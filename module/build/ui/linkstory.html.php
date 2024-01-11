@@ -36,7 +36,7 @@ searchForm
 
 dtable
 (
-    set::id('unlinkStoryList'),
+    setID('unlinkStoryList'),
     set::userMap($users),
     set::cols($cols),
     set::orderBy($orderBy),
@@ -51,7 +51,7 @@ dtable
         'text'      => $lang->productplan->linkStory,
         'btnType'   => 'primary',
         'className' => 'size-sm linkObjectBtn',
-        'data-type' => 'story',
+        'data-type' => 'linkStory',
         'data-url'  => createLink($buildModule, 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param")
     )))),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(helper::createLink($buildModule, 'view', "buildID=$build->id&type=story"). "#app={$app->tab}", $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),

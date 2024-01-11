@@ -30,7 +30,7 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
 
 window.showLink = function(type, params, onlyUpdateTable)
 {
-    const url = $.createLink(buildModule, type === 'story' ? 'linkStory' : 'linkBug', 'buildID=' + buildID + (params || '&browseType=&param='));
+    const url = $.createLink(buildModule, type === 'linkStory' ? 'linkStory' : 'linkBug', 'buildID=' + buildID + (params || '&browseType=&param='));
     if(onlyUpdateTable)
     {
         loadComponent($('#' + type).find('.dtable').attr('id'), {url: url, component: 'dtable', partial: true});
@@ -54,7 +54,7 @@ $(document).off('click', '.linkObjectBtn').on('click', '.linkObjectBtn', functio
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    const postKey  = type == 'story' ? 'stories' : 'bugs';
+    const postKey  = type == 'linkStory' ? 'stories' : 'bugs';
     const postData = new FormData();
     checkedList.forEach(function(id)
     {

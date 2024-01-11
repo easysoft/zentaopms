@@ -57,7 +57,7 @@ detailHeader
 );
 
 jsVar('initLink',       $link);
-jsVar('type',           $type);
+jsVar('type',           $type == 'story' ? 'linkStory' : $type);
 jsVar('linkParams',     $decodeParam);
 jsVar('buildID',        $build->id);
 jsVar('confirmDelete',  $lang->build->confirmDelete);
@@ -114,7 +114,7 @@ detailBody
             tabPane
             (
                 to::prefix(icon('lightbulb')),
-                set::key('story'),
+                set::key('linkStory'),
                 set::title($lang->build->stories),
                 set::active($type == 'story'),
                 div
@@ -125,7 +125,7 @@ detailBody
                         set::text($lang->build->linkStory),
                         set::icon('link'),
                         set::type('primary'),
-                        bind::click("window.showLink('story')")
+                        bind::click("window.showLink('linkStory')")
                     ) : null
                 ),
                 dtable
