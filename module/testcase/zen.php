@@ -652,6 +652,7 @@ class testcaseZen extends testcase
             ->join('stage', ',')
             ->join('linkCase', ',')
             ->cleanInt('story,product,branch,module')
+            ->skipSpecial('script')
             ->stripTags($this->config->testcase->editor->edit['id'], $this->config->allowedTags)
             ->remove('files,labels,scriptFile,scriptName')
             ->get();
