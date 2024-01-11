@@ -324,11 +324,6 @@ class releaseModel extends model
                 if($build->bugs) $release->bugs .= ',' . $build->bugs;
             }
         }
-        if($isSync && $release->bugs)
-        {
-            $releaseBugs   = $this->bug->getReleaseBugs(array_keys($builds), $release->product, $release->branch);
-            $release->bugs = implode(',', array_intersect(explode(',', $release->bugs), array_keys($releaseBugs)));
-        }
 
         $release->build   = ',' . trim($release->build, ',') . ',';
         $release->branch  = ',' . trim(implode(',', $branches), ',') . ',';
