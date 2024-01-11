@@ -26,7 +26,7 @@ if($parent)
 
 formPanel
 (
-    setID('createForm'),
+    set::formID('createForm'),
     set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
     set::title($parent ? $lang->productplan->createChildren : $lang->productplan->create),
     $parent ? formGroup

@@ -6,7 +6,7 @@ $(document).on('change', 'input[name=begin],input[name=end]', function()
 window.clickSubmit = function()
 {
     const parentPlan  = $('input[name=parent]').val();
-    const branches    = $('select[name^=branch]').val();
+    const branches    = $('select[name^=branch]').val().toString();
     const title       = $('input[name=title]').val();
     const begin       = $('input[name=begin]').val();
     const end         = $('input[name=end]').val();
@@ -15,9 +15,9 @@ window.clickSubmit = function()
     const errorBegin  = parentBegin && begin < parentBegin;
     const errorEnd    = parentEnd && end > parentEnd;
 
-    if(parentPlan > 0 && branches && title && !errorBegin && !errorEnd)
+    if(parentPlan > 0 && branches !== '' && title && !errorBegin && !errorEnd)
     {
-        const link = $.createLink('productplan', 'ajaxGetDiffBranchesTip', "productID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches.toString());
+        const link = $.createLink('productplan', 'ajaxGetDiffBranchesTip', "productID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches);
         $.get(link, function(diffBranchesTip)
         {
             const formUrl  = $('#createForm').attr('action');
