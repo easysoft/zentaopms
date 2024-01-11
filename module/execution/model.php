@@ -5418,7 +5418,7 @@ class executionModel extends model
         $title    = '';
         $disabled = $execution->status == 'wait' ? '' : 'disabled';
         $this->app->loadLang('stage');
-        if($project and $project->model == 'ipd')
+        if($project and $project->model == 'ipd' and !$execution->parallel)
         {
             $title    = ($execution->ipdStage['canStart'] or $execution->ipdStage['isFirst']) ? '' : sprintf($this->lang->execution->disabledTip->startTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
             $disabled = $execution->ipdStage['canStart'] ? $disabled : 'disabled';

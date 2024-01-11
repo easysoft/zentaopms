@@ -822,6 +822,7 @@ class programplanModel extends model
         $project   = $this->loadModel('project')->getByID($projectID);
         $setCode   = (isset($this->config->setCode) and $this->config->setCode == 1) ? true : false;
         $sameCodes = $setCode ? $this->checkCodeUnique($codes, isset($planIDList) ? $planIDList : '') : false;
+        $parallel  = isset($parallel) ? $parallel : $project->parallel;
 
         $setPercent = (isset($this->config->setPercent) and $this->config->setPercent == 1) ? true : false;
         $datas = array();
@@ -835,18 +836,19 @@ class programplanModel extends model
             $plan->project    = $projectID;
             $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->name       = $names[$key];
-            if($setCode)    $plan->code    = $codes[$key];
-            if($setPercent) $plan->percent = $percents[$key];
             $plan->attribute  = (empty($parentID) or $parentAttribute == 'mix') ? $attributes[$key] : $parentAttribute;
-            $plan->milestone  = $milestone[$key] ? 1 : 0;
             $plan->output     = empty($output[$key]) ? '' : implode(',', $output[$key]);
             $plan->acl        = empty($parentID) ? $acl[$key] : $parentACL;
             $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
             $plan->desc       = empty($desc[$key]) ? '' : $desc[$key];
+            $plan->milestone  = empty($milestone[$key]) ? 0 : 1;
             $plan->hasProduct = $project->hasProduct;
             $plan->vision     = $this->config->vision;
             $plan->market     = $project->market;
+            $plan->parallel   = $parallel;
 
+            if($setCode)    $plan->code    = $codes[$key];
+            if($setPercent) $plan->percent = $percents[$key];
             if(!empty($begin[$key]))     $plan->begin     = $begin[$key];
             if(!empty($end[$key]))       $plan->end       = $end[$key];
             if(!empty($realBegan[$key])) $plan->realBegan = $realBegan[$key];
@@ -1138,6 +1140,8 @@ class programplanModel extends model
 
             /* If child plans has milestone, update parent plan set milestone eq 0 . */
             if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
+
+            if($project->model == 'ipd') $this->dao->update(TABLE_PROJECT)->set('parallel')->eq($parallel)->where('id')->eq($projectID)->exec();
 
             if(dao::isError()) return print(js::error(dao::getError()));
         }
