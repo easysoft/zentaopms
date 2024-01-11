@@ -47,7 +47,7 @@ class fieldList
         {
             foreach($fields as $field)
             {
-                $this->setField($field);
+                $this->add($field);
             }
         }
     }
@@ -66,21 +66,21 @@ class fieldList
 
     public function field(string $name): field
     {
-        $field = $this->getField($name);
+        $field = $this->get($name);
         if(is_null($field))
         {
             $field = new field($name, $this);
-            $this->setField($field);
+            $this->add($field);
         }
         return $field;
     }
 
-    public function getField(string $name): field|null
+    public function get(string $name): field|null
     {
         return isset($this->fields[$name]) ? $this->fields[$name] : null;
     }
 
-    public function setField(field $field): fieldList
+    public function add(field $field): fieldList
     {
         $this->fields[$field->getName()] = $field;
         return $this;
@@ -116,8 +116,8 @@ class fieldList
 
     public function mergeField(field $field): fieldList
     {
-        $oldField = $this->getField($field->getName());
-        if(is_null($oldField)) return $this->setField($field);
+        $oldField = $this->get($field->getName());
+        if(is_null($oldField)) return $this->add($field);
 
         $oldField->merge($field);
         return $this;
@@ -203,13 +203,16 @@ class fieldList
 
     public static ?string $currentName = null;
 
-    public static function define($currentName)
+    public static function define(string $currentName, string|array|field|fieldList|null ...$args): fieldList
     {
         static::$currentName = $currentName;
-        return static::ensure($currentName);
+        $fieldList = static::ensure($currentName);
+
+        if(!empty($args)) static::extend($fieldList, ...$args);
+        return $fieldList;
     }
 
-    public static function get(string $name): ?fieldList
+    public static function getList(string $name): ?fieldList
     {
         return isset(static::$map[$name]) ? static::$map[$name] : null;
     }
@@ -219,15 +222,15 @@ class fieldList
         if(is_null($name)) list($listName, $name) = explode('/', $listName);
         if(is_null($name)) return null;
 
-        $fieldList = static::get($listName);
-        return is_null($fieldList) ? null : $fieldList->getField($name);
+        $fieldList = static::getList($listName);
+        return is_null($fieldList) ? null : $fieldList->get($name);
     }
 
     public static function getByName(string $name): field|fieldList|null
     {
-        if(str_ends_with($name, '/')) return static::get(substr($name, 0, -1));
+        if(str_ends_with($name, '/')) return static::getList(substr($name, 0, -1));
         if(str_contains($name, '/')) return static::getListField($name);
-        return static::get($name);
+        return static::getList($name);
     }
 
     public static function ensure(string $name): fieldList
@@ -245,14 +248,19 @@ class fieldList
         return static::ensure(static::$currentName);
     }
 
-    public static function build(string|array|field|fieldList|null ...$args): fieldList
+    public static function extend(fieldList $fieldList, string|array|field|fieldList|null ...$args): fieldList
     {
-        $fieldList = new fieldList();
         foreach($args as $arg)
         {
             if(is_null($arg)) continue;
             $fieldList->merge($arg);
         }
         return $fieldList;
+    }
+
+    public static function build(string|array|field|fieldList|null ...$args): fieldList
+    {
+        $fieldList = new fieldList();
+        return static::extend($fieldList, ...$args);
     }
 }

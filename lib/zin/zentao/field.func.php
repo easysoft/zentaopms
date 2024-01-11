@@ -16,11 +16,16 @@ namespace zin;
 require_once __DIR__ . DS . 'field.class.php';
 require_once __DIR__ . DS . 'fieldlist.class.php';
 
-function fieldList(string $name = null): fieldList
+function defineFieldList(string $name = null, string|array|field|fieldList|null ...$args): fieldList
 {
     global $app;
     if(is_null($name)) $name = $app->rawModule;
-    return fieldList::define($name);
+    return fieldList::define($name, ...$args);
+}
+
+function fieldList(string $name)
+{
+    return fieldList::ensure($name);
 }
 
 function field(string $name, ?string $listName = null): field
@@ -30,7 +35,7 @@ function field(string $name, ?string $listName = null): field
         list($listName, $name) = explode('/', $name);
         return fieldList::ensure($listName)->field($name);
     }
-    return fieldList($listName)->field($name);
+    return defineFieldList($listName)->field($name);
 }
 
 function createField(string $name): field
