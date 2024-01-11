@@ -34,6 +34,17 @@ $(document).on('click', '.batch-btn', function()
     if(!checkedList.length) return false;
 
     $('#mergedBranchIDList').val(checkedList.join(','));
+
+    let targetBranchItems = [];
+    for(let branchName in branchNamePairs)
+    {
+        branchID = branchNamePairs[branchName];
+        if(!checkedList.includes(String(branchID))) targetBranchItems.push({value: branchID, text: branchName});
+    }
+
+    let $targetBranchPicker = $('[name=targetBranch]').zui('picker');
+    $targetBranchPicker.render({items: targetBranchItems});
+    $targetBranchPicker.$.setValue('0');
 });
 
 /**
