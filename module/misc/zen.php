@@ -22,4 +22,40 @@ class miscZen extends misc
     {
         return 'hello world from hello()<br />';
     }
+
+    /**
+     * 获取缓存文件。
+     * Get cache files.
+     *
+     * @param  string $directory
+     * @return void
+     */
+    public function cleanCachaFiles(string $directory)
+    {
+        $files = glob($directory . DS . '*.cache');
+
+        foreach($files as $file) $this->deleteExpiredFile($file);
+
+        $subdirectories = glob($directory . DS . '*', GLOB_ONLYDIR);
+
+        foreach($subdirectories as $subdirectory) $this->cleanCachaFiles($subdirectory);
+    }
+
+    /**
+     * 删除过期文件。
+     * Delete expired file.
+     *
+     * @param  string $file
+     * @return bool
+     */
+    public function deleteExpiredFile(string $file): bool
+    {
+        $content = file_get_contents($file);
+        $content = unserialize($content);
+
+        if(is_null($content['time'])) return false;
+        if(time() > $content['time']) return unlink($file);
+
+        return false;
+    }
 }
