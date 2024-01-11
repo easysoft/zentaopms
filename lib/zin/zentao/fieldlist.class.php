@@ -64,7 +64,7 @@ class fieldList
         return $this->field($name);
     }
 
-    public function field(string $name): field
+    public function field(string $name, array|object|null $fieldProps = null): field
     {
         $field = $this->get($name);
         if(is_null($field))
@@ -72,6 +72,7 @@ class fieldList
             $field = new field($name, $this);
             $this->add($field);
         }
+        if(!is_null($fieldProps)) $field->set($fieldProps);
         return $field;
     }
 
@@ -80,8 +81,11 @@ class fieldList
         return isset($this->fields[$name]) ? $this->fields[$name] : null;
     }
 
-    public function add(field $field): fieldList
+    public function add(field|array|stdClass $field): fieldList
     {
+        if(!($field instanceof field)) $field = get_object_vars($field);
+        if(is_array($field))           $field = new field($field);
+
         $this->fields[$field->getName()] = $field;
         return $this;
     }
@@ -92,12 +96,25 @@ class fieldList
 
         if(is_string($info))
         {
-            $list = array();
-            foreach(explode(',', $info) as $name)
+            if(str_starts_with($info, '!'))
             {
-                $list[] = static::getByName($name);
+                return $this->remove(substr($info, 1));
             }
-            $info = $list;
+
+            if(str_contains($info, '/'))
+            {
+                $info = static::getListFields($info);
+            }
+            else
+            {
+                $listNames = explode(',', $info);
+                $info = array();
+                foreach($listNames as $listName)
+                {
+                    $fieldList = static::getList($listName);
+                    if($fieldList) $info[] = $fieldList;
+                }
+            }
         }
 
         if(is_array($info))
@@ -186,13 +203,23 @@ class fieldList
 
     public function toList(string|array|null $names = null): array
     {
-        return $this->fields;
+        if(is_null($names)) return $this->fields;
+
+        if(is_string($names)) $names = explode(',', $names);
+
+        $list = array();
+        foreach($names as $name)
+        {
+            $field = $this->get($name);
+            if($field) $list[$name] = $field;
+        }
+        return $list;
     }
 
-    public function toArray(): array
+    public function toArray(string|array|null $names = null): array
     {
         $list = array();
-        foreach($this->toList() as $field)
+        foreach($this->toList($names) as $field)
         {
             $list[$field->getName()] = $field->toArray();
         }
@@ -212,25 +239,18 @@ class fieldList
         return $fieldList;
     }
 
-    public static function getList(string $name): ?fieldList
+    public static function getList(string $listName): ?fieldList
     {
-        return isset(static::$map[$name]) ? static::$map[$name] : null;
+        return isset(static::$map[$listName]) ? static::$map[$listName] : null;
     }
 
-    public static function getListField(string $listName, string $name = null): ?field
+    public static function getListFields(string $listName, string $fieldNames = null): array
     {
-        if(is_null($name)) list($listName, $name) = explode('/', $listName);
-        if(is_null($name)) return null;
+        if(is_null($fieldNames)) list($listName, $fieldNames) = explode('/', $listName);
+        if(is_null($fieldNames)) return null;
 
         $fieldList = static::getList($listName);
-        return is_null($fieldList) ? null : $fieldList->get($name);
-    }
-
-    public static function getByName(string $name): field|fieldList|null
-    {
-        if(str_ends_with($name, '/')) return static::getList(substr($name, 0, -1));
-        if(str_contains($name, '/')) return static::getListField($name);
-        return static::getList($name);
+        return is_null($fieldList) ? array() : $fieldList->toList($fieldNames);
     }
 
     public static function ensure(string $name): fieldList

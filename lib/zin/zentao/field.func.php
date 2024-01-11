@@ -23,22 +23,21 @@ function defineFieldList(string $name = null, string|array|field|fieldList|null 
     return fieldList::define($name, ...$args);
 }
 
+function defineField(string $name, ?string $listName = null): field
+{
+    if(str_contains($name, '/') && is_null($listName))
+    {
+        list($listName, $name) = explode('/', $name);
+    }
+    return defineFieldList($listName)->field($name);
+}
+
 function fieldList(string $name)
 {
     return fieldList::ensure($name);
 }
 
-function field(string $name, ?string $listName = null): field
-{
-    if(str_contains($name, '/') && is_null($listName))
-    {
-        list($listName, $name) = explode('/', $name);
-        return fieldList::ensure($listName)->field($name);
-    }
-    return defineFieldList($listName)->field($name);
-}
-
-function createField(string $name): field
+function field(string $name): field
 {
     return new field($name);
 }

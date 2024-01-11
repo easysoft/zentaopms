@@ -28,11 +28,16 @@ class field extends setting
 
     public mixed $default;
 
-    public function __construct(?string $name = null, ?fieldList $fieldList = null, ?field $parent = null)
+    public function __construct(string|object|array|null $nameOrProps = null, ?fieldList $fieldList = null, ?field $parent = null)
     {
         $this->fieldList = $fieldList;
         $this->parent    = $parent;
-        parent::__construct(array('name' => $name));
+
+        if(is_string($nameOrProps))           $nameOrProps = array('name' => $nameOrProps);
+        elseif($nameOrProps instanceof field) $nameOrProps = $nameOrProps->toArray();
+        elseif(is_object($nameOrProps))       $nameOrProps = get_object_vars($nameOrProps);
+
+        parent::__construct($nameOrProps);
     }
 
     public function getName(): string
@@ -236,8 +241,9 @@ class field extends setting
         return $this->parent->control($this->toArray());
     }
 
-    function items(array|object|null $items): field
+    function items(array|object|false|null $items): field
     {
+        if($items === false) return $this->remove('items');
         return $this->addToList('items', $items);
     }
 
@@ -306,6 +312,16 @@ class field extends setting
             trigger_error('[ZIN] The field named ' . $this->getName() . ' has no parent, maybe you should add self to a fieldList firstly.', E_USER_ERROR);
         }
         $this->parent->moveAfter($this->getName(), $name);
+        return $this;
+    }
+
+    function detach(): field
+    {
+        if(is_null($this->parent))
+        {
+            trigger_error('[ZIN] The field named ' . $this->getName() . ' has no parent, maybe you should add self to a fieldList firstly.', E_USER_ERROR);
+        }
+        $this->parent->remove($this->getName());
         return $this;
     }
 
