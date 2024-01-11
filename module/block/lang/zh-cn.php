@@ -117,7 +117,7 @@ $lang->block->budget          = '预算';
 $lang->block->left            = '剩余';
 
 $lang->block->summary = new stdclass();
-$lang->block->summary->welcome = '禅道已陪伴您%s天，<strong>昨日</strong>完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a>个任务、解决了<a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>个Bug，今日期待优秀的您来处理';
+$lang->block->summary->welcome = '禅道已陪伴您%s，<strong>昨日</strong>完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a>个任务、解决了<a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>个Bug，今日期待优秀的您来处理';
 
 $lang->block->dashboard['default'] = '仪表盘';
 $lang->block->dashboard['my']      = '地盘';

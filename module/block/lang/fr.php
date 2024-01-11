@@ -117,7 +117,7 @@ $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
 $lang->block->summary = new stdclass();
-$lang->block->summary->welcome = 'Zentao has been with you for %s days. <strong>Yesterday</strong>, you has finished <a href="' . helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a> tasks , <a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>  bugs were resolved.';
+$lang->block->summary->welcome = 'Zentao has been with you for %s. <strong>Yesterday</strong>, you has finished <a href="' . helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a> tasks , <a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>  bugs were resolved.';
 
 $lang->block->dashboard['default'] = 'Dashboard';
 $lang->block->dashboard['my']      = 'My';

@@ -389,15 +389,33 @@ class blockZen extends block
         foreach($this->lang->block->welcomeList as $type => $name) $welcomeType = $time >= $type ? $type : $welcomeType;
 
         /* 获取禅道陪伴当前用户总天数。 */
-        $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
-            ->where('date')->gt('1970-01-01')
-            ->andWhere('actor')->eq($this->app->user->account)
-            ->orderBy('date_asc')
-            ->limit('1')
-            ->fetch('date');
+        if(!empty($this->config->installedDate))
+        {
+            $firstUseDate = $this->config->global->installedDate;
+        }
+        else
+        {
+            $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
+                ->where('date')->gt('1970-01-01')
+                ->andWhere('actor')->eq($this->app->user->account)
+                ->orderBy('date_asc')
+                ->limit('1')
+                ->fetch('date');
+        }
 
-        $usageDays = 1; // 最小陪伴天数是一天。
-        if($firstUseDate) $usageDays = ceil((time() - strtotime($firstUseDate)) / 3600 / 24);
+        if($firstUseDate)
+        {
+            $usageDays     = '';
+            $usageDateInfo = helper::getDateInterval($firstUseDate);
+            if(!empty($usageDateInfo->year))  $usageDays .= $usageDateInfo->year . ' ' . $this->lang->year . ' ';
+            if(!empty($usageDateInfo->month)) $usageDays .= $usageDateInfo->month . ' ' . $this->lang->month . ' ';
+            if(!empty($usageDateInfo->day))   $usageDays .= $usageDateInfo->day . ' ' . $this->lang->day . ' ';
+        }
+        else
+        {
+            $usageDays = ' 1 ' . $this->lang->day; // 最小陪伴天数是一天。
+        }
+        if(strpos($this->app->getClientLang(), 'zh') !== false) $usageDays = str_replace(' ', '', $usageDays);
 
         $yesterday = strtotime("-1 day");
         /* 获取昨日完成的任务数。 */
