@@ -2106,6 +2106,7 @@ class projectModel extends model
             $model       = $project->type == 'kanban' ? 'kanban' : 'scrum';
             $executionID = $project->id;
             $projectID   = $project->project;
+            $project     = $this->projectTao->fetchProjectInfo($projectID);
         }
         if(empty($projectID) || empty($executionID)) return false;
 
