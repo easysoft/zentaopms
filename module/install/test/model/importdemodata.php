@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 installModel->importDemoData();
-timeout=0
-cid=1
+cid=0
 
 - 检查user表的演示数据导出是否正确。
  - 属性id @9
@@ -15,7 +15,7 @@ cid=1
  - 属性name @企业内部工时管理系统
  - 属性code @workhourManage
 - 检查project表的演示数据导出是否正确。
- - 属性id @7
+ - 属性id @3
  - 属性name @企业管理系统
 
 */
@@ -62,4 +62,4 @@ $app->loadLang('install');
 $tester->install->importDemoData();
 r($tester->install->fetchByID(9, 'user'))    && p('id,account,realname') && e('9,testManager,测试经理');                // 检查user表的演示数据导出是否正确。
 r($tester->install->fetchByID(2, 'product')) && p('id,name,code')        && e('2,企业内部工时管理系统,workhourManage'); // 检查product表的演示数据导出是否正确。
-r($tester->install->fetchByID(7, 'project')) && p('id,name')             && e('7,企业管理系统');                        // 检查project表的演示数据导出是否正确。
+r($tester->install->fetchByID(3, 'project')) && p('id,name')             && e('3,企业管理系统');                        // 检查project表的演示数据导出是否正确。
