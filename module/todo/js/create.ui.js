@@ -14,10 +14,10 @@ function toggleCycle(e)
         $('.date').prop('value', '');
         $('.cycle-date').prop('value', defaultDate);
         $('.cycle-config:not(.type-week,.type-month,.type-year)').removeClass('hidden');
-        $('#switchDate').prop('checked', false);
-        $('#switchDate').closest('.input-group-addon').addClass('hidden');
-        $('#type').closest('.form-row').addClass('hidden');
-        $('#type').zui('picker').$.setValue('custom');
+        $('[name="switchDate"]').prop('checked', false);
+        $('[name="switchDate"]').closest('.input-group-addon').addClass('hidden');
+        $('[name="type"]').closest('.form-row').addClass('hidden');
+        $('[name="type"]').zui('picker').$.setValue('custom');
         loadList('custom'); //Fix bug 3278.
     }
     else
@@ -25,8 +25,8 @@ function toggleCycle(e)
         $('.cycle-date').prop('value', '');
         $date.render({disabled: false});
         $('.cycle-config').addClass('hidden');
-        $('#switchDate').closest('.input-group-addon').removeClass('hidden');
-        $('#type').closest('.form-row').removeClass('hidden');
+        $('[name="switchDate"]').closest('.input-group-addon').removeClass('hidden');
+        $('[name="type"]').closest('.form-row').removeClass('hidden');
     }
 }
 
