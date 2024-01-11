@@ -30,7 +30,7 @@ cid=1
 
 - 测试获取对象类型 story 对象ID 1 的动态信息 @nochanged
 - 测试获取对象类型 story 对象ID 2 的动态信息 @link
-- 测试获取对象类型 story 对象ID 3 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 3 的动态信息 @link
 - 测试获取对象类型 story 对象ID 4 的动态信息 @link
 - 测试获取对象类型 story 对象ID 5 的动态信息 @nochanged
 - 测试获取对象类型 story 对象ID 6 的动态信息 @link
@@ -43,7 +43,7 @@ cid=1
 - 测试获取对象类型 story 对象ID 13 的动态信息 @link
 - 测试获取对象类型 story 对象ID 14 的动态信息 @nochanged
 - 测试获取对象类型 story 对象ID 15 的动态信息 @link
-- 测试获取对象类型 story 对象ID 16 的动态信息 @nochanged
+- 测试获取对象类型 story 对象ID 16 的动态信息 @link
 - 测试获取对象类型 story 对象ID 17 的动态信息 @link
 - 测试获取对象类型 story 对象ID 18 的动态信息 @nochanged
 - 测试获取对象类型 story 对象ID 19 的动态信息 @link
@@ -151,7 +151,7 @@ $action = new actionTest();
 // 操作以 linked2 或 unlinked2 开头
 r($action->getListTest($objectType[0], $storyID[0]))  && p() && e('nochanged'); // 测试获取对象类型 story 对象ID 1 的动态信息
 r($action->getListTest($objectType[0], $storyID[1]))  && p() && e('link');      // 测试获取对象类型 story 对象ID 2 的动态信息
-r($action->getListTest($objectType[0], $storyID[2]))  && p() && e('nochanged'); // 测试获取对象类型 story 对象ID 3 的动态信息
+r($action->getListTest($objectType[0], $storyID[2]))  && p() && e('link');      // 测试获取对象类型 story 对象ID 3 的动态信息
 r($action->getListTest($objectType[0], $storyID[3]))  && p() && e('link');      // 测试获取对象类型 story 对象ID 4 的动态信息
 r($action->getListTest($objectType[0], $storyID[4]))  && p() && e('nochanged'); // 测试获取对象类型 story 对象ID 5 的动态信息
 r($action->getListTest($objectType[0], $storyID[5]))  && p() && e('link');      // 测试获取对象类型 story 对象ID 6 的动态信息
@@ -164,7 +164,7 @@ r($action->getListTest($objectType[0], $storyID[11])) && p() && e('link');      
 r($action->getListTest($objectType[0], $storyID[12])) && p() && e('link');      // 测试获取对象类型 story 对象ID 13 的动态信息
 r($action->getListTest($objectType[0], $storyID[13])) && p() && e('nochanged'); // 测试获取对象类型 story 对象ID 14 的动态信息
 r($action->getListTest($objectType[0], $storyID[14])) && p() && e('link');      // 测试获取对象类型 story 对象ID 15 的动态信息
-r($action->getListTest($objectType[0], $storyID[15])) && p() && e('nochanged'); // 测试获取对象类型 story 对象ID 16 的动态信息
+r($action->getListTest($objectType[0], $storyID[15])) && p() && e('link');      // 测试获取对象类型 story 对象ID 16 的动态信息
 r($action->getListTest($objectType[0], $storyID[16])) && p() && e('link');      // 测试获取对象类型 story 对象ID 17 的动态信息
 r($action->getListTest($objectType[0], $storyID[17])) && p() && e('nochanged'); // 测试获取对象类型 story 对象ID 18 的动态信息
 r($action->getListTest($objectType[0], $storyID[18])) && p() && e('link');      // 测试获取对象类型 story 对象ID 19 的动态信息
