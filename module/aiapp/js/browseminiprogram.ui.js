@@ -287,7 +287,7 @@ window.aiBrowseMiniProgram.resetInputHeight = function(event)
 
 window.aiBrowseMiniProgram.backToSquare = function()
 {
-    window.location.href = $.createLink('ai', 'square') + '#app=ai';
+    window.location.href = $.createLink('aiapp', 'square');
 };
 
 /**
@@ -392,8 +392,6 @@ function createServerNotification(content)
 
 $(function()
 {
-    $('#heading .toolbar-item').attr('data-app', 'ai');
-
     $('#to-language-model').prop('href', $.createLink('ai', 'models'));
     $('#reload-current').on('click', () =>
     {

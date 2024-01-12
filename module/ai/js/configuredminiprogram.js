@@ -671,7 +671,7 @@ $(function()
         trigger.show();
 
         $.post(
-            createLink('ai', 'miniProgramChat', `id=${appID}`),
+            createLink('aiapp', 'miniProgramChat', `id=${appID}`),
             {
                 message,
                 test: '1'

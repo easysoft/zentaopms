@@ -14,7 +14,7 @@ if(count($categoryList) <= 9)
         $navItems[] = array(
             'text'   => $value,
             'active' => $isActive,
-            'url'    => createLink('ai', 'square', "category=$key" . '#app=ai'),
+            'url'    => createLink('aiapp', 'square', "category=$key"),
             'badge'  => $isActive ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null,
             'props'  => array('data-id' => $key)
         );
@@ -28,7 +28,7 @@ else
         $navItems[] = array(
             'text'   => $value,
             'active' => $isActive,
-            'url'    => createLink('ai', 'square', "category=$key" . '#app=ai'),
+            'url'    => createLink('aiapp', 'square', "category=$key"),
             'badge'  => $isActive ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null,
             'props'  => array('data-id' => $key)
         );
@@ -41,13 +41,13 @@ else
         $subItems[] = array(
             'text'   => $value,
             'active' => $key === $category,
-            'url'    => createLink('ai', 'square', "category=$key" . '#app=ai'),
+            'url'    => createLink('aiapp', 'square', "category=$key"),
             'attrs'  => array('data-id' => $key)
         );
     }
     $isActive = array_key_exists($category, $moreCategoryList);
     $navItems[] = array(
-        'text'   => $isActive ? $moreCategoryList[$category] : $lang->ai->miniPrograms->more,
+        'text'   => $isActive ? $moreCategoryList[$category] : $lang->aiapp->more,
         'active' => $isActive,
         'type'   => 'dropdown',
         'caret'  => 'down',
@@ -67,19 +67,19 @@ $miniProgramCard = function($miniProgram) use ($categoryList, $collectedIDs, $sh
     $star = in_array($miniProgram->id, $collectedIDs) ? 'star' : 'star-empty';
     $delete = $star === 'star' ? 'true' : 'false';
 
-    $starBtn = common::hasPriv('ai', 'collectMiniProgram')
+    $starBtn = common::hasPriv('aiapp', 'collectMiniProgram')
         ? btn(
             set::size('md'),
             setClass('ghost btn-star'),
-            setData('url', createLink('ai', 'collectMiniProgram', "appID={$miniProgram->id}&delete={$delete}")),
+            setData('url', createLink('aiapp', 'collectMiniProgram', "appID={$miniProgram->id}&delete={$delete}")),
             on::click('window.aiSquare.handleStarBtnClick'),
             html(html::image("static/svg/{$star}.svg", "class='$star'")),
-            $lang->ai->miniPrograms->collect
+            $lang->aiapp->collect
         )
         : null;
 
     return a(
-        common::hasPriv('ai', 'browseMiniProgram') ? set::href(createLink('ai', 'browseMiniProgram', "id={$miniProgram->id}" . '#app=ai')) : null,
+        common::hasPriv('aiapp', 'browseMiniProgram') ? set::href(createLink('aiapp', 'browseMiniProgram', "id={$miniProgram->id}")) : null,
         setClass('miniprogram-card'),
         div(
             setClass('program-content'),

@@ -182,6 +182,7 @@ $lang->qa->common         = '测试';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文档';
 $lang->ai->common         = 'AI';
+$lang->aiapp->common      = 'AI';
 $lang->repo->common       = '代码库';
 $lang->repo->codeRepo     = '代码库';
 $lang->bi->common         = 'BI';
@@ -425,7 +426,7 @@ $lang->searchObjects['project']     = $lang->projectCommon;
 $lang->searchObjects['execution']   = $lang->execution->common;
 $lang->searchObjects['user']        = '用户';
 $lang->searchTips                   = '编号(ctrl+g)';
-$lang->searchObjects['ai']          = 'AI';
+$lang->searchObjects['aiapp']       = 'AI';
 
 /* 导入支持的编码格式。*/
 $lang->importEncodeList['gbk']   = 'GBK';

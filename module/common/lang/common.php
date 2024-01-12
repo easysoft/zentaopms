@@ -25,6 +25,7 @@ $lang->milestone   = new stdclass();
 $lang->qa          = new stdclass();
 $lang->doc         = new stdclass();
 $lang->ai          = new stdclass();
+$lang->aiapp       = new stdclass();
 $lang->system      = new stdclass();
 $lang->testcase    = new stdclass();
 $lang->testtask    = new stdclass();

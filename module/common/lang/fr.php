@@ -182,6 +182,7 @@ $lang->qa->common         = 'QA';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = 'Doc';
 $lang->ai->common         = 'AI';
+$lang->aiapp->common      = 'AI';
 $lang->repo->common       = 'Code Repo';
 $lang->repo->codeRepo     = 'Code Repo';
 $lang->bi->common         = 'BI';
@@ -425,7 +426,7 @@ $lang->searchObjects['project']     = $lang->projectCommon;
 $lang->searchObjects['execution']   = $lang->execution->common;
 $lang->searchObjects['user']        = 'User';
 $lang->searchTips                   = '';
-$lang->searchObjects['ai']          = 'AI';
+$lang->searchObjects['aiapp']       = 'AI';
 
 /* Code formats for import. */
 $lang->importEncodeList['gbk']   = 'GBK';

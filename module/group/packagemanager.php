@@ -3849,7 +3849,7 @@ $config->group->package->manageMiniProgram->subset = 'ai';
 $config->group->package->manageMiniProgram->privs  = array();
 $config->group->package->manageMiniProgram->privs['ai-createMiniProgram']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-editMiniProgram', 'ai-testMiniProgram'));
 $config->group->package->manageMiniProgram->privs['ai-editMiniProgram']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-publishMiniProgram'));
-$config->group->package->manageMiniProgram->privs['ai-testMiniProgram']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView', 'ai-miniProgramChat'), 'recommend' => array('ai-createMiniProgram', 'ai-editMiniProgram', 'ai-publishMiniProgram'));
+$config->group->package->manageMiniProgram->privs['ai-testMiniProgram']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView', 'aiapp-miniProgramChat'), 'recommend' => array('ai-createMiniProgram', 'ai-editMiniProgram', 'ai-publishMiniProgram'));
 $config->group->package->manageMiniProgram->privs['ai-editMiniProgramCategory'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('admin-index', 'ai-miniPrograms'), 'recommend' => array());
 
 $config->group->package->browseMiniProgram = new stdclass();
@@ -3861,12 +3861,12 @@ $config->group->package->browseMiniProgram->privs['ai-miniProgramView'] = array(
 
 $config->group->package->miniProgramSquare = new stdclass();
 $config->group->package->miniProgramSquare->order  = 2170;
-$config->group->package->miniProgramSquare->subset = 'ai';
+$config->group->package->miniProgramSquare->subset = 'aiapp';
 $config->group->package->miniProgramSquare->privs  = array();
-$config->group->package->miniProgramSquare->privs['ai-square']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array('ai-browseMiniProgram', 'ai-miniProgramChat', 'ai-collectMiniProgram'));
-$config->group->package->miniProgramSquare->privs['ai-collectMiniProgram'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ai-square', 'ai-browseMiniProgram'), 'recommend' => array('ai-miniProgramChat'));
-$config->group->package->miniProgramSquare->privs['ai-miniProgramChat']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('ai-browseMiniProgram'), 'recommend' => array('ai-collectMiniProgram'));
-$config->group->package->miniProgramSquare->privs['ai-browseMiniProgram']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('ai-square'), 'recommend' => array('ai-miniProgramChat', 'ai-collectMiniProgram'));
+$config->group->package->miniProgramSquare->privs['aiapp-square']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array('aiapp-browseMiniProgram', 'aiapp-miniProgramChat', 'aiapp-collectMiniProgram'));
+$config->group->package->miniProgramSquare->privs['aiapp-collectMiniProgram'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('aiapp-square', 'aiapp-browseMiniProgram'), 'recommend' => array('aiapp-miniProgramChat'));
+$config->group->package->miniProgramSquare->privs['aiapp-miniProgramChat']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('aiapp-browseMiniProgram'), 'recommend' => array('aiapp-collectMiniProgram'));
+$config->group->package->miniProgramSquare->privs['aiapp-browseMiniProgram']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('aiapp-square'), 'recommend' => array('aiapp-miniProgramChat', 'aiapp-collectMiniProgram'));
 
 $config->group->package->publishMiniProgram = new stdclass();
 $config->group->package->publishMiniProgram->order  = 2180;

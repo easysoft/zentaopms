@@ -1868,16 +1868,18 @@ $lang->resource->ai->editMiniProgram         = 'editMiniProgram';
 $lang->resource->ai->testMiniProgram         = 'testMiniProgram';
 $lang->resource->ai->miniPrograms            = 'miniProgramList';
 $lang->resource->ai->miniProgramView         = 'miniProgramView';
-$lang->resource->ai->square                  = 'miniProgramSquare';
-$lang->resource->ai->collectMiniProgram      = 'collectMiniProgram';
-$lang->resource->ai->miniProgramChat         = 'miniProgramChat';
-$lang->resource->ai->browseMiniProgram       = 'browseMiniProgram';
 $lang->resource->ai->publishMiniProgram      = 'publishMiniProgram';
 $lang->resource->ai->unpublishMiniProgram    = 'unpublishMiniProgram';
 $lang->resource->ai->deleteMiniProgram       = 'deleteMiniProgram';
 $lang->resource->ai->exportMiniProgram       = 'exportMiniProgram';
 $lang->resource->ai->importMiniProgram       = 'importMiniProgram';
 $lang->resource->ai->editMiniProgramCategory = 'editMiniProgramCategory';
+
+$lang->resource->aiapp = new stdclass();
+$lang->resource->aiapp->square                  = 'miniProgramSquare';
+$lang->resource->aiapp->browseMiniProgram       = 'browseMiniProgram';
+$lang->resource->aiapp->miniProgramChat         = 'miniProgramChat';
+$lang->resource->aiapp->collectMiniProgram      = 'collectMiniProgram';
 
 $lang->api->methodOrder[0]   = 'index';
 $lang->api->methodOrder[5]   = 'createLib';

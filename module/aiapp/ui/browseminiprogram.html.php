@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('regenerateLang',   $lang->ai->miniPrograms->regenerate);
-jsVar('emptyNameWarning', $lang->ai->miniPrograms->field->emptyNameWarning);
-jsVar('clearContextLang', $lang->ai->miniPrograms->clearContext);
-jsVar('newChatTip',       $lang->ai->miniPrograms->newChatTip);
-jsVar('newVersionTip',    $lang->ai->miniPrograms->newVersionTip);
+jsVar('regenerateLang',   $lang->aiapp->regenerate);
+jsVar('emptyNameWarning', $lang->aiapp->emptyNameWarning);
+jsVar('clearContextLang', $lang->aiapp->clearContext);
+jsVar('newChatTip',       $lang->aiapp->newChatTip);
+jsVar('newVersionTip',    $lang->aiapp->newVersionTip);
 
 jsVar('prompt', $miniProgram->prompt);
-jsVar('postLink', createLink('ai', 'miniProgramChat', "id={$miniProgram->id}"));
+jsVar('postLink', createLink('aiapp', 'miniProgramChat', "id={$miniProgram->id}"));
 jsVar('messages', $messages);
 jsVar('isAppDisabled', $miniProgram->published === '0');
 
@@ -101,7 +101,7 @@ div(
                 <circle cx="12.013" cy="12.0163" r="12" transform="rotate(0.0777774 12.013 12.0163)" fill="#FFA34D"/>
                 <path d="M11.5573 14.7861C12.0809 14.7867 12.6054 14.2164 12.6063 13.6455L13.0103 6.08095C13.0112 5.51 13.0129 4.36812 11.442 4.36619C10.002 4.36442 9.8696 5.36341 9.86853 6.07709L10.2499 13.6426C10.5109 14.2138 11.0337 14.7854 11.5573 14.7861ZM11.5551 16.2134C10.7697 16.2124 9.98317 16.9252 9.98167 17.9243C9.98039 18.7807 10.6336 19.6379 11.55 19.6391C12.4664 19.6402 13.122 18.9273 13.1235 17.9282C13.125 16.929 12.3406 16.2144 11.5551 16.2134Z" fill="white"/>
                 </svg>'),
-                $lang->ai->miniPrograms->disabledTip
+                $lang->aiapp->disabledTip
             ),
             div(
                 setClass('modal-footer'),
@@ -116,27 +116,27 @@ div(
     )
 );
 
-$starBtn = common::hasPriv('ai', 'collectMiniProgram')
+$starBtn = common::hasPriv('aiapp', 'collectMiniProgram')
     ? btn(
         setClass('ghost btn-star absolute'),
         set::size('md'),
-        setData('url', createLink('ai', 'collectMiniProgram', "appID={$miniProgram->id}&delete={$delete}")),
+        setData('url', createLink('aiapp', 'collectMiniProgram', "appID={$miniProgram->id}&delete={$delete}")),
         on::click('window.aiBrowseMiniProgram.handleStarBtnClick'),
         html(html::image("static/svg/{$star}.svg", "class='$star'")),
-        $lang->ai->miniPrograms->collect
+        $lang->aiapp->collect
     )
     : null;
 
-$generateBtn = common::hasPriv('ai', 'miniProgramChat')
+$generateBtn = common::hasPriv('aiapp', 'miniProgramChat')
     ? btn(
         setClass('primary block w-full generate-btn'),
         set::disabled($isDeleted),
-        $lang->ai->miniPrograms->generate,
+        $lang->aiapp->generate,
         on::click('window.aiBrowseMiniProgram.startAIChat')
     )
     : null;
 
-$inputContainer = common::hasPriv('ai', 'miniProgramChat')
+$inputContainer = common::hasPriv('aiapp', 'miniProgramChat')
     ? div(
         setClass('input-container'),
         setClass(array('hidden' => !empty($messages))),
@@ -176,7 +176,7 @@ $inputContainer = common::hasPriv('ai', 'miniProgramChat')
             </defs>
             </svg>
         END),
-        html("<textarea placeholder='{$lang->ai->miniPrograms->placeholder->asking}' rows='1' class='chat-input-box'></textarea>"),
+        html("<textarea placeholder='{$lang->aiapp->continueasking}' rows='1' class='chat-input-box'></textarea>"),
         btn(
             setClass('ghost send-btn'),
             on::click('window.aiBrowseMiniProgram.clearInputAndChat'),
@@ -217,7 +217,7 @@ div(
             $isDeleted
                 ? label(
                     setClass('danger'),
-                    $lang->ai->prompts->deleted
+                    $lang->aiapp->deleted
                 )
                 : $starBtn
         ),
@@ -229,9 +229,9 @@ div(
                     setClass('content flex gap-2.5'),
                     span(
                         setStyle(array('color' => 'var(--color-slate-700)')),
-                        $lang->ai->modelCurrent
+                        $lang->aiapp->modelCurrent
                     ),
-                    span($lang->ai->miniPrograms->modelList[$miniProgram->model]),
+                    span($lang->aiapp->modelList[$miniProgram->model]),
                 ),
                 empty($formGroups)
                     ? null
@@ -240,7 +240,7 @@ div(
                         set::size('md'),
                         set::disabled($isDeleted),
                         set::icon('trash'),
-                        $lang->ai->chatReset,
+                        $lang->aiapp->clear,
                         on::click('window.aiBrowseMiniProgram.handleRestBtnClick')
                     )
             ),
@@ -272,7 +272,7 @@ div(
                 <path d="M8.47095 4.78107L7.05673 6.19528L9.17805 6.90239L7.52814 8.5523" stroke="#FF9F46" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             END),
-            $lang->ai->miniPrograms->chatTip
+            $lang->aiapp->chatTip
         )
     ),
     div(
@@ -280,9 +280,9 @@ div(
         div(
             p(
                 icon(set::name('exclamation'), setClass('mr-2'), setStyle(array('color' => 'rgb(255, 159, 70)'))),
-                html($lang->ai->miniPrograms->noModel[0])
+                html($lang->aiapp->noModel[0])
             ),
-            p(html($lang->ai->miniPrograms->noModel[1]), setStyle('padding-left', '22px'))
+            p(html($lang->aiapp->noModel[1]), setStyle('padding-left', '22px'))
         )
     ),
     div(

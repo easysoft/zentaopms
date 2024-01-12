@@ -100,6 +100,7 @@ $lang->search->modules['project']     = 'Project';
 $lang->search->modules['execution']   = $lang->executionCommon;
 $lang->search->modules['story']       = 'Story';
 $lang->search->modules['requirement'] = $lang->URCommon;
+$lang->search->modules['aiapp']       = 'AI';
 
 $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;
