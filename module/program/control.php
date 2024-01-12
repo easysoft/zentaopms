@@ -161,6 +161,7 @@ class program extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID, 'locate' => $locateLink));
         }
 
+        $originExtra = $extra;
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
@@ -175,6 +176,7 @@ class program extends control
         $this->view->programList    = $this->program->getList();
         $this->view->budgetUnitList = $this->project->getBudgetUnitList();
         $this->view->budgetLeft     = empty($parentProgram) ? 0 : $this->program->getBudgetLeft($parentProgram);
+        $this->view->loadUrl        = $this->createLink('program', 'create', "parentProgramID={parent}" . (empty($originExtra) ? '' : "&extra=$originExtra"));
 
         $this->display();
     }
