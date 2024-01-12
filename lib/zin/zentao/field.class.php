@@ -265,46 +265,22 @@ class field extends setting
      */
     function items(array|false|null $items, bool $reset = false): field
     {
-        if($items === false) return $this->remove('items');
-        if($reset)           return $this->setVal('items', $items);
-        if(is_null($items))  return $this;
-        return $this->addToMap('items', $items);
+        if($items === false)  return $this->remove('items');
+        if($reset)            return $this->setVal('items', $items);
+
+        if(is_array($items))
+        {
+            foreach($items as $item) $this->addToList('items', $item);
+        }
+        return $this;
     }
 
     /**
      * Add item.
      */
-    function item(array|object|null ...$items): field
+    function item(mixed ...$items): field
     {
-        $list = array();
-        foreach($items as $item)
-        {
-            if(is_null($item)) continue;
-            $name = null;
-            if($item instanceof field)
-            {
-                $name = $item->getName();
-            }
-            if($item instanceof dataset)
-            {
-                $name = $item->get('name');
-            }
-            elseif(is_array($item))
-            {
-                if(isset($item['name'])) $name = $item['name'];
-            }
-            if(is_null($name))
-            {
-                trigger_error('[ZIN] The item for adding to field "' . $this->getName() . '" has no name.', E_USER_ERROR);
-            }
-            $list[$name] = $item;
-        }
-        return $this->addToMap('items', $list);
-    }
-
-    function removeItem(string ...$names): field
-    {
-        return $this->removeFromMap('items', ...$names);
+        return $this->addToList('items', ...$items);
     }
 
     function itemBegin(?string $itemName = null): field
