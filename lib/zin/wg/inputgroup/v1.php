@@ -22,9 +22,11 @@ class inputGroup extends wg
 
         $type = $item->prop('type');
 
-        if($type === 'addon')  return h::span(setClass('input-group-addon'), set($item->props->skip('type,text')), $item->prop('text'));
-        if($type === 'btn')    return new btn(set($item->props->skip('type')));
-        if($type === 'picker') return new picker(set($item->props->skip('type')));
+        if($type === 'addon')      return h::span(setClass('input-group-addon'), set($item->props->skip('type,text')), $item->prop('text'));
+        if($type === 'span')       return h::span(setClass('px-2 h-8 flex items-center'), set($item->props->skip('type,text')), $item->prop('text'));
+        if($type === 'btn')        return new btn(set($item->props->skip('type')));
+        if($type === 'picker')     return new picker(set($item->props->skip('type')));
+        if($type === 'datePicker') return new datePicker(set($item->props->skip('type')));
 
         if($type)
         {
