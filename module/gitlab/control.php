@@ -284,7 +284,7 @@ class gitlab extends control
 
         $input       = file_get_contents('php://input');
         $requestBody = json_decode($input);
-        $result      = $this->gitlab->webhookParseBody($requestBody, $gitlab);
+        $result      = $this->gitlabZen->webhookParseBody($requestBody, $gitlab);
 
         $this->gitlabZen->recordWebhookLogs($input, $result);
 
@@ -990,7 +990,7 @@ class gitlab extends control
                 if(isset($issue->assignee)) $issue->assignee_id = $issue->assignee->id;
                 $issue->updated_by_id = $issue->author->id; // Here can be replaced by current zentao user.
 
-                $object            = $this->gitlab->issueToZentaoObject($issue, $gitlabID);
+                $object            = $this->gitlabZen->issueToZentaoObject($issue, $gitlabID);
                 $object->product   = (int)$productList[$issueID];
                 $object->execution = $executionID;
                 $clonedObject      = clone $object;

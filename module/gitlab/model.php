@@ -1499,24 +1499,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 解析webhook事件。
-     * Parse webhook body function.
-     *
-     * @param  object $body
-     * @param  int    $gitlabID
-     * @access public
-     * @return object
-     */
-    public function webhookParseBody(object $body, int $gitlabID): object
-    {
-        $type = zget($body, 'object_kind', '');
-        if(!$type or !is_callable(array($this, "webhookParse{$type}"))) return false;
-        // fix php 8.0 bug. link: https://www.php.net/manual/zh/function.call-user-func-array.php#125953
-
-        return call_user_func_array(array($this, "webhookParse{$type}"), array($body, $gitlabID));
-    }
-
-    /**
      * 通过webhook同步issue。
      * Webhook sync issue.
      *
@@ -1680,45 +1662,6 @@ class gitlabModel extends model
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issue->iid}");
         commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'));
         $this->saveIssueRelation($objectType, $object, $gitlabID, $issue);
-    }
-
-    /**
-     * 解析gitlab issue为禅道任务、bug、需求。
-     * Parse issue to zentao object.
-     *
-     * @param  object $issue
-     * @param  int    $gitlabID
-     * @param  object $changes
-     * @access public
-     * @return object
-     */
-    public function issueToZentaoObject(object $issue, int $gitlabID, object $changes = null): object
-    {
-        if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
-
-        if(isset($changes->assignees)) $changes->assignee_id = true;
-        $maps        = $this->config->gitlab->maps->{$issue->objectType};
-        $gitlabUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitlabID, 'gitlab', 'openID,account');
-
-        $object     = new stdclass;
-        $object->id = $issue->objectID;
-        foreach($maps as $zentaoField => $config)
-        {
-            $value = '';
-            list($gitlabField, $optionType, $options) = explode('|', $config);
-            if(!isset($changes->$gitlabField) and $object->id != 0) continue;
-            if($optionType == 'field' or $optionType == 'fields') $value = $issue->$gitlabField;
-            if($options == 'date') $value = $value ? date('Y-m-d', strtotime($value)) : '0000-00-00';
-            if($options == 'datetime') $value = $value ? date('Y-m-d H:i:s', strtotime($value)) : '0000-00-00 00:00:00';
-            if($optionType == 'userPairs' and isset($issue->$gitlabField)) $value = zget($gitlabUsers, $issue->$gitlabField);
-            if($optionType == 'configItems' and isset($issue->$gitlabField)) $value = array_search($issue->$gitlabField, $this->config->gitlab->$options);
-
-            /* Execute this line even `$value == ""`, such as `$issue->description == ""`. */
-            if($value or $value == "") $object->$zentaoField = $value;
-
-            if($gitlabField == "description") $object->$zentaoField .= "<br><br><a href=\"{$issue->web_url}\" target=\"_blank\">{$issue->web_url}</a>";
-        }
-        return $object;
     }
 
     /**
