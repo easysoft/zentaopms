@@ -4,13 +4,11 @@ global $lang;
 
 $fields = defineFieldList('program.create', 'program');
 
+$fields->field('name')
+    ->wrapBefore(true);
+
 $fields->field('budget')
-    ->control('inputGroup')
-    ->label($lang->project->budget)
-    ->item(field('budget'))
-    ->checkbox(true)
-    ->checkboxProps(array('field' => 'future', 'label' => $lang->project->future))
-    ->checked(false);
+    ->checkbox(array('name' => 'future', 'text' => $lang->project->future));
 
 $fields->field('acl')
     ->width('full')
