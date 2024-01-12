@@ -1740,7 +1740,7 @@ class testcase extends control
             $result = $this->testcaseZen->parseUploadFile($productID, $branch);
             if(is_array($result)) return $this->send($result);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => $this->createLink('testcase', 'showXmindImport', "productID=$result&branch=$branch"), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'load' => $this->createLink('testcase', 'showXmindImport', "productID=$result&branch=$branch"), 'closeModal' => true));
         }
 
         $this->view->settings = $this->testcase->getXmindConfig();
