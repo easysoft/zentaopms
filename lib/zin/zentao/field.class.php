@@ -280,7 +280,11 @@ class field extends setting
         if($items === false)  return $this->remove('items');
         if($reset)            return $this->setVal('items', $items);
 
-        if(is_array($items))
+        if(empty($items) && !$this->has('items'))
+        {
+            $this->setVal('items', array());
+        }
+        elseif(is_array($items))
         {
             foreach($items as $item) $this->addToList('items', $item);
         }
