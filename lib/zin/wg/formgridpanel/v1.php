@@ -35,7 +35,7 @@ class formGridPanel extends formPanel
         'layout'        => 'grid',
         'container'     => true,
         'modeSwitcher'  => true,
-        'foldableItems' => array(),
+        'foldableItems' => null,
         'formID'        => '$AUTO',
         'customBtn'     => true
     );

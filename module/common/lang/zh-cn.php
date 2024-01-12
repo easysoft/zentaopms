@@ -143,6 +143,9 @@ $lang->noticeOkFile    = '为了安全起见，系统需要确认您的管理员
 $lang->noticeDrag      = '可点击添加或拖拽上传, 不超过 %s';
 $lang->allProgress     = '总进度';
 
+$lang->fieldDisplaySetting = '字段显示设置';
+$lang->fieldSettingTip     = '以下字段默认收起，点击「显示更多字段」按钮展开查看，若您希望某些字段默认不收起，通过图钉固定即可。';
+
 $lang->serviceAgreement = "服务协议";
 $lang->privacyPolicy    = "隐私政策";
 $lang->needAgreePrivacy = "请先阅读《服务协议》和《隐私政策》";

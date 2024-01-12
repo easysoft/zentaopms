@@ -20,6 +20,7 @@ class form extends formBase
         'foldableItems?: array|string',    // 可折叠的表单项。
         'pinnedItems?: array|string',      // 固定显示的表单项。
         'customBtn?: array|bool',          // 是否显示表单自定义按钮。
+        'customUrl?: string',              // 自定义表单提交 URL。
         'toolbar?: array|bool',            // 额外的自定义按钮。
         'layout?: string="horz"',          // 表单布局，可选值为：'horz'、'grid' 和 `normal`。
         'labelWidth?: int',                // 标签宽度，单位为像素。
@@ -60,24 +61,28 @@ class form extends formBase
         if(!$this->hasProp('data'))      $this->setProp('data',      data($module));
         if(!$this->hasProp('labelData')) $this->setProp('labelData', $lang->$module);
 
-        if($this->prop('customBtn') && !$this->hasProp('foldableItems'))
+        if($this->prop('customBtn'))
         {
             global $config;
             $module = $app->rawModule;
             $method = $app->rawMethod;
+            $key    = $method . 'Fields';
 
             $app->loadLang($module);
             $app->loadModuleConfig($module);
 
-            $key           = $method . 'Fields';
-            $listFieldsKey = 'custom' . ucfirst($key);
-            $fieldList     = empty($config->$module->$listFieldsKey) ? $config->$module->list->$listFieldsKey : $config->$module->$listFieldsKey;
-
-            $foldableItems = empty($fieldList) ? array() : explode(',', $fieldList);
-
-            if(!empty($foldableItems))
+            if(!$this->hasProp('foldableItems'))
             {
-                $this->setProp('foldableItems', $foldableItems);
+                $listFieldsKey = 'custom' . ucfirst($key);
+                $fieldList     = empty($config->$module->$listFieldsKey) ? $config->$module->list->$listFieldsKey : $config->$module->$listFieldsKey;
+                $foldableItems = empty($fieldList) ? array() : explode(',', $fieldList);
+                if(!empty($foldableItems))
+                {
+                    $this->setProp('foldableItems', $foldableItems);
+                }
+            }
+            if(!$this->hasProp('pinnedItems'))
+            {
                 $this->setProp('pinnedItems', explode(',', $config->$module->custom->$key));
             }
         }
@@ -149,6 +154,27 @@ class form extends formBase
         return $item;
     }
 
+    protected function buildCustomBtn()
+    {
+        global $lang;
+        list($customBtn, $customUrl) = $this->prop(array('customBtn', 'customUrl'));
+
+        if(is_null($customUrl))
+        {
+            global $app;
+            $customUrl = createLink('custom', 'ajaxSaveCustomFields', "module={$app->rawModule}&section=custom&key={$app->rawMethod}Fields");
+        }
+
+        return btn
+        (
+            setClass('gray-300-outline rounded-full btn-custom-form'),
+            setData(array('title' => $lang->fieldDisplaySetting, 'tip' => $lang->fieldSettingTip, 'customUrl' => $customUrl)),
+            set::icon('cog-outline'),
+            bind::click('zui.FormSetting.show({element: event.target, tip: options.tip, title: options.title, customUrl: options.customUrl});'),
+            is_array($customBtn) ? set($customBtn) : null
+        );
+    }
+
     public function buildItems(): array
     {
         global $lang;
@@ -199,12 +225,7 @@ class form extends formBase
                     setData(array('collapse-text' => $lang->hideMoreInfo, 'expand-text' => $lang->showMoreInfo)),
                     bind::click('$element.closest(\'.panel-form\').toggleClass(\'show-fold-items\')')
                 ),
-                $customBtn ? btn
-                (
-                    setClass('gray-300-outline rounded-full btn-custom-form'),
-                    set::icon('cog-outline'),
-                    is_array($customBtn) ? set($customBtn) : null
-                ) : null
+                $customBtn ? $this->buildCustomBtn() : null
             );
         }
 
