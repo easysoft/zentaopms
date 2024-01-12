@@ -1517,38 +1517,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 解析webhook触发的issue。
-     * Parse Webhook issue.
-     *
-     * @param  object $body
-     * @param  int    $gitlabID
-     * @access public
-     * @return object
-     */
-    public function webhookParseIssue(object $body, int $gitlabID): object
-    {
-        $object = $this->webhookParseObject($body->labels);
-        if(empty($object)) return null;
-
-        $issue             = new stdclass;
-        $issue->action     = $body->object_attributes->action . $body->object_kind;
-        $issue->issue      = $body->object_attributes;
-        $issue->changes    = $body->changes;
-        $issue->objectType = $object->type;
-        $issue->objectID   = $object->id;
-
-        $issue->issue->objectType = $object->type;
-        $issue->issue->objectID   = $object->id;
-
-        /* Parse markdown description to html. */
-        $issue->issue->description = commonModel::processMarkdown($issue->issue->description);
-
-        if(!isset($this->config->gitlab->maps->{$object->type})) return false;
-        $issue->object = $this->issueToZentaoObject($issue->issue, $gitlabID, $body->changes);
-        return $issue;
-    }
-
-    /**
      * 通过webhook同步issue。
      * Webhook sync issue.
      *
@@ -1561,36 +1529,6 @@ class gitlabModel extends model
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
         if($tableName) $this->dao->update($tableName)->data($issue->object)->where('id')->eq($issue->objectID)->exec();
         return !dao::isError();
-    }
-
-    /**
-     * 通过标签解析禅道对象。
-     * Parse zentao object from labels.
-     *
-     * @param  array $labels
-     * @access public
-     * @return object
-     */
-    public function webhookParseObject(array $labels): object
-    {
-        $object     = null;
-        $objectType = '';
-        foreach($labels as $label)
-        {
-            if(preg_match($this->config->gitlab->labelPattern->story, $label->title)) $objectType = 'story';
-            if(preg_match($this->config->gitlab->labelPattern->task, $label->title)) $objectType = 'task';
-            if(preg_match($this->config->gitlab->labelPattern->bug, $label->title)) $objectType = 'bug';
-
-            if($objectType)
-            {
-                list($prefix, $id) = explode('/', $label->title);
-                $object       = new stdclass;
-                $object->id   = $id;
-                $object->type = $objectType;
-            }
-        }
-
-        return $object;
     }
 
     /**
