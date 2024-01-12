@@ -117,10 +117,10 @@ $fields->field('testtask')->control('hidden')->value(data('bug.testtask'));
 
 $fields = defineFieldList('bug.kanban');
 $fields->field('region')
-    ->label($lang->kanbancard->region)
+    ->label(data('lang.kanbancard.region'))
     ->items(data('regionPairs'))
     ->value(data('regionID'));
 $fields->field('lane')
-    ->label($lang->kanbancard->lane)
+    ->label(data('lang.kanbancard.lane'))
     ->items(data('lanePairs'))
     ->value(data('laneID'));
