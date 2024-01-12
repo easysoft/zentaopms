@@ -6,42 +6,46 @@ require_once dirname(__DIR__) . DS . 'formlabel' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'control' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
 
+/**
+ * 表单控件组部件。
+ * Form control group widget.
+ */
 class formGroup extends wg
 {
     protected static array $defineProps = array(
-        'name?: string',
-        'label?: string|bool',
-        'labelFor?: string',
-        'labelClass?: string',
-        'labelProps?: string',
-        'labelWidth?: int|string',
-        'labelHint?: string',
-        'labelHintIcon?: string="help"',
-        'labelHintClass?: string',
-        'labelHintProps?: array',
-        'labelActions?: array',
-        'labelActionsClass?: string',
-        'labelActionsProps?: array',
-        'checkbox?: bool|array',
-        'required?:bool|string="auto"',
-        'requiredFields?: string',
-        'tip?: string',
-        'tipClass?: string|array',
-        'tipProps?: array',
-        'control?: array|string',
-        'builder?: callable',
-        'width?: string',
-        'strong?: bool',
-        'value?: string|array',
-        'disabled?: bool',
-        'readonly?: bool',
-        'multiple?: bool',
-        'hidden?: bool',
-        'items?: array',
-        'placeholder?: string',
-        'foldable?: bool',
-        'pinned?: bool',
-        'children?: array|object'
+        'id?: string',                          // ID。
+        'name?: string',                        // 字段名。
+        'label?: string|bool',                  // 标签文本。
+        'labelFor?: string',                    // 标签的 for 属性。
+        'labelClass?: string',                  // 标签的 class 属性。
+        'labelProps?: string',                  // 标签的其它属性。
+        'labelWidth?: int|string',              // 标签的宽度。
+        'labelHint?: string',                   // 标签的提示文本。
+        'labelHintIcon?: string="help"',        // 标签的提示图标。
+        'labelHintClass?: string',              // 标签的提示 class 属性。
+        'labelHintProps?: array',               // 标签的提示其它属性。
+        'labelActions?: array',                 // 标签的操作按钮。
+        'labelActionsClass?: string',           // 标签的操作按钮 class 属性。
+        'labelActionsProps?: array',            // 标签的操作按钮其它属性。
+        'checkbox?: bool|array',                // 标签的复选框属性定义。
+        'required?:bool|string="auto"',         // 是否必填。
+        'requiredFields?: string',              // 必填字段列表，例如 `'product,branch'`。
+        'tip?: string',                         // 提示文本。
+        'tipClass?: string|array',              // 提示 class 属性。
+        'tipProps?: array',                     // 提示其它属性。
+        'control?: array|string',               // 表单控件类型或控件属性定义。
+        'width?: string',                       // 界面宽度。
+        'strong?: bool',                        // 是否加粗。
+        'value?: string|array',                 // 值。
+        'disabled?: bool',                      // 是否禁用。
+        'readonly?: bool',                      // 是否只读。
+        'multiple?: bool',                      // 是否多选。
+        'hidden?: bool',                        // 是否隐藏。
+        'items?: array',                        // 选项列表。
+        'placeholder?: string',                 // 占位符。
+        'foldable?: bool',                      // 是否可折叠。
+        'pinned?: bool',                        // 是否固定。
+        'children?: array|object'               // 内部自定义内容。
     );
 
     protected function buildLabel(): ?wg
@@ -96,6 +100,7 @@ class formGroup extends wg
         (
             setClass('form-group', array('required' => $required, 'no-label' => $label === false || $label === null, 'hidden' => $hidden, 'is-foldable' => $foldable, 'is-pinned' => $pinned)),
             zui::width($width),
+            setID($id),
             set($this->getRestProps()),
             setData('name', $name),
             setCssVar('form-horz-label-width', $labelWidth),
