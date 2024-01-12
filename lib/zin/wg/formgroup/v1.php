@@ -14,7 +14,7 @@ class formGroup extends wg
 {
     protected static array $defineProps = array(
         'id?: string',                          // ID。
-        'name?: string',                        // 字段名。
+        'name?: string',                        // 字段名，可能影响到表单提交的域名称，如果是多个值的表单控件，可能需要将名称定义为 `key[]` 的形式。
         'label?: string|bool',                  // 标签文本。
         'labelFor?: string',                    // 标签的 for 属性。
         'labelClass?: string',                  // 标签的 class 属性。
