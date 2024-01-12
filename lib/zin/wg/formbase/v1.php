@@ -26,9 +26,9 @@ class formBase extends wg
         'target?: string="ajax"',       // 表单提交目标，如果是 `'ajax'` 提交则为 ajax，在禅道中除非特殊目的，都使用 ajax 进行提交。
         'submitBtnText?: string',       // 表单提交按钮文本，如果不指定则使用 `$lang->save` 的值。
         'cancelBtnText?: string',       // 表单取消按钮文本，如果不指定则使用 `$lang->goback` 的值。
-        'back?: string="APP"',          // 表单返回行为
-        'backUrl?: string',             // 表单返回链接
-        'ajax?:array'                   // Ajax 表单选项
+        'back?: string="APP"',          // 表单返回行为。
+        'backUrl?: string',             // 表单返回链接。
+        'ajax?:array'                   // Ajax 表单选项。
     );
 
     protected static array $defineBlocks = array(
