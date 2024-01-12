@@ -429,6 +429,20 @@ class gitlabTest
         return $result;
     }
 
+    /**
+     * Test webhookSyncIssue method.
+     *
+     * @param  object  $issue
+     * @access public
+     * @return array|object|false
+     */
+    public function webhookSyncIssueTest(object $issue): array|object|false
+    {
+        $result = $this->gitlab->webhookSyncIssue($issue);
+        if(dao::isError()) return dao::getError();
+        return $result ? $this->gitlab->loadModel($issue->objectType)->getByID($issue->objectID) : false;
+    }
+
     public function apiGetTest(int|string $host, string $api)
     {
         $result = $this->gitlab->apiGet($host, $api);
