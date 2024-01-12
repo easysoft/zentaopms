@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The model file of ai module of ZenTaoPMS.
  *
@@ -36,47 +35,49 @@ class aiModel extends model
     public $errors = array();
 
     /**
-     * Constructor. Get model config from system.ai settings.
-     * TODO: change this.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        /* Load config from setting. */
-        $this->modelConfig = new stdclass();
-        $openaiSettings = $this->loadModel('setting')->getItems("owner=system&module=ai");
-        foreach($openaiSettings as $item) $this->modelConfig->{$item->key} = $item->value;
-    }
-
-    /**
-     * Set model config, used for testing.
+     * Set model config with model stored in database.
      *
      * @param  object $config
      * @access public
-     * @return void
+     * @return bool
      */
-    public function setConfig($config)
+    public function setModelConfig($config)
     {
+        /* Extract model options if model is from DB. */
+        if(isset($config->credentials)) $config = $this->unserializeModel($config);
+
+        /* Abort if config is falsy. */
+        if(empty($config)) return false;
+
         $this->modelConfig = $config;
+        return true;
     }
 
     /**
-     * Determine model is configured or not.
-     * TODO: change this.
+     * Setup $modelConfig with model stored in database.
      *
-     * @access public
+     * @param  int      $modelID
+     * @access private
      * @return bool
      */
-    public function isModelConfigured()
+    private function useLanguageModel($modelID)
     {
-        $modelConfig = new stdclass();
-        $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
-        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
-        return !empty($modelConfig->status) && $modelConfig->status == 'on' && !empty($modelConfig->key);
+        $model = $this->getLanguageModel($modelID);
+        if(empty($model)) return false;
+
+        return $this->setModelConfig($model);
+    }
+
+    /**
+     * Whether any LLM is configured and enabled.
+     *
+     * @access public
+     * @return boolean
+     */
+    public function hasModelsAvailable()
+    {
+        $models = $this->getLanguageModels('', true);
+        return !empty($models);
     }
 
     /**
@@ -89,11 +90,12 @@ class aiModel extends model
      * @access public
      * @return array
      */
-    public function getModels($type = '', $enabledOnly = false, $pager = null, $orderBy = 'id_desc')
+    public function getLanguageModels($type = '', $enabledOnly = false, $pager = null, $orderBy = 'id_desc')
     {
         return $this->dao->select('*')->from(TABLE_AI_MODEL)
             ->where('deleted')->eq('0')
             ->beginIF(!empty($type))->andWhere('`type`')->eq($type)->fi()
+            ->beginIF($enabledOnly)->andWhere('`enabled`')->eq('1')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -106,7 +108,7 @@ class aiModel extends model
      * @access public
      * @return object|false  LLM config, false if not found.
      */
-    public function getModel($modelID)
+    public function getLanguageModel($modelID)
     {
         return $this->dao->select('*')->from(TABLE_AI_MODEL)
             ->where('id')->eq($modelID)
@@ -121,7 +123,7 @@ class aiModel extends model
      * @access private
      * @return object|false
      */
-    private function formatModel($model)
+    private function serializeModel($model)
     {
         /* Check if all credentials fields are present. */
         if(empty($this->config->ai->vendorList[$model->vendor])) return false;
@@ -132,21 +134,48 @@ class aiModel extends model
             $credentials->$credKey = $model->$credKey;
         }
 
-        $proxy = new stdclass();
-        if(!empty($model->proxyType) && !empty($model->proxyAddr))
-        {
-            $proxy->type = $model->proxyType;
-            $proxy->addr = $model->proxyAddr;
-        }
-
         $modelConfig = new stdclass();
         $modelConfig->name        = $model->name;
         $modelConfig->desc        = $model->description;
         $modelConfig->type        = $model->type;
         $modelConfig->vendor      = $model->vendor;
         $modelConfig->credentials = json_encode($credentials);
-        $modelConfig->proxy       = json_encode($proxy);
         $modelConfig->enabled     = $model->status == '1';
+
+        if(!empty($model->proxyType) && !empty($model->proxyAddr))
+        {
+            $proxy = new stdclass();
+            $proxy->type = $model->proxyType;
+            $proxy->addr = $model->proxyAddr;
+            $modelConfig->proxy = json_encode($proxy);
+        }
+
+        return $modelConfig;
+    }
+
+    /**
+     * Extract model config for use with actual API calls.
+     *
+     * @param  object        $model
+     * @access private
+     * @return object|false
+     */
+    private function unserializeModel($model)
+    {
+        $modelConfig = new stdclass();
+        $modelConfig->type   = $model->type;
+        $modelConfig->vendor = $model->vendor;
+
+        /* Extract credential props. */
+        $credentials = json_decode($model->credentials);
+        foreach($credentials as $credKey => $credValue) $modelConfig->$credKey = $credValue;
+
+        /* Extract proxy options. */
+        if(!empty($model->proxy))
+        {
+            $proxy = json_decode($model->proxy);
+            foreach($proxy as $proxyKey => $proxyValue) $modelConfig->{'proxy' . ucfirst($proxyKey)} = $proxyValue;
+        }
 
         return $modelConfig;
     }
@@ -160,7 +189,7 @@ class aiModel extends model
      */
     public function createModel($model)
     {
-        $modelConfig = $this->formatModel($model);
+        $modelConfig = $this->serializeModel($model);
         if(!$modelConfig) return false;
 
         $this->dao->insert(TABLE_AI_MODEL)
@@ -182,10 +211,10 @@ class aiModel extends model
      */
     public function updateModel($modelID, $model)
     {
-        $currentModel = $this->getModel($modelID);
+        $currentModel = $this->getLanguageModel($modelID);
         if(!$currentModel) return false;
 
-        $modelConfig = $this->formatModel($model);
+        $modelConfig = $this->serializeModel($model);
         if(!$modelConfig) return false;
 
         $this->dao->update(TABLE_AI_MODEL)
@@ -573,14 +602,17 @@ class aiModel extends model
     /**
      * Complete text with OpenAI GPT.
      *
+     * @param   int      $model      model id
      * @param   string   $prompt     text to complete
      * @param   int      $maxTokens  max tokens to generate
      * @param   array    $options    optional params, see https://platform.openai.com/docs/api-reference/completions/create
      * @access  public
      * @return  mixed    false if error, array of texts (choices) if success
      */
-    public function complete($prompt, $maxTokens = 512, $options = array())
+    public function complete($model, $prompt, $maxTokens = 512, $options = array())
     {
+        if(empty($this->modelConfig) && !$this->useLanguageModel($model)) return false;
+
         $data = compact('prompt', 'maxTokens');
 
         if(!empty($options))
@@ -598,14 +630,17 @@ class aiModel extends model
     /**
      * Edit text with OpenAI GPT.
      *
+     * @param   int     $model        model id
      * @param   string  $input        text to edit
      * @param   string  $instruction  edit instruction
      * @param   array   $options      optional params, see https://platform.openai.com/docs/api-reference/edits/create
      * @access  public
      * @return  mixed   false if error, array of texts (choices) if success
      */
-    public function edit($input, $instruction, $options = array())
+    public function edit($model, $input, $instruction, $options = array())
     {
+        if(empty($this->modelConfig) && !$this->useLanguageModel($model)) return false;
+
         $data = compact('input', 'instruction');
 
         if(!empty($options))
@@ -642,13 +677,16 @@ class aiModel extends model
      *        (object)array('role' => 'assistant', 'content' => 'Hi, there are 48 bobs in 24 bebs.')
      *     );
      *
+     * @param  int     $model     model id
      * @param  array   $messages  array of chat messages
      * @param  array   $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
      * @access public
      * @return mixed   false if error, array of chat messages if success
      */
-    public function converse($messages, $options = array())
+    public function converse($model, $messages, $options = array())
     {
+        if(empty($this->modelConfig) && !$this->useLanguageModel($model)) return false;
+
         /* Filter system message out for ERNIE. */
         if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
         {
@@ -684,14 +722,17 @@ class aiModel extends model
      *
      * For technical details, see https://platform.openai.com/docs/guides/gpt/function-calling.
      *
+     * @param  int    $model     model id
      * @param  array  $messages  array of chat messages
      * @param  object $schema    schema of the output
      * @param  array  $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
      * @access public
      * @return mixed  false if error, array of JSON object if success
      */
-    public function converseForJSON($messages, $schema, $options = array())
+    public function converseForJSON($model, $messages, $schema, $options = array())
     {
+        if(empty($this->modelConfig) && !$this->useLanguageModel($model)) return false;
+
         $functions    = array((object)array('name' => 'function', 'parameters' => $schema));
         $functionCall = (object)array('name' => 'function');
 
@@ -715,6 +756,7 @@ class aiModel extends model
      * Usage is the same as function `converseForJSON`, but this function will generate two conversations:
      * one for manipulating the natural language data, and the other for generating the JSON output.
      *
+     * @param  int    $model     model id
      * @param  array  $messages  array of chat messages
      * @param  object $schema    schema of the output
      * @param  array  $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
@@ -722,8 +764,10 @@ class aiModel extends model
      * @return mixed  false if error, array of JSON object if success
      * @throws AIResponseException
      */
-    public function converseTwiceForJSON($messages, $schema, $options = array())
+    public function converseTwiceForJSON($model, $messages, $schema, $options = array())
     {
+        if(empty($this->modelConfig) && !$this->useLanguageModel($model)) return false;
+
         /* First conversation. */
         $data = compact('messages');
         if(!empty($options))
