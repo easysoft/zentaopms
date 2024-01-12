@@ -41,7 +41,7 @@ class formLabel extends wg
             $actions = toolbar
             (
                 setClass('form-label-actions size-sm', $actionsClass),
-                set::btnClass('ghost'),
+                set::btnClass('primary-ghost'),
                 set::items($actions),
                 set($actionsProps)
             );
