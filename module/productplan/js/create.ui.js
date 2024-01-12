@@ -20,8 +20,9 @@ window.clickSubmit = function()
         const link = $.createLink('productplan', 'ajaxGetDiffBranchesTip', "productID=" + productID + "&parentID=" + parentPlan + "&branches=" + branches);
         $.get(link, function(diffBranchesTip)
         {
-            const formUrl  = $('#createForm').attr('action');
-            const formData = new FormData($("#createForm")[0]);
+            const formUrl  = $('#createPlanPanel form').attr('action');
+            console.log($("#createPlanPanel form"));
+            const formData = new FormData($("#createPlanPanel form")[0]);
             if(diffBranchesTip != '')
             {
                 zui.Modal.confirm(diffBranchesTip).then((res) => {
