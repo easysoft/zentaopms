@@ -287,7 +287,7 @@ js::set('pageSummary',       $summary);
         {
             echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             echo "<ul class='dropdown-menu pull-right'>";
-            echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project=$projectID"), $lang->execution->linkStory). "</li>";
+            echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project=$projectID&browseType=&param=0&recTotal=0&recPerPage=50&pageID=1&storyType=$storyType"), $lang->execution->linkStory). "</li>";
             echo '<li>' . html::a('#linkStoryByRoadmap', $lang->product->linkStoryByRoadmap . $lang->URCommon, '', 'data-toggle="modal"') . "</li>";
             echo '</ul>';
         }
@@ -295,7 +295,7 @@ js::set('pageSummary',       $summary);
         {
             echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             echo "<ul class='dropdown-menu pull-right'>";
-            echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project=$projectID"), $lang->execution->linkStory). "</li>";
+            echo '<li>' . html::a($this->createLink('projectstory', 'linkStory', "project=$projectID&browseType=&param=0&recTotal=0&recPerPage=50&pageID=1&storyType=$storyType"), $lang->execution->linkStory). "</li>";
             echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
             echo '</ul>';
         }
