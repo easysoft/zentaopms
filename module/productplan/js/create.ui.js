@@ -6,7 +6,7 @@ $(document).on('change', 'input[name=begin],input[name=end]', function()
 window.clickSubmit = function()
 {
     const parentPlan  = $('input[name=parent]').val();
-    const branches    = $('select[name^=branch]').val().toString();
+    const branches    = $('select[name^=branch]').length > 0 ? $('select[name^=branch]').val().toString() : '';
     const title       = $('input[name=title]').val();
     const begin       = $('input[name=begin]').val();
     const end         = $('input[name=end]').val();
