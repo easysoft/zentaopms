@@ -114,6 +114,7 @@ foreach($cases as $case)
 
     $actionType = $case->isScene ? 'scene' : 'testcase';
     $cols['actions']['menu'] = $config->$actionType->menu;
+    if($actionType == 'testcase' && $this->config->testcase->needReview) unset($cols['actions']['menu'][1][0]);
 
     $case->browseType = $browseType;
     initTableData(array($case), $cols, $this->testcase);
