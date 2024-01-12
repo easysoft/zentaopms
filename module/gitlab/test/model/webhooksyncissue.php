@@ -14,7 +14,7 @@ cid=1
 - 对象类型错误 @0
 - 对象ID为空 @0
 - 对象ID错误 @0
-- 对象ID正确属性name @开发任务11
+- 对象ID正确,更新内容为空 @0
 - 对象ID正确,更新名称属性name @任务1
 
 */
@@ -40,7 +40,7 @@ $issue->objectID = 10;
 r($gitlab->webhookSyncIssueTest($issue)) && p() && e('0'); // 对象ID错误
 
 $issue->objectID = 1;
-r($gitlab->webhookSyncIssueTest($issue)) && p('name') && e('开发任务11'); // 对象ID正确
+r($gitlab->webhookSyncIssueTest($issue)) && p() && e('0'); // 对象ID正确,更新内容为空
 
 $issue->object->name = '任务1';
 r($gitlab->webhookSyncIssueTest($issue)) && p('name') && e('任务1'); // 对象ID正确,更新名称

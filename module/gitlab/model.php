@@ -1511,7 +1511,7 @@ class gitlabModel extends model
     public function webhookSyncIssue(object $issue): bool
     {
         $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');
-        if(!$tableName) return false;
+        if(!$tableName || empty($issue->objectID) || empty((array)$issue->object)) return false;
 
         $this->dao->update($tableName)->data($issue->object)->where('id')->eq($issue->objectID)->exec();
         return !dao::isError();

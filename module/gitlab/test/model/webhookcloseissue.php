@@ -26,6 +26,8 @@ $gitlab = new gitlabTest();
 
 $issue = new stdclass();
 $issue->object     = new stdclass();
+$issue->issue      = new stdclass();
+$issue->issue->url = '';
 $issue->objectID   = 0;
 $issue->objectType = '';
 
