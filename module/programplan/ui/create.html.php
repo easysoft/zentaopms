@@ -220,7 +220,7 @@ featureBar(li
 
 toolbar
 (
-    btn(setClass('btn primary open-url'), set::icon('back'), setData(array('back', 'APP')), $lang->goback)
+    backBtn(set::icon('back'), setClass('primary'), $lang->goback),
 );
 
 formBatchPanel
