@@ -141,7 +141,7 @@ class form extends formBase
                 if(!isset($item['width'])) $item['width'] = '1/2';
 
                 $control = isset($item['control']) ? $item['control'] : array('name' => $name);
-                if(is_string($control)) $control = array('type' => $control, 'name' => $name);
+                if(is_string($control)) $control = array('control' => $control, 'name' => $name);
                 if(!isset($control['id'])) $control['id'] = '';
                 $item['control'] = $control;
             }

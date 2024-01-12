@@ -370,10 +370,14 @@ class field extends setting
             foreach($array['items'] as $key => $item)
             {
                 if($item instanceof \zin\utils\dataset) $item = $item->toArray();
-                elseif(is_object($item))     $item = get_object_vars($item);
+                elseif(is_object($item))                $item = get_object_vars($item);
                 $items[$key] = $item;
             }
             $array['items'] = $items;
+        }
+        if(isset($array['control']['control']) && count($array['control']) == 1)
+        {
+            $array['control'] = $array['control']['control'];
         }
         return $array;
     }

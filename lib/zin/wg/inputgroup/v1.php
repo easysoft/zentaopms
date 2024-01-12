@@ -21,16 +21,23 @@ class inputGroup extends wg
         elseif($item instanceof wg || is_null($item)) return $item;
 
         list($control, $type) = $item->prop(array('control', 'type'));
+        if(is_array($control))
+        {
+            $controlProps = $control;
+            if(isset($control['control']))
+            {
+                $control = $control['control'];
+                unset($controlProps['control']);
+                $item->setProp('control', $control);
+            }
+            $item->setProp($controlProps);
+        }
         if(is_null($control) && !is_null($type))
         {
             $control = $type;
             $type    = null;
             $item->setProp('control', $control);
             $item->setProp('type', null);
-        }
-        if(is_array($control))
-        {
-            $control = $control['control'];
         }
 
         if($control === 'addon')      return h::span(setClass('input-group-addon'), set($item->props->skip('control,text')), $item->prop('text'));
