@@ -16,6 +16,7 @@ zdTable('project')->gen(20);
 global $tester;
 $tester->loadModel('story');
 $tester->story->lang->SRCommon      = '研发需求';
+$tester->story->lang->URCommon      = '用户需求';
 $tester->story->config->requestType = 'PATH_INFO';
 $tester->story->config->webRoot     = '/';
 
