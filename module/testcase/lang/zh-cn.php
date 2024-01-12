@@ -208,7 +208,6 @@ $lang->testcase->autoList['no']   = '否';
 $lang->testcase->reviewList[0] = '否';
 $lang->testcase->reviewList[1] = '是';
 
-$lang->testcase->priList[0] = '';
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
 $lang->testcase->priList[2] = 2;
