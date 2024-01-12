@@ -12,13 +12,16 @@ declare(strict_types=1);
 
 namespace zin;
 
+use function zin\utils\flat;
+
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 
 class context extends \zin\utils\dataset
 {
-    public function addHookFiles(string ...$files)
+    public function addHookFiles(string|array ...$files)
     {
+        $files = flat($files);
         return $this->addToList('hookFiles', ...$files);
     }
 
