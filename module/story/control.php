@@ -720,7 +720,6 @@ class story extends control
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('story', $storyID, 'submitReview');
-                a($changes);
                 $this->action->logHistory($actionID, $changes);
             }
 
