@@ -28,6 +28,10 @@ class inputGroup extends wg
             $item->setProp('control', $control);
             $item->setProp('type', null);
         }
+        if(is_array($control))
+        {
+            $control = $control['type'];
+        }
 
         if($control === 'addon')      return h::span(setClass('input-group-addon'), set($item->props->skip('control,text')), $item->prop('text'));
         if($control === 'span')       return h::span(setClass('px-2 h-8 flex items-center'), set($item->props->skip('control,text')), $item->prop('text'));
