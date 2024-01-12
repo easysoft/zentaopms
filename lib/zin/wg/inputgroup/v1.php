@@ -30,7 +30,7 @@ class inputGroup extends wg
         }
         if(is_array($control))
         {
-            $control = $control['type'];
+            $control = $control['control'];
         }
 
         if($control === 'addon')      return h::span(setClass('input-group-addon'), set($item->props->skip('control,text')), $item->prop('text'));

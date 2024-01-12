@@ -78,7 +78,7 @@ class formGroup extends wg
 
         if($required === 'auto') $required = isFieldRequired($name, $requiredFields);
 
-        if(is_string($control))                   $control = array('type' => $control, 'name' => $name);
+        if(is_string($control))                   $control = array('control' => $control, 'name' => $name);
         elseif(empty($control) && $name !== null) $control = array('name' => $name);
 
         if(!empty($control))
@@ -92,8 +92,11 @@ class formGroup extends wg
             if($readonly !== null && !isset($control['readonly']))       $control['readonly']    = $readonly;
             if($multiple !== null && !isset($control['multiple']))       $control['multiple']    = $multiple;
             if($id && !isset($control['id']))                            $control['id'] = '';
-
-            if(isset($control['type']) && $control['type'] === 'hidden') return new input(set($control));
+            if(isset($control['control']) && $control['control'] === 'hidden')
+            {
+                unset($control['control']);
+                return new input(set::type('hidden'), set($control));
+            }
         }
 
         return div

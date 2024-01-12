@@ -197,6 +197,11 @@ class control extends wg
         return new upload(set($this->props->skip('control')));
     }
 
+    protected function buildHidden(): wg
+    {
+        return new input(set::type('hidden'), set($this->props->skip('control')));
+    }
+
     protected function build(): wg
     {
         $builder = $this->prop('builder');

@@ -247,7 +247,7 @@ class field extends setting
 
     function control(string|array|object|null $control, array|object|null $props = null): field
     {
-        if(is_string($control)) $control = array('type' => $control);
+        if(is_string($control)) $control = array('control' => $control);
         $this->addToMap('control', $control);
         if(!is_null($props)) $this->addToMap('control', $props);
         return $this;
