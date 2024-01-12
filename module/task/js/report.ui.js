@@ -1,7 +1,7 @@
 window.createChart = function()
 {
-    const formData = new FormData($('#chartForm')[0]);
-    postAndLoadPage($('#chartForm').attr('action'), formData, '#chartContainer,pageJS/.zin-page-js,#configJS');
+    const formData = new FormData($('#chartForm form')[0]);
+    postAndLoadPage($('#chartForm form').attr('action'), formData, '#chartContainer,pageJS/.zin-page-js,#configJS');
 }
 
 window.triggerChecked = function()
@@ -12,6 +12,6 @@ window.triggerChecked = function()
 
 window.changeTab = function(e)
 {
-    $('#chartForm').attr('action', $(e.target).closest('.font-medium').data('param'))
+    $('#chartForm form').attr('action', $(e.target).closest('.font-medium').data('param'))
     createChart();
 }
