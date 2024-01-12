@@ -145,7 +145,7 @@
           <?php if(isset($line['lineName']) and isset($line['products']) and is_array($line['products']) and in_array($config->systemMode, array('ALM', 'PLM'))):?>
           <?php $lineNames[] = $line['lineName'];?>
           <?php
-          if(in_array($config->systemMode, array('ALM', 'PLM')) and $programID)
+          if(in_array($config->systemMode, array('ALM', 'PLM')))
           {
               $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
               $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,line.$lineID'" . "class='text-center'";
@@ -190,8 +190,7 @@
           $trClass = '';
           if($product->line and in_array($config->systemMode, array('ALM', 'PLM')))
           {
-              $path = "line.$product->line,$product->id";
-              if(in_array($config->systemMode, array('ALM', 'PLM')) and $product->program) $path = "program.$product->program,$path";
+              $path     = "program.$product->program,line.$product->line,$product->id";
               $trAttrs  = "data-id='$product->id' data-parent='line.$product->line'";
               $trClass .= ' is-nest-child  table-nest';
               $trAttrs .= " data-nest-parent='line.$product->line' data-nest-path='$path'";

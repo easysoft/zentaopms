@@ -159,9 +159,16 @@ $config->product->report->planLabels   = array();
 $config->product->report->planLabels[] = '';
 
 $config->product->statisticFields = array();
-$config->product->statisticFields['stories']  = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishedStories', 'finishClosedStories', 'totalStories');
-$config->product->statisticFields['bugs']     = array('unresolvedBugs', 'closedBugs', 'fixedBugs');
-$config->product->statisticFields['plans']    = array('plans');
-$config->product->statisticFields['releases'] = array('releases');
+if($config->vision == 'or')
+{
+    $config->product->statisticFields['stories']  = array('draftStories', 'activeStories', 'launchedStories', 'developingStories');
+}
+else
+{
+    $config->product->statisticFields['stories']  = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishedStories', 'finishClosedStories', 'totalStories');
+    $config->product->statisticFields['bugs']     = array('unresolvedBugs', 'closedBugs', 'fixedBugs');
+    $config->product->statisticFields['plans']    = array('plans');
+    $config->product->statisticFields['releases'] = array('releases');
+}
 
 $config->product->skipRedirectMethod = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,ajaxgetplans,';

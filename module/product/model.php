@@ -342,7 +342,7 @@ class productModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
+            ->beginIF($this->config->vision != 'or')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
 
@@ -1960,9 +1960,10 @@ class productModel extends model
                 ->where('id')->in(array_unique($programKeys))
                 ->fetchAll('id');
 
+            $this->app->loadLang('project');
             foreach($products as $product)
             {
-                $product->programName = isset($programs[$product->program]) ? $programs[$product->program]->name : '';
+                $product->programName = (!empty($product->line) && empty($product->program)) ? $this->lang->project->future : (isset($programs[$product->program]) ? $programs[$product->program]->name : '');
                 $product->programPM   = isset($programs[$product->program]) ? $programs[$product->program]->PM : '';
             }
         }
@@ -2186,14 +2187,14 @@ class productModel extends model
         foreach($productStats as $product)
         {
             $productStructure[$product->program][$product->line]['products'][$product->id] = $product;
-            if($product->line and $this->config->vision != 'or')
+            if($product->line)
             {
                 /* Line name. */
                 $productStructure[$product->program][$product->line]['lineName'] = $product->lineName;
                 $productStructure[$product->program][$product->line] = $this->statisticData('line', $productStructure, $product);
             }
 
-            if($product->program and $this->config->vision != 'or')
+            if($product->program || (empty($product->program) && $product->line))
             {
                 /* Init vars. */
                 /* Program name. */
@@ -2201,6 +2202,14 @@ class productModel extends model
                 $productStructure[$product->program]['programPM']   = $product->programPM;
                 $productStructure[$product->program] = $this->statisticData('program', $productStructure, $product);
             }
+        }
+
+        // Put program to last when line has no program.
+        if(isset($productStructure[0]))
+        {
+            $zeroProgram = $productStructure[0];
+            unset($productStructure[0]);
+            $productStructure[0] = $zeroProgram;
         }
         return $productStructure;
     }
