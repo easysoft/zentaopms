@@ -444,17 +444,17 @@ detailBody
                     item
                     (
                         set::name($lang->task->estimate),
-                        $task->estimate . $lang->workingHour
+                        $task->estimate . ' ' . $lang->task->suffixHour
                     ),
                     item
                     (
                         set::name($lang->task->consumed),
-                        round($task->consumed, 2) . $lang->workingHour
+                        round($task->consumed, 2) . ' ' . $lang->task->suffixHour
                     ),
                     item
                     (
                         set::name($lang->task->left),
-                        $task->left . $lang->workingHour
+                        $task->left . ' ' . $lang->task->suffixHour
                     ),
                     item
                     (

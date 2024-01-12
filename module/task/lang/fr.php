@@ -173,7 +173,7 @@ $lang->task->lblTestStory      = 'Story Testée';
 $lang->task->teamMember        = 'Team Member';
 $lang->task->addMember         = 'Add Member';
 $lang->task->to                = 'To';
-$lang->task->suffixHour        = 'H';
+$lang->task->suffixHour        = 'h';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = 'Task';

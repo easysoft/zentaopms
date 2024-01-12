@@ -68,8 +68,8 @@ if($efforts)
                 h::td($effort->date),
                 h::td(zget($users, $effort->account)),
                 h::td(html($effort->work)),
-                h::td($effort->consumed . ' H'),
-                h::td($effort->left . ' H'),
+                h::td("{$effort->consumed} {$lang->task->suffixHour}"),
+                h::td("{$effort->left} {$lang->task->suffixHour}"),
                 h::td
                 (
                     common::hasPriv('task', 'editEffort') ? a
