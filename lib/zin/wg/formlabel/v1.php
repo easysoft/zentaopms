@@ -40,13 +40,12 @@ class formLabel extends wg
         {
             $actions = toolbar
             (
-                set::size('sm'),
-                setClass('form-label-actions', $actionsClass),
+                setClass('form-label-actions size-sm', $actionsClass),
+                set::btnClass('ghost'),
                 set::items($actions),
                 set($actionsProps)
             );
         }
-
 
         return h::label
         (
@@ -55,8 +54,8 @@ class formLabel extends wg
             set($this->getRestProps()),
             $text,
             $this->children(),
-            $checkbox,
             $hint,
+            $checkbox,
             $actions
         );
     }

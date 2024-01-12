@@ -167,9 +167,21 @@ class field extends setting
         return $this->setVal('labelHintIcon', $icon);
     }
 
-    function labelActions(array $actions): field
+    function labelActions(array|false|null $actions, bool $reset = false): field
     {
-        return $this->setVal('labelActions', $actions);
+        if($actions === false)  return $this->remove('actions');
+        if($reset)            return $this->setVal('actions', $actions);
+
+        if(is_array($actions))
+        {
+            foreach($actions as $item) $this->addToList('actions', $item);
+        }
+        return $this;
+    }
+
+    function labelAction(mixed ...$actions): field
+    {
+        return $this->addToList('labelActions', ...$actions);
     }
 
     function labelActionsClass(mixed ...$classList): field
