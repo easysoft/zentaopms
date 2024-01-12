@@ -42,7 +42,7 @@ $fnGenerateSide = function() use($groupMetrics, $current, $viewType, $scope, $la
         }
     }
 
-    return ul($metricList);
+    return ul(setClass('list-unstyled'), $metricList);
 };
 
 
