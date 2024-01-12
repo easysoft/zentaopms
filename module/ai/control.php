@@ -186,14 +186,14 @@ class ai extends control
         if(!$isRetry)
         {
             $messages[] = (object)array('role' => 'user', 'content' => $message);
-            if(!isset($this->post->test) || $this->post->test !== '1') $this->ai->saveMiniProgramMessage($id, 'req', $message);
+            if($this->post->test !== '1') $this->ai->saveMiniProgramMessage($id, 'req', $message);
         }
         if($this->ai->isModelConfigured())
         {
             $response = $this->ai->converse($messages);
             if(empty($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->miniPrograms->chatNoResponse , 'reason' => 'no response'));
 
-            if(!isset($this->post->test) || $this->post->test !== '1') $this->ai->saveMiniProgramMessage($id, 'res', is_array($response) ? current($response) : $response);
+            if($this->post->test !== '1') $this->ai->saveMiniProgramMessage($id, 'res', is_array($response) ? current($response) : $response);
             return $this->send(array('result' => 'success', 'message' => array('time' => date("Y/n/j G:i"), 'role' => 'assistant', 'content' => is_array($response) ? current($response) : $response)));
         }
 
