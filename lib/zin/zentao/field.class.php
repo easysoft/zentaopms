@@ -17,7 +17,6 @@ require_once dirname(__DIR__) . DS . 'core' . DS . 'setting.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 
 use \zin\fieldList;
-use \zin\utils\dataset;
 
 class field extends setting
 {
@@ -167,21 +166,17 @@ class field extends setting
         return $this->setVal('labelHintIcon', $icon);
     }
 
-    function labelActions(array|false|null $actions, bool $reset = false): field
+    function labelActions(array|false|null $actions, bool $reset = false, ?string $key = null): field
     {
         if($actions === false)  return $this->remove('actions');
-        if($reset)            return $this->setVal('actions', $actions);
-
-        if(is_array($actions))
-        {
-            foreach($actions as $item) $this->addToList('actions', $item);
-        }
+        if($reset)              return $this->setVal('actions', $actions);
+        if(is_array($actions))  return $this->mergeToList('actions', $actions, $key);
         return $this;
     }
 
-    function labelAction(mixed ...$actions): field
+    function labelAction(mixed $action, ?string $key = null): field
     {
-        return $this->addToList('labelActions', ...$actions);
+        return $this->addToList('labelActions', $action, $key);
     }
 
     function labelActionsClass(mixed ...$classList): field
@@ -286,7 +281,7 @@ class field extends setting
         }
         elseif(is_array($items))
         {
-            foreach($items as $item) $this->addToList('items', $item);
+            $this->mergeToList('items', $items);
         }
         return $this;
     }
@@ -294,9 +289,9 @@ class field extends setting
     /**
      * Add item.
      */
-    function item(mixed ...$items): field
+    function item(mixed $item, ?string $key = null): field
     {
-        return $this->addToList('items', ...$items);
+        return $this->addToList('items', $item, $key);
     }
 
     function itemBegin(?string $itemName = null): field
@@ -316,7 +311,7 @@ class field extends setting
 
     function children(mixed ...$children): field
     {
-        return $this->addToList('children', ...$children);
+        return $this->mergeToList('children', $children);
     }
 
     function setDefault(string|array|null $default): field

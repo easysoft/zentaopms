@@ -246,13 +246,29 @@ class dataset
      *
      * @access public
      * @param string    $prop          Property name.
-     * @param mixed  ...$values        Values to add to list.
+     * @param mixed  ...$item          Item Value to add to list.
      * @return mixed
      */
-    public function addToList(string $prop, mixed ...$values): dataset
+    public function addToList(string $prop, mixed $item, ?string $key = null): dataset
     {
         $list = $this->getList($prop);
-        return $this->set($prop, array_merge($list, $values));
+        if($key) $list[$key] = $item;
+        else     $list[] = $item;
+        return $this->set($prop, $list);
+    }
+
+    /**
+     * Merge value to array list.
+     *
+     * @access public
+     * @param string    $prop          Property name.
+     * @param mixed     $newList       Values to add to list.
+     * @return mixed
+     */
+    public function mergeToList(string $prop, $newList): dataset
+    {
+        $list = $this->getList($prop);
+        return $this->set($prop, array_merge($list, $newList));
     }
 
     /**

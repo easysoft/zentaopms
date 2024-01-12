@@ -22,7 +22,7 @@ class context extends \zin\utils\dataset
     public function addHookFiles(string|array ...$files)
     {
         $files = flat($files);
-        return $this->addToList('hookFiles', ...$files);
+        return $this->mergeToList('hookFiles', $files);
     }
 
     public function getHookFiles(): array
@@ -32,7 +32,7 @@ class context extends \zin\utils\dataset
 
     public function addImport(string ...$files)
     {
-        return $this->addToList('import', ...$files);
+        return $this->mergeToList('import', $files);
     }
 
     public function getImportList(): array
@@ -42,7 +42,7 @@ class context extends \zin\utils\dataset
 
     public function addCSS(string ...$cssList)
     {
-        return $this->addToList('css', ...$cssList);
+        return $this->mergeToList('css', $cssList);
     }
 
     public function getCSS(): string
@@ -52,7 +52,7 @@ class context extends \zin\utils\dataset
 
     public function addJS(string ...$jsList)
     {
-        return $this->addToList('js', ...$jsList);
+        return $this->mergeToList('js', $jsList);
     }
 
     public function addJSVar(string $name, mixed $value)
