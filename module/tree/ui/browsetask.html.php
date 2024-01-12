@@ -116,7 +116,7 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
 $parentPath = array();
 $parentPath[] = div
 (
-    setClass('row flex-nowrap items-center'),
+    setClass('row flex-nowrap items-center text-clip'),
     a
     (
         setClass('tree-link text-clip'),
@@ -189,7 +189,7 @@ div
     ),
     div
     (
-        setClass('flex-auto'),
+        setStyle('max-width', '70%'),
         panel
         (
             setClass('pb-4'),
@@ -201,6 +201,7 @@ div
                 (
                     setClass('pr-2 tree-item-content row items-center'),
                     setStyle('padding-bottom', '48px'),
+                    setStyle('max-width', '30%'),
                     $parentPath
                 ),
                 form
