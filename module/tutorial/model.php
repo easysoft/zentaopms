@@ -119,7 +119,7 @@ class tutorialModel extends model
         $product->latestRelease     = 0;
         $product->plans             = 0;
 
-        $productStat[$product->id] = $product;
+        $productStat[$product->id] = json_decode(json_encode($product), true);
         return $productStat;
     }
 
