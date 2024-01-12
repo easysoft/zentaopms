@@ -1744,7 +1744,7 @@ class productModel extends model
      */
     public function statisticProgram(array $productStats): array
     {
-        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProductStats();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProductStats(true);
 
         $programStructure = array();
 

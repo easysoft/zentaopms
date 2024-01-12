@@ -97,10 +97,11 @@ class tutorialModel extends model
      * 获取新手模式产品统计数据。
      * Get product stats for tutorial.
      *
+     * @param  bool   $isArray
      * @access public
      * @return array
      */
-    public function getProductStats(): array
+    public function getProductStats(bool $isArray = false): array
     {
         $product = $this->getProduct();
         $product->totalStories      = 0;
@@ -119,7 +120,7 @@ class tutorialModel extends model
         $product->latestRelease     = 0;
         $product->plans             = 0;
 
-        $productStat[$product->id] = json_decode(json_encode($product), true);
+        $productStat[$product->id] = $isArray ? json_decode(json_encode($product), true) : $product;
         return $productStat;
     }
 
