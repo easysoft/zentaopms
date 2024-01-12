@@ -106,7 +106,7 @@ class formGroup extends wg
             $this->children(),
             empty($tip) ? null : div
             (
-                set::className($tipClass),
+                setClass('form-tip', $tipClass),
                 set($tipProps),
                 $tip
             )
