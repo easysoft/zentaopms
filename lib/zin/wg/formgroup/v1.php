@@ -15,12 +15,21 @@ class formGroup extends wg
         'labelClass?: string',
         'labelProps?: string',
         'labelWidth?: int|string',
+        'labelHint?: string',
+        'labelHintIcon?: string="help"',
+        'labelHintClass?: string',
+        'labelHintProps?: array',
+        'labelActions?: array',
+        'labelActionsClass?: string',
+        'labelActionsProps?: array',
+        'checkbox?: bool|array',
         'required?:bool|string="auto"',
         'requiredFields?: string',
         'tip?: string',
         'tipClass?: string|array',
         'tipProps?: array',
         'control?: array|string',
+        'builder?: callable',
         'width?: string',
         'strong?: bool',
         'value?: string|array',
@@ -35,9 +44,33 @@ class formGroup extends wg
         'children?: array|object'
     );
 
+    protected function buildLabel(): wg
+    {
+        list($name, $label, $labelFor, $labelClass, $labelProps, $labelHint, $labelHintClass, $labelHintProps, $labelHintIcon, $labelActions, $labelActionsClass, $labelActionsProps, $checkbox, $required, $strong) = $this->prop(array('name', 'label', 'labelFor', 'labelClass', 'labelProps', 'labelHint', 'labelHintClass', 'labelHintProps', 'labelHintIcon', 'labelActions', 'labelActionsClass', 'labelActionsProps', 'checkbox', 'required', 'strong'));
+
+        if(is_null($label)) return null;
+
+        return new formLabel
+        (
+            set::className($labelClass, $strong ? 'font-bold' : null),
+            set::required($required),
+            set::hint($labelHint),
+            set::hintIcon($labelHintIcon),
+            set::hintClass($labelHintClass),
+            set::hintProps($labelHintProps),
+            set::actions($labelActions),
+            set::actionsClass($labelActionsClass),
+            set::actionsProps($labelActionsProps),
+            set::checkbox($checkbox),
+            set('for', is_null($labelFor) ? $name : $labelFor),
+            set($labelProps),
+            $label
+        );
+    }
+
     protected function build(): wg
     {
-        list($name, $label, $labelFor, $labelClass, $labelProps, $labelWidth, $required, $requiredFields, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly, $multiple, $id, $hidden, $foldable, $pinned, $children) = $this->prop(array('name', 'label', 'labelFor', 'labelClass', 'labelProps', 'labelWidth', 'required', 'requiredFields', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly', 'multiple', 'id', 'hidden', 'foldable', 'pinned', 'children'));
+        list($name, $label, $labelWidth, $required, $requiredFields, $tip, $tipClass, $tipProps, $control, $width, $value, $disabled, $items, $placeholder, $readonly, $multiple, $id, $hidden, $foldable, $pinned, $children) = $this->prop(array('name', 'label', 'labelWidth', 'required', 'requiredFields', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'value', 'disabled', 'items', 'placeholder', 'readonly', 'multiple', 'id', 'hidden', 'foldable', 'pinned', 'children'));
 
         if($required === 'auto') $required = isFieldRequired($name, $requiredFields);
 
@@ -66,14 +99,7 @@ class formGroup extends wg
             set($this->getRestProps()),
             setData('name', $name),
             setCssVar('form-horz-label-width', $labelWidth),
-            empty($label) && $label !== '0' ? null : new formLabel
-            (
-                set::className($labelClass, $strong ? 'font-bold' : null),
-                set::required($required),
-                set('for', is_null($labelFor) ? $name : $labelFor),
-                set($labelProps),
-                $label
-            ),
+            $this->buildLabel(),
             empty($control) ? null : new control(set($control)),
             (isset($control['disabled']) && $control['disabled'] && isset($control['name']) && isset($control['value'])) ? h::input(set::type('hidden'), set::name($control['name']), set::value($control['value'])) : null,
             $children,
