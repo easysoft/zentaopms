@@ -1074,17 +1074,19 @@ class gitlabModel extends model
         $systemURL = dirname(common::getSysURL() . $_SERVER['REQUEST_URI']);
 
         $hook = new stdClass;
-        $hook->url = $systemURL . '/api.php/v1/gitlab/webhook?repoID='. $repo->id;
+        $hook->url                   = $systemURL . '/api.php/v1/gitlab/webhook?repoID='. $repo->id;
         $hook->push_events           = true;
         $hook->merge_requests_events = true;
         if($token) $hook->token = $token;
 
         /* Return an empty array if where is one existing webhook. */
-        if($this->isWebhookExists($repo, $hook->url)) return array();
+        if($this->isWebhookExists($repo, $hook->url)) return true;
 
-        $result = $this->apiCreateHook($repo->gitService, $repo->project, $hook);
+        $result = $this->apiCreateHook($repo->gitService, (int)$repo->project, $hook);
 
         if(!empty($result->id)) return true;
+
+        if(!empty($result->message)) return array('result' => 'fail', 'message' => $result->message);
         return false;
     }
 
@@ -1098,7 +1100,7 @@ class gitlabModel extends model
      */
     public function isWebhookExists(object $repo, string $url = ''): bool
     {
-        $hookList = $this->apiGetHooks($repo->gitService, $repo->project);
+        $hookList = $this->apiGetHooks($repo->gitService, (int)$repo->project);
         foreach($hookList as $hook)
         {
             if(empty($hook->url)) continue;

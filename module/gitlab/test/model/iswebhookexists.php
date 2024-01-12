@@ -6,23 +6,22 @@ su('admin');
 
 /**
 
-title=测试 gitlabModel::addPushWebhook();
+title=测试 gitlabModel::isWebhookExists();
 timeout=0
 cid=1
 
-- 使用repoID为1，不存在的项目id推送webhook @0
-- 使用repoID为1，存在的项目id推送webhook @1
+- 检查url为空的webhook是否存在 @0
+- 用正常的url检查webhook是否存在 @1
 
 */
 
 zdTable('pipeline')->gen(5);
-zdTable('repo')->gen(1);
+zdTable('repo')->config('repo')->gen(1);
 
 $gitlab = new gitlabTest();
 
 $repoID = 1;
-$token  = '';
-$_SERVER['REQUEST_URI'] = 'http://unittest/';
+$url    = 'http:/api.php/v1/gitlab/webhook?repoID=1';
 
-r($gitlab->addPushWebhookTest($repoID, $token))    && p() && e('0'); //使用repoID为1，不存在的项目id推送webhook
-r($gitlab->addPushWebhookTest($repoID, $token, 2)) && p() && e('1'); //使用repoID为1，存在的项目id推送webhook
+r($gitlab->isWebhookExistsTest($repoID, ''))   && p() && e('0'); //检查url为空的webhook是否存在
+r($gitlab->isWebhookExistsTest($repoID, $url)) && p() && e('1'); //用正常的url检查webhook是否存在

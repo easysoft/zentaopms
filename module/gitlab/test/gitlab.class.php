@@ -266,7 +266,7 @@ class gitlabTest
         if($projectID) $repo->project = $projectID;
 
         $result = $this->gitlab->addPushWebhook($repo, $token);
-        if(is_array($result)) $result = true;
+        if(is_array($result)) $result = false;
         return $result;
     }
 

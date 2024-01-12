@@ -195,10 +195,10 @@ class repoModel extends model
         {
             $token = uniqid();
             $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
-            if($res === false)
+            if($res !== true)
             {
                 $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
-                dao::$errors['webhook'][] = $this->lang->gitlab->failCreateWebhook;
+                dao::$errors['webhook'][] = isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook;
                 return false;
             }
             else
@@ -358,9 +358,9 @@ class repoModel extends model
 
             $token = uniqid();
             $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
-            if($res === false)
+            if($res !== true)
             {
-                dao::$errors['webhook'][] = $this->lang->gitlab->failCreateWebhook;
+                dao::$errors['webhook'][] = isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook;
                 return false;
             }
             else

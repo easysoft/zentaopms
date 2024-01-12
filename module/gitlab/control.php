@@ -1071,7 +1071,7 @@ class gitlab extends control
             $repo = $this->loadModel('repo')->getByID($repoID);
             $res  = $this->gitlab->addPushWebhook($repo);
 
-            if($res or is_array($res))
+            if($res)
             {
                 return $this->send(array('result' => 'success', 'message' => $this->lang->gitlab->addWebhookSuccess));
             }
