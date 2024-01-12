@@ -66,7 +66,7 @@ class field extends setting
         return $this->setClass('className', ...$classList);
     }
 
-    function value(string|array|null $value): field
+    function value(string|array|int|null $value): field
     {
         return $this->setVal('value', $value);
     }
