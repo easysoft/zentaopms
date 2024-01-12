@@ -120,6 +120,7 @@ $parentPath[] = div
     a
     (
         setClass('tree-link text-clip'),
+        set::title($root->name),
         set('href', helper::createLink('tree', 'browsetask', "rootID=$root->id&productID=$productID")),
         $root->name
     ),
