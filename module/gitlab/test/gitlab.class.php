@@ -460,4 +460,18 @@ class gitlabTest
         if(isset($result->name)) return 'success';
         return $result;
     }
+
+    /**
+     * Test webhookAssignIssue method.
+     *
+     * @param  object  $issue
+     * @access public
+     * @return array|object|false
+     */
+    public function webhookAssignIssueTest(object $issue): array|object|false
+    {
+        $result = $this->gitlab->webhookAssignIssue($issue);
+        if(dao::isError()) return dao::getError();
+        return $result ? $this->gitlab->loadModel($issue->objectType)->getByID($issue->objectID) : false;
+    }
 }
