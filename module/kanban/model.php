@@ -852,11 +852,14 @@ class kanbanModel extends model
                 if(empty($plan) || $plan->parent == -1) continue;
                 $plan->isParent = false;
 
+                $planBegin = $plan->begin == $this->config->productplan->future ? $this->lang->productplan->future : date('m-d', strtotime($plan->begin));
+                $planEnd   = $plan->end == $this->config->productplan->future ? $this->lang->productplan->future : date('m-d', strtotime($plan->end));
+
                 $item = array('id' => $plan->id, 'name' => $plan->id, 'title' => htmlspecialchars_decode($plan->title), 'status' => $plan->status);
                 $item['statusLabel'] = zget($this->lang->productplan->statusList, $plan->status);
                 $item['delay']       = helper::today() > $plan->end ? true : false;
                 $item['desc']        = strip_tags(htmlspecialchars_decode($plan->desc));
-                $item['dateLine']    = date('m-d', strtotime($plan->begin)) . ' ' . $this->lang->productplan->to . ' ' . date('m-d', strtotime($plan->end));
+                $item['dateLine']    = $planBegin . ' ' . $this->lang->productplan->to . ' ' . $planEnd;
                 $item['actionList']  = array();
                 foreach($cardActions as $action)
                 {
