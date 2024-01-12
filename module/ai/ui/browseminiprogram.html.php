@@ -129,7 +129,7 @@ $starBtn = common::hasPriv('ai', 'collectMiniProgram')
 
 $generateBtn = common::hasPriv('ai', 'miniProgramChat')
     ? btn(
-        setClass('primary block w-full'),
+        setClass('primary block w-full generate-btn'),
         set::disabled($isDeleted),
         $lang->ai->miniPrograms->generate,
         on::click('window.aiBrowseMiniProgram.startAIChat')

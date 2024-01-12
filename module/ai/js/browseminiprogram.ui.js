@@ -117,8 +117,10 @@ function sendMessagesToAI(message)
     const $inputBox = $('.chat-input-box');
     const $sendBtn = $('.send-btn');
     const $messageList = $('.chat-history .message-list');
+    const $generateBtn = $('.generate-btn');
     $inputBox.attr('readonly', 'readonly');
     $sendBtn.attr('disabled', 'disabled');
+    $generateBtn.attr('disabled', 'disabled');
     $.post(
         postLink,
         formData,
@@ -126,6 +128,7 @@ function sendMessagesToAI(message)
         {
             $inputBox.removeAttr('readonly');
             $sendBtn.removeAttr('disabled');
+            $generateBtn.removeAttr('disabled');
             response = JSON.parse(response);
             const {message, result} = response;
             if(result === 'success')
