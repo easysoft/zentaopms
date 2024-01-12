@@ -95,7 +95,7 @@ if(empty($tree))
             set::text($lang->task->create),
             set::icon('plus'),
             set::url(createLink('task', 'create', "execution={$executionID}" . (isset($moduleID) ? "&storyID=&moduleID={$moduleID}" : '' . ($app->tab == 'project' ? '#app=project' : '')))),
-            setClass('primary ml-2')
+            setClass('btn primary-pale border-primary ml-2')
         ) : null
     );
 }

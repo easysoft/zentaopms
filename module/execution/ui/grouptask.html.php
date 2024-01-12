@@ -495,9 +495,23 @@ if($tasks)
 }
 else
 {
-    div
+    panel
     (
-        setClass('canvas text-center py-8'),
-        $lang->task->noTask
+        div
+        (
+            setClass('table-empty-tip h-60 flex items-center justify-center'),
+            span
+            (
+                setClass('text-gray'),
+                $lang->task->noTask
+            ),
+            $canCreate ? btn
+            (
+                set::text($lang->task->create),
+                set::icon('plus'),
+                set::url(createLink('task', 'create', "execution={$executionID}" . (isset($moduleID) ? "&storyID=&moduleID={$moduleID}" : '' . ($app->tab == 'project' ? '#app=project' : '')))),
+                setClass('btn primary-pale border-primary ml-2')
+            ) : null
+        )
     );
 }
