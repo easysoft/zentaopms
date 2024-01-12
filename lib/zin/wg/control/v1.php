@@ -216,6 +216,6 @@ class control extends wg
         $wgName = "\\zin\\$control";
         if(class_exists($wgName)) return new $wgName(set($this->props->skip('control')), $this->children());
 
-        return new input(set($this->props));
+        return new input(set::type($control), set($this->props->skip('control')));
     }
 }
