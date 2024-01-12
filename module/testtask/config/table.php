@@ -124,10 +124,10 @@ $config->testtask->browseUnits->dtable->fieldList['execution'] = $config->testta
 $config->testtask->browseUnits->dtable->fieldList['build']     = $config->testtask->dtable->fieldList['build'];
 
 $config->testtask->browseUnits->dtable->fieldList['owner'] = $config->testtask->dtable->fieldList['owner'];
-$config->testtask->browseUnits->dtable->fieldList['execTime']['name']  = 'execTime';
-$config->testtask->browseUnits->dtable->fieldList['execTime']['title'] = $lang->testtask->execTime;
-$config->testtask->browseUnits->dtable->fieldList['execTime']['type']  = 'datetime';
-$config->testtask->browseUnits->dtable->fieldList['execTime']['group'] = 'user';
+$config->testtask->browseUnits->dtable->fieldList['begin']['name']  = 'begin';
+$config->testtask->browseUnits->dtable->fieldList['begin']['title'] = $lang->testtask->execTime;
+$config->testtask->browseUnits->dtable->fieldList['begin']['type']  = 'datetime';
+$config->testtask->browseUnits->dtable->fieldList['begin']['group'] = 'user';
 
 $config->testtask->browseUnits->dtable->fieldList['caseCount']['name']  = 'caseCount';
 $config->testtask->browseUnits->dtable->fieldList['caseCount']['title'] = $lang->testtask->caseCount;
