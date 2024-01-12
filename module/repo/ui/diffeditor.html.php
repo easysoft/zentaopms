@@ -94,7 +94,7 @@ $inModal ? null : sidebar
         set::collapsedIcon('folder'),
         set::expandedIcon('folder-open'),
         set::normalIcon('file-text-alt'),
-        set::activeKey($entry),
+        set::selected($currentEntry),
         set::onClickItem(jsRaw('window.treeClick'))
     )
 );

@@ -2440,10 +2440,10 @@ class repoModel extends model
         foreach($fileList as $file)
         {
             if(in_array($file->name, $fileSort)) continue;
-            $base64Name = base64_encode($file->path);
+            $base64Name = $this->encodePath($file->path);
 
             $fileInfo = new stdclass();
-            $fileInfo->id   = $file->sha;
+            $fileInfo->id   = $base64Name;
             $fileInfo->name = $file->name;
             $fileInfo->text = $file->name;
             $fileInfo->path = $file->path;
@@ -2457,10 +2457,10 @@ class repoModel extends model
         foreach($folderList as $dir)
         {
             if(in_array($dir->name, $dirSort)) continue;
-            $base64Name = base64_encode($dir->path);
+            $base64Name = $this->encodePath($dir->path);
 
             $folder = new stdclass();
-            $folder->id   = $dir->sha;
+            $folder->id   = $base64Name;
             $folder->name = $dir->name;
             $folder->text = $dir->name;
             $folder->path = $dir->path;

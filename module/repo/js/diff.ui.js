@@ -15,6 +15,9 @@ $('#monacoTabs').off('click', '.monaco-close').on('click', '.monaco-close', func
     $('#' + eleId.substring(5)).parent().removeClass('selected');
     if(isActive) tabsEle.children().last().find('a').trigger('click');
     if(!tabsEle.children().length) $('.monaco-dropmenu').addClass('hidden');
+
+    const fileKey = eleId.substring(5).replace(/-/g, '=');
+    $('li[z-key="' + fileKey + '"] .listitem').removeClass('selected');
 });
 
 $(function()
@@ -66,8 +69,8 @@ window.downloadCode = function()
 window.treeClick = function(info)
 {
     if (info.item.items && info.item.items.length > 0) return;
-    $('#' + info.item.id).parent().addClass('selected');
-    openTab(info.item.key, info.item.text);
+    $('li[z-key="' + info.item.id + '"] .listitem').addClass('selected');
+    openTab(info.item.id, info.item.text);
     arrowTabs('monacoTabs', -2);
 }
 

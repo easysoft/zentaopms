@@ -202,7 +202,6 @@ class repoTao extends repoModel
     public function buildFileTree(array $allFiles = array()): array
     {
         $files = array();
-        $id    = 0;
         foreach($allFiles as $file)
         {
             $fileName = explode('/', $file);
@@ -215,11 +214,9 @@ class repoTao extends repoModel
                 $parent  .= $parent == '' ? $path : '/' . $path;
                 if(!isset($files[$parent]))
                 {
-                    $id++;
-
                     $id = $this->encodePath($parent);
                     $files[$parent] = array(
-                        'id'     => str_replace('=', '-', $id),
+                        'id'     => $id,
                         'parent' => $parentID,
                         'name'   => $path,
                         'path'   => $parent,

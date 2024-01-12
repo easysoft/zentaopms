@@ -1567,7 +1567,7 @@ class repoZen extends repo
         $tree = $scm->ls($entry, (string)$revision);
         foreach($tree as &$file)
         {
-            $base64Name = base64_encode($file->path);
+            $base64Name = $this->repo->encodePath($file->path);
 
             $file->path = trim($file->path, '/');
             if(!isset($file->id))    $file->id    = $base64Name;
