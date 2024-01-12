@@ -474,4 +474,18 @@ class gitlabTest
         if(dao::isError()) return dao::getError();
         return $result ? $this->gitlab->loadModel($issue->objectType)->getByID($issue->objectID) : false;
     }
+
+    /**
+     * Test webhookCloseIssue method.
+     *
+     * @param  object  $issue
+     * @access public
+     * @return array|object|false
+     */
+    public function webhookCloseIssueTest(object $issue): array|object|false
+    {
+        $result = $this->gitlab->webhookCloseIssue($issue);
+        if(dao::isError()) return dao::getError();
+        return $result ? $this->gitlab->loadModel($issue->objectType)->getByID($issue->objectID) : false;
+    }
 }
