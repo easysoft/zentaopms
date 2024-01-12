@@ -41,7 +41,7 @@ class field extends setting
         parent::__construct($nameOrProps);
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->get('name');
     }
@@ -255,21 +255,23 @@ class field extends setting
      * @param  bool        $reset  - Whether to reset items.
      * @return field
      */
-    function items(array|false $items, bool $reset = false): field
+    function items(array|false|null $items, bool $reset = false): field
     {
         if($items === false) return $this->remove('items');
         if($reset)           return $this->setVal('items', $items);
+        if(is_null($items))  return $this;
         return $this->addToMap('items', $items);
     }
 
     /**
      * Add item.
      */
-    function item(array|object ...$items): field
+    function item(array|object|null ...$items): field
     {
         $list = array();
         foreach($items as $item)
         {
+            if(is_null($item)) continue;
             $name = null;
             if($item instanceof field)
             {
