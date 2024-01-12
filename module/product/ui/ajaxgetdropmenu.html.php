@@ -54,13 +54,20 @@ foreach($products as $programID => $programProducts)
         $item['active'] = $productID == $product->id;
         $item['keys']   = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
 
-        if(!isset($data[$group][$programID])) $data[$group][$programID] = $programItem;
-        $data[$group][$programID]['items'][] = $item;
+        if($config->systemMode == 'light' || $config->vision == 'or')
+        {
+            $data[$group][] = $item;
+        }
+        else
+        {
+            if(!isset($data[$group][$programID])) $data[$group][$programID] = $programItem;
+            $data[$group][$programID]['items'][] = $item;
+        }
     }
 }
 
 /* 将分组数据转换为索引数组。Format grouped data to indexed array. */
-foreach ($data as $key => $value) $data[$key] = array_values($value);
+foreach($data as $key => $value) $data[$key] = array_values($value);
 
 /**
  * 定义每个分组名称信息，包括可展开的已关闭分组。
