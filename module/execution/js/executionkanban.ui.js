@@ -13,10 +13,10 @@ window.getItem = function(info)
     if(info.item.delay)
     {
         info.item.suffix      = delayed;
-        info.item.suffixClass = 'label danger rounded-xl' + (info.item.status == 'doing' ? ' mr-8' : '');
+        info.item.suffixClass = 'label danger rounded-xl mr-8';
     }
     info.item.prefix     = {component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}};
-    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+    info.item.titleAttrs = {'class': 'text-black clip ' + (info.item.delay ? '' : 'mr-8'), 'title' : info.item.title};
     if(privs.canViewExecution) info.item.titleUrl = $.createLink('execution', 'task', `id=${info.item.id}`);
 }
 
