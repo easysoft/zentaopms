@@ -5,3 +5,4 @@
 .burnByBox {width: 150px;}
 .intervalBox {width: 100px;}
 .text-gray {--tw-text-opacity: 1; color: rgba(var(--color-gray-500-rgb),var(--tw-text-opacity)) !important;}
+#featureBar .nav-item > a:hover {color: rgba(var(--color-link-rgb),var(--tw-text-opacity));}
