@@ -71,6 +71,7 @@ class colorInput extends inputControl
                     set::name($colorName),
                     set::value($colorValue),
                     set::syncColor($syncColor),
+                    set::popPlacement('bottom-end'),
                     set($this->getRestProps())
                 )
             )

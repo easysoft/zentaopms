@@ -48,7 +48,8 @@ class colorPicker extends wg
         'syncBorder?: string',              // 指定选择器同步边框颜色到的元素。
         'hint?: string',                    // 提示文字。
         'closeBtn?: boolean',               // 是否在弹出面板上显示关闭按钮。
-        'heading?: ComponentChildren'       // 弹出面板的标题。
+        'popPlacement?: string',            // 弹出面板方向。
+        'heading?: string|array'            // 弹出面板的标题。
     );
 
     /**
