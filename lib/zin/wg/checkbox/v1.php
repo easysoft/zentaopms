@@ -32,7 +32,7 @@ class checkbox extends wg
         list($id, $text, $name, $checked, $disabled, $type, $typeClass, $rootClass, $labelClass, $value) = $this->prop(array('id', 'text', 'name', 'checked', 'disabled', 'type', 'typeClass', 'rootClass', 'labelClass', 'value'));
 
         if(empty($typeClass)) $typeClass = $type;
-        if(empty($id))        $id        = $name . '_' . $value;
+        if(empty($id))        $id        = empty($name) ? $this->gid : ($name . '_' . $value);
 
         return div
         (
