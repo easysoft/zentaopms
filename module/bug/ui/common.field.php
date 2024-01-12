@@ -23,14 +23,14 @@ $fields->field('module')
 
 $fields->field('openedBuild')
     ->control('inputGroup')
-    ->itemBegin('openedBuild[]')->type('picker')->items(data('builds'))->multiple()->itemEnd()
-    ->itemBegin()->type('addon')->id('buildBoxActions')->className('btn-group hidden')->itemEnd()
-    ->itemBegin()->type('btn')->icon('refresh text-primary')->hint($lang->bug->loadAll)->id('allBuilds')->itemEnd();
+    ->itemBegin('openedBuild[]')->control('picker')->items(data('builds'))->multiple()->itemEnd()
+    ->itemBegin()->control('addon')->id('buildBoxActions')->className('btn-group hidden')->itemEnd()
+    ->itemBegin()->control('btn')->icon('refresh text-primary')->hint($lang->bug->loadAll)->id('allBuilds')->itemEnd();
 
 $fields->field('assignedTo')
     ->control('inputGroup')
-    ->itemBegin('assignedTo')->type('picker')->items(data('productMembers'))->value(data('bug.assignedTo'))->itemEnd()
-    ->itemBegin()->type('btn')->icon('refresh text-primary')->hint($lang->bug->loadAll)->id('allUsers')->itemEnd();
+    ->itemBegin('assignedTo')->control('picker')->items(data('productMembers'))->value(data('bug.assignedTo'))->itemEnd()
+    ->itemBegin()->control('btn')->icon('refresh text-primary')->hint($lang->bug->loadAll)->id('allUsers')->itemEnd();
 
 $fields->field('deadline')
     ->control('datePicker');

@@ -9,8 +9,8 @@ $fields->field('product')
     ->hidden(data('product.shadow'))
     ->control('inputGroup')
     ->items(false)
-    ->itemBegin('product')->type('picker')->items(data('products'))->value(data('bug.productID'))->itemEnd()
-    ->item((data('product.type') !== 'normal' && isset(data('products')[data('bug.productID')])) ? field('branch')->type('picker')->boxClass('flex-none')->width('100px')->name('branch')->items(data('branches'))->value(data('bug.branch')) : null);
+    ->itemBegin('product')->control('picker')->items(data('products'))->value(data('bug.productID'))->itemEnd()
+    ->item((data('product.type') !== 'normal' && isset(data('products')[data('bug.productID')])) ? field('branch')->control('picker')->boxClass('flex-none')->width('100px')->name('branch')->items(data('branches'))->value(data('bug.branch')) : null);
 
 $fields->field('title')
     ->width('full')
