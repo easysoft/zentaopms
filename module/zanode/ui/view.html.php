@@ -418,7 +418,7 @@ detailBody
             span
             (
                 setClass('init-success hidden'),
-                html(sprintf($lang->zanode->init->initSuccessNoticeTitle, "<a id='jumpManual' href='javascript:;'>{$lang->zanode->manual}</a>", html::a(helper::createLink('testcase', 'automation', "", '', true), $lang->zanode->automation, '', "class='iframe' title='{$lang->zanode->automation}' data-width='800px'", '')))
+                html(sprintf($lang->zanode->init->initSuccessNoticeTitle, "<a href='https://www.zentao.net/book/zentaopms/974.html?fullScreen=zentao'>{$lang->zanode->manual}</a>", html::a(createLink('testcase', 'automation'), $lang->zanode->automation, '', "data-toggle='modal'")))
             ),
             $zanode->hostType == 'physics' ? div
             (

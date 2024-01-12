@@ -96,5 +96,3 @@ formPanel
     set::actions(array('submit')),
     set::submitBtnText($lang->save)
 );
-
-render('modalDialog');
