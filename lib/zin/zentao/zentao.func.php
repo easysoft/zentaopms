@@ -125,6 +125,8 @@ function bind(string $name, bool|string|array $callback, array|string $options =
         if(str_contains($flags, 'self'))    $options['self']    = true;
         if(str_contains($flags, 'once'))    $options['once']    = true;
     }
+    if($name === 'inited' && !isset($options['self'])) $options['self'] = true;
+
     $options['on'] = $name;
     return setData($options);
 }
