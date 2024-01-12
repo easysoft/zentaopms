@@ -15,7 +15,7 @@
 ?>
 <?php
 $this->loadModel('ai');
-if($this->ai->isModelConfigured() && commonModel::hasPriv('ai', 'promptExecute')):?>
+if($this->ai->hasModelsAvailable() && commonModel::hasPriv('ai', 'promptExecute')):?>
 <?php
   $this->app->loadConfig('ai');
   $module = $this->app->getModuleName();
