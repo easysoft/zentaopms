@@ -150,10 +150,16 @@ class fieldList
         return $this;
     }
 
-    public function remove(string|array $names): fieldList
+    public function remove(string ...$names): fieldList
     {
-        if(is_string($names)) $names = explode(',', $names);
-        foreach($names as $name) unset($this->fields[$name]);
+        foreach($names as $name)
+        {
+            $nameList = explode(',', $name);
+            foreach($nameList as $nameItem)
+            {
+                unset($this->fields[$nameItem]);
+            }
+        }
         return $this;
     }
 
@@ -180,6 +186,11 @@ class fieldList
     public function sort(string|array $names): fieldList
     {
         return $this;
+    }
+
+    public function names(): array
+    {
+        return array_keys($this->fields);
     }
 
     public function batchSet(string|array $names, string|array $prop, mixed $value = null): fieldList

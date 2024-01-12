@@ -194,6 +194,11 @@ class field extends setting
         return $this->setVal($side == 'before' ? 'wrapBefore' : 'wrapAfter', $wrap);
     }
 
+    function text(bool|string|null $text): field
+    {
+        return $this->setVal('text', $text);
+    }
+
     function tip(bool|string|null $tip): field
     {
         return $this->setVal('tip', $tip);
@@ -242,21 +247,54 @@ class field extends setting
         return $this->parent->control($this->toArray());
     }
 
-    function items(array|object|false|null $items): field
+    /**
+     * Set items.
+     *
+     * @access public
+     * @param  array|false $items  - Items.
+     * @param  bool        $reset  - Whether to reset items.
+     * @return field
+     */
+    function items(array|false $items, bool $reset = false): field
     {
         if($items === false) return $this->remove('items');
-        return $this->addToList('items', $items);
+        if($reset)           return $this->setVal('items', $items);
+        return $this->addToMap('items', $items);
     }
 
-    function item(string|array|object|null $itemOrName, array|object|null $item = null): field
+    /**
+     * Add item.
+     */
+    function item(array|object ...$items): field
     {
-        if(is_null($itemOrName)) return $this;
-        if(is_string($itemOrName))
+        $list = array();
+        foreach($items as $item)
         {
-            if(is_null($item)) return $this->removeItem($itemOrName);
-            return $this->addToList('items', array($itemOrName => $item));
+            $name = null;
+            if($item instanceof field)
+            {
+                $name = $item->getName();
+            }
+            if($item instanceof dataset)
+            {
+                $name = $item->get('name');
+            }
+            elseif(is_array($item))
+            {
+                if(isset($item['name'])) $name = $item['name'];
+            }
+            if(is_null($name))
+            {
+                trigger_error('[ZIN] The item for adding to field "' . $this->getName() . '" has no name.', E_USER_ERROR);
+            }
+            $list[$name] = $item;
         }
-        return $this->addToList('items', array($itemOrName));
+        return $this->addToMap('items', $list);
+    }
+
+    function removeItem(string ...$names): field
+    {
+        return $this->removeFromMap('items', ...$names);
     }
 
     function itemBegin(?string $itemName = null): field
@@ -272,11 +310,6 @@ class field extends setting
         }
         $this->parent->item($this);
         return $this->parent;
-    }
-
-    function removeItem(string $itemName): field
-    {
-        return $this->removeFromList('items', $itemName);
     }
 
     function children(mixed ...$children): field

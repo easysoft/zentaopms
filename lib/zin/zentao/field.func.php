@@ -16,11 +16,17 @@ namespace zin;
 require_once __DIR__ . DS . 'field.class.php';
 require_once __DIR__ . DS . 'fieldlist.class.php';
 
-function defineFieldList(string $name = null, string|array|field|fieldList|null ...$args): fieldList
+/**
+ * Define a field list.
+ *
+ * @param string                               $name     The name of field list.
+ * @param string|array|field|fieldList|null ...$extends  The extend fields and field list.
+ *
+ * @return fieldList
+ */
+function defineFieldList(string $name, string|array|field|fieldList|null ...$extends): fieldList
 {
-    global $app;
-    if(is_null($name)) $name = $app->rawModule;
-    return fieldList::define($name, ...$args);
+    return fieldList::define($name, ...$extends);
 }
 
 function defineField(string $name, ?string $listName = null): field
@@ -29,7 +35,10 @@ function defineField(string $name, ?string $listName = null): field
     {
         list($listName, $name) = explode('/', $name);
     }
-    return defineFieldList($listName)->field($name);
+
+    if(is_null($listName)) $listName = fieldList::$currentName;
+    $fieldList = fieldList::ensure($listName);
+    return $fieldList->field($name);
 }
 
 function fieldList(string $name)
@@ -37,9 +46,9 @@ function fieldList(string $name)
     return fieldList::ensure($name);
 }
 
-function field(string $name): field
+function field(string|object|array|null $nameOrProps = null): field
 {
-    return new field($name);
+    return new field($nameOrProps);
 }
 
 function useFields(string|array|field|fieldList|null ...$args): fieldList
