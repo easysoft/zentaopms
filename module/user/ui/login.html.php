@@ -116,6 +116,7 @@ div
                     (
                         set::grid(false),
                         on::click('#submit', 'safeSubmit'),
+                        set::requiredFields(false),
                         setID('loginForm'),
                         formGroup
                         (
