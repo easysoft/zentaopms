@@ -210,7 +210,7 @@ class dataset
         elseif(is_object($map)) $map = get_object_vars($map);
         elseif(!is_array($map)) return $this;
 
-        $this->set($prop, array_merge($this->get($prop, array()), $map));
+        $this->set($prop, array_merge($this->getMap($prop), $map));
         return $this;
     }
 
@@ -234,56 +234,25 @@ class dataset
      * @param mixed  $keys          Map keys.
      * @return mixed
      */
-    public function removeFromMap(string $prop, string|array $keys)
+    public function removeFromMap(string $prop, string ...$keys)
     {
         $map = $this->getMap($prop);
-        if(is_string($keys))
-        {
-            unset($map[$keys]);
-        }
-        elseif(is_array($keys))
-        {
-            foreach($keys as $key) unset($map[$key]);
-        }
-        return $this->set($prop, $map);
+        foreach($keys as $key) unset($map[$key]);
+        return $this->setVal($prop, $map);
     }
 
     /**
      * Add value to array list.
      *
      * @access public
-     * @param string $prop          Property name.
-     * @param mixed  $values        Array list value.
+     * @param string    $prop          Property name.
+     * @param mixed  ...$values        Values to add to list.
      * @return mixed
      */
-    public function addToList(string $prop, mixed $values): dataset
+    public function addToList(string $prop, mixed ...$values): dataset
     {
-        if(!is_array($values)) $values = array($values);
-
         $list = $this->getList($prop);
         return $this->set($prop, array_merge($list, $values));
-    }
-
-    /**
-     * Remove value from array list.
-     *
-     * @access public
-     * @param string $prop          Property name.
-     * @param mixed  $keys          Array list keys.
-     * @return mixed
-     */
-    public function removeFromList(string $prop, string|array $keys): dataset
-    {
-        $list = $this->getList($prop);
-        if(is_string($keys))
-        {
-            unset($list[$keys]);
-        }
-        elseif(is_array($keys))
-        {
-            foreach($keys as $key) unset($list[$key]);
-        }
-        return $this->set($prop, $list);
     }
 
     /**

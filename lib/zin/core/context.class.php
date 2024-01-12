@@ -17,42 +17,42 @@ require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 
 class context extends \zin\utils\dataset
 {
-    public function addHookFiles()
+    public function addHookFiles(string ...$files)
     {
-        return $this->addToList('hookFiles', \zin\utils\flat(func_get_args()));
+        return $this->addToList('hookFiles', ...$files);
     }
 
-    public function getHookFiles()
+    public function getHookFiles(): array
     {
         return $this->getList('hookFiles');
     }
 
-    public function addImport()
+    public function addImport(string ...$files)
     {
-        return $this->addToList('import', func_get_args());
+        return $this->addToList('import', ...$files);
     }
 
-    public function getImportList()
+    public function getImportList(): array
     {
         return $this->getList('import');
     }
 
-    public function addCSS()
+    public function addCSS(string ...$cssList)
     {
-        return $this->addToList('css', func_get_args());
+        return $this->addToList('css', ...$cssList);
     }
 
-    public function getCSS()
+    public function getCSS(): string
     {
         return trim(implode("\n", $this->getList('css')));
     }
 
-    public function addJS()
+    public function addJS(string ...$jsList)
     {
-        return $this->addToList('js', func_get_args());
+        return $this->addToList('js', ...$jsList);
     }
 
-    public function addJSVar($name, $value)
+    public function addJSVar(string $name, mixed $value)
     {
         return $this->addToList('jsVar', h::createJsVarCode($name, $value));
     }
@@ -69,9 +69,9 @@ class context extends \zin\utils\dataset
         return $this->getList('wgWithEvents');
     }
 
-    public function addJSCall()
+    public function addJSCall($func, $args)
     {
-        $code = call_user_func_array('\zin\h::createJsCallCode', func_get_args());
+        $code = call_user_func('\zin\h::createJsCallCode', $func, $args);
         return $this->addToList('jsCall', $code);
     }
 

@@ -17,6 +17,7 @@ require_once dirname(__DIR__) . DS . 'core' . DS . 'setting.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 
 use \zin\fieldList;
+use \zin\utils\dataset;
 
 class field extends setting
 {
@@ -280,7 +281,7 @@ class field extends setting
 
     function children(mixed ...$children): field
     {
-        return $this->addToList('children', $children);
+        return $this->addToList('children', ...$children);
     }
 
     function setDefault(string|array|null $default): field
