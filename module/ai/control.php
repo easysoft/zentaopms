@@ -533,7 +533,7 @@ class ai extends control
 
         if(!empty($_POST))
         {
-            $errors = $this->ai->verifyRequiredFields(array('category' => $this->lang->ai->miniPrograms->category, 'toPublish' => $this->lang->ai->toPublish));
+            $errors = $this->ai->verifyRequiredFields(array('category' => $this->lang->ai->miniPrograms->category, 'published' => $this->lang->ai->toPublish));
             if($errors !== false) return $this->sendError($errors);
 
             $file = $_FILES['file'];
