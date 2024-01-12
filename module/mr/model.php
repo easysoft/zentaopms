@@ -780,6 +780,8 @@ class mrModel extends model
         {
             $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
             $MR  = json_decode(commonModel::http($url, array('state' => 'open'), array(), array(), 'json', 'PATCH'));
+            if(!$MR) return null;
+
             $MR->iid   = $host->type == 'gitea' ? $MR->number : $MR->id;
             $MR->state = $MR->state == 'open' ? 'opened' : $MR->state;
             if($MR->merged) $MR->state = 'merged';

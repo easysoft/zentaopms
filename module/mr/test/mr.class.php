@@ -187,9 +187,9 @@ class mrTest
      * @param  string  $project
      * @param  object  $params
      * @access public
-     * @return array|object
+     * @return array|object|null
      */
-    public function apiCreateMrTester(int $hostID, string $project, object $params): array|object
+    public function apiCreateMrTester(int $hostID, string $project, object $params): array|object|null
     {
         $result = $this->objectModel->apiCreateMR($hostID, $project, $params);
         if(empty($result->iid) && empty($result->id)) return $result;
@@ -247,6 +247,8 @@ class mrTest
     public function apiDeleteMrTester(int $hostID, string $project, object $params): array|object|null
     {
         $result = $this->objectModel->apiCreateMR($hostID, $project, $params);
+        if(!$result) return null;
+
         $mrID   = empty($result->iid) ? $result->id : $result->iid;
         $this->objectModel->apiDeleteMR($hostID, $project, $mrID);
         return $this->objectModel->apiGetSingleMR($hostID, $project, $mrID);
