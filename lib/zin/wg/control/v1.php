@@ -34,6 +34,7 @@ class control extends wg
         'readonly?: bool',       // HTML readonly 属性
         'required?: bool',       // 是否为必填项
         'disabled?: bool',       // 是否为禁用状态
+        'builder?: callable',    // 自定义构建函数
         'items?: array'          // 表单输入元素子项数据
     );
 
@@ -184,6 +185,9 @@ class control extends wg
 
     protected function build(): wg
     {
+        $builder = $this->prop('builder');
+        if(is_callable($builder)) return $builder($this->props->skip('builder'), $this->children());
+
         $type = $this->prop('type');
         if(empty($type)) $type = $this->hasProp('items') ? 'picker' : 'text';
 
