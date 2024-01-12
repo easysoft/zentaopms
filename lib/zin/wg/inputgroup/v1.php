@@ -16,25 +16,32 @@ class inputGroup extends wg
 
     public function onBuildItem($item): ?wg
     {
-        if(is_string($item)) $item = new item(set(array('type' => 'addon', 'text' => $item)));
+        if(is_string($item)) $item = new item(set(array('control' => 'addon', 'text' => $item)));
         elseif(is_array($item)) $item = new item(set($item));
         elseif($item instanceof wg || is_null($item)) return $item;
 
-        $type = $item->prop('type');
+        list($control, $type) = $item->prop(array('control', 'type'));
+        if(is_null($control) && !is_null($type))
+        {
+            $control = $type;
+            $type    = null;
+            $item->setProp('control', $control);
+            $item->setProp('type', null);
+        }
 
-        if($type === 'addon')      return h::span(setClass('input-group-addon'), set($item->props->skip('type,text')), $item->prop('text'));
-        if($type === 'span')       return h::span(setClass('px-2 h-8 flex items-center'), set($item->props->skip('type,text')), $item->prop('text'));
-        if($type === 'btn')        return new btn(set($item->props->skip('type')));
-        if($type === 'picker')     return new picker(set($item->props->skip('type')));
-        if($type === 'datePicker') return new datePicker(set($item->props->skip('type')));
+        if($control === 'addon')      return h::span(setClass('input-group-addon'), set($item->props->skip('control,text')), $item->prop('text'));
+        if($control === 'span')       return h::span(setClass('px-2 h-8 flex items-center'), set($item->props->skip('control,text')), $item->prop('text'));
+        if($control === 'btn')        return new btn(set($item->props->skip('control')));
+        if($control === 'picker')     return new picker(set($item->props->skip('control')));
+        if($control === 'datePicker') return new datePicker(set($item->props->skip('control')));
 
-        if($type)
+        if($control)
         {
             $propNames = array_keys(inputControl::definedPropsList());
             return new inputControl
             (
                 set($item->props->pick($propNames)),
-                new input(set($item->props->skip(array_merge($propNames, array('type')))))
+                new input(set($item->props->skip(array_merge($propNames, array('control')))))
             );
         }
 
