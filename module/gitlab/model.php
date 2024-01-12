@@ -1665,6 +1665,7 @@ class gitlabModel extends model
         $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, (string)$objectID);
         $data  = new stdclass;
         if(isset($label->name)) $data->labels = $label->name;
+        if(isset($label->message) && $label->message == 'Label already exists') $data->labels = sprintf($this->config->gitlab->zentaoObjectLabel->name, $objectType, $objectID);
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issue->iid}");

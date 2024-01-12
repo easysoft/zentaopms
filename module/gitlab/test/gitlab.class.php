@@ -314,6 +314,27 @@ class gitlabTest
         return $result ? $this->gitlab->getRelationByObject($objectType, $object->id) : $result;
     }
 
+    public function saveImportedIssueTest(int $gitlabID, int $projectID, string $objectType, int $objectID, int $issueID)
+    {
+        $issue = $this->gitlab->apiGetSingleIssue($gitlabID, $projectID, $issueID);
+
+        /* Init issue labels. */
+        $data  = new stdclass;
+        $data->labels = '';
+        $apiRoot = $this->gitlab->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/issues/{$issue->iid}");
+        commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'));
+
+        $object = new stdclass();
+        $object->id        = $objectID;
+        $object->product   = 1;
+        $object->execution = 1;
+
+        $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object);
+        $result = $this->gitlab->apiGetSingleIssue($gitlabID, $projectID, $issueID);
+        return $result;
+    }
+
     public function createUserTest(int $gitlabID, object $gitlabUser)
     {
         $result = $this->gitlab->createUser($gitlabID, $gitlabUser);
