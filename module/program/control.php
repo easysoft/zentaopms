@@ -695,6 +695,8 @@ class program extends control
         $this->loadModel('user');
         $this->session->set('productList', $this->app->getURI(true), 'program');
 
+        $this->product->refreshStats(); // Refresh stats fields of products.
+
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
