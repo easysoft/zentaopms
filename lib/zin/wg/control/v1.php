@@ -26,29 +26,43 @@ class control extends wg
 {
     protected static array $defineProps = array
     (
-        'type?: string',         // 表单输入元素类型，值可以为：static, text, password, email, number, date, time, datetime, month, url, search, tel, color, picker, pri, severity, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea
-        'name: string',          // HTML name 属性
-        'id?: string',           // HTML id 属性
-        'value?: string',        // HTML value 属性
-        'placeholder?: string',  // HTML placeholder 属性
-        'readonly?: bool',       // HTML readonly 属性
-        'required?: bool',       // 是否为必填项
-        'disabled?: bool',       // 是否为禁用状态
-        'builder?: callable',    // 自定义构建函数
-        'items?: array'          // 表单输入元素子项数据
+        'control?: string',      // 表单输入元素类型，值可以为：static, text, input, password, email, number, date, time, datetime, month, url, search, tel, color, picker, pri, severity, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea, editor, upload, modulePicker。
+        'type?: string',         // 请使用 control 属性，如果已经指定 control 属性，则此属性作为具体控件的 type 属性。
+        'id?: string',           // ID。
+        'name: string',          // 控件名称，可能影响到表单提交的域名称，如果是多个值的表单控件，可能需要将名称定义为 `key[]` 的形式。
+        'value?: string',        // 控件值。
+        'placeholder?: string',  // 占位文本。
+        'readonly?: bool',       // 是否只读。
+        'required?: bool',       // 是否为必填。
+        'disabled?: bool',       // 是否禁用。
+        'builder?: callable',    // 自定义构建函数。
+        'items?: array'          // 选项列表。
     );
 
     protected function created()
     {
-        $name = $this->prop('name');
-        if($this->prop('type') === 'static' && $name === null) $this->setProp('name', '');
-        if(!$this->hasProp('id') && $this->prop('name') !== null)
+        list($control, $type, $name, $id) = $this->prop(array('control', 'type', 'name', 'id'));
+
+        if(is_null($control))
         {
-            $name = $this->prop('name');
-            $id   = substr($name, -2) == '[]' ? substr($name, 0, - 2) : $name;
+            $control = $type;
+            $type    = null;
+            $this->setProp('control', $control);
+            $this->setProp('type', null);
+        }
+
+        if($control === 'static' && is_null($name))
+        {
+            $name = '';
+            $this->setProp('name', '');
+        }
+
+        if(is_null($id) && $name !== null)
+        {
+            $id = substr($name, -2) == '[]' ? substr($name, 0, - 2) : $name;
             $this->setProp('id', $id);
         }
-        elseif($this->prop('id') === '')
+        elseif($id === '')
         {
             $this->setProp('id', null);
         }
@@ -65,7 +79,7 @@ class control extends wg
         return div
         (
             set::className('form-control-static'),
-            set($this->props->skip(array('type', 'name', 'value', 'required', 'disabled', 'placeholder', 'items', 'required'))),
+            set($this->props->skip(array('type', 'control', 'name', 'value', 'required', 'disabled', 'placeholder', 'items', 'required'))),
             $name ? set('data-name', $name) : null,
             $this->prop('value')
         );
@@ -73,13 +87,13 @@ class control extends wg
 
     protected function buildTextarea(): wg
     {
-        return new textarea(set($this->props->skip('type')));
+        return new textarea(set($this->props->skip('control')));
     }
 
     protected function buildInputControl(): wg
     {
         $controlProps = array();
-        $allProps     = $this->props->skip(array('type'));
+        $allProps     = $this->props->skip(array('control'));
         $propsNames   = array_keys(inputControl::definedPropsList());
 
         foreach($propsNames as $propName)
@@ -101,7 +115,7 @@ class control extends wg
     {
         return new inputGroup
         (
-            set($this->props->skip(array('type', 'required', 'name'))),
+            set($this->props->skip(array('control', 'required', 'name'))),
         );
     }
 
@@ -110,7 +124,7 @@ class control extends wg
         if($this->hasProp('items')) return $this->buildCheckList();
         return new checkList
         (
-            new checkbox(set($this->props->skip('type')))
+            new checkbox(set($this->props->skip('control')))
         );
     }
 
@@ -118,7 +132,7 @@ class control extends wg
     {
         return new checkList
         (
-            set($this->props->skip('type'))
+            set($this->props->skip('control'))
         );
     }
 
@@ -126,7 +140,7 @@ class control extends wg
     {
         return new radioList
         (
-            set($this->props->skip('type'))
+            set($this->props->skip('control'))
         );
     }
 
@@ -135,7 +149,7 @@ class control extends wg
         return new checkList
         (
             set::inline(true),
-            set($this->props->skip('type'))
+            set($this->props->skip('control'))
         );
     }
 
@@ -144,43 +158,43 @@ class control extends wg
         return new radioList
         (
             set::inline(true),
-            set($this->props->skip('type'))
+            set($this->props->skip('control'))
         );
     }
 
     protected function buildDate(): wg
     {
-        return new datePicker(set($this->props->skip('type')));
+        return new datePicker(set($this->props->skip('control')));
     }
 
     protected function buildTime(): wg
     {
-        return new timePicker(set($this->props->skip('type')));
+        return new timePicker(set($this->props->skip('control')));
     }
 
     protected function buildPri(): wg
     {
-        return new priPicker(set($this->props->skip('type')));
+        return new priPicker(set($this->props->skip('control')));
     }
 
     protected function buildSeverity(): wg
     {
-        return new severityPicker(set($this->props->skip('type')));
+        return new severityPicker(set($this->props->skip('control')));
     }
 
     protected function buildColor(): wg
     {
-        return new colorPicker(set($this->props->skip('type')));
+        return new colorPicker(set($this->props->skip('control')));
     }
 
     protected function buildColorInput(): wg
     {
-        return new colorInput(set($this->props->skip('type')));
+        return new colorInput(set($this->props->skip('control')));
     }
 
     protected function buildFiles(): wg
     {
-        return new upload(set($this->props->skip('type')));
+        return new upload(set($this->props->skip('control')));
     }
 
     protected function build(): wg
@@ -188,14 +202,14 @@ class control extends wg
         $builder = $this->prop('builder');
         if(is_callable($builder)) return $builder($this->props->skip('builder'), $this->children());
 
-        $type = $this->prop('type');
-        if(empty($type)) $type = $this->hasProp('items') ? 'picker' : 'text';
+        $control = $this->prop('control');
+        if(empty($control)) $control = $this->hasProp('items') ? 'picker' : 'input';
 
-        $methodName = "build{$type}";
+        $methodName = "build{$control}";
         if(method_exists($this, $methodName)) return $this->$methodName();
 
-        $wgName = "\\zin\\$type";
-        if(class_exists($wgName)) return new $wgName(set($this->props->skip('type')), $this->children());
+        $wgName = "\\zin\\$control";
+        if(class_exists($wgName)) return new $wgName(set($this->props->skip('control')), $this->children());
 
         return new input(set($this->props));
     }
