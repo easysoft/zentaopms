@@ -162,21 +162,29 @@ class field extends setting
         return $this->addToMap('labelHintProps', $props);
     }
 
-    function checkbox(bool|string|null $checkbox = true, array|object|null $props = null): field
+    function labelHintIcon(array|object|null $icon): field
     {
-        $this->setVal('checkbox', $checkbox);
-        if (!is_null($props)) $this->checkboxProps($props);
-        return $this;
+        return $this->setVal('labelHintIcon', $icon);
     }
 
-    function checkboxProps(array|object|null $props): field
+    function labelActions(array $actions): field
     {
-        return $this->addToMap('checkboxProps', $props);
+        return $this->setVal('labelActions', $actions);
     }
 
-    function checked(?bool $checked = true): field
+    function labelActionsClass(mixed ...$classList): field
     {
-        return $this->setVal('checked', $checked);
+        return $this->setClass('labelActionsClass', ...$classList);
+    }
+
+    function labelActionsProps(array|object|null $props): field
+    {
+        return $this->addToMap('labelActionsProps', $props);
+    }
+
+    function checkbox(bool|array|null $checkbox = true): field
+    {
+        return $this->setVal('checkbox', $checkbox);
     }
 
     function wrapBefore(?bool $wrapBefore = true): field
