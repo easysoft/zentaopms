@@ -11,7 +11,7 @@ $fields->field('budget')
     ->control('inputGroup')
     ->checkbox(array('name' => 'future', 'text' => $lang->project->future))
     ->item(field('budget'))
-    ->item((data('parentProgram') ? field('budgetUnit')->hidden(true)->value(data('parentProgram.budgetUnit')) : field('budgetUnit')->required()->control('picker')->name('budgetUnit')->items(data('budgetUnitList'))->value($config->project->defaultCurrency)));
+    ->item(data('parentProgram') ? field('budgetUnit')->hidden(true)->value(data('parentProgram.budgetUnit')) : field('budgetUnit')->required()->control('picker')->name('budgetUnit')->items(data('budgetUnitList'))->value($config->project->defaultCurrency));
 
 $fields->field('acl')
     ->width('full')
