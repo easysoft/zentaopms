@@ -21,6 +21,7 @@ $autoLoad = array();
 
 formGridPanel
 (
+    set::modeSwitcher(false),
     set::title($title),
     set::fields($fields),
     set::loadUrl($loadUrl),
