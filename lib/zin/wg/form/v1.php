@@ -24,7 +24,7 @@ class form extends formBase
         'layout?: string="horz"',          // 表单布局，可选值为：'horz'、'grid' 和 `normal`。
         'labelWidth?: int',                // 标签宽度，单位为像素。
         'submitBtnText?: string',          // 提交按钮文本。
-        'requiredFields?: string',         // 必填项定义。
+        'requiredFields?: string|false',   // 必填项定义。
         'data?: array|object',             // 表单项值默认数据。
         'labelData?: array|object',        // 表单项标签默认数据。
         'loadUrl?: string',                // 动态更新 URL。
@@ -123,7 +123,7 @@ class form extends formBase
         return new formGroup(inherit($item));
     }
 
-    protected function getItemProps(item|array $item, string|int $key, ?array $foldableItems = null, ?array $pinnedItems = null, bool $isGrid = false, ?string $requiredFields = null): array
+    protected function getItemProps(item|array $item, string|int $key, ?array $foldableItems = null, ?array $pinnedItems = null, bool $isGrid = false, bool|string|null $requiredFields = null): array
     {
         if(is_string($key) && !isset($item['name'])) $item['name'] = $key;
         $name = $item['name'];
@@ -132,7 +132,7 @@ class form extends formBase
         {
             if(!isset($item['value'])) $item['value'] = $this->getItemValue($name);
             if(!isset($item['label'])) $item['label'] = $this->getItemLabel($name);
-            if(!isset($item['required']) || $item['required'] === 'auto') $item['required'] = isFieldRequired($name, $requiredFields);
+            if($requiredFields !== false && (!isset($item['required']) || $item['required'] === 'auto')) $item['required'] = isFieldRequired($name, $requiredFields);
             if(!isset($item['foldable']) && is_array($foldableItems)) $item['foldable'] = in_array($name, $foldableItems);
             if(!isset($item['pinned']) && is_array($pinnedItems))     $item['pinned'] =   in_array($name, $pinnedItems);
 
@@ -224,7 +224,7 @@ class form extends formBase
     {
         $props = parent::buildProps();
         $layout = $this->prop('layout');
-        $props[] = setClass("form-$layout");
+        $props[] = setClass("form-$layout", $this->prop('requiredFields') === false ? 'no-required' : '');
 
         if($layout == 'horz')
         {
