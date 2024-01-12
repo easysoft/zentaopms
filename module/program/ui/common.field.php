@@ -9,8 +9,7 @@ $fields->field('parent')
     ->items(data('parents'))
     ->value(data('parentProgram.id'));
 
-$fields->field('name')
-    ->wrapBefore(true);
+$fields->field('name');
 
 $fields->field('PM')
     ->items(data('pmUsers'));
@@ -24,11 +23,7 @@ $fields->field('dateRange')
     ->itemBegin('end')->require()->type('datePicker')->placeholder($lang->project->end)->itemEnd();
 
 $fields->field('budget')
-    ->control('inputGroup')
-    ->item(field('budget'))
-    ->checkbox(true)
-    ->checkboxProps(array('field' => 'future', 'label' => $lang->project->future))
-    ->checked(false);
+    ->checkbox(array('name' => 'future', 'text' => $lang->project->future));
 
 $fields->field('desc')
     ->width('full')
