@@ -179,6 +179,7 @@ class metric extends control
         foreach($classifiedCalcGroup as $calcGroup)
         {
             if($this->config->edition == 'open' and in_array($calcGroup->dataset, array('getFeedbacks', 'getIssues', 'getRisks'))) continue;
+            if($this->config->edition == 'biz' and in_array($calcGroup->dataset, array('getIssues', 'getRisks'))) continue;
 
             try
             {

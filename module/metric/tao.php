@@ -139,6 +139,7 @@ class metricTao extends metricModel
             ->beginIF(!empty($objects))->andWhere('object')->in($objects)->fi()
             ->beginIF(!empty($purposes))->andWhere('purpose')->in($purposes)->fi()
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
+            ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk')
             ->fetchAll();
 
         return $metrics;
