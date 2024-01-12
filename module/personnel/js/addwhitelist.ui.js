@@ -1,16 +1,32 @@
 window.renderRowData = function($row, index, row)
 {
-    if(row == undefined) return;
-
     $row.find('[data-name="account"]').find('.picker-box').on('inited', function(e, info)
     {
-        let $account = info[0];
-        let isAppend = typeof(row.isAppend) != 'undefined' && row.isAppend;
+        /* Get selected users. */
+        let users = [];
+        $('.add-whitelist-panel form [name^=account]').each(function()
+        {
+            value = $(this).val();
+            if(value != '') users.push(value);
+        });
 
+        let $account = info[0];
+        let isAppend = row != undefined && row.isAppend != undefined && row.isAppend;
+
+        /* Remove selected account in picker items. */
         items = userItems;
-        if(isAppend) items = $account.options.items;
-        $account.render({items: items, required: true, readonly: !isAppend});
-        $account.$.setValue(row.account);
+        if(isAppend || row == undefined)
+        {
+            items = [];
+            $account.options.items.forEach(function(userItem)
+            {
+                if(!users.includes(userItem.value)) items.push(userItem);
+                if(row != undefined && row.account == userItem.value) items.push(userItem);
+            })
+        }
+
+        $account.render({items: items, required: row != undefined, readonly: !isAppend && row != undefined});
+        if(row != undefined) $account.$.setValue(row.account);
     });
 }
 
@@ -29,4 +45,33 @@ function setObjectUsers()
     if(module == 'program') link = $.createLink(module, moduleMethod, 'objectID=' + objectID + '&deptID=' + deptID + '&copyID=' + copyID + '&programID=' + programID + '&from=' + from);
 
     loadPage(link, '.panel-body');
+}
+
+function changeUsers()
+{
+    let users     = [];
+    let $accounts = $('.add-whitelist-panel form [name^=account]');
+    $accounts.each(function()
+    {
+        value = $(this).val();
+        if(value != '') users.push(value);
+    });
+
+    if(users.length == 0) return;
+
+    $accounts.each(function()
+    {
+        let items   = [];
+        let $this   = $(this).zui('picker');
+        let options = $this.options;
+        let value   = $this.$.state.value;
+        if(options.readonly) return;
+
+        usersPickerItems.forEach(function(userItem)
+        {
+            if(!users.includes(userItem.value)) items.push(userItem);
+            if(value != '' && value == userItem.value) items.push(userItem);
+        })
+        $this.render({items: items});
+    });
 }

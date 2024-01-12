@@ -33,7 +33,12 @@ foreach($members as $member)
     $userItems[] = array('value' => $member->account, 'text' => $member->realname);
     unset($users[$member->account]);
 }
+
+$usersPickerItems = array();
+foreach($users as $account => $realname) $usersPickerItems[] = array('value' => $account, 'text' => $realname);
+
 jsVar('userItems', $userItems);
+jsVar('usersPickerItems', $usersPickerItems);
 
 dropmenu(set::objectID($objectID));
 
@@ -44,6 +49,8 @@ formBatchPanel
     set::onRenderRow(jsRaw('renderRowData')),
     set::data($members),
     set::headingClass('justify-start'),
+    on::change('[name^=account]', 'changeUsers'),
+    on::click('.form-batch-row-actions button', 'changeUsers'),
     to::heading
     (
         div
