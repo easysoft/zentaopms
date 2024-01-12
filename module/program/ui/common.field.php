@@ -32,7 +32,6 @@ $fields->field('desc')
 $fields->field('acl')
     ->width('full')
     ->control('radioList')
-    ->items($lang->project->aclList)
     ->value('open');
 
 $fields->field('whitelist')
