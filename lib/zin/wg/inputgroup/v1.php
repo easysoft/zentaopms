@@ -46,17 +46,8 @@ class inputGroup extends wg
         if($control === 'picker')     return new picker(set($item->props->skip('control')));
         if($control === 'datePicker') return new datePicker(set($item->props->skip('control')));
 
-        if($control)
-        {
-            $propNames = array_keys(inputControl::definedPropsList());
-            return new inputControl
-            (
-                set($item->props->pick($propNames)),
-                new input(set($item->props->skip(array_merge($propNames, array('control')))))
-            );
-        }
-
-        return new input(inherit($item));
+        if(!empty($control)) return createWg($control, set($item->props->skip('control')), 'input');
+        return new input(set::type($control), set($item->props->skip('control')));
     }
 
     protected function build(): wg
