@@ -36,7 +36,7 @@ function getWgVer($name)
     return isset($config->zin->verMap[$name]) ? $config->zin->verMap[$name] : $config->zin->wgVer;
 }
 
-function createWg($name, $args): wg
+function createWg($name, $args, ?string $fallbackWgName = null): wg
 {
     $name  = strtolower($name);
     $wgVer = getWgVer($name);
@@ -44,6 +44,12 @@ function createWg($name, $args): wg
     include_once dirname(__DIR__) . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
 
     $wgName = "\\zin\\$name";
+
+    if(!class_exists($wgName) && $fallbackWgName)
+    {
+        $fallbackWgName = "\\zin\\$fallbackWgName";
+        if(class_exists($fallbackWgName)) $wgName = $fallbackWgName;
+    }
 
     return class_exists($wgName) ? (new $wgName($args)) : $wgName($args);
 }
