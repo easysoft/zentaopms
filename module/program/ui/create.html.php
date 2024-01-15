@@ -27,7 +27,8 @@ formGridPanel
     set::fields($fields),
     set::loadUrl($loadUrl),
     set::autoLoad($autoLoad),
-    on::change('#budget', 'budgetOverrunTips')
+    on::change('[name=budget]', 'budgetOverrunTips'),
+    on::change('[name=future]', 'onFutureChange')
 );
 
 render();
