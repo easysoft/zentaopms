@@ -122,7 +122,7 @@ div
                         (
                             set::label($lang->user->account),
                             set::strong(true),
-                            set::control(array('type' => 'text', 'name' => 'account', 'id' => 'account'))
+                            set::control(array('type' => 'input', 'name' => 'account', 'id' => 'account'))
                         ),
                         formGroup
                         (
