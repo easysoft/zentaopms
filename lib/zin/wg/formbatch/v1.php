@@ -83,7 +83,7 @@ class formBatch extends formBase
      */
     protected function buildContent(): array|wg
     {
-        $items         = array_merge($this->children(), $this->prop('items', array()));
+        $items         = $this->prop('items', array());
         $templateItems = array();
         $headItems     = array();
         $otherItems    = array();

@@ -173,6 +173,7 @@ class formPanel extends panel
         $listFields   = zget($customFields, 'list', array());
         $showFields   = zget($customFields, 'show', array());
         $hiddenFields = $listFields && $showFields ? array_values(array_diff(array_keys($listFields), $showFields)) : array();
+        $formID       = $this->prop('formID');
 
         if($this->prop('batch'))
         {
@@ -181,6 +182,7 @@ class formPanel extends panel
 
             return new formBatch
             (
+                set::id($formID),
                 set($this->props->pick(array_keys($props))),
                 $this->children(),
                 jsVar('formBatch', true),
@@ -197,6 +199,7 @@ class formPanel extends panel
 
         return new form
         (
+            set::id($formID),
             set::className($this->prop('formClass')),
             set($this->props->pick($formProps)),
             $this->children(),

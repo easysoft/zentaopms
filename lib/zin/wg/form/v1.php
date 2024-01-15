@@ -14,7 +14,7 @@ class form extends formBase
 {
     protected static array $defineProps = array
     (
-        'formID?: string',                 // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
+        'id?: string',                     // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
         'items?: array',                   // 使用一个列定义对象数组来定义表单项。
         'fields?: string|array|fieldList', // 表单字段配置。
         'foldableItems?: array|string',    // 可折叠的表单项。
@@ -39,6 +39,16 @@ class form extends formBase
     {
         if(is_null($this->layout)) $this->layout = $this->prop('layout');
         return $this->layout == $layout;
+    }
+
+    protected function onSetProp(array|string $prop, mixed $value)
+    {
+        if($prop === 'id' && $value === '$AUTO')
+        {
+            global $app;
+            $value = "form-{$app->rawModule}-{$app->rawMethod}";
+        }
+        $this->props->set($prop, $value);
     }
 
     protected function created()
@@ -85,11 +95,6 @@ class form extends formBase
             {
                 $this->setProp('pinnedItems', explode(',', $config->$module->custom->$key));
             }
-        }
-
-        if ($this->prop('formID') === '$AUTO')
-        {
-            $this->setProp('id', "form-$module-$method");
         }
 
         $fields = $this->prop('fields');
@@ -285,10 +290,7 @@ class form extends formBase
 
     protected function buildContent(): array
     {
-        $items    = $this->buildItems();
-        $children = $this->children();
-        if(!empty($children)) $items = array_merge($items, $children);
-
+        $items = $this->buildItems();
         if($this->isLayout('horz'))
         {
             foreach($items as $key => $item)

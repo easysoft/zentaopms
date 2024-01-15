@@ -71,23 +71,29 @@ class formBase extends wg
         );
     }
 
-    protected function buildContent(): array|wg
+    protected function buildContent(): array|wg|null
     {
-        return $this->children();
+        return null;
+    }
+
+    public function children(): array
+    {
+        $children = parent::children();
+        $children[] = $this->buildContent();
+        $children[] = $this->buildActions();
+        return $children;
     }
 
     protected function buildProps(): array
     {
         list($url, $target, $method, $id) = $this->prop(array('url', 'target', 'method', 'id'));
-        return array(
-            set::className('form load-indicator'),
-            $target === 'ajax' ? set::className('form-ajax') : null,
-            set(array(
-                'id'     => $id,
-                'action' => empty($url) ? $_SERVER['REQUEST_URI'] : $url,
-                'target' => $target === 'ajax' ? null: $target,
-                'method' => $method
-            ))
+        return array
+        (
+            set::id($id),
+            set::className('form load-indicator', $target === 'ajax' ? 'form-ajax' : ''),
+            set::action(empty($url) ? $_SERVER['REQUEST_URI'] : $url),
+            set::target($target === 'ajax' ? null: $target),
+            set::method($method)
         );
     }
 
@@ -107,8 +113,7 @@ class formBase extends wg
         (
             $this->buildProps(),
             set($this->getRestProps()),
-            $this->buildContent(),
-            $this->buildActions()
+            $this->children()
         );
     }
 }
