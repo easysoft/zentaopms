@@ -70,39 +70,7 @@ class classlist
      */
     public function set(string|array|null $list, bool $reset = false): classlist
     {
-        if(is_string($list)) $list = explode(' ', $list);
-
-        if(is_array($list))
-        {
-            if($reset) $this->list = array();
-
-            $expectedKey = 0;
-            foreach($list as $index => $value)
-            {
-                if(is_array($value))
-                {
-                    $this->set($value);
-                    continue;
-                }
-
-                /* If $index is expected numberic key and the $value is string, then use the $value as the name */
-                if($expectedKey === $index && is_string($value))
-                {
-                    $value = trim($value);
-                    if(strlen($value) > 0) $this->list[$value] = true;
-                }
-                /* If index is string, then set $index as name */
-                else if(is_string($index))
-                {
-                    $index = trim($index);
-                    if(strlen($index) === 0) continue;
-
-                    $this->list[$index] = boolval($value);
-                }
-                $expectedKey++;
-            }
-        }
-
+        $this->list = static::parse($list, $reset ? array() : $this->list);
         return $this;
     }
 
@@ -248,5 +216,51 @@ class classlist
     public function toJSON(): array
     {
         return $this->list;
+    }
+
+    public static function format(mixed ...$classList): string
+    {
+        return implode(' ', array_keys(static::parse($classList)));
+    }
+
+    public static function parseList(mixed ...$classList): array
+    {
+        $map = static::parse($classList);
+        return array_keys($map);
+    }
+
+    public static function parse(mixed $classList, array|string|object|null $currenMap = null): array
+    {
+        $currenMap = is_null($currenMap) ? array() : static::parse($currenMap);
+
+        if(is_string($classList))
+        {
+            $classList = explode(' ', $classList);
+            foreach($classList as $name)
+            {
+                $name = trim($name);
+                if(!strlen($name)) continue;
+
+                $currenMap[$name] = true;
+            }
+            return $currenMap;
+        }
+
+        if(is_object($classList)) $classList = get_object_vars($classList);
+        if(!is_array($classList)) return $currenMap;
+
+        foreach($classList as $key => $value)
+        {
+            if(is_string($key))
+            {
+                if($value && !isset($currenMap[$key])) $currenMap[$key] = true;
+                else if(!$value && isset($currenMap[$key])) unset($currenMap[$key]);
+                continue;
+            }
+
+            $currenMap = static::parse($value, $currenMap);
+        }
+
+        return $currenMap;
     }
 }
