@@ -128,7 +128,7 @@ div
                         (
                             set::label($lang->user->password),
                             set::strong(true),
-                            set::control(array('type' => 'password', 'name' => 'password', 'id' => 'password'))
+                            input(set(array('type' => 'password', 'name' => 'password', 'id' => 'password')))
                         ),
                         !empty($this->config->safe->loginCaptcha) ? formGroup
                         (
