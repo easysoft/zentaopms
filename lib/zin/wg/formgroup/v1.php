@@ -48,11 +48,23 @@ class formGroup extends wg
         'children?: array|object'               // 内部自定义内容。
     );
 
-    protected function buildLabel(): ?wg
+    protected static array $controlExtendProps = array('required', 'name', 'value', 'disabled', 'items', 'placeholder', 'readonly', 'multiple');
+
+    protected bool $isHiddenField = false;
+
+    protected function created()
+    {
+        if($this->hasProp('name') && $this->prop('required') == 'auto')
+        {
+            $this->setProp('required', isFieldRequired($this->prop('name'), $this->prop('requiredFields')));
+        }
+    }
+
+    protected function buildLabel(): wg|directive
     {
         list($name, $label, $labelFor, $labelClass, $labelProps, $labelHint, $labelHintClass, $labelHintProps, $labelHintIcon, $labelActions, $labelActionsClass, $labelActionsProps, $checkbox, $required, $strong) = $this->prop(array('name', 'label', 'labelFor', 'labelClass', 'labelProps', 'labelHint', 'labelHintClass', 'labelHintProps', 'labelHintIcon', 'labelActions', 'labelActionsClass', 'labelActionsProps', 'checkbox', 'required', 'strong'));
 
-        if(is_null($label)) return null;
+        if(is_null($label) || $label === false) return setClass('no-label');
 
         return new formLabel
         (
@@ -72,52 +84,81 @@ class formGroup extends wg
         );
     }
 
-    protected function build(): wg
+    protected function buildControl(): wg|array|null
     {
-        list($name, $label, $labelWidth, $required, $requiredFields, $tip, $tipClass, $tipProps, $control, $width, $value, $disabled, $items, $placeholder, $readonly, $multiple, $id, $hidden, $foldable, $pinned, $children) = $this->prop(array('name', 'label', 'labelWidth', 'required', 'requiredFields', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'value', 'disabled', 'items', 'placeholder', 'readonly', 'multiple', 'id', 'hidden', 'foldable', 'pinned', 'children'));
+        $control = $this->prop('control');
 
-        if($required === 'auto') $required = isFieldRequired($name, $requiredFields);
+        if($control instanceof wg) return $control;
 
-        if(is_string($control))                   $control = array('control' => $control, 'name' => $name);
-        elseif(empty($control) && $name !== null) $control = array('name' => $name);
+        if(is_string($control))                             $control = array('control' => $control);
+        elseif($control instanceof item)                    $control = $control->props->toJSON();
+        elseif(is_object($control))                         $control = get_object_vars($control);
+        elseif(is_null($control) && $this->hasProp('name')) $control = array();
 
-        if(!empty($control))
+        if(!is_array($control)) return null;
+
+        if($this->hasProp('id') && !isset($control['id'])) $control['id'] = '';
+        foreach(static::$controlExtendProps as $controlPropName)
         {
-            if($required !== null && !isset($control['required']))       $control['required']    = $required;
-            if($name !== null && !isset($control['name']))               $control['name']        = $name;
-            if($value !== null && !isset($control['value']))             $control['value']       = $value;
-            if($disabled !== null && !isset($control['disabled']))       $control['disabled']    = $disabled;
-            if($items !== null && !isset($control['items']))             $control['items']       = $items;
-            if($placeholder !== null && !isset($control['placeholder'])) $control['placeholder'] = $placeholder;
-            if($readonly !== null && !isset($control['readonly']))       $control['readonly']    = $readonly;
-            if($multiple !== null && !isset($control['multiple']))       $control['multiple']    = $multiple;
-            if($id && !isset($control['id']))                            $control['id'] = '';
-            if(isset($control['control']) && $control['control'] === 'hidden')
-            {
-                unset($control['control']);
-                return new input(set::type('hidden'), set($control));
-            }
+            $controlPropValue = $this->prop($controlPropName);
+            if($controlPropValue !== null && !isset($control[$controlPropName])) $control[$controlPropName] = $controlPropValue;
         }
+
+        if(isset($control['control']) && $control['control'] === 'hidden')
+        {
+            unset($control['control']);
+            $this->isHiddenField = true;
+            return new input(set::type('hidden'), set($control));
+        }
+
+        $controlView = new control(set($control));
+
+        if((isset($control['disabled']) && $control['disabled'] && isset($control['name']) && isset($control['value'])))
+        {
+            return array($controlView, h::input
+            (
+                set::type('hidden'),
+                set::name($control['name']),
+                set::value($control['value'])
+            ));
+        }
+
+        return $controlView;
+    }
+
+    protected function buildTip(): ?wg
+    {
+        list($tip, $tipClass, $tipProps) = $this->prop(array('tip', 'tipClass', 'tipProps'));
+        if(empty($tip)) return null;
 
         return div
         (
-            setClass('form-group', array('required' => $required, 'no-label' => $label === false || $label === null, 'hidden' => $hidden, 'is-foldable' => $foldable, 'is-pinned' => $pinned)),
+            setClass('form-tip', $tipClass),
+            set($tipProps),
+            $tip
+        );
+    }
+
+    protected function build(): wg
+    {
+        list($name, $labelWidth, $required, $width, $id, $hidden, $foldable, $pinned, $children) = $this->prop(array('name', 'labelWidth', 'required', 'width', 'id', 'hidden', 'foldable', 'pinned', 'children'));
+
+        $control = $this->buildControl();
+        if($this->isHiddenField) return $control;
+
+        return div
+        (
+            setClass('form-group', array('required' => $required, 'hidden' => $hidden, 'is-foldable' => $foldable, 'is-pinned' => $pinned)),
             zui::width($width),
             setID($id),
-            set($this->getRestProps()),
             setData('name', $name),
             setCssVar('form-horz-label-width', $labelWidth),
+            set($this->getRestProps()),
             $this->buildLabel(),
-            empty($control) ? null : new control(set($control)),
-            (isset($control['disabled']) && $control['disabled'] && isset($control['name']) && isset($control['value'])) ? h::input(set::type('hidden'), set::name($control['name']), set::value($control['value'])) : null,
+            $control,
             $children,
             $this->children(),
-            empty($tip) ? null : div
-            (
-                setClass('form-tip', $tipClass),
-                set($tipProps),
-                $tip
-            )
+            $this->buildTip()
         );
     }
 }
