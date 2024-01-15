@@ -5,7 +5,8 @@ global $lang, $config;
 
 $fields = defineFieldList('project');
 
-$hasCode = !empty($config->setCode);
+$hasCode     = !empty($config->setCode);
+$copyProject = !!data('copyProjectID');
 
 $fields->field('parent')
     ->required()
@@ -53,12 +54,14 @@ $fields->field('days')
 $fields->field('products[]')
     ->wrapBefore()
     ->setClass('className', 'productBox')
+    ->hidden($copyProject ? !data('copyProject.hasProduct') : false)
     ->checkbox(array('text' => $lang->project->newProduct, 'name' => 'newProduct', 'checked' => false))
     ->items(data('allProducts'))
     ->label($lang->project->manageProducts);
 
 $fields->field('plans[]')
     ->setClass('className', 'productBox')
+    ->hidden($copyProject ? !data('copyProject.hasProduct') : false)
     ->items(array())
     ->label($lang->project->managePlans);
 
