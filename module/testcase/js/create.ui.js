@@ -47,13 +47,13 @@ function changeStory(event)
 function checkScript()
 {
     $('.autoScript').toggleClass('hidden', !$('#auto').prop('checked'));
-    if(!$('#auto').prop('checked')) $('#script').val('');
+    if(!$('#auto').prop('checked')) $('[name=script]').val('');
 }
 
 function showUploadScriptBtn()
 {
     $('#scriptFile').next().show();
-    $('#script').val('');
+    $('[name=script]').val('');
 }
 
 function hideUploadScriptBtn()
@@ -69,5 +69,5 @@ function readScriptContent()
 
     var reader = new FileReader();
     reader.readAsText($('#scriptFile')[0].files[0], 'UTF-8');
-    reader.onload = function(evt){$('#script').val(evt.target.result);}
+    reader.onload = function(evt){$('[name=script]').val(evt.target.result);}
 }
