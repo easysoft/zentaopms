@@ -81,7 +81,7 @@ class form extends formBase
                     $this->setProp('foldableItems', $foldableItems);
                 }
             }
-            if(!$this->hasProp('pinnedItems'))
+            if(!$this->hasProp('pinnedItems') && isset($config->{$module}->custon->{$key}))
             {
                 $this->setProp('pinnedItems', explode(',', $config->$module->custom->$key));
             }
