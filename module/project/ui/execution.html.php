@@ -161,7 +161,7 @@ dtable
     set::emptyTip($lang->execution->noExecution),
     set::createTip($isStage ? $lang->programplan->create : $lang->execution->create),
     set::createLink(hasPriv('execution', 'create') ? $createLink : ''),
-    set::createAttr('data-app="execution"')
+    set::createAttr($isStage ? 'data-app="project"' : 'data-app="execution"')
 );
 
 render();
