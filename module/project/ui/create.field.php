@@ -18,8 +18,8 @@ $fields->field('hasProduct')
         ->control('radioListInline', array('className' => $copyProject ? 'has-warning' : ''))
        ->value($copyProject ? data('copyProject.hasProduct') : '1');
 
+if(in_array($model, array('scrum', 'kanban'))) $fields->field('name')->checkbox(array('text' => $lang->project->multiple, 'name' => 'multiple', 'checked' => $copyProject ? !!data('copyProject.multiple') : true, 'disabled' => !!$copyProject));
 $fields->field('name')
-    ->checkbox(array('text' => $lang->project->multiple, 'name' => 'multiple', 'checked' => $copyProject ? !!data('copyProject.multiple') : true, 'disabled' => !!$copyProject))
     ->className($copyProject ? 'has-warning' : '')
     ->tip($copyProject ? $lang->project->copyProject->nameTips : null)
     ->value($copyProject ? data('copyProject.name') : '');
