@@ -8,3 +8,5 @@
 .items-center {align-items: center !important}
 
 .programTip {width: 200px !important;}
+
+.form-group[data-name=budget] .has-prefix .input-control-prefix {padding: 0}
