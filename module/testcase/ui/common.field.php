@@ -44,6 +44,7 @@ $fields->field('script')
     ->value(data('case.script'));
 
 $fields->field('story')
+    ->foldable()
     ->label($lang->testcase->lblStory)
     ->items(data('stories'))
     ->value(data('case.story'));
@@ -76,8 +77,11 @@ $fields->field('steps')
 
 $fields->field('keywords')
     ->width('full')
+    ->className('lite:w-1/2')
+    ->foldable()
     ->value(data('case.keywords'));
 
 $fields->field('files')
     ->width('full')
+    ->foldable()
     ->control('upload');
