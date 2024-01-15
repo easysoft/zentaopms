@@ -240,12 +240,14 @@ class field extends setting
         return $item;
     }
 
-    function control(string|array|object|null $control, array|object|null $props = null): field
+    function control(string|array|object|false|null $control, array|object|null $props = null): field
     {
-        if(is_string($control)) $control = array('control' => $control);
-        $this->addToMap('control', $control);
-        if(!is_null($props)) $this->addToMap('control', $props);
-        return $this;
+        if($control === false) return $this->remove('control');
+
+        if(is_object($props)) $props = get_object_vars($props);
+        if(is_string($control) && is_array($props)) $control = array('control' => $control) + $props;
+
+        return $this->setVal('control', $control);
     }
 
     function controlBegin(?string $itemName): field
@@ -266,24 +268,13 @@ class field extends setting
      * Set items.
      *
      * @access public
-     * @param  array|false $items  - Items.
-     * @param  bool        $reset  - Whether to reset items.
+     * @param  array|false|null $items  - Items.
      * @return field
      */
-    function items(array|false|null $items, bool $reset = false): field
+    function items(array|false|null $items): field
     {
-        if($items === false)  return $this->remove('items');
-        if($reset)            return $this->setVal('items', $items);
-
-        if(empty($items) && !$this->has('items'))
-        {
-            $this->setVal('items', array());
-        }
-        elseif(is_array($items))
-        {
-            $this->mergeToList('items', $items);
-        }
-        return $this;
+        if($items === false) return $this->remove('items');
+        return $this->setVal('items', $items);
     }
 
     /**
