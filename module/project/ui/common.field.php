@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 namespace zin;
-global $lang, $config;
+global $lang, $config, $app;
 
+$app->loadLang('program');
 $fields = defineFieldList('project');
 
 $hasCode     = !empty($config->setCode);
