@@ -81,6 +81,14 @@ $lang->project->invested            = 'Invested';
 $lang->project->member              = 'Member';
 $lang->project->manage              = 'Manage';
 
+$lang->project->manDay          = 'Man Day';
+$lang->project->day             = 'Day';
+$lang->project->newProduct      = 'New Product';
+$lang->project->associatePlan   = 'Associate Plan';
+$lang->project->tenThousandYuan = '10k';
+$lang->project->planDate        = 'Schedule Date';
+$lang->project->delayInfo       = 'Delayed for %s days';
+
 /* Fields. */
 $lang->project->common             = $lang->projectCommon;
 $lang->project->id                 = 'ID';
@@ -128,7 +136,7 @@ $lang->project->team               = 'Team';
 $lang->project->teamAction         = 'Team List';
 $lang->project->order              = 'Rank';
 $lang->project->budget             = 'Budget';
-$lang->project->budgetUnit         = 'Budget Unit';
+$lang->project->budgetUnit         = "(Unit: {$lang->project->tenThousandYuan})";
 $lang->project->suspendedDate      = 'SuspendedDate';
 $lang->project->vision             = 'Vision';
 $lang->project->displayCards       = 'Max cards per column';
@@ -184,6 +192,7 @@ $lang->project->longTime           = 'Long-Term';
 $lang->project->future             = 'TBD';
 $lang->project->moreProject        = "More {$lang->projectCommon}";
 $lang->project->days               = 'Days';
+$lang->project->daysUnit           = '(Unit: Days)';
 $lang->project->mailto             = 'Mailto';
 $lang->project->etc                = " , etc";
 $lang->project->product            = $lang->productCommon;
@@ -193,10 +202,10 @@ $lang->project->createKanban       = 'Create Kanban';
 $lang->project->kanban             = 'Kanban';
 $lang->project->moreActions        = 'More Actions';
 
-/* Project Kanban. */
+/* Project Category. */
 $lang->project->projectTypeList = array();
-$lang->project->projectTypeList[1] = "{$lang->productCommon}-based";
-$lang->project->projectTypeList[0] = "Non-{$lang->productCommon}-based";
+$lang->project->projectTypeList[1] = "{$lang->productCommon}";
+$lang->project->projectTypeList[0] = "Non-{$lang->productCommon}";
 
 /* Project Kanban. */
 $lang->project->typeList = array();
@@ -456,14 +465,6 @@ $lang->project->featureBar['dynamic']['lastMonth'] = 'Last Month';
 $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = 'Suspended';
 $lang->project->moreSelects['closed']    = 'Closed';
-
-$lang->project->manDay          = 'Man Day';
-$lang->project->day             = 'Day';
-$lang->project->newProduct      = 'New Product';
-$lang->project->associatePlan   = 'Associate Plan';
-$lang->project->tenThousandYuan = '10k';
-$lang->project->planDate        = 'Schedule Date';
-$lang->project->delayInfo       = 'Delayed for %s days';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . ' Sprint';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . ' Stage';

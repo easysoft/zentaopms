@@ -1,8 +1,5 @@
 $(function()
 {
-    new zui.Tooltip('#programHover', {title: programTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light programTip'});
-    new zui.Tooltip('#stageByHover', {title: stageByTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light programTip'});
-
     setWhite();
 });
 
@@ -15,9 +12,10 @@ $(function()
  */
 function removeTips()
 {
-    $(this).removeClass('has-warning');
-    $(this).next('.text-warning').remove();
-    $(this).parent().next('.text-warning').remove();
+    const $formGroup = $(this).closest('.form-group');
+    $formGroup.removeClass('has-warning');
+    $formGroup.find('.has-warning').removeClass('has-warning');
+    $formGroup.find('.form-tip').remove();
 }
 
 /**

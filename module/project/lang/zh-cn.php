@@ -47,6 +47,7 @@ $lang->project->unbindWhitelist     = "{$lang->projectCommon}移除白名单";
 $lang->project->manageProducts      = "关联{$lang->productCommon}";
 $lang->project->manageOtherProducts = "关联其他{$lang->productCommon}";
 $lang->project->manageProductPlan   = "关联{$lang->productCommon}和计划";
+$lang->project->managePlans         = '关联计划';
 $lang->project->copyTitle           = "请选择要复制的{$lang->projectCommon}";
 $lang->project->errorSameProducts   = "{$lang->projectCommon}不能关联多个相同的{$lang->productCommon}。";
 $lang->project->errorSameBranches   = "{$lang->projectCommon}不能关联多个相同的分支。";
@@ -80,6 +81,14 @@ $lang->project->storyCount          = '需求规模';
 $lang->project->invested            = '已投入';
 $lang->project->member              = '成员';
 $lang->project->manage              = '管理';
+
+$lang->project->manDay          = '人天';
+$lang->project->day             = '天';
+$lang->project->newProduct      = '新产品';
+$lang->project->associatePlan   = '关联计划';
+$lang->project->tenThousandYuan = '万元';
+$lang->project->planDate        = '计划日期';
+$lang->project->delayInfo       = '延期 %s 天';
 
 /* Fields. */
 $lang->project->common             = "{$lang->projectCommon}";
@@ -128,7 +137,7 @@ $lang->project->team               = '团队';
 $lang->project->teamAction         = '团队列表';
 $lang->project->order              = '排序';
 $lang->project->budget             = '预算';
-$lang->project->budgetUnit         = '预算单位';
+$lang->project->budgetUnit         = "（单位：{$lang->project->tenThousandYuan}）";
 $lang->project->suspendedDate      = '暂停日期';
 $lang->project->vision             = '界面';
 $lang->project->displayCards       = '每列最大卡片数';
@@ -184,6 +193,7 @@ $lang->project->longTime           = '长期';
 $lang->project->future             = '待定';
 $lang->project->moreProject        = "更多{$lang->projectCommon}";
 $lang->project->days               = '可用工作日';
+$lang->project->daysUnit           = '（单位：天）';
 $lang->project->mailto             = '抄送给';
 $lang->project->etc                = "等";
 $lang->project->product            = "所属{$lang->productCommon}";
@@ -193,10 +203,10 @@ $lang->project->createKanban       = '添加看板';
 $lang->project->kanban             = '项目看板';
 $lang->project->moreActions        = '更多操作';
 
-/* Project Kanban. */
+/* Project Category. */
 $lang->project->projectTypeList = array();
-$lang->project->projectTypeList[1] = "{$lang->productCommon}型{$lang->projectCommon}";
-$lang->project->projectTypeList[0] = "{$lang->projectCommon}型{$lang->projectCommon}";
+$lang->project->projectTypeList[1] = "{$lang->productCommon}型";
+$lang->project->projectTypeList[0] = "{$lang->projectCommon}型";
 
 /* Project Kanban. */
 $lang->project->typeList = array();
@@ -460,14 +470,6 @@ $lang->project->featureBar['dynamic']['lastMonth'] = '上月';
 $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = '已挂起';
 $lang->project->moreSelects['closed']    = '已关闭';
-
-$lang->project->manDay          = '人天';
-$lang->project->day             = '天';
-$lang->project->newProduct      = '新产品';
-$lang->project->associatePlan   = '关联计划';
-$lang->project->tenThousandYuan = '万元';
-$lang->project->planDate        = '计划日期';
-$lang->project->delayInfo       = '延期 %s 天';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . '迭代';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . '阶段';

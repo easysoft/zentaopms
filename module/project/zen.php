@@ -292,7 +292,7 @@ class projectZen extends project
         $this->view->URSRPairs           = $this->loadModel('custom')->getURSRPairs();
         $this->view->availableBudget     = $parentProgram ? $this->program->getBudgetLeft($parentProgram) : 0;
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
-
+        $this->view->currency            = $parentProgram ? $parentProgram->budget : $this->config->project->defaultCurrency;
         $this->display();
     }
 

@@ -13,14 +13,9 @@ const ignoreTips = {
  * @access public
  * @return void
  */
-function changeType(type)
+function changeType()
 {
-    if($('.project-type-' + type).hasClass('disabled')) return;
-    $('.project-type-1, .project-type-0').removeClass('primary-pale');
-    $('.project-type-' + type).addClass('primary-pale');
-    $('input[name=hasProduct]').val(type);
-
-    if(type == 0)
+    if($(this).val() == 0)
     {
         $('.productBox').addClass('hidden');
     }
