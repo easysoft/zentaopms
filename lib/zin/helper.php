@@ -12,53 +12,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-require_once __DIR__ . DS . 'config.php';
-
-function setWgVer($ver, $names = null)
-{
-    global $config;
-    $zinConfig = $config->zin;
-
-    if(is_string($names)) $names = explode(',', $names);
-    if(!is_array($names)) return;
-
-    foreach($names as $name)
-    {
-        $name = trim($name);
-        if(!empty($name)) continue;
-
-        $zinConfig->wgVerMap[$name] = $ver;
-    }
-}
-
-function getWgVer($name)
-{
-    global $config;
-
-    return isset($config->zin->verMap[$name]) ? $config->zin->verMap[$name] : $config->zin->wgVer;
-}
-
-function createWg($name, $args): wg
-{
-    $name  = strtolower($name);
-    $wgVer = getWgVer($name);
-
-    include_once __DIR__ . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
-
-    $wgName = "\\zin\\$name";
-
-    return class_exists($wgName) ? (new $wgName($args)) : $wgName($args);
-}
-
-function requireWg(string $name, string $wgVer = '')
-{
-    $name = strtolower($name);
-
-    if(!$wgVer) $wgVer = getWgVer($name);
-
-    require_once __DIR__ . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
-}
-
 if(!function_exists('str_contains'))
 {
     /**
