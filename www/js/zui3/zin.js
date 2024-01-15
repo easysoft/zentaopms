@@ -882,6 +882,14 @@
             data[key] = value;
         });
 
+        if(DEBUG)
+        {
+            console.groupCollapsed('[APP] ', 'loadForm:', id);
+            console.log('options', options);
+            console.trace('data', data);
+            console.groupEnd();
+        }
+
         const $oldItems = $form.children('.form-group[data-name]');
         let items = options.items || [];
         if(typeof items === 'string') items = items.split(',');
