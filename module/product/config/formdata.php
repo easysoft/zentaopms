@@ -2,10 +2,10 @@
 global $app, $lang;
 $config->product->form = new stdclass();
 $config->product->form->create = array();
-$config->product->form->create['program']        = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
-$config->product->form->create['line']           = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
+$config->product->form->create['program']        = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
+$config->product->form->create['line']           = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => '', 'options' => array());
 $config->product->form->create['name']           = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
-$config->product->form->create['code']           = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
+$config->product->form->create['code']           = array('type' => 'string',  'control' => 'text',         'required' => false, 'filter'  => 'trim');
 $config->product->form->create['PO']             = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',       'options' => array());
 $config->product->form->create['QD']             = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',       'options' => array());
 $config->product->form->create['RD']             = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',       'options' => array());

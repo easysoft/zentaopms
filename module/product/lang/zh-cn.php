@@ -200,6 +200,7 @@ $lang->product->statusList['normal'] = '正常';
 $lang->product->statusList['closed'] = '结束';
 
 global $config;
+$lang->product->aclList['open'] = "公开(有{$lang->productCommon}视图权限，即可访问)";
 if($config->systemMode == 'ALM')
 {
     $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、所属项目集的负责人及干系人、相关联{$lang->projectCommon}的团队成员和干系人可访问)";
@@ -208,7 +209,6 @@ else
 {
     $lang->product->aclList['private'] = "私有({$lang->productCommon}相关负责人、相关联{$lang->projectCommon}的团队成员和关系人可访问)";
 }
-$lang->product->aclList['open'] = "公开(有{$lang->productCommon}视图权限，即可访问)";
 
 $lang->product->abbr = new stdclass();
 $lang->product->abbr->aclList['private'] = '私有';

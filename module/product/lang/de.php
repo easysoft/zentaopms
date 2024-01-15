@@ -200,6 +200,7 @@ $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Geschlossen';
 
 global $config;
+$lang->product->aclList['open'] = "Standard (Benutzer mit Rechten für {$lang->productCommon} können zugreifen.)";
 if($config->systemMode == 'ALM')
 {
     $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated {$lang->projectCommon} can access)";
@@ -208,7 +209,6 @@ else
 {
     $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }
-$lang->product->aclList['open']    = "Standard (Benutzer mit Rechten für {$lang->productCommon} können zugreifen.)";
 
 $lang->product->abbr = new stdclass();
 $lang->product->abbr->aclList['private'] = "Private {$lang->productCommon}";

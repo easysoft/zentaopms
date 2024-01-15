@@ -6,7 +6,7 @@ $config->product->showAllProjects = 0;
 
 $config->product->create = new stdclass();
 $config->product->edit   = new stdclass();
-$config->product->create->requiredFields = 'name,code';
+$config->product->create->requiredFields = 'name';
 $config->product->edit->requiredFields   = 'name,code';
 
 $config->product->browse = new stdclass();

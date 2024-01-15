@@ -267,7 +267,7 @@ class productZen extends product
     protected function getFormFields4Create(int $programID = 0): array
     {
         $fields = $this->setSelectFormOptions($programID, $this->config->product->form->create);
-        $fields['program']['default'] = $programID;
+        $fields['program']['default'] = $programID ? $programID : '';
         $fields['PO']['default']      = $this->app->user->account;
 
         /* Set required. */
