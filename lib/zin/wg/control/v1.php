@@ -31,6 +31,7 @@ class control extends wg
         'name: string',          // 控件名称，可能影响到表单提交的域名称，如果是多个值的表单控件，可能需要将名称定义为 `key[]` 的形式。
         'value?: string',        // 控件值。
         'placeholder?: string',  // 占位文本。
+        'text?: string',         // 文本。
         'readonly?: bool',       // 是否只读。
         'required?: bool',       // 是否为必填。
         'disabled?: bool',       // 是否禁用。
@@ -199,6 +200,11 @@ class control extends wg
     protected function buildHidden(): wg
     {
         return new input(set::type('hidden'), set($this->props->skip('control')));
+    }
+
+    protected function buildDropdown(): wg
+    {
+        return new dropdown($this->prop('text'), set($this->props->skip('control,text,name,widget')));
     }
 
     protected function build(): wg
