@@ -74,7 +74,7 @@ class form extends formBase
             if(!$this->hasProp('foldableItems'))
             {
                 $listFieldsKey = 'custom' . ucfirst($key);
-                $fieldList     = empty($config->$module->$listFieldsKey) ? $config->$module->list->$listFieldsKey : $config->$module->$listFieldsKey;
+                $fieldList     = empty($config->{$module}->{$listFieldsKey}) ? (!empty($config->{$module}->list->{$listFieldsKey}) ? $config->{$module}->list->{$listFieldsKey} : array()) : $config->{$module}->{$listFieldsKey};
                 $foldableItems = empty($fieldList) ? array() : explode(',', $fieldList);
                 if(!empty($foldableItems))
                 {
