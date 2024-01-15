@@ -4782,6 +4782,8 @@ class executionModel extends model
             $task->isParent      = ($task->parent < 0);
             $task->parent        = $task->parent <= 0 ? 'pid' . (string)$task->execution : 'tid' . (string)$task->parent;
             $task->progress      = ($task->consumed + $task->left) == 0 ? 0 : round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+            $task->begin         = $task->estStarted;
+            $task->end           = $task->deadline;
 
             $rows[] = $task;
         }
