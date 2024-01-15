@@ -722,7 +722,7 @@
         if(options.selector && options.selector !== 'dtable') selector = options.selector;
         if(!$(target).closest('.modal').length && !options.selector)
         {
-            selector += ',#featureBar>*';
+            selector += ',#featureBar>*,pageJS/.zin-page-js';
             if($('#moduleMenu').length) selector += ',#moduleMenu';
         }
         delete options.selector;
