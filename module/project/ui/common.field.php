@@ -49,7 +49,7 @@ $fields->field('begin')
     ->control('inputGroup')
     ->itemBegin('begin')->control('datePicker')->placeholder($lang->project->begin)->value(date('Y-m-d'))->required(true)->itemEnd()
     ->item(array('control' => 'span', 'text' => '-'))
-    ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->itemEnd();
+    ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->value(data('project.end'))->itemEnd();
 
 $fields->field('days')->label($lang->project->days . $lang->project->daysUnit);
 

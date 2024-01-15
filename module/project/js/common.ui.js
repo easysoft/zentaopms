@@ -176,7 +176,7 @@ window.toggleBudget = function(e)
 window.toggleBudgetUnit = function(unit)
 {
     $('[data-name="budget"] > .has-prefix > .input-control-prefix > a').text(currencySymbol[unit]);
-    $('[name="budgetUnit"]').text(unit);
+    $('[name="budgetUnit"]').val(unit);
 };
 
 /**
