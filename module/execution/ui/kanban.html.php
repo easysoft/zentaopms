@@ -35,11 +35,12 @@ foreach($kanbanList as $current => $region)
 }
 
 $operationMenu = array();
-if(common::hasPriv('execution', 'start'))   $operationMenu[] = array('text' => $lang->execution->start, 'url' => inlink('start', "id=$execution->id"), 'data-toggle' => 'modal', 'icon' => 'start');
-if(common::hasPriv('execution', 'putoff'))  $operationMenu[] = array('text' => $lang->execution->putoff, 'url' => inlink('putoff', "id=$execution->id"), 'data-toggle' => 'modal', 'icon' => 'calendar');
-if(common::hasPriv('execution', 'suspend')) $operationMenu[] = array('text' => $lang->execution->suspend, 'url' => inlink('suspend', "id=$execution->id"), 'data-toggle' => 'modal', 'icon'=> 'pause');
-if(common::hasPriv('execution', 'close'))   $operationMenu[] = array('text' => $lang->execution->close, 'url' => inlink('close', "id=$execution->id"), 'data-toggle' => 'modal', 'icon' => 'off');
-if(common::hasPriv('execution', 'delete'))  $operationMenu[] = array('text' => $lang->delete, 'url' => inlink('delete', "id=$execution->id&confirm=no"), 'innerClass' => 'ajax-submit', 'icon' => 'trash');
+if($this->execution->isClickable($execution, 'start'))    $operationMenu[] = array('text' => $lang->execution->start, 'url' => inlink('start', "id=$execution->id"), 'data-toggle' => 'modal', 'icon' => 'start');
+if($this->execution->isClickable($execution, 'putoff'))   $operationMenu[] = array('text' => $lang->execution->putoff, 'url' => inlink('putoff', "id=$execution->id"), 'data-toggle' => 'modal', 'icon' => 'calendar');
+if($this->execution->isClickable($execution, 'suspend'))  $operationMenu[] = array('text' => $lang->execution->suspend, 'url' => inlink('suspend', "id=$execution->id"), 'data-toggle' => 'modal', 'icon'=> 'pause');
+if($this->execution->isClickable($execution, 'close'))    $operationMenu[] = array('text' => $lang->execution->close, 'url' => inlink('close', "id=$execution->id"), 'data-toggle' => 'modal', 'icon' => 'off');
+if($this->execution->isClickable($execution, 'activate')) $operationMenu[] = array('text' => $lang->execution->activate, 'url' => inlink('activate', "id=$execution->id"), 'data-toggle' => 'modal', 'icon' => 'off');
+if($this->execution->isClickable($execution, 'delete'))   $operationMenu[] = array('text' => $lang->delete, 'url' => inlink('delete', "id=$execution->id&confirm=no"), 'innerClass' => 'ajax-submit', 'icon' => 'trash');
 
 $canCreateTask      = common::hasPriv('task', 'create');
 $canBatchCreateTask = common::hasPriv('task', 'batchCreate');
