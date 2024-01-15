@@ -71,7 +71,7 @@ class form extends formBase
             $app->loadLang($module);
             $app->loadModuleConfig($module);
 
-            if(!$this->hasProp('foldableItems'))
+            if($this->prop('foldableItems') === true)
             {
                 $listFieldsKey = 'custom' . ucfirst($key);
                 $fieldList     = empty($config->{$module}->{$listFieldsKey}) ? (!empty($config->{$module}->list->{$listFieldsKey}) ? $config->{$module}->list->{$listFieldsKey} : array()) : $config->{$module}->{$listFieldsKey};
@@ -81,7 +81,7 @@ class form extends formBase
                     $this->setProp('foldableItems', $foldableItems);
                 }
             }
-            if(!$this->hasProp('pinnedItems') && isset($config->{$module}->custon->{$key}))
+            if(!$this->hasProp('pinnedItems') && isset($config->{$module}->custom->{$key}))
             {
                 $this->setProp('pinnedItems', explode(',', $config->$module->custom->$key));
             }
