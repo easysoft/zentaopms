@@ -25,6 +25,8 @@ class fieldList
 
     public ?array $valueData = null;
 
+    public ?array $autoLoadRule = null;
+
     public function __construct(?string $name = null, ?array $fields = null)
     {
         if(is_null($name))
@@ -266,6 +268,17 @@ class fieldList
     {
         if(is_object($valueData)) $valueData = get_object_vars($valueData);
         $this->valueData = $valueData;
+        return $this;
+    }
+
+    public function autoLoad(string|array $targets, string|array|null $loadNames = null)
+    {
+        if(is_string($targets))
+        {
+            if(is_array($loadNames)) $loadNames = implode(',', $loadNames);
+            $targets = array($targets => $loadNames);
+        }
+        $this->autoLoadRule = is_null($this->autoLoadRule) ? $targets : array_merge($this->autoLoadRule, $targets);
         return $this;
     }
 
