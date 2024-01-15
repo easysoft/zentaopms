@@ -35,6 +35,7 @@ $fields->field('acl')
     ->value('open');
 
 $fields->field('whitelist')
+    ->hidden(true)
     ->width('full')
     ->control('whitelist')
     ->items(data('users'));
