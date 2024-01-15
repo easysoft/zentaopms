@@ -64,33 +64,5 @@ formPanel
                 span('px')
             )
         )
-    ),
-    ($laneCount > 1) ? formRow
-    (
-        formGroup
-        (
-            set::label($lang->kanban->laneHeight),
-            radioList
-            (
-                set::name('heightType'),
-                set::items($lang->kanbanlane->heightTypeList),
-                set::value($heightType),
-                on::change('changeLaneHeight')
-            ),
-        )
-    ) : null,
-    formRow
-    (
-        formGroup
-        (
-            $heightType == 'auto' ? setClass('hidden') : null,
-            set::label($lang->kanban->cardCount),
-            input
-            (
-                set::name('displayCards'),
-                set::value($displayCards),
-                set::placeholder($lang->kanbanlane->error->mustBeInt),
-            )
-        )
     )
 );
