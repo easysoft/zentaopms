@@ -18,7 +18,7 @@ jsVar('budgetOverrun',       $lang->project->budgetOverrun);
 $fields = useFields('program.create');
 
 $autoLoad = array();
-$autoLoad['parent'] = 'parent,budgetUnit,';
+$autoLoad['parent'] = 'parent,budgetUnit';
 
 formGridPanel
 (
@@ -26,7 +26,8 @@ formGridPanel
     set::title($title),
     set::fields($fields),
     set::loadUrl($loadUrl),
-    set::autoLoad($autoLoad)
+    set::autoLoad($autoLoad),
+    on::change('#budget', 'budgetOverrunTips')
 );
 
 render();

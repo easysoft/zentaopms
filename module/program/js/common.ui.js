@@ -284,7 +284,7 @@ window.budgetOverrunTips = function(e)
 {
     if(window.ignoreTips['beyondBudgetTip']) return;
 
-    var selectedProgramID = $('#parent').zui('picker').$.state.value;
+    var selectedProgramID = $('[name=parent]').zui('picker').$.state.value;
     var budget            = $('#budget').val();
     if(selectedProgramID == 0)
     {
@@ -301,7 +301,7 @@ window.budgetOverrunTips = function(e)
         if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<div class='form-row'><div class='form-group'><div class='input-group'><span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></div></div></div>";
 
         if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').closest('.form-row').remove();
-        $('#budgetRow').after(tip);
+        $('[name=budget]').parent().after(tip);
     });
 }
 
