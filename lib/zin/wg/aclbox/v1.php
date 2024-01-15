@@ -55,7 +55,7 @@ class aclBox extends wg
                 set(array('label' => $whitelistLabel, 'required' => false)),
                 div
                 (
-                    div
+                    $groupLabel ? div
                     (
                         setClass('input-group'),
                         span
@@ -67,15 +67,15 @@ class aclBox extends wg
                         (
                             set(array('items' => $groupItems, 'name' => $groupName, 'value' => $groupValue, 'multiple' => true))
                         )
-                    ),
+                    ) : null,
                     div
                     (
                         setClass('input-group mt-2'),
-                        span
+                        $userLabel ? span
                         (
                             setClass('input-group-addon'),
                             $userLabel
-                        ),
+                        ) : null,
                         whitelist
                         (
                             set(array('inputGroupClass' => 'w-full', 'name' => $userName, 'value' => $userValue))
