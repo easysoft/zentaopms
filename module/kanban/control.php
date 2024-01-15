@@ -55,6 +55,7 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
+            $this->lang->kanban->name = $this->lang->kanbanspace->name;
             $space = form::data($this->config->kanban->form->createSpace)
                 ->setDefault('createdBy', $this->app->user->account)
                 ->setDefault('createdDate', helper::now())
