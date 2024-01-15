@@ -239,7 +239,7 @@ $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->exe
 $lang->project->unlinkExecutionMembers = "移除的团队成员还参与了{$lang->projectCommon}下的执行，是否同步从执行团队中移除？";
 $lang->project->productTip             = "点击新建{$lang->productCommon}后，{$lang->projectCommon}将不会关联已选中的{$lang->productCommon}。";
 $lang->project->noDevStage             = "该{$lang->projectCommon}下没有研发类型的阶段，或者您没有权限访问，暂时不支持创建版本。";
-$lang->project->budgetOverrun          = "{$lang->projectCommon}的预算超出了父项目集的剩余预算：<strong id='currency'></strong><strong id='parentBudget'></strong><strong id='budgetUnit'></strong>。";
+$lang->project->budgetOverrun          = "{$lang->projectCommon}的预算超出了父项目集的剩余预算：%s。";
 $lang->project->disabledInputTip       = '请先取消%s';
 $lang->project->linkRepoFailed         = '关联代码库失败';
 $lang->project->unLinkProductTip       = "您确认要取消与%s的关联关系吗？（不影响已关联的需求）";

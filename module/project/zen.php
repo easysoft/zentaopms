@@ -277,7 +277,7 @@ class projectZen extends project
         $this->view->title               = $this->lang->project->create;
         $this->view->gobackLink          = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
         $this->view->model               = $model;
-        $this->view->pmUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
+        $this->view->PMUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
         $this->view->programID           = $programID;
         $this->view->productID           = isset($output['productID']) ? $output['productID'] : 0;
@@ -292,7 +292,6 @@ class projectZen extends project
         $this->view->URSRPairs           = $this->loadModel('custom')->getURSRPairs();
         $this->view->availableBudget     = $parentProgram ? $this->program->getBudgetLeft($parentProgram) : 0;
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
-        $this->view->currency            = $parentProgram ? $parentProgram->budget : $this->config->project->defaultCurrency;
         $this->display();
     }
 
@@ -378,13 +377,23 @@ class projectZen extends project
             }
         }
 
+        $program     = $this->program->getByID($project->parent);
+        $programList = $this->program->getParentPairs();
+
+        $disableParent  = false;
+        if(!isset($programList[$project->parent]))
+        {
+            $disableParent = true;
+            $programList   = array($project->parent => $program->name);
+        }
+
         $this->view->title = $this->lang->project->edit;
 
         $this->view->PMUsers                  = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
         $this->view->users                    = $this->user->getPairs('noclosed|nodeleted');
         $this->view->project                  = $project;
-        $this->view->programList              = $this->program->getParentPairs();
-        $this->view->program                  = $this->program->getByID($project->parent);
+        $this->view->programList              = $programList;
+        $this->view->program                  = $program;
         $this->view->projectID                = $projectID;
         $this->view->allProducts              = $allProducts;
         $this->view->multiBranchProducts      = $this->product->getMultiBranchPairs();
@@ -406,7 +415,7 @@ class projectZen extends project
         $this->view->teamMembers              = $this->user->getTeamMemberPairs($projectID, 'project');
         $this->view->from                     = $from;
         $this->view->programID                = $programID;
-
+        $this->view->disableParent            = $disableParent;
         $this->display();
     }
 

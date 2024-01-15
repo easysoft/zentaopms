@@ -12,9 +12,13 @@ namespace zin;
 
 $fields = useFields('project.create');
 
-$autoLoad = array();
-
 jsVar('model', $model);
+jsVar('ignore', $lang->project->ignore);
+jsVar('budgetOverrun', $lang->project->budgetOverrun);
+jsVar('currencySymbol', $lang->project->currencySymbol);
+jsVar('parentBudget', $lang->project->parentBudget);
+jsVar('budgetUnitLabel', $lang->project->tenThousandYuan);
+jsVar('budgetUnitValue', $config->project->budget->tenThousand);
 
 formGridPanel
 (
@@ -45,6 +49,7 @@ formGridPanel
     on::change('[name=hasProduct]', 'changeType'),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
+    on::change('#parent, #budget', "checkBudget(0)"),
     set::title($lang->project->create),
     set::fields($fields),
 );

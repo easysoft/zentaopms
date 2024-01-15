@@ -5,11 +5,12 @@ global $lang, $config;
 
 $fields = defineFieldList('project.create', 'project');
 
+$model       = data('model');
 $hasCode     = !empty($config->setCode);
 $copyProject = !!data('copyProjectID');
 
 $fields->field('parent')
-    ->control('picker', array('className' => $copyProject ? 'has-warning' : ''))
+    ->control('picker', array('className' => $copyProject ? 'has-warning' : '', 'required' => true))
     ->className($copyProject ? 'has-warning' : '')
     ->value($copyProject ? data('copyProject.name') : '');
 
@@ -34,10 +35,15 @@ if($hasCode)
 
 $fields->field('days')->control('input', array('className' => $copyProject ? 'has-warning' : ''));
 
+$fields->field('products[]')->hidden($copyProject ? !data('copyProject.hasProduct') : false);
+
+$fields->field('plans[]')->hidden($copyProject ? !data('copyProject.hasProduct') : false);
+
+if($model == 'waterfall' || $model == 'waterfallplus')
+{
+    $fields->field('stageBy')->className('hidden');
+}
+
 $fields->field('acl')->value($copyProject ? data('copyProject.acl') : 'private');
 
 $fields->field('auth')->value($copyProject ? data('copyProject.auth') : 'extend');
-
-$fields->field('budget')
-    ->control('inputGroup')
-    ->itemBegin('budget')->control('input')->prefix(zget($lang->project->currencySymbol, data('currency')))->prefixWidth(20)->itemEnd();

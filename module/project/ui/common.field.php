@@ -6,8 +6,10 @@ global $lang, $config, $app;
 $app->loadLang('program');
 $fields = defineFieldList('project');
 
-$hasCode     = !empty($config->setCode);
-$copyProject = !!data('copyProjectID');
+$model          = data('model');
+$hasCode        = !empty($config->setCode);
+$currency       = data('parentProgram') ? data('parentProgram.budgetUnit') : $config->project->defaultCurrency;
+$disableStageBy = !empty(data('executions')) ? true : false;
 
 $fields->field('parent')
     ->required()
@@ -15,7 +17,7 @@ $fields->field('parent')
     ->hidden(data('globalDisableProgram'))
     ->items(data('programList'));
 
-$fields->field('model')->control('hidden')->value(data('model'));
+$fields->field('model')->control('hidden')->value($model);
 
 if(!$hasCode)
 {
@@ -28,7 +30,7 @@ if(!$hasCode)
 $fields->field('name')
     ->wrapBefore()
     ->required()
-    ->control('colorInput');
+    ->control('input');
 
 if($hasCode)
 {
@@ -40,7 +42,7 @@ if($hasCode)
     $fields->field('code')->required();
 }
 
-$fields->field('PM')->items(data('pmUsers'));
+$fields->field('PM')->items(data('PMUsers'));
 
 $fields->field('begin')
     ->required()
@@ -49,31 +51,52 @@ $fields->field('begin')
     ->item(array('control' => 'span', 'text' => '-'))
     ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->itemEnd();
 
-$fields->field('days')
-    ->label($lang->project->days . $lang->project->daysUnit);
+$fields->field('days')->label($lang->project->days . $lang->project->daysUnit);
 
 $fields->field('products[]')
     ->wrapBefore()
     ->setClass('className', 'productBox')
-    ->hidden($copyProject ? !data('copyProject.hasProduct') : false)
     ->checkbox(array('text' => $lang->project->newProduct, 'name' => 'newProduct', 'checked' => false))
     ->items(data('allProducts'))
     ->label($lang->project->manageProducts);
 
 $fields->field('plans[]')
     ->setClass('className', 'productBox')
-    ->hidden($copyProject ? !data('copyProject.hasProduct') : false)
     ->items(array())
     ->label($lang->project->managePlans);
+
+if($model == 'waterfall' || $model == 'waterfallplus')
+{
+    $fields->field('stageBy')
+        ->control('radioListInline')
+        ->labelHint($lang->project->stageByTips)
+        ->label($lang->project->stageBy)
+        ->value('project')
+        ->disabled($disableStageBy)
+        ->items($lang->project->stageByList);
+}
 
 $fields->field('desc')
     ->width('full')
     ->control('editor');
 
+$budgetItemList = array();
+$budgetUnitList = data('budgetUnitList') ? data('budgetUnitList') : array();
+foreach($budgetUnitList as $key => $value)
+{
+    $budgetItemList[] = array('text' => $value, 'value' => $key, 'url' => "javascript:toggleBudgetUnit('{$key}')");
+}
+
 $fields->field('budget')
     ->label($lang->project->budget . $lang->project->budgetUnit)
     ->foldable()
-    ->checkbox(array('text' => $lang->project->future, 'name' => 'future', 'checked' => false));
+    ->checkbox(array('text' => $lang->project->future, 'name' => 'future', 'checked' => data('project.budget') != null && data('project.budget') == 0))
+    ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, $currency), 'className' => 'text-gray'), 'prefixWidth' => 20, 'disabled' => data('project.budget') != null && data('project.budget') == 0))
+    ->tip(sprintf($lang->project->budgetOverrun, zget($lang->project->currencySymbol, $currency) . data('program.budget')))
+    ->tipProps(array('id' => 'budgetTip'))
+    ->tipClass('text-warning hidden');
+
+$fields->field('budgetUnit')->control('hidden')->value($currency);
 
 $fields->field('acl')
     ->width('full')

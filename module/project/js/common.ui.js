@@ -173,6 +173,12 @@ window.toggleBudget = function(e)
     }
 }
 
+window.toggleBudgetUnit = function(unit)
+{
+    $('[data-name="budget"] > .has-prefix > .input-control-prefix > a').text(currencySymbol[unit]);
+    $('[name="budgetUnit"]').text(unit);
+};
+
 /**
  * If change multiple, set delta.
  *
@@ -207,32 +213,30 @@ function checkBudget(projectID)
     const programID = $('[name=parent]').val();
     if(programID == 0)
     {
-        $('#budget').removeAttr('placeholder');
+        $('[name=budget]').removeAttr('placeholder');
         $('#budgetTip').addClass('hidden');
         return false;
     }
 
     if(typeof(projectID) == 'undefined') projectID = 0;
 
-    $.get($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + programID), function(response)
+    $('#budgetTip').addClass('hidden');
+    $.getJSON($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + programID), function(data)
     {
-        const data = JSON.parse(response);
         if(typeof(data.availableBudget) == 'undefined') return;
 
-        const budget = $('#budget').val() * budgetUnitValue;
+        const budget = $('[name=budget]').val() * budgetUnitValue;
         if(budget != 0 && budget !== null && budget > data.availableBudget)
         {
             const currency = currencySymbol[data.budgetUnit];
             const availableBudget = (data.availableBudget / budgetUnitValue).toFixed(2);
-            $('#budget').attr('placeholder', parentBudget + currency + availableBudget);
+            const budgetTip = budgetOverrun.replace('%s', currency + availableBudget);
+            $('[name=budget]').attr('placeholder', budgetTip);
+            $('#budgetTip').html(budgetTip);
+            $('#budgetTip').append($('<span id="ignoreBudget" class="junderline">' + ignore + '</span>'));
             $('#budgetTip').removeClass('hidden');
-            $('#budgetTip').find('#currency').text(currency);
-            $('#budgetTip').find('#parentBudget').text(availableBudget);
-            $('#budgetTip').find('#budgetUnit').text(budgetUnitLabel);
-            return;
+            $('#budgetTip').off('click', '#ignoreBudget').on('click', '#ignoreBudget', function(){ignoreTip('budgetTip')});
         }
-
-        $('#budgetTip').addClass('hidden');
     });
 }
 
