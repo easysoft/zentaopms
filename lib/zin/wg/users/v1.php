@@ -22,7 +22,8 @@ class users extends wg
         'menu?: array',                     // picker 附加的菜单选项。
         'toolbar?: boolean|array',          // picker 列表工具栏。
         'multiple?: boolean|number=false',  // picker 是否允许选择多个值，如果指定为数字，则限制多选的数目，默认 `false`。
-        'contactList?: boolean=true'        // 是否显示联系人列表。
+        'contactList?: boolean=true',       // 是否显示联系人列表。
+        'inputGroupClass?: string=""'       // inputGroup 的 class 属性。
     );
 
     protected static array $defaultProps = array(
@@ -47,6 +48,7 @@ class users extends wg
     {
         return inputGroup
         (
+            $this->prop('inputGroupClass') ? setClass($this->prop('inputGroupClass')) : null,
             $this->prop('label', null),
             picker(set($this->props->pick(array('id', 'name', 'value', 'items', 'toolbar', 'menu', 'multiple')))),
             $this->prop('contactList') ? contactList() : null

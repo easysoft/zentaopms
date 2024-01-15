@@ -20,7 +20,6 @@ class aclBox extends wg
         'groupValue?: string=""',              // 权限组默认选中值。
         'userLabel?: string=""',               // 用户组标签。
         'userName?: string="whitelist[]"',     // 用户组名称。
-        'userItems?: array',                   // 用户组下拉可选值。
         'userValue?: string=""',               // 用户组默认选中值。
     );
 
@@ -36,7 +35,7 @@ class aclBox extends wg
 
     protected function build(): wg
     {
-        list($aclItems, $aclValue, $whitelistLabel, $groupLabel, $userLabel, $groupName, $userName, $groupItems, $userItems, $groupValue, $userValue) = $this->prop(array('aclItems', 'aclValue', 'whitelistLabel', 'groupLabel', 'userLabel', 'groupName', 'userName', 'groupItems', 'userItems', 'groupValue', 'userValue'));
+        list($aclItems, $aclValue, $whitelistLabel, $groupLabel, $userLabel, $groupName, $userName, $groupItems, $groupValue, $userValue) = $this->prop(array('aclItems', 'aclValue', 'whitelistLabel', 'groupLabel', 'userLabel', 'groupName', 'userName', 'groupItems', 'groupValue', 'userValue'));
 
         return div
         (
@@ -77,9 +76,9 @@ class aclBox extends wg
                             setClass('input-group-addon'),
                             $userLabel
                         ),
-                        picker
+                        whitelist
                         (
-                            set(array('items' => $userItems, 'name' => $userName, 'value' => $userValue, 'multiple' => true))
+                            set(array('inputGroupClass' => 'w-full', 'name' => $userName, 'value' => $userValue))
                         )
                     )
                 )
