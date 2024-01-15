@@ -234,7 +234,8 @@ window.setDownloading = function(event)
     {
         if($.cookie.get('downloading') == 1)
         {
-            $(event.target).closest('div.modal')[0].classList.remove('show');
+            const modal = zui.Modal.query(event.target);
+            if(modal) modal.hide();
             $.cookie.set('downloading', null, {expires:config.cookieLife, path:config.webRoot});
             clearInterval(time);
         }
