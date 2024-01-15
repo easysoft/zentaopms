@@ -101,9 +101,7 @@ $fields->field('budgetUnit')->control('hidden')->value($currency);
 $fields->field('acl')
     ->width('full')
     ->foldable()
-    ->wrapBefore()
-    ->control('radioList')
-    ->items(data('programID') ? $lang->project->subAclList : $lang->project->aclList);
+    ->wrapBefore();
 
 $fields->field('auth')
     ->width('full')

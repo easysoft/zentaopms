@@ -44,6 +44,6 @@ if($model == 'waterfall' || $model == 'waterfallplus')
     $fields->field('stageBy')->className('hidden');
 }
 
-$fields->field('acl')->value($copyProject ? data('copyProject.acl') : 'private');
+$fields->field('acl')->control(array('type' => 'aclBox', 'aclItems' => data('programID') ? $lang->project->subAclList : $lang->project->aclList, 'aclValue' => $copyProject ? data('copyProject.acl') : 'private', 'whitelistLabel' => $lang->project->whitelist));
 
 $fields->field('auth')->value($copyProject ? data('copyProject.auth') : 'extend');
