@@ -89,7 +89,7 @@ class form extends formBase
 
         if ($this->prop('formID') === '$AUTO')
         {
-            $this->setProp('formID', "form-$module-$method");
+            $this->setProp('id', "form-$module-$method");
         }
 
         $fields = $this->prop('fields');
@@ -253,7 +253,6 @@ class form extends formBase
             if(!empty($labelWidth)) $props[] = setCssVar('form-horz-label-width', $labelWidth);
         }
 
-        if($this->hasProp('formID'))  $props[] = setID($this->prop('formID'));
         if($this->hasProp('loadUrl')) $props[] = setData('load-url', $this->prop('loadUrl'));
 
         $autoLoad = $this->prop('autoLoad');
