@@ -56,7 +56,7 @@ foreach($projects as $programID => $programProjects)
         $item['keys']  = zget(common::convert2Pinyin(array($project->name)), $project->name, '');
         $item['url']   = sprintf($link, $project->id);
 
-        if(empty($project->multiple) || $project->type == 'kanban') $item['url'] = helper::createLink('project', 'index', "projectID={$project->id}");
+        if(empty($project->multiple) || $project->type == 'kanban' || $project->model == 'kanban') $item['url'] = helper::createLink('project', 'index', "projectID={$project->id}");
 
         if($config->systemMode == 'light' || $config->vision == 'lite')
         {
