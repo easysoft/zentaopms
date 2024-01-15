@@ -111,13 +111,13 @@ class formPanel extends panel
                 btn
                 (
                     setClass('gray-300-outline text-sm rounded-full btn-lite-form'),
-                    bind::click('$element.closest(\'.form,.panel-form\').addClass(\'is-lite-form\').removeClass(\'is-full-form\')'),
+                    bind::click('$element.closest(\'.form,.panel-form\').addClass(\'is-lite\').removeClass(\'is-full\')'),
                     $lang->liteMode
                 ),
                 btn
                 (
                     setClass('gray-300-outline text-sm rounded-full btn-full-form'),
-                    bind::click('$element.closest(\'.form,.panel-form\').addClass(\'is-full-form\').removeClass(\'is-lite-form\')'),
+                    bind::click('$element.closest(\'.form,.panel-form\').addClass(\'is-full\').removeClass(\'is-lite\')'),
                     $lang->fullMode
                 )
             );
@@ -214,7 +214,7 @@ class formPanel extends panel
     {
         list($width, $batch, $shadow, $defaultMode) = $this->prop(array('width', 'batch', 'shadow', 'defaultMode'));
         $props = parent::buildProps();
-        $props[] = setClass("is-$defaultMode-form");
+        $props[] = setClass("is-$defaultMode");
 
         if($width)     $props[] = setCssVar('--zt-page-form-max-width', $width);
         elseif($batch) $props[] = setCssVar('--zt-page-form-max-width', 'auto');
