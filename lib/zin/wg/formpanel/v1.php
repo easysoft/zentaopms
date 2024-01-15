@@ -111,13 +111,11 @@ class formPanel extends panel
                 btn
                 (
                     setClass('gray-300-outline text-sm rounded-full btn-lite-form'),
-                    bind::click('$element.closest(\'.form,.panel-form\').addClass(\'is-lite\').removeClass(\'is-full\')'),
                     $lang->liteMode
                 ),
                 btn
                 (
                     setClass('gray-300-outline text-sm rounded-full btn-full-form'),
-                    bind::click('$element.closest(\'.form,.panel-form\').addClass(\'is-full\').removeClass(\'is-lite\')'),
                     $lang->fullMode
                 )
             );

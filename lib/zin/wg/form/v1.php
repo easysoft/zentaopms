@@ -74,9 +74,7 @@ class form extends formBase
         if($this->prop('customBtn'))
         {
             global $config;
-            $module = $app->rawModule;
-            $method = $app->rawMethod;
-            $key    = $method . 'Fields';
+            $key = $method . 'Fields';
 
             $app->loadLang($module);
             $app->loadModuleConfig($module);
@@ -235,8 +233,7 @@ class form extends formBase
                 btn
                 (
                     setClass('gray-300-outline rounded-full btn-toggle-fold'),
-                    setData(array('collapse-text' => $lang->hideMoreInfo, 'expand-text' => $lang->showMoreInfo)),
-                    bind::click('$element.closest(\'.panel-form\').toggleClass(\'show-fold-items\')')
+                    setData(array('collapse-text' => $lang->hideMoreInfo, 'expand-text' => $lang->showMoreInfo))
                 ),
                 $customBtn ? $this->buildCustomBtn() : null
             );
@@ -266,26 +263,22 @@ class form extends formBase
             if(!empty($labelWidth)) $props[] = setCssVar('form-horz-label-width', $labelWidth);
         }
 
-        if($this->hasProp('loadUrl')) $props[] = setData('load-url', $this->prop('loadUrl'));
-
-        $autoLoad = $this->prop('autoLoad');
-        if(is_array($autoLoad) || is_object($autoLoad))
-        {
-            $props[] = bind::change(implode('', array
-            (
-                'const autoLoad = ' . json_encode($autoLoad) . ';',
-                'const $ele = $(event.target);',
-                'Object.keys(autoLoad).forEach(selector => ',
-                '{',
-                    'const setting = autoLoad[selector];',
-                    'if(!".[#".includes(selector[0])) selector = `[name="${selector}"]`;',
-                    'if(!$ele.closest(selector).length) return;',
-                    'loadForm($.extend({target: $ele}, typeof setting === "string" ? {items: setting} : setting));',
-                '});'
-            )));
-        }
-
         return $props;
+    }
+
+    protected function buildAfter(): array
+    {
+        $after = parent::buildAfter();
+        if($this->isLayout('grid'))
+        {
+            $options = $this->props->pick(array('loadUrl', 'autoLoad'));
+            $after[] = zui::formGrid
+            (
+                set::_to('#' . $this->id()),
+                set($options)
+            );
+        }
+        return $after;
     }
 
     protected function buildContent(): array
