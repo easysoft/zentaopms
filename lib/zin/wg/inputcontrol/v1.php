@@ -43,6 +43,11 @@ class inputControl extends wg
             {
                 $class .= ' has-prefix';
             }
+
+            if(is_array($prefix) && !empty($prefix['widget']))
+            {
+                $prefix = new control(set($prefix));
+            }
         }
         if(!empty($suffix))
         {
