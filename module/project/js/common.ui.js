@@ -233,7 +233,7 @@ function checkBudget(projectID)
             const budgetTip = budgetOverrun.replace('%s', currency + availableBudget);
             $('[name=budget]').attr('placeholder', budgetTip);
             $('#budgetTip').html(budgetTip);
-            $('#budgetTip').append($('<span id="ignoreBudget" class="junderline">' + ignore + '</span>'));
+            $('#budgetTip').append($('<span id="ignoreBudget" class="underline">' + ignore + '</span>'));
             $('#budgetTip').removeClass('hidden');
             $('#budgetTip').off('click', '#ignoreBudget').on('click', '#ignoreBudget', function(){ignoreTip('budgetTip')});
         }
