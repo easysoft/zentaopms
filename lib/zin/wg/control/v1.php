@@ -19,7 +19,6 @@ require_once dirname(__DIR__) . DS . 'severitypicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'colorpicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'colorinput' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'upload' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'modulepicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'datetimepicker' . DS . 'v1.php';
 
 class control extends wg
@@ -216,6 +215,7 @@ class control extends wg
         $wgName = "\\zin\\$control";
         if(class_exists($wgName)) return new $wgName(set($this->props->skip('control')), $this->children());
 
+        if(!empty($control)) return createWg($control, set($this->props->skip('control')), 'input');
         return new input(set::type($control), set($this->props->skip('control')));
     }
 }
