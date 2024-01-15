@@ -894,7 +894,7 @@
             selector:      `#${id}>*`,
             partial:       options.partial,
             loadingTarget: loadingTarget,
-            loadingClass:  'disabled',
+            loadingClass:  'pointer-events-none',
             success:       () =>
             {
                 let updateActionUrl = options.updateActionUrl;
