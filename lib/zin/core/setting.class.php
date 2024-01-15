@@ -62,9 +62,7 @@ class setting extends \zin\utils\dataset
     public function setClass(string $name, mixed ...$class): setting
     {
         if(empty($class)) return $this;
-
-        $classList = new \zin\utils\classlist($this->getVal($name), ...$class);
-        return $this->setVal($name, $classList->toStr());
+        return $this->setVal($name, \zin\utils\classlist::format($class, $this->getVal($name)));
     }
 
     /**
