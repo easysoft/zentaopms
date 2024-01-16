@@ -5,7 +5,6 @@ global $lang,$config;
 $fields = defineFieldList('product.create', 'product');
 
 $fields->field('program')
-    ->wrapAfter(!$config->setCode)
     ->label(!empty(data('programID')) ? $lang->product->program . ' & ' . $lang->product->line : $lang->product->program)
     ->checkbox(array('text' => $lang->product->newLine, 'name' => 'newLine'))
     ->control('inputGroup')
