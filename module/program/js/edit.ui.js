@@ -1,13 +1,9 @@
-function onParentChange(event)
-{
-    const parentID = $(event.target).val();
-    const url      = $.createLink('program', 'create', parentID ? ('parentProgramID=' + parentID) : '');
-    loadPage(url, '#budgetRow>*, #acl');
-}
-
 window.onFutureChange = (event) =>
 {
-    $('#budget,#budgetUnit').attr('disabled', $(event.target).prop('checked') ? 'disabled' : null);
+    let checked = $(event.target).prop('checked');
+
+    $('[name=budget]').val('').attr('disabled', checked ? 'disabled' : null);
+    $('[name=budgetUnit]').zui('picker').render({'disabled': checked});
     $('#budgetTip').remove();
 };
 
@@ -18,5 +14,5 @@ window.outOfDateTip = function()
 
 window.onAclChange = () =>
 {
-    $('#whitelistRow').toggleClass('hidden', $('#aclopen').prop('checked'));
+    $('[data-name=whitelist]').toggleClass('hidden', $('#aclopen').prop('checked'));
 };
