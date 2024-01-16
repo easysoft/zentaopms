@@ -657,7 +657,7 @@ div
                                     span
                                     (
                                         setClass('ml-2'),
-                                        $project->budget ? '￥' . $project->budget : $lang->project->future
+                                        $project->budget ? zget($lang->project->currencySymbol, $project->budgetUnit) . $project->budget : $lang->project->future
                                     )
                                 )
                             )
