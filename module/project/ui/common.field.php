@@ -12,6 +12,7 @@ $currency       = data('parentProgram') ? data('parentProgram.budgetUnit') : $co
 $disableStageBy = !empty(data('executions')) ? true : false;
 
 $fields->field('parent')
+    ->control('picker')
     ->required()
     ->labelHint($lang->program->tips)
     ->hidden(data('globalDisableProgram'))
@@ -42,7 +43,7 @@ if($hasCode)
     $fields->field('code')->required();
 }
 
-$fields->field('PM')->items(data('PMUsers'));
+$fields->field('PM')->control('picker')->items(data('PMUsers'));
 
 $fields->field('begin')
     ->required()
@@ -55,12 +56,14 @@ $fields->field('days')->label($lang->project->days . $lang->project->daysUnit);
 
 $fields->field('products[]')
     ->wrapBefore()
+    ->control('picker')
     ->setClass('className', 'productBox')
     ->checkbox(array('text' => $lang->project->newProduct, 'name' => 'newProduct', 'checked' => false))
     ->items(data('allProducts'))
     ->label($lang->project->manageProducts);
 
 $fields->field('plans[]')
+    ->control('picker')
     ->setClass('className', 'productBox')
     ->items(array())
     ->label($lang->project->managePlans);
@@ -87,11 +90,24 @@ foreach($budgetUnitList as $key => $value)
     $budgetItemList[] = array('text' => $value, 'value' => $key, 'url' => "javascript:toggleBudgetUnit('{$key}')");
 }
 
+$budgetField = function($budgetItemList, $currency, $currencySymbol)
+{
+    return inputControl
+    (
+        input(set::name('budget')),
+        to::prefix
+        (
+            dropdown($currencySymbol, set::name('budgetUnit'), set::items($budgetItemList), set::value($currency), set::widget(true), set::className('btn ghost')),
+            set::width(34)
+        )
+    );
+};
+
 $fields->field('budget')
     ->label($lang->project->budget . $lang->project->budgetUnit)
     ->foldable()
     ->checkbox(array('text' => $lang->project->future, 'name' => 'future', 'checked' => data('project.budget') != null && data('project.budget') == 0))
-    ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, $currency), 'className' => 'btn ghost'), 'prefixWidth' => 34, 'disabled' => data('project.budget') != null && data('project.budget') == 0))
+    ->control($budgetField($budgetItemList, $currency, zget($lang->project->currencySymbol, $currency)))
     ->tip(sprintf($lang->project->budgetOverrun, zget($lang->project->currencySymbol, $currency) . data('program.budget')))
     ->tipProps(array('id' => 'budgetTip'))
     ->tipClass('text-warning hidden');
