@@ -14,7 +14,7 @@ class form extends formBase
 {
     protected static array $defineProps = array
     (
-        'id?: string',                     // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
+        'id?: string="$GID"',              // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
         'items?: array',                   // 使用一个列定义对象数组来定义表单项。
         'fields?: string|array|fieldList', // 表单字段配置。
         'foldableItems?: array|string',    // 可折叠的表单项。
@@ -48,7 +48,7 @@ class form extends formBase
             global $app;
             $value = "form-{$app->rawModule}-{$app->rawMethod}";
         }
-        $this->props->set($prop, $value);
+        parent::onSetProp($prop, $value);
     }
 
     protected function created()
