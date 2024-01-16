@@ -21,7 +21,7 @@ $cols['id']     = $config->story->dtable->fieldList['id'];
 $cols['title']  = $config->story->dtable->fieldList['title'];
 $cols['pri']    = $config->story->dtable->fieldList['pri'];
 $cols['status'] = $config->story->dtable->fieldList['status'];
-if($story->type == 'story') $cols['stage'] = $config->story->dtable->fieldList['stage'];
+if($story->type == 'requirement') $cols['stage'] = $config->story->dtable->fieldList['stage'];
 $cols['openedBy'] = $config->story->dtable->fieldList['openedBy'];
 $cols['estimate'] = $config->story->dtable->fieldList['estimate'];
 $cols['title']['nestedToggle'] = false;
