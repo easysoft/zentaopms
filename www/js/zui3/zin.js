@@ -913,7 +913,7 @@
             {
                 if(info.name !== id) return;
 
-                if(!options.items)
+                if(options.items)
                 {
                     const $data = $(info.data).filter('.form-group[data-name]');
                     items.forEach(name =>
