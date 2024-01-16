@@ -4,6 +4,11 @@ global $lang,$config;
 
 $fields = defineFieldList('task.create', 'task');
 
+$nameWidth = 'w-1/2';
+if(empty(data('features.story'))) $nameWidth .= ' full:w-full';
+if(data('execution.type') == 'kanban') $nameWidth .= ' lite:w-full';
+$fields->field('name')->className($nameWidth);
+
 if(!isAjaxRequest('modal'))
 {
     $fields->field('after')
