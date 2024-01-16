@@ -221,7 +221,8 @@ detailBody
             (
                 set::cols($cols),
                 set::userMap($users),
-                set::data(array_values($story->children))
+                set::data(array_values($story->children)),
+                set::fixedLeftWidth('0.4')
             )
         )
     ),
