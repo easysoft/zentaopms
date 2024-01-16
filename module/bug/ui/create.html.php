@@ -34,7 +34,6 @@ formGridPanel
     set::title($lang->bug->create),
     set::fields($fields),
     set::loadUrl($loadUrl),
-    set::autoLoad($autoLoad),
     on::click('#allBuilds',             'loadAllBuilds'),
     on::click('#allUsers',              'loadAllUsers'),
     on::click('#refreshExecutionBuild', 'refreshExecutionBuild'),
