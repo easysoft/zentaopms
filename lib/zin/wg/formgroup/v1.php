@@ -45,6 +45,8 @@ class formGroup extends wg
         'placeholder?: string',                 // 占位符。
         'foldable?: bool',                      // 是否可折叠。
         'pinned?: bool',                        // 是否固定。
+        'wrapBefore?: bool',                    // 是否在前方换行。
+        'wrapAfter?: bool',                     // 是否在后方换行。
         'children?: array|object'               // 内部自定义内容。
     );
 
