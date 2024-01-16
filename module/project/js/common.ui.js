@@ -165,11 +165,13 @@ window.toggleBudget = function(e)
     const future = e.target;
     if($(future).prop('checked'))
     {
-        $('#budget').val('').attr('disabled', 'disabled');
+        $('#budget').val('').addClass('disabled pointer-events-none');
+        $('#budgetUnit-toggle').addClass('disabled pointer-events-none');
     }
     else
     {
-        $('#budget').removeAttr('disabled');
+        $('#budget').removeClass('disabled').removeClass('pointer-events-none');
+        $('#budgetUnit-toggle').removeClass('disabled').removeClass('pointer-events-none');
     }
 }
 
