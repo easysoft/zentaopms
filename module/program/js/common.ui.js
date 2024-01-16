@@ -3,6 +3,12 @@ window.ignoreTips = {
     'dateTip'         : false
 };
 
+window.toggleBudgetUnit = function(unit)
+{
+    $('[data-name="budget"] > .has-prefix > .input-control-prefix > a').text(currencySymbol[unit]);
+    $('[name="budgetUnit"]').val(unit);
+};
+
 var batchEditDateTips = new Array();
 
 /**
@@ -298,7 +304,7 @@ window.budgetOverrunTips = function(e)
         var data = JSON.parse(data);
 
         var tip = "";
-        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<div class='form-row'><div class='form-group'><div class='input-group'><span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></div></div></div>";
+        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<div class='form-row'><div class='form-group'><div class='input-group'><p id='beyondBudgetTip' class='text-remind'><span>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</span><span id='ignore' onclick='ignoreTip(this)'>" + ignore + "</span></p></div></div></div>";
 
         if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').closest('.form-row').remove();
         $('[name=budget]').parent().after(tip);

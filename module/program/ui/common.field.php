@@ -1,6 +1,6 @@
 <?php
 namespace zin;
-global $lang;
+global $lang, $config;
 
 $fields = defineFieldList('program');
 
@@ -17,10 +17,26 @@ $fields->field('PM')
 
 $fields->field('begin');
 
+$currency       = data('parentProgram.budgetUnit') ? data('parentProgram.budgetUnit') : $config->project->defaultCurrency;
+$budgetItemList = array();
+$budgetUnitList = data('budgetUnitList') ? data('budgetUnitList') : array();
+foreach($budgetUnitList as $key => $value)
+{
+    $budgetItemList[] = array('text' => $value, 'value' => $key, 'url' => "javascript:toggleBudgetUnit('{$key}')");
+}
+
 $fields->field('budget')
-    ->control('inputGroup')
     ->label($lang->project->budget . $lang->project->budgetUnit)
-    ->checkbox(array('name' => 'future', 'text' => $lang->project->future));
+    ->checkbox(array('name' => 'future', 'text' => $lang->project->future))
+    ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, $currency), 'className' => 'btn ghost'), 'prefixWidth' => 34, 'disabled' => data('parentProgram.budget') != null && data('parentProgram.budget') == 0));
+
+if(data('parentProgram.budget'))
+{
+    $fields->field('budget')
+        ->tip(sprintf($lang->project->budgetOverrun, zget($lang->project->currencySymbol, $currency) . data('parentProgram.budget')))
+        ->tipProps(array('id' => 'budgetTip'))
+        ->tipClass('text-warning hidden');
+}
 
 $fields->field('desc')
     ->width('full')
