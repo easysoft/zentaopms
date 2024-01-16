@@ -93,6 +93,7 @@ $lang->task->pri               = 'Priorität';
 $lang->task->mailto            = 'Mail an';
 $lang->task->estimate          = 'Geplant(h)';
 $lang->task->estimateAB        = 'Geplant(h)';
+$lang->task->estimateLabel     = 'Est(Unit: h)';
 $lang->task->left              = 'Rest';
 $lang->task->leftAB            = 'Rest';
 $lang->task->consumed          = 'Genutzt';

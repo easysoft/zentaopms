@@ -93,6 +93,7 @@ $lang->task->pri               = 'Priorité';
 $lang->task->mailto            = 'Mailto';
 $lang->task->estimate          = 'Estimés';
 $lang->task->estimateAB        = 'Esti.';
+$lang->task->estimateLabel     = 'Est(Unit: h)';
 $lang->task->left              = 'Reste Heures';
 $lang->task->leftAB            = 'Reste';
 $lang->task->consumed          = 'Coût Total';

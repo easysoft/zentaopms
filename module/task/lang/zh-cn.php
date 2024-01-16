@@ -93,6 +93,7 @@ $lang->task->pri               = '优先级';
 $lang->task->mailto            = '抄送给';
 $lang->task->estimate          = '最初预计';
 $lang->task->estimateAB        = '预计';
+$lang->task->estimateLabel     = '预计（单位：小时）';
 $lang->task->left              = '预计剩余';
 $lang->task->leftAB            = '剩余';
 $lang->task->consumed          = '总计消耗';
