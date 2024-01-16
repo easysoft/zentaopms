@@ -109,6 +109,7 @@ $config->testcase->form->review['reviewedBy']   = array('required' => false, 'ty
 $config->testcase->form->review['comment']      = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->testcase->form->showImport = common::formConfig('testcase', 'showImport');
+$config->testcase->form->showImport['rawID']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->showImport['product']      = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->showImport['title']        = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
 $config->testcase->form->showImport['branch']       = array('required' => false, 'type' => 'int',    'default' => 0);

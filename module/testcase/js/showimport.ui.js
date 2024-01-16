@@ -1,10 +1,15 @@
 window.handleRenderRow = function($row, index, row)
 {
+    if(!row) return false;
+
+    row.id = index + 1;
     let stepDesc   = "<input class='hidden' type='text' name='product[" + row.id + "]' value='" + productID + "'/>";
     let stepExpect = '';
 
-    const descs  = stepData[index + 1]['desc'];
-    const expect = stepData[index + 1]['expect'];
+    if(!stepData[index]) return false;
+
+    const descs  = stepData[index]['desc'];
+    const expect = stepData[index]['expect'];
     if(descs.length)
     {
         $.each(descs, function(id, desc)

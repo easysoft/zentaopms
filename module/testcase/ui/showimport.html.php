@@ -41,9 +41,27 @@ else
     $requiredFields = $config->testcase->create->requiredFields;
     $items[] = array
     (
-        'name'  => 'id',
+        'name'  => 'index',
         'label' => $lang->idAB,
         'control' => 'index',
+        'width' => '32px'
+    );
+
+    $items[] = array
+    (
+        'name'  => 'rawID',
+        'label' => '',
+        'hidden' => true,
+        'control' => 'hidden',
+        'width' => '32px'
+    );
+
+    $items[] = array
+    (
+        'name'  => 'product',
+        'label' => '',
+        'hidden' => true,
+        'control' => 'hidden',
         'width' => '32px'
     );
 
@@ -139,30 +157,35 @@ else
     );
 
     $insert = true;
+    $caseData = array_values($caseData);
     foreach($caseData as $key => $case)
     {
         if(empty($case->id) || !isset($cases[$case->id]))
         {
-            $case->new = true;
-            $case->id  = '';
+            $case->new   = true;
+            $case->id    = $key + 1;
+            $case->rawID = '';
         }
         else
         {
             $insert = false;
 
-            if(!isset($case->module)) $case->module = $cases[$case->id]->module;
-            if(!isset($case->pri))    $case->pri    = $cases[$case->id]->pri;
-            if(!isset($case->type))   $case->type   = $cases[$case->id]->type;
-            if(empty($case->stage))   $case->stage  = $cases[$case->id]->stage;
+            $case->rawID = $case->id;
+            if(!isset($case->module))  $case->module  = $cases[$case->id]->module;
+            if(!isset($case->pri))     $case->pri     = $cases[$case->id]->pri;
+            if(!isset($case->type))    $case->type    = $cases[$case->id]->type;
+            if(empty($case->stage))    $case->stage   = $cases[$case->id]->stage;
+            $case->product = $cases[$case->id]->product;
         }
     }
 
     $submitText = $isEndPage ? $this->lang->save : $this->lang->file->saveAndNext;
     formBatchPanel
     (
+        set::mode('edit'),
         set::title($lang->testcase->import),
         set::items($items),
-        set::data(array_values($caseData)),
+        set::data($caseData),
         set::actionsText(false),
         set::onRenderRow(jsRaw('handleRenderRow')),
         input(set::className('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),

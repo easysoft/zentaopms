@@ -1432,22 +1432,22 @@ class testcaseZen extends testcase
         $oldSteps          = $this->testcase->fetchStepsByList($caseIdList);
         $storyVersionPairs = $this->loadModel('story')->getVersions($this->post->story);
 
-        foreach($cases as $caseID => $case)
+        foreach($cases as $index => $case)
         {
             /* 构建更新的用例. */
             /* Build updated case. */
-            if(!empty($caseID) && !$insert)
+            if(!empty($case->rawID) && !$insert)
             {
-                $oldCase     = zget($oldCases, $caseID, new stdclass());
-                $stepChanged = $this->buildUpdateCaseForShowImport($case, $oldCase, zget($oldSteps, $caseID, array()), $forceNotReview);
+                $oldCase     = zget($oldCases, $case->rawID, new stdclass());
+                $stepChanged = $this->buildUpdateCaseForShowImport($case, $oldCase, zget($oldSteps, $case->rawID, array()), $forceNotReview);
 
-                $case->id             = $caseID;
+                $case->id             = $case->rawID;
                 $case->lastEditedBy   = $account;
                 $case->lastEditedDate = $now;
                 if($case->story != $oldCase->story) $case->storyVersion = zget($storyVersionPairs, $case->story, 1);
 
                 $changes = common::createChanges($oldCase, $case);
-                if(!$changes && !$stepChanged) unset($cases[$caseID]);
+                if(!$changes && !$stepChanged) unset($cases[$case->rawID]);
             }
             /* 构建插入的用例. */
             /* Build inserted case. */
@@ -1463,7 +1463,7 @@ class testcaseZen extends testcase
             $case->steps     = $case->desc;
             $case->expects   = $case->expect;
             $case->frequency = 1;
-            unset($case->desc, $case->expect);
+            unset($case->desc, $case->expect, $case->rawID);
         }
 
         return $cases;
@@ -1985,6 +1985,7 @@ class testcaseZen extends testcase
             if(isset($case->id))
             {
                 $oldCase = $this->testcase->getByID($case->id);
+
                 if($oldCase->product != $case->product) continue;
 
                 $changes = $this->testcase->update($case, $oldCase);
@@ -2543,10 +2544,15 @@ class testcaseZen extends testcase
                 }
             }
 
-            if(empty($case->title)) continue;
+            if(empty($case->title))
+            {
+                unset($stepData[$row]);
+                continue;
+            }
             $caseData[$row] = $case;
             unset($case);
         }
+
         return array(array('caseData' => $caseData, 'stepData' => $stepData), $stepVars);
     }
 

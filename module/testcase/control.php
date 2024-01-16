@@ -1219,7 +1219,7 @@ class testcase extends control
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $this->view->cases      = $this->testcase->getByProduct($productID);
-        $this->view->stepData   = $data['stepData'];
+        $this->view->stepData   = array_values($data['stepData']);
         $this->view->productID  = $productID;
         $this->view->branch     = $branch;
         $this->view->product    = $this->product->getByID($productID);
