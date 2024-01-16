@@ -83,6 +83,7 @@ $fields->field('desc')
     ->width('full')
     ->control('editor');
 
+$budgetFuture   = data('project.budget') !== null && !data('project.budget');
 $budgetItemList = array();
 $budgetUnitList = data('budgetUnitList') ? data('budgetUnitList') : array();
 foreach($budgetUnitList as $key => $value)
@@ -93,8 +94,8 @@ foreach($budgetUnitList as $key => $value)
 $fields->field('budget')
     ->label($lang->project->budget . $lang->project->budgetUnit)
     ->foldable()
-    ->checkbox(array('text' => $lang->project->future, 'name' => 'future', 'checked' => data('project.budget') != null && data('project.budget') == 0))
-    ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, data('project.budgetUnit') ? data('project.budgetUnit') : $currency), 'className' => 'btn ghost'), 'prefixWidth' => 34, 'disabled' => data('project.budget') != null && data('project.budget') == 0))
+    ->checkbox(array('text' => $lang->project->future, 'name' => 'future', 'checked' => $budgetFuture))
+    ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, data('project.budgetUnit') ? data('project.budgetUnit') : $currency), 'className' => 'btn ghost'), 'prefixWidth' => 34, 'disabled' => $budgetFuture))
     ->tip(sprintf($lang->project->budgetOverrun, zget($lang->project->currencySymbol, $currency) . data('program.budget')))
     ->tipProps(array('id' => 'budgetTip'))
     ->tipClass('text-warning hidden');
