@@ -18,6 +18,9 @@ jsVar('budgetOverrun',       $lang->project->budgetOverrun);
 
 $fields = useFields('program.edit');
 
+$autoLoad = array();
+$autoLoad['parent'] = 'parent,budgetUnit,acl';
+
 formGridPanel
 (
     set::modeSwitcher(false),

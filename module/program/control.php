@@ -186,10 +186,11 @@ class program extends control
      * Edit the program.
      *
      * @param  int    $programID
+     * @param  int    $parentProgramID
      * @access public
      * @return void
      */
-    public function edit(int $programID = 0)
+    public function edit(int $programID = 0, int $parentProgramID = 0)
     {
         if($_POST)
         {
@@ -208,6 +209,7 @@ class program extends control
         $program = $this->program->getByID($programID);
         $program->budget = round((float)$program->budget / $this->config->project->budget->tenThousand, $this->config->project->budget->precision);
 
+        if($parentProgramID) $program->parent = $parentProgramID;
         $parentProgram = $program->parent ? $this->program->getByID($program->parent) : new stdclass();
         $parents       = $this->program->getParentPairs();
         $parents       = $this->programZen->removeSubjectToCurrent($parents, $programID);
@@ -219,6 +221,7 @@ class program extends control
         $this->view->parents         = $parents;
         $this->view->budgetUnitList  = $this->loadModel('project')->getBudgetUnitList();
         $this->view->parentProgram   = $parentProgram;
+        $this->view->loadUrl         = $this->createLink('program', 'edit', "programID=$programID&parentProgramID={parent}");
 
         $this->display();
     }
