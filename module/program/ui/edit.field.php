@@ -14,10 +14,10 @@ $fields->field('begin')
 
 $fields->field('budget')
     ->checkbox(array('name' => 'future', 'text' => $lang->project->future, 'checked' => data('program.budget') == 0 ? true : false))
-    ->itemBegin('budget')->control('input')->value(data('program.budget'))->prefix(data('parentProgram') ? data('parentProgram.budgetUnit') : '')->prefixWidth(20)->itemEnd()
-    ->item(data('program.parent') ? field('budgetUnit')->hidden(true)->value(data('parentProgram.budgetUnit')) : field('budgetUnit')->required()->control('picker')->name('budgetUnit')->items(data('budgetUnitList'))->value($config->project->defaultCurrency));
-    //->item('syncPRJUnit')->hidden()->value('false')
-    //->item('exchangeRate')->hidden()->value('');
+    ->itemBegin('budget')->control('input')->value(data('program.budget'))->disabled(data('program.budget') == 0 ? true : false)->itemEnd()
+    ->item(data('program.parent') ? field('budgetUnit')->className('hidden')->value(data('parentProgram.budgetUnit')) : field('budgetUnit')->required()->control('picker')->name('budgetUnit')->items(data('budgetUnitList'))->value($config->project->defaultCurrency))
+    ->itemBegin('syncPRJUnit')->className('hidden')->value('false')->itemEnd()
+    ->itemBegin('exchangeRate')->className('hidden')->value('')->itemEnd();
 
 $fields->field('acl')
     ->items(data('program.parent') ? $lang->program->subAclList : $lang->program->aclList);

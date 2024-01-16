@@ -13,8 +13,8 @@ $fields->field('begin')
     ->itemBegin('end')->require()->type('datePicker')->placeholder($lang->project->end)->itemEnd();
 
 $fields->field('budget')
-    ->itemBegin('budget')->control('input')->prefix(data('parentProgram') ? data('parentProgram.budgetUnit') : '')->prefixWidth(20)->itemEnd()
-    ->item(data('parentProgram') ? field('budgetUnit')->hidden(true)->value(data('parentProgram.budgetUnit')) : field('budgetUnit')->required()->control('picker')->name('budgetUnit')->items(data('budgetUnitList'))->value($config->project->defaultCurrency));
+    ->itemBegin('budget')->control('input')->itemEnd()
+    ->item(data('parentProgram') ? field('budgetUnit')->className('hidden')->value(data('parentProgram.budgetUnit')) : field('budgetUnit')->required()->control('picker')->name('budgetUnit')->items(data('budgetUnitList'))->value($config->project->defaultCurrency));
 
 $fields->field('acl')
     ->items(data('parentProgram') ? $lang->program->subAclList : $lang->program->aclList)

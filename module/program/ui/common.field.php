@@ -19,6 +19,7 @@ $fields->field('begin');
 
 $fields->field('budget')
     ->control('inputGroup')
+    ->label($lang->project->budget . $lang->project->budgetUnit)
     ->checkbox(array('name' => 'future', 'text' => $lang->project->future));
 
 $fields->field('desc')
