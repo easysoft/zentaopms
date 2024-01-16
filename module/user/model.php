@@ -1021,7 +1021,7 @@ class userModel extends model
     {
         $account  = $this->cookie->za;
         $authHash = $this->cookie->zp;
-        $user     = $this->identify($account, $authHash);
+        $user     = $this->identify($account, $authHash, 3); // Set passwordStrength=MAX_PASSWORD_STRENGTH, don't check modifyPassword.
         if(!$user) return false;
 
         $user->rights = $this->authorize($account);
