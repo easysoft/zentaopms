@@ -66,13 +66,12 @@ else
         'required' => strpos(",$requiredFields,", ',module,') !== false
     );
 
-    $storyID = isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : '');
     $items[] = array
     (
         'name'    => 'story',
         'label'   => $lang->testcase->story,
         'control' => 'picker',
-        'items'   => array($storyID => zget($stories, $storyID, '')),
+        'items'   => $stories,
         'width'   => '240px',
         'required' => strpos(",$requiredFields,", ',story,') !== false
     );
