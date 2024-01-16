@@ -241,6 +241,7 @@ class product extends control
         $this->view->title   = $this->lang->product->edit . $this->lang->colon . $product->name;
         $this->view->product = $product;
         $this->view->fields  = $this->productZen->getFormFields4Edit($product);
+        $this->view->loadUrl = $this->createLink('product', 'edit', "productID={$productID}&action={$action}&extra={$extra}&programID={program}");
 
         $this->display();
     }

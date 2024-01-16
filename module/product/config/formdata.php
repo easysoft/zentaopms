@@ -25,7 +25,7 @@ $config->product->form->edit = array();
 $config->product->form->edit['program']   = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
 $config->product->form->edit['line']      = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
 $config->product->form->edit['name']      = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
-$config->product->form->edit['code']      = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
+$config->product->form->edit['code']      = array('type' => 'string',  'control' => 'text',         'required' => false, 'filter'  => 'trim');
 $config->product->form->edit['PO']        = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',        'options' => array());
 $config->product->form->edit['QD']        = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',        'options' => array());
 $config->product->form->edit['RD']        = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',        'options' => array());

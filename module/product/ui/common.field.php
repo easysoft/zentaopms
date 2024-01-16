@@ -48,4 +48,4 @@ $fields->field('desc')
 $fields->field('acl')
     ->foldable()
     ->width('full')
-    ->control(array('type' => 'aclBox', 'aclItems' => data('fields.acl.options'), 'whitelistLabel' => $lang->product->whitelist, 'groupLabel' => $lang->product->groups, 'groupItems' => data('fields.groups.options'), 'userLabel' => $lang->product->users));
+    ->control(array('type' => 'aclBox', 'aclItems' => data('fields.acl.options'), 'whitelistLabel' => $lang->product->whitelist, 'groupLabel' => $lang->product->groups, 'groupItems' => data('fields.groups.options'), 'userLabel' => $lang->product->users, 'aclValue' => data('fields.acl.default'), 'groupValue' => data('fields.groups.default'), 'userValue' => data('fields.whitelist.default')));
