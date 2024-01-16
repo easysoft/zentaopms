@@ -194,28 +194,9 @@ class fieldList
 
     public function moveAfter(string|array $moveNames, string $afterName): fieldList
     {
-        $fields = $this->fields;
-        $keys   = array_keys($fields);
+        $names = array($afterName) + (is_string($moveNames) ? explode(',', $moveNames) : $moveNames);
+        $this->fields = static::sortFields($this->fields, $names);
 
-        $afterIndex = array_search($afterName, $keys);
-        if($afterIndex === false) return $this;
-
-        $moveNames    = is_string($moveNames) ? explode(',', $moveNames) : $moveNames;
-        $sortedFields = array();
-        foreach($keys as $key)
-        {
-            if(in_array($key, $moveNames)) continue;
-            $sortedFields[$key] = $fields[$key];
-            if($key === $afterName)
-            {
-                foreach($moveNames as $moveName)
-                {
-                    $sortedFields[$moveName] = $fields[$moveName];
-                }
-            }
-        }
-
-        $this->fields = $sortedFields;
         return $this;
     }
 
@@ -223,9 +204,7 @@ class fieldList
     {
         foreach($sortNames as $names)
         {
-            if(is_string($names)) $names = explode(',', $names);
-            $afterName = array_shift($names);
-            $this->moveAfter($names, $afterName);
+            $this->fields = static::sortFields($this->fields, $names);
         }
         return $this;
     }
@@ -355,5 +334,30 @@ class fieldList
     {
         $fieldList = new fieldList();
         return static::extend($fieldList, ...$args);
+    }
+
+    public static function sortFields(array &$fields, string|array $names): array
+    {
+        if(is_string($names)) $names = explode(',', $names);
+        if(empty($names)) return $fields;
+
+        $keys         = array_keys($fields);
+        $firstName    = array_shift($names);
+        $sortedFields = array();
+        foreach($keys as $key)
+        {
+            if($key === $firstName)
+            {
+                $sortedFields[$key] = $fields[$key];
+                foreach($names as $name) $sortedFields[$name] = $fields[$name];
+            }
+            elseif(in_array($key, $names))
+            {
+                continue;
+            }
+            $sortedFields[$key] = $fields[$key];
+        }
+
+        return $sortedFields;
     }
 }
