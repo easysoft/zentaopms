@@ -53,7 +53,13 @@
         <tr class='text-center'>
           <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->id, '', "class='iframe'");?></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "class='iframe'");?></td>
-          <td class='c-severity'><span class='label-severity <?php echo 'severity' . zget($lang->bug->severityList, $bug->severity, $bug->severity)?>' data-severity='<?php echo $bug->severity;?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity)?></span></td>
+          <td class='c-severity'>
+            <?php
+            $severityValue     = zget($lang->bug->severityList, $bug->severity);
+            $hasCustomSeverity = !is_numeric($severityValue);
+            ?>
+            <span class='label-severity<?php echo $hasCustomSeverity ? '-custom' : '';?>' data-severity='<?php echo $bug->severity;?>'><?php echo $hasCustomSeverity ? $severityValue : '';?></span>
+          </td>
           <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
           <td><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <td><?php echo zget($users, $bug->openedBy);?></td>
