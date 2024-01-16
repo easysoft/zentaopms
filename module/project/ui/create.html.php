@@ -51,7 +51,8 @@ formGridPanel
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
     on::change('#parent, #budget', "checkBudget(0)"),
     set::title($lang->project->create),
-    set::fields($fields),
+    set::fullModeOrders(array('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin')),
+    set::fields($fields)
 );
 
 $copyProjectsBox = array();
