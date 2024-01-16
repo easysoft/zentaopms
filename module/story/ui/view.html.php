@@ -151,6 +151,11 @@ if(!empty($story->children))
     $cols['actions']    = $config->story->dtable->fieldList['actions'];
     $cols['id']['checkbox']        = false;
     $cols['title']['nestedToggle'] = false;
+    if($isInModal)
+    {
+        $cols['title']['data-toggle'] = 'modal';
+        $cols['title']['data-size']   = 'lg';
+    }
 
     foreach(array_keys($cols) as $fieldName) $cols[$fieldName]['sortType'] = false;
 
