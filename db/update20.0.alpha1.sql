@@ -70,3 +70,5 @@ ALTER TABLE `zt_history`
 CHANGE `old` `old` text NULL AFTER `field`,
 CHANGE `new` `new` text NULL AFTER `old`,
 CHANGE `diff` `diff` mediumtext NULL AFTER `new`;
+
+ALTER TABLE `zt_task` ADD `keywords` varchar(255) NOT NULL DEFAULT '' AFTER `mailto`;

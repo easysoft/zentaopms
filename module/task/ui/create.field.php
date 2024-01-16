@@ -10,6 +10,6 @@ if(!isAjaxRequest('modal'))
         ->label($lang->task->afterSubmit)
         ->width('full')
         ->control(array('type' => 'radioList', 'inline' => true))
-        ->value(!empty(data('task.id') ? 'toTaskList' : 'continueAdding'))
-        ->items($config->task->afterOptions);
+        ->value(data('task.id') ? 'continueAdding' : 'toTaskList')
+        ->items(empty(data('features.story')) ? array('toTaskList' => $lang->task->afterChoices['toTaskList']) : $config->task->afterOptions);
 }

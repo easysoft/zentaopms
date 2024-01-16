@@ -68,6 +68,7 @@ $lang->task->foldEffort          = 'Fold Effort';
 $lang->task->addEffort           = 'Add Effort';
 $lang->task->createBranch        = 'Create Branch';
 $lang->task->relatedBranch       = 'Related Branch';
+$lang->task->keywords            = 'Tags';
 
 $lang->task->common            = 'Tâche';
 $lang->task->id                = 'ID';

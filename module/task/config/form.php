@@ -28,6 +28,7 @@ $config->task->form->create['version']      = array('type' => 'int',      'requi
 $config->task->form->create['storyVersion'] = array('type' => 'int',      'required' => false, 'default' => 1);
 $config->task->form->create['uid']          = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->create['mailto']       = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->task->form->create['keywords']     = array('type' => 'string',   'required' => false, 'default' => '');
 
 $config->task->form->assign = array();
 $config->task->form->assign['assignedTo']     = array('type' => 'string',   'required' => false, 'default' => '');

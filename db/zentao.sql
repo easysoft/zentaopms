@@ -1901,6 +1901,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL DEFAULT '',
   `mailto` text NULL,
+  `keywords` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
   `version` smallint(6) NOT NULL DEFAULT '0',
   `openedBy` varchar(30) NOT NULL DEFAULT '',

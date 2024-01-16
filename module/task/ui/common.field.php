@@ -24,7 +24,8 @@ $fields->field('module')
     ->value(data('task.module'));
 
 $fields->field('story')
-    ->foldable()
+    ->hidden(!data('features.story'))
+    ->foldable(data('features.story'))
     ->control('picker')
     ->items(data('stories'))
     ->value(data('task.story'));
@@ -55,6 +56,7 @@ $fields->field('pri')
     ->value('3');
 
 $fields->field('estimate')
+    ->control('input')
     ->label($lang->task->estimateLabel)
     ->width('1/4');
 
@@ -62,13 +64,30 @@ $fields->field('desc')
     ->width('full')
     ->control('editor');
 
-$fields->field('files')
+$fields->field('file')
     ->width('full')
     ->control('upload');
 
 $fields->field('mailto')
     ->foldable()
-    ->width('full')
     ->control('picker')
     ->multiple(true)
     ->items(data('users'));
+
+$fields->field('keywords')
+    ->foldable()
+    ->control('input');
+
+$fields = defineFieldList('task.kanban');
+
+$fields->field('region')
+    ->control(array('type' => 'picker', 'required' => true))
+    ->label(data('lang.kanbancard.region'))
+    ->items(data('regionPairs'))
+    ->value(data('regionID'));
+
+$fields->field('lane')
+    ->control(array('type' => 'picker', 'required' => true))
+    ->label(data('lang.kanbancard.lane'))
+    ->items(data('lanePairs'))
+    ->value(data('laneID'));

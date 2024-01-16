@@ -68,6 +68,7 @@ $lang->task->foldEffort          = '收起日志';
 $lang->task->addEffort           = '新增日志';
 $lang->task->createBranch        = '创建分支';
 $lang->task->relatedBranch       = '相关分支';
+$lang->task->keywords            = '关键词';
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';
