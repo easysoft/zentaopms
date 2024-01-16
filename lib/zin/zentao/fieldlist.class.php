@@ -371,6 +371,29 @@ class fieldList
         $keys         = array_keys($fields);
         $firstName    = array_shift($names);
         $sortedFields = array();
+
+        if($firstName === '$BEGIN')
+        {
+            foreach($names as $name) $sortedFields[$name] = $fields[$name];
+            foreach($keys as $key)
+            {
+                if(in_array($key, $names)) continue;
+                $sortedFields[$key] = $fields[$key];
+            }
+            return $sortedFields;
+        }
+
+        if($firstName === '$END')
+        {
+            foreach($keys as $key)
+            {
+                if(in_array($key, $names)) continue;
+                $sortedFields[$key] = $fields[$key];
+            }
+            foreach($names as $name) $sortedFields[$name] = $fields[$name];
+            return $sortedFields;
+        }
+
         foreach($keys as $key)
         {
             if($key === $firstName)
