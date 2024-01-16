@@ -375,8 +375,8 @@ class actionTao extends actionModel
             $project = $this->fetchObjectInfoByID($table, (int)$action->extra, 'name, model, multiple');
 
             $name = $project->name;
-            if($project->model == 'kanban') $method = 'kanban';
-            if($name) $action->extra = (common::hasPriv('project', $method) and $this->config->vision != 'or') ? html::a(helper::createLink('project', $method, "projectID=$action->project"), $name) : $name;
+            if($project->model == 'kanban') $method = $project->multiple ? 'kanban' : 'index';
+            if($name) $action->extra = (common::hasPriv('project', $method) and $this->config->vision != 'or') ? html::a(helper::createLink('project', $method, "projectID=$action->project"), $name, '_self', $method == 'index' ? 'data-app="project"' : '') : $name;
         }
         elseif($type == 'plan' || $type == 'productplan')
         {
