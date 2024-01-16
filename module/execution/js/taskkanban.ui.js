@@ -502,7 +502,7 @@ window.searchCards = function(value, order)
 
 window.refreshKanban = function(url)
 {
-    if(typeof url == 'undefined') url = $.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=taskkanban&searchValue=&orderBy=' + orderBy);
+    if(typeof url == 'undefined') url = $.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=taskkanban&searchValue=' + searchValue + '&orderBy=' + orderBy);
 
     const $kanbanList = $('[data-zui-kanbanlist]').zui('kanbanList');
     let   options     = $kanbanList.options;

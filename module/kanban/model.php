@@ -1463,7 +1463,6 @@ class kanbanModel extends model
         {
             list($laneData, $columnData, $cardsData) = $this->buildExecutionGroup($lane, $columns, $objectGroup, $searchValue, $menus);
 
-            if($searchValue != '' && empty($cardsData)) continue;
             $kanbanGroup[$lane->type]['id']   = $lane->id;
             $kanbanGroup[$lane->type]['key']  = 'group' . $lane->id;
             $kanbanGroup[$lane->type]['data'] = array();
