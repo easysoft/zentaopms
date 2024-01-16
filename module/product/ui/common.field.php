@@ -16,7 +16,7 @@ $fields->field('type')
 
 $fields->field('name');
 
-if($config->setCode) $fields->field('code')->foldable();
+if(!empty($config->setCode)) $fields->field('code')->foldable();
 
 $fields->field('PO')
     ->control('picker')
