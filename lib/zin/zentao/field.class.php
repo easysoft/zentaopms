@@ -246,6 +246,7 @@ class field extends setting
 
         if(is_object($props)) $props = get_object_vars($props);
         if(is_string($control) && is_array($props)) $control = array('control' => $control) + $props;
+        elseif($control instanceof wg)              $control = wg($control);
 
         return $this->setVal('control', $control);
     }
@@ -356,12 +357,12 @@ class field extends setting
             foreach($array['items'] as $key => $item)
             {
                 if($item instanceof \zin\utils\dataset) $item = $item->toArray();
-                elseif(is_object($item))                $item = get_object_vars($item);
+                elseif($item instanceof \stdClass)      $item = get_object_vars($item);
                 $items[$key] = $item;
             }
             $array['items'] = $items;
         }
-        if(isset($array['control']['control']) && count($array['control']) == 1)
+        if(is_array($array['control']) && isset($array['control']['control']) && count($array['control']) == 1)
         {
             $array['control'] = $array['control']['control'];
         }
