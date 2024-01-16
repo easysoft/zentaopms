@@ -81,9 +81,9 @@ class formGroup extends wg
             set::actionsClass($labelActionsClass),
             set::actionsProps($labelActionsProps),
             set::checkbox($checkbox),
+            set::text($label),
             set('for', is_null($labelFor) ? $name : $labelFor),
-            set($labelProps),
-            $label
+            set($labelProps)
         );
     }
 
