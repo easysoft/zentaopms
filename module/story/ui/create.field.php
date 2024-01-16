@@ -82,7 +82,6 @@ $fields->field('category')
     ->required($createFields['category']['required'])
     ->items($createFields['category']['options'])
     ->value($createFields['category']['default']);
-$fields->field('needNotReview')->control('hidden')->value(0);
 
 if($isKanban)
 {
