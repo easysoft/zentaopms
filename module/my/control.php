@@ -802,6 +802,8 @@ class my extends control
      */
     public function audit(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->session->set('storyList', $this->app->getURI(true), 'my');
+
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
