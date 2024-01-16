@@ -163,7 +163,6 @@ else
         set::title($lang->testcase->import),
         set::items($items),
         set::data(array_values($caseData)),
-        set::mode('edit'),
         set::actionsText(false),
         set::onRenderRow(jsRaw('handleRenderRow')),
         input(set::className('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),
