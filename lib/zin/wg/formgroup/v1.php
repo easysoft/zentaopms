@@ -91,8 +91,8 @@ class formGroup extends wg
     {
         $control = $this->prop('control');
 
-        if($control instanceof wg) return $control;
-        if(is_callable($control))  return $control($this->props->toJSON());
+        if($control instanceof wg)       return $control;
+        if(is_callable($control, true))  return $control($this->props->toJSON());
 
         if(is_string($control))                             $control = array('control' => $control);
         elseif($control instanceof item)                    $control = $control->props->toJSON();
