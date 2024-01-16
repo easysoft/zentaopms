@@ -277,6 +277,7 @@ class executionZen extends execution
         $this->view->multiBranch  = $multiBranch;
         $this->view->execution    = $execution;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->branchPairs  = $this->loadModel('branch')->getPairs($productID, 'withClosed');
     }
 
     /**
