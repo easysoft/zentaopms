@@ -19,9 +19,7 @@ $fields->field('begin');
 
 $fields->field('budget')
     ->control('inputGroup')
-    ->checkbox(array('name' => 'future', 'text' => $lang->project->future))
-    ->itemBegin('budget')->control('input')->prefix(data('parentProgram') ? data('parentProgram.budgetUnit') : '')->prefixWidth(20)->itemEnd()
-    ->item(data('parentProgram') ? field('budgetUnit')->hidden(true)->value(data('parentProgram.budgetUnit')) : field('budgetUnit')->required()->control('picker')->name('budgetUnit')->items(data('budgetUnitList'))->value($config->project->defaultCurrency));
+    ->checkbox(array('name' => 'future', 'text' => $lang->project->future));
 
 $fields->field('desc')
     ->width('full')
@@ -29,11 +27,9 @@ $fields->field('desc')
 
 $fields->field('acl')
     ->width('full')
-    ->control('radioList')
-    ->items(data('parentProgram') ? $lang->program->subAclList : $lang->program->aclList);
+    ->control('radioList');
 
 $fields->field('whitelist')
-    ->hidden(true)
     ->width('full')
     ->control('whitelist')
     ->items(data('users'));
