@@ -1,10 +1,3 @@
-function onParentChange(event)
-{
-    const parentID = $(event.target).val();
-    const url      = $.createLink('program', 'create', parentID ? ('parentProgramID=' + parentID) : '');
-    loadPage(url, '#budgetRow>*, #acl');
-}
-
 window.onFutureChange = (event) =>
 {
     let checked = $(event.target).prop('checked');
