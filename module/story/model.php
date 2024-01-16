@@ -2249,6 +2249,10 @@ class storyModel extends model
             $plan->branch = BRANCH_MAIN;
         }
 
+        $productIdList = array();
+        foreach($oldStories as $oldStory) $productIdList[$oldStory->product] = $oldStory->product;
+        $products = $this->loadModel('product')->getByIdList($productIdList);
+
         /* Cycle every story and process it's plan and stage. */
         foreach($storyIdList as $storyID)
         {
@@ -2274,7 +2278,9 @@ class storyModel extends model
             /* Replace plan field if product is normal or not linked to plan or story linked to a branch. */
             if($this->session->currentProductType == 'normal') $story->plan = $planID;
             if(empty($oldPlanID)) $story->plan = $planID;
-            if($oldStory->branch) $story->plan = $planID;
+
+            $productType = $products[$oldStory->product]->type;
+            if($productType != 'normal') $story->plan = $planID;
 
             /* Change stage. */
             if($planID)
