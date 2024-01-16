@@ -52,7 +52,8 @@ if(!isInModal())
         'text'      => $lang->goback,
         'className' => 'btn btn-info size-sm text-gray',
         'url'       => $browseLink,
-        'btnType'   => 'info'
+        'btnType'   => 'info',
+        'data-app'  => $app->tab
     );
 }
 
