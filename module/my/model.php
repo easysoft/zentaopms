@@ -1256,10 +1256,12 @@ class myModel extends model
             if(empty($table) && isset($flows[$objectType])) $table = $flows[$objectType]->table;
             if(empty($table)) continue;
 
-            $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
+            $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->andWhere('deleted')->eq('0')->fetchAll('id');
         }
 
-        return $this->buildReviewedList($objectGroup, $actions, $flows);
+        $reviewList = $this->buildReviewedList($objectGroup, $actions, $flows);
+        $pager->setRecTotal(count($reviewList));
+        return $reviewList;
     }
 
     /**
@@ -1281,6 +1283,7 @@ class myModel extends model
         {
             $objectType = $action->objectType;
             if(!isset($objectGroup[$objectType]) || !$action->objectID) continue;
+            if(!isset($objectGroup[$objectType][$action->objectID])) continue;
 
             $object = $objectGroup[$objectType][$action->objectID];
             $review = new stdclass();
