@@ -12,15 +12,10 @@ namespace zin;
 
 $fields = useFields('product.edit');
 
-$autoLoad = array();
-$autoLoad['program'] = 'line';
-
 formGridPanel
 (
     set::title($lang->product->edit),
     set::fields($fields),
-    set::autoLoad($autoLoad),
-    set::loadUrl($loadUrl),
     set::defaultMode('full'),
     set::modeSwitcher(false),
     on::change('[name=program]', 'toggleLineByProgram')

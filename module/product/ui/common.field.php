@@ -14,9 +14,9 @@ $fields->field('type')
     ->items(data('fields.type.options'))
     ->value(data('fields.type.default'));
 
-$fields->field('name');
+$fields->field('name')->control('input');
 
-if(!empty($config->setCode)) $fields->field('code')->foldable();
+if(!empty($config->setCode)) $fields->field('code')->foldable()->control('input');
 
 $fields->field('PO')
     ->control('picker')
