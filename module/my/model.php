@@ -1256,12 +1256,24 @@ class myModel extends model
             if(empty($table) && isset($flows[$objectType])) $table = $flows[$objectType]->table;
             if(empty($table)) continue;
 
-            $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->andWhere('deleted')->eq('0')->fetchAll('id');
+            if(in_array($objectType, array('story', 'testcase', 'case')))
+            {
+                $objectGroup[$objectType] = $this->dao->select('t1.*')
+                    ->from($table)->alias('t1')
+                    ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                    ->where('t1.id')->in($idList)->andWhere('t1.deleted')->eq('0')
+                    ->andWhere('t2.deleted')->eq('0')
+                    ->fetchAll('id');
+            }
+            else
+            {
+                $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->andWhere('deleted')->eq('0')->fetchAll('id');
+            }
         }
 
-        $reviewList = $this->buildReviewedList($objectGroup, $actions, $flows);
-        $pager->setRecTotal(count($reviewList));
-        return $reviewList;
+        $reviewedList = $this->buildReviewedList($objectGroup, $actions, $flows);
+        if($pager) $pager->setRecTotal(count($reviewedList));
+        return $reviewedList;
     }
 
     /**
