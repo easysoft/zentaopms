@@ -9,21 +9,19 @@ $fields->field('parent')
     ->items(data('parents'))
     ->value(data('parentProgram.id'));
 
-$fields->field('name');
+$fields->field('name')
+    ->wrapBefore(true);
 
 $fields->field('PM')
     ->items(data('pmUsers'));
 
-$fields->field('dateRange')
-    ->control('inputGroup')
-    ->required()
-    ->label($lang->project->dateRange)
-    ->itemBegin('begin')->require()->type('datePicker')->value(date('Y-m-d'))->placeholder($lang->project->begin)->itemEnd()
-    ->itemBegin()->type('addon')->label($lang->project->to)->text($lang->colon)->itemEnd()
-    ->itemBegin('end')->require()->type('datePicker')->placeholder($lang->project->end)->itemEnd();
+$fields->field('begin');
 
 $fields->field('budget')
-    ->checkbox(array('name' => 'future', 'text' => $lang->project->future));
+    ->control('inputGroup')
+    ->checkbox(array('name' => 'future', 'text' => $lang->project->future))
+    ->itemBegin('budget')->control('input')->prefix(data('parentProgram') ? data('parentProgram.budgetUnit') : '')->prefixWidth(20)->itemEnd()
+    ->item(data('parentProgram') ? field('budgetUnit')->hidden(true)->value(data('parentProgram.budgetUnit')) : field('budgetUnit')->required()->control('picker')->name('budgetUnit')->items(data('budgetUnitList'))->value($config->project->defaultCurrency));
 
 $fields->field('desc')
     ->width('full')
@@ -32,7 +30,7 @@ $fields->field('desc')
 $fields->field('acl')
     ->width('full')
     ->control('radioList')
-    ->value('open');
+    ->items(data('parentProgram') ? $lang->program->subAclList : $lang->program->aclList);
 
 $fields->field('whitelist')
     ->hidden(true)

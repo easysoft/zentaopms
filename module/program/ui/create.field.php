@@ -4,17 +4,12 @@ global $lang;
 
 $fields = defineFieldList('program.create', 'program');
 
-$fields->field('name')
-    ->wrapBefore(true);
-
-$fields->field('budget')
+$fields->field('begin')
     ->control('inputGroup')
-    ->checkbox(array('name' => 'future', 'text' => $lang->project->future))
-    ->item(field('budget')->prefix(data('parentProgram') ? data('parentProgram.budgetUnit') : ''))
-    ->item(data('parentProgram') ? field('budgetUnit')->hidden(true)->value(data('parentProgram.budgetUnit')) : field('budgetUnit')->required()->control('picker')->name('budgetUnit')->items(data('budgetUnitList'))->value($config->project->defaultCurrency));
+    ->required()
+    ->label($lang->project->dateRange)
+    ->itemBegin('begin')->require()->type('datePicker')->value(date('Y-m-d'))->placeholder($lang->project->begin)->itemEnd()
+    ->itemBegin()->type('addon')->label($lang->project->to)->text($lang->colon)->itemEnd()
+    ->itemBegin('end')->require()->type('datePicker')->placeholder($lang->project->end)->itemEnd();
 
-$fields->field('acl')
-    ->width('full')
-    ->control('radioList')
-    ->items(data('parentProgram') ? $lang->program->subAclList : $lang->program->aclList)
-    ->value('open');
+$fields->field('acl')->value('open');
