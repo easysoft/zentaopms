@@ -17,6 +17,7 @@ class form extends formBase
         'id?: string="$GID"',              // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
         'items?: array',                   // 使用一个列定义对象数组来定义表单项。
         'fields?: string|array|fieldList', // 表单字段配置。
+        'fullModeOrders?: string|array',   // 完整模式下字段显示顺序。
         'foldableItems?: array|string',    // 可折叠的表单项。
         'pinnedItems?: array|string',      // 固定显示的表单项。
         'customBtn?: array|bool',          // 是否显示表单自定义按钮。
@@ -103,8 +104,9 @@ class form extends formBase
         {
             $items = $fields->toList();
             $this->setProp('items', $items);
-            if(!is_null($fields->labelData)) $this->setProp('labelData', $fields->labelData);
-            if(!is_null($fields->valueData)) $this->setProp('data',      $fields->valueData);
+            if(!is_null($fields->labelData))      $this->setProp('labelData',     $fields->labelData);
+            if(!is_null($fields->valueData))      $this->setProp('data',          $fields->valueData);
+            if(!is_null($fields->ordersForFull))  $this->setProp('ordersForFull', $fields->ordersForFull);
 
             if(!is_null($fields->autoLoadRule))
             {
@@ -272,7 +274,7 @@ class form extends formBase
         $after = parent::buildAfter();
         if($this->isLayout('grid'))
         {
-            $options = $this->props->pick(array('loadUrl', 'autoLoad'));
+            $options = $this->props->pick(array('loadUrl', 'autoLoad', 'fullModeOrders'));
             $after[] = zui::formGrid
             (
                 set::_to('#' . $this->id()),

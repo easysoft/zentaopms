@@ -29,6 +29,8 @@ class fieldList
 
     public ?array $defaultOrders = null;
 
+    public ?array $ordersForFull = null;
+
     public function __construct(?string $name = null, ?array $fields = null)
     {
         if(is_null($name))
@@ -244,7 +246,7 @@ class fieldList
         return $this;
     }
 
-    public function autoLoad(string|array $targets, string|array|null $loadNames = null)
+    public function autoLoad(string|array $targets, string|array|null $loadNames = null): fieldList
     {
         if(is_string($targets))
         {
@@ -259,6 +261,13 @@ class fieldList
     {
         if(is_null($this->defaultOrders)) $this->defaultOrders = array();
         $this->defaultOrders = array_merge($this->defaultOrders, $orders);
+        return $this;
+    }
+
+    public function fullModeOrders(string|array ...$orders): fieldList
+    {
+        if(is_null($this->ordersForFull)) $this->ordersForFull = array();
+        $this->ordersForFull = array_merge($this->ordersForFull, $orders);
         return $this;
     }
 
@@ -360,7 +369,7 @@ class fieldList
     public static function sortFields(array &$fields, string|array $names): array
     {
         if(is_string($names)) $names = explode(',', $names);
-        if(empty($names)) return $fields;
+        if(empty($names) || count($names) < 2) return $fields;
 
         $keys         = array_keys($fields);
         $firstName    = array_shift($names);
