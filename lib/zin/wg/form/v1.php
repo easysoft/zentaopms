@@ -106,7 +106,7 @@ class form extends formBase
             $this->setProp('items', $items);
             if(!is_null($fields->labelData))      $this->setProp('labelData',     $fields->labelData);
             if(!is_null($fields->valueData))      $this->setProp('data',          $fields->valueData);
-            if(!is_null($fields->ordersForFull))  $this->setProp('ordersForFull', $fields->ordersForFull);
+            if(!is_null($fields->ordersForFull))  $this->setProp('fullModeOrders', $fields->ordersForFull);
 
             if(!is_null($fields->autoLoadRule))
             {
