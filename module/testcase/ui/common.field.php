@@ -19,7 +19,8 @@ $fields->field('module')
     ->items(data('moduleOptionMenu'))
     ->value(data('currentModuleID'))
     ->manageLink(createLink('tree', 'browse', 'rootID=' . data('productID') . '&view=case&currentModuleID=0&branch=' . data('branch')))
-    ->controlEnd();
+    ->controlEnd()
+    ->wrapAfter(true);
 
 $fields->field('type')
     ->checkbox(array('id' => 'auto', 'name' => 'auto', 'text' => $lang->testcase->automated, 'checked' => data('case.auto') == 'auto'))

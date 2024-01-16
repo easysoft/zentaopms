@@ -18,17 +18,14 @@ if($app->tab == 'qa')        jsVar('objectID', 0);
 unset($lang->testcase->typeList['unit']);
 
 $fields = useFields('testcase.create');
-
-$autoLoad = array();
-$autoLoad['product'] = 'branch,module,story,scene';
-$autoLoad['branch']  = 'module,story,scene';
-$autoLoad['module']  = 'story,scene';
+$fields->autoLoad('product', 'branch,module,story,scene')
+    ->autoLoad('branch', 'module,story,scene')
+    ->autoLoad('module', 'story,scene');
 
 formGridPanel
 (
     set::title($lang->testcase->create),
     set::fields($fields),
-    set::autoLoad($autoLoad),
     set::loadUrl(helper::createLink('testcase', 'create', "productID={product}&branch={branch}&moduleID={module}&from=&param=0&storyID={story}")),
     !empty($gobackLink) ? set::backUrl($gobackLink) : null,
     on::change('#scriptFile', 'readScriptContent'),
