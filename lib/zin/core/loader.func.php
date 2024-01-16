@@ -40,10 +40,12 @@ function createWg($name, $args, ?string $fallbackWgName = null): wg
 {
     $name  = strtolower($name);
     $wgVer = getWgVer($name);
-
-    include_once dirname(__DIR__) . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
-
     $wgName = "\\zin\\$name";
+
+    if(!class_exists($wgName))
+    {
+        include_once dirname(__DIR__) . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
+    }
 
     if(!class_exists($wgName) && $fallbackWgName)
     {

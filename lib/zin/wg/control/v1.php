@@ -25,7 +25,7 @@ class control extends wg
 {
     protected static array $defineProps = array
     (
-        'control?: string',      // 表单输入元素类型，值可以为：static, text, input, password, email, number, date, time, datetime, month, url, search, tel, color, picker, pri, severity, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea, editor, upload, modulePicker。
+        'control?: string',      // 表单输入元素类型，值可以为：static, text, input, password, email, number, date, time, datetime, month, url, search, color, picker, pri, severity, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea, editor, upload
         'type?: string',         // 请使用 control 属性，如果已经指定 control 属性，则此属性作为具体控件的 type 属性。
         'id?: string',           // ID。
         'name: string',          // 控件名称，可能影响到表单提交的域名称，如果是多个值的表单控件，可能需要将名称定义为 `key[]` 的形式。
@@ -37,6 +37,11 @@ class control extends wg
         'disabled?: bool',       // 是否禁用。
         'builder?: callable',    // 自定义构建函数。
         'items?: array'          // 选项列表。
+    );
+
+    protected static array $inputTypes = array
+    (
+        'button', 'datetime-local', 'email', 'file', 'hidden', 'image', 'month', 'number', 'password', 'range', 'reset', 'search', 'submit', 'tel', 'text', 'url', 'week'
     );
 
     protected function created()
@@ -221,7 +226,7 @@ class control extends wg
         $wgName = "\\zin\\$control";
         if(class_exists($wgName)) return new $wgName(set($this->props->skip('control')), $this->children());
 
-        if(!empty($control)) return createWg($control, set($this->props->skip('control')), 'input');
+        if(!empty($control) && !in_array($control, static::$inputTypes)) return createWg($control, set($this->props->skip('control')), 'input');
         return new input(set::type($control), set($this->props->skip('control')));
     }
 }
