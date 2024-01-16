@@ -308,7 +308,16 @@ $reviewedBy = trim($reviewedBy);
 
 $isInModal = isAjaxRequest('modal');
 $versions  = array();
-for($i = $case->version; $i >= 1; $i --) $versions[] = array('text' => "#{$i}", 'url' => inlink('view', "caseID={$case->id}&version={$i}"), 'active' => $i == $version);
+for($i = $case->version; $i >= 1; $i --)
+{
+    $versionItem = array('text' => "#{$i}", 'url' => inlink('view', "caseID={$case->id}&version={$i}"), 'active' => $i == $version);
+    if($isInModal)
+    {
+        $versionItem['data-load'] = 'modal';
+        $versionItem['data-target'] = '.modal-content';
+    }
+    $versions[] = $versionItem;
+}
 detailHeader
 (
     to::title
