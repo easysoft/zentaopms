@@ -54,9 +54,12 @@ class formGroup extends wg
 
     protected function created()
     {
-        if($this->hasProp('name') && $this->prop('required') == 'auto')
+        $required = $this->prop('required');
+        if($required === 'auto')
         {
-            $this->setProp('required', isFieldRequired($this->prop('name'), $this->prop('requiredFields')));
+            if($this->hasProp('name')) $required = isFieldRequired($this->prop('name'), $this->prop('requiredFields'));
+            else                       $required = false;
+            $this->setProp('required', $required);
         }
     }
 
