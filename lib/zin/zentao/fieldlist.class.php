@@ -171,6 +171,11 @@ class fieldList
 
     public function moveBefore(string|array $moveNames, string $beforeName): fieldList
     {
+        if($beforeName === '$BEGIN' || $beforeName === '$END')
+        {
+            return $this->moveAfter($moveNames, $beforeName);
+        }
+
         $fields = $this->fields;
         $keys   = array_keys($fields);
 
@@ -202,6 +207,16 @@ class fieldList
         $this->fields = static::sortFields($this->fields, $names);
 
         return $this;
+    }
+
+    public function moveToBegin(string|array $moveNames): fieldList
+    {
+        return $this->moveAfter($moveNames, '$BEGIN');
+    }
+
+    public function moveToEnd(string|array $moveNames): fieldList
+    {
+        return $this->moveAfter($moveNames, '$END');
     }
 
     public function sort(string|array ...$sortNames): fieldList

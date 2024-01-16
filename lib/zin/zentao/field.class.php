@@ -320,31 +320,51 @@ class field extends setting
 
     function moveBefore(string $name): field
     {
-        if(is_null($this->parent))
+        if(is_null($this->fieldList))
         {
-            trigger_error('[ZIN] The field named ' . $this->getName() . ' has no parent, maybe you should add self to a fieldList firstly.', E_USER_ERROR);
+            trigger_error('[ZIN] The field named ' . $this->getName() . ' has no fieldList, maybe you should add self to a fieldList firstly.', E_USER_ERROR);
         }
-        $this->parent->moveBefore($this->getName(), $name);
+        $this->fieldList->moveBefore($this->getName(), $name);
         return $this;
     }
 
     function moveAfter(string $name): field
     {
-        if(is_null($this->parent))
+        if(is_null($this->fieldList))
         {
-            trigger_error('[ZIN] The field named ' . $this->getName() . ' has no parent, maybe you should add self to a fieldList firstly.', E_USER_ERROR);
+            trigger_error('[ZIN] The field named ' . $this->getName() . ' has no fieldList, maybe you should add self to a fieldList firstly.', E_USER_ERROR);
         }
-        $this->parent->moveAfter($this->getName(), $name);
+        $this->fieldList->moveAfter($this->getName(), $name);
+        return $this;
+    }
+
+    function moveToBegin(): field
+    {
+        if(is_null($this->fieldList))
+        {
+            trigger_error('[ZIN] The field named ' . $this->getName() . ' has no fieldList, maybe you should add self to a fieldList firstly.', E_USER_ERROR);
+        }
+        $this->fieldList->moveToBegin($this->getName());
+        return $this;
+    }
+
+    function moveToEnd(): field
+    {
+        if(is_null($this->fieldList))
+        {
+            trigger_error('[ZIN] The field named ' . $this->getName() . ' has no fieldList, maybe you should add self to a fieldList firstly.', E_USER_ERROR);
+        }
+        $this->fieldList->moveToEnd($this->getName());
         return $this;
     }
 
     function detach(): field
     {
-        if(is_null($this->parent))
+        if(is_null($this->fieldList))
         {
-            trigger_error('[ZIN] The field named ' . $this->getName() . ' has no parent, maybe you should add self to a fieldList firstly.', E_USER_ERROR);
+            trigger_error('[ZIN] The field named ' . $this->getName() . ' has no fieldList, maybe you should add self to a fieldList firstly.', E_USER_ERROR);
         }
-        $this->parent->remove($this->getName());
+        $this->fieldList->remove($this->getName());
         return $this;
     }
 
