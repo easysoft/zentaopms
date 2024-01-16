@@ -52,7 +52,7 @@ class formLabel extends wg
             setClass('form-label', $required ? 'required' : null),
             set('for', $for),
             set($this->getRestProps()),
-            $text,
+            span(setClass('text'), $text),
             $this->children(),
             $hint,
             $checkbox,
