@@ -143,14 +143,14 @@ class formGroup extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build(): wg|array
     {
-        list($name, $labelWidth, $required, $width, $id, $hidden, $foldable, $pinned, $children) = $this->prop(array('name', 'labelWidth', 'required', 'width', 'id', 'hidden', 'foldable', 'pinned', 'children'));
+        list($name, $labelWidth, $required, $width, $id, $hidden, $foldable, $pinned, $children, $wrapBefore, $wrapAfter) = $this->prop(array('name', 'labelWidth', 'required', 'width', 'id', 'hidden', 'foldable', 'pinned', 'children', 'wrapBefore', 'wrapAfter'));
 
         $control = $this->buildControl();
         if($this->isHiddenField) return $control;
 
-        return div
+        $content = div
         (
             setClass('form-group', array('required' => $required, 'hidden' => $hidden, 'is-foldable' => $foldable, 'is-pinned' => $pinned)),
             zui::width($width),
@@ -164,5 +164,11 @@ class formGroup extends wg
             $this->children(),
             $this->buildTip()
         );
+
+        if($wrapBefore || $wrapAfter) $content = array($content);
+        if($wrapBefore)               array_unshift($content, div(setClass('form-grid-wrap'), setData('wrap-before', $name)));
+        if($wrapAfter)                array_push($content, div(setClass('form-grid-wrap'), setData('wrap-after', $name)));
+
+        return $content;
     }
 }
