@@ -62,7 +62,6 @@ window.renderCell = function(result, info)
     {
         const story = info.row.data;
         let html = '';
-        if(showBranch) html += "<span class='label gray-pale rounded-xl clip'>" + story.branch + "</span> ";
         if(typeof modulePairs[story.rawModule] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.rawModule] + "</span> ";
         if(story.parent > 0) html += "<span class='label gray-pale rounded-xl clip'>" + (storyType == 'requirement' ? 'SR' : childrenAB) + "</span> ";
         if(html) result.unshift({html});

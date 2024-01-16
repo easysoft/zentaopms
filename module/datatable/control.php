@@ -28,9 +28,6 @@ class datatable extends control
         $this->app->loadLang($currentModule);
         $this->app->loadConfig($currentModule);
 
-        if($currentModule == 'product'      && $currentMethod == 'browse') $this->view->showBranch = $this->loadModel('branch')->showBranch($this->session->product);
-        if($currentModule == 'projectstory' && $currentMethod == 'story')  $this->view->showBranch = $this->loadModel('branch')->showBranch(0, 0, $this->session->project);
-
         $this->view->datatableID   = $datatableID;
         $this->view->moduleName    = $moduleName;
         $this->view->methodName    = $methodName;

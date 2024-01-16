@@ -20,7 +20,6 @@ $isProjectStory    = $this->app->rawModule == 'projectstory';
 $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $storyBrowseType   = $this->session->storyBrowseType;
-$branchType        = $showBranch ? $product->type : '';
 $storyProductIds   = array();
 
 foreach($stories as $story) $storyProductIds[$story->product] = $story->product;
@@ -302,7 +301,6 @@ data('storyBrowseType', $storyBrowseType);
 jsVar('childrenAB',     $lang->story->childrenAB);
 jsVar('projectID',      $projectID);
 jsVar('modulePairs',    $modulePairs);
-jsVar('showBranch',     $showBranch);
 jsVar('storyType',      $storyType);
 jsVar('checkedSummary', $storyType == 'story' ? $lang->product->checkedSRSummary : $lang->product->checkedURSummary);
 

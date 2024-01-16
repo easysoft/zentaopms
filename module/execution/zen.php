@@ -418,7 +418,6 @@ class executionZen extends execution
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleID        = $moduleID;
         $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
-        $this->view->showBranch      = $this->loadModel('branch')->showBranch($productID);
     }
 
     /**

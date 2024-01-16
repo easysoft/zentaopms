@@ -56,17 +56,6 @@ form
             set::value($showAllModule)
         )
     ) : null,
-    !empty($showBranch) ? formGroup
-    (
-        set::label($lang->datatable->showBranch),
-        radiolist
-        (
-            set::name('showBranch'),
-            set::inline(true),
-            set::items($lang->datatable->showBranchList),
-            set::value(isset($config->$currentModule->$currentMethod->showBranch) ? $config->$currentModule->$currentMethod->showBranch : 1)
-        )
-    ) : null,
     input
     (
         set('class', 'hidden'),

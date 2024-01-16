@@ -920,24 +920,6 @@ class productZen extends product
     }
 
     /**
-     * 是否展示分支。
-     * Can show the branch.
-     *
-     * @param  int       $projectID
-     * @param  int       $productID
-     * @param  string    $storyType
-     * @param  bool      $isProjectStory
-     * @access protected
-     * @return bool
-     */
-    protected function canShowBranch(int $projectID, int $productID, string $storyType, bool $isProjectStory): bool
-    {
-        if($isProjectStory && $storyType == 'story') return $this->loadModel('branch')->showBranch($productID, 0, $projectID);
-
-        return $this->loadModel('branch')->showBranch($productID);
-    }
-
-    /**
      * 获取项目下的产品列表。
      * Get products of the project.
      *
@@ -1488,7 +1470,6 @@ class productZen extends product
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
         $this->view->modulePairs     = !empty($showModule) ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
-        $this->view->showBranch      = $this->canShowBranch($projectID, $productID, $storyType, $isProjectStory);
         $this->view->branchOptions   = (empty($product) && $isProjectStory) ? $this->getBranchOptions($projectProducts, $projectID) : array($productID => $branchOpt);
         $this->view->branchTagOption = $branchTagOpt;
         $this->view->projectProducts = $projectProducts;
