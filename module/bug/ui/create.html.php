@@ -15,20 +15,19 @@ $fields = useFields('bug.create');
 
 if(!empty($executionType) && $executionType == 'kanban') $fields->merge('bug.kanban');
 
+$fields->autoLoad('product', 'product,module,openedBuild,execution,project,story,task,assignedTo')
+   ->autoLoad('branch',  'module,openedBuild,execution,project,story,task,assignedTo')
+   ->autoLoad('module',  'assignedTo,story')
+   ->autoLoad('project', 'openedBuild,execution,story,task,assignedTo')
+   ->autoLoad('execution', 'openedBuild,story,task,assignedTo')
+   ->autoLoad('region', 'lane');
+
 jsVar('bug',                   $bug);
 jsVar('moduleID',              $bug->moduleID);
 jsVar('tab',                   $this->app->tab);
 jsVar('createRelease',         $lang->release->create);
 jsVar('refresh',               $lang->refreshIcon);
 jsVar('projectExecutionPairs', $projectExecutionPairs);
-
-$autoLoad = array();
-$autoLoad['product']   = 'product,module,openedBuild,execution,project,story,task,assignedTo';
-$autoLoad['branch']    = 'module,openedBuild,execution,project,story,task,assignedTo';
-$autoLoad['module']    = 'assignedTo,story';
-$autoLoad['project']   = 'openedBuild,execution,story,task,assignedTo';
-$autoLoad['execution'] = 'openedBuild,story,task,assignedTo';
-$autoLoad['region']    = 'lane';
 
 formGridPanel
 (
