@@ -14,7 +14,7 @@ $fields->field('begin')
 
 $fields->field('budget')
     ->itemBegin('budget')->control('input')->itemEnd()
-    ->item(data('parentProgram') ? field('budgetUnit')->className('hidden')->value(data('parentProgram.budgetUnit')) : field('budgetUnit')->required()->control('picker')->name('budgetUnit')->items(data('budgetUnitList'))->value($config->project->defaultCurrency));
+    ->item(field('budgetUnit')->required()->disabled(data('parentProgram') ? true : false)->control('picker')->name('budgetUnit')->items(data('budgetUnitList'))->value(data('parentProgram') ? data('parentProgram.budgetUnit') : $config->project->defaultCurrency));
 
 $fields->field('acl')
     ->items(data('parentProgram') ? $lang->program->subAclList : $lang->program->aclList)
