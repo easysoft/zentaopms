@@ -56,8 +56,9 @@ window.loadURS = function(allURS)
     var link = $.createLink('story', 'ajaxGetURS', 'productID=' + productID + '&branchID=' + branchID + '&moduleID=' + moduleID + '&requirementList=' + requirementList);
     $.get(link, function(data)
     {
-        $('.URSBox').html("<div class='picker-box' id='URS'></div>");
-        new zui.Picker('.URSBox #URS', JSON.parse(data));
+        data = JSON.parse(data);
+        $URS = $('#URS').zui('picker');
+        $URS.render({items: data.items});
     })
 };
 

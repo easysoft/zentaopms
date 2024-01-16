@@ -137,9 +137,9 @@ if(!isset($createFields['branch']) && $type == 'story')
         ->required($createFields['plan']['required'])
         ->control('inputGroup')
         ->items(false)
-        ->itemBegin('plan')->control('picker')->items($createFields['plan']['options'])->value($createFields['plan']['default'])->itemEnd()
-        ->item(empty($createFields['plan']['options']) ? field()->control('btn')->icon('plus')->setVal('url', createLink('productplan', 'create', 'productID=' . data('productID') . '&branch=' . data('branch')))->setVal('data-toggle', 'modal')->setVal('title', $lang->productplan->create) : null)
-        ->item(empty($createFields['plan']['options']) ? field()->control('btn')->icon('refresh')->id("loadProductPlans")->setVal('title', $lang->refresh) : null);
+        ->itemBegin('plan')->control('picker')->id('planIdBox')->items($createFields['plan']['options'])->value($createFields['plan']['default'])->itemEnd()
+        ->item(empty($createFields['plan']['options']) ? field()->control('btn')->icon('plus')->url(createLink('productplan', 'create', 'productID=' . data('productID') . '&branch=' . data('branch')))->set('data-toggle', 'modal')->set('title', $lang->productplan->create) : null)
+        ->item(empty($createFields['plan']['options']) ? field()->control('btn')->icon('refresh')->id("loadProductPlans")->set('title', $lang->refresh) : null);
 }
 
 $fields->field('source')

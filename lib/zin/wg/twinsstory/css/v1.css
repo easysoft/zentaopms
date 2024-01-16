@@ -3,3 +3,7 @@
 
 .twinsStoryBox .newLine {display:flex; position: relative; padding-top: var(--form-grid-gap-y-half);}
 .twinsStoryBox .newLine .c-actions {position: absolute; width: 100px; right: -100px; bottom: -5px;}
+
+#storyNoticeBranch{margin-top:8px;}
+#storyNoticeBranch .form-label{height:auto;}
+#storyNoticeBranch .form-group{min-height:auto;}

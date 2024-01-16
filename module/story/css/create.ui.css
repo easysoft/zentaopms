@@ -2,8 +2,5 @@
 .c-actions .btn-link{padding:0 5px;}
 #uploadFiles .upload {width: 100%;}
 .no-background .input-group-addon{background: none;}
-#storyNoticeBranch{margin-top:8px;}
-#storyNoticeBranch .form-label{height:auto;}
-#storyNoticeBranch .form-group{min-height:auto;}
 #planIdBox, #moduleIdBox{width:100%;}
 .titleBox .input-control-suffix {width: 2.5rem;}
