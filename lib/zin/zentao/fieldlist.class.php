@@ -219,22 +219,14 @@ class fieldList
         return $this;
     }
 
-    public function sort(string|array $names): fieldList
+    public function sort(string|array ...$sortNames): fieldList
     {
-        $names         = is_string($names) ? explode(',', $names) : $names;
-        $userOrders    = array_flip($names);
-        $fields        = $this->fields;
-        $keys          = array_keys($fields);
-        $defaultOrders = array_flip($keys);
-
-        $sortFields = function($key1, $key2) use($userOrders, $defaultOrders)
+        foreach($sortNames as $names)
         {
-            if($userOrders[$key1] && $userOrders[$key2]) return $userOrders[$key1] < $userOrders[$key2] ? -1 : 1;
-            return $defaultOrders[$key1] < $defaultOrders[$key2] ? -1 : 1;
-        };
-
-        $this->fields = uksort($fields, $sortFields);
-
+            if(is_string($names)) $names = explode(',', $names);
+            $afterName = array_shift($names);
+            $this->moveAfter($names, $afterName);
+        }
         return $this;
     }
 
