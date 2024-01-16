@@ -27,6 +27,8 @@ class fieldList
 
     public ?array $autoLoadRule = null;
 
+    public ?array $defaultOrders = null;
+
     public function __construct(?string $name = null, ?array $fields = null)
     {
         if(is_null($name))
@@ -253,18 +255,37 @@ class fieldList
         return $this;
     }
 
+    public function orders(string|array ...$orders): fieldList
+    {
+        if(is_null($this->defaultOrders)) $this->defaultOrders = array();
+        $this->defaultOrders = array_merge($this->defaultOrders, $orders);
+        return $this;
+    }
+
     public function toList(string|array|null $names = null): array
     {
-        if(is_null($names)) return $this->fields;
-
-        if(is_string($names)) $names = explode(',', $names);
-
-        $list = array();
-        foreach($names as $name)
+        if(is_null($names))
         {
-            $field = $this->get($name);
-            if($field) $list[$name] = $field;
+            $list = $this->fields;
         }
+        else
+        {
+            if(is_string($names)) $names = explode(',', $names);
+
+            $list = array();
+            foreach($names as $name)
+            {
+                $field = $this->get($name);
+                if($field) $list[$name] = $field;
+            }
+        }
+
+        $orders = $this->defaultOrders;
+        if(!empty($orders))
+        {
+
+        }
+
         return $list;
     }
 
