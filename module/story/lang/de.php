@@ -201,6 +201,7 @@ $lang->story->toBeReviewed     = 'To Be Reviewed';
 $lang->story->linkMR           = 'Related MRs';
 $lang->story->linkCommit       = 'Related Commits';
 $lang->story->URS              = 'User requirements';
+$lang->story->estimateUnit     = "(Unit: {$lang->story->hour})";
 
 $lang->story->ditto       = 'Dito';
 $lang->story->dittoNotice = "This story is not linked to the same {$lang->productCommon} as the last one is!";

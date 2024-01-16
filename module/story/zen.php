@@ -519,8 +519,8 @@ class storyZen extends story
             if(isset($fields[$field])) $fields[$field]['default'] = $defaultValue;
         }
         if(empty($fields['product']['default']))  $fields['product']['default']  = $productID;
-        if(empty($fields['branch']['default']))   $fields['branch']['default']   = $branch;
-        if(empty($fields['branches']['default'])) $fields['branches']['default'] = $branch;
+        if(empty($fields['branch']['default']))   $fields['branch']['default']   = (int)$branch;
+        if(empty($fields['branches']['default'])) $fields['branches']['default'] = (int)$branch;
         if(empty($fields['plans']['default']))    $fields['plans']['default']    = zget($initStory, 'plan', 0);
 
         if(empty($needReview)) $fields['reviewer']['default']  = $product->PO;

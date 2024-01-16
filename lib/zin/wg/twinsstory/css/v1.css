@@ -1,0 +1,5 @@
+.twinsStoryBox .switchBranch {display:flex; position: relative;}
+.twinsStoryBox .switchBranch .c-actions {position: absolute; width: 50px; right: -50px; bottom: -5px;}
+
+.twinsStoryBox .newLine {display:flex; position: relative; padding-top: var(--form-grid-gap-y-half);}
+.twinsStoryBox .newLine .c-actions {position: absolute; width: 100px; right: -100px; bottom: -5px;}
