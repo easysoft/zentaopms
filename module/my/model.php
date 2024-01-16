@@ -905,7 +905,7 @@ class myModel extends model
             $pager->setRecTotal(count($reviewList));
             $pager->setPageTotal();
             $pager->setPageID($pager->pageID);
-            $reviewList = array_chunk($reviewList, $pager->recPerPage);
+            $reviewList = array_chunk($reviewList, (int)$pager->recPerPage);
             $reviewList = $reviewList[$pager->pageID - 1];
         }
 
