@@ -3192,6 +3192,7 @@ class storyModel extends model
         $mainMenu   = array();
         $dropMenus  = array();
         $suffixMenu = array();
+        $isInModal  = isInModal();
         $params     = "storyID=$story->id";
 
         if($type == 'view')
@@ -3233,8 +3234,8 @@ class storyModel extends model
                 $mainMenu[] = commonModel::buildActionItem('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, array('icon' => 'plus', 'text' => $this->lang->task->create));
             }
 
-            $suffixMenu[] = commonModel::buildActionItem('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, array('icon' => 'edit', 'data-app' => $this->app->tab));
-            $suffixMenu[] = commonModel::buildActionItem('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type", $story, array('icon' => 'copy', 'data-app' => $this->app->tab));
+            if(!$isInModal) $suffixMenu[] = commonModel::buildActionItem('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, array('icon' => 'edit', 'data-app' => $this->app->tab));
+            if(!$isInModal) $suffixMenu[] = commonModel::buildActionItem('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type", $story, array('icon' => 'copy', 'data-app' => $this->app->tab));
             if(common::hasPriv('story', 'delete')) $suffixMenu[] = array('url' => helper::createLink('story', 'delete', $params), 'class' => 'ajax-submit', 'icon' => 'trash');
         }
 
