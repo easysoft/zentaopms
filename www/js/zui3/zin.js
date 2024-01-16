@@ -927,7 +927,7 @@
                     $form.html(info.data);
                 }
 
-                let keep = options.items;
+                let keep = options.keep;
                 if(keep === true) keep = Object.keys(data);
                 else if(typeof keep === 'string') keep = keep.split(',');
 
