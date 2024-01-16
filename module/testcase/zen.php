@@ -1998,8 +1998,6 @@ class testcaseZen extends testcase
             else
             {
                 $caseID = $this->testcase->create($case);
-
-                $this->action->create('case', $caseID, 'Opened');
                 $this->testcase->syncCase2Project($case, $caseID);
             }
         }
