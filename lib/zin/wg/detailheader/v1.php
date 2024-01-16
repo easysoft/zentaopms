@@ -38,10 +38,10 @@ class detailHeader extends wg
 
         return div
         (
-            setClass('detail-header flex justify-between mb-3'),
+            setClass('detail-header flex justify-between mb-3 min-w-0 flex-nowrap'),
             div
             (
-                setClass('flex', 'items-center', 'gap-x-4'),
+                setClass('flex flex-auto min-w-0 items-center gap-x-4 flex-nowrap pr-5'),
                 $prefix,
                 $title
             ),
