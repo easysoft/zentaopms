@@ -259,15 +259,13 @@ class fieldList
 
     public function orders(string|array ...$orders): fieldList
     {
-        if(is_null($this->defaultOrders)) $this->defaultOrders = array();
-        $this->defaultOrders = array_merge($this->defaultOrders, $orders);
+        $this->defaultOrders = $orders;
         return $this;
     }
 
     public function fullModeOrders(string|array ...$orders): fieldList
     {
-        if(is_null($this->ordersForFull)) $this->ordersForFull = array();
-        $this->ordersForFull = array_merge($this->ordersForFull, $orders);
+        $this->ordersForFull = $orders;
         return $this;
     }
 
@@ -289,10 +287,9 @@ class fieldList
             }
         }
 
-        $orders = $this->defaultOrders;
-        if(!empty($orders))
+        if(!empty($this->defaultOrders))
         {
-
+            foreach($this->defaultOrders as $orders) $list = static::sortFields($list, $orders);
         }
 
         return $list;
