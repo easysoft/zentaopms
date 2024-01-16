@@ -362,7 +362,7 @@ class field extends setting
             }
             $array['items'] = $items;
         }
-        if(is_array($array['control']) && isset($array['control']['control']) && count($array['control']) == 1)
+        if(isset($array['control']['control']) && count($array['control']) == 1)
         {
             $array['control'] = $array['control']['control'];
         }
