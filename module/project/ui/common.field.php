@@ -40,7 +40,7 @@ if($hasCode)
         ->label($lang->project->category)
         ->items($lang->project->projectTypeList);
 
-    $fields->field('code')->required();
+    $fields->field('code')->control('input')->required();
 }
 
 $fields->field('PM')->control('picker')->items(data('PMUsers'));
@@ -52,7 +52,7 @@ $fields->field('begin')
     ->item(array('control' => 'span', 'text' => '-'))
     ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->value(data('project.end'))->itemEnd();
 
-$fields->field('days')->label($lang->project->days . $lang->project->daysUnit);
+$fields->field('days')->label($lang->project->days . $lang->project->daysUnit)->control('input');
 
 $fields->field('products[]')
     ->wrapBefore()
@@ -89,7 +89,6 @@ foreach($budgetUnitList as $key => $value)
 {
     $budgetItemList[] = array('text' => $value, 'value' => $key, 'url' => "javascript:toggleBudgetUnit('{$key}')");
 }
-
 
 $fields->field('budget')
     ->label($lang->project->budget . $lang->project->budgetUnit)
