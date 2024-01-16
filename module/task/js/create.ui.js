@@ -1,21 +1,3 @@
-$(function()
-{
-    if(hideStory)
-    {
-        $("input[name='after'][value='toStoryList']").parent().hide();
-        $("input[name='after'][value='continueAdding']").parent().hide();
-        $("input[name='after'][value='toTaskList']").prop('checked', true);
-    }
-
-    if(task.mode != '')
-    {
-        $('[name="multiple"]').prop('checked', true);
-        toggleTeam();
-    }
-
-    setStoryRelated();
-})
-
 /**
  * 根据多人任务是否勾选展示团队。
  * Show team menu box.
@@ -511,19 +493,15 @@ window.copyStoryTitle = function()
     }
 }
 
-window.showAllModule = function()
+window.showAllModule = function(e)
 {
-    $('input[name=isShowAllModule]').val('1');
-    const getModuleLink = $.createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=items&fieldID=&extra=allModule');
+    const extra         = $(e.target).prop('checked') ? 'allModule' : '';
+    const getModuleLink = $.createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=items&fieldID=&extra=' + extra);
 
-    $.get(getModuleLink, function(modules)
+    $.getJSON(getModuleLink, function(modules)
     {
-        if(modules)
-        {
-            modules = JSON.parse(modules);
-            const $modulePicker = $('input[name=module]').zui('picker');
-            $modulePicker.render({items: modules});
-        }
+        const $modulePicker = $('input[name=module]').zui('picker');
+        $modulePicker.render({items: modules});
     });
 }
 

@@ -12,10 +12,14 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('window.executionID', $execution->id);
+
 $fields = useFields('task.create');
+if($execution->type == 'kanban') $fields->merge('task.kanban');
 
 formGridPanel
 (
     set::title($lang->task->create),
     set::fields($fields),
+    on::click('[name=isShowAllModule]', 'showAllModule')
 );
