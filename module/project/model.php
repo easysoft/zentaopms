@@ -2845,15 +2845,18 @@ class projectModel extends model
 
         $projectProduct = 0;
         if(empty($project->hasProduct) || $model == 'ipd') $projectProduct = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetch('product');
-        $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
+        if(isset($lang->project->menu->settings['subMenu']->module['link'])) $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
-        if(isset($project->model) and ($project->model == 'scrum' or $project->model == 'agileplus'))
+        if(isset($lang->project->menu->projectplan))
         {
-            $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
-        }
-        else
-        {
-            unset($lang->project->menu->projectplan);
+            if(isset($project->model) and ($project->model == 'scrum' or $project->model == 'agileplus'))
+            {
+                $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
+            }
+            else
+            {
+                unset($lang->project->menu->projectplan);
+            }
         }
 
         if(!empty($this->config->URAndSR) && $project->model !== 'kanban' && isset($lang->project->menu->storyGroup))

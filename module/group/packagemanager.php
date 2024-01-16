@@ -3715,6 +3715,7 @@ $config->group->package->manageDemand->privs['demand-manageTree']  = array('edit
 $config->group->package->manageDemand->privs['demand-close']       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 180, 'depend' => array('demand-browse', 'demand-view'), 'recommend' => array('demand-activate', 'demand-assignTo', 'demand-batchCreate', 'demand-create', 'demand-edit'));
 $config->group->package->manageDemand->privs['demand-activate']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 190, 'depend' => array('demand-browse', 'demand-view'), 'recommend' => array('demand-assignTo', 'demand-batchCreate', 'demand-close', 'demand-create', 'demand-edit'));
 $config->group->package->manageDemand->privs['demand-distribute']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 200, 'depend' => array('demand-browse', 'demand-view'), 'recommend' => array('demand-assignTo', 'demand-batchCreate', 'demand-create', 'demand-edit'));
+$config->group->package->manageDemand->privs['demand-retract']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 210, 'depend' => array('demandpool-browse', 'demand-browse', 'demand-view'), 'recommend' => array('demand-distribute'));
 
 $config->group->package->reviewDemand = new stdclass();
 $config->group->package->reviewDemand->order  = 5;

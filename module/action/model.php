@@ -649,6 +649,11 @@ class actionModel extends model
                     $action->extra = sprintf($this->lang->execution->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
                 }
             }
+            elseif($objectType == 'story' && $actionName == 'retracted')
+            {
+                $story = $this->loadModel('story')->getById($objectID);
+                $action->extra = "#{$story->id} {$this->lang->story->title} {$story->title}";
+            }
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
 
             $actionName = strtolower($action->action);

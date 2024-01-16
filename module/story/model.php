@@ -45,18 +45,25 @@ class storyModel extends model
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
+        $storyIdList = $story->id;
+        if($story->type == 'requirement')
+        {
+            $stories = $this->getStoryRelationByIds($story->id, 'requirement');
+            if(isset($stories[$story->id])) $storyIdList = $stories[$story->id];
+        }
+
         $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
-            ->beginIF($story->twins)->andWhere('t1.story')->in(ltrim($story->twins, ',') . $story->id)->fi()
-            ->beginIF(!$story->twins)->andWhere('t1.story')->in($story->id)->fi()
+            ->beginIF($story->twins)->andWhere('t1.story')->in(ltrim($story->twins, ',') . $storyIdList)->fi()
+            ->beginIF(!$story->twins)->andWhere('t1.story')->in($storyIdList)->fi()
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
 
         $story->tasks  = $this->dao->select('id, name, assignedTo, execution, project, status, consumed, `left`,type')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)->fi()
-            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)->fi()
+            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $storyIdList)->fi()
+            ->beginIF(!$story->twins)->andWhere('story')->in($storyIdList)->fi()
             ->orderBy('id DESC')
             ->fetchGroup('execution');
 
@@ -155,6 +162,12 @@ class storyModel extends model
      */
     public function getAffectedScope($story)
     {
+        $storyIdList = $story->id;
+        if($story->type == 'requirement')
+        {
+            $stories = $this->getStoryRelationByIds($story->id, 'requirement');
+            if(isset($stories[$story->id])) $storyIdList = $stories[$story->id];
+        }
         /* Remove closed executions. */
         if($story->executions)
         {
@@ -174,8 +187,8 @@ class storyModel extends model
         /* Get affected bugs. */
         $story->bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->ne('closed')
-            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)->fi()
-            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)->fi()
+            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $storyIdList)->fi()
+            ->beginIF(!$story->twins)->andWhere('story')->in($storyIdList)->fi()
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchAll();
@@ -183,9 +196,18 @@ class storyModel extends model
         /* Get affected cases. */
         $story->cases = $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq(0)
-            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)->fi()
-            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)->fi()
+            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $storyIdList)->fi()
+            ->beginIF(!$story->twins)->andWhere('story')->in($storyIdList)->fi()
             ->fetchAll();
+
+        $story->stories = $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
+            ->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+            ->where('t1.version=t2.version')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.id')->in($storyIdList)
+            ->fetchAll('id');
 
         return $story;
     }
