@@ -1254,6 +1254,7 @@ class taskZen extends task
      */
     protected function isLimitedInExecution(int $executionID): bool
     {
+        if($this->app->user->admin) return false;
         $limitedExecutions = $this->execution->getLimitedExecution();
 
         if(strpos(",{$limitedExecutions},", ",$executionID,") !== false) return true;
