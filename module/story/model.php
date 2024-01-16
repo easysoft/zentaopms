@@ -189,7 +189,6 @@ class storyModel extends model
             ->where('status')->ne('closed')
             ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $storyIdList)->fi()
             ->beginIF(!$story->twins)->andWhere('story')->in($storyIdList)->fi()
-            ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchAll();
 
