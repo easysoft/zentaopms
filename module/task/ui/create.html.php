@@ -21,6 +21,7 @@ formGridPanel
 (
     set::title($lang->task->create),
     set::fields($fields),
+    on::change('[name=module]', 'loadExecutionStories'),
     on::change('[name=story]', 'setStoryRelated'),
     on::click('[name=isShowAllModule]', 'showAllModule'),
     on::click('[name=copyButton]', 'copyStoryTitle'),

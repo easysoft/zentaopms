@@ -1,15 +1,1 @@
-.flex-none {flex: none !important;}
-#taskCreateForm #pri {width: 5rem;}
-#taskCreateForm .empty-story-tip input {padding: 0;}
-#taskCreateForm .empty-story-tip .input-control-suffix {padding-right: 0;}
-#taskCreateForm .empty-story-tip .input-control-suffix .btn:hover:before {background: none;}
-#taskCreateForm .selectStoryLabel {top: 50%;}
-#testStoryBox th.required:before {content: '*'; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); margin-right: 0.25rem; position: relative; top: 0.125rem;}
-
-#multipleBox {min-width: 100px}
-
-.assignedToBox {align-items: center !important}
-.assignedToBox .add-team {margin-bottom: 5px}
-.assignedToList {display: flex; align-items: center; flex-wrap: wrap;}
-.assignedToList .picker-multi-selection, .assignedToList .icon{margin-right: 5px; margin-bottom: 5px}
-.noCopyBox {width: 40px !important;}
+.empty-story-tip .input-control-prefix {z-index: 2;}

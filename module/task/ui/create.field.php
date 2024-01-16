@@ -9,15 +9,76 @@ if(empty(data('features.story'))) $nameWidth .= ' full:w-full';
 if(data('execution.type') == 'kanban') $nameWidth .= ' lite:w-full';
 $fields->field('name')->className($nameWidth);
 
+$buildStoryBox = function($props)
+{
+    if(!empty(data('execution.hasProduct')))
+    {
+        $executionID      = data('execution.id');
+        $storyEmptyPreTip = span
+            (
+                setClass('input-control-prefix'),
+                span(data('lang.task.noticeLinkStory')),
+                a
+                (
+                    set::href(createLink('execution', 'linkStory', "executionID={$executionID}")),
+                    setClass('text-primary'),
+                    isInModal() ? setData('toggle', 'modal') : null,
+                    data('lang.execution.linkStory')
+                )
+            );
+    }
+    else
+    {
+        $storyEmptyPreTip = span
+            (
+                setClass('input-control-prefix'),
+                span(data('lang.task.noticeLinkStoryNoProduct'))
+            );
+    }
+
+    return div
+        (
+            inputGroup
+            (
+                setClass('setStoryBox'),
+                setClass(empty(data('stories')) ? 'hidden' : ''),
+                picker
+                (
+                    set::name('story'),
+                    set::value(data('task.story')),
+                    set::items(data('stories'))
+                ),
+                btn
+                (
+                    setID('preview'),
+                    setClass('hidden'),
+                    setData('toggle', 'modal'),
+                    setData('url', '#'),
+                    setData('size', 'lg'),
+                    icon('eye text-gray')
+                )
+            ),
+            inputGroup
+            (
+                setClass('empty-story-tip input-control has-prefix has-suffix'),
+                setClass(empty(data('stories')) ? '' : 'hidden'),
+                $storyEmptyPreTip,
+                input
+                (
+                    set::name(''),
+                    set('readonly'),
+                    set('onfocus', 'this.blur()')
+                ),
+            )
+        );
+};
+
 $fields->field('storyBox')
     ->label($lang->task->story)
     ->checkbox(array('text' => $lang->task->syncStory, 'name' => 'copyButton'))
     ->hidden(!data('features.story'))
     ->foldable(data('features.story'))
-    ->control('inputgroup')
-    ->items(false)
-    ->itemBegin('story')->control('picker')->items(data('stories'))->value(data('task.story'))->itemEnd()
-    ->itemBegin()->control('btn', array('id' => 'preview', 'data-toggle' => 'modal', 'data-url' => '#', 'data-size' => 'lg', 'className' => 'hidden'))->icon('eye text-gray')->itemEnd();
+    ->control($buildStoryBox);
 
 if(!isAjaxRequest('modal'))
 {
