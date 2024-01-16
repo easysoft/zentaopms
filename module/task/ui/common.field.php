@@ -23,13 +23,6 @@ $fields->field('module')
     ->items(data('modulePairs'))
     ->value(data('task.module'));
 
-$fields->field('story')
-    ->hidden(!data('features.story'))
-    ->foldable(data('features.story'))
-    ->control('picker')
-    ->items(data('stories'))
-    ->value(data('task.story'));
-
 $fields->field('name')
     ->control('colorInput', array('colorValue' => data('task.color')))
     ->value(data('task.name'));

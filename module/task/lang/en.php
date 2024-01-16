@@ -69,6 +69,7 @@ $lang->task->addEffort           = 'Add Effort';
 $lang->task->createBranch        = 'Create Branch';
 $lang->task->relatedBranch       = 'Related Branch';
 $lang->task->keywords            = 'Tags';
+$lang->task->syncStory           = 'Sync to task';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';

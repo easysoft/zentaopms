@@ -258,7 +258,7 @@ function loadLanes()
  */
 function setStoryRelated()
 {
-    $('#copyButton').prop('checked', false);
+    $('[name=copyButton]').prop('checked', false);
     setPreview();
     setStoryModule();
 }
@@ -275,10 +275,7 @@ function setPreview()
     let storyID = $("input[name='story']").val() ? $("input[name='story']").val() : 0;
     if(parseFloat(storyID) == 0)
     {
-        $('#copyButton').closest('.input-control-suffix').addClass('noCopyBox');
         $('#preview').addClass('hidden');
-        $('#copyButton').closest('.checkbox-primary').addClass('hidden');
-        $('.title-group.required > div').removeAttr('id', 'copyStory-input').addClass('.required');
     }
     else
     {
@@ -287,12 +284,9 @@ function setPreview()
 
         if(storyLink.indexOf("onlybody=yes") < 0) storyLink = storyLink + concat + 'onlybody=yes';
 
-        $('#copyButton').closest('.input-control-suffix').removeClass('noCopyBox');
         $('#preview').removeClass('hidden');
-        $('#copyButton').closest('.checkbox-primary').removeClass('hidden');
-        $('#preview .btn').attr('data-url', storyLink);
-        $('#preview .btn').attr('data-size', 'lg');
-        $('.title-group.required > div').attr('id', 'copyStory-input').removeClass('.required');
+        $('#preview').attr('data-url', storyLink);
+        $('#preview').attr('data-size', 'lg');
     }
 
     setAfter();
@@ -470,25 +464,28 @@ $('#taskCreateForm').on('click', '.assignedToList .picker-multi-selection', func
     setLineIndex();
 })
 
-window.copyStoryTitle = function()
+window.copyStoryTitle = function(e)
 {
-    let storyTitle = $('#story span.picker-single-selection').text();
+    if(!$('[name=story]').val()) return;
+
+    let storyTitle = $('[data-name=storyBox] > .input-group span.picker-single-selection').text();
     let startPosition = storyTitle.indexOf(':') + 1;
     if (startPosition > 0) {
         let endPosition   = storyTitle.lastIndexOf('(');
         storyTitle = storyTitle.substr(startPosition, endPosition - startPosition);
     }
 
-    if($('[name^=copyButton]').prop('checked'))
+    if($(e.target).prop('checked'))
     {
-        $('#name').val(storyTitle);
-        $('#estimate').val($('input[name=storyEstimate]').val());
-        $('#desc').val($('input[name=storyDesc]').val());
+        $('[name=name]').val(storyTitle);
+        $('[name=estimate]').val($('input[name=storyEstimate]').val());
+        $('[name=desc]').val($('input[name=storyDesc]').val());
         $('input[name=pri]').zui('pripicker').$.setValue($('input[name=storyPri]').val());
     }
     else
     {
-        $('#name, #estimate, #desc').val('');
+        $('[name=name]').val($('[name=taskName]').val());
+        $('[name=estimate]').val($('[name=taskEstimate]').val());
         $('input[name=pri]').zui('pripicker').$.setValue(3);
     }
 }
@@ -512,4 +509,14 @@ window.closeModal = function(e)
 
     const modalID = $modal.attr('id');
     zui.Modal.hide('#' + modalID);
+}
+
+window.saveTaskName = function(e)
+{
+    $('[name=taskName]').val($(e.target).val());
+}
+
+window.saveTaskEstimate = function(e)
+{
+    $('[name=taskEstimate]').val($(e.target).val());
 }
