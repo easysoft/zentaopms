@@ -152,6 +152,8 @@ if(!empty($story->children))
     $cols['id']['checkbox']        = false;
     $cols['title']['nestedToggle'] = false;
 
+    foreach(array_keys($cols) as $fieldName) $cols[$fieldName]['sortType'] = false;
+
     $options = array('users' => $users);
     foreach($story->children as $child) $child = $this->story->formatStoryForList($child, $options);
 }
