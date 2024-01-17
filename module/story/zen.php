@@ -991,7 +991,7 @@ class storyZen extends story
         if($storyType == 'story')
         {
             $moduleIdList = $this->tree->getAllChildId($this->view->moduleID);
-            $URS          = $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'active', 'id_desc', 0, '', 'requirement');
+            $URS          = $this->story->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch, $moduleIdList, 'active', 'id_desc', 0, '', 'requirement');
         }
         $fields['URS']['options'] = $URS;
 

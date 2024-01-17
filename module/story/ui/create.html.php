@@ -44,7 +44,7 @@ formGridPanel
     on::click('#loadProductPlans', "loadProductPlans('{$productID}')"),
     on::change('[name=module]', 'loadURS'),
     on::change('[name=product]', 'loadProduct'),
-    on::change('[name=branch]', 'loadBranch'),
+    on::change('[name^=branches]', 'loadBranch'),
     on::change('[name=source]', "toggleFeedback(e.target)"),
     on::change('[name=region]', 'setLane')
 );
