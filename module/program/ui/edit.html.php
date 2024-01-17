@@ -15,6 +15,8 @@ jsVar('endGreatThanParent',  $lang->program->endGreatThanParent);
 jsVar('ignore',              $lang->program->ignore);
 jsVar('currencySymbol',      $lang->project->currencySymbol);
 jsVar('budgetOverrun',       $lang->project->budgetOverrun);
+jsVar('parentBeginDate',     $parentProgram ? $parentProgram->begin : '');
+jsVar('parentEndDate',       $parentProgram ? $parentProgram->end : '');
 
 $fields = useFields('program.edit');
 
@@ -30,7 +32,8 @@ formGridPanel
     set::autoLoad($autoLoad),
     on::change('[name=budget]', 'budgetOverrunTips'),
     on::change('[name=future]', 'onFutureChange'),
-    on::change('[name=acl]',    'onAclChange')
+    on::change('[name=acl]',    'onAclChange'),
+    on::change('[name=begin], [name=end]', 'onDateChange')
 );
 
 render();
