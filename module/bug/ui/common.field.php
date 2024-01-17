@@ -32,7 +32,7 @@ $fields->field('assignedTo')
 $fields->field('deadline')
     ->control('datePicker');
 
-if(isset($executionType) and $executionType == 'kanban')
+if(data('executionType') && data('executionType') == 'kanban')
 {
     $fields->field('region')
         ->label($lang->kanbancard->region)
