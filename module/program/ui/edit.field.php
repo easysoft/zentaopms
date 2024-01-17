@@ -12,6 +12,8 @@ $fields->field('begin')
     ->itemBegin()->type('addon')->label($lang->project->to)->text($lang->colon)->itemEnd()
     ->itemBegin('end')->require()->type('datePicker')->value(data('program.end'))->placeholder($lang->project->end)->itemEnd();
 
+$fields->field('budget')->checkbox(array('name' => 'future', 'text' => $lang->project->future, 'checked' => data('program.budget') == 0 ? true : false));
+
 $fields->field('acl')
     ->items(data('program.parent') ? $lang->program->subAclList : $lang->program->aclList);
 

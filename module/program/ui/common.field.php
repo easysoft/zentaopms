@@ -25,10 +25,12 @@ foreach($budgetUnitList as $key => $value)
     $budgetItemList[] = array('text' => $value, 'value' => $key, 'url' => "javascript:toggleBudgetUnit('{$key}')");
 }
 
+$budgetDisabled = (data('parentProgram.budget') !== null && data('parentProgram.budget') == 0) || (data('program.budget') !== null && data('program.budget') == 0);
+
 $fields->field('budget')
     ->label($lang->project->budget . $lang->project->budgetUnit)
     ->checkbox(array('name' => 'future', 'text' => $lang->project->future))
-    ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, $currency), 'className' => 'btn ghost'), 'prefixWidth' => 34, 'disabled' => data('parentProgram.budget') != null && data('parentProgram.budget') == 0));
+    ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, $currency), 'className' => 'btn ghost'), 'prefixWidth' => 34, 'disabled' => $budgetDisabled));
 
 if(data('parentProgram.budget'))
 {
