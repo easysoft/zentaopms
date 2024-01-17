@@ -1329,7 +1329,7 @@ class blockZen extends block
         /* Build project statistic data. */
         $this->app->loadClass('pager', true);
         $pager   = pager::init(0, 3, 1);
-        $project = $this->buildProjectStatistic($project, $data, $pager);
+        $project = $project ? $this->buildProjectStatistic($project, $data, $pager) : $this->loadModel('tutorial')->getProject();
 
         $this->view->projectID = $projectID;
         $this->view->project   = $project;
