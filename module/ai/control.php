@@ -345,7 +345,7 @@ class ai extends control
 
         $this->view->miniProgram = $miniProgram;
         $this->view->categoryList = array_merge($this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategories());
-        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('miniProgram', $id);
+        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('miniprogram', $id);
         $this->view->actions     = $this->loadModel('action')->getList('miniProgram', $id);
         $this->view->fields      = $this->ai->getMiniProgramFields($id);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
