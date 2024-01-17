@@ -547,9 +547,12 @@ class taskZen extends task
      */
     protected function buildTaskForCreate(int $executionID): object
     {
+        $formConfig = $this->config->task->form->create;
+        if($this->post->type == 'affair') $formConfig['assignedTo']['type'] = 'array';
+
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
         $team      = $this->post->team ? array_filter($this->post->team) : array();
-        $task      = form::data()->setDefault('execution', $executionID)
+        $task      = form::data($formConfig)->setDefault('execution', $executionID)
             ->setDefault('project', $execution->project)
             ->setDefault('left', 0)
             ->setIF($this->post->estimate, 'left', $this->post->estimate)

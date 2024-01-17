@@ -13,6 +13,11 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('window.executionID', $execution->id);
+jsVar('vision', $config->vision);
+jsVar('window.lifetime', $execution->lifetime);
+jsVar('window.attribute', $execution->attribute);
+jsVar('window.lifetimeList', $lifetimeList);
+jsVar('window.attributeList', $attributeList);
 
 $fields = useFields('task.create');
 if($execution->type == 'kanban') $fields->merge('task.kanban');
@@ -23,6 +28,7 @@ formGridPanel
     set::fields($fields),
     on::change('[name=module]', 'loadExecutionStories'),
     on::change('[name=story]', 'setStoryRelated'),
+    on::change('[name=type]', 'typeChange'),
     on::click('[name=isShowAllModule]', 'showAllModule'),
     on::click('[name=copyButton]', 'copyStoryTitle'),
     on::keyup('[name=name]', 'saveTaskName'),

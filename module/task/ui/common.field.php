@@ -27,8 +27,7 @@ $fields->field('name')
     ->control('colorInput', array('colorValue' => data('task.color')))
     ->value(data('task.name'));
 
-$fields->field('assignTo')
-    ->label($lang->task->assignedTo)
+$fields->field('assignedTo')
     ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple'))
     ->control('picker')
     ->items(data('members'))

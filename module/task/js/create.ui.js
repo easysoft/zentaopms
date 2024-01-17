@@ -32,32 +32,28 @@ function toggleTeam()
 function typeChange(e)
 {
     const result = $(e.target).val();
+
     /* Change assigned person to multiple selection, and hide multiple team box. */
+    const $assignedToPicker = $('[name^=assignedTo]').zui('picker');
     if(result == 'affair')
     {
-        $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
-        $('#assignedTo').next('.picker').removeClass('hidden');
+        $('[name=multiple]').prop("checked", false);
+        $assignedToPicker.render({multiple: true, checkbox: true, toolbar: true});
 
-        $('#assignedTo').attr('multiple', 'multiple');
-        $('.affair').hide();
-        $('.assignedToList').addClass('hidden');
-        $('.add-team').addClass('hidden');
-        $("[name='multiple']").prop("checked", false);
-        $('#selectAllUser').removeClass('hidden');
     }
     /* If assigned selection is multiple, remove multiple and hide the selection of select all members. */
-    else if($('#assignedTo').attr('multiple') == 'multiple')
+    else if($assignedToPicker.options.multiple)
     {
-        $('#assignedTo').removeAttr('multiple');
-        $('.affair').show();
-        $('#selectAllUser').addClass('hidden');
+        $assignedToPicker.render({multiple: false});
+        $assignedToPicker.$.setValue('');
     }
+
+    $('[name=multiple]').closest('.checkbox-primary').toggleClass('hidden', result == 'affair');
 
     /* If the execution has story list, toggle between hiding and displaying the selection of select test story box. */
     if(lifetime != 'ops' && attribute != 'request' && attribute != 'review' && vision != 'lite')
     {
-        $('#selectTestStoryBox').toggleClass('hidden', result != 'test');
-        toggleSelectTestStory();
+        $('[name=selectTestStory]').closest('.checkbox-primary').toggleClass('hidden', result != 'test');
     }
 }
 
