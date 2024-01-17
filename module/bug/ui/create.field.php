@@ -3,15 +3,8 @@ namespace zin;
 
 global $lang;
 
-$fields = defineFieldList('bug.create', 'bug', '!branch,color');
+$fields = defineFieldList('bug.create', 'bug');
 
-$fields->field('product')
-    ->hidden(data('product.shadow'))
-    ->control('inputGroup')
-    ->items(false)
-    ->itemBegin('product')->control('picker')->items(data('products'))->value(data('bug.productID'))->itemEnd()
-    ->item((data('product.type') !== 'normal' && isset(data('products')[data('bug.productID')])) ? field('branch')->control('picker')->boxClass('flex-none')->width('100px')->name('branch')->items(data('branches'))->value(data('bug.branch')) : null);
+$fields->field('module')->width('1/4');
 
-$fields->field('title')
-    ->width('full')
-    ->control('colorInput', array('colorValue' => data('bug.color')));
+$fields->field('openedBuild')->width('1/4');
