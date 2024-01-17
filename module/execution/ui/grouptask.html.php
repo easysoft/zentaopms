@@ -407,7 +407,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                         (
                             array
                             (
-                                'url'          => createLink('task', 'delete', "taskID=$task->id"),
+                                'url'          => createLink('task', 'delete', "executionID={$task->execution}&taskID={$task->id}"),
                                 'data-confirm' => $lang->task->confirmDelete,
                                 'class'        => 'btn ghost toolbar-item text-primary square size-sm ajax-submit',
                                 'icon'         => 'trash'
