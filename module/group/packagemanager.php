@@ -485,6 +485,10 @@ $config->group->subset->ai = new stdclass();
 $config->group->subset->ai->order = 2020;
 $config->group->subset->ai->nav   = 'admin';
 
+$config->group->subset->aiapp = new stdclass();
+$config->group->subset->aiapp->order = 2030;
+$config->group->subset->aiapp->nav   = 'aiapp';
+
 $config->group->subset->codereview = new stdclass();
 $config->group->subset->codereview->order = 2580;
 $config->group->subset->codereview->nav   = 'devops';
