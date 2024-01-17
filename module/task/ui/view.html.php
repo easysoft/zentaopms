@@ -11,6 +11,18 @@ declare(strict_types=1);
 namespace zin;
 global $lang;
 
+/* Join mailto. */
+$mailtoList = array();
+if(!empty($task->mailto))
+{
+    foreach(explode(',', $task->mailto) as $account)
+    {
+        if(empty($account)) continue;
+        $mailtoList[] = zget($users, trim($account));
+    }
+}
+$mailtoList = implode($lang->comma, $mailtoList);
+
 detailHeader
 (
     to::title
@@ -347,6 +359,16 @@ detailBody
                             $task->pri,
                             set::text($lang->task->priList)
                         )
+                    ),
+                    item
+                    (
+                        set::name($lang->task->keywords),
+                        $task->keywords
+                    ),
+                    item
+                    (
+                        set::name($lang->task->mailto),
+                        $mailtoList
                     )
                 )
             ),
