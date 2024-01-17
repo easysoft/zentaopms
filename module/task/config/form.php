@@ -58,6 +58,7 @@ $config->task->form->edit['story']          = array('type' => 'int',      'requi
 $config->task->form->edit['module']         = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->edit['parent']         = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->edit['mailto']         = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->task->form->edit['keywords']       = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->edit['mode']           = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->edit['assignedTo']     = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->edit['type']           = array('type' => 'string',   'required' => true);

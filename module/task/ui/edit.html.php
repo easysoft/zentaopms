@@ -304,6 +304,11 @@ detailBody
             ),
             item
             (
+                set::name($lang->task->keywords),
+                input(set::name('keywords'), set::value($task->keywords))
+            ),
+            item
+            (
                 set::name($lang->task->mailto),
                 mailto(set::items($mailtoOptions), set::value($task->mailto))
             )
