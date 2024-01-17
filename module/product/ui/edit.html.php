@@ -11,12 +11,13 @@ declare(strict_types=1);
 namespace zin;
 
 $fields = useFields('product.edit');
+$fields->fullModeOrders('name,code', 'type,status', 'reviewer,QD,RD');
 
 formGridPanel
 (
     set::title($lang->product->edit),
-    set::fields($fields),
     set::defaultMode('full'),
     set::modeSwitcher(false),
+    set::fields($fields),
     on::change('[name=program]', 'toggleLineByProgram')
 );
