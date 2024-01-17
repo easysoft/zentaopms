@@ -19,7 +19,7 @@ featureBar
 (
     (!in_array($execution->status, array('wait,doing')) && hasPriv('execution', 'computeCFD')) ? btn
     (
-        setClass('primary mr-5 refresh-btn'),
+        setClass('primary mr-5 refresh-btn ajax-submit'),
         set::url(createLink('execution', 'computeCFD', "reload=yes&executionID=$executionID")),
         set::icon('refresh'),
         $lang->execution->computeCFD
@@ -31,6 +31,7 @@ featureBar
         (
             set::id('weekend'),
             set::href(createLink('execution', 'cfd', "executionID={$executionID}&type={$type}&withWeekend=" . ($withWeekend == 'true' ? 'false' : 'true'))),
+            setData('app', $app->tab),
             $lang->execution->withweekend
         )
     ),
