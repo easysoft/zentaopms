@@ -496,7 +496,7 @@ function goBack(target, url, startState)
         if($.apps.openedMap[target]) return openApp(target);
         if(target.includes('-'))
         {
-            const parts = target.split('-');
+            const parts = target.split(',').shift().split('-');
             return openApp($.createLink(parts[0], parts[1]));
         }
     }
