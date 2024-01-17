@@ -33,3 +33,8 @@ $lang->aiapp->chatTip          = '点击左侧的生成按钮试试吧';
 $lang->aiapp->noModel          = array('尚未配置语言模型，请联系管理员或跳转至后台配置<a id="to-language-model">语言模型</a>。', '若已完成相关配置，请尝试<a id="reload-current">重新加载</a>页面。');
 $lang->aiapp->continueasking   = '继续追问';
 $lang->aiapp->modelList        = array('openai-gpt35' => 'OpenAI / GPT-3.5');
+
+$lang->aiapp->miniProgramSquare       = '查看AI小程序列表';
+$lang->aiapp->browseMiniProgram       = '查看AI小程序详情';
+$lang->aiapp->miniProgramChat         = '执行AI小程序';
+$lang->aiapp->collectMiniProgram      = '收藏AI小程序';

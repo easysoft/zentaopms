@@ -33,3 +33,8 @@ $lang->aiapp->newChatTip       = 'Please click on the Generate button on the lef
 $lang->aiapp->disabledTip      = 'The current mini program is disabled.';
 $lang->aiapp->continueasking   = 'Continue asking';
 $lang->aiapp->modelList        = array('openai-gpt35' => 'openai / GPT-3.5');
+
+$lang->aiapp->miniProgramSquare  = 'Browse AI Mini Program List';
+$lang->aiapp->collectMiniProgram = 'Collect AI Mini Program';
+$lang->aiapp->miniProgramChat    = 'Execute AI Mini Program';
+$lang->aiapp->browseMiniProgram  = 'View AI Mini Program Details';

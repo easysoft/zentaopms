@@ -57,16 +57,13 @@ $lang->ai->editMiniProgram         = 'Edit AI Mini Program';
 $lang->ai->testMiniProgram         = 'Test AI Mini Program';
 $lang->ai->miniProgramList         = 'Browse AI Mini Program List';
 $lang->ai->miniProgramView         = 'View AI Mini Program Details';
-$lang->ai->miniProgramSquare       = 'Browse AI Mini Program List';
-$lang->ai->collectMiniProgram      = 'Collect AI Mini Program';
-$lang->ai->miniProgramChat         = 'Execute AI Mini Program';
-$lang->ai->browseMiniProgram       = 'View AI Mini Program Details';
 $lang->ai->publishMiniProgram      = 'Publish AI Mini Program';
 $lang->ai->unpublishMiniProgram    = 'Disable AI Mini Program';
 $lang->ai->deleteMiniProgram       = 'Delete AI Mini Program';
 $lang->ai->exportMiniProgram       = 'Export AI Mini Program';
 $lang->ai->importMiniProgram       = 'Import AI Mini Program';
 $lang->ai->editMiniProgramCategory = 'Module maintenance';
+
 
 $lang->ai->export                 = 'Export';
 $lang->ai->import                 = 'Import';
