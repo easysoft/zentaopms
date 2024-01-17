@@ -12,10 +12,13 @@ namespace zin;
 
 $fields = useFields('product.create');
 
+$fields->autoLoad('program', 'line');
+
 formGridPanel
 (
     set::title($lang->product->create),
     set::fields($fields),
-    on::change('[name=program]', 'setParentProgram'),
+    set::loadUrl($loadUrl),
+    set::fullModeOrders('name,code', 'reviewer,QD,RD'),
     on::click('[name=newLine]', 'toggleLine(e.target)')
 );

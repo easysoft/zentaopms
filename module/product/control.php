@@ -205,6 +205,7 @@ class product extends control
         $this->view->gobackLink = $this->productZen->getBackLink4Create($extra);
         $this->view->programID  = $programID;
         $this->view->fields     = $this->productZen->getFormFields4Create($programID);
+        $this->view->loadUrl    = $this->createLink('product', 'create', "programID={program}&extra={$extra}");
         $this->display();
     }
 

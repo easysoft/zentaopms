@@ -9,14 +9,20 @@ $fields->field('program')
     ->items(data('fields.program.options'))
     ->value(data('fields.program.default'));
 
+$fields->field('line')
+    ->hidden(empty(data('fields.program.default')))
+    ->control('picker')
+    ->items(data('fields.line.options'))
+    ->value(data('fields.line.default'));
+
+$fields->field('name')->wrapBefore()->control('input');
+
 $fields->field('type')
     ->control(array('type' => 'picker', 'required' => true))
     ->items(data('fields.type.options'))
     ->value(data('fields.type.default'));
 
-$fields->field('name')->control('input');
-
-if(!empty($config->setCode)) $fields->field('code')->foldable()->control('input');
+$fields->field('code')->foldable()->control('input');
 
 $fields->field('PO')
     ->control('picker')
@@ -31,6 +37,7 @@ $fields->field('reviewer')
 
 $fields->field('QD')
     ->foldable()
+    ->wrapBefore()
     ->control('picker')
     ->items(data('fields.QD.options'))
     ->value(data('fields.QD.default'));

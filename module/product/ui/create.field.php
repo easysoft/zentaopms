@@ -4,11 +4,15 @@ global $lang,$config;
 
 $fields = defineFieldList('product.create', 'product');
 
-$fields->field('program')
-    ->label(!empty(data('programID')) ? $lang->product->program . ' & ' . $lang->product->line : $lang->product->program)
-    ->checkbox(array('text' => $lang->product->newLine, 'name' => 'newLine'))
+$fields->field('line')
     ->control('inputGroup')
     ->items(false)
-    ->itemBegin('program')->control('picker')->items(data('fields.program.options'))->value(data('fields.program.default'))->itemEnd()
-    ->item(field('line')->control('picker')->placeholder($lang->product->line)->width('1/4')->name('line')->items(data('fields.line.options'))->value(data('fields.line.default')))
-    ->item(field('lineName')->width('full')->className('hidden')->name('lineName'));
+    ->item(field('line')->control('picker')->placeholder($lang->product->line)->name('line')->items(data('fields.line.options'))->value(data('fields.line.default')))
+    ->item(field('lineName')->control('input')->className('hidden')->name('lineName'));
+
+if(hasPriv('product', 'manageLine')) $fields->field('line')->checkbox(array('text' => $lang->product->newLine, 'name' => 'newLine'));
+
+$fields->field('code')->className('full:w-1/4 lite:w-1/2');
+
+if(empty($config->setCode)) $fields->remove('code');
+if(!empty($config->setCode)) $fields->field('type')->className('full:w-1/4 lite:w-1/2');
