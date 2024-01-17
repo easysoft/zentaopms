@@ -380,11 +380,8 @@ class fieldList
 
     public static function sortFields(array &$fields, string|array $names): array
     {
-        \a(['sortFields', $names]);
         if(is_string($names)) $names = explode(',', $names);
         if(empty($names) || count($names) < 2) return $fields;
-
-        \a(['sortFields', $names]);
 
         $keys         = array_keys($fields);
         $firstName    = array_shift($names);
