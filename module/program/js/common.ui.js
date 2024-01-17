@@ -321,8 +321,28 @@ window.budgetOverrunTips = function(e)
 window.ignoreTip = function(obj)
 {
     var parentID = obj.parentNode.id;
-    $('#' + parentID).closest('.form-row').remove();
+
+    $('#' + parentID).addClass('hidden');
 
     if(parentID == 'dateTip') window.ignoreTips['dateTip'] = true;
     if(parentID == 'beyondBudgetTip') window.ignoreTips['beyondBudgetTip'] = true;
 }
+
+window.onDateChange = () =>
+{
+    if(window.ignoreTips['dateTip']) return;
+
+    let programBegin = $('[name=begin]').val();
+    let programEnd   = $('[name=end]').val();
+    const ignoreBtn  = "<span id='ignore' onclick='ignoreTip(this)'>" + ignore + "</span>";
+
+    if(programBegin && parentBeginDate && new Date(parentBeginDate) > new Date(programBegin))
+    {
+        $('#dateTip').html(beginLessThanParent + parentBeginDate + ignoreBtn).removeClass('hidden');
+    }
+
+    if(programEnd && parentEndDate && new Date(parentEndDate) < new Date(programEnd))
+    {
+        $('#dateTip').html(endGreatThanParent + parentEndDate + ignoreBtn).removeClass('hidden');
+    }
+};

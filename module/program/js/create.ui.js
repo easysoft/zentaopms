@@ -16,19 +16,3 @@ window.onAclChange = () =>
 {
     $('[data-name=whitelist]').toggleClass('hidden', $('#aclopen').prop('checked'));
 };
-
-window.onDateChange = () =>
-{
-    let programBegin = $('[name=begin]').val();
-    let programEnd   = $('[name=end]').val();
-
-    if(programBegin && parentBeginDate && new Date(parentBeginDate) > new Date(programBegin))
-    {
-        $('#beginTip').text(beginLessThanParent + parentBeginDate).removeClass('hidden');
-    }
-
-    if(programEnd && parentEndDate && new Date(parentEndDate) < new Date(programEnd))
-    {
-        $('#beginTip').text(endGreatThanParent + parentEndDate).removeClass('hidden');
-    }
-};
