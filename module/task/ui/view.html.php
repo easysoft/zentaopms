@@ -252,8 +252,8 @@ detailBody
     floatToolbar
     (
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-        set::main($operateMenus),
-        set::suffix($commonActions),
+        $task->deleted == '0' ? set::main($operateMenus) : null,
+        $task->deleted == '0' ? set::suffix($commonActions) : null,
         set::object($task)
     ),
     detailSide
