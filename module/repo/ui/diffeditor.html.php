@@ -59,7 +59,7 @@ div(
             ),
             div(set::id('tab-' . $currentEntry)),
         ),
-        $dropMenus ? $dropdown
+        $dropMenus ? dropdown
         (
             set::arrow(false),
             set::staticMenu(true),
