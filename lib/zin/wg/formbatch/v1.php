@@ -75,6 +75,14 @@ class formBatch extends formBase
         return new formBatchItem(inherit($item));
     }
 
+    public function children(): array
+    {
+        $children = array();
+        $children[] = $this->buildContent();
+        $children[] = $this->buildActions();
+        return $children;
+    }
+
     /**
      * Build batch form content.
      *
@@ -83,7 +91,7 @@ class formBatch extends formBase
      */
     protected function buildContent(): array|wg
     {
-        $items         = $this->prop('items', array());
+        $items         = array_merge($this->block('children'), $this->prop('items', array()));
         $templateItems = array();
         $headItems     = array();
         $otherItems    = array();
