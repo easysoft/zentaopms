@@ -239,7 +239,10 @@ class bug extends control
         /* 初始化一个bug对象，尽可能把属性都绑定到bug对象上，extract() 出来的变量除外。 */
         /* Init bug, give bug as many variables as possible, except for extract variables. */
         $fields = array('productID' => $productID, 'branch' => $branch, 'title' => ($from == 'sonarqube' ? $_COOKIE['sonarqubeIssue'] : ''), 'assignedTo' => (isset($product->QD) ? $product->QD : ''));
+        $fields = array_merge($fields, $params);
+
         $bug = $this->bugZen->initBug($fields);
+        $bug = $this->bugZen->getBugBranches($bug, $product);
         $bug = $this->bugZen->setOptionMenu($bug, $product);
 
         /* 处理复制 bug，从用例、测试单、日志转 bug。 */
@@ -249,7 +252,7 @@ class bug extends control
         /* 获取分支、版本、需求、项目、执行、产品、项目的模式，构造$this->view。*/
         /* Get branches, builds, stories, project, projects, executions, products, project model and build create form. */
         $this->bugZen->buildCreateForm($bug, $params, $from);
-        $this->view->loadUrl = $this->createLink('bug', 'create', "productID={product}&branch={branch}&extras=$originExtras" . (empty($from) ? '' : "&from=$from"));
+        $this->view->loadUrl = $this->createLink('bug', 'create', "productID={product}&branch={branch}&extras=moduleID={module},projectID={project},executionID={execution}" . (empty($from) ? '' : "&from=$from"));
 
         $this->display();
     }

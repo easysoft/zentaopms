@@ -299,12 +299,12 @@ class bugZen extends bug
      * 获取bug创建页面的branches和branch，并绑定到bug上。
      * Get the branches and branch for the bug create page and bind them to bug.
      *
-     * @param  object  $bug
-     * @param  object  $currentProduct
-     * @access private
+     * @param  object    $bug
+     * @param  object    $currentProduct
+     * @access protected
      * @return object
      */
-    private function getBugBranches(object $bug, object $currentProduct): object
+    protected function getBugBranches(object $bug, object $currentProduct): object
     {
         $productID = $bug->productID;
         $branch    = $bug->branch;
@@ -337,9 +337,9 @@ class bugZen extends bug
         $this->loadModel('build');
         $productID   = $bug->productID;
         $branch      = $bug->branch;
-        $projectID   = $bug->projectID;
-        $executionID = $bug->executionID;
-        $moduleID    = $bug->moduleID ? $bug->moduleID : 0;
+        $projectID   = (int)$bug->projectID;
+        $executionID = (int)$bug->executionID;
+        $moduleID    = $bug->moduleID ? (int)$bug->moduleID : 0;
 
         if($executionID)
         {
@@ -347,10 +347,15 @@ class bugZen extends bug
             $stories = $this->story->getExecutionStoryPairs($executionID);
             if(!$projectID) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         }
+        elseif($projectID)
+        {
+            $builds  = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased', $projectID, 'project');
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all', 'id_desc', 0, 'full', 'story', false);
+        }
         else
         {
-            $builds   = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
-            $stories  = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all', 'id_desc', 0, 'full', 'story', false);
+            $builds  = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all', 'id_desc', 0, 'full', 'story', false);
         }
 
         return $this->updateBug($bug, array('stories' => $stories, 'builds' => $builds, 'projectID' => $projectID));
@@ -366,7 +371,20 @@ class bugZen extends bug
      */
     private function getProductMembersForCreate(object $bug): array
     {
-        $productMembers = $this->bug->getProductMemberPairs($bug->productID, (string)$bug->branch);
+        $this->loadModel('user');
+        if($bug->executionID)
+        {
+            $productMembers = $this->user->getTeamMemberPairs((int)$bug->executionID, 'execution');
+        }
+        else if($bug->projectID)
+        {
+            $productMembers = $this->user->getTeamMemberPairs((int)$bug->projectID, 'project');
+        }
+        else
+        {
+            $productMembers = $this->bug->getProductMemberPairs($bug->productID, (string)$bug->branch);
+        }
+
         $productMembers = array_filter($productMembers);
         if(empty($productMembers)) $productMembers = $this->view->users;
 
@@ -383,34 +401,39 @@ class bugZen extends bug
      */
     private function getProductsAndProjectsForCreate(object $bug): object
     {
-        $productID   = $bug->productID;
+        $productID   = (int)$bug->productID;
         $branch      = $bug->branch;
-        $projectID   = $bug->projectID;
-        $executionID = $bug->executionID;
+        $projectID   = (int)$bug->projectID;
+        $executionID = (int)$bug->executionID;
         $projects    = array();
         $products    = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, '', 'all');
 
-        if($executionID)
-        {
-            $products       = array();
-            $linkedProducts = $this->product->getProducts($executionID);
-            foreach($linkedProducts as $product) $products[$product->id] = $product->name;
-
-            /* Set project menu. */
-            if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($executionID);
-        }
-        elseif($projectID)
-        {
-            $products    = array();
-            $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $projectID) : $this->product->getOrderedProducts('normal', 40, $projectID);
-            foreach($productList as $product) $products[$product->id] = $product->name;
-
-            /* Set project menu. */
-            if($this->app->tab == 'project') $this->project->setMenu($projectID);
-        }
-        else
+        /* Link all projects to product when copying bug under qa. */
+        if($this->app->tab == 'qa')
         {
             $projects += $this->product->getProjectPairsByProduct($productID, (string)$branch);
+        }
+        elseif($projectID && $project)
+        {
+            if($executionID)
+            {
+                $products       = array();
+                $linkedProducts = $this->product->getProducts($executionID);
+                foreach($linkedProducts as $product) $products[$product->id] = $product->name;
+
+                /* Set project menu. */
+                if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($executionID);
+            }
+            elseif($projectID)
+            {
+                $products    = array();
+                $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $projectID) : $this->product->getOrderedProducts('normal', 40, $projectID);
+                foreach($productList as $product) $products[$product->id] = $product->name;
+
+                /* Set project menu. */
+                if($this->app->tab == 'project') $this->project->setMenu($projectID);
+            }
+            $projects += array($projectID => $project->name);
         }
 
         return $this->updateBug($bug, array('products' => $products, 'projects' => $projects));
@@ -426,8 +449,8 @@ class bugZen extends bug
      */
     private function getProjectModelForCreate(object $bug): object
     {
-        $projectID    = $bug->projectID;
-        $executionID  = $bug->executionID;
+        $projectID    = (int)$bug->projectID;
+        $executionID  = (int)$bug->executionID;
         $project      = $bug->project;
         $projectModel = '';
 
@@ -454,8 +477,8 @@ class bugZen extends bug
     {
         $productID   = $bug->productID;
         $branch      = $bug->branch;
-        $projectID   = $bug->projectID;
-        $executionID = $bug->executionID;
+        $projectID   = (int)$bug->projectID;
+        $executionID = (int)$bug->executionID;
 
         $executions  = array();
         $execution   = null;
@@ -464,47 +487,23 @@ class bugZen extends bug
         $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : '0', (int)$projectID, !$projectID ? 'multiple|stagefilter' : 'stagefilter');
         if($executionID)
         {
-            $execution  = $this->loadModel('execution')->getByID($executionID);
-            $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
+            if(isset($executions[$executionID]))
+            {
+                $execution = $this->loadModel('execution')->getByID($executionID);
+            }
+            else
+            {
+                $bug->executionID = '';
+            }
         }
 
-        if($execution and !$execution->multiple)
+        if($execution && !$execution->multiple)
         {
             $this->config->bug->list->customCreateFields = str_replace('execution,', '', $this->config->bug->list->customCreateFields);
             $this->config->bug->custom->createFields     = str_replace('execution,', '', $this->config->bug->custom->createFields);
         }
 
         return $this->updateBug($bug, array('executions' => $executions, 'execution' => $execution));
-    }
-
-    /**
-     * 获取bug创建页面的projects，并绑定到bug上。
-     * Append the projects for the bug create page and bind them to bug.
-     *
-     * @param  object  $bug
-     * @access private
-     * @return object
-     */
-    private function getProjectsForCreate(object $bug): object
-    {
-        $productID = $bug->productID;
-        $branch    = $bug->branch;
-        $projects  = $bug->projects;
-
-        $projectID = $bug->projectID;
-        $project   = $bug->project;
-
-        /* Link all projects to product when copying bug under qa. */
-        if($this->app->tab == 'qa')
-        {
-            $projects += $this->product->getProjectPairsByProduct($productID, $branch);
-        }
-        elseif($projectID and $project)
-        {
-            $projects += array($projectID => $project->name);
-        }
-
-        return $this->updateBug($bug, array('projects' => $projects));
     }
 
     /**
@@ -812,13 +811,11 @@ class bugZen extends bug
      * Get moduleOptionMenu, if moduleOptionMenu is empty, return tree-browse.
      *
      * @param  object    $bug
-     * @param  object    $product
      * @access protected
      * @return object
      */
-    protected function setOptionMenu(object $bug, object $product): object
+    protected function setOptionMenu(object $bug): object
     {
-        $bug = $this->getBugBranches($bug, $product);
         $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 'all' : (string)$bug->branch);
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
 
@@ -1134,24 +1131,21 @@ class bugZen extends bug
 
         $currentProduct = $this->product->getByID($bug->productID);
 
-        /* 获得版本下拉和需求下拉列表。 */
-        /* Get builds and stroies. */
-        $bug = $this->getBuildsAndStoriesForCreate($bug);
         /* 如果bug有所属项目，查询这个项目。 */
         /* Get project. */
-        if($bug->projectID) $bug = $this->updateBug($bug, array('project' => $this->loadModel('project')->getByID($bug->projectID)));
+        if($bug->projectID) $bug = $this->updateBug($bug, array('project' => $this->loadModel('project')->getByID((int)$bug->projectID)));
         /* 获得产品下拉和项目下拉列表。 */
         /* Get products and projects. */
         $bug = $this->getProductsAndProjectsForCreate($bug);
-        /* 追加下拉列表的内容。 */
-        /* Append projects. */
-        $bug = $this->getProjectsForCreate($bug);
         /* 获得项目的管理方式。 */
         /* Get project model. */
         $bug = $this->getProjectModelForCreate($bug);
         /* 获得执行下拉列表。 */
         /* Get executions. */
         $bug = $this->getExecutionsForCreate($bug);
+        /* 获得版本下拉和需求下拉列表。 */
+        /* Get builds and stroies. */
+        $bug = $this->getBuildsAndStoriesForCreate($bug);
 
         $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->productMembers        = $this->getProductMembersForCreate($bug);
@@ -1169,7 +1163,7 @@ class bugZen extends bug
         $this->view->product               = $currentProduct;
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->projectID             = isset($projectID) ? $projectID : $bug->projectID;
-        $this->view->executionID           = isset($executionID) ? $executionID : (!empty($bug->execution->id) ? $bug->execution->id : '');
+        $this->view->executionID           = $bug->executionID;
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
     }
 
