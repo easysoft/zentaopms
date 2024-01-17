@@ -4,6 +4,11 @@ global $lang,$config;
 
 $fields = defineFieldList('product.create', 'product');
 
+$fields->field('QD')->foldable();
+$fields->field('code')->foldable();
+$fields->field('RD')->foldable();
+$fields->field('acl')->foldable();
+
 $fields->field('line')
     ->control('inputGroup')
     ->items(false)

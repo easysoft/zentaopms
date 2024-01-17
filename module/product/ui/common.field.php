@@ -22,7 +22,7 @@ $fields->field('type')
     ->items(data('fields.type.options'))
     ->value(data('fields.type.default'));
 
-$fields->field('code')->foldable()->control('input');
+$fields->field('code')->control('input');
 
 $fields->field('PO')
     ->control('picker')
@@ -36,14 +36,12 @@ $fields->field('reviewer')
     ->value(data('fields.reviewer.default'));
 
 $fields->field('QD')
-    ->foldable()
     ->wrapBefore()
     ->control('picker')
     ->items(data('fields.QD.options'))
     ->value(data('fields.QD.default'));
 
 $fields->field('RD')
-    ->foldable()
     ->control('picker')
     ->items(data('fields.RD.options'))
     ->value(data('fields.RD.default'));
@@ -53,6 +51,5 @@ $fields->field('desc')
     ->control('editor');
 
 $fields->field('acl')
-    ->foldable()
     ->width('full')
     ->control(array('type' => 'aclBox', 'aclItems' => data('fields.acl.options'), 'whitelistLabel' => $lang->product->whitelist, 'groupLabel' => $lang->product->groups, 'groupItems' => data('fields.groups.options'), 'userLabel' => $lang->product->users, 'aclValue' => data('fields.acl.default'), 'groupValue' => data('fields.groups.default'), 'userValue' => data('fields.whitelist.default')));
