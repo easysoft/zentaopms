@@ -76,12 +76,16 @@ div
                         set::name('hidden'),
                         set::type('hidden')
                     ),
-                    btn
+                    formGroup
                     (
-                        setClass('px-6'),
-                        set::type('primary'),
-                        set::btnType('submit'),
-                        $lang->install->next
+                        setClass('justify-center'),
+                        btn
+                        (
+                            setClass('px-6'),
+                            set::type('primary'),
+                            set::btnType('submit'),
+                            $lang->install->next
+                        )
                     )
                 )
             )
