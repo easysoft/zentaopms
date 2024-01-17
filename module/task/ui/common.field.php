@@ -65,17 +65,3 @@ $fields->field('mailto')
 
 $fields->field('keywords')
     ->control('input');
-
-$fields = defineFieldList('task.kanban');
-
-$fields->field('region')
-    ->control(array('type' => 'picker', 'required' => true))
-    ->label(data('lang.kanbancard.region'))
-    ->items(data('regionPairs'))
-    ->value(data('regionID'));
-
-$fields->field('lane')
-    ->control(array('type' => 'picker', 'required' => true))
-    ->label(data('lang.kanbancard.lane'))
-    ->items(data('lanePairs'))
-    ->value(data('laneID'));

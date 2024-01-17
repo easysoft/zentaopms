@@ -25,7 +25,6 @@ $fields->orders('desc,module,storyBox');
 $fields->fullModeOrders('type,module,storyBox', 'desc,file,mailto,keywords');
 if($execution->type == 'kanban')
 {
-    $fields->merge('task.kanban');
     $fields->orders('desc,module,storyBox', 'type,assignedTo,region,lane');
     $fields->fullModeOrders('name,assignedTo', 'type,module,storyBox', 'desc,file,mailto,keywords');
     if(empty($features['story'])) $fields->fullModeOrders('type,module,storyBox', 'name,assignedTo', 'desc,file,mailto,keywords');
@@ -46,6 +45,7 @@ formGridPanel
     on::change('[name=module]', 'loadExecutionStories'),
     on::change('[name=story]', 'setStoryRelated'),
     on::change('[name=type]', 'typeChange'),
+    on::change('[name=region]', 'loadLanes'),
     on::click('[name=isShowAllModule]', 'showAllModule'),
     on::click('[name=copyButton]', 'copyStoryTitle'),
     on::keyup('[name=name]', 'saveTaskName'),

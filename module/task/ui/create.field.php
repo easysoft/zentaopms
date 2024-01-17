@@ -21,6 +21,21 @@ if(!empty(data('features.story')) && data('execution.type') == 'kanban')
     $fields->field('module')->wrapBefore();
 }
 
+/* Set region and lane fieldList. */
+$fields->field('region')
+    ->hidden(data('execution.type') != 'kanban')
+    ->label(data('lang.kanbancard.region'))
+    ->control('picker', array('required' => true))
+    ->items(data('regionPairs') ? data('regionPairs') : array())
+    ->value(data('regionID'));
+
+$fields->field('lane')
+    ->hidden(data('execution.type') != 'kanban')
+    ->label(data('lang.kanbancard.lane'))
+    ->control('picker', array('required' => true))
+    ->items(data('lanePairs') ? data('lanePairs') : array())
+    ->value(data('laneID'));
+
 /* Set story field control. */
 $buildStoryBox = function($props)
 {

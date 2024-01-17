@@ -234,14 +234,12 @@ function loadLanes()
 {
     const regionID    = $('input[name=region]').val();
     const getLaneLink = $.createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lane');
-    $.get(getLaneLink, function(data)
+    $.getJSON(getLaneLink, function(data)
     {
-        if(data)
-        {
-            data = JSON.parse(data);
-            const $lanePicker = $('input[name=lane]').zui('picker');
-            $lanePicker.render({items: data.items});
-        }
+        const laneID      = data.items.length > 0 ? data.items[0].value : '';
+        const $lanePicker = $('input[name=lane]').zui('picker');
+        $lanePicker.$.setValue(laneID);
+        $lanePicker.render({items: data.items});
     });
 }
 
