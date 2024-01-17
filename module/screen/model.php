@@ -282,7 +282,26 @@ class screenModel extends model
 
         $component->chartConfig->dataset  = $component->option->dataset;
         $component->chartConfig->fields   = json_decode($chart->fields);
-        $component->chartConfig->filters  = $this->getChartFilters($chart);
+
+        // 如果传过来的component->chartConfig中有filters，判断filters是否发生了改变，改变则重置filters，其中单个filter的linkedGlobalFilter属性就不存在了
+        $latestFilters = $this->getChartFilters($chart);
+        if(!isset($component->chartConfig->filters))
+        {
+            $component->chartConfig->filters = $latestFilters;
+        }
+        else
+        {
+            $oldFilters    = $component->chartConfig->filters;
+            $filterChanged = false;
+
+            if(count($oldFilters) != count($latestFilters)) $filterChanged = true;
+            foreach($oldFilters as $index => $oldFilter)
+            {
+                if($oldFilter['field'] != $latestFilters[$index]['field']) $filterChanged = true;
+            }
+
+            if($filterChanged) $component->chartConfig->filters = $latestFilters;
+        }
 
         if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
         {
