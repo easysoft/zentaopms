@@ -109,7 +109,7 @@ class task extends control
         }
 
         /* Shows the variables needed to create the task page. */
-        $this->taskZen->assignCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output);
+        $this->taskZen->assignCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output, $cardPosition);
     }
 
     /**

@@ -11,13 +11,11 @@ $fields->field('execution')
     ->value(data('execution.id'));
 
 $fields->field('type')
-    ->checkbox(array('text' => $lang->task->selectTestStory, 'name' => 'selectTestStory'))
     ->control('picker')
     ->items($lang->task->typeList)
     ->value(data('task.type'));
 
 $fields->field('module')
-    ->foldable()
     ->checkbox(array('text' => $lang->task->allModule, 'name' => 'isShowAllModule'))
     ->control(array('type' => 'picker', 'required' => true))
     ->items(data('modulePairs'))
@@ -61,13 +59,11 @@ $fields->field('file')
     ->control('upload');
 
 $fields->field('mailto')
-    ->foldable()
     ->control('picker')
     ->multiple(true)
     ->items(data('users'));
 
 $fields->field('keywords')
-    ->foldable()
     ->control('input');
 
 $fields = defineFieldList('task.kanban');

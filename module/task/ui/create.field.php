@@ -4,11 +4,24 @@ global $lang,$config;
 
 $fields = defineFieldList('task.create', 'task');
 
+/* Set foldable attribute. */
+$fields->field('module')->foldable();
+$fields->field('file')->foldable();
+$fields->field('mailto')->foldable();
+$fields->field('keywords')->foldable();
+
+/* Set name field width. */
 $nameWidth = 'w-1/2';
-if(empty(data('features.story'))) $nameWidth .= ' full:w-full';
+if(empty(data('features.story')) && data('execution.type') != 'kanban') $nameWidth .= ' full:w-full';
 if(data('execution.type') == 'kanban') $nameWidth .= ' lite:w-full';
 $fields->field('name')->className($nameWidth);
 
+if(!empty(data('features.story')) && data('execution.type') == 'kanban')
+{
+    $fields->field('module')->wrapBefore();
+}
+
+/* Set story field control. */
 $buildStoryBox = function($props)
 {
     if(!empty(data('execution.hasProduct')))
@@ -80,6 +93,7 @@ $fields->field('storyBox')
     ->foldable(data('features.story'))
     ->control($buildStoryBox);
 
+/* Remove story relate jump link. */
 if(!isAjaxRequest('modal'))
 {
     $fields->field('after')
@@ -90,6 +104,9 @@ if(!isAjaxRequest('modal'))
         ->items(empty(data('features.story')) ? array('toTaskList' => $lang->task->afterChoices['toTaskList']) : $config->task->afterOptions);
 }
 
+if(!empty(data('features.story'))) $fields->field('type')->checkbox(array('text' => $lang->task->selectTestStory, 'name' => 'selectTestStory'));
+
+/* Set hidden control. */
 $fields->field('storyEstimate')
     ->hidden()
     ->control('input');

@@ -20,12 +20,29 @@ jsVar('window.lifetimeList', $lifetimeList);
 jsVar('window.attributeList', $attributeList);
 
 $fields = useFields('task.create');
-if($execution->type == 'kanban') $fields->merge('task.kanban');
+
+$fields->orders('desc,module,storyBox');
+$fields->fullModeOrders('type,module,storyBox', 'desc,file,mailto,keywords');
+if($execution->type == 'kanban')
+{
+    $fields->merge('task.kanban');
+    $fields->orders('desc,module,storyBox', 'type,assignedTo,region,lane');
+    $fields->fullModeOrders('name,assignedTo', 'type,module,storyBox', 'desc,file,mailto,keywords');
+    if(empty($features['story'])) $fields->fullModeOrders('type,module,storyBox', 'name,assignedTo', 'desc,file,mailto,keywords');
+}
+
+if(empty($features['story']) && $execution->type != 'kanban')
+{
+    $fields->fullModeOrders('type,module,storyBox,assignedTo', 'desc,file,mailto,keywords');
+}
+
+$fields->autoLoad('execution', 'execution,type,name,assignedTo,region,lane,module,storyBox,datePlan,pri,estimate,desc,file,mailto,keywords,after');
 
 formGridPanel
 (
     set::title($lang->task->create),
     set::fields($fields),
+    set::loadUrl($loadUrl),
     on::change('[name=module]', 'loadExecutionStories'),
     on::change('[name=story]', 'setStoryRelated'),
     on::change('[name=type]', 'typeChange'),

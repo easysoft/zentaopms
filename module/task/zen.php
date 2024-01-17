@@ -32,10 +32,11 @@ class taskZen extends task
      * @param  int       $todoID
      * @param  int       $bugID
      * @param  array     $output
+     * @param  string    $cardPosition
      * @access protected
      * @return void
      */
-    protected function assignCreateVars(object $execution, int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output): void
+    protected function assignCreateVars(object $execution, int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output, string $cardPosition)
     {
         /* Get information about the task. */
         $this->view->task = $this->setTaskByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID);
@@ -63,6 +64,7 @@ class taskZen extends task
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
         $this->view->from          = $storyID || $todoID || $bugID  ? 'other' : 'task';
         $this->view->taskID        = $taskID;
+        $this->view->loadUrl       = $this->createLink('task', 'create', "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
 
         $this->display();
     }
