@@ -51,6 +51,7 @@ formGridPanel
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
     on::change('[name=parent], [name=budget]', "checkBudget({$project->id})"),
     on::change('#parent', 'setParentProgram'),
+    set::fullModeOrders(array('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin')),
     set::title($lang->project->edit),
     set::fields($fields)
 );
