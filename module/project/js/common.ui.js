@@ -165,12 +165,13 @@ window.toggleBudget = function(e)
     const future = e.target;
     if($(future).prop('checked'))
     {
-        $('#budget').val('').addClass('disabled pointer-events-none');
+        $('[name=budget]').val('').addClass('disabled pointer-events-none');
         $('#budgetUnit-toggle').addClass('disabled pointer-events-none');
     }
     else
     {
-        $('#budget').removeClass('disabled').removeClass('pointer-events-none');
+        $('[name=budget]').removeAttr('disabled');
+        $('[name=budget]').removeClass('disabled').removeClass('pointer-events-none');
         $('#budgetUnit-toggle').removeClass('disabled').removeClass('pointer-events-none');
     }
 }
