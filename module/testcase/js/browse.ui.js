@@ -92,13 +92,18 @@ window.setStatistics = function(element, checks)
 {
     if(checks.length)
     {
+        caseCount    = 0;
         runCaseCount = 0;
         checks.forEach((id) => {
             const scene = element.getRowInfo(id).data;
-            if(scene.isCase == 1 && scene.lastRunResult != '') runCaseCount++;
+            if(scene.isScene == false)
+            {
+                caseCount ++;
+                if(scene.lastRunResult != '') runCaseCount ++;
+            }
         });
         return zui.formatString(checkedSummary, {
-            checked: checks.length,
+            checked: caseCount,
             run: runCaseCount
         });
     }
