@@ -17,6 +17,7 @@ jsVar('currencySymbol',      $lang->project->currencySymbol);
 jsVar('budgetOverrun',       $lang->project->budgetOverrun);
 jsVar('parentBeginDate',     $parentProgram ? $parentProgram->begin : '');
 jsVar('parentEndDate',       $parentProgram ? $parentProgram->end : '');
+jsVar('parentBudgetData',    $parentProgram ? $parentProgram->budget : '');
 
 $fields = useFields('program.edit');
 

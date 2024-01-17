@@ -292,23 +292,21 @@ window.budgetOverrunTips = function(e)
 
     var selectedProgramID = $('[name=parent]').zui('picker').$.state.value;
     var budget            = $('#budget').val();
+
     if(selectedProgramID == 0)
     {
-        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').closest('.form-row').remove();
+        $('#budgetTip').addClass('hidden');
         return false;
     }
 
-    if(typeof(programID) == 'undefined') programID = 0;
-    $.get($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
+    if(budget > parentBudgetData)
     {
-        var data = JSON.parse(data);
+        let ignoreBtn = "<span id='ignore' onclick='ignoreTip(this)'>" + ignore + "</span>";
 
-        var tip = "";
-        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<div class='form-row'><div class='form-group'><div class='input-group'><p id='beyondBudgetTip' class='text-remind'><span>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</span><span id='ignore' onclick='ignoreTip(this)'>" + ignore + "</span></p></div></div></div>";
+        if(!$('#budgetTip').find('#ignore').length) $('#budgetTip').append(ignoreBtn);
 
-        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').closest('.form-row').remove();
-        $('[name=budget]').parent().after(tip);
-    });
+        $('#budgetTip').removeClass('hidden');
+    }
 }
 
 /**
