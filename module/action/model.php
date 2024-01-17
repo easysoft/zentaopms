@@ -649,10 +649,10 @@ class actionModel extends model
                     $action->extra = sprintf($this->lang->execution->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
                 }
             }
-            elseif($objectType == 'story' && $actionName == 'retracted')
+            elseif($objectType == 'demand' && $actionName == 'retracted')
             {
-                $story = $this->loadModel('story')->getById($objectID);
-                $action->extra = "#{$story->id} {$this->lang->story->title} {$story->title}";
+                $story = $this->loadModel('story')->getById($action->extra);
+                $action->extra = "#{$action->extra} {$this->lang->story->title} " . html::a(helper::createLink('story', 'view', "storyID=$story->id"), "$story->title");
             }
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
 
