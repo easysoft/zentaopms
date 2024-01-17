@@ -44,6 +44,7 @@ featureBar
         (
             set::id('weekend'),
             set::href(createLink('execution', 'burn', "executionID={$execution->id}&type={$weekendParam}&interval={$interval}")),
+            setData('app', $app->tab),
             $lang->execution->{$weekend}
         )
     ),
@@ -54,6 +55,7 @@ featureBar
         (
             set::id('delay'),
             set::href(createLink('execution', 'burn', "executionID={$execution->id}&type={$delayParam}")),
+            setData('app', $app->tab),
             $lang->execution->{$delay}
         )
     ),
