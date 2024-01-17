@@ -1594,18 +1594,18 @@ class pivotModel extends model
             switch($stat)
             {
                 case 'sum':
-                    $sliceGroupRecord->$fieldKey[$stat] += $floatValue;
+                    $sliceGroupRecord->{$fieldKey}[$stat] += $floatValue;
                     break;
                 case 'avg':
                 case 'max':
                 case 'min':
-                    $sliceGroupRecord->$fieldKey[$stat][] = $floatValue;
+                    $sliceGroupRecord->{$fieldKey}[$stat][] = $floatValue;
                     break;
                 case 'count':
-                    $sliceGroupRecord->$fieldKey[$stat] += 1;
+                    $sliceGroupRecord->{$fieldKey}[$stat] += 1;
                     break;
                 case 'distinct':
-                    $sliceGroupRecord->$fieldKey[$stat][] = $value;
+                    $sliceGroupRecord->{$fieldKey}[$stat][] = $value;
                     break;
             }
         }
@@ -1619,7 +1619,7 @@ class pivotModel extends model
                 /* Skip the group field directly. */
                 if(in_array($sliceField, $groups)) continue;
 
-                $sliceStat = $sliceRecord->$sliceField[$stat];
+                $sliceStat = $sliceRecord->{$sliceField}[$stat];
                 switch($stat)
                 {
                     case 'sum':
