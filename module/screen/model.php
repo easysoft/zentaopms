@@ -1857,7 +1857,8 @@ class screenModel extends model
         $tableOption->data    = $this->filterMetricData($groupData, $dateType, $isObjectMetric, $filters);
 
         if($metric->scope != 'system') $tableOption->objectPairs = $this->loadModel('metric')->getPairsByScope($metric->scope);
-        $tableOption->scope   = $metric->scope;
+        $tableOption->scope       = $metric->scope;
+        $tableOption->createdDate = $metric->createdDate;
 
         return $tableOption;
     }
