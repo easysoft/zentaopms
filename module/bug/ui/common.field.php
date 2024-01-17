@@ -12,10 +12,9 @@ $fields->field('product')
     ->item((data('product.type') !== 'normal' && isset(data('products')[data('bug.productID')])) ? field('branch')->control('picker')->boxClass('flex-none')->width('100px')->name('branch')->items(data('branches'))->value(data('bug.branch')) : null);
 
 $fields->field('module')
-    ->control('modulePicker')
+    ->control(array('control' => 'modulePicker', 'manageLink' => createLink('tree', 'browse', 'rootID=' . data('bug.productID') . '&view=bug&currentModuleID=0&branch=' . data('bug.branch'))))
     ->items(data('moduleOptionMenu'))
-    ->value(data('bug.moduleID'))
-    ->manageLink(createLink('tree', 'browse', 'rootID=' . data('bug.productID') . '&view=bug&currentModuleID=0&branch=' . data('bug.branch')));
+    ->value(data('bug.moduleID'));
 
 $fields->field('openedBuild')
     ->checkbox(array('text' => $lang->bug->allBugs, 'name' => 'allBuilds'))
