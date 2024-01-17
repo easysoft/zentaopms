@@ -44,8 +44,8 @@ $buildStoryBox = function($props)
         $executionID      = data('execution.id');
         $storyEmptyPreTip = span
             (
-                setClass('input-control-prefix'),
-                span(data('lang.task.noticeLinkStory')),
+                setClass('input-control-prefix opacity-100'),
+                span(setClass('opacity-50'), data('lang.task.noticeLinkStory')),
                 a
                 (
                     set::href(createLink('execution', 'linkStory', "executionID={$executionID}")),
