@@ -33,6 +33,7 @@ formGridPanel
 (
     set::title($lang->bug->create),
     set::fields($fields),
+    set::fullModeOrders('module,project,execution'),
     set::loadUrl($loadUrl),
     on::click('#allBuilds',             'loadAllBuilds'),
     on::click('#allUsers',              'loadAllUsers'),

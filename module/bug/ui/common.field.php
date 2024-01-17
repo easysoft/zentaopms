@@ -5,11 +5,21 @@ global $lang;
 $fields = defineFieldList('bug');
 
 $fields->field('product')
-    ->hidden(data('product.shadow'))
     ->control('inputGroup')
     ->items(false)
     ->itemBegin('product')->control('picker')->items(data('products'))->value(data('bug.productID'))->itemEnd()
     ->item((data('product.type') !== 'normal' && isset(data('products')[data('bug.productID')])) ? field('branch')->control('picker')->boxClass('flex-none')->width('100px')->name('branch')->items(data('branches'))->value(data('bug.branch')) : null);
+
+$fields->field('project')
+    ->control('picker')
+    ->items(data('projects'))
+    ->value(data('projectID'));
+
+$fields->field('execution')
+    ->id('executionBox')
+    ->control('picker')
+    ->items(data('executions'))
+    ->value(data('executionID'));
 
 $fields->field('module')
     ->control(array('control' => 'modulePicker', 'manageLink' => createLink('tree', 'browse', 'rootID=' . data('bug.productID') . '&view=bug&currentModuleID=0&branch=' . data('bug.branch'))))
@@ -72,61 +82,38 @@ $fields->field('files')
     ->width('full')
     ->control('files');
 
-$fields->field('project')
-    ->foldable()
-    ->control('picker')
-    ->items(data('projects'))
-    ->value(data('projectID'));
-
-$fields->field('execution')
-    ->hidden(data('execution') && !data('execution.multiple'))
-    ->id('executionBox')
-    ->foldable()
-    ->label(data('bug.projectModel') === 'kanban' ? $lang->bug->kanban : $lang->bug->execution)
-    ->control('picker')
-    ->items(data('executions'))
-    ->value(data('executionID'));
-
 $fields->field('story')
     ->wrapBefore()
-    ->foldable()
     ->control('picker')
     ->items(empty(data('bug.stories')) ? array() : data('bug.stories'))
     ->value(data('bug.storyID'));
 
 $fields->field('task')
-    ->foldable()
     ->control('picker')
     ->items(array())
     ->value(data('bug.taskID'));
 
 $fields->field('feedbackBy')
-    ->foldable()
     ->control('input');
 
 $fields->field('notifyEmail')
-    ->foldable()
     ->control('input');
 
 $fields->field('browser')
-    ->foldable()
     ->control('picker')
     ->items($lang->bug->browserList)
     ->multiple();
 
 $fields->field('os')
-    ->foldable()
     ->control('picker')
     ->items($lang->bug->osList)
     ->multiple();
 
 $fields->field('mailto')
-    ->foldable()
     ->control('mailto')
     ->value(data('bug.mailto'));
 
 $fields->field('keywords')
-   ->foldable()
    ->control('input');
 
 $fields->field('case')->control('hidden')->value(data('bug.caseID'));
