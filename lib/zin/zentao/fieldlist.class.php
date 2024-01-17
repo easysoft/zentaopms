@@ -203,7 +203,7 @@ class fieldList
 
     public function moveAfter(string|array $moveNames, string $afterName): fieldList
     {
-        $names = array($afterName) + (is_string($moveNames) ? explode(',', $moveNames) : $moveNames);
+        $names = array_merge(array($afterName), (is_string($moveNames) ? explode(',', $moveNames) : $moveNames));
         $this->fields = static::sortFields($this->fields, $names);
 
         return $this;
@@ -380,8 +380,11 @@ class fieldList
 
     public static function sortFields(array &$fields, string|array $names): array
     {
+        \a(['sortFields', $names]);
         if(is_string($names)) $names = explode(',', $names);
         if(empty($names) || count($names) < 2) return $fields;
+
+        \a(['sortFields', $names]);
 
         $keys         = array_keys($fields);
         $firstName    = array_shift($names);
