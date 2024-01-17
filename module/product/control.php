@@ -354,6 +354,8 @@ class product extends control
 
         $productName = ($isProjectStory and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 
+        if($this->config->edition == 'ipd') $this->story->getAffectObject($stories, 'story');
+
         /* Assign. */
         $this->view->title           = $productName . $this->lang->colon . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
         $this->view->position[]      = $productName;
