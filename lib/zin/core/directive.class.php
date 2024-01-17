@@ -49,6 +49,47 @@ class directive
         );
     }
 
+    public function applyToWg(wg &$wg, string $blockName): void
+    {
+        $this->parent = $wg;
+
+        $data = $this->data;
+        $type = $this->type;
+
+        if($type === 'prop')
+        {
+            $wg->setProp($data);
+            return;
+        }
+        if($type === 'class' || $type === 'style')
+        {
+            $wg->setProp($type, $data);
+            return;
+        }
+        if($type === 'cssVar')
+        {
+            $wg->setProp('--', $data);
+            return;
+        }
+        if($type === 'html')
+        {
+            $wg->addToBlock($blockName, $this);
+            return;
+        }
+        if($type === 'text')
+        {
+            $wg->addToBlock($blockName, htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false));
+            return;
+        }
+        if($type === 'block')
+        {
+            foreach($data as $blockName => $blockChildren)
+            {
+                $wg->add($blockChildren, $blockName);
+            }
+        }
+    }
+
     public static function is(mixed $item, ?string $type = null): bool
     {
         return $item instanceof directive && ($type === null || $item->type === $type);

@@ -459,44 +459,9 @@ class wg
     /**
      * Apply directive
      */
-    public function directive(directive &$directive, array|string $blockName)
+    public function directive(directive &$directive, string $blockName)
     {
-        $data = $directive->data;
-        $type = $directive->type;
-        $directive->parent = &$this;
-
-        if($type === 'prop')
-        {
-            $this->setProp($data);
-            return;
-        }
-        if($type === 'class' || $type === 'style')
-        {
-            $this->setProp($type, $data);
-            return;
-        }
-        if($type === 'cssVar')
-        {
-            $this->setProp('--', $data);
-            return;
-        }
-        if($type === 'html')
-        {
-            $this->addToBlock($blockName, $directive);
-            return;
-        }
-        if($type === 'text')
-        {
-            $this->addToBlock($blockName, htmlspecialchars($data));
-            return;
-        }
-        if($type === 'block')
-        {
-            foreach($data as $blockName => $blockChildren)
-            {
-                $this->add($blockChildren, $blockName);
-            }
-        }
+        $directive->applyToWg($this, $blockName);
     }
 
     public function prop(array|string $name, mixed $defaultValue = null): mixed
