@@ -17,7 +17,7 @@ $fields->field('PM')
 
 $fields->field('begin')
     ->tip(' ')
-    ->tipProps(array('id' => 'beginTip'))
+    ->tipProps(array('id' => 'dateTip'))
     ->tipClass('text-warning hidden');
 
 $budgetItemList = array();
