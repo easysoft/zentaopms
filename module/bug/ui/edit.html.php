@@ -543,7 +543,8 @@ detailBody
                     (
                         set::multiple(true),
                         set::name('relatedBug[]'),
-                        set::items(isset($bug->relatedBugTitles) ? $bug->relatedBugTitles : array())
+                        set::items(isset($bug->relatedBugTitles) ? $bug->relatedBugTitles : array()),
+                        set::value($bug->relatedBug)
                     ),
                     common::hasPriv('bug', 'linkBugs') ? inputGroupAddon
                     (
