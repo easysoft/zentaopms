@@ -15,7 +15,10 @@ $fields->field('name')
 $fields->field('PM')
     ->items(data('pmUsers'));
 
-$fields->field('begin');
+$fields->field('begin')
+    ->tip(' ')
+    ->tipProps(array('id' => 'beginTip'))
+    ->tipClass('text-warning hidden');
 
 $budgetItemList = array();
 $budgetUnitList = data('budgetUnitList') ? data('budgetUnitList') : array();
