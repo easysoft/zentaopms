@@ -20,20 +20,20 @@ class gitlabWebhookEntry extends baseEntry
      */
     public function post()
     {
+        $headers = getallheaders(); /* Fetch all HTTP request headers. */
+        $event   = isset($headers['X-Gitlab-Event']) ? $headers['X-Gitlab-Event'] : '';
+        if(empty($event)) return;
+
         $repoID = $this->param('repoID');
         if(empty($repoID)) return;
 
-        $this->loadModel('repo');
-
-        $repo = $this->repo->getByID($repoID);
+        $repo = $this->loadModel('repo')->getByID($repoID);
         if(empty($repo)) return;
 
-        $headers = getallheaders(); /* Fetch all HTTP request headers. */
-        $event   = isset($headers['X-Gitlab-Event']) ? $headers['X-Gitlab-Event'] : '';
-        $token   = isset($headers['X-Gitlab-Token']) ? $headers['X-Gitlab-Token'] : '';
-        if(empty($event) || empty($token)) return;
-
-        $this->repo->handleWebhook($event, $token, $this->requestBody, $repo);
+        $this->app->user = new stdclass();
+        $this->app->user->account = '';
+        $this->app->user->admin   = false;
+        $this->repo->handleWebhook($event, $this->requestBody, $repo);
     }
 
 }

@@ -2217,13 +2217,12 @@ class repoModel extends model
      * Handle received GitLab webhook.
      *
      * @param  string $event
-     * @param  string $token
      * @param  string $data
      * @param  object $repo
      * @access public
      * @return void
      */
-    public function handleWebhook($event, $token, $data, $repo)
+    public function handleWebhook($event, $data, $repo)
     {
         if($event == 'Push Hook' or $event == 'Merge Request Hook')
         {
