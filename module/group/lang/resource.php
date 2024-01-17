@@ -442,7 +442,6 @@ $lang->resource->product->dynamic         = 'dynamic';
 $lang->resource->product->project         = 'project';
 $lang->resource->product->dashboard       = 'dashboard';
 $lang->resource->product->close           = 'closeAction';
-$lang->resource->product->sort            = 'orderAction';
 $lang->resource->product->activate        = 'activateAction';
 $lang->resource->product->updateOrder     = 'orderAction';
 $lang->resource->product->all             = 'list';
