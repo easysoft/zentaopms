@@ -62,10 +62,14 @@ class tree extends control
             $this->view->syncConfig = isset($syncConfig[$viewType]) ? $syncConfig[$viewType] : array();
         }
 
+        /* 获取产品的分支。 Get branches of product. */
+        $branches = ($root->rootType == 'product' && $root->type != 'normal') ? $this->loadModel('branch')->getPairs($root->id, 'withClosed') : array();
+
         $this->view->title           = $viewType == 'host' ? $this->lang->host->groupMaintenance : $this->lang->tree->manage;
         $this->view->rootID          = $root->id;
         $this->view->root            = $root;
-        $this->view->productID       = $root->rootType == 'product' ? $root->id: 0;
+        $this->view->productID       = $root->rootType == 'product' ? $root->id : 0;
+        $this->view->branches        = $branches;
         $this->view->libID           = $root->rootType == 'caselib' || $root->rootType == 'lib' ? $root->id : 0;
         $this->view->viewType        = $viewType;
         $this->view->placeholder     = $viewType == 'host' ? $this->lang->tree->groupName : $this->lang->tree->name;

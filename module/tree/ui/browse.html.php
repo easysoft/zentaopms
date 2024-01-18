@@ -48,6 +48,14 @@ foreach($sons as $son)
                     set::value($son->name),
                     set::placeholder($placeholder)
                 ),
+                picker
+                (
+                    setClass(empty($branches) ? 'hidden' : ''),
+                    set::name("branch[id$son->id]"),
+                    set::items($branches),
+                    set::value($son->branch),
+                    set::disabled(true),
+                ),
                 input
                 (
                     setClass('col-short'),
@@ -89,6 +97,13 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                     set::value(''),
                     set::placeholder($placeholder)
                 ),
+                picker
+                (
+                    setClass(empty($branches) ? 'hidden' : ''),
+                    set::name("branch[$i]"),
+                    set::items($branches),
+                    set::value(0),
+                ),
                 input
                 (
                     setClass('col-short'),
@@ -96,13 +111,6 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                     set::type('input'),
                     set::value(''),
                     set::placeholder($lang->tree->short)
-                ),
-                input
-                (
-                    setClass('hidden'),
-                    set::name("branch[$i]"),
-                    set::value(0),
-                    set::control('hidden')
                 )
             ),
             batchActions
