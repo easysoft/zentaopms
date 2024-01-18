@@ -32,28 +32,30 @@ class day_of_annual_closed_project extends baseCalc
             ->from(TABLE_TASK)
             ->where('deleted')->eq('0')
             ->andWhere('parent')->ne('-1')
-            ->andWhere("NOT FIND_IN_SET('or', vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', vision)")
+            ->andWhere("vision NOT LIKE '%or%'")
+            ->andWhere("vision NOT LIKE '%lite%'")
             ->groupBy('project')
             ->get();
 
-        return $this->dao->select('t1.id as project, LEFT(t1.closedDate, 4) as year, t2.consumed')
+        return $this->dao->select('t1.id as project, t1.closedDate, t2.consumed')
             ->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin("($task)")->alias('t2')->on('t1.id = t2.project')
             ->where('t1.type')->eq('project')
             ->andWhere('t1.status')->eq('closed')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.closedDate')->notZeroDatetime()
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
     public function calculate($data)
     {
         $project  = $data->project;
-        $year     = $data->year;
+        $year     = substr($data->closedDate, 0, 4);
         $consumed = $data->consumed;
+
+        if(empty($year) || $year == '0000') return false;
 
         if(!is_numeric($consumed) || empty($consumed)) return false;
 

@@ -24,7 +24,7 @@ class count_of_marker_release extends baseCalc
 
     public $fieldList = array('t1.marker');
 
-    public $result = 0;
+    public $result;
 
     public function calculate($data)
     {
@@ -33,7 +33,7 @@ class count_of_marker_release extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = array(array('value' => $this->result));
         return $this->filterByOptions($records, $options);
     }
 }

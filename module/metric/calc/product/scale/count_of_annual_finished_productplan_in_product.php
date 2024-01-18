@@ -24,17 +24,20 @@ class count_of_annual_finished_productplan_in_product extends baseCalc
 
     public function getStatement()
     {
-        return $this->dao->select('t1.id,t1.product,year(t1.finishedDate) as year')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        return $this->dao->select('t1.id,t1.product,t1.finishedDate')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
+            ->andWhere("t2.vision NOT LIKE '%or%'")
+            ->andWhere("t2.vision NOT LIKE '%lite%'")
             ->query();
     }
 
     public function calculate($row)
     {
+        if(empty($row->finishedDate)) return false;
+        $row->year = substr($row->finishedDate, 0, 4);
         if(!empty($row->year))
         {
             if(!isset($this->result[$row->year])) $this->result[$row->year] = array();

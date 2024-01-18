@@ -31,7 +31,8 @@ class count_of_invalid_story extends baseCalc
             ->andWhere('t1.type')->eq('story')
             ->andWhere('t2.shadow')->eq(0)
             ->andWhere('t1.closedReason')->in('duplicate,willnotdo,bydesign')
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 

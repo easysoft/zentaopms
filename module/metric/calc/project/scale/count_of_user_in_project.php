@@ -31,8 +31,8 @@ class count_of_user_in_project extends baseCalc
             ->where('t1.type')->eq('execution')
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t3.vision)")
+            ->andWhere("t3.vision NOT LIKE '%or%'")
+            ->andWhere("t3.vision NOT LIKE '%lite%'")
             ->groupBy('t3.id')
             ->query();
     }

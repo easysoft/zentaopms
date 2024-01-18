@@ -32,7 +32,8 @@ class count_of_reviewing_story_in_user extends baseCalc
             ->andWhere('t2.type')->eq('story')
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t2.status')->eq('reviewing')
-            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
+            ->andWhere("t2.vision NOT LIKE '%or%'")
+            ->andWhere("t2.vision NOT LIKE '%lite%'")
             ->query();
     }
 
