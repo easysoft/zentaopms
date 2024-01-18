@@ -315,6 +315,7 @@ class product extends control
             $storyIdList[$story->id] = $story->id;
             if(!empty($story->children))
             {
+                if($this->config->edition == 'ipd') $this->story->getAffectObject($story->children, 'story');
                 foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
             }
         }
