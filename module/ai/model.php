@@ -558,7 +558,7 @@ class aiModel extends model
             $data->appID       = $appID;
             $data->user        = $user;
             $data->type        = 'ntf';
-            $data->content     = sprintf($this->lang->ai->miniPrograms->squareCategories, date("Y/n/j G:i"));
+            $data->content     = sprintf($this->lang->ai->miniPrograms->newVersionTip, date("Y/n/j G:i"));
             $data->createdDate = helper::now();
 
             $this->dao->insert(TABLE_AIMESSAGE)

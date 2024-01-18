@@ -439,7 +439,6 @@ $lang->ai->miniPrograms->icon              = '图标';
 $lang->ai->miniPrograms->desc              = '简介';
 $lang->ai->miniPrograms->categoryList      = array('writing' => '写作', 'statistics' => '统计', 'creative' => '创意', 'raiders' => '攻略', 'schedule' => '日程');
 $lang->ai->miniPrograms->allCategories     = array('' => '所有分组');
-$lang->ai->miniPrograms->squareCategories  = array('collection' => '我的收藏', 'discovery' => '发现', 'latest' => '最新');
 $lang->ai->miniPrograms->collect           = '收藏';
 $lang->ai->miniPrograms->more              = '更多';
 $lang->ai->miniPrograms->modelList         = array('openai-gpt35' => 'OpenAI / GPT-3.5');

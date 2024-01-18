@@ -135,6 +135,7 @@ function sendMessagesToAI(message)
             {
                 const {content, time} = message;
                 const $message = createMessage('ai', content, time);
+                $messageList.find('.tmp-message').remove();
                 $messageList.append($message);
                 $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
 
@@ -160,6 +161,7 @@ function sendMessagesToAI(message)
 
     const $message = createMessage('user', message);
     $messageList.append($message);
+    $messageList.append(createTmpMessage());
     $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
 }
 
@@ -349,6 +351,26 @@ function createMessageBody(role, content, time)
     return $(`<div class="message-body"></div>`)
         .append($time)
         .append($content);
+}
+
+function createTmpMessage()
+{
+    const $avatar = createAvatar('ai');
+    const $body = $(`<div class="message-body flex-1">
+        <div class="animate-pulse">
+            <div class="h-3 w-24 loading-bar mb-1.5 rounded"></div>
+        </div>
+        <div class="message-content ai-message-content w-full">
+            <div class="animate-pulse w-full">
+                <div class="h-3 w-full loading-bar mb-2 rounded"></div>
+                <div class="h-3 w-full loading-bar mb-2 rounded"></div>
+                <div class="h-3 w-1/2 loading-bar rounded"></div>
+            </div>
+        </div>
+    </div>`);
+    return $(`<div class="message ai-message tmp-message"></div>`)
+        .append($avatar)
+        .append($body);
 }
 
 /**
