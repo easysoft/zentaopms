@@ -83,12 +83,12 @@ $fields->field('files')
 $fields->field('story')
     ->wrapBefore()
     ->control('picker')
-    ->items(empty(data('bug.stories')) ? array() : data('bug.stories'))
+    ->items(!empty(data('bug.stories')) ? data('bug.stories') : array())
     ->value(data('bug.storyID'));
 
 $fields->field('task')
     ->control('picker')
-    ->items(array())
+    ->items(!empty(data('bug.tasks')) ? data('bug.tasks') : array())
     ->value(data('bug.taskID'));
 
 $fields->field('feedbackBy')

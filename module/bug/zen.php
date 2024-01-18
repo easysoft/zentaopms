@@ -340,6 +340,7 @@ class bugZen extends bug
         $projectID   = (int)$bug->projectID;
         $executionID = (int)$bug->executionID;
         $moduleID    = $bug->moduleID ? (int)$bug->moduleID : 0;
+        $tasks       = array();
 
         if(!empty($bug->allBuilds))
         {
@@ -350,6 +351,7 @@ class bugZen extends bug
         {
             $builds  = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased', $executionID, 'execution');
             $stories = $this->story->getExecutionStoryPairs($executionID);
+            $tasks   = $this->task->getExecutionTaskPairs($executionID);
             if(!$projectID) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         }
         elseif($projectID)
@@ -363,7 +365,7 @@ class bugZen extends bug
             $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all', 'id_desc', 0, 'full', 'story', false);
         }
 
-        return $this->updateBug($bug, array('stories' => $stories, 'builds' => $builds, 'projectID' => $projectID));
+        return $this->updateBug($bug, array('stories' => $stories, 'builds' => $builds, 'tasks' => $tasks, 'projectID' => $projectID));
     }
 
     /**
@@ -1159,6 +1161,7 @@ class bugZen extends bug
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
         $this->view->products              = $bug->products;
+        $this->view->productID             = $bug->productID;
         $this->view->product               = $currentProduct;
         $this->view->projects              = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProjectPairs() : $bug->projects;
         $this->view->projectID             = $bug->projectID;
