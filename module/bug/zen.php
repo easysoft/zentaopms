@@ -725,7 +725,7 @@ class bugZen extends bug
 
         $legendExecStoryTask = array();
         $legendExecStoryTask['project']   = array('name' => $this->lang->bug->project, 'text' => zget($bug, 'projectName', ''), 'href' => $projectLink);
-        $legendExecStoryTask['execution'] = array('name' => $executionTitle,           'text' => $bug->executionName,           'href' => $executionLink);
+        if(empty($project) || !empty($project->multiple)) $legendExecStoryTask['execution'] = array('name' => $executionTitle,           'text' => $bug->executionName,           'href' => $executionLink);
         $legendExecStoryTask['story']     = array('name' => $this->lang->bug->story,   'text' => $bug->storyTitle,              'href' => $storyLink, 'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
         $legendExecStoryTask['task']      = array('name' => $this->lang->bug->task,    'text' => $bug->taskName,                'href' => $taskLink,  'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
 
