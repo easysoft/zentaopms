@@ -96,6 +96,7 @@ dtable
     set::sortLink(createLink('project', 'bug', "projectID={$project->id}&productID={$productID}&branchID={$branchID}&orderBy={name}_{sortType}&build={$buildID}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::emptyTip($lang->bug->notice->noBug),
     set::createTip($lang->bug->create),
     set::createLink($canCreate ? createLink('bug', 'create', "productID={$productID}&branch={$branchID}&extras=projectID={$project->id}") : '')
