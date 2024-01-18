@@ -129,7 +129,7 @@ class moduleMenu extends wg
 
         return div
         (
-            setClass('col gap-2 py-3 px-7'),
+            setClass('col gap-2 py-3 px-4'),
             $settingLink ? btn
             (
                 set::type('primary-pale'),
