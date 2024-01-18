@@ -1136,7 +1136,11 @@ class execution extends control
             if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
 
             /* If link from no head then reload. */
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            if(isInModal())
+            {
+                $kanbanLoad = array('selector' => '#header>*');
+                return $this->sendSuccess(array('closeModal' => true, 'callback' => $execution->type == 'kanban' ? 'loadCurrentPage(' . json_encode($kanbanLoad) . ');' : 'loadCurrentPage()'));
+            }
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "executionID=$executionID")));
         }
