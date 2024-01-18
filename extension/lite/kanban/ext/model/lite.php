@@ -16,7 +16,7 @@ public function __construct($appName = '')
  * @access public
  * @return array
  */
-public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '', $orderBy = 'pri_asc')
+public function getKanban4Group(int $executionID, string $browseType, string $groupBy, string $searchValue = '', string $orderBy = 'pri_asc'): array
 {
     /* Get card  data. */
     $cardList = array();
@@ -182,7 +182,7 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
  * @access public
  * @return array
  */
-public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc', $searchValue = '')
+public function getCardGroupByExecution(int $executionID, string $browseType = 'all', string $orderBy = 'id_asc', string $searchValue = ''): array
 {
     $cards = $this->dao->select('t1.*, t2.type as columnType')
         ->from(TABLE_KANBANCELL)->alias('t1')
