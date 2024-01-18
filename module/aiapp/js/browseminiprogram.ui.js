@@ -333,7 +333,8 @@ function createMessageTime(time)
  */
 function createMessageContent(role, content)
 {
-    return $(`<div class="message-content ${role}-message-content">${content}</div>`);
+    content = content.replace(/\n{2,}/g, '\n');
+    return $(`<pre class="message-content ${role}-message-content">${content}</pre>`);
 }
 
 /**

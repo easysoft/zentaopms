@@ -79,6 +79,7 @@
     gap: 16px;
     padding: 20px 20px 0 20px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .message {
@@ -110,6 +111,10 @@
     color: #313C52;
     padding: 10px;
     word-break: break-all;
+}
+
+pre.message-content {
+    white-space: pre-wrap;
 }
 
 .ai-message-content {
