@@ -547,6 +547,7 @@ class baseValidater
     {
         global $config;
         if(empty($_FILES)) return $_FILES;
+        if(isset($_FILES['scriptFile'])) unset($_FILES['scriptFile']);
 
         foreach($_FILES as $varName => $files)
         {

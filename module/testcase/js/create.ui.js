@@ -63,10 +63,6 @@ function hideUploadScriptBtn()
 
 function readScriptContent()
 {
-    $uploadBtnLabel = $('#scriptFile').next();
-
-    $uploadBtnLabel.toggle($('#scriptFile').parents('td').find('.file-list').length < 1);
-
     var reader = new FileReader();
     reader.readAsText($('#scriptFile')[0].files[0], 'UTF-8');
     reader.onload = function(evt){$('[name=script]').val(evt.target.result);}
