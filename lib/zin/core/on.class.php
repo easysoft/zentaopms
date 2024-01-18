@@ -202,7 +202,7 @@ function on(string $event, string|null $selectorOrHandler = null, null|array|str
     if(!is_null($handler))
     {
         $on->compatible = true;
-        $on->appendJS($handler);
+        $on->appendCode($handler);
     }
 
     return $on;

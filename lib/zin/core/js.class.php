@@ -15,6 +15,7 @@ namespace zin;
 require_once __DIR__ . DS . 'wg.func.php';
 
 use zin\jsContext;
+use zin\jQuery;
 
 /**
  * Class for generating js code.
@@ -26,7 +27,7 @@ class js extends directive
     public function __construct(string|array|js|null ...$codes)
     {
         parent::__construct('js');
-        $this->appendJS(...$codes);
+        $this->appendLines(...$codes);
     }
 
     public function __call($name, $arguments)
@@ -53,7 +54,7 @@ class js extends directive
 
     public function do(string|array|js|null ...$codes): self
     {
-        return $this->appendJS(...$codes);
+        return $this->appendLines(...$codes);
     }
 
     public function let(string $name, mixed $value): self
@@ -75,7 +76,7 @@ class js extends directive
     public function with(string $name, string|array|js|null ...$codes): self
     {
         $this->appendLine('with(', $name, '){');
-        $this->appendJS(...$codes);
+        $this->appendLines(...$codes);
         return $this->appendLine('}');
     }
 
@@ -90,9 +91,9 @@ class js extends directive
         return $this->appendLine('}');
     }
 
-    public function query(string $selector): jquery
+    public function query(string $selector): jQuery
     {
-        return new jquery($selector);
+        return new jQuery($selector);
     }
 
     public function scopeBegin(): self
@@ -115,14 +116,14 @@ class js extends directive
         return $this;
     }
 
-    public function appendJS(string|array|js|null ...$lines): self
+    public function appendLines(string|array|js|null ...$lines): self
     {
         foreach($lines as $line)
         {
             if(is_null($line)) continue;
             if(is_array($line))
             {
-                $this->appendJS(...$line);
+                $this->appendLines(...$line);
                 continue;
             }
             if($line instanceof js)
@@ -132,6 +133,12 @@ class js extends directive
             }
             $this->appendLine($line);
         }
+        return $this;
+    }
+
+    public function appendCode(string ...$codes): self
+    {
+        foreach($codes as $code) $this->jsLines[] = $code;
         return $this;
     }
 
