@@ -7020,14 +7020,14 @@ class storyModel extends model
         /* 获取需要确认的用户需求id。 */
         $URs   = $this->getStoryRelationByIds($storyIDList, 'story');
         $URIds = implode(',', $URs);
-        if(!$URIds) return $objects;
+        if(!$URIds) return $objectInfo ? $objectInfo : $objects;
 
         /* 获取已经撤回的用户需求。*/
         $requirements = $this->dao->select('id')->from(TABLE_STORY)
             ->where('id')->in($URIds)
             ->andWhere('retractedBy')->ne('')
             ->fetchPairs('id');
-        if(!$requirements) return $objects;
+        if(!$requirements) return $objectInfo ? $objectInfo : $objects;
 
         /* 获取已经确认过的对象。*/
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
