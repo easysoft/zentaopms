@@ -299,8 +299,10 @@ class h extends wg
         return 'RAWJS<' . implode("\n", func_get_args()) . '>RAWJS';
     }
 
-    protected static function encodeJsonWithRawJs($data)
+    public static function encodeJsonWithRawJs($data)
     {
+        if(is_string($data) && str_starts_with($data, 'RAWJS<') && str_ends_with($data, '>RAWJS')) return substr($data, 6, -6);
+
         $json = \zin\utils\jsonEncode($data, JSON_UNESCAPED_UNICODE);
         if(empty($json) && (is_array($data) || is_object($data))) return '[]';
 
@@ -313,7 +315,7 @@ class h extends wg
         $children = \zin\utils\flat($children);
         $code = array();
         $args = array();
-        foreach($children as $key => $child)
+        foreach($children as $child)
         {
             if(is_string($child)) $code[] = $child;
             else $args[] = $child;

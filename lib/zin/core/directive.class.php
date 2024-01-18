@@ -22,7 +22,7 @@ class directive
 
     public ?array $options;
 
-    public ?wg $parent = null;
+    public mixed $parent = null;
 
     /**
      * Construct a directive object
@@ -31,7 +31,7 @@ class directive
      * @param  array  $options
      * @access public
      */
-    public function __construct(string $type, mixed $data, ?array $options = null)
+    public function __construct(string $type, mixed $data = null, ?array $options = null)
     {
         $this->type    = $type;
         $this->data    = $data;

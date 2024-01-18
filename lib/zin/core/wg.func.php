@@ -19,6 +19,8 @@ require_once __DIR__ . DS . 'setting.class.php';
 require_once __DIR__ . DS . 'rawcontent.class.php';
 require_once __DIR__ . DS . 'wg.class.php';
 require_once __DIR__ . DS . 'context.func.php';
+require_once __DIR__ . DS . 'on.class.php';
+require_once __DIR__ . DS . 'jquery.class.php';
 
 /**
  * Create an new widget.
@@ -120,42 +122,6 @@ function setData(string|array $name, mixed $value = null): directive
         else                      $attrs[$name] = $value;
     }
     return set($attrs);
-}
-
-/**
- * Add event listener to widget element.
- *
- * @param  string            $name
- * @param  bool|string|array $handler
- * @param  array             $options
- */
-function on(string $name, bool|string|array $handler, array|string|bool $options = null): directive
-{
-    if(is_string($options) && is_string($handler))
-    {
-        $options  = array('selector' => $handler, 'handler' => $options);
-    }
-    elseif(is_bool($options))
-    {
-        $options = array('capture' => $options, 'handler' => $handler);
-    }
-    elseif(is_array($options))
-    {
-        $options['handler'] = $handler;
-    }
-    else
-    {
-        $options = array('handler' => $handler);
-    }
-    if(str_contains($name, '__'))
-    {
-        list($name, $flags) = explode('__', $name);
-        if(str_contains($flags, 'capture')) $options['capture'] = true;
-        if(str_contains($flags, 'stop'))    $options['stop']    = true;
-        if(str_contains($flags, 'prevent')) $options['prevent'] = true;
-        if(str_contains($flags, 'self'))    $options['self']    = true;
-    }
-    return set("@$name", (object)$options);
 }
 
 /**
