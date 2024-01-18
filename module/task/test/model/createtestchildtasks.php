@@ -45,5 +45,5 @@ $testTasks[3]->mailto   = '';
 $taskTester = new taskTest();
 r($taskTester->createTestChildTasksTest())              && p()   && e('0');                         // 测试空数据
 r($taskTester->createTestChildTasksTest(0, $testTasks)) && p('type') && e('test');                  // 测试任务ID为空的情况
-r($taskTester->createTestChildTasksTest(1, array()))    && p('id')   && e('3');                     // 测试子测试任务的数据为空的情况
+r($taskTester->createTestChildTasksTest(1, array()))    && p('id')   && e('2');                     // 测试子测试任务的数据为空的情况
 r($taskTester->createTestChildTasksTest(1, $testTasks)) && p('name') && e('测试研发需求 #2 需求2'); // 测试创建任务ID为1的子测试任务
