@@ -28,8 +28,8 @@ class cv_in_waterfall extends baseCalc
             ->from(TABLE_TASK)
             ->where('deleted')->eq('0')
             ->andWhere('parent')->ne('-1')
-            ->andWhere("NOT FIND_IN_SET('or', vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', vision)")
+            ->andWhere("vision NOT LIKE '%or%'")
+            ->andWhere("vision NOT LIKE '%lite%'")
             ->andWhere('status', true)->in('done,closed')
             ->orWhere('closedReason')->eq('done')
             ->markRight(1)
@@ -40,8 +40,8 @@ class cv_in_waterfall extends baseCalc
             ->from(TABLE_EFFORT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-            ->where("NOT FIND_IN_SET('or', t3.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t3.vision)")
+            ->where("t3.vision NOT LIKE '%or%'")
+            ->andWhere("t3.vision NOT LIKE '%lite%'")
             ->groupBy('t3.id')
             ->get();
 

@@ -37,7 +37,8 @@ class case_coverage_of_projected_story_in_product extends baseCalc
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->groupBy('t1.product')
             ->query();
     }
