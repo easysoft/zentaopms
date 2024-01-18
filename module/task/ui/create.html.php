@@ -60,6 +60,7 @@ if(empty($task->team))
                 h::td
                 (
                     set::width('240px'),
+                    setClass('team-member'),
                     picker
                     (
                         set::name("team[]"),
@@ -165,7 +166,7 @@ formGridPanel
     on::change('[name=region]', 'loadLanes'),
     on::change('[name=multiple]', 'toggleTeam'),
     on::change('[name=selectTestStory]', 'toggleSelectTestStory'),
-    on::change('#teamTable [name^=team]', 'changeTeamMember'),
+    on::change('.team-member [name^=team]', 'changeTeamMember'),
     on::change('[name=execution]', 'loadAll'),
     on::click('[name=isShowAllModule]', 'showAllModule'),
     on::click('[name=copyButton]', 'copyStoryTitle'),
