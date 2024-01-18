@@ -614,10 +614,11 @@ class productModel extends model
      * Get products group by program.
      *
      * @param  array  $appendIDList
+     * @param  bool   $allVision
      * @access public
      * @return array
      */
-    public function getProductsGroupByProgram($appendIDList = array())
+    public function getProductsGroupByProgram($appendIDList = array(), $allVision = false)
     {
         $views = $this->app->user->view->products;
         if(!empty($appendIDList)) $views .= ',' . implode(',', $appendIDList);
@@ -625,7 +626,7 @@ class productModel extends model
         $products = $this->dao->select("t1.id, t1.name, t1.program, t2.name AS programName")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
+            ->beginIF(!$allVision)->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
             ->andWhere('t1.shadow')->eq((int)0)
             ->andWhere('t1.status')->ne('closed')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($views)->fi()
