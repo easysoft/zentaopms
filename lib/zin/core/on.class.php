@@ -101,53 +101,53 @@ class on extends jsHelper
             $options['selector'] = $this->selector;
             $options['handler']  = parent::toJS('');
 
-            $wg->setProp("@{$this->event}", $options);
+            $wg->setProp("@{$this->event}", (object)$options);
             return;
         }
 
         $zuiInitCode = $wg->prop('zui-init', '');
-        $wg->setProp('zui-init', $zuiInitCode . $this->toJS());
+        $wg->setProp('zui-init', $zuiInitCode . "\n" . $this->toJS());
     }
 
-    public static function change(null|string|on $selectorOrCallback = null): on
+    public static function change(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
     {
-        return static::bind('change', $selectorOrCallback);
+        return static::bind('change', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function click(null|string|on $selectorOrCallback = null): on
+    public static function click(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
     {
-        return static::bind('click', $selectorOrCallback);
+        return static::bind('click', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function dbclick(null|string|on $selectorOrCallback = null): on
+    public static function dbclick(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
     {
-        return static::bind('dbclick', $selectorOrCallback);
+        return static::bind('dbclick', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function mouseenter(null|string|on $selectorOrCallback = null): on
+    public static function mouseenter(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
     {
-        return static::bind('mouseenter', $selectorOrCallback);
+        return static::bind('mouseenter', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function mouseleave(null|string|on $selectorOrCallback = null): on
+    public static function mouseleave(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
     {
-        return static::bind('mouseleave', $selectorOrCallback);
+        return static::bind('mouseleave', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function inited(null|string|on $selectorOrCallback = null): on
+    public static function inited(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
     {
-        return static::bind('inited', $selectorOrCallback);
+        return static::bind('inited', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function bind(string $event, null|string|on $selectorOrCallback = null, null|array|string $options = null): on
+    public static function bind(string $event, null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
     {
         if($selectorOrCallback instanceof on)
         {
             $selectorOrCallback->event = $event;
-            if(is_array($options)) $selectorOrCallback->options = array_merge($selectorOrCallback->options, $options);
+            if(is_array($handlerOrOptions)) $selectorOrCallback->options = array_merge($selectorOrCallback->options, $handlerOrOptions);
             return $selectorOrCallback;
         }
-        return on($event, $selectorOrCallback, $options);
+        return on($event, $selectorOrCallback, $handlerOrOptions);
     }
 
     public static function __callStatic($event, $args)
