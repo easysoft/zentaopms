@@ -874,8 +874,9 @@
 
         const id = $form.attr('id');
         if(!id) return console.warn('[APP] ', `form from "${options.target}" has no id`);
+
         const formData = new FormData($form[0]);
-        const data = {branch: '0'};
+        const data     = {};
         formData.forEach((value, key) =>
         {
             if(key.includes('[')) key = key.substring(0, key.indexOf('['));
@@ -895,7 +896,7 @@
         if(typeof items === 'string') items = items.split(',');
         const loadingTarget = items ? $oldItems.filter((_, element) => items.includes($(element).attr('data-name'))) : `#${id}`;
         let url = options.url || $form.attr('data-load-url');
-        url = url ? zui.formatString(url, data) : currentAppUrl;
+        url = url ? zui.formatString(url, data).replace(/\{\w+\}/g, '') : currentAppUrl;
         loadPage(
         {
             url:           url,
