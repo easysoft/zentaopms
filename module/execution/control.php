@@ -969,6 +969,8 @@ class execution extends control
         $summary = $this->product->summary($stories, $storyType);
         if($storyType == 'requirement') $summary = str_replace($this->lang->SRCommon, $this->lang->URCommon, $summary);
 
+        if($this->config->edition == 'ipd') $stories = $this->loadModel('story')->getAffectObject($stories, 'story');
+
         /* Assign. */
         $this->view->title             = $title;
         $this->view->position          = $position;
