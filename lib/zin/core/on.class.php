@@ -139,7 +139,7 @@ class on extends jsHelper
         return static::bind('inited', $selectorOrCallback);
     }
 
-    public static function bind(string $event, null|string|on $selectorOrCallback = null, ?array $options = null): on
+    public static function bind(string $event, null|string|on $selectorOrCallback = null, null|array|string $options = null): on
     {
         if($selectorOrCallback instanceof on)
         {

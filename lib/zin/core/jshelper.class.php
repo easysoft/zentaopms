@@ -19,13 +19,13 @@ require_once __DIR__ . DS . 'js.class.php';
  */
 class jsHelper extends js
 {
-    public function hide(string $selector): self
+    public function toggleHide(string $selector): self
     {
         $selector = str_replace('"', '\\"', $selector);
         return $this->appendLine("$(\"{$selector}\").hide();");
     }
 
-    public function show(string $selector): self
+    public function toggleShow(string $selector): self
     {
         $selector = str_replace('"', '\\"', $selector);
         return $this->appendLine("$(\"{$selector}\").show();");
@@ -34,6 +34,7 @@ class jsHelper extends js
     public function toggle(string $selector, string $toggle): self
     {
         $selector = str_replace('"', '\\"', $selector);
+        if(!is_string($toggle)) $toggle = json_encode($toggle);
         return $this->appendLine("$(\"{$selector}\").toggle($toggle);");
     }
 
@@ -55,25 +56,25 @@ class jsHelper extends js
         return $this->appendLine("$(\"{$selector}\").removeClass(\"{$class}\", $toggle);");
     }
 
-    public function html(string $selector, string $html): self
+    public function setHtml(string $selector, string $html): self
     {
         $selector = str_replace('"', '\\"', $selector);
         return $this->appendLine("$(\"{$selector}\").html(", json_encode($html), ");");
     }
 
-    public function text(string $selector, string $text): self
+    public function setText(string $selector, string $text): self
     {
         $selector = str_replace('"', '\\"', $selector);
         return $this->appendLine("$(\"{$selector}\").text(", json_encode($text), ");");
     }
 
-    public function val(string $selector, string $value): self
+    public function setVal(string $selector, string $value): self
     {
         $selector = str_replace('"', '\\"', $selector);
         return $this->appendLine("$(\"{$selector}\").val(", json_encode($value), ");");
     }
 
-    public function attr(string $selector, string $name, string $value): self
+    public function setAttr(string $selector, string $name, string $value): self
     {
         $selector = str_replace('"', '\\"', $selector);
         return $this->appendLine("$(\"{$selector}\").attr(\"{$name}\", ", json_encode($value), ");");
@@ -85,7 +86,7 @@ class jsHelper extends js
         return $this->appendLine("$(\"{$selector}\").removeAttr(\"{$name}\");");
     }
 
-    public function prop(string $selector, string $name, string $value): self
+    public function setProp(string $selector, string $name, string $value): self
     {
         $selector = str_replace('"', '\\"', $selector);
         return $this->appendLine("$(\"{$selector}\").prop(\"{$name}\", ", json_encode($value), ");");
@@ -97,19 +98,19 @@ class jsHelper extends js
         return $this->appendLine("$(\"{$selector}\").removeProp(\"{$name}\");");
     }
 
-    public function trigger(string $selector, string $event, string $data = ''): self
+    public function triggerEvent(string $selector, string $event, string $data = ''): self
     {
         $selector = str_replace('"', '\\"', $selector);
         return $this->appendLine("$(\"{$selector}\").trigger(\"{$event}\", ", json_encode($data), ");");
     }
 
-    public function on(string $selector, string $event, string $handler): self
+    public function onEvent(string $selector, string $event, string $handler): self
     {
         $selector = str_replace('"', '\\"', $selector);
         return $this->appendLine("$(\"{$selector}\").on(\"{$event}\", {$handler});");
     }
 
-    public function off(string $selector, string $event, string $handler): self
+    public function offEvent(string $selector, string $event, string $handler): self
     {
         $selector = str_replace('"', '\\"', $selector);
         return $this->appendLine("$(\"{$selector}\").off(\"{$event}\", {$handler});");
