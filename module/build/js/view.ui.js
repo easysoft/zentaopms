@@ -30,6 +30,7 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
 
 window.showLink = function(type, params, onlyUpdateTable)
 {
+    if(type == 'story') type = 'linkStory';
     const url = $.createLink(buildModule, type === 'linkStory' ? 'linkStory' : 'linkBug', 'buildID=' + buildID + (params || '&browseType=&param='));
     if(onlyUpdateTable)
     {
