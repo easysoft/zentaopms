@@ -5,7 +5,7 @@ $config->stakeholder->form = new stdclass();
 
 $config->stakeholder->form->create['from']        = array('type' => 'string',   'required' => false, 'default' => '');
 $config->stakeholder->form->create['user']        = array('type' => 'string',   'required' => false, 'default' => '');
-$config->stakeholder->form->create['name']        = array('type' => 'string',   'required' => false, 'default' => '');
+$config->stakeholder->form->create['name']        = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true);
 $config->stakeholder->form->create['objectType']  = array('type' => 'string',   'required' => false, 'default' => $app->tab);
 $config->stakeholder->form->create['key']         = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->stakeholder->form->create['phone']       = array('type' => 'string',   'required' => false, 'default' => '');
