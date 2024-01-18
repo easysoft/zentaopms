@@ -276,6 +276,7 @@ $lang->task->noModule                  = '<div>您现在还没有模块信息</d
 $lang->task->createDenied              = "你不能在该{$lang->projectCommon}添加任务";
 $lang->task->cannotDeleteParent        = '不能删除父任务。';
 $lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
+$lang->task->selectTestStoryTip        = "以下{$lang->SRCommon}将作为此任务的子任务";
 
 $lang->task->error                    = new stdclass();
 $lang->task->error->totalNumber       = '"总计消耗"必须为数字';

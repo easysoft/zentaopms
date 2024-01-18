@@ -1,2 +1,5 @@
+#testTaskTable {table-layout: fixed;}
 #testTaskTable tr {border: none;}
-#testTaskTable tr > th, #testTaskTable tr > td {padding: 0.5rem;}
+#testTaskTable tr > th:not(.c-actions) {border: 1px solid var(--table-border-color);}
+#testTaskTable tr > th {background-color: #FFF; font-weight: unset;}
+#testTaskTable tr > td {padding: 0;}

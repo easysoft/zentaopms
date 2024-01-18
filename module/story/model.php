@@ -2698,6 +2698,9 @@ class storyModel extends model
         $storyPairs = array();
         foreach($stories as $story)
         {
+            $prefix = $story->id . ':';
+            if($type == 'ignoreID') $prefix = '';
+
             $property = '';
             if($type == 'short')
             {
@@ -2707,7 +2710,7 @@ class storyModel extends model
             {
                 $property = '(' . $this->lang->story->pri . ':' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')';
             }
-            $storyPairs[$story->id] = $story->id . ':' . $story->title . ' ' . $property;
+            $storyPairs[$story->id] = $prefix . $story->title . ' ' . $property;
         }
 
         if($limit == 0) return $storyPairs;

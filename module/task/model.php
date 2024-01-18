@@ -1020,7 +1020,7 @@ class taskModel extends model
     {
         if(!empty($testTasks))
         {
-            $this->config->task->create->requiredFields = str_replace(array(',estimate,', ',story,', ',estStarted,', ',deadline,', ',module,'), ',', $this->config->task->create->requiredFields);
+            $this->config->task->create->requiredFields = str_replace(array(',estimate,', ',story,', ',estStarted,', ',deadline,', ',module,'), ',', ",{$this->config->task->create->requiredFields},");
         }
 
         $taskID = $this->create($task);

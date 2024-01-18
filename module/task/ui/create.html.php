@@ -21,10 +21,12 @@ jsVar('window.attributeList', $attributeList);
 jsVar('teamMemberError', $lang->task->error->teamMember);
 jsVar('requiredFields', $config->task->create->requiredFields);
 jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'));
+jsVar('taskID', $taskID ?? 0);
 
 $fields = useFields('task.create');
+$fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,module,storyBox,datePlan,pri,estimate,desc,file,mailto,keywords,after,testStoryBox');
 
-$fields->orders('name,assignedToBox', 'desc,module,storyBox');
+$fields->orders('name,assignedToBox', 'module,testStoryBox', 'desc,module,storyBox');
 $fields->fullModeOrders('type,module,storyBox', 'desc,file,mailto,keywords');
 if($execution->type == 'kanban')
 {
@@ -37,8 +39,6 @@ if(empty($features['story']) && $execution->type != 'kanban')
 {
     $fields->fullModeOrders('type,module,storyBox,assignedToBox', 'desc,file,mailto,keywords');
 }
-
-$fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,module,storyBox,datePlan,pri,estimate,desc,file,mailto,keywords,after');
 
 $teamForm = array();
 if(empty($task->team))
@@ -164,7 +164,9 @@ formGridPanel
     on::change('[name=type]', 'typeChange'),
     on::change('[name=region]', 'loadLanes'),
     on::change('[name=multiple]', 'toggleTeam'),
+    on::change('[name=selectTestStory]', 'toggleSelectTestStory'),
     on::change('#teamTable [name^=team]', 'changeTeamMember'),
+    on::change('[name=execution]', 'loadAll'),
     on::click('[name=isShowAllModule]', 'showAllModule'),
     on::click('[name=copyButton]', 'copyStoryTitle'),
     on::click('.assignedToList .picker-multi-selection', 'removeTeamMember'),

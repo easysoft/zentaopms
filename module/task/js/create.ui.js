@@ -68,33 +68,31 @@ function typeChange(e)
  * @access public
  * @return void
  */
-function toggleSelectTestStory(executionID)
+function toggleSelectTestStory()
 {
-    if(typeof(executionID) == 'undefined') executionID = window.executionID;
-
-    $('#testStoryBox').load($.createLink('task', 'ajaxGetTestStories', 'executionID=' + executionID + '&taskID=' + taskID));
-    if(!$('#selectTestStoryBox').hasClass('hidden') && $('#selectTestStory').prop('checked'))
+    if(!$('[name=selectTestStory]').hasClass('hidden') && $('[name=selectTestStory]').prop('checked'))
     {
-        $('#module').closest('.form-group').addClass('hidden');
-        $('#multipleBox').closest('.form-group').addClass('hidden');
-        $('#story').closest('.form-row').addClass('hidden');
-        $('#estStarted').closest('.form-row').addClass('hidden');
-        if(!$('#estimate').hasClass('hidden')) $('#estimate').parent().prev().addClass('hidden');
-        if(!$('#estimate').hasClass('hidden')) $('#estimate').parent().addClass('hidden');
-        $('#testStoryBox').removeClass('hidden');
+        $('[data-name=module]').addClass('hidden');
+        $('[data-name=storyBox]').addClass('hidden');
+        $('[data-name=datePlan]').addClass('hidden');
+        $('[data-name=estimate]').addClass('hidden');
+        $('[name=multiple]').closest('.checkbox-primary').addClass('hidden');
+
+        $('[data-name=testStoryBox]').removeClass('hidden');
+        $('#testStoryBox').load($.createLink('task', 'ajaxGetTestStories', 'executionID=' + executionID + '&taskID=' + taskID));
 
         $('[name^=multiple]').prop('checked', false);
         toggleTeam();
     }
     else
     {
-        $('#module').closest('.form-group').removeClass('hidden');
-        $('#multipleBox').closest('.form-group').removeClass('hidden');
-        if(showFields.indexOf('story') != -1) $('#story').closest('.form-row').removeClass('hidden');
-        $('#estStarted').closest('.form-row').removeClass('hidden');
-        if(!$('#estimate').hasClass('hidden')) $('#estimate').parent().prev().removeClass('hidden');
-        if(!$('#estimate').hasClass('hidden')) $('#estimate').parent().removeClass('hidden');
-        $('#testStoryBox').addClass('hidden');
+        $('[data-name=module]').removeClass('hidden');
+        $('[data-name=storyBox]').removeClass('hidden');
+        $('[data-name=datePlan]').removeClass('hidden');
+        $('[data-name=estimate]').removeClass('hidden');
+        $('[name=multiple]').closest('.checkbox-primary').removeClass('hidden');
+
+        $('[data-name=testStoryBox]').addClass('hidden');
     }
 }
 

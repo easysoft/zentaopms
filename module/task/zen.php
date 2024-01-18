@@ -551,6 +551,7 @@ class taskZen extends task
     {
         $formConfig = $this->config->task->form->create;
         if($this->post->type == 'affair') $formConfig['assignedTo']['type'] = 'array';
+        if($this->post->type == 'test') $formConfig['story']['skipRequired'] = true;
 
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
         $team      = $this->post->team ? array_filter($this->post->team) : array();
@@ -699,7 +700,7 @@ class taskZen extends task
     {
         /* Set data for the type of test task that has linked stories. */
         $postData = form::data($this->config->task->form->testTask->create)->get();
-        if(empty($postData->selectTestStory)) return array();
+        if($postData->selectTestStory == 'off') return array();
 
         $testTasks = array();
         foreach($postData->testStory as $key => $storyID)
@@ -714,8 +715,8 @@ class taskZen extends task
             $task->estStarted = !empty($postData->testEstStarted[$key]) ? $postData->testEstStarted[$key] : null;
             $task->deadline   = !empty($postData->testDeadline[$key])   ? $postData->testDeadline[$key]   : null;
             $task->assignedTo = !empty($postData->testAssignedTo[$key]) ? $postData->testAssignedTo[$key] : '';
-            $task->estimate   = (float)$postData->testEstimate[$key];
-            $task->left       = (float)$postData->testEstimate[$key];
+            $task->estimate   = !empty($postData->testEstimate[$key])   ? (float)$postData->testEstimate[$key] : 0;
+            $task->left       = !empty($postData->testEstimate[$key])   ? (float)$postData->testEstimate[$key] : 0;
             $task->type       = 'test'; /* Setting the task type to test to prevent duplicate tasks from being created. */
             $task->vision     = $this->config->vision;
 

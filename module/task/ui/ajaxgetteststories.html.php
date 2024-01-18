@@ -24,23 +24,29 @@ foreach($testStories as $storyID => $storyTitle)
         (
             h::td
             (
-                picker
-                (
-                    setID("testStory{$i}"),
-                    set::name("testStory[$i]"),
-                    set::value($storyID),
-                    set::items(array($storyID => $storyTitle))
-                )
+                setClass('border-b border-l'),
+                span($storyID, setClass('ml-2'))
             ),
             h::td
             (
                 picker
                 (
+                    setID("testStory{$i}"),
+                    set::name("testStory[$i]"),
+                    set::value($storyID),
+                    set::items(array($storyID => $storyTitle)),
+                    set::required(true)
+                )
+            ),
+            h::td
+            (
+                priPicker
+                (
                     setID("testPri{$i}"),
                     set::name("testPri[$i]"),
                     set::required(true),
                     set::value(empty($task->pri) ? 3 : $task->pri),
-                    set::items($lang->task->priList)
+                    set::items(array_filter($lang->task->priList))
                 )
             ),
             h::td
@@ -49,8 +55,14 @@ foreach($testStories as $storyID => $storyTitle)
                 (
                     setID("testEstStarted{$i}"),
                     set::name("testEstStarted[$i]"),
+                    set::placeholder($lang->task->estStarted),
                     set::value(empty($task->estStarted) ? '' : $task->estStarted)
                 )
+            ),
+            h::td
+            (
+                setClass('text-center text-gray border-b'),
+                span('—')
             ),
             h::td
             (
@@ -58,6 +70,7 @@ foreach($testStories as $storyID => $storyTitle)
                 (
                     setID("testDeadline{$i}"),
                     set::name("testDeadline[$i]"),
+                    set::placeholder($lang->task->deadline),
                     set::value(empty($task->deadline) ? '' : $task->deadline)
                 )
             ),
@@ -86,7 +99,7 @@ foreach($testStories as $storyID => $storyTitle)
             ),
             h::td
             (
-                setClass('center'),
+                setClass('c-actions'),
                 btnGroup
                 (
                     set::items(array(
@@ -99,59 +112,55 @@ foreach($testStories as $storyID => $storyTitle)
     $i ++;
 }
 
-formGroup
+h::table
 (
-    set::label($lang->task->selectTestStory),
-    set::labelClass('selectStoryLabel'),
-    h::table
+    setClass('table table-form'),
+    setID('testTaskTable'),
+    h::thead
     (
-        setClass('table table-form'),
-        setID('testTaskTable'),
-        h::thead
+        h::tr
         (
-            h::tr
+            setClass('text-gray text-left'),
+            h::th('ID'),
+            h::th($lang->task->storyAB),
+            h::th
             (
-                h::th($lang->task->storyAB),
-                h::th
-                (
-                    $lang->task->pri,
-                    set::width('80px'),
-                    setClass(isset($requiredFields['pri']) ? 'required' : '')
-                ),
-                h::th
-                (
-                    $lang->task->estStarted,
-                    set::width('140px'),
-                    setClass(isset($requiredFields['estStarted']) ? 'required' : '')
-                ),
-                h::th
-                (
-                    $lang->task->deadline,
-                    set::width('140px'),
-                    setClass(isset($requiredFields['deadline']) ? 'required' : '')
-                ),
-                h::th
-                (
-                    $lang->task->assignedTo,
-                    set::width('100px')
-                ),
-                h::th
-                (
-                    $lang->task->estimate,
-                    set::width('88px'),
-                    setClass(isset($requiredFields['estimate']) ? 'required' : '')
-                ),
-                h::th
-                (
-                    $lang->actions,
-                    set::width('70px')
-                )
+                $lang->task->pri,
+                setClass(isset($requiredFields['pri']) ? 'required' : '')
+            ),
+            h::th
+            (
+                $lang->task->datePlan,
+                set('colspan', 3),
+                setClass((isset($requiredFields['estStarted']) || isset($requiredFields['deadline'])) ? 'required' : '')
+            ),
+            h::th
+            (
+                $lang->task->assignedTo,
+            ),
+            h::th
+            (
+                $lang->task->estimateAB,
+                setClass(isset($requiredFields['estimate']) ? 'required' : '')
+            ),
+            h::th
+            (
+                setClass('c-actions'),
             )
         ),
-        h::tbody
-        (
-            $taskTR
-        )
+        h::col(setStyle('width', '80px')),
+        h::col(setStyle('width', 'auto')),
+        h::col(setStyle('width', '80px')),
+        h::col(setStyle('width', '140px')),
+        h::col(setStyle('width', '30px')),
+        h::col(setStyle('width', '140px')),
+        h::col(setStyle('width', '120px')),
+        h::col(setStyle('width', '100px')),
+        h::col(setStyle('width', '70px')),
+    ),
+    h::tbody
+    (
+        $taskTR
     )
 );
 

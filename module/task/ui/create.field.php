@@ -179,3 +179,16 @@ $fields->field('taskName')
 $fields->field('taskEstimate')
     ->hidden()
     ->control('input');
+
+/* Set test story task control. */
+$buildTestStoryBox = function($props)
+{
+    return div(setID('testStoryBox'));
+};
+
+$fields->field('testStoryBox')
+    ->label($lang->task->selectTestStory)
+    ->labelHint($lang->task->selectTestStoryTip)
+    ->width('full')
+    ->hidden()
+    ->control($buildTestStoryBox);

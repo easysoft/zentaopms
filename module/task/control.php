@@ -1200,7 +1200,7 @@ class task extends control
      */
     public function ajaxGetTestStories(int $executionID, int $taskID = 0)
     {
-        $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', '', 'active');
+        $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'ignoreID', 'active');
         $testStoryIdList = $this->story->getTestStories(array_keys($stories), $executionID);
         $testStories     = array();
         foreach($stories as $testStoryID => $storyTitle)
