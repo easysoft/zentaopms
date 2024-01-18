@@ -12,6 +12,7 @@ namespace zin;
 
 $fields    = useFields('execution.create');
 $typeField = $isStage ? 'attribute' : 'lifetime';
+$fields->fullModeOrders('productsBox,PO,QD,PM,RD,team,teams,teamMembers[],desc');
 if(!$isStage || empty($config->setPercent))
 {
     $fields->remove('percent');
@@ -19,6 +20,11 @@ if(!$isStage || empty($config->setPercent))
 }
 if(empty($config->setCode))  $fields->remove('code');
 if(!empty($config->setCode)) $fields->moveBefore($typeField, 'name');
+if(!empty($project->model) && $project->model == 'kanban')
+{
+    $fields->remove($typeField);
+    $fields->field('name')->width('full');
+}
 if(!empty($project->model) && $project->model == 'agileplus' && !empty($config->setCode))
 {
     $fields->field('code')->width('1/4');
