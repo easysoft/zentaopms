@@ -53,6 +53,8 @@ if(common::canModify('project', $project) and common::hasPriv('project', 'testre
         ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 }
 
+if(!$project->hasProduct) unset($config->project->dtable->testtask->fieldList['product']);
+
 dtable
 (
     set::id('taskTable'),
