@@ -385,7 +385,8 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                                 'url'         => createLink('task', 'assignTo', "executionID=$task->execution&taskID=$task->id"),
                                 'data-toggle' => 'modal',
                                 'class'       => 'btn ghost toolbar-item text-primary square size-sm',
-                                'icon'        => 'hand-right'
+                                'icon'        => 'hand-right',
+                                'disabled'    => !empty($task) && $task->status == 'closed'
                             )
                         )
                     ) : null,
