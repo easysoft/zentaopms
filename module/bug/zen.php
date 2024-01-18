@@ -420,7 +420,7 @@ class bugZen extends bug
         {
             $projects += $this->product->getProjectPairsByProduct($productID, (string)$branch);
         }
-        elseif($projectID && $project)
+        elseif($projectID && !empty($bug->project))
         {
             if($executionID)
             {
@@ -440,7 +440,7 @@ class bugZen extends bug
                 /* Set project menu. */
                 if($this->app->tab == 'project') $this->project->setMenu($projectID);
             }
-            $projects += array($projectID => $project->name);
+            $projects += array($projectID => $bug->project->name);
         }
 
         $projectID = isset($projects[$projectID]) ? $projectID : '';
@@ -1142,18 +1142,22 @@ class bugZen extends bug
         /* 如果bug有所属项目，查询这个项目。 */
         /* Get project. */
         if($bug->projectID) $bug = $this->updateBug($bug, array('project' => $this->loadModel('project')->getByID((int)$bug->projectID)));
-        /* 获得产品下拉和项目下拉列表。 */
-        /* Get products and projects. */
-        $bug = $this->getProductsAndProjectsForCreate($bug);
+
         /* 获得项目的管理方式。 */
         /* Get project model. */
         $bug = $this->getProjectModelForCreate($bug);
+
         /* 获得执行下拉列表。 */
         /* Get executions. */
         $bug = $this->getExecutionsForCreate($bug);
+
         /* 获得版本下拉和需求下拉列表。 */
         /* Get builds and stroies. */
         $bug = $this->getBuildsAndStoriesForCreate($bug);
+
+        /* 获得产品下拉和项目下拉列表。 */
+        /* Get products and projects. */
+        $bug = $this->getProductsAndProjectsForCreate($bug);
 
         $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->productMembers        = $this->getProductMembersForCreate($bug);
@@ -1170,7 +1174,7 @@ class bugZen extends bug
         $this->view->branches              = $bug->branches;
         $this->view->builds                = $bug->builds;
         $this->view->bug                   = $bug;
-        $this->view->allBuilds             = $allBuilds;
+        $this->view->allBuilds             = !empty($bug->allBuilds) ? $bug->allBuilds : '';
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = !empty($resultID) && !empty($stepIdList) ? $this->loadModel('file')->getByObject('stepResult', (int)$resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
