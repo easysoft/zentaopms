@@ -283,8 +283,9 @@ $config->story->dtable->fieldList['actions']['actionsMap']['change']['icon']    
 $config->story->dtable->fieldList['actions']['actionsMap']['change']['hint']     = $lang->story->operateList['changed'];
 $config->story->dtable->fieldList['actions']['actionsMap']['change']['data-app'] = $app->tab;
 
-$config->story->dtable->fieldList['actions']['actionsMap']['review']['icon'] = 'search';
-$config->story->dtable->fieldList['actions']['actionsMap']['review']['hint'] = $lang->story->operateList['reviewed'];
+$config->story->dtable->fieldList['actions']['actionsMap']['review']['icon']     = 'search';
+$config->story->dtable->fieldList['actions']['actionsMap']['review']['hint']     = $lang->story->operateList['reviewed'];
+$config->story->dtable->fieldList['actions']['actionsMap']['review']['data-app'] = $app->tab;
 
 $config->story->dtable->fieldList['actions']['actionsMap']['edit']['icon'] = 'edit';
 $config->story->dtable->fieldList['actions']['actionsMap']['edit']['hint'] = $lang->story->operateList['edited'];
