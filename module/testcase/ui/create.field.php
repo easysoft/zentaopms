@@ -17,17 +17,21 @@ $fields->field('module')
     ->items(data('moduleOptionMenu'))
     ->value(data('currentModuleID'))
     ->manageLink(createLink('tree', 'browse', 'rootID=' . data('productID') . '&view=case&currentModuleID=0&branch=' . data('branch')))
+    ->required(true)
     ->controlEnd()
     ->wrapAfter(true);
 
 $fields->field('story')
     ->label($lang->testcase->lblStory)
-    ->items(data('stories'))
-    ->value(data('case.story'));
+    ->control('inputGroup')
+    ->items(false)
+    ->itemBegin('story')->control('picker')->id('story')->items(data('stories'))->value(data('case.story'))->itemEnd()
+    ->itemBegin()->control('btn', array('url' => helper::createLink('story', 'view', 'storyID=' . data('case.story')), 'data-toggle' => 'modal', 'data-size' => 'lg'))->className('hidden', empty(data('case.story')))->icon('eye text-primary')->hint($lang->preview)->id('preview')->itemEnd();
 
 $fields->field('scene')
     ->items(data('sceneOptionMenu'))
-    ->value(data('currentSceneID'));
+    ->value(data('currentSceneID'))
+    ->required(true);
 
 $fields->field('type')
     ->checkbox(array('id' => 'auto', 'name' => 'auto', 'text' => $lang->testcase->automated, 'checked' => data('case.auto') == 'auto'))

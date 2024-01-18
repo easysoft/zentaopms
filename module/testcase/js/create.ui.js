@@ -35,12 +35,12 @@ function changeStory(event)
     if(storyID != '0')
     {
         const storyLink = $.createLink('story', 'view', 'storyID=' + storyID);
-        $('#preview').parent().removeClass('hidden');
+        $('#preview').removeClass('hidden');
         $('#preview').attr('href', storyLink);
     }
     else
     {
-        $('#preview').parent().addClass('hidden');
+        $('#preview').addClass('hidden');
     }
 }
 
