@@ -20,6 +20,7 @@ $fields->autoLoad('product', 'product,module,openedBuild,execution,project,story
    ->autoLoad('module',  'assignedTo,story')
    ->autoLoad('project', 'project,openedBuild,execution,story,task,assignedTo')
    ->autoLoad('execution', 'execution,openedBuild,story,task,assignedTo')
+   ->autoLoad('allBuilds', 'openedBuild')
    ->autoLoad('region', 'lane');
 
 jsVar('bug',                   $bug);

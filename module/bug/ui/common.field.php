@@ -27,7 +27,7 @@ $fields->field('module')
     ->value(data('bug.moduleID'));
 
 $fields->field('openedBuild')
-    ->checkbox(array('text' => $lang->bug->allBugs, 'name' => 'allBuilds'))
+    ->checkbox(array('text' => $lang->bug->allBugs, 'name' => 'allBuilds', 'checked' => data('allBuilds') ? true : false))
     ->control('inputGroup')
     ->itemBegin('openedBuild[]')->control('picker')->items(data('builds'))->multiple()->itemEnd();
 

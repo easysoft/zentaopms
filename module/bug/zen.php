@@ -341,7 +341,12 @@ class bugZen extends bug
         $executionID = (int)$bug->executionID;
         $moduleID    = $bug->moduleID ? (int)$bug->moduleID : 0;
 
-        if($executionID)
+        if(!empty($bug->allBuilds))
+        {
+            $builds  = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all', 'id_desc', 0, 'full', 'story', false);
+        }
+        else if($executionID)
         {
             $builds  = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased', $executionID, 'execution');
             $stories = $this->story->getExecutionStoryPairs($executionID);
@@ -436,7 +441,9 @@ class bugZen extends bug
             $projects += array($projectID => $project->name);
         }
 
-        return $this->updateBug($bug, array('products' => $products, 'projects' => $projects));
+        $projectID = isset($projects[$projectID]) ? $projectID : '';
+
+        return $this->updateBug($bug, array('products' => $products, 'projects' => $projects, 'projectID' => $projectID));
     }
 
     /**
@@ -493,7 +500,7 @@ class bugZen extends bug
             }
             else
             {
-                $bug->executionID = '';
+                $executionID = '';
             }
         }
 
@@ -503,7 +510,7 @@ class bugZen extends bug
             $this->config->bug->custom->createFields     = str_replace('execution,', '', $this->config->bug->custom->createFields);
         }
 
-        return $this->updateBug($bug, array('executions' => $executions, 'execution' => $execution));
+        return $this->updateBug($bug, array('executions' => $executions, 'execution' => $execution, 'executionID' => $executionID));
     }
 
     /**
@@ -1151,18 +1158,19 @@ class bugZen extends bug
         $this->view->gobackLink            = $from == 'global' ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
-        $this->view->projects              = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProjectPairs() : $bug->projects;
         $this->view->products              = $bug->products;
+        $this->view->product               = $currentProduct;
+        $this->view->projects              = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProjectPairs() : $bug->projects;
+        $this->view->projectID             = $bug->projectID;
+        $this->view->executions            = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
+        $this->view->executionID           = $bug->executionID;
         $this->view->branches              = $bug->branches;
         $this->view->builds                = $bug->builds;
         $this->view->bug                   = $bug;
-        $this->view->executions            = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
+        $this->view->allBuilds             = $allBuilds;
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = !empty($resultID) && !empty($stepIdList) ? $this->loadModel('file')->getByObject('stepResult', (int)$resultID, str_replace('_', ',', $stepIdList)) : array();
-        $this->view->product               = $currentProduct;
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
-        $this->view->projectID             = isset($projectID) ? $projectID : $bug->projectID;
-        $this->view->executionID           = $bug->executionID;
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
     }
 
