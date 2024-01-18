@@ -1,4 +1,4 @@
-#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg, var(--color-gray-800)); width: var(--zt-menu-width, 96px); color: rgba(var(--color-canvas-rgb), .8); transition: width .2s; user-select: none; z-index: 10;}
+#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg, var(--color-gray-900)); width: var(--zt-menu-width, 96px); color: rgba(var(--color-canvas-rgb), .8); transition: width .2s; user-select: none; z-index: 10;}
 #menu .nav {flex-direction: column; align-items: stretch;}
 #menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 8px; transition: padding .2s;}
 #menu .nav > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 0; margin: 6px 12px;}
