@@ -297,7 +297,7 @@ class screenModel extends model
             if(count($oldFilters) != count($latestFilters)) $filterChanged = true;
             foreach($oldFilters as $index => $oldFilter)
             {
-                if($oldFilter['field'] != $latestFilters[$index]['field']) $filterChanged = true;
+                if($oldFilter->field != $latestFilters[$index]->field) $filterChanged = true;
             }
 
             if($filterChanged) $component->chartConfig->filters = $latestFilters;
