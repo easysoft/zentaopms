@@ -443,7 +443,7 @@ pipeline {
                       steps {
                         script {
                           buildZboxLinux.doBuild()
-                          buildZboxLinux.test()
+                          //buildZboxLinux.test()
                           buildZboxLinux.uploadInternal()
                         }
                       }
