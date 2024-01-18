@@ -830,7 +830,7 @@ class project extends control
         $this->view->memberPairs = $memberPairs;
 
         /* 准备分支数据。 */
-        $this->projectZen->prepareBranchForBug($product, $productID, $projectID);
+        $this->projectZen->prepareBranchForBug($products, $productID);
 
         /* 准备模块数据。 */
         $this->projectZen->prepareModuleForBug($productID, $projectID, $type, $param, $orderBy, $build, $branchID, $products);

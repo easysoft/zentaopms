@@ -508,24 +508,28 @@ class projectZen extends project
      * 为项目的bug列表准备分支数据。
      * Prepare branches for project bug list.
      *
-     * @param  object    $product
+     * @param  array     $products
      * @param  int       $productID
-     * @param  int       $projectID
      * @access protected
      * @return void
      */
-    protected function prepareBranchForBug($product, int $productID, int $projectID)
+    protected function prepareBranchForBug(array $products, int $productID)
     {
+        $this->loadModel('branch');
         $branchOption    = array();
         $branchTagOption = array();
-        if($product and $product->type != 'normal')
+        foreach($products as $product)
         {
-            /* Display status of branch. */
-            $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
-            foreach($branches as $branchInfo)
+            if($productID && $productID != $product->id) continue;
+            if($product && $product->type != 'normal')
             {
-                $branchOption[$branchInfo->id]    = $branchInfo->name;
-                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                /* Display status of branch. */
+                $branches = $this->branch->getList($product->id, 0, 'all');
+                foreach($branches as $branchInfo)
+                {
+                    $branchOption[$branchInfo->id]    = $branchInfo->name;
+                    $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                }
             }
         }
 
