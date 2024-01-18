@@ -4710,7 +4710,7 @@ class executionModel extends model
             $execution->parent        = ($execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->isParent      = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->actions       = array();
-            foreach($this->config->projectExecution->dtable->fieldList['actions'][$execution->projectModel] as $actionKey)
+            foreach($this->config->projectExecution->dtable->actionsRule[$execution->projectModel] as $actionKey)
             {
                 $action  = array();
                 $actions = explode('|', $actionKey);

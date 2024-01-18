@@ -228,20 +228,13 @@ $config->projectExecution->dtable->fieldList['burn']['sortType'] = false;
 $config->projectExecution->dtable->fieldList['burn']['width']    = '88';
 $config->projectExecution->dtable->fieldList['burn']['group']    = '4';
 
-$config->projectExecution->dtable->fieldList['actions']['name']              = 'actions';
-$config->projectExecution->dtable->fieldList['actions']['title']             = $lang->actions;
-$config->projectExecution->dtable->fieldList['actions']['type']              = 'actions';
-$config->projectExecution->dtable->fieldList['actions']['width']             = '160';
-$config->projectExecution->dtable->fieldList['actions']['sortType']          = false;
-$config->projectExecution->dtable->fieldList['actions']['fixed']             = 'right';
-$config->projectExecution->dtable->fieldList['actions']['actionItemCreator'] = "RAWJS<function(item){ if(item.icon == 'split') {item.hint = item.disabled ? '{$lang->programplan->error->createdTask}' : '{$lang->programplan->createSubPlan}' } return item;}>RAWJS";
-$config->projectExecution->dtable->fieldList['actions']['scrum']             = array('start', 'createTask', 'edit', 'close|activate', 'delete');
-$config->projectExecution->dtable->fieldList['actions']['kanban']            = array('start', 'createTask', 'edit', 'close|activate', 'delete');
-$config->projectExecution->dtable->fieldList['actions']['agileplus']         = array('start', 'createTask', 'edit', 'close|activate', 'delete');
-$config->projectExecution->dtable->fieldList['actions']['waterfall']         = array('start', 'createTask', 'createChildStage', 'edit', 'close|activate', 'delete');
-$config->projectExecution->dtable->fieldList['actions']['waterfallplus']     = array('start', 'createTask', 'createChildStage', 'edit', 'close|activate', 'delete');
-$config->projectExecution->dtable->fieldList['actions']['task']              = array('startTask', 'finishTask', 'closeTask', 'recordWorkhour', 'editTask', 'batchCreate');
-$config->projectExecution->dtable->fieldList['actions']['actionsMap']        = $config->execution->actionList;
+$config->projectExecution->dtable->fieldList['actions']['name']       = 'actions';
+$config->projectExecution->dtable->fieldList['actions']['title']      = $lang->actions;
+$config->projectExecution->dtable->fieldList['actions']['type']       = 'actions';
+$config->projectExecution->dtable->fieldList['actions']['width']      = '160';
+$config->projectExecution->dtable->fieldList['actions']['sortType']   = false;
+$config->projectExecution->dtable->fieldList['actions']['fixed']      = 'right';
+$config->projectExecution->dtable->fieldList['actions']['actionsMap'] = $config->execution->actionList;
 
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['icon']        = 'play';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['startTask']['hint']        = $lang->task->start;
@@ -270,6 +263,13 @@ $config->projectExecution->dtable->fieldList['actions']['actionsMap']['editTask'
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['batchCreate']['icon'] = 'split';
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['batchCreate']['hint'] = $lang->task->batchCreate;
 $config->projectExecution->dtable->fieldList['actions']['actionsMap']['batchCreate']['url']  = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={rawID}');
+
+$config->projectExecution->dtable->actionsRule['scrum']         = array('start', 'createTask', 'edit', 'close|activate', 'delete');
+$config->projectExecution->dtable->actionsRule['kanban']        = array('start', 'createTask', 'edit', 'close|activate', 'delete');
+$config->projectExecution->dtable->actionsRule['agileplus']     = array('start', 'createTask', 'edit', 'close|activate', 'delete');
+$config->projectExecution->dtable->actionsRule['waterfall']     = array('start', 'createTask', 'createChildStage', 'edit', 'close|activate', 'delete');
+$config->projectExecution->dtable->actionsRule['waterfallplus'] = array('start', 'createTask', 'createChildStage', 'edit', 'close|activate', 'delete');
+$config->projectExecution->dtable->actionsRule['task']          = array('startTask', 'finishTask', 'closeTask', 'recordWorkhour', 'editTask', 'batchCreate');
 
 $app->loadLang('group');
 $config->projectGroup = new stdclass();
