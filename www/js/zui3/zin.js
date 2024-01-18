@@ -872,6 +872,8 @@
         if(!$form.length) $form = $target.find('form');
         if(!$form.length) return console.warn('[APP] ', `cannot find form from target "${options.target}"`);
 
+        if(options.partial === undefined) options.partial = !!$target.closest('.modal').length;
+
         const id = $form.attr('id');
         if(!id) return console.warn('[APP] ', `form from "${options.target}" has no id`);
 
