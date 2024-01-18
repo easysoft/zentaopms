@@ -666,7 +666,6 @@ $config->delete['18_4_alpha1'][] = 'module/report/view/preview.html.php';
 $config->delete['18_4_alpha1'][] = 'module/report/view/productsummary.html.php';
 $config->delete['18_4_alpha1'][] = 'module/report/view/projectdeviation.html.php';
 $config->delete['18_4_alpha1'][] = 'module/report/view/workload.html.php';
-$config->delete['18_4_alpha1'][] = 'module/report/zen.php';
 
 $config->delete['18_4'][] = 'extension/biz/dataview/config.php';
 $config->delete['18_4'][] = 'extension/biz/dataview/control.php';
