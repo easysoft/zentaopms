@@ -154,6 +154,7 @@ zentaoxx:
 	sed -i 's/v\.//g' zentaoxx/extension/xuan/im/js/debug.js
 	sed -i 's/helper::jsonEncode(/json_encode(/g' zentaoxx/framework/xuanxuan.class.php
 	sed -i 's/moduleRoot/getExtensionRoot() . "xuan\/"/' zentaoxx/framework/xuanxuan.class.php
+	sed -i 's/getDefaultParams/getFunctionParams/' zentaoxx/framework/xuanxuan.class.php
 	sed -i "s/lang->goback,/lang->goback, '',/g" zentaoxx/extension/xuan/im/view/debug.html.php
 	sed -i 's/v\.//g' zentaoxx/extension/xuan/client/js/checkupgrade.js
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/extension/xuan/im/control.php
