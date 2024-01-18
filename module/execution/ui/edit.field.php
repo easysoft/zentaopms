@@ -1,7 +1,7 @@
 <?php
 namespace zin;
 
-global $lang, $config;
+global $app, $lang, $config;
 
 $fields = defineFieldList('execution.edit');
 
@@ -12,6 +12,7 @@ $linkedPlans     = data('product.plans');
 $linkedProducts  = data('linkedProducts');
 $branchGroups    = data('branchGroups');
 $productPlans    = data('productPlans');
+$hidden          = empty($project->hasProduct);
 
 if($project)
 {
@@ -52,7 +53,8 @@ if($project)
         $fields->field('attribute')
             ->label($lang->stage->type)
             ->labelHint($lang->execution->typeTip);
-        if($enableOptionalAttr)
+
+        if(data('enableOptionalAttr'))
         {
             $fields->field('attribute')
                 ->width('1/2')
@@ -110,7 +112,6 @@ $fields->field('days')
 
 if($project->model != 'waterfall' && $project->model != 'waterfallplus')
 {
-    $hidden = empty($project->hasProduct);
     if(!empty($project->hasProduct) && $linkedProducts)
     {
         $i = 0;
@@ -160,7 +161,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
     else
     {
         $fields->field('products[0]')
-            ->width('1/4')
+            ->width('1/2')
             ->className($hidden ? 'hidden' : '')
             ->label($lang->project->manageProducts)
             ->items(data('allProducts'))
@@ -187,6 +188,9 @@ elseif(!empty($project->hasProduct))
     $i = 0;
     foreach($linkedProducts as $product)
     {
+        $plans     = isset($productPlans[$product->id]) ? $productPlans[$product->id] : array();
+        $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
+        $hasBranch = $product->type != 'normal' && !empty($branches);
         $fields->field("products[{$i}]")
             ->width($hasBranch ? '1/4' : '1/2')
             ->className($hidden ? 'hidden' : '')
@@ -199,11 +203,11 @@ elseif(!empty($project->hasProduct))
         $fields->field("branch[{$i}][]")
             ->width('1/4')
             ->multiple()
-            ->className($hidden ? 'hidden' : '')
+            ->className($hidden || !$hasBranch ? 'hidden' : '')
             ->label($i == 0 ? $lang->product->branchName['branch'] : '')
             ->disabled($project->model == 'waterfall' || $project->model == 'waterfallplus')
             ->items($branches)
-            ->value($productBranches ? implode(',', $productBranches) : array());
+            ->value($productBranches ? implode(',', $productBranches) : '0');
 
         $fields->field("plans[$product->id][]")
             ->width('1/2')
