@@ -162,11 +162,18 @@ class storyModel extends model
      */
     public function getAffectedScope($story)
     {
-        $storyIdList = $story->id;
+        if($story->type == 'story') $storyIdList = $story->id;
         if($story->type == 'requirement')
         {
             $stories = $this->getStoryRelationByIds($story->id, 'requirement');
-            if(isset($stories[$story->id])) $storyIdList = $stories[$story->id];
+            if(isset($stories[$story->id]))
+            {
+                $storyIdList = $stories[$story->id];
+            }
+            else
+            {
+                $storyIdList = '';
+            }
         }
         /* Remove closed executions. */
         if($story->executions)
@@ -184,6 +191,14 @@ class storyModel extends model
                 ->fetchGroup('root');
         }
 
+        if(!$story->twins && empty($storyIdList))
+        {
+            $story->bugs  = array();
+            $story->cases = array();
+            if($this->config->vision == 'or') $story->stories = array();
+            return $story;
+        }
+
         /* Get affected bugs. */
         $story->bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->ne('closed')
@@ -199,13 +214,14 @@ class storyModel extends model
             ->beginIF(!$story->twins)->andWhere('story')->in($storyIdList)->fi()
             ->fetchAll();
 
-        $story->stories = $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
+        if($this->config->vision == 'or') $story->stories = $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.version=t2.version')
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.id')->in($storyIdList)
+            ->beginIF($story->twins)->andWhere('t1.id')->in(ltrim($story->twins, ',') . $storyIdList)->fi()
+            ->beginIF(!$story->twins)->andWhere('t1.id')->in($storyIdList)->fi()
             ->fetchAll('id');
 
         return $story;
