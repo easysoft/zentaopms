@@ -1584,7 +1584,7 @@ class taskZen extends task
             return $response;
         }
 
-        $response['load'] = true;
+        $response['load'] = $from != 'edittask';
         return $response;
     }
 

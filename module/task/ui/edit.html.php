@@ -405,7 +405,7 @@ detailBody
                     (
                         setClass('ghost text-primary'),
                         icon('time'),
-                        set::href(inlink('recordWorkhour', "id={$task->id}")),
+                        set::href(inlink('recordWorkhour', "id={$task->id}&from=edittask")),
                         setData('toggle', 'modal')
                     ),
                     formHidden('consumed', $task->consumed)
