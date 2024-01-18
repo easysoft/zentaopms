@@ -145,7 +145,12 @@
           <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
           <td class='c-actions'>
             <?php
-            if($canBeChanged)
+            if(!empty($bug->retractConfirm))
+            {
+                $retractObject = join(',', $bug->retractObject);
+                 common::printIcon('bug', 'confirmDemandRetract', "objectID=$bug->id&object=bug&extra=$retractObject", $bug, 'browse', 'search', '', 'iframe', true);
+            }
+            else if($canBeChanged)
             {
                 $params = "bugID=$bug->id";
                 common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'ok',      '', 'iframe', true, '', '', $bug->project);

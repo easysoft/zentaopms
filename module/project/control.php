@@ -1285,6 +1285,7 @@ class project extends control
         $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
 
         $showModule  = !empty($this->config->datatable->projectBug->showModule) ? $this->config->datatable->projectBug->showModule : '';
+        if($this->config->edition == 'ipd') $bugs = $this->loadModel('story')->getAffectObject($bugs, 'bug');
 
         /* Assign. */
         $this->view->title           = $title;

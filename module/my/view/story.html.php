@@ -100,7 +100,12 @@
           <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
             <?php
-            if($canBeChanged)
+            if(!empty($story->retractConfirm))
+            {
+                $retractObject = join(',', $story->retractObject);
+                 common::printIcon('story', 'confirmDemandRetract', "objectID=$story->id&object=story&extra=$retractObject", $story, 'browse', 'search', '', 'iframe', true);
+            }
+            else if($canBeChanged)
             {
                 $vars = "story={$story->id}";
                 echo common::buildIconButton('story', 'change', $vars, $story, 'list', 'alter', '', 'iframe', true);

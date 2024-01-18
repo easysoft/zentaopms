@@ -183,6 +183,7 @@ class testcase extends control
         $sceneCount = count($scenes);
         $caseCount  = 0;
         /* Process case for check story changed. */
+        if($this->config->edition == 'ipd') $cases = $this->loadModel('story')->getAffectObject($cases, 'case');
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases);
         foreach($cases as $case)
@@ -906,6 +907,7 @@ class testcase extends control
         $case->caseFails = $caseFails;
 
         $this->executeHooks($caseID);
+        if($this->config->edition == 'ipd') $case = $this->loadModel('story')->getAffectObject('', 'case', $case);
 
         $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->view;

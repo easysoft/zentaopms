@@ -6991,4 +6991,81 @@ class storyModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * Get affect objects.
+     *
+     * @param  mixed  $objects
+     * @param  string $objectType
+     * @param  string $object
+     * @access public
+     * @return void
+     */
+    public function getAffectObject($objects = '', $objectType = '', $objectInfo = '')
+    {
+        if(empty($objects) and empty($objectInfo)) return $objects;
+        if(empty($objects) and $objectInfo) $objects = array($objectInfo->id => $objectInfo);
+
+        $objectIDList = array();
+        $storyIDList  = array();
+        foreach($objects as $object)
+        {
+            $objectIDList[] = $object->id;
+            if($objectType == 'story') $storyIDList[] = $object->id;
+            if($objectType != 'story') $storyIDList[] = $object->story;
+            $object->retractConfirm = false;
+            $object->retractObject  = array();
+        }
+
+        /* 获取需要确认的用户需求id。 */
+        $URs   = $this->getStoryRelationByIds($storyIDList, 'story');
+        $URIds = implode(',', $URs);
+        if(!$URIds) return $objects;
+
+        /* 获取已经撤回的用户需求。*/
+        $requirements = $this->dao->select('id')->from(TABLE_STORY)
+            ->where('id')->in($URIds)
+            ->andWhere('retractedBy')->ne('')
+            ->fetchPairs('id');
+        if(!$requirements) return $objects;
+
+        /* 获取已经确认过的对象。*/
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->in($objectIDList)
+            ->andWhere('action')->eq('confirmedretract')
+            ->fetchPairs('objectID', 'extra');
+        foreach($actions as $objecyID => $action) $actions[$objecyID] = explode(',', $action);
+
+        /* 获取需要进行确认操作的研发需求 => 用户需求。*/
+        $confirmObjects = array();
+        foreach($requirements as $requirement)
+        {
+            foreach($URs as $storyID => $UR)
+            {
+                if (strpos($UR, (string) $requirement) !== false) $confirmObjects[$storyID][$requirement] = $requirement;
+            }
+        }
+
+        /* 将确认信息插入到objects中并且过滤掉已经确认的用户需求。*/
+        foreach($objects as $object)
+        {
+            $confirmed = array();
+            if(isset($actions[$object->id])) $confirmed = $actions[$object->id]; // 已经确认的用户需求
+
+            if($objectType == 'story' and isset($confirmObjects[$object->id]))
+            {
+                $object->retractObject  = array_diff($confirmObjects[$object->id], $confirmed);
+                if($object->retractObject) $object->retractConfirm = true;
+            }
+            else if($objectType != 'story' and isset($confirmObjects[$object->story]))
+            {
+                $object->retractObject  = array_diff($confirmObjects[$object->story], $confirmed);
+                if($object->retractObject) $object->retractConfirm = true;
+            }
+        }
+
+        if($objectInfo) return $objects[$objectInfo->id];
+        return $objects;
+    }
 }

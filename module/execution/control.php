@@ -232,6 +232,7 @@ class execution extends control
         $this->config->execution->search['onMenuBar'] = 'yes';
         if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
         $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL, $modules);
+        if($this->config->edition == 'ipd') $tasks = $this->loadModel('story')->getAffectObject($tasks, 'task');
 
         /* Assign. */
         $this->view->tasks        = $tasks;
@@ -1150,6 +1151,8 @@ class execution extends control
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
         $showModule = !empty($this->config->datatable->executionBug->showModule) ? $this->config->datatable->executionBug->showModule : '';
+        if($this->config->edition == 'ipd') $bugs = $this->loadModel('story')->getAffectObject($bugs, 'bug');
+
 
         /* Assign. */
         $this->view->title           = $title;
@@ -1244,6 +1247,7 @@ class execution extends control
             $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $executionID, 'productID' => $productID), $branchID);
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
+        if($this->config->edition == 'ipd') $cases = $this->loadModel('story')->getAffectObject($cases, 'case');
 
         $this->view->title       = $this->lang->execution->testcase;
         $this->view->executionID = $executionID;
