@@ -2660,6 +2660,7 @@ EOF;
         if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
         if($module == 'requirement' and $method == 'processstorychange') $module = 'story';
         if($app->config->vision != 'lite' and $module == 'feedback' and $method == 'view') $method = 'adminview';
+        if($method == 'confirmdemandretract' and $module == 'requirement') $module = 'story';
 
         /* If the user is doing a tutorial, have all tutorial privs. */
         if(defined('TUTORIAL'))
