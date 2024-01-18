@@ -379,7 +379,11 @@ class bugZen extends bug
     private function getProductMembersForCreate(object $bug): array
     {
         $this->loadModel('user');
-        if($bug->executionID)
+        if(!empty($bug->allUsers))
+        {
+            $productMembers = $this->user->getPairs('devfirst|noclosed');
+        }
+        else if($bug->executionID)
         {
             $productMembers = $this->user->getTeamMemberPairs((int)$bug->executionID, 'execution');
         }
@@ -1175,6 +1179,7 @@ class bugZen extends bug
         $this->view->builds                = $bug->builds;
         $this->view->bug                   = $bug;
         $this->view->allBuilds             = !empty($bug->allBuilds) ? $bug->allBuilds : '';
+        $this->view->allUsers              = !empty($bug->allUsers)  ? $bug->allUsers  : '';
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = !empty($resultID) && !empty($stepIdList) ? $this->loadModel('file')->getByObject('stepResult', (int)$resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->contactList           = $this->loadModel('user')->getContactLists();

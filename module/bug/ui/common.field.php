@@ -32,9 +32,9 @@ $fields->field('openedBuild')
     ->itemBegin('openedBuild[]')->control('picker')->items(data('builds'))->multiple()->itemEnd();
 
 $fields->field('assignedTo')
+    ->checkbox(array('text' => $lang->bug->loadAll, 'name' => 'allUsers', 'checked' => data('allUsers') ? true : false))
     ->control('inputGroup')
-    ->itemBegin('assignedTo')->control('picker')->items(data('productMembers'))->value(data('bug.assignedTo'))->itemEnd()
-    ->itemBegin()->control('btn')->icon('refresh text-primary')->hint($lang->bug->loadAll)->id('allUsers')->itemEnd();
+    ->itemBegin('assignedTo')->control('picker')->items(data('productMembers'))->value(data('bug.assignedTo'))->itemEnd();
 
 $fields->field('deadline')
     ->control('datePicker');

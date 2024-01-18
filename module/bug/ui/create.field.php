@@ -29,8 +29,7 @@ $fields->field('openedBuild')
     ->icon('plus')->text($lang->release->create)->hint($lang->release->create)
     ->url(createLink('release', 'create', 'productID=' . data('bug.productID') . '&branch=' . data('bug.branch')))
     ->className(count(data('builds')) > 1 || data('executionID') ? 'hidden' : '')
-    ->itemEnd()
-    ->itemBegin()->control('btn')->icon('refresh text-primary')->hint($lang->bug->loadAll)->itemEnd();
+    ->itemEnd();
 
 $fields->field('story')->foldable();
 

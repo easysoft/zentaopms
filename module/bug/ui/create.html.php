@@ -21,6 +21,7 @@ $fields->autoLoad('product', 'product,module,openedBuild,execution,project,story
    ->autoLoad('project', 'project,openedBuild,execution,story,task,assignedTo')
    ->autoLoad('execution', 'execution,openedBuild,story,task,assignedTo')
    ->autoLoad('allBuilds', 'openedBuild')
+   ->autoLoad('allUsers',  'assignedTo')
    ->autoLoad('region', 'lane');
 
 jsVar('bug',                   $bug);
@@ -35,9 +36,5 @@ formGridPanel
     set::title($lang->bug->create),
     set::fields($fields),
     set::fullModeOrders('module,project,execution'),
-    set::loadUrl($loadUrl),
-    on::click('#allBuilds',             'loadAllBuilds'),
-    on::click('#allUsers',              'loadAllUsers'),
-    on::click('#refreshExecutionBuild', 'refreshExecutionBuild'),
-    on::click('#refreshProductBuild',   'refreshProductBuild'),
+    set::loadUrl($loadUrl)
 );
