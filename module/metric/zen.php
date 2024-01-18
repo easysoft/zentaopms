@@ -215,7 +215,7 @@ class metricZen extends metric
                 $initRecords[$uniqueKey]->value = $record->value;
             }
 
-            $records = array_merge($records, array_values($initRecords));
+            $records[$code] = array_values($initRecords);
         }
 
         return $records;

@@ -759,18 +759,29 @@ class metricModel extends model
      * 插入度量库数据。
      * Insert into metric lib.
      *
-     * @param  array  $records
+     * @param  array  $recordWithCode
      * @access public
      * @return void
      */
-    public function insertMetricLib($records)
+    public function insertMetricLib($recordWithCode)
     {
         $this->dao->begin();
-        foreach($records as $record)
+        foreach($recordWithCode as $code => $records)
         {
-            if(empty($record)) continue;
-            $this->dao->insert(TABLE_METRICLIB)
-                ->data($record)
+            foreach($records as $record)
+            {
+                if(empty($record)) continue;
+                $this->dao->insert(TABLE_METRICLIB)
+                    ->data($record)
+                    ->exec();
+            }
+            $rows = count($records);
+            $time = helper::now();
+
+            $this->dao->update(TABLE_METRIC)
+                ->set('lastCalcRows')->eq($rows)
+                ->set('lastCalcTime')->eq($time)
+                ->where('code')->eq($code)
                 ->exec();
         }
         $this->dao->commit();

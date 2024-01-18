@@ -189,8 +189,8 @@ class metric extends control
                 $rows = $statement->fetchAll();
                 $this->metricZen->calcMetric($rows, $calcGroup->calcList);
 
-                $records = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
-                $this->metric->insertMetricLib($records);
+                $recordWithCode = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
+                $this->metric->insertMetricLib($recordWithCode);
             }
             catch(Exception $e)
             {
