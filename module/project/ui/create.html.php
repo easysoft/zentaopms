@@ -20,19 +20,28 @@ jsVar('parentBudget', $lang->project->parentBudget);
 jsVar('budgetUnitLabel', $lang->project->tenThousandYuan);
 jsVar('budgetUnitValue', $config->project->budget->tenThousand);
 
+$modelMenuItems = array();
+foreach($lang->project->modelList as $key => $text)
+{
+    if(empty($key)) continue;
+    $modelMenuItems[] = array('text' => $text, 'selected' => $key == $model, 'url' => createLink('project', 'create', "model=$key"));
+}
+
+$modeDropdown = dropdown
+(
+    btn
+    (
+        zget($lang->project->modelList, $model),
+        setClass('gray-300-outline size-sm rounded-full ml-2')
+    ),
+    set::arrow(true),
+    set::placement('bottom'),
+    set::items($modelMenuItems)
+);
+
 formGridPanel
 (
-    to::titleSuffix
-    (
-        picker
-        (
-            set::onChange(jsRaw("(value) => loadPage($.createLink('project', 'create', 'model=' + value))")),
-            set::className('text-base text-light w-24'),
-            set::required(true),
-            set::items($lang->project->modelList),
-            set::value($model)
-        )
-    ),
+    to::titleSuffix($modeDropdown),
     to::headingActions
     (
         a
