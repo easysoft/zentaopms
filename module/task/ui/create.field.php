@@ -102,6 +102,7 @@ $buildStoryBox = function($props)
 };
 
 $fields->field('storyBox')
+    ->required(strpos($config->task->create->requiredFields, 'story') !== false)
     ->label($lang->task->story)
     ->checkbox(array('text' => $lang->task->syncStory, 'name' => 'copyButton'))
     ->hidden(!data('features.story'))
