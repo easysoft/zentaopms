@@ -29,7 +29,7 @@ class formLabel extends wg
                 set::size('sm'),
                 set::icon(is_null($hintIcon) ? 'help' : $hintIcon),
                 setClass('ghost form-label-hint text-gray-300', $hintClass),
-                toggle::tooltip(array('title' => $hint)),
+                toggle::tooltip(array('title' => $hint, 'className' => 'text-gray border border-gray-300', 'type' => 'white', 'placement' => 'right')),
                 set($hintProps)
             );
         }
