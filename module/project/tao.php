@@ -111,7 +111,7 @@ class projectTao extends projectModel
             ->autoCheck('begin,end')
             ->check('end',  'gt', $project->begin)
             ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$project->parent' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$project->parent' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();
@@ -133,8 +133,8 @@ class projectTao extends projectModel
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchCheck($this->config->project->create->requiredFields, 'notempty')
-            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = " . $this->dao->sqlobj->quote($project->parent) . " and `model` =  " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = " . $this->dao->sqlobj->quote($project->parent) . " and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `parent` = " . $this->dao->sqlobj->quote($project->parent) . " and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->checkFlow()
             ->exec();

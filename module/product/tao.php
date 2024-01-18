@@ -405,7 +405,7 @@ class productTao extends productModel
 
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->checkIF(!empty($product->name), 'name', 'unique', "id != {$productID} and `program` = {$programID} and `deleted` = '0'")
-            ->checkIF(!empty($product->code), 'code', 'unique', "id != {$productID} and `deleted` = '0'")
+            ->checkIF(!empty($product->code), 'code', 'unique', "id != {$productID} and `program` = {$programID} and `deleted` = '0'")
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
             ->checkFlow()
             ->where('id')->eq($productID)
