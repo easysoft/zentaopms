@@ -4762,7 +4762,7 @@ class executionModel extends model
 
         foreach($tasks as $task)
         {
-            foreach($this->config->projectExecution->dtable->fieldList['actions']['task'] as $action)
+            foreach($this->config->projectExecution->dtable->actionsRule['task'] as $action)
             {
                 $rawAction = str_replace('Task', '', $action);
                 if(!commonModel::hasPriv('task', $rawAction)) continue;
