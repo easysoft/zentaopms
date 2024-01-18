@@ -10,11 +10,20 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$fields = useFields('execution.create');
+$fields    = useFields('execution.create');
+$typeField = $isStage ? 'attribute' : 'lifetime';
 if(!$isStage || empty($config->setPercent))
 {
     $fields->remove('percent');
     $fields->field('days')->width('1/2');
+}
+if(empty($config->setCode))  $fields->remove('code');
+if(!empty($config->setCode)) $fields->moveBefore($typeField, 'name');
+if(!empty($project->model) && $project->model == 'agileplus' && !empty($config->setCode))
+{
+    $fields->field('code')->width('1/4');
+    $fields->field($typeField)->width('1/4');
+    $fields->moveAfter($typeField, 'code');
 }
 
 jsVar('+projectID', $projectID);

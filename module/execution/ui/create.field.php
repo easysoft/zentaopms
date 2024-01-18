@@ -20,9 +20,10 @@ if(!empty($project->model) && $project->model == 'agileplus')
     unset($lang->execution->typeList['stage'], $lang->execution->typeList['']);
     $fields->field('method')
         ->required()
+        ->name('type')
         ->labelHint($lang->execution->agileplusMethodTip)
-        ->items(false)
-        ->itemBegin('type')->control('picker')->items($lang->execution->typeList)->value(data('execution.type'))->required(true)->itemEnd();
+        ->items($lang->execution->typeList)
+        ->value(data('execution.type'));
 }
 
 $fields->field('name')
@@ -31,13 +32,10 @@ $fields->field('name')
     ->label($showExecutionExec ? $lang->execution->execName : $lang->execution->name)
     ->value(data('execution.name'));
 
-if(isset($config->setCode) && $config->setCode == 1)
-{
-    $fields->field('code')
-        ->required()
-        ->label($showExecutionExec ? $lang->execution->execCode : $lang->execution->code)
-        ->value(data('execution.code'));
-}
+$fields->field('code')
+    ->required()
+    ->label($showExecutionExec ? $lang->execution->execCode : $lang->execution->code)
+    ->value(data('execution.code'));
 
 $fields->field('type')
     ->required()
