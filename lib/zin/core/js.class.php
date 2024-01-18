@@ -86,6 +86,17 @@ class js extends directive
         return $this->appendLine("if($conditions){");
     }
 
+    public function elseIf(string ...$conditions): self
+    {
+        $conditions = implode(' && ', $conditions);
+        return $this->appendLine("}else if($conditions){");
+    }
+
+    public function else(): self
+    {
+        return $this->appendLine('}else{');
+    }
+
     public function endIf(): self
     {
         return $this->appendLine('}');
@@ -138,7 +149,11 @@ class js extends directive
 
     public function appendCode(string ...$codes): self
     {
-        foreach($codes as $code) $this->jsLines[] = $code;
+        foreach($codes as $code)
+        {
+            if(empty($code)) continue;
+            $this->jsLines[] = $code;
+        }
         return $this;
     }
 

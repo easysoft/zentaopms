@@ -24,12 +24,7 @@ class jQuery extends jsContext
 {
     public function __construct(string $selector, ?string $name = null, string|array|js|null ...$codes)
     {
-        if(!str_starts_with($selector, '$'))
-        {
-            if($selector !== 'window' && $selector !== 'document') $selector = static::json($selector);
-            $selector = '$(' . $selector . ')';
-        }
-        parent::__construct($selector, $name, ...$codes);
+        parent::__construct(static::select($selector), $name, ...$codes);
     }
 
     public function addClass(mixed ...$classList): self
@@ -203,6 +198,19 @@ class jQuery extends jsContext
     public function prependTo(string $content): self
     {
         return $this->call('prependTo', $content);
+    }
+
+    public static function select(string $selector)
+    {
+        if(is_string($selector) && str_starts_with($selector, 'RAWJS<') && str_ends_with($selector, '>RAWJS')) return substr($selector, 6, -6);
+
+        if(str_starts_with($selector, '$')) return $selector;
+
+        if($selector !== 'window' && $selector !== 'document')
+        {
+            $selector = '\'' . str_replace('\'', "\'", $selector) . '\'';
+        }
+        return "\$($selector)";
     }
 }
 

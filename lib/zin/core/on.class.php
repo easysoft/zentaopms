@@ -81,16 +81,16 @@ class on extends jsHelper
 
         $js = array
         (
-            "\$element.$bindMethod('{$this->event}.zin.on'$selector,function(event,args){",
-                'const $this = $(this);',
-                'const target = event.target;',
-                $self    ? 'if(event.target !== this) return;' : '',
-                $prevent ? 'event.preventDefault();' : '',
-                $stop    ? 'event.stopPropagation();' : '',
+            "\$element.$bindMethod('{$this->event}.zin.on'$selector,function(event,args){\n",
+                "const \$this = $(this);\n",
+                "const target = event.target;\n",
+                $self    ? "if(event.target !== this) return;\n" : '',
+                $prevent ? "event.preventDefault();\n" : '',
+                $stop    ? "event.stopPropagation();\n" : '',
                 parent::toJS($joiner),
-            '});',
+            "\n});",
         );
-        return implode($joiner, $js);
+        return implode('', $js);
     }
 
     public function applyToWg(wg &$wg, string $blockName): void
@@ -139,13 +139,19 @@ class on extends jsHelper
         return static::bind('inited', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function bind(string $event, null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
+    public static function bind(string $event, null|string|on $selectorOrCallback = null, null|array|string|on $handlerOrOptions = null): on
     {
         if($selectorOrCallback instanceof on)
         {
             $selectorOrCallback->event = $event;
             if(is_array($handlerOrOptions)) $selectorOrCallback->options = array_merge($selectorOrCallback->options, $handlerOrOptions);
             return $selectorOrCallback;
+        }
+        if($handlerOrOptions instanceof on)
+        {
+            $handlerOrOptions->event    = $event;
+            $handlerOrOptions->selector = $selectorOrCallback;
+            return $handlerOrOptions;
         }
         return on($event, $selectorOrCallback, $handlerOrOptions);
     }
