@@ -34,17 +34,10 @@ if($canBatchAction)
         $statusList = array();
         foreach($lang->execution->statusList as $key => $value)
         {
-            $statusList[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('execution', 'batchChangeStatus', "status=$key"));
+            $statusList[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('execution', 'batchChangeStatus', "status=$key"));
         }
 
-        menu
-        (
-            set::id('navStatus'),
-            set::className('dropdown-menu'),
-            set::items($statusList)
-        );
-
-        $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->statusAB,   'className' => 'btn btn-caret size-sm secondary', 'url' => '#navStatus', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
+        $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->statusAB, 'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'items' => $statusList, 'type' => 'dropdown');
     }
 }
 
