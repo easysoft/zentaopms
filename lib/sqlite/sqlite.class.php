@@ -77,7 +77,8 @@ class sqlite
         if(empty($sqliteFile) || !is_file($sqliteFile)) $sqliteFile = $tmpRoot . 'sqlite.db';
 
         $sqliteFile = realpath($sqliteFile);
-        if(strpos($sqliteFile, $tmpRoot) !== 0) helper::end("The sqlite file '$sqliteFile' is not in the tmp root '$tmpRoot'");
+        if(strpos($sqliteFile, $tmpRoot) !== 0) return helper::end("The sqlite file '$sqliteFile' is not in the tmp root '$tmpRoot'");
+        if(!is_file($sqliteFile)) return helper::end("The sqlite file '$sqliteFile' is not exists");
 
         $dbh = new PDO("sqlite:$sqliteFile");
         $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
@@ -133,7 +134,7 @@ class sqlite
      */
     public function formatSQL(string $sql): string
     {
-        $sql = $this->formatAttr($sql);
+        // $sql = $this->formatAttr($sql);
         return $sql;
     }
 
@@ -167,7 +168,9 @@ class sqlite
      */
     public function rawQuery($sql): PDOStatement|false
     {
-        return $this->dbh->query($sql);
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute();
+        return $stmt;
     }
 
     /**
