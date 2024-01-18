@@ -17,6 +17,11 @@ function loadExecutionRelated()
     loadExecutionBuilds();
 }
 
+window.refreshExecutionBuild = function()
+{
+    loadExecutionBuilds();
+}
+
 /**
  * Load execution builds.
  *

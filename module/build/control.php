@@ -60,7 +60,7 @@ class build extends control
 
             $message = $this->executeHooks($buildID);
             if($message) $this->lang->saveSuccess = $message;
-            if(helper::isAjaxRequest('modal')) return $this->sendSuccess(array('closeModal' => true, 'callback' => 'loadExecutionBuilds()'));
+            if(helper::isAjaxRequest('modal')) return $this->sendSuccess(array('closeModal' => true, 'callback' => 'refreshExecutionBuild()'));
             return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID"), 'id' => $buildID));
         }
 

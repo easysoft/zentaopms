@@ -120,13 +120,13 @@ function refreshModule(event)
     loadProductModules(productID);
 }
 
-function refreshProductBuild(event)
+window.refreshProductBuild = function(event)
 {
     const productID = $('[name="product"]').val();
     loadProductBuilds(productID);
 }
 
-function refreshExecutionBuild(event)
+window.refreshExecutionBuild = function(event)
 {
     const executionID = $('[name="execution"]').val();
     loadExecutionBuilds(executionID);

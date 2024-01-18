@@ -116,7 +116,7 @@ class release extends control
             $message = $result ? $result : $this->lang->saveSuccess;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $releaseID));
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "parent.loadProductBuilds($productID)"));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => 'refreshProductBuild'));
 
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => inlink('view', "releaseID={$releaseID}")));
         }

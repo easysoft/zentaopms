@@ -18,8 +18,8 @@ if(!empty($executionType) && $executionType == 'kanban') $fields->merge('bug.kan
 $fields->autoLoad('product', 'product,module,openedBuild,execution,project,story,task,assignedTo')
    ->autoLoad('branch',  'module,openedBuild,execution,project,story,task,assignedTo')
    ->autoLoad('module',  'assignedTo,story')
-   ->autoLoad('project', 'openedBuild,execution,story,task,assignedTo')
-   ->autoLoad('execution', 'openedBuild,story,task,assignedTo')
+   ->autoLoad('project', 'project,openedBuild,execution,story,task,assignedTo')
+   ->autoLoad('execution', 'execution,openedBuild,story,task,assignedTo')
    ->autoLoad('region', 'lane');
 
 jsVar('bug',                   $bug);

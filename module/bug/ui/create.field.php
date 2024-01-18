@@ -19,6 +19,19 @@ $fields->field('execution')
        ->className('full:w-1/4')
        ->foldable(!$isShadowProduct);
 
+$fields->field('openedBuild')
+    ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal'))
+    ->icon('plus')->text($lang->build->create)->hint($lang->build->create)
+    ->url(createLink('build', 'create', 'executionID=' . data('executionID') . '&productID=' . data('bug.productID') . '&projectID=' . data('projectID')))
+    ->className(count(data('builds')) > 1 || !data('executionID') ? 'hidden' : '')
+    ->itemEnd()
+    ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal'))
+    ->icon('plus')->text($lang->release->create)->hint($lang->release->create)
+    ->url(createLink('release', 'create', 'productID=' . data('bug.productID') . '&branch=' . data('bug.branch')))
+    ->className(count(data('builds')) > 1 || data('executionID') ? 'hidden' : '')
+    ->itemEnd()
+    ->itemBegin()->control('btn')->icon('refresh text-primary')->hint($lang->bug->loadAll)->id('allBuilds')->itemEnd();
+
 $fields->field('story')->foldable();
 
 $fields->field('task')->foldable();

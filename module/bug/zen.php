@@ -1127,7 +1127,6 @@ class bugZen extends bug
     protected function buildCreateForm(object $bug, array $param, string $from): void
     {
         extract($param);
-        if(!empty($executionID)) $projectID = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('project');
 
         $currentProduct = $this->product->getByID($bug->productID);
 

@@ -29,9 +29,7 @@ $fields->field('module')
 $fields->field('openedBuild')
     ->checkbox(array('text' => $lang->bug->allBugs, 'name' => 'allBuilds'))
     ->control('inputGroup')
-    ->itemBegin('openedBuild[]')->control('picker')->items(data('builds'))->multiple()->itemEnd()
-    ->itemBegin()->control('addon')->id('buildBoxActions')->className('btn-group hidden')->itemEnd()
-    ->itemBegin()->control('btn')->icon('refresh text-primary')->hint($lang->bug->loadAll)->id('allBuilds')->itemEnd();
+    ->itemBegin('openedBuild[]')->control('picker')->items(data('builds'))->multiple()->itemEnd();
 
 $fields->field('assignedTo')
     ->control('inputGroup')
