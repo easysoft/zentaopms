@@ -179,6 +179,10 @@ $config->task->dtable->fieldList['desc']['title']   = 'desc';
 $config->task->dtable->fieldList['desc']['control'] = 'textarea';
 $config->task->dtable->fieldList['desc']['display'] = false;
 
+$config->task->dtable->fieldList['keywords']['type']     = 'text';
+$config->task->dtable->fieldList['keywords']['sortType'] = true;
+$config->task->dtable->fieldList['keywords']['group']    = 9;
+
 $config->task->dtable->fieldList['mailto']['type']      = 'text';
 $config->task->dtable->fieldList['mailto']['sortType']  = true;
 $config->task->dtable->fieldList['mailto']['group']     = 9;
