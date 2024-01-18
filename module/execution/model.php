@@ -5488,6 +5488,7 @@ class executionModel extends model
                 {
                     $canStart = $execution->status == 'wait' ? $execution->ipdStage['canStart'] : 1;
                     if($execution->status == 'close') $canStart = false;
+                    if($project->parallel) $canStart = true;
                     $task->ipdStage = new stdclass();
                     $task->ipdStage->canStart      = $canStart;
                     $task->ipdStage->taskStartTip  = sprintf($this->lang->execution->disabledTip->taskStartTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
