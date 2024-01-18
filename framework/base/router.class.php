@@ -417,6 +417,7 @@ class baseRouter
         $this->loadClass('filter', $static = true);
         $this->loadClass('form',   $static = true);
         $this->loadClass('dbh',    $static = true);
+        $this->loadClass('sqlite', $static = true);
         $this->loadClass('dao',    $static = true);
         $this->loadClass('mobile', $static = true);
 
@@ -2927,6 +2928,25 @@ class baseRouter
             }
             self::triggerError($message, __FILE__, __LINE__, $exit = true);
         }
+    }
+
+    /**
+     * 连接SQLite数据库。
+     * Connect SQLite database.
+     *
+     * @param  object $params
+     * @access public
+     * @return object
+     */
+    public function connectSqlite($params = null)
+    {
+        if(empty($params))
+        {
+            $params = new stdclass();
+            $params->file = $this->getTmpRoot() . 'sqlite.db';
+        }
+
+        return new sqlite($params);
     }
 
     /**

@@ -489,6 +489,28 @@ class metricModel extends model
     }
 
     /**
+     * 获取dao对象。
+     * Get dao object.
+     *
+     * @access public
+     * @return object
+     */
+    public function getDAO()
+    {
+        if($this->config->metricDB->type == 'sqlite')
+        {
+            $dao = clone $this->dao;
+            $dao->reset();
+
+            $dao->dbh    = $this->app->connectSqlite();
+            $dao->driver = 'sqlite';
+
+            return $dao;
+        }
+        return $this->dao;
+    }
+
+    /**
      * 获取度量项数据源句柄。
      * Get data source statement of calculator.
      *
@@ -499,11 +521,12 @@ class metricModel extends model
      */
     public function getDataStatement($calculator, $returnType = 'statement')
     {
+        $dao = $this->getDAO();
         if(!empty($calculator->dataset))
         {
             include_once $this->getDatasetPath();
 
-            $dataset    = new dataset($this->dao);
+            $dataset    = new dataset($dao);
             $dataSource = $calculator->dataset;
             $fieldList  = implode(',', $calculator->fieldList);
 
@@ -512,7 +535,7 @@ class metricModel extends model
         }
         else
         {
-            $calculator->setDAO($this->dao);
+            $calculator->setDAO($dao);
             $scm = $this->app->loadClass('scm');
             $calculator->setSCM($scm);
 
@@ -829,11 +852,11 @@ class metricModel extends model
      * @access public
      * @return dataset
      */
-    public function getDataset()
+    public function getDataset($dao)
     {
         $datasetPath = $this->getDatasetPath();
         include_once $datasetPath;
-        return new dataset($this->dao);
+        return new dataset($dao);
     }
 
     /**
@@ -884,13 +907,19 @@ class metricModel extends model
         $aliasList  = array();
         foreach($uniqueList as $field)
         {
-            if(strpos($field, '.') === false || strpos(strtoupper($field), ' AS ') !== false)
+            if(strpos(strtoupper($field), ' AS ') !== false)
             {
                 $aliasList[] = $field;
                 continue;
             }
-            $alias = str_replace('.', '_', $field);
-            $aliasList[] = $field . ' AS ' . $alias;
+            if(strpos($field, '.') !== false)
+            {
+                $alias = str_replace('.', '_', $field);
+                list($table, $field) = explode('.', $field);
+                $aliasList[] = "`$table`.`$field` AS `$alias`";
+                continue;
+            }
+            $aliasList[] = "`$field`";
         }
         return implode(',', $aliasList);
     }

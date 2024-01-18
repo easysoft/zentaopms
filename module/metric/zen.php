@@ -86,18 +86,20 @@ class metricZen extends metric
      */
     protected function prepareDataset($calcGroup)
     {
+        $dao = $this->metric->getDAO();
+
         $dataSource = $calcGroup->dataset;
         $calcList   = $calcGroup->calcList;
 
         if(empty($dataSource))
         {
             $calc = current($calcList);
-            $calc->setDAO($this->dao);
+            $calc->setDAO($dao);
 
             return $calc->getStatement();
         }
 
-        $dataset   = $this->metric->getDataset($this->dao);
+        $dataset   = $this->metric->getDataset($dao);
         $fieldList = $this->metric->uniteFieldList($calcList);
 
         return $dataset->$dataSource($fieldList);
