@@ -694,7 +694,7 @@ $config->featureGroup->waterfall     = array();
 $config->featureGroup->agileplus     = array();
 $config->featureGroup->waterfallplus = array();
 $config->featureGroup->assetlib      = array();
-$config->featureGroup->other         = array('devops', 'kanban');
+$config->featureGroup->other         = array('devops', 'kanban', 'setCode');
 
 $config->bi = new stdclass();
 $config->bi->pickerHeight = 150;

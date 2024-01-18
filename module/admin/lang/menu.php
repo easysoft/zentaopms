@@ -51,7 +51,7 @@ $lang->admin->menuList->system['subMenu']['cron']        = array('link' => "{$la
 $lang->admin->menuList->system['subMenu']['timezone']    = array('link' => "{$lang->timezone}|custom|timezone|");
 $lang->admin->menuList->system['subMenu']['buildindex']  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
 $lang->admin->menuList->system['subMenu']['tableengine'] = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
-if($this->config->db->driver == 'mysql') $lang->admin->menuList->system['subMenu']['backup']      = array('link' => "{$lang->backup->common}|backup|index|");
+if($this->config->db->driver == 'mysql') $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|backup|index|");
 
 $lang->admin->menuList->system['menuOrder']['5']  = 'mode';
 if($this->config->db->driver == 'mysql') $lang->admin->menuList->system['menuOrder']['10'] = 'backup';
@@ -88,7 +88,6 @@ $lang->admin->menuList->model['tabMenu']['common']['project']      = array('link
 if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['common']['stage'] = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage');
 $lang->admin->menuList->model['tabMenu']['common']['build']        = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
 $lang->admin->menuList->model['tabMenu']['common']['flow']         = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
-$lang->admin->menuList->model['tabMenu']['common']['code']         = array('link' => "{$lang->code}|custom|code|");
 
 $lang->admin->menuList->model['tabMenu']['common']['percent']      = array('link' => "{$lang->stage->percent}|custom|percent|");
 $lang->admin->menuList->model['tabMenu']['common']['hours']        = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|', 'custom|hours|'));
@@ -98,8 +97,7 @@ $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']        = 'p
 if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['7']        = 'stage';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']       = 'build';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['35']       = 'flow';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['40']       = 'code';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['43']       = 'percent';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['40']       = 'percent';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['45']       = 'hours';
 if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfall']['5']     = 'stage';
 if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfallplus']['5'] = 'stage';

@@ -250,24 +250,29 @@ class admin extends control
         if($_POST)
         {
             $data           = form::data()->get();
-            $closedFeatures = '';
+            $closedFeatures = array();
             foreach($this->config->featureGroup as $group => $features)
             {
                 foreach($features as $feature)
                 {
                     $code = $group . ucfirst($feature);
-                    if(empty($data->module[$code])) $closedFeatures .= "{$code},";
+                    if(empty($data->module[$code])) $closedFeatures[] = $code;
                 }
             }
 
-            $this->setting->setItem('system.common.closedFeatures', rtrim($closedFeatures, ','));
+            $this->setting->setItem('system.common.closedFeatures', implode(',', $closedFeatures));
             $this->setting->setItem('system.common.global.scoreStatus', zget($data->module, 'myScore', 0));
             $this->setting->setItem('system.custom.URAndSR', $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productUR', 0));
+            $this->setting->setItem('system.common.setCode', in_array('otherSetCode', $closedFeatures) ? 0 : 1);
             $this->loadModel('custom')->processMeasrecordCron();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => '$.apps.updateAppsMenu(true);loadCurrentPage();'));
         }
+
+        $closedFeatures = $this->setting->getItem('owner=system&module=common&section=&key=closedFeatures');
+        if(empty($config->setCode) && strpos(",{$closedFeatures},", ',otherSetCode,') === false) $closedFeatures .= ',otherSetCode';
+
         $this->view->title            = $this->lang->admin->setModuleIndex;
-        $this->view->closedFeatures   = $this->setting->getItem('owner=system&module=common&section=&key=closedFeatures');
+        $this->view->closedFeatures   = $closedFeatures;
         $this->view->useScore         = $this->setting->getItem('owner=system&module=common&global&key=scoreStatus');
         $this->view->disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
         $this->display();

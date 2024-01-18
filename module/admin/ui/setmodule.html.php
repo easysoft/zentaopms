@@ -31,14 +31,8 @@ foreach($config->featureGroup as $group => $features)
             $code = $group. ucfirst($feature);
             if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;
 
-            if($code == 'myScore')
-            {
-                $value = $useScore ? 1 : 0;
-            }
-            else
-            {
-                $value = strpos(",$closedFeatures,", ",$code,") === false ? '1' : '0';
-            }
+            $value = strpos(",$closedFeatures,", ",$code,") === false ? '1' : '0';
+            if($code == 'myScore') $value = $useScore ? 1 : 0;
 
             $items[] = checkbox
             (
