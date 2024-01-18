@@ -53,7 +53,7 @@ $fields->field('file')
     ->control('upload');
 
 $fields->field('mailto')
-    ->control('picker')
+    ->control('mailto')
     ->multiple(true)
     ->items(data('users'));
 
