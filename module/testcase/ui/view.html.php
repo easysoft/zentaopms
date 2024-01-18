@@ -115,12 +115,12 @@ if($isLibCase)
 else
 {
 
-    $productItem = item
+    $productItem = !$product->shadow ? item
     (
         set::name($lang->testcase->product),
         set::href($productLink),
         $product->name
-    );
+    ) : null;
 
     if($product->type != 'normal')
     {
