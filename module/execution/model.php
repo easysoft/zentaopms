@@ -2529,7 +2529,7 @@ class executionModel extends model
         $today       = helper::today();
         foreach($assignedToes as $account => $preExecutionID)
         {
-            if(!isset($teamMembers[$account]))
+            if(!empty($account) && !isset($teamMembers[$account]))
             {
                 $role = $this->dao->select('*')->from(TABLE_TEAM)
                     ->where('root')->eq($preExecutionID)
