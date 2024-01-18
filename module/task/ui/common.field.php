@@ -25,12 +25,6 @@ $fields->field('name')
     ->control('colorInput', array('colorValue' => data('task.color')))
     ->value(data('task.name'));
 
-$fields->field('assignedTo')
-    ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple'))
-    ->control('picker')
-    ->items(data('members'))
-    ->value(data('task.assignedTo'));
-
 $fields->field('datePlan')
     ->lable($lang->task->datePlan)
     ->control('inputGroup')

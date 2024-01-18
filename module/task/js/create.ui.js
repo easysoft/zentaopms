@@ -7,17 +7,18 @@
  */
 function toggleTeam()
 {
+    $assignedToBox = $('.assignedToBox');
     if($('[name^=multiple]').prop('checked'))
     {
-        $('.add-team').removeClass('hidden');
-        $('#assignedTo').addClass('hidden');
-        $('.assignedToList').removeClass('hidden');
+        $assignedToBox.find('.add-team').removeClass('hidden');
+        $assignedToBox.find('.picker-box').addClass('hidden');
+        $assignedToBox.find('.assignedToList').removeClass('hidden');
     }
     else
     {
-        $('.add-team').addClass('hidden');
-        $('#assignedTo').removeClass('hidden');
-        $('.assignedToList').addClass('hidden');
+        $assignedToBox.find('.add-team').addClass('hidden');
+        $assignedToBox.find('.picker-box').removeClass('hidden');
+        $assignedToBox.find('.assignedToList').addClass('hidden');
     }
 }
 
@@ -37,6 +38,8 @@ function typeChange(e)
     const $assignedToPicker = $('[name^=assignedTo]').zui('picker');
     if(result == 'affair')
     {
+        $('.assignedToBox .assignedToList').addClass('hidden');
+        $('.assignedToBox .add-team').addClass('hidden');
         $('[name=multiple]').prop("checked", false);
         $assignedToPicker.render({multiple: true, checkbox: true, toolbar: true});
 
@@ -420,7 +423,7 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
     return false;
 })
 
-$('#taskCreateForm').on('click', '.assignedToList .picker-multi-selection', function()
+window.removeTeamMember = function()
 {
     /* 团队成员必须大于1人. */
     if($(this).closest('.assignedToList').find('.picker-multi-selection').length == 2)
@@ -456,7 +459,7 @@ $('#taskCreateForm').on('click', '.assignedToList .picker-multi-selection', func
     $('#estimate').val(totalEstimate);
 
     setLineIndex();
-})
+}
 
 window.copyStoryTitle = function(e)
 {

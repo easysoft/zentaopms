@@ -10,6 +10,42 @@ $fields->field('file')->foldable();
 $fields->field('mailto')->foldable();
 $fields->field('keywords')->foldable();
 
+/* Set assignedTo field. */
+$buildAssginedTo = function($props)
+{
+    return div
+        (
+            setClass('assignedToBox flex'),
+            picker
+            (
+                set::name('assignedTo'),
+                set::value(data('task.assignedTo')),
+                set::items(data('members'))
+            ),
+            btn
+            (
+                set
+                (
+                    array
+                    (
+                        'class' => 'btn primary-pale hidden add-team mr-3',
+                        'data-toggle' => 'modal',
+                        'url' => '#modalTeam',
+                        'icon' => 'plus'
+                    )
+                ),
+                data('lang.task.addMember')
+            ),
+            div(setClass('assignedToList'))
+
+        );
+};
+
+$fields->field('assignedToBox')
+    ->label($lang->task->assignedTo)
+    ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple'))
+    ->control($buildAssginedTo);
+
 /* Set name field width. */
 $nameWidth = 'w-1/2';
 if(empty(data('features.story')) && data('execution.type') != 'kanban') $nameWidth .= ' full:w-full';
@@ -106,7 +142,7 @@ $fields->field('storyBox')
     ->label($lang->task->story)
     ->checkbox(array('text' => $lang->task->syncStory, 'name' => 'copyButton'))
     ->hidden(!data('features.story'))
-    ->foldable(data('features.story'))
+    ->foldable(data('features.story') && strpos($config->task->create->requiredFields, 'story') === false)
     ->control($buildStoryBox);
 
 /* Remove story relate jump link. */
