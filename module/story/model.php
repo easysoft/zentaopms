@@ -7026,6 +7026,7 @@ class storyModel extends model
         $storyIDList  = array();
         foreach($objects as $object)
         {
+            if($this->app->rawModule == 'testtask') $object->id = $object->case;
             $objectIDList[] = $object->id;
             if($objectType == 'story') $storyIDList[] = $object->id;
             if($objectType != 'story') $storyIDList[] = $object->story;
@@ -7067,6 +7068,8 @@ class storyModel extends model
         foreach($objects as $object)
         {
             $confirmed = array();
+
+            if($this->app->rawModule == 'testtask') $object->id = $object->case;
             if(isset($actions[$object->id])) $confirmed = $actions[$object->id]; // 已经确认的用户需求
 
             if($objectType == 'story' and isset($confirmObjects[$object->id]))
