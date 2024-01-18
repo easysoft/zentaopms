@@ -12,4 +12,4 @@ div.no-background .input-group-addon {background: none;}
 #teamTable tr td:first-child .icon{position:absolute; top: 40px; right: 19px;display: block; font-size: 8px; color: #9ea3bd;}
 #teamTable tr:nth-last-child(2) td:first-child .icon {display: none;}
 #teamTable td.required {position: relative;}
-#teamTable td.required:after {content: '*'; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); position: absolute; top: 1rem; right: 0.125rem;}
+#teamTable td.required:after {content: '*'; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); position: absolute; top: 1rem; right: 0.125rem; font-size: 16px;}

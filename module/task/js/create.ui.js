@@ -465,7 +465,7 @@ window.copyStoryTitle = function(e)
 {
     if(!$('[name=story]').val()) return;
 
-    let storyTitle = $('[data-name=storyBox] > .input-group span.picker-single-selection').text();
+    let storyTitle = $('[data-name=storyBox] .setStoryBox span.picker-single-selection').text();
     let startPosition = storyTitle.indexOf(':') + 1;
     if (startPosition > 0) {
         let endPosition   = storyTitle.lastIndexOf('(');
@@ -516,4 +516,9 @@ window.saveTaskName = function(e)
 window.saveTaskEstimate = function(e)
 {
     $('[name=taskEstimate]').val($(e.target).val());
+}
+
+window.changeTeamMember = function(e)
+{
+    $(e.target).closest('td').next().toggleClass('required', $(e.target).val() != '');
 }

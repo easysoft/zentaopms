@@ -164,6 +164,7 @@ formGridPanel
     on::change('[name=type]', 'typeChange'),
     on::change('[name=region]', 'loadLanes'),
     on::change('[name=multiple]', 'toggleTeam'),
+    on::change('#teamTable [name^=team]', 'changeTeamMember'),
     on::click('[name=isShowAllModule]', 'showAllModule'),
     on::click('[name=copyButton]', 'copyStoryTitle'),
     on::click('.assignedToList .picker-multi-selection', 'removeTeamMember'),
