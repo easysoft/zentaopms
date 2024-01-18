@@ -1332,7 +1332,7 @@ class story extends control
 
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
-        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, $story->type == 'story' ? 'requirement' : 'story');
+        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, $story->type == 'story' ? 'requirement' : 'story', (string)$story->branch);
 
         /* Get stories to link. */
         $stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type);
