@@ -18,6 +18,7 @@ $fields->field('product')
     ->item($isBranchUR ? field('branch')->control('picker')->boxClass('flex-none')->width('100px')->name('branch')->items($createFields['branch']['options'])->value($createFields['branch']['default']) : null);
 
 $fields->field('module')
+    ->wrapAfter(true)
     ->required($createFields['module']['required'])
     ->controlBegin('module')
     ->type('modulePicker')
@@ -47,7 +48,6 @@ if(isset($createFields['branch']) && $type == 'story')
 if(isset($createFields['URS']))
 {
     $fields->field('URS')
-        ->wrapBefore(true)
         ->label($lang->story->requirement)
         ->control('inputGroup')
         ->items(false)
@@ -70,15 +70,13 @@ $fields->field('needNotReview')->control('hidden')->value(0);
 if($isSR)
 {
     $fields->field('assignedTo')
-        ->wrapBefore(true)
         ->required($createFields['assignedTo']['required'])
         ->id('assignedToBox')
         ->items($createFields['assignedTo']['options']);
 }
 
 $fields->field('category')
-    ->wrapBefore(!$isSR)
-    ->wrapAfter(true)
+    ->className('full:w-1/6')
     ->required($createFields['category']['required'])
     ->items($createFields['category']['options'])
     ->value($createFields['category']['default']);
@@ -98,12 +96,14 @@ if($isKanban)
 }
 
 $fields->field('title')
+    ->wrapBefore(true)
     ->control('colorInput')
     ->required($createFields['title']['required'])
     ->value($createFields['title']['default']);
 
 $fields->field('pri')
     ->width('1/4')
+    ->className('full:w-1/6')
     ->required($createFields['pri']['required'])
     ->control('priPicker')
     ->items($createFields['pri']['options'])
@@ -111,6 +111,7 @@ $fields->field('pri')
 
 $fields->field('estimate')
     ->width('1/4')
+    ->className('full:w-1/6')
     ->required($createFields['estimate']['required'])
     ->label($lang->story->estimateAB . $lang->story->estimateUnit)
     ->value($createFields['estimate']['default']);
