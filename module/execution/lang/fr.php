@@ -420,6 +420,7 @@ $lang->execution->noweekend                    = 'Exclure les Weekends';
 $lang->execution->nodelay                      = 'Exclude Delay Date';
 $lang->execution->withweekend                  = 'Inclure les Weekends';
 $lang->execution->withdelay                    = 'Include Delay Date';
+$lang->execution->unitTemplate                 = ' (Unit：%s)';
 $lang->execution->interval                     = 'Intervalles';
 $lang->execution->fixFirstWithLeft             = 'Mettre à jour les heures également';
 $lang->execution->unfinishedExecution          = "This {$lang->executionCommon} has ";

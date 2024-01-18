@@ -2,8 +2,6 @@ $(function()
 {
     loadProjectExecutions(copyProjectID);
 
-    if($('#methodHover').length) new zui.Tooltip('#methodHover', {title: methodTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light methodTip'});
-
     if(isStage)
     {
         $(document).on('change', '#attribute', function(e)
@@ -26,7 +24,7 @@ $(function()
  */
 function refreshPage()
 {
-    const projectID = $('#project').zui('picker').$.value;
+    const projectID = $('[name=project]').val();
     loadPage($.createLink('execution', 'create', 'projectID=' + projectID));
 }
 
@@ -60,19 +58,6 @@ function loadMembers()
         }
     });
 }
-
-$(document).on('change', '#begin', function()
-{
-    $("#days").val('');
-    $('#end').zui('datePicker').$.changeState({value: ''});
-    $("input[name='delta']").prop('checked', false);
-});
-
-$(document).on('change', '#end', function(e)
-{
-    $("input[name='delta']").prop('checked', false);
-    computeWorkDays();
-});
 
 /**
  * Load copy executions box.
@@ -108,8 +93,17 @@ function setCopyExecution()
     zui.Modal.hide();
 }
 
-window.branchChange = function(e)
+window.toggleCopyTeam = function(e)
 {
-    let $product = $(e.target).closest('.form-row').find("[name^='products']");
-    loadPlans($product, $(e.target));
+    $this = $(e.target);
+    if($this.prop('checked'))
+    {
+        $('[data-name=team]').removeClass('w-full').addClass('w-1/2');
+        $('[data-name=teams]').removeClass('hidden');
+    }
+    else
+    {
+        $('[data-name=team]').removeClass('w-1/2').addClass('w-full');
+        $('[data-name=teams]').addClass('hidden');
+    }
 }

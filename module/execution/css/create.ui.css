@@ -1,8 +1,4 @@
-.createPanel {max-width: 1200px !important;}
-.methodTip {width: 200px !important;}
-#lifeTimeTips {padding-left: 1rem; align-items: center;}
-.team-hr {margin-top: 0 !important;}
-.productsBox .line-btn {width: 48px; margin-right: 32px;}
+.panel-actions {display: flex; align-items: center;}
 
 #copyExecutionModal .modal-dialog {max-height: unset;}
 #copyExecutionModal .copy-title {min-width: 130px;}

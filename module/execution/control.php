@@ -981,6 +981,9 @@ class execution extends control
 
         if($executionID) return $this->executionZen->displayAfterCreated($projectID, $executionID, $planID, $confirm);
 
+        $allProjects = $this->project->getPairsByModel('all', 'noclosed,multiple');
+        if(empty($projectID)) $projectID = key($allProjects);
+
         $project = empty($projectID) ? null : $this->loadModel('project')->fetchByID($projectID);
         if($project) $this->executionZen->correctExecutionCommonLang($project, $execution->type);
         $products = $this->executionZen->getLinkedProducts($copyExecutionID, $planID, $project);
@@ -1024,7 +1027,7 @@ class execution extends control
         $this->view->title               = $this->app->tab == 'execution' ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->allProducts         = array_filter($this->executionZen->getAllProductsForCreate($project));
-        $this->view->allProjects         = $this->project->getPairsByModel('all', 'noclosed,multiple');
+        $this->view->allProjects         = $allProjects;
         $this->view->multiBranchProducts = $this->loadModel('product')->getMultiBranchPairs();
         $this->view->products            = $products;
         $this->view->teams               = $this->execution->getCanCopyObjects($projectID);

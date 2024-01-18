@@ -420,6 +420,7 @@ $lang->execution->noweekend                    = '去除周末';
 $lang->execution->nodelay                      = '去除延期日期';
 $lang->execution->withweekend                  = '显示周末';
 $lang->execution->withdelay                    = '显示延期日期';
+$lang->execution->unitTemplate                 = '（单位：%s）';
 $lang->execution->interval                     = '间隔';
 $lang->execution->fixFirstWithLeft             = '修改剩余工时';
 $lang->execution->unfinishedExecution          = "该{$lang->executionCommon}下还有";
