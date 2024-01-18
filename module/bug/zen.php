@@ -655,7 +655,7 @@ class bugZen extends bug
         $legendBasic['activatedCount'] = array('name' => $this->lang->bug->activatedCount, 'text' => $bug->activatedCount);
         $legendBasic['activatedDate']  = array('name' => $this->lang->bug->activatedDate,  'text' => formatTime($bug->activatedDate));
         $legendBasic['confirmed']      = array('name' => $this->lang->bug->confirmed,      'text' => $this->lang->bug->confirmedList[$bug->confirmed]);
-        $legendBasic['assignedTo']     = array('name' => $this->lang->bug->lblAssignedTo,  'text' => zget($users, $bug->assignedTo) . $this->lang->at . formatTime($bug->assignedDate));
+        $legendBasic['assignedTo']     = array('name' => $this->lang->bug->lblAssignedTo,  'text' => $bug->assignedTo ? zget($users, $bug->assignedTo) . $this->lang->at . formatTime($bug->assignedDate) : '');
         $legendBasic['deadline']       = array('name' => $this->lang->bug->deadline,       'text' => formatTime($bug->deadline) . (isset($bug->delay) ? sprintf($this->lang->bug->notice->delayWarning, $bug->delay) : ''));
         $legendBasic['feedbackBy']     = array('name' => $this->lang->bug->feedbackBy,     'text' => $bug->feedbackBy);
         $legendBasic['notifyEmail']    = array('name' => $this->lang->bug->notifyEmail,    'text' => $bug->notifyEmail);
