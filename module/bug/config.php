@@ -127,6 +127,7 @@ $config->bug->actionList['toStory']['data-url']     = array('module' => 'story',
 $config->bug->actionList['toTask']['icon']        = 'check';
 $config->bug->actionList['toTask']['text']        = $lang->bug->toTask;
 $config->bug->actionList['toTask']['hint']        = $lang->bug->toTask;
+$config->bug->actionList['toTask']['data-url']    = array('module' => 'task', 'method' => 'create', 'params' => '');
 $config->bug->actionList['toTask']['data-target'] = '#toTask';
 $config->bug->actionList['toTask']['data-toggle'] = 'modal';
 $config->bug->actionList['toTask']['data-size']   = 'sm';
