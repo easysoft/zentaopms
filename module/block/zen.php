@@ -689,13 +689,21 @@ class blockZen extends block
         $this->view->builds = $this->dao->select('id,name')->from(TABLE_BUILD)->where('deleted')->eq(0)->fetchPairs();
     }
 
-    protected function printRoadmapBlock(object $block)
+    /**
+     * 打印产品路线图区块数据。
+     * Print roadmap block.
+     *
+     * @param  object    $block
+     * @access protected
+     * @return void
+     */
+    protected function printRoadmapBlock(object $block): void
     {
         $productID = $this->session->product;
         $product   = $this->loadModel('product')->getByID($productID);
 
         $roadmaps = $this->product->getRoadmap($productID, 'all');
-        $branches = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID);
+        $branches = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID, 'active');
 
         /* Assign view data. */
         $this->view->title    = $product->name . $this->lang->colon . $this->lang->product->roadmap;
