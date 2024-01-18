@@ -20,6 +20,7 @@ form
 (
     set::actions(''),
     set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
+    setID('docEditForm'),
     div
     (
         setClass('flex titleBox'),
@@ -178,14 +179,8 @@ form
                     setClass('form-actions form-group no-label'),
                     btn
                     (
-                        set
-                        (
-                            array
-                            (
-                                'class'   => 'btn primary',
-                                'btnType' => 'submit'
-                            )
-                        ),
+                        setClass('btn primary'),
+                        on::click('window.saveDoc'),
                         $lang->save
                     )
                 )

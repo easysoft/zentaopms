@@ -396,7 +396,7 @@ class doc extends control
                 $files   = $result['files'];
             }
 
-            return $this->docZen->responseAfterEdit($doc, $comment, $changes, $files);
+            return $this->docZen->responseAfterEdit($doc, $changes, $files);
         }
 
         /* Get doc and set menu. */

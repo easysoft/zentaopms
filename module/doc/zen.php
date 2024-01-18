@@ -576,13 +576,12 @@ class docZen extends doc
      * Return after edit a document.
      *
      * @param  object    $doc
-     * @param  bool      $comment
      * @param  array     $changes
      * @param  array     $files
      * @access protected
-     * @return bool|int
+     * @return void
      */
-    protected function responseAfterEdit(object $doc, bool $comment = false, array $changes = array(), array $files = array()): bool|int
+    protected function responseAfterEdit(object $doc, array $changes = array(), array $files = array())
     {
         if($this->post->comment != '' || !empty($changes) || !empty($files))
         {
@@ -601,7 +600,6 @@ class docZen extends doc
         }
 
         $link     = $this->createLink('doc', 'view', "docID={$doc->id}");
-        $oldLib   = $doc->lib;
         $doc      = $this->doc->getByID($doc->id);
         $lib      = $this->doc->getLibByID((int)$doc->lib);
         $objectID = zget($lib, $lib->type, 0);
