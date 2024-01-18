@@ -94,6 +94,7 @@ $fields->field('RD')->foldable()->items(data('rdUsers'))->value(data('copyExecut
 $fields->field('teamName')
     ->foldable()
     ->width('full')
+    ->label($lang->execution->teamName)
     ->name('team')
     ->checkbox(array('text' => $lang->execution->copyTeam, 'id' => 'copyTeam'))
     ->value(data('execution.team'));
