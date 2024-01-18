@@ -268,7 +268,7 @@ detailBody
                 set::active(true),
                 tableData
                 (
-                    item
+                    $execution->multiple ? item
                     (
                         set::name($lang->task->execution),
                         a
@@ -276,7 +276,7 @@ detailBody
                             set::href(createLink('execution', 'view', "executionID=$execution->id")),
                             $execution->name
                         )
-                    ),
+                    ) : null,
                     item
                     (
                         set::name($lang->task->module),
