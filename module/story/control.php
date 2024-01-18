@@ -1435,6 +1435,7 @@ class story extends control
     public function view($storyID, $version = 0, $param = 0, $storyType = 'story')
     {
         $story = $this->story->getById($storyID, $version, true);
+        if($this->config->edition == 'ipd') $story = $this->story->getAffectObject('', $story->type, $story);
 
         $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
         if(!$story)
