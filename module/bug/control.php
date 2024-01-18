@@ -175,6 +175,7 @@ class bug extends control
 
         if($this->app->tab == 'repo') $this->view->repoID = $bug->repo;
         $this->view->title       = "BUG #$bug->id $bug->title - " . $product->name;
+        $this->view->branchID    = $bug->branch;
         $this->view->product     = $product;
         $this->view->project     = $this->loadModel('project')->getByID($bug->project);
         $this->view->projects    = $projects;
