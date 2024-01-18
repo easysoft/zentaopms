@@ -127,14 +127,15 @@ class fileModel extends model
      * @param  string $extra
      * @param  string $filesName
      * @param  string $labelsName
+     * @param  int    $arrayKey
      * @access public
      * @return array
      */
-    public function saveUpload($objectType = '', $objectID = 0, $extra = '', $filesName = 'files', $labelsName = 'labels')
+    public function saveUpload($objectType = '', $objectID = 0, $extra = '', $filesName = 'files', $labelsName = 'labels', $arrayKey = -1)
     {
         $fileTitles = array();
         $now        = helper::today();
-        $files      = $this->getUpload($filesName, $labelsName);
+        $files      = $this->getUpload($filesName, $labelsName, $arrayKey);
 
         foreach($files as $id => $file)
         {
@@ -206,10 +207,11 @@ class fileModel extends model
      *
      * @param  string $htmlTagName
      * @param  string $labelsName
+     * @param  int    $arrayKey
      * @access public
      * @return array
      */
-    public function getUpload($htmlTagName = 'files', $labelsName = 'labels')
+    public function getUpload($htmlTagName = 'files', $labelsName = 'labels', $arrayKey = -1)
     {
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
@@ -227,6 +229,7 @@ class fileModel extends model
             extract($_FILES[$htmlTagName]);
             foreach($name as $id => $filename)
             {
+                if($arrayKey > -1 && $id != $arrayKey) continue;
                 if(empty($filename)) continue;
                 if(!validater::checkFileName($filename)) continue;
 

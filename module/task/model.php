@@ -498,7 +498,7 @@ class taskModel extends model
             $childTasks .= $taskID . ',';
             if($task->story) $this->story->setStage($task->story);
 
-            $this->executeHooks($taskID);
+            $this->executeHooks($taskID, $i);
 
             if($this->config->vision == 'lite')
             {
@@ -1593,6 +1593,8 @@ class taskModel extends model
                     $this->updateParentStatus($oldTask->id);
                     $this->computeBeginAndEnd($oldTask->parent);
                 }
+
+                $this->executeHooks($taskID, $taskID);
 
                 if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);

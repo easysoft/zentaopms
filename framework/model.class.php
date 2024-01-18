@@ -317,10 +317,11 @@ class model extends baseModel
      * Execute Hooks
      *
      * @param  int    $objectID
+     * @param  int    $arrayKey
      * @access public
      * @return void
      */
-    public function executeHooks($objectID)
+    public function executeHooks($objectID, $arrayKey = -1)
     {
         if($this->config->edition == 'open') return false;
 
@@ -337,7 +338,7 @@ class model extends baseModel
         {
             if($field->control == 'file' && $field->show && !$field->readonly)
             {
-                $this->file->saveUpload($moduleName, $objectID, $field->field, $field->field, $field->field);
+                $this->file->saveUpload($moduleName, $objectID, $field->field, $field->field, $field->field, $arrayKey);
             }
         }
 

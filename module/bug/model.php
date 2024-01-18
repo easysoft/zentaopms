@@ -308,7 +308,7 @@ class bugModel extends model
 
             $bugID = $this->dao->lastInsertID();
 
-            $this->executeHooks($bugID);
+            $this->executeHooks($bugID, $i);
 
             if($bug->execution)
             {
@@ -930,7 +930,7 @@ class bugModel extends model
                 {
                     if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bug);
 
-                    $this->executeHooks($bugID);
+                    $this->executeHooks($bugID, $bugID);
 
                     $allChanges[$bugID] = common::createChanges($oldBug, $bug);
 

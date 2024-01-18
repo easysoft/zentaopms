@@ -51,7 +51,7 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
       <?php endif;?>
     </div>
   </div>
-  <form class='main-form' method='post' target='hiddenwin' id='batchCreateForm'>
+  <form class='main-form' method='post' target='hiddenwin' id='batchCreateForm' enctype='multipart/form-data'>
     <div class="table-responsive">
       <table class='table table-form'>
         <thead>

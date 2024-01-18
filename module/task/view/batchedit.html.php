@@ -50,7 +50,7 @@ js::set('requiredFields', $config->task->edit->requiredFields);
       }
   }
   ?>
-  <form id='batchEditForm' class='main-form' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "executionID={$executionID}")?>">
+  <form id='batchEditForm' class='main-form' method='post' target='hiddenwin' enctype='multipart/form-data' action="<?php echo inLink('batchEdit', "executionID={$executionID}")?>">
     <div class="table-responsive">
       <table class='table table-form table-fixed with-border'>
         <thead>
