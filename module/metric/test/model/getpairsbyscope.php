@@ -7,7 +7,7 @@ title=getPairsByScope
 timeout=0
 cid=1
 
-- 测试user对象数 @11
+- 测试user对象数 @10
 - 测试product对象数 @5
 - 测试project对象数 @20
 - 测试部分user对象
@@ -36,7 +36,7 @@ zdTable('user')->config('user', true)->gen(30);
 zdTable('product')->config('product', true)->gen(10);
 zdTable('project')->config('project', true)->gen(40);
 
-r(count($metric->getPairsByScope('user')))    && p('') && e('11'); // 测试user对象数
+r(count($metric->getPairsByScope('user')))    && p('') && e('10'); // 测试user对象数
 r(count($metric->getPairsByScope('product'))) && p('') && e('5');  // 测试product对象数
 r(count($metric->getPairsByScope('project'))) && p('') && e('20'); // 测试project对象数
 

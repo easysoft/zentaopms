@@ -17,7 +17,8 @@ include dirname(__FILE__, 2) . '/calc.class.php';
 
 $metric = new metricTest();
 
-$metric1 = $metric->getByID(1);
+$metricByCode = $metric->getByCode('count_of_program');
+$metric1 = $metric->getByID($metricByCode->id);
 $metric2 = json_decode(json_encode($metric1));
 $metric2->stage = 'wait';
 $metric3 = json_decode(json_encode($metric1));

@@ -10,23 +10,22 @@ cid=1
 - 传入resultHeader1和resultData1，获取header
  - 第0条的name属性 @date
  - 第1条的name属性 @value
-- 传入resultHeader1和resultData1，获取data
- - 第0条的value属性 @1
- - 第1条的value属性 @3
+- 传入resultHeader1和resultData1，获取data[0]第value条的0属性 @1
+- 传入resultHeader1和resultData1，获取data[1]第value条的0属性 @3
 - 传入resultHeader2和resultData2，获取header
  - 第0条的name属性 @scope
  - 第1条的name属性 @2023
-- 传入resultHeader2和resultData2，获取data
- - 第0条的scope属性 @开源
- - 第0条的2023属性 @3
- - 第1条的scope属性 @ddddw
- - 第1条的2022属性 @9
+- 传入resultHeader2和resultData2，获取data[0]
+ - 属性scope @开源
+ - 第2023条的0属性 @3
+- 传入resultHeader2和resultData2，获取data[1]
+ - 属性scope @ddddw
+ - 第2022条的0属性 @9
 - 传入resultHeader2和resultData2，获取header
  - 第0条的name属性 @date
  - 第1条的name属性 @value
-- 传入resultHeader2和resultData2，获取data
- - 第0条的value属性 @1
- - 第1条的value属性 @1
+- 传入resultHeader2和resultData2，获取data[0]第value条的0属性 @1
+- 传入resultHeader2和resultData2，获取data[1]第value条的0属性 @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -72,11 +71,23 @@ $resultData3[] = (object) array('date' => '2023-10-20', 'dateString' => '2023-10
 $resultData3[] = (object) array('date' => '2023-11-12', 'dateString' => '2023-11-12', 'dateType' => 'day', 'value' => 1, 'calcTime' => '2021-11-23 0:23');
 $resultData3[] = (object) array('date' => '2023-11-13', 'dateString' => '2023-11-13', 'dateType' => 'day', 'value' => 1, 'calcTime' => '2021-11-23 0:23');
 
-r($metric->getGroupTable($resultHeader1, $resultData1)) && p('0:name;1:name') && e('date,value');                 // 传入resultHeader1和resultData1，获取header
-r($metric->getGroupTable($resultHeader1, $resultData1, false, false)) && p('0:value;1:value') && e('1,3');        // 传入resultHeader1和resultData1，获取data
+$group1 = $metric->getGroupTable($resultHeader1, $resultData1);
+r($group1) && p('0:name;1:name') && e('date,value'); // 传入resultHeader1和resultData1，获取header
 
-r($metric->getGroupTable($resultHeader2, $resultData2)) && p('0:name;1:name') && e('scope,2023');                                      // 传入resultHeader2和resultData2，获取header
-r($metric->getGroupTable($resultHeader2, $resultData2, false, false)) && p('0:scope,2023;1:scope,2022') && e('开源,3;ddddw,9');        // 传入resultHeader2和resultData2，获取data
+$group1 = $metric->getGroupTable($resultHeader1, $resultData1, false, false);
+r($group1[0]) && p('value:0') && e('1'); // 传入resultHeader1和resultData1，获取data[0]
+r($group1[1]) && p('value:0') && e('3'); // 传入resultHeader1和resultData1，获取data[1]
 
-r($metric->getGroupTable($resultHeader3, $resultData3)) && p('0:name;1:name') && e('date,value');                 // 传入resultHeader2和resultData2，获取header
-r($metric->getGroupTable($resultHeader3, $resultData3, false, false)) && p('0:value;1:value') && e('1;1');         // 传入resultHeader2和resultData2，获取data
+$group2 = $metric->getGroupTable($resultHeader2, $resultData2);
+r($group2) && p('0:name;1:name') && e('scope,2023'); // 传入resultHeader2和resultData2，获取header
+
+$group2 = $metric->getGroupTable($resultHeader2, $resultData2, false, false);
+r($group2[0]) && p('scope;2023:0') && e('开源,3');  // 传入resultHeader2和resultData2，获取data[0]
+r($group2[1]) && p('scope;2022:0') && e('ddddw,9'); // 传入resultHeader2和resultData2，获取data[1]
+
+$group3 = $metric->getGroupTable($resultHeader3, $resultData3);
+r($group3) && p('0:name;1:name') && e('date,value'); // 传入resultHeader2和resultData2，获取header
+
+$group3 = $metric->getGroupTable($resultHeader3, $resultData3, false, false);
+r($group3[0]) && p('value:0') && e('1');         // 传入resultHeader2和resultData2，获取data[0]
+r($group3[1]) && p('value:0') && e('1');         // 传入resultHeader2和resultData2，获取data[1]
