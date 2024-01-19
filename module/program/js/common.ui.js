@@ -292,6 +292,7 @@ window.budgetOverrunTips = function(e)
 
     var selectedProgramID = $('[name=parent]').zui('picker').$.state.value;
     var budget            = $('#budget').val();
+    let parentBudget      = $('[data-name=parent]').data('parentBudget');
 
     if(selectedProgramID == 0)
     {
@@ -299,7 +300,7 @@ window.budgetOverrunTips = function(e)
         return false;
     }
 
-    if(budget > parentBudgetData)
+    if(budget > parentBudget)
     {
         let ignoreBtn = "<span id='ignore' onclick='ignoreTip(this)'>" + ignore + "</span>";
 

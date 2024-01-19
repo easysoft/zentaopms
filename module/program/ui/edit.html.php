@@ -15,7 +15,6 @@ jsVar('endGreatThanParent',  $lang->program->endGreatThanParent);
 jsVar('ignore',              $lang->program->ignore);
 jsVar('currencySymbol',      $lang->project->currencySymbol);
 jsVar('budgetOverrun',       $lang->project->budgetOverrun);
-jsVar('parentBudgetData',    zget($parentProgram, 'budget', ''));
 
 $fields = useFields('program.edit');
 

@@ -7,6 +7,7 @@ $fields = defineFieldList('program');
 $fields->field('parent')
     ->items(data('parents'))
     ->value(data('parentProgram.id'))
+    ->data('parentBudget', data('parentProgram.budget'))
     ->data('parentBegin', data('parentProgram.begin'))
     ->data('parentEnd', data('parentProgram.end'));
 
