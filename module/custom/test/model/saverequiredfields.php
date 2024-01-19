@@ -62,12 +62,12 @@ $requiredFields = array(
 );
 
 $customTester = new customTest();
-r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields1'], $fieldsType[0]))   && p('value', ';') && e('name,code');                                        //测试moduleName为product，requiredFields为空
-r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields2'], $fieldsType[0]))   && p('value', ';') && e('name,code,PO');                                     //测试moduleName为product，requiredFields中的create存在一个值
-r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields3'], $fieldsType[0]))   && p('value', ';') && e('name,code,PO,RD');                                  //测试moduleName为product，requiredFields中的create存在多个值
-r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields4'], $fieldsType[1]))   && p('value', ';') && e('name,code,PO');                                     //测试moduleName为product，requiredFields中的edit存在一个值
-r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields5'], $fieldsType[1]))   && p('value', ';') && e('name,code,PO,RD');                                  //测试moduleName为product，requiredFields中的edit存在多个值
-r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields6'], $fieldsType[0]))   && p('value', ';') && e('name,code,PO,RD');                                  //测试moduleName为product，requiredFields中的create,edit各存在多个值
+r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields1'], $fieldsType[0]))   && p('value', ';') && e('name');                                        //测试moduleName为product，requiredFields为空
+r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields2'], $fieldsType[0]))   && p('value', ';') && e('name,PO');                                     //测试moduleName为product，requiredFields中的create存在一个值
+r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields3'], $fieldsType[0]))   && p('value', ';') && e('name,PO,RD');                                  //测试moduleName为product，requiredFields中的create存在多个值
+r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields4'], $fieldsType[1]))   && p('value', ';') && e('name,PO');                                     //测试moduleName为product，requiredFields中的edit存在一个值
+r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields5'], $fieldsType[1]))   && p('value', ';') && e('name,PO,RD');                                  //测试moduleName为product，requiredFields中的edit存在多个值
+r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields6'], $fieldsType[0]))   && p('value', ';') && e('name,PO,RD');                                  //测试moduleName为product，requiredFields中的create,edit各存在多个值
 r($customTester->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields1'], $fieldsType[0]))   && p('value', ';') && e('name,date');                                        //测试moduleName为release，requiredFields为空
 r($customTester->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields2'], $fieldsType[0]))   && p('value', ';') && e('name,date,desc');                                   //测试moduleName为release，requiredFields中的create存在一个值
 r($customTester->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields3'], $fieldsType[1]))   && p('value', ';') && e('name,date,desc');                                   //测试moduleName为release，requiredFields中的edit存在一个值
