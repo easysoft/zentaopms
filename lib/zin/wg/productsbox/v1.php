@@ -197,11 +197,7 @@ class productsBox extends wg
                 {
                     foreach($branchIdList as $branchID)
                     {
-                        if(isset($planGroups[$product->id][$branchID]))
-                        {
-                            $branchPlans = $planGroups[$product->id][$branchID];
-                            $plans += array_combine(array_column($branchPlans, 'id'), array_column($branchPlans, 'title'));
-                        }
+                        if(isset($planGroups[$product->id][$branchID])) $plans += $planGroups[$product->id][$branchID];
                     }
                 }
                 $planID = isset($product->plans) ? implode(',', $product->plans) : '';
@@ -242,6 +238,7 @@ class productsBox extends wg
                 (
                     set::width('1/4'),
                     setClass('ml-px linkBranch'),
+                    count($linkedProductsBox) == 0 ? set::label('') : null,
                     $hasBranch ? null : setClass('hidden'),
                     inputGroup
                     (
