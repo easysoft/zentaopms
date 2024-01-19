@@ -11,6 +11,11 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('confirmRecord', $lang->task->confirmRecord);
+if(isInModal())
+{
+    set::id("modal-record-hours-task-{$task->id}");
+    on('click', "#modal-record-hours-task-{$task->id} .edit-effort", "zui.Modal.query('#modal-record-hours-task-{$task->id}').hide()");
+}
 
 to::header
 (
@@ -74,9 +79,8 @@ if($efforts)
                 (
                     common::hasPriv('task', 'editEffort') ? a
                     (
-                        setClass('btn ghost toolbar-item square size-sm text-primary'),
-                        set::href(createLink('task', 'editEffort', "id={$effort->id}")),
-                        set('data-toggle', 'modal'),
+                        setClass('btn ghost toolbar-item square size-sm text-primary edit-effort'),
+                        on::click("loadModal('" . createLink('task', 'editEffort', "id={$effort->id}") . "')"),
                         icon('edit'),
                     ) : null,
                     common::hasPriv('task', 'deleteWorkhour') ? a
@@ -180,7 +184,7 @@ else
             set::name('date'),
             set::label($lang->task->date),
             set::width('120px'),
-            set::control('date'),
+            set::control(array('type' => 'date', 'id' => '$GID')),
             set::value(helper::today())
         ),
         formBatchItem

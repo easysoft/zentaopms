@@ -70,9 +70,8 @@ foreach($myCountList as $order => $count)
             (
                 common::hasPriv('task', 'editEffort') ? a
                 (
-                    setClass('btn ghost toolbar-item square size-sm text-primary'),
-                    set::href(createLink('task', 'editEffort', "id={$effort->id}")),
-                    set('data-toggle', 'modal'),
+                    setClass('btn ghost toolbar-item square size-sm text-primary edit-effort'),
+                    on::click("loadModal('" . createLink('task', 'editEffort', "id={$effort->id}") . "')"),
                     icon('edit')
                 ) : null,
                 common::hasPriv('task', 'deleteWorkhour') ? a
