@@ -1,3 +1,8 @@
+$(function()
+{
+    if(taskConsumed > 0) zui.Modal.alert(addChildTask);
+})
+
 $('#zeroTaskStory').closest('.panel-actions').addClass('row-reverse justify-between w-11/12');
 $('#zeroTaskStory').closest('.checkbox-primary').addClass('items-center');
 

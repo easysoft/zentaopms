@@ -12,6 +12,8 @@ namespace zin;
 /* ====== Preparing and processing page data ====== */
 jsVar('executionID', $execution->id);
 jsVar('storyTasks', $storyTasks);
+jsVar('taskConsumed', $taskConsumed);
+jsVar('addChildTask', $lang->task->addChildTask);
 
 /* zin: Set variables to define picker options for form. */
 $storyItem         = '';
