@@ -5,7 +5,6 @@ global $lang, $config;
 $fields = defineFieldList('program');
 
 $fields->field('parent')
-    ->required()
     ->items(data('parents'))
     ->value(data('parentProgram.id'));
 
