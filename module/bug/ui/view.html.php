@@ -254,6 +254,16 @@ $buildItems = function($items): array
     return $itemList;
 };
 
+$fileList = array();
+if(!empty($bug->files))
+{
+    $fileList[] = fileList
+    (
+        set::files($bug->files),
+        set::padding(false)
+    );
+}
+
 $actions = $this->loadModel('common')->buildOperateMenu($bug);
 detailBody
 (
@@ -265,11 +275,7 @@ detailBody
             set::content($steps),
             set::useHtml(true)
         ),
-        fileList
-        (
-            set::files($bug->files),
-            set::padding(false)
-        )
+        $fileList
     ),
     history(),
     floatToolbar
