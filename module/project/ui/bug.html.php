@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-
 $linkParams = "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type={key}&param={$param}&recTotal={$pager->recTotal}&recPerpage={$pager->recPerPage}";
 featureBar
 (
@@ -62,6 +61,7 @@ $config->bug->dtable->fieldList['toTask']['map']    = $tasks;
 $config->bug->dtable->fieldList['branch']['map']    = $branchTagOption;
 $config->bug->dtable->fieldList['project']['map']   = $projectPairs;
 $config->bug->dtable->fieldList['execution']['map'] = $executions;
+$config->bug->dtable->fieldList['plan']['map']      = $plans;
 
 foreach($config->bug->dtable->fieldList as $fieldCode => $fieldInfo)
 {
@@ -71,7 +71,6 @@ foreach($config->bug->dtable->fieldList as $fieldCode => $fieldInfo)
 if(!$canBatchAssignTo) $config->bug->dtable->fieldList['id']['type'] = 'id';
 
 foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
-
 $footToolbar = array();
 if($canBatchAssignTo)
 {
