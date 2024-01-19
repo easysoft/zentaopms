@@ -12,7 +12,7 @@ namespace zin;
 
 jsVar('twinsCount', $twinsCount);
 jsVar('langTwins', $lang->story->twins . ': ');
-if(!empty($errorTips)) js("zui.Modal.alert({message: '{$errorTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
+if(!empty($errorTips)) pageJS("zui.Modal.alert({message: '{$errorTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 
 unset($lang->story->reasonList['subdivided']);
 foreach($lang->story->reasonList as $key => $value)

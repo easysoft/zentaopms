@@ -17,7 +17,7 @@ jsVar('meeting', isset($meetings) ? $meetings : array());
 jsVar('researchReports', isset($researchReports) ? $researchReports : array());
 jsVar('productStoryList', $productStoryList);
 
-if(!empty($twinsTip)) js("zui.Modal.alert({message: '{$twinsTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
+if(!empty($twinsTip)) pageJS("zui.Modal.alert({message: '{$twinsTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 
 $fields     = $config->story->form->batchEdit;
 $showFields = array('module', 'title', 'estimate', 'pri', 'assignedTo', 'status', 'closedBy', 'closedReason', 'keywords');

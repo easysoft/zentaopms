@@ -19,7 +19,7 @@ jsVar('researchReports', isset($researchReports) ? $researchReports : array());
 jsVar('productStoryList', $productStoryList);
 jsVar('storyType', $storyType);
 
-if(!empty($twinsTip)) js("zui.Modal.alert({message: '{$twinsTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
+if(!empty($twinsTip)) pageJS("zui.Modal.alert({message: '{$twinsTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 
 $fields = $config->story->form->batchEdit;
 

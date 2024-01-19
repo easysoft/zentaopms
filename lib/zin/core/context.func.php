@@ -14,7 +14,7 @@ namespace zin;
 
 require_once __DIR__ . DS . 'context.class.php';
 
-function js()
+function pageJS()
 {
     call_user_func_array('\zin\context::js', func_get_args());
 }
