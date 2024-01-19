@@ -427,9 +427,8 @@ class js extends directive
      * @access public
      * @param null|string           $name     Name.
      * @param mixed                 ...$args  Arguments.
-     * @return mixed
      */
-    public static function __callStatic($name, $args): mixed
+    public static function __callStatic($name, $args)
     {
         $context = static::context("window.{$name}");
         if(empty($args)) return $context;
