@@ -5,7 +5,6 @@ global $lang,$config;
 $fields = defineFieldList('product.create', 'product');
 
 $fields->field('QD')->foldable();
-$fields->field('code')->foldable(strpos($config->product->create->requiredFields, 'code') === false);
 $fields->field('RD')->foldable();
 $fields->field('acl')->foldable();
 
@@ -17,6 +16,8 @@ $fields->field('line')
 
 if(hasPriv('product', 'manageLine')) $fields->field('line')->checkbox(array('text' => $lang->product->newLine, 'name' => 'newLine'));
 
-$fields->field('code')->className('full:w-1/4 lite:w-1/2');
-
-if(!empty($config->setCode)) $fields->field('type')->className('full:w-1/4 lite:w-1/2');
+if(!empty($config->setCode))
+{
+    $fields->field('code')->width('1/4');
+    $fields->field('type')->width('1/4');
+}
