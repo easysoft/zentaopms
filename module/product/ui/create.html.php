@@ -13,6 +13,9 @@ namespace zin;
 $fields = useFields('product.create');
 
 $fields->autoLoad('program', 'line');
+
+if(!empty($config->setCode)) $fields->orders('name,code');
+if(empty($config->setCode)) $fields->remove('code');
 $fields->fullModeOrders('name,code', 'reviewer,QD,RD');
 
 formGridPanel
