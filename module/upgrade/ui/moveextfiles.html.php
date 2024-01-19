@@ -38,7 +38,7 @@ div
         setID('mainContent'),
         formPanel
         (
-            setID('moveExtFileForm'),
+            set::formID('moveExtFileForm'),
             setClass('bg-canvas'),
             width('1000px'),
             set::title($lang->upgrade->compatibleEXT),
