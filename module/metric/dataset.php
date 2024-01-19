@@ -182,6 +182,16 @@ class dataset
             ->query();
     }
 
+    public function getBugsWithShadowProduct($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->query();
+    }
+
     /**
      * 获取项目bug数据。
      * Get project bug list.
