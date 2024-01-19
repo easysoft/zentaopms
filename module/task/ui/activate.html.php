@@ -374,8 +374,7 @@ formPanel
                 (
                     setID('confirmButton'),
                     setClass('primary btn-wide'),
-                    set::text($lang->confirm),
-                    on::click('checkTeam')
+                    set::text($lang->confirm)
                 )
             ),
             h::table

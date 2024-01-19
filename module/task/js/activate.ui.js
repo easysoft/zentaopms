@@ -67,7 +67,7 @@ function setTeamUser()
  * @access public
  * @return void
  */
-function checkTeam()
+$(document).on('click', '#confirmButton', function()
 {
     let memberCount   = '';
     let totalEstimate = 0;
@@ -120,7 +120,7 @@ function checkTeam()
 
     updateAssignedTo();
     zui.Modal.hide();
-}
+});
 
 
 /**
