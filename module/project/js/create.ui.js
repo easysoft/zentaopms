@@ -31,68 +31,6 @@ function removeAllTips()
     $('.text-warning').remove();
 }
 
-// window.addProduct = function(e)
-// {
-//     if($(e.target).prop('checked'))
-//     {
-//         $('.productBox').addClass('hidden');
-//         $('#addProductBox').removeClass('hidden');
-//         $("[name^='newProduct']").prop('checked', true);
-//     }
-//     else
-//     {
-//         $('.productBox').removeClass('hidden');
-//         $('#addProductBox').addClass('hidden');
-//         $("[name^='newProduct']").prop('checked', false);
-//     }
-// }
-// 
-// window.productChange = function(target)
-// {
-//     loadBranches(target);
-// 
-//     let $this       = $(target);
-//     let current     = $this.val();
-//     let last        = $this.attr('last');
-//     let lastBranch  = $this.attr('data-lastBranch');
-//     let $newProduct = $this.closest('.productBox').find('[name=newProduct]').closest('.checkbox-primary').parent();
-// 
-//     if($newProduct.length > 0) $newProduct.toggleClass('hidden', current > 0);
-//     $this.attr('data-last', current);
-// 
-//     let $branch = $this.closest('.has-branch').find("[name^='branch']");
-//     if($branch.length)
-//     {
-//         let branchID = $branch.val();
-//         $this.attr('data-lastBranch', branchID);
-//     }
-//     else
-//     {
-//         $this.removeAttr('data-lastBranch');
-//     }
-// 
-//     let chosenProducts = 0;
-//     $(".productBox [name^='products']").each(function()
-//     {
-//         if($(this).val() > 0) chosenProducts ++;
-//     });
-// 
-//     if(chosenProducts > 1)  $('.stageBy').removeClass('hidden');
-//     if(chosenProducts <= 1) $('.stageBy').addClass('hidden');
-// }
-// 
-// window.branchChange = function(e)
-// {
-//     let current = $(e.target).val();
-//     let last    = $(e.target).attr('data-last');
-//     $(e.target).attr('data-last', current);
-// 
-//     let $product = $(e.target).closest('.form-row').find("[name^='products']");
-//     $product.attr('data-lastBranch', current);
-// 
-//     loadPlans($product, $(e.target));
-// }
-
 $(document).on('click', '#copyProjects button', function()
 {
     const copyProjectID = $(this).hasClass('primary-outline') ? 0 : $(this).data('id');
