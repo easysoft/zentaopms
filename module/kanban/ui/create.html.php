@@ -18,6 +18,7 @@ formPanel
 (
     on::change('[name=type]', 'changeKanbanType'),
     on::change('[name=space]', 'changeKanbanSpace'),
+    on::change('[name=import]', 'toggleImportObjectBox'),
     on::click('#allUsers', 'loadAllUsers'),
     set::headingClass('headingActions'),
     to::headingActions
@@ -205,7 +206,6 @@ formPanel
                 set::items($lang->kanban->importList),
                 set::inline(true),
                 set::value($enableImport),
-                on::change('toggleImportObjectBox')
             )
         )
     ),
