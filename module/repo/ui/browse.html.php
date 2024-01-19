@@ -109,7 +109,7 @@ $downloadWg = div
 (
     set::id('modal-downloadCode'),
     set::title($lang->repo->downloadCode),
-    on('click', '', array('capture' => true, 'prevent' => true, 'stop' => true)),
+    on('click', 'body', array('capture' => true, 'prevent' => true, 'stop' => true)),
     !empty($cloneUrl->svn) ? div
     (
         p(set::className('repo-downloadCode'), $lang->repo->cloneUrl),
