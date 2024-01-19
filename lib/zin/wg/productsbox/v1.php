@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace zin;
+
 class productsBox extends wg
 {
     /**
@@ -66,7 +67,7 @@ class productsBox extends wg
     protected function initProductsBox(): array
     {
         global $lang;
-        list($productItems, $project, $isStage) = $this->prop(array('productItems', 'project', 'isStage'));
+        list($productItems, $project, $isStage, $productPlans) = $this->prop(array('productItems', 'project', 'isStage', 'productPlans'));
 
         $productsBox   = array();
         $hidden        = empty($project->hasProduct) ? 'hidden' : '';
