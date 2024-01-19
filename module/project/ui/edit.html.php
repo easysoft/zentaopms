@@ -19,6 +19,13 @@ jsVar('currencySymbol', $lang->project->currencySymbol);
 jsVar('parentBudget', $lang->project->parentBudget);
 jsVar('budgetUnitLabel', $lang->project->tenThousandYuan);
 jsVar('budgetUnitValue', $config->project->budget->tenThousand);
+jsVar('unmodifiableProducts', $unmodifiableProducts);
+jsVar('unmodifiableBranches', $unmodifiableBranches);
+jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
+jsVar('errorSameProducts', $lang->project->errorSameProducts);
+jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
+jsVar('allProducts', $allProducts);
+jsVar('branchGroups', $branchGroups);
 
 $labelClass = $config->project->labelClass[$model];
 
@@ -50,6 +57,7 @@ formGridPanel
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
     on::change('[name=parent], [name=budget]', "checkBudget({$project->id})"),
+    on::change('[name^=products]', 'productChange'),
     on::change('#parent', 'setParentProgram'),
     set::fullModeOrders(array('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin')),
     set::modeSwitcher(false),

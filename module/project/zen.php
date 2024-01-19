@@ -279,6 +279,14 @@ class projectZen extends project
             $copyProjectBranches = $this->project->getBranchesByProject($copyProjectID);
             $linkedProducts      = $this->product->getProducts($copyProjectID, 'all', '', true, $copyProjectBranches, false);
         }
+        $productPlans = $this->loadModel('productplan')->getGroupByProduct(array_keys($allProducts), 'skipparent|unexpired');
+        foreach($productPlans as $productID => $branchPlans)
+        {
+            foreach($branchPlans as $branchID => $plans)
+            {
+                $productPlans[$productID][$branchID] = array_combine(array_column($plans, 'id'), array_column($plans, 'title'));
+            }
+        }
 
         $this->view->title               = $this->lang->project->create;
         $this->view->gobackLink          = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
@@ -299,7 +307,7 @@ class projectZen extends project
         $this->view->availableBudget     = $parentProgram ? $this->program->getBudgetLeft($parentProgram) : 0;
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
         $this->view->branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
-        $this->view->productPlans        = $this->loadModel('productplan')->getGroupByProduct(array_keys($allProducts), 'skipparent|unexpired');
+        $this->view->productPlans        = $productPlans;
         $this->view->linkedProducts      = isset($linkedProducts) ? $linkedProducts : array();
         $this->view->linkedBranches      = $this->project->getBranchesByProject($copyProjectID);
         $this->view->isStage             = in_array($model, array('waterfall', 'waterfallplus', 'ipd'));
@@ -319,7 +327,6 @@ class projectZen extends project
     protected function buildEditForm(int $projectID, object $project, string $from = '', int $programID = 0): void
     {
         $productPlans     = array();
-        $linkedBranchList = array();
         $parentProject    = $this->loadModel('program')->getByID($project->parent);
         $projectStories   = $this->project->getStoriesByProject($projectID);
         $branches         = $this->project->getBranchesByProject($projectID);
@@ -328,6 +335,7 @@ class projectZen extends project
         $plans            = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipparent|unexpired');
         $withProgram      = $this->config->systemMode == 'ALM';
         $allProducts      = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
+        $branchGroups     = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
 
         $unmodifiableProducts     = array();
         $unmodifiableMainBranches = array();
@@ -337,20 +345,24 @@ class projectZen extends project
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
             foreach($branches[$productID] as $branchID => $branch)
             {
-                $linkedBranchList[$branchID] = $branchID;
+                if(!isset($branchGroups[$productID][$branchID]))
+                {
+                    $branchInfo = $this->loadModel('branch')->fetchByID($branchID);
+                    if($branchInfo) $branchGroups[$productID][$branchID] = $branchInfo->name;
+                }
 
                 if(!isset($productPlans[$productID]))
                 {
                     $productPlans[$productID] = array();
                     if(isset($plans[$productID][BRANCH_MAIN]))
                     {
-                        foreach($plans[$productID][BRANCH_MAIN] as $plan) $productPlans[$productID][$plan->id] = array('text' => $plan->title, 'value' => $plan->id);
+                        foreach($plans[$productID][BRANCH_MAIN] as $plan) $productPlans[$productID][BRANCH_MAIN][$plan->id] = $plan->title;
                     }
                 }
 
                 if(!empty($plans[$productID][$branchID]))
                 {
-                    foreach($plans[$productID][$branchID] as $plan) $productPlans[$productID][$plan->id] = array('text' => $plan->title, 'value' => $plan->id);
+                    foreach($plans[$productID][$branchID] as $plan) $productPlans[$productID][$branchID][$plan->id] = $plan->title;
                 }
 
                 if(!empty($projectStories[$productID][$branchID]) || !empty($projectBranches[$productID][$branchID]))
@@ -369,22 +381,26 @@ class projectZen extends project
                     foreach($planList as $planID)
                     {
                         if(isset($plans[$productID][$planID])) continue;
-                        $productPlans[$productID][$planID] = array('text' => '', 'value' => $planID);
+                        $productPlans[$productID][$branchID][$planID] = '';
                     }
                 }
             }
+
         }
 
         $productPlansOrder = array();
-        foreach($productPlans as $productID => $plan)
+        foreach($productPlans as $productID => $branchPlans)
         {
-            $orderPlans    = $this->loadModel('productplan')->getByIDList(array_keys($plan));
-            $orderPlans    = $this->productplan->relationBranch($orderPlans);
-            $orderPlansMap = array_keys($orderPlans);
-            foreach($orderPlansMap as $planMapID)
+            foreach($branchPlans as $branchID => $plans)
             {
-                if(empty($plan['title'])) $productPlans[$productID][$planMapID]['text'] = $orderPlans[$planMapID]->title;
-                $productPlansOrder[$productID][$planMapID] = $productPlans[$productID][$planMapID];
+                $orderPlans    = $this->loadModel('productplan')->getByIDList(array_keys($plans));
+                $orderPlans    = $this->productplan->relationBranch($orderPlans);
+                $orderPlansMap = array_keys($orderPlans);
+                foreach($orderPlansMap as $planMapID)
+                {
+                    if(empty($plans[$planMapID])) $productPlans[$productID][$branchID][$planMapID] = $orderPlans[$planMapID]->title;
+                    $productPlansOrder[$productID][$branchID][$planMapID] = $productPlans[$productID][$branchID][$planMapID];
+                }
             }
         }
 
@@ -410,12 +426,11 @@ class projectZen extends project
         $this->view->multiBranchProducts      = $this->product->getMultiBranchPairs();
         $this->view->productPlans             = array_filter($productPlansOrder);
         $this->view->linkedProducts           = $linkedProducts;
-        $this->view->branches                 = $branches;
-        $this->view->executions               = $this->loadModel('execution')->getPairs($projectID);
+        $this->view->branchGroups             = $branchGroups;
+        $this->view->executions               = $this->execution->getPairs($projectID);
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
-        $this->view->branchGroups             = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), 'noclosed', $linkedBranchList);
         $this->view->URSRPairs                = $this->loadModel('custom')->getURSRPairs();
         $this->view->parentProject            = $parentProject;
         $this->view->parentProgram            = $this->program->getByID($project->parent);

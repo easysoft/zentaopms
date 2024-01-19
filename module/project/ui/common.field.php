@@ -48,7 +48,7 @@ $fields->field('PM')->control('picker')->items(data('PMUsers'));
 $fields->field('begin')
     ->required()
     ->control('inputGroup')
-    ->itemBegin('begin')->control('datePicker')->placeholder($lang->project->begin)->value(date('Y-m-d'))->required(true)->itemEnd()
+    ->itemBegin('begin')->control('datePicker')->placeholder($lang->project->begin)->value(data('project.begin') ? data('project.begin') : date('Y-m-d'))->required(true)->itemEnd()
     ->item(array('control' => 'span', 'text' => '-'))
     ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->value(data('project.end'))->itemEnd();
 
@@ -64,7 +64,7 @@ $fields->field('productsBox')
         'planGroups'     => data('productPlans'),
         'linkedProducts' => data('linkedProducts'),
         'linkedBranches' => data('linkedBranches'),
-        'project'        => data('copyProject'),
+        'project'        => data('project') ? data('project') : data('copyProject'),
         'isStage'        => data('isStage')
     ));
 

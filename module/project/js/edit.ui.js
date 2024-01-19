@@ -20,27 +20,25 @@ $(document).on('click', '.model-drop', function()
 
 window.productChange = function(e)
 {
-    loadBranches(e.target);
-
-    let current    = $(e.target).val();
-    let last       = $(e.target).attr('last');
-    let lastBranch = $(e.target).attr('lastBranch');
-
-    $(e.target).attr('data-last', current);
+    let current     = $(e.target).val();
+    let $productBox = $(e.target).closest('.picker-box');
+    let last        = $productBox.attr('last');
+    let lastBranch  = $productBox.attr('lastBranch');
+    $productBox.attr('last', current);
 
     let $branch = $(e.target).closest('.productBox').find("[name^='branch']");
     if($branch.val())
     {
-        $(e.target).attr('lastBranch', $branch.val());
+        $productBox.attr('lastBranch', $branch.val());
     }
     else
     {
-        $(e.target).removeAttr('lastBranch');
+        $productBox.removeAttr('lastBranch');
     }
 
     if(current != last && unmodifiableProducts.includes(Number(last)))
     {
-        if(lastBranch != 0)
+        if(lastBranch != undefined && lastBranch != 0)
         {
             if(unmodifiableBranches.includes(Number(lastBranch))) zui.Modal.alert(unLinkProductTip.replace("%s", allProducts[last] + branchGroups[last][lastBranch]));
         }
@@ -62,19 +60,16 @@ window.productChange = function(e)
 
 window.branchChange = function(e)
 {
-    let current = $(e.target).val();
-    let last    = $(e.target).attr('data-last');
-    $(e.target).attr('data-last', current);
+    let current    = $(e.target).val();
+    let $productBox = $(e.target).closest('.productBox ').find('.linkProduct .picker-box');
+    let last       = $productBox.attr('lastBranch').split(',');
+    let changed    = last.filter(item => !current.includes(item));
+    $productBox.attr('lastBranch', current);
 
-    let $product = $(e.target).closest('.form-row').find("[name^='products']");
-    $product.attr('lastBranch', current);
-
-    loadPlans($product, $(e.target));
-
-    if(unmodifiableBranches.includes(last))
+    if(changed.length > 0 && unmodifiableBranches.includes(parseInt(changed[0])))
     {
-        let productID = $product.val();
-        if(unmodifiableBranches.includes(productID))
+        let productID = $productBox.find('input').val();
+        if(unmodifiableProducts.includes(productID))
         {
             if((last == 0 && unmodifiableMainBranches[productID]) || last != 0)
             {
