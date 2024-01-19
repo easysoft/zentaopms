@@ -60,7 +60,7 @@ class aclBox extends wg
                         setClass('input-group'),
                         span
                         (
-                            setClass('input-group-addon'),
+                            setClass('input-group-addon w-14'),
                             $groupLabel
                         ),
                         picker
@@ -73,7 +73,7 @@ class aclBox extends wg
                         setClass('input-group mt-2'),
                         $userLabel ? span
                         (
-                            setClass('input-group-addon'),
+                            setClass('input-group-addon w-14'),
                             $userLabel
                         ) : null,
                         whitelist
