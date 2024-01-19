@@ -53,7 +53,7 @@ $lang->design->linkCommit   = '关联提交';
 $lang->design->unlinkCommit = '取消关联';
 $lang->design->submit       = '提交评审';
 $lang->design->assignTo     = '指派';
-$lang->design->assignAction = '指派设计';
+$lang->design->assignAction = '指派';
 $lang->design->revision     = '查看关联代码';
 
 $lang->design->browseAction = '设计列表';

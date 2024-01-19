@@ -11,23 +11,10 @@ declare(strict_types=1);
 namespace zin;
 
 /* zin: Define the form in main content */
+modalHeader(set::title($lang->design->assignAction));
 formPanel
 (
-    set::title($lang->design->assignAction),
-    set::headingClass('modal-heading'),
-    set::titleClass('form-label .form-horz'),
-    set::shadow(false),
-    to::headingActions
-    (
-        entityLabel
-        (
-            setClass('my-3 gap-x-3'),
-            set::level(1),
-            set::text($design->name),
-            set::entityID($design->id),
-            set::reverse(true)
-        )
-    ),
+    set::submitBtnText($lang->design->assignAction),
     formGroup
     (
         set::width("1/2"),
@@ -46,6 +33,8 @@ formPanel
         )
     )
 );
+hr();
+history();
 
 /* ====== Render page ====== */
 render();
