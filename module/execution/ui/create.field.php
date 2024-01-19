@@ -61,7 +61,7 @@ $fields->field('days')
 
 $fields->field('percent')
     ->width('1/4')
-    ->label($lang->stage->percent . sprintf($lang->execuition->unitTemplate, '%'))
+    ->label($lang->stage->percent . sprintf($lang->execution->unitTemplate, '%'))
     ->required(true);
 
 $fields->field('productsBox')

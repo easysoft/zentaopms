@@ -114,7 +114,7 @@ class productsBox extends wg
                     picker
                     (
                         set::name('plans[0][]'),
-                        set::items($productPlans),
+                        set::items(array()),
                         set::multiple(true)
                     )
                 ),
