@@ -14,6 +14,7 @@ $config->project->editor->view     = array('id' => 'lastComment', 'tools' => 'si
 $config->project->list = new stdclass();
 $config->project->list->exportFields = 'id,code,name,hasProduct,linkedProducts,status,begin,end,budget,PM,end,desc';
 if($config->systemMode == 'ALM') $config->project->list->exportFields = substr_replace($config->project->list->exportFields, ',parent', 2, 0);
+$config->project->list->customCreateFields = 'budget,acl,auth';
 
 $config->project->create    = new stdclass();
 $config->project->edit      = new stdclass();
