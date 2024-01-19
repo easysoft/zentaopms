@@ -124,6 +124,10 @@ $lang->metric->noFormula = "No calculation rules available";
 $lang->metric->noCalc    = "The PHP algorithm for this metric has not been implemented yet";
 $lang->metric->noSQL     = "No SQL";
 
+$lang->metric->noData              = "No data available.";
+$lang->metric->noDataBeforeCollect = "No data is available until the time for data collection.";
+$lang->metric->noDataAfterCollect  = "No data is available after the time for data collection.";
+
 $lang->metric->legendBasicInfo  = 'Basic Information';
 $lang->metric->legendCreateInfo = 'Creation and Editing Information';
 
@@ -155,8 +159,8 @@ $lang->metric->featureBar['preview']['dept']      = 'Team';
 $lang->metric->featureBar['preview']['user']      = 'Individual';
 $lang->metric->featureBar['preview']['program']   = 'Program';
 $lang->metric->featureBar['preview']['system']    = 'System';
-$lang->metric->featureBar['preview']['code']      = 'Code Repository';
-$lang->metric->featureBar['preview']['pipeline']  = 'Pipeline';
+// $lang->metric->featureBar['preview']['code']      = 'Code Repository';
+// $lang->metric->featureBar['preview']['pipeline']  = 'Pipeline';
 
 $lang->metric->more        = 'More';
 $lang->metric->collect     = 'My Collect';
@@ -204,8 +208,8 @@ $lang->metric->scopeList['project']   = "Project";
 $lang->metric->scopeList['execution'] = "Execution";
 $lang->metric->scopeList['dept']      = "Team";
 $lang->metric->scopeList['user']      = "Individual";
-$lang->metric->scopeList['code']      = "Code Repository";
-$lang->metric->scopeList['pipeline']  = "Pipeline";
+// $lang->metric->scopeList['code']      = "Code Repository";
+// $lang->metric->scopeList['pipeline']  = "Pipeline";
 $lang->metric->scopeList['other']     = "Other";
 
 global $config;

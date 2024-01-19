@@ -42,7 +42,7 @@ $fnGenerateSide = function() use($groupMetrics, $current, $viewType, $scope, $la
         }
     }
 
-    return ul(setClass('list-unstyled'), $metricList);
+    return ul($metricList);
 };
 
 
@@ -344,7 +344,7 @@ div
         $fnGenerateQueryForm(),
         div
         (
-            setClass('table-and-chart table-and-chart-single'),
+            setClass('table-and-chart table-and-chart-single' . ($groupData ? '' : ' no-data')),
             $groupData ? div
             (
                 setClass('table-side'),
@@ -393,7 +393,8 @@ div
                         set::tooltip($echartOptions['tooltip'])
                     )->size('100%', '100%')
                 )
-            ) : null
+            ) : null,
+            $groupData ? null : span($noDataTip, setClass('text-md'))
         )
     )
 );

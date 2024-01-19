@@ -69,18 +69,17 @@ class metricModel extends model
      */
     public function getViewTableData($metric, $result)
     {
-        $scope = $metric->scope;
         if(empty($result)) return array();
 
-        if($metric->scope != 'system') $objectPairs = $this->getPairsByScope($scope);
+        $scope    = $metric->scope;
+        $dateType = $metric->dateType;
+        if($scope != 'system') $objectPairs = $this->getPairsByScope($scope);
 
         $tableData = array();
         foreach($result as $record)
         {
             $record = (array)$record;
             if(isset($record['date'])) $record['calcTime'] = date("Y-m-d H:i", strtotime($record['date']));
-
-            $dateType  = $this->getDateType(array_keys($record));
 
             $row = $this->buildDateCell($record, $dateType);
             if($scope != 'system')
@@ -106,7 +105,7 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getGroupTable($header, $data, $withCalcTime = true)
+    public function getGroupTable($header, $data, $dateType, $withCalcTime = true)
     {
         if(!$header or !$data) return array(array(), array());
 
@@ -114,23 +113,21 @@ class metricModel extends model
 
         if($headerLength == 2)
         {
-            return $this->getTimeTable($data, 'nodate', $withCalcTime);
+            return $this->getTimeTable($data, $dateType, $withCalcTime); // $dateType should eq nodate
         }
         elseif($headerLength == 3)
         {
             if($this->isObjectMetric($header))
             {
-                return $this->getObjectTable($header, $data, 'nodate', $withCalcTime);
+                return $this->getObjectTable($header, $data, $dateType, $withCalcTime); // $dateType should eq nodate
             }
             else
             {
-                $dateType = current($data)->dateType;
                 return $this->getTimeTable($data, $dateType, $withCalcTime);
             }
         }
         elseif($headerLength == 4)
         {
-            $dateType = current($data)->dateType;
             return $this->getObjectTable($header, $data, $dateType, $withCalcTime);
         }
 
@@ -199,16 +196,16 @@ class metricModel extends model
         return array($groupHeader, $groupData);
     }
 
-    /**
-     * 构建有对象属性的度量项的表格数据。
-     * Build table data for metric with object.
-     *
-     * @param  array  $data
-     * @param  string $dateType
-     * @param  bool   $withCalcTime
-     * @access public
-     * @return array
-     */
+   /**
+    * 构建有对象属性的度量项的表格数据。
+    * Build table data for metric with object.
+    *
+    * @param  array  $data
+    * @param  string $dateType
+    * @param  bool   $withCalcTime
+    * @access public
+    * @return array
+    */
     public function getObjectTable($header, $data, $dateType = 'day', $withCalcTime = true)
     {
         $groupHeader = array();
@@ -507,6 +504,7 @@ class metricModel extends model
             $metric->collectConf = $oldMetric->collectConf;
             $metric->execTime    = $oldMetric->execTime;
         }
+        if(empty($metric->dateType) and isset($metric->code)) $metric->dateType = $this->getDateTypeByCode($metric->code);
 
         return $metric;
     }
@@ -515,7 +513,7 @@ class metricModel extends model
      * 根据ID获取旧版度量项信息。
      * Get old metric info by id.
      *
-     * @param  int   $measurementID
+     * @param  int $measurementID
      * @access public
      * @return object|false
      */
@@ -546,6 +544,28 @@ class metricModel extends model
     }
 
     /**
+     * 获取dao对象。
+     * Get dao object.
+     *
+     * @access public
+     * @return object
+     */
+    public function getDAO()
+    {
+        if($this->config->metricDB->type == 'sqlite')
+        {
+            $dao = clone $this->dao;
+            $dao->reset();
+
+            $dao->dbh    = $this->app->connectSqlite();
+            $dao->driver = 'sqlite';
+
+            return $dao;
+        }
+        return $this->dao;
+    }
+
+    /**
      * 获取度量项数据源句柄。
      * Get data source statement of calculator.
      *
@@ -556,11 +576,12 @@ class metricModel extends model
      */
     public function getDataStatement($calculator, $returnType = 'statement')
     {
+        $dao = $this->getDAO();
         if(!empty($calculator->dataset))
         {
             include_once $this->getDatasetPath();
 
-            $dataset    = new dataset($this->dao);
+            $dataset    = new dataset($dao);
             $dataSource = $calculator->dataset;
             $fieldList  = implode(',', $calculator->fieldList);
 
@@ -569,7 +590,7 @@ class metricModel extends model
         }
         else
         {
-            $calculator->setDAO($this->dao);
+            $calculator->setDAO($dao);
             $scm = $this->app->loadClass('scm');
             $calculator->setSCM($scm);
 
@@ -585,10 +606,10 @@ class metricModel extends model
      * Get date field of metric data.
      *
      * @param  string $code
-     * @access public
+     * @access protected
      * @return array
      */
-    public function getMetricRecordDateField(string $code): array
+    protected function getMetricRecordDateField(string $code): array
     {
         $record = $this->dao->select("year, month, week, day")
             ->from(TABLE_METRICLIB)
@@ -639,7 +660,7 @@ class metricModel extends model
      *
      * @param  string      $code
      * @param  array       $options e.g. array('product' => '1,2,3', 'year' => '2023')
-     * @param  string      $type    cron|realtime
+     * @param  string      $type
      * @param  object|null $pager
      * @access public
      * @return array
@@ -725,7 +746,9 @@ class metricModel extends model
      */
     public function deduplication(string $code): bool
     {
+        $metric = $this->getByCode($code);
         $fields = $this->metricTao->getRecordFields($code);
+        if(!in_array($metric->scope, $fields)) $fields[] = $metric->scope;
 
         if(empty($fields)) return false;
 
@@ -788,35 +811,32 @@ class metricModel extends model
     }
 
     /**
-     * 是否为第一次生成度量数据。
-     * Whether it is the first time to generate metric data.
-     *
-     * @access public
-     * @return bool
-     */
-    public function isFirstGenerate(): bool
-    {
-        $record = $this->dao->select('id')->from(TABLE_METRICLIB)->limit(1)->fetch();
-
-        return !$record;
-    }
-
-    /**
      * 插入度量库数据。
      * Insert into metric lib.
      *
-     * @param  array  $records
+     * @param  array  $recordWithCode
      * @access public
      * @return void
      */
-    public function insertMetricLib($records)
+    public function insertMetricLib($recordWithCode)
     {
         $this->dao->begin();
-        foreach($records as $record)
+        foreach($recordWithCode as $code => $records)
         {
-            if(empty($record)) continue;
-            $this->dao->insert(TABLE_METRICLIB)
-                ->data($record)
+            foreach($records as $record)
+            {
+                if(empty($record)) continue;
+                $this->dao->insert(TABLE_METRICLIB)
+                    ->data($record)
+                    ->exec();
+            }
+            $rows = count($records);
+            $time = helper::now();
+
+            $this->dao->update(TABLE_METRIC)
+                ->set('lastCalcRows')->eq($rows)
+                ->set('lastCalcTime')->eq($time)
+                ->where('code')->eq($code)
                 ->exec();
         }
         $this->dao->commit();
@@ -898,11 +918,11 @@ class metricModel extends model
      * @access public
      * @return dataset
      */
-    public function getDataset()
+    public function getDataset($dao)
     {
         $datasetPath = $this->getDatasetPath();
         include_once $datasetPath;
-        return new dataset($this->dao);
+        return new dataset($dao);
     }
 
     /**
@@ -953,13 +973,19 @@ class metricModel extends model
         $aliasList  = array();
         foreach($uniqueList as $field)
         {
-            if(strpos($field, '.') === false || strpos(strtoupper($field), ' AS ') !== false)
+            if(strpos(strtoupper($field), ' AS ') !== false)
             {
                 $aliasList[] = $field;
                 continue;
             }
-            $alias = str_replace('.', '_', $field);
-            $aliasList[] = $field . ' AS ' . $alias;
+            if(strpos($field, '.') !== false)
+            {
+                $alias = str_replace('.', '_', $field);
+                list($table, $field) = explode('.', $field);
+                $aliasList[] = "`$table`.`$field` AS `$alias`";
+                continue;
+            }
+            $aliasList[] = "`$field`";
         }
         return implode(',', $aliasList);
     }
@@ -1027,12 +1053,15 @@ class metricModel extends model
      * Get object pairs by scope.
      *
      * @param  string $scope
+     * @param  bool   $withHierarchy
      * @access public
      * @return array
      */
-    public function getPairsByScope($scope)
+    public function getPairsByScope($scope, $withHierarchy = false)
     {
         if(empty($scope) || $scope == 'system') return array();
+        if($scope == 'dept'    && $withHierarchy) $scope = 'deptWithHierarchy';
+        if($scope == 'program' && $withHierarchy) $scope = 'programWithHierarchy';
 
         $objectPairs = array();
         switch($scope)
@@ -1040,8 +1069,11 @@ class metricModel extends model
             case 'dept':
                 $objectPairs = $this->loadModel('dept')->getDeptPairs();
                 break;
+            case 'deptWithHierarchy':
+                $objectPairs = $this->loadModel('dept')->getOptionMenu();
+                break;
             case 'user':
-                $objectPairs = $this->loadModel('user')->getPairs('noletter');
+                $objectPairs = $this->loadModel('user')->getPairs('noletter|noempty|noclosed');
                 break;
             case 'program':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROGRAM)
@@ -1049,9 +1081,14 @@ class metricModel extends model
                     ->andWhere('type')->eq('program')
                     ->fetchPairs();
                 break;
+            case 'programWithHierarchy':
+                $objectPairs = $this->loadModel('program')->getParentPairs();
+                break;
             case 'product':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PRODUCT)
-                    ->where('deleted')->eq(0)->fetchPairs();
+                    ->where('deleted')->eq(0)
+                    ->andWhere('shadow')->eq(0)
+                    ->fetchPairs();
                 break;
             case 'project':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -1083,7 +1120,7 @@ class metricModel extends model
      * @param  array  $record
      * @param  string $dateType
      * @access public
-     * @return string
+     * @return object
      */
     public function buildDateCell($record, $dateType)
     {
@@ -1289,7 +1326,7 @@ class metricModel extends model
      */
     public function isOldMetric($metric)
     {
-        return isset($metric->type) and $metric->type == 'sql';
+        return $metric->type == 'sql';
     }
 
     /**
@@ -1547,16 +1584,17 @@ class metricModel extends model
      * @access public
      * @return string|false
      */
-    public function getMetricRecordType(array|bool $tableData): string|false
+    public function getMetricRecordType($code, $scope)
     {
-        if(!$tableData) return false;
-        $fields = array_column($tableData, 'name');
+        if(!$code) return false;
 
         $type = array();
-        if(in_array('scope', $fields)) $type[] = 'scope';
-        if(in_array('date', $fields)) $type[] = 'date';
+        $dateType = $this->getDateTypeByCode($code);
 
+        if($scope != 'system') $type[] = 'scope';
+        if($dateType != 'nodate') $type[] = 'date';
         if(empty($type)) $type[] = 'system';
+
         return implode('-', $type);
     }
 
@@ -1614,25 +1652,6 @@ class metricModel extends model
     public function isDateMetric($header)
     {
         return in_array('date', array_column($header, 'name'));
-    }
-
-    /**
-     * 判断是否是按系统统计的度量项。
-     * Determine whether it is metric in system.
-     *
-     * @param  array  $results
-     * @access public
-     * @return bool
-     */
-    public function isSystemMetric($results)
-    {
-        $firstRecord = (object)current($results);
-
-        foreach($this->config->metric->excludeGlobal as $exclude)
-        {
-            if(isset($firstRecord->$exclude)) return false;
-        }
-        return true;
     }
 
     /**
@@ -1993,6 +2012,35 @@ class metricModel extends model
     }
 
     /**
+     * 根据日期类型和日期，拆解出日期的年、月、周、日。
+     * Get date values by date type and date.
+     *
+     * @param  string  $date
+     * @access public
+     * @return object
+     */
+    public function generateDateValues($date)
+    {
+        $timestamp = strtotime($date);
+
+        $year  = date('Y', $timestamp);
+        $month = date('m', $timestamp);
+        $day   = date('d', $timestamp);
+        $week  = date('oW', $timestamp);
+        $week  = substr($week, -2);
+
+        $dateValues = new stdClass();
+
+        $dateValues->year   = array('year' => $year);
+        $dateValues->month  = array('year' => $year, 'month' => $month);
+        $dateValues->week   = array('year' => $year, 'week' => $week);
+        $dateValues->day    = array('year' => $year, 'month' => $month, 'day' => $day);
+        $dateValues->nodate = array();
+
+        return $dateValues;
+    }
+
+    /**
      * 获取度量数据的日期类型。
      * Get date type of metric data.
      *
@@ -2012,20 +2060,36 @@ class metricModel extends model
         return 'nodate';
     }
 
+    public function getDateTypeByCode(string $code)
+    {
+        /* Get dateType form db first. */
+        $metric = $this->getByCode($code, 'dateType');
+        if(!empty($metric->dateType)) return $metric->dateType;
+
+        /* Get dateType from config second. */
+        if(isset($this->config->metric->dateType[$code])) return $this->config->metric->dateType[$code];
+
+        /* At last, infer dateType by code. */
+        $dataFields = $this->getMetricRecordDateField($code);
+        return $this->getDateType($dataFields);
+    }
+
     /**
-     * 根据代号获取度量数据的日期类型。
-     * Get date type of metric by code.
+     * 获取度量数据的日期类型。
+     * Get date type of metric data.
      *
-     * @param  string $code
+     * @param  array    $dateFields
      * @access public
      * @return string
      */
-    public function getDateTypeByCode(string $code)
+    public function getDateByDateType(string $dateType): string
     {
-        $dataFields = $this->getMetricRecordDateField($code);
-        $dateType   = $this->getDateType($dataFields);
+        if($dateType == 'day')   $sub = '-7 days';
+        if($dateType == 'week')  $sub = '-1 month';
+        if($dateType == 'month') $sub = '-1 year';
+        if($dateType == 'year')  $sub = '-3 years';
 
-        return $dateType;
+        return date('Y-m-d', strtotime($sub));
     }
 
     /**
@@ -2069,11 +2133,11 @@ class metricModel extends model
      * 判断 header 是否有分组（合并单元格）。
      * Judge header whether there are merges cell.
      *
-     * @param  array  $header
-     * @access public
+     * @param  array     $header
+     * @access protected
      * @return array
      */
-    public function isHeaderGroup($header)
+    protected function isHeaderGroup($header)
     {
         if(!$header) return false;
 
@@ -2083,6 +2147,25 @@ class metricModel extends model
         }
 
         return false;
+    }
+
+    /**
+     * 判断是否是按系统统计的度量项。
+     * Determine whether it is metric in system.
+     *
+     * @param  array  $results
+     * @access public
+     * @return bool
+     */
+    public function isSystemMetric($results)
+    {
+        $firstRecord = (object)current($results);
+
+        foreach($this->config->metric->excludeGlobal as $exclude)
+        {
+            if(isset($firstRecord->$exclude)) return false;
+        }
+        return true;
     }
 
     /**
@@ -2126,11 +2209,42 @@ class metricModel extends model
      * Get default selected date.
      *
      * @param  array $dateLabels
+     * @param  array $filters
      * @access public
      * @return string
      */
-    public function getDefaultDate(array $dateLabels): string
+    public function getDefaultDate(array $dateLabels, array $filters = array()): string
     {
-        return (string)current(array_keys($dateLabels));
+        $defaultDate = '';
+
+        $dates = array_keys($dateLabels);
+        return (string)current($dates);
+    }
+
+    /**
+     * 获取没有数据时的提示信息。
+     * Get no data tip.
+     *
+     * @param  string    $code
+     * @access public
+     * @return string
+     */
+    public function getNoDataTip($code)
+    {
+        $today = helper::today();
+
+        $todayData = $this->metricTao->fetchMetricRecordByDate('all', $today, 1);
+        $todayDataWithCode = $this->metricTao->fetchMetricRecordByDate($code, $today, 1);
+        $dataWithCode = $this->metricTao->fetchMetricRecordByDate($code, null, 1);
+
+        /* 度量项定义之后，未到采集时间，可以理解为今天没有任何数据并且该度量项没有任何数据。*/
+        /* After the metric item is defined, it is not time to collect, which can be understood as there is no data today and the metric item has no data. */
+        if(empty($todayData) && empty($dataWithCode)) return $this->lang->metric->noDataBeforeCollect;
+
+        /* 度量项定义之后，已到采集时间，但是没有采集到数据，可以理解为今天收集到了数据但是该度量项没有任何数据。*/
+        /* After the metric item is defined, it is time to collect, but no data is collected, which can be understood as data is collected today, but the metric item has no data. */
+        if(!empty($todayData) && empty($dataWithCode)) return $this->lang->metric->noDataAfterCollect;
+
+        return $this->lang->metric->noData;
     }
 }

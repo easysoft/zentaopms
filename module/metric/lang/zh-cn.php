@@ -124,6 +124,10 @@ $lang->metric->noFormula = "暂无计算规则";
 $lang->metric->noCalc    = "暂未实现度量项PHP算法";
 $lang->metric->noSQL     = "暂无";
 
+$lang->metric->noData              = "暂时没有数据。";
+$lang->metric->noDataBeforeCollect = "未到收集数据的时间，暂无数据。";
+$lang->metric->noDataAfterCollect  = "度量范围内未产生数据，暂无数据。";
+
 $lang->metric->legendBasicInfo  = '基本信息';
 $lang->metric->legendCreateInfo = '创建编辑信息';
 
@@ -155,8 +159,8 @@ $lang->metric->featureBar['preview']['dept']      = '团队';
 $lang->metric->featureBar['preview']['user']      = '个人';
 $lang->metric->featureBar['preview']['program']   = '项目集';
 $lang->metric->featureBar['preview']['system']    = '系统';
-$lang->metric->featureBar['preview']['code']      = '代码库';
-$lang->metric->featureBar['preview']['pipeline']  = '流水线';
+// $lang->metric->featureBar['preview']['code']      = '代码库';
+// $lang->metric->featureBar['preview']['pipeline']  = '流水线';
 
 $lang->metric->more        = '更多';
 $lang->metric->collect     = '我收藏的';
@@ -204,8 +208,8 @@ $lang->metric->scopeList['project']   = "项目";
 $lang->metric->scopeList['execution'] = "执行";
 $lang->metric->scopeList['dept']      = "团队";
 $lang->metric->scopeList['user']      = "个人";
-$lang->metric->scopeList['code']      = "代码库";
-$lang->metric->scopeList['pipeline']  = "流水线";
+// $lang->metric->scopeList['code']      = "代码库";
+// $lang->metric->scopeList['pipeline']  = "流水线";
 $lang->metric->scopeList['other']     = "其他";
 
 global $config;

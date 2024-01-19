@@ -117,7 +117,7 @@ class metricTao extends metricModel
      * 根据筛选条件获取度量项数据。
      * Fetch metric by filter.
      *
-     * @param  array  $filters
+     * @param  array    $filters
      * @param  string $stage
      * @access protected
      * @return array
@@ -139,6 +139,7 @@ class metricTao extends metricModel
             ->beginIF(!empty($objects))->andWhere('object')->in($objects)->fi()
             ->beginIF(!empty($purposes))->andWhere('purpose')->in($purposes)->fi()
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
+            ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk')
             ->fetchAll();
 
         return $metrics;
@@ -157,7 +158,7 @@ class metricTao extends metricModel
         return $this->dao->select('*')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
             ->andWhere('collector')->like("%,{$this->app->user->account},%")
-            ->beginIF($stage != 'all')->andWhere('stage')->eq($stage)->fi()
+            ->beginIF($stage!= 'all')->andWhere('stage')->eq($stage)->fi()
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,issue,risk')
             ->fetchAll();
     }
@@ -166,7 +167,7 @@ class metricTao extends metricModel
      * 请求模块数据。
      * Fetch module data.
      *
-     * @param string     $scope
+     * @param string  $scope
      * @access protected
      * @return void
      */
@@ -302,10 +303,32 @@ class metricTao extends metricModel
     }
 
     /**
+     * 根据日期获取度量数据。
+     * Fetch metric record by date.
+     *
+     * @param  string $code
+     * @param  string    $date
+     * @param  int    $limit
+     * @access protected
+     * @return array
+     */
+    protected function fetchMetricRecordByDate($code = 'all', $date = '', $limit = 100)
+    {
+        $records = $this->dao->select('*')->from(TABLE_METRICLIB)
+            ->where('1 = 1')
+            ->beginIF($code != 'all')->andWhere('metricCode')->eq($code)->fi()
+            ->beginIF(!empty($date))->andWhere('left(date, 10)')->eq($date)->fi()
+            ->beginIF($limit > 0)->limit($limit)->fi()
+            ->fetchAll();
+
+        return $records;
+    }
+
+    /**
      * 获取度量数据有效字段。
      * Get metric record fields.
      *
-     * @param  string    $code
+     * @param  string $code
      * @access protected
      * @return array|false
      */
@@ -317,7 +340,7 @@ class metricTao extends metricModel
             ->limit(1)
             ->fetch();
 
-        if(!$record) return false;
+        if(!$record) return array();
 
         $fields = array();
         foreach(array_keys((array)$record) as $field)
@@ -350,8 +373,8 @@ class metricTao extends metricModel
      * 将度量数据不重复的id插入到临时表中。
      * Insert distinct metric record id to temp table.
      *
-     * @param  string    $code
-     * @param  array     $fields
+     * @param  string $code
+     * @param  array $fields
      * @access protected
      * @return void
      */
@@ -361,8 +384,8 @@ class metricTao extends metricModel
         /**
          * 判断fields中的字段是否与array('year', 'month', 'week', 'day')存在交集
          */
-        foreach($fields as $key => $field) $fields[$key] = "`$field`";
         $intersect = array_intersect($fields, array('year', 'month', 'week', 'day'));
+        foreach($fields as $key => $field) $fields[$key] = "`$field`";
         if(empty($intersect)) $fields[] = 'left(date, 10)';
 
         $sql  = "INSERT INTO `metriclib_distinct` (id) ";
