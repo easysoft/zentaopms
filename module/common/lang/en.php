@@ -566,6 +566,9 @@ $lang->noticePasteImg     = "You can paste images into the editor.";
 $lang->pasteImgFail       = "Failed to paste images. Try again later.";
 $lang->pasteImgUploading  = "Uploading...";
 
+$lang->visionTips = "You can switch vision here";
+$lang->IKnow      = "I know";
+
 /* Time formats settings. */
 if(!defined('DT_DATETIME1'))      define('DT_DATETIME1',  'Y-m-d H:i:s');
 if(!defined('DT_DATETIME2'))      define('DT_DATETIME2',  'y-m-d H:i');

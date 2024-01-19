@@ -1675,6 +1675,7 @@ EOF;
     {
         $_SESSION['vision'] = $vision;
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.vision", $vision);
+        if(($vision == 'lite' || $vision == 'or') && empty($this->config->hideVisionTips)) $this->setting->setItem("{$this->app->user->account}.common.global.hideVisionTips", 1);
         $this->config->vision = $vision;
 
         $_SESSION['user']->rights = $this->loadModel('user')->authorize($this->app->user->account);

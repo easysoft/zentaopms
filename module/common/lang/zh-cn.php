@@ -566,6 +566,9 @@ $lang->noticePasteImg    = "可以在编辑器直接贴图。";
 $lang->pasteImgFail      = "贴图失败，请稍后重试。";
 $lang->pasteImgUploading = "正在上传图片，请稍后...";
 
+$lang->visionTips = "您可以在这里切换界面";
+$lang->IKnow      = "我知道了";
+
 /* 时间格式设置。*/
 if(!defined('DT_DATETIME1'))      define('DT_DATETIME1', 'Y-m-d H:i:s');
 if(!defined('DT_DATETIME2'))      define('DT_DATETIME2', 'y-m-d H:i');
