@@ -43,7 +43,7 @@ div
                 set::className('group-user-row'),
                 formGroup
                 (
-                    set::className('items-center'),
+                    set::className('items-center row-label'),
                     set::label($lang->group->inside),
                     set::width('1/10'),
                     checkbox
@@ -72,7 +72,7 @@ div
                 set::className('group-user-row'),
                 formGroup
                 (
-                    set::className('items-center'),
+                    set::className('items-center row-label'),
                     set::label($lang->group->outside),
                     set::width('1/10'),
                     checkbox
@@ -100,7 +100,7 @@ div
                 set::className('group-user-row'),
                 formGroup
                 (
-                    set::className('items-center'),
+                    set::className('items-center row-label'),
                     set::label($lang->user->outside),
                     set::width('1/10'),
                     checkbox

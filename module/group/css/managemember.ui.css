@@ -1,3 +1,5 @@
 .group-user-row {align-items: stretch;}
 .group-user-row .form-label {top: unset;}
+.group-user-row .row-label {max-width: 105px; min-width: 105px;}
 .group-user-box > .checkbox-primary {flex: 0 1 10%; flex-wrap: nowrap; text-overflow: clip; overflow: hidden;}
+.group-user-box > .checkbox-primary > label {white-space: nowrap;}
