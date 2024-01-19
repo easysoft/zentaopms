@@ -3065,25 +3065,6 @@ class baseRouter
     }
 
     /**
-     * 连接SQLite数据库。
-     * Connect SQLite database.
-     *
-     * @param  object $params
-     * @access public
-     * @return object
-     */
-    public function connectSqlite($params = null)
-    {
-        if(empty($params))
-        {
-            $params = new stdclass();
-            $params->file = $this->getTmpRoot() . 'sqlite.db';
-        }
-
-        return new sqlite($params);
-    }
-
-    /**
      * Query from database, use master or slave db.
      *
      * @param  string $query
