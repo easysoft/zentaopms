@@ -269,7 +269,7 @@ class admin extends control
         }
 
         $closedFeatures = $this->setting->getItem('owner=system&module=common&section=&key=closedFeatures');
-        if(empty($config->setCode) && strpos(",{$closedFeatures},", ',otherSetCode,') === false) $closedFeatures .= ',otherSetCode';
+        if(empty($this->config->setCode) && strpos(",{$closedFeatures},", ',otherSetCode,') === false) $closedFeatures .= ',otherSetCode';
 
         $this->view->title            = $this->lang->admin->setModuleIndex;
         $this->view->closedFeatures   = $closedFeatures;
