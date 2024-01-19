@@ -60,6 +60,7 @@ window.onRenderCell = function(result, {col, row})
         return result;
     }
     if(col.name == 'rawID' && row.data.parent) result[0] = '';
+    if(['estimate', 'consumed','left'].includes(col.name) && result) result[0] = {html: result[0] + ' h'};
 
     return result;
 }
