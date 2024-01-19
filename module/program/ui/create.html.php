@@ -21,7 +21,7 @@ jsVar('parentBudgetData',    $parentProgram ? $parentProgram->budget : '');
 $fields = useFields('program.create');
 
 $autoLoad = array();
-$autoLoad['parent'] = 'parent,budgetUnit,acl,whitelist';
+$autoLoad['parent'] = 'parent,future,budget,budgetUnit,acl,whitelist';
 
 formGridPanel
 (
