@@ -1,7 +1,7 @@
 .as-subtitle {color: rgb(139, 145, 162); opacity: 0.5; text-wrap: nowrap}
 #toolbar .btn-group .btn{border:none}
 #kanbanActionMenu {color: #333; padding: 8px}
-.cardcolor {width: 40px; height: 14px; float: left; margin-right: 5px; margin-top: 2px; border-radius: 2px; border: 1px solid rgb(176, 176, 176) }
+.cardcolor {width: 36px; height: 14px; float: left; margin-right: 5px; margin-top: 2px; border-radius: 2px; border: 1px solid rgb(176, 176, 176) }
 .card-title {color: var(--color-black-rgb); }
 .card-icon {opacity: 1;}
 .color-b10b0b > .card { background-color: #b10b0b !important; color: #fff !important }
