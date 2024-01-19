@@ -977,7 +977,7 @@ class projectZen extends project
         $editorIdList = $this->config->project->editor->activate['id'];
 
         return $postData->add('id', $projectID)
-            ->setDefault('realEnd', $oldProject->realEnd)
+            ->setDefault('realEnd', '')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
