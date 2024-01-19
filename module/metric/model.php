@@ -1326,7 +1326,7 @@ class metricModel extends model
      */
     public function isOldMetric($metric)
     {
-        return $metric->type == 'sql';
+        return isset($metric->type) && $metric->type == 'sql';
     }
 
     /**
