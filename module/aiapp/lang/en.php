@@ -26,10 +26,10 @@ $lang->aiapp->categoryList     = array('writing' => 'Writing', 'statistics' => '
 $lang->aiapp->generate         = 'Generate';
 $lang->aiapp->regenerate       = 'Regenerate';
 $lang->aiapp->emptyNameWarning = '「%s」 cannot be empty';
-$lang->aiapp->chatTip          = 'Click the generate button on the left to give it a try.';
+$lang->aiapp->chatTip          = 'Please enter the field content on the left and try generating the results.';
 $lang->aiapp->noModel          = array('The language model has not been configured yet. Please contact the administrator or go to the backend to configure <a id="to-language-model"> the language model.</a>。', 'If the relevant configuration has been completed, please try <a id="reload-current">reloading</a> the page.');
 $lang->aiapp->clearContext     = 'The context content has been cleared.';
-$lang->aiapp->newChatTip       = 'Please click on the Generate button on the left side to start a new conversation.';
+$lang->aiapp->newChatTip       = 'Please enter the fields on the left to start a new conversation.';
 $lang->aiapp->disabledTip      = 'The current mini program is disabled.';
 $lang->aiapp->continueasking   = 'Continue asking';
 $lang->aiapp->modelList        = array('openai-gpt35' => 'openai / GPT-3.5');

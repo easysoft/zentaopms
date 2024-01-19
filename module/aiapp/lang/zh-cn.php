@@ -26,10 +26,10 @@ $lang->aiapp->categoryList     = array('writing' => '写作', 'statistics' => '�
 $lang->aiapp->regenerate       = '重新生成';
 $lang->aiapp->emptyNameWarning = '「%s」不能为空';
 $lang->aiapp->clearContext     = '上下文内容已清除';
-$lang->aiapp->newChatTip       = '请点击左侧生成按钮，开启新对话';
+$lang->aiapp->newChatTip       = '请在左侧输入字段内容，开启新对话。';
 $lang->aiapp->disabledTip      = '当前小程序已被禁用。';
 $lang->aiapp->generate         = '生成';
-$lang->aiapp->chatTip          = '点击左侧的生成按钮试试吧';
+$lang->aiapp->chatTip          = '请在左侧输入字段内容，生成结果试试吧。';
 $lang->aiapp->noModel          = array('尚未配置语言模型，请联系管理员或跳转至后台配置<a id="to-language-model">语言模型</a>。', '若已完成相关配置，请尝试<a id="reload-current">重新加载</a>页面。');
 $lang->aiapp->continueasking   = '继续追问';
 $lang->aiapp->modelList        = array('openai-gpt35' => 'OpenAI / GPT-3.5');

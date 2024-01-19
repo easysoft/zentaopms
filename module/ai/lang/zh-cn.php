@@ -454,9 +454,9 @@ $lang->ai->miniPrograms->emptyPrompterTip  = '小程序提词为空，请编辑�
 $lang->ai->miniPrograms->maintenanceGroup  = '维护小程序分组';
 
 $lang->ai->miniPrograms->latestPublishedDate = '最新发布时间';
-$lang->ai->miniPrograms->deleteTip           = '确定删除该小程序吗？删除后可以到后台回收站恢复';
+$lang->ai->miniPrograms->deleteTip           = '确定删除该小程序？';
 $lang->ai->miniPrograms->disableTip          = '禁用小程序用户将无法使用，是否确认禁用？';
-$lang->ai->miniPrograms->publishTip          = '您确定要发布吗？发布后将在客户端前台小程序广场显示';
+$lang->ai->miniPrograms->publishTip          = '发布后将在AI小程序广场显示，客户端也会同步更新。';
 $lang->ai->miniPrograms->unpublishedTip      = '您使用的小程序没有发布';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
@@ -485,7 +485,7 @@ $lang->ai->miniPrograms->field->debug               = '调试区';
 $lang->ai->miniPrograms->field->preview             = '预览区';
 $lang->ai->miniPrograms->field->option              = '选项';
 $lang->ai->miniPrograms->field->contentDebugging    = '内容调试';
-$lang->ai->miniPrograms->field->contentDebuggingTip = '请在此处输入字段进行调试。';
+$lang->ai->miniPrograms->field->contentDebuggingTip = '请在此处输入字段内容进行调试。';
 $lang->ai->miniPrograms->field->prompterDesign      = '提词设计';
 $lang->ai->miniPrograms->field->prompterDesignTip   = '输入“<>”符号可引用已配置的字段，“<>”前后采用空格进行间隔。';
 $lang->ai->miniPrograms->field->prompterPreview     = '提词预览';
@@ -517,10 +517,8 @@ $lang->ai->miniPrograms->fieldConfiguration = '字段配置';
 $lang->ai->miniPrograms->summary            = '本页共 %s 个小程序。';
 $lang->ai->miniPrograms->generate           = '生成';
 $lang->ai->miniPrograms->regenerate         = '重新生成';
-$lang->ai->miniPrograms->chatTip            = '点击左侧的生成按钮试试吧';
 $lang->ai->miniPrograms->noModel            = array('尚未配置语言模型，请联系管理员或跳转至后台配置<a id="to-language-model">语言模型</a>。', '若已完成相关配置，请尝试<a id="reload-current">重新加载</a>页面。');
 $lang->ai->miniPrograms->clearContext       = '上下文内容已清除';
-$lang->ai->miniPrograms->newChatTip         = '请点击左侧生成按钮，开启新对话';
 $lang->ai->miniPrograms->newVersionTip      = '小程序已于 %s 更新，以上为过往记录';
 $lang->ai->miniPrograms->disabledTip        = '当前小程序已被禁用。';
 $lang->ai->miniPrograms->chatNoResponse     = '会话发生了错误';
