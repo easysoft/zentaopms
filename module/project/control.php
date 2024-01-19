@@ -478,7 +478,7 @@ class project extends control
             }
 
             $this->project->updatePlans($projectID, (array)$this->post->plans); // 更新关联的计划列表。
-            if($project->hasProduct > 0) $this->project->updateProducts($projectID, (array)$this->post->products); // 更新关联的产品列表。
+            if($project->hasProduct > 0) $this->project->updateProducts($projectID, (array)$this->post->products, $postProductData); // 更新关联的产品列表。
             $this->project->updateTeamMembers($newProject, $project, (array)$this->post->teamMembers); // 更新关联的用户信息。
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

@@ -1739,12 +1739,13 @@ class projectModel extends model
      * 更新项目关联的产品信息。
      * Update products of a project.
      *
-     * @param  int    $projectID
-     * @param  array  $products
+     * @param  int          $projectID
+     * @param  array        $products
+     * @param  object|array $postProductData
      * @access public
      * @return bool
      */
-    public function updateProducts(int $projectID, array $products = array()): bool
+    public function updateProducts(int $projectID, array $products = array(), object|array $postProductData): bool
     {
         $this->loadModel('user');
         $teams        = array_keys($this->getTeamMembers($projectID));
@@ -1774,7 +1775,7 @@ class projectModel extends model
             if(!empty($project) && !empty($executions) && $project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus')))
             {
                 $this->loadModel('execution');
-                foreach($executions as $executionID) $this->execution->updateProducts($executionID);
+                foreach($executions as $executionID) $this->execution->updateProducts($executionID, $postProductData);
             }
         }
 
