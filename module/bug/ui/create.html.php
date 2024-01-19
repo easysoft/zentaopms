@@ -11,7 +11,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$fields = useFields('bug.create');
+$fields          = useFields('bug.create');
+$isShadowProduct = $product->shadow;
 
 if(!empty($executionType) && $executionType == 'kanban') $fields->merge('bug.kanban');
 
@@ -35,6 +36,6 @@ formGridPanel
 (
     set::title($lang->bug->create),
     set::fields($fields),
-    set::fullModeOrders('module,project,execution'),
+    set::fullModeOrders($isShadowProduct ? '' : 'module,project,execution'),
     set::loadUrl($loadUrl)
 );
