@@ -6233,8 +6233,12 @@ class storyModel extends model
         $story->finalResult = $result;
 
         /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
-        if($story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
+        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and (strpos($oldStory->vision, 'rnd') !== false)) $story->status = 'launched';
+        if($story->status == 'launched')
+        {
+            $project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($oldStory->id)->orderBy('project')->fetch();
+            if($project) $story->status = 'developing';
+        }
 
         return $story;
     }
