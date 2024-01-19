@@ -276,6 +276,7 @@ $lang->task->noModule                  = '<div>You have no modules.</div><div>Ma
 $lang->task->createDenied              = 'La création de tâches est interdite dans ce ' . $lang->projectCommon;
 $lang->task->cannotDeleteParent        = 'Impossible de supprimer la tâche parente';
 $lang->task->addChildTask              = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
+$lang->task->selectTestStoryTip        = "The following {$lang->SRCommon} will be subtasks of this task";
 
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Coût Total" doit être numérique.';

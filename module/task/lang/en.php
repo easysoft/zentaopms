@@ -276,6 +276,7 @@ $lang->task->noModule                  = '<div>You have no modules.</div><div>Ma
 $lang->task->createDenied              = 'Create Task is denied in this ' . $lang->projectCommon;
 $lang->task->cannotDeleteParent        = 'Cannot delete parent task';
 $lang->task->addChildTask              = 'Because the task has cost hours, ZenTao will create a child task with the same name to record the cost housrs to ensure data consistency.';
+$lang->task->selectTestStoryTip        = "The following {$lang->SRCommon} will be subtasks of this task";
 
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Total Cost" must be numbers.';
