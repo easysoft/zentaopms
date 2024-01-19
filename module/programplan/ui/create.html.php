@@ -105,6 +105,7 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
     foreach($fields as $name => $field)
     {
         $field['name'] = $name;
+        if(!empty($field['default'])) $field['value'] = $field['default'];
 
         /* Convert 'options' to 'items'. */
         if(!empty($field['options'])) $field['items'] = $field['options'];
