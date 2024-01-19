@@ -674,7 +674,7 @@ class bugZen extends bug
         $legendBasic['severity']       = array('name' => $this->lang->bug->severity,       'text' => zget($this->lang->bug->severityList, $bug->severity));
         $legendBasic['pri']            = array('name' => $this->lang->bug->pri,            'text' => zget($this->lang->bug->priList, $bug->pri));
         $legendBasic['status']         = array('name' => $this->lang->bug->status,         'text' => $this->processStatus('bug', $bug), 'attr' => array('class' => 'status-' . $bug->status));
-        $legendBasic['activatedCount'] = array('name' => $this->lang->bug->activatedCount, 'text' => $bug->activatedCount);
+        $legendBasic['activatedCount'] = array('name' => $this->lang->bug->activatedCount, 'text' => $bug->activatedCount ? $bug->activatedCount : '');
         $legendBasic['activatedDate']  = array('name' => $this->lang->bug->activatedDate,  'text' => formatTime($bug->activatedDate));
         $legendBasic['confirmed']      = array('name' => $this->lang->bug->confirmed,      'text' => $this->lang->bug->confirmedList[$bug->confirmed]);
         $legendBasic['assignedTo']     = array('name' => $this->lang->bug->lblAssignedTo,  'text' => $bug->assignedTo ? zget($users, $bug->assignedTo) . $this->lang->at . formatTime($bug->assignedDate) : '');
