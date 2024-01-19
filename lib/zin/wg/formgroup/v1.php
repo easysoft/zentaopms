@@ -89,7 +89,7 @@ class formGroup extends wg
         );
     }
 
-    protected function buildControl(): wg|array|null
+    protected function buildControl(): wg|null
     {
         $control = $this->prop('control');
 
@@ -118,16 +118,6 @@ class formGroup extends wg
         }
 
         $controlView = new control(set($control));
-
-        if((isset($control['disabled']) && $control['disabled'] && isset($control['name']) && isset($control['value'])))
-        {
-            return array($controlView, h::input
-            (
-                set::type('hidden'),
-                set::name($control['name']),
-                set::value($control['value'])
-            ));
-        }
 
         return $controlView;
     }
