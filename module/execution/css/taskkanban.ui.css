@@ -2,6 +2,5 @@
 .toolbar .btn-link{color: unset; text-decoration-line: unset;}
 .toolbar .kanbanSetting.btn-link .caret{display: none;}
 .dropdown-menu .menu-divider a{display:none;}
-.dropdown-menu .menu-divider {border-top:1px solid #dedede;}
 .kanban-header-col-actions{top:unset;}
 .as-subtitle {opacity: 0.5; text-wrap: nowrap; font-weight: 700;}
