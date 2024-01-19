@@ -12,16 +12,16 @@ class productsBox extends wg
      * @access protected
      */
     protected static array $defineProps = array(
-        'productItems?: array',       // 产品列表。
-        'branchGroups?: array',       // 产品分支分组列表。
-        'planGroups?: array',         // 产品计划分组列表。
-        'linkedProducts?: array',     // 关联的产品。
-        'linkedBranches?: array',     // 关联的分支。
-        'currentProduct?: int',       // 来源产品ID。
-        'currentPlan?: int',          // 来源计划。
-        'productPlans?: array',       // 同来源计划所属产品的计划列表。
-        'project?: object',           // 关联的项目。
-        'isStage?: bool',             // 是否是阶段类型。
+        'productItems?: array',         // 产品列表。
+        'branchGroups?: array',         // 产品分支分组列表。
+        'planGroups?: array',           // 产品计划分组列表。
+        'linkedProducts?: array',       // 关联的产品。
+        'linkedBranches?: array',       // 关联的分支。
+        'currentProduct?: int=0',       // 来源产品ID。
+        'currentPlan?: int=0',          // 来源计划。
+        'productPlans?: array=array()', // 同来源计划所属产品的计划列表。
+        'project?: object',             // 关联的项目。
+        'isStage?: bool',               // 是否是阶段类型。
     );
 
     public static function getPageCSS(): string|false
@@ -59,7 +59,7 @@ class productsBox extends wg
             on::click('.productsBox .removeLine', 'removeLine'),
             on::change('.productsBox [name^=products]', 'loadBranches'),
             jsVar('multiBranchProducts', data('multiBranchProducts')),
-            jsVar('productID', $project->id),
+            jsVar('project', \zget($project, 'id', 0)),
             $productsBox
         );
     }
@@ -70,7 +70,7 @@ class productsBox extends wg
         list($productItems, $project, $isStage) = $this->prop(array('productItems', 'project', 'isStage'));
 
         $productsBox   = array();
-        $hidden        = empty($project->hasProduct) ? 'hidden' : '';
+        $hidden        = !empty($project) && empty($project->hasProduct) ? 'hidden' : '';
         $productsBox[] = div
         (
             set::className("productBox flex $hidden"),
@@ -84,7 +84,7 @@ class productsBox extends wg
                 (
                     set::name('products[0]'),
                     set::items($productItems),
-                    empty($project->hasProduct) ? set::value(current(array_keys($productItems))) : null,
+                    !empty($project) && empty($project->hasProduct) ? set::value(current(array_keys($productItems))) : null,
                 )
             ),
             formGroup
@@ -120,7 +120,7 @@ class productsBox extends wg
                     )
                 ),
             ),
-            $isStage && $project->stageBy == 'product' ? null : div
+            $isStage && !empty($project) && $project->stageBy == 'product' ? null : div
             (
                 setClass('pl-2 flex self-center line-btn c-actions'),
                 btn
@@ -186,12 +186,24 @@ class productsBox extends wg
             $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
 
             $branchIdList = '';
-            if(isset($product->branches)) $branchIdList = implode(',', $product->branches);
-            if(!empty($linkedBranches[$product->id]))  $branchIdList = $linkedBranches[$product->id];
+            if(isset($product->branches))             $branchIdList = $product->branches;
+            if(!empty($linkedBranches[$product->id])) $branchIdList = is_array($linkedBranches) ? array_keys($linkedBranches[$product->id]) : $linkedBranches[$product->id];
 
+            $planID = 0;
             if(empty($currentProduct) || ($currentProduct != $product->id))
             {
-                $plans  = isset($planGroups[$product->id]) ? $planGroups[$product->id] : array();
+                $plans = array();
+                if(is_array($branchIdList) && isset($planGroups[$product->id]))
+                {
+                    foreach($branchIdList as $branchID)
+                    {
+                        if(isset($planGroups[$product->id][$branchID]))
+                        {
+                            $branchPlans = $planGroups[$product->id][$branchID];
+                            $plans += array_combine(array_column($branchPlans, 'id'), array_column($branchPlans, 'title'));
+                        }
+                    }
+                }
                 $planID = isset($product->plans) ? implode(',', $product->plans) : '';
             }
             else
@@ -230,7 +242,6 @@ class productsBox extends wg
                 (
                     set::width('1/4'),
                     setClass('ml-px linkBranch'),
-                    set::label(''),
                     $hasBranch ? null : setClass('hidden'),
                     inputGroup
                     (
@@ -264,7 +275,7 @@ class productsBox extends wg
                         )
                     )
                 ),
-                $isStage && $project->stageBy == 'project' ? null : div
+                $isStage && !empty($project) && $project->stageBy == 'project' ? null : div
                 (
                     setClass('pl-2 flex self-center line-btn c-actions'),
                     btn
