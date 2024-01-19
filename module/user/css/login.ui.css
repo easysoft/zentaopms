@@ -21,13 +21,13 @@ body {background: var(--color-primary-500) linear-gradient(-90deg, var(--color-p
 .langsDropMenu.dropdown-menu {min-width: 85px;}
 #langs-toggle {float: right; position: absolute; right: 0;}
 
-#loginForm {margin: 32px 0 20px 0;}
+#loginForm {margin: 10px 0 30px 0;}
 #loginOptions {position: relative;}
 #keepLogin {display: inline-block; vertical-align: middle;}
 .resetPassword {position: absolute; top: 50%; right: 0; transform: translateY(-50%); color: var(--color-fore);}
 
 .form-actions {padding-bottom: 0 !important;}
-.form-actions > button {width: 100%; margin-top: 28px;}
+.form-actions > button {width: 100%;}
 
 .form-actions .btn {min-width: unset;}
 .form-actions .resetPassword {box-shadow: unset; background-color: unset; color: unset;}

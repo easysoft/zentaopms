@@ -114,24 +114,25 @@ div
                     $loginExpired ? p(setClass('text-danger loginExpired'), $lang->user->loginExpired) : null,
                     form
                     (
-                        set::grid(false),
+                        set::layout('grid'),
                         on::click('#submit', 'safeSubmit'),
                         set::requiredFields(false),
                         setID('loginForm'),
                         formGroup
                         (
+                            set::width('full'),
                             set::label($lang->user->account),
-                            set::strong(true),
                             set::control(array('type' => 'input', 'name' => 'account', 'id' => 'account'))
                         ),
                         formGroup
                         (
+                            set::width('full'),
                             set::label($lang->user->password),
-                            set::strong(true),
                             input(set(array('type' => 'password', 'name' => 'password', 'id' => 'password')))
                         ),
                         !empty($this->config->safe->loginCaptcha) ? formGroup
                         (
+                            set::width('full'),
                             set::label($lang->user->captcha),
                             div
                             (
@@ -146,7 +147,7 @@ div
                         formGroup
                         (
                             setID('loginOptions'),
-                            set::label(''),
+                            set::width('full'),
                             set::control(array('type' => 'checkList', 'items' => $lang->user->keepLogin, 'name' => 'keepLogin', 'value' => $keepLogin)),
                             a(
                                 set('href', $resetLink),
