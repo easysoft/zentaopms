@@ -207,7 +207,6 @@ class program extends control
         }
 
         $program = $this->program->getByID($programID);
-        $program->budget = round((float)$program->budget / $this->config->project->budget->tenThousand, $this->config->project->budget->precision);
 
         if($parentProgramID) $program->parent = $parentProgramID;
         $parentProgram = $program->parent ? $this->program->getByID($program->parent) : new stdclass();

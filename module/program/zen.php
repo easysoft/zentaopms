@@ -51,7 +51,6 @@ class programZen extends program
             ->setDefault('openedDate', helper::now())
             ->setDefault('code', '')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
-            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget * $this->config->project->budget->tenThousand, 2))
             ->add('type', 'program')
             ->get();
 
@@ -86,7 +85,6 @@ class programZen extends program
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
             ->setIF($this->post->realBegan != '' and $oldProgram->status == 'wait', 'status', 'doing')
             ->setIF($this->post->future, 'budget', 0)
-            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget * $this->config->project->budget->tenThousand, 2))
             ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->join('whitelist', ',')

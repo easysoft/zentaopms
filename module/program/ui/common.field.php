@@ -33,7 +33,7 @@ $budgetDisabled     = (data('parentProgram.budget') !== null && data('parentProg
 $budgetUnitDisabled = data('parentProgram.budgetUnit') ? true : false;
 
 $fields->field('budget')
-    ->label($lang->project->budget . $lang->project->budgetUnit)
+    ->label($lang->project->budget)
     ->checkbox(array('name' => 'future', 'text' => $lang->project->future, 'checked' => $budgetDisabled ? true : false))
     ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, $currency), 'className' => 'btn ghost', 'disabled' => $budgetUnitDisabled), 'prefixWidth' => 34, 'disabled' => $budgetDisabled));
 
