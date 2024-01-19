@@ -685,7 +685,7 @@ div
         ),
         to::headingActions
         (
-            common::hasPriv('project', 'dynamic') ? btn
+            ($project->model != 'kanban' and common::hasPriv('project', 'dynamic')) ? btn
             (
                 setClass('ghost text-gray'),
                 set::url(createLink('project', 'dynamic', "projectID={$projectID}&type=all")),
