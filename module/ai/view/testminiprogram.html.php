@@ -5,6 +5,7 @@ js::set('currentField', $currentFields);
 js::set('currentPrompt', $currentPrompt);
 js::set('appID', $appID);
 ?>
+<?php js::import($jsRoot . 'textcomplete/jquery.textcomplete.min.js'); ?>
 
 <form action="<?= $this->createLink('ai', 'testMiniProgram', "appID=$appID"); ?>" method="post" style="width: 100%; height: 100%; display: flex; flex-direction: column; padding: 24px 32px 32px 32px; background: #fff; overflow: hidden;">
   <strong style="font-size: 16px; padding-bottom: 16px;"><?= $lang->ai->prompts->action->test; ?></strong>
@@ -54,7 +55,6 @@ js::set('appID', $appID);
           class="form-control"
           id="autocomplete-textarea"
           contenteditable="true"></div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.textcomplete/1.8.5/jquery.textcomplete.min.js"></script>
       </div>
     </div>
     <div style="flex-basis: 45%; height: 100%;">

@@ -25,6 +25,7 @@ js::set('currentFields', $currentFields);
 js::set('currentPrompt', $currentPrompt);
 js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
 ?>
+<?php js::import($jsRoot . 'textcomplete/jquery.textcomplete.min.js'); ?>
 
 <template id="option-template">
   <div class="input-group">
@@ -185,7 +186,6 @@ js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
           <span class="text-muted"><?= $lang->ai->miniPrograms->field->prompterDesignTip; ?></span>
         </div>
         <div class="form-control" id="autocomplete-textarea" contenteditable="true" style="overflow-wrap: break-word; overflow-y: auto; position: absolute; top: 32px; left: 24px; right: 24px; bottom: 24px; height: auto; width: auto;"></div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.textcomplete/1.8.5/jquery.textcomplete.min.js"></script>
       </div>
     </main>
   </div>
