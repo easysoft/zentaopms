@@ -18,6 +18,7 @@ include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
 zdTable('product')->config('product', true, 4)->gen(10);
+zdTable('project')->config('project', true, 4)->gen(10);
 zdTable('release')->config('release', true, 4)->gen(1000);
 
 $metric = new metricTest();

@@ -1,0 +1,23 @@
+title: table zt_taskteam
+desc: "系统日志"
+author: qixinzhi
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: task
+    range: 1-50
+  - field: left
+    range: 0-3
+  - field: estimate
+    range: 1-10{2}
+  - field: consumed
+    range: 1,3,0,2
+  - field: account
+  - field: status
+    range: done,doing,wait,doing
+  - field: transfer
+    range: "[]"
+  - field: order
+    range: 1-1000
+

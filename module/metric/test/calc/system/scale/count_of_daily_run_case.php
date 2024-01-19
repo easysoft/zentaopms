@@ -8,9 +8,9 @@ timeout=0
 cid=1
 
 - 测试分组数。 @144
-- 测试2020.12.4。第0条的value属性 @1
-- 测试2020.12.14。第0条的value属性 @1
-- 测试2020.12.24。第0条的value属性 @1
+- 测试2020.12.4。第0条的value属性 @3
+- 测试2020.12.14。第0条的value属性 @4
+- 测试2020.12.24。第0条的value属性 @4
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
@@ -25,6 +25,6 @@ $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('144'); // 测试分组数。
 
-r($calc->getResult(array('year' => '2020', 'month' => '12', 'day' => '4')))  && p('0:value') && e('1'); // 测试2020.12.4。
-r($calc->getResult(array('year' => '2020', 'month' => '12', 'day' => '14'))) && p('0:value') && e('1'); // 测试2020.12.14。
-r($calc->getResult(array('year' => '2020', 'month' => '12', 'day' => '24'))) && p('0:value') && e('1'); // 测试2020.12.24。
+r($calc->getResult(array('year' => '2020', 'month' => '12', 'day' => '4')))  && p('0:value') && e('3'); // 测试2020.12.4。
+r($calc->getResult(array('year' => '2020', 'month' => '12', 'day' => '14'))) && p('0:value') && e('4'); // 测试2020.12.14。
+r($calc->getResult(array('year' => '2020', 'month' => '12', 'day' => '24'))) && p('0:value') && e('4'); // 测试2020.12.24。
