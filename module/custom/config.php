@@ -71,6 +71,16 @@ $config->custom->fieldList['doc']                    = 'keywords,content';
 $config->custom->fieldList['user']['create']         = 'dept,role,email,commiter';
 $config->custom->fieldList['user']['edit']           = 'dept,role,email,commiter,skype,qq,mobile,phone,address,zipcode,dingding,slack,whatsapp,weixin';
 
+if(!empty($config->setCode))
+{
+    $config->custom->fieldList['project']['create']   .= ',code';
+    $config->custom->fieldList['project']['edit']     .= ',code';
+    $config->custom->fieldList['product']['create']   .= ',code';
+    $config->custom->fieldList['product']['edit']     .= ',code';
+    $config->custom->fieldList['execution']['create'] .= ',code';
+    $config->custom->fieldList['execution']['edit']   .= ',code';
+}
+
 $config->custom->notSetMethods = array('required', 'browsestoryconcept', 'product', 'role', 'execution', 'limitTaskDate', 'hours');
 
 global $lang;
