@@ -82,6 +82,7 @@ if(!$hideStory)
         set::name('storyEstimate'),
         set::label(''),
         set('labelClass', 'hidden'),
+        set::value(isset($story->estimate) ? $story->estimate : ''),
         set::control('hidden')
     );
 
@@ -89,6 +90,7 @@ if(!$hideStory)
         set::name('storyDesc'),
         set::label(''),
         set('labelClass', 'hidden'),
+        set::value(isset($story->desc) ? $story->desc : ''),
         set::control('hidden')
     );
 
@@ -96,6 +98,7 @@ if(!$hideStory)
         set::name('storyPri'),
         set::label(''),
         set('labelClass', 'hidden'),
+        set::value(isset($story->pri) ? $story->pri : '3'),
         set::control('hidden')
     );
 }
