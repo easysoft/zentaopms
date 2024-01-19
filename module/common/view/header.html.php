@@ -33,7 +33,7 @@ include 'chosen.html.php';
           </ul>
         </div>
       </div>
-      <?php if(empty($config->global->hideVisionTips)):?>
+      <?php if(count(explode(',', $this->app->user->visions)) > 1 && empty($config->global->hideVisionTips)):?>
       <div id="visionTips">
           <div class="inner bg-primary">
               <span><?php echo $lang->visionTips;?></span>
