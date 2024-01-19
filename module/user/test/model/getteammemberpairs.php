@@ -1,12 +1,14 @@
 #!/usr/bin/env php
 <?php
-/**
-title=测试 userModel->getTeamMemberPairs();
-cid=1
-pid=1
 
-获取ID为11的项目的团队成员数量 >> 1
-获取ID为11的项目的团队成员数量，追加用户user1 >> 2
+/**
+
+title=测试 userModel->getTeamMemberPairs();
+cid=0
+
+- 获取ID为11的项目的团队成员数量 @1
+- 获取ID为11的项目的团队成员数量，追加用户user1 @2
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

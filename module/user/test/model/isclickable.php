@@ -1,9 +1,20 @@
 #!/usr/bin/env php
 <?php
+
 /**
-title=测试 userModel::getById();
-cid=1
-pid=1
+
+title=测试 userModel::isClickable();
+cid=0
+
+- 判断是否可以对用户 user1 执行解除绑定操作，返回 false。 @0
+- 判断是否可以对用户 user2 执行解除绑定操作，返回 true。 @1
+- 判断是否可以对用户 user1 执行解除绑定操作，返回 false。 @0
+- 判断是否可以对用户 user2 执行解除绑定操作，返回 true。 @1
+- 判断是否可以对用户 user3 执行解锁操作，返回 false。 @0
+- 判断是否可以对用户 user4 执行解锁操作，返回 true。 @1
+- 判断是否可以对用户 admin 执行删除操作，返回 false。 @0
+- 判断是否可以对用户 user6 执行删除操作，返回 true。 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

@@ -1,9 +1,39 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->checkAccountChange();
-cid=1
-pid=1
+cid=0
+
+- 新用户忙和旧用户名相同，返回 false。属性result @0
+- 查看用户权限组，返回 2 条记录。 @2
+- 第 1 条记录的用户名是 admin，权限组 id 是 1。
+ - 第0条的account属性 @admin
+ - 第0条的group属性 @1
+- 第 2 条记录的用户名是 admin，权限组 id 是 2。
+ - 第1条的account属性 @admin
+ - 第1条的group属性 @2
+- 查看用户视图，返回 1 条记录。 @1
+- 第 1 条记录的用户名是 admin。第0条的account属性 @admin
+- 数据库中超级管理员是 admin。 @,admin,
+
+- $app 对象中超级管理员是 admin。 @,admin,
+
+- 新用户忙和旧用户名不同，返回 true。属性result @1
+- 查看用户权限组，返回 2 条记录。 @2
+- 第 1 条记录的用户名是 user1，权限组 id 是 1。
+ - 第0条的account属性 @user1
+ - 第0条的group属性 @1
+- 第 2 条记录的用户名是 user1，权限组 id 是 2。
+ - 第1条的account属性 @user1
+ - 第1条的group属性 @2
+- 查看用户视图，返回 1 条记录。 @1
+- 第 1 条记录的用户名是 user1。第0条的account属性 @user1
+- 数据库中超级管理员是 user1。 @,user1,
+
+- $app 对象中超级管理员是 user1。 @,user1,
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

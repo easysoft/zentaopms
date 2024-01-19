@@ -1,5 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 userModel->getList();
+cid=0
+
+- 查找系统中第一个未删除的、内部用户真实姓名,根据account正序排第0条的realname属性 @用户名1
+- 查找系统中第二个未删除的、内部用户真实姓名,根据account正序排第1条的realname属性 @用户名3
+- 查找系统中所有未删除的、内部用户的数量 @2
+- 查找系统中第一个用户的真实姓名第0条的realname属性 @用户名1
+- 查找系统中第二个用户的真实姓名第1条的realname属性 @用户名2
+- 查找系统中第三个用户的真实姓名第2条的realname属性 @用户名3
+- 查找系统中第四个用户的真实姓名第3条的realname属性 @用户名4
+- 查找系统中第五个用户的真实姓名第4条的realname属性 @用户名5
+- 查找系统中所有用户数量 @5
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
 su('admin');
@@ -11,24 +28,6 @@ $user->realname->range('1-5')->prefix("用户名");
 $user->type->range('inside{3},outside{2}');
 $user->deleted->range('0-1');
 $user->gen(5);
-
-/**
-
-title=测试 userModel->getList();
-cid=1
-pid=1
-
-查找系统中第一个未删除的、内部用户真实姓名,根据account正序排 >> 用户名1
-查找系统中第二个未删除的、内部用户真实姓名,根据account正序排 >> 用户名3
-查找系统中所有未删除的、内部用户的数量 >> 2
-查找系统中第一个用户的真实姓名 >> 用户名1
-查找系统中第二个用户的真实姓名 >> 用户名2
-查找系统中第三个用户的真实姓名 >> 用户名3
-查找系统中第四个用户的真实姓名 >> 用户名4
-查找系统中第五个用户的真实姓名 >> 用户名5
-查找系统中所有用户数量 >> 5
-
-*/
 
 $user = new userTest();
 

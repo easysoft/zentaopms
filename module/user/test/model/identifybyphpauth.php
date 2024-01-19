@@ -1,9 +1,57 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->identifyByPhpAuth();
-cid=1
-pid=1
+cid=0
+
+- 空用户验证失败，返回 false。 @0
+- guest 用户验证失败，返回 false。 @0
+- user2 用户验证失败，返回 false。 @0
+- admin 用户验证成功，返回 true。 @1
+- admin 用户验证成功，$app 对象的中的用户是 admin。属性account @admin
+- admin 用户验证成功，session 中的用户是 admin。属性account @admin
+- admin 用户具有 6 个模块的权限。 @8
+- admin 用户具有 index 模块的 index 动作的权限。 @1
+- admin 用户具有 my 模块的 index 动作的权限。 @1
+- admin 用户具有 company 模块的 all 动作的权限。 @1
+- admin 用户具有 dept 模块的 browse 动作的权限。 @1
+- admin 用户具有 group 模块的 browse 动作的权限。 @1
+- admin 用户具有 program 模块的 browse 动作的权限。 @1
+- admin 用户具有 product 模块的 browse 动作的权限。 @1
+- admin 用户具有 execution 模块的 browse 动作的权限。 @1
+- admin 用户具有 2 个权限组。 @2
+- admin 用户具有的权限组 id 分别是 1 和 2。
+ - 属性1 @1
+ - 属性2 @2
+- 记录日志，最后一条日志对象类型是 user，对象 ID 是 1，动作是 login。
+ - 属性objectType @user
+ - 属性objectID @1
+ - 属性action @login
+- user1 用户验证成功，返回 true。 @1
+- user1 用户验证成功，$app 对象的中的用户是 user1。属性account @user1
+- user1 用户验证成功，session 中的用户是 user1。属性account @user1
+- user1 用户具有 2 个模块的权限。 @8
+- user1 用户具有 index 模块的 index 动作的权限。 @1
+- user1 用户具有 my 模块的 index 动作的权限。 @1
+- user1 用户具有 program 模块的 browse 动作的权限。 @1
+- user1 用户具有 product 模块的 browse 动作的权限。 @1
+- user1 用户具有 execution 模块的 all 动作的权限。 @1
+- user1 用户具有 qa 模块的 index 动作的权限。 @1
+- user1 用户具有 bug 模块的 browse 动作的权限。 @1
+- user1 用户具有 testcase 模块的 browse 动作的权限。 @1
+- user1 用户具有 2 个权限组。 @2
+- user1 用户具有的权限组 id 分别是 2 和 3。
+ - 属性2 @2
+ - 属性3 @3
+- 记录日志，最后一条日志对象类型是 user，对象 ID 是 2，动作是 login。
+ - 属性objectType @user
+ - 属性objectID @2
+ - 属性action @login
+- user1 用户使用错误密码验证失败，返回 false。 @0
+- user1 用户使用空密码验证失败，返回 false。 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

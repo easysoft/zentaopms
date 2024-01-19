@@ -1,9 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->checkLocked();
-cid=1
-pid=1
+cid=0
+
+- admin 用户被锁定，返回 true。 @1
+- user1 用户锁定时间未超过锁定时长限制，返回 true。 @1
+- user3 用户锁定时间超过锁定时长限制，返回 false。 @0
+- user2 用户不存在，返回 false。 @0
+- user4 用户锁定时间为 null，返回 false。 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

@@ -1,9 +1,45 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->getWeakUsers();
-cid=1
-pid=1
+cid=0
+
+- 检测出 10 个弱密码用户。 @10
+- user11 密码为强密码，未检测出。 @0
+- user12 密码为弱密码但是账号已删除，未检测出。 @0
+- user1 密码为弱口令，弱密码原因为常用弱口令。
+ - 属性account @user1
+ - 属性weakReason @weak
+- user2 密码为加密后的弱口令，弱密码原因为常用弱口令。
+ - 属性account @user2
+ - 属性weakReason @weak
+- user3 密码为账号，弱密码原因为与账号相同。
+ - 属性account @user3
+ - 属性weakReason @account
+- user4 密码为加密后的账号，弱密码原因为与账号相同。
+ - 属性account @user4
+ - 属性weakReason @account
+- user5 密码为电话号码，弱密码原因为与电话号码相同
+ - 属性account @user5
+ - 属性weakReason @phone
+- user6 密码为加密后的电话号码，弱密码原因为与电话号码相同
+ - 属性account @user6
+ - 属性weakReason @phone
+- user7 密码为手机号，弱密码原因为与手机号相同。
+ - 属性account @user7
+ - 属性weakReason @mobile
+- user8 密码为加密后的手机号，弱密码原因为与手机号相同。
+ - 属性account @user8
+ - 属性weakReason @mobile
+- user9 密码为生日，弱密码原因为与生日相同。
+ - 属性account @user9
+ - 属性weakReason @birthday
+- user10 密码为加密后的生日，弱密码原因为与生日相同。
+ - 属性account @user10
+ - 属性weakReason @birthday
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

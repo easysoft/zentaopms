@@ -1,9 +1,42 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->batchUpdate();
-cid=1
-pid=1
+cid=0
+
+- 传入空数组，返回 false。属性result @0
+- 更新用户失败，返回 false。属性result @0
+- 更新用户失败，提示错误信息。第errors条的gender属性 @『性别』不符合格式，应当为:『/f|m/』。
+- 更新用户成功，返回 true。属性result @1
+- 创建日志成功，最后一条记录的对象类型是 user，对象 id 是 2，动作是 edited。
+ - 属性objectType @user
+ - 属性objectID @2
+ - 属性action @edited
+- 创建历史记录成功，最后一条日志的历史记录是 2 条。 @2
+- 创建历史记录成功，第 1 条历史记录的字段是 account，旧值是 user1，新值是 user11。
+ - 第0条的field属性 @realname
+ - 第0条的old属性 @用户1
+ - 第0条的new属性 @user11
+- 创建历史记录成功，第 2 条历史记录的字段是 visions，旧值是 rnd,lite,or，新值是 rnd。
+ - 第1条的field属性 @visions
+ - 第1条的old属性 @rnd,lite,or
+ - 第1条的new属性 @rnd
+- 当前登录用户的用户名是 admin，真实姓名是 admin，角色是 qa。
+ - 属性account @admin
+ - 属性realname @admin
+ - 属性role @qa
+- 更新当前登录用户成功，返回 true。属性result @1
+- 当前登录用户的用户名是 admin，真实姓名是 newAdmin，角色是 newRole。
+ - 属性account @admin
+ - 属性realname @newAdmin
+ - 属性role @newRole
+- 事务提交成功，能查询到修改的用户。
+ - 属性id @2
+ - 属性realname @user11
+ - 属性visions @rnd
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

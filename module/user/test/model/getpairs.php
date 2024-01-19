@@ -1,5 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 userModel->getPairs();
+cid=0
+
+- 查找带有Closed用户的外部用户键值对属性closed @Closed
+- 查找带有首字母的外部用户键值对属性account4 @A:用户名4
+- 查找不带首字母的外部用户键值对属性account4 @用户名4
+- 按照给定的用户名查找用户键值对，返回值中不带有Closed用户 @1
+- 按照给定的用户名查找用户键值对，返回值中带有Closed用户 @2
+- 使用limit参数来限制最多获取2个用户键值对 @2
+- 使用limit参数来限制最多获取50个用户键值对 @3
+- 使用pofirst参数来将系统中的产品经理用户放到返回值前列属性account1 @A:用户名1
+- 使用pmfirst参数来将系统中的项目经理内部和外部用户放到返回值前列属性account3 @A:用户名3
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
 
@@ -13,23 +30,6 @@ $user->deleted->range('0{4}, 1{2}');
 $user->visions->range('rnd');
 $user->gen(5);
 
-/**
-
-title=测试 userModel->getPairs();
-cid=1
-pid=1
-
-查找带有Closed用户的外部用户键值对 >> Closed
-查找带有首字母的外部用户键值对 >> A:用户名4
-查找不带首字母的外部用户键值对 >> 用户名4
-按照给定的用户名查找用户键值对，返回值中不带有Closed用户 >> 1
-按照给定的用户名查找用户键值对，返回值中带有Closed用户 >> 2
-使用limit参数来限制最多获取2个用户键值对 >> 2
-使用limit参数来限制最多获取50个用户键值对 >> 3
-使用pofirst参数来将系统中的产品经理用户放到返回值前列 >> A:用户名1
-使用pmfirst参数来将系统中的项目经理内部和外部用户放到返回值前列 >> A:用户名3
-
-*/
 $usersToAppended = array('account5', 'account1');
 
 $user = new userTest();

@@ -1,9 +1,31 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->fetchExtraUsers();
-cid=1
-pid=1
+cid=0
+
+- usersToAppended 参数为空字符串，返回空数组。 @0
+- usersToAppended 参数为空数组，返回空数组。 @0
+- usersToAppended 参数为字符串，包含 2 个用户，返回 2 个用户。 @2
+- 返回的第 1 个用户的 account 字段值为 admin。第0条的account属性 @admin
+- 返回的第 2 个用户的 account 字段值为 user1。第1条的account属性 @user1
+- usersToAppended 参数为数组，包含 2 个用户，返回 2 个用户。 @2
+- 返回的第 1 个用户的 account 字段值为 admin。第0条的account属性 @admin
+- 返回的第 2 个用户的 account 字段值为 user1。第1条的account属性 @user1
+- usersToAppended 参数为数组，包含 2 个用户，指定查找 id 和 account 字段，返回 2 个用户。 @2
+- 返回的第 1 个用户的 id 字段值为 1。第0条的id属性 @1
+- 返回的第 1 个用户的 account 字段值为 admin。第0条的account属性 @admin
+- 返回的第 1 个用户没有 realname 字段。第0条的realname属性 @~~
+- 返回的第 2 个用户的 id 字段值为 2。第1条的id属性 @2
+- 返回的第 2 个用户的 account 字段值为 user1。第1条的account属性 @user1
+- 返回的第 2 个用户没有 realname 字段。第0条的realname属性 @~~
+- usersToAppended 参数为数组，包含 2 个用户，指定查找 id 和 account 字段，指定以 id 字段为键，返回 2 个用户。 @2
+- 返回的第 1 个用户的键为 1。 @1
+- 返回的第 2 个用户的键为 2。属性1 @2
+- usersToAppended 参数为数组，包含 3 个用户，指定查找 id 和 account 字段，指定以 id 字段为键，返回 2 个用户。 @2
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

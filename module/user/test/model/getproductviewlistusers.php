@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 userModel->getProductViewListUsers();
-cid=1
-pid=1
+cid=0
 
 - 获取ID为11的产品关联的用户。
  - 属性po1 @po1

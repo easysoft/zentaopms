@@ -1,5 +1,20 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 userModel->getAvatarPairs();
+cid=0
+
+- 未删除的用户头像的数量 @4
+- 所有用户头像的数量 @5
+- 在未删除用户中查找account为"account1"的用户的头像路径属性account1 @/home/z/user/1
+- 在未删除用户中查找account为"account2"的用户的头像路径属性account2 @/home/z/user/2
+- 在未删除用户中查找account为"account3"的用户的头像路径属性account3 @/home/z/user/3
+- 在未删除用户中查找account为"account4"的用户的头像路径属性account4 @/home/z/user/4
+- 在所有用户中查找account为"account5"的用户的头像路径属性account5 @/home/z/user/5
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
 su('admin');
@@ -13,21 +28,6 @@ $user->avatar->range('1-5')->prefix('/home/z/user/');
 $user->deleted->range('0{4}, 1{1}');
 $user->gen(5);
 
-/**
-
-title=测试 userModel->getPairs();
-cid=1
-pid=1
-
-未删除的用户头像的数量 >> 4
-所有用户头像的数量 >> 5
-在未删除用户中查找account为"account1"的用户的头像路径 >> /home/z/user/1
-在未删除用户中查找account为"account2"的用户的头像路径 >> /home/z/user/2
-在未删除用户中查找account为"account3"的用户的头像路径 >> /home/z/user/3
-在未删除用户中查找account为"account4"的用户的头像路径 >> /home/z/user/4
-在所有用户中查找account为"account5"的用户的头像路径 >> /home/z/user/5
-
-*/
 $user = new userTest();
 
 r(count($user->getAvatarPairsTest()))      && p()           && e('4');              // 未删除的用户头像的数量

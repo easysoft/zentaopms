@@ -1,9 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->checkBeforeCreateOrEdit();
-cid=1
-pid=1
+cid=0
+
+- 使用系统预留用户名返回 false。属性result @0
+- 使用系统预留用户名提示信息。第errors条的account属性 @用户名已被系统预留
+- 使用正常用户名返回 true。属性result @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

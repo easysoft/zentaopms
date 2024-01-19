@@ -1,9 +1,31 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->cleanLocked();
-cid=1
-pid=1
+cid=0
+
+- admin 用户的失败次数为 5，锁定时间为 2023-01-10 14:34:12。
+ - 第0条的account属性 @admin
+ - 第0条的fails属性 @5
+ - 第0条的locked属性 @2023-01-10 14:34:12
+- user1 用户的失败次数为 5，锁定时间为 2023-01-10 14:34:12。
+ - 第1条的account属性 @user1
+ - 第1条的fails属性 @5
+ - 第1条的locked属性 @2023-01-10 14:34:12
+- admin 用户的失败次数为 0，锁定时间为空。
+ - 第0条的account属性 @admin
+ - 第0条的fails属性 @0
+ - 第0条的locked属性 @~~
+- user1 用户的失败次数为 0，锁定时间为空。
+ - 第1条的account属性 @user1
+ - 第1条的fails属性 @0
+ - 第1条的locked属性 @~~
+- session 中记录的失败次数为空。 @0
+- session 中记录的 admin 用户锁定时间为空。 @0
+- session 中记录的 user1 用户锁定时间为空。 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

@@ -1,9 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->getListForGitLabAPI();
-cid=1
-pid=1
+cid=0
+
+- 传入参数为空数组，返回空数组。 @0
+- 传入参数为非空数组，其中包含的账号在数据库中不存在，返回空数组。 @0
+- 传入参数为非空数组，包含 2 个账号，返回数组包含 2 个用户。 @2
+- 传入参数为非空数组，包含 2 个账号，返回数组包含 2 个用户，其中第 1 个用户有头像。 @1
+- 传入参数为非空数组，包含 2 个账号，返回数组包含 2 个用户，其中第 2 个用户无头像。 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

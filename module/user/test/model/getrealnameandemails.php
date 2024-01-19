@@ -1,9 +1,22 @@
 #!/usr/bin/env php
 <?php
+
 /**
-title=测试 userModel->getPairs();
-cid=1
-pid=1
+
+title=测试 userModel->getRealNameAndEmails();
+cid=0
+
+- 参数为空数组，返回空数组。 @0
+- 参数包含 3个账号，返回 3个账号的邮箱和真实姓名。 @3
+- 参数包含 5个账号，返回 5个账号的邮箱和真实姓名。 @5
+- 参数包含 6个账号，返回 5个账号的邮箱和真实姓名。 @5
+- 获取 account1 的邮箱和真实姓名
+ - 属性email @account1!qq.com
+ - 属性realname @用户名1
+- 获取 account2 的邮箱和真实姓名
+ - 属性email @account2!qq.com
+ - 属性realname @用户名2
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

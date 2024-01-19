@@ -1,9 +1,21 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->keepkeepLogin();
-cid=1
-pid=1
+cid=0
+
+- 未勾选保持登录状态，cookie 中保持登录状态的值是 off。 @off
+- 未勾选保持登录状态，cookie 中 za 的值为空。 @0
+- 未勾选保持登录状态，cookie 中 zp 的值为空。 @0
+- 勾选保持登录状态，cookie 中保持登录状态的值是 on。 @on
+- 勾选保持登录状态，cookie 中 za 的值是 admin。 @admin
+- 勾选保持登录状态，cookie 中 zp 的值是 admin 的密码加密后的值。 @1
+- 勾选保持登录状态，cookie 中保持登录状态的值是 on。 @on
+- 勾选保持登录状态，cookie 中 za 的值是 user1。 @user1
+- 勾选保持登录状态，cookie 中 zp 的值是 user1 的密码加密后的值。 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 

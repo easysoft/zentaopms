@@ -1,9 +1,43 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->checkNeedModifyPassword();
-cid=1
-pid=1
+cid=0
+
+- 首次登录修改密码功能关闭，首次登录无需修改密码。
+ - 属性account @user1
+ - 属性modifyPassword @~~
+ - 属性modifyPasswordReason @~~
+- 首次登录修改密码功能开启，首次登录需要修改密码。
+ - 属性modifyPassword @1
+ - 属性modifyPasswordReason @modifyPasswordFirstLogin
+- 首次登录修改密码功能开启，非首次登录无需修改密码。
+ - 属性modifyPassword @~~
+ - 属性modifyPasswordReason @~~
+- 修改弱密码功能关闭，弱密码无需修改密码。
+ - 属性modifyPassword @~~
+ - 属性modifyPasswordReason @~~
+- 修改弱密码功能开启，弱密码需要修改密码。
+ - 属性modifyPassword @1
+ - 属性modifyPasswordReason @weak
+- 修改弱密码功能开启，强密码无需修改密码。
+ - 属性modifyPassword @~~
+ - 属性modifyPasswordReason @~~
+- 密码强度检查功能设为 1，密码强度为 0，模块为 index，方法为 index，无需修改密码。
+ - 属性modifyPassword @~~
+ - 属性modifyPasswordReason @~~
+- 密码强度检查功能设为 1，密码强度为 0，模块为 user，方法为 index，无需修改密码。
+ - 属性modifyPassword @~~
+ - 属性modifyPasswordReason @~~
+- 密码强度检查功能设为 1，密码强度为 0，模块为 user，方法为 login，需要修改密码。
+ - 属性modifyPassword @1
+ - 属性modifyPasswordReason @passwordStrengthWeak
+- 密码强度检查功能设为 1，密码强度为 1，模块为 user，方法为 login，无需修改密码。
+ - 属性modifyPassword @~~
+ - 属性modifyPasswordReason @~~
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

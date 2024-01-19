@@ -1,9 +1,83 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->login();
-cid=1
-pid=1
+cid=0
+
+- 用户名为空，返回 false。 @0
+- 登录成功，返回的用户是 admin，是超级管理员。
+ - 属性account @admin
+ - 属性admin @1
+- 登录成功，$app 对象的中的用户是 admin，是超级管理员。
+ - 属性account @admin
+ - 属性admin @1
+- 登录成功，session 中的用户是 admin，是超级管理员。
+ - 属性account @admin
+ - 属性admin @1
+- 数据库中记录的 admin 用户登录失败次数为 0，锁定时间为空。
+ - 属性account @admin
+ - 属性fails @0
+ - 属性locked @~~
+- session 中未记录登录失败次数。 @0
+- session 中未记录 admin 用户锁定时间。 @0
+- admin 用户具有 6 个模块的权限。 @8
+- admin 用户具有 index 模块的 index 动作的权限。 @1
+- admin 用户具有 my 模块的 index 动作的权限。 @1
+- admin 用户具有 company 模块的 all 动作的权限。 @1
+- admin 用户具有 dept 模块的 browse 动作的权限。 @1
+- admin 用户具有 group 模块的 browse 动作的权限。 @1
+- admin 用户具有 program 模块的 browse 动作的权限。 @1
+- admin 用户具有 product 模块的 browse 动作的权限。 @1
+- admin 用户具有 execution 模块的 browse 动作的权限。 @1
+- admin 用户具有 2 个权限组。 @2
+- admin 用户具有的权限组 id 分别是 1 和 2。
+ - 属性1 @1
+ - 属性2 @2
+- 记录日志，最后一条日志对象类型是 user，对象 ID 是 1，动作是 login。
+ - 属性objectType @user
+ - 属性objectID @1
+ - 属性action @login
+- 未勾选保持登录状态，cookie 中保持登录状态的值是 off。 @off
+- 未勾选保持登录状态，cookie 中 za 的值为空。 @0
+- 未勾选保持登录状态，cookie 中 zp 的值为空。 @0
+- 登录成功，返回的用户是 user1，不是超级管理员。
+ - 属性account @user1
+ - 属性admin @~~
+- 登录成功，$app 对象的中的用户是 user1，不是超级管理员。
+ - 属性account @user1
+ - 属性admin @~~
+- 登录成功，session 中的用户是 user1，不是超级管理员。
+ - 属性account @user1
+ - 属性admin @~~
+- 数据中记录的 user1 用户登录失败次数为 0，锁定时间为空。
+ - 属性account @user1
+ - 属性fails @0
+ - 属性locked @~~
+- session 中未记录登录失败次数。 @0
+- session 中未记录 user1 用户锁定时间。 @0
+- user1 用户具有 2 个模块的权限。 @8
+- user1 用户具有 index 模块的 index 动作的权限。 @1
+- user1 用户具有 my 模块的 index 动作的权限。 @1
+- user1 用户具有 program 模块的 browse 动作的权限。 @1
+- user1 用户具有 product 模块的 browse 动作的权限。 @1
+- user1 用户具有 execution 模块的 all 动作的权限。 @1
+- user1 用户具有 qa 模块的 index 动作的权限。 @1
+- user1 用户具有 bug 模块的 browse 动作的权限。 @1
+- user1 用户具有 testcase 模块的 browse 动作的权限。 @1
+- user1 用户具有 2 个权限组。 @2
+- user1 用户具有的权限组 id 分别是 2 和 3。
+ - 属性2 @2
+ - 属性3 @3
+- 未记录日志，最后一条日志是 admin 用户的登录日志。
+ - 属性objectType @user
+ - 属性objectID @1
+ - 属性action @login
+- 勾选保持登录状态，cookie 中保持登录状态的值是 on。 @on
+- 勾选保持登录状态，cookie 中 za 的值是 user1。 @user1
+- 勾选保持登录状态，cookie 中 zp 的值是 user1 的密码加密后的值。 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

@@ -1,9 +1,61 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->create();
-cid=1
-pid=1
+cid=0
+
+- 使用系统预留用户名，返回 false。属性result @0
+- 使用系统预留用户名，提示错误信息。第errors条的account属性 @用户名已被系统预留
+- 密码为空，返回 false。属性result @0
+- 密码为空，提示错误信息。第errors条的password1属性 @『密码』不能为空。
+- 密码长度不够，返回 false。属性result @0
+- 密码长度不够，提示错误信息。第errors条的password1属性 @密码须6位及以上。
+- 两次密码不同，返回 false。属性result @0
+- 两次密码不同，提示错误信息。第errors条的password1属性 @两次密码应该相同。
+- 当前用户登录密码不正确，返回 false。属性result @0
+- 当前用户登录密码不正确，提示错误信息。第errors条的verifyPassword属性 @验证失败，请检查您的系统登录密码是否正确
+- 创建外部公司，公司名称为空，返回 false。属性result @0
+- 创建外部公司，公司名称为空，提示错误信息。第errors条的newCompany属性 @『所属公司』不能为空。
+- 创建外部公司，公司名称不为空，返回创建的用户 id。属性result @2
+- 创建外部公司，公司名称不为空，没有错误信息。第errors条的newCompany属性 @~~
+- 必填项为空，返回 false。属性result @0
+- 用户名为空，提示错误信息。第errors条的account属性 @『用户名』不能为空。
+- 姓名为空，提示错误信息。第errors条的realname属性 @『姓名』不能为空。
+- 密码为空，提示错误信息。第errors条的password属性 @『密码』不能为空。
+- 界面类型为空，提示错误信息。第errors条的visions属性 @『界面类型』不能为空。
+- 用户名重复，返回 false。属性result @0
+- 用户名重复，提示错误信息。第errors条的account属性 @『用户名』已经有『user1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 用户名不符合格式要求，返回 false。属性result @0
+- 用户名不符合格式要求，提示错误信息。第errors条的account属性 @『用户名』只能是字母、数字或下划线的组合三位以上。
+- 邮箱不符合格式要求，返回 false。属性result @0
+- 邮箱不符合格式要求，提示错误信息。第errors条的email属性 @『邮箱』应当为合法的EMAIL。
+- 字段不符合数据库设置，返回 false。属性result @0
+- 字符串字段长度超过数据库设置，提示错误信息。第errors条的type属性 @『用户类型』长度应当不超过『30』，且大于『0』。
+- 数字字段类型不符合数据库设置，提示错误信息。第errors条的company属性 @『所属公司』应当是数字。
+- 日期字段类型不符合数据库设置，提示错误信息。第errors条的join属性 @『入职日期』应当为合法的日期。
+- 枚举字段类型不符合数据库设置，提示错误信息。第errors条的gender属性 @『性别』不符合格式，应当为:『/f|m/』。
+- 创建外部公司成功，用户名重复，返回 false。属性result @0
+- 创建外部公司成功，用户名重复，提示错误信息。第errors条的account属性 @『用户名』已经有『user1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 事务回滚成功，没有创建公司。 @0
+- 创建用户成功，返回创建的用户 id。属性result @3
+- 创建用户成功，没有错误信息。第errors条的account属性 @~~
+- 生成用户权限组成功，返回 2 条记录。 @2
+- 第 1 条记录的用户名是 user2，权限组 id 是 1。
+ - 第0条的account属性 @user2
+ - 第0条的group属性 @1
+- 第 2 条记录的用户名是 user2，权限组 id 是 2。
+ - 第1条的account属性 @user2
+ - 第1条的group属性 @2
+- 创建日志成功，最后一条日志的对象类型是 user，对象 id 是 3，操作是 created。
+ - 属性objectType @user
+ - 属性objectID @3
+ - 属性action @created
+- 事务提交成功，能查询到创建的用户。
+ - 属性id @3
+ - 属性account @user2
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

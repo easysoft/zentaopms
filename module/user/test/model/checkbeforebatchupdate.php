@@ -1,9 +1,33 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->checkBeforeBatchUpdate();
-cid=1
-pid=1
+cid=0
+
+- 检查未通过，返回 false。属性result @0
+- 姓名为空错误提示。第errors条的realname[0]属性 @『姓名』不能为空。
+- 界面类型为空错误提示。第errors条的visions[0][]属性 @『界面类型』不能为空。
+- 邮箱无错误提示。第errors条的email[0]属性 @~~
+- 电话无错误提示。第errors条的phone[0]属性 @~~
+- 手机无错误提示。第errors条的mobile[0]属性 @~~
+- 验证密码错误提示。第errors条的verifyPassword属性 @验证失败，请检查您的系统登录密码是否正确
+- 检查未通过，返回 false。属性result @0
+- 姓名无错误提示。第errors条的realname[0]属性 @~~
+- 界面类型无错误提示。第errors条的visions[0][]属性 @~~
+- 邮箱格式错误提示。第errors条的email[0]属性 @『邮箱』应当为合法的EMAIL。
+- 电话格式错误提示。第errors条的phone[0]属性 @『电话』应当为合法的电话号码。
+- 手机格式错误提示。第errors条的mobile[0]属性 @『手机』应当为合法的手机号码。
+- 验证密码无错误提示。第errors条的verifyPassword属性 @~~
+- 检查通过，返回 true。属性result @1
+- 姓名无错误提示。第errors条的realname[0]属性 @~~
+- 界面类型无错误提示。第errors条的visions[0][]属性 @~~
+- 邮箱无错误提示。第errors条的email[0]属性 @~~
+- 电话无错误提示。第errors条的phone[0]属性 @~~
+- 手机无错误提示。第errors条的mobile[0]属性 @~~
+- 验证密码无错误提示。第errors条的verifyPassword属性 @~~
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

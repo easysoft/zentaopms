@@ -1,9 +1,28 @@
 #!/usr/bin/env php
 <?php
+
 /**
-title=测试 userModel->checkGroupChange);
-cid=1
-pid=1
+
+title=测试 userModel->checkGroupChange();
+cid=0
+
+- 新权限组和旧权限组相同，返回 false。属性result @0
+- 查看用户权限组，返回 2 条记录。 @2
+- 第 1 条记录的用户名是 user1，权限组 id 是 1。
+ - 第0条的account属性 @user1
+ - 第0条的group属性 @1
+- 第 2 条记录的用户名是 user1，权限组 id 是 2。
+ - 第1条的account属性 @user1
+ - 第1条的group属性 @2
+- 新权限组和旧权限组不同，返回 true。属性result @1
+- 查看用户权限组，返回 2 条记录。 @2
+- 第 1 条记录的用户名是 user1，权限组 id 是 2。
+ - 第0条的account属性 @user1
+ - 第0条的group属性 @2
+- 第 2 条记录的用户名是 user1，权限组 id 是 3。
+ - 第1条的account属性 @user1
+ - 第1条的group属性 @3
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

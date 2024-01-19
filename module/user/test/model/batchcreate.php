@@ -1,9 +1,38 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->batchCreate();
-cid=1
-pid=1
+cid=0
+
+- 传入空数组，返回 false。属性result @0
+- 用户名为空，返回 false。属性result @0
+- 查看公司表只有 1 条记录。 @1
+- 公司表第 1 条记录的 id 是 1。第0条的id属性 @1
+- 创建用户失败，返回 false。属性result @0
+- 创建用户失败，提示错误信息。第errors条的gender属性 @『性别』不符合格式，应当为:『/f|m/』。
+- 事务回滚成功，查看公司表只有 1 条记录。 @1
+- 公司表第 1 条记录的 id 是 1。第0条的id属性 @1
+- 查看用户权限组表没有记录。 @0
+- 创建用户成功，返回新用户 id。属性result @2
+- 查看公司表有 2 条记录。 @2
+- 公司表第 1 条记录的 id 是 1。第0条的id属性 @1
+- 公司表第 2 条记录的 id 是 3（上一条测试失败事务回滚，所以这里的 id 是 3 不是 2），名称是 newCompany。
+ - 第1条的id属性 @3
+ - 第1条的name属性 @newCompany
+- 查看用户权限组表有 2 条记录。 @2
+- 第 1 条记录的用户名是 user1，权限组 id 是 1。
+ - 第0条的account属性 @user1
+ - 第0条的group属性 @1
+- 第 2 条记录的用户名是 user1，权限组 id 是 2。
+ - 第1条的account属性 @user1
+ - 第1条的group属性 @2
+- 查看日志表最后一条记录的对象类型是 user，对象 id 是 2，动作是 created。
+ - 属性objectType @user
+ - 属性objectID @2
+ - 属性action @created
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
@@ -34,7 +63,7 @@ $users2 = array
 
 $users3 = array
 (
-    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => 'Admin123', 'type' => 'outside', 'new' => 1, 'newCompany' => 'newCompany', 'group' => array(1, 2)),
+    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => 'Admin123', 'type' => 'outside', 'new' => 1, 'newCompany' => 'newCompany', 'group' => array(1, 2), 'gender' => 'm'),
 );
 
 /**

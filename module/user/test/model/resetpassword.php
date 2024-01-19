@@ -1,9 +1,24 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->resetPassword();
-cid=1
-pid=1
+cid=0
+
+- user2 用户不存在，返回 false。属性result @0
+- user2 用户不存在，提示错误信息。第errors条的0属性 @用户不存在
+- admin 用户存在，但密码为空，返回 false。属性result @0
+- admin 用户存在，但密码为空，提示错误信息。第errors条的password1属性 @『密码』不能为空。
+- admin 用户存在，但密码长度不够，返回 false。属性result @0
+- admin 用户存在，但密码长度不够，提示错误信息。第errors条的password1属性 @密码须6位及以上。
+- admin 用户存在，但两次密码不相同，返回 false。属性result @0
+- admin 用户存在，但两次密码不相同，提示错误信息。第errors条的password1属性 @两次密码应该相同。
+- user1 用户存在，且密码符合要求，返回 true。属性result @1
+- user1 用户存在，且密码符合要求，不提示错误信息。第errors条的0属性 @~~
+- user1 用户存在，且密码符合要求，不提示错误信息。第errors条的password1属性 @~~
+- user1 用户密码重置成功。 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

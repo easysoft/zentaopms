@@ -1,19 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 userModel->su();
+cid=0
+
+- 当前用户为 user1。属性account @user1
+- 当前用户为 admin。属性account @admin
+- 没有管理员用户。属性account @No admin users.
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('user')->gen(3);
 zdTable('company')->gen(1);
 
 su('user1');
-
-/**
-
-title=测试 userModel->su();
-cid=1
-pid=1
-
-*/
 
 global $app, $tester;
 

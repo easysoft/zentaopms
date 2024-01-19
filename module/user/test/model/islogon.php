@@ -1,9 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->isLogon();
-cid=1
-pid=1
+cid=0
+
+- session 中用户为 admin 时获取用户的登录状态。 @1
+- session 中用户为 user1 时获取用户的登录状态。 @1
+- session 中用户为 guest 时获取用户的登录状态。 @0
+- session 中用户为空时获取用户的登录状态。 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

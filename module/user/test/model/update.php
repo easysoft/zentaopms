@@ -1,9 +1,104 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->update();
-cid=1
-pid=1
+cid=0
+
+- 使用系统预留用户名，返回 false。属性result @0
+- 使用系统预留用户名，提示错误信息。第errors条的account属性 @用户名已被系统预留
+- 密码长度不够，返回 false。属性result @0
+- 密码长度不够，提示错误信息。第errors条的password1属性 @密码须6位及以上。
+- 两次密码不同，返回 false。属性result @0
+- 两次密码不同，提示错误信息。第errors条的password1属性 @两次密码应该相同。
+- 当前用户登录密码不正确，返回 false。属性result @0
+- 当前用户登录密码不正确，提示错误信息。第errors条的verifyPassword属性 @验证失败，请检查您的系统登录密码是否正确
+- 公司名称为空，创建外部公司失败，返回 false。属性result @0
+- 公司名称为空，创建外部公司失败，提示错误信息。第errors条的newCompany属性 @『所属公司』不能为空。
+- 公司名称不为空，创建外部公司成功，返回 true。属性result @1
+- 必填项为空，返回 false。属性result @0
+- 用户名为空，提示错误信息。第errors条的account属性 @『用户名』不能为空。
+- 姓名为空，提示错误信息。第errors条的realname属性 @『姓名』不能为空。
+- 界面类型为空，提示错误信息。第errors条的visions属性 @『界面类型』不能为空。
+- 更新 id 为 2 的用户成功，返回 true。属性result @1
+- 更新 id 为 3 的用户失败，用户名重复，返回 false。属性result @0
+- 更新 id 为 3 的用户失败，用户名重复，提示错误信息。第errors条的account属性 @『用户名』已经有『user1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 用户名不符合格式要求，返回 false。属性result @0
+- 用户名不符合格式要求，提示错误信息。第errors条的account属性 @『用户名』只能是字母、数字或下划线的组合三位以上。
+- 邮箱不符合格式要求，返回 false。属性result @0
+- 邮箱不符合格式要求，提示错误信息。第errors条的email属性 @『邮箱』应当为合法的EMAIL。
+- 电话不符合格式要求，提示错误信息。第errors条的phone属性 @『电话』应当为合法的电话号码。
+- 手机不符合格式要求，提示错误信息。第errors条的mobile属性 @『手机』应当为合法的手机号码。
+- 字段不符合数据库设置，返回 false。属性result @0
+- 字符串字段长度超过数据库设置，提示错误信息。第errors条的type属性 @『用户类型』长度应当不超过『30』，且大于『0』。
+- 数字字段类型不符合数据库设置，提示错误信息。第errors条的company属性 @『所属公司』应当是数字。
+- 日期字段类型不符合数据库设置，提示错误信息。第errors条的join属性 @『入职日期』应当为合法的日期。
+- 枚举字段类型不符合数据库设置，提示错误信息。第errors条的gender属性 @『性别』不符合格式，应当为:『/f|m/』。
+- 创建外部公司成功，更新 id 为 3 的用户失败，用户名重复，返回 false。属性result @0
+- 创建外部公司成功，更新 id 为 3 的用户失败，用户名重复，提示错误信息。第errors条的account属性 @『用户名』已经有『user1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 事务回滚成功，没有创建公司。 @0
+- 查看用户权限组，返回 2 条记录。 @2
+- 第 1 条记录的用户名是 user1，权限组 id 是 1。
+ - 第0条的account属性 @user1
+ - 第0条的group属性 @1
+- 第 2 条记录的用户名是 user1，权限组 id 是 2。
+ - 第1条的account属性 @user1
+ - 第1条的group属性 @2
+- 查看用户视图，返回 2 条记录。 @2
+- 第 1 条记录的用户名是 admin。第0条的account属性 @admin
+- 第 2 条记录的用户名是 user1。第1条的account属性 @user1
+- 数据库中超级管理员是 admin,user1。 @,admin,user1,
+
+- $app 对象中超级管理员是 admin,user1。 @,admin,user1,
+
+- 修改用户名成功，返回 true。属性result @1
+- 查看用户权限组，返回 2 条记录。 @2
+- 第 1 条记录的用户名是 user12，权限组 id 是 1。
+ - 第0条的account属性 @user12
+ - 第0条的group属性 @1
+- 第 2 条记录的用户名是 user12，权限组 id 是 2。
+ - 第1条的account属性 @user12
+ - 第1条的group属性 @2
+- 查看用户视图，返回 2 条记录。 @2
+- 第 1 条记录的用户名是 admin。第0条的account属性 @admin
+- 第 2 条记录的用户名是 user12。第1条的account属性 @user12
+- 数据库中超级管理员是 admin,user12。 @,admin,user12,
+
+- $app 对象中超级管理员是 admin,user12。 @,admin,user12,
+
+- 修改用户权限组成功，返回 true。属性result @1
+- 查看用户权限组，返回 2 条记录。 @2
+- 第 1 条记录的用户名是 user12，权限组 id 是 1。
+ - 第0条的account属性 @user12
+ - 第0条的group属性 @2
+- 第 2 条记录的用户名是 user12，权限组 id 是 2。
+ - 第1条的account属性 @user12
+ - 第1条的group属性 @3
+- 创建日志成功，最后一条日志的对象类型是 user，对象 id 是 2，操作是 edited。
+ - 属性objectType @user
+ - 属性objectID @2
+ - 属性action @edited
+- 创建历史记录成功，最后一条日志的历史记录是 1 条。 @1
+- 创建历史记录成功，最后一条日志的历史记录的字段是 account，旧值是 user1，新值是 user12。
+ - 第0条的field属性 @account
+ - 第0条的old属性 @user1
+ - 第0条的new属性 @user12
+- 事务提交成功，能查询到修改的用户。
+ - 属性id @2
+ - 属性account @user12
+- 当前登录用户的用户名是 admin，真实姓名是 admin，角色是 qa。
+ - 属性account @admin
+ - 属性realname @admin
+ - 属性role @qa
+- 当前登录用户的密码不是 123456。 @0
+- 更新当前登录用户成功，返回 true。属性result @1
+- 当前登录用户的用户名是 admin，真实姓名是 user13，角色是 role13。
+ - 属性account @admin
+ - 属性realname @user13
+ - 属性role @role13
+- 当前登录用户的密码是 123456。 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

@@ -1,9 +1,41 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->getExecutions();
-cid=1
-pid=1
+cid=0
+
+- 用户名为空，返回空数组。 @0
+- 用户 user2 未参与任何执行，返回空数组。 @0
+- 运营管理界面下 admin 用户参与的执行有 0 个。 @0
+- 研发综合界面下 admin 用户参与的执行有 5 个。 @5
+- 执行 6 的状态为 wait，没有延期，项目名称为项目 1，指派给 admin 的任务数是 3。
+ - 第6条的status属性 @wait
+ - 第6条的delay属性 @~~
+ - 第6条的projectName属性 @项目1
+ - 第6条的assignedToMeTasks属性 @3
+- 执行 7 的状态为 wait，延期 1 天，项目名称为项目 2，指派给 admin 的任务数是 2。
+ - 第7条的status属性 @wait
+ - 第7条的delay属性 @1
+ - 第7条的projectName属性 @项目2
+ - 第7条的assignedToMeTasks属性 @2
+- 执行 8 的状态为 doing，延期 1 天，项目名称为项目 2，指派给 admin 的任务数是 1。
+ - 第8条的status属性 @doing
+ - 第8条的delay属性 @1
+ - 第8条的projectName属性 @项目2
+ - 第8条的assignedToMeTasks属性 @1
+- 执行 9 的状态为 suspended，没有延期，项目名称为项目 2，指派给 admin 的任务数是 1。
+ - 第9条的status属性 @suspended
+ - 第9条的delay属性 @~~
+ - 第9条的projectName属性 @项目2
+ - 第9条的assignedToMeTasks属性 @1
+- 执行 10 的状态为 closed，没有延期，项目名称为项目 3，指派给 admin 的任务数是 1。
+ - 第10条的status属性 @closed
+ - 第10条的delay属性 @~~
+ - 第10条的projectName属性 @项目3
+ - 第10条的assignedToMeTasks属性 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

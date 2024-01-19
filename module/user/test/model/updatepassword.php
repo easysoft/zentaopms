@@ -1,9 +1,28 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->updatePassword();
-cid=1
-pid=1
+cid=0
+
+- 密码为空，返回 false。属性result @0
+- 密码为空，提示错误信息。第errors条的password1属性 @『密码』不能为空。
+- 密码长度不够，返回 false。属性result @0
+- 密码长度不够，提示错误信息。第errors条的password1属性 @密码须6位及以上。
+- 两次密码不相同，返回 false。属性result @0
+- 两次密码不相同，提示错误信息。第errors条的password1属性 @两次密码应该相同。
+- 原密码不正确，返回 false。属性result @0
+- 原密码不正确，提示错误信息。第errors条的originalPassword属性 @原密码不正确
+- 密码符合要求，返回 true。属性result @1
+- 密码符合要求，不提示错误信息。第errors条的0属性 @~~
+- 密码符合要求，不提示错误信息。第errors条的password1属性 @~~
+- 数据库中的密码修改成功。 @1
+- app 中的密码修改成功。 @1
+- app 中的是否强制修改免密重置为 false。 @0
+- app 中的强制修改密码原因重置为空。 @0
+- session 中的密码修改成功。 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

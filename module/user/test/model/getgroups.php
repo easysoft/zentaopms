@@ -1,9 +1,24 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->getGroups();
-cid=1
-pid=1
+cid=0
+
+- 参数为空字符串，返回空数组。 @0
+- 参数为不存在的用户名，返回空数组。 @0
+- user1 用户属于 1,2,3 组。
+ - 属性1 @1
+ - 属性2 @2
+ - 属性3 @3
+- user2 用户属于 2,3 组。
+ - 属性2 @2
+ - 属性3 @3
+- user3 用户属于 3,4 组。
+ - 属性3 @3
+ - 属性4 @4
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

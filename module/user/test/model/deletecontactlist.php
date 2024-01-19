@@ -1,9 +1,21 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->deleteContactList();
-cid=1
-pid=1
+cid=0
+
+- 联系人列表数量为 3。 @3
+- 联系人列表第 1 条 id 为 3。第0条的id属性 @3
+- 联系人列表第 2 条 id 为 2。第1条的id属性 @2
+- 联系人列表第 3 条 id 为 1。第2条的id属性 @1
+- 删除 id 为 4 的联系人列表。属性result @1
+- 删除 id 为 3 的联系人列表。属性result @1
+- 删除 id 为 2 的联系人列表。属性result @1
+- 联系人列表数量为 1。 @1
+- 联系人列表第 1 条 id 为 1。第0条的id属性 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

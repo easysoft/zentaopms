@@ -1,9 +1,65 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->checkBeforeBatchCreate();
-cid=1
-pid=1
+cid=0
+
+- 检查未通过，返回 false。属性result @0
+- 用户名不符合规则错误提示。第errors条的account[0]属性 @『用户名』只能是字母、数字或下划线的组合三位以上。
+- 用户名被系统预留错误提示。第errors条的account[1]属性 @用户名已被系统预留
+- 用户名已存在错误提示。第errors条的account[2]属性 @『用户名』已经有『admin』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 用户名已存在错误提示。第errors条的account[4]属性 @『用户名』已经有『user1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 姓名为空错误提示。第errors条的realname[0]属性 @『姓名』不能为空。
+- 界面类型为空错误提示。第errors条的visions[0][]属性 @『界面类型』不能为空。
+- 密码为空错误提示。第errors条的password[0]属性 @『密码』不能为空。
+- 密码长度小于 6 位错误提示。第errors条的password[1]属性 @密码必须为六位及以上
+- 邮箱格式错误提示。第errors条的email[4]属性 @『邮箱』应当为合法的EMAIL。
+- 电话格式错误提示。第errors条的phone[4]属性 @『电话』应当为合法的电话号码。
+- 手机格式错误提示。第errors条的mobile[4]属性 @『手机』应当为合法的手机号码。
+- 验证密码错误提示。第errors条的verifyPassword属性 @验证失败，请检查您的系统登录密码是否正确
+- 未设置密码安全属性，返回 false。属性result @1
+- 未设置密码安全属性，密码只包含数字，无错误提示。第errors条的password[0]属性 @~~
+- 未设置密码安全属性，密码包含大小写字母和数字，无错误提示。第errors条的password[1]属性 @~~
+- 未设置密码安全属性，密码包含大小写字母、数字和特殊字符，无错误提示。第errors条的password[2]属性 @~~
+- 密码安全属性设为小于不检查的自定义数字，密码只包含数字，无错误提示。第errors条的password[0]属性 @~~
+- 密码安全属性设为小于不检查的自定义数字，密码包含大小写字母和数字，无错误提示。第errors条的password[1]属性 @~~
+- 密码安全属性设为小于不检查的自定义数字，密码包含大小写字母、数字和特殊字符，无错误提示。第errors条的password[2]属性 @~~
+- 密码安全属性设为不检查，密码只包含数字，无错误提示。第errors条的password[0]属性 @~~
+- 密码安全属性设为不检查，密码包含大小写字母和数字，无错误提示。第errors条的password[1]属性 @~~
+- 密码安全属性设为不检查，密码包含大小写字母、数字和特殊字符，无错误提示。第errors条的password[2]属性 @~~
+- 密码安全属性设为中，密码只包含数字，密码强度小于系统设定，有错误提示。第errors条的password[0]属性 @密码强度小于系统设定。
+- 密码安全属性设为中，密码包含大小写字母和数字，密码强度符合系统设定，无错误提示。第errors条的password[1]属性 @~~
+- 密码安全属性设为中，密码包含大小写字母、数字和特殊字符，密码强度符合系统设定，无错误提示。第errors条的password[2]属性 @~~
+- 密码安全属性设为强，密码只包含数字，密码强度小于系统设定，有错误提示。第errors条的password[0]属性 @密码强度小于系统设定。
+- 密码安全属性设为强，密码包含大小写字母和数字，密码强度小于系统设定，有错误提示。第errors条的password[1]属性 @密码强度小于系统设定。
+- 密码安全属性设为强，密码包含大小写字母、数字和特殊字符，密码强度符合系统设定，无错误提示。第errors条的password[2]属性 @~~
+- 密码安全属性设为大于强的自定义数字，密码只包含数字，密码强度小于系统设定，有错误提示。第errors条的password[0]属性 @密码强度小于系统设定。
+- 密码安全属性设为大于强的自定义数字，密码包含大小写字母和数字，密码强度小于系统设定，有错误提示。第errors条的password[1]属性 @密码强度小于系统设定。
+- 密码安全属性设为大于强的自定义数字，密码包含大小写字母、数字和特殊字符，密码强度小于系统设定，有错误提示。第errors条的password[2]属性 @密码强度小于系统设定。
+- 未设置修改弱口令密码属性，返回 false。属性result @1
+- 未设置修改弱口令密码属性，无错误提示。第errors条的password[0]属性 @~~
+- 未设置修改弱口令密码属性，无错误提示。第errors条的password[1]属性 @~~
+- 修改弱口令密码属性设为不强制，返回 false。属性result @1
+- 修改弱口令密码属性设为不强制，无错误提示。第errors条的password[0]属性 @~~
+- 修改弱口令密码属性设为不强制，无错误提示。第errors条的password[1]属性 @~~
+- 修改弱口令密码属性设为必须修改，使用系统内置常用弱口令检查，返回 false。属性result @0
+- 修改弱口令密码属性设为必须修改，使用系统内置常用弱口令检查，有错误提示。第errors条的password[0]属性 @密码不能使用【123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123】这些常用弱口令。
+- 修改弱口令密码属性设为必须修改，使用系统内置常用弱口令检查，无错误提示。第errors条的password[1]属性 @~~
+- 修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，返回 false。属性result @0
+- 修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，无错误提示。第errors条的password[0]属性 @~~
+- 修改弱口令密码属性设为必须修改，使用自定义常用弱口令检查，有错误提示。第errors条的password[1]属性 @密码不能使用【password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123,1234567890】这些常用弱口令。
+- 检查通过，返回 true。属性result @1
+- 用户名无错误提示。第errors条的account[0]属性 @~~
+- 姓名无错误提示。第errors条的realname[0]属性 @~~
+- 界面类型无错误提示。第errors条的visions[0][]属性 @~~
+- 密码无错误提示。第errors条的password[0]属性 @~~
+- 邮箱无错误提示。第errors条的email[0]属性 @~~
+- 电话无错误提示。第errors条的phone[0]属性 @~~
+- 手机无错误提示。第errors条的mobile[0]属性 @~~
+- 验证密码无错误提示。第errors条的verifyPassword属性 @~~
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
@@ -28,22 +84,22 @@ $users1 = array
 /* 用于测试密码强度的数据。*/
 $users2 = array
 (
-    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => '123456',     'email' => '', 'phone' => '', 'mobile' => ''),
-    (object)array('account' => 'user2', 'realname' => 'user2', 'visions' => 'rnd', 'password' => 'Admin123',   'email' => '', 'phone' => '', 'mobile' => ''),
-    (object)array('account' => 'user3', 'realname' => 'user3', 'visions' => 'rnd', 'password' => '@Admin123@', 'email' => '', 'phone' => '', 'mobile' => '')
+    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => '123456',     'email' => '', 'phone' => '', 'mobile' => '', 'gender' => 'm'),
+    (object)array('account' => 'user2', 'realname' => 'user2', 'visions' => 'rnd', 'password' => 'Admin123',   'email' => '', 'phone' => '', 'mobile' => '', 'gender' => 'm'),
+    (object)array('account' => 'user3', 'realname' => 'user3', 'visions' => 'rnd', 'password' => '@Admin123@', 'email' => '', 'phone' => '', 'mobile' => '', 'gender' => 'm')
 );
 
 /* 用于测试系统内置常用弱口令和自定义常用弱口令的数据。*/
 $users3 = array
 (
-    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => '123456',     'email' => '', 'phone' => '', 'mobile' => ''),
-    (object)array('account' => 'user2', 'realname' => 'user2', 'visions' => 'rnd', 'password' => '1234567890', 'email' => '', 'phone' => '', 'mobile' => '')
+    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => '123456',     'email' => '', 'phone' => '', 'mobile' => '', 'gender' => 'm'),
+    (object)array('account' => 'user2', 'realname' => 'user2', 'visions' => 'rnd', 'password' => '1234567890', 'email' => '', 'phone' => '', 'mobile' => '', 'gender' => 'm')
 );
 
 /* 用户测试符合各项要求的数据。*/
 $users4 = array
 (
-    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => '@Admin123@', 'email' => 'a@a.com', 'phone' => '86893032', 'mobile' => '13888888888'),
+    (object)array('account' => 'user1', 'realname' => 'user1', 'visions' => 'rnd', 'password' => '@Admin123@', 'email' => 'a@a.com', 'phone' => '86893032', 'mobile' => '13888888888', 'gender' => 'm'),
 );
 
 $random         = updateSessionRandom();

@@ -1,9 +1,36 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel::saveUserTemplate();
-cid=1
-pid=1
+cid=0
+
+- 模板名称和模板内容为空，返回 false。属性result @0
+- 创建人无错误提示。第errors条的account属性 @~~
+- 模板类型无错误提示。第errors条的type属性 @~~
+- 模板名称不能为空。第errors条的title属性 @『模板名称』不能为空。
+- 模板内容不能为空。第errors条的content属性 @『模板内容』不能为空。
+- 公共模板无错误提示。第errors条的public属性 @~~
+- 模板名称已存在，返回 false。属性result @0
+- 创建人无错误提示。第errors条的account属性 @~~
+- 创建人无错误提示。第errors条的type属性 @~~
+- 模板名称已存在。第errors条的title属性 @『模板名称』已经有『模板名称1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 模板内容无错误提示。第errors条的content属性 @~~
+- 公共模板无错误提示。第errors条的public属性 @~~
+- 创建人和模板名称过长，返回 false。属性result @0
+- 创建人过长。第errors条的account属性 @『创建人』长度应当不超过『30』，且大于『0』。
+- 模板类型过长。第errors条的type属性 @『模板类型』长度应当不超过『30』，且大于『0』。
+- 模板名称过长。第errors条的title属性 @『模板名称』长度应当不超过『150』，且大于『0』。
+- 模板内容无错误提示。第errors条的content属性 @~~
+- 公共模板应当是数字。第errors条的public属性 @『公共模板』不符合格式，应当为:『/0|1/』。
+- 创建成功，返回 true。属性result @1
+- 创建人无错误提示。第errors条的account属性 @~~
+- 模板类型无错误提示。第errors条的type属性 @~~
+- 模板名称无错误提示。第errors条的title属性 @~~
+- 模板内容无错误提示。第errors条的content属性 @~~
+- 公共模板无错误提示。第errors条的public属性 @~~
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

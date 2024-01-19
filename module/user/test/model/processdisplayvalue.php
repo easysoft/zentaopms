@@ -1,9 +1,44 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->processDisplayValue();
-cid=1
-pid=1
+cid=0
+
+- 参数为空，用户 1 显示首字母 + 姓名，用户 2 显示首字母 + 用户名，用户 3 显示首字母 + 用户名。
+ - 属性user1 @U:用户1
+ - 属性user2 @U:user2
+ - 属性user3 @U:user3
+- 参数为 showid，用户 1 显示用户 ID，用户 2 显示用户 ID，用户 3 显示用户 ID。
+ - 属性user1 @1
+ - 属性user2 @2
+ - 属性user3 @3
+- 参数为 noletter，用户 1 显示姓名，用户 2 显示用户名，用户 3 显示用户名。
+ - 属性user1 @用户1
+ - 属性user2 @user2
+ - 属性user3 @user3
+- 参数为 realname，用户 1 显示首字母 + 姓名，用户 2 显示首字母 + 用户名，用户 3 显示首字母 + 姓名。
+ - 属性user1 @U:用户1
+ - 属性user2 @U:user2
+ - 属性user3 @U:用户3
+- 参数为 showid,noletter，用户 1 显示用户 ID，用户 2 显示用户 ID，用户 3 显示用户 ID。
+ - 属性user1 @1
+ - 属性user2 @2
+ - 属性user3 @3
+- 参数为 showid,realname，用户 1 显示用户 ID，用户 2 显示用户 ID，用户 3 显示用户 ID。
+ - 属性user1 @1
+ - 属性user2 @2
+ - 属性user3 @3
+- 参数为 noletter,realname，用户 1 显示姓名，用户 2 显示用户名，用户 3 显示姓名。
+ - 属性user1 @用户1
+ - 属性user2 @user2
+ - 属性user3 @用户3
+- 参数为 showid,noletter,realname，用户 1 显示用户 ID，用户 2 显示用户 ID，用户 3 显示用户 ID。
+ - 属性user1 @1
+ - 属性user2 @2
+ - 属性user3 @3
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

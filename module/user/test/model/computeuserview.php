@@ -1,15 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 userModel->computeUserView();
-cid=1
-pid=1
+cid=0
 
-- 计算并获取test1账户的可查看项目集列表。属性programs @,1
-- 计算并获取test1账户的可查看产品列表。属性products @,1
-- 计算并获取test1账户的可查看项目列表。属性projects @,11
-- 计算并获取test1账户的可查看执行列表。属性sprints @,101
+- 计算并获取test1账户的可查看项目集列表。属性programs @,3
+- 计算并获取test1账户的可查看产品列表。属性products @,3
+- 计算并获取test1账户的可查看项目列表。属性projects @,13
+- 计算并获取test1账户的可查看执行列表。属性sprints @,103
 - 计算并获取admin账户的可查看项目集列表。属性programs @2,3,5,6,8,9
 - 计算并获取admin账户的可查看产品列表。属性products @11,12,13,14,15,16,17,18,19,20
 - 计算并获取admin账户的可查看项目列表。属性projects @11,12,14,15,17,18,20

@@ -1,9 +1,32 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->createContactList();
-cid=1
-pid=1
+cid=0
+
+- 列表名称和用户列表为空，返回 false。属性result @0
+- 创建人无错误提示。第errors条的account属性 @~~
+- 列表名称不能为空。第errors条的listName属性 @『列表名称』不能为空。
+- 用户列表不能为空。第errors条的userList属性 @『用户列表』不能为空。
+- 公共联系人无错误提示。第errors条的public属性 @~~
+- 列表名称已存在，返回 false。属性result @0
+- 创建人无错误提示。第errors条的account属性 @~~
+- 列表名称已存在。第errors条的listName属性 @『列表名称』已经有『联系人列表1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 用户列表无错误提示。第errors条的userList属性 @~~
+- 公共联系人无错误提示。第errors条的public属性 @~~
+- 创建人和列表名称过长，返回 false。属性result @0
+- 创建人过长。第errors条的account属性 @『创建人』长度应当不超过『30』，且大于『0』。
+- 列表名称过长。第errors条的listName属性 @『列表名称』长度应当不超过『60』，且大于『0』。
+- 用户列表无错误提示。第errors条的userList属性 @~~
+- 公共联系人应当是数字。第errors条的public属性 @『公共联系人』应当是数字。
+- 创建成功，返回 true。属性result @1
+- 创建人无错误提示。第errors条的account属性 @~~
+- 列表名称无错误提示。第errors条的listName属性 @~~
+- 用户列表无错误提示。第errors条的userList属性 @~~
+- 公共联系人无错误提示。第errors条的public属性 @~~
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

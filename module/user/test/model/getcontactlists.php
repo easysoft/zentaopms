@@ -1,17 +1,10 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
-su('admin');
-
-$userContactList = zdTable('usercontact');
-$userContactList->gen(100);
 
 /**
 
 title=测试 userModel::getContactLists();
-cid=1
-pid=1
+cid=0
 
 - 获取user1的联系人列表，取出数组第一个值第0条的listName属性 @联系人列表41
 - 获取dev2的联系人列表，取出数组第三个值第2条的listName属性 @联系人列表2
@@ -20,6 +13,12 @@ pid=1
 - 获取空用户的联系人列表 @0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/user.class.php';
+su('admin');
+
+$userContactList = zdTable('usercontact');
+$userContactList->gen(100);
 
 $user = new userTest();
 $user1ContactList = $user->getContactListsTest('user1', 'withempty|withnote');

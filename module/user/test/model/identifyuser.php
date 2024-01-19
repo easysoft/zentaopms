@@ -1,9 +1,22 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->identifyUser();
-cid=1
-pid=1
+cid=0
+
+- 用户名不存在，密码不为空，返回 false。 @0
+- 用户名存在，密码使用 md5 加密，密码不正确，返回 false。 @0
+- 用户名存在，密码使用 sha1 加密，密码不正确，返回 false。 @0
+- 用户名存在，密码使用明文，密码不正确，返回 false。 @0
+- 用户名存在，密码使用明文，密码正确，返回用户。属性account @admin
+- 用户名存在，密码使用 md5 加密，密码正确，返回用户。属性account @admin
+- 用户名存在，密码使用 sha1 加密，密码正确，返回用户。属性account @admin
+- 用户名存在，密码使用明文，密码正确，返回用户。属性account @user1
+- 用户名存在，密码使用 md5 加密，密码正确，返回用户。属性account @user1
+- 用户名存在，密码使用 sha1 加密，密码正确，返回用户。属性account @user1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

@@ -1,20 +1,10 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
-
-su('admin');
-
-zdTable('user')->gen(20);
-zdTable('group')->config('group')->gen(100);
-zdTable('usergroup')->config('usergroup')->gen(100);
-zdTable('grouppriv')->config('grouppriv')->gen(100);
 
 /**
 
 title=测试 userModel->authorize();
-cid=1
-pid=1
+cid=0
 
 - 获取user2用户的访问权限。
  - 第rights[index]条的index属性 @1
@@ -30,6 +20,15 @@ pid=1
  - 第acls[views]条的project属性 @project
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/user.class.php';
+
+su('admin');
+
+zdTable('user')->gen(20);
+zdTable('group')->config('group')->gen(100);
+zdTable('usergroup')->config('usergroup')->gen(100);
+zdTable('grouppriv')->config('grouppriv')->gen(100);
 
 $user = new userTest();
 

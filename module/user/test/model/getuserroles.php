@@ -1,9 +1,42 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->getUserRoles();
-cid=1
-pid=1
+cid=0
+
+- 参数为空字符串返回空数组。 @0
+- 参数为空数组返回空数组。 @0
+- 参数为字符串，账号不存在，返回空数组。 @0
+- 参数为数组，账号不存在，返回空数组。 @0
+- 参数包含 10 个账号，返回 10 个键值对。 @10
+- admin 账号的角色是 研发。属性admin @研发
+- user1 账号的角色是 测试。属性user1 @测试
+- user2 账号的角色是 项目经理。属性user2 @项目经理
+- user3 账号的角色是 产品经理。属性user3 @产品经理
+- user4 账号的角色是 研发主管。属性user4 @研发主管
+- user5 账号的角色是 产品主管。属性user5 @产品主管
+- user6 账号的角色是 测试主管。属性user6 @测试主管
+- user7 账号的角色是 高层管理。属性user7 @高层管理
+- user8 账号的角色是 其他。属性user8 @其他
+- user9 账号的角色是 role。属性user9 @role
+- user10 账号不存在。属性user10 @~~
+- 参数包含 10 个账号，返回 10 个键值对。 @10
+- admin 账号的角色是 研发。属性admin @研发
+- user1 账号的角色是 测试。属性user1 @测试
+- user2 账号的角色是 项目经理。属性user2 @项目经理
+- user3 账号的角色是 产品经理。属性user3 @产品经理
+- user4 账号的角色是 研发主管。属性user4 @研发主管
+- user5 账号的角色是 产品主管。属性user5 @产品主管
+- user6 账号的角色是 测试主管。属性user6 @测试主管
+- user7 账号的角色是 高层管理。属性user7 @高层管理
+- user8 账号的角色是 其他。属性user8 @其他
+- user9 账号的角色是 role。属性user9 @role
+- user10 账号不存在。属性user10 @~~
+- 参数包含 3 个账号，返回 2 个键值对。 @2
+- 参数包含 3 个账号，返回 2 个键值对。 @2
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

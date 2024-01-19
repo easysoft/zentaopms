@@ -1,9 +1,65 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel::getUserTemplates();
-cid=1
-pid=1
+cid=0
+
+- admin 用户可以查看导出任务的模板有 2 个。 @2
+- 第一个模板的 id 是 1，创建者是 admin。
+ - 第0条的id属性 @1
+ - 第0条的account属性 @admin
+- 第二个模板的 id 是 5，创建者是 admin。
+ - 第1条的id属性 @5
+ - 第1条的account属性 @admin
+- admin 用户可以查看需求的模板有 3 个。 @3
+- 第一个模板的 id 是 2，创建者是 admin。
+ - 第0条的id属性 @2
+ - 第0条的account属性 @admin
+- 第二个模板的 id 是 6，创建者是 user1。
+ - 第1条的id属性 @6
+ - 第1条的account属性 @user1
+- 第三个模板的 id 是 10，创建者是 user1。
+ - 第2条的id属性 @10
+ - 第2条的account属性 @user1
+- admin 用户可以查看导出 bug 的模板有 1 个。 @1
+- 第一个模板的 id 是 3，创建者是 admin。
+ - 第0条的id属性 @3
+ - 第0条的account属性 @admin
+- admin 用户可以查看导出需求的模板有 2 个。 @2
+- 第一个模板的 id 是 4，创建者是 admin。
+ - 第0条的id属性 @4
+ - 第0条的account属性 @admin
+- 第二个模板的 id 是 8，创建者是 user1。
+ - 第1条的id属性 @8
+ - 第1条的account属性 @user1
+- user1 用户可以查看导出任务的模板有 1 个。 @1
+- 第一个模板的 id 是 9，创建者是 user1。
+ - 第0条的id属性 @9
+ - 第0条的account属性 @user1
+- user1 用户可以查看需求的模板有 3 个。 @3
+- 第一个模板的 id 是 2，创建者是 admin。
+ - 第0条的id属性 @2
+ - 第0条的account属性 @admin
+- 第二个模板的 id 是 6，创建者是 user1。
+ - 第1条的id属性 @6
+ - 第1条的account属性 @user1
+- 第三个模板的 id 是 10，创建者是 user1。
+ - 第2条的id属性 @10
+ - 第2条的account属性 @user1
+- user1 用户可以查看导出 bug 的模板有 1 个。 @1
+- 第一个模板的 id 是 7，创建者是 user1。
+ - 第0条的id属性 @7
+ - 第0条的account属性 @user1
+- user1 用户可以查看导出需求的模板有 2 个。 @2
+- 第一个模板的 id 是 4，创建者是 admin。
+ - 第0条的id属性 @4
+ - 第0条的account属性 @admin
+- 第二个模板的 id 是 8，创建者是 user1。
+ - 第1条的id属性 @8
+ - 第1条的account属性 @user1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

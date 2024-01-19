@@ -1,9 +1,23 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel->getCanCreateStoryUsers();
-cid=1
-pid=1
+cid=0
+
+- 有创建需求权限的用户数为 4。 @4
+- admin 用户是超级管理员，有创建需求权限。属性admin @A:admin
+- user1 用户在权限组 1 中，有创建需求权限。属性user1 @U:user1
+- user2 用户在权限组 2 和 3 中，没有创建需求权限。属性user2 @~~
+- user3 用户在权限组 3 中，没有创建需求权限。属性user3 @~~
+- user4 用户在权限组 3 和 4 中，有创建需求权限。属性user4 @U:user4
+- user5 用户在权限组 5 中，有创建需求权限。属性user5 @U:user5
+- user6 用户在权限组 6 中，没有创建需求权限。属性user6 @~~
+- user7 用户不在权限组中，没有创建需求权限。属性user7 @~~
+- user8 用户真实姓名为空，没有创建需求权限。属性user8 @~~
+- user9 用户被删除，没有创建需求权限。属性user9 @~~
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';

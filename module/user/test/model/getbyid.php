@@ -1,9 +1,23 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userModel::getById();
-cid=1
-pid=1
+cid=0
+
+- $userID 参数为 0 ，通过默认字段获取，用户不存在。属性account @0
+- $userID 参数为 1 ，通过默认字段获取，用户不存在。属性account @0
+- $userID 参数为 0 ，通过 id 字段获取，用户不存在。属性account @0
+- $userID 参数为 1 ，通过 id 字段获取，用户存在。属性account @admin
+- $userID 参数为 2 ，通过 id 字段获取，用户不存在。属性account @0
+- $userID 参数为空字符串 ，通过默认字段获取，用户不存在。属性account @0
+- $userID 参数为 admin ，通过默认字段获取，用户存在。属性account @admin
+- $userID 参数为 admin ，通过 account 字段获取，用户存在。属性account @admin
+- $userID 参数为 user1 ，通过 account 字段获取，用户不存在。属性account @0
+- $userID 参数为 admin ，通过 account 字段获取，用户存在。 @1
+- $userID 参数为 0，通过默认字段获取，用户不存在。当前用户未登录，返回游客信息。属性account @guest
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/user.class.php';
