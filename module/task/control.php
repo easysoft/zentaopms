@@ -567,7 +567,7 @@ class task extends control
         /* The task status will be set to wait as the consumed effort is set to 0. */
         if($task->consumed - $effort->consumed == 0) $this->action->create('task', $taskID, 'Adjusttasktowait');
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => 'modal'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('" . inLink('recordworkhour', "taskID={$taskID}") . "', '#modal-record-hours-task-{$taskID}')"));
     }
 
     /**

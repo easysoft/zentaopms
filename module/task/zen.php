@@ -1578,7 +1578,7 @@ class taskZen extends task
     {
         $response['result']     = 'success';
         $response['message']    = $this->lang->saveSuccess;
-        $response['closeModal'] = $this->app->rawMethod != 'recordworkhour';
+        $response['closeModal'] = $this->app->rawMethod != 'recordworkhour' || $from == 'edittask';
 
         $execution = $this->loadModel('execution')->getByID((int)$task->execution);
 
@@ -1589,7 +1589,14 @@ class taskZen extends task
             return $response;
         }
 
-        $response['load'] =  $this->app->rawMethod == 'recordworkhour' ? 'modal' : $from != 'edittask';
+        if($this->app->rawMethod == 'recordworkhour')
+        {
+            $response['callback'] = "loadModal('" . inLink('recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
+        }
+        else
+        {
+            $response['load'] =  $from != 'edittask';
+        }
         return $response;
     }
 
