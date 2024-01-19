@@ -1287,13 +1287,13 @@ class taskTest
      * 创建测试类型的任务。
      * Create a test type task.
      *
-     * @param  array        $param
-     * @param  array        $testTasks
-     * @param  string       $requiredField
+     * @param  array            $param
+     * @param  array            $testTasks
+     * @param  string           $requiredField
      * @access public
-     * @return object|array
+     * @return object|array|bool
      */
-    public function createTaskOfTestObject(array $param = array(), array $testTasks = array(), string $requiredField = ''): object|array
+    public function createTaskOfTestObject(array $param = array(), array $testTasks = array(), string $requiredField = ''): object|array|bool
     {
         $createFields = array(
             'execution'    => 3,
