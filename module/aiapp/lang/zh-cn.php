@@ -9,7 +9,7 @@
  * @package     ai
  * @link        https://www.zentao.net
  */
-$lang->aiapp->common           = 'AI';
+$lang->aiapp->common           = 'AI广场';
 $lang->aiapp->squareCategories = array('collection' => '我的收藏', 'discovery' => '发现', 'latest' => '最新');
 $lang->aiapp->newVersionTip    = '小程序已于 %s 更新，以上为过往记录';
 $lang->aiapp->noMiniProgram    = '您访问的小程序不存在';

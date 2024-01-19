@@ -9,7 +9,7 @@
  * @package     ai
  * @link        https://www.zentao.net
  */
-$lang->aiapp->common           = 'AI';
+$lang->aiapp->common           = 'AI Square';
 $lang->aiapp->squareCategories = array('collection' => 'My collection', 'discovery' => 'Discovery', 'latest' => 'Latest');
 $lang->aiapp->newVersionTip    = 'The mini-program has been updated on %s. The above is the past record.';
 $lang->aiapp->noMiniProgram    = 'The mini program you visited does not exist.';

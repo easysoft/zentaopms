@@ -9,7 +9,7 @@
  * @package     ai
  * @link        https://www.zentao.net
  */
-$lang->ai->common = 'AI';
+$lang->ai->common = 'AI配置';
 
 /* Definitions of table columns, used to sprintf error messages to dao::$errors. */
 $lang->prompt = new stdclass();
