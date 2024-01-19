@@ -110,130 +110,19 @@ $fields->field('days')
     ->value(data('execution.days'))
     ->width('1/2');
 
-if($project->model != 'waterfall' && $project->model != 'waterfallplus')
-{
-    if(!empty($project->hasProduct) && $linkedProducts)
-    {
-        $i = 0;
-        foreach($linkedProducts as $product)
-        {
-            $plans     = isset($productPlans[$product->id]) ? $productPlans[$product->id] : array();
-            $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
-            $hasBranch = $product->type != 'normal' && !empty($branches);
-            $fields->field("products[{$i}]")
-                ->width($hasBranch ? '1/4' : '1/2')
-                ->className($hidden ? 'hidden' : '')
-                ->label($i == 0 ? $lang->project->manageProducts : '')
-                ->items(data('allProducts'))
-                ->value($product->id);
-
-            $fields->field("branch[{$i}][]")
-                ->width('1/4')
-                ->multiple()
-                ->className($hidden || !$hasBranch ? 'hidden' : '')
-                ->label($i == 0 ? $lang->product->branchName['branch'] : '')
-                ->items($branches)
-                ->value($productBranches ? implode(',', $productBranches) : array());
-
-            $fields->field("plans[$product->id][]")
-                ->width('1/2')
-                ->multiple()
-                ->label($lang->project->associatePlan)
-                ->items($plans)
-                ->value($linkedPlans ? implode(',', $linkedPlans) : array());
-
-            $i ++;
-        }
-    }
-    elseif(empty($project->hasProduct))
-    {
-        $planProductID = current(array_keys($linkedProducts));
-        $fields->field("plans[$planProductID][]")
-            ->width('1/2')
-            ->multiple()
-            ->label($lang->execution->linkPlan)
-            ->items(isset($productPlans[$planProductID]) ? $productPlans[$planProductID] : array())
-            ->value(isset($linkedProducts[$planProductID]) ? $linkedProducts[$planProductID]->plans : '');
-
-        $fields->field('products[0]')->type('hidden')->value($planProductID);
-        $fields->field('branch[0]')->type('hidden')->value('');
-    }
-    else
-    {
-        $fields->field('products[0]')
-            ->width('1/2')
-            ->className($hidden ? 'hidden' : '')
-            ->label($lang->project->manageProducts)
-            ->items(data('allProducts'))
-            ->value('');
-
-        $fields->field('branch[0][]')
-            ->width('1/4')
-            ->className('hidden')
-            ->multiple()
-            ->label($lang->product->branchName['branch'])
-            ->items(array())
-            ->value('');
-
-        $fields->field('plans[0][]')
-            ->width('1/2')
-            ->multiple()
-            ->label($lang->project->associatePlan)
-            ->items(array())
-            ->value('');
-    }
-}
-elseif(!empty($project->hasProduct))
-{
-    $i = 0;
-    foreach($linkedProducts as $product)
-    {
-        $plans     = isset($productPlans[$product->id]) ? $productPlans[$product->id] : array();
-        $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
-        $hasBranch = $product->type != 'normal' && !empty($branches);
-        $fields->field("products[{$i}]")
-            ->width($hasBranch ? '1/4' : '1/2')
-            ->className($hidden ? 'hidden' : '')
-            ->label($i == 0 ? $lang->project->manageProducts : '')
-            ->items(data('allProducts'))
-            ->value(data('product.id'))
-            ->disabled(in_array($project->model, array('waterfall', 'waterfallplus')))
-            ->required(in_array($project->model, array('waterfall', 'waterfallplus')));
-
-        $fields->field("branch[{$i}][]")
-            ->width('1/4')
-            ->multiple()
-            ->className($hidden || !$hasBranch ? 'hidden' : '')
-            ->label($i == 0 ? $lang->product->branchName['branch'] : '')
-            ->disabled($project->model == 'waterfall' || $project->model == 'waterfallplus')
-            ->items($branches)
-            ->value($productBranches ? implode(',', $productBranches) : '0');
-
-        $fields->field("plans[$product->id][]")
-            ->width('1/2')
-            ->multiple()
-            ->label($lang->project->associatePlan)
-            ->items($plans)
-            ->value($linkedPlans ? implode(',', $linkedPlans) : array());
-
-        $i ++;
-    }
-
-    if(empty($linkedProducts))
-    {
-        $fields->field('products[0]')->type('hidden')->value(array());
-        $fields->field('branch[][]')->type('hidden')->items(array())->value('')->multiple();
-    }
-}
-else
-{
-    $fields->field('products[0]')->type('hidden')->value(key($linkedProducts));
-    $fields->field('branch[][]')
-        ->className('hidden')
-        ->items(isset($linkedBranches[key($linkedProducts)]) ? $linkedBranches[key($linkedProducts)] : array())
-        ->value(isset($linkedBranches[key($linkedProducts)]) ? implode(',', $linkedBranches[key($linkedProducts)]) : '')
-        ->multiple();
-}
+$fields->field('productsBox')
+    ->width('full')
+    ->control(array(
+        'control'        => 'productsBox',
+        'productItems'   => data('allProducts'),
+        'branchGroups'   => data('branchGroups'),
+        'planGroups'     => data('productPlans'),
+        'linkedProducts' => data('linkedProducts'),
+        'linkedBranches' => data('linkedBranches'),
+        'productPlans'   => data('productPlans'),
+        'project'        => data('project'),
+        'isStage'        => data('isStage')
+    ));
 
 if(data('execution.type') == 'stage' && isset($config->setPercent) && $config->setPercent == 1)
 {

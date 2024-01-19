@@ -25,15 +25,12 @@ jsVar('branchGroups', $branchGroups);
 jsVar('isWaterfall', isset($project) && ($project->model == 'waterfall' || $project->model == 'waterfallplus'));
 jsVar('executionAttr', $execution->attribute);
 jsVar('window.lastProjectID', $execution->project);
-jsVar('multiBranchProducts', $multiBranchProducts);
 
 formGridPanel
 (
-    on::change('[name^=products]', 'productChange'),
-    on::change('[name^=project]', 'changeProject'),
     on::change('[name=begin]', 'computeWorkDays(NaN)'),
     on::change('[name=end]', 'computeWorkDays(NaN)'),
-    set::fullModeOrders('project', !empty($config->setCode) ? 'type,name,code' : 'method,name,type', 'planDate,days,products,branch,plans,PO,QD,PM,RD,teamMembers,desc,acl'),
+    set::fullModeOrders('project', !empty($config->setCode) ? 'type,name,code' : 'method,name,type', 'planDate,days,productsBox,PO,QD,PM,RD,teamMembers,desc,acl'),
     set::title($lang->execution->edit),
     set::modeSwitcher(false),
     set::defaultMode('full'),

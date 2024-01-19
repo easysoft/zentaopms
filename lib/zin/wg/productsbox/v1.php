@@ -67,7 +67,7 @@ class productsBox extends wg
     protected function initProductsBox(): array
     {
         global $lang;
-        list($productItems, $project, $isStage, $productPlans) = $this->prop(array('productItems', 'project', 'isStage', 'productPlans'));
+        list($productItems, $project, $isStage) = $this->prop(array('productItems', 'project', 'isStage'));
 
         $productsBox   = array();
         $hidden        = empty($project->hasProduct) ? 'hidden' : '';
