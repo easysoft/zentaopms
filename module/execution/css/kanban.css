@@ -67,7 +67,6 @@
 .kanban-card {min-height: 60px !important; height: auto;}
 
 .cardcolor {width:40px; height: 14px; float: left; margin-left: 5px; margin-right: 5px; margin-top: 2px; border-radius: 2px;}
-#cardcolormenu {padding:2px 2px; width: 100px;}
 
 .kanban-col[data-type=ADD] {display: none;}
 .kanban-col[data-type=EMPTY] {display: none;}
