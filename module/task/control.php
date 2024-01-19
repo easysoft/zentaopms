@@ -562,7 +562,7 @@ class task extends control
         /* The task status will be set to wait as the consumed effort is set to 0. */
         if($task->consumed - $effort->consumed == 0) $this->action->create('task', $taskID, 'Adjusttasktowait');
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => 'modal'));
     }
 
     /**

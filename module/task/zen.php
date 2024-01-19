@@ -1589,7 +1589,7 @@ class taskZen extends task
             return $response;
         }
 
-        $response['load'] = $from != 'edittask';
+        $response['load'] =  $this->app->rawMethod == 'recordworkhour' ? 'modal' : $from != 'edittask';
         return $response;
     }
 
