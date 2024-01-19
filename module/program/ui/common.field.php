@@ -6,7 +6,9 @@ $fields = defineFieldList('program');
 
 $fields->field('parent')
     ->items(data('parents'))
-    ->value(data('parentProgram.id'));
+    ->value(data('parentProgram.id'))
+    ->data('parentBegin', data('parentProgram.begin'))
+    ->data('parentEnd', data('parentProgram.end'));
 
 $fields->field('name')
     ->wrapBefore(true);

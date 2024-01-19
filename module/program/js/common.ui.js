@@ -332,15 +332,18 @@ window.onDateChange = () =>
 
     let programBegin = $('[name=begin]').val();
     let programEnd   = $('[name=end]').val();
+    let parentBegin  = $('[data-name=parent]').data('parentBegin');
+    let parentEnd    = $('[data-name=parent]').data('parentEnd');
+
     const ignoreBtn  = "<span id='ignore' onclick='ignoreTip(this)'>" + ignore + "</span>";
 
-    if(programBegin && parentBeginDate && new Date(parentBeginDate) > new Date(programBegin))
+    if(programBegin && parentBegin && new Date(parentBegin) > new Date(programBegin))
     {
-        $('#dateTip').html(beginLessThanParent + parentBeginDate + ignoreBtn).removeClass('hidden');
+        $('#dateTip').html(beginLessThanParent + parentBegin + ignoreBtn).removeClass('hidden');
     }
 
-    if(programEnd && parentEndDate && new Date(parentEndDate) < new Date(programEnd))
+    if(programEnd && parentEnd && new Date(parentEnd) < new Date(programEnd))
     {
-        $('#dateTip').html(endGreatThanParent + parentEndDate + ignoreBtn).removeClass('hidden');
+        $('#dateTip').html(endGreatThanParent + parentEnd + ignoreBtn).removeClass('hidden');
     }
 };
