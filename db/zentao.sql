@@ -15909,6 +15909,7 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   `name` varchar(90) NOT NULL DEFAULT '',
   `code` varchar(90) NOT NULL DEFAULT '',
   `unit` varchar(10) NOT NULL DEFAULT '',
+  `dateType` varchar(50) NOT NULL DEFAULT '',
   `collector` text,
   `desc` text,
   `definition` text,
@@ -15927,6 +15928,8 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
   `fromID` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `lastCalcRows` int NOT NULL DEFAULT '0',
+  `lastCalcTime` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
