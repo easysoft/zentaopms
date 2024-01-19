@@ -35,10 +35,7 @@ class productsBox extends wg
 
     protected function build(): wg
     {
-        global $lang, $config;
-        list($productItems, $branchGroups, $planGroups, $productPlans) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans'));
-        list($linkedProducts, $linkedBranches, $currentProduct, $currentPlan) = $this->prop(array('linkedProducts', 'linkedBranches', 'currentProduct', 'currentPlan'));
-        list($project, $isStage) = $this->prop(array('project', 'isStage'));
+        list($project, $productItems, $linkedProducts) = $this->prop(array('project', 'productItems', 'linkedProducts'));
 
         $productsBox = array();
         if(!empty($project->hasProduct) && $linkedProducts)
