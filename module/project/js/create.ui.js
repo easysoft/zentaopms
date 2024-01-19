@@ -93,3 +93,15 @@ window.waitDom('[name^=products]', function()
 {
     if($('.newProductBox').length > 0) productChange($('[name^=products]').eq(0));
 });
+
+window.productChange = function(e)
+{
+    let chosenProducts = 0;
+    $(".productsBox [name^='products']").each(function()
+    {
+        if($(e.target).val() > 0) chosenProducts ++;
+    });
+
+    if(chosenProducts > 1)  $('.stageByBox').removeClass('hidden');
+    if(chosenProducts <= 1) $('.stageByBox').addClass('hidden');
+}

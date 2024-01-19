@@ -71,6 +71,7 @@ $fields->field('productsBox')
 if($model == 'waterfall' || $model == 'waterfallplus')
 {
     $fields->field('stageBy')
+        ->className('stageByBox')
         ->control('radioListInline')
         ->labelHint($lang->project->stageByTips)
         ->label($lang->project->stageBy)

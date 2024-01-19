@@ -60,6 +60,7 @@ formGridPanel
     on::change('[name=hasProduct]', 'changeType'),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
+    on::change('[name^=products]', 'productChange'),
     on::change('#parent, #budget', "checkBudget(0)"),
     set::title($lang->project->create),
     set::fullModeOrders(array('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin')),

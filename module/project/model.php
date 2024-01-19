@@ -1745,7 +1745,7 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function updateProducts(int $projectID, array $products = array(), object|array $postProductData): bool
+    public function updateProducts(int $projectID, array $products = array(), object|array $postProductData = array()): bool
     {
         $this->loadModel('user');
         $teams        = array_keys($this->getTeamMembers($projectID));
