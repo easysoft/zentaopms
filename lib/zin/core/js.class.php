@@ -327,11 +327,12 @@ class js extends directive
      * 将 JS 导出为代码字符串，并使用立即执行函数作用域。
      *
      * @access public
+     * @param string $joiner Joiner.
      * @return string
      */
-    public function toScopeJS(): string
+    public function toScopeJS(string $joiner = "\n"): string
     {
-        return $this->scope($this->toJS());
+        return $this->scope($this->toJS($joiner));
     }
 
     /**
@@ -376,7 +377,7 @@ class js extends directive
 
     /**
      * Create js context object.
-     * 创建 JS 上下文操作辅助对象。
+     * 创建给定 JS 值的上下文操作辅助对象。
      *
      * @access public
      * @param mixed                 $value Value.
@@ -395,17 +396,13 @@ class js extends directive
      *
      * @access public
      * @param null|string           $name     Name.
-     * @param null|string           $func     Function.
-     * @param mixed                 ...$args  Arguments.
      * @return jsContext
      */
-    public static function zui(?string $name = null, ?string $func = null, mixed ...$args): jsContext
+    public static function zui(?string $name = null): jsContext
     {
         if(is_null($name)) return static::context('zui');
 
-        $context = static::context("zui.{$name}");
-        if(is_null($func)) return $context;
-        return $context->call($func, ...$args);
+        return static::context("zui.{$name}");
     }
 
     /**
@@ -432,7 +429,7 @@ class js extends directive
      * @param mixed                 ...$args  Arguments.
      * @return jsContext
      */
-    public static function __callStatic($name, $args)
+    public static function __callStatic($name, $args): jsContext
     {
         $context = static::context("window.{$name}");
         if(empty($args)) return $context;
