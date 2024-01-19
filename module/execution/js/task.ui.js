@@ -143,5 +143,8 @@ window.renderCell = function(result, info)
             result[0]['props']['children'][1]['props']['children'] = teamLang;
         }
     }
+
+    if(['estimate', 'consumed','left'].includes(info.col.name) && result) result[0] = {html: result[0] + ' h'};
+
     return result;
 }
