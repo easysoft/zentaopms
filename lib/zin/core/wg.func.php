@@ -109,9 +109,9 @@ function setTag(string $id): directive
  * @param  mixed        $value
  * @return directive
  */
-function setData(null|string|array $name, mixed $value = null): directive
+function setData(null|string|array $name, mixed $value = null): ?directive
 {
-    if($name === null) return set(null);
+    if($name === null) return null;
     $map   = is_array($name) ? $name : array($name => $value);
     $attrs = array();
     foreach($map as $key => $value)
