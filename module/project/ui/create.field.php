@@ -35,7 +35,7 @@ if($hasCode)
 
 $fields->field('days')->control('input', array('className' => $copyProject ? 'has-warning' : ''));
 
-$fields->field('productsBox')->hidden(data('copyProject.hasProduct') == 0);
+$fields->field('productsBox')->hidden(data('copyProject') && data('copyProject.hasProduct') == 0);
 
 if($model == 'waterfall' || $model == 'waterfallplus')
 {
