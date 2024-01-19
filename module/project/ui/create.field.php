@@ -35,10 +35,6 @@ if($hasCode)
 
 $fields->field('days')->control('input', array('className' => $copyProject ? 'has-warning' : ''));
 
-$fields->field('products[]')->hidden($copyProject ? !data('copyProject.hasProduct') : false);
-
-$fields->field('plans[]')->hidden($copyProject ? !data('copyProject.hasProduct') : false);
-
 if($model == 'waterfall' || $model == 'waterfallplus')
 {
     $fields->field('stageBy')->className('hidden');

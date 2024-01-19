@@ -274,6 +274,12 @@ class projectZen extends project
         $allProducts   = $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
         $parentProgram = $this->loadModel('program')->getByID($programID);
 
+        if($copyProjectID)
+        {
+            $copyProjectBranches = $this->project->getBranchesByProject($copyProjectID);
+            $linkedProducts      = $this->product->getProducts($copyProjectID, 'all', '', true, $copyProjectBranches, false);
+        }
+
         $this->view->title               = $this->lang->project->create;
         $this->view->gobackLink          = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
         $this->view->model               = $model;
@@ -292,6 +298,11 @@ class projectZen extends project
         $this->view->URSRPairs           = $this->loadModel('custom')->getURSRPairs();
         $this->view->availableBudget     = $parentProgram ? $this->program->getBudgetLeft($parentProgram) : 0;
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
+        $this->view->branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
+        $this->view->productPlans        = $this->loadModel('productplan')->getGroupByProduct(array_keys($allProducts), 'skipparent|unexpired');
+        $this->view->linkedProducts      = isset($linkedProducts) ? $linkedProducts : array();
+        $this->view->linkedBranches      = $this->project->getBranchesByProject($copyProjectID);
+        $this->view->isStage             = in_array($model, array('waterfall', 'waterfallplus', 'ipd'));
         $this->display();
     }
 

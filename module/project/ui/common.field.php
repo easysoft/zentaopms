@@ -54,19 +54,19 @@ $fields->field('begin')
 
 $fields->field('days')->label($lang->project->days . $lang->project->daysUnit)->control('input');
 
-$fields->field('products[]')
-    ->wrapBefore()
-    ->control('picker')
-    ->setClass('className', 'productBox')
-    ->checkbox(array('text' => $lang->project->newProduct, 'name' => 'newProduct', 'checked' => false))
-    ->items(data('allProducts'))
-    ->label($lang->project->manageProducts);
-
-$fields->field('plans[]')
-    ->control('picker')
-    ->setClass('className', 'productBox')
-    ->items(array())
-    ->label($lang->project->managePlans);
+$fields->field('productsBox')
+    ->width('full')
+    ->control(array
+    (
+        'control'        => 'productsBox',
+        'productItems'   => data('allProducts'),
+        'branchGroups'   => data('branchGroups'),
+        'planGroups'     => data('productPlans'),
+        'linkedProducts' => data('linkedProducts'),
+        'linkedBranches' => data('linkedBranches'),
+        'project'        => data('copyProject'),
+        'isStage'        => data('isStage')
+    ));
 
 if($model == 'waterfall' || $model == 'waterfallplus')
 {
