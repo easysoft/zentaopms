@@ -16,7 +16,8 @@ if($config->systemMode == 'ALM') $config->product->custom->batchEditFields .= ',
 
 /* Export fields of product list page. */
 $config->product->list = new stdclass();
-$config->product->list->exportFields = 'id,program,line,name,manager,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,unResolvedBugs,bugFixedRate,plans,releases';
+$config->product->list->exportFields       = 'id,program,line,name,manager,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,unResolvedBugs,bugFixedRate,plans,releases';
+$config->product->list->customCreateFields = 'PO,RD,acl';
 
 $config->product->actionsMap['normal'] = array('edit');
 

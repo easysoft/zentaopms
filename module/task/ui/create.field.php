@@ -6,7 +6,7 @@ $fields = defineFieldList('task.create', 'task');
 
 /* Set foldable attribute. */
 $fields->field('module')->foldable(strpos($config->task->create->requiredFields, 'module') === false);
-$fields->field('file')->foldable();
+$fields->field('files')->foldable();
 $fields->field('mailto')->foldable();
 $fields->field('keywords')->foldable();
 

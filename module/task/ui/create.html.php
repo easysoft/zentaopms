@@ -24,20 +24,20 @@ jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))
 jsVar('taskID', $taskID ?? 0);
 
 $fields = useFields('task.create');
-$fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,module,storyBox,datePlan,pri,estimate,desc,file,mailto,keywords,after,testStoryBox');
+$fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,module,storyBox,datePlan,pri,estimate,desc,files,mailto,keywords,after,testStoryBox');
 
 $fields->orders('name,assignedToBox', 'module,testStoryBox', 'desc,module,storyBox');
-$fields->fullModeOrders('type,module,storyBox', 'desc,file,mailto,keywords');
+$fields->fullModeOrders('type,module,storyBox', 'desc,files,mailto,keywords');
 if($execution->type == 'kanban')
 {
     $fields->orders('desc,module,storyBox', 'type,assignedToBox,region,lane');
-    $fields->fullModeOrders('name,assignedToBox', 'type,module,storyBox', 'desc,file,mailto,keywords');
-    if(empty($features['story'])) $fields->fullModeOrders('type,module,storyBox', 'name,assignedToBox', 'desc,file,mailto,keywords');
+    $fields->fullModeOrders('name,assignedToBox', 'type,module,storyBox', 'desc,files,mailto,keywords');
+    if(empty($features['story'])) $fields->fullModeOrders('type,module,storyBox', 'name,assignedToBox', 'desc,files,mailto,keywords');
 }
 
 if(empty($features['story']) && $execution->type != 'kanban')
 {
-    $fields->fullModeOrders('type,module,storyBox,assignedToBox', 'desc,file,mailto,keywords');
+    $fields->fullModeOrders('type,module,storyBox,assignedToBox', 'desc,files,mailto,keywords');
 }
 
 $teamForm = array();

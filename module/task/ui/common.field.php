@@ -48,7 +48,7 @@ $fields->field('desc')
     ->width('full')
     ->control('editor');
 
-$fields->field('file')
+$fields->field('files')
     ->width('full')
     ->control('upload');
 
