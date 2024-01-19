@@ -92,10 +92,12 @@ formPanel
         (
             set::width('1/4'),
             set::label($lang->productplan->begin),
-            set::control('date'),
-            setID('begin'),
-            set::name('begin'),
-            set::value(formatTime($begin))
+            datepicker
+            (
+                setID('begin'),
+                set::name('begin'),
+                set::value(formatTime($begin))
+            )
         ),
         formGroup
         (
