@@ -439,3 +439,16 @@ class js extends directive
         return $context->call(...$args);
     }
 }
+
+/**
+ * Create js object.
+ * 创建 JS 对象。
+ *
+ * @access public
+ * @param null|string|js|array ...$codes Codes.
+ * @return js
+ */
+function js(null|string|js|array ...$codes): js
+{
+    return new js(...$codes);
+}
