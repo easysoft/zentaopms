@@ -72,6 +72,17 @@ class js extends directive
     }
 
     /**
+     * The magic function, used to convert the object to a string.
+     *
+     * @access public
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toJS();
+    }
+
+    /**
      * Call a function.
      * 调用一个函数。
      *
