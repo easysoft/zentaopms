@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('confirmFinish', $lang->task->confirmFinish);
+
 /* zin: Set variables to define control for form. */
 $assignedToControl = '';
 if($task->mode == 'linear')
@@ -66,6 +68,8 @@ else
 {
     formPanel
     (
+        setID('restartForm'),
+        set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
         formGroup
         (
             set::className($task->mode == 'multi' ? 'hidden' : ''),
