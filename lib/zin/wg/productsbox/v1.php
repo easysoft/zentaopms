@@ -229,6 +229,7 @@ class productsBox extends wg
                                 set::items($productItems),
                                 set::last($product->id),
                                 set::disabled($isStage && $project->stageBy == 'project'),
+                                $hasBranch ? set::lastBranch(implode(',', $product->branches)) : null,
                                 $isStage && $project->stageBy == 'project' ? formHidden("products[$i]", $product->id) : null
                             )
                         )
