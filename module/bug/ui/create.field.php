@@ -3,18 +3,19 @@ namespace zin;
 
 global $lang, $app;
 
-$isShadowProduct = data('product.shadow');
-$inQA            = $app->tab == 'qa';
+$isShadowProduct   = data('product.shadow');
+$noMultipleProject = data('project.multiple') === '0';
+$inQA              = $app->tab == 'qa';
 
 $fields = defineFieldList('bug.create', 'bug');
 
 $fields->field('product')->hidden($isShadowProduct && !$inQA);
 
-$fields->field('project')->foldable(!$isShadowProduct)->className($isShadowProduct && $inQA ? 'w-1/4' : 'w-1/2')->className('full:w-1/4');
+$fields->field('project')->foldable(!$isShadowProduct)->className($isShadowProduct && $inQA && !$noMultipleProject ? 'w-1/4' : 'w-1/2')->className('full:w-1/4');
 
 $fields->field('execution')
-       ->label(data('bug.projectModel') === 'kanban' ? $lang->bug->kanban : $lang->bug->execution)
-       ->hidden(data('execution'))
+       ->label(data('project.modal') === 'kanban' ? $lang->bug->kanban : $lang->bug->execution)
+       ->hidden($noMultipleProject)
        ->className($isShadowProduct && $inQA ? 'w-1/4' : 'w-1/2')
        ->className('full:w-1/4')
        ->foldable(!$isShadowProduct);
