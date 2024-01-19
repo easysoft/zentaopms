@@ -262,7 +262,6 @@ class productsBox extends wg
                     set::width('1/2'),
                     $i == 0 ? set::label($lang->project->associatePlan) : null,
                     set::className('planBox'),
-                    set::id("plan{$i}"),
                     inputGroup
                     (
                         set::id("plan{$i}"),
