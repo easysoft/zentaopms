@@ -45,12 +45,14 @@ if(data('executionType') && data('executionType') == 'kanban')
     $fields->field('region')
         ->label($lang->kanbancard->region)
         ->control('picker')
+        ->required(true)
         ->items(data('regionPairs'))
         ->value(data('regionID'));
 
     $fields->field('lane')
         ->label($lang->kanbancard->lane)
         ->control('picker')
+        ->required(true)
         ->items(data('lanePairs'))
         ->value(data('laneID'));
 }

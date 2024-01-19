@@ -673,36 +673,19 @@ function setBranchRelated(event)
 function loadBuildActions()
 {
     if(config.currentMethod == 'edit') return;
-    $('#buildBoxActions').empty().hide();
+    $('#createRelease, #createBuild').hide();
     let itemCount = $('[name^=openedBuild]').zui('picker').options.items.length;
     if(itemCount <= 1)
     {
         let html = '';
         if($('#execution').length == 0 || $('[name="execution"]').val() == 0)
         {
-            let branch    = $('[name="branch"]').val();
-            let projectID = $('[name="project"]').val();
-
-            if(typeof(branch)    == 'undefined') branch    = 0;
-            if(typeof(projectID) == 'undefined') projectID = 0;
-
-            let productID = $('[name="product"]').length > 0 ? $('[name="product"]').val() : bug.productID;
-            let link = $.createLink('release', 'create', 'productID=' + productID + '&branch=' + branch);
-            if(projectID > 0) link = $.createLink('projectrelease', 'create', 'projectID=' + projectID);
-
-            html += '<a href="' + link + '" class="btn" data-toggle="modal">' + createRelease + '</a> ';
-            html += '<a href="javascript:;" class="btn" id="refreshProductBuild">' + refresh + '</a>';
+            $('#createRelease').show();
         }
         else
         {
-            const executionID = $('[name="execution"]').val();
-            const productID   = $('[name="product"]').val();
-            const projectID   = $('[name="project"]').val();
-            let link = $.createLink('build', 'create','executionID=' + executionID + '&productID=' + productID + '&projectID=' + projectID);
-            html += '<a href="' + link + '" class="btn" data-toggle="modal">' + createBuild + '</a> ';
-            html += '<a href="javascript:;" class="btn" id="refreshExecutionBuild">' + refresh + '</a>';
+            $('#createBuild').show();
         }
-        $('#buildBoxActions').html(html).show();
     }
 }
 

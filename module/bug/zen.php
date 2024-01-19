@@ -306,7 +306,7 @@ class bugZen extends bug
      */
     protected function getBugBranches(object $bug, object $currentProduct): object
     {
-        $productID = $bug->productID;
+        $productID = (int)$bug->productID;
         $branch    = $bug->branch;
 
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
@@ -335,7 +335,7 @@ class bugZen extends bug
     private function getBuildsAndStoriesForCreate(object $bug): object
     {
         $this->loadModel('build');
-        $productID   = $bug->productID;
+        $productID   = (int)$bug->productID;
         $branch      = $bug->branch;
         $projectID   = (int)$bug->projectID;
         $executionID = (int)$bug->executionID;
@@ -393,7 +393,7 @@ class bugZen extends bug
         }
         else
         {
-            $productMembers = $this->bug->getProductMemberPairs($bug->productID, (string)$bug->branch);
+            $productMembers = $this->bug->getProductMemberPairs((int)$bug->productID, (string)$bug->branch);
         }
 
         $productMembers = array_filter($productMembers);
@@ -419,6 +419,7 @@ class bugZen extends bug
         $project     = array();
         $projects    = array();
         $products    = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, '', 'all');
+        $product     = $this->loadModel('product')->getByID($productID);
 
         /* Link all projects to product when copying bug under qa. */
         if($this->app->tab == 'qa')
@@ -452,9 +453,11 @@ class bugZen extends bug
             $projectID = isset($projects[$projectID]) ? $projectID : '';
         }
 
+        if($product->shadow && empty($projectID)) $projectID = key($projects);
+
         if($projectID)
         {
-            $project   = $projectID ? $this->loadModel('project')->getByID((int)$bug->projectID) : array();
+            $project   = $this->loadModel('project')->getByID((int)$projectID);
             $projects += array($projectID => $project->name);
         }
 
@@ -497,7 +500,7 @@ class bugZen extends bug
      */
     private function getExecutionsForCreate(object $bug): object
     {
-        $productID   = $bug->productID;
+        $productID   = (int)$bug->productID;
         $branch      = $bug->branch;
         $projectID   = (int)$bug->projectID;
         $executionID = (int)$bug->executionID;
@@ -838,7 +841,7 @@ class bugZen extends bug
      */
     protected function setOptionMenu(object $bug): object
     {
-        $moduleOptionMenu = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 'all' : (string)$bug->branch);
+        $moduleOptionMenu = $this->tree->getOptionMenu((int)$bug->productID, 'bug', 0, ($bug->branch === 'all' or !isset($bug->branches[$bug->branch])) ? 'all' : (string)$bug->branch);
         if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID={$bug->productID}&view=story")));
 
         $this->view->moduleOptionMenu = $moduleOptionMenu;
@@ -1150,11 +1153,6 @@ class bugZen extends bug
     {
         extract($param);
 
-        $currentProduct = $this->product->getByID($bug->productID);
-
-        /* 如果bug有所属项目，查询这个项目。 */
-        /* Get project. */
-
         /* 获得执行下拉列表。 */
         /* Get executions. */
         $bug = $this->getExecutionsForCreate($bug);
@@ -1177,8 +1175,8 @@ class bugZen extends bug
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
         $this->view->products              = $bug->products;
-        $this->view->productID             = $bug->productID;
-        $this->view->product               = $currentProduct;
+        $this->view->product               = $this->product->getByID((int)$bug->productID);
+        $this->view->productID             = $this->session->product;
         $this->view->projects              = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProjectPairs() : $bug->projects;
         $this->view->project               = $bug->project;
         $this->view->projectID             = $bug->projectID;
@@ -1191,7 +1189,7 @@ class bugZen extends bug
         $this->view->bug                   = $bug;
         $this->view->allBuilds             = !empty($bug->allBuilds) ? $bug->allBuilds : '';
         $this->view->allUsers              = !empty($bug->allUsers)  ? $bug->allUsers  : '';
-        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
+        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds((int)$bug->productID, $bug->branch);
         $this->view->resultFiles           = !empty($resultID) && !empty($stepIdList) ? $this->loadModel('file')->getByObject('stepResult', (int)$resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
