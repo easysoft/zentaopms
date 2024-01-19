@@ -65,6 +65,7 @@ $fields->field('productsBox')
         'linkedProducts' => data('linkedProducts'),
         'linkedBranches' => data('linkedBranches'),
         'project'        => data('project') ? data('project') : data('copyProject'),
+        'hasNewProduct'  => data('app.rawMethod') == 'create',
         'isStage'        => data('isStage')
     ));
 

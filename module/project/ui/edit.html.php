@@ -22,7 +22,6 @@ jsVar('budgetUnitValue', $config->project->budget->tenThousand);
 jsVar('unmodifiableProducts', $unmodifiableProducts);
 jsVar('unmodifiableBranches', $unmodifiableBranches);
 jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
-jsVar('errorSameProducts', $lang->project->errorSameProducts);
 jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
 jsVar('allProducts', $allProducts);
 jsVar('branchGroups', $branchGroups);

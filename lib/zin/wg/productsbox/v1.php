@@ -22,6 +22,7 @@ class productsBox extends wg
         'productPlans?: array=array()', // 同来源计划所属产品的计划列表。
         'project?: object',             // 关联的项目。
         'isStage?: bool',               // 是否是阶段类型。
+        'hasNewProduct?: bool=false',   // 是否有新产品。
     );
 
     public static function getPageCSS(): string|false
@@ -36,6 +37,7 @@ class productsBox extends wg
 
     protected function build(): wg
     {
+        global $lang;
         list($project, $productItems, $linkedProducts) = $this->prop(array('project', 'productItems', 'linkedProducts'));
 
         $productsBox = array();
@@ -60,6 +62,7 @@ class productsBox extends wg
             on::change('.productsBox [name^=products]', 'loadBranches'),
             jsVar('multiBranchProducts', data('multiBranchProducts')),
             jsVar('project', \zget($project, 'id', 0)),
+            jsVar('errorSameProducts', $lang->project->errorSameProducts),
             $productsBox
         );
     }
@@ -67,12 +70,26 @@ class productsBox extends wg
     protected function initProductsBox(): array
     {
         global $lang;
-        list($productItems, $project, $isStage) = $this->prop(array('productItems', 'project', 'isStage'));
+        list($productItems, $project, $isStage, $hasNewProduct) = $this->prop(array('productItems', 'project', 'isStage', 'hasNewProduct'));
 
         $productsBox   = array();
         $hidden        = !empty($project) && empty($project->hasProduct) ? 'hidden' : '';
+        $productsBox[] = $hasNewProduct ? div
+        (
+            setClass('addProductBox flex hidden'),
+            formGroup
+            (
+                on::change('[name=newProduct]', 'toggleNewProduct'),
+                set::width('1/2'),
+                set::checkbox(array('text' => $lang->project->addProduct, 'name' => 'newProduct', 'checked' => false)),
+                set::required(true),
+                set::label($lang->project->manageProducts),
+                set::name('productName')
+            )
+        ) : null;
         $productsBox[] = div
         (
+            on::change('[name=addProduct]', 'toggleNewProduct'),
             set::className("productBox flex $hidden"),
             formGroup
             (
@@ -80,12 +97,13 @@ class productsBox extends wg
                 setClass('linkProduct'),
                 set::required($project && in_array($project->model, array('waterfall', 'waterfallplus'))),
                 set::label($lang->project->manageProducts),
+                set::checkbox(array('text' => $lang->project->addProduct, 'name' => 'addProduct', 'checked' => false)),
                 picker
                 (
                     set::name('products[0]'),
                     set::items($productItems),
                     !empty($project) && empty($project->hasProduct) ? set::value(current(array_keys($productItems))) : null,
-                )
+                ),
             ),
             formGroup
             (

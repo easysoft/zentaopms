@@ -21,6 +21,7 @@ jsVar('budgetUnitLabel', $lang->project->tenThousandYuan);
 jsVar('budgetUnitValue', $config->project->budget->tenThousand);
 jsVar('+projectID', $copyProjectID);
 jsVar('LONG_TIME', LONG_TIME);
+jsVar('weekend', $config->execution->weekend);
 
 $modelMenuItems = array();
 foreach($lang->project->modelList as $key => $text)
