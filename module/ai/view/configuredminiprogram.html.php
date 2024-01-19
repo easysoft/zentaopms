@@ -24,6 +24,7 @@ js::set('emptyPrompterTip', $lang->ai->miniPrograms->emptyPrompterTip);
 js::set('currentFields', $currentFields);
 js::set('currentPrompt', $currentPrompt);
 js::set('promptPlaceholder', $lang->ai->miniPrograms->placeholder->prompt);
+js::set('fieldName', $lang->ai->miniPrograms->field->name);
 ?>
 <?php js::import($jsRoot . 'textcomplete/jquery.textcomplete.min.js'); ?>
 
