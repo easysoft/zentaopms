@@ -551,7 +551,11 @@ class taskZen extends task
     {
         $formConfig = $this->config->task->form->create;
         if($this->post->type == 'affair') $formConfig['assignedTo']['type'] = 'array';
-        if($this->post->type == 'test') $formConfig['story']['skipRequired'] = true;
+        if($this->post->type == 'test')
+        {
+            $formConfig['story']['skipRequired'] = true;
+            $formConfig['module']['skipRequired'] = true;
+        }
 
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
         $team      = $this->post->team ? array_filter($this->post->team) : array();
