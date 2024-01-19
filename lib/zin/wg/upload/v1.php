@@ -53,6 +53,9 @@ class upload extends wg
             $this->setProp('exceededCountHint', sprintf($lang->file->errorFileCount, $this->prop('limitCount')));
         }
 
+        $name = $this->prop('name');
+        if($this->prop('multiple') && strpos($name, '[]') === false) $this->setProp('name', $name . '[]');
+
         $otherProps = $this->getRestProps();
         return zui::upload(inherit($this), set('_props', $otherProps));
     }

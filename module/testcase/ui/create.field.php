@@ -44,6 +44,7 @@ $fields->field('stage')
     ->multiple();
 
 $fields->field('scriptFile')
+    ->multiple(false)
     ->width('full')
     ->label($lang->testcase->autoScript)
     ->className('autoScript')
