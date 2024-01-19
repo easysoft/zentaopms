@@ -234,6 +234,12 @@ class field extends setting
         return $this->setVal('multiple', $multiple);
     }
 
+    function data(array|object|string|null $nameOrData, mixed $value = null): field
+    {
+        if(is_string($nameOrData)) $nameOrData = array($nameOrData => $value);
+        return $this->addToMap('data', $nameOrData);
+    }
+
     function createChild(?string $itemName = null): field
     {
         $item = new field($itemName, null, $this);
