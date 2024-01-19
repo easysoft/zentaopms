@@ -57,8 +57,8 @@ function updatePromptPreview()
 
 function updateButtonStatus()
 {
-    if($('#autocomplete-textarea').text().trim()) $('button[type="submit"]').removeAttr('disabled');
-    else $('button[type="submit"]').attr('disabled', 'disabled');
+    if($('#autocomplete-textarea').text().trim()) $('.button-container button').removeAttr('disabled');
+    else $('.button-container button').attr('disabled', 'disabled');
 }
 
 $(function()
