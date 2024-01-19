@@ -46,6 +46,7 @@ if($hasCode)
 $fields->field('PM')->control('picker')->items(data('PMUsers'));
 
 $fields->field('begin')
+    ->label($lang->project->planDate)
     ->required()
     ->control('inputGroup')
     ->itemBegin('begin')->control('datePicker')->placeholder($lang->project->begin)->value(data('project.begin') ? data('project.begin') : date('Y-m-d'))->required(true)->itemEnd()
