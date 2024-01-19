@@ -3995,7 +3995,7 @@ class storyModel extends model
             ->exec();
 
         /* Sync twins. */
-        if(!empty($twins))
+        if(!empty(array_filter($twins)))
         {
             foreach($twins as $twinID)
             {
@@ -4018,7 +4018,7 @@ class storyModel extends model
             $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
 
             /* Sync twins. */
-            if(!empty($twins))
+            if(!empty(array_filter($twins)))
             {
                 foreach($twins as $twinID)
                 {
