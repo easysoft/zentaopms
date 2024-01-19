@@ -71,6 +71,7 @@ else
     formPanel
     (
         setID('startForm'),
+        set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
         formGroup
         (
             set::className($task->mode == 'multi' ? 'hidden' : ''),
@@ -134,7 +135,6 @@ else
     hr();
     history();
 }
-
 
 /* ====== Render page ====== */
 render();
