@@ -1578,7 +1578,7 @@ class taskZen extends task
     {
         $response['result']     = 'success';
         $response['message']    = $this->lang->saveSuccess;
-        $response['closeModal'] = true;
+        $response['closeModal'] = $this->app->rawMethod != 'recordworkhour';
 
         $execution = $this->loadModel('execution')->getByID((int)$task->execution);
 
