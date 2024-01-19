@@ -12,6 +12,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/custom.class.php';
 
 zdTable('user')->gen(5);
+zdTable('cron')->config('cron')->gen(1);
 su('admin');
 
 $disabledFeatures[0] = 'waterfall';
