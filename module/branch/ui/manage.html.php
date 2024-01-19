@@ -58,7 +58,7 @@ modal
             set::label($lang->branch->mergeTo),
             inputGroup
             (
-                setClass('input-control has-suffix text-left'),
+                setClass('text-left'),
                 picker
                 (
                     set::name('targetBranch'),
@@ -67,7 +67,7 @@ modal
                 ),
                 div
                 (
-                    setClass('input-control-suffix opacity-100 bg-white z-10 mr-1'),
+                    setClass('input-group-addon'),
                     checkbox
                     (
                         setID('createBranch'),
@@ -139,6 +139,7 @@ dtable
     set::data($tableData),
     set::checkable(count($tableData) > 1 ? true : false),
     set::canRowCheckable(jsRaw("(rowID) => {return rowID == '0' ? false : true}")),
+    set::onCheckChange(jsRaw('checkedChange')),
     set::orderBy($orderBy),
     set::sortLink(createLink('branch', 'manage', "productID={$product->id}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::footToolbar($footToolbar),

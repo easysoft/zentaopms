@@ -59,12 +59,18 @@ function createBranch()
     $('input[name=targetBranch]').removeAttr('disabled');
     $('#createForm').addClass('hidden');
 
-    const createNew = $(this).is(':checked');
+    const createNew           = $(this).is(':checked');
+    const $targetBranchPicker = $('[name=targetBranch]').zui('picker');
     if(createNew)
     {
+        $targetBranchPicker.render({disabled: true});
+
         $('#createForm input, #createForm textarea').removeAttr('disabled');
-        $('#targetBranch').attr('disabled', true);
         $('#createForm').removeClass('hidden');
+    }
+    else
+    {
+        $targetBranchPicker.render({disabled: false});
     }
 }
 
@@ -93,4 +99,21 @@ window.clickSubmit = function()
         });
         return false;
     }
+}
+
+/**
+ * 设置合并分支按钮是否显示。
+ * Set merge btn display.
+ *
+ * @access public
+ * @return void
+ */
+window.checkedChange = function()
+{
+    const dtable = zui.DTable.query($(this).target);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    $('#mergeBranch').hide();
+    if(checkedList.length == 2) $('#mergeBranch').show();
 }
