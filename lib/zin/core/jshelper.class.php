@@ -17,7 +17,7 @@ require_once __DIR__ . DS . 'jquery.class.php';
 
 /**
  * Class for generating js code.
- * 用于生成 js 代码的助手类，可以方便的操作 DOM 元素。
+ * 用于生成 js 代码的助手，可以方便的操作 DOM 元素。
  */
 class jsHelper extends js
 {
@@ -36,40 +36,26 @@ class jsHelper extends js
     }
 
     /**
-     * Show the specified elements.
-     * 显示指定的元素。
+     * Toggle the specified elements, if not specified, auto detect.
+     * 切换显示或隐藏指定的元素，如果不指定参数则自动判断。
      *
      * @access public
-     * @param string $selector The selector of the elements.
+     * @param string $selector     The selector of the elements.
+     * @param string $toggleCode   Whether to show or hide the elements.
      * @return self
      */
-    public function toggleShow(string $selector): self
+    public function toggleShow(string $selector, ?string $toggleCode = null): self
     {
         $target = jQuery::select($selector);
-        return $this->appendLine("$target.show();");
-    }
+        if(is_null($toggleCode)) return $this->appendLine("$target.toggle();");
 
-    /**
-     * Toggle the specified elements.
-     * 切换显示或隐藏指定的元素。
-     *
-     * @access public
-     * @param string $selector The selector of the elements.
-     * @param string $toggle   Whether to show or hide the elements.
-     * @return self
-     */
-    public function toggle(string $selector, ?string $toggle = null): self
-    {
-        $target = jQuery::select($selector);
-        if(is_null($toggle)) return $this->appendLine("$target.toggle();");
-
-        if(!is_string($toggle)) $toggle = json_encode($toggle);
-        return $this->appendLine("$target.toggle($toggle);");
+        if(!is_string($toggleCode)) $toggleCode = json_encode($toggleCode);
+        return $this->appendLine("$target.toggle($toggleCode);");
     }
 
     /**
      * Add class to the specified elements.
-     * 给指定的元素添加 class。
+     * 给指定的元素添加 CSS 类。
      *
      * @access public
      * @param string $selector The selector of the elements.
@@ -84,7 +70,7 @@ class jsHelper extends js
 
     /**
      * Remove class from the specified elements.
-     * 从指定的元素中移除 class。
+     * 从指定的元素中移除 CSS 类。
      *
      * @access public
      * @param string $selector The selector of the elements.
@@ -99,19 +85,19 @@ class jsHelper extends js
 
     /**
      * Toggle class of the specified elements.
-     * 切换指定的元素的 class。
+     * 切换指定的元素的 CSS 类。
      *
      * @access public
-     * @param string $selector The selector of the elements.
-     * @param string $class    The class to toggle.
-     * @param string $toggle   Whether to add or remove the class.
+     * @param string $selector     The selector of the elements.
+     * @param string $class        The class to toggle.
+     * @param string $toggleCode   Whether to add or remove the class.
      * @return self
      */
-    public function toggleClass(string $selector, string $class, ?string $toggle = null): self
+    public function toggleClass(string $selector, string $class, ?string $toggleCode = null): self
     {
         $target = jQuery::select($selector);
-        if(is_null($toggle)) return $this->appendLine("$target.toggleClass(\"{$class}\");");
-        return $this->appendLine("$target.toggleClass(\"{$class}\", $toggle);");
+        if(is_null($toggleCode)) return $this->appendLine("$target.toggleClass(\"{$class}\");");
+        return $this->appendLine("$target.toggleClass(\"{$class}\", $toggleCode);");
     }
 
     /**
