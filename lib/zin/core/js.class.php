@@ -317,7 +317,7 @@ class js extends directive
      * @param string $joiner Joiner.
      * @return string
      */
-    public function toJS($joiner = "\n"): string
+    public function toJS(string $joiner = "\n"): string
     {
         return implode($joiner, $this->jsLines);
     }
@@ -428,7 +428,7 @@ class js extends directive
      * @param null|string           $name     Name.
      * @param mixed                 ...$args  Arguments.
      */
-    public static function __callStatic($name, $args)
+    public static function __callStatic(string $name, array $args)
     {
         $context = static::context("window.{$name}");
         if(empty($args)) return $context;

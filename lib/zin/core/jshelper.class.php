@@ -250,7 +250,7 @@ class jsHelper extends js
      * @param string $data     The data to pass to the event handler.
      * @return self
      */
-    public function triggerEvent(string $selector, string $event, string $data = ''): self
+    public function triggerEvent(string $selector, string $event, mixed $data = null): self
     {
         $target = jQuery::select($selector);
         return $this->appendLine("$target.trigger(\"{$event}\", ", json_encode($data), ");");
