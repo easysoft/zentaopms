@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The block setter class file of zin lib.
+ * The events binding class file of zin lib.
  *
  * @copyright   Copyright 2023 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @author      Hao Sun <sunhao@easycorp.ltd>
@@ -13,14 +13,14 @@ declare(strict_types=1);
 namespace zin;
 
 require_once __DIR__ . DS . 'wg.func.php';
-require_once __DIR__ . DS . 'jshelper.class.php';
+require_once __DIR__ . DS . 'jscallback.class.php';
 
 use zin\wg;
 
 /**
  * Events binding class.
  */
-class on extends jsHelper
+class on extends jsCallback
 {
     public ?string $selector;
 
@@ -30,7 +30,7 @@ class on extends jsHelper
 
     public function __construct(string $event, ?string $selector = null, array $options = array())
     {
-        parent::__construct();
+        parent::__construct('event', 'args');
 
         if(str_contains($event, '__'))
         {
@@ -70,27 +70,33 @@ class on extends jsHelper
 
     public function toJS($joiner = "\n"): string
     {
-        if($this->event === 'init') return parent::toJS($joiner);
+        if($this->event === 'init') return parent::buildBody($joiner);
 
         $options    = $this->options;
-        $self       = isset($options['self']) ? $options['self'] : false;
-        $prevent    = isset($options['prevent']) ? $options['prevent'] : false;
-        $stop       = isset($options['stop']) ? $options['stop'] : false;
         $bindMethod = (isset($options['once']) && $options['once']) ? 'once' : 'on';
         $selector   = $this->selector ? (',' . static::json($this->selector)) : '';
 
-        $js = array
-        (
-            "\$element.$bindMethod('{$this->event}.zin.on'$selector,function(event,args){\n",
-                "const \$this = $(this);\n",
-                "const target = event.target;\n",
-                $self    ? "if(event.target !== this) return;\n" : '',
-                $prevent ? "event.preventDefault();\n" : '',
-                $stop    ? "event.stopPropagation();\n" : '',
-                parent::toJS($joiner),
-            "\n});",
-        );
-        return implode('', $js);
+        $callback = parent::toJS($joiner);
+        return "\$element.$bindMethod('{$this->event}.zin.on'$selector,$callback);";
+    }
+
+    public function buildBody(string $joiner = "\n"): string
+    {
+        $options = $this->options;
+        $self    = isset($options['self'])    ? $options['self']    : false;
+        $prevent = isset($options['prevent']) ? $options['prevent'] : false;
+        $stop    = isset($options['stop'])    ? $options['stop']    : false;
+        $arrow   = $this->isArrowFunc;
+        $codes   = array();
+
+        if(!$arrow)          $codes[] = "const \$this = $(this);";
+                             $codes[] = "const target = event.target;";
+        if($self && !$arrow) $codes[] = "if(target !== this) return;";
+        if($prevent)         $codes[] = "event.preventDefault();";
+        if($stop)            $codes[] = "event.stopPropagation();";
+                             $codes[] = parent::buildBody($joiner);
+
+        return implode($joiner, $codes);
     }
 
     public function applyToWg(wg &$wg, string $blockName): void
@@ -99,7 +105,7 @@ class on extends jsHelper
         {
             $options = $this->options;
             $options['selector'] = $this->selector;
-            $options['handler']  = parent::toJS('');
+            $options['handler']  = parent::buildBody('');
 
             $wg->setProp("@{$this->event}", (object)$options);
             return;
@@ -109,51 +115,64 @@ class on extends jsHelper
         $wg->setProp('zui-init', $zuiInitCode . "\n" . $this->toJS());
     }
 
-    public static function change(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
+    public static function change(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('change', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function click(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
+    public static function click(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('click', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function dbclick(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
+    public static function dbclick(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('dbclick', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function mouseenter(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
+    public static function mouseenter(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('mouseenter', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function mouseleave(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
+    public static function mouseleave(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('mouseleave', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function inited(null|string|on $selectorOrCallback = null, null|array|string $handlerOrOptions = null): on
+    public static function inited(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('inited', $selectorOrCallback, $handlerOrOptions);
     }
 
-    public static function bind(string $event, null|string|on $selectorOrCallback = null, null|array|string|on $handlerOrOptions = null): on
+    public static function bind(string $event, null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
-        if($selectorOrCallback instanceof on)
+        if($selectorOrCallback instanceof jsCallback)
         {
-            $selectorOrCallback->event = $event;
-            if(is_array($handlerOrOptions)) $selectorOrCallback->options = array_merge($selectorOrCallback->options, $handlerOrOptions);
-            return $selectorOrCallback;
+            return static::fromCallback($selectorOrCallback, $event, null, $handlerOrOptions);
         }
-        if($handlerOrOptions instanceof on)
+        if($handlerOrOptions instanceof jsCallback)
         {
-            $handlerOrOptions->event    = $event;
-            $handlerOrOptions->selector = $selectorOrCallback;
-            return $handlerOrOptions;
+            return static::fromCallback($handlerOrOptions, $event, $selectorOrCallback);
         }
         return on($event, $selectorOrCallback, $handlerOrOptions);
+    }
+
+    public static function fromCallback(jsCallback $callback, string $event, ?string $selector = null, ?array $options = null): on
+    {
+        if(!($callback instanceof on))
+        {
+            $on = new on($event, $selector, $options);
+            $on->appendCode($callback->buildBody());
+            $on->args(...$callback->funcArgs);
+            $on->name($callback->funcName);
+            return $on;
+        }
+
+        $callback->event = $event;
+        if(!is_null($selector)) $callback->selector = $selector;
+        if(!is_null($options))  $callback->options = array_merge($callback->options, $options);
+        return $callback;
     }
 
     public static function __callStatic($event, $args)
@@ -161,11 +180,6 @@ class on extends jsHelper
         list($selectorOrCallback, $options) = array_merge($args, array(null, null));
         return static::bind($event, $selectorOrCallback, $options);
     }
-}
-
-function jsCallback(?string $selector, array $options = array())
-{
-    return new on('callback', $selector, $options);
 }
 
 /**
