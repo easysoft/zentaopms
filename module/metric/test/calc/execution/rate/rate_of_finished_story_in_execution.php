@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=rate_of_finished_story_in_execution
 timeout=0
 cid=1
+
+- 测试分组数。 @6
+- 测试项目4。第0条的value属性 @0.3333
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
@@ -20,4 +24,4 @@ $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('6'); // 测试分组数。
 
-r($calc->getResult(array('project' => '4'))) && p('0:value') && e('0');  // 测试项目4。
+r($calc->getResult(array('project' => '4'))) && p('0:value') && e('0.3333');  // 测试项目4。

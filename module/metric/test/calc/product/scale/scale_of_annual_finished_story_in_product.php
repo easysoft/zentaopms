@@ -1,10 +1,19 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=scale_of_annual_finished_story_in_product
 timeout=0
 cid=1
+
+- 测试按产品的年度完成需求分组数。 @20
+- 测试2016年产品3关闭的需求规模数。第0条的value属性 @0
+- 测试2017年产品3关闭的需求规模数。第0条的value属性 @10
+- 测试2016年产品5关闭的需求规模数。第0条的value属性 @54
+- 测试2017年产品5关闭的需求规模数。第0条的value属性 @36
+- 测试已删除产品4关闭的需求规模数。第0条的value属性 @0
+- 测试不存在的产品的需求规模数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

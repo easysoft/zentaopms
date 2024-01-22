@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_daily_review_story_in_user
 timeout=0
 cid=1
+
+- 测试分组数。 @40
+- 测试po在2018年1月28日完成的任务。第0条的value属性 @1
+- 测试po在2018年2月13日完成的任务。第0条的value属性 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

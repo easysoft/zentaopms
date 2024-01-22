@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_monthly_created_release_in_product
 timeout=0
 cid=1
+
+- 测试分组数。 @200
+- 测试2019.09。第0条的value属性 @1
+- 测试2020.04。第0条的value属性 @1
+- 测试不存在的产品的发布数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

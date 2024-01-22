@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_fixed_bug_in_product
 timeout=0
 cid=1
+
+- 测试分组数。 @12
+- 测试2015年产品3修复的bug数。第0条的value属性 @2
+- 测试2016年产品5修复的bug数。第0条的value属性 @3
+- 测试已删除产品4修复的bug数。第0条的value属性 @0
+- 测试不存在的产品。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

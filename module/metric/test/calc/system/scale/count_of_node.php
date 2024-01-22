@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_node
 timeout=0
 cid=1
+
+- 测试执行节点总数。第0条的value属性 @4
 
 */
 

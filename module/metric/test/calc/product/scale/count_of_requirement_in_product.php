@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_requirement_in_product
 timeout=0
 cid=1
+
+- 测试按产品统计的用户需求分组数。 @5
+- 测试产品5的用户需求数。第0条的value属性 @30
+- 测试产品7的用户需求数。第0条的value属性 @20
+- 测试已删除产品8的用户需求数。第0条的value属性 @0
+- 测试不存在的产品的用户需求数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

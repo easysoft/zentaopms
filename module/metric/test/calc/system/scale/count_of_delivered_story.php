@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_delivered_story
 timeout=0
 cid=1
+
+- 测试839条数据全局已交付研发需求数。第0条的value属性 @48
+- 测试500条数据全局已关闭研发需求数。第0条的value属性 @32
+- 测试1252条数据全局已关闭研发需求数。第0条的value属性 @80
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

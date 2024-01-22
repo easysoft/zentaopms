@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_finished_productplan_in_product
 timeout=0
 cid=1
+
+- 测试分组数。 @55
+- 测试2011年产品1计划数。第0条的value属性 @5
+- 测试2011年产品3计划数。第0条的value属性 @6
+- 测试2011年产品5计划数。第0条的value属性 @6
+- 测试2021年产品1计划数。第0条的value属性 @4
+- 测试不存在的产品的计划数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

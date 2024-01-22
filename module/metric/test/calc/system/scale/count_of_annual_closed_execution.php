@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_closed_execution
 timeout=0
 cid=1
+
+- 测试年度关闭执行分组数。 @10
+- 测试2017年关闭执行数第0条的value属性 @54
+- 测试2019年关闭执行数第0条的value属性 @10
+- 测试2023年关闭执行数第0条的value属性 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

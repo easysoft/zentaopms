@@ -1,10 +1,19 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=rate_of_fixed_bug_product
 timeout=0
 cid=1
+
+- 测试分组数。 @5
+- 测试产品1的bug修复率。第0条的value属性 @0.0833
+- 测试产品3的bug修复率。第0条的value属性 @0.0833
+- 测试产品5的bug修复率。第0条的value属性 @0.0833
+- 测试产品7的bug修复率。第0条的value属性 @0.0833
+- 测试产品9的bug修复率。第0条的value属性 @0.0833
+- 测试产品10的bug修复率。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

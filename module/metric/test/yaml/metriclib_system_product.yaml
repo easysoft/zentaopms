@@ -1,0 +1,30 @@
+---
+title: zt_metriclib
+author: zhouxin
+version: "1.0"
+fields:
+- field: id
+  range: 1-80
+- field: metricID
+  range: 107{10},15{10},30{10},65{10},188{10},180{10},186{10},183{10}
+- field: metricCode
+  range: count_of_bug{10},count_of_annual_created_product{10},count_of_monthly_created_project{10},count_of_weekly_created_release{10},count_of_case_in_product{10},count_of_annual_fixed_bug_in_product{10},count_of_monthly_created_bug_in_product{10},count_of_daily_closed_bug_in_product{10}
+- field: system
+  range: 1{40},0{40}
+- field: product
+  range: "[]{40},1{10},2{10},3{10},4{10}"
+- field: year
+  range: "[]{10},2021{10},2022{10},2023{10},[]{10},2021{10},2022{10},2023{10}"
+- field: month
+  range: "[]{20},11{10},[]{30},11{10},12{10}"
+- field: week
+  range: "[]{30},44{5},45{5},[]{40}"
+- field: day
+  range: "[]{70},10{5},11{5}"
+- field: value
+  range: 1
+- field: date
+  range: "20220101 000000-20230101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+...

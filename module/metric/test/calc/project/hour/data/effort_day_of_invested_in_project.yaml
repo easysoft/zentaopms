@@ -1,0 +1,81 @@
+---
+fields:
+- field: id
+  range: 1-10000
+- field: objectType
+  note: 对象类型
+  range: task{100},custom{100}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: extra
+  range: extra
+- field: product
+  note: 产品ID
+  range: "0"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 项目ID
+  range: "0"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  fields:
+  - field: account1
+    range: admin,user{99}
+  - field: account2
+    range: '[],1-99'
+  format: ""
+- field: work
+  note: 工作内容
+  range: 1-10000
+  prefix: 这是工作内容
+  postfix: ""
+  loop: 0
+  format: ""
+- field: date
+  range: 20100101 000000-20210101 230000:10D
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: left
+  note: 剩余
+  range: "0"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: consumed
+  range: 1{2},2{3},3{3},4{5},1.5{6},2.5{7}
+- field: begin
+  note: 开始
+  range: 1000-1059:2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: end
+  note: 结束
+  range: 1400-1459:2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: execution
+  range: 11-50{10}
+- field: deleted
+  range: 0{1},1{1}
+...

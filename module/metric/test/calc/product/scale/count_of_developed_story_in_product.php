@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_developed_story_in_product
 timeout=0
 cid=1
+
+- 测试分组数 @5
+- 测试产品1已开发的需求数第0条的value属性 @1
+- 测试产品3已开发的需求数第0条的value属性 @1
+- 测试已删除产品4已开发的需求数第0条的value属性 @0
+- 测试不存在的产品下的需求数 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

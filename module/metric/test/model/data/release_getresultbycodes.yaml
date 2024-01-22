@@ -1,0 +1,62 @@
+---
+fields:
+- field: id
+  range: 1-10000
+- field: project
+  range: 131{5},132{2},0,11-12
+- field: product
+  range: 1-10{2}
+- field: branch
+  range: '[0,1]{2!},0{2},2,0{3}'
+- field: build
+  range: 1-8
+- field: name
+  fields:
+  - field: name.1
+    range: 产品,项目
+  - field: name.2
+    range: '[1,41]{2!},1{2},42,2,1-2'
+  - field: name.2
+    range: '[正常的,停止维护的]{3!},[]{4}'
+  - field: name.3
+    range: '[,里程碑]{3},[]{4}'
+  - field: name.4
+    range: 发布{7},`发布!@#$$%^&*()测试发布的名称到底可以有多长asdlfkjla`,发布
+  - field: name.5
+    range: 1-1000
+- field: marker
+  range: 0,1
+- field: date
+  range: 20100101 000000-20210101 000000:10D
+  type: timestamp
+  format: YYYY-MM-DD
+- field: stories
+  range: ""
+- field: bugs
+  range: ' '
+- field: leftBugs
+  range: ' '
+- field: desc
+  range: <div><p>代金券哦放假啊理发店啦发啦打扫房间群殴OAf</p><p>sSL卡洛斯等放假啦水电费来看四方达Kjl;阿斯顿发顺丰啊aksdjl</p><p>jlaksdfj
+    la阿里肯定是放假啦水电费看来时代峰峻拉水电费拉打扫房间阿拉丁佛爷发</p></div>
+- field: status
+  range: '[normal,terminate]'
+- field: subStatus
+  range: ' '
+- field: notify
+  range: PO,PD
+  postfix: ','
+- field: createdBy
+  note: 由谁创建
+  range: admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  range: 20100101 000000-20210101 230000:10D
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  range: 0{1},1{1}
+...

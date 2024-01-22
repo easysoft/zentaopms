@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_doing_task_in_project
 timeout=0
 cid=1
+
+- 测试分组数。 @15
+- 测试项目12的进行中任务数第0条的value属性 @3
+- 测试项目24的进行中任务数第0条的value属性 @3
+- 测试项目36的进行中任务数第0条的value属性 @3
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

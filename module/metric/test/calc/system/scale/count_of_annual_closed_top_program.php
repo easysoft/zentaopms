@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_closed_top_program
 timeout=0
 cid=1
+
+- 测试2011年关闭的一级项目集数。第0条的value属性 @5
+- 测试2012年关闭的一级项目集数。第0条的value属性 @5
+- 测试2013年关闭的一级项目集数。第0条的value属性 @4
+- 测试2020年关闭的一级项目集数。第0条的value属性 @3
+- 测试错误年份关闭的一级项目集数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

@@ -1,0 +1,6 @@
+INSERT INTO zt_pipeline(`id`, `type`, `name`, `url`, `account`, `password`, `token`, `private`, `createdBy`, `createdDate`, `deleted`)
+  VALUES ('1', 'gitlab', 'GitLab服务器', 'https://gitlabdev.qc.oop.cc', 'root', 'bGFjdTdCSUgwTEljY21tbnZRQUs=', 'glpat-b8Sa1pM9k9ygxMZYPN6w', '08bcc98f75d7d40053dc80722bdc117b', 'admin', '2022-08-01 09:09:37', '0'), 
+         ('2', 'sonarqube', 'SonarQube服务器', 'https://sonardev.qc.oop.cc', 'sonar', 'a2tHQXpFMXA5cE9vcUpBOWJMSWg=', 'squ_00a8b5794f6fa527bfb8f2a6f382264b5d306b17', '228b25587479f2fc7570428e8bcbabdc', 'admin', '2022-08-01 09:09:37', '0'), 
+         ('3', 'jenkins', 'Jenkins服务器', 'https://jenkinsdev.qc.oop.cc', 'jenkins', 'MXJZN1JWREEyQlZrak81ME9qTUo=', '11eb8b38c99143c7c6d872291e291abff4', 'ec8e41481723685d9106c88be5967c41', 'admin', '2022-08-01 09:09:37', '0'), 
+         ('4', 'gitea', 'Gitea服务器', 'https://giteadev.qc.oop.cc', 'gitea', 'UGNVb1dhSFE1aUp6ZTl5RU9WYmk=', '6149a6013047301b116389d50db5cbf599772082', 'a56af13f4c4a6a4ed77f24e59794cf39', 'admin', '2022-08-01 09:09:37', '0'), 
+         ('5', 'gogs', 'Gogs服务器', 'https://gogsdev.qc.oop.cc', 'gogs-admin', 'RUgwM3ByWDJWUWVnOGRha1Fnc2g=', '6aafc3d332b70312a680fedf26039c67e98cfabe', '4fabcbd31314365506ebc56c0c83c1ec', 'admin', '2022-08-01 09:09:37', '0'); 

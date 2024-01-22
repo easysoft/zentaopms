@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_assigned_task_in_user
 timeout=0
 cid=1
+
+- 测试分组数。 @5
+- 测试用户dev。第0条的value属性 @12
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
@@ -17,6 +21,6 @@ zdTable('task')->config('task', true, 4)->gen(1000);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r(count($calc->getResult())) && p('') && e('6'); // 测试分组数。
+r(count($calc->getResult())) && p('') && e('5'); // 测试分组数。
 
-r($calc->getResult(array('user' => 'dev'))) && p('0:value') && e('34'); // 测试用户dev。
+r($calc->getResult(array('user' => 'dev'))) && p('0:value') && e('12'); // 测试用户dev。

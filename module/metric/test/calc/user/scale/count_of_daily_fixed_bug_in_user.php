@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_daily_fixed_bug_in_user
 timeout=0
 cid=1
+
+- 测试分组数。 @160
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

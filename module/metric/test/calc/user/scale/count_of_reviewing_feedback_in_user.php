@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_reviewing_feedback_in_user
 timeout=0
 cid=1
+
+- 测试分组数。 @6
+- 测试用户admin第0条的value属性 @2
+- 测试用户user第0条的value属性 @2
+- 测试用户dev第0条的value属性 @5
+- 测试用户pm第0条的value属性 @3
+- 测试不存在的用户 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
@@ -23,4 +31,3 @@ r($calc->getResult(array('user' => 'user')))     && p('0:value') && e('2'); // �
 r($calc->getResult(array('user' => 'dev')))      && p('0:value') && e('5'); // 测试用户dev
 r($calc->getResult(array('user' => 'pm')))       && p('0:value') && e('3'); // 测试用户pm
 r($calc->getResult(array('user' => 'notexist'))) && p('')        && e('0'); // 测试不存在的用户
-

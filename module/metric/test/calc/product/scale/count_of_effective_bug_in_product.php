@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_effective_bug_in_product
 timeout=0
 cid=1
+
+- 测试有效bug按产品分组数。 @5
+- 测试产品1有效的bug数。第0条的value属性 @36
+- 测试产品3有效的bug数。第0条的value属性 @24
+- 测试已删除产品4有效的bug数。第0条的value属性 @0
+- 测试不存在的产品有效的bug数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_case_in_product
 timeout=0
 cid=1
+
+- 测试产品1的用例数第0条的value属性 @40
+- 测试产品3的用例数第0条的value属性 @40
+- 测试产品5的用例数第0条的value属性 @40
+- 测试产品7的用例数第0条的value属性 @40
+- 测试产品9的用例数第0条的value属性 @40
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

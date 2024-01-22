@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=rate_of_fixed_bug
 timeout=0
 cid=1
+
+- 测试123条数据Bug数。第0条的value属性 @0.0833
+- 测试123条数据Bug数。第0条的value属性 @0.0833
+- 测试1234条数据Bug数。第0条的value属性 @0.0833
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

@@ -1,0 +1,113 @@
+---
+fields:
+- field: id
+  range: 1-10000
+- field: project
+  range: 0{10},1-10{100!}
+- field: model
+  range: '[]{10},[scrum,waterfall,kanban,agileplus,waterfallplus]{30!}'
+- field: name
+  note: 名称
+  fields:
+  - field: name1
+    range: 项目集{10},项目{100}
+  - field: name2
+    range: 1-10000
+- field: type
+  range: project
+- field: status
+  range: closed{1},doing{1},suspended{1},wait{1}
+- field: lifetime
+  range: ~
+- field: budget
+  range: 900000-1:100
+- field: budgetUnit
+  range: CNY,USD
+- field: attribute
+  note: Only stage has attribute
+  range: ~
+- field: percent
+  range: 1-100:R
+- field: milestone
+  note: Is it milestone
+  range: 0
+- field: output
+  note: Output document
+  range: ~
+- field: auth
+  note: Only project has auth
+  range: extend
+- field: parent
+  range: 0{10},1-10{100!}
+- field: path
+  fields:
+  - field: path1
+    prefix: ','
+    range: 1-10
+  - field: path2
+    prefix: ','
+    range: '[]{10},11-100'
+    postfix: ','
+- field: grade
+  range: "2"
+- field: code
+  fields:
+  - field: code1
+    range: program{10},project{100}
+  - field: code2
+    range: 1-10,1-10000
+- field: begin
+  range: (-3M)-(+M):1D
+  type: timestamp
+  format: YY/MM/DD
+  postfix: "\t"
+- field: end
+  range: (+5w)-(+2M):1D
+  type: timestamp
+  format: YY/MM/DD
+  postfix: "\t"
+- field: PO
+  range: ~
+- field: PM
+  range: ~
+- field: QD
+  range: ~
+- field: RD
+  range: ~
+- field: team
+  range: ~
+- field: acl
+  range: open,private,program
+- field: order
+  range: 5-10000:5
+- field: openedVersion
+  range: "16.5"
+- field: openedDate
+  range: (-3M)-(+M):1D
+  type: timestamp
+  format: YY/MM/DD
+  postfix: "\t"
+- field: multiple
+  note: 有无迭代
+  range: 1
+- field: category
+  range: ""
+- field: deleted
+  range: 0{4},1{4}
+- field: closedDate
+  range: 20110101 000000-20210101 000000:10D
+  type: timestamp
+  format: YYYY-MM-DD
+- field: realBegan
+  range: 20110101 000000-20210101 000000:10D
+  type: timestamp
+  format: YYYY-MM-DD
+- field: realEnd
+  range: 20110101 000000-20210101 000000:10D
+  type: timestamp
+  format: YYYY-MM-DD
+- field: firstEnd
+  range: 20110101 000000-20210101 000000:10D
+  type: timestamp
+  format: YYYY-MM-DD
+...
