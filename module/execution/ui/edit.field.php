@@ -143,21 +143,25 @@ $fields->field('productsBox')
 
 $fields->field('PO')
     ->label($lang->execution->PO)
+    ->required(in_array('PO', explode(',', $config->execution->edit->requiredFields)))
     ->items(data('poUsers'))
     ->value(data('execution.PO'));
 
 $fields->field('QD')
     ->label($lang->execution->QD)
+    ->required(in_array('QD', explode(',', $config->execution->edit->requiredFields)))
     ->items(data('qdUsers'))
     ->value(data('execution.QD'));
 
 $fields->field('PM')
     ->label($lang->execution->PM)
+    ->required(in_array('PM', explode(',', $config->execution->edit->requiredFields)))
     ->items(data('pmUsers'))
     ->value(data('execution.PM'));
 
 $fields->field('RD')
     ->label($lang->execution->RD)
+    ->required(in_array('RD', explode(',', $config->execution->edit->requiredFields)))
     ->items(data('rdUsers'))
     ->value(data('execution.RD'));
 
@@ -177,6 +181,7 @@ $fields->field('teamMembers')
 
 $fields->field('desc')
     ->width('full')
+    ->required(in_array('desc', explode(',', $config->execution->edit->requiredFields)))
     ->control('editor')
     ->value(data('execution.desc'));
 
