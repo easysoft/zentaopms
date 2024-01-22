@@ -77,9 +77,19 @@ function toggleSelectTestStory()
         $('[data-name=datePlan]').addClass('hidden');
         $('[data-name=estimate]').addClass('hidden');
         $('[name=multiple]').closest('.checkbox-primary').addClass('hidden');
-
         $('[data-name=testStoryBox]').removeClass('hidden');
         $('#testStoryBox').load($.createLink('task', 'ajaxGetTestStories', 'executionID=' + executionID + '&taskID=' + taskID));
+
+        if($('[data-name=execution]').hasClass('hidden'))
+        {
+            $('[data-name=name]').removeClass('lite:w-full');
+            $('[data-name=pri]').removeClass('w-1/4').addClass('w-1/2 full:w-1/4');
+            $('[data-name=assignedToBox]').addClass('full:w-1/4');
+        }
+        else
+        {
+            $('[data-name=assignedToBox]').removeClass('w-1/2').addClass('w-1/4');
+        }
 
         $('[name^=multiple]').prop('checked', false);
         toggleTeam();
@@ -91,8 +101,18 @@ function toggleSelectTestStory()
         $('[data-name=datePlan]').removeClass('hidden');
         $('[data-name=estimate]').removeClass('hidden');
         $('[name=multiple]').closest('.checkbox-primary').removeClass('hidden');
-
         $('[data-name=testStoryBox]').addClass('hidden');
+
+        if($('[data-name=execution]').hasClass('hidden'))
+        {
+            $('[data-name=name]').addClass('lite:w-full');
+            $('[data-name=pri]').addClass('w-1/4').removeClass('w-1/2 full:w-1/4');
+            $('[data-name=assignedBox]').removeClass('full:w-1/4');
+        }
+        else
+        {
+            $('[data-name=assignedToBox]').removeClass('w-1/4').addClass('w-1/2');
+        }
     }
 }
 

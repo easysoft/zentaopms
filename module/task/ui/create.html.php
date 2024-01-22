@@ -27,17 +27,17 @@ $fields = useFields('task.create');
 $fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,module,storyBox,datePlan,pri,estimate,desc,files,mailto,keywords,after,testStoryBox');
 
 $fields->orders('name,assignedToBox', 'module,testStoryBox', 'desc,module,storyBox');
-$fields->fullModeOrders('type,module,storyBox', 'desc,files,mailto,keywords');
+$fields->fullModeOrders('type,module,storyBox,testStoryBox', 'desc,files,mailto,keywords');
 if($execution->type == 'kanban')
 {
     $fields->orders('desc,module,storyBox', 'type,assignedToBox,region,lane');
-    $fields->fullModeOrders('name,assignedToBox', 'type,module,storyBox', 'desc,files,mailto,keywords');
+    $fields->fullModeOrders('name,assignedToBox', 'type,module,storyBox,testStoryBox', 'desc,files,mailto,keywords');
     if(empty($features['story'])) $fields->fullModeOrders('type,module,storyBox', 'name,assignedToBox', 'desc,files,mailto,keywords');
 }
 
 if(empty($features['story']) && $execution->type != 'kanban')
 {
-    $fields->fullModeOrders('type,module,storyBox,assignedToBox', 'desc,files,mailto,keywords');
+    $fields->fullModeOrders('type,module,storyBox,testStoryBox,assignedToBox', 'desc,files,mailto,keywords');
 }
 
 $teamForm = array();
