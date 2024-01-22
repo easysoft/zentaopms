@@ -294,7 +294,8 @@ div
             setClass('hidden'),
             history
             (
-                set::objectID($api->id)
+                set::objectID($api->id),
+                set::objectType('api')
             )
         )
     )
