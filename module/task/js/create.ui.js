@@ -56,7 +56,9 @@ function typeChange(e)
     /* If the execution has story list, toggle between hiding and displaying the selection of select test story box. */
     if(lifetime != 'ops' && attribute != 'request' && attribute != 'review' && vision != 'lite')
     {
+        $('[name=selectTestStory]').prop('checked', false);
         $('[name=selectTestStory]').closest('.checkbox-primary').toggleClass('hidden', result != 'test');
+        toggleSelectTestStory();
     }
 }
 
