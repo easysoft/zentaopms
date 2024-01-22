@@ -2553,8 +2553,8 @@ class taskModel extends model
         $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
 
         /* Check if field is valid. */
-        $result = $this->taskTao->checkWorkhour($task, $workhour);
-        if(!$result || dao::isError()) return array();
+        $workhour = $this->taskTao->checkWorkhour($task, $workhour);
+        if(!$workhour || dao::isError()) return array();
 
         /* Add field to workhour. */
         $workhour = $this->taskTao->buildWorkhour($taskID, $workhour);

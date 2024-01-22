@@ -254,16 +254,16 @@ class taskTao extends taskModel
      * 检查录入日志的字段必填性及日志记录人要在多人任务的团队中。
      * Check that the required fields of the effort must be filled in and the effort recorder must be in the multi-task team.
      *
-     * @param  object    $task
-     * @param  array     $workhour
+     * @param  object      $task
+     * @param  array       $workhour
      * @access protected
-     * @return bool
+     * @return false|array
      */
-    protected function checkWorkhour(object $task, array $workhour): bool
+    protected function checkWorkhour(object $task, array $workhour): false|array
     {
         foreach($workhour as $id => $record)
         {
-            if(!$record->work && !$record->consumed)
+            if(!$record->work && !$record->consumed && !$record->left)
             {
                 unset($workhour[$id]);
                 continue;
@@ -302,7 +302,7 @@ class taskTao extends taskModel
         $inTeam = $this->dao->select('id')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->andWhere('account')->eq($this->app->user->account)->fetch('id');
         if($task->team && !$inTeam) return false;
 
-        return true;
+        return $workhour;
     }
 
     /**
