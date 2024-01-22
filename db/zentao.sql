@@ -15996,6 +15996,8 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
   `fromID` mediumint unsigned NOT NULL DEFAULT 0,
   `order` mediumint unsigned NOT NULL DEFAULT '0',
+  `lastCalcRows` mediumint unsigned NOT NULL DEFAULT 0,
+  `lastCalcTime` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
