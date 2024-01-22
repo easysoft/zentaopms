@@ -97,7 +97,7 @@ foreach($budgetUnitList as $key => $value)
 }
 
 $fields->field('budget')
-    ->label($lang->project->budget . $lang->project->budgetUnit)
+    ->label($lang->project->budget)
     ->foldable()
     ->checkbox(array('text' => $lang->project->future, 'name' => 'future', 'checked' => $budgetFuture))
     ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, data('project.budgetUnit') ? data('project.budgetUnit') : $currency), 'className' => 'btn ghost' . ($budgetFuture ? ' disabled pointer-events-none' : '')), 'prefixWidth' => 34, 'disabled' => $budgetFuture))
