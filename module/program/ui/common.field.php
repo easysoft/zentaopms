@@ -29,7 +29,7 @@ foreach($budgetUnitList as $key => $value)
     $budgetItemList[] = array('text' => $value, 'value' => $key, 'url' => "javascript:toggleBudgetUnit('{$key}')");
 }
 
-$currency           = data('parentProgram.budgetUnit') ? data('parentProgram.budgetUnit') : $config->project->defaultCurrency;
+$currency           = data('parentProgram.budgetUnit') ? data('parentProgram.budgetUnit') : (data('program.budgetUnit') ? data('program.budgetUnit') : $config->project->defaultCurrency);
 $budgetDisabled     = (data('parentProgram.budget') !== null && data('parentProgram.budget') == 0) || (data('program.budget') !== null && data('program.budget') == 0);
 $budgetUnitDisabled = data('parentProgram.budgetUnit') ? true : false;
 
@@ -41,10 +41,12 @@ $fields->field('budget')
 if(data('parentProgram.budget'))
 {
     $fields->field('budget')
-        ->tip(sprintf($lang->project->budgetOverrun, zget($lang->project->currencySymbol, $currency) . data('parentProgram.budget')))
+        ->tip(' ')
         ->tipProps(array('id' => 'budgetTip'))
         ->tipClass('text-warning hidden');
 }
+
+$fields->field('budgetUnit')->control('hidden')->value($currency);
 
 $fields->field('desc')
     ->width('full')
