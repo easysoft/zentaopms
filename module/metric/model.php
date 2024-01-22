@@ -20,9 +20,9 @@ class metricModel extends model
      * 获取度量数据表的表头。
      * Get header of result table in view.
      *
-     * @param  array $result
+     * @param  object $metric
      * @access public
-     * @return array|false
+     * @return array
      */
     public function getViewTableHeader($metric)
     {
@@ -134,6 +134,16 @@ class metricModel extends model
         return array($header, $data);
     }
 
+    /**
+     * 构建有时间属性的度量项的表格数据。
+     * Build table data for metric with time.
+     *
+     * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $withCalcTime
+     * @access public
+     * @return array
+     */
     public function getTimeTable($data, $dateType = 'day', $withCalcTime = true)
     {
         $dateField = 'dateString';
@@ -186,6 +196,16 @@ class metricModel extends model
         return array($groupHeader, $groupData);
     }
 
+   /**
+    * 构建有对象属性的度量项的表格数据。
+    * Build table data for metric with object.
+    *
+    * @param  array  $data
+    * @param  string $dateType
+    * @param  bool   $withCalcTime
+    * @access public
+    * @return array
+    */
     public function getObjectTable($header, $data, $dateType = 'day', $withCalcTime = true)
     {
         $groupHeader = array();
@@ -261,8 +281,10 @@ class metricModel extends model
     }
 
     /**
+     * 获取所有范围的键值对。
      * Get scope pairs.
      *
+     * @param  bool   $all
      * @access public
      * @return array
      */
@@ -334,6 +356,14 @@ class metricModel extends model
         return $metrics;
     }
 
+    /**
+     * 以对象为维度分组度量项。
+     * Group metrics by object.
+     *
+     * @param  array  $metrics
+     * @access public
+     * @return array
+     */
     public function groupMetricByObject($metrics)
     {
         $groupMetrics = array_fill_keys(array_keys($this->lang->metric->objectList), array());
@@ -366,6 +396,14 @@ class metricModel extends model
         return $groupMetrics;
     }
 
+    /**
+     * 根据id列表获取度量项列表。
+     * Get metrics by id list.
+     *
+     * @param  array  $metricIDList
+     * @access public
+     * @return array|false
+     */
     public function getMetricsByIDList($metricIDList)
     {
         return $this->metricTao->fetchMetricsByIDList($metricIDList);
@@ -384,11 +422,28 @@ class metricModel extends model
         return $this->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq(0)->orderby($orderBy)->fetchAll('id');
     }
 
+    /**
+     * 通过筛选器筛选度量项。
+     * Get metric list by filters.
+     *
+     * @param  array  $filters
+     * @param  string $stage
+     * @access public
+     * @return array|false
+     */
     public function getListByFilter($filters, $stage)
     {
         return $this->metricTao->fetchMetricsWithFilter($filters, $stage);
     }
 
+    /**
+     * 通过我的收藏筛选度量项。
+     * Get metric list by collect.
+     *
+     * @param  string $stage
+     * @access public
+     * @return array|false
+     */
     public function getListByCollect($stage)
     {
         return $this->metricTao->fetchMetricsByCollect($stage);
@@ -449,7 +504,7 @@ class metricModel extends model
             $metric->collectConf = $oldMetric->collectConf;
             $metric->execTime    = $oldMetric->execTime;
         }
-        if(empty($metric->dateType)) $metric->dateType = $this->getDateTypeByCode($metric->code);
+        if(empty($metric->dateType) and isset($metric->code)) $metric->dateType = $this->getDateTypeByCode($metric->code);
 
         return $metric;
     }
@@ -526,7 +581,7 @@ class metricModel extends model
         {
             include_once $this->getDatasetPath();
 
-            $dataset    = new dataset($dao);
+            $dataset    = new dataset($dao, $this->config);
             $dataSource = $calculator->dataset;
             $fieldList  = implode(',', $calculator->fieldList);
 
@@ -867,7 +922,7 @@ class metricModel extends model
     {
         $datasetPath = $this->getDatasetPath();
         include_once $datasetPath;
-        return new dataset($dao);
+        return new dataset($dao, $this->config);
     }
 
     /**
@@ -1108,6 +1163,14 @@ class metricModel extends model
         return $row;
     }
 
+    /**
+     * 检查度量项的计算文件是否存在。
+     * Check if metric's calculator exists.
+     *
+     * @param  object $metric
+     * @access public
+     * @return bool
+     */
     public function checkCalcExists($metric)
     {
         $calcName = $this->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
@@ -1263,7 +1326,7 @@ class metricModel extends model
      */
     public function isOldMetric($metric)
     {
-        return $metric->type == 'sql';
+        return isset($metric->type) && $metric->type == 'sql';
     }
 
     /**
@@ -1751,6 +1814,16 @@ class metricModel extends model
         return $options;
     }
 
+    /**
+     * 生成数据缩放的配置。
+     * Generate data zoom config.
+     *
+     * @param  int    $dataLength
+     * @param  int    $initZoom
+     * @param  stirng $axis
+     * @access public
+     * @return array
+     */
     public function genDataZoom(int $dataLength, int $initZoom = 10, string $axis = 'x')
     {
         $percent = $initZoom / $dataLength * 100;

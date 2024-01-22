@@ -16,9 +16,10 @@ class dataset
      * @access public
      * @return void
      */
-    public function __construct($dao)
+    public function __construct($dao, $config)
     {
         $this->dao = $dao;
+        $this->config = $config;
     }
 
     /**
@@ -109,9 +110,11 @@ class dataset
      */
     public function getReleases($fieldList)
     {
+        $dbType = $this->config->metricDB->type;
         return $this->dao->select($fieldList)
             ->from(TABLE_RELEASE)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("(',' || t2.id || ',') LIKE ('%' || t1.project || '%')")
+            ->beginIF($dbType == 'mysql')->leftJoin(TABLE_PROJECT)->alias('t2')->on("CONCAT(',', t2.id, ',') LIKE CONCAT('%', t1.project, '%')")->fi()
+            ->beginIF($dbType == 'sqlite')->leftJoin(TABLE_PROJECT)->alias('t2')->on("(',' || t2.id || ',') LIKE ('%' || t1.project || '%')")->fi()
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
@@ -176,6 +179,16 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
+            ->query();
+    }
+
+    public function getBugsWithShadowProduct($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->query();
     }
 
