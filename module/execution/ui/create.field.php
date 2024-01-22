@@ -2,10 +2,11 @@
 namespace zin;
 global $lang, $config;
 
-$fields  = defineFieldList('execution.create');
-$project = data('project');
-$from    = data('from');
-$isStage = data('isStage');
+$fields   = defineFieldList('execution.create');
+$project  = data('project');
+$from     = data('from');
+$isStage  = data('isStage');
+$isKanban = data('isKanban');
 $showExecutionExec = ($from == 'execution' || $from == 'doc');
 $requiredFields    = ",{$config->execution->create->requiredFields},";
 
@@ -43,6 +44,7 @@ $fields->field('type')
     ->required()
     ->label($showExecutionExec ? $lang->execution->execType : $lang->execution->type)
     ->name($isStage ? 'attribute' : 'lifetime')
+    ->hidden($isKanban)
     ->items($isStage ? $lang->stage->typeList : $lang->execution->lifeTimeList);
 
 $plan = data('plan');

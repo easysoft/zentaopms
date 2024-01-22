@@ -1039,6 +1039,7 @@ class execution extends control
         $this->view->execution           = $execution;
         $this->view->from                = $this->app->tab;
         $this->view->isStage             = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
+        $this->view->isKanban            = isset($output['type']) && $output['type'] == 'kanban';
         $this->view->project             = $project;
 
         $this->display();
