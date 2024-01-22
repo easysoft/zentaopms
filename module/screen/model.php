@@ -457,6 +457,7 @@ class screenModel extends model
         if($isObjectMetric)
         {
             $scopeFilter = new stdclass();
+            $scopeFilter->belong     = 'metric';
             $scopeFilter->from       = 'query';
             $scopeFilter->field      = $scope;
             $scopeFilter->name       = $this->lang->$scope->common;
@@ -481,6 +482,7 @@ class screenModel extends model
         if($isDateMetric)
         {
             $beginFilter = new stdclass();
+            $beginFilter->belong     = 'metric';
             $beginFilter->from       = 'query';
             $beginFilter->field      = 'begin';
             $beginFilter->type       = 'date';
@@ -489,6 +491,7 @@ class screenModel extends model
             $filters[] = $beginFilter;
 
             $endFilter = new stdclass();
+            $endFilter->belong     = 'metric';
             $endFilter->from       = 'query';
             $endFilter->field      = 'end';
             $endFilter->type       = 'date';
