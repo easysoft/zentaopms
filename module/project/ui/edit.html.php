@@ -22,6 +22,7 @@ jsVar('unmodifiableProducts', $unmodifiableProducts);
 jsVar('unmodifiableBranches', $unmodifiableBranches);
 jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
 jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
+jsVar('weekend', $config->execution->weekend);
 jsVar('allProducts', $allProducts);
 jsVar('branchGroups', $branchGroups);
 jsVar('projectID', $projectID);
