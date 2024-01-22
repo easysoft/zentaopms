@@ -2110,14 +2110,14 @@ class executionZen extends execution
             {
                 if(isset($plans[$productID][$branchID]))
                 {
-                    foreach($plans[$productID][$branchID] as $plan) $productPlans[$productID][$plan->id] = $plan->title;
+                    foreach($plans[$productID][$branchID] as $plan) $productPlans[$productID][$branchID][$plan->id] = $plan->title;
                 }
 
                 $linkedBranchList[$branchID]           = $branchID;
                 $linkedBranches[$productID][$branchID] = $branchID;
                 if($branchID != BRANCH_MAIN && isset($plans[$productID][BRANCH_MAIN]))
                 {
-                    foreach($plans[$productID][BRANCH_MAIN] as $plan) $productPlans[$productID][$plan->id] = $plan->title;
+                    foreach($plans[$productID][BRANCH_MAIN] as $plan) $productPlans[$productID][BRANCH_MAIN][$plan->id] = $plan->title;
                 }
                 if(!empty($executionStories[$productID][$branchID]))
                 {
@@ -2126,12 +2126,42 @@ class executionZen extends execution
                     $linkedStoryIDList[$productID][$branchID] = $executionStories[$productID][$branchID]->storyIDList;
                 }
             }
+
+            if(!empty($linkedProduct->plans))
+            {
+                foreach($linkedProduct->plans as $linkedPlans)
+                {
+                    $planList = explode(',', $linkedPlans);
+                    $planList = array_filter($planList);
+                    foreach($planList as $planID)
+                    {
+                        if(isset($plans[$productID][$planID])) continue;
+                        $productPlans[$productID][$branchID][$planID] = '';
+                    }
+                }
+            }
+        }
+
+        $productPlansOrder = array();
+        foreach($productPlans as $productID => $branchPlans)
+        {
+            foreach($branchPlans as $branchID => $plans)
+            {
+                $orderPlans    = $this->loadModel('productplan')->getByIDList(array_keys($plans));
+                $orderPlans    = $this->productplan->relationBranch($orderPlans);
+                $orderPlansMap = array_keys($orderPlans);
+                foreach($orderPlansMap as $planMapID)
+                {
+                    if(empty($plans[$planMapID])) $productPlans[$productID][$branchID][$planMapID] = $orderPlans[$planMapID]->title;
+                    $productPlansOrder[$productID][$branchID][$planMapID] = $productPlans[$productID][$branchID][$planMapID];
+                }
+            }
         }
 
         $linkedObjects = new stdclass();
         $linkedObjects->allProducts          = $allProducts;
         $linkedObjects->linkedProducts       = $linkedProducts;
-        $linkedObjects->productPlans         = $productPlans;
+        $linkedObjects->productPlans         = array_filter($productPlansOrder);
         $linkedObjects->linkedBranches       = $linkedBranches;
         $linkedObjects->linkedBranchList     = $linkedBranchList;
         $linkedObjects->linkedStoryIDList    = $linkedStoryIDList;
