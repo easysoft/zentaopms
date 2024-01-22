@@ -98,7 +98,7 @@ modalTrigger
             btn
             (
                 setClass('primary btn-wide hidden confirmBtn'),
-                set::text($lang->confirm),
+                set::text($lang->execution->copy),
                 on::click('setCopyExecution')
             )
         ),
