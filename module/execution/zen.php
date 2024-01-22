@@ -1780,7 +1780,6 @@ class executionZen extends execution
 
             $this->view->plan = $plan;
         }
-        if(!empty($project) and $project->stageBy == 'project') $products = $this->loadModel('product')->getProducts($project->id);
 
         return $products;
     }
@@ -1808,6 +1807,7 @@ class executionZen extends execution
 
         if(!empty($project) and $project->stageBy == 'project')
         {
+            $products = $this->loadModel('product')->getProducts($project->id);
             $branches = $this->project->getBranchesByProject($projectID);
             $plans    = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipparent|unexpired');
         }
