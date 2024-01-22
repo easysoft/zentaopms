@@ -50,6 +50,7 @@ $fields->field('desc')
 
 $fields->field('files')
     ->width('full')
+    ->value('')
     ->control('upload');
 
 $fields->field('mailto')
