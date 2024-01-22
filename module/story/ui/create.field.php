@@ -24,7 +24,7 @@ $fields->field('module')
     ->type('modulePicker')
     ->items($createFields['module']['options'])
     ->value($createFields['module']['default'])
-    ->manageLink(createLink('tree', 'browse', 'rootID=' . data('productID') . '&view=strory&currentModuleID=0&branch=' . data('branch')))
+    ->manageLink(createLink('tree', 'browse', 'rootID=' . data('productID') . '&view=story&currentModuleID=0&branch=' . data('branch')))
     ->controlEnd();
 
 if(isset($createFields['branch']) && $type == 'story')
