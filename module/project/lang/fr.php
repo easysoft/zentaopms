@@ -427,8 +427,8 @@ $lang->project->cannotCancelCat      = "There are child {$lang->projectCommon}s 
 $lang->project->parentBeginEnd       = "The begin and end date of the parent {$lang->projectCommon}: %s ~ %s";
 $lang->project->parentBudget         = "The budget of the parent program: ";
 
-$lang->project->beginLessThanParent     = "The start date of the {$lang->projectCommon} is < the start date of the parent program: <strong class='parentBegin'></strong>. ";
-$lang->project->endGreatThanParent      = "The finish date of the {$lang->projectCommon} is > the finish date of the parent program: <strong class='parentEnd'></strong>. ";
+$lang->project->beginLessThanParent     = "The start date of the {$lang->projectCommon} is < the start date of the parent program: %s. ";
+$lang->project->endGreatThanParent      = "The finish date of the {$lang->projectCommon} is > the finish date of the parent program: %s. ";
 $lang->project->dateExceedParent        = "The start and finish date of the {$lang->projectCommon} was > the start and finish date of the parent program:";
 $lang->project->beginGreatEqualChild    = "The start date of the {$lang->projectCommon} should be ≥ the start date of program: %s.";
 $lang->project->endLessThanChild        = "The finish date of the {$lang->projectCommon} should be ≤ the finish date of program: %s.";

@@ -51,7 +51,10 @@ $fields->field('begin')
     ->control('inputGroup')
     ->itemBegin('begin')->control('datePicker')->placeholder($lang->project->begin)->value(data('project.begin') ? data('project.begin') : date('Y-m-d'))->required(true)->itemEnd()
     ->item(array('control' => 'span', 'text' => '-'))
-    ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->value(data('project.end'))->itemEnd();
+    ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->value(data('project.end'))->itemEnd()
+    ->tip('123')
+    ->tipProps(array('id' => 'dateTip'))
+    ->tipClass('text-warning hidden');
 
 $fields->field('days')->label($lang->project->days . $lang->project->daysUnit)->control('input');
 

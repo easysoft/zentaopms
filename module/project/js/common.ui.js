@@ -96,6 +96,7 @@ function computeWorkDays()
             $('#delta' + days).prop('checked', true);
         }
     }
+    checkProjectInfo();
 }
 
 /**
@@ -209,36 +210,54 @@ window.toggleMultiple = function(e)
  * @access public
  * @return void
  */
-function checkBudget(projectID)
+function checkBudget()
 {
     if(ignoreTips['budgetTip']) return;
 
+    $('#budgetTip').addClass('hidden');
+    checkProjectInfo();
+}
+
+function checkProjectInfo()
+{
     const programID = $('[name=parent]').val();
     if(programID == 0)
     {
         $('[name=budget]').removeAttr('placeholder');
         $('#budgetTip').addClass('hidden');
+        $('#dateTip').addClass('hidden');
         return false;
     }
 
     if(typeof(projectID) == 'undefined') projectID = 0;
 
-    $('#budgetTip').addClass('hidden');
     $.getJSON($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + programID), function(data)
     {
-        if(typeof(data.availableBudget) == 'undefined') return;
-
-        const budget = $('[name=budget]').val() * budgetUnitValue;
-        if(budget != 0 && budget !== null && budget > data.availableBudget)
+        let dateTip = '';
+        if(typeof(data.selectedProgramBegin) != 'undefined' && $('[name=begin]').val() != '' && $('[name=begin]').val() > data.selectedProgramBegin) dateTip += beginLessThanParent.replace('%s', data.selectedProgramBegin);
+        if(typeof(data.selectedProgramEnd) != 'undefined' && $('[name=end]').val() != '' && $('[name=end]').val() < data.selectedProgramEnd) dateTip += endGreatThanParent.replace('%s', data.selectedProgramEnd);
+        if(dateTip != '')
         {
-            const currency = currencySymbol[data.budgetUnit];
-            const availableBudget = (data.availableBudget / budgetUnitValue).toFixed(2);
-            const budgetTip = budgetOverrun.replace('%s', currency + availableBudget);
-            $('[name=budget]').attr('placeholder', budgetTip);
-            $('#budgetTip').html(budgetTip);
-            $('#budgetTip').append($('<span id="ignoreBudget" class="underline">' + ignore + '</span>'));
-            $('#budgetTip').removeClass('hidden');
-            $('#budgetTip').off('click', '#ignoreBudget').on('click', '#ignoreBudget', function(){ignoreTip('budgetTip')});
+            $('#dateTip').html(dateTip);
+            $('#dateTip').append($('<span id="ignoreDate" class="underline">' + ignore + '</span>'));
+            $('#dateTip').removeClass('hidden');
+            $('#dateTip').off('click', '#ignoreDate').on('click', '#ignoreDate', function(){ignoreTip('dateTip')});
+        }
+
+        if(typeof(data.availableBudget) != 'undefined')
+        {
+            const budget = $('[name=budget]').val() * budgetUnitValue;
+            if(budget != 0 && budget !== null && budget > data.availableBudget)
+            {
+                const currency = currencySymbol[data.budgetUnit];
+                const availableBudget = (data.availableBudget / budgetUnitValue).toFixed(2);
+                const budgetTip = budgetOverrun.replace('%s', currency + availableBudget);
+                $('[name=budget]').attr('placeholder', budgetTip);
+                $('#budgetTip').html(budgetTip);
+                $('#budgetTip').append($('<span id="ignoreBudget" class="underline">' + ignore + '</span>'));
+                $('#budgetTip').removeClass('hidden');
+                $('#budgetTip').off('click', '#ignoreBudget').on('click', '#ignoreBudget', function(){ignoreTip('budgetTip')});
+            }
         }
     });
 }

@@ -22,6 +22,8 @@ jsVar('budgetUnitValue', $config->project->budget->tenThousand);
 jsVar('+projectID', $copyProjectID);
 jsVar('LONG_TIME', LONG_TIME);
 jsVar('weekend', $config->execution->weekend);
+jsVar('beginLessThanParent', $lang->project->beginLessThanParent);
+jsVar('endGreatThanParent', $lang->project->endGreatThanParent);
 
 $modelMenuItems = array();
 foreach($lang->project->modelList as $key => $text)
@@ -62,7 +64,7 @@ formGridPanel
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
     on::change('[name^=products]', 'productChange'),
-    on::change('#parent, #budget', "checkBudget(0)"),
+    on::change('[name=parent], [name=budget]', 'checkBudget'),
     set::title($lang->project->create),
     set::fullModeOrders(array('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin')),
     set::fields($fields)

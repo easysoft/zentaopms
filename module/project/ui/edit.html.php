@@ -25,6 +25,10 @@ jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
 jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
 jsVar('allProducts', $allProducts);
 jsVar('branchGroups', $branchGroups);
+jsVar('projectID', $projectID);
+jsVar('from', $from);
+jsVar('programID', $programID);
+jsVar('LONG_TIME', LONG_TIME);
 
 $labelClass = $config->project->labelClass[$model];
 
@@ -55,9 +59,9 @@ formGridPanel
     on::change('[name=hasProduct]', 'changeType'),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
-    on::change('[name=parent], [name=budget]', "checkBudget({$project->id})"),
+    on::change('[name=parent], [name=budget]', 'checkBudget'),
     on::change('[name^=products]', 'productChange'),
-    on::change('#parent', 'setParentProgram'),
+    on::change('[name=parent]', 'setParentProgram'),
     set::fullModeOrders(array('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin')),
     set::modeSwitcher(false),
     set::defaultMode('full'),

@@ -432,8 +432,8 @@ $lang->project->cannotCancelCat      = "该{$lang->projectCommon}下已经有子
 $lang->project->parentBeginEnd       = "父{$lang->projectCommon}起止时间：%s ~ %s";
 $lang->project->parentBudget         = "父项目集预算：";
 
-$lang->project->beginLessThanParent     = "{$lang->projectCommon}的开始日期小于了父项目集的开始日期：<strong class='parentBegin'></strong>。";
-$lang->project->endGreatThanParent      = "{$lang->projectCommon}的完成日期大于了父项目集的完成日期：<strong class='parentEnd'></strong>。";
+$lang->project->beginLessThanParent     = "{$lang->projectCommon}的开始日期小于了父项目集的开始日期：%s。";
+$lang->project->endGreatThanParent      = "{$lang->projectCommon}的完成日期大于了父项目集的完成日期：%s。";
 $lang->project->dateExceedParent        = "{$lang->projectCommon}的起止日期已超出父项目集的起止日期：";
 $lang->project->beginGreatEqualChild    = "{$lang->projectCommon}的开始日期应大于等于项目集的最小开始日期：%s";
 $lang->project->endLessThanChild        = "{$lang->projectCommon}的完成日期应小于等于项目集的最大完成日期：%s";
