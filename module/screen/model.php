@@ -1884,12 +1884,13 @@ class screenModel extends model
         {
             if(isset($filters['scope']))
             {
-                $scopeFilter = $filters['scope'];
-                $objectPairs = $this->loadModel('metric')->getPairsByScope($scopeFilter->type);
+                $scopeFilter     = $filters['scope'];
+                $objectPairs     = $this->loadModel('metric')->getPairsByScope($scopeFilter->type);
+                $selectedObjects = array_intersect_key($objectPairs, array_flip($scopeFilter->value));
 
                 foreach($data as $index => $row)
                 {
-                    if($row['scope'] != $objectPairs[$scopeFilter->value]) unset($data[$index]);
+                    if(!in_array($row['scope'], $selectedObjects)) unset($data[$index]);
                 }
             }
 
