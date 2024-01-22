@@ -82,7 +82,7 @@ $lang->story->currentBranch      = '当前%s';
 $lang->story->twins              = '孪生需求';
 $lang->story->relieved           = '解除';
 $lang->story->relievedTwins      = '解除孪生需求';
-$lang->story->loadAllStories     = '加载所有需求';
+$lang->story->loadAllStories     = '所有';
 $lang->story->hasDividedTask     = '已经分解任务';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";

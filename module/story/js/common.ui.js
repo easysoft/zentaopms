@@ -44,15 +44,20 @@ window.toggleFeedback = function(obj)
     $('.feedbackBox').toggleClass('hidden', !feedbackSource.includes(source));
 }
 
-window.loadURS = function(allURS)
+window.loadURS = function(e)
 {
-    var productID       = $('[name=product]').val();
-    var moduleID        = typeof(allURS) == 'undefined' ? $('[name=module]').val() : 0;
-    var requirementList = $('[name=URS]').val();
-    requirementList     = requirementList ? encodeURIComponent(requirementList.join(',')) : '';
+    const eventType = e.type;
+    const productID = $('[name=product]').val();
 
-    var branchID  = 0;
-    var $branches = $('input[name^=branches]');
+    let requirementList = $('[name=URS]').val();
+    requirementList = requirementList ? encodeURIComponent(requirementList.join(',')) : '';
+
+    let moduleID = 0;
+    if(eventType == 'change') moduleID = $('[name=module]').val();
+    if(eventType == 'click' && !$(e.target).prop('checked')) moduleID = $('[name=module]').val();
+
+    let branchID  = 0;
+    let $branches = $('input[name^=branches]');
     if($branches.length > 0)
     {
         branchIdList = [];

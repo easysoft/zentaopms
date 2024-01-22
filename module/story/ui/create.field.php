@@ -51,8 +51,8 @@ if(isset($createFields['URS']))
         ->label($lang->story->requirement)
         ->control('inputGroup')
         ->items(false)
-        ->itemBegin('URS[]')->control('picker')->id('URS')->items($createFields['URS']['options'])->value($createFields['URS']['default'])->multiple()->itemEnd()
-        ->itemBegin()->control('btn')->icon('refresh text-primary')->hint($lang->story->loadAllStories)->id('loadURS')->itemEnd();
+        ->checkbox(array('text' => $lang->story->loadAllStories, 'id' => 'loadURS'))
+        ->itemBegin('URS[]')->control('picker')->id('URS')->items($createFields['URS']['options'])->value($createFields['URS']['default'])->multiple()->itemEnd();
     $fields->field('parent')
         ->hidden(data('hiddenParent'))
         ->items($createFields['parent']['options'])

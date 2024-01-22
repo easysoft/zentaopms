@@ -42,7 +42,7 @@ formGridPanel
         array('text' => $lang->goback,           'data-back'   => 'APP',    'class' => 'open-url')
     )),
     set::fields($createFields),
-    on::click('#loadURS', "loadURS('allURS')"),
+    on::click('#loadURS', "loadURS"),
     on::click('#loadProductPlans', "loadProductPlans('{$productID}')"),
     on::change('[name=module]', 'loadURS'),
     on::change('[name=product]', 'loadProduct'),

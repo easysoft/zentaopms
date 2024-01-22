@@ -82,7 +82,7 @@ $lang->story->currentBranch      = 'Current Branch';
 $lang->story->twins              = 'Twins story';
 $lang->story->relieved           = 'Relieved';
 $lang->story->relievedTwins      = 'Relieved Twins';
-$lang->story->loadAllStories     = 'Load all stories';
+$lang->story->loadAllStories     = 'All';
 $lang->story->hasDividedTask     = 'has divided task';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
