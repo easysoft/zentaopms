@@ -31,7 +31,7 @@ class jsHelper extends js
      */
     public function toggleHide(string $selector): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         return $this->appendLine("$target.hide();");
     }
 
@@ -46,7 +46,7 @@ class jsHelper extends js
      */
     public function toggleShow(string $selector, ?string $toggleCode = null): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         if(is_null($toggleCode)) return $this->appendLine("$target.toggle();");
 
         if(!is_string($toggleCode)) $toggleCode = json_encode($toggleCode);
@@ -64,7 +64,7 @@ class jsHelper extends js
      */
     public function addClass(string $selector, string $class): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         return $this->appendLine("$target.addClass(\"{$class}\");");
     }
 
@@ -79,7 +79,7 @@ class jsHelper extends js
      */
     public function removeClass(string $selector, string $class): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         return $this->appendLine("$target.removeClass(\"{$class}\");");
     }
 
@@ -95,7 +95,7 @@ class jsHelper extends js
      */
     public function toggleClass(string $selector, string $class, ?string $toggleCode = null): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         if(is_null($toggleCode)) return $this->appendLine("$target.toggleClass(\"{$class}\");");
         return $this->appendLine("$target.toggleClass(\"{$class}\", $toggleCode);");
     }
@@ -111,7 +111,7 @@ class jsHelper extends js
      */
     public function setHtml(string $selector, string $html): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         return $this->appendLine("$target.html(", json_encode($html), ");");
     }
 
@@ -126,7 +126,7 @@ class jsHelper extends js
      */
     public function setText(string $selector, string $text): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         return $this->appendLine("$target.text(", json_encode($text), ");");
     }
 
@@ -141,7 +141,7 @@ class jsHelper extends js
      */
     public function setVal(string $selector, string $value): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         return $this->appendLine("$target.val(", json_encode($value), ");");
     }
 
@@ -157,7 +157,7 @@ class jsHelper extends js
      */
     public function setCss(string $selector, string|array $nameOrStyle, ?string $value = null): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         if(is_array($nameOrStyle)) return $this->appendLine("$target.css(", json_encode($nameOrStyle), ");");
         return $this->appendLine("$target.css(\"{$nameOrStyle}\", ", json_encode($value), ");");
     }
@@ -174,7 +174,7 @@ class jsHelper extends js
      */
     public function setAttr(string $selector, string|array $nameOrAttrs, ?string $value = null): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         if(is_array($nameOrAttrs)) return $this->appendLine("$target.attr(", json_encode($nameOrAttrs), ");");
         return $this->appendLine("$target.attr(\"{$nameOrAttrs}\", ", json_encode($value), ");");
     }
@@ -190,7 +190,7 @@ class jsHelper extends js
      */
     public function removeAttr(string $selector, string $name): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         return $this->appendLine("$target.removeAttr(\"{$name}\");");
     }
 
@@ -206,7 +206,7 @@ class jsHelper extends js
      */
     public function setProp(string $selector, string|array $nameOrProps, ?string $value = null): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         if(is_array($nameOrProps)) return $this->appendLine("$target.prop(", json_encode($nameOrProps), ");");
         return $this->appendLine("$target.prop(\"{$nameOrProps}\", ", json_encode($value), ");");
     }
@@ -222,7 +222,7 @@ class jsHelper extends js
      */
     public function removeProp(string $selector, string $name): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         return $this->appendLine("$target.removeProp(\"{$name}\");");
     }
 
@@ -238,7 +238,7 @@ class jsHelper extends js
      */
     public function triggerEvent(string $selector, string $event, mixed $data = null): self
     {
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
         return $this->appendLine("$target.trigger(\"{$event}\", ", json_encode($data), ");");
     }
 
@@ -264,7 +264,7 @@ class jsHelper extends js
         {
             $targets = $targetsOrHandler;
         }
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
 
         if(is_null($targets))
         {
@@ -296,7 +296,7 @@ class jsHelper extends js
         {
             $targets = $targetsOrHandler;
         }
-        $target = jQuery::select($selector);
+        $target = jQuery::selector($selector);
 
         if(is_null($targets))
         {

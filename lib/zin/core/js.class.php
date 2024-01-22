@@ -93,8 +93,12 @@ class js extends directive
      */
     public function call(string $func, mixed ...$args): self
     {
-        $args = array_map(fn($arg) => static::json($arg), $args);
-        return $this->appendLine($func, '(', implode(',', $args), ')');
+        $argCodes = array();
+        foreach($args as $arg)
+        {
+            $argCodes[] = ($arg instanceof js) ? $arg->toJS() : static::json($arg);
+        }
+        return $this->appendLine($func, '(', implode(',', $argCodes), ')');
     }
 
     /**
