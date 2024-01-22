@@ -47,7 +47,7 @@ function typeChange(e)
     /* If assigned selection is multiple, remove multiple and hide the selection of select all members. */
     else if($assignedToPicker.options.multiple)
     {
-        $assignedToPicker.render({multiple: false});
+        $assignedToPicker.render({multiple: false, checkbox: false, toolbar: false});
         $assignedToPicker.$.setValue('');
     }
 
