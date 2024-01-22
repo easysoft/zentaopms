@@ -14,5 +14,5 @@ window.outOfDateTip = function()
 
 window.onAclChange = () =>
 {
-    $('[data-name=whitelist]').toggleClass('hidden', $('#aclopen').prop('checked'));
+    $('.whitelistBox').toggleClass('hidden', $('#aclopen').prop('checked'));
 };

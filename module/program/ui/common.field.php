@@ -53,10 +53,4 @@ $fields->field('desc')
     ->control('editor');
 
 $fields->field('acl')
-    ->width('full')
-    ->control('radioList');
-
-$fields->field('whitelist')
-    ->width('full')
-    ->control('whitelist')
-    ->items(data('users'));
+    ->width('full');

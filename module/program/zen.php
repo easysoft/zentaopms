@@ -50,8 +50,9 @@ class programZen extends program
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('code', '')
-            ->setIF($this->post->acl == 'open', 'whitelist', '')
+            ->setIF($this->post->acl == 'open', 'whitelist,groups', '')
             ->add('type', 'program')
+            ->join('whitelist,groups', ',')
             ->get();
 
         return $this->loadModel('file')->processImgURL($program, $editorFields, $this->post->uid);
@@ -87,7 +88,8 @@ class programZen extends program
             ->setIF($this->post->future, 'budget', 0)
             ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-            ->join('whitelist', ',')
+            ->setIF(!isset($_POST['groups']), 'groups', '')
+            ->join('whitelist,groups', ',')
             ->get();
 
         return $this->loadModel('file')->processImgURL($program, $editorFields, $this->post->uid);
