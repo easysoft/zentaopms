@@ -8,6 +8,13 @@ include 'chosen.html.php';
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
 <?php if($config->showMainMenu):?>
+<style>
+#visionTips {width: 280px; height: 0; position: absolute; top:64px; right: 48px; z-index: 200;}
+#visionTips .inner {width: 270px; height: 58px; position: relative; bottom: 0; left: 0; border-radius: 8px; display: flex; justify-content: space-around; align-items: center;}
+#visionTips .line {width: 2px; height: 31px; position: absolute; top: -31px; left: 224px;}
+#visionTips .circle {width: 10px; height: 10px; border-radius: 50%; border-width: 3px; border-style: solid; position: relative; left: -4px; background-color: white;}
+#visionTips .inner > button {border-color: white;}
+</style>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
@@ -26,6 +33,17 @@ include 'chosen.html.php';
           </ul>
         </div>
       </div>
+      <?php if(count(explode(',', $this->app->user->visions)) > 1 && empty($config->global->hideVisionTips)):?>
+      <div id="visionTips">
+          <div class="inner bg-primary">
+              <span><?php echo $lang->visionTips;?></span>
+              <button type="button" class="btn btn-primary" onclick="hideVisionTips()"><?php echo $lang->IKnow;?></button>
+              <div class="line bg-primary pannel-primary">
+                  <div class="circle alert-primary-inverse"></div>
+              </div>
+          </div>
+      </div>
+      <?php endif;?>
     </div>
   </div>
   <?php if(isset($lang->{$app->tab}->menu->$activeMenu) and is_array($lang->{$app->tab}->menu->$activeMenu) and isset($lang->{$app->tab}->menu->{$activeMenu}['subMenu'])):?>
@@ -64,6 +82,13 @@ if(window.navigator.userAgent.indexOf('xuanxuan') > 0)
     {
         $('#subHeader').parent().parent().children('#main').css('top', '100px');
     });
+}
+
+function hideVisionTips()
+{
+    $('#visionTips').hide();
+    var link = createLink('custom', 'ajaxSaveCustomFields', 'module=common&section=global&key=hideVisionTips');
+    $.post(link, {fields: 1});
 }
 </script>
 <main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >

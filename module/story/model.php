@@ -162,11 +162,18 @@ class storyModel extends model
      */
     public function getAffectedScope($story)
     {
-        $storyIdList = $story->id;
+        if($story->type == 'story') $storyIdList = $story->id;
         if($story->type == 'requirement')
         {
             $stories = $this->getStoryRelationByIds($story->id, 'requirement');
-            if(isset($stories[$story->id])) $storyIdList = $stories[$story->id];
+            if(isset($stories[$story->id]))
+            {
+                $storyIdList = $stories[$story->id];
+            }
+            else
+            {
+                $storyIdList = '';
+            }
         }
         /* Remove closed executions. */
         if($story->executions)
@@ -184,6 +191,14 @@ class storyModel extends model
                 ->fetchGroup('root');
         }
 
+        if(!$story->twins && empty($storyIdList))
+        {
+            $story->bugs  = array();
+            $story->cases = array();
+            if($this->config->vision == 'or') $story->stories = array();
+            return $story;
+        }
+
         /* Get affected bugs. */
         $story->bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->ne('closed')
@@ -199,13 +214,14 @@ class storyModel extends model
             ->beginIF(!$story->twins)->andWhere('story')->in($storyIdList)->fi()
             ->fetchAll();
 
-        $story->stories = $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
+        if($this->config->vision == 'or') $story->stories = $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.version=t2.version')
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.id')->in($storyIdList)
+            ->beginIF($story->twins)->andWhere('t1.id')->in(ltrim($story->twins, ',') . $storyIdList)->fi()
+            ->beginIF(!$story->twins)->andWhere('t1.id')->in($storyIdList)->fi()
             ->fetchAll('id');
 
         return $story;
@@ -6217,8 +6233,12 @@ class storyModel extends model
         $story->finalResult = $result;
 
         /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
-        if($story->status == 'launched' and $this->app->tab != 'product') $story->status = 'developing';
+        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and (strpos($oldStory->vision, 'rnd') !== false)) $story->status = 'launched';
+        if($story->status == 'launched')
+        {
+            $project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($oldStory->id)->orderBy('project')->fetch();
+            if($project) $story->status = 'developing';
+        }
 
         return $story;
     }
@@ -6990,5 +7010,85 @@ class storyModel extends model
             ->exec();
 
         return !dao::isError();
+    }
+
+    /**
+     * Get affect objects.
+     *
+     * @param  mixed  $objects
+     * @param  string $objectType
+     * @param  string $object
+     * @access public
+     * @return void
+     */
+    public function getAffectObject($objects = '', $objectType = '', $objectInfo = '')
+    {
+        if(empty($objects) and empty($objectInfo)) return $objects;
+        if(empty($objects) and $objectInfo) $objects = array($objectInfo->id => $objectInfo);
+
+        $objectIDList = array();
+        $storyIDList  = array();
+        foreach($objects as $object)
+        {
+            if($this->app->rawModule == 'testtask') $object->id = $object->case;
+            $objectIDList[] = $object->id;
+            if($objectType == 'story') $storyIDList[] = $object->id;
+            if($objectType != 'story') $storyIDList[] = $object->story;
+            $object->retractConfirm = false;
+            $object->retractObject  = array();
+        }
+
+        /* 获取需要确认的用户需求id。 */
+        $URs   = $this->getStoryRelationByIds($storyIDList, 'story');
+        $URIds = implode(',', $URs);
+        if(!$URIds) return $objectInfo ? $objectInfo : $objects;
+
+        /* 获取已经撤回的用户需求。*/
+        $requirements = $this->dao->select('id')->from(TABLE_STORY)
+            ->where('id')->in($URIds)
+            ->andWhere('retractedBy')->ne('')
+            ->fetchPairs('id');
+        if(!$requirements) return $objectInfo ? $objectInfo : $objects;
+
+        /* 获取已经确认过的对象。*/
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->in($objectIDList)
+            ->andWhere('action')->eq('confirmedretract')
+            ->fetchPairs('objectID', 'extra');
+        foreach($actions as $objecyID => $action) $actions[$objecyID] = explode(',', $action);
+
+        /* 获取需要进行确认操作的研发需求 => 用户需求。*/
+        $confirmObjects = array();
+        foreach($requirements as $requirement)
+        {
+            foreach($URs as $storyID => $UR)
+            {
+                if (strpos($UR, (string) $requirement) !== false) $confirmObjects[$storyID][$requirement] = $requirement;
+            }
+        }
+
+        /* 将确认信息插入到objects中并且过滤掉已经确认的用户需求。*/
+        foreach($objects as $object)
+        {
+            $confirmed = array();
+
+            if($this->app->rawModule == 'testtask') $object->id = $object->case;
+            if(isset($actions[$object->id])) $confirmed = $actions[$object->id]; // 已经确认的用户需求
+
+            if($objectType == 'story' and isset($confirmObjects[$object->id]))
+            {
+                $object->retractObject  = array_diff($confirmObjects[$object->id], $confirmed);
+                if($object->retractObject) $object->retractConfirm = true;
+            }
+            else if($objectType != 'story' and isset($confirmObjects[$object->story]))
+            {
+                $object->retractObject  = array_diff($confirmObjects[$object->story], $confirmed);
+                if($object->retractObject) $object->retractConfirm = true;
+            }
+        }
+
+        if($objectInfo) return $objects[$objectInfo->id];
+        return $objects;
     }
 }

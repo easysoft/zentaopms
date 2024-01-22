@@ -85,7 +85,7 @@
             <?php if(isset($unauthorizedPrograms[$products[$productID]->program])):?>
             <td class='text-left<?php echo zget($visibleFields, 'program', ' hidden')?>' style='overflow:visible'><?php echo html::select("programs[$productID]",  $unauthorizedPrograms, $products[$productID]->program, "class='form-control' disabled");?></td>
             <?php else:?>
-            <td class='text-left<?php echo zget($visibleFields, 'program', ' hidden')?>' style='overflow:visible'><?php echo html::select("programs[$productID]",  $programs, $products[$productID]->program, "class='form-control picker-select' onchange='loadProductLines(this.value, $productID)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'program', ' hidden')?>' style='overflow:visible'><?php echo html::select("programs[$productID]",  $programs, $products[$productID]->program, "class='form-control picker-select' data-allow_single_deselect='false' onchange='loadProductLines(this.value, $productID)'");?></td>
             <?php endif;?>
             <?php endif;?>
             <td title='<?php echo $products[$productID]->name?>'><?php echo html::input("names[$productID]", $products[$productID]->name, "class='form-control'");?></td>

@@ -364,6 +364,7 @@ EOF;
         $currentMethod = $this->app->rawMethod;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=story&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildStorySearchForm($queryID, $actionURL, $currentMethod);
+        if($this->config->edition == 'ipd') $stories = $this->loadModel('story')->getAffectObject($stories, 'story');
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
@@ -520,6 +521,7 @@ EOF;
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bySearch&queryID=myQueryID");
         $this->my->buildTaskSearchForm($queryID, $actionURL);
+        if($this->config->edition == 'ipd') $tasks = $this->loadModel('story')->getAffectObject($tasks, 'task');
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
@@ -585,6 +587,7 @@ EOF;
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
         $this->my->buildBugSearchForm($queryID, $actionURL);
+        if($this->config->edition == 'ipd') $bugs = $this->loadModel('story')->getAffectObject($bugs, 'bug');
 
         /* assign. */
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
@@ -696,6 +699,7 @@ EOF;
         $currentMethod = $this->app->rawMethod;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTestcaseSearchForm($queryID, $actionURL, $currentMethod);
+        if($this->config->edition == 'ipd') $cases = $this->loadModel('story')->getAffectObject($cases, 'case');
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestCase;
@@ -1671,6 +1675,7 @@ EOF;
     {
         $_SESSION['vision'] = $vision;
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.vision", $vision);
+        if(empty($this->config->hideVisionTips)) $this->setting->setItem("{$this->app->user->account}.common.global.hideVisionTips", 1);
         $this->config->vision = $vision;
 
         $_SESSION['user']->rights = $this->loadModel('user')->authorize($this->app->user->account);

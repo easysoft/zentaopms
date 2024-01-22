@@ -1003,6 +1003,8 @@ class task extends control
 
         $this->executeHooks($taskID);
 
+        if($this->config->edition == 'ipd') $task = $this->loadModel('story')->getAffectObject('', 'task', $task);
+
         $title      = "TASK#$task->id $task->name / $execution->name";
         $position[] = html::a($this->createLink('execution', 'browse', "executionID=$task->execution"), $execution->name);
         $position[] = $this->lang->task->common;

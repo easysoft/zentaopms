@@ -227,6 +227,7 @@ class bug extends control
                 $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
             }
         }
+        if($this->config->edition == 'ipd') $bugs = $this->loadModel('story')->getAffectObject($bugs, 'bug');
 
         /* Set view. */
         $this->view->title           = $productName . $this->lang->colon . $this->lang->bug->common;
@@ -935,6 +936,7 @@ class bug extends control
         $this->session->set("project", key($projects), 'project');
 
         $this->executeHooks($bugID);
+        if($this->config->edition == 'ipd') $bug = $this->loadModel('story')->getAffectObject('', 'bug', $bug);
 
         /* Header and positon. */
         $this->view->title      = "BUG #$bug->id $bug->title - " . $product->name;

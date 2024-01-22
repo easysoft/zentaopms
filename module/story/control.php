@@ -949,8 +949,10 @@ class story extends control
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
-            $objectID  = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            $products  = $this->product->getProductPairsByProject($objectID);
+            $objectID        = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $projectProducts = $this->product->getProductPairsByProject($objectID);
+            if(!isset($projectProducts[$story->product]) && isset($products[$story->product])) $projectProducts[$story->product] = $products[$story->product];
+            $products = $projectProducts;
             $this->view->objectID = $objectID;
         }
 
@@ -1435,7 +1437,7 @@ class story extends control
     public function view($storyID, $version = 0, $param = 0, $storyType = 'story')
     {
         $story = $this->story->getById($storyID, $version, true);
-        if($this->config->edition == 'ipd') $story = $this->story->getAffectObject('', $story->type, $story);
+        if($this->config->edition == 'ipd' and $story->type == 'story') $story = $this->story->getAffectObject('', $story->type, $story);
 
         $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
         if(!$story)

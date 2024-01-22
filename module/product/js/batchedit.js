@@ -21,6 +21,7 @@ $(function()
  */
 function loadProductLines(programID, productID)
 {
+    if(!programID) programID = 0;
     var link = createLink('product', 'ajaxGetLine', 'programID=' + programID + '&productID=' + productID);
     $('#line_' + productID).load(link, function()
     {

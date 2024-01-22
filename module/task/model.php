@@ -4258,6 +4258,7 @@ class taskModel extends model
             $execution->ipdStage = $this->loadModel('execution')->canStageStart($execution);
             $plmCanStart = $execution->status == 'wait' ? $execution->ipdStage['canStart'] : 1;
             if($execution->status == 'close') $plmCanStart = false;
+            if($execution->parallel) $plmCanStart = true;
         }
 
         $menu   = '';

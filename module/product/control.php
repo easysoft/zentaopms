@@ -315,6 +315,7 @@ class product extends control
             $storyIdList[$story->id] = $story->id;
             if(!empty($story->children))
             {
+                if($this->config->edition == 'ipd') $this->story->getAffectObject($story->children, 'story');
                 foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
             }
         }
@@ -636,13 +637,14 @@ class product extends control
         $unauthorizedPrograms = array();
         if(in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
-            $programs = $this->loadModel('program')->getTopPairs();
+            $this->app->loadLang('project');
+            $programs = $this->loadModel('program')->getTopPairs() + array(0 => $this->lang->project->future);
 
             /* Get unauthorized programs. */
             $programIDList = array();
             foreach($products as $product)
             {
-                if($product->program and !isset($programs[$product->program]) and !in_array($product->program, $programIDList)) $programIDList[] = $product->program;
+                if(!isset($programs[$product->program]) and !in_array($product->program, $programIDList)) $programIDList[] = $product->program;
             }
             $unauthorizedPrograms = $this->program->getPairsByList($programIDList);
 
@@ -650,12 +652,12 @@ class product extends control
             $lines = array(0 => '');
             foreach($programs + $unauthorizedPrograms as $id => $program)
             {
-                $lines[$id] = array('') + $this->product->getLinePairs($id);
+                $lines[$id] = array('') + $this->product->getLinePairs($id, true);
             }
         }
         else
         {
-            $lines = array('') + $this->product->getLinePairs();
+            $lines = array('') + $this->product->getLinePairs(0, true);
         }
 
         $this->view->title                = $this->lang->product->batchEdit;
@@ -1125,7 +1127,7 @@ class product extends control
     public function ajaxGetLine($programID, $productID = 0)
     {
         $lines = array();
-        if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID, true);
+        $lines = $this->product->getLinePairs($programID, true);
 
         if($productID)  return print(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
         if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control picker-select'"));

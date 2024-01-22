@@ -112,7 +112,12 @@
           <td class='result-testcase <?php echo $case->lastRunResult;?>'><?php echo $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted;?></td>
           <td class='c-actions'>
             <?php
-            if($canBeChanged)
+            if(!empty($case->retractConfirm))
+            {
+                $retractObject = join(',', $case->retractObject);
+                 common::printIcon('testcase', 'confirmDemandRetract', "objectID=$case->id&object=case&extra=$retractObject", $case, 'browse', 'search', '', 'iframe', true);
+            }
+            else if($canBeChanged)
             {
                 $disabled = (isset($case->lastRunResult) and $case->lastRunResult != 'fail') ? 'disabled' : '';
                 common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug', '', "iframe $disabled", 'true', "data-app='qa' data-toggle=''");

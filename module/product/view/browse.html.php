@@ -265,7 +265,7 @@ js::set('pageSummary',       $summary);
             $buttonTitle = $lang->execution->linkStoryByPlan;
             $dataToggle  = 'data-toggle="modal"';
         }
-        if(common::hasPriv('projectstory', 'importRoadmapStories') and $storyType == 'requirement' and $this->config->edition == 'ipd')
+        if(common::hasPriv('projectstory', 'importRoadmapStories') and $project->charter and $storyType == 'requirement' and $this->config->edition == 'ipd')
         {
             $buttonLink  = empty($productID) ? '' : '#linkStoryByRoadmap';
             $buttonTitle = $lang->product->linkStoryByRoadmap;;
@@ -283,7 +283,7 @@ js::set('pageSummary',       $summary);
         $hidden = empty($buttonLink) ? 'hidden' : '';
         echo html::a($buttonLink, "<i class='icon-link'></i> $buttonTitle", '', "class='btn btn-primary $hidden' $dataToggle");
 
-        if(!empty($productID) and common::hasPriv('projectstory', 'linkStory') and common::hasPriv('projectstory', 'importRoadmapStories') and $storyType == 'requirement' and $this->config->edition == 'ipd')
+        if(!empty($productID) and common::hasPriv('projectstory', 'linkStory') and common::hasPriv('projectstory', 'importRoadmapStories') and $project->charter and $storyType == 'requirement' and $this->config->edition == 'ipd')
         {
             echo "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
             echo "<ul class='dropdown-menu pull-right'>";

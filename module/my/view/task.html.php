@@ -138,7 +138,12 @@
               <?php
               if($canBeChanged)
               {
-                  if($task->needConfirm)
+                  if(!empty($task->retractConfirm))
+                  {
+                      $retractObject = join(',', $task->retractObject);
+                       common::printIcon('task', 'confirmDemandRetract', "objectID=$task->id&object=task&extra=$retractObject", $task, 'browse', 'search', '', 'iframe', true);
+                  }
+                  else if($task->needConfirm)
                   {
                       $this->lang->task->confirmStoryChange = $this->lang->confirm;
                       common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', '', '', '', '', $task->project);
