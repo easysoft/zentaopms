@@ -142,8 +142,8 @@ if($config->vision != 'lite')
 }
 
 $config->task->actionList['create']['icon']     = 'copy';
-$config->task->actionList['create']['hint']     = $lang->task->children;
-$config->task->actionList['create']['text']     = $lang->task->children;
+$config->task->actionList['create']['hint']     = $lang->task->copy;
+$config->task->actionList['create']['text']     = $lang->task->copy;
 $config->task->actionList['create']['url']      = helper::createLink('task', 'create', 'projctID={execution}&storyID=0&moduleID=0&taskID={id}');
 $config->task->actionList['create']['data-app'] = $app->tab;
 
