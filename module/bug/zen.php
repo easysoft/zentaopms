@@ -299,26 +299,26 @@ class bugZen extends bug
      * 获取bug创建页面的branches和branch，并绑定到bug上。
      * Get the branches and branch for the bug create page and bind them to bug.
      *
-     * @param  object    $bug
-     * @param  object    $currentProduct
-     * @access protected
+     * @param  object  $bug
+     * @access private
      * @return object
      */
-    protected function getBugBranches(object $bug, object $currentProduct): object
+    private function getBugBranches(object $bug): object
     {
         $productID = (int)$bug->productID;
         $branch    = $bug->branch;
+        $product   = $this->product->getByID((int)$bug->productID);
 
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
             $objectID        = $this->app->tab == 'project' ? $bug->projectID : $bug->executionID;
-            $productBranches = $currentProduct->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($productID), (int)$objectID, 'noclosed|withMain') : array();
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($productID), (int)$objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array('');
             $branch          = key($branches);
         }
         else
         {
-            $branches = $currentProduct->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array('');
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array('');
         }
 
         return $this->updateBug($bug, array('branches' => $branches, 'branch' => (string)$branch));
@@ -1164,6 +1164,10 @@ class bugZen extends bug
         /* 获得产品下拉和项目下拉列表。 */
         /* Get products and projects. */
         $bug = $this->getProductsAndProjectsForCreate($bug);
+
+        /* 获取产品分支下拉。 */
+        /* Get branches. */
+        $bug = $this->getBugBranches($bug);
 
         /* 获得项目的管理方式。 */
         /* Get project model. */
