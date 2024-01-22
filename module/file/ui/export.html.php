@@ -132,7 +132,6 @@ formPanel
     formGroup
     (
         set::label($lang->file->extension),
-        set::control('picker'),
         set::name('fileType'),
         set::items($lang->exportFileTypeList),
         on::change('onChangeFileType'),
@@ -247,6 +246,8 @@ window.setDownloading = function(event)
 /* If file type is CSV, then user can select encode type. */
 window.onChangeFileType = function(event)
 {
+    if($(event.target).attr('name') != 'fileType') return;
+
     var fileType     = $(event.target).val();
     var encodePicker = $('[name="encode"]').zui('picker');
 
@@ -335,7 +336,7 @@ setExportTPL();
 if($('.dtable .dtable-header .has-checkbox').length > 0)
 {
     const dtable = zui.DTable.query($('.dtable .dtable-header .has-checkbox').closest('.dtable')[0]);
-    const checkedList = dtable.$.getChecks();
+    const checkedList = dtable ? dtable.$.getChecks() : [];
     if(checkedList.length)
     {
         if(window.config.currentModule == 'testcase') checkedList.forEach(function(item, index){ checkedList[index] = item.replace('case_', '');});

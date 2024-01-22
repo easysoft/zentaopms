@@ -33,7 +33,7 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 }).off('click', '#actionBar .export').on('click', '#actionBar .export', function()
 {
     const dtable = zui.DTable.query($('#table-project-browse'));
-    const checkedList = dtable.$.getChecks();
+    const checkedList = dtable ? dtable.$.getChecks() : [];
     if(!checkedList.length) return;
 
     $.cookie.set('checkedItem', checkedList, {expires:config.cookieLife, path:config.webRoot});
