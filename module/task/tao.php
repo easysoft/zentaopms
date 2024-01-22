@@ -561,9 +561,8 @@ class taskTao extends taskModel
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
             ->batchCheckIF($task->status == 'wait' || $task->status == 'doing', 'finishedBy,finishedDate,canceledBy,canceledDate,closedBy,closedDate,closedReason', 'empty')
             ->checkIF($task->status == 'done', 'consumed', 'notempty')
-            ->checkIF($task->status == 'done' && $task->closedReason, 'closedReason', 'equal', 'done')
             ->batchCheckIF($task->status == 'done', 'canceledBy,canceledDate', 'empty')
-            ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy,finishedDate', 'empty')
+            ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy,finishedDate,closedBy,closedDate,closedReason', 'empty')
             ->checkFlow()
             ->where('id')->eq($task->id)
             ->exec();
