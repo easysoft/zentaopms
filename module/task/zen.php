@@ -707,6 +707,7 @@ class taskZen extends task
         if($postData->selectTestStory == 'off') return array();
 
         $testTasks = array();
+        $execution = $this->loadModel('execution')->getByID($executionID);
         foreach($postData->testStory as $key => $storyID)
         {
             if(empty($storyID)) continue;
@@ -723,6 +724,7 @@ class taskZen extends task
             $task->left       = !empty($postData->testEstimate[$key])   ? (float)$postData->testEstimate[$key] : 0;
             $task->type       = 'test'; /* Setting the task type to test to prevent duplicate tasks from being created. */
             $task->vision     = $this->config->vision;
+            $task->project    = $execution->project;
 
             $testTasks[$storyID] = $task;
         }
