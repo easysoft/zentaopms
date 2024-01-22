@@ -18,8 +18,8 @@ if(empty($executions))
     $executionsBox[] = div
         (
             setClass('inline-flex items-center'),
-            setClass('bg-lighter h-12'),
-            icon('exclamation-sign icon-2x pl-2 text-warning'),
+            setClass('alert with-icon w-full'),
+            icon('exclamation-sign text-gray icon-2x pl-2 text-warning'),
             span
             (
                 set::className('font-bold ml-2'),
