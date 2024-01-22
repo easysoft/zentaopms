@@ -87,7 +87,7 @@ if(!empty($config->setCode))
     $fields->field('code')
         ->label($lang->execution->code)
         ->value(data('execution.code'))
-        ->required()
+        ->required(in_array('code', explode(',', $config->execution->edit->requiredFields)))
         ->width('1/4');
 }
 
