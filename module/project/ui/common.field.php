@@ -101,7 +101,7 @@ $fields->field('budget')
     ->foldable()
     ->checkbox(array('text' => $lang->project->future, 'name' => 'future', 'checked' => $budgetFuture))
     ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, data('project.budgetUnit') ? data('project.budgetUnit') : $currency), 'className' => 'btn ghost' . ($budgetFuture ? ' disabled pointer-events-none' : '')), 'prefixWidth' => 34, 'disabled' => $budgetFuture))
-    ->placeholder($lang->project->parentBudget . zget($lang->project->currencySymbol, $currency) . data('parentProgram.budget'))
+    ->placeholder(data('parentProgram') ? $lang->project->parentBudget . zget($lang->project->currencySymbol, $currency) . data('parentProgram.budget') : '')
     ->tip(sprintf($lang->project->parentBudget, zget($lang->project->currencySymbol, $currency) . data('parentProgram.budget')))
     ->tipProps(array('id' => 'budgetTip'))
     ->tipClass('text-warning hidden');
