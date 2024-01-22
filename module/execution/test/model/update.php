@@ -1,5 +1,52 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试executionModel->update();
+cid=1
+
+- 测试重复迭代code第code条的0属性 @『项目代号』已经有『执行2』这条记录了。
+- 测试修改迭代名称
+ - 第0条的field属性 @name
+ - 第0条的old属性 @执行3
+ - 第0条的new属性 @迭代名修改
+- 测试修改迭代项目为瀑布项目
+ - 第0条的field属性 @project
+ - 第0条的old属性 @0
+ - 第0条的new属性 @1
+- 测试修改迭代项目为看板项目
+ - 第0条的field属性 @project
+ - 第0条的old属性 @1
+ - 第0条的new属性 @2
+- 测试修改迭代code
+ - 第0条的field属性 @code
+ - 第0条的old属性 @执行1
+ - 第0条的new属性 @code修改
+- 测试修改迭代工作日
+ - 第0条的field属性 @days
+ - 第0条的old属性 @0
+ - 第0条的new属性 @5
+- 测试修改迭代类型
+ - 第0条的field属性 @lifetime
+ - 第0条的old属性 @~~
+ - 第0条的new属性 @long
+- 测试修改迭代状态为wait
+ - 第0条的field属性 @status
+ - 第0条的old属性 @doing
+ - 第0条的new属性 @wait
+- 测试修改迭代状态为closed
+ - 第0条的field属性 @status
+ - 第0条的old属性 @wait
+ - 第0条的new属性 @closed
+- 测试修改名称为空第name条的0属性 @『迭代名称』不能为空。
+- 测试修改code为空
+ - 第0条的field属性 @code
+ - 第0条的old属性 @迭代3
+ - 第0条的new属性 @~~
+- 测试无修改 @没有数据更新
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/execution.class.php';
 
@@ -30,27 +77,6 @@ $product->gen(3);
 
 su('admin');
 
-/**
-
-title=测试executionModel->update();
-cid=1
-pid=1
-
-测试重复迭代code           >> 『迭代代号』已经有『执行2』这条记录了。
-测试修改迭代名称           >> name,执行3,迭代名修改
-测试修改迭代项目为瀑布项目 >> project,0,1
-测试修改迭代项目为看板项目 >> project,1,2
-测试修改迭代code           >> code,执行1,code修改
-测试修改迭代工作日         >> days,0,5
-测试修改迭代类型           >> lifetime,,long
-测试修改迭代状态为wait     >> status,doing,wait
-测试修改迭代状态为closed   >> status,wait,closed
-测试修改名称为空           >> 『迭代名称』不能为空。
-测试修改code为空           >> 『迭代代号』不能为空。
-测试无修改                 >> 没有数据更新
-
-*/
-
 $executionIDList = array('3','4','5','6','7','8','9','10','11');
 $productIDList   = array('2','1','3');
 
@@ -69,7 +95,7 @@ $noCode         = array('code' => '');
 $repeatcode     = array('name' => '迭代1', 'code' => '执行2');
 
 $execution = new executionTest();
-r($execution->updateObject($executionIDList[0], $repeatcode))     && p('code:0')          && e('『迭代代号』已经有『执行2』这条记录了。'); // 测试重复迭代code
+r($execution->updateObject($executionIDList[0], $repeatcode))     && p('code:0')          && e('『项目代号』已经有『执行2』这条记录了。'); // 测试重复迭代code
 r($execution->updateObject($executionIDList[0], $changeName))     && p('0:field,old,new') && e('name,执行3,迭代名修改');                   // 测试修改迭代名称
 r($execution->updateObject($executionIDList[0], $changeStage))    && p('0:field,old,new') && e('project,0,1');                             // 测试修改迭代项目为瀑布项目
 r($execution->updateObject($executionIDList[0], $changeKanban))   && p('0:field,old,new') && e('project,1,2');                             // 测试修改迭代项目为看板项目
@@ -79,5 +105,5 @@ r($execution->updateObject($executionIDList[1], $changeLifetime)) && p('0:field,
 r($execution->updateObject($executionIDList[1], $changeDoing))    && p('0:field,old,new') && e('status,doing,wait');                       // 测试修改迭代状态为wait
 r($execution->updateObject($executionIDList[1], $changeClosed))   && p('0:field,old,new') && e('status,wait,closed');                      // 测试修改迭代状态为closed
 r($execution->updateObject($executionIDList[1], $noName))         && p('name:0')          && e('『迭代名称』不能为空。');                  // 测试修改名称为空
-r($execution->updateObject($executionIDList[3], $noCode))         && p('code:0')          && e('『迭代代号』不能为空。');                  // 测试修改code为空
+r($execution->updateObject($executionIDList[3], $noCode))         && p('0:field,old,new') && e('code,迭代3,~~');                           // 测试修改code为空
 r($execution->updateObject($executionIDList[1], $noChange))       && p()                  && e('没有数据更新');                            // 测试无修改
