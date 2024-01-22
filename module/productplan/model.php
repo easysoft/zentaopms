@@ -190,7 +190,7 @@ class productplanModel extends model
         if($branch !== '' && $branch != 'all')
         {
             if(is_int($branch)) $branchQuery = "t1.branch = '$branch'";
-            if(is_string($branch)) $branch = array_unique(array_filter(explode(',', trim($branch, ','))));
+            if(is_string($branch)) $branch = array_unique(explode(',', trim($branch, ',')));
             if(is_array($branch) && !empty($branch))
             {
                 if(count($branch) == 1) $branchQuery = "t1.branch = '" . current($branch) . "'";
