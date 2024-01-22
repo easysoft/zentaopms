@@ -530,6 +530,8 @@ class aiModel extends model
      */
     public function deleteMiniProgram($appID, $deleted = '1')
     {
+        $program = $this->getMiniProgramByID($appID);
+        if($program->builtIn === '1') return 'Deletion of built-in program is not supported.';
         $this->dao->update(TABLE_MINIPROGRAM)
             ->set('deleted')->eq($deleted)
             ->where('id')->eq($appID)
@@ -670,6 +672,7 @@ class aiModel extends model
         if(!isset($data->createdDate)) $data->createdDate = helper::now();
         if(!isset($data->prompt))      $data->prompt      = $this->lang->ai->miniPrograms->field->default[3];
         if($data->published === '1')   $data->publishedDate = helper::now();
+        $data->builtIn = '0';
 
         if(!empty($data->iconName) && !empty($data->iconTheme))
         {
@@ -745,6 +748,7 @@ class aiModel extends model
         }
 
         $old = $this->getMiniProgramByID($appID);
+        if($old->builtIn === '1') return false;
 
         $this->dao->update(TABLE_MINIPROGRAM)
             ->data($data)

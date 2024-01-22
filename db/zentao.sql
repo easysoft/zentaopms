@@ -15945,6 +15945,7 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogram` (
   `publishedDate` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `prompt` text NOT NULL,
+  `builtIn` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

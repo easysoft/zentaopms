@@ -203,7 +203,8 @@ class ai extends control
     public function deleteMiniProgram($appID, $deleted)
     {
         $result = $this->ai->deleteMiniProgram($appID, $deleted);
-        if($result) return $this->send(array('result' => 'success', 'locate' => $this->createLink('ai', 'miniPrograms')));
+        if($result === true) return $this->send(array('result' => 'success', 'locate' => $this->createLink('ai', 'miniPrograms')));
+        if(is_string($result)) return $this->sendError($result);
         $this->sendError(dao::getError());
     }
 
@@ -255,6 +256,7 @@ class ai extends control
 
         $miniProgram = $this->ai->getMiniProgramByID($appID);
         if(empty($miniProgram)) return $this->sendError($this->lang->ai->noMiniProgram);
+        if($miniProgram->builtIn) return $this->sendError('Testing built-in program is not supported.');
         $this->view->currentFields = $this->ai->getMiniProgramFields($appID);
         $this->view->currentPrompt = $miniProgram->prompt;
         $this->view->appID         = $appID;
@@ -391,6 +393,8 @@ class ai extends control
      */
     public function exportMiniProgram($appID)
     {
+        $program = $this->ai->getMiniProgramByID($appID);
+        if($program->builtIn === '1') exit;
         $php = $this->ai->createZtAppPhp($appID);
         $zip = $this->ai->createZtAppZip($php);
 
