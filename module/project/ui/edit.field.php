@@ -14,6 +14,8 @@ if(in_array($model, array('scrum', 'kanban'))) $fields->field('name')->checkbox(
 
 $fields->field('hasProduct')->disabled(true);
 
+$fields->field('budget')->value(data('project.budget') !== null && data('project.budget') == 0 ? '' : data('project.budget'));
+
 $fields->field('acl')
        ->foldable()
        ->control(array('control' => 'aclBox', 'aclItems' => data('programID') ? $lang->project->subAclList : $lang->project->aclList, 'aclValue' => data('project.acl'), 'whitelistLabel' => $lang->project->whitelist, 'groupLabel' => $lang->product->groups, 'groupItems' => data('groups'), 'groupValue' => data('project.groups'), 'userLabel' => $lang->product->users, 'userValue' => data('project.whitelist')));
