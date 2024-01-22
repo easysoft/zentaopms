@@ -8,7 +8,8 @@ $config->execution->ownerFields       = array('PO', 'PM', 'QD', 'RD');
 $config->execution->defaultBurnPeriod = 30;
 
 $config->execution->list = new stdclass();
-$config->execution->list->exportFields = 'id,name,projectName,PM,begin,end,status,estimate,consumed,left,progress';
+$config->execution->list->exportFields       = 'id,name,projectName,PM,begin,end,status,estimate,consumed,left,progress';
+$config->execution->list->customCreateFields = '';
 
 $config->execution->modelList['scrum']         = 'sprint';
 $config->execution->modelList['waterfall']     = 'stage';
