@@ -41,7 +41,7 @@ $config->story->exportFields = '
     lastEditedBy, lastEditedDate,
     childStories, linkStories, duplicateStory, files';
 
-$config->story->list->customCreateFields      = 'source,verify,pri,estimate,mailto,keywords';
+$config->story->list->customCreateFields      = '';
 $config->story->list->customBatchCreateFields = 'plan,assignedTo,spec,source,verify,pri,estimate,URS,parent,keywords,mailto';
 $config->story->list->customBatchEditFields   = 'branch,plan,estimate,pri,assignedTo,source,stage,closedBy,closedReason,keywords';
 
