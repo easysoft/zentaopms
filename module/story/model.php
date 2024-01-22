@@ -1731,35 +1731,31 @@ class storyModel extends model
     }
 
     /**
+     * 指派需求。
      * Assign story.
      *
-     * @param  int    $storyID
+     * @param  int         $storyID
+     * @param  object      $story
      * @access public
-     * @return array|false
+     * @return array|bool
      */
-    public function assign(int $storyID): array|false
+    public function assign(int $storyID, object $story): array|bool
     {
-        $oldStory   = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        $now        = helper::now();
-        $assignedTo = $this->post->assignedTo;
-        if($assignedTo == $oldStory->assignedTo) return array();
+        $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if($story->assignedTo == $oldStory->assignedTo) return array();
 
-        $story = fixer::input('post')
-            ->add('id', $storyID)
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->add('assignedDate', $now)
-            ->stripTags($this->config->story->editor->assignto['id'], $this->config->allowedTags)
-            ->remove('comment')
-            ->get();
-
-        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq((int)$storyID)->exec();
 
         $changes = common::createChanges($oldStory, $story);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('story', $storyID, 'Assigned', $this->post->comment, $this->post->assignedTo);
+            $this->action->logHistory($actionID, $changes);
+        }
+
         if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Assigned');
-        if(!dao::isError()) return $changes;
-        return false;
+
+        return !dao::isError();
     }
 
     /**

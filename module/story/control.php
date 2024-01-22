@@ -1121,25 +1121,18 @@ class story extends control
      * Assign the story to a user.
      *
      * @param  int    $storyID
-     * @param  string $kanbanGroup
-     * @param  string $from        ''|taskkanban
-     * @param  string $storyType   story|requirement
      * @access public
      * @return void
      */
-    public function assignTo(int $storyID, string $kanbanGroup = 'default', string $from = '', string $storyType = 'story')
+    public function assignTo(int $storyID)
     {
         if(!empty($_POST))
         {
-            $changes = $this->story->assign($storyID);
+            $story = form::data($this->config->story->form->assignTo)->get();
+            $this->story->assign($storyID, $story);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('story', $storyID, 'Assigned', $this->post->comment, $this->post->assignedTo);
-                $this->action->logHistory($actionID, $changes);
-            }
 
-            $message = $this->executeHooks($storyID);
+            $message  = $this->executeHooks($storyID);
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
@@ -1153,7 +1146,6 @@ class story extends control
 
         $this->view->title     = zget($product, 'name', $story->title) . $this->lang->colon . $this->lang->story->assign;
         $this->view->story     = $story;
-        $this->view->storyType = $storyType;
         $this->view->actions   = $this->action->getList('story', $storyID);
         $this->view->users     = $users;
         $this->display();
