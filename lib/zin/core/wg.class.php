@@ -461,6 +461,7 @@ class wg
      */
     public function directive(directive &$directive, string $blockName)
     {
+        $directive->parent = &$this;
         $directive->applyToWg($this, $blockName);
     }
 
