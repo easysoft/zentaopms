@@ -19,6 +19,7 @@ formPanel
         (
             set::label($lang->kanbanlane->name),
             set::name('name'),
+            set::required(true),
             set::value($lane->name)
         )
     ),

@@ -19,6 +19,7 @@ formPanel
         formGroup
         (
             set::label($lang->kanbancolumn->name),
+            set::required(true),
             inputControl
             (
                 input(set::name('name'), set::value($column->name), set::style(array('color' => $column->color))),
