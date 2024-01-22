@@ -52,6 +52,7 @@ $lang->action->hideOneAction  = 'Hide Data';
 $lang->action->refusecase   = 'Before restoring the use case, please restore the scene to which the use case belongs';
 $lang->action->refusescene  = 'Before restoring the scene, please restore the parent scene of this scene ';
 $lang->action->refusemodule = 'Before restoring the module, please restore the parent module of this module ';
+$lang->action->refusekanban = 'Before restoring the Kanban board, make sure to restore the space it belongs to';
 
 $lang->action->trashTips          = 'Note: Les suppressions dans ZenTao sont purement logiques.';
 $lang->action->textDiff           = 'Text Format';

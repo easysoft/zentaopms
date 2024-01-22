@@ -52,6 +52,7 @@ $lang->action->hideOneAction  = '隐藏数据';
 $lang->action->refusecase   = '还原用例之前，请先还原该用例所属场景';
 $lang->action->refusescene  = '还原场景之前，请先还原该场景的父场景';
 $lang->action->refusemodule = '还原模块之前，请先还原该模块的父模块';
+$lang->action->refusekanban = '还原看板之前，请先还原该看板所属空间';
 
 $lang->action->trashTips          = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
 $lang->action->textDiff           = '文本格式';

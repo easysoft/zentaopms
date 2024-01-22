@@ -1898,6 +1898,11 @@ class actionModel extends model
                 return $this->lang->reviewissue->undeleteAction;
             }
         }
+        elseif($action->objectType == 'kanban' && $object->space)
+        {
+            $kanbanSpace = $this->dao->select('*')->from(TABLE_KANBANSPACE)->where('id')->eq($object->space)->fetch();
+            if($kanbanSpace->deleted) return $this->lang->action->refusekanban;
+        }
 
         return true;
     }
