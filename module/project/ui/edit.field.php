@@ -10,7 +10,7 @@ $hasCode = !empty($config->setCode);
 
 $fields->field('parent')->disabled(data('disableParent'));
 
-if(in_array($model, array('scrum', 'kanban'))) $fields->field('name')->checkbox(array('text' => $lang->project->multiple, 'name' => 'multiple', 'checked' => data('project.multiple'), 'disabled' => true));
+if(in_array($model, array('scrum', 'kanban'))) $fields->field('name')->checkbox(array('text' => $lang->project->multiple, 'name' => 'multiple', 'checked' => data('project.multiple') == '1', 'disabled' => true));
 
 $fields->field('hasProduct')->disabled(true);
 
