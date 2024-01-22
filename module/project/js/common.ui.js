@@ -246,14 +246,13 @@ function checkProjectInfo()
 
         if(typeof(data.availableBudget) != 'undefined')
         {
-            const budget = $('[name=budget]').val() * budgetUnitValue;
+            const budget          = $('[name=budget]').val();
+            const currency        = currencySymbol[data.budgetUnit];
+            const availableBudget = data.availableBudget.toFixed(2);
+            $('[name=budget]').attr('placeholder', parentBudget + currency + availableBudget);
             if(budget != 0 && budget !== null && budget > data.availableBudget)
             {
-                const currency = currencySymbol[data.budgetUnit];
-                const availableBudget = (data.availableBudget / budgetUnitValue).toFixed(2);
-                const budgetTip = budgetOverrun.replace('%s', currency + availableBudget);
-                $('[name=budget]').attr('placeholder', budgetTip);
-                $('#budgetTip').html(budgetTip);
+                $('#budgetTip').html(budgetOverrun.replace('%s', currency + availableBudget));
                 $('#budgetTip').append($('<span id="ignoreBudget" class="underline">' + ignore + '</span>'));
                 $('#budgetTip').removeClass('hidden');
                 $('#budgetTip').off('click', '#ignoreBudget').on('click', '#ignoreBudget', function(){ignoreTip('budgetTip')});

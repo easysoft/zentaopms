@@ -18,7 +18,6 @@ jsVar('budgetOverrun', $lang->project->budgetOverrun);
 jsVar('currencySymbol', $lang->project->currencySymbol);
 jsVar('parentBudget', $lang->project->parentBudget);
 jsVar('budgetUnitLabel', $lang->project->tenThousandYuan);
-jsVar('budgetUnitValue', $config->project->budget->tenThousand);
 jsVar('unmodifiableProducts', $unmodifiableProducts);
 jsVar('unmodifiableBranches', $unmodifiableBranches);
 jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);

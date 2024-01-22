@@ -420,7 +420,7 @@ class projectZen extends project
         $this->view->users                    = $this->user->getPairs('noclosed|nodeleted');
         $this->view->project                  = $project;
         $this->view->programList              = $programList;
-        $this->view->program                  = $program;
+        $this->view->parentProgram            = $program;
         $this->view->projectID                = $projectID;
         $this->view->allProducts              = $allProducts;
         $this->view->multiBranchProducts      = $this->product->getMultiBranchPairs();
@@ -433,7 +433,6 @@ class projectZen extends project
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->URSRPairs                = $this->loadModel('custom')->getURSRPairs();
         $this->view->parentProject            = $parentProject;
-        $this->view->parentProgram            = $this->program->getByID($project->parent);
         $this->view->availableBudget          = $parentProject ? $this->program->getBudgetLeft($parentProject) + (float)$project->budget : $project->budget;
         $this->view->budgetUnitList           = $this->project->getBudgetUnitList();
         $this->view->model                    = $project->model;

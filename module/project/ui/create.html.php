@@ -18,7 +18,6 @@ jsVar('budgetOverrun', $lang->project->budgetOverrun);
 jsVar('currencySymbol', $lang->project->currencySymbol);
 jsVar('parentBudget', $lang->project->parentBudget);
 jsVar('budgetUnitLabel', $lang->project->tenThousandYuan);
-jsVar('budgetUnitValue', $config->project->budget->tenThousand);
 jsVar('+projectID', $copyProjectID);
 jsVar('LONG_TIME', LONG_TIME);
 jsVar('weekend', $config->execution->weekend);
