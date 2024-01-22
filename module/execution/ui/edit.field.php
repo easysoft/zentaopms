@@ -106,7 +106,7 @@ $fields->field('planDate')
     ->control('inputGroup')
     ->label($lang->execution->dateRange)
     ->itemBegin('begin')->control('datePicker')->value(data('execution.begin'))->itemEnd()
-    ->itemBegin()->control('addon')->text($lang->project->to)->itemEnd()
+    ->item(array('control' => 'span', 'text' => '-'))
     ->itemBegin('end')->control('datePicker')->value(data('execution.end'))->itemEnd();
 
 $hasPercent = data('execution.type') == 'stage' && isset($config->setPercent) && $config->setPercent == 1;
