@@ -468,7 +468,7 @@ class storyModel extends model
         if(!empty($story->plan))
         {
             $this->updateStoryOrderOfPlan($storyID, (string)$story->plan); // Set story order in this plan.
-            $this->action->create('productplan', $story->plan, 'linkstory', '', $storyID);
+            $this->action->create('productplan', (int)$story->plan, 'linkstory', '', $storyID);
         }
 
         $this->setStage($storyID);
