@@ -190,6 +190,8 @@ window.getItem = function(info)
         info.item.content = {html: content};
     }
 
+    if(info.item.color && info.item.titleAttrs) info.item.titleAttrs.style = {'color': info.item.color};
+
     if(searchValue != '')
     {
         info.item.title = info.item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>");
