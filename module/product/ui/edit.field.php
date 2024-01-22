@@ -13,4 +13,5 @@ if(empty($config->setCode))
 {
     $fields->field('type')->className('w-1/4');
     $fields->field('status')->className('w-1/4');
+    $fields->remove('code');
 }
