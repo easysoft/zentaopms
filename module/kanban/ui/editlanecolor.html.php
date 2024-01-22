@@ -10,11 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 modalHeader(set::title($lang->kanban->editLaneColor), set::entityText($lane->name), set::entityID($lane->id));
-
+setClass("size-sm");
 formPanel
 (
     formRow
     (
+        set::width('150px'),
         formGroup
         (
             set::label($lang->kanbanlane->color),
