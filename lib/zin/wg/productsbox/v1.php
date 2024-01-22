@@ -161,11 +161,11 @@ class productsBox extends wg
     protected function buildOnlyLinkPlans(array $productItems): array
     {
         global $lang;
-        list($currentPlan, $productPlans) = $this->prop(array('currentPlan', 'productPlans'));
+        list($currentPlan, $productPlans, $project) = $this->prop(array('currentPlan', 'productPlans', 'project'));
 
         $planProductID = current(array_keys($productItems));
         $productsBox   = array();
-        $productsBox[] = div
+        $productsBox[] = !empty($project->hasProduct) ? div
         (
             set::className('productBox'),
             formGroup
@@ -183,7 +183,7 @@ class productsBox extends wg
                     formHidden('branch[0][0]', 0)
                 )
             )
-        );
+        ) : null;
 
         return $productsBox;
     }
