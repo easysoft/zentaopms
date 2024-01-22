@@ -10,6 +10,15 @@ title=taskModel->checkWorkhour();
 timeout=0
 cid=1
 
+- 正常完成任务，是否通过检查 @1
+- 不在团队中的人维护工时，返回false @0
+- 在团队中的人维护工时，返回true @5
+- 无消耗工时给出提示 @1
+- 剩余不为数字，给出提示 @1
+- 消耗不为数字，给出提示 @1
+- 以记录工时的形式完成任务 @1
+- 正常记录工时 @1
+
 */
 $task = zdTable('task');
 $task->id->range('1-7');
@@ -91,16 +100,16 @@ $leftNotNumTaskEffort[1]->work     = "剩余不为数字";
 $leftNotNumTaskEffort[1]->date     = "2022-01-01";
 
 $task = new taskTest();
-r($task->checkWorkhourTest(1, $finishTaskEffort)) && p() && e('1'); // 正常完成任务，是否通过检查
+r(count($task->checkWorkhourTest(1, $finishTaskEffort))) && p() && e('1'); // 正常完成任务，是否通过检查
 
 su('admin');
 r($task->checkWorkhourTest(2, $multiTaskEffort))  && p() && e('0'); // 不在团队中的人维护工时，返回false
 
 su('user1');
-r($task->checkWorkhourTest(2, $multiTaskEffort))  && p() && e('1'); // 在团队中的人维护工时，返回true
+r(count($task->checkWorkhourTest(2, $multiTaskEffort)))  && p() && e('5'); // 在团队中的人维护工时，返回true
 
 r(strpos(current($task->checkWorkhourTest(3, $noconsumedTaskEffort)), '请填写"消耗"') !== false)                   && p() && e('1'); // 无消耗工时给出提示
 r(strpos(current($task->checkWorkhourTest(4, $leftNotNumTaskEffort)), 'ID #1 "预计剩余"必须为数字') !== false)     && p() && e('1'); // 剩余不为数字，给出提示
 r(strpos(current($task->checkWorkhourTest(6, $consumedNotNumTaskEffort)), 'ID #1 "总计消耗"必须为数字') !== false) && p() && e('1'); // 消耗不为数字，给出提示
-r($task->checkWorkhourTest(5, $finishTaskEffort))                                                                  && p() && e('1'); // 以记录工时的形式完成任务
-r($task->checkWorkhourTest(7, $normalTaskEffort))                                                                  && p() && e('1'); // 正常记录工时
+r(count($task->checkWorkhourTest(5, $finishTaskEffort)))                                                                  && p() && e('1'); // 以记录工时的形式完成任务
+r(count($task->checkWorkhourTest(7, $normalTaskEffort)))                                                                  && p() && e('1'); // 正常记录工时
