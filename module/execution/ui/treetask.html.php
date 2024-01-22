@@ -26,7 +26,7 @@ div
             setClass('flex-none rounded-full dark-outline ml-2'),
             $this->lang->task->childrenAB
         ) : null,
-        !empty($task->team) ?  label
+        !empty($task->mode) ?  label
         (
             setClass('flex-none rounded-full dark-outline ml-2'),
             $this->lang->task->multipleAB
