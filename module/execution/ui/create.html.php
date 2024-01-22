@@ -54,7 +54,7 @@ formGridPanel
             icon('copy', setClass('mr-1')),
             setClass('primary-ghost'),
             setData(array('destoryOnHide' => true, 'toggle' => 'modal', 'target' => '#copyExecutionModal')),
-            $lang->project->copy
+            $lang->execution->copy
         ),
         divider(setClass('py-2 my-0.5 mx-4 self-center'))
     ),
