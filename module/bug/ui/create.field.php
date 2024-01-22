@@ -15,13 +15,13 @@ $fields->field('project')
     ->foldable(!$isShadowProduct)
     ->wrapAfter($noMultipleProject)
     ->className($isShadowProduct && !$isOriginalProduct && !$noMultipleProject ? 'w-1/4' : 'w-1/2')
-    ->className($isShadowProduct && !$isOriginalProduct && !$noMultipleProject ? 'full:w-1/4' : 'full:w-1/2');
+    ->className($noMultipleProject ? 'full:w-1/2' : 'full:w-1/4');
 
 $fields->field('execution')
     ->label(data('project.model') === 'kanban' ? $lang->bug->kanban : $lang->bug->execution)
     ->hidden($noMultipleProject)
     ->className($isShadowProduct && !$isOriginalProduct ? 'w-1/4' : 'w-1/2')
-    ->className($isShadowProduct && !$isOriginalProduct ? 'full:w-1/4' : 'full:w-1/2')
+    ->className('full:w-1/4')
     ->foldable(!$isShadowProduct);
 
 $fields->field('openedBuild')
