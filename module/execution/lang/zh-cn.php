@@ -208,12 +208,11 @@ $lang->execution->statusList['doing']     = '进行中';
 $lang->execution->statusList['suspended'] = '已挂起';
 $lang->execution->statusList['closed']    = '已关闭';
 
-global $config;
-$lang->execution->aclList['private'] = "私有（团队成员和{$lang->projectCommon}负责人、干系人可访问）";
 $lang->execution->aclList['open']    = "继承{$lang->projectCommon}访问权限（能访问当前{$lang->projectCommon}，即可访问）";
+$lang->execution->aclList['private'] = "私有（团队成员和{$lang->projectCommon}负责人、干系人可访问）";
 
-$lang->execution->kanbanAclList['private'] = '私有';
 $lang->execution->kanbanAclList['open']    = "继承{$lang->projectCommon}";
+$lang->execution->kanbanAclList['private'] = '私有';
 
 $lang->execution->storyPoint = '故事点';
 

@@ -208,12 +208,11 @@ $lang->execution->statusList['doing']     = 'Doing';
 $lang->execution->statusList['suspended'] = 'Suspended';
 $lang->execution->statusList['closed']    = 'Closed';
 
-global $config;
-$lang->execution->aclList['private'] = "Private (for team members and {$lang->projectCommon} stakeholders)";
 $lang->execution->aclList['open']    = "Inherited {$lang->projectCommon} ACL (for who can access the current {$lang->projectCommon})";
+$lang->execution->aclList['private'] = "Private (for team members and {$lang->projectCommon} stakeholders)";
 
-$lang->execution->kanbanAclList['private'] = 'Private';
 $lang->execution->kanbanAclList['open']    = "Inherited {$lang->projectCommon}";
+$lang->execution->kanbanAclList['private'] = 'Private';
 
 $lang->execution->storyPoint = 'Story Point';
 
