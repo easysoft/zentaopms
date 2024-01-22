@@ -12,7 +12,7 @@ $copyProject = !!data('copyProjectID');
 $fields->field('parent')
     ->control('picker', array('className' => $copyProject ? 'has-warning' : '', 'required' => true))
     ->className($copyProject ? 'has-warning' : '')
-    ->value($copyProject ? data('copyProject.name') : '');
+    ->value($copyProject ? data('copyProject.parent') : data('parentProgram.id'));
 
 $fields->field('hasProduct')
         ->control('radioListInline', array('className' => $copyProject ? 'has-warning' : ''))
