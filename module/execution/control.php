@@ -556,6 +556,7 @@ class execution extends control
         $this->view->branchOption   = $branchOption;
         $this->view->switcherParams = "executionID={$executionID}&productID={$productID}&currentMethod=bug";
         $this->view->switcherText   = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
+        if(empty($project->hasProduct)) $this->config->excludeSwitcherList[] = 'execution-bug';
         $this->display();
     }
 

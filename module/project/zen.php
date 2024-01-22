@@ -797,6 +797,7 @@ class projectZen extends project
         $this->view->switcherParams   = "projectID={$projectID}&productID={$productID}&currentMethod=bug";
         $this->view->switcherText     = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
         $this->view->switcherObjectID = $productID;
+        if(empty($project->hasProduct)) $this->config->excludeSwitcherList[] = 'project-bug';
 
         $this->display();
     }
