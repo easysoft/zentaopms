@@ -162,6 +162,7 @@ $fields->field('RD')
     ->value(data('execution.RD'));
 
 $fields->field('team')
+    ->width('full')
     ->label($lang->execution->teamName)
     ->value(data('execution.team'));
 
