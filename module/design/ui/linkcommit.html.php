@@ -79,7 +79,7 @@ else
             )
         )
     );
-
+    h::hr(setClass('my-5'));
     $footToolbar['items'][] = array(
         'text' => $lang->save,
         'class' => 'btn batch-btn secondary size-sm',
