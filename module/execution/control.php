@@ -1076,33 +1076,26 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $formData     = form::data()->get();
             $oldProducts  = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList);
             $oldPlans     = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
             $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
             /* Get the data from the post. */
-            $postData = fixer::input('post')
+            $formData = form::data()
                 ->add('id', $executionID)
                 ->setDefault('lastEditedBy', $this->app->user->account)
                 ->setDefault('lastEditedDate', helper::now())
                 ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
                 ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
                 ->setIF(helper::isZeroDate($this->post->end), 'end', '')
-                ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
-                ->join('whitelist', ',')
                 ->setIF($this->post->status == 'closed' && $oldExecution->status != 'closed', 'closedDate', helper::now())
                 ->setIF($this->post->status == 'suspended' && $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
                 ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
-                ->setDefault('days', '0')
                 ->setDefault('team', $this->post->name)
                 ->setDefault('branch', $this->post->branch)
-                ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
-                ->cleanInt('id,project')
-                ->remove('contactList')
                 ->get();
 
-            $changes = $this->execution->update($executionID, $postData, $formData);
+            $changes = $this->execution->update($executionID, $formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->execution->updateProducts($executionID, $formData);

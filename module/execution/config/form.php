@@ -48,9 +48,27 @@ $config->execution->form->create['whitelist']     = array('type' => 'array',  'r
 $config->execution->form->create['openedVersion'] = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => $config->version);
 $config->execution->form->create['vision']        = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => $config->vision);
 
-$config->execution->form->edit['products'] = array('type' => 'array', 'required' => false, 'default' => array());
-$config->execution->form->edit['branch']   = array('type' => 'array', 'required' => false, 'default' => array());
-$config->execution->form->edit['plans']    = array('type' => 'array', 'required' => false, 'default' => array());
+$config->execution->form->edit['project']   = array('type' => 'int',    'required' => true,  'control' => 'select', 'default' => 0);
+$config->execution->form->edit['name']      = array('type' => 'string', 'required' => true,  'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->execution->form->edit['code']      = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '', 'filter' => 'trim');
+$config->execution->form->edit['begin']     = array('type' => 'date',   'required' => true,  'control' => 'date',   'default' => null);
+$config->execution->form->edit['end']       = array('type' => 'date',   'required' => true,  'control' => 'date',   'default' => null);
+$config->execution->form->edit['days']      = array('type' => 'int',    'required' => false, 'control' => 'text',   'default' => 0);
+$config->execution->form->edit['lifetime']  = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '');
+$config->execution->form->edit['attribute'] = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '');
+$config->execution->form->edit['percent']   = array('type' => 'float',  'required' => false, 'control' => 'text',   'default' => 0);
+$config->execution->form->edit['products']  = array('type' => 'array',  'required' => false, 'default' => array());
+$config->execution->form->edit['branch']    = array('type' => 'array',  'required' => false, 'default' => array());
+$config->execution->form->edit['plans']     = array('type' => 'array',  'required' => false, 'default' => array());
+$config->execution->form->edit['team']      = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '');
+$config->execution->form->edit['status']    = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => 'wait');
+$config->execution->form->edit['PM']        = array('type' => 'string', 'required' => false, 'control' => 'select', 'default' => '');
+$config->execution->form->edit['PO']        = array('type' => 'string', 'required' => false, 'control' => 'select', 'default' => '');
+$config->execution->form->edit['QD']        = array('type' => 'string', 'required' => false, 'control' => 'select', 'default' => '');
+$config->execution->form->edit['RD']        = array('type' => 'string', 'required' => false, 'control' => 'select', 'default' => '');
+$config->execution->form->edit['desc']      = array('type' => 'string', 'required' => false, 'control' => 'editor', 'default' => '');
+$config->execution->form->edit['acl']       = array('type' => 'string', 'required' => false, 'control' => 'radio',  'default' => '');
+$config->execution->form->edit['whitelist'] = array('type' => 'array',  'required' => false, 'control' => 'select', 'default' => array(), 'filter' => 'join');
 
 $config->execution->form->importBug['id']         = array('type' => 'int',    'required' => false, 'default' => 0, 'base' => true);
 $config->execution->form->importBug['pri']        = array('type' => 'int',    'required' => false, 'default' => 0);

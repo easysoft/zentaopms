@@ -313,11 +313,10 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  object $postData
-     * @param  object $formData
      * @access public
      * @return array|false
      */
-    public function update(int $executionID, object $postData, object $formData = null): array|false
+    public function update(int $executionID, object $postData): array|false
     {
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
@@ -338,14 +337,14 @@ class executionModel extends model
             return false;
         }
 
-        if(!empty($formData->products))
+        if(!empty($postData->products))
         {
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
-            if(isset($formData->branch) and !empty($formData->branch)) $formData->branch = is_array($formData->branch) ? $formData->branch : json_decode($formData->branch, true);
-            foreach($formData->products as $index => $productID)
+            if(isset($postData->branch) and !empty($postData->branch)) $postData->branch = is_array($postData->branch) ? $postData->branch : json_decode($postData->branch, true);
+            foreach($postData->products as $index => $productID)
             {
-                if(!isset($formData->branch[$index])) continue;
-                $branches = is_array($formData->branch[$index]) ? implode(',', $formData->branch[$index]) : $formData->branch[$index];
+                if(!isset($postData->branch[$index])) continue;
+                $branches = is_array($postData->branch[$index]) ? implode(',', $postData->branch[$index]) : $postData->branch[$index];
                 if(isset($multipleProducts[$productID]) && $branches == '')
                 {
                     dao::$errors["branch[$index][]"] = $this->lang->project->error->emptyBranch;
@@ -366,10 +365,10 @@ class executionModel extends model
         /* Child stage inherits parent stage permissions. */
         if(!isset($postData->acl)) $postData->acl = $oldExecution->acl;
 
-        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->edit['id'], $postData->uid);
+        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->edit['id'], $this->post->uid);
 
         /* Check the workload format and total, such as check Workload Ratio if it enabled. */
-        if(!empty($execution->percent) and isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('update', $execution->percent, $oldExecution);
+        if(!empty($execution->percent) && isset($this->config->setPercent) && $this->config->setPercent == 1) $this->checkWorkload('update', (float)$execution->percent, $oldExecution);
 
         /* Set planDuration and realDuration. */
         if(in_array($this->config->edition, array('max', 'ipd')))
@@ -447,7 +446,7 @@ class executionModel extends model
                 $this->changeProject((int)$execution->project, $oldExecution->project, $executionID, $postData->syncStories ?? 'no');
             }
 
-            $this->file->updateObjectID($postData->uid, $executionID, 'execution');
+            $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
             return common::createChanges($oldExecution, $execution);
         }
     }
