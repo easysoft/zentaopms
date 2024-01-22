@@ -41,8 +41,14 @@ unset($config->execution->dtable->fieldList['progress']);
 unset($config->execution->dtable->fieldList['burn']);
 unset($config->execution->dtable->fieldList['actions']);
 
-foreach($config->execution->dtable->fieldList as $id => $field) $config->execution->dtable->fieldList[$id]['sortType'] = false;
+$cols = array_values($config->execution->dtable->fieldList);
+foreach($cols as $key => $col)
+{
+    if($cols[$key]['name'] == 'name') $cols[$key]['title'] = $lang->kanban->importExecution;
+    if($cols[$key]['name'] == 'PM')   $cols[$key]['title'] = $lang->execution->execPM;
+}
 
+foreach($config->execution->dtable->fieldList as $id => $field) $config->execution->dtable->fieldList[$id]['sortType'] = false;
 formBase
 (
     setID('linkForm'),
@@ -53,7 +59,7 @@ formBase
         set::fixedLeftWidth('0.33'),
         set::checkable(true),
         set::userMap($users),
-        set::cols(array_values($config->execution->dtable->fieldList)),
+        set::cols(array_values($cols)),
         set::data(array_values($executions2Imported)),
         set::footToolbar(array('items' => array(array('text' => $lang->kanban->importAB, 'btnType' => 'primary', 'className' => 'size-sm batch-btn', 'data-url'  => inlink('importExecution', "kanbanID=$kanbanID&regionID=$regionID&groupID=$groupID&columnID=$columnID"))))),
         set::footPager(usePager())
