@@ -22,6 +22,7 @@ if(!empty($project->model) && $project->model == 'agileplus')
     $fields->field('method')
         ->required()
         ->name('type')
+        ->label($lang->execution->method)
         ->labelHint($lang->execution->agileplusMethodTip)
         ->items($lang->execution->typeList)
         ->value(data('execution.type'));
