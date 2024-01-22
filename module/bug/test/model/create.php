@@ -26,7 +26,7 @@ cid=1
 
 - 测试bug的指派人属性assignedTo @admin
 
-- 测试bug名称为空第title条的0属性 @『Bug名称』不能为空。
+- 测试bug标题称为空第title条的0属性 @『Bug标题』不能为空。
 
 - 测试版本为空第openedBuild条的0属性 @『影响版本』不能为空。
 
@@ -54,6 +54,6 @@ r($bug->createObject($bug_priseverity))  && p('pri,severity')  && e('2,2');     
 r($bug->createObject($bug_steps))        && p('steps')         && e('i wish');                          // 测试bug的步骤
 r($bug->createObject($bug_deadline))     && p('deadline')      && e('2023-04-23');                      // 测试bug的截止日期
 r($bug->createObject($bug_assign))       && p('assignedTo')    && e('admin');                           // 测试bug的指派人
-r($bug->createObject($bug_notitle))      && p('title:0')       && e('『Bug名称』不能为空。');           // 测试bug名称为空
+r($bug->createObject($bug_notitle))      && p('title:0')       && e('『Bug标题』不能为空。');           // 测试bug标题为空
 r($bug->createObject($bug_nobuild))      && p('openedBuild:0') && e('『影响版本』不能为空。');          // 测试版本为空
 r($bug->createObject($bug_erremail))     && p('notifyEmail:0') && e('『通知邮箱』应当为合法的EMAIL。'); // 测试异常的email输入

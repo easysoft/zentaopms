@@ -28,7 +28,7 @@ title=bugModel->update();
 timeout=0
 cid=1
 
-- 测试更新bug名称
+- 测试更新bug标题
  - 第0条的field属性 @title
  - 第0条的old属性 @BUG1
  - 第0条的new属性 @john
@@ -38,11 +38,11 @@ cid=1
  - 第0条的old属性 @codeerror
  - 第0条的new属性 @config
 
-- 测试不更改bug名称 @没有数据更新
+- 测试不更改bug标题 @没有数据更新
 
 - 测试不更改bug类型 @没有数据更新
 
-- 测试不输入Bug名称 @『Bug名称』不能为空。
+- 测试不输入Bug标题 @『Bug标题』不能为空。
 
 - 测试通知邮件不合法 @『通知邮箱』应当为合法的EMAIL。
 
@@ -72,11 +72,11 @@ $t_unduplicateBug  = array('resolution'  => 'duplicate', 'duplicateBug'  => 0);
 $t_unresolvedBuild = array('resolution'  => 'fixed',     'resolvedBuild' => '');
 
 $bug = new bugTest();
-r($bug->updateObject($bugIdList[0], $t_uptitle))         && p('0:field,old,new') && e('title,BUG1,john');                 // 测试更新bug名称
+r($bug->updateObject($bugIdList[0], $t_uptitle))         && p('0:field,old,new') && e('title,BUG1,john');                 // 测试更新bug标题
 r($bug->updateObject($bugIdList[0], $t_uptype))          && p('0:field,old,new') && e('type,codeerror,config');           // 测试更新bug类型
-r($bug->updateObject($bugIdList[0], $t_untitle))         && p()                  && e('没有数据更新');                    // 测试不更改bug名称
+r($bug->updateObject($bugIdList[0], $t_untitle))         && p()                  && e('没有数据更新');                    // 测试不更改bug标题
 r($bug->updateObject($bugIdList[0], $t_untype))          && p()                  && e('没有数据更新');                    // 测试不更改bug类型
-r($bug->updateObject($bugIdList[0], $t_titleRequire))    && p('title:0')         && e('『Bug名称』不能为空。');           // 测试不输入Bug名称
+r($bug->updateObject($bugIdList[0], $t_titleRequire))    && p('title:0')         && e('『Bug标题』不能为空。');           // 测试不输入Bug标题
 r($bug->updateObject($bugIdList[0], $t_unnotifyEmail))   && p('notifyEmail:0')   && e('『通知邮箱』应当为合法的EMAIL。'); // 测试通知邮件不合法
 r($bug->updateObject($bugIdList[0], $t_resolution1))     && p('resolution:0')    && e('『解决方案』不能为空。');          // 测试解决者不为空时，不输入解决方案
 r($bug->updateObject($bugIdList[0], $t_resolution2))     && p('resolution:0')    && e('『解决方案』不能为空。');          // 测试由谁关闭不为空时，不输入解决方案
