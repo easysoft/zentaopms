@@ -20,9 +20,10 @@ class projectZen extends project
     protected function prepareCreateExtras(object $postData): object|false
     {
         $project = $postData->setDefault('status', 'wait')
-            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
-            ->setIF($this->post->delta == 999, 'days', 0)
-            ->setIF($this->post->acl   == 'open', 'whitelist', '')
+            ->setIF($this->post->delta    == 999, 'end', LONG_TIME)
+            ->setIF($this->post->delta    == 999, 'days', 0)
+            ->setIF($this->post->acl      == 'open', 'whitelist', '')
+            ->setIF($this->post->multiple == 'on', 'multiple', '1')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF(!isset($_POST['multiple']), 'multiple', '1')
             ->setIF($this->post->model == 'ipd', 'stageBy', 'project')
