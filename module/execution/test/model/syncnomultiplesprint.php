@@ -4,8 +4,10 @@
 /**
 
 title=测试executionModel->syncNoMultipleSprint();
-timeout=0
-cid=1
+cid=0
+
+- 同步没有执行的项目 @5
+- 同步错误的项目 @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

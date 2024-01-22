@@ -365,7 +365,7 @@ class executionModel extends model
         /* Child stage inherits parent stage permissions. */
         if(!isset($postData->acl)) $postData->acl = $oldExecution->acl;
 
-        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->edit['id'], $this->post->uid);
+        $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->edit['id'], (string)$this->post->uid);
 
         /* Check the workload format and total, such as check Workload Ratio if it enabled. */
         if(!empty($execution->percent) && isset($this->config->setPercent) && $this->config->setPercent == 1) $this->checkWorkload('update', (float)$execution->percent, $oldExecution);
