@@ -341,8 +341,8 @@ $lang->project->featureBar['build']['all'] = '全部版本';
 
 $lang->project->featureBar['group']['all'] = '浏览分组';
 
-$lang->project->aclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员和干系人可访问)";
 $lang->project->aclList['open']    = "公开 (有{$lang->projectCommon}视图权限即可访问)";
+$lang->project->aclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员和干系人可访问)";
 
 $lang->project->multipleList['1'] = '是';
 $lang->project->multipleList['0'] = '否';
@@ -350,19 +350,19 @@ $lang->project->multipleList['0'] = '否';
 $lang->project->acls['private'] = '私有';
 $lang->project->acls['open']    = '公开';
 
-$lang->project->shortAclList['private'] = '私有';
 $lang->project->shortAclList['open']    = '公开';
+$lang->project->shortAclList['private'] = '私有';
 $lang->project->shortAclList['program'] = '项目集内公开';
 
-$lang->project->subAclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员和干系人可访问)";
 $lang->project->subAclList['open']    = "公开 (有{$lang->projectCommon}视图权限即可访问)";
+$lang->project->subAclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员和干系人可访问)";
 $lang->project->subAclList['program'] = "项目集内公开（所有上级项目集负责人和干系人、{$lang->projectCommon}负责人、团队成员和干系人可访问）";
 
-$lang->project->kanbanAclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员可访问)";
 $lang->project->kanbanAclList['open']    = "公开 (有{$lang->projectCommon}视图权限即可访问)";
+$lang->project->kanbanAclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员可访问)";
 
-$lang->project->kanbanSubAclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员可访问)";
 $lang->project->kanbanSubAclList['open']    = "公开 (有{$lang->projectCommon}视图权限即可访问)";
+$lang->project->kanbanSubAclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员可访问)";
 $lang->project->kanbanSubAclList['program'] = "项目集内公开（所有上级项目集负责人和干系人、{$lang->projectCommon}负责人、团队成员可访问）";
 
 if($config->systemMode == 'light')
