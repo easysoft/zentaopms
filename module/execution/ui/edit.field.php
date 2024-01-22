@@ -19,18 +19,15 @@ if($project)
     if($project->model == 'scrum')
     {
         $fields->field('project')
-            ->width('1/2')
             ->label($lang->execution->projectName)
             ->items(data('allProjects'))
-            ->value(data('execution.project'))
-            ->wrapAfter(empty($config->setCode));
+            ->value(data('execution.project'));
     }
     elseif($project->model == 'kanban')
     {
         $fields->field('project')
-            ->type('hidden')
+            ->className('hidden')
             ->value(data('execution.project'));
-        $projectBox = formHidden('project', $execution->project);
     }
     elseif($project->model == 'agileplus')
     {
@@ -42,7 +39,6 @@ if($project)
     elseif($app->tab == 'project' && $project->model == 'waterfallplus')
     {
         $fields->field('parent')
-            ->width('1/2')
             ->label($lang->programplan->parent)
             ->items(data('parentStageList'))
             ->value(data('execution.parent'));
@@ -52,12 +48,12 @@ if($project)
     {
         $fields->field('attribute')
             ->label($lang->stage->type)
+            ->wrapAfter()
             ->labelHint($lang->execution->typeTip);
 
         if(data('enableOptionalAttr'))
         {
             $fields->field('attribute')
-                ->width('1/2')
                 ->required()
                 ->items($lang->stage->typeList)
                 ->value(data('execution.attribute'));
@@ -65,7 +61,6 @@ if($project)
         else
         {
             $fields->field('attribute')
-                ->width('1/8')
                 ->disabled()
                 ->value(zget($lang->stage->typeList, data('execution.attribute')));
         }
@@ -73,7 +68,6 @@ if($project)
     elseif($execution->type != 'kanban' && $project->model != 'ipd')
     {
         $fields->field('lifetime')
-            ->width('1/2')
             ->required()
             ->id('lifetime')
             ->label($lang->execution->type)
@@ -85,7 +79,8 @@ if($project)
 $fields->field('name')
     ->required()
     ->label($lang->execution->name)
-    ->value(data('execution.name'));
+    ->value(data('execution.name'))
+    ->wrapAfter(empty($config->setCode) && $project->model == 'ipd');
 
 if(!empty($config->setCode))
 {
@@ -93,7 +88,17 @@ if(!empty($config->setCode))
         ->label($lang->execution->code)
         ->value(data('execution.code'))
         ->required()
-        ->width('1/2');
+        ->width('1/4');
+}
+
+if($project && $project->model != 'ipd')
+{
+    $fields->field('status')
+        ->required()
+        ->label($lang->execution->status)
+        ->items($lang->execution->statusList)
+        ->value(data('execution.status'))
+        ->width(empty($config->setCode) ? '1/2' : '1/4');
 }
 
 $fields->field('planDate')
@@ -104,11 +109,23 @@ $fields->field('planDate')
     ->itemBegin()->control('addon')->text($lang->project->to)->itemEnd()
     ->itemBegin('end')->control('datePicker')->value(data('execution.end'))->itemEnd();
 
+$hasPercent = data('execution.type') == 'stage' && isset($config->setPercent) && $config->setPercent == 1;
 $fields->field('days')
     ->label("{$lang->execution->days} ({$lang->execution->day})")
     ->required(strpos(",{$config->execution->edit->requiredFields},", ",days,") !== false)
     ->value(data('execution.days'))
-    ->width('1/2');
+    ->width($hasPercent ? '1/4' : '1/2');
+
+if($hasPercent)
+{
+    $fields->field('percent')
+        ->required()
+        ->label($lang->stage->percent)
+        ->control('inputGroup')
+        ->itemBegin('percent')->control('input')->value(data('execution.percent'))->itemEnd()
+        ->itemBegin()->control('addon')->text('%')->itemEnd()
+        ->width('1/4');
+}
 
 $fields->field('productsBox')
     ->width('full')
@@ -123,15 +140,6 @@ $fields->field('productsBox')
         'project'        => data('project'),
         'isStage'        => data('isStage')
     ));
-
-if(data('execution.type') == 'stage' && isset($config->setPercent) && $config->setPercent == 1)
-{
-    $fields->field('percent')
-        ->required()
-        ->label($lang->stage->percent)
-        ->value(data('execution.percent'))
-        ->width('1/2');
-}
 
 $fields->field('PO')
     ->label($lang->execution->PO)
@@ -152,16 +160,6 @@ $fields->field('RD')
     ->label($lang->execution->RD)
     ->items(data('rdUsers'))
     ->value(data('execution.RD'));
-
-if($project && $project->model != 'ipd')
-{
-    $fields->field('status')
-        ->required()
-        ->label($lang->execution->status)
-        ->items($lang->execution->statusList)
-        ->value(data('execution.status'))
-        ->width('1/2');
-}
 
 $fields->field('team')
     ->label($lang->execution->teamName)

@@ -29,7 +29,7 @@ formGridPanel
 (
     on::change('[name=begin]', 'computeWorkDays(NaN)'),
     on::change('[name=end]', 'computeWorkDays(NaN)'),
-    set::fullModeOrders('project', !empty($config->setCode) ? 'type,name,code' : 'method,name,type', 'planDate,days,productsBox,PO,QD,PM,RD,teamMembers,desc,acl'),
+    set::fullModeOrders('project', !empty($config->setCode) ? 'lifetime,attribute,name,code,status' : 'lifetime,attribute,name,status', 'planDate,days,productsBox,PO,QD,PM,RD,teamMembers,desc,acl'),
     set::title($lang->execution->edit),
     set::modeSwitcher(false),
     set::defaultMode('full'),
