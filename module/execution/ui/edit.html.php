@@ -11,16 +11,7 @@ declare(strict_types=1);
 namespace zin;
 $fields = useFields('execution.edit');
 
-jsVar('weekend', $config->execution->weekend);
-jsVar('unmodifiableProducts',$unmodifiableProducts);
-jsVar('unmodifiableBranches', $unmodifiableBranches);
-jsVar('linkedStoryIDList', $linkedStoryIDList);
 jsVar('confirmSync', $lang->execution->confirmSync);
-jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
-jsVar('typeTip', $lang->execution->typeTip);
-jsVar('projectID', $execution->project);
-jsVar('allProducts', $allProducts);
-jsVar('branchGroups', $branchGroups);
 jsVar('isWaterfall', isset($project) && ($project->model == 'waterfall' || $project->model == 'waterfallplus'));
 jsVar('executionAttr', $execution->attribute);
 jsVar('window.lastProjectID', $execution->project);
