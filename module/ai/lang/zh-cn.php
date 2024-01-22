@@ -69,6 +69,7 @@ $lang->ai->import                 = '导入';
 $lang->ai->saveFail               = '保存失败';
 $lang->ai->installPackage         = '安装包';
 $lang->ai->toPublish              = '安装后发布';
+$lang->ai->toZentaoStoreAIPage    = '点击可跳转至禅道官网应用商店AI小程序页面';
 
 $lang->ai->chatPlaceholderMessage = 'Hi，我是 AI 助手阿道，您可以问我任何问题。';
 $lang->ai->chatPlaceholderInput   = '问问阿道…';

@@ -19,9 +19,14 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('ai', 'importMiniProgram')): ?>
-      <button class="btn btn-primary" data-toggle="modal" data-target="#import-miniprogram">
+      <a class="btn btn-link" data-toggle="tooltip" data-placement="top" title="<?= $lang->ai->toZentaoStoreAIPage; ?>" href="https://www.zentao.net/extension-browse-1625.html">
+        <i class="icon icon-help"></i>
+        <?= $lang->help; ?>
+      </a>
+      <a class="btn btn-primary" data-toggle="modal" data-target="#import-miniprogram">
+        <i class="icon icon-import"></i>
         <?= $lang->ai->import; ?>
-      </button>
+      </a>
     <?php endif; ?>
     <?php if(common::hasPriv('ai', 'createMiniProgram')): ?>
       <?= html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-primary'"); ?>

@@ -69,6 +69,7 @@ $lang->ai->import                 = 'Import';
 $lang->ai->saveFail               = 'Save failed';
 $lang->ai->installPackage         = 'Installation package';
 $lang->ai->toPublish              = 'Publish after installation';
+$lang->ai->toZentaoStoreAIPage    = 'Click to jump to Zentao official app store AI mini programs page';
 
 $lang->ai->chatPlaceholderMessage = 'Hi, I\'m Adao, your AI assistant at ZenTao!';
 $lang->ai->chatPlaceholderInput   = 'type here...';

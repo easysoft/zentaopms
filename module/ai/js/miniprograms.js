@@ -103,3 +103,8 @@ function exportMiniProgram(event)
 
     xhr.send();
 }
+
+$(function()
+{
+    $('[data-toggle="tooltip"]').tooltip();
+});
