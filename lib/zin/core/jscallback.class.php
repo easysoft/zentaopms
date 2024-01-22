@@ -36,7 +36,7 @@ class jsCallback extends jsHelper
      * @access public
      * @var array
      */
-    public array $funcArgs;
+    public array $funcArgs = array();
 
     /**
      * Is arrow function.
@@ -76,10 +76,10 @@ class jsCallback extends jsHelper
 
     /**
      * Set the function arguments.
-     * 设置函数参数列表。
+     * 设置函数参数名称列表。
      *
      * @access public
-     * @param string ...$args The function arguments. 函数参数列表。
+     * @param string ...$args The function arguments. 函数参数名称列表。
      * @return self
      */
     public function args(string ...$args): self
@@ -206,6 +206,7 @@ class jsCallback extends jsHelper
      * @param string $name The function name. 函数名称。
      * @param array $args The function arguments. 函数参数列表。
      * @return self
+     * @static
      */
     public static function __callStatic(string $name, array $args)
     {
@@ -214,7 +215,13 @@ class jsCallback extends jsHelper
     }
 }
 
-function jsCallback(string ...$args)
+/**
+ * Create a js callback.
+ *
+ * @param string ...$args The function arguments. 函数参数列表。
+ * @return jsCallback
+ */
+function jsCallback(string ...$args): jsCallback
 {
     return new jsCallback(...$args);
 }

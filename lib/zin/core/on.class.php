@@ -22,12 +22,42 @@ use zin\wg;
  */
 class on extends jsCallback
 {
-    public ?string $selector;
-
-    public bool $compatible = false;
-
+    /**
+     * The event name.
+     * 事件名称。
+     *
+     * @access public
+     * @var string
+     */
     public string $event;
 
+    /**
+     * As a delegate event selector。
+     * 作为委托事件选择器。
+     *
+     * @access public
+     * @var array
+     */
+    public ?string $selector;
+
+    /**
+     * Whether is compatible mode.
+     * 是否为兼容模式。
+     *
+     * @access public
+     * @var bool
+     */
+    public bool $compatible = false;
+
+    /**
+     * The constructor.
+     * 构造函数。
+     *
+     * @access public
+     * @param string      $event    Event name.
+     * @param string|null $selector As a delegate event selector.
+     * @param array       $options  Event options.
+     */
     public function __construct(string $event, ?string $selector = null, array $options = array())
     {
         parent::__construct('event', 'args');
@@ -44,30 +74,56 @@ class on extends jsCallback
         $this->event    = $event;
     }
 
+    /**
+     * Set to prevent event default behavior.
+     * 设置阻止事件默认行为选项。
+     *
+     * @access public
+     * @param  bool $prevent Whether prevent event default behavior.
+     * @return self
+     */
     public function prevent(bool $prevent = true): self
     {
         $this->options['prevent'] = $prevent;
         return $this;
     }
 
+    /**
+     * Set to stop event propagation.
+     * 设置停止事件冒泡选项。
+     *
+     * @access public
+     * @param  bool $stop Whether stop event propagation.
+     * @return self
+     */
     public function stop(bool $stop = true): self
     {
         $this->options['stop'] = $stop;
         return $this;
     }
 
+    /**
+     * Set to only trigger event on self element.
+     * 设置只在自身元素上触发事件选项。
+     *
+     * @access public
+     * @param  bool $self Whether only trigger event on self element.
+     * @return self
+     */
     public function self(bool $self = true): self
     {
         $this->options['self'] = $self;
         return $this;
     }
 
-    public function capture(bool $capture = true): self
-    {
-        $this->options['capture'] = $capture;
-        return $this;
-    }
-
+    /**
+     * Convert to js code.
+     * 转换为 js 代码。
+     *
+     * @access public
+     * @param  string $joiner The joiner of each line.
+     * @return string
+     */
     public function toJS($joiner = "\n"): string
     {
         if($this->event === 'init') return parent::buildBody($joiner);
@@ -80,6 +136,15 @@ class on extends jsCallback
         return "\$element.$bindMethod('{$this->event}.zin.on'$selector,$callback);";
     }
 
+    /**
+     * Build body code.
+     * 构建函数体代码。
+     *
+     * @access public
+     * @param  string $joiner The joiner of each line.
+     * @return string
+     * @override
+     */
     public function buildBody(string $joiner = "\n"): string
     {
         $options = $this->options;
@@ -99,6 +164,16 @@ class on extends jsCallback
         return implode($joiner, $codes);
     }
 
+    /**
+     * Apply to widget.
+     * 应用到部件。
+     *
+     * @access public
+     * @param  wg     $wg        The widget instance.
+     * @param  string $blockName The block name.
+     * @return void
+     * @override
+     */
     public function applyToWg(wg &$wg, string $blockName): void
     {
         if($this->compatible)
@@ -115,36 +190,106 @@ class on extends jsCallback
         $wg->setProp('zui-init', $zuiInitCode . "\n" . $this->toJS());
     }
 
+    /**
+     * Bind the "change" event to widget.
+     * 绑定 "change" 事件到部件。
+     *
+     * @access public
+     * @param  null|string|jsCallback $selectorOrCallback
+     * @param  null|array|string      $handlerOrOptions
+     * @return on
+     * @static
+     */
     public static function change(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('change', $selectorOrCallback, $handlerOrOptions);
     }
 
+    /**
+     * Bind the "click" event to widget.
+     * 绑定 "click" 事件到部件。
+     *
+     * @access public
+     * @param  null|string|jsCallback $selectorOrCallback
+     * @param  null|array|string      $handlerOrOptions
+     * @return on
+     * @static
+     */
     public static function click(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('click', $selectorOrCallback, $handlerOrOptions);
     }
 
+    /**
+     * Bind the "dbclick" event to widget.
+     * 绑定 "dbclick" 事件到部件。
+     *
+     * @access public
+     * @param  null|string|jsCallback $selectorOrCallback
+     * @param  null|array|string      $handlerOrOptions
+     * @return on
+     * @static
+     */
     public static function dbclick(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('dbclick', $selectorOrCallback, $handlerOrOptions);
     }
 
+    /**
+     * Bind the "focus" event to widget.
+     * 绑定 "focus" 事件到部件。
+     *
+     * @access public
+     * @param  null|string|jsCallback $selectorOrCallback
+     * @param  null|array|string      $handlerOrOptions
+     * @return on
+     * @static
+     */
     public static function mouseenter(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('mouseenter', $selectorOrCallback, $handlerOrOptions);
     }
 
+    /**
+     * Bind the "mouseleave" event to widget.
+     * 绑定 "mouseleave" 事件到部件。
+     *
+     * @access public
+     * @param  null|string|jsCallback $selectorOrCallback
+     * @param  null|array|string      $handlerOrOptions
+     * @return on
+     * @static
+     */
     public static function mouseleave(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('mouseleave', $selectorOrCallback, $handlerOrOptions);
     }
 
+    /**
+     * Bind the "focus" event to widget.
+     * 绑定 "focus" 事件到部件。
+     *
+     * @access public
+     * @param  null|string|jsCallback $selectorOrCallback
+     * @param  null|array|string      $handlerOrOptions
+     * @return on
+     * @static
+     */
     public static function inited(null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         return static::bind('inited', $selectorOrCallback, $handlerOrOptions);
     }
 
+    /**
+     * Bind the "focus" event to widget.
+     * 绑定 "focus" 事件到部件。
+     *
+     * @access public
+     * @param  null|string|jsCallback $selectorOrCallback
+     * @param  null|array|string      $handlerOrOptions
+     * @return on
+     * @static
+     */
     public static function bind(string $event, null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null): on
     {
         if($selectorOrCallback instanceof jsCallback)
@@ -158,6 +303,18 @@ class on extends jsCallback
         return on($event, $selectorOrCallback, $handlerOrOptions);
     }
 
+    /**
+     * Create on instance from callback.
+     * 从回调创建 on 实例。
+     *
+     * @access public
+     * @param  jsCallback $callback
+     * @param  string     $event
+     * @param  string     $selector
+     * @param  array      $options
+     * @return on
+     * @static
+     */
     public static function fromCallback(jsCallback $callback, string $event, ?string $selector = null, ?array $options = null): on
     {
         if(!($callback instanceof on))
@@ -175,6 +332,16 @@ class on extends jsCallback
         return $callback;
     }
 
+    /**
+     * Bind event to widget with magic method.
+     * 绑定事件到部件，使用魔术方法。
+     *
+     * @access public
+     * @param  null|string|jsCallback $selectorOrCallback
+     * @param  null|array|string      $handlerOrOptions
+     * @return on
+     * @static
+     */
     public static function __callStatic($event, $args)
     {
         list($selectorOrCallback, $options) = array_merge($args, array(null, null));
@@ -188,8 +355,9 @@ class on extends jsCallback
  * @param  string             $event
  * @param  null|string        $selectorOrHandler
  * @param  null|array|string  $handlerOrOptions
+ * @return on
  */
-function on(string $event, string|null $selectorOrHandler = null, null|array|string $handlerOrOptions = null): directive
+function on(string $event, string|null $selectorOrHandler = null, null|array|string $handlerOrOptions = null): on
 {
     $options  = array();
     $selector = null;

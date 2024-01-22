@@ -285,7 +285,7 @@ class jsHelper extends js
      * @param string $handler           The handler to unbind.
      * @return self
      */
-    public function offEvent(string $selector, string $event, string $targetsOrHandler, ?string $handler = null): self
+    public function offEvent(string $selector, string $event, ?string $targetsOrHandler = null, ?string $handler = null): self
     {
         if(is_null($handler))
         {
@@ -300,9 +300,11 @@ class jsHelper extends js
 
         if(is_null($targets))
         {
+            if(is_null($handler)) return $this->appendLine("$target.off(\"{$event}\");");
             return $this->appendLine("$target.off(\"{$event}\", {$handler});");
         }
         $targets = str_replace('"', '\\"', $targets);
+        if(is_null($handler)) return $this->appendLine("$target.off(\"{$event}\", \"{$targets}\");");
         return $this->appendLine("$target.off(\"{$event}\", \"{$targets}\", {$handler});");
     }
 }
