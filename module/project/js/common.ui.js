@@ -17,12 +17,12 @@ function changeType()
 {
     if($(this).val() == 0)
     {
-        $('.productBox').addClass('hidden');
+        $('.productsBox').addClass('hidden');
         $('.stageByBox').addClass('hidden');
     }
     else
     {
-        $('.productBox').removeClass('hidden');
+        $('.productsBox').removeClass('hidden');
         if(typeof productChange == 'function') productChange($(this));
     }
 }
