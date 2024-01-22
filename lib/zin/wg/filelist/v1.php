@@ -79,7 +79,7 @@ class fileList extends wg
             set::title($lang->files),
             to::actions
             (
-                icon('paper-clip')
+                icon('paper-clip ml-1')
             ),
             $fileDiv
         ) : $fileDiv;
