@@ -151,8 +151,16 @@ class form extends formBase
             if(!isset($item['value'])) $item['value'] = $this->getItemValue($name);
             if(!isset($item['label'])) $item['label'] = $this->getItemLabel($name);
             if($requiredFields !== false && (!isset($item['required']) || $item['required'] === 'auto')) $item['required'] = isFieldRequired($name, $requiredFields);
-            if(!isset($item['foldable']) && is_array($foldableItems)) $item['foldable'] = in_array($name, $foldableItems);
-            if(!isset($item['pinned']) && is_array($pinnedItems))     $item['pinned'] =   in_array($name, $pinnedItems);
+            if(!isset($item['required']) || !$item['required'])
+            {
+                if(!isset($item['foldable']) && is_array($foldableItems)) $item['foldable'] = in_array($name, $foldableItems);
+                if(!isset($item['pinned']) && is_array($pinnedItems))     $item['pinned'] =   in_array($name, $pinnedItems);
+            }
+            else
+            {
+                $item['foldable'] = false;
+                $item['pinned']   = true;
+            }
 
             if($isGrid)
             {
