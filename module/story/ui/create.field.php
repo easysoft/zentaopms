@@ -67,13 +67,10 @@ $fields->field('reviewer')
     ->itemBegin('reviewer[]')->control('picker')->id('reviewer')->items($createFields['reviewer']['options'])->value($createFields['reviewer']['default'])->multiple()->itemEnd();
 $fields->field('needNotReview')->control('hidden')->value(0);
 
-if($isSR)
-{
-    $fields->field('assignedTo')
-        ->required($createFields['assignedTo']['required'])
-        ->id('assignedToBox')
-        ->items($createFields['assignedTo']['options']);
-}
+$fields->field('assignedTo')
+    ->required($createFields['assignedTo']['required'])
+    ->id('assignedToBox')
+    ->items($createFields['assignedTo']['options']);
 
 $fields->field('category')
     ->className('full:w-1/6')
@@ -84,6 +81,7 @@ $fields->field('category')
 if($isKanban)
 {
     $fields->field('region')
+        ->wrapBefore(true)
         ->label($createFields['region']['title'])
         ->items($createFields['region']['options'])
         ->value($createFields['region']['default']);
@@ -146,6 +144,7 @@ if(!isset($createFields['branch']) && $type == 'story')
 $fields->field('source')
     ->foldable()
     ->label($lang->story->source . '&' . $lang->story->sourceNote)
+    ->required($createFields['source']['required'])
     ->control('inputGroup')
     ->items(false)
     ->itemBegin('source')->control('picker')->items($createFields['source']['options'])->value($createFields['source']['default'])->itemEnd()
@@ -165,7 +164,7 @@ $fields->field('mailto')
     ->foldable()
     ->control('mailto');
 
-$fields->field('keywords')->foldable();
+$fields->field('keywords')->foldable()->required($createFields['keywords']['required']);
 
 $fields->field('type')->control('hidden')->value($type);
 $fields->field('status')->control('hidden')->value('active');

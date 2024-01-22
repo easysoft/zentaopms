@@ -7,6 +7,7 @@ $project = data('project');
 $from    = data('from');
 $isStage = data('isStage');
 $showExecutionExec = ($from == 'execution' || $from == 'doc');
+$requiredFields    = ",{$config->execution->create->requiredFields},";
 
 $fields->field('project')
     ->required()
@@ -54,7 +55,7 @@ $fields->field('dateRange')
 
 $fields->field('days')
     ->width('1/4')
-    ->required(strpos(",{$config->execution->create->requiredFields},", ",days,") !== false)
+    ->required(strpos($requiredFields, ",days,") !== false)
     ->label($lang->execution->days . sprintf($lang->execution->unitTemplate, $lang->execution->day))
     ->items(false)
     ->value(!empty($plan->begin) ? (helper::workDays($plan->begin, $plan->end) + 1) : '');
@@ -83,13 +84,14 @@ $fields->field('productsBox')
 
 $fields->field('desc')
     ->width('full')
+    ->required(strpos($requiredFields, ",desc,") !== false)
     ->label($showExecutionExec ? $lang->execution->execDesc : $lang->execution->desc)
     ->control('editor');
 
-$fields->field('PO')->foldable()->items(data('poUsers'))->value(data('copyExecution.PO'));
-$fields->field('QD')->foldable()->items(data('qdUsers'))->value(data('copyExecution.QD'));
-$fields->field('PM')->foldable()->items(data('pmUsers'))->value(data('copyExecution.PM'));
-$fields->field('RD')->foldable()->items(data('rdUsers'))->value(data('copyExecution.RD'));
+$fields->field('PO')->foldable()->required(strpos($requiredFields, ",PO,") !== false)->items(data('poUsers'))->value(data('copyExecution.PO'));
+$fields->field('QD')->foldable()->required(strpos($requiredFields, ",QD,") !== false)->items(data('qdUsers'))->value(data('copyExecution.QD'));
+$fields->field('PM')->foldable()->required(strpos($requiredFields, ",PM,") !== false)->items(data('pmUsers'))->value(data('copyExecution.PM'));
+$fields->field('RD')->foldable()->required(strpos($requiredFields, ",RD,") !== false)->items(data('rdUsers'))->value(data('copyExecution.RD'));
 
 $fields->field('teamName')
     ->foldable()
