@@ -78,3 +78,5 @@ ALTER table `zt_metric` ADD `lastCalcRows` int NOT NULL DEFAULT 0 AFTER `order`;
 ALTER table `zt_metric` ADD `lastCalcTime` datetime DEFAULT NULL AFTER `lastCalcRows`;
 
 UPDATE `zt_metric` SET `desc` = '按系统统计的年度关闭执行数是指在关闭时间在某年的执行数。该度量项可以反映团队或组织在某年的工作效率。较高的年度关闭执行数可能表示团队或组织在完成任务方面表现出较高的效率，反之则可能需要审查工作流程和资源分配情况，以提高执行效率。' WHERE `code` = 'count_of_annual_closed_execution';
+
+ALTER TABLE `zt_project` ADD COLUMN `groups` text NULL AFTER `acl`;

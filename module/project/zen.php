@@ -311,6 +311,7 @@ class projectZen extends project
         $this->view->linkedProducts      = isset($linkedProducts) ? $linkedProducts : array();
         $this->view->linkedBranches      = $this->project->getBranchesByProject($copyProjectID);
         $this->view->isStage             = in_array($model, array('waterfall', 'waterfallplus', 'ipd'));
+        $this->view->groups              = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
@@ -441,6 +442,7 @@ class projectZen extends project
         $this->view->from                     = $from;
         $this->view->programID                = $programID;
         $this->view->disableParent            = $disableParent;
+        $this->view->groups                   = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
