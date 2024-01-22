@@ -2556,7 +2556,7 @@ class blockZen extends block
         $this->loadModel('metric');
         $finishEstimateGroup = $this->metric->getResultByCode('scale_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y'))); // 从度量项获取今年各产品完成的需求规模数。
         $doneStoryGroup      = $this->metric->getResultByCode('count_of_annual_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => date('Y'))); // 从度量项获取今年各产品完成的需求数。
-        $resolvedBugGroup    = $this->metric->getResultByCode('count_of_annual_restored_bug_in_product',   array('product' => join(',', $productIdList), 'year' => date('Y'))); // 从度量项获取今年各产品修复的Bug数。
+        $resolvedBugGroup    = $this->metric->getResultByCode('count_of_annual_fixed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => date('Y'))); // 从度量项获取今年各产品修复的Bug数。
 
         if(!empty($finishEstimateGroup)) $finishEstimateGroup = array_column($finishEstimateGroup, null, 'product');
         if(!empty($doneStoryGroup))      $doneStoryGroup      = array_column($doneStoryGroup,      null, 'product');
@@ -2585,8 +2585,8 @@ class blockZen extends block
 
         /* 获取各个分组中最大的值， 用来计算各个值所占的比例。 */
         $this->view->maxStoryEstimate  = !empty($doneStoryEstimate) ? max($doneStoryEstimate) : 0;
-        $this->view->maxStoryCount     = !empty($doneStoryCount) ? max($doneStoryCount) : 0;
-        $this->view->maxBugCount       = !empty($dosolvedBugCount) ? max($dosolvedBugCount) : 0;
+        $this->view->maxStoryCount     = !empty($doneStoryCount)    ? max($doneStoryCount)    : 0;
+        $this->view->maxBugCount       = !empty($resolvedBugCount)  ? max($resolvedBugCount)  : 0;
     }
 
     /**
