@@ -8,8 +8,8 @@ timeout=0
 cid=1
 
 - 测试分组数。 @10
-- 测试2017年新增执行数第0条的value属性 @54
-- 测试2019年新增执行数第0条的value属性 @10
+- 测试2017年新增执行数第0条的value属性 @33
+- 测试2019年新增执行数第0条的value属性 @30
 - 测试2023年新增执行数第0条的value属性 @0
 
 */
@@ -24,6 +24,6 @@ $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('10'); // 测试分组数。
-r($calc->getResult(array('year' => '2017'))) && p('0:value') && e('54'); // 测试2017年新增执行数
-r($calc->getResult(array('year' => '2019'))) && p('0:value') && e('10'); // 测试2019年新增执行数
+r($calc->getResult(array('year' => '2017'))) && p('0:value') && e('33'); // 测试2017年新增执行数
+r($calc->getResult(array('year' => '2019'))) && p('0:value') && e('30'); // 测试2019年新增执行数
 r($calc->getResult(array('year' => '2023'))) && p('0:value') && e('0');  // 测试2023年新增执行数

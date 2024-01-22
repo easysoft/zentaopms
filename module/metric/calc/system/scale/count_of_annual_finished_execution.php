@@ -22,16 +22,16 @@ class count_of_annual_finished_execution extends baseCalc
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('t1.closedDate');
+    public $fieldList = array('t1.realEnd');
 
     public $result = array();
 
     public function calculate($row)
     {
-        $closedDate = $row->closedDate;
-        if(empty($closedDate)) return false;
+        $realEnd = $row->realEnd;
+        if(empty($realEnd)) return false;
 
-        $year = substr($closedDate, 0, 4);
+        $year = substr($realEnd, 0, 4);
         if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;

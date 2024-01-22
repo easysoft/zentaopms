@@ -21,4 +21,12 @@ fields:
   range: "20110101 000000-20210101 000000:10D"
   type: timestamp
   format: YYYY-MM-DD
+- field: realBegan
+  range: "20110101 000000-20210101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: realEnd
+  range: "20120101 000000-20220101 000000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
 ...
