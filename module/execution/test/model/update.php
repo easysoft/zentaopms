@@ -1,9 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试executionModel->update();
-cid=1
+cid=0
 
 - 测试重复迭代code第code条的0属性 @『项目代号』已经有『执行2』这条记录了。
 - 测试修改迭代名称
@@ -39,14 +40,10 @@ cid=1
  - 第0条的old属性 @wait
  - 第0条的new属性 @closed
 - 测试修改名称为空第name条的0属性 @『迭代名称』不能为空。
-- 测试修改code为空
- - 第0条的field属性 @code
- - 第0条的old属性 @迭代3
- - 第0条的new属性 @~~
+- 测试修改code为空属性code @『迭代代号』不能为空。
 - 测试无修改 @没有数据更新
 
 */
-
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/execution.class.php';
 
@@ -95,6 +92,11 @@ $noCode         = array('code' => '');
 $repeatcode     = array('name' => '迭代1', 'code' => '执行2');
 
 $execution = new executionTest();
+$execution->executionModel->lang->projectCommon   = '项目';
+$execution->executionModel->lang->executionCommon = '迭代';
+$execution->executionModel->config->setCode       = 1;
+include($execution->executionModel->app->getBasePath() . 'module/execution/lang/zh-cn.php');
+
 r($execution->updateObject($executionIDList[0], $repeatcode))     && p('code:0')          && e('『项目代号』已经有『执行2』这条记录了。'); // 测试重复迭代code
 r($execution->updateObject($executionIDList[0], $changeName))     && p('0:field,old,new') && e('name,执行3,迭代名修改');                   // 测试修改迭代名称
 r($execution->updateObject($executionIDList[0], $changeStage))    && p('0:field,old,new') && e('project,0,1');                             // 测试修改迭代项目为瀑布项目
@@ -105,5 +107,5 @@ r($execution->updateObject($executionIDList[1], $changeLifetime)) && p('0:field,
 r($execution->updateObject($executionIDList[1], $changeDoing))    && p('0:field,old,new') && e('status,doing,wait');                       // 测试修改迭代状态为wait
 r($execution->updateObject($executionIDList[1], $changeClosed))   && p('0:field,old,new') && e('status,wait,closed');                      // 测试修改迭代状态为closed
 r($execution->updateObject($executionIDList[1], $noName))         && p('name:0')          && e('『迭代名称』不能为空。');                  // 测试修改名称为空
-r($execution->updateObject($executionIDList[3], $noCode))         && p('0:field,old,new') && e('code,迭代3,~~');                           // 测试修改code为空
+r($execution->updateObject($executionIDList[3], $noCode))         && p('code')            && e('『迭代代号』不能为空。');                  // 测试修改code为空
 r($execution->updateObject($executionIDList[1], $noChange))       && p()                  && e('没有数据更新');                            // 测试无修改
