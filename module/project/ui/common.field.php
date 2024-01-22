@@ -12,8 +12,7 @@ $currency       = data('parentProgram') ? data('parentProgram.budgetUnit') : $co
 $disableStageBy = !empty(data('executions')) ? true : false;
 
 $fields->field('parent')
-    ->control('picker')
-    ->required()
+    ->control('picker', array('required' => true))
     ->labelHint($lang->program->tips)
     ->hidden(data('globalDisableProgram'))
     ->items(data('programList'));
