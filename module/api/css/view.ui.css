@@ -7,6 +7,6 @@ pre { display: block; padding: 9.5px; margin: 0px 0px 10px; font-size: 12px; lin
 
 .scrollbar-hover { overflow-y: scroll; }
 #mainContent .panel+.panel {flex: none}
-#history{ position: relative;}
+#history{position: relative; width: 400px}
 #history .history-changes {max-width: 400px !important; word-wrap: break-word;}
 #history > #closeBtn { position: absolute; right: 10px; top: 10px;}
