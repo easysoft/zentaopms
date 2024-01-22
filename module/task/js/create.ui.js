@@ -1,3 +1,5 @@
+window.waitDom('[name=type]', function(){ typeChange();})
+
 /**
  * 根据多人任务是否勾选展示团队。
  * Show team menu box.
@@ -30,9 +32,9 @@ function toggleTeam()
  * @access public
  * @return void
  */
-function typeChange(e)
+function typeChange()
 {
-    const result = $(e.target).val();
+    const result = $('[name=type]').val();
 
     /* Change assigned person to multiple selection, and hide multiple team box. */
     const $assignedToPicker = $('[name^=assignedTo]').zui('picker');
