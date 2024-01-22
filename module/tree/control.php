@@ -357,7 +357,7 @@ class tree extends control
 
             if(strpos($extra, 'excludeRelated') !== false)
             {
-                $childs = $this->tree->getAllChildId($excludeModuleID);
+                $childs = $this->tree->getAllChildId((int)$excludeModuleID);
                 foreach($childs as $childModuleID) unset($optionMenu[$childModuleID]);
             }
             else
