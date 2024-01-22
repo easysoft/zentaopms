@@ -12,7 +12,6 @@ namespace zin;
 $fields = useFields('execution.edit');
 
 jsVar('weekend', $config->execution->weekend);
-jsVar('errorSameProducts', $lang->execution->errorSameProducts);
 jsVar('unmodifiableProducts',$unmodifiableProducts);
 jsVar('unmodifiableBranches', $unmodifiableBranches);
 jsVar('linkedStoryIDList', $linkedStoryIDList);

@@ -35,7 +35,6 @@ if(!empty($project->model) && $project->model == 'agileplus' && !empty($config->
 jsVar('+projectID', $projectID);
 jsVar('copyProjectID', $copyProjectID);
 jsVar('weekend', $config->execution->weekend);
-jsVar('errorSameProducts', $lang->execution->errorSameProducts);
 jsVar('isStage', $isStage);
 jsVar('copyExecutionID', $copyExecutionID);
 jsVar('executionID', isset($executionID) ? $executionID : 0);
