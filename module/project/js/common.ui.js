@@ -18,10 +18,12 @@ function changeType()
     if($(this).val() == 0)
     {
         $('.productBox').addClass('hidden');
+        $('.stageByBox').addClass('hidden');
     }
     else
     {
         $('.productBox').removeClass('hidden');
+        if(typeof productChange == 'function') productChange($(this));
     }
 }
 
