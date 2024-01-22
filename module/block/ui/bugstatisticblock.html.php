@@ -23,7 +23,7 @@ foreach($products as $productItem)
     (
         'id'        => $productItem->id,
         'text'      => $productItem->name,
-        'url'       => createLink('product', 'browse', "productID={$productItem->id}"),
+        'url'       => createLink('bug', 'browse', "productID={$productItem->id}"),
         'activeUrl' => createLink('block', 'printBlock', "blockID={$block->id}&params={$params}")
     );
     if($productItem->id == $active) $product = $productItem;
