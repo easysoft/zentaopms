@@ -561,7 +561,7 @@ class storyTest
     {
         $_POST['uid']        = '0';
         $_POST['assignedTo'] = $assignedTo;
-        $this->objectModel->assign($storyID);
+        $this->objectModel->assign($storyID, (object)$_POST);
         unset($_POST);
 
         if(dao::isError()) return dao::getError();

@@ -1,18 +1,20 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
-
-zdTable('story')->gen(100);
 
 /**
 
 title=测试 storyModel->assign();
-cid=1
-pid=1
+cid=0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/story.class.php';
+su('admin');
+
+zdTable('product')->gen(1);
+$story = zdTable('story');
+$story->product->range(1);
+$story->gen(100);
 
 $story = new storyTest();
 
