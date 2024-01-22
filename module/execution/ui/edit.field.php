@@ -138,7 +138,7 @@ $fields->field('productsBox')
         'linkedBranches' => data('linkedBranches'),
         'productPlans'   => data('productPlans'),
         'project'        => data('project'),
-        'isStage'        => data('isStage')
+        'isStage'        => isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'))
     ));
 
 $fields->field('PO')
