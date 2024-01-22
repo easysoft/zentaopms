@@ -242,7 +242,7 @@ detailBody
                             !empty($task->team) && $task->mode == 'linear' ? set::disabled(true) : null
                         )
                     ),
-                    !empty($task->team) && $task->mode == 'linear' ? div
+                    !empty($task->team) && !empty($task->mode) ? div
                     (
                         btn
                         (
