@@ -1,6 +1,6 @@
 $(document).on('change', 'input[name=begin],input[name=end]', function()
 {
-    $("input[name='delta']").prop('checked', false);
+    $("[name='delta']:checked").prop('checked', false);
 });
 
 window.clickSubmit = function()

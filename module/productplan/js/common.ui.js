@@ -6,9 +6,9 @@
  */
 function computeEndDate(e)
 {
-    let delta     = $(e.target).val();
+    let delta     = $('[name=delta]:checked').val();
     let beginDate = $('input[name=begin]').val();
-    if(!beginDate) return;
+    if(!beginDate || !delta) return;
 
     delta     = currentDelta = parseInt(delta);
     beginDate = convertStringToDate(beginDate);
@@ -64,9 +64,9 @@ function formatDate(dateString, days)
  * @access public
  * @return void
  */
-function toggleDateBox(e)
+function toggleDateBox()
 {
-    if($(e.target).prop('checked'))
+    if($('[name=future]').prop('checked'))
     {
         $('#begin').attr('disabled', 'disabled');
         $('#end').attr('disabled', 'disabled').parents('.form-row').addClass('hidden');

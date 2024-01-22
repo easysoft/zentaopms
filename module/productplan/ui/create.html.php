@@ -68,6 +68,7 @@ formPanel
     ) : null,
     formRow
     (
+        set::width($lastPlan ? 'full' : '1/2'),
         formGroup
         (
             set::width('1/2'),
@@ -90,7 +91,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/4'),
+            set::width('1/3'),
             set::label($lang->productplan->begin),
             datepicker
             (
@@ -102,6 +103,7 @@ formPanel
         formGroup
         (
             setClass('items-center'),
+            set::width('2/3'),
             checkbox
             (
                 set::name('future'),
@@ -116,7 +118,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/4'),
+            set::width('1/3'),
             set::label($lang->productplan->end),
             set::control('date'),
             setID('end'),
@@ -124,6 +126,7 @@ formPanel
         ),
         formGroup
         (
+            set::width('2/3'),
             radioList
             (
                 set::name('delta'),
