@@ -50,7 +50,8 @@ class programZen extends program
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('code', '')
-            ->setIF($this->post->acl == 'open', 'whitelist,groups', '')
+            ->setIF($this->post->acl == 'open', 'whitelist', '')
+            ->setIF($this->post->acl == 'open', 'groups', '')
             ->add('type', 'program')
             ->join('whitelist,groups', ',')
             ->get();
