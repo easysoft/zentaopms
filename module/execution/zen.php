@@ -856,9 +856,9 @@ class executionZen extends execution
             return false;
         }
 
-        $_POST['products'] = array_filter($_POST['products']);
         if(!empty($_POST['products']))
         {
+            $_POST['products'] = array_filter($_POST['products']);
             $this->app->loadLang('project');
             $multipleProducts  = $this->loadModel('product')->getMultiBranchPairs();
             foreach($_POST['products'] as $index => $productID)
