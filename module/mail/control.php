@@ -55,9 +55,8 @@ class mail extends control
             set_time_limit(30);
             $error = '';
             if($this->post->fromAddress == false) $error = sprintf($this->lang->error->notempty, $this->lang->mail->fromAddress);
-            if(!validater::checkEmail($this->post->fromAddress)) $error .= '\n' . sprintf($this->lang->error->email, $this->lang->mail->fromAddress);
-
-            if($error) return $this->sendError($error);
+            if(!$error && !validater::checkEmail($this->post->fromAddress)) $error = sprintf($this->lang->error->email, $this->lang->mail->fromAddress);
+            if($error) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({message: '{$error}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});"));
 
             $mailConfig = $this->mail->autoDetect($this->post->fromAddress);
             $mailConfig->fromAddress = $this->post->fromAddress;

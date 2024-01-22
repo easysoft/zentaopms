@@ -64,7 +64,7 @@ formPanel
         ),
         span
         (
-            setClass('ml-4 pt-2 flex items-center text-gray'),
+            setClass('ml-4 pt-2 flex items-center text-gray w-3/4'),
             icon('info text-warning mr-1'),
             $lang->mail->addressWhiteList
         )
