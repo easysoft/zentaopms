@@ -21,6 +21,7 @@ jsVar('moduleGroup', $moduleGroup);
 /* ====== Define the page structure with zin widgets ====== */
 formBatchPanel
 (
+    set::title($lang->task->batchEdit),
     set::mode('edit'),
     set::data(array_values($tasks)),
     set::onRenderRow(jsRaw('renderRowData')),
