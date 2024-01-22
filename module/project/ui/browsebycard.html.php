@@ -193,7 +193,7 @@ if(!empty($projectStats))
                         (
                             set::title($project->date),
                             setClass('label lighter mr-2'),
-                            setClass($status == 'delay' ? 'text-danger' : ''),
+                            setStyle('color', $status == 'delay' ? 'var(--color-danger-500)' : 'inherit'),
                             $project->date
                         )
                     ),
