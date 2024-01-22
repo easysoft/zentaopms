@@ -563,6 +563,13 @@ class aiModel extends model
             $data->content     = sprintf($this->lang->ai->miniPrograms->newVersionTip, date("Y/n/j G:i"));
             $data->createdDate = helper::now();
 
+            $this->dao->delete()
+                ->from(TABLE_AIMESSAGE)
+                ->where('appID')->eq($appID)
+                ->andWhere('user')->eq($user)
+                ->andWhere('type')->eq('ntf')
+                ->exec();
+
             $this->dao->insert(TABLE_AIMESSAGE)
                 ->data($data)
                 ->exec();
