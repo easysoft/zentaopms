@@ -4,16 +4,19 @@ global $lang, $config;
 
 $fields = defineFieldList('product');
 
-$fields->field('program')
-    ->control('picker')
-    ->items(data('fields.program.options'))
-    ->value(data('fields.program.default'));
+if($config->systemMode != 'light')
+{
+    $fields->field('program')
+        ->control('picker')
+        ->items(data('fields.program.options'))
+        ->value(data('fields.program.default'));
 
-$fields->field('line')
-    ->hidden(empty(data('fields.program.default')))
-    ->control('picker')
-    ->items(data('fields.line.options'))
-    ->value(data('fields.line.default'));
+    $fields->field('line')
+        ->hidden(empty(data('fields.program.default')))
+        ->control('picker')
+        ->items(data('fields.line.options'))
+        ->value(data('fields.line.default'));
+}
 
 $fields->field('name')->wrapBefore()->control('input');
 
