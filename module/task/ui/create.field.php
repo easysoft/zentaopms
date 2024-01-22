@@ -5,7 +5,7 @@ global $lang,$config;
 $fields = defineFieldList('task.create', 'task');
 
 /* Set foldable attribute. */
-$fields->field('module')->foldable(strpos($config->task->create->requiredFields, 'module') === false);
+$fields->field('module')->foldable();
 $fields->field('files')->foldable();
 $fields->field('mailto')->foldable();
 $fields->field('keywords')->foldable();
@@ -142,7 +142,7 @@ $fields->field('storyBox')
     ->label($lang->task->story)
     ->checkbox(array('text' => $lang->task->syncStory, 'name' => 'copyButton'))
     ->hidden(!data('features.story'))
-    ->foldable(data('features.story') && strpos($config->task->create->requiredFields, 'story') === false)
+    ->foldable()
     ->control($buildStoryBox);
 
 /* Remove story relate jump link. */
