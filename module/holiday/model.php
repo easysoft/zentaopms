@@ -425,6 +425,17 @@ class holidayModel extends model
         $data    = json_decode(common::http($apiRoot));
         $days    = isset($data->days) ? (array)$data->days : array();
 
+        /* Get holidays by file. */
+        if(empty($days))
+        {
+            $yearFile    = $this->app->wwwRoot . 'static/json/holiday/' . $year . '.json';
+            $defaultFile = $this->app->wwwRoot . 'static/json/holiday/json/default.json';
+
+            $data = file_exists($yearFile) ? file_get_contents($yearFile) : file_get_contents($defaultFile);
+            $data = json_decode($data);
+            $days = isset($data->days) ? (array)$data->days : array();
+        }
+
         /* Build holiday data. */
         $holidays   = array();
         $privDay    = 0;
