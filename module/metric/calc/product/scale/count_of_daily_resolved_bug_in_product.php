@@ -44,20 +44,7 @@ class count_of_daily_resolved_bug_in_product extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $product => $years)
-        {
-            foreach($years as $year => $months)
-            {
-                foreach($months as $month => $days)
-                {
-                    foreach($days as $day => $value)
-                    {
-                        $records[] = array('product' => $product, 'year' => $year, 'month' => $month, 'day' => $day, 'value' => $value);
-                    }
-                }
-            }
-        }
+        $records = $this->getRecords(array('product', 'year', 'month', 'day', 'value'));
 
         return $this->filterByOptions($records, $options);
     }

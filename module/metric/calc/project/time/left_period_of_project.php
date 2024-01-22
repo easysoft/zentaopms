@@ -52,3 +52,4 @@ class left_period_of_project extends baseCalc
         return $this->filterByOptions($records, $options);
     }
 }
+

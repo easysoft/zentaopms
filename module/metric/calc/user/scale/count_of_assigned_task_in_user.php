@@ -37,7 +37,7 @@ class count_of_assigned_task_in_user extends baseCalc
 
         if(empty($assignedTo) || $assignedTo == 'closed') return false;
         if($status == 'closed' || $status == 'cancel') return false;
-        if($projectStatus == 'suspended' || $executionStatus == 'suspended') return false;
+        if($projectStatus == 'suspended' || $projectStatus == 'closed' || $executionStatus == 'suspended' || $executionStatus == 'closed') return false;
 
         if($mode == 'multi')
         {

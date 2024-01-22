@@ -45,14 +45,7 @@ class count_of_monthly_created_release extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = array();
-        foreach($this->result as $year => $months)
-        {
-            foreach($months as $month => $value)
-            {
-                $records[] = array('year' => $year, 'month' => $month, 'value' => $value);
-            }
-        }
+        $records = $this->getRecords(array('year', 'month', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }

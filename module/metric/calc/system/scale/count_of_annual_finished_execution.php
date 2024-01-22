@@ -1,15 +1,15 @@
 <?php
 /**
- * 按系统统计的年度关闭执行数。
- * Count of annual closed execution.
+ * 按系统统计的年度完成执行数。
+ * Count of annual finished execution.
  *
  * 范围：system
  * 对象：execution
  * 目的：scale
- * 度量名称：按系统统计的年度关闭执行数
+ * 度量名称：按系统统计的年度完成执行数
  * 单位：个
- * 描述：按系统统计的年度关闭执行数是指在关闭时间在某年的执行数。该度量项可以反映团队或组织在某年的工作效率。较高的年度关闭执行数可能表示团队或组织在完成任务方面表现出较高的效率，反之则可能需要审查工作流程和资源分配情况，以提高执行效率。
- * 定义：所有的执行个数求和;关闭时间为某年;过滤已删除的执行;
+ * 描述：按系统统计的年度完成执行数是指在某年度已经完成的执行数。该度量项反映了团队或组织在某年的工作效率和完成能力。较高的年度完成执行数表示团队或组织在完成任务方面表现出较高的效率，反之则可能需要审查工作流程和资源分配情况，以提高执行效率。
+ * 定义：所有的执行个数求和;实际完成日期为某年;过滤已删除的执行;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -18,7 +18,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_annual_closed_execution extends baseCalc
+class count_of_annual_finished_execution extends baseCalc
 {
     public $dataset = 'getExecutions';
 
