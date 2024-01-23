@@ -140,7 +140,12 @@ else
         $canBrowseTestCase        = hasPriv('testcase', 'browse');
         $canBrowseProjectTestCase = hasPriv('testcase', 'browse');
 
-        if($caseModule->branch && isset($branches[$caseModule->branch])) $moduleItems[] = $branches[$caseModule->branch] . $lang->arrow;
+        if($caseModule->branch && isset($branches[$caseModule->branch]))
+        {
+            $moduleItems[] = $branches[$caseModule->branch];
+            $moduleItems[] = icon('angle-right');
+        }
+
         foreach($modulePath as $key => $module)
         {
             if($tab == 'qa' || $tab == 'ops')
