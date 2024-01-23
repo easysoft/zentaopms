@@ -1,4 +1,4 @@
-window.waitDom('[name=type]', function(){ typeChange();})
+window.waitDom('#form-task-create [name=type]', function(){ typeChange();})
 
 /**
  * 根据多人任务是否勾选展示团队。
@@ -34,10 +34,10 @@ function toggleTeam()
  */
 function typeChange()
 {
-    const result = $('[name=type]').val();
+    const result = $('#form-task-create [name=type]').val();
 
     /* Change assigned person to multiple selection, and hide multiple team box. */
-    const $assignedToPicker = $('[name^=assignedTo]').zui('picker');
+    const $assignedToPicker = $('#form-task-create [name^=assignedTo]').zui('picker');
     if(result == 'affair')
     {
         $('.assignedToBox .assignedToList').addClass('hidden');
@@ -53,13 +53,13 @@ function typeChange()
         $assignedToPicker.$.setValue('');
     }
 
-    $('[name=multiple]').closest('.checkbox-primary').toggleClass('hidden', result == 'affair');
+    $('#form-task-create [name=multiple]').closest('.checkbox-primary').toggleClass('hidden', result == 'affair');
 
     /* If the execution has story list, toggle between hiding and displaying the selection of select test story box. */
     if(lifetime != 'ops' && attribute != 'request' && attribute != 'review' && vision != 'lite')
     {
-        $('[name=selectTestStory]').prop('checked', false);
-        $('[name=selectTestStory]').closest('.checkbox-primary').toggleClass('hidden', result != 'test');
+        $('#form-task-create [name=selectTestStory]').prop('checked', false);
+        $('#form-task-create [name=selectTestStory]').closest('.checkbox-primary').toggleClass('hidden', result != 'test');
         toggleSelectTestStory();
     }
 }
@@ -74,48 +74,48 @@ function typeChange()
  */
 function toggleSelectTestStory()
 {
-    if(!$('[name=selectTestStory]').hasClass('hidden') && $('[name=selectTestStory]').prop('checked'))
+    if(!$('#form-task-create [name=selectTestStory]').hasClass('hidden') && $('#form-task-create [name=selectTestStory]').prop('checked'))
     {
-        $('[data-name=module]').addClass('hidden');
-        $('[data-name=storyBox]').addClass('hidden');
-        $('[data-name=datePlan]').addClass('hidden');
-        $('[data-name=estimate]').addClass('hidden');
-        $('[name=multiple]').closest('.checkbox-primary').addClass('hidden');
-        $('[data-name=testStoryBox]').removeClass('hidden');
+        $('#form-task-create [data-name=module]').addClass('hidden');
+        $('#form-task-create [data-name=storyBox]').addClass('hidden');
+        $('#form-task-create [data-name=datePlan]').addClass('hidden');
+        $('#form-task-create [data-name=estimate]').addClass('hidden');
+        $('#form-task-create [name=multiple]').closest('.checkbox-primary').addClass('hidden');
+        $('#form-task-create [data-name=testStoryBox]').removeClass('hidden');
         $('#testStoryBox').load($.createLink('task', 'ajaxGetTestStories', 'executionID=' + executionID + '&taskID=' + taskID));
 
         if($('[data-name=execution]').hasClass('hidden'))
         {
-            $('[data-name=name]').removeClass('lite:w-full');
-            $('[data-name=pri]').removeClass('w-1/4').addClass('w-1/2 full:w-1/4');
-            $('[data-name=assignedToBox]').addClass('full:w-1/4');
+            $('#form-task-create [data-name=name]').removeClass('lite:w-full');
+            $('#form-task-create [data-name=pri]').removeClass('w-1/4').addClass('w-1/2 full:w-1/4');
+            $('#form-task-create [data-name=assignedToBox]').addClass('full:w-1/4');
         }
         else
         {
-            $('[data-name=assignedToBox]').removeClass('w-1/2').addClass('w-1/4');
+            $('#form-task-create [data-name=assignedToBox]').removeClass('w-1/2').addClass('w-1/4');
         }
 
-        $('[name^=multiple]').prop('checked', false);
+        $('#form-task-create [name^=multiple]').prop('checked', false);
         toggleTeam();
     }
     else
     {
-        $('[data-name=module]').removeClass('hidden');
-        $('[data-name=storyBox]').removeClass('hidden');
-        $('[data-name=datePlan]').removeClass('hidden');
-        $('[data-name=estimate]').removeClass('hidden');
-        $('[name=multiple]').closest('.checkbox-primary').removeClass('hidden');
-        $('[data-name=testStoryBox]').addClass('hidden');
+        $('#form-task-create [data-name=module]').removeClass('hidden');
+        $('#form-task-create [data-name=storyBox]').removeClass('hidden');
+        $('#form-task-create [data-name=datePlan]').removeClass('hidden');
+        $('#form-task-create [data-name=estimate]').removeClass('hidden');
+        $('#form-task-create [name=multiple]').closest('.checkbox-primary').removeClass('hidden');
+        $('#form-task-create [data-name=testStoryBox]').addClass('hidden');
 
-        if($('[data-name=execution]').hasClass('hidden'))
+        if($('#form-task-create [data-name=execution]').hasClass('hidden'))
         {
-            $('[data-name=name]').addClass('lite:w-full');
-            $('[data-name=pri]').addClass('w-1/4').removeClass('w-1/2 full:w-1/4');
-            $('[data-name=assignedBox]').removeClass('full:w-1/4');
+            $('#form-task-create [data-name=name]').addClass('lite:w-full');
+            $('#form-task-create [data-name=pri]').addClass('w-1/4').removeClass('w-1/2 full:w-1/4');
+            $('#form-task-create [data-name=assignedBox]').removeClass('full:w-1/4');
         }
         else
         {
-            $('[data-name=assignedToBox]').removeClass('w-1/4').addClass('w-1/2');
+            $('#form-task-create [data-name=assignedToBox]').removeClass('w-1/4').addClass('w-1/2');
         }
     }
 }
