@@ -69,39 +69,3 @@ $(document).on('keyup', '#projectName', function()
         if($(this).text().includes(name) || $(this).data('pinyin').includes(name)) $(this).show();
     });
 });
-
-/**
- * Set acl list when change program.
- *
- * @access public
- * @return void
- */
-window.setParentProgram = function()
-{
-    const programID = $('[name=parent]').val();
-    const link      = $.createLink('project', 'create', 'model=' + model + '&program=' + programID);
-
-    if(programID) $('#linkProduct .input-group').addClass('required');
-    if(programID == 0) $('#linkProduct .input-group.required').removeClass('required');
-
-    loadPage(link, '#aclList');
-    $('select[name^=whitelist]').closest('.form-row').removeClass('hidden')
-}
-
-/* Init product. */
-window.waitDom('[name^=products]', function()
-{
-    if($('.newProductBox').length > 0) toggleStageBy($('[name^=products]').eq(0));
-});
-
-window.toggleStageBy = function()
-{
-    let chosenProducts = 0;
-    $(".productsBox [name^='products']").each(function()
-    {
-        if($(this).val() > 0) chosenProducts ++;
-    });
-
-    if(chosenProducts > 1)  $('.stageByBox').removeClass('hidden');
-    if(chosenProducts <= 1) $('.stageByBox').addClass('hidden');
-}

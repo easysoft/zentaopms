@@ -37,11 +37,6 @@ $fields->field('days')->control('input', array('className' => $copyProject ? 'ha
 
 $fields->field('productsBox')->hidden(data('copyProject') && data('copyProject.hasProduct') == 0);
 
-if($model == 'waterfall' || $model == 'waterfallplus')
-{
-    $fields->field('stageBy')->className('hidden');
-}
-
 $fields->field('budget')->foldable();
 
 $fields->field('acl')

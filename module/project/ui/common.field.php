@@ -9,7 +9,7 @@ $fields = defineFieldList('project');
 $model          = data('model');
 $hasCode        = !empty($config->setCode);
 $currency       = data('parentProgram') ? data('parentProgram.budgetUnit') : $config->project->defaultCurrency;
-$disableStageBy = !empty(data('executions')) ? true : false;
+$disableStageBy = !empty(data('executions')) || data('app.rawMethod') == 'edit' ? true : false;
 
 $fields->field('parent')
     ->control('picker', array('required' => true))
@@ -75,11 +75,11 @@ $fields->field('productsBox')
 if($model == 'waterfall' || $model == 'waterfallplus')
 {
     $fields->field('stageBy')
-        ->className('stageByBox')
+        ->className('stageByBox', data('linkedProducts') && count(data('linkedProducts')) > 1 ? '' : 'hidden')
         ->control('radioListInline')
         ->labelHint($lang->project->stageByTips)
         ->label($lang->project->stageBy)
-        ->value('project')
+        ->value(data('copyProject') ? data('copyProject.stageBy') : (data('project') ? data('project.stageBy') : 'project'))
         ->disabled($disableStageBy)
         ->items($lang->project->stageByList);
 }

@@ -23,7 +23,6 @@ function changeType()
     else
     {
         $('.productsBox').removeClass('hidden');
-        if(typeof toggleStageBy == 'function') toggleStageBy($(this));
     }
 }
 
@@ -316,4 +315,16 @@ function ignoreTip(tip)
 {
     $('#' + tip).remove();
     ignoreTips[tip] = true;
+}
+
+function toggleStageBy()
+{
+    let chosenProducts = 0;
+    $(".productsBox [name^='products']").each(function()
+    {
+        if($(this).val() > 0) chosenProducts ++;
+    });
+
+    if(chosenProducts > 1)  $('.stageByBox').removeClass('hidden');
+    if(chosenProducts <= 1) $('.stageByBox').addClass('hidden');
 }
