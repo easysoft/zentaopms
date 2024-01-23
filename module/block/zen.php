@@ -1807,12 +1807,12 @@ class blockZen extends block
         }
 
         /* 通过度量项获取今年完成的迭代数量。 */
-        $closedExecution      = 0;
-        $closedExecutionGroup = $project ? $this->metric->getResultByCode('count_annual_closed_execution_in_project', array('project' => $project, 'year' => date('Y'))) : $this->metric->getResultByCode('count_of_annual_closed_execution', array('year' => date('Y')));
-        if(!empty($closedExecutionGroup))
+        $finishedExecution      = 0;
+        $finishedExecutionGroup = $project ? $this->metric->getResultByCode('count_annual_finished_execution_in_project', array('project' => $project, 'year' => date('Y'))) : $this->metric->getResultByCode('count_of_annual_finished_execution', array('year' => date('Y')));
+        if(!empty($finishedExecutionGroup))
         {
-            $closedExecutionGroup = reset($closedExecutionGroup);
-            $closedExecution      = zget($closedExecutionGroup, 'value', 0);
+            $finishedExecutionGroup = reset($finishedExecutionGroup);
+            $finishedExecution      = zget($finishedExecutionGroup, 'value', 0);
         }
 
         /* 通过度量项获取未开始的迭代数量。 */
@@ -1855,7 +1855,7 @@ class blockZen extends block
         $cards[0]->url   = $url;
 
         $cards[1] = new stdclass();
-        $cards[1]->value = $closedExecution;
+        $cards[1]->value = $finishedExecution;
         $cards[1]->label = $this->lang->block->{$code}->thisYear;
 
         $cardGroup = new stdclass();
