@@ -561,6 +561,7 @@ class customModel extends model
                     $fieldKey = substr($method, 0, 3) . ucfirst($fieldName);
                     if(isset($moduleLang->{$fieldKey}) && is_string($moduleLang->{$fieldKey})) $fields[$fieldName] = $moduleLang->$fieldKey;
                 }
+                if($moduleName == 'execution' && $fieldName == 'code') $fields[$fieldName] = $this->lang->execution->code;
             }
         }
 
