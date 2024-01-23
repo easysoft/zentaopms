@@ -751,8 +751,12 @@
         target   = target || options.target;
         callback = callback || options.callback;
 
-        if(!target) return zui.Modal.open(options);
-        else if(target === 'current') target = zui.Modal.query().id;
+        if(!target || target === 'current')
+        {
+            const lastModal = zui.Modal.last();
+            if(!lastModal) return;
+            target = lastModal.id;
+        }
 
         if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
