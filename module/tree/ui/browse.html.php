@@ -102,14 +102,13 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                     setClass(empty($branches) ? 'hidden' : ''),
                     set::name("branch[$i]"),
                     set::items($branches),
-                    set::value(0),
+                    set::value($branch),
                 ),
                 input
                 (
                     setClass('col-short'),
                     set::name("shorts[$i]"),
                     set::type('input'),
-                    set::value(''),
                     set::placeholder($lang->tree->short)
                 )
             ),
