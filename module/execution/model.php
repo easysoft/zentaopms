@@ -361,6 +361,7 @@ class executionModel extends model
 
         /* Check the workload format and total, such as check Workload Ratio if it enabled. */
         if(!empty($execution->percent) && isset($this->config->setPercent) && $this->config->setPercent == 1) $this->checkWorkload('update', (float)$execution->percent, $oldExecution);
+        if(dao::isError()) return false;
 
         /* Set planDuration and realDuration. */
         if(in_array($this->config->edition, array('max', 'ipd')))

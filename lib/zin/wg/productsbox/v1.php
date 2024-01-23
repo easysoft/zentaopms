@@ -273,6 +273,17 @@ class productsBox extends wg
                         )
                     )
                 ),
+                $isStage && $project->stageBy == 'project' ? div
+                (
+                    setClass('hidden branchBoxHidden'),
+                    picker
+                    (
+                        set::name("branch[$i][]"),
+                        set::items($branches),
+                        set::multiple(true),
+                        set::value(is_array($branchIdList) ? implode(',', $branchIdList) : $branchIdList)
+                    )
+                ) : null,
                 formGroup
                 (
                     set::width('1/2'),
