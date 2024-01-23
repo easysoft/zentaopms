@@ -794,17 +794,7 @@ class taskZen extends task
      */
     protected function buildEffortForFinish(object $oldTask, object $task): object
     {
-        /* Record consumed and left. */
-        if(empty($oldTask->team))
-        {
-            $consumed = $task->consumed - $oldTask->consumed;
-        }
-        else
-        {
-            $currentTeam = $this->task->getTeamByAccount($oldTask->team);
-            $consumed = $currentTeam ? $task->consumed - $currentTeam->consumed : $task->consumed;
-        }
-
+        $consumed = (float)$this->post->currentConsumed;
         if($consumed < 0) dao::$errors[] = $this->lang->task->error->consumedSmall;
 
         $effort = new stdclass();

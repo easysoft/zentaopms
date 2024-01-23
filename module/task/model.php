@@ -837,7 +837,7 @@ class taskModel extends model
             foreach($efforts as $effort) $currentTask->consumed += (float)$effort->consumed;
 
             /* If task is not empty, the task status is computed and the task is returned. */
-            if(!empty($task)) return $this->taskTao->computeTaskStatus($currentTask, $oldTask, $task, $autoStatus, empty($efforts), $members);
+            if(!empty($task)) return $this->taskTao->computeTaskStatus($currentTask, $oldTask, $task, $autoStatus, !empty($efforts), $members);
 
             /* If task is empty, update the current task. */
             $this->dao->update(TABLE_TASK)->data($currentTask)->autoCheck()->where('id')->eq($oldTask->id)->exec();
@@ -1153,15 +1153,18 @@ class taskModel extends model
     public function finish(object $oldTask, object $task): bool|array
     {
         $currentTeam = !empty($oldTask->team) ? $this->getTeamByAccount($oldTask->team) : array();
-        if($currentTeam) $task = $this->computeMultipleHours($oldTask, $task);
+        if($currentTeam)
+        {
+            $consumed = $currentTeam->consumed + (float)$this->post->currentConsumed;
+            $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
+            $task = $this->computeMultipleHours($oldTask, $task);
+        }
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()
             ->where('id')->eq((int)$oldTask->id)
             ->exec();
 
         if(dao::isError()) return false;
-
-        if($currentTeam) $this->dao->update(TABLE_TASKTEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)->set('status')->eq('done')->where('id')->eq($currentTeam->id)->exec();
 
         if($task->status == 'done') $this->loadModel('score')->create('task', 'finish', $oldTask->id);
         return common::createChanges($oldTask, $task);
