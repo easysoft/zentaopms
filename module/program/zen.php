@@ -117,7 +117,6 @@ class programZen extends program
     protected function getProgramsByType(string $status, string $orderBy, int $param = 0, object|null $pager = null): array
     {
         $status = strtolower($status);
-        $params = array();
         $this->view->summary = '';
 
         if(strtolower($status) == 'bysearch')
