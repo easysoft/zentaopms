@@ -571,6 +571,7 @@ class taskZen extends task
             ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
             ->setIF(!$this->post->estStarted, 'estStarted', null)
             ->setIF(!$this->post->deadline, 'deadline', null)
+            ->setIF($this->post->type == 'test', 'story', 0)
             ->get();
 
         /* Processing image link. */
