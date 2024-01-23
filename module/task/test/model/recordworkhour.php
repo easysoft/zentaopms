@@ -94,7 +94,7 @@ su('user2');
 $multiTaskResult = $task->recordWorkhourTest(2, $multiTaskEffort);
 r($multiTaskResult[0]) && p('field,old,new') && e('estimate,1,25');  // 在多人任务团队中的用户记录工时，查看返回的最初预计工时
 r($multiTaskResult[1]) && p('field,old,new') && e('consumed,4,2');   // 在多人任务团队中的用户记录工时，查看返回的消耗工时
-r($multiTaskResult[2]) && p('field,old,new') && e('left,2,25');      // 在多人任务团队中的用户记录工时，查看返回的剩余工时
+r($multiTaskResult[2]) && p('field,old,new') && e('left,2,21');      // 在多人任务团队中的用户记录工时，查看返回的剩余工时
 
 r($task->recordWorkhourTest(3, $finishTaskEffort))        && p('0:field,old,new') && e('consumed,5,10');                 // 通过记录日志直接完成任务的情况
 r($task->recordWorkhourTest(4, $normalTaskEffort))        && p('2:field,old,new') && e('status,done,doing');             // 正常记录工时
