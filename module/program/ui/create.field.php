@@ -13,4 +13,5 @@ $fields->field('begin')
     ->itemBegin('end')->require()->type('datePicker')->placeholder($lang->project->end)->itemEnd();
 
 $fields->field('acl')
-       ->control(array('control' => 'aclBox', 'aclItems' => data('parentProgram') ? $lang->program->subAclList : $lang->program->aclList, 'aclValue' => 'open', 'whitelistLabel' => $lang->program->whitelist, 'groupLabel' => $lang->program->groups, 'groupItems' => data('groups'), 'userLabel' => $lang->program->users));
+    ->items(data('parentProgram') ? $lang->program->subAclList : $lang->program->aclList)
+    ->value('open');

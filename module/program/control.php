@@ -176,7 +176,6 @@ class program extends control
         $this->view->programList    = $this->program->getList();
         $this->view->budgetUnitList = $this->project->getBudgetUnitList();
         $this->view->budgetLeft     = empty($parentProgram) ? 0 : $this->program->getBudgetLeft($parentProgram);
-        $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->loadUrl        = $this->createLink('program', 'create', "parentProgramID={parent}" . (empty($originExtra) ? '' : "&extra=$originExtra"));
 
         $this->display();
@@ -221,7 +220,6 @@ class program extends control
         $this->view->parents        = $parents;
         $this->view->budgetUnitList = $this->loadModel('project')->getBudgetUnitList();
         $this->view->parentProgram  = $parentProgram;
-        $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->loadUrl        = $this->createLink('program', 'edit', "programID=$programID&parentProgramID={parent}");
 
         $this->display();
