@@ -28,14 +28,14 @@ $fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,mo
 
 $fields->orders('name,assignedToBox', 'module,testStoryBox', 'desc,module,storyBox');
 $fields->fullModeOrders('type,module,storyBox,testStoryBox', 'desc,files,mailto,keywords');
-if($execution->type == 'kanban')
+if($execution->type == 'kanban' || empty(data('execution.multiple')))
 {
     $fields->orders('desc,module,storyBox', 'type,assignedToBox,region,lane');
     $fields->fullModeOrders('name,assignedToBox', 'type,module,storyBox,testStoryBox', 'desc,files,mailto,keywords');
     if(empty($features['story'])) $fields->fullModeOrders('type,module,storyBox', 'name,assignedToBox', 'desc,files,mailto,keywords');
 }
 
-if(empty($features['story']) && $execution->type != 'kanban')
+if(empty($features['story']) && $execution->type != 'kanban' && !empty(data('execution.multiple')))
 {
     $fields->fullModeOrders('type,module,storyBox,testStoryBox,assignedToBox', 'desc,files,mailto,keywords');
 }

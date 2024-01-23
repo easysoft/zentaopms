@@ -5,7 +5,7 @@ global $lang, $config;
 $fields = defineFieldList('task');
 
 $fields->field('execution')
-    ->hidden(data('execution.type') == 'kanban' && $config->vision != 'lite')
+    ->hidden((data('execution.type') == 'kanban' && $config->vision != 'lite') || empty(data('execution.multiple')))
     ->control('picker')
     ->items(data('executions'))
     ->value(data('execution.id'));

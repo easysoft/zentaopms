@@ -68,11 +68,11 @@ $fields->field('assignedToBox')
 
 /* Set name field width. */
 $nameWidth = 'w-1/2';
-if(empty(data('features.story')) && data('execution.type') != 'kanban') $nameWidth .= ' full:w-full';
+if(empty(data('features.story')) && data('execution.type') != 'kanban' && !empty(data('execution.multiple'))) $nameWidth .= ' full:w-full';
 if(data('execution.type') == 'kanban') $nameWidth .= ' lite:w-full';
 $fields->field('name')->className($nameWidth);
 
-if(!empty(data('features.story')) && data('execution.type') == 'kanban')
+if(!empty(data('features.story')) && (data('execution.type') == 'kanban' || empty(data('execution.multiple'))))
 {
     $fields->field('module')->wrapBefore();
 }
