@@ -25,7 +25,7 @@ foreach($testStories as $storyID => $storyTitle)
             h::td
             (
                 setClass('border-b border-l'),
-                span($storyID, setClass('ml-2'))
+                div($storyID, setClass('ml-2 flex items-center h-8'))
             ),
             h::td
             (
@@ -88,6 +88,7 @@ foreach($testStories as $storyID => $storyTitle)
             (
                 inputControl
                 (
+                    setClass('c-estimate'),
                     input
                     (
                         setID("testEstimate{$i}"),
