@@ -374,7 +374,7 @@ class execution extends control
         /* Get users, products, executions, project and projects.*/
         $users      = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $products   = $this->loadModel('product')->getProductPairsByProject($executionID);
-        $executions = !empty($products) ? $this->execution->getPairsByProduct(array_keys($products)) : $executions[$executionID] = $execution->name;
+        $executions = !empty($products) ? $this->execution->getPairsByProduct(array_keys($products)) : array($executionID => $execution->name);
         $project    = $this->loadModel('project')->getByID($execution->project);
         !empty($products) ? $projects = $this->product->getProjectPairsByProductIDList(array_keys($products)) : $projects[$project->id] = $project->name;
 

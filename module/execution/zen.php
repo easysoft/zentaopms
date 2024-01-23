@@ -791,11 +791,9 @@ class executionZen extends execution
                 $bugModules[$moduleID] = $productName . $moduleName;
             }
         }
-        $this->config->bug->search['params']['module']['values'] = $bugModules;
-
-        $this->config->bug->search['params']['project']['values'] = array('' => '') + $projects;
-
-        $this->config->bug->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withbranch|releasetag');
+        $this->config->bug->search['params']['module']['values']      = $bugModules;
+        $this->config->bug->search['params']['project']['values']     = $projects;
+        $this->config->bug->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array_keys($products), 'all', 'withbranch|releasetag');
 
         unset($this->config->bug->search['fields']['resolvedBy']);
         unset($this->config->bug->search['fields']['closedBy']);
