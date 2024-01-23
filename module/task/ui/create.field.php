@@ -13,11 +13,27 @@ $fields->field('keywords')->foldable();
 /* Set assignedTo field. */
 $buildAssginedTo = function($props)
 {
+    $assignedToListBox = null;
+    if(!empty(data('task.team')))
+    {
+        $i = 1;
+        foreach(data('task.team') as $member)
+        {
+            $users              = data('users');
+            $assignedToListBox .= "<div class='picker-multi-selection' data-index={$i}><span class='text'>{$users[$member->account]}</span><div class='picker-deselect-btn btn size-xs ghost'><span class='close'></span></div></div>";
+            if($i < count(data('task.team')) && data('task.mode') == 'linear') $assignedToListBox .= '<i class="icon icon-arrow-right"></i>';
+
+            $i ++;
+        }
+    }
+
+    $hiddenTeamBtn = empty(data('task.mode')) ? 'hidden' : '';
     return div
         (
             setClass('assignedToBox flex'),
             picker
             (
+                setClass($hiddenTeamBtn ? '' : 'hidden'),
                 set::name('assignedTo'),
                 set::value(data('task.assignedTo')),
                 set::items(data('members'))
@@ -28,7 +44,7 @@ $buildAssginedTo = function($props)
                 (
                     array
                     (
-                        'class' => 'btn primary-pale hidden add-team mr-3',
+                        'class' => "btn primary-pale add-team mr-3 $hiddenTeamBtn",
                         'data-toggle' => 'modal',
                         'url' => '#modalTeam',
                         'icon' => 'plus'
@@ -36,14 +52,18 @@ $buildAssginedTo = function($props)
                 ),
                 data('lang.task.addMember')
             ),
-            div(setClass('assignedToList'))
+            div
+            (
+                setClass('assignedToList'),
+                html($assignedToListBox)
+            )
 
         );
 };
 
 $fields->field('assignedToBox')
     ->label($lang->task->assignedTo)
-    ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple'))
+    ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple', 'checked' => !empty(data('task.mode'))))
     ->control($buildAssginedTo);
 
 /* Set name field width. */
