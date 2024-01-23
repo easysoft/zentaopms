@@ -1591,9 +1591,9 @@ class screenModel extends model
             /* Process execution delay date. */
             $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
             $chartData    = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
-            $chartData['baseLine']  = json_encode($chartData['baseLine']);
-            $chartData['burnLine']  = json_encode($chartData['burnLine']);
-            if(isset($chartData['delayLine'])) $chartData['delayLine'] = json_encode($chartData['delayLine']);
+            $chartData['baseLine']  = '[' . implode(',', $chartData['baseLine']) . ']';
+            $chartData['burnLine']  = '[' . implode(',', $chartData['burnLine']) . ']';
+            if(isset($chartData['delayLine'])) $chartData['delayLine'] = '[' . implode(',', $chartData['delayLine']) . ']';
             $execution->chartData = $chartData;
 
             $executionData[$executionID] = $execution;
