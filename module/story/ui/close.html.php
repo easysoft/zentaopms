@@ -23,23 +23,21 @@ formPanel
         setID('closedReason'),
         set::name('closedReason'),
         set::label($lang->story->closedReason),
-        set::width('1/2'),
+        set::width('1/3'),
         set::value(''),
         set::items($reasonList),
         on::change('#closedReason', 'setStory')
     ),
-    formRow
+    formGroup
     (
         set::hidden(true),
         setID('duplicateStoryBox'),
-        formGroup
-        (
-            set::name('duplicateStory'),
-            set::label($lang->story->duplicateStory),
-            set::width('1/2'),
-            set::value(''),
-            set::items($productStories)
-        )
+	set::name('duplicateStory'),
+	set::required(true),
+	set::label($lang->story->duplicateStory),
+	set::width('1/3'),
+	set::value(''),
+	set::items($productStories)
     ),
     formGroup
     (
