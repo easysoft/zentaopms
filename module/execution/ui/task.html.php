@@ -45,7 +45,7 @@ if(common::canModify('execution', $execution))
     if($canImportTask && $execution->multiple) $importItems[] = array('text' => $lang->execution->importTask, 'url' => $this->createLink('execution', 'importTask', "execution={$execution->id}"));
     if($canImportBug && $execution->lifetime != 'ops' && !in_array($execution->attribute, array('request', 'review')))
     {
-        $importItems[] = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"), 'className' => 'importBug');
+        $importItems[] = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"), 'className' => 'importBug', 'data-app' => $execution->multiple ? '' : 'project');
     }
 }
 
