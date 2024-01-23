@@ -5,6 +5,8 @@ $(function()
         $('#mainNavbar li[data-id=' + mode + ']').addClass('active');
         if(typeof rawMethod === 'string' && rawMethod == 'work')
         {
+            if($("#mainNavbar li.nav-item a[data-id='task'] .label").length > 0) return false;
+
             $("#mainNavbar li.nav-item a[data-id='task']").append('<span class="label rounded-2xl gray-pale h-4">' + todoCount.task + '</span>');
             $("#mainNavbar li.nav-item a[data-id='story']").append('<span class="label rounded-2xl gray-pale h-4">' + todoCount.story + '</span>');
             $("#mainNavbar li.nav-item a[data-id='bug']").append('<span class="label rounded-2xl gray-pale h-4">' + todoCount.bug + '</span>');
@@ -13,7 +15,7 @@ $(function()
 
             if(isOpenedURAndSR !== 0) $("#mainNavbar li.nav-item a[data-id='requirement']").append('<span class="label rounded-2xl gray-pale h-4">' + todoCount.requirement + '</span>');
 
-            if(isBiz !== 0 || isMax !== 0) 
+            if(isBiz !== 0 || isMax !== 0)
             {
                 $("#mainNavbar li.nav-item a[data-id='feedback']").append('<span class="label rounded-2xl gray-pale h-4">' + todoCount.feeckback + '</span>');
                 $("#mainNavbar li.nav-item a[data-id='ticket']").append('<span class="label rounded-2xl gray-pale h-4">' + todoCount.ticket + '</span>');
