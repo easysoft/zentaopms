@@ -485,7 +485,7 @@ window.removeTeamMember = function()
 
 window.copyStoryTitle = function(e)
 {
-    if(!$('[name=story]').val()) return;
+    if(!$('[name=story]').val() || $('[name=story]').val() == 0) return;
 
     let storyTitle = $('[data-name=storyBox] .setStoryBox span.picker-single-selection').text();
     let startPosition = storyTitle.indexOf(':') + 1;
