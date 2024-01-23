@@ -766,7 +766,7 @@
         if(!target || target === 'current')
         {
             const lastModal = zui.Modal.last();
-            if(!lastModal) return;
+            if(!lastModal) return zui.Modal.open(options);;
             target = lastModal.id;
         }
 
