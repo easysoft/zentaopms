@@ -266,7 +266,6 @@ class storyZen extends story
      */
     protected function setViewVarsForKanban(int $objectID, array $kanbanSetting): void
     {
-        if($this->app->tab != 'execution') return;
         if(empty($objectID)) return;
 
         $execution = $this->dao->findById($objectID)->from(TABLE_EXECUTION)->fetch();
