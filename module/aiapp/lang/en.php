@@ -22,7 +22,7 @@ $lang->aiapp->collect          = 'Collect';
 $lang->aiapp->deleted          = 'Deleted';
 $lang->aiapp->clear            = 'Reset';
 $lang->aiapp->modelCurrent     = 'Current Model';
-$lang->aiapp->categoryList     = array('writing' => 'Writing', 'statistics' => 'Statistics', 'creative' => 'Creative', 'raiders' => 'Guideline ', 'schedule' => 'Schedule');
+$lang->aiapp->categoryList     = array('work' => 'Work', 'personal' => 'Personal', 'life' => 'Life', 'creative' => 'Creative', 'others' => 'Others');
 $lang->aiapp->generate         = 'Generate';
 $lang->aiapp->regenerate       = 'Regenerate';
 $lang->aiapp->emptyNameWarning = '「%s」 cannot be empty';

@@ -438,7 +438,7 @@ $lang->ai->miniPrograms->download          = 'Download Zentao Client';
 $lang->ai->miniPrograms->category          = 'Category';
 $lang->ai->miniPrograms->icon              = 'Icon';
 $lang->ai->miniPrograms->desc              = 'Introduction';
-$lang->ai->miniPrograms->categoryList      = array('writing' => 'Writing', 'statistics' => 'Statistics', 'creative' => 'Creative', 'raiders' => 'Guideline ', 'schedule' => 'Schedule');
+$lang->ai->miniPrograms->categoryList      = array('work' => 'Work', 'personal' => 'Personal', 'life' => 'Life', 'creative' => 'Creative', 'others' => 'Others');
 $lang->ai->miniPrograms->modelList         = array('openai-gpt35' => 'openai / GPT-3.5');
 $lang->ai->miniPrograms->allCategories     = array('' => 'All categories');
 $lang->ai->miniPrograms->collect           = 'Collect';

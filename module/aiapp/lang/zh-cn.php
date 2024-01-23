@@ -22,7 +22,7 @@ $lang->aiapp->collect          = '收藏';
 $lang->aiapp->deleted          = '已删除';
 $lang->aiapp->clear            = '清空';
 $lang->aiapp->modelCurrent     = '当前语言模型';
-$lang->aiapp->categoryList     = array('writing' => '写作', 'statistics' => '统计', 'creative' => '创意', 'raiders' => '攻略', 'schedule' => '日程');
+$lang->aiapp->categoryList     = array('work' => '工作', 'personal' => '个人', 'life' => '生活', 'creative' => '创意', 'others' => '其它');
 $lang->aiapp->regenerate       = '重新生成';
 $lang->aiapp->emptyNameWarning = '「%s」不能为空';
 $lang->aiapp->clearContext     = '上下文内容已清除';

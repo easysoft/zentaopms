@@ -438,7 +438,7 @@ $lang->ai->miniPrograms->download          = '下载禅道客户端';
 $lang->ai->miniPrograms->category          = '所属分类';
 $lang->ai->miniPrograms->icon              = '图标';
 $lang->ai->miniPrograms->desc              = '简介';
-$lang->ai->miniPrograms->categoryList      = array('writing' => '写作', 'statistics' => '统计', 'creative' => '创意', 'raiders' => '攻略', 'schedule' => '日程');
+$lang->ai->miniPrograms->categoryList      = array('work' => '工作', 'personal' => '个人', 'life' => '生活', 'creative' => '创意', 'others' => '其它');
 $lang->ai->miniPrograms->allCategories     = array('' => '所有分组');
 $lang->ai->miniPrograms->collect           = '收藏';
 $lang->ai->miniPrograms->more              = '更多';
