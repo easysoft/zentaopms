@@ -40,7 +40,7 @@ class aclBox extends wg
                 radiolist
                 (
                     set(array('items' => $aclItems, 'value' => $aclValue, 'name' => 'acl')),
-                    on::change()->toggleClass('.whitelistBox', 'hidden', "$(target).val() === 'open'")
+                    on::change()->toggleClass('.whitelistBox', 'hidden', "\$element.find('[name=acl]:checked').val() !== 'open'")
                 )
             ),
             formGroup
