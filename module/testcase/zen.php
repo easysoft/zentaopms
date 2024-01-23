@@ -397,8 +397,7 @@ class testcaseZen extends testcase
 
         /* 获取未关闭的需求。 */
         /* Get the status of stories are not closed. */
-        $storyStatus = $this->loadModel('story')->getStatusList('noclosed');
-        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch, $modules, $storyStatus, 'id_desc', 50, 'full', 'story', false);
+        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch, $modules, 'active,reviewing', 'id_desc', 50, 'full', 'story', false);
         if($this->app->tab != 'qa' && $this->app->tab != 'product' && $this->app->tab != 'my')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
