@@ -50,7 +50,7 @@ class jsHelper extends js
         if(is_null($toggleCode)) return $this->appendLine("$target.toggle();");
 
         if(!is_string($toggleCode)) $toggleCode = json_encode($toggleCode);
-        return $this->appendLine("$target.toggle($toggleCode);debugger");
+        return $this->appendLine("$target.toggle($toggleCode);");
     }
 
     /**
