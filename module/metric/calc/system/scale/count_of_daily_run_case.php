@@ -24,23 +24,28 @@ class count_of_daily_run_case extends baseCalc
 
     public function getStatement()
     {
-        return $this->dao->select('YEAR(t1.date) as `year`, MONTH(t1.date) as `month`, DAY(t1.date) as `day`, COUNT(t1.id) as count')
+        return $this->dao->select('t1.`date` as `date`, t1.id')
             ->from(TABLE_TESTRESULT)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case`=t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
             ->where('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t1.date')->notZeroDatetime()
-            ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
-            ->groupBy('`year`, `month`, `day`')
+            ->andWhere("t3.vision NOT LIKE '%or%'")
+            ->andWhere("t3.vision NOT LIKE '%lite%'")
             ->query();
     }
 
     public function calculate($row)
     {
-        $year  = $row->year;
-        $month = $row->month;
-        $day   = $row->day;
+        $date = $row->date;
+        if(empty($date)) return false;
+
+        $year = substr($date, 0, 4);
+        if($year == '0000') return false;
+
+        $month = substr($date, 5, 2);
+        $day   = substr($date, 8, 2);
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$month])) $this->result[$year][$month] = array();

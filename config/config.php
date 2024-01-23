@@ -68,6 +68,9 @@ $config->db->strictMode      = false;     // 关闭MySQL的严格模式。  Turn
 $config->db->prefix          = 'zt_';     // 数据库表名前缀。       The prefix of the table name.
 $config->slaveDBList         = array();   // 支持多个从库。         Support multiple slave dbs.
 
+$config->metricDB = new stdclass();
+$config->metricDB->type      = 'mysql';   // 度量计算数据库类型。   The type of metric database.
+
 /* 可用域名后缀列表。Domain postfix lists. */
 $config->domainPostfix  = "|com|com.cn|com.hk|com.tw|com.vc|edu.cn|es|";
 $config->domainPostfix .= "|eu|fm|gov.cn|gs|hk|im|in|info|jp|kr|la|me|";

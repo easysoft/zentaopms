@@ -31,18 +31,17 @@ class day_of_daily_effort extends baseCalc
             ->fetch('value');
         if(empty($defaultHours)) $defaultHours = 7;
 
-        return $this->dao->select("year(date) as year, month(date) as month, day(date) as day, date, sum(consumed) as consumed, $defaultHours as defaultHours")
+        return $this->dao->select("`date`, `consumed`, $defaultHours as defaultHours")
             ->from(TABLE_EFFORT)
             ->where('deleted')->eq('0')
             ->andWhere('date')->notZeroDate()
-            ->groupBy('`year`, `month`, `day`, date')
             ->query();
     }
 
     public function calculate($row)
     {
-        $year         = $row->year;
         $date         = $row->date;
+        $year         = substr($date, 0, 4);
         $month        = substr($date, 5, 2);
         $day          = substr($date, 8, 2);
         $consumed     = $row->consumed;
@@ -50,9 +49,11 @@ class day_of_daily_effort extends baseCalc
 
         $dayPerson = round($consumed / $defaultHours, 2);
 
-        $this->result[$year] = array();
-        $this->result[$year][$month] = array();
-        $this->result[$year][$month][$day] = $dayPerson;
+        if(!isset($this->result[$year])) $this->result[$year] = array();
+        if(!isset($this->result[$year][$month])) $this->result[$year][$month] = array();
+        if(!isset($this->result[$year][$month][$day])) $this->result[$year][$month][$day] = 0;
+
+        $this->result[$year][$month][$day] += $dayPerson;
     }
 
     public function getResult($options = array())

@@ -24,7 +24,7 @@ class rate_of_approved_story_in_product extends baseCalc
 
     public function getStatement()
     {
-        return $this->dao->select("COUNT(t1.result) as total, SUM(IF(result='pass', 1, 0)) as pass, t2.product")
+        return $this->dao->select("COUNT(t1.result) as total, SUM(CASE WHEN result = 'pass' THEN 1 ELSE 0 END) as pass, t2.product")
             ->from(TABLE_STORYREVIEW)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
@@ -32,7 +32,8 @@ class rate_of_approved_story_in_product extends baseCalc
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.type')->eq('story')
             ->andWhere('t3.shadow')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
+            ->andWhere("t3.vision NOT LIKE '%or%'")
+            ->andWhere("t3.vision NOT LIKE '%lite%'")
             ->groupBy('t2.product')
             ->query();
     }

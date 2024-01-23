@@ -502,7 +502,7 @@ class metricModel extends model
         {
             include_once $this->getDatasetPath();
 
-            $dataset    = new dataset($this->dao);
+            $dataset    = new dataset($this->dao, $this->config);
             $dataSource = $calculator->dataset;
             $fieldList  = implode(',', $calculator->fieldList);
 
@@ -844,7 +844,7 @@ class metricModel extends model
     {
         $datasetPath = $this->getDatasetPath();
         include_once $datasetPath;
-        return new dataset($this->dao);
+        return new dataset($this->dao, $this->config);
     }
 
     /**

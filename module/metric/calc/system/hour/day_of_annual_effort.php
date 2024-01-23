@@ -31,21 +31,22 @@ class day_of_annual_effort extends baseCalc
             ->fetch('value');
         if(empty($defaultHours)) $defaultHours = 7;
 
-        return $this->dao->select("year(date) as year,sum(consumed) as consumed, $defaultHours as defaultHours")
+        return $this->dao->select("`date`, `consumed`, $defaultHours as defaultHours")
             ->from(TABLE_EFFORT)
             ->where('deleted')->eq('0')
             ->andWhere('date')->notZeroDate()
-            ->groupBy('`year`')
             ->query();
     }
 
     public function calculate($row)
     {
-        $year         = $row->year;
+        $year         = substr($row->date, 0, 4);
         $consumed     = $row->consumed;
         $defaultHours = $row->defaultHours;
 
-        $this->result[$year] = array('consumed' => $consumed, 'defaultHours' => $defaultHours);
+        if(!isset($this->result[$year])) $this->result[$year] = array('consumed' => 0, 'defaultHours' => $defaultHours);
+
+        $this->result[$year]['consumed'] += $consumed;
     }
 
     public function getResult($options = array())

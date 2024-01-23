@@ -16,9 +16,10 @@ class dataset
      * @access public
      * @return void
      */
-    public function __construct($dao)
+    public function __construct($dao, $config)
     {
         $this->dao = $dao;
+        $this->config = $config;
     }
 
     /**
@@ -35,8 +36,8 @@ class dataset
             ->from(TABLE_PROJECT)->alias('t1')
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq('0')
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -55,8 +56,8 @@ class dataset
             ->where('type')->eq('program')
             ->andWhere('grade')->eq('1')
             ->andWhere('deleted')->eq('0')
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -73,8 +74,8 @@ class dataset
         return $this->dao->select($fieldList)->from(TABLE_PROJECT)->alias('t1')
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('project')
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -94,8 +95,8 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t2.type')->eq('project')
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -109,15 +110,17 @@ class dataset
      */
     public function getReleases($fieldList)
     {
+        $dbType = $this->config->metricDB->type;
         return $this->dao->select($fieldList)
             ->from(TABLE_RELEASE)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("CONCAT(',', t2.id, ',') LIKE CONCAT('%', t1.project, '%')")
+            ->beginIF($dbType == 'mysql')->leftJoin(TABLE_PROJECT)->alias('t2')->on("CONCAT(',', t2.id, ',') LIKE CONCAT('%', t1.project, '%')")->fi()
+            ->beginIF($dbType == 'sqlite')->leftJoin(TABLE_PROJECT)->alias('t2')->on("(',' || t2.id || ',') LIKE ('%' || t1.project || '%')")->fi()
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t2.vision)", true)
+            ->andWhere("t2.vision NOT LIKE '%or%'", true)
             ->orWhere("t2.vision IS NULL")->markRight(1)
-            ->andWhere("NOT FIND_IN_SET('lite', t2.vision)", true)
+            ->andWhere("t2.vision NOT LIKE '%lite%'", true)
             ->orWhere("t2.vision IS NULL")->markRight(1)
             ->query();
     }
@@ -179,6 +182,16 @@ class dataset
             ->query();
     }
 
+    public function getBugsWithShadowProduct($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->query();
+    }
+
     /**
      * 获取项目bug数据。
      * Get project bug list.
@@ -195,8 +208,8 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t3.vision)")
+            ->andWhere("t3.vision NOT LIKE '%or%'")
+            ->andWhere("t3.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -233,8 +246,8 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -261,8 +274,8 @@ class dataset
             ->andWhere('t4.deleted')->eq(0) // 已删除的执行
             ->andWhere('t4.type')->in('sprint,stage,kanban')
             ->andWhere('t5.deleted')->eq(0) // 已删除的项目
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -287,8 +300,8 @@ class dataset
             ->andWhere('t2.shadow')->eq(0)
             ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t4.type')->eq('project')
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -309,8 +322,8 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story')
             ->andWhere('t2.shadow')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -330,8 +343,8 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story')
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -350,8 +363,8 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->andWhere('t1.stage', true)->eq('released')
             ->orWhere('t1.closedReason')->eq('done')
             ->markRight(1)
@@ -374,8 +387,8 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t2.vision)")
+            ->andWhere("t2.vision NOT LIKE '%or%'")
+            ->andWhere("t2.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -393,8 +406,8 @@ class dataset
             ->from(TABLE_PRODUCT)->alias('t1')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -415,8 +428,8 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -436,8 +449,8 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('line')
             ->andWhere('t2.type')->eq('program')
-            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t2.vision)")
+            ->andWhere("t2.vision NOT LIKE '%or%'")
+            ->andWhere("t2.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -468,8 +481,8 @@ class dataset
     {
         return $this->dao->select($fieldList)->from(TABLE_DOC)->alias('t1')
             ->where('t1.deleted')->eq('0')
-            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
     }
 
