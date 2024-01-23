@@ -62,7 +62,7 @@ $fields->field('title')
 
 $fields->field('pri')
     ->width('1/6')
-    ->control('priPicker')
+    ->control(array('control' => 'priPicker', 'required' => true))
     ->items(array_filter($lang->testcase->priList))
     ->value(data('case.pri'));
 
