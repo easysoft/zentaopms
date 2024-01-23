@@ -1858,7 +1858,7 @@ class taskZen extends task
             $task->story  = $storyID;
             $task->module = $this->dao->findByID($storyID)->from(TABLE_STORY)->fetch('module');
         }
-        elseif(!$moduleID)
+        elseif(!$moduleID && !$taskID)
         {
             $task->module = (int)$this->cookie->lastTaskModule;
         }
