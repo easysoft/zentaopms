@@ -55,6 +55,7 @@ class picker extends wg
         'search?: boolean|number',          // 是否启用搜索。
         'searchDelay?: number',             // 搜索延迟时间，单位：毫秒。
         'searchHint?: string',              // 搜索提示文本。
+        'searchEmptyHint?: string',         // 搜索不到匹配项的提示。
         'onDeselect?: function',            // 当取消选择值时的回调函数。
         'onSelect?: function',              // 当选择值时的回调函数。
         'onClear?: function',               // 当清空值时的回调函数。
