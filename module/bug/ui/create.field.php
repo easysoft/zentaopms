@@ -13,7 +13,7 @@ $fields->field('product')->hidden($isShadowProduct && $isOriginalProduct);
 
 $fields->field('project')
     ->foldable(!$isShadowProduct)
-    ->wrapAfter($noMultipleProject)
+    ->wrapAfter($isShadowProduct && $noMultipleProject)
     ->className($isShadowProduct && !$isOriginalProduct && !$noMultipleProject ? 'w-1/4' : 'w-1/2')
     ->className($noMultipleProject ? 'full:w-1/2' : 'full:w-1/4');
 

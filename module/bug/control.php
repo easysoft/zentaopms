@@ -243,7 +243,6 @@ class bug extends control
         $fields = array_merge($fields, $params);
 
         $bug = $this->bugZen->initBug($fields);
-        $bug = $this->bugZen->setOptionMenu($bug, $product);
 
         /* 处理复制 bug，从用例、测试单、日志转 bug。 */
         /* Handle copy bug, bug from case, testtask, todo. */
