@@ -41,7 +41,7 @@ panel
     set::title($block->title),
     div
     (
-        set::class('waterfall-gantt'),
+        set::className('waterfall-gantt'),
         empty($plans['data']) ? div(setClass('gantt-product-tips'), $lang->block->selectProduct) : div
         (
             setClass('gantt clearfix'),
