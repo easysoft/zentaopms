@@ -179,7 +179,7 @@ class treeModel extends model
 
             foreach($modules as $module)
             {
-                $branchName = (isset($product) && $product->type != 'normal' && $module->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
+                $branchName = (isset($product) && $product->type != 'normal' && (string)$module->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
                 $this->buildTreeArray($treeMenu, $modules, $module, (empty($branchName)) ? '/' : "/$branchName/", $divide);
             }
         }
