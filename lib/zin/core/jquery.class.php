@@ -483,7 +483,7 @@ class jQuery extends jsContext
      * @return string
      * @static
      */
-    public static function select(string $selector): string
+    public static function selector(string $selector): string
     {
         if(is_string($selector) && str_starts_with($selector, 'RAWJS<') && str_ends_with($selector, '>RAWJS')) return substr($selector, 6, -6);
 

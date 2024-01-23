@@ -15,6 +15,7 @@ namespace zin;
 require_once __DIR__ . DS . 'wg.func.php';
 
 use zin\jsContext;
+use zin\jsCallback;
 use zin\jQuery;
 
 /**
@@ -422,6 +423,20 @@ class js extends directive
     public static function jquery(string $selector, ?string $name = null, null|string|js|array ...$codes): jquery
     {
         return new jquery($selector, $name, ...$codes);
+    }
+
+    /**
+     * Create js callback object.
+     * 创建 js 回调函数代码生成对象。
+     *
+     * @access public
+     * @param string  ...$args Function argument name list.
+     * @return jsCallback
+     * @static
+     */
+    public static function callback(string ...$args): jsCallback
+    {
+        return new jsCallback(...$args);
     }
 
     /**
