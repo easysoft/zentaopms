@@ -123,4 +123,4 @@ $fields->field('teamMembers')
 $fields->field('acl')
     ->foldable()
     ->width('full')
-    ->control(array('control' => 'aclBox', 'aclItems' => $lang->execution->aclList, 'aclValue' => data('execution.acl'), 'whitelistLabel' => $lang->whitelist));
+    ->control(array('control' => 'aclBox', 'aclItems' => $lang->execution->aclList, 'aclValue' => 'open', 'whitelistLabel' => $lang->whitelist));
