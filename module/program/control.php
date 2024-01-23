@@ -216,13 +216,13 @@ class program extends control
 
         $this->view->title = $this->lang->program->edit;
 
-        $this->view->pmUsers         = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
-        $this->view->program         = $program;
-        $this->view->parents         = $parents;
-        $this->view->budgetUnitList  = $this->loadModel('project')->getBudgetUnitList();
-        $this->view->parentProgram   = $parentProgram;
-        $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->loadUrl         = $this->createLink('program', 'edit', "programID=$programID&parentProgramID={parent}");
+        $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
+        $this->view->program        = $program;
+        $this->view->parents        = $parents;
+        $this->view->budgetUnitList = $this->loadModel('project')->getBudgetUnitList();
+        $this->view->parentProgram  = $parentProgram;
+        $this->view->groups         = $this->loadModel('group')->getPairs();
+        $this->view->loadUrl        = $this->createLink('program', 'edit', "programID=$programID&parentProgramID={parent}");
 
         $this->display();
     }
