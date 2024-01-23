@@ -1,6 +1,7 @@
-<?php include '../../common/view/header.html.php'; ?>
 <?php
+include '../../common/view/header.html.php';
 $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
+$isNotOpen = $config->edition != 'open';
 ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
@@ -28,7 +29,7 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
         <?= $lang->ai->import; ?>
       </a>
     <?php endif; ?>
-    <?php if(common::hasPriv('ai', 'createMiniProgram')): ?>
+    <?php if($isNotOpen && common::hasPriv('ai', 'createMiniProgram')): ?>
       <?= html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-primary'"); ?>
     <?php endif; ?>
   </div>
@@ -175,7 +176,8 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
             <?php foreach($miniPrograms as $miniProgram) : ?>
               <tr>
                 <td class="c-id"><?= $miniProgram->id; ?></td>
-                <td class="c-name"><a href="<?= $this->createLink('ai', 'miniProgramView', "id={$miniProgram->id}"); ?>"><?= $miniProgram->name; ?></a></td>
+                <?php $link = $isNotOpen && common::hasPriv('ai', 'miniProgramView') ? $this->createLink('ai', 'miniProgramView', "id={$miniProgram->id}") : '#' ?>
+                <td class="c-name"><a href="<?= $link; ?>"><?= $miniProgram->name; ?></a></td>
                 <td class="c-status"><?= $miniProgram->publishedLabel; ?></td>
                 <td class="c-category"><?= $miniProgram->categoryLabel; ?></td>
                 <td class="c-createdby"><?= $miniProgram->createdByLabel; ?></td>
@@ -187,14 +189,14 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
                     $isBuiltIn = $miniProgram->builtIn === '1';
                   ?>
                   <?php
-                  if(common::hasPriv('ai', 'editMiniProgram'))
+                  if($isNotOpen && common::hasPriv('ai', 'editMiniProgram'))
                   {
                     echo $isPublished || $isBuiltIn
                       ? "<button class='btn' disabled title='{$lang->ai->prompts->action->edit}'><i class='icon icon-edit text-primary'></i></button>"
                       : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id")}'><i class='icon icon-edit text-primary'></i></a>";
                   }
                   ?>
-                  <?php if(common::hasPriv('ai', 'testMiniProgram')): ?>
+                  <?php if($isNotOpen && common::hasPriv('ai', 'testMiniProgram')): ?>
                     <button
                       class="btn iframe"
                       data-toggle="modal"
@@ -216,7 +218,7 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
                       <i class="icon icon-ban-circle text-primary"></i>
                     </button>
                   <?php endif; ?>
-                  <?php if(common::hasPriv('ai', 'exportMiniProgram')): ?>
+                  <?php if($isNotOpen && common::hasPriv('ai', 'exportMiniProgram')): ?>
                     <button class="btn" onclick="exportMiniProgram(event)" title="<?= $lang->ai->export; ?>"<?= $isPublished && !$isBuiltIn ? '' : ' disabled'; ?>>
                       <i class="icon icon-export text-primary"></i>
                     </button>
