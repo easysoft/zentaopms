@@ -28,11 +28,6 @@ class aclBox extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    public static function getPageJS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
     protected function build(): wg
     {
         list($aclItems, $aclValue, $whitelistLabel, $groupLabel, $userLabel, $groupName, $userName, $groupItems, $groupValue, $userValue) = $this->prop(array('aclItems', 'aclValue', 'whitelistLabel', 'groupLabel', 'userLabel', 'groupName', 'userName', 'groupItems', 'groupValue', 'userValue'));
@@ -45,7 +40,7 @@ class aclBox extends wg
                 radiolist
                 (
                     set(array('items' => $aclItems, 'value' => $aclValue, 'name' => 'acl')),
-                    on::change()->toggleShow('.whitelistBox', "$(target).val() === 'open'")
+                    on::change()->toggleClass('.whitelistBox', 'hidden', "$(target).val() === 'open'")
                 )
             ),
             formGroup
