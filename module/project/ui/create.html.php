@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 $fields = useFields('project.create');
+$fields->autoLoad('parent', 'acl');
+$loadUrl = $this->createLink('project', 'create', "model={$model}&program={parent}");
 
 jsVar('model', $model);
 jsVar('ignore', $lang->project->ignore);
@@ -66,7 +68,8 @@ formGridPanel
     on::change('[name=parent], [name=budget]', 'checkBudget'),
     set::title($lang->project->create),
     set::fullModeOrders(array('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin')),
-    set::fields($fields)
+    set::fields($fields),
+    set::loadUrl($loadUrl)
 );
 
 $copyProjectsBox = array();
