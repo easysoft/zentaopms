@@ -2051,9 +2051,6 @@ class userModel extends model
         $userView->products = rtrim($userView->products, ',') . ',' . join(',', $openedProducts);
         $userView->projects = rtrim($userView->projects, ',') . ',' . join(',', $openedProjects);
 
-        /* 合并项目集/产品/项目/执行的权限组人员到用户访问权限。 */
-        $userView = $this->mergeObjectGroupsToUserView($account, $userView);
-
         /* 合并用户视图权限到用户访问权限。 */
         $userView = $this->mergeAclsToUserView($account, $userView, $acls, $projects);
 
@@ -2062,37 +2059,6 @@ class userModel extends model
         $userView->projects = trim($userView->projects, ',');
         $userView->sprints  = trim($userView->sprints, ',');
 
-        return $userView;
-    }
-
-    /**
-     * 合并项目集/产品/项目/执行的权限组人员到用户访问权限。
-     * Merge the groups program, product, project and sprints to userView.
-     *
-     * @param  string  $account
-     * @param  object  $userView
-     * @access private
-     * @return object
-     */
-    private function mergeObjectGroupsToUserView(string $account, object $userView): object
-    {
-        $programs = array();
-        $products = array();
-        $projects = array();
-        $sprints  = array();
-        $groups   = $this->getGroups($account);
-        foreach($groups as $groupID)
-        {
-            $query = "FIND_IN_SET({$groupID}, `groups`)";
-            $products += $this->dao->select('id,id')->from(TABLE_PRODUCT)->where($query)->andWhere('acl')->ne('open')->andWhere('deleted')->eq('0')->fetchPairs();
-            $programs += $this->dao->select('id,id')->from(TABLE_PROGRAM)->where($query)->andWhere('acl')->ne('open')->andWhere('type')->eq('program')->andWhere('deleted')->eq('0')->fetchPairs();
-            $projects += $this->dao->select('id,id')->from(TABLE_PROJECT)->where($query)->andWhere('acl')->ne('open')->andWhere('type')->eq('project')->andWhere('deleted')->eq('0')->fetchPairs();
-            $sprints  += $this->dao->select('id,id')->from(TABLE_PROJECT)->where($query)->andWhere('acl')->ne('open')->andWhere('type')->in('stage,sprint,kanban')->andWhere('deleted')->eq('0')->fetchPairs();
-        }
-        $userView->products .= ',' . implode(',', $products);
-        $userView->programs .= ',' . implode(',', $programs);
-        $userView->projects .= ',' . implode(',', $projects);
-        $userView->sprints  .= ',' . implode(',', $sprints);
         return $userView;
     }
 
