@@ -13,7 +13,7 @@ namespace zin;
 $buildModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'release';
 
 $cols = array();
-foreach($config->release->dtable->defaultFields['linkBug'] as $field)
+foreach($config->release->dtable->defaultFields['linkBug'][$type] as $field)
 {
     $cols[$field] = zget($config->bug->dtable->fieldList, $field, array());
     if($field == 'title')
