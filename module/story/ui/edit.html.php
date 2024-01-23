@@ -48,6 +48,7 @@ jsVar('parentStory', !empty($story->children));
 jsVar('moveChildrenTips', $lang->story->moveChildrenTips);
 jsVar('executionID', isset($objectID) ? $objectID : 0);
 jsVar('langTreeManage', $lang->tree->manage);
+jsVar('feedbackSource', $config->story->feedbackSource);
 
 detailHeader
 (
@@ -260,7 +261,7 @@ detailBody
             item
             (
                 set::name($lang->story->source),
-                picker(setID('source'), set::name('source'), set::items($fields['source']['options']), set::value($fields['source']['default']), on::change('toggleFeedback(e.target)'))
+                picker(setID('source'), set::name('source'), set::items($fields['source']['options']), set::value($fields['source']['default']), on::change('window.toggleFeedback(e.target)'))
             ),
             item
             (
@@ -295,15 +296,13 @@ detailBody
             ),
             item
             (
-                set::trClass('feedbackBox'),
-                set::trClass(in_array($story->source, $config->story->feedbackSource) ? '' : 'hidden'),
+                set::trClass(in_array($story->source, $config->story->feedbackSource) ? 'feedbackBox' : 'feedbackBox hidden'),
                 set::name($lang->story->feedbackBy),
                 input(set::name('feedbackBy'), set::value($story->feedbackBy))
             ),
             item
             (
-                set::trClass('feedbackBox'),
-                set::trClass(in_array($story->source, $config->story->feedbackSource) ? '' : 'hidden'),
+                set::trClass(in_array($story->source, $config->story->feedbackSource) ? 'feedbackBox' : 'feedbackBox hidden'),
                 set::name($lang->story->notifyEmail),
                 input(set::name('notifyEmail'), set::value($story->notifyEmail))
             ),
