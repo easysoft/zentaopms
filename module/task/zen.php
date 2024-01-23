@@ -727,7 +727,7 @@ class taskZen extends task
             $task->vision     = $this->config->vision;
             $task->project    = $execution->project;
 
-            $testTasks[$storyID] = $task;
+            $testTasks[] = $task;
         }
 
         $this->checkCreateTestTasks($testTasks);

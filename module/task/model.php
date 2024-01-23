@@ -1050,15 +1050,17 @@ class taskModel extends model
         $this->loadModel('action');
 
         /* Get the stories of the test tasks. */
-        $testStoryIdList = array_keys($testTasks);
-        $testStories     = $this->dao->select('id,title,version,module')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchAll('id');
-        foreach($testStoryIdList as $storyID)
+        $testStoryIdList = array();
+        foreach($testTasks as $task) $testStoryIdList[$task->story] = $task->story;
+
+        $testStories = $this->dao->select('id,title,version,module')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchAll('id');
+        foreach($testTasks as $task)
         {
             /* If the story id is not exist, skip it. */
+            $storyID = $task->story;
             if(!isset($testStories[$storyID])) continue;
 
             /* Construct a task and create it. */
-            $task               = $testTasks[$storyID];
             $task->parent       = $taskID;
             $task->storyVersion = $testStories[$storyID]->version;
             $task->name         = $this->lang->task->lblTestStory . " #{$storyID} " . $testStories[$storyID]->title;
