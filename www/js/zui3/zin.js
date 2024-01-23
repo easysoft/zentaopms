@@ -927,11 +927,12 @@
                     {
                         const $item = $data.filter(`[data-name="${name}"]`);
                         $oldItems.filter(`[data-name="${name}"]`).replaceWith($item);
+                        $item.zuiInit();
                     });
                 }
                 else
                 {
-                    $form.html(info.data);
+                    $form.html(info.data).zuiInit();
                 }
 
                 let keep = options.keep;
