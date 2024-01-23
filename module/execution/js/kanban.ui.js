@@ -118,7 +118,7 @@ window.buildColCardActions = function(col)
     }
     else if(col.type == 'unconfirmed')
     {
-        if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=' + productID + '&moduleID=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id + ',executionID=' + executionID), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=' + productID + '&moduleID=0&extra=regionID=' + col.region + ',groupID=' + col.group + ',laneID=' + 0 + ',columnID=' + col.id + ',executionID=' + executionID), 'data-toggle': 'modal', 'data-size' : 'lg'});
         if(priv.canBatchCreateBug) actions.push({text: bugLang.batchCreate, url: productCount > 1 ? '#batchCreateBug' : $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=all&executionID=' + executionID + '&module=0&extra=regionID=' + col.region + ',laneID=' + 0 + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     }
     else if(col.type == 'wait')

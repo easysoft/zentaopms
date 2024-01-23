@@ -951,7 +951,8 @@ class bugZen extends bug
             $linkedProducts = $this->product->getProducts($executionID);
             foreach($linkedProducts as $product) $products[$product->id] = $product->name;
 
-            $projectID = $bug->execution->project;
+            $execution = $this->loadModel('execution')->getByID($executionID);
+            $projectID = $execution->project;
             $this->loadModel('execution')->setMenu($executionID);
         }
 
@@ -1001,7 +1002,7 @@ class bugZen extends bug
         $productID = (int)$bug->productID;
         $branch    = (string)$bug->branch;
         $moduleID  = (int)$bug->moduleID;
-        $modules   = $this->tree->getOptionMenu($bug->productID, 'bug', 0, ($bug->branch === 'all' || !isset($bug->branches[$bug->branch])) ? 'all' : $bug->branch);
+        $modules   = $this->tree->getOptionMenu($productID, 'bug', 0, ($branch === 'all' || !isset($bug->branches[$branch])) ? 'all' : $branch);
         $moduleID  = isset($modules[$moduleID]) ? $moduleID : '';
 
         return $this->updateBug($bug, array('modules' => $modules, 'moduleID' => $moduleID));
@@ -1199,7 +1200,7 @@ class bugZen extends bug
         $this->view->bug                   = $bug;
         $this->view->allBuilds             = !empty($bug->allBuilds) ? $bug->allBuilds : '';
         $this->view->allUsers              = !empty($bug->allUsers)  ? $bug->allUsers  : '';
-        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds((int)$bug->productID, $bug->branch);
+        $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds((int)$bug->productID, (string)$bug->branch);
         $this->view->resultFiles           = !empty($resultID) && !empty($stepIdList) ? $this->loadModel('file')->getByObject('stepResult', (int)$resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
@@ -1464,8 +1465,15 @@ class bugZen extends bug
     {
         $regionPairs = $this->loadModel('kanban')->getRegionPairs($execution->id, 0, 'execution');
         $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
-        $lanePairs   = $this->kanban->getLanePairsByRegion((int)$regionID, 'bug');
-        $laneID      = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
+
+        if(!empty($output['groupID']))
+        {
+            $lanePairs = $this->kanban->getLanePairsByGroup((int)$output['groupID']);
+            $laneID = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
+        }
+
+        $lanePairs = $this->kanban->getLanePairsByRegion((int)$regionID, 'bug');
+        if(empty($laneID)) $laneID = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
         $this->view->executionType = $execution->type;
         $this->view->regionID      = $regionID;
