@@ -1756,7 +1756,7 @@ class taskZen extends task
         if($changes and $this->task->needUpdateBugStatus($task))
         {
             $response = $this->task->getRemindBugLink($task, $changes);
-            if($response) return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $response['confirmed'], $response['canceled'], 'parent', 'parent.parent'));
+            if($response) return $this->send($response);
         }
 
         if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
