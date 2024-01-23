@@ -67,14 +67,12 @@ $fields->field('type')
 
 $fields->field('severity')
     ->width('1/6')
-    ->required(true)
-    ->control('severityPicker')
+    ->control('severityPicker', array('required' => true))
     ->items($lang->bug->severityList);
 
 $fields->field('pri')
     ->width('1/6')
-    ->required(true)
-    ->control('priPicker')
+    ->control('priPicker', array('required' => true))
     ->items($lang->bug->priList);
 
 $fields->field('steps')
