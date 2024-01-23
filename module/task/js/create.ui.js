@@ -375,8 +375,53 @@ function setAfter()
  */
 window.addItem = function(obj)
 {
-    let $tr = $(obj).closest('tr');
-    $tr.after($tr.clone());
+    let $newLine = $(obj).closest('tr').clone();
+
+    /* 将已有需求下拉的最大name属性的值加1赋值给新行. */
+    let index = 0;
+    $("#testTaskTable [name^='testStory']").each(function()
+    {
+        let id = $(this).attr('name').replace(/[^\d]/g, '');
+
+        id = parseInt(id);
+        id ++;
+
+        index = id > index ? id : index;
+    });
+
+    /* 重新初始化新一行的下拉控件. */
+    $newLine.find('.c-testStory .form-group-wrapper').attr('id', `testStory${index}`).removeAttr('data-zui-picker').empty();
+    $newLine.find('.c-testPri .form-group-wrapper').attr('id', `testPri${index}`).removeAttr('data-zui-picker').empty();
+    $newLine.find('.c-testEstStarted .form-group-wrapper').attr('id', `testEstStarted${index}`).removeAttr('data-zui-picker').empty();
+    $newLine.find('.c-testDeadline .form-group-wrapper').attr('id', `testDeadline${index}`).removeAttr('data-zui-picker').empty();
+    $newLine.find('.c-testAssignedTo .form-group-wrapper').attr('id', `testAssignedTo${index}`).removeAttr('data-zui-picker').empty();
+    $newLine.find('.c-estimate input').attr('id', `testEstimate${index}`).attr('name', `testEstimate[${index}]`).val('');
+
+    $(obj).closest('tr').after($newLine);
+
+    let storyOptions  = $(obj).closest('tr').find("[name^='testStory']").zui('picker').options;
+    storyOptions.name = `testStory[${index}]`;
+    new zui.Picker(`#testStory${index}`, storyOptions);
+
+    let priOptions  = $(obj).closest('tr').find("[name^='testPri']").zui('priPicker').options;
+    priOptions.name = `testPri[${index}]`;
+    priOptions.defaultValue = '3';
+    new zui.PriPicker(`#testPri${index}`, priOptions);
+
+    let estStartedOptions  = $(obj).closest('tr').find("[name^='testEstStarted']").zui('datePicker').options;
+    estStartedOptions.name = `testEstStarted[${index}]`;
+    estStartedOptions.defaultValue = '';
+    new zui.DatePicker(`#testEstStarted${index}`, estStartedOptions);
+
+    let deadlineOptions  = $(obj).closest('tr').find("[name^='testDeadline']").zui('datePicker').options;
+    deadlineOptions.name = `testDeadline[${index}]`;
+    deadlineOptions.defaultValue = '';
+    new zui.DatePicker(`#testDeadline${index}`, deadlineOptions);
+
+    let assignedToOptions  = $(obj).closest('tr').find("[name^='testAssignedTo']").zui('picker').options;
+    assignedToOptions.name = `testAssignedTo[${index}]`;
+    assignedToOptions.defaultValue = '';
+    new zui.Picker(`#testAssignedTo${index}`, assignedToOptions);
 }
 
 /**

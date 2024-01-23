@@ -29,17 +29,19 @@ foreach($testStories as $storyID => $storyTitle)
             ),
             h::td
             (
+                setClass('c-testStory'),
                 picker
                 (
                     setID("testStory{$i}"),
                     set::name("testStory[$i]"),
                     set::value($storyID),
-                    set::items(array($storyID => $storyTitle)),
+                    set::items($testStories),
                     set::required(true)
                 )
             ),
             h::td
             (
+                setClass('c-testPri'),
                 priPicker
                 (
                     setID("testPri{$i}"),
@@ -51,6 +53,7 @@ foreach($testStories as $storyID => $storyTitle)
             ),
             h::td
             (
+                setClass('c-testEstStarted'),
                 datepicker
                 (
                     setID("testEstStarted{$i}"),
@@ -66,6 +69,7 @@ foreach($testStories as $storyID => $storyTitle)
             ),
             h::td
             (
+                setClass('c-testDeadline'),
                 datepicker
                 (
                     setID("testDeadline{$i}"),
@@ -76,6 +80,7 @@ foreach($testStories as $storyID => $storyTitle)
             ),
             h::td
             (
+                setClass('c-testAssignedTo'),
                 picker
                 (
                     setID("testAssignedTo{$i}"),
