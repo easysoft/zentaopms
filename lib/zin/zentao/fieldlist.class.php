@@ -233,7 +233,7 @@ class fieldList
         return array_keys($this->fields);
     }
 
-    public function batchSet(string|array $names, string|array $prop, mixed $value = null): fieldList
+    public function set(string|array $names, string|array $prop, mixed $value = null): fieldList
     {
         $names = is_string($names) ? explode(',', $names) : $names;
         foreach($names as $name)
