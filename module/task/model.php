@@ -2261,9 +2261,9 @@ class taskModel extends model
             $member->task     = $task->id;
             $member->order    = $index;
             $member->account  = $account;
-            $member->estimate = zget($teamData->teamEstimate, $index, 0);
-            $member->consumed = isset($teamData->teamConsumed) ? zget($teamData->teamConsumed, $index, 0) : 0;
-            $member->left     = isset($teamData->teamLeft) ? zget($teamData->teamLeft, $index, 0) : 0;
+            $member->estimate = isset($teamData->teamEstimate) ? (float)zget($teamData->teamEstimate, $index, 0.00) : 0.00;
+            $member->consumed = isset($teamData->teamConsumed) ? (float)zget($teamData->teamConsumed, $index, 0.00) : 0.00;
+            $member->left     = isset($teamData->teamLeft) ? (float)zget($teamData->teamLeft, $index, 0.00) : 0.00;
             $member->status   = 'wait';
             if($task->status == 'wait' && $member->estimate > 0 && $member->left == 0) $member->left = $member->estimate;
             if($task->status == 'done') $member->left = 0;
@@ -3141,7 +3141,8 @@ class taskModel extends model
             ->where('id')->eq($taskID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldTask, $task);
+        if(dao::isError()) return false;
+        return common::createChanges($oldTask, $task);
     }
 
     /**

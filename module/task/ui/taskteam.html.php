@@ -140,6 +140,7 @@ for($i; $i < $count; $i ++)
 {
     $teamForm[] = h::tr
     (
+        setClass('member-wait'),
         h::td
         (
             setClass('team-index'),

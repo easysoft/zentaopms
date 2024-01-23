@@ -1175,7 +1175,12 @@ class task extends control
             /* Update assign of multi task. */
             $postData = form::data($this->config->task->form->manageTeam);
             $task     = $this->taskZen->prepareManageTeam($postData, $taskID);
-            $changes  = $this->task->updateTeam($task, $postData);
+
+            $postData->team         = $this->post->team;
+            $postData->teamEstimate = $this->post->teamEstimate;
+            $postData->teamConsumed = $this->post->teamConsumed;
+            $postData->teamLeft     = $this->post->teamLeft;
+            $changes = $this->task->updateTeam($task, $postData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

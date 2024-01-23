@@ -50,6 +50,7 @@ else
             setID('teamTable'),
             setClass('table table-form'),
             formHidden('mode', $task->mode),
+            formHidden('status', $task->status),
             $teamForm
         )
     );
