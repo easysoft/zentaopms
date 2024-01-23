@@ -33,6 +33,7 @@ formPanel
     (
         formGroup
         (
+            set::width('2/3'),
             set::label($lang->tree->product),
             picker
             (
@@ -44,6 +45,7 @@ formPanel
         ),
         $product->type != 'normal' ? formGroup
         (
+            set::width('1/3'),
             setClass('branchBox'),
             control
             (

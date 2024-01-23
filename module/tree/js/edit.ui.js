@@ -12,9 +12,12 @@ function loadBranches(e)
     $branchBox.addClass('hidden');
     $.get($.createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=withClosed"), function(data)
     {
-        if(data)
+        data = JSON.parse(data);
+        if(data.length > 0)
         {
-            $('[name=branch]').zui('picker').render({items: JSON.parse(data), defaultValue: 0, name: 'branch'});
+            $branch = $('[name=branch]').zui('picker');
+            $branch.render({items: data});
+            $branch.$.setValue('');
             $branchBox.removeClass('hidden');
         }
         ajaxLoadModules(productID, 0);
@@ -32,10 +35,8 @@ function loadModules(e)
 {
     var productID = $('[name=root]').val();
     var branchID  = $(e.target).val();
-
     if(typeof(branchID) == 'undefined') branchID = 0;
 
-    console.log(productID)
     ajaxLoadModules(productID, branchID);
 }
 
