@@ -89,18 +89,21 @@ window.loadProductModules = function(productID, branch)
     var currentModule = 0;
     if(config.currentMethod == 'edit') currentModule = $('[name=module]').val();
 
-    var moduleLink   = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&extra=nodeleted&currentModuleID=' + currentModule);
-    var $moduleIdBox = $('#moduleIdBox');
+    var moduleLink = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&extra=nodeleted&currentModuleID=' + currentModule);
+    var $moduleBox = $('#moduleBox');
     $.get(moduleLink, function(data)
     {
-        let $inputGroup = $moduleIdBox.closest('.input-group');
-        data = JSON.parse(data);
-        $inputGroup.html("<span id='moduleIdBox'><div class='picker-box' id='module'></div></span>");
-        new zui.Picker('#moduleIdBox #module', data);
-        if(data.items.length <= 1)
+        if(data)
         {
-            $inputGroup.append('<a class="btn btn-default" type="button" data-toggle="modal" href="' + $.createLink('tree', 'browse', 'rootID=' + productID + '&view=story&currentModuleID=0&branch=' + branch) + '"><span class="text">' + langTreeManage + '</span></a>');
-            $inputGroup.append('<button class="refresh btn" type="button" onclick="loadProductModules(' + productID + ')"><i class="icon icon-refresh"></i></button>');
+            let $inputGroup = $moduleBox.closest('.input-group');
+            data = JSON.parse(data);
+            $inputGroup.html("<span id='moduleIdBox'><div class='picker-box' id='module'></div></span>");
+            new zui.Picker('#moduleIdBox #module', data);
+            if(data.items.length <= 1)
+            {
+                $inputGroup.append('<a class="btn btn-default" type="button" data-toggle="modal" href="' + $.createLink('tree', 'browse', 'rootID=' + productID + '&view=story&currentModuleID=0&branch=' + branch) + '"><span class="text">' + langTreeManage + '</span></a>');
+                $inputGroup.append('<button class="refresh btn" type="button" onclick="window.loadProductModules(' + productID + ')"><i class="icon icon-refresh"></i></button>');
+            }
         }
     })
 };
@@ -111,21 +114,23 @@ window.loadProductPlans = function(productID, branch)
     if(!branch) branch = 0;
 
     let planID     = $('[name=plan]').val();
-    let param      = config.currentMethod == 'edit' ? 'skipParent|forStory' : 'skipParent';
     let expired    = config.currentMethod == 'create' ? 'unexpired' : '';
     let planLink   = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + planID + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent,forStory,' + config.currentMethod);
     let $planIdBox = $('#planIdBox');
 
     $.get(planLink, function(data)
     {
-        let items = JSON.parse(data);
-        let $inputGroup = $planIdBox.closest('.input-group');
-        $inputGroup.html("<span id='planIdBox'><div class='picker-box' id='plan'></div></span>")
-        new zui.Picker('#planIdBox #plan', {items: items, name: 'plan', defaultValue: planID.toString()});
-        if(items.length == 0)
+        if(data && data != '[]')
         {
-            $inputGroup.append('<a class="btn btn-default" type="button" data-toggle="modal" href="' + $.createLink('productplan', 'create', 'productID=' + productID + '&branch=' + branch) + '"><i class="icon icon-plus"></i></a>');
-            $inputGroup.append('<button class="refresh btn" type="button" onclick="loadProductPlans(' + productID + ')"><i class="icon icon-refresh"></i></button>');
+            let items = JSON.parse(data);
+            let $inputGroup = $planIdBox.closest('.input-group');
+            $inputGroup.html("<span id='planIdBox'><div class='picker-box' id='plan'></div></span>")
+            new zui.Picker('#planIdBox #plan', {items: items, name: 'plan', defaultValue: planID.toString()});
+            if(items.length == 0)
+            {
+                $inputGroup.append('<a class="btn btn-default" type="button" data-toggle="modal" href="' + $.createLink('productplan', 'create', 'productID=' + productID + '&branch=' + branch) + '"><i class="icon icon-plus"></i></a>');
+                $inputGroup.append('<button class="refresh btn" type="button" onclick="window.loadProductPlans(' + productID + ')"><i class="icon icon-refresh"></i></button>');
+            }
         }
     })
 };
@@ -136,7 +141,7 @@ window.loadBranch = function()
     var productID = $('[name=product]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    loadProductModules(productID, branch);
-    loadProductPlans(productID, branch);
-    loadURS();
+    window.loadProductModules(productID, branch);
+    window.loadProductPlans(productID, branch);
+    window.loadURS();
 };

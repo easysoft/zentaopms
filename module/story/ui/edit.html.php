@@ -198,9 +198,9 @@ detailBody
                 set::name($lang->story->product),
                 row
                 (
+                    on::change('[name=branch]')->call('loadBranch'),
                     picker
                     (
-                        setID('product'),
                         set::name('product'),
                         set::items($fields['product']['options']),
                         set::value($fields['product']['default']),
@@ -217,7 +217,6 @@ detailBody
                             set::name('branch'),
                             set::items($fields['branch']['options']),
                             set::value($fields['branch']['default']),
-                            on::change('loadBranch')
                         ) : null
                     )
                 )

@@ -1,6 +1,6 @@
 window.loadProduct = function()
 {
-    const $product  = $('#product').zui('picker');
+    const $product  = $('[name=product]').zui('picker');
     const productID = $product.$.value;
 
     if(twins && productID != oldProductID)
@@ -108,20 +108,20 @@ function loadProductBranches(productID)
     var isTwins = 'no';
     var branch  = 0;
 
-    var $product   = $('#product');
+    var $product   = $('[name=product]');
     var $branchBox = $product.closest('.row').find('.branchIdBox');
     $branchBox.addClass('hidden');
     $.get($.createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=" + param + "&projectID=" + executionID + "&withMainBranch=1&isTwins=" + isTwins), function(data)
     {
-        if(data)
+        if(data && data != '[]')
         {
             $branchBox.html("<div class='picker-box' id='branch'></div>").removeClass('hidden');
-            $branch = new zui.Picker('.branchIdBox #branch', {items: JSON.parse(data), name: 'branch', onChange: "loadBranch()"});
+            $branch = new zui.Picker('.branchIdBox #branch', {items: JSON.parse(data), name: 'branch'});
             branch  = $branch.$.value;
         }
 
-        loadProductModules(productID, branch);
-        loadProductPlans(productID, branch);
+        window.loadProductModules(productID, branch);
+        window.loadProductPlans(productID, branch);
     });
 }
 
