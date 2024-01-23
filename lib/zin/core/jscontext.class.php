@@ -33,7 +33,7 @@ class jsContext extends js
         {
             if(!is_string($name)) $name = '__C' . (static::$tempIndex++);
             $this->contextName = $name;
-            $this->set($name, jsRaw($value));
+            $this->const($name, jsRaw($value));
         }
     }
 
