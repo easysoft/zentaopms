@@ -458,7 +458,6 @@ class screenModel extends model
         {
             $scopeFilter = new stdclass();
             $scopeFilter->belong     = 'metric';
-            $scopeFilter->from       = 'query';
             $scopeFilter->field      = $scope;
             $scopeFilter->name       = $this->lang->$scope->common;
             $scopeFilter->type       = 'select';
@@ -481,23 +480,14 @@ class screenModel extends model
 
         if($isDateMetric)
         {
-            $beginFilter = new stdclass();
-            $beginFilter->belong     = 'metric';
-            $beginFilter->from       = 'query';
-            $beginFilter->field      = 'begin';
-            $beginFilter->type       = 'date';
-            $beginFilter->typeOption = null;
-            $beginFilter->default    = null;
-            $filters[] = $beginFilter;
+            $dateFilter = new stdclass();
+            $dateFilter->belong     = 'metric';
+            $dateFilter->field      = 'date';
+            $dateFilter->type       = 'dateRange';
+            $dateFilter->typeOption = null;
+            $dateFilter->default    = null;
 
-            $endFilter = new stdclass();
-            $endFilter->belong     = 'metric';
-            $endFilter->from       = 'query';
-            $endFilter->field      = 'end';
-            $endFilter->type       = 'date';
-            $endFilter->typeOption = null;
-            $endFilter->default    = null;
-            $filters[] = $endFilter;
+            $filters[] = $dateFilter;
         }
 
         return $filters;
@@ -1008,27 +998,50 @@ class screenModel extends model
             $value = $filterParam['default'];
             if(empty($value)) continue;
 
-            $filter = new stdclass();
-            $filter->value = $value;
-            if($field == 'begin' || $field == 'end')
+            if($field == 'date')
             {
-                $filter->year = date('Y', $value/1000);
-                if($dateType == 'month') $filter->month = date('Y-m', $value/1000);
-                if($dateType == 'week')  $filter->week  = date('Y-W', $value/1000);
-                if($dateType == 'day')   $filter->day   = date('Y-m-d', $value/1000);
+                $beginValue = $value[0];
+                $endValue   = $value[1];
 
-                $filters[$field] = $filter;
+                $beginFilter = $this->formatMetricDateByType($beginValue, $dateType);
+                $endFilter   = $this->formatMetricDateByType($endValue, $dateType);
+
+                $beginFilter->value = $beginValue;
+                $endFilter->value   = $endValue;
+
+                $filters['begin'] = $beginFilter;
+                $filters['end']   = $endFilter;
             }
             else
             {
-                $filter->type = $field;
-                $filters['scope'] = $filter;
+                $scopeFilter = new stdclass();
+                $scopeFilter->value = $value;
+                $scopeFilter->type  = $field;
+
+                $filters['scope'] = $scopeFilter;
             }
         }
 
-        if(!isset($filters['begin'], $filters['end'])) unset($filters['begin'], $filters['end']);
-
         return $filters;
+    }
+
+    /**
+     * Format date of metric's filter by type.
+     *
+     * @param string  $stamp
+     * @param string  $dateType
+     * @access public
+     * @return array
+     */
+    public function formatMetricDateByType($stamp, $dateType)
+    {
+        $formatedDate = new stdclass();
+        $formatedDate->year = date('Y', $stamp/1000);
+        if($dateType == 'month') $formatedDate->month = date('Y-m', $stamp/1000);
+        if($dateType == 'week')  $formatedDate->week  = date('Y-W', $stamp/1000);
+        if($dateType == 'day')   $formatedDate->day   = date('Y-m-d', $stamp/1000);
+
+        return $formatedDate;
     }
 
     /**
