@@ -28,8 +28,9 @@ class count_of_monthly_finished_story_in_product extends baseCalc
 
     public function calculate($row)
     {
-        $product    = $row->product;
-        $closedDate = $row->closedDate;
+        $product      = $row->product;
+        $closedDate   = $row->closedDate;
+        $closedReason = $row->closedReason;
 
         if(empty($closedDate)) return false;
 
@@ -38,6 +39,8 @@ class count_of_monthly_finished_story_in_product extends baseCalc
 
         if(empty($year) || empty($month)) return false;
         if($year == '0000') return false;
+
+        if($closedReason != 'done') return false;
 
         if(!isset($this->result[$product])) $this->result[$product] = array();
         if(!isset($this->result[$product][$year])) $this->result[$product][$year] = array();
