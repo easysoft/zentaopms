@@ -414,7 +414,7 @@ class fieldList
             if($key === $firstName)
             {
                 $sortedFields[$key] = $fields[$key];
-                foreach($names as $name) $sortedFields[$name] = $fields[$name];
+                foreach($names as $name) $sortedFields[$name] = \zget($fields, $name, '');
             }
             elseif(in_array($key, $names))
             {

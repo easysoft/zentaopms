@@ -73,7 +73,6 @@ $fields->field('assignedTo')
     ->items($createFields['assignedTo']['options']);
 
 $fields->field('category')
-    ->className('full:w-1/6')
     ->required($createFields['category']['required'])
     ->items($createFields['category']['options'])
     ->value($createFields['category']['default']);
@@ -101,7 +100,6 @@ $fields->field('title')
 
 $fields->field('pri')
     ->width('1/4')
-    ->className('full:w-1/6')
     ->required($createFields['pri']['required'])
     ->control('priPicker')
     ->items($createFields['pri']['options'])
@@ -109,7 +107,6 @@ $fields->field('pri')
 
 $fields->field('estimate')
     ->width('1/4')
-    ->className('full:w-1/6')
     ->required($createFields['estimate']['required'])
     ->label($lang->story->estimateAB . $lang->story->estimateUnit)
     ->value($createFields['estimate']['default']);

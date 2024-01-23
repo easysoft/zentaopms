@@ -55,6 +55,7 @@ window.loadURS = function(e)
     let moduleID = 0;
     if(eventType == 'change') moduleID = $('[name=module]').val();
     if(eventType == 'click' && !$(e.target).prop('checked')) moduleID = $('[name=module]').val();
+    if($('#loadURS').prop('checked')) moduleID = 0;
 
     let branchID  = 0;
     let $branches = $('input[name^=branches]');
@@ -76,6 +77,7 @@ window.loadURS = function(e)
         data = JSON.parse(data);
         $URS = $('#URS').zui('picker');
         $URS.render({items: data.items});
+        $URS.$.setValue($URS.$.value);
     })
 };
 

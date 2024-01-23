@@ -17,14 +17,42 @@ $forceReview  = $this->story->checkForceReview();
 $createFields = useFields('story.create');
 $createFields->field('needNotReview')->value($forceReview ? 0 : 1);
 if(!$forceReview) $createFields->field('reviewer')->hidden(true);
-if(isset($fields['branch']) && $type == 'story')
+
+if((isset($fields['branch']) && $type == 'story') || $type != 'story')
 {
-    $createFields->field('reviewer')->className('full:w-1/2');
     $createFields->field('source')->width('1/2');
     $createFields->field('sourceNote')->width('1/2');
 }
 
-$createFields->fullModeOrders('product,module,twinsStory,plan,URS,parent,assignedTo,reviewer,region,lane,title,category,pri,estimate,spec,verify,files');
+/* Set layout in execution tab. */
+if(!empty($objectID))
+{
+    $createFields->remove('parent');
+    $createFields->field('category')->width('1/6')->className('full:w-1/2');
+    $createFields->field('pri')->width('1/6')->className('full:w-1/4');
+    $createFields->field('estimate')->width('1/6')->className('full:w-1/4');
+    $createFields->field('source')->className('full:w-1/2');
+    $createFields->field('sourceNote')->className('full:w-1/2');
+    $createFields->orders('product,module,twinsStory,URS,assignedTo,reviewer,region,lane,title,category,pri,estimate,spec,verify,files');
+    $createFields->fullModeOrders('product,module,twinsStory,plan,URS,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files');
+}
+/* Set layout in product tab. */
+else
+{
+    if($type == 'story' and !isset($fields['branch']))
+    {
+        $createFields->field('category')->width('1/2')->className('full:w-1/6');
+        $createFields->field('pri')->width('1/4')->className('full:w-1/6');
+        $createFields->field('estimate')->width('1/4')->className('full:w-1/6');
+    }
+
+    $fullModeOrders = 'product,module,twinsStory,plan,URS,parent,assignedTo,reviewer,region,lane,title,category,pri,estimate,spec,verify,files';
+    if($type != 'story') $fullModeOrders = 'product,module,twinsStory,plan,URS,parent,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
+    if($type == 'story' and isset($fields['branch'])) $fullModeOrders = 'product,module,twinsStory,plan,URS,parent,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
+
+    $createFields->orders('product,module,twinsStory,URS,parent,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files');
+    $createFields->fullModeOrders($fullModeOrders);
+}
 
 $params = $app->getParams();
 array_shift($params);

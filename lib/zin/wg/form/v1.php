@@ -213,6 +213,7 @@ class form extends formBase
 
         foreach($items as $key => $item)
         {
+            if(empty($item)) continue;
             if($item instanceof wg && !($item instanceof item))
             {
                 $list[] = $item;
