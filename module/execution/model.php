@@ -4693,28 +4693,31 @@ class executionModel extends model
         $this->app->loadConfig('project');
         foreach($executions as $execution)
         {
-            $execution->rawID         = $execution->id;
-            $execution->isExecution   = 1;
-            $execution->id            = 'pid' . (string)$execution->id;
-            $execution->projectID     = $execution->project;
-            $execution->project       = $execution->projectName;
-            $execution->parent        = ($execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
-            $execution->isParent      = !empty($execution->isParent) or !empty($execution->tasks);
-            $execution->actions       = array();
-            foreach($this->config->projectExecution->dtable->actionsRule[$execution->projectModel] as $actionKey)
+            $execution->rawID       = $execution->id;
+            $execution->isExecution = 1;
+            $execution->id          = 'pid' . (string)$execution->id;
+            $execution->projectID   = $execution->project;
+            $execution->project     = $execution->projectName;
+            $execution->parent      = ($execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
+            $execution->isParent    = !empty($execution->isParent) or !empty($execution->tasks);
+            $execution->actions     = array();
+            if(isset($this->config->projectExecution->dtable->actionsRule[$execution->projectModel]))
             {
-                $action  = array();
-                $actions = explode('|', $actionKey);
-                foreach($actions as $actionName)
+                foreach($this->config->projectExecution->dtable->actionsRule[$execution->projectModel] as $actionKey)
                 {
-                    if($actionName == 'createChildStage' && !commonModel::hasPriv('programplan', 'create')) continue;
-                    if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
-                    if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
-                    $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
-                    if(!$action['disabled']) break;
-                    if($actionName == 'close' && $execution->status != 'closed') break;
+                    $action  = array();
+                    $actions = explode('|', $actionKey);
+                    foreach($actions as $actionName)
+                    {
+                        if($actionName == 'createChildStage' && !commonModel::hasPriv('programplan', 'create')) continue;
+                        if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
+                        if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
+                        $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
+                        if(!$action['disabled']) break;
+                        if($actionName == 'close' && $execution->status != 'closed') break;
+                    }
+                    if(!empty($action)) $execution->actions[] = $action;
                 }
-                if(!empty($action)) $execution->actions[] = $action;
             }
 
             /* For user's avatar. */
