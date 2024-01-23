@@ -91,10 +91,10 @@ window.setParentProgram = function()
 /* Init product. */
 window.waitDom('[name^=products]', function()
 {
-    if($('.newProductBox').length > 0) productChange($('[name^=products]').eq(0));
+    if($('.newProductBox').length > 0) toggleStageBy($('[name^=products]').eq(0));
 });
 
-window.productChange = function()
+window.toggleStageBy = function()
 {
     let chosenProducts = 0;
     $(".productsBox [name^='products']").each(function()

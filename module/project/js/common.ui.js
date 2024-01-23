@@ -23,7 +23,7 @@ function changeType()
     else
     {
         $('.productsBox').removeClass('hidden');
-        if(typeof productChange == 'function') productChange($(this));
+        if(typeof toggleStageBy == 'function') toggleStageBy($(this));
     }
 }
 
