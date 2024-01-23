@@ -5,7 +5,7 @@ global $lang, $config;
 $fields   = defineFieldList('execution.create');
 $project  = data('project');
 $from     = data('from');
-$isStage  = data('isStage');
+$isStage  = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
 $isKanban = data('isKanban');
 $showExecutionExec = ($from == 'execution' || $from == 'doc');
 $requiredFields    = ",{$config->execution->create->requiredFields},";
@@ -36,7 +36,7 @@ $fields->field('name')
     ->value(data('execution.name'));
 
 $fields->field('code')
-    ->required(in_array('code', explode(',', $config->execution->edit->requiredFields)))
+    ->required(strpos($requiredFields, ",code,") !== false)
     ->label($showExecutionExec ? $lang->execution->execCode : $lang->execution->code)
     ->value(data('execution.code'));
 

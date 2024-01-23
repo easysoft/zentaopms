@@ -109,6 +109,3 @@ modalTrigger
         )
     )
 );
-
-/* ====== Render page ====== */
-render();
