@@ -67,11 +67,13 @@ $fields->field('type')
 
 $fields->field('severity')
     ->width('1/6')
+    ->required(true)
     ->control('severityPicker')
     ->items($lang->bug->severityList);
 
 $fields->field('pri')
     ->width('1/6')
+    ->required(true)
     ->control('priPicker')
     ->items($lang->bug->priList);
 
