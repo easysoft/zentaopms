@@ -2825,7 +2825,7 @@ class taskModel extends model
      */
     public function updateEffortOrder(int $effortID, int $order): bool
     {
-        $this->dao->update(TABLE_EFFORT)->set('`order`')->eq((int)$order)->where('id')->eq($effortID)->exec();
+        $this->dao->update(TABLE_EFFORT)->set('`order`')->eq($order)->where('id')->eq($effortID)->exec();
         return !dao::isError();
     }
 
