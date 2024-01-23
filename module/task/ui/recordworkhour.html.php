@@ -76,7 +76,7 @@ if($efforts)
                     common::hasPriv('task', 'editEffort') ? a
                     (
                         setClass('btn ghost toolbar-item square size-sm text-primary edit-effort'),
-                        on::click("loadModal('" . createLink('task', 'editEffort', "id={$effort->id}") . "')"),
+                        on::click()->call('loadModal', createLink('task', 'editEffort', "id={$effort->id}")),
                         icon('edit'),
                     ) : null,
                     common::hasPriv('task', 'deleteWorkhour') ? a
