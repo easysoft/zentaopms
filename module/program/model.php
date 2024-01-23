@@ -666,7 +666,7 @@ class programModel extends model
         {
             $this->loadModel('user');
             $this->loadModel('file')->updateObjectID($this->post->uid, $programID, 'project');
-            if($program->whitelist) $this->loadModel('personnel')->updateWhitelist(explode(',', $program->whitelist), 'program', $programID);
+            $this->loadModel('personnel')->updateWhitelist(explode(',', $program->whitelist), 'program', $programID);
             if($program->acl != 'open') $this->user->updateUserView(array($programID), 'program');
 
             /* If the program changes, the authorities of programs and projects under the program should be refreshed. */
