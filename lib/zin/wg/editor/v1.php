@@ -53,6 +53,8 @@ class editor extends wg
 
     protected function build(): wg
     {
+        global $lang;
+
         $editor = new h
         (
             setTag('zen-editor'),
@@ -63,6 +65,7 @@ class editor extends wg
         $props = $this->props->pick(array('uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
         foreach($props as $key => $value)
         {
+            if($key == 'placeholder' && empty($value)) $value = $lang->noticePasteImg;
             if($value === true || (is_string($value) && !empty($value))) $editor->add(set(uncamelize($key), $value));
         }
 
