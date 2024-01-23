@@ -446,7 +446,7 @@ class header extends wg
             btn
             (
                 icon('plus', set::size('lg')),
-                setClass('secondary ring-0 rounded'),
+                setClass('text-primary ring-primary ring-opacity-30 bg-inherit'),
                 set::square(true),
                 set::size('sm'),
                 set::caret(false)
