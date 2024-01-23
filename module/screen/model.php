@@ -1823,6 +1823,8 @@ class screenModel extends model
         if(!isset($chartOption['title'])) $chartOption['title'] = array('text' => $metric->name, 'show' => false, 'titleShow' => true, 'textStyle' => array('color' => '#BFBFBF'));
         $chartOption['title']['text'] = $metric->name;
         $chartOption['backgroundColor'] = "#0B1727FF";
+        $chartOption['legend']['textStyle']['color'] = 'white';
+        $chartOption['legend']['inactiveColor'] = 'gray';
 
         if(!empty($component))
         {
