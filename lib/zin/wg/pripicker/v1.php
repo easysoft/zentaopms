@@ -59,6 +59,7 @@ class priPicker extends wg
             $props['_id'] = $props['id'];
             unset($props['id']);
         }
+        if(is_null($props['required'])) $props['required'] = true;
 
         if(!isset($props['items']))
         {
