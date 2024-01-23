@@ -111,14 +111,14 @@ class dropmenu extends wg
                     if($module == 'testtask' && $method == 'browse') $extra = data('type');
                     $branchURL  = createLink('branch', 'ajaxGetDropMenu', "objectID=$objectID&branch=$branchID&module=$module&method=$method&extra=$extra");
                     $branchMenu = zui::dropmenu
-                        (
-                            setID('branch-dropmenu'),
-                            set('_id', 'branch-dropmenu'),
-                            set('_props', array('data-fetcher' => $branchURL)),
-                            set('data', $data),
-                            set(array('fetcher' => $branchURL, 'text' => $branchName, 'defaultValue' => $branchID)),
-                            set($this->getRestProps())
-                        );
+                    (
+                        setID('branch-dropmenu'),
+                        set('_id', 'branch-dropmenu'),
+                        set('_props', array('data-fetcher' => $branchURL)),
+                        set('data', $data),
+                        set(array('fetcher' => $branchURL, 'text' => $branchName, 'defaultValue' => $branchID)),
+                        set($this->getRestProps())
+                    );
                 }
             }
         }
