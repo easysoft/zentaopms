@@ -269,18 +269,16 @@
     {
         const $data = $(data);
         const $heading = $('#heading');
-        const $dropmenu = $heading.find('#dropmenu');
-        const $nextDropmenu = $data.filter('#dropmenu');
-        if($dropmenu.dataset('fetcher') === $nextDropmenu.dataset('fetcher'))
+        $heading.children('[data-zui-dropmenu]').each(function()
         {
-            const $toolbar = $heading.find('.toolbar');
-            const $nextToolbar = $data.filter('.toolbar');
-            if($nextToolbar.text().trim() !== $toolbar.text().trim()) $toolbar.replaceWith($nextToolbar);
-        }
-        else
-        {
-            $heading.html(data);
-        }
+            const $dropmenu = $(this);
+            const $nextDropmenu = $data.filter(`#${$dropmenu.attr('id')}`);
+            if($dropmenu.data('fetcher') === $nextDropmenu.data('fetcher')) return;
+            $dropmenu.replaceWith($nextDropmenu);
+        });
+        const $toolbar = $heading.children('.toolbar');
+        const $nextToolbar = $data.filter('.toolbar');
+        if($nextToolbar.text().trim() !== $toolbar.text().trim()) $toolbar.replaceWith($nextToolbar);
         layoutNanavbar();
     }
 
