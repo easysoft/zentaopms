@@ -40,7 +40,7 @@ to::header
     ),
     span
     (
-        setClass('flex gap-x-2'),
+        setClass('flex gap-x-2 pr-4'),
         $lang->task->consumed,
         span
         (
