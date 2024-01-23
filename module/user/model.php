@@ -2084,10 +2084,10 @@ class userModel extends model
         foreach($groups as $groupID)
         {
             $query = "FIND_IN_SET({$groupID}, `groups`)";
-            $products += $this->dao->select('id,id')->from(TABLE_PRODUCT)->where($query)->andWhere('acl')->eq('private')->andWhere('deleted')->eq('0')->fetchPairs();
-            $programs += $this->dao->select('id,id')->from(TABLE_PROGRAM)->where($query)->andWhere('acl')->eq('private')->andWhere('type')->eq('program')->andWhere('deleted')->eq('0')->fetchPairs();
-            $projects += $this->dao->select('id,id')->from(TABLE_PROJECT)->where($query)->andWhere('acl')->eq('private')->andWhere('type')->eq('project')->andWhere('deleted')->eq('0')->fetchPairs();
-            $sprints  += $this->dao->select('id,id')->from(TABLE_PROJECT)->where($query)->andWhere('acl')->eq('private')->andWhere('type')->in('stage,sprint,kanban')->andWhere('deleted')->eq('0')->fetchPairs();
+            $products += $this->dao->select('id,id')->from(TABLE_PRODUCT)->where($query)->andWhere('acl')->ne('open')->andWhere('deleted')->eq('0')->fetchPairs();
+            $programs += $this->dao->select('id,id')->from(TABLE_PROGRAM)->where($query)->andWhere('acl')->ne('open')->andWhere('type')->eq('program')->andWhere('deleted')->eq('0')->fetchPairs();
+            $projects += $this->dao->select('id,id')->from(TABLE_PROJECT)->where($query)->andWhere('acl')->ne('open')->andWhere('type')->eq('project')->andWhere('deleted')->eq('0')->fetchPairs();
+            $sprints  += $this->dao->select('id,id')->from(TABLE_PROJECT)->where($query)->andWhere('acl')->ne('open')->andWhere('type')->in('stage,sprint,kanban')->andWhere('deleted')->eq('0')->fetchPairs();
         }
         $userView->products .= ',' . implode(',', $products);
         $userView->programs .= ',' . implode(',', $programs);
