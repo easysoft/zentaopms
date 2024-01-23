@@ -72,6 +72,8 @@ class task extends control
             {
                 /* Prepare to create the data for the test subtask and to check the data format. */
                 $testTasks  = $this->taskZen->buildTestTasksForCreate($taskData->execution);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
                 $taskIdList = $this->task->createTaskOfTest($taskData, $testTasks);
             }
             elseif($this->post->type == 'affair')

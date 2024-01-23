@@ -701,7 +701,7 @@ class taskZen extends task
      * @access protected
      * @return array
      */
-    protected function buildTestTasksForCreate(int $executionID): array
+    protected function buildTestTasksForCreate(int $executionID): array|bool
     {
         /* Set data for the type of test task that has linked stories. */
         $postData = form::data($this->config->task->form->testTask->create)->get();
@@ -731,6 +731,8 @@ class taskZen extends task
         }
 
         $this->checkCreateTestTasks($testTasks);
+        if(dao::isError()) return false;
+
         return $testTasks;
     }
 
@@ -1035,7 +1037,7 @@ class taskZen extends task
             /* Check if the estimate is positive. */
             if($task->estimate < 0)
             {
-                dao::$errors[] = "ID: {$task->story} {$this->lang->task->error->recordMinus}";
+                dao::$errors['message'] = "ID: {$task->story} {$this->lang->task->error->recordMinus}";
                 return false;
             }
 
@@ -1046,7 +1048,7 @@ class taskZen extends task
                 if(dao::isError())
                 {
                     $error = current(dao::getError());
-                    dao::$errors[] = "ID: {$task->story} {$error}";
+                    dao::$errors['message'] = "ID: {$task->story} {$error}";
                     return false;
                 }
             }
@@ -1054,7 +1056,7 @@ class taskZen extends task
             /* Check start and end date. */
             if($task->estStarted > $task->deadline)
             {
-                dao::$errors[] = "ID: {$task->story} {$this->lang->task->error->deadlineSmall}";
+                dao::$errors['message'] = "ID: {$task->story} {$this->lang->task->error->deadlineSmall}";
                 return false;
             }
 
@@ -1063,7 +1065,7 @@ class taskZen extends task
             if(dao::isError())
             {
                 $error = current(dao::getError());
-                dao::$errors[] = "ID: {$task->story} {$error}";
+                dao::$errors['message'] = "ID: {$task->story} {$error}";
                 return false;
             }
         }
