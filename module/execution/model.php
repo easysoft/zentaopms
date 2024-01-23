@@ -320,14 +320,6 @@ class executionModel extends model
     {
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
-        /* Judgment of required items, such as execution code name. */
-        if($oldExecution->type != 'stage' && empty($postData->code) && isset($this->config->setCode) && $this->config->setCode == 1)
-        {
-            /* $this->config->setCode is the value get from database with system owner and common module. */
-            dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
-            return false;
-        }
-
         /* Judge workdays is legitimate. */
         $this->app->loadLang('project');
         $workdays = helper::diffDate($postData->end, $postData->begin) + 1;
