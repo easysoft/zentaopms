@@ -29,9 +29,9 @@ $fields->field('story')
     ->itemBegin()->control('btn', array('url' => helper::createLink('story', 'view', 'storyID=' . data('case.story')), 'data-toggle' => 'modal', 'data-size' => 'lg'))->className('hidden', empty(data('case.story')))->icon('eye text-primary')->hint($lang->preview)->id('preview')->itemEnd();
 
 $fields->field('scene')
+    ->control(array('type' => 'picker', 'required' => true))
     ->items(data('sceneOptionMenu'))
-    ->value(data('currentSceneID'))
-    ->required(true);
+    ->value(data('currentSceneID'));
 
 $fields->field('type')
     ->checkbox(array('id' => 'auto', 'name' => 'auto', 'text' => $lang->testcase->automated, 'checked' => data('case.auto') == 'auto'))
