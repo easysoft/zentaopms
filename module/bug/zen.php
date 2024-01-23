@@ -616,7 +616,7 @@ class bugZen extends bug
         {
             $execution = $this->loadModel('execution')->getByID($executionID);
             if(empty($execution->multiple)) $exportFields = str_replace('execution,', '', $exportFields);
-            if(empty($execution->hasProduct) || !empty($product->shadow)) $exportFields = str_replace('product,',   '', $exportFields);
+            if(empty($execution->hasProduct) || !empty($product->shadow)) $exportFields = str_replace(array('product,', 'branch,'),   '', $exportFields);
         }
 
         return $exportFields;
