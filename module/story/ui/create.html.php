@@ -28,27 +28,52 @@ if((isset($fields['branch']) && $type == 'story') || $type != 'story')
 if(!empty($objectID))
 {
     $createFields->remove('parent');
-    $createFields->field('category')->width('1/6')->className('full:w-1/2');
-    $createFields->field('pri')->width('1/6')->className('full:w-1/4');
-    $createFields->field('estimate')->width('1/6')->className('full:w-1/4');
     $createFields->field('source')->className('full:w-1/2');
     $createFields->field('sourceNote')->className('full:w-1/2');
-    $createFields->orders('product,module,twinsStory,URS,assignedTo,reviewer,region,lane,title,category,pri,estimate,spec,verify,files');
-    $createFields->fullModeOrders('product,module,twinsStory,plan,URS,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files');
+    if(isset($fields['URS']))
+    {
+        $createFields->field('category')->width('1/6')->className('full:w-1/2');
+        $createFields->field('pri')->width('1/6')->className('full:w-1/4');
+        $createFields->field('estimate')->width('1/6')->className('full:w-1/4');
+    }
+    else
+    {
+        $createFields->field('category')->width('1/2');
+        $createFields->field('pri')->width('1/4');
+        $createFields->field('estimate')->width('1/4');
+    }
+
+    $orders         = 'product,module,twinsStory,URS,assignedTo,reviewer,region,lane,title,category,pri,estimate,spec,verify,files';
+    $fullModeOrders = 'product,module,twinsStory,plan,URS,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
+    if(!isset($fields['URS']))
+    {
+        $orders         = 'product,module,twinsStory,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
+        $fullModeOrders = 'product,module,twinsStory,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
+    }
+
+    $createFields->orders($orders);
+    $createFields->fullModeOrders($fullModeOrders);
 }
 /* Set layout in product tab. */
 else
 {
-    if($type == 'story' and !isset($fields['branch']))
+    if($type == 'story')
     {
-        $createFields->field('category')->width('1/2')->className('full:w-1/6');
-        $createFields->field('pri')->width('1/4')->className('full:w-1/6');
-        $createFields->field('estimate')->width('1/4')->className('full:w-1/6');
+        if(!isset($fields['branch']) || !isset($fields['URS']))
+        {
+            $createFields->field('category')->width('1/2')->className('full:w-1/6');
+            $createFields->field('pri')->width('1/4')->className('full:w-1/6');
+            $createFields->field('estimate')->width('1/4')->className('full:w-1/6');
+        }
     }
 
     $fullModeOrders = 'product,module,twinsStory,plan,URS,parent,assignedTo,reviewer,region,lane,title,category,pri,estimate,spec,verify,files';
     if($type != 'story') $fullModeOrders = 'product,module,twinsStory,plan,URS,parent,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
-    if($type == 'story' and isset($fields['branch'])) $fullModeOrders = 'product,module,twinsStory,plan,URS,parent,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
+    if($type == 'story' and isset($fields['branch']))
+    {
+        $fullModeOrders = 'product,module,twinsStory,plan,URS,parent,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
+        if(!isset($fields['URS'])) $fullModeOrders = 'product,module,twinsStory,reviewer,region,lane,plan,assignedTo,title,category,pri,estimate,spec,verify,files';
+    }
 
     $createFields->orders('product,module,twinsStory,URS,parent,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files');
     $createFields->fullModeOrders($fullModeOrders);
