@@ -227,6 +227,7 @@ class productsBox extends wg
                 $plans  = !empty($productPlans) ? $productPlans : array();
                 $planID = isset($currentPlan) && isset($productPlans[$currentPlan]) ? $currentPlan : '';
             }
+            if($planID and empty($plans)) $planID = '';
 
             $linkedProductsBox[] = div
             (

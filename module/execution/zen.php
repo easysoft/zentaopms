@@ -1820,7 +1820,7 @@ class executionZen extends execution
                     $linkedBranches[$productIndex][$branchID] = $branchID;
                     if(isset($plans[$productIndex][$branchID]))
                     {
-                        foreach($plans[$productIndex][$branchID] as $plan) $productPlans[$productIndex][$plan->id] = $plan->title;
+                        foreach($plans[$productIndex][$branchID] as $plan) $productPlans[$productIndex][$branchID][$plan->id] = $plan->title;
                     }
                 }
             }
