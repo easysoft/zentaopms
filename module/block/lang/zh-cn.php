@@ -448,7 +448,7 @@ $lang->block->flowchart            = array();
 $lang->block->flowchart['admin']   = array('管理员', '维护部门', '添加用户', '维护权限');
 if($config->systemMode == 'ALM') $lang->block->flowchart['program'] = array('项目集负责人', '创建项目集', "关联{$lang->productCommon}", "创建{$lang->projectCommon}", "制定预算和规划", '添加干系人');
 $lang->block->flowchart['product'] = array($lang->productCommon . '经理', '创建' . $lang->productCommon, '维护模块', "维护计划", "维护需求", '创建发布');
-$lang->block->flowchart['project'] = array('项目经理', "创建{$lang->productCommon}、" . $lang->execution->common, '维护团队', "关联需求", '分解任务', '跟踪进度');
+$lang->block->flowchart['project'] = array('项目经理', "创建{$lang->projectCommon}、" . $lang->execution->common, '维护团队', "关联需求", '分解任务', '跟踪进度');
 $lang->block->flowchart['dev']     = array('研发人员', '领取任务和Bug', '设计实现方案', '更新状态', '完成任务和Bug', '提交代码');
 $lang->block->flowchart['tester']  = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug');
 
