@@ -17,7 +17,13 @@ $forceReview  = $this->story->checkForceReview();
 $createFields = useFields('story.create');
 $createFields->field('needNotReview')->value($forceReview ? 0 : 1);
 if(!$forceReview) $createFields->field('reviewer')->hidden(true);
-if(isset($fields['branch']) && $type == 'story') $createFields->field('reviewer')->className('full:w-1/2');
+if(isset($fields['branch']) && $type == 'story')
+{
+    $createFields->field('reviewer')->className('full:w-1/2');
+    $createFields->field('source')->width('1/2');
+    $createFields->field('sourceNote')->width('1/2');
+}
+
 $createFields->fullModeOrders('product,module,twinsStory,plan,URS,parent,assignedTo,reviewer,region,lane,title,category,pri,estimate,spec,verify,files');
 
 $params = $app->getParams();
@@ -46,7 +52,6 @@ formGridPanel
     on::click('#loadProductPlans', "loadProductPlans('{$productID}')"),
     on::change('[name=module]', 'loadURS'),
     on::change('[name=product]', 'loadProduct'),
-    on::change('[name^=branches]', 'loadBranch'),
     on::change('[name=source]', "toggleFeedback(e.target)"),
     on::change('[name=region]', 'setLane')
 );

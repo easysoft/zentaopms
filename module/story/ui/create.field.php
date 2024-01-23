@@ -143,12 +143,15 @@ if(!isset($createFields['branch']) && $type == 'story')
 
 $fields->field('source')
     ->foldable()
-    ->label($lang->story->source . '&' . $lang->story->sourceNote)
+    ->width('1/4')
     ->required($createFields['source']['required'])
-    ->control('inputGroup')
-    ->items(false)
-    ->itemBegin('source')->control('picker')->items($createFields['source']['options'])->value($createFields['source']['default'])->itemEnd()
-    ->itemBegin('sourceNote')->value($createFields['sourceNote']['default'])->itemEnd();
+    ->items($createFields['source']['options'])
+    ->value($createFields['source']['default']);
+
+$fields->field('sourceNote')
+    ->foldable()
+    ->width('1/4')
+    ->value($createFields['sourceNote']['default']);
 
 $fields->field('feedbackBy')
     ->foldable()

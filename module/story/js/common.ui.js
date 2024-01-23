@@ -46,7 +46,7 @@ window.toggleFeedback = function(obj)
 
 window.loadURS = function(e)
 {
-    const eventType = e.type;
+    const eventType = typeof e == 'undefined' ? '' : e.type;
     const productID = $('[name=product]').val();
 
     let requirementList = $('[name=URS]').val();
