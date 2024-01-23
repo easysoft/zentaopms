@@ -53,7 +53,6 @@ class taskTao extends taskModel
         $newTask  = clone $task;
         $newTask->consumed      += $record->consumed;
         $newTask->lastEditedBy   = $this->app->user->account;
-        $newTask->lastEditedDate = $now;
         if(!$task->realStarted) $newTask->realStarted = $now;
 
         if($lastDate <= $record->date) $newTask->left = $record->left;

@@ -1593,7 +1593,14 @@ class taskZen extends task
 
         if($this->app->rawMethod == 'recordworkhour')
         {
-            $response['callback'] = "loadModal('" . inLink('recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
+            if($from == 'edittask')
+            {
+                $response['callback'] = "refreshConsumed('{$task->consumed}');";
+            }
+            else
+            {
+                $response['callback'] = "loadModal('" . inLink('recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
+            }
         }
         else
         {
