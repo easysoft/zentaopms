@@ -2589,7 +2589,7 @@ class taskModel extends model
             {
                 $currentTeam->status = $record->left == 0 ? 'done' : 'doing';
                 $this->taskTao->updateTeamByEffort($effortID, $record, $currentTeam, $task);
-                $newTask = $this->computeMultipleHours($task, $newTask, $task->team);
+                $newTask = $this->computeMultipleHours($task, $newTask);
             }
 
             $changes = common::createChanges($task, $newTask, 'task');
