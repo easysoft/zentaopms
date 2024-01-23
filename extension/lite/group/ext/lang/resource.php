@@ -580,6 +580,7 @@ $lang->resource->doc->delete         = 'delete';
 $lang->resource->doc->deleteFile     = 'deleteFile';
 $lang->resource->doc->collect        = 'collectAction';
 $lang->resource->doc->projectSpace   = 'projectSpace';
+$lang->resource->doc->teamSpace      = 'teamSpace';
 $lang->resource->doc->showFiles      = 'showFiles';
 $lang->resource->doc->addCatalog     = 'addCatalog';
 $lang->resource->doc->editCatalog    = 'editCatalog';
