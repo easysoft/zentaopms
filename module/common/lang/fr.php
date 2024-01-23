@@ -89,6 +89,7 @@ $lang->noDesc             = 'No Describe';
 $lang->fullscreen         = 'Plein Ecran';
 $lang->retrack            = 'Réduire';
 $lang->whitelist          = 'Liste blanche';
+$lang->whitelistNotNeed   = 'Note: Public object does not need to set whitelist.';
 $lang->globalSetting      = 'Common';
 $lang->waterfallModel     = 'Waterfall';
 $lang->scrumModel         = 'Scrum';
@@ -111,6 +112,10 @@ $lang->switchDisplay   = 'Basculer';
 $lang->switchTo        = 'Switch To';
 $lang->expand          = 'Déplier';
 $lang->collapse        = 'Replier';
+$lang->liteMode        = 'Lite Mode';
+$lang->fullMode        = 'Full Mode';
+$lang->showMoreInfo    = 'Display more information';
+$lang->hideMoreInfo    = 'Hide more information';
 $lang->saveSuccess     = 'Sauvegardé';
 $lang->importSuccess   = 'Sauvé';
 $lang->fail            = 'Echec';
@@ -137,6 +142,9 @@ $lang->levelExceeded   = 'The level has exceeded the display range. For more inf
 $lang->noticeOkFile    = 'For security reasons, your Admin account has to be confirmed. \n Please login ZenTao server and create %s File.\n Note:\n 1. File is blank.\n 2. If the file existed, delete it and then create a new one.';
 $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 $lang->allProgress     = 'All Progress';
+
+$lang->fieldDisplaySetting = 'Field Display Setting';
+$lang->fieldSettingTip     = 'The following fields are collapsed by default, click on the "Show more fields" button to expand the view, if you want some fields not to be collapsed by default, you can fix it with a pin.';
 
 $lang->serviceAgreement = "Service Agreement";
 $lang->privacyPolicy    = "Privacy Policy";
@@ -515,6 +523,7 @@ $lang->error->account         = "『 %s 』doit être >= 3 lettres ou chiffres."
 $lang->error->passwordsame    = "Les mots de passe doivent être cohérents.";
 $lang->error->passwordrule    = "Le mot de passe doit être conforme aux règles. Il devrait être >= 6 caractères.";
 $lang->error->accessDenied    = 'Accès refusé.';
+$lang->error->unsupportedReq  = 'Unsupported request type';
 $lang->error->pasteImg        = 'Les images ne peuvent pas être collées dans votre navigateur !';
 $lang->error->noData          = 'No data yet.';
 $lang->error->editedByOther   = 'Cet enregistrement a peut-être été modifié. Veuillez actualiser et réessayer !';
