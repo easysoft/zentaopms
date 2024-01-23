@@ -363,10 +363,7 @@ $lang->themes['default']    = '禪道藍（預設）';
 $lang->themes['blue']       = '青春藍';
 $lang->themes['green']      = '葉蘭綠';
 $lang->themes['red']        = '赤誠紅';
-$lang->themes['purple']     = '玉煙紫';
-$lang->themes['pink']       = '芙蕖粉';
-$lang->themes['blackberry'] = '露莓黑';
-$lang->themes['classic']    = '經典藍';
+$lang->themes['purple']     = '萱萱紫';
 
 /* 錯誤提示信息。*/
 $lang->error                  = new stdclass();

@@ -296,9 +296,6 @@ $lang->themes['blue']       = 'Young Blue';
 $lang->themes['green']      = 'Green';
 $lang->themes['red']        = 'Red';
 $lang->themes['purple']     = 'Purple';
-$lang->themes['pink']       = 'Pink';
-$lang->themes['blackberry'] = 'Blackberry';
-$lang->themes['classic']    = 'Classic';
 
 /* Index menu settings. */
 $lang->index = new stdclass();

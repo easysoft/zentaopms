@@ -498,9 +498,6 @@ $lang->block->themes['blue']       = 'Young Blue';
 $lang->block->themes['green']      = 'Green';
 $lang->block->themes['red']        = 'Red';
 $lang->block->themes['pink']       = 'Pink';
-$lang->block->themes['blackberry'] = 'Blackberry';
-$lang->block->themes['classic']    = 'Classic';
-$lang->block->themes['purple']     = 'Purple';
 
 $lang->block->visionTitle            = 'The user interface of ZenTao is divided into 【Full feature interface】 and 【Operation Management Interface】.';
 $lang->block->visions['rnd']         = new stdclass();

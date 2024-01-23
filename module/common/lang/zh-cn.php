@@ -487,14 +487,11 @@ $lang->setLang = '语言设置';
 
 /* 风格列表。*/
 $lang->theme                = '主题';
-$lang->themes['default']    = '禅道蓝（默认）';
+$lang->themes['default']    = '禅道蓝';
 $lang->themes['blue']       = '青春蓝';
 $lang->themes['green']      = '叶兰绿';
 $lang->themes['red']        = '赤诚红';
-$lang->themes['purple']     = '玉烟紫';
-$lang->themes['pink']       = '芙蕖粉';
-$lang->themes['blackberry'] = '露莓黑';
-$lang->themes['classic']    = '经典蓝';
+$lang->themes['purple']     = '萱萱紫';
 
 /* 错误提示信息。*/
 $lang->error                  = new stdclass();
