@@ -152,7 +152,11 @@ class treeModel extends model
             if($product && $product->type != 'normal')
             {
                 $branchPairs = $this->loadModel('branch')->getPairs($rootID, 'all');
-                foreach(explode(',', (string)$branch) as $branchID) $branches[$branchID] = $branchPairs[$branchID];
+                foreach(explode(',', (string)$branch) as $branchID)
+                {
+                    $branchID = (int)$branchID;
+                    $branches[$branchID] = $branchPairs[$branchID];
+                }
             }
         }
 
