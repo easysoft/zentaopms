@@ -1,4 +1,5 @@
 window.waitDom('#form-task-create [name=type]', function(){ typeChange();})
+window.waitDom('#form-task-create [name=after]', function(){setAfter();})
 
 /**
  * 根据多人任务是否勾选展示团队。
@@ -347,7 +348,7 @@ function setStoryModule()
  */
 function setAfter()
 {
-    if($("#story").length == 0 || $("input[name=story]").val())
+    if($("input[name=story]").length == 0 || !$("input[name=story]").val() || $("input[name=story]").val() == 0)
     {
         /* If the exeuction doesn't have stories, hide the selections of story. */
         if($('input[value="continueAdding"]').prop('checked'))
