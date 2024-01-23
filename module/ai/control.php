@@ -155,7 +155,7 @@ class ai extends control
         foreach($programs as $program)
         {
             $program->canPublish     = empty($program->published) && $this->ai->canPublishMiniProgram($program);
-            $program->createdByLabel = $this->loadModel('user')->getById($program->createdBy, 'account')->realname;
+            $program->createdByLabel = $program->createdBy === 'system' ? $this->lang->admin->system : $this->loadModel('user')->getById($program->createdBy, 'account')->realname;
             $program->categoryLabel  = $categoryList[$program->category];
             $program->publishedLabel = $program->published === '1'
                 ? $this->lang->ai->miniPrograms->statuses['active']

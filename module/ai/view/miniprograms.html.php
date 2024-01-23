@@ -184,22 +184,22 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
                 <td class="c-actions">
                   <?php
                     $isPublished = $miniProgram->published === '1';
-                    $isNotBuiltIn = $miniProgram->builtIn === '0';
+                    $isBuiltIn = $miniProgram->builtIn === '1';
                   ?>
                   <?php
-                  if($isNotBuiltIn && common::hasPriv('ai', 'editMiniProgram'))
+                  if(common::hasPriv('ai', 'editMiniProgram'))
                   {
-                    echo $isPublished
+                    echo $isPublished || $isBuiltIn
                       ? "<button class='btn' disabled title='{$lang->ai->prompts->action->edit}'><i class='icon icon-edit text-primary'></i></button>"
                       : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'editMiniProgram', "appID=$miniProgram->id")}'><i class='icon icon-edit text-primary'></i></a>";
                   }
                   ?>
-                  <?php if($isNotBuiltIn && common::hasPriv('ai', 'testMiniProgram')): ?>
+                  <?php if(common::hasPriv('ai', 'testMiniProgram')): ?>
                     <button
                       class="btn iframe"
                       data-toggle="modal"
                       data-width="800"
-                      data-height="600"<?= $isPublished ? ' disabled' : ''; ?>
+                      data-height="600"<?= $isPublished || $isBuiltIn ? ' disabled' : ''; ?>
                       title="<?= $lang->ai->prompts->action->test; ?>"
                       data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
                     >
@@ -216,8 +216,8 @@ $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
                       <i class="icon icon-ban-circle text-primary"></i>
                     </button>
                   <?php endif; ?>
-                  <?php if($isNotBuiltIn && common::hasPriv('ai', 'exportMiniProgram')): ?>
-                    <button class="btn" onclick="exportMiniProgram(event)" title="<?= $lang->ai->export; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
+                  <?php if(common::hasPriv('ai', 'exportMiniProgram')): ?>
+                    <button class="btn" onclick="exportMiniProgram(event)" title="<?= $lang->ai->export; ?>"<?= $isPublished && !$isBuiltIn ? '' : ' disabled'; ?>>
                       <i class="icon icon-export text-primary"></i>
                     </button>
                   <?php endif; ?>
