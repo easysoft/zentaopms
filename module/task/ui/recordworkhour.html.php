@@ -11,11 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('confirmRecord', $lang->task->confirmRecord);
-if(isInModal())
-{
-    set::id("modal-record-hours-task-{$task->id}");
-    on('click', "#modal-record-hours-task-{$task->id} .edit-effort", "zui.Modal.query('#modal-record-hours-task-{$task->id}').hide()");
-}
+if(isInModal()) set::id("modal-record-hours-task-{$task->id}");
 
 to::header
 (
