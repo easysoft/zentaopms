@@ -454,17 +454,15 @@ class testtaskZen extends testtask
         $nextLink = '';
         if($preAndNext->pre && $this->app->tab != 'my')
         {
-            $runID     = $runID ? $preAndNext->pre->id : 0;
-            $preCaseID = $runID ? $preAndNext->pre->case : $preAndNext->pre->id;
-            $version   = $preAndNext->pre->version;
-            $preLink   = inlink('runCase', "runID={$runID}&caseID={$preCaseID}&version={$version}");
+            $preCaseRunID = $runID ? $preAndNext->pre->id : 0;
+            $preCaseID    = $preCaseRunID ? $preAndNext->pre->case : $preAndNext->pre->id;
+            $preLink      = inlink('runCase', "runID={$preCaseRunID}&caseID={$preCaseID}&version={$preAndNext->pre->version}");
         }
         if($preAndNext->next && $this->app->tab != 'my')
         {
-            $runID      = $runID ? $preAndNext->next->id : 0;
-            $nextCaseID = $runID ? $preAndNext->next->case : $preAndNext->next->id;
-            $version    = $preAndNext->next->version;
-            $nextLink   = inlink('runCase', "runID={$runID}&caseID={$nextCaseID}&version={$version}");
+            $nextCaseRunID = $runID ? $preAndNext->next->id : 0;
+            $nextCaseID    = $nextCaseRunID ? $preAndNext->next->case : $preAndNext->next->id;
+            $nextLink      = inlink('runCase', "runID={$nextCaseRunID}&caseID={$nextCaseID}&version={$preAndNext->next->version}");
         }
 
         $this->view->title    = $this->lang->testtask->lblRunCase;
