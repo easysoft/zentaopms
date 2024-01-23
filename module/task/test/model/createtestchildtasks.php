@@ -33,6 +33,7 @@ $testTasks[2]->name     = '测试子任务1';
 $testTasks[2]->type     = 'test';
 $testTasks[2]->estimate = 0;
 $testTasks[2]->left     = 0;
+$testTasks[2]->story    = 1;
 $testTasks[2]->mailto   = '';
 
 $testTasks[3] = new stdclass();
@@ -40,6 +41,7 @@ $testTasks[3]->name     = '测试子任务2';
 $testTasks[3]->type     = 'test';
 $testTasks[3]->estimate = 0;
 $testTasks[3]->left     = 0;
+$testTasks[2]->left     = 1;
 $testTasks[3]->mailto   = '';
 
 $taskTester = new taskTest();
