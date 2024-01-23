@@ -897,8 +897,6 @@ class executionZen extends execution
      */
     protected function buildExecutionForCreate(): object|false
     {
-        if(!$this->checkPostForCreate()) return false;
-
         $now     = helper::now();
         $project = $this->loadModel('project')->fetchByID((int)$_POST['project']);
         $type    = 'sprint';
@@ -928,6 +926,7 @@ class executionZen extends execution
 
         if(!empty($execution->parent) && ($execution->project == $execution->parent)) $execution->hasProduct = $project->hasProduct;
         if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return false;
+        if(!$this->checkPostForCreate()) return false;
 
         /* Set planDuration and realDuration. */
         if(in_array($this->config->edition, array('max', 'ipd')))
