@@ -8451,6 +8451,7 @@ class upgradeModel extends model
     public function revertStoryCustomFields()
     {
         $this->dao->delete()->from(TABLE_CONFIG)->where('section')->eq('productBrowse')->andWhere('module')->eq('datatable')->andWhere('key')->eq('cols')->exec();
+        $this->dao->delete()->from(TABLE_CONFIG)->where('section')->eq('executionStory')->andWhere('module')->eq('datatable')->andWhere('key')->eq('cols')->exec();
         return true;
     }
 }

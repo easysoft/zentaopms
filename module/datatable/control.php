@@ -96,7 +96,7 @@ class datatable extends control
             $value = json_encode($fields);
 
             /* Split story and requirement custom fields. */
-            if($module == 'product' && $method == 'browse' && strpos(',story,requirement,', ",$extra,") !== false) $name = 'datatable.' . $module . ucfirst($method) . ucfirst($extra) . '.cols';
+            if(strpos(',product-browse,execution-story,', ",$module-$method,") !== false && strpos(',story,requirement,', ",$extra,") !== false) $name = 'datatable.' . $module . ucfirst($method) . ucfirst($extra) . '.cols';
 
             /* 保存个人配置信息。 */
             $this->loadModel('setting')->setItem($account . '.' . $name, $value);
@@ -200,7 +200,7 @@ class datatable extends control
         $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$target}&key=cols");
 
         /* Delete story and requirement custom fields. */
-        if($module == 'product' && $method == 'browse')
+        if(strpos(',product-browse,execution-story,', ",$module-$method,") !== false)
         {
             $storyCustom       = $module . ucfirst($method) . 'Story';
             $requirementCustom = $module . ucfirst($method) . 'Requirement';
@@ -223,7 +223,7 @@ class datatable extends control
     public function ajaxSaveGlobal(string $module, string $method, string $extra = '')
     {
         $target = $module . ucfirst($method);
-        if($module == 'product' && $method == 'browse' && strpos(',story,requirement', ",$extra,") !== false) $target .= ucfirst($extra);
+        if(strpos(',product-browse,execution-story,', ",$module-$method,") !== false && strpos(',story,requirement', ",$extra,") !== false) $target .= ucfirst($extra);
 
         $settings = isset($this->config->datatable->$target->cols) ? $this->config->datatable->$target->cols : '';
         if(!empty($settings)) $this->loadModel('setting')->setItem("system.datatable.{$target}.cols", $settings);

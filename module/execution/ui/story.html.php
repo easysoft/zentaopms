@@ -353,13 +353,14 @@ if($canBatchAction)
 }
 
 /* DataTable columns. */
-$setting = $this->loadModel('datatable')->getSetting('execution');
+$config->story->dtable->fieldList['title']['title'] = $lang->story->title;
+$setting = $this->loadModel('datatable')->getSetting('execution', 'story', false, $storyType);
 $cols    = array();
+if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 foreach($setting as $col)
 {
     if(!$execution->hasProduct && $col['name'] == 'branch') continue;
     if(!$execution->hasProduct && !$execution->multiple && $col['name'] == 'plan') continue;
-    if(!$execution->hasProduct && !$execution->multiple && $storyType == 'requirement' && $col['name'] == 'stage') continue;
 
     if($col['name'] == 'title') $col['link'] = createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id));
 
@@ -395,7 +396,7 @@ dtable
 (
     setClass('shadow rounded'),
     set::userMap($users),
-    set::customCols(true),
+    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
     set::groupDivider(true),
     set::cols($cols),
     set::data($data),
