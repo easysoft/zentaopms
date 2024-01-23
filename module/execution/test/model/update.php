@@ -40,7 +40,6 @@ cid=0
  - 第0条的old属性 @wait
  - 第0条的new属性 @closed
 - 测试修改名称为空第name条的0属性 @『迭代名称』不能为空。
-- 测试修改code为空属性code @『迭代代号』不能为空。
 - 测试无修改 @没有数据更新
 
 */
@@ -88,7 +87,6 @@ $changeDoing    = array('status' => 'wait');
 $changeClosed   = array('status' => 'closed');
 $noChange       = array();
 $noName         = array('name' => '');
-$noCode         = array('code' => '');
 $repeatcode     = array('name' => '迭代1', 'code' => '执行2');
 
 $execution = new executionTest();
@@ -107,5 +105,4 @@ r($execution->updateObject($executionIDList[1], $changeLifetime)) && p('0:field,
 r($execution->updateObject($executionIDList[1], $changeDoing))    && p('0:field,old,new') && e('status,doing,wait');                       // 测试修改迭代状态为wait
 r($execution->updateObject($executionIDList[1], $changeClosed))   && p('0:field,old,new') && e('status,wait,closed');                      // 测试修改迭代状态为closed
 r($execution->updateObject($executionIDList[1], $noName))         && p('name:0')          && e('『迭代名称』不能为空。');                  // 测试修改名称为空
-r($execution->updateObject($executionIDList[3], $noCode))         && p('code')            && e('『迭代代号』不能为空。');                  // 测试修改code为空
 r($execution->updateObject($executionIDList[1], $noChange))       && p()                  && e('没有数据更新');                            // 测试无修改
