@@ -86,7 +86,6 @@ class programZen extends program
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
             ->setIF($this->post->realBegan != '' and $oldProgram->status == 'wait', 'status', 'doing')
-            ->setIF($this->post->future, 'budget', 0)
             ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF(!isset($_POST['groups']), 'groups', '')

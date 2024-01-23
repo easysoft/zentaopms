@@ -30,7 +30,7 @@ foreach($budgetUnitList as $key => $value)
 }
 
 $currency           = data('parentProgram.budgetUnit') ? data('parentProgram.budgetUnit') : (data('program.budgetUnit') ? data('program.budgetUnit') : $config->project->defaultCurrency);
-$budgetDisabled     = (data('parentProgram.budget') !== null && data('parentProgram.budget') == 0) || (data('program.budget') !== null && data('program.budget') == 0);
+$budgetDisabled     = (data('parentProgram.budget') !== null && empty(data('parentProgram.budget'))) || (data('program.budget') !== null && empty(data('program.budget')));
 $budgetUnitDisabled = data('parentProgram.budgetUnit') ? true : false;
 
 $fields->field('budget')
