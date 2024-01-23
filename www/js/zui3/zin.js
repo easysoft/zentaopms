@@ -269,16 +269,30 @@
     {
         const $data = $(data);
         const $heading = $('#heading');
-        $heading.children('[data-zui-dropmenu]').each(function()
-        {
-            const $dropmenu = $(this);
-            const $nextDropmenu = $data.filter(`#${$dropmenu.attr('id')}`);
-            if($dropmenu.data('fetcher') === $nextDropmenu.data('fetcher')) return;
-            $dropmenu.replaceWith($nextDropmenu);
-        });
         const $toolbar = $heading.children('.toolbar');
-        const $nextToolbar = $data.filter('.toolbar');
-        if($nextToolbar.text().trim() !== $toolbar.text().trim()) $toolbar.replaceWith($nextToolbar);
+        if($toolbar.length)
+        {
+            $heading.children('[data-zui-dropmenu]').each(function()
+            {
+                const $dropmenu = $(this);
+                const $nextDropmenu = $data.filter(`#${$dropmenu.attr('id')}`);
+                if(!$nextDropmenu.length) return $dropmenu.remove();
+                if($dropmenu.data('fetcher') === $nextDropmenu.data('fetcher')) return;
+                $dropmenu.replaceWith($nextDropmenu);
+            });
+            $data.filter('[data-fetcher]').each(function()
+            {
+                const $nextDropmenu = $(this);
+                const $dropmenu = $heading.children(`#${$nextDropmenu.attr('id')}`);
+                if(!$dropmenu.length) return $heading.append($nextDropmenu);
+            });
+            const $nextToolbar = $data.filter('.toolbar');
+            if($nextToolbar.text().trim() !== $toolbar.text().trim()) $toolbar.replaceWith($nextToolbar);
+        }
+        else
+        {
+            $heading.html(data);
+        }
         layoutNanavbar();
     }
 
