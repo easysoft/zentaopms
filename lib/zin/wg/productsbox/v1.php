@@ -69,11 +69,12 @@ class productsBox extends wg
 
     protected function initProductsBox(): array
     {
-        global $lang;
+        global $lang, $app;
         list($productItems, $project, $isStage, $hasNewProduct) = $this->prop(array('productItems', 'project', 'isStage', 'hasNewProduct'));
 
-        $productsBox   = array();
-        $hidden        = !empty($project) && empty($project->hasProduct) ? 'hidden' : '';
+        $productsBox    = array();
+        $hidden         = !empty($project) && empty($project->hasProduct) ? 'hidden' : '';
+        $disabledProduct = $app->rawMethod != 'create' && $isStage && !empty($project) && $project->stageBy == 'project';
         $productsBox[] = $hasNewProduct ? div
         (
             setClass('addProductBox flex hidden'),
@@ -138,7 +139,7 @@ class productsBox extends wg
                     )
                 ),
             ),
-            $isStage && !empty($project) && $project->stageBy == 'product' ? null : div
+            $disabledProduct ? null : div
             (
                 setClass('pl-2 flex self-center line-btn c-actions'),
                 btn
@@ -192,11 +193,12 @@ class productsBox extends wg
     {
         if(empty($linkedProducts)) return array();
 
-        global $lang;
+        global $lang, $app;
         list($productItems, $branchGroups, $planGroups, $productPlans) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans'));
         list($linkedBranches, $currentProduct, $currentPlan) = $this->prop(array('linkedBranches', 'currentProduct', 'currentPlan'));
         list($project, $isStage) = $this->prop(array('project', 'isStage'));
 
+        $disabledProduct = $app->rawMethod != 'create' && $isStage && !empty($project) && $project->stageBy == 'project';
         $linkedProductsBox = array();
         foreach(array_values($linkedProducts) as $i => $product)
         {
@@ -246,9 +248,9 @@ class productsBox extends wg
                                 set::value($product->id),
                                 set::items($productItems),
                                 set::last($product->id),
-                                set::disabled($isStage && $project->stageBy == 'project'),
+                                set::disabled($disabledProduct),
                                 $hasBranch ? set::lastBranch(implode(',', $product->branches)) : null,
-                                $isStage && $project->stageBy == 'project' ? formHidden("products[$i]", $product->id) : null
+                                $disabledProduct ? formHidden("products[$i]", $product->id) : null
                             )
                         )
                     )
@@ -267,13 +269,13 @@ class productsBox extends wg
                             set::name("branch[$i][]"),
                             set::items($branches),
                             set::value(is_array($branchIdList) ? implode(',', $branchIdList) : $branchIdList),
-                            set::disabled($isStage && $project->stageBy == 'project'),
+                            set::disabled($disabledProduct),
                             set::multiple(true),
                             on::change("branchChange")
                         )
                     )
                 ),
-                $isStage && $project->stageBy == 'project' ? div
+                $disabledProduct ? div
                 (
                     setClass('hidden branchBoxHidden'),
                     picker
@@ -301,7 +303,7 @@ class productsBox extends wg
                         )
                     )
                 ),
-                $isStage && !empty($project) && $project->stageBy == 'project' ? null : div
+                $disabledProduct ? null : div
                 (
                     setClass('pl-2 flex self-center line-btn c-actions'),
                     btn
