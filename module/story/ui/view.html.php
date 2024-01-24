@@ -13,6 +13,7 @@ namespace zin;
 $confirmDelete = $this->lang->story->confirmDelete;
 if($story->type == 'requirement') $confirmDelete = str_replace($lang->SRCommon, $lang->URCommon, $confirmDelete);
 
+data('branchID', $story->branch);
 data('activeMenuID', $story->type);
 jsVar('relievedTip', $lang->story->relievedTip);
 jsVar('unlinkStoryTip', $lang->story->unlinkStory);
