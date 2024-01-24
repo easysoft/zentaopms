@@ -34,7 +34,6 @@ class count_of_assigned_bug_in_user extends baseCalc
 
         if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = 0;
         $this->result[$assignedTo] += 1;
-
     }
 
     public function getResult($options = array())
