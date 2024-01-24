@@ -21,7 +21,7 @@ class editor extends wg
         'uid?: string'                    // 图片上传 uid
     );
 
-    protected static string $css = <<<EOT
+    protected static string $css = <<<CSS
         .editor {border: unset; border-radius: unset;}
         zen-editor-menu-item > .menu-item {color: #9ea3b0!important;}
         zen-editor-menu-item > .menu-item:hover, zen-editor-menu-item > .menu-item.is-active {color: #fff!important; background-color: var(--color-primary-400)!important;}
@@ -30,7 +30,7 @@ class editor extends wg
         .tippy-content > div {border: 1px solid #d8dbde!important;}
         .tippy-content zen-editor-menu-item {line-height: normal;}
         .tippy-content zen-editor-menu-item .label {all: unset;}
-    EOT;
+    CSS;
 
     public static function getPageCSS(): string|false
     {
