@@ -79,13 +79,13 @@ if(!empty($kanbanList))
             $actionItem['url'] = createLink('execution', $action, "executionID={$kanban->id}");
             if($action == 'edit')
             {
-                $actionItem['text'] = $lang->kanban->edit;
-                $actionItem['hint'] = $lang->kanban->edit;
+                $actionItem['text'] = $lang->edit;
+                $actionItem['hint'] = $lang->edit;
             }
             elseif($action == 'delete')
             {
-                $actionItem['text'] = $lang->kanban->delete;
-                $actionItem['hint'] = $lang->kanban->delete;
+                $actionItem['text'] = $lang->delete;
+                $actionItem['hint'] = $lang->delete;
             }
 
             $actionItems[] = $actionItem;
