@@ -1590,6 +1590,24 @@ class blockZen extends block
         if(!empty($fixedBug))     $fixedBug     = array_column($fixedBug,  null, 'product');
         if(!empty($activatedBug)) $activatedBug = array_column($activatedBug, null, 'product');
 
+        $productIdList  = array_keys($products);
+        $doingTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
+            ->where('product')->in($productIdList)
+            ->andWhere('project')->ne(0)
+            ->andWhere('status')->eq('doing')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('begin_asc')
+            ->fetchGroup('product');
+
+        $waitTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
+            ->where('product')->in($productIdList)
+            ->andWhere('project')->ne(0)
+            ->andWhere('status')->eq('wait')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('begin')->ge(date('Y-m-d'))
+            ->orderBy('begin_desc')
+            ->fetchGroup('product');
+
         /* 将获取出的度量项数据塞入产品列表数据中。 */
         foreach($products as $productID => $product)
         {
@@ -1629,10 +1647,12 @@ class blockZen extends block
                 }
             }
 
-            $product->fixedBugRate = isset($bugFixRate[$productID]['value'])   ? $bugFixRate[$productID]['value'] * 100 : 0;
-            $product->totalBug     = isset($effectiveBug[$productID]['value']) ? $effectiveBug[$productID]['value']     : 0;
-            $product->fixedBug     = isset($fixedBug[$productID]['value'])     ? $fixedBug[$productID]['value']         : 0;
-            $product->activatedBug = isset($activatedBug[$productID]['value']) ? $activatedBug[$productID]['value']     : 0;
+            $product->fixedBugRate   = isset($bugFixRate[$productID]['value'])   ? $bugFixRate[$productID]['value'] * 100 : 0;
+            $product->totalBug       = isset($effectiveBug[$productID]['value']) ? $effectiveBug[$productID]['value']     : 0;
+            $product->fixedBug       = isset($fixedBug[$productID]['value'])     ? $fixedBug[$productID]['value']         : 0;
+            $product->activatedBug   = isset($activatedBug[$productID]['value']) ? $activatedBug[$productID]['value']     : 0;
+            $product->waitTesttasks  = isset($waitTesttasks[$productID])         ? $waitTesttasks[$productID]             : '';
+            $product->doingTesttasks = isset($doingTesttasks[$productID])        ? $doingTesttasks[$productID]            : '';
         }
 
         $this->view->products = $products;
