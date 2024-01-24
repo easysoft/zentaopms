@@ -44,7 +44,7 @@ class detailBody extends wg
                     setClass('col gap-1 grow min-w-0'),
                     $main,
                     $bottom,
-                    empty($floating) ? null : center(setClass('pt-6'), $floating)
+                    empty($floating) ? null : center(setClass('pt-6 sticky bottom-0'), $floating)
                 ),
                 $side
             );
