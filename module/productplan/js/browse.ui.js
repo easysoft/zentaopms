@@ -80,7 +80,7 @@ window.renderProductPlanList = function(result, {col, row, value})
 
 window.startProductPlan = function(planID)
 {
-    zui.Modal.confirm({message: confirmStart, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: confirmStart, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res) $.ajaxSubmit({url: $.createLink('productplan', 'start', 'planID=' + planID)});
     });
@@ -88,7 +88,7 @@ window.startProductPlan = function(planID)
 
 window.finishProductPlan = function(planID)
 {
-    zui.Modal.confirm({message: confirmFinish, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: confirmFinish, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res) $.ajaxSubmit({url: $.createLink('productplan', 'finish', 'planID=' + planID)});
     });
@@ -96,7 +96,7 @@ window.finishProductPlan = function(planID)
 
 window.activateProductPlan = function(planID)
 {
-    zui.Modal.confirm({message: confirmActivate, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: confirmActivate, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res) $.ajaxSubmit({url: $.createLink('productplan', 'activate', 'planID=' + planID)});
     });
@@ -104,7 +104,7 @@ window.activateProductPlan = function(planID)
 
 window.deleteProductPlan = function(planID)
 {
-    zui.Modal.confirm({message: confirmDelete, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: confirmDelete, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res) $.ajaxSubmit({url: $.createLink('productplan', 'delete', 'planID=' + planID)});
     });

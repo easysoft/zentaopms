@@ -79,7 +79,7 @@ window.getConflictStories = function(index)
     {
         if(conflictStories != '')
         {
-            zui.Modal.confirm({message: conflictStories, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+            zui.Modal.confirm({message: conflictStories, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
             {
                 if(!res)
                 {

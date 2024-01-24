@@ -42,7 +42,7 @@ window.confirmDelete = function(projectID, module, projectName)
     var deleteURL = $.createLink(module, 'delete', "projectID=" + projectID);
     if(module == 'program') deleteURL = $.createLink('program', 'delete', "programID=" + projectID + '&confirm=yes');
 
-    zui.Modal.confirm({message: confirmDeleteLang[module].replace('%s', projectName), icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: confirmDeleteLang[module].replace('%s', projectName), icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res) $.ajaxSubmit({url: deleteURL, load: true});
     });

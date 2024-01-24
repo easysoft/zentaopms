@@ -8,7 +8,7 @@
  */
 window.deleteMember = function(executionID, userID)
 {
-    zui.Modal.confirm({message: confirmUnlinkMember, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: confirmUnlinkMember, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res) $.ajaxSubmit({url: $.createLink('execution', 'unlinkMember', 'executionID=' + executionID + '&userID=' + userID)});
     });

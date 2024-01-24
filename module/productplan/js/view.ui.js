@@ -1,6 +1,6 @@
 window.unlinkObject = function(objectType, objectID)
 {
-    zui.Modal.confirm({message: confirmLang[objectType], icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: confirmLang[objectType], icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res) $.ajaxSubmit({'url': unlinkURL[objectType].replace('%s', objectID)});
     });
@@ -22,7 +22,7 @@ window.ajaxConfirmLoad = function(obj)
 {
     var $this   = $(obj);
     var action = $this.data('action');
-    zui.Modal.confirm({message: confirmLang[action], icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: confirmLang[action], icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res) $.get($this.data('url'), function(){loadCurrentPage()});
     });

@@ -12,7 +12,7 @@ window.deleteMember = function(projectID, account, userID)
     let removeConfirm   = '';
     let tipsLink        = $.createLink('project', 'ajaxGetRemoveMemberTips', 'projectID=' + projectID + '&account=' + account);
     let removeExecution = 'no';
-    zui.Modal.confirm({message: confirmUnlinkMember, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: confirmUnlinkMember, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res)
         {

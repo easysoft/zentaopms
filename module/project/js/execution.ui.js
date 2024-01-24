@@ -37,7 +37,7 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
  */
 window.confirmDeleteExecution = function(executionID, confirmDeleteTip)
 {
-    zui.Modal.confirm({message: confirmDeleteTip, icon:'icon-info-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    zui.Modal.confirm({message: confirmDeleteTip, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
     {
         if(res) $.ajaxSubmit({url: $.createLink('execution', 'delete', 'executionID=' + executionID + '&comfirm=yes')});
     });
