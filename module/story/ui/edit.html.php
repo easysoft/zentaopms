@@ -49,6 +49,7 @@ jsVar('moveChildrenTips', $lang->story->moveChildrenTips);
 jsVar('executionID', isset($objectID) ? $objectID : 0);
 jsVar('langTreeManage', $lang->tree->manage);
 jsVar('feedbackSource', $config->story->feedbackSource);
+jsVar('relievedTip', $lang->story->relievedTip);
 
 detailHeader
 (
