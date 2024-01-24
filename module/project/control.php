@@ -286,7 +286,7 @@ class project extends control
         $this->view->pager       = $pager;
         $this->view->project     = $project;
         $this->view->browseType  = $browseType;
-        $this->view->actionList  = $this->config->execution->statusActions + array('delete');
+        $this->view->actionList  = array_merge(array('edit'), $this->config->execution->statusActions, array('delete'));
         $this->view->kanbanList  = $this->execution->getList($projectID, 'all', $browseType, 0, 0, 0, $pager);
         $this->view->usersAvatar = $this->loadModel('user')->getAvatarPairs('all');
         $this->view->userIdPairs = $this->user->getPairs('nodeleted|showid|all');
