@@ -15,12 +15,6 @@ $fields->field('type')
     ->items($lang->task->typeList)
     ->value(data('task.type'));
 
-$fields->field('module')
-    ->checkbox(array('text' => $lang->task->allModule, 'name' => 'isShowAllModule'))
-    ->control(array('type' => 'picker', 'required' => true))
-    ->items(data('modulePairs'))
-    ->value(data('task.module'));
-
 $fields->field('name')
     ->control('colorInput', array('colorValue' => data('task.color')))
     ->value(data('task.name'));

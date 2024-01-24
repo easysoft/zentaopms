@@ -4,6 +4,13 @@ global $lang,$config;
 
 $fields = defineFieldList('task.create', 'task');
 
+/* Set module field. */
+$fields->field('module')
+    ->checkbox(array('text' => $lang->task->allModule, 'name' => 'isShowAllModule', 'checked' => data('showAllModule')))
+    ->control(array('type' => 'picker', 'required' => true))
+    ->items(data('modulePairs'))
+    ->value(data('task.module'));
+
 /* Set foldable attribute. */
 $fields->field('module')->foldable();
 $fields->field('files')->foldable();

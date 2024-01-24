@@ -2213,7 +2213,7 @@ class treeModel extends model
         $table          = $viewType == 'task' ? TABLE_PROJECT : TABLE_PRODUCT;
         $versionField   = $viewType == 'task' ? 'openedVersion' : 'createdVersion';
         $createdVersion = $this->dao->select($versionField)->from($table)->where('id')->eq($rootID)->fetch($versionField);
-        if(!$createdVersion) return false;
+        if(!$createdVersion) return true;
 
         if(is_numeric($createdVersion[0]) && version_compare($createdVersion, '4.1', '<=')) return false;
         return true;

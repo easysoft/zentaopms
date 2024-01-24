@@ -103,7 +103,7 @@ class task extends control
             $taskData->id = current($taskIdList);
             $this->task->afterCreate($taskData, $taskIdList, $bugID, $todoID);
             $this->task->updateKanbanData($taskData->execution, $taskIdList, (int)$this->post->lane, $columnID);
-            helper::setcookie('lastTaskModule', $this->post->module);
+            setCookie("lastTaskModule", $this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* Get the information returned after a task is created. */
             $response = $this->taskZen->responseAfterCreate($taskData, $execution, $this->post->after ? $this->post->after : '');

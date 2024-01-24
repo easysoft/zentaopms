@@ -1,5 +1,6 @@
 window.waitDom('#form-task-create [name=type]', function(){ typeChange();})
-window.waitDom('#form-task-create [name=story]', function(){setAfter();})
+window.waitDom('#form-task-create [name=story]', function(){setPreview();})
+window.waitDom('#form-task-create [name=story]', function(){setStoryRelated();})
 
 /**
  * 根据多人任务是否勾选展示团队。

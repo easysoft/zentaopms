@@ -39,11 +39,14 @@ class taskZen extends task
     protected function assignCreateVars(object $execution, int $storyID, int $moduleID, int $taskID, int $todoID, int $bugID, array $output, string $cardPosition)
     {
         /* Get information about the task. */
-        $this->view->task = $this->setTaskByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID);
+        $task = $this->setTaskByObjectID($storyID, $moduleID, $taskID, $todoID, $bugID);
+        $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
 
         /* Get module information. */
         $executionID = $execution->id;
-        $modulePairs = $this->tree->getTaskOptionMenu($executionID);
+        $modulePairs = $this->tree->getTaskOptionMenu($executionID, 0 ,$this->view->showAllModule ? 'allModule' : '');
+        if(!isset($modulePairs[$task->module])) $task->module = 0;
+        $this->view->task = $task;
 
         /* Display relevant variables. */
         $this->assignExecutionForCreate($execution);
@@ -1861,9 +1864,9 @@ class taskZen extends task
             $task->story  = $storyID;
             $task->module = $this->dao->findByID($storyID)->from(TABLE_STORY)->fetch('module');
         }
-        elseif(!$moduleID && !$taskID)
+        else
         {
-            $task->module = (int)$this->cookie->lastTaskModule;
+            $task->module = $task->module ? $task->module : (int)$this->cookie->lastTaskModule;
         }
 
         return $task;
