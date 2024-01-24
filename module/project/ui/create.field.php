@@ -41,6 +41,6 @@ $fields->field('budget')->foldable();
 
 $fields->field('acl')
        ->foldable()
-       ->control(array('control' => 'aclBox', 'aclItems' => data('programID') ? $lang->project->subAclList : $lang->project->aclList, 'aclValue' => $copyProject ? data('copyProject.acl') : 'open', 'whitelistLabel' => $lang->project->whitelist));
+       ->control(array('control' => 'aclBox', 'aclItems' => data('programID') ? $lang->project->subAclList : $lang->project->aclList, 'aclValue' => $copyProject ? data('copyProject.acl') : 'open', 'whitelistLabel' => $lang->project->whitelist, 'userValue' => data('copyProjectID') ? data('copyProject.whitelist') : ''));
 
 $fields->field('auth')->foldable()->value($copyProject ? data('copyProject.auth') : 'extend');
