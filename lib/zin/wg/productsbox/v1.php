@@ -179,11 +179,16 @@ class productsBox extends wg
                     set::items(!empty($productPlans) ? $productPlans : array()),
                     set::value($currentPlan),
                     set::multiple(true),
-                    formHidden('products[]', $planProductID),
-                    formHidden('branch[0][0]', 0)
+                    formHidden("products[{$planProductID}]", $planProductID),
+                    formHidden("branch[{$planProductID}][0]", 0)
                 )
             )
-        ) : null;
+        ) : div
+        (
+            set::className('productBox'),
+            formHidden("products[{$planProductID}]", $planProductID),
+            formHidden("branch[{$planProductID}][0]", 0)
+        );
 
         return $productsBox;
     }
