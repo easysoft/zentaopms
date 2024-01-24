@@ -29,7 +29,7 @@ $config->project->form->create['whitelist']  = array('type' => 'array',  'requir
 $config->project->form->create['auth']       = array('type' => 'array',  'required' => false, 'default' => '');
 $config->project->form->create['model']      = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['vision']     = array('type' => 'string', 'required' => false, 'default' => $config->vision);
-if(isset($this->config->setCode) && $this->config->setCode == 1) $config->project->form->create['code'] = array('type' => 'string', 'required' => true,  'filter'  => 'trim');
+if(isset($this->config->setCode) && $this->config->setCode == 1) $config->project->form->create['code'] = array('type' => 'string', 'required' => false,  'filter'  => 'trim');
 
 $config->project->form->edit = $config->project->form->create;
 $config->project->form->edit['products'] = array('type' => 'array', 'required' => false, 'default' => array());
@@ -55,7 +55,7 @@ $config->project->form->batchedit['begin']   = array('type' => 'date',   'requir
 $config->project->form->batchedit['end']     = array('type' => 'date',   'required' => true);
 $config->project->form->batchedit['day']     = array('type' => 'int',    'required' => false);
 $config->project->form->batchedit['acl']     = array('type' => 'string', 'required' => false);
-if(isset($config->setCode) and $config->setCode == 1) $config->project->form->batchedit['code'] = array('type' => 'string', 'required' => true, 'filter' => 'trim');
+if(isset($config->setCode) and $config->setCode == 1) $config->project->form->batchedit['code'] = array('type' => 'string', 'required' => false, 'filter' => 'trim');
 
 $config->project->form->manageMembers['account'] = array('type' => 'string', 'required' => false, 'base' => true);
 $config->project->form->manageMembers['role']    = array('type' => 'string', 'required' => false, 'filter' => 'trim');

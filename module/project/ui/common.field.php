@@ -39,7 +39,7 @@ if($hasCode)
         ->label($lang->project->category)
         ->items($lang->project->projectTypeList);
 
-    $fields->field('code')->control('input')->required();
+    $fields->field('code')->control('input');
 }
 
 $fields->field('PM')->control('picker')->items(data('PMUsers'));

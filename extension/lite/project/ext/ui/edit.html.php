@@ -56,8 +56,7 @@ formPanel
         set::width('1/2'),
         set::name('code'),
         set::value($project->code),
-        set::label($lang->project->code),
-        set::strong(true)
+        set::label($lang->project->code)
     ) : null,
     formGroup
     (
