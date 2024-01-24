@@ -211,13 +211,13 @@ detailHeader
             set::entityID($bug->id),
             set::level(1),
             span(setStyle('color', $bug->color), $bug->title),
-            a
+            $bug->case ? a
             (
                 set::href($legendBasic['fromCase']['href']),
                 setClass('font-medium text-base text-gray'),
                 icon('testcase px-1'),
                 $lang->case->fromCase . $lang->colon . $bug->case
-            )
+            ) : null
         ),
         $bug->deleted ? span(setClass('label danger'), $lang->bug->deleted) : null
     ),
