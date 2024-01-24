@@ -199,7 +199,7 @@ $lang->block->default['full']['my'][] = array('title' => "{$lang->executionCommo
 $lang->block->default['doc'][] = array('title' => 'Statistic',                       'module' => 'doc', 'code' => 'docstatistic',    'width' => '2');
 $lang->block->default['doc'][] = array('title' => 'My Collection Document',          'module' => 'doc', 'code' => 'docmycollection', 'width' => '2');
 $lang->block->default['doc'][] = array('title' => 'Recently Update Document',        'module' => 'doc', 'code' => 'docrecentupdate', 'width' => '2');
-$lang->block->default['doc'][] = array('title' => "{$lang->productCommon} Document", 'module' => 'doc', 'code' => 'productdoc',      'width' => '2', 'params' => array('count' => '20'));
+if($config->vision == 'rnd') $lang->block->default['doc'][] = array('title' => "{$lang->productCommon} Document", 'module' => 'doc', 'code' => 'productdoc',      'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['doc'][] = array('title' => "{$lang->projectCommon} Document", 'module' => 'doc', 'code' => 'projectdoc',      'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['doc'][] = array('title' => 'Dynamic',                         'module' => 'doc', 'code' => 'docdynamic',      'width' => '1');
 $lang->block->default['doc'][] = array('title' => 'Browse Leaderboard',              'module' => 'doc', 'code' => 'docviewlist',     'width' => '1');

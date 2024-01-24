@@ -199,7 +199,7 @@ $lang->block->default['full']['my'][] = array('title' => "{$lang->executionCommo
 $lang->block->default['doc'][] = array('title' => '文档统计',                   'module' => 'doc', 'code' => 'docstatistic',    'width' => '2');
 $lang->block->default['doc'][] = array('title' => '我收藏的文档',               'module' => 'doc', 'code' => 'docmycollection', 'width' => '2');
 $lang->block->default['doc'][] = array('title' => '最近更新的文档',             'module' => 'doc', 'code' => 'docrecentupdate', 'width' => '2');
-$lang->block->default['doc'][] = array('title' => "{$lang->productCommon}文档", 'module' => 'doc', 'code' => 'productdoc',      'width' => '2', 'params' => array('count' => '20'));
+if($config->vision == 'rnd') $lang->block->default['doc'][] = array('title' => "{$lang->productCommon}文档", 'module' => 'doc', 'code' => 'productdoc',      'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['doc'][] = array('title' => "{$lang->projectCommon}文档", 'module' => 'doc', 'code' => 'projectdoc',      'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['doc'][] = array('title' => '文档动态',                   'module' => 'doc', 'code' => 'docdynamic',      'width' => '1');
 $lang->block->default['doc'][] = array('title' => '浏览排行榜',                 'module' => 'doc', 'code' => 'docviewlist',     'width' => '1');
