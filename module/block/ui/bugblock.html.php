@@ -13,7 +13,6 @@ namespace zin;
 if(!$longBlock)
 {
     unset($config->block->bug->dtable->fieldList['id']);
-    unset($config->block->bug->dtable->fieldList['pri']);
     unset($config->block->bug->dtable->fieldList['confirmed']);
     unset($config->block->bug->dtable->fieldList['deadline']);
 }

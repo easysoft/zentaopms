@@ -23,11 +23,13 @@ $config->block->bug->dtable->fieldList['title']['fixed']       = 'left';
 $config->block->bug->dtable->fieldList['severity']['name']  = 'severity';
 $config->block->bug->dtable->fieldList['severity']['title'] = $lang->bug->abbr->severity;
 $config->block->bug->dtable->fieldList['severity']['type']  = 'severity';
+$config->block->bug->dtable->fieldList['severity']['width'] = 60;
 $config->block->bug->dtable->fieldList['severity']['sort']  = true;
 
 $config->block->bug->dtable->fieldList['pri']['name']  = 'pri';
 $config->block->bug->dtable->fieldList['pri']['title'] = $lang->priAB;
 $config->block->bug->dtable->fieldList['pri']['type']  = 'pri';
+$config->block->bug->dtable->fieldList['pri']['width'] = 60;
 $config->block->bug->dtable->fieldList['pri']['sort']  = true;
 
 $config->block->bug->dtable->fieldList['status']['name']      = 'status';
