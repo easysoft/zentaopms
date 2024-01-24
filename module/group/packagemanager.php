@@ -1609,7 +1609,7 @@ $config->group->package->deleteFeedback = new stdclass();
 $config->group->package->deleteFeedback->order  = 25;
 $config->group->package->deleteFeedback->subset = 'feedback';
 $config->group->package->deleteFeedback->privs  = array();
-$config->group->package->deleteFeedback->privs['feedback-delete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 95, 'depend' => array('feedback-admin'), 'recommend' => array('feedback-create', 'feedback-edit'));
+$config->group->package->deleteFeedback->privs['feedback-delete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or,lite', 'order' => 95, 'depend' => array('feedback-admin'), 'recommend' => array('feedback-create', 'feedback-edit'));
 
 $config->group->package->deleteTIcket = new stdclass();
 $config->group->package->deleteTIcket->order  = 25;
@@ -1621,9 +1621,9 @@ $config->group->package->feedbackPriv = new stdclass();
 $config->group->package->feedbackPriv->order  = 5;
 $config->group->package->feedbackPriv->subset = 'feedbackpriv';
 $config->group->package->feedbackPriv->privs  = array();
-$config->group->package->feedbackPriv->privs['feedback-products']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 135, 'depend' => array(), 'recommend' => array('feedback-manageProduct', 'feedback-productSetting'));
-$config->group->package->feedbackPriv->privs['feedback-manageProduct']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 140, 'depend' => array('feedback-products'), 'recommend' => array('feedback-productSetting'));
-$config->group->package->feedbackPriv->privs['feedback-productSetting'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 160, 'depend' => array('feedback-products'), 'recommend' => array('feedback-manageProduct'));
+$config->group->package->feedbackPriv->privs['feedback-products']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 135, 'depend' => array(), 'recommend' => array('feedback-manageProduct', 'feedback-productSetting'));
+$config->group->package->feedbackPriv->privs['feedback-manageProduct']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 140, 'depend' => array('feedback-products'), 'recommend' => array('feedback-productSetting'));
+$config->group->package->feedbackPriv->privs['feedback-productSetting'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 160, 'depend' => array('feedback-products'), 'recommend' => array('feedback-manageProduct'));
 
 $config->group->package->browseCourse = new stdclass();
 $config->group->package->browseCourse->order  = 5;
