@@ -33,11 +33,26 @@ $canBatchClose    = common::hasPriv('bug', 'batchClose')   && strtolower($type) 
 $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 $canBatchAction   = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchAssignTo;
 
-if($type == 'bySearch')       $type = $this->session->myBugType;
-if($type == 'openedBy')       unset($config->bug->dtable->fieldList['openedBy']);
-if($type == 'assignedTo')     unset($config->bug->dtable->fieldList['assignedTo']);
-if($type == 'resolvedBy')     unset($config->bug->dtable->fieldList['resolvedBy']);
-if($app->rawMethod != 'work') unset($config->bug->dtable->fieldList['deadline']);
+if($type == 'bySearch') $type = $this->session->myBugType;
+
+if($type == 'openedBy')
+{
+    $config->my->bug->dtable->fieldList['openedBy']['hidden']     = true;
+    $config->my->bug->dtable->fieldList['openedDate']['hidden']   = true;
+    $config->my->bug->dtable->fieldList['assignedDate']['hidden'] = true;
+}
+
+if($type == 'resolvedBy')
+{
+    $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
+    $config->my->bug->dtable->fieldList['resolvedBy']['hidden'] = true;
+}
+
+if($type == 'assignedBy')     $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
+if($type == 'closedBy')       $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
+if($type == 'assignedTo')     $config->my->bug->dtable->fieldList['assignedTo']['hidden'] = true;
+if($app->rawMethod != 'work') $config->my->bug->dtable->fieldList['deadline']['hidden']   = true;
+
 if(!$canBatchAction) $config->bug->dtable->fieldList['id']['type'] = 'id';
 
 $projectBrowseLink = createLink('project', 'browse');

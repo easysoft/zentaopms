@@ -574,18 +574,17 @@ $config->my->bug->dtable->fieldList['pri']['title'] = $lang->bug->pri;
 $config->my->bug->dtable->fieldList['pri']['type']  = 'pri';
 $config->my->bug->dtable->fieldList['pri']['group'] = '2';
 
-$config->my->bug->dtable->fieldList['status']['name']      = 'status';
-$config->my->bug->dtable->fieldList['status']['title']     = $lang->bug->abbr->status;
-$config->my->bug->dtable->fieldList['status']['type']      = 'status';
-$config->my->bug->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
-$config->my->bug->dtable->fieldList['status']['group']     = '2';
-
 $config->my->bug->dtable->fieldList['type']['name']   = 'type';
 $config->my->bug->dtable->fieldList['type']['title']  = $lang->bug->type;
 $config->my->bug->dtable->fieldList['type']['type']   = 'category';
 $config->my->bug->dtable->fieldList['type']['map']    = $lang->bug->typeList;
 $config->my->bug->dtable->fieldList['type']['group']  = '2';
-$config->my->bug->dtable->fieldList['type']['hidden'] = true;
+
+$config->my->bug->dtable->fieldList['status']['name']      = 'status';
+$config->my->bug->dtable->fieldList['status']['title']     = $lang->bug->abbr->status;
+$config->my->bug->dtable->fieldList['status']['type']      = 'status';
+$config->my->bug->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
+$config->my->bug->dtable->fieldList['status']['group']     = '2';
 
 $config->my->bug->dtable->fieldList['product']['name']  = 'productName';
 $config->my->bug->dtable->fieldList['product']['title'] = $lang->bug->product;
@@ -654,7 +653,6 @@ $config->my->bug->dtable->fieldList['resolvedBy']['name']   = 'resolvedBy';
 $config->my->bug->dtable->fieldList['resolvedBy']['title']  = $lang->bug->resolvedBy;
 $config->my->bug->dtable->fieldList['resolvedBy']['type']   = 'user';
 $config->my->bug->dtable->fieldList['resolvedBy']['group']  = '6';
-$config->my->bug->dtable->fieldList['resolvedBy']['hidden'] = true;
 
 $config->my->bug->dtable->fieldList['resolution']['name']  = 'resolution';
 $config->my->bug->dtable->fieldList['resolution']['title'] = $lang->bug->resolution;
