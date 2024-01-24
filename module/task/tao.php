@@ -345,7 +345,7 @@ class taskTao extends taskModel
 
             /* Compute progress by the count of done status in status list if some child task is finished(left is 0, consumed is not 0) but other task is in wait. */
             $statusCount = array_count_values($childrenStatus);
-            if(in_array('wait', $childrenStatus)) return round($statusCount['done'] / count($childrenStatus), 2) * 100;
+            if(in_array('wait', $childrenStatus)) return empty($statusCount['done']) ? 0 : round($statusCount['done'] / count($childrenStatus), 2) * 100;
             return 100;
         }
     }
