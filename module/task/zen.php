@@ -361,7 +361,7 @@ class taskZen extends task
         $this->view->stories       = array_filter($stories);
         $this->view->storyTasks    = $this->task->getStoryTaskCounts(array_keys($stories), $execution->id);
         $this->view->members       = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
-        $this->view->taskConsumed  = isset($task) ? $task->consumed : 0;
+        $this->view->taskConsumed  = isset($task) && $task->parent == 0 ? $task->consumed : 0;
         $this->view->customFields  = $customFields;
         $this->view->checkedFields = $checkedFields;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
