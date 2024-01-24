@@ -1983,6 +1983,7 @@ class productModel extends model
         if($module == 'testtask'   && $method == 'browseunits') return helper::createLink($module, 'browseUnits', "productID=%s&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1" . ($this->app->tab == 'project' ? "&projectID={$this->session->project}" : ''));
         if($module == 'testtask'   && $method == 'unitcases')   return helper::createLink($module, 'browseUnits', "productID=%s&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1" . ($this->app->tab == 'project' ? "&projectID={$this->session->project}" : ''));
 
+        if($module == 'story'      && in_array($method, array('create', 'batchcreate')))  return helper::createLink('product', 'browse',    "productID=%s");
         if($module == 'execution'  && in_array($method, array('bug', 'testcase')))        return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");
         if($module == 'product'    && in_array($method, array('doc', 'view')))            return helper::createLink($module,    $method,  "productID=%s");
         if($module == 'product'    && in_array($method, array('create', 'showimport')))   return helper::createLink($module,    'browse', "productID=%s&type=$extra");

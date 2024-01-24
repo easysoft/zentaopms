@@ -46,6 +46,7 @@ class formPanel extends panel
         'cancelBtnText?: string',                      // 表单取消按钮文本，如果不指定则使用 `$lang->goback` 的值。
         'items?: array',                               // 使用一个列定义对象数组来定义表单项。
         'fields?: string|array|fieldList',             // 表单字段配置。
+        'fullModeOrders?: string|array',               // 完整模式下字段显示顺序。
         'layout?: string="horz"',                      // 表单布局，可选值为：'horz'、'grid' 和 `normal`。
         'labelWidth?: int',                            // 标签宽度，单位为像素。
         'batch?: bool',                                // 是否为批量操作表单。
