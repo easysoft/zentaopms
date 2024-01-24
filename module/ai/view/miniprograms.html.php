@@ -153,7 +153,7 @@ $isNotOpen = $config->edition != 'open';
       <div class="table-empty-tip">
         <p>
           <span class="text-muted"><?php echo $lang->ai->miniPrograms->emptyList;?></span>
-          <?php if(common::hasPriv('ai', 'createMiniProgram')) echo html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-info'");?>
+          <?php if($isNotOpen && common::hasPriv('ai', 'createMiniProgram')) echo html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-info'");?>
         </p>
       </div>
     <?php else: ?>
