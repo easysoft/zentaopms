@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/screen.class.php';
 
 zdTable('product')->gen(2);
 zdTable('story')->config('story')->gen(20);
+zdTable('action')->gen(20);
 
 /**
 
