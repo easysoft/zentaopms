@@ -1862,6 +1862,8 @@ class testcaseModel extends model
      */
     public function getSceneGroupCases(int $productID, string $branch, array $modules, string $caseType, string $orderBy): array
     {
+        $browseType = $this->session->caseBrowseType && $this->session->caseBrowseType != 'bysearch' ? $this->session->caseBrowseType : 'all';
+
         $stmt = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
 
@@ -1871,6 +1873,7 @@ class testcaseModel extends model
             ->beginIF($this->app->tab == 'project')->andWhere('t2.project')->eq($this->session->project)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
+            ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($this->cookie->onlyAutoCase)->andWhere('t1.auto')->eq('auto')->fi()
             ->beginIF(!$this->cookie->onlyAutoCase)->andWhere('t1.auto')->ne('unit')->fi()
             ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
