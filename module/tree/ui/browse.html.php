@@ -102,7 +102,7 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                     setClass(empty($branches) ? 'hidden' : ''),
                     set::name("branch[$i]"),
                     set::items($branches),
-                    set::value($branch),
+                    set::value((int)$branch),
                 ),
                 input
                 (
