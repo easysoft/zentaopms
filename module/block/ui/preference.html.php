@@ -74,7 +74,7 @@ function printPreference(array $URSRList)
                 set::label($lang->my->storyConcept),
                 picker
                 (
-                    set('menu', array('class' => 'menu picker-menu-list no-nested-items menu-nested flex flex-wrap content-between ursr-menu')),
+                    set('menu', array('class' => 'menu picker-menu-list no-nested-items menu-nested flex flex-wrap content-between ursr-menu preference-menu')),
                     set::name('URSR'),
                     set::required(true),
                     set::items($URSRItems),
@@ -86,6 +86,7 @@ function printPreference(array $URSRList)
                 set::label($lang->my->programLink),
                 picker
                 (
+                    set('menu', array('class' => 'preference-menu')),
                     set::name('programLink'),
                     set::required(true),
                     set::items($programItems),
@@ -97,6 +98,7 @@ function printPreference(array $URSRList)
                 set::label($lang->my->productLink),
                 picker
                 (
+                    set('menu', array('class' => 'preference-menu')),
                     set::name('productLink'),
                     set::required(true),
                     set::items($productItems),
@@ -108,6 +110,7 @@ function printPreference(array $URSRList)
                 set::label($lang->my->projectLink),
                 picker
                 (
+                    set('menu', array('class' => 'preference-menu')),
                     set::name('projectLink'),
                     set::required(true),
                     set::items($projectItems),
@@ -120,6 +123,7 @@ function printPreference(array $URSRList)
                 set::label($lang->my->executionLink),
                 picker
                 (
+                    set('menu', array('class' => 'preference-menu')),
                     set::name('executionLink'),
                     set::required(true),
                     set::items($executionItems),
