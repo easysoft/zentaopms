@@ -26,6 +26,9 @@ jsVar('weekend', $config->execution->weekend);
 jsVar('beginLessThanParent', $lang->project->beginLessThanParent);
 jsVar('endGreatThanParent', $lang->project->endGreatThanParent);
 
+unset($lang->project->endList['999']);
+jsVar('endList', $lang->project->endList);
+
 $modelMenuItems = array();
 foreach($lang->project->modelList as $key => $text)
 {

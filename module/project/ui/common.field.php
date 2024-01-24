@@ -50,8 +50,9 @@ $fields->field('begin')
     ->control('inputGroup')
     ->itemBegin('begin')->control('datePicker')->placeholder($lang->project->begin)->value(data('project.begin') ? data('project.begin') : date('Y-m-d'))->required(true)->itemEnd()
     ->item(array('control' => 'span', 'text' => '-'))
-    ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->value(data('project.end'))->itemEnd()
-    ->tip('123')
+    ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->value(data('project.end'))
+    ->menu(array('items' => jsRaw('window.getDateMenu')))
+    ->itemEnd()
     ->tipProps(array('id' => 'dateTip'))
     ->tipClass('text-warning hidden');
 
