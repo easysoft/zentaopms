@@ -48,18 +48,15 @@ detailBody
         (
             set::files($task->files),
             set::padding(false)
-        ),
-        history(set::objectID($task->id)),
-        center
-        (
-            floatToolbar
-            (
-                set::object($task),
-                isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
-                set::main($actions['mainActions']),
-                set::suffix($actions['suffixActions'])
-            )
         )
+    ),
+    history(set::objectID($task->id)),
+    floatToolbar
+    (
+        set::object($task),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
+        set::main($actions['mainActions']),
+        set::suffix($actions['suffixActions'])
     ),
     detailSide
     (
