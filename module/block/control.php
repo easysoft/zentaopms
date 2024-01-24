@@ -174,7 +174,8 @@ class block extends control
         if(empty($modules)) $module = $dashboard;                                       // 如果该仪表盘下没有模块列表，则模块同仪表盘。
         if(empty($module) && !empty($modules)) $module = current(array_keys($modules)); // 如果当前没有选择模块，则选中第一个。
 
-        $codes  = $this->blockZen->getAvailableCodes($module);         // 根据仪表盘和模块获取可用的区块列表。
+        $codes  = $this->blockZen->getAvailableCodes($module); // 根据仪表盘和模块获取可用的区块列表。
+        $code   = $codes && empty($code) ? key($codes) : $code;
         $params = $this->blockZen->getAvailableParams($module, $code); // 根据所属模块和区块code获取参数配置项列表。
 
         $this->view->title      = $this->lang->block->createBlock;
