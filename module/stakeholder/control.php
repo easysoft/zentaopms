@@ -52,14 +52,16 @@ class stakeholder extends control
     {
         if($_POST)
         {
+            if($this->post->from != 'outside') $this->config->stakeholder->create->requiredFields .= ',user';
             $stakeholderData = form::data()
                 ->setDefault('objectID', $objectID)
                 ->get();
 
             $stakeholderID = $this->stakeholder->create($stakeholderData);
-            $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
 
             if(!$stakeholderID || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $stakeholderID));
 
             $moduleName = $this->app->tab == 'program' ? 'program'              : $this->moduleName;
