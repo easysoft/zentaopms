@@ -196,7 +196,7 @@ class productsBox extends wg
         list($productItems, $branchGroups, $planGroups, $productPlans) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans'));
         list($linkedBranches, $currentProduct, $currentPlan, $project) = $this->prop(array('linkedBranches', 'currentProduct', 'currentPlan', 'project'));
 
-        $unmodifiableProducts = data('unmodifiableProducts');
+        $unmodifiableProducts = data('unmodifiableProducts') ? data('unmodifiableProducts') : array();
 
         $linkedProductsBox = array();
         foreach(array_values($linkedProducts) as $i => $product)
