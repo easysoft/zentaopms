@@ -47,7 +47,7 @@ class editor extends wg
 
     protected function created()
     {
-        if(empty($this->prop('uid'))) $this->setProp('uid', $this->gid);
+        if(empty($this->prop('uid'))) $this->setProp('uid', uniqid());
         $this->setDefaultProps(array('uploadUrl' => helper::createLink('file', 'ajaxUpload', 'uid=' . $this->prop('uid'))));
     }
 
