@@ -240,8 +240,8 @@ class testcaseZen extends testcase
         {
             $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
             $productBranches = isset($product->type) && $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($productID), $objectID, 'noclosed|withMain') : array();
-            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-            $branch          = !empty($branches) ? (string)key($branches) : '';
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array('');
+            $branch          = empty($branch) ? (string)key($branches) : $branch;
         }
         else
         {

@@ -978,7 +978,7 @@ class bugZen extends bug
             $objectID        = $this->app->tab == 'project' ? $bug->projectID : $bug->executionID;
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($productID), (int)$objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array('');
-            $branch          = key($branches);
+            $branch          = empty($branch) ? key($branches) : $branch;
         }
         else
         {
