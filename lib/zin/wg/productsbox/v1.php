@@ -90,10 +90,10 @@ class productsBox extends wg
         ) : null;
         $productsBox[] = div
         (
-            on::change('[name=addProduct]', 'toggleNewProduct'),
             set::className("productBox flex $hidden"),
             formGroup
             (
+                on::change('[name=addProduct]', 'toggleNewProduct'),
                 set::width('1/2'),
                 setClass('linkProduct'),
                 set::required($project && in_array($project->model, array('waterfall', 'waterfallplus'))),
