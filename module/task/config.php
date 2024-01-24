@@ -92,9 +92,10 @@ $config->task->afterOptions[] = array('text' => $lang->task->afterChoices['toTas
 $config->task->afterOptions[] = array('text' => $lang->task->afterChoices['toStoryList'], 'value' => 'toStoryList');
 $config->task->afterOptions[] = array('text' => $lang->task->afterChoices['continueAdding'], 'value' => 'continueAdding');
 
-$config->task->actionList['confirmStoryChange']['icon']  = 'search';
-$config->task->actionList['confirmStoryChange']['hint']  = $lang->task->confirmStoryChange;
-$config->task->actionList['confirmStoryChange']['url']   = helper::createLink('task', 'confirmStoryChange', 'taskID={id}');
+$config->task->actionList['confirmStoryChange']['icon']     = 'search';
+$config->task->actionList['confirmStoryChange']['hint']     = $lang->task->confirmStoryChange;
+$config->task->actionList['confirmStoryChange']['url']      = helper::createLink('task', 'confirmStoryChange', 'taskID={id}');
+$config->task->actionList['confirmStoryChange']['data-app'] = $app->tab;
 
 $config->task->actionList['start']['icon']        = 'play';
 $config->task->actionList['start']['hint']        = $lang->task->start;
