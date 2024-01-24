@@ -354,11 +354,16 @@ modalTrigger
         (
             span
             (
-                setClass('copy-title h1'),
+                setClass('copy-title'),
                 $lang->kanban->copyTitle,
             ),
+        ),
+        div
+        (
+            setClass('flex items-center'),
             span
             (
+                setClass('ml-2.5 mr-2'),
                 $lang->kanban->copyContent,
             ),
             checkList
