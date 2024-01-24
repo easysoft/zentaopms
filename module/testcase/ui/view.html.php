@@ -118,8 +118,12 @@ else
     $productItem = !$product->shadow ? item
     (
         set::name($lang->testcase->product),
-        set::href($productLink),
-        $product->name
+        a
+        (
+            set::href($productLink),
+            $product->name
+        ),
+        set::collapse($product->name)
     ) : null;
 
     if($product->type != 'normal')
@@ -127,8 +131,12 @@ else
         $branchItem = item
         (
             set::name(sprintf($lang->product->branch, $lang->product->branchName[$product->type])),
-            set::href($branchLink),
-            $branchName
+            a
+            (
+                set::href($branchLink),
+                $branchName
+            ),
+            set::collapse($branchName)
         );
     }
 
