@@ -160,6 +160,7 @@ detailBody
     (
         tableData
         (
+            setClass('mt-5'),
             set::title($lang->testcase->legendBasicInfo),
             $isLibCase ? item
             (

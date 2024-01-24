@@ -104,6 +104,7 @@ detailBody
     (
         tableData
         (
+            setClass('mt-5'),
             set::title($lang->bug->legendBasicInfo),
             set::tdClass('w-64'),
             item
