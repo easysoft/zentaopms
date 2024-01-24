@@ -179,7 +179,7 @@ class searchTao extends searchModel
         {
             if($field == 'module')
             {
-                $allModules = $this->loadModel('tree')->getAllChildId($value);
+                $allModules = $this->loadModel('tree')->getAllChildId((int)$value);
                 if($allModules) $condition = helper::dbIN($allModules);
             }
             elseif($field == 'dept')
