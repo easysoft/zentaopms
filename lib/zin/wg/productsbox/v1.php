@@ -89,7 +89,7 @@ class productsBox extends wg
         ) : null;
         $productsBox[] = div
         (
-            set::className("productBox flex $hidden"),
+            set::className("productBox flex items-center $hidden"),
             formGroup
             (
                 on::change('[name=addProduct]', 'toggleNewProduct'),
@@ -140,7 +140,7 @@ class productsBox extends wg
             ),
             div
             (
-                setClass('pl-2 flex self-center line-btn c-actions'),
+                setClass('pl-2 flex self-center line-btn c-actions first-action'),
                 btn
                 (
                     setClass('btn btn-link text-gray addLine'),
@@ -307,7 +307,7 @@ class productsBox extends wg
                 ),
                 $disabledProduct ? null : div
                 (
-                    setClass('pl-2 flex self-center line-btn c-actions'),
+                    setClass('pl-2 flex self-center line-btn c-actions', $i == 0 ? 'first-action' : ''),
                     btn
                     (
                         setClass('btn btn-link text-gray addLine'),

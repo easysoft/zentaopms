@@ -1,4 +1,5 @@
 .productBox {position: relative; padding-top:0;}
 .productBox .linkProduct, .productsBox .addProductBox .form-group{padding-left: 0px;}
 .productBox .planBox{padding-right: 0px;}
-.productBox .c-actions {position: absolute; width: 100px; right: -100px; bottom: 7px;}
+.productBox .c-actions {position: absolute; width: 100px; right: -100px;}
+.productBox .c-actions.first-action {bottom: calc(calc(100% - 64px) / 2);}
