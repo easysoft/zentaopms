@@ -61,12 +61,20 @@ if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('className' => 'btn pr
 jsVar('confirmunlinkleftbug', $lang->release->confirmUnlinkBug);
 jsVar('unlinkleftbugurl', helper::createLink($releaseModule, 'unlinkBug', "releaseID={$release->id}&bugID=%s&type=leftBug"));
 
-$config->release->dtable->leftBug->fieldList['resolvedBuild']['map'] = $builds;
+$releaseBuild = array();
+foreach($release->builds as $build) $releaseBuild[] = $build->name;
 $leftBugTableData = initTableData($leftBugs, $config->release->dtable->leftBug->fieldList, $this->release);
 if(commonModel::hasPriv($releaseModule, 'unlinkBug'))
 {
     foreach($leftBugTableData as $leftBug)
     {
+        $openedBuilds = '';
+        foreach(explode(',', $leftBug->openedBuild) as $openedBuild)
+        {
+            $openedBuilds .= zget($builds, $openedBuild) . ',';
+        }
+        $leftBug->openedBuild = trim($openedBuilds, ',');
+
         if(!empty($leftBug->actions)) continue;
         $leftBug->actions[] = array('name' => 'unlinkLeftBug', 'disabled' => false);
     }

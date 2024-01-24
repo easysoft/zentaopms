@@ -153,5 +153,14 @@ $config->release->dtable->bug->fieldList['actions']['menu']     = array('unlinkB
 $config->release->dtable->bug->fieldList['actions']['list']     = $config->release->actionList;
 
 $config->release->dtable->leftBug = clone $config->release->dtable->bug;
+
+$config->release->dtable->leftBug->fieldList['openedBuild']['title']    = $lang->bug->openedBuild;
+$config->release->dtable->leftBug->fieldList['openedBuild']['name']     = 'openedBuild';
+$config->release->dtable->leftBug->fieldList['openedBuild']['type']     = 'text';
+$config->release->dtable->leftBug->fieldList['openedBuild']['sortType'] = true;
+
 $config->release->dtable->leftBug->fieldList['severity']['name'] = 'severityOrder';
 $config->release->dtable->leftBug->fieldList['actions']['menu']  = array('unlinkLeftBug');
+unset($config->release->dtable->leftBug->fieldList['resolvedBuild']);
+unset($config->release->dtable->leftBug->fieldList['resolvedBy']);
+unset($config->release->dtable->leftBug->fieldList['resolvedDate']);
