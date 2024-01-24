@@ -954,7 +954,7 @@ class storyZen extends story
     {
         $productID  = $this->view->productID;
         $branch     = $this->view->branch;
-        $optionMenu = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+        $optionMenu = $this->tree->getOptionMenu($productID, 'story', 0, '0', 'nodeleted');
 
         $moduleID = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
         $moduleID = isset($optionMenu[$moduleID]) ? $moduleID : 0;
