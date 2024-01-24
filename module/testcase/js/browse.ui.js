@@ -64,14 +64,14 @@ window.onRenderCell = function(result, {row, col})
             {
                 result.shift(); // 移除带链接的场景名称
                 result.push({html: data.title}); // 添加不带链接的场景名称
-                if(data.grade == 1 && module) result.unshift({html: '<span class="label lighter rounded-full">' + module + '</span>'}); // 顶级场景添加模块标签
+                if(data.grade == 1 && module) result.unshift({html: '<span class="label gray-pale rounded-full">' + module + '</span>'}); // 顶级场景添加模块标签
                 result.unshift({html: '<span class="label gray-300-outline text-gray rounded-full">' + scene + '</span>'}); // 添加场景标签
                 if(!this.options.customData.isOnlyScene && data.hasCase == false) result.push({html: '<span class="text-gray">(' + noCase + ')</span>'}); // 添加暂无用例标签
             }
             else // 用例
             {
-                if(data.auto == 'auto') result.unshift({html: '<span class="label lighter rounded-full">' + automated + '</span>'}); // 添加自动化标签
-                if(module) result.unshift({html: '<span class="label lighter rounded-full">' + module + '</span>'}); // 添加模块标签
+                if(data.auto == 'auto') result.unshift({html: '<span class="label gray-pale rounded-full">' + automated + '</span>'}); // 添加自动化标签
+                if(module) result.unshift({html: '<span class="label gray-pale rounded-full">' + module + '</span>'}); // 添加模块标签
             }
         }
     }

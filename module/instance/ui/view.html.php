@@ -94,7 +94,7 @@ div
                                 div
                                 (
                                     $instance->name, setClass('text-xl'),
-                                    $type === 'store' ? span($instance->appVersion, setClass('ml-3 label lighter rounded-full')) : null
+                                    $type === 'store' ? span($instance->appVersion, setClass('ml-3 label gray-pale rounded-full')) : null
                                 ),
                                 $type === 'store' ? div
                                 (

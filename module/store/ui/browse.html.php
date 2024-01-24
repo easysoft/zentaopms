@@ -55,7 +55,7 @@ foreach ($cloudApps as $group)
                 div
                 (
                     setClass('ml-4'),
-                    div($cloudApp->alias, setClass('app-name'), span($cloudApp->app_version, setClass('ml-5 label lighter rounded-full'))),
+                    div($cloudApp->alias, setClass('app-name'), span($cloudApp->app_version, setClass('ml-5 label gray-pale rounded-full'))),
                     div($cloudApp->introduction, setClass('line-2'))
                 )
             ),

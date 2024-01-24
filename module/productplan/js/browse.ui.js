@@ -221,7 +221,7 @@ window.getItem = function(info)
     info.item.titleAttrs   = {'class': 'text-black clip', 'title' : info.item.title};
     info.item.content      = {html: info.item.desc};
     info.item.contentClass = 'text-gray';
-    info.item.footer       = {html: "<div class='flex'><span class='label label-" + info.item.status + "'>" + info.item.statusLabel + "</span><span class='label lighter ml-2'>" + info.item.dateLine + "</span></div>"};
+    info.item.footer       = {html: "<div class='flex'><span class='label label-" + info.item.status + "'>" + info.item.statusLabel + "</span><span class='label gray-pale ml-2'>" + info.item.dateLine + "</span></div>"};
     if(privs.canViewPlan) info.item.titleUrl = $.createLink('productplan', 'view', `id=${info.item.id}`);
 }
 

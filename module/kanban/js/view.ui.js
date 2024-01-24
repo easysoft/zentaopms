@@ -240,7 +240,7 @@ window.renderReleaseItem = function(info)
     {
         statusBox = '<span class="label label-deleted">' + releaseLang.deleted + '</span>';
     }
-    const date = '<span class="ml-2 label lighter">' + info.item.date + '</span>';
+    const date = '<span class="ml-2 label gray-pale">' + info.item.date + '</span>';
     info.item.content = {html: statusBox + date}
 }
 window.renderBuildItem = function(info)
@@ -249,7 +249,7 @@ window.renderBuildItem = function(info)
     info.item.titleUrl   = $.createLink('build', 'view', `id=${info.item.fromID}`);
     info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
-    const date = '<span class="label lighter">' + info.item.date + '</span>';
+    const date = '<span class="label gray-pale">' + info.item.date + '</span>';
     info.item.content = {html: date}
 }
 window.renderProductplanItem = function(info)

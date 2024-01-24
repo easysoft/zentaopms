@@ -186,13 +186,13 @@ if(!empty($projectStats))
                         span
                         (
                             set::title($project->budget),
-                            setClass('label lighter mr-2'),
+                            setClass('label gray-pale mr-2'),
                             $project->budget
                         ),
                         span
                         (
                             set::title($project->date),
-                            setClass('label lighter mr-2'),
+                            setClass('label gray-pale mr-2'),
                             setStyle('color', $status == 'delay' ? 'var(--color-danger-500)' : 'inherit'),
                             $project->date
                         )
