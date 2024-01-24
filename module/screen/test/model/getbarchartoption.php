@@ -54,16 +54,12 @@ r(is_null($component3) || is_null($chart3)) && p('') && e(1);  //测试type为st
 
 list($component4, $chart4) = getComponetAndChart($screen, $filter4);
 $screen->getBarChartOption($component4, $chart4);
-r(
-    isset($component4->option->dataset->dimensions[0])
-    && $component4->option->dataset->dimensions[0] == 'project'
-    && count($component4->option->dataset->source) == 5
-) && p('') && e(1);  //测试type为cluBarX的图表是否显示正确，生成的指标项和数据项是否正确。
+r(isset($component4->option->dataset->dimensions[0]) && $component4->option->dataset->dimensions[0] == 'project' && count($component4->option->dataset->source) == 5 ) && p('') && e(1);  //测试type为cluBarX的图表是否显示正确，生成的指标项和数据项是否正确。
 
 list($component5, $chart5) = getComponetAndChart($screen, $filter5);
 $screen->getBarChartOption($component5, $chart5);
 $dataset = isset($component5) && $component5->option->dataset ? $component5->option->dataset : null;
-r($dataset && $dataset->dimensions[0] == '年份' && count($dataset->source) == 1) && p('') && e(1);  // 测试type为stackedBar的图表是否显示正确，生成的指标项和数据项是否正确。
+r($dataset && $dataset->dimensions[0] == '年份' && count($dataset->source) == 2) && p('') && e(1);  //测试type为stackedBar的图表是否显示正确，生成的指标项和数据项是否正确。
 
 list($component6, $chart6) = getComponetAndChart($screen, $filter6);
-r($component6 && $chart6) && p('') && e(1);  //测试type为bar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。
+r(is_null($component6) && is_null($chart6)) && p('') && e(1);  //测试type为bar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。

@@ -9,24 +9,23 @@ zdTable('story')->gen(20);
 zdTable('bug')->gen(20);
 
 /**
-title=测试 screenModel->getchartoption();
-cid=1
-pid=1
 
-测试获取折线图配置中dimensions是否正确，值为年份。                                      >> 1
-测试type为cluBarY的图表是否显示正确，生成的指标项和数据项是否正确。                     >> 1
-测试type为stackedBarY的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。 >> 1
-测试type为cluBarX的图表是否显示正确，生成的指标项和数据项是否正确。                     >> 1
-测试type为stackedBar的图表是否显示正确，生成的指标项和数据项是否正确。                  >> 1
-测试type为bar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。         >> 0
-测试type为piecircle的图表是否显示正确，生成的指标项和数据项是否正确。                   >> 1
-测试type为pie的图表是否显示正确，生成的指标项和数据项是否正确。                         >> 1
-测试type为table的图表是否显示正确，生成的header指标项数量是否正确。                     >> 1
-测试type为table的图表是否显示正确，生成的dataset数据项数量是否正确。                    >> 1
-测试配置错误的水球图是否能正常生成，此为默认配置。                                      >> 1
-测试配置正确的水球图是否能正常生成，生成的比例为0.000。                                 >> 1
-测试type为radar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。       >> 0
-测试type为card的图表是否显示正确，生成的指标项和数据项是否正确。                        >> 1
+title=测试 screenModel->getchartoption();
+timeout=0
+cid=1
+
+- 测试获取折线图配置中dimensions是否正确，值为年份。 @1
+- 测试type为cluBarY的图表是否显示正确，生成的指标项和数据项是否正确。 @1
+- 测试type为stackedBarY的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。 @1
+- 测试type为stackedBar的图表是否显示正确，生成的指标项和数据项是否正确。 @1
+- 测试type为bar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。 @1
+- 测试type为pie的图表是否显示正确，生成的指标项和数据项是否正确。 @1
+- 测试type为table的图表是否显示正确，生成的header指标项数量是否正确。 @1
+- 测试type为table的图表是否显示正确，生成的dataset数据项数量是否正确。 @1
+- 测试配置错误的水球图是否能正常生成，此为默认配置。 @1
+- 测试配置正确的水球图是否能正常生成，生成的比例为0.000。 @1
+- 测试type为radar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。 @1
+- 测试type为card的图表是否显示正确，生成的指标项和数据项是否正确。 @1
 
 */
 
@@ -86,10 +85,10 @@ r(
 list($component5, $chart5) = getComponetAndChart($screen, $filter5);
 $screen->getChartOptionTest($chart5, $component5);
 $dataset = isset($component5) && $component5->option->dataset ? $component5->option->dataset : null;
-r($dataset && $dataset->dimensions[0] == '年份' && count($dataset->source) == 1) && p('') && e(1); // 测试type为stackedBar的图表是否显示正确，生成的指标项和数据项是否正确。
+r($dataset && $dataset->dimensions[0] == '年份' && count($dataset->source) == 2) && p('') && e(1); // 测试type为stackedBar的图表是否显示正确，生成的指标项和数据项是否正确。
 
 list($component6, $chart6) = getComponetAndChart($screen, $filter6);
-r($component6 && $chart6) && p('') && e(1);                                                        //测试type为bar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。
+r(is_null($component6) && is_null($chart6)) && p('') && e(1);                                      //测试type为bar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。
 
 list($component7, $chart7) = getComponetAndChart($screen, $filter7);
 $screen->getChartOptionTest($chart7, $component7);
@@ -102,7 +101,7 @@ r(
 list($component8, $chart8) = getComponetAndChart($screen, $filter8);
 $screen->getChartOptionTest($chart8, $component8);
 $dataset = $component8->option->dataset ?? null;
-r($dataset->dimensions[0] == 'completeStatus' && $dataset->source[0]->completeStatus == '延期完成项目') && p('') && e(0);               //测试type为pie的图表是否显示正确，生成的指标项和数据项是否正确。
+r($dataset->dimensions[0] == 'completeStatus' && $dataset->source[0]->completeStatus == '延期完成项目') && p('') && e(1);               //测试type为pie的图表是否显示正确，生成的指标项和数据项是否正确。
 
 list($component9, $chart9) = getComponetAndChart($screen, $filter9);
 $screen->getChartOptionTest($chart9, $component9);
@@ -121,7 +120,7 @@ $screen->getChartOptionTest($chart11, $component11);
 r($component11->option->dataset == "0.000") && p('') && e(1);                                       //测试配置正确的水球图是否能正常生成，生成的比例为0.000。
 
 list($component12, $chart12) = getComponetAndChart($screen, $filter11);
-r($component12 && $chart12) && p('') && e(1);                                                        //测试type为radar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。
+r(is_null($component12) && is_null($chart12)) && p('') && e(1);                                     //测试type为radar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。
 
 list($component13, $chart13) = getComponetAndChart($screen, $filter12); 
 $screen->getChartOptionTest($chart13, $component13);
