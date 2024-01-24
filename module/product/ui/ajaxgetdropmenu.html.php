@@ -49,10 +49,11 @@ foreach($products as $programID => $programProducts)
         $name  = (in_array($this->config->systemMode, array('ALM', 'PLM')) and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
 
         $item = array();
-        $item['id']     = $product->id;
-        $item['text']   = $product->name;
-        $item['active'] = $productID == $product->id;
-        $item['keys']   = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
+        $item['id']       = $product->id;
+        $item['text']     = $product->name;
+        $item['active']   = $productID == $product->id;
+        $item['keys']     = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
+        $item['data-app'] = $app->tab;
 
         if($config->systemMode == 'light' || $config->vision == 'or')
         {
