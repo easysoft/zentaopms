@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $fields = useFields('product.edit');
+$fields->orders('name,code', 'type,status', 'reviewer,QD,RD');
 $fields->fullModeOrders('name,code', 'type,status', 'reviewer,QD,RD');
 
 formGridPanel
