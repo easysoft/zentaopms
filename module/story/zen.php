@@ -1012,6 +1012,7 @@ class storyZen extends story
         }
         if($storyType != 'story') unset($fields['region'], $fields['lane'], $fields['branches'], $fields['modules'], $fields['plans']);
         if($storyType != 'story' || !$this->config->URAndSR || $hiddenURS) unset($fields['URS']);
+        if($hiddenPlan) unset($fields['plan']);
         if($hiddenProduct)
         {
             $fields['product']['control']    = 'hidden';

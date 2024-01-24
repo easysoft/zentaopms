@@ -126,7 +126,7 @@ $fields->field('verify')
 
 $fields->field('files')->width('full')->control('files');
 
-if(!isset($createFields['branch']) && $type == 'story')
+if(!isset($createFields['branch']) && $type == 'story' and isset($createFields['plan']))
 {
     $fields->field('plan')
         ->foldable()
