@@ -222,7 +222,6 @@ class navbar extends wg
                         if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod))
                         {
                             $activeMainMenu = true;
-                            if($activeMenuID) $activeMainMenu = $dropMenuName == $activeMenuID;
                         }
                         else
                         {
@@ -230,6 +229,7 @@ class navbar extends wg
                             if($subModule and in_array($currentModule, $subModule) and !str_contains(",$exclude,", ",$currentModule-$currentMethod,")) $activeMainMenu = true;
                         }
 
+                        if($activeMenuID) $activeMainMenu = $dropMenuName == $activeMenuID;
                         if($activeMainMenu)
                         {
                             $activeMenu = $dropMenuName;
@@ -248,7 +248,8 @@ class navbar extends wg
                     }
 
                     if(empty($dropItems)) continue;
-                    $items[] = array(
+                    $items[] = array
+                    (
                         'type'     => 'dropdown',
                         'items'    => $dropItems,
                         'class'    => $class,

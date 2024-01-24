@@ -231,8 +231,8 @@ $lang->scrum->menu->dynamic     = array('link' => "$lang->dynamic|project|dynami
 $lang->scrum->menu->settings    = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team', 'exclude' => 'tree-browsetask');
 
 $lang->scrum->menu->storyGroup['dropMenu'] = new stdclass();
-$lang->scrum->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|projectstory|story|projectID=%s&productID=%s", 'subModule' => 'tree');
-$lang->scrum->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|projectstory|story|projectID=%s&productID=%s&branch=0&browseType=&param=0&storyType=requirement", 'subModule' => 'tree');
+$lang->scrum->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|projectstory|story|projectID=%s&productID=%s", 'subModule' => 'tree,story');
+$lang->scrum->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|projectstory|story|projectID=%s&productID=%s&branch=0&browseType=&param=0&storyType=requirement", 'subModule' => 'tree,story');
 
 $lang->scrum->dividerMenu = ',execution,programplan,doc,settings,';
 
@@ -360,8 +360,8 @@ $lang->execution->menu->settings   = array('link' => "$lang->settings|execution|
 $lang->execution->menu->more       = array('link' => "$lang->more|execution|more|%s");
 
 $lang->execution->menu->storyGroup['dropMenu'] = new stdclass();
-$lang->execution->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s");
-$lang->execution->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|execution|story|executionID=%s&storyType=requirement");
+$lang->execution->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story');
+$lang->execution->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|execution|story|executionID=%s&storyType=requirement", 'subModule' => 'story');
 
 /* Execution menu order. */
 $lang->execution->menuOrder[5]  = 'task';
