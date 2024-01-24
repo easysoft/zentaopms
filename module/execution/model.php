@@ -521,15 +521,15 @@ class executionModel extends model
             $project      = $this->project->getByID($projectID);
 
             /* Check unique code for edited executions. */
-            if(isset($postData->code) and empty($executionCode))
+            if(isset($postData->code) && empty($executionCode) && strpos(",{$this->config->execution->edit->requiredFields},", ',code,') !== false)
             {
-                dao::$errors["code$executionID"][] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
+                dao::$errors["code[$executionID]"] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
             }
             elseif(isset($postData->code) and $executionCode)
             {
                 if(isset($codeList[$executionCode]))
                 {
-                    dao::$errors["code$executionID"][] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
+                    dao::$errors["code[$executionID]"] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
                 }
                 $codeList[$executionCode] = $executionCode;
             }
@@ -543,8 +543,7 @@ class executionModel extends model
                     if($parentID == $parents[$repeatID])
                     {
                         $type = $oldExecution->type == 'stage' ? 'stage' : 'agileplus';
-                        dao::$errors["name$executionID"][] = sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
-                        break;
+                        dao::$errors["name[$executionID]"] = sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
                     }
                 }
             }
@@ -563,13 +562,13 @@ class executionModel extends model
                 }
                 else
                 {
-                    $parentAttr = $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
+                    $parentAttr = dao::isError() ? '' : $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
                 }
 
                 if($parentAttr && $parentAttr != $attribute && $parentAttr != 'mix')
                 {
                     $parentAttr = zget($this->lang->stage->typeList, $parentAttr);
-                    dao::$errors["attribute$executionID"][] = sprintf($this->lang->execution->errorAttrMatch, $parentAttr);
+                    dao::$errors["attribute[$executionID]"] = sprintf($this->lang->execution->errorAttrMatch, $parentAttr);
                 }
 
                 $attributeList[$executionID] = $attribute;
@@ -580,7 +579,7 @@ class executionModel extends model
             if(isset($postData->days[$executionID]) and $postData->days[$executionID] > $workdays)
             {
                 $this->app->loadLang('project');
-                dao::$errors["days{$executionID}"][] = sprintf($this->lang->project->workdaysExceed, $workdays);
+                dao::$errors["days[{$executionID}]"] = sprintf($this->lang->project->workdaysExceed, $workdays);
             }
 
             /* Parent stage begin and end check. */
@@ -593,12 +592,12 @@ class executionModel extends model
 
                 if($begin < $parentBegin)
                 {
-                    dao::$errors["begin$executionID"][] = sprintf($this->lang->execution->errorLesserParent, $parentBegin);
+                    dao::$errors["begin[$executionID]"] = sprintf($this->lang->execution->errorLesserParent, $parentBegin);
                 }
 
                 if($end > $parentEnd)
                 {
-                    dao::$errors["end$executionID"][] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
+                    dao::$errors["end[$executionID]"] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
                 }
             }
 
@@ -610,24 +609,24 @@ class executionModel extends model
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
             }
 
-            if(empty($executions[$executionID]->begin)) dao::$errors["begin{$executionID}"][] = sprintf($this->lang->error->notempty, $this->lang->execution->begin);
-            if(empty($executions[$executionID]->end))   dao::$errors["end{$executionID}"][]   = sprintf($this->lang->error->notempty, $this->lang->execution->end);
+            if(empty($executions[$executionID]->begin)) dao::$errors["begin[{$executionID}]"] = sprintf($this->lang->error->notempty, $this->lang->execution->begin);
+            if(empty($executions[$executionID]->end))   dao::$errors["end[{$executionID}]"]   = sprintf($this->lang->error->notempty, $this->lang->execution->end);
 
             /* Project begin and end check. */
             if(!empty($executions[$executionID]->begin) and !empty($executions[$executionID]->end))
             {
                 if($executions[$executionID]->begin > $executions[$executionID]->end)
                 {
-                    dao::$errors["end{$executionID}"][] = sprintf($this->lang->execution->errorLesserPlan, $executions[$executionID]->end, $executions[$executionID]->begin);
+                    dao::$errors["end[{$executionID}]"] = sprintf($this->lang->execution->errorLesserPlan, $executions[$executionID]->end, $executions[$executionID]->begin);
                 }
 
                 if($project and $executions[$executionID]->begin < $project->begin)
                 {
-                    dao::$errors["begin{$executionID}"][] = sprintf($this->lang->execution->errorLesserProject, $project->begin);
+                    dao::$errors["begin[{$executionID}]"] = sprintf($this->lang->execution->errorLesserProject, $project->begin);
                 }
                 if($project and $executions[$executionID]->end > $project->end)
                 {
-                    dao::$errors["end{$executionID}"][] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
+                    dao::$errors["end[{$executionID}]"] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
                 }
             }
         }

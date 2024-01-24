@@ -69,7 +69,8 @@ formBatchPanel
     (
         set::name('code'),
         set::label($lang->execution->code),
-        set::width('136px')
+        set::width('136px'),
+        set::required(strpos(",{$config->execution->edit->requiredFields},", ',code,') !== false)
     ) : null,
     formBatchItem
     (
