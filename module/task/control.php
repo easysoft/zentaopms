@@ -1182,6 +1182,7 @@ class task extends control
             $postData->teamEstimate = $this->post->teamEstimate;
             $postData->teamConsumed = $this->post->teamConsumed;
             $postData->teamLeft     = $this->post->teamLeft;
+            $postData->teamSource   = $this->post->teamSource;
             $changes = $this->task->updateTeam($task, $postData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

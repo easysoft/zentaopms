@@ -66,7 +66,9 @@ if(!empty($task->team))
                     set::items($members),
                     set::value($member->account),
                     $memberDisabled ? set::disabled(true) : null
-                )
+                ),
+                formHidden('teamSource[]', $member->account),
+                $memberDisabled ? formHidden('team[]', $member->account) : null,
             ),
             h::td
             (
