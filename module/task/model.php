@@ -2635,6 +2635,7 @@ class taskModel extends model
                 foreach($taskFiles as $taskFile)
                 {
                     $taskFile->objectID = $objectID;
+                    unset($taskFile->id);
                     $this->dao->insert(TABLE_FILE)->data($taskFile)->exec();
                 }
             }
