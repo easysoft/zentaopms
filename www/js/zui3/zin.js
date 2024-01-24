@@ -515,7 +515,8 @@
                             {
                                 zui.Modal.confirm({message: data.load.confirm, onResult: function(result)
                                 {
-                                    loadPage(result ? data.load.confirmed : data.load.canceled);
+                                    if(result && data.load.confirmed) loadPage(data.load.confirmed);
+                                    else if(!result && data.load.canceled) loadPage(data.load.canceled);
                                 }});
                             }
                             else if('alert' in data.load)
