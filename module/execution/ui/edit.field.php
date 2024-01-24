@@ -192,6 +192,5 @@ $fields->field('acl')
         'type' => 'aclBox',
         'aclItems' => $lang->execution->aclList,
         'whitelistLabel' => $lang->whitelist,
-        'userLabel' => $lang->product->users,
         'userItems' => data('users')
     ));

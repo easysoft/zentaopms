@@ -14,11 +14,6 @@ class aclBox extends wg
         'aclItems?: array',                    // 访问控制可选项。
         'aclValue?: string="open"',            // 访问控制默认选中值。
         'whitelistLabel?: string=""',          // 白名单标签。
-        'groupLabel?: string=""',              // 权限组标签。
-        'groupName?: string="groups[]"',       // 权限组名称。
-        'groupItems?: string|array|function',  // 权限组下拉可选值。
-        'groupValue?: string=""',              // 权限组默认选中值。
-        'userLabel?: string=""',               // 用户组标签。
         'userName?: string="whitelist[]"',     // 用户组名称。
         'userValue?: string=""',               // 用户组默认选中值。
     );
@@ -48,34 +43,9 @@ class aclBox extends wg
                 setClass('whitelistBox'),
                 $aclValue == 'open' ? setClass('hidden') : null,
                 set(array('label' => $whitelistLabel, 'required' => false)),
-                div
+                whitelist
                 (
-                    $groupLabel ? div
-                    (
-                        setClass('input-group'),
-                        span
-                        (
-                            setClass('input-group-addon w-14'),
-                            $groupLabel
-                        ),
-                        picker
-                        (
-                            set(array('items' => $groupItems, 'name' => $groupName, 'value' => $groupValue, 'multiple' => true))
-                        )
-                    ) : null,
-                    div
-                    (
-                        setClass('input-group mt-2'),
-                        $userLabel ? span
-                        (
-                            setClass('input-group-addon w-14'),
-                            $userLabel
-                        ) : null,
-                        whitelist
-                        (
-                            set(array('inputGroupClass' => 'w-full', 'name' => $userName, 'value' => $userValue))
-                        )
-                    )
+                    set(array('inputGroupClass' => 'w-full', 'name' => $userName, 'value' => $userValue))
                 )
             )
         );
