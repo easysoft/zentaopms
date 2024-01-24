@@ -330,50 +330,15 @@ class projectZen extends project
     {
         $productPlans     = array();
         $parentProject    = $this->loadModel('program')->getByID($project->parent);
-        $projectStories   = $this->project->getStoriesByProject($projectID);
-        $branches         = $this->project->getBranchesByProject($projectID);
         $linkedProducts   = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
-        $projectBranches  = $this->project->getBranchGroup($projectID, array_keys($linkedProducts));
         $plans            = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipparent|unexpired');
         $withProgram      = $this->config->systemMode == 'ALM';
         $allProducts      = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
         $branchGroups     = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
 
-        $unmodifiableProducts     = array();
-        $unmodifiableMainBranches = array();
-        $unmodifiableBranches     = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
-            foreach($branches[$productID] as $branchID => $branch)
-            {
-                if(!isset($branchGroups[$productID][$branchID]))
-                {
-                    $branchInfo = $this->loadModel('branch')->fetchByID($branchID);
-                    if($branchInfo) $branchGroups[$productID][$branchID] = $branchInfo->name;
-                }
-
-                if(!isset($productPlans[$productID]))
-                {
-                    $productPlans[$productID] = array();
-                    if(isset($plans[$productID][BRANCH_MAIN]))
-                    {
-                        foreach($plans[$productID][BRANCH_MAIN] as $plan) $productPlans[$productID][BRANCH_MAIN][$plan->id] = $plan->title;
-                    }
-                }
-
-                if(!empty($plans[$productID][$branchID]))
-                {
-                    foreach($plans[$productID][$branchID] as $plan) $productPlans[$productID][$branchID][$plan->id] = $plan->title;
-                }
-
-                if(!empty($projectStories[$productID][$branchID]) || !empty($projectBranches[$productID][$branchID]))
-                {
-                    if($branchID == BRANCH_MAIN) $unmodifiableMainBranches[$productID] = $branchID;
-                    array_push($unmodifiableProducts, $productID);
-                    array_push($unmodifiableBranches, $branchID);
-                }
-            }
             if(!empty($linkedProduct->plans))
             {
                 foreach($linkedProduct->plans as $linkedPlans)
@@ -387,7 +352,6 @@ class projectZen extends project
                     }
                 }
             }
-
         }
 
         $productPlansOrder = array();
@@ -418,32 +382,30 @@ class projectZen extends project
 
         $this->view->title = $this->lang->project->edit;
 
-        $this->view->PMUsers                  = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
-        $this->view->users                    = $this->user->getPairs('noclosed|nodeleted');
-        $this->view->project                  = $project;
-        $this->view->programList              = $programList;
-        $this->view->parentProgram            = $program;
-        $this->view->projectID                = $projectID;
-        $this->view->allProducts              = $allProducts;
-        $this->view->multiBranchProducts      = $this->product->getMultiBranchPairs();
-        $this->view->productPlans             = array_filter($productPlansOrder);
-        $this->view->linkedProducts           = $linkedProducts;
-        $this->view->branchGroups             = $branchGroups;
-        $this->view->executions               = $this->execution->getPairs($projectID);
-        $this->view->unmodifiableProducts     = $unmodifiableProducts;
-        $this->view->unmodifiableBranches     = $unmodifiableBranches;
-        $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
-        $this->view->URSRPairs                = $this->loadModel('custom')->getURSRPairs();
-        $this->view->parentProject            = $parentProject;
-        $this->view->availableBudget          = $parentProject ? $this->program->getBudgetLeft($parentProject) + (float)$project->budget : $project->budget;
-        $this->view->budgetUnitList           = $this->project->getBudgetUnitList();
-        $this->view->model                    = $project->model;
-        $this->view->disableModel             = $this->project->checkCanChangeModel($projectID, $project->model) ? '' : 'disabled';
-        $this->view->teamMembers              = $this->user->getTeamMemberPairs($projectID, 'project');
-        $this->view->from                     = $from;
-        $this->view->programID                = $programID;
-        $this->view->disableParent            = $disableParent;
-        $this->view->groups                   = $this->loadModel('group')->getPairs();
+        $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->users                = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->project              = $project;
+        $this->view->programList          = $programList;
+        $this->view->parentProgram        = $program;
+        $this->view->projectID            = $projectID;
+        $this->view->allProducts          = $allProducts;
+        $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
+        $this->view->productPlans         = array_filter($productPlansOrder);
+        $this->view->linkedProducts       = $linkedProducts;
+        $this->view->unmodifiableProducts = $this->getUnmodifiableProducts($projectID, $project);
+        $this->view->branchGroups         = $branchGroups;
+        $this->view->executions           = $this->execution->getPairs($projectID);
+        $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
+        $this->view->parentProject        = $parentProject;
+        $this->view->availableBudget      = $parentProject ? $this->program->getBudgetLeft($parentProject) + (float)$project->budget : $project->budget;
+        $this->view->budgetUnitList       = $this->project->getBudgetUnitList();
+        $this->view->model                = $project->model;
+        $this->view->disableModel         = $this->project->checkCanChangeModel($projectID, $project->model) ? '' : 'disabled';
+        $this->view->teamMembers          = $this->user->getTeamMemberPairs($projectID, 'project');
+        $this->view->from                 = $from;
+        $this->view->programID            = $programID;
+        $this->view->disableParent        = $disableParent;
+        $this->view->groups               = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
@@ -1138,7 +1100,6 @@ class projectZen extends project
         $projectBranches     = $this->project->getBranchGroup($projectID, array_keys($linkedProducts));
 
         /* If the story of the product which linked the project,don't allow to remove the product. */
-        $unmodifiableProducts     = array();
         $unmodifiableBranches     = array();
         $unmodifiableMainBranches = array();
         foreach($linkedProducts as $productID => $linkedProduct)
@@ -1152,7 +1113,6 @@ class projectZen extends project
                 if(!empty($projectStories[$productID][$branchID]) || !empty($projectBranches[$productID][$branchID]))
                 {
                     if($branchID == BRANCH_MAIN) $unmodifiableMainBranches[$productID] = $branchID;
-                    array_push($unmodifiableProducts, $productID);
                     array_push($unmodifiableBranches, $branchID);
                 }
             }
@@ -1163,7 +1123,7 @@ class projectZen extends project
 
         $this->view->linkedBranches           = $linkedBranches;
         $this->view->linkedProducts           = $linkedProducts;
-        $this->view->unmodifiableProducts     = $unmodifiableProducts;
+        $this->view->unmodifiableProducts     = $this->getUnmodifiableProducts($projectID, $project);
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->allProducts              = $allProducts;
@@ -1696,5 +1656,43 @@ class projectZen extends project
         }
 
         return $kanbanList;
+    }
+
+    /**
+     * 瀑布项目专属规则：
+     *   1.按产品创建阶段的：
+     *     项目中已经关联需求的产品及分支不可以解除关联。
+     *     项目中已经关联迭代的产品不能解除关联。
+     *   2.按项目创建阶段的：
+     *     项目中已经关联需求的产品及分支不可以解除关联。
+     *     项目中已经关联迭代的产品解除后，迭代中的关联产品同步解除关联。
+     *   3.项目至少要关联一个产品。
+     *
+     * Get unmodifiable products.
+     *
+     * @param  int       $projectID
+     * @param  object    $project
+     * @access protected
+     * @return array
+     */
+    protected function getUnmodifiableProducts(int $projectID, object $project): array
+    {
+        $linkedProducts = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
+
+        $unmodifiableProducts = array();
+        if(in_array($project->model, array('waterfall', 'waterfallplus')))
+        {
+            $projectStories    = $this->project->getStoriesByProject($projectID);
+            $projectExecutions = $this->loadModel('execution')->getPairs($projectID);
+            $executionProducts = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($projectExecutions))->fetchGroup('product', 'project');
+
+            foreach($linkedProducts as $productID => $linkedProduct)
+            {
+                if(isset($projectStories[$productID])) $unmodifiableProducts[$productID] = $productID;
+                if(isset($executionProducts[$productID]) && $project->stageBy == 'product') $unmodifiableProducts[$productID] = $productID;
+            }
+        }
+
+        return $unmodifiableProducts;
     }
 }

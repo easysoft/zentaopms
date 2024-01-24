@@ -209,7 +209,7 @@ class productsBox extends wg
             $hasBranch = $product->type != 'normal' && isset($branchGroups[$product->id]);
             $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
 
-            $disabledProduct = !empty($project) && $project->model == 'waterfall' && in_array($product->id, $unmodifiableProducts);
+            $disabledProduct = !empty($project) && in_array($product->id, $unmodifiableProducts);
 
             $branchIdList = '';
             if(isset($product->branches))             $branchIdList = $product->branches;
