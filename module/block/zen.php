@@ -1006,7 +1006,7 @@ class blockZen extends block
         $newPlan = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
-            ->andWhere('begin')->ge(date('Y-m-01'))
+            ->andWhere('begin')->ge(date('Y-m-d'))
             ->andWhere('status')->eq('wait')
             ->orderBy('begin_desc')
             ->fetchGroup('product', 'product');
@@ -1027,7 +1027,7 @@ class blockZen extends block
         $newRelease = $this->dao->select('*')->from(TABLE_RELEASE)
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
-            ->andWhere('date')->lt(date('Y-m-01'))
+            ->andWhere('date')->le(date('Y-m-d'))
             ->orderBy('date_asc')
             ->fetchGroup('product', 'product');
 
