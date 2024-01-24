@@ -2232,6 +2232,7 @@ class metricModel extends model
     public function getNoDataTip($code)
     {
         $today = helper::today();
+        $metric = $this->getByCode($code);
 
         $todayData = $this->metricTao->fetchMetricRecordByDate('all', $today, 1);
         $todayDataWithCode = $this->metricTao->fetchMetricRecordByDate($code, $today, 1);
@@ -2240,6 +2241,10 @@ class metricModel extends model
         /* 度量项定义之后，未到采集时间，可以理解为今天没有任何数据并且该度量项没有任何数据。*/
         /* After the metric item is defined, it is not time to collect, which can be understood as there is no data today and the metric item has no data. */
         if(empty($todayData) && empty($dataWithCode)) return $this->lang->metric->noDataBeforeCollect;
+
+        /* 度量项是在今天采集后定义的，还没到明天的采集时间，但今天不会再采集一次。*/
+        /* The metric is defined after today's collection, not yet at tomorrow's collection time, but not again today. */
+        if(!empty($todayData) && (current($todayData)->date < $metric->createdDate)) return $this->lang->metric->noDataBeforeCollect;
 
         /* 度量项定义之后，已到采集时间，但是没有采集到数据，可以理解为今天收集到了数据但是该度量项没有任何数据。*/
         /* After the metric item is defined, it is time to collect, but no data is collected, which can be understood as data is collected today, but the metric item has no data. */
