@@ -51,6 +51,7 @@ class twinsStory extends wg
                         cell
                         (
                             set::width('1/2'),
+                            setClass('w-1/2'),
                             setID('branchBox'),
                             picker
                             (
@@ -64,6 +65,7 @@ class twinsStory extends wg
                         cell
                         (
                             set::width('1/2'),
+                            setClass('w-1/2'),
                             setID('moduleIdBox'),
                             picker(setID('modules_0'), set::name('modules[0]'), set::items($moduleItems), set::value($defaultModule), set::required(true))
                         )
@@ -107,12 +109,14 @@ class twinsStory extends wg
                         cell
                         (
                             set::width('1/2'),
+                            setClass('w-1/2'),
                             setID('branchBox'),
                             div(setID('branches'), setClass('form-group-wrapper'))
                         ),
                         cell
                         (
                             set::width('1/2'),
+                            setClass('w-1/2'),
                             setID('moduleIdBox'),
                             div(setID('modules'), setClass('form-group-wrapper'))
                         )
