@@ -452,7 +452,7 @@ $config->my->story->dtable->fieldList['id']['type']     = 'id';
 $config->my->story->dtable->fieldList['id']['sortType'] = true;
 
 $config->my->story->dtable->fieldList['title']['name']         = 'title';
-$config->my->story->dtable->fieldList['title']['title']        = common::checkNotCN() ? $lang->SRCommon . ' ' . $lang->my->name : $lang->SRCommon . $lang->my->name;
+$config->my->story->dtable->fieldList['title']['title']        = $lang->story->title;
 $config->my->story->dtable->fieldList['title']['type']         = 'title';
 $config->my->story->dtable->fieldList['title']['nestedToggle'] = true;
 $config->my->story->dtable->fieldList['title']['link']         = array('module' => 'story', 'method' => 'view', 'params' => 'id={id}');
