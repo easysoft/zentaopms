@@ -201,12 +201,10 @@ window.loadExecutionStories = function()
     const getStoryLink = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=' + moduleID + '&storyID=' + storyID + '&number=&type=full&status=active');
     $.get(getStoryLink, function(stories)
     {
-        if(stories)
-        {
-            stories = JSON.parse(stories);
-            const $storyPicker = $('input[name=story]').zui('picker');
-            $storyPicker.render({items: stories});
-        }
+        stories = JSON.parse(stories);
+        const $storyPicker = $('input[name=story]').zui('picker');
+        $storyPicker.render({items: stories});
+        $storyPicker.$.setValue(storyID);
 
         setPreview();
 
@@ -560,11 +558,12 @@ window.showAllModule = function(e)
 {
     const extra         = $(e.target).prop('checked') ? 'allModule' : '';
     const getModuleLink = $.createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=items&fieldID=&extra=' + extra);
-
     $.getJSON(getModuleLink, function(modules)
     {
+        const moduleID      = $('input[name=module]').val();
         const $modulePicker = $('input[name=module]').zui('picker');
         $modulePicker.render({items: modules});
+        $modulePicker.$.setValue(moduleID);
     });
 }
 
