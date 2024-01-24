@@ -20,77 +20,26 @@ jsVar('programTip', $lang->program->tips);
 jsVar('projectID', $project->id);
 jsVar('from', $from);
 
-$projectModelItems = array();
-foreach($lang->project->modelList as $key => $text)
-{
-    if(empty($key)) continue;
-
-    $projectModelItems[] = array
-    (
-        'active'     => ($key == $model),
-        'class'      => 'model-drop',
-        'data-key'   => $key,
-        'data-value' => $text,
-        'text'       => $text
-    );
-}
-
-$productElements = array();
-if($linkedProducts)
-{
-    foreach($linkedProducts as $productID => $product) $productElements[] = formHidden('products[]', $productID);
-}
-
 $labelClass     = $config->project->labelClass[$model];
-$disableParent  = false;
 $delta          = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;
-if(!isset($programList[$project->parent]))
-{
-    $disableParent = true;
-    $programList   = array($project->parent => $program->name);
-}
 
-useData('title', null);
 formPanel
 (
-    to::heading(div
+    to::heading
     (
-        setClass('panel-title text-lg'),
-        $title,
-        $disableModel ?
-        btn
+        div
         (
-            set::id('project-model'),
-            setClass("$labelClass h-5 px-2"),
-            zget($lang->project->modelList, $model, '')
-        ) :
-        dropdown
-        (
+            setClass('panel-title text-lg'),
+            $title,
             btn
             (
                 set::id('project-model'),
                 setClass("$labelClass h-5 px-2"),
                 zget($lang->project->modelList, $model, '')
-            ),
-            set::placement('bottom'),
-            set::menu(array('style' => array('color' => 'var(--color-fore)'))),
-            set::items($projectModelItems)
+            )
         )
-    )),
-    on::click('.addLine', 'addNewLine'),
-    on::click('.removeLine', 'removeLine'),
-    on::click('.project-type-1', 'changeType(1)'),
-    on::click('.project-type-0', 'changeType(0)'),
-    on::click('.project-stageBy-0', 'changeStageBy(0)'),
-    on::click('.project-stageBy-1', 'changeStageBy(1)'),
-    on::change('[name^=products]', 'productChange'),
-    on::change('[name^=branch]', 'branchChange'),
-    on::change('#parent', 'setParentProgram'),
-    on::change('#begin', 'computeWorkDays'),
-    on::change('#end', 'computeWorkDays'),
-    on::change('[name=delta]', 'setDate'),
-    on::change('[name=future]', 'toggleBudget'),
-    on::change('[name=newProduct]', 'addProduct'),
+    ),
+    on::change('[name=delta]', 'computeenddate'),
     formHidden('parent', $project->parent),
     formHidden('model', $project->model),
     formHidden('hasProduct', $project->hasProduct),
@@ -170,7 +119,6 @@ formPanel
         (
             set::name('desc'),
             html($project->desc),
-            set::placeholder($lang->project->editorPlaceholder)
         )
     ),
     formRow
@@ -183,11 +131,13 @@ formPanel
             set::control('radioList'),
             set::items($lang->project->aclList),
             $programID ? set::items($lang->project->subAclList) : set::items($lang->project->aclList),
+            on::change()->toggleClass('.whitelistBox', 'hidden', "\$element.find('[name=acl]:checked').val() === 'open'"),
             set::value($project->acl)
         )
     ),
     formGroup
     (
+        setClass('whitelistBox' . ($project->acl == 'open' ? ' hidden' : '')),
         set::width('1/2'),
         set::label($lang->whitelist),
         picker
@@ -197,8 +147,7 @@ formPanel
             set::items($users),
             set::multiple(true)
         )
-    ),
-    $productElements ? $productElements : null
+    )
 );
 
 useData('title', $title);

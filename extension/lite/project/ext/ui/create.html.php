@@ -35,21 +35,7 @@ formPanel
             $lang->project->copy
         )
     ),
-    on::click('.addLine', 'addNewLine'),
-    on::click('.removeLine', 'removeLine'),
-    on::click('.project-type-1', 'changeType(1)'),
-    on::click('.project-type-0', 'changeType(0)'),
-    on::click('.project-stageBy-0', 'changeStageBy(0)'),
-    on::click('.project-stageBy-1', 'changeStageBy(1)'),
-    on::change('[name^=products]', 'productChange'),
-    on::change('[name^=branch]', 'branchChange'),
-    on::change('#parent', 'setParentProgram'),
-    on::change('[name=multiple]', 'toggleMultiple'),
-    on::change('#begin', 'computeWorkDays'),
-    on::change('#end', 'computeWorkDays'),
-    on::change('[name=delta]', 'setDate'),
-    on::change('[name=future]', 'toggleBudget'),
-    on::change('[name=newProduct]', 'addProduct'),
+    on::change('[name=delta]', 'computeEndDate'),
     formGroup
     (
         set::width('1/2'),
@@ -63,7 +49,7 @@ formPanel
         set::width('1/4'),
         set::name('PM'),
         set::label($lang->project->PM),
-        set::items($pmUsers)
+        set::items($PMUsers)
     ),
     formRow
     (
@@ -79,6 +65,7 @@ formPanel
                     set::name('begin'),
                     set('id', 'begin'),
                     set::value(date('Y-m-d')),
+                    set::value($copyProjectID ? $copyProject->begin : ''),
                     set::required(true)
                 ),
                 $lang->project->to,
@@ -87,6 +74,7 @@ formPanel
                     set::name('end'),
                     set('id', 'end'),
                     set::placeholder($lang->project->end),
+                    set::value($copyProjectID ? $copyProject->end : ''),
                     set::required(true)
                 )
             )
@@ -118,11 +106,13 @@ formPanel
             set::label($lang->project->acl),
             set::control('radioList'),
             $programID ? set::items($lang->project->subAclList) : set::items($lang->project->aclList),
+            on::change()->toggleClass('.whitelistBox', 'hidden', "\$element.find('[name=acl]:checked').val() === 'open'"),
             set::value($copyProjectID ? $copyProject->acl : 'private')
         )
     ),
     formGroup
     (
+        setClass('whitelistBox' . ($copyProjectID && $copyProject->acl == 'open' ? ' hidden' : '')),
         set::width('1/2'),
         set::label($lang->whitelist),
         picker
@@ -135,7 +125,7 @@ formPanel
     formHidden('parent', 0),
     formHidden('model', $model),
     formHidden('vision', 'lite'),
-    formHidden('hasProduct', 1)
+    formHidden('hasProduct', 0)
 );
 
 $copyProjectsBox = array();
