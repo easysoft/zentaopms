@@ -948,6 +948,12 @@ class actionTao extends actionModel
             $kanbanID = $this->dao->select('kanban')->from($table)->where('id')->eq($action->objectID)->fetch('kanban');
             $params   =  sprintf($vars, $kanbanID);
         }
+        elseif($action->objectType == 'module' && $action->action == 'undeleted')
+        {
+            $table    = $this->config->objectTables[$action->objectType];
+            $moduleID = $this->dao->select('root')->from($table)->where('id')->eq($action->objectID)->fetch('root');
+            $params = sprintf($vars, $moduleID);
+        }
         else
         {
             $params = sprintf($vars, $action->objectID);
