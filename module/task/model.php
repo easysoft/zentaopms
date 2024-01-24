@@ -640,12 +640,12 @@ class taskModel extends model
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $this->updateKanbanCell($task->id, $output, $oldTask->execution);
+        $this->updateKanbanCell($oldTask->id, $output, $oldTask->execution);
 
         $changes = common::createChanges($oldTask, $task);
         if($changes || $this->post->comment != '')
         {
-            $actionID = $this->loadModel('action')->create('task', $task->id, 'Canceled', $this->post->comment);
+            $actionID = $this->loadModel('action')->create('task', $oldTask->id, 'Canceled', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
 
