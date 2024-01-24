@@ -96,4 +96,4 @@ $config->productplan->dtable->fieldList['actions']['width']    = 'auto';
 $config->productplan->dtable->fieldList['actions']['type']     = 'actions';
 $config->productplan->dtable->fieldList['actions']['minWidth'] = 200;
 $config->productplan->dtable->fieldList['actions']['list']     = $config->productplan->actionList;
-$config->productplan->dtable->fieldList['actions']['menu']     = array(array('start|activate|close', 'other' => array('finish', 'close', 'activate')), 'createExecution', 'divider', 'linkStory', 'linkBug', 'edit', 'more' => array('create', 'delete'));
+$config->productplan->dtable->fieldList['actions']['menu']     = array(array('start|finish|close|activate', 'other' => array('finish', 'close', 'activate')), 'createExecution', 'divider', 'linkStory', 'linkBug', 'edit', 'more' => array('create', 'delete'));

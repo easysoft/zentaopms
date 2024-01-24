@@ -35,6 +35,18 @@ toolbar
 
 $cols      = $this->loadModel('datatable')->getSetting('productplan');
 $tableData = initTableData($plans, $cols, $this->productplan);
+foreach($tableData as $plan)
+{
+    $otherActions = array_filter(array_map(function($action) use($plan)
+    {
+        if($plan->status == 'doing' && (str_contains($action, 'close') || str_contains($action, 'activate'))) return $action;
+        if($plan->status == 'done' && str_contains($action, 'activate')) return $action;
+        if($plan->status == 'closed' && str_contains($action, 'close')) return $action;
+        if($plan->status == 'wait') return $action;
+        return null;
+    }, explode(',', str_replace('other:', '', $plan->actions[1]))));
+    $plan->actions[1] = 'other:' . implode(',', $otherActions);
+}
 
 $canBatchEdit         = common::hasPriv('productplan', 'batchEdit');
 $canBatchChangeStatus = common::hasPriv('productplan', 'batchChangeStatus');

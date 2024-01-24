@@ -670,6 +670,12 @@ function initTableActions(array &$fieldList, string $actionMenu): void
  */
 function initItemActions(object &$item, string $actionMenu, array $actionList, object $model): bool
 {
+    if($actionMenu == 'divider')
+    {
+        $item->actions[] = array('name' => 'divider', 'type' => 'divider');
+        return true;
+    }
+
     global $app;
     $module = $model->getModuleName();
     $method = '';
