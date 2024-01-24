@@ -430,6 +430,7 @@ class docMenu extends wg
         $this->setMenuTreeProps();
         $title     = $this->getTitle();
         $menuLink  = $this->prop('menuLink', '');
+        $objectID  = $this->prop('objectID', 0);
         $treeProps = set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover')));
 
         $isInSidebar = $this->parent instanceof sidebar;
@@ -452,6 +453,7 @@ class docMenu extends wg
                 (
                     set::id('docDropmenu'),
                     set::menuID('docDropmenuMenu'),
+                    set::objectID($objectID),
                     set::text($title),
                     set::url($menuLink)
                 ) : null,
