@@ -9,7 +9,7 @@ $fields->field('product')
     ->control('inputGroup')
     ->items(false)
     ->itemBegin('product')->control('picker')->items(data('products'))->required(true)->value(empty(data('case.product')) ? data('productID') : data('case.product'))->itemEnd()
-    ->item(data('product.type') == 'normal' ? null : field('branch')->control('picker')->width('100px')->items(data('branches'))->value(data('branch')));
+    ->item(data('product.type') == 'normal' ? null : field('branch')->control('picker')->width('100px')->items(data('branches'))->value((int)data('branch')));
 
 $fields->field('module')
     ->controlBegin('module')
