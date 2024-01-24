@@ -99,7 +99,8 @@ $config->admin->navsGroup['model']['common']      = ',project,build,issue,risk,o
 $config->admin->navsGroup['template']['type']     = ',baseline,';
 if($config->vision == 'lite') $config->admin->navsGroup['feature']['my'] .= 'task,';
 
-global $lang;
+global $lang, $app;
+$app->loadLang('user');
 $config->admin->checkWeak = new stdclass();
 $config->admin->checkWeak->actionList = array();
 $config->admin->checkWeak->actionList['edit']['icon']        = 'edit';

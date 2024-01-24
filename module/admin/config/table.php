@@ -1,6 +1,7 @@
 <?php
 global $lang, $app;
 $app->loadLang('admin');
+$app->loadLang('user');
 $config->admin->checkWeak->dtable = new stdclass();
 $config->admin->checkWeak->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->admin->checkWeak->dtable->fieldList['id']['type']     = 'ID';
