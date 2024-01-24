@@ -144,7 +144,7 @@ else
     foreach($modulePath as $key => $module)
     {
         $moduleTitle   .= $module->name;
-        $moduleItems[]  = a(set::href(createLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id")), $module->name) ?? span($module->name);
+        $moduleItems[]  = a(set::href(createLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id")), set('data-app', $app->tab), $module->name) ?? span($module->name);
         if(isset($modulePath[$key + 1]))
         {
             $moduleTitle   .= '/';
