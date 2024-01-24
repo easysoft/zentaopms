@@ -71,13 +71,13 @@ $config->programplan->custom = new stdclass();
 $config->programplan->list = new stdclass();
 if(isset($config->setPercent) and $config->setPercent == 1)
 {
-    $config->programplan->custom->createFields  = 'PM,percent,attribute,acl,milestone';
+    $config->programplan->custom->createFields  = 'code,PM,percent,attribute,acl,milestone';
     $config->programplan->custom->defaultFields = $config->programplan->custom->createFields;
     $config->programplan->list->customCreateFields    = 'PM,percent,attribute,acl,milestone,realBegan,realEnd';
 }
 else
 {
-    $config->programplan->custom->createFields  = 'PM,attribute,acl,milestone';
+    $config->programplan->custom->createFields  = 'code,PM,attribute,acl,milestone';
     $config->programplan->custom->defaultFields = $config->programplan->custom->createFields;
     $config->programplan->list->customCreateFields    = 'PM,attribute,acl,milestone,realBegan,realEnd';
 }
@@ -85,7 +85,7 @@ else
 $config->programplan->list->customAgilePlusCreateFields = 'PM,milestone,acl,desc,attribute';
 
 $config->programplan->customAgilePlus = new stdclass();
-$config->programplan->customAgilePlus->createFields  = 'PM,milestone,acl,desc,attribute';
+$config->programplan->customAgilePlus->createFields  = 'code,PM,milestone,acl,desc,attribute';
 $config->programplan->customAgilePlus->defaultFields = $config->programplan->customAgilePlus->createFields;
 
 $config->programplan->custom->customGanttFields = 'PM,deadline,status,realBegan,realEnd,progress,taskProgress,estimate,consumed,delay,delayDays';

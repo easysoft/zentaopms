@@ -98,6 +98,7 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
 
     $fields['attribute']['required'] = $fields['acl']['required'] = true;
+    if(isset($requiredFields['code'])) $fields['code']['required'] = true;
 
     $renderFields = implode(',', array_keys($requiredFields));
     $renderFields = ",$renderFields,$showFields,";

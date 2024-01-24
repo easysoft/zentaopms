@@ -60,7 +60,7 @@ class programplanZen extends programplan
         $names  = $codes = array();
         $plans  = form::batchData($fields)->get();
         $orders = $this->programplan->computeOrders(array(), $plans);
-        foreach($plans as $plan)
+        foreach($plans as $rowID => $plan)
         {
             $plan->days       = helper::diffDate($plan->end, $plan->begin) + 1;
             $plan->project    = $projectID;
@@ -77,11 +77,11 @@ class programplanZen extends programplan
             }
 
             /* Check duplicated names to avoid to save same names. */
-            if(in_array($plan->name, $names)) dao::$errors['name'] = empty($plan->type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);
+            if(in_array($plan->name, $names)) dao::$errors["name[{$rowID}]"] = empty($plan->type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);
             if(isset($plan->code))
             {
-                if(in_array($plan->code, $codes)) dao::$errors['code'] = sprintf($this->lang->error->repeat, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code, $plan->code);
-                if(empty($plan->code))            dao::$errors['code'] = sprintf($this->lang->error->notempty, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code);
+                if(in_array($plan->code, $codes)) dao::$errors["code[{$rowID}]"] = sprintf($this->lang->error->repeat, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code, $plan->code);
+                if(!empty($this->config->setCode) && empty($plan->code) && strpos(",{$this->config->execution->create->requiredFields},", ',code,') !== false) dao::$errors["code[{$rowID}]"] = sprintf($this->lang->error->notempty, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code);
             }
 
             $totalPercent += $plan->percent;
@@ -90,7 +90,7 @@ class programplanZen extends programplan
 
             $this->checkLegallyDate($plan, $project, !empty($parentStage) ? $parentStage : null);
         }
-        if(!empty($this->config->setPercent) and $totalPercent > 100) dao::$errors['percent'] = $this->lang->programplan->error->percentOver;
+        if(!empty($this->config->setPercent) and $totalPercent > 100) dao::$errors["percent[$rowID]"] = $this->lang->programplan->error->percentOver;
         return $plans;
     }
 
@@ -276,6 +276,7 @@ class programplanZen extends programplan
         }
 
         if(empty($this->config->setPercent)) unset($visibleFields['percent'], $requiredFields['percent']);
+        if(empty($this->config->setCode)) unset($visibleFields['code'], $requiredFields['code']);
 
         return array($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields);
     }
