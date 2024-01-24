@@ -74,6 +74,8 @@ panel
                     set::name('year'),
                     set::value($currentYear),
                     set::items($yearList),
+                    set::required(true),
+                    set::className('w-20'),
                     on::change('changeYear')
                 )
             )
