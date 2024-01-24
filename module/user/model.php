@@ -1640,7 +1640,7 @@ class userModel extends model
     {
         static $allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders;
 
-        if(!$allProducts || $force) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy,reviewer,PMT')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
+        if(!$allProducts || $force) $allProducts = $this->dao->select('id,PO,QD,RD,acl,whitelist,program,createdBy,reviewer,PMT')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
         if(!$allProjects || $force) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
         if(!$allPrograms || $force) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
         if(!$allSprints  || $force) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id');
