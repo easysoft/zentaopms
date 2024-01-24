@@ -72,11 +72,9 @@ formPanel
             set::name('PM'),
             set::items($PMUsers),
             set::value($plan->PM),
-            set::required(true)
         )
     ),
-    isset($config->setPercent) && $config->setPercent == 1 ?
-    formGroup
+    isset($config->setPercent) && $config->setPercent == 1 ? formGroup
     (
         set::label($lang->programplan->percent),
         set::width('2/3'),
