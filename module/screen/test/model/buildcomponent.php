@@ -4,15 +4,18 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/screen.class.php';
 
 zdTable('product')->gen(2);
-/**
-title=测试 screenModel->buildComponent();
-cid=1
-pid=1
 
-有图表id的元素判断是否正常生成了刻度和数据。 >> 1
-判断是否正常生成了Select组件                 >> 1
-非列表的组件判断是否给予了默认的属性。       >> 1
-列表的组件判断是否给予了默认的属性。         >> 1
+/**
+
+title=测试 screenModel->buildComponent();
+timeout=0
+cid=1
+
+- 有图表id的元素判断是否正常生成了刻度和数据。 @1
+- 判断是否正常生成了Select组件。 @1
+- 非列表的组件判断是否给予了默认的属性。 @1
+- 列表的组件判断是否给予了默认的属性。 @1
+
 */
 
 $screen = new screenTest();
