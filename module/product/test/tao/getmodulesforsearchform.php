@@ -70,6 +70,6 @@ r($product->getModulesForSearchForm(4, $products, 'all', 4)[13]) && p() && e('/�
 r($product->getModulesForSearchForm(4, $products, '0',   4)[13]) && p() && e('/主干/这是一个模块13'); // 项目视图下，传入分支产品编号，传入项目编号，并查询主干分支。
 r($product->getModulesForSearchForm(4, $products, '1',   4)[13]) && p() && e('/主干/这是一个模块13'); // 项目视图下，传入分支产品编号，传入项目编号，并查询1分支。
 
-r($product->getModulesForSearchForm(0, array(7 => $products[7]), 'all', 7)[25]) && p() && e('产品7/分支11/这是一个模块25'); // 项目视图下，不传入产品编号，传入项目编号，并查询所有分支。
-r($product->getModulesForSearchForm(0, array(7 => $products[7]), '0',   7)[25]) && p() && e('产品7/分支11/这是一个模块25'); // 项目视图下，不传入产品编号，传入项目编号，并查询主干分支。
-r($product->getModulesForSearchForm(0, array(7 => $products[7]), '10',  7)[25]) && p() && e('产品7/分支11/这是一个模块25'); // 项目视图下，不传入产品编号，传入项目编号，并查询10分支。
+r($product->getModulesForSearchForm(0, array(7 => $products[7]), 'all', 7)[25]) && p() && e('产品7/主干/这是一个模块25'); // 项目视图下，不传入产品编号，传入项目编号，并查询所有分支。
+r($product->getModulesForSearchForm(0, array(7 => $products[7]), '0',   7)[25]) && p() && e('产品7/主干/这是一个模块25'); // 项目视图下，不传入产品编号，传入项目编号，并查询主干分支。
+r($product->getModulesForSearchForm(0, array(7 => $products[7]), '10',  7)[25]) && p() && e('产品7/主干/这是一个模块25'); // 项目视图下，不传入产品编号，传入项目编号，并查询10分支。
