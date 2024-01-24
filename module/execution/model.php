@@ -562,7 +562,7 @@ class executionModel extends model
                 }
                 else
                 {
-                    $parentAttr = dao::isError() ? '' : $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
+                    $parentAttr = dao::isError() ? $attribute : $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
                 }
 
                 if($parentAttr && $parentAttr != $attribute && $parentAttr != 'mix')
