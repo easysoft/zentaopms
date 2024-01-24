@@ -242,17 +242,17 @@ detailBody
                             !empty($task->team) && $task->mode == 'linear' ? set::disabled(true) : null
                         )
                     ),
-                    !empty($task->team) && !empty($task->mode) ? div
+                    div
                     (
                         btn
                         (
                             $lang->task->team,
-                            setClass('input-group-btn team-group'),
+                            setClass('input-group-btn team-group', empty($task->team) && (!$task->mode) ? 'hidden' : ''),
                             set::url('#modalTeam'),
                             setData('toggle', 'modal'),
                             $task->mode == 'multi' ? on::click('disableMembers') : null
                         )
-                    ) : null
+                    )
                 )
             ),
             item
