@@ -71,7 +71,8 @@ $config->program->productview->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->productview->dtable->fieldList['name']['checkbox']     = true;
 $config->program->productview->dtable->fieldList['name']['show']         = true;
 $config->program->productview->dtable->fieldList['name']['sortType']     = true;
-$config->program->productview->dtable->fieldList['name']['minWidth']     = 350;
+$config->program->productview->dtable->fieldList['name']['fixed']        = 'left';
+$config->program->productview->dtable->fieldList['name']['width']        = 356;
 $config->program->productview->dtable->fieldList['name']['group']        = 'g1';
 
 $config->program->productview->dtable->fieldList['PM']['name']  = 'PM';
@@ -198,10 +199,11 @@ $config->program->browse->dtable->fieldList = array();
 
 $config->program->browse->dtable->fieldList['name']['name']         = 'name';
 $config->program->browse->dtable->fieldList['name']['title']        = $lang->nameAB;
-$config->program->browse->dtable->fieldList['name']['width']        = 200;
+$config->program->browse->dtable->fieldList['name']['width']        = 356;
 $config->program->browse->dtable->fieldList['name']['type']         = 'link';
 $config->program->browse->dtable->fieldList['name']['link']         = "RAWJS<function(info){const {row, col} = info; if(row.data.type == 'project') return {url:$.createLink('project', 'index', 'projectID=' + row.data.id)}; if(row.data.type == 'program') return {url:$.createLink('program', 'project', 'programID=' + row.data.id)};}>RAWJS";
 $config->program->browse->dtable->fieldList['name']['flex']         = 1;
+$config->program->browse->dtable->fieldList['name']['fixed']        = 'left';
 $config->program->browse->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->browse->dtable->fieldList['name']['checkbox']     = true;
 $config->program->browse->dtable->fieldList['name']['sortType']     = true;
