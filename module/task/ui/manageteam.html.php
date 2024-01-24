@@ -43,7 +43,7 @@ else
     formPanel
     (
         setID('teamForm'),
-        set::url(inlink('manageTeam', "executionID=$task->execution&taskID=$task->id")),
+        set::action(inlink('manageTeam', "executionID=$task->execution&taskID=$task->id")),
         set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
         h::table
         (
