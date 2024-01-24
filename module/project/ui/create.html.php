@@ -50,14 +50,14 @@ formGridPanel
     to::titleSuffix($modeDropdown),
     to::headingActions
     (
-        a
+        btn
         (
-            icon('copy', setClass('mr-1')),
-            setClass('primary-ghost'),
-            setData(array('destoryOnHide' => true, 'toggle' => 'modal', 'target' => '#copyProjectModal')),
+            set::icon('copy'),
+            setClass('primary-ghost size-md'),
+            toggle::modal(array('target' => '#copyProjectModal', 'destoryOnHide' => true)),
             $lang->project->copy
         ),
-        divider(setClass('py-2 my-0.5 mx-4 self-center'))
+        divider(setClass('h-4 mr-4 ml-2 self-center'))
     ),
     on::click('[name=name], [name=code], [name=end], [name=days], [data-name="parent"] .pick *', 'removeTips'),
     on::click('[type=submit]', 'removeAllTips'),
@@ -102,33 +102,30 @@ else
     );
 }
 
-modalTrigger
+modal
 (
-    modal
+    set::id('copyProjectModal'),
+    to::header
     (
-        set::id('copyProjectModal'),
-        to::header
+        span
         (
-            span
+            h4
             (
-                h4
-                (
-                    set::className('copy-title'),
-                    $lang->project->copyTitle
-                )
-            ),
-            input
-            (
-                set::name('projectName'),
-                set::placeholder($lang->project->searchByName)
+                set::className('copy-title'),
+                $lang->project->copyTitle
             )
         ),
-        div
+        input
         (
-            set::id('copyProjects'),
-            setClass('flex items-center flex-wrap'),
-            $copyProjectsBox
+            set::name('projectName'),
+            set::placeholder($lang->project->searchByName)
         )
+    ),
+    div
+    (
+        set::id('copyProjects'),
+        setClass('flex items-center flex-wrap'),
+        $copyProjectsBox
     )
 );
 
