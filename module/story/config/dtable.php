@@ -237,30 +237,35 @@ $config->story->dtable->fieldList['source']['sortType'] = true;
 $config->story->dtable->fieldList['source']['width']    = '90';
 $config->story->dtable->fieldList['source']['group']    = 10;
 
-$config->story->dtable->fieldList['sourceNote']['name']  = 'sourceNote';
-$config->story->dtable->fieldList['sourceNote']['title'] = $lang->story->sourceNote;
-$config->story->dtable->fieldList['sourceNote']['width'] = '90';
-$config->story->dtable->fieldList['sourceNote']['group'] = 10;
+$config->story->dtable->fieldList['sourceNote']['name']     = 'sourceNote';
+$config->story->dtable->fieldList['sourceNote']['title']    = $lang->story->sourceNote;
+$config->story->dtable->fieldList['sourceNote']['width']    = '90';
+$config->story->dtable->fieldList['sourceNote']['sortType'] = true;
+$config->story->dtable->fieldList['sourceNote']['group']    = 10;
 
-$config->story->dtable->fieldList['feedbackBy']['name']  = 'feedbackBy';
-$config->story->dtable->fieldList['feedbackBy']['title'] = $lang->story->feedbackBy;
-$config->story->dtable->fieldList['feedbackBy']['type']  = 'user';
-$config->story->dtable->fieldList['feedbackBy']['group'] = 10;
+$config->story->dtable->fieldList['feedbackBy']['name']     = 'feedbackBy';
+$config->story->dtable->fieldList['feedbackBy']['title']    = $lang->story->feedbackBy;
+$config->story->dtable->fieldList['feedbackBy']['type']     = 'user';
+$config->story->dtable->fieldList['feedbackBy']['sortType'] = true;
+$config->story->dtable->fieldList['feedbackBy']['group']    = 10;
 
-$config->story->dtable->fieldList['notifyEmail']['name']  = 'notifyEmail';
-$config->story->dtable->fieldList['notifyEmail']['title'] = $lang->story->notifyEmail;
-$config->story->dtable->fieldList['notifyEmail']['width'] = '100';
-$config->story->dtable->fieldList['notifyEmail']['group'] = 11;
+$config->story->dtable->fieldList['notifyEmail']['name']     = 'notifyEmail';
+$config->story->dtable->fieldList['notifyEmail']['title']    = $lang->story->notifyEmail;
+$config->story->dtable->fieldList['notifyEmail']['width']    = '100';
+$config->story->dtable->fieldList['notifyEmail']['sortType'] = true;
+$config->story->dtable->fieldList['notifyEmail']['group']    = 11;
 
-$config->story->dtable->fieldList['mailto']['name']  = 'mailto';
-$config->story->dtable->fieldList['mailto']['title'] = $lang->story->mailto;
-$config->story->dtable->fieldList['mailto']['width'] = '100';
-$config->story->dtable->fieldList['mailto']['group'] = 11;
+$config->story->dtable->fieldList['mailto']['name']     = 'mailto';
+$config->story->dtable->fieldList['mailto']['title']    = $lang->story->mailto;
+$config->story->dtable->fieldList['mailto']['width']    = '100';
+$config->story->dtable->fieldList['mailto']['sortType'] = true;
+$config->story->dtable->fieldList['mailto']['group']    = 11;
 
-$config->story->dtable->fieldList['version']['name']  = 'version';
-$config->story->dtable->fieldList['version']['title'] = $lang->story->version;
-$config->story->dtable->fieldList['version']['type']  = 'number';
-$config->story->dtable->fieldList['version']['group'] = 11;
+$config->story->dtable->fieldList['version']['name']     = 'version';
+$config->story->dtable->fieldList['version']['title']    = $lang->story->version;
+$config->story->dtable->fieldList['version']['type']     = 'number';
+$config->story->dtable->fieldList['version']['sortType'] = true;
+$config->story->dtable->fieldList['version']['group']    = 11;
 
 $config->story->dtable->fieldList['actions']['name']     = 'actions';
 $config->story->dtable->fieldList['actions']['title']    = $lang->actions;
