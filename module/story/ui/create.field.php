@@ -61,6 +61,7 @@ if(isset($createFields['URS']))
 
 $fields->field('reviewer')
     ->width('full')
+    ->required()
     ->control('inputGroup')
     ->id('reviewerBox')
     ->items(false)
