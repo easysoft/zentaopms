@@ -58,6 +58,7 @@ common:
 	# delete the unused files.
 	find zentaopms -name .gitkeep |xargs rm -fr
 	find zentaopms -name tests |xargs rm -fr
+	find zentaopms -name test |xargs rm -fr
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
 zentaoxx:
