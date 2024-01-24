@@ -190,9 +190,9 @@ class form extends formBase
         return btn
         (
             setClass('gray-300-outline rounded-full btn-custom-form'),
-            setData(array('title' => $lang->fieldDisplaySetting, 'tip' => $lang->fieldSettingTip, 'customUrl' => $customUrl)),
+            setData(array('title' => $lang->fieldDisplaySetting, 'tip' => $lang->fieldSettingTip, 'customUrl' => $customUrl, 'saveText' => $lang->save, 'cancelText' => $lang->cancel, 'resetText' => $lang->restore)),
             set::icon('cog-outline'),
-            bind::click('zui.FormSetting.show({element: event.target, tip: options.tip, title: options.title, customUrl: options.customUrl});'),
+            on::click()->call('zui.FormSetting.show', jsRaw('$.extend({element: $element[0]}, $element.data())')),
             is_array($customBtn) ? set($customBtn) : null
         );
     }

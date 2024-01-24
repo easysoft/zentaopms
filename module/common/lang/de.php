@@ -143,6 +143,9 @@ $lang->noticeOkFile    = 'Aus Sicherheitsgrü nden muss Ihr Adminkonto bestätig
 $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 $lang->allProgress     = 'All Progress';
 
+$lang->fieldDisplaySetting = 'Einstellungen der Feldanzeige';
+$lang->fieldSettingTip     = 'Die folgenden Felder sind standardmäßig eingeklappt, klicken Sie auf die Schaltfläche "Weitere Felder anzeigen", um die Ansicht zu erweitern. Wenn Sie möchten, dass einige Felder nicht standardmäßig eingeklappt sind, können Sie dies mit einem Stift festlegen.';
+
 $lang->fieldDisplaySetting = 'Field Display Setting';
 $lang->fieldSettingTip     = 'The following fields are collapsed by default, click on the "Show more fields" button to expand the view, if you want some fields not to be collapsed by default, you can fix it with a pin.';
 
