@@ -520,11 +520,10 @@
                             }
                             else if('alert' in data.load)
                             {
-                                zui.Modal.alert(data.load.alert);
-                                if(data.load.locate)
+                                zui.Modal.alert(data.load.alert).then(function()
                                 {
-                                    setTimeout(function(){openUrl(data.load.locate);}, 1500);
-                                }
+                                    if(data.load.locate) openUrl(data.load.locate);
+                                });
                             }
                             else
                             {
