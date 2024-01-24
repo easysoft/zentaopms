@@ -664,8 +664,8 @@ class storyModel extends model
             {
                 foreach(explode(',', trim($oldStory->twins, ',')) as $twinID)
                 {
-                    $this->storyTao->doCreateSpec($twinID, $story, $story->files);
-                    if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($twinID, $story->reviewer, $story->version);
+                    $this->storyTao->doCreateSpec((int)$twinID, $story, $story->files);
+                    if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer((int)$twinID, $story->reviewer, $story->version);
                 }
             }
 
