@@ -138,7 +138,7 @@ detailBody
                     set::manageLink(createLink('tree', 'browse', "rootID={$product->id}&view=bug&currentModuleID=0&branch={$bug->branch}"))
                 )
             ),
-            item
+            !$product->shadow ? item
             (
                 set::trClass($product->shadow && isset($project) && empty($project->multiple) ? 'hidden' : ''),
                 set::name($lang->bug->plan),
@@ -154,7 +154,7 @@ detailBody
                         setData('max_drop_width', '100%')
                     )
                 )
-            ),
+            ) : null,
             item
             (
                 set::name($lang->bug->fromCase),
