@@ -154,12 +154,13 @@ $config->product->all->dtable->fieldList['name']['link']         = helper::creat
 $config->product->all->dtable->fieldList['name']['sortType']     = true;
 $config->product->all->dtable->fieldList['name']['group']        = 'g1';
 
-$config->product->all->dtable->fieldList['productLine']['name']  = 'productLine';
-$config->product->all->dtable->fieldList['productLine']['title'] = $lang->product->belongingLine;
-$config->product->all->dtable->fieldList['productLine']['width'] = 136;
-$config->product->all->dtable->fieldList['productLine']['type']  = 'format';
-$config->product->all->dtable->fieldList['productLine']['show']  = true;
-$config->product->all->dtable->fieldList['productLine']['group'] = 'g2';
+$config->product->all->dtable->fieldList['productLine']['name']     = 'productLine';
+$config->product->all->dtable->fieldList['productLine']['title']    = $lang->product->belongingLine;
+$config->product->all->dtable->fieldList['productLine']['width']    = 136;
+$config->product->all->dtable->fieldList['productLine']['type']     = 'format';
+$config->product->all->dtable->fieldList['productLine']['show']     = true;
+$config->product->all->dtable->fieldList['productLine']['sortType'] = true;
+$config->product->all->dtable->fieldList['productLine']['group']    = 'g2';
 
 $config->product->all->dtable->fieldList['PO']['name']     = 'PO';
 $config->product->all->dtable->fieldList['PO']['title']    = $lang->product->manager;
@@ -188,7 +189,7 @@ $config->product->all->dtable->fieldList['draftStories']['title']    = $lang->pr
 $config->product->all->dtable->fieldList['draftStories']['width']    = 64;
 $config->product->all->dtable->fieldList['draftStories']['type']     = 'number';
 $config->product->all->dtable->fieldList['draftStories']['show']     = true;
-$config->product->all->dtable->fieldList['draftStories']['sortType'] = false;
+$config->product->all->dtable->fieldList['draftStories']['sortType'] = true;
 $config->product->all->dtable->fieldList['draftStories']['group']    = 'g4';
 
 $config->product->all->dtable->fieldList['activeStories']['name']     = 'activeStories';
@@ -196,7 +197,7 @@ $config->product->all->dtable->fieldList['activeStories']['title']    = $lang->p
 $config->product->all->dtable->fieldList['activeStories']['width']    = 64;
 $config->product->all->dtable->fieldList['activeStories']['type']     = 'number';
 $config->product->all->dtable->fieldList['activeStories']['show']     = true;
-$config->product->all->dtable->fieldList['activeStories']['sortType'] = false;
+$config->product->all->dtable->fieldList['activeStories']['sortType'] = true;
 $config->product->all->dtable->fieldList['activeStories']['group']    = 'g4';
 
 $config->product->all->dtable->fieldList['changingStories']['name']     = 'changingStories';
@@ -204,7 +205,7 @@ $config->product->all->dtable->fieldList['changingStories']['title']    = $lang-
 $config->product->all->dtable->fieldList['changingStories']['width']    = 64;
 $config->product->all->dtable->fieldList['changingStories']['type']     = 'number';
 $config->product->all->dtable->fieldList['changingStories']['show']     = true;
-$config->product->all->dtable->fieldList['changingStories']['sortType'] = false;
+$config->product->all->dtable->fieldList['changingStories']['sortType'] = true;
 $config->product->all->dtable->fieldList['changingStories']['group']    = 'g4';
 
 $config->product->all->dtable->fieldList['reviewingStories']['name']     = 'reviewingStories';
@@ -212,7 +213,7 @@ $config->product->all->dtable->fieldList['reviewingStories']['title']    = $lang
 $config->product->all->dtable->fieldList['reviewingStories']['width']    = 64;
 $config->product->all->dtable->fieldList['reviewingStories']['type']     = 'number';
 $config->product->all->dtable->fieldList['reviewingStories']['show']     = true;
-$config->product->all->dtable->fieldList['reviewingStories']['sortType'] = false;
+$config->product->all->dtable->fieldList['reviewingStories']['sortType'] = true;
 $config->product->all->dtable->fieldList['reviewingStories']['group']    = 'g4';
 
 $config->product->all->dtable->fieldList['totalStories']['name']     = 'totalStories';
@@ -220,7 +221,7 @@ $config->product->all->dtable->fieldList['totalStories']['title']    = $lang->pr
 $config->product->all->dtable->fieldList['totalStories']['width']    = 92;
 $config->product->all->dtable->fieldList['totalStories']['minWidth'] = 100;
 $config->product->all->dtable->fieldList['totalStories']['type']     = 'number';
-$config->product->all->dtable->fieldList['totalStories']['sortType'] = false;
+$config->product->all->dtable->fieldList['totalStories']['sortType'] = true;
 $config->product->all->dtable->fieldList['totalStories']['group']    = 'g4';
 
 $config->product->all->dtable->fieldList['storyCompleteRate']['name']     = 'storyCompleteRate';
@@ -236,7 +237,7 @@ $config->product->all->dtable->fieldList['plans']['title']    = $lang->product->
 $config->product->all->dtable->fieldList['plans']['width']    = 64;
 $config->product->all->dtable->fieldList['plans']['type']     = 'number';
 $config->product->all->dtable->fieldList['plans']['show']     = true;
-$config->product->all->dtable->fieldList['plans']['sortType'] = false;
+$config->product->all->dtable->fieldList['plans']['sortType'] = true;
 $config->product->all->dtable->fieldList['plans']['group']    = 'g5';
 
 $config->product->all->dtable->fieldList['executions']['name']     = 'executions';
@@ -262,7 +263,7 @@ $config->product->all->dtable->fieldList['unresolvedBugs']['width']    = 64;
 $config->product->all->dtable->fieldList['unresolvedBugs']['minWidth'] = 86;
 $config->product->all->dtable->fieldList['unresolvedBugs']['type']     = 'number';
 $config->product->all->dtable->fieldList['unresolvedBugs']['show']     = true;
-$config->product->all->dtable->fieldList['unresolvedBugs']['sortType'] = false;
+$config->product->all->dtable->fieldList['unresolvedBugs']['sortType'] = true;
 $config->product->all->dtable->fieldList['unresolvedBugs']['group']    = 'g8';
 
 $config->product->all->dtable->fieldList['totalBugs']['name']     = 'totalBugs';
@@ -270,7 +271,7 @@ $config->product->all->dtable->fieldList['totalBugs']['title']    = $lang->produ
 $config->product->all->dtable->fieldList['totalBugs']['width']    = 64;
 $config->product->all->dtable->fieldList['totalBugs']['minWidth'] = 86;
 $config->product->all->dtable->fieldList['totalBugs']['type']     = 'number';
-$config->product->all->dtable->fieldList['totalBugs']['sortType'] = false;
+$config->product->all->dtable->fieldList['totalBugs']['sortType'] = true;
 $config->product->all->dtable->fieldList['totalBugs']['group']    = 'g8';
 
 $config->product->all->dtable->fieldList['bugFixedRate']['name']     = 'bugFixedRate';
@@ -283,15 +284,15 @@ $config->product->all->dtable->fieldList['bugFixedRate']['group']    = 'g8';
 
 $config->product->all->dtable->fieldList['releases']['name']     = 'releases';
 $config->product->all->dtable->fieldList['releases']['title']    = $lang->product->release;
-$config->product->all->dtable->fieldList['releases']['width']    = 80;
+$config->product->all->dtable->fieldList['releases']['width']    = 120;
 $config->product->all->dtable->fieldList['releases']['type']     = 'number';
 $config->product->all->dtable->fieldList['releases']['show']     = true;
-$config->product->all->dtable->fieldList['releases']['sortType'] = false;
+$config->product->all->dtable->fieldList['releases']['sortType'] = true;
 $config->product->all->dtable->fieldList['releases']['group']    = 'g9';
 
 $config->product->all->dtable->fieldList['latestReleaseDate']['name']     = 'latestReleaseDate';
 $config->product->all->dtable->fieldList['latestReleaseDate']['title']    = $lang->product->latestReleaseDate;
-$config->product->all->dtable->fieldList['latestReleaseDate']['width']    = 96;
+$config->product->all->dtable->fieldList['latestReleaseDate']['width']    = 120;
 $config->product->all->dtable->fieldList['latestReleaseDate']['minWidth'] = 120;
 $config->product->all->dtable->fieldList['latestReleaseDate']['type']     = 'date';
 $config->product->all->dtable->fieldList['latestReleaseDate']['sortType'] = false;

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 /* Get field list for data table. */
+if(str_contains($orderBy, 'line')) $orderBy = str_replace('line', 'productLine', $orderBy);
 $fnGetTableFieldList = function() use ($config)
 {
     $fieldList = $this->loadModel('datatable') ->getSetting('product');

@@ -578,6 +578,7 @@ class product extends control
 
         /* Generate statistics of products. */
         if($this->config->systemMode == 'light' && $orderBy == 'program_asc') $orderBy = 'order_asc';
+        if(str_contains($orderBy, 'productLine')) $orderBy = str_replace('productLine', 'line', $orderBy);
 
         if(strtolower($browseType) == 'bysearch')
         {
