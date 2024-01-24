@@ -1,4 +1,4 @@
-$('.form-row').on('click', '.btn-add', function()
+$('.form-group').on('click', '.btn-add', function()
 {
     let $newRow   = $(this).closest('tr').clone();
 
@@ -26,7 +26,7 @@ $('.form-row').on('click', '.btn-add', function()
     }
 });
 
-$('.form-row').on('click', '.btn-split', function()
+$('.form-group').on('click', '.btn-split', function()
 {
     let $newRow = $(this).closest('tr').clone();
     $newRow.find('input').val('');
@@ -41,7 +41,7 @@ $('.form-row').on('click', '.btn-split', function()
     $(this).closest('tr').after($newRow);
 });
 
-$('.form-row').on('click', '.btn-delete', function()
+$('.form-group').on('click', '.btn-delete', function()
 {
     if($(this).closest('table').find('.input-row').length == 1) return false;
 
