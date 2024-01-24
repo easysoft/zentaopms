@@ -648,10 +648,12 @@ class testtaskZen extends testtask
         /* 如果要执行的测试用例是自动化测试用例，并且设置了自动化测试的参数配置，并且用户尚未确认，则弹窗让用户确认。*/
         /* If the test case to be executed is an automated test case, and the parameter configuration of the automated test is set, and the user has not confirmed it, a pop-up window will pop up for the user to confirm. */
         $automation = $this->loadModel('zanode')->getAutomationByProduct($run->case->product);
-        if($run->case->auto == 'auto'&& $automation && $confirm == '')
+        if($run->case->auto == 'auto' && $confirm == '')
         {
+            $cancelURL = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=no");
+            if(!$automation) return $this->send(array('load' => $cancelURL));
+
             $confirmURL = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=yes");
-            $cancelURL  = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=no");
             return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->zanode->runCaseConfirm, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
         }
 

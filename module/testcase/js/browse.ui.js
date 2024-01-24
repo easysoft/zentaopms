@@ -140,12 +140,17 @@ function getCheckedCaseIdList()
 window.checkZtf = function(e)
 {
     e.preventDefault();
+    e.stopPropagation();
 
     const url = $(this).attr('href');
     $.get(url, function(result)
     {
         const load = result.load;
-        if(!load) return loadModal(url, null, {size: 'lg'});
+        if(!load || typeof load == 'string')
+        {
+            zui.Modal.open({url: load, size: 'lg', replace: true});
+            return false;
+        }
 
         zui.Modal.confirm(load.confirm).then((res) => {
             if(!res) return loadModal(load.canceled, null, {size: 'lg'});
