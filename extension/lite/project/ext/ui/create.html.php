@@ -48,6 +48,7 @@ formPanel
     (
         set::width('1/2'),
         set::name('code'),
+        set::required(true),
         set::label($lang->project->code),
         set::strong(true)
     ) : null,
@@ -71,8 +72,7 @@ formPanel
                 (
                     set::name('begin'),
                     set('id', 'begin'),
-                    set::value(date('Y-m-d')),
-                    set::value($copyProjectID ? $copyProject->begin : ''),
+                    set::value($copyProjectID ? $copyProject->begin : date('Y-m-d')),
                     set::required(true)
                 ),
                 $lang->project->to,
