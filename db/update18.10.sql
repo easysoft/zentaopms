@@ -7,3 +7,8 @@ INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `type`, `name`, `
 
 UPDATE `zt_metric` SET `createdBy` = 'system' WHERE `createdBy` = '';
 UPDATE `zt_metric` SET `createdDate` = '2023-08-22 08:00:00' WHERE `createdDate` IS NULL;
+
+UPDATE `zt_metric` SET `definition` = '所有测试单中的用例个数求和（不去重）\r\n指派给某人\r\n过滤已删除的用例\r\n过滤已删除的测试单中的用例\r\n过滤已关闭的测试单中的用例\r\n' WHERE `code` = 'count_of_assigned_case_in_user';
+UPDATE `zt_metric` SET `definition` = '所有任务个数求和\r\n指派给为某人\r\n过滤已关闭的任务\r\n过滤已取消的任务\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务\r\n过滤多人任务中某人任务状态为已完成的任务\r\n过滤任务关联的执行和项目都为挂起状态时的任务' WHERE `code` = 'count_of_assigned_task_in_user';
+UPDATE `zt_metric` SET `definition` = '所有研发需求个数求和\r\n过滤已删除的研发需求\r\n过滤状态为已关闭的研发需求\r\n过滤已删除产品下的研发需求\r\n过滤已删除的无产品项目下的研发需求' WHERE `code` = 'count_of_pending_story_in_user';
+UPDATE `zt_metric` SET `definition` = '所有研发需求个数求和\r\n评审人为某人\r\n评审结果为空\r\n评审状态为评审中或变更中\r\n过滤已删除的需求\r\n过滤已删除产品的需求' WHERE `code` = 'count_of_reviewing_story_in_user';
