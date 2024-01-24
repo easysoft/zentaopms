@@ -9,7 +9,7 @@
  * 度量名称：按人员统计的待处理研发需求数
  * 单位：个
  * 描述：按人员统计的待处理研发需求数表示每个人待处理的研发需求数量之和。反映了每个人员需要处理的研发需求数量的规模。该数值越大，说明需要投入越多的时间处理研发需求。
- * 定义：所有研发需求个数求和;指派给为某人;过滤已删除的研发需求;过滤已删除产品的研发需求;
+ * 定义：所有研发需求个数求和;过滤已删除的研发需求;过滤状态为已关闭的研发需求;过滤已删除产品下的研发需求;过滤已删除的无产品项目下的研发需求。
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -20,7 +20,7 @@
  */
 class count_of_pending_story_in_user extends baseCalc
 {
-    public $dataset = 'getDevStories';
+    public $dataset = 'getAllDevStories';
 
     public $fieldList = array('assignedTo');
 
