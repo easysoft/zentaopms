@@ -224,7 +224,6 @@ $config->block->params['productDoc'] = $config->block->params['default']->count;
 $config->block->params['projectDoc'] = $config->block->params['default']->count;
 
 $config->block->params['singlestory']   = $config->block->params['story'];
-unset($config->block->params['singlestory']->type['options']['reviewedBy']);
 
 $config->block->params['singlerelease'] = $config->block->params['default'];
 $config->block->params['singleplan']    = $config->block->params['default'];
