@@ -878,9 +878,12 @@ class executionZen extends execution
             if(empty($_POST['products'])) dao::$errors['products[0]'] = $this->lang->project->errorNoProducts;
             if(dao::isError()) return false;
 
-            if(isset($this->config->setPercent) && $this->config->setPercent == 1) $this->execution->checkWorkload('create', (int)$_POST['percent'], $project);
-            if(dao::isError()) return false;
-            $this->config->execution->create->requiredFields .= ',percent';
+            if(isset($this->config->setPercent) && $this->config->setPercent == 1)
+            {
+                $this->execution->checkWorkload('create', (int)$_POST['percent'], $project);
+                if(dao::isError()) return false;
+                $this->config->execution->create->requiredFields .= ',percent';
+            }
         }
 
         return true;
