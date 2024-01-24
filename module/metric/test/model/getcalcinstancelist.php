@@ -26,7 +26,7 @@ cid=1
  - 第ac_of_all_in_waterfall条的dataset属性 @~~
  - 第ac_of_all_in_waterfall条的id属性 @231
 - 测试count_of_pending_story_in_user的数据源和编号
- - 第count_of_pending_story_in_user条的dataset属性 @getDevStories
+ - 第count_of_pending_story_in_user条的dataset属性 @getAllDevStories
  - 第count_of_pending_story_in_user条的id属性 @251
 
 */
@@ -43,4 +43,4 @@ r($metric->getCalcInstanceList()) && p('count_of_user_in_project:dataset,id')   
 r($metric->getCalcInstanceList()) && p('count_of_valid_story_in_project:dataset,id')    && e('getDevStoriesWithProject,208'); // 测试count_of_valid_story_in_project的数据源和编号
 r($metric->getCalcInstanceList()) && p('consume_of_all_in_project:dataset,id')          && e('~~,229');                       // 测试consume_of_all_in_project的数据源和编号
 r($metric->getCalcInstanceList()) && p('ac_of_all_in_waterfall:dataset,id')             && e('~~,231');                       // 测试ac_of_all_in_waterfall的数据源和编号
-r($metric->getCalcInstanceList()) && p('count_of_pending_story_in_user:dataset,id')     && e('getDevStories,251');            // 测试count_of_pending_story_in_user的数据源和编号
+r($metric->getCalcInstanceList()) && p('count_of_pending_story_in_user:dataset,id')     && e('getAllDevStories,251');         // 测试count_of_pending_story_in_user的数据源和编号

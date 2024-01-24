@@ -71,7 +71,7 @@ $resultData3[] = (object) array('date' => '2023-10-20', 'dateString' => '2023-10
 $resultData3[] = (object) array('date' => '2023-11-12', 'dateString' => '2023-11-12', 'dateType' => 'day', 'value' => 1, 'calcTime' => '2021-11-23 0:23');
 $resultData3[] = (object) array('date' => '2023-11-13', 'dateString' => '2023-11-13', 'dateType' => 'day', 'value' => 1, 'calcTime' => '2021-11-23 0:23');
 
-$group1 = $metric->getGroupTable($resultHeader1, $resultData1);
+$group1 = (array)$metric->getGroupTable($resultHeader1, $resultData1);
 r($group1) && p('0:name;1:name') && e('date,value'); // 传入resultHeader1和resultData1，获取header
 
 $group1 = $metric->getGroupTable($resultHeader1, $resultData1, false, false);
@@ -85,7 +85,7 @@ $group2 = $metric->getGroupTable($resultHeader2, $resultData2, false, false);
 r($group2[0]) && p('scope;2023:0') && e('开源,3');  // 传入resultHeader2和resultData2，获取data[0]
 r($group2[1]) && p('scope;2022:0') && e('ddddw,9'); // 传入resultHeader2和resultData2，获取data[1]
 
-$group3 = $metric->getGroupTable($resultHeader3, $resultData3);
+$group3 = (array)$metric->getGroupTable($resultHeader3, $resultData3);
 r($group3) && p('0:name;1:name') && e('date,value'); // 传入resultHeader2和resultData2，获取header
 
 $group3 = $metric->getGroupTable($resultHeader3, $resultData3, false, false);
