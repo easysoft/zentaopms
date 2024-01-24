@@ -459,7 +459,7 @@ class screenModel extends model
             $scopeFilter = new stdclass();
             $scopeFilter->belong     = 'metric';
             $scopeFilter->field      = $scope;
-            $scopeFilter->name       = $this->lang->$scope->common;
+            $scopeFilter->name       = $this->lang->screen->belong . $this->lang->$scope->common;
             $scopeFilter->type       = 'select';
             $scopeFilter->typeOption = $scope;
             $scopeFilter->default    = null;
@@ -483,6 +483,7 @@ class screenModel extends model
             $dateFilter = new stdclass();
             $dateFilter->belong     = 'metric';
             $dateFilter->field      = 'date';
+            $dateFilter->name       = $this->lang->screen->dateRange;
             $dateFilter->type       = 'dateRange';
             $dateFilter->typeOption = null;
             $dateFilter->default    = null;
