@@ -41,7 +41,7 @@ class storyModel extends model
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
-        $twinsIdList = $storyID . ($story->twins ? ",{$story->twins}" : '');
+        $twinsIdList = $storyID . ($story->twins ? "," . trim($story->twins, ',') : '');
         $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
