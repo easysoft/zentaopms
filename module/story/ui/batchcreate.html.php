@@ -14,6 +14,7 @@ namespace zin;
 
 data('storyType', $type);
 jsVar('storyType', $type);
+jsVar('productID', $productID);
 
 !isAjaxRequest() && dropmenu();
 
@@ -53,6 +54,7 @@ $fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $sh
 formBatchPanel
 (
     setID('dataform'),
+    on::change('[data-name="branch"]', 'setModuleByBranch'),
     $stories ? set::data($stories) : null,
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::title($storyID ? $storyTitle . $lang->colon . $this->lang->story->subdivide : $this->lang->story->batchCreate),
