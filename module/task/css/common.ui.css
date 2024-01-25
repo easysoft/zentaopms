@@ -2,6 +2,7 @@ div.no-background .input-group-addon {background: none;}
 .items-center {align-items: center !important;}
 .flex-center {justify-content: center;}
 
+#modalTeam .modal-body {max-height: 400px;}
 #modalTeam .table tr {border:none}
 #modalTeam .team-saveBtn {text-align: center !important}
 #modalTeam .team-saveBtn .btn{min-width: 96px;}
