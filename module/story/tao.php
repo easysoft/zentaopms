@@ -1081,7 +1081,7 @@ class storyTao extends storyModel
         {
             $twinsIdList = $storyIdList;
             unset($twinsIdList[$storyID]);
-            $this->dao->update(TABLE_STORY)->set('twins')->eq(implode(',', $twinsIdList))->where('id')->eq($storyID)->exec();
+            $this->dao->update(TABLE_STORY)->set('twins')->eq(',' . implode(',', $twinsIdList) . ',')->where('id')->eq($storyID)->exec();
         }
     }
 
