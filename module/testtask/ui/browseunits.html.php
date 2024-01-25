@@ -62,6 +62,10 @@ if($canImport && (empty($product) || $canModify))
 $cols    = $this->config->testtask->browseUnits->dtable->fieldList;
 $tasks   = initTableData($tasks, $cols, $this->testtask);
 $summary = sprintf($lang->testtask->unitSummary, $pager->recTotal);
+if($browseType == 'newest')
+{
+    foreach($cols as $key => $col) $cols[$key]['sortType'] = false;
+}
 
 dtable
 (
