@@ -622,6 +622,7 @@ class execution extends control
         $this->view->switcherParams   = "executionID={$executionID}&productID={$productID}&currentMethod=testcase";
         $this->view->switcherText     = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
         $this->view->switcherObjectID = $productID;
+        if(empty($execution->hasProduct)) $this->config->excludeSwitcherList[] = 'execution-testcase';
         $this->display();
     }
 
