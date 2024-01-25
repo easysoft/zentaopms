@@ -882,7 +882,6 @@ class executionZen extends execution
             {
                 $this->execution->checkWorkload('create', (int)$_POST['percent'], $project);
                 if(dao::isError()) return false;
-                $this->config->execution->create->requiredFields .= ',percent';
             }
         }
 
