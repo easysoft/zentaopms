@@ -400,6 +400,7 @@ $buildTodoType = function(object $todo)
 formPanel
 (
     set::title(''),
+    set::submitBtnText($lang->save),
     div
     (
         setClass('flex items-center pb-2.5'),
