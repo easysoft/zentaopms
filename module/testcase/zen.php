@@ -250,7 +250,8 @@ class testcaseZen extends testcase
 
         /* 设置菜单。 */
         /* Set menu. */
-        $this->setMenu((int)$this->session->project, $executionID ? $executionID : (int)$this->session->execution, $productID, $branch);
+        $executionID = $executionID ? $executionID : (int)$this->session->execution;
+        $this->setMenu((int)$this->session->project, $executionID, $productID, $branch);
 
         /* 初始化用例数据。 */
         /* Initialize the testcase. */
