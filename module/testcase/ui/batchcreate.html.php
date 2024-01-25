@@ -185,6 +185,7 @@ $items[] = array
 formBatchPanel
 (
     set::title($lang->testcase->batchCreate),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
     set::pasteField('title'),
     set::items($items),
     on::change('[data-name="branch"]', 'onBranchChangedForBatch'),
