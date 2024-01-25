@@ -12,7 +12,7 @@ $lang->datatable->switchToTable     = '切换到简单表格';
 $lang->datatable->switchToDatatable = '切换到高级表格';
 $lang->datatable->required          = '必选';
 $lang->datatable->confirmReset      = '是否恢复默认设置？';
-$lang->datatable->setGlobal         = '全局';
+$lang->datatable->setGlobal         = '应用到全局';
 $lang->datatable->resetGlobal       = '全局恢复默认';
 
 $lang->datatable->branch   = '分支';
