@@ -81,7 +81,11 @@ panel
                     set::key('my'),
                     set::title($lang->my->myContact),
                     set::active(true),
-                    ul($myContactList)
+                    ul
+                    (
+                        setClass('pl-0'),
+                        $myContactList
+                    )
                 ),
                 tabPane
                 (
