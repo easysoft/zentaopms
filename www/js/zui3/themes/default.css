@@ -1,1 +1,9 @@
-#header .btn.secondary {background-color: rgba(var(--color-canvas-rgb), .2);}
+:root
+{
+  --zt-menu-bg: var(--color-gray-900);
+  --zt-menu-hover-bg: var(--color-primary-600);
+  --zt-menu-active-bg: var(--color-primary-500);
+  --zt-header-bg: var(--color-primary-500);
+  --zt-header-color: var(--color-canvas);
+}
+#header .btn.primary-pale {background-color: var(--color-primary-400); color: var(--color-canvas)}

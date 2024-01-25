@@ -119,7 +119,7 @@ class header extends wg
         (
             btn
             (
-                setClass('secondary ring-0 rounded'),
+                setClass('primary-pale text-primary-600'),
                 set::text($lang->visionList[$currentVision]),
                 set::caret(false)
             ),
