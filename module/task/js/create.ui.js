@@ -465,7 +465,7 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
             return false;
         }
 
-        assignedToList += `<div class='picker-multi-selection' data-index=${index}><span class='text'>${realname}</span><div class="picker-deselect-btn btn size-xs ghost"><span class="close"></span></div></div>`;
+        assignedToList += `<div class='picker-multi-selection' data-index=${index} data-account=${account}><span class='text'>${realname}</span><div class="picker-deselect-btn btn size-xs ghost"><span class="close"></span></div></div>`;
         if(mode == 'linear') assignedToList += '<i class="icon icon-arrow-right"></i>';
     })
 
@@ -494,6 +494,21 @@ window.removeTeamMember = function()
 {
     /* 团队成员必须大于1人. */
     if($(this).closest('.assignedToList').find('.picker-multi-selection').length == 2)
+    {
+        zui.Modal.alert(teamMemberError);
+        return false;
+    }
+
+    /* 去重后查看人数. */
+    let accounts = [];
+    $(this).closest('.assignedToList').find('.picker-multi-selection').not(this).each(function()
+    {
+        const account = $(this).data('account');
+        accounts.push(account);
+    })
+
+    let uniqueAccounts = [...new Set(accounts)];
+    if(uniqueAccounts.length == 1)
     {
         zui.Modal.alert(teamMemberError);
         return false;
