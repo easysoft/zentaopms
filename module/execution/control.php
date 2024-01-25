@@ -2469,8 +2469,8 @@ class execution extends control
 
         $members = $this->loadModel('user')->getTeamMemberPairs($objectID, $objectType);
 
-        $selectedMembers = '';
-        foreach($members as $account => $realName) $selectedMembers .= $account . ',';
+        $selectedMembers = array();
+        foreach($members as $account => $realName) $selectedMembers[] = $account;
         return print(json_encode($selectedMembers));
     }
 

@@ -51,11 +51,8 @@ function loadMembers()
     let objectID = $('input[name=teams]').val() ? $('input[name=teams]').val() : projectID;
     $.getJSON($.createLink('execution', 'ajaxGetTeamMembers', 'objectID=' + objectID), function(data)
     {
-        if(data)
-        {
-            let membersPicker = $('select[name^=teamMembers]').zui('picker');
-            membersPicker.$.setValue(data);
-        }
+        let membersPicker = $('[name^=teamMembers]').zui('picker');
+        membersPicker.$.setValue(data);
     });
 }
 
