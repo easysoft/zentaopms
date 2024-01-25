@@ -118,6 +118,7 @@ $lang->showMoreInfo    = 'Display more information';
 $lang->hideMoreInfo    = 'Hide more information';
 $lang->saveSuccess     = 'Sauvegardé';
 $lang->importSuccess   = 'Sauvé';
+$lang->deleteSuccess   = 'Supprimé';
 $lang->fail            = 'Echec';
 $lang->addFiles        = 'Fichiers ajoutés ';
 $lang->files           = 'Fichiers ';

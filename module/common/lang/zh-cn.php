@@ -118,6 +118,7 @@ $lang->showMoreInfo    = '显示更多信息';
 $lang->hideMoreInfo    = '隐藏更多信息';
 $lang->saveSuccess     = '保存成功';
 $lang->importSuccess   = '导入成功';
+$lang->deleteSuccess   = '删除成功';
 $lang->fail            = '失败';
 $lang->addFiles        = '上传了附件 ';
 $lang->files           = '附件 ';
