@@ -72,12 +72,11 @@ formPanel
                 count($modules) == 1 ? div
                 (
                     setClass('input-group-btn flex'),
-                    a
+                    btn
                     (
-                        setClass('btn'),
-                        setData(array('toggle' => 'mdoal')),
-                        set('href', createLink('tree', 'browse', "rootId=$productID&view=case&currentModuleID=0&branch=$branch")),
-                        $lang->tree->manage
+                        setData(array('toggle' => 'modal', 'size' => 'lg')),
+                        set::text($lang->tree->manage),
+                        set::url(createLink('tree', 'browse', "rootId={$scene->product}&view=case&currentModuleID=0&branch={$scene->branch}"))
                     ),
                     a
                     (
