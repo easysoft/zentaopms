@@ -1,5 +1,15 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试 storyModel->create();
+cid=1
+
+- 检查创建后的数据。
+ - 属性id @5
+ - 属性twins @,6,
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -21,14 +31,6 @@ $story->gen(4);
 $storySpec = zdTable('storyspec');
 $storySpec->story->range('1-6');
 $storySpec->gen(4);
-
-/**
-
-title=测试 storyModel->create();
-cid=1
-pid=1
-
-*/
 
 $data  = new stdclass();
 $data->product     = 1;
@@ -63,4 +65,4 @@ $data->reviewer[]  = 'admin';
 
 $story = new storyTest();
 $test1 = $story->createTwinsTest($data);
-r((array)$test1) && p('id,twins') && e('5,6'); //检查创建后的数据。
+r((array)$test1) && p('id-twins', '-') && e('5-,6,'); //检查创建后的数据。
