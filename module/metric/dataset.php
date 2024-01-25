@@ -144,9 +144,21 @@ class dataset
             ->query();
     }
 
+    /*
+    public function getAllReleases($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_RELEASE)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->query();
+    }
+    */
+
     /**
      * 获取产品计划数据。
-     * Get plan list.
+     * Get plan list, without shadow product's data.
      *
      * @param  string       $fieldList
      * @access public
@@ -164,8 +176,26 @@ class dataset
     }
 
     /**
+     * 获取产品计划数据，包括项目型项目的计划。
+     * Get plan list include shadow product data.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getAllPlans($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_PRODUCTPLAN)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->query();
+    }
+
+    /**
      * 获取bug数据。
-     * Get bug list.
+     * Get product bug list.
      *
      * @param  string       $fieldList
      * @access public
@@ -182,7 +212,15 @@ class dataset
             ->query();
     }
 
-    public function getBugsWithShadowProduct($fieldList)
+    /**
+     * 获取所有bug数据。
+     * Get all bug list.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getAllBugs($fieldList)
     {
         return $this->dao->select($fieldList)
             ->from(TABLE_BUG)->alias('t1')
@@ -228,6 +266,23 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
+            ->query();
+    }
+
+    /**
+     * 获取所有反馈数据。
+     * Get all feedback list.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getAllFeedbacks($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_FEEDBACK)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->query();
     }
 
@@ -387,6 +442,25 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
+            ->andWhere("t2.vision NOT LIKE '%or%'")
+            ->andWhere("t2.vision NOT LIKE '%lite%'")
+            ->query();
+    }
+
+    /**
+     * 获取所有用例数据。
+     * Get all case list.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getAllCases($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->andWhere("t2.vision NOT LIKE '%or%'")
             ->andWhere("t2.vision NOT LIKE '%lite%'")
             ->query();
@@ -618,6 +692,14 @@ class dataset
             ->query();
     }
 
+    /**
+     * 统计mr信息。
+     * Get merge request data.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
     public function getMRs($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_MR)->alias('t1')

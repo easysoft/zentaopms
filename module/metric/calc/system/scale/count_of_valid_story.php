@@ -28,7 +28,6 @@ class count_of_valid_story extends baseCalc
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.shadow')->eq(0)
             ->andWhere('t1.type')->eq('story')
             ->andWhere('t1.closedReason')->notin('duplicate,willnotdo,bydesign,cancel')
             ->andWhere("t1.vision NOT LIKE '%or%'")

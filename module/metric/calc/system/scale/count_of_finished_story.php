@@ -20,7 +20,7 @@
  */
 class count_of_finished_story extends baseCalc
 {
-    public $dataset = 'getDevStories';
+    public $dataset = 'getAllDevStories';
 
     public $fieldList = array('t1.stage', 't1.closedReason');
 

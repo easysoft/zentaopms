@@ -20,7 +20,7 @@
  */
 class count_of_assigned_bug_in_user extends baseCalc
 {
-    public $dataset = 'getBugsWithShadowProduct';
+    public $dataset = 'getAllBugs';
 
     public $fieldList = array('t1.assignedTo');
 

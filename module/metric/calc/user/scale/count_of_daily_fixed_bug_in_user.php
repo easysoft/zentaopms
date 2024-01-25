@@ -20,7 +20,7 @@
  */
 class count_of_daily_fixed_bug_in_user extends baseCalc
 {
-    public $dataset = 'getProjectBugs';
+    public $dataset = 'getAllBugs';
 
     public $fieldList = array('t1.resolvedBy', 't1.resolvedDate');
 
