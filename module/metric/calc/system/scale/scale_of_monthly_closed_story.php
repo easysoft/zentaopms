@@ -20,7 +20,7 @@
  */
 class scale_of_monthly_closed_story extends baseCalc
 {
-    public $dataset = 'getDevStories';
+    public $dataset = 'getAllDevStories';
 
     public $fieldList = array('t1.status', 't1.closedDate', 't1.estimate', 't1.parent');
 

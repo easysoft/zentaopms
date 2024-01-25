@@ -20,7 +20,7 @@
  */
 class rate_of_fixed_bug extends baseCalc
 {
-    public $dataset = 'getBugs';
+    public $dataset = 'getAllBugs';
 
     public $fieldList = array('t1.status', 't1.resolution');
 
