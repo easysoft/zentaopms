@@ -29,6 +29,9 @@ jsVar('from', $from);
 jsVar('programID', $programID);
 jsVar('LONG_TIME', LONG_TIME);
 
+unset($lang->project->endList['999']);
+jsVar('endList', $lang->project->endList);
+
 $labelClass = $config->project->labelClass[$model];
 
 $disableModel = true;
