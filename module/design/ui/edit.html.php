@@ -77,6 +77,34 @@ formPanel
     (
         set::label($lang->design->file),
         upload()
+    ),
+    formGroup
+    (
+        set::label($lang->story->checkAffection),
+        tabs
+        (
+            setClass('w-full'),
+            tabPane
+            (
+                set::key('affectedTasks'),
+                set::active(true),
+                to::suffix
+                (
+                    $lang->design->affectedTasks,
+                    label
+                    (
+                        setClass('danger rounded-full size-sm font-normal'),
+                        count($design->tasks)
+                    )
+                ),
+                dtable
+                (
+                    set::cols($config->design->affect->tasks->fields),
+                    set::data(array_values($design->tasks)),
+                    set::userMap($users)
+                )
+            )
+        )
     )
 );
 

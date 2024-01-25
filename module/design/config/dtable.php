@@ -85,3 +85,13 @@ $config->design->viewcommit->dtable->fieldList['comment']['hint']     = '{origin
 $config->design->viewcommit->dtable->fieldList['actions']['type'] = 'actions';
 $config->design->viewcommit->dtable->fieldList['actions']['menu'] = array('unlinkCommit');
 $config->design->viewcommit->dtable->fieldList['actions']['list'] = $config->design->viewcommit->actionList;
+
+$app->loadLang('task');
+$config->design->affect = new stdclass();
+$config->design->affect->tasks = new stdclass();
+$config->design->affect->tasks->fields['id']         = array('name' => 'id',         'title' => $lang->task->id,         'type' => 'id',     'sortType' => false);
+$config->design->affect->tasks->fields['name']       = array('name' => 'name',       'title' => $lang->task->name,       'type' => 'title',  'sortType' => false);
+$config->design->affect->tasks->fields['assignedTo'] = array('name' => 'assignedTo', 'title' => $lang->task->assignedTo, 'type' => 'user',   'sortType' => false);
+$config->design->affect->tasks->fields['status']     = array('name' => 'status',     'title' => $lang->task->status,     'type' => 'status', 'sortType' => false, 'statusMap' => $lang->task->statusList);
+$config->design->affect->tasks->fields['consumed']   = array('name' => 'consumed',   'title' => $lang->task->consumed,   'type' => 'number', 'sortType' => false);
+$config->design->affect->tasks->fields['left']       = array('name' => 'left',       'title' => $lang->task->left,       'type' => 'number', 'sortType' => false);

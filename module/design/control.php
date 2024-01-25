@@ -269,7 +269,7 @@ class design extends control
         $this->view->design   = $design;
         $this->view->project  = $project;
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList);
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
         $this->display();
