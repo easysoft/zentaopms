@@ -254,7 +254,7 @@ class projectZen extends project
         parse_str($extra, $output);
 
         if($this->app->tab == 'program' && $programID)                   common::setMenuVars('program', $programID);
-        if($this->app->tab == 'product' && !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
+        if($this->app->tab == 'product' && !empty($output['productID'])) $this->product->setMenu($output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
         if($copyProjectID) $copyProject = $this->getCopyProject((int)$copyProjectID);
@@ -273,12 +273,19 @@ class projectZen extends project
 
         $withProgram   = $this->config->systemMode == 'ALM';
         $allProducts   = $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
-        $parentProgram = $this->loadModel('program')->getByID($programID);
+        $parentProgram = $this->program->getByID($programID);
 
         if($copyProjectID)
         {
             $copyProjectBranches = $this->project->getBranchesByProject($copyProjectID);
             $linkedProducts      = $this->product->getProducts($copyProjectID, 'all', '', true, $copyProjectBranches, false);
+            $linkedBranches      = $this->project->getBranchesByProject($copyProjectID);
+        }
+        else
+        {
+            $linkedProducts = $linkedBranches = array();
+            if(!empty($output['productID'])) $linkedProducts = array($output['productID'] => $this->product->getByID((int)$output['productID']));
+            if(isset($output['branchID']))   $linkedBranches = array($output['branchID'] => $output['branchID']);
         }
         $productPlans = $this->loadModel('productplan')->getGroupByProduct(array_keys($allProducts), 'skipparent|unexpired');
         foreach($productPlans as $productID => $branchPlans)
@@ -309,8 +316,8 @@ class projectZen extends project
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
         $this->view->branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
         $this->view->productPlans        = $productPlans;
-        $this->view->linkedProducts      = isset($linkedProducts) ? $linkedProducts : array();
-        $this->view->linkedBranches      = $this->project->getBranchesByProject($copyProjectID);
+        $this->view->linkedProducts      = $linkedProducts;
+        $this->view->linkedBranches      = $linkedBranches;
         $this->view->isStage             = in_array($model, array('waterfall', 'waterfallplus', 'ipd'));
         $this->view->groups              = $this->loadModel('group')->getPairs();
         $this->display();

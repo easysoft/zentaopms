@@ -41,7 +41,7 @@ class productsBox extends wg
         list($project, $productItems, $linkedProducts) = $this->prop(array('project', 'productItems', 'linkedProducts'));
 
         $productsBox = array();
-        if(!empty($project->hasProduct) && $linkedProducts)
+        if((!empty($project->hasProduct) || is_null($project)) && $linkedProducts)
         {
             $productsBox = $this->buildLinkedProducts($linkedProducts);
         }
@@ -226,7 +226,7 @@ class productsBox extends wg
                         if(isset($planGroups[$product->id][$branchID])) $plans += $planGroups[$product->id][$branchID];
                     }
                 }
-                $planID = isset($product->plans) ? implode(',', $product->plans) : '';
+                $planID = isset($product->plans) && is_array($product->plans)? implode(',', $product->plans) : '';
             }
             else
             {
