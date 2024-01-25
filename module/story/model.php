@@ -4349,6 +4349,7 @@ class storyModel extends model
             if(empty($twinID)) continue;
 
             $this->dao->update(TABLE_STORY)->data($syncFieldList)->where('id')->eq($twinID)->exec();
+            if(strtolower($operate) == 'closed') $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->eq($twinID)->exec();
             if(dao::isError()) continue;
 
             $this->setStage($twinID);

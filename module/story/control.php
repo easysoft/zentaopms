@@ -798,8 +798,6 @@ class story extends control
             if(isInModal())
             {
                 $execution = $this->execution->getByID((int)$this->session->execution);
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
                 if(($this->app->tab == 'execution' && $execution->type == 'kanban') || $from == 'taskkanban')
                 {
                     return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "refreshKanban()"));
