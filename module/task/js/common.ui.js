@@ -56,6 +56,11 @@ $('#teamTable').on('click.team', '.btn-delete', function()
     disableMembers();
 });
 
+$('#teamTable').on('click.team', '.picker-select', function()
+{
+    disableMembers();
+});
+
 /* 切换串行/并行 展示/隐藏工序图标. */
 $('.form').on('change.team', '[name="mode"]', function()
 {
@@ -150,6 +155,22 @@ function disableMembers()
         });
 
         $('#teamTable').find('tr.hidden').remove();
+    }
+    else
+    {
+        let $teams = $('#teamTable').find('.picker-box [name^=team]');
+        $teams.each(function()
+        {
+            let $team       = $(this);
+            let $teamPicker = $team.zui('picker');
+            let teamItems   = $teamPicker.options.items;
+            $.each(teamItems, function(i, item)
+            {
+                if(item.value == '') return;
+                teamItems[i].disabled = false;
+            })
+            $teamPicker.render({items: $teamPicker.options.items});
+        });
     }
 }
 
