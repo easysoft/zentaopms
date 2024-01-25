@@ -581,8 +581,8 @@ class build extends control
                 }
             }
             $build       = $this->build->getByID($buildID);
-            $planStories = $build->allStories ? $this->loadModel('story')->getByList($build->allStories) : '';
-            $planBugs    = $build->allBugs ? $this->loadModel('bug')->getByIdList($build->allBugs) : '';
+            $planStories = $build->allStories ? $this->loadModel('story')->getByList($build->allStories) : array();
+            $planBugs    = $build->allBugs ? $this->loadModel('bug')->getByIdList($build->allBugs) : array();
             if($oldBranch)
             {
                 foreach($planStories as $storyID => $story)
