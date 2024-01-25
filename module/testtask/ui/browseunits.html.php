@@ -69,6 +69,7 @@ dtable
     set::data(array_values($tasks)),
     set::emptyTip($lang->testtask->emptyUnitTip),
     set::userMap($users),
+    set::sortLink(createLink('testtask', 'browseUnits', "productID={$product->id}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer(array(array('html' => $summary), 'flex', 'pager')),
     set::footPager($browseType !== 'newest' ? usePager() : null)
 );
