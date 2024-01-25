@@ -289,10 +289,11 @@ $config->testcase->importfromlib->dtable->fieldList['module']['type']    = 'cont
 $config->testcase->importfromlib->dtable->fieldList['module']['control'] = array('type' => 'picker', 'props' => "RAWJS<window.getModuleCellProps>RAWJS");
 $config->testcase->importfromlib->dtable->fieldList['module']['width']   = '200px';
 
-$config->testcase->importfromlib->dtable->fieldList['type']['name']  = 'type';
-$config->testcase->importfromlib->dtable->fieldList['type']['title'] = $lang->testcase->type;
-$config->testcase->importfromlib->dtable->fieldList['type']['type']  = 'status';
+$config->testcase->importfromlib->dtable->fieldList['type']['name']      = 'type';
+$config->testcase->importfromlib->dtable->fieldList['type']['title']     = $lang->testcase->type;
+$config->testcase->importfromlib->dtable->fieldList['type']['type']      = 'status';
 $config->testcase->importfromlib->dtable->fieldList['type']['statusMap'] = $lang->testcase->typeList;
+$config->testcase->importfromlib->dtable->fieldList['type']['width']     = '100px';
 
 $config->testcase->linkbugs = new stdclass();
 $config->testcase->linkbugs->dtable = new stdclass();
