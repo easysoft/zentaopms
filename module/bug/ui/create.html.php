@@ -23,7 +23,7 @@ $fields->autoLoad('product',   'product,module,openedBuild,execution,project,sto
        ->autoLoad('allUsers',  'assignedTo')
        ->autoLoad('region',    'lane');
 
-if($product->shadow) $fields->fullModeOrders('module,project,execution');
+if(!$product->shadow) $fields->fullModeOrders('module,project,execution');
 
 jsVar('bug',                   $bug);
 jsVar('moduleID',              $bug->moduleID);
