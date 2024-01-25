@@ -266,7 +266,11 @@ window.renderProductplanItem = function(info)
     {
         statusBox = '<span class="label label-deleted">' + executionLang.deleted + '</span>';
     }
-    const date = '<span class="ml-2 label ' + (info.item.delay ? 'danger' : 'lighter') + '">' + info.item.begin.slice(5) + ' ' + productplanLang.to + ' ' + info.item.end.slice(5) + '</span>';
+
+    const today     = zui.formatDate(new Date(), 'yyyy-MM-dd');
+    const labelType = (info.item.begin <= today && info.item.end >= today) ? 'danger' : 'lighter';
+
+    const date = '<span class="ml-2 label ' + labelType + '">' + info.item.begin.slice(5) + ' ' + productplanLang.to + ' ' + info.item.end.slice(5) + '</span>';
     info.item.content      = {html: info.item.desc}
     info.item.contentClass = 'text-gray';
     info.item.footer       = {html: statusBox + date}
