@@ -3,6 +3,5 @@
 #copyKanbanModal .modal-body {margin-left: -8px; margin-right: -8px;}
 #fixedColBox .items-center, #autoColBox .items-center {align-items: center !important;}
 div.required {position: relative;}
-div.required:after {content: '*'; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); position: absolute; top: 0.5rem; right: -0.5rem;}
 .panel-body .form-row > .form-group {--form-horz-label-width: 6.5rem;}
 
