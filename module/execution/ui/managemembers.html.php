@@ -56,6 +56,7 @@ featureBar
             set::value($dept),
             set::items($depts),
             set('data-placeholder', $lang->execution->selectDeptTitle),
+            set::required(true),
             on::change('setDeptUsers')
         ),
         $copyTeamBox
@@ -222,10 +223,10 @@ h::table
 div
 (
     setClass('main-content'),
-    form
+    formPanel
     (
         setClass('main-form'),
-        set::id('teamForm'),
+        setID('teamForm'),
         h::table
         (
             set::className('table table-form'),
