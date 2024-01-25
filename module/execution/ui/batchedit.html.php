@@ -21,6 +21,8 @@ jsVar('confirmSync', $lang->execution->confirmSync);
 formBatchPanel
 (
     set::mode('edit'),
+    set::title($lang->execution->batchEdit),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     set::data(array_values($executions)),
     set::onRenderRow(jsRaw('renderRowData')),
     on::change('[data-name="project"]', 'changeProject'),
