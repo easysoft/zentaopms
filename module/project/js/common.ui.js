@@ -340,9 +340,7 @@ window.getDateMenu = function()
     const beginDate = new Date(begin);
     for(let key in endList)
     {
-        let endDate = new Date();
-        endDate.setDate(beginDate.getDate() + parseInt(key));
-        endMenu.push({'text': endList[key], 'data-set-date': zui.formatDate(endDate, 'yyyy-MM-dd')});
+        endMenu.push({'text': endList[key], 'data-set-date': zui.formatDate(new Date(beginDate.getTime() + 1000 * 60 * 60 * 24 * parseInt(key)), 'yyyy-MM-dd')});
     }
     return endMenu;
 }
