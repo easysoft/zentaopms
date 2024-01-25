@@ -18,6 +18,7 @@ class editor extends wg
         'menubarMode?: string="compact"', // 菜单栏模式，可选值 'compact', 'full'
         'locale?: string',                // 语言，可选值 'zh', 'en'，默认跟随浏览器，也可以是自定义的语言项 JSON，详见 ZenEditor 文档
         'value?: string',                 // 初始内容
+        'templateType?: string',          // 模板类型
         'uid?: string'                    // 图片上传 uid
     );
 
@@ -26,7 +27,7 @@ class editor extends wg
         zen-editor-menu-item > .menu-item {color: #9ea3b0!important;}
         zen-editor-menu-item > .menu-item:hover, zen-editor-menu-item > .menu-item.is-active {color: #fff!important; background-color: var(--color-primary-400)!important;}
         zen-editor-menu-item > .menu-item:has(.color):hover, zen-editor-menu-item > .menu-item:has(.color).is-active {background-color: transparent!important; box-shadow: inset 0 0 0 1px #9ea3b0!important;}
-        .menubar {border-bottom: 1px solid #d8dbde!important;}
+        .menubar {border-bottom: 1px solid #d8dbde!important; height: 1.5rem; padding: 0.25rem;}
         .tippy-content > div {border: 1px solid #d8dbde!important;}
         .tippy-content zen-editor-menu-item {line-height: normal;}
         .tippy-content zen-editor-menu-item .label {all: unset;}
@@ -41,14 +42,40 @@ class editor extends wg
     {
         // global $app;
         // $jsFile = $app->getWebRoot() . 'js/zeneditor/tiptap-component.esm.js';
-        $jsFile = 'https://zui-dist.oop.cc/zen-editor/zen-editor.esm.js';
-        return '$.getLib("' . $jsFile . '", {type: "module", root: false}, () => {document.body.dataset.loadedEditor = true;});';
+        $jsFile   = 'https://zui-dist.oop.cc/zen-editor/zen-editor.esm.js';
+        $content  = file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+        $content .= '$.getLib("' . $jsFile . '", {type: "module", root: false}, () => {document.body.dataset.loadedEditor = true;});';
+        return $content;
     }
 
     protected function created()
     {
         if(empty($this->prop('uid'))) $this->setProp('uid', uniqid());
-        $this->setDefaultProps(array('uploadUrl' => helper::createLink('file', 'ajaxUpload', 'uid=' . $this->prop('uid'))));
+        $this->setDefaultProps(array('uploadUrl' => createLink('file', 'ajaxUpload', 'uid=' . $this->prop('uid'))));
+    }
+
+    protected function buildTemplate(string $editor, string $type): wg
+    {
+        global $app, $lang;
+        $app->loadLang('user');
+
+        jsVar('templateEmpty', $lang->user->tplContentNotEmpty);
+        jsVar('confirmDeleteTemplate', $lang->user->confirmDeleteTemplate);
+
+        return btnGroup
+        (
+            setClass('absolute right-0'),
+            btn
+            (
+                on::click("showSaveModal('$editor', '$type')"),
+                $lang->user->saveTemplate
+            ),
+            dropdown
+            (
+                btn($lang->user->applyTemplate),
+                set::items(createLink('user', 'ajaxGetTemplates', "editor=$editor&type=$type"))
+            )
+        );
     }
 
     protected function build(): wg
@@ -76,11 +103,14 @@ class editor extends wg
         $editor->add(set('css', self::$css)); // Inject CSS into editor.
         $editor->add(h('article', set('slot', 'content'), html($this->prop('value')), $this->children())); // Set initial content.
 
+        $templateType = $this->prop('templateType');
+
         return div
         (
-            setClass('editor-container p-px mt-px rounded'),
+            setClass('editor-container p-px mt-px rounded relative'),
             $props['size'] === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
             h::css(self::$css), // Inject CSS on page, for tippy menus.
+            $templateType ? $this->buildTemplate($this->prop('name'), $templateType) : null,
             $editor,
             textarea
             (
