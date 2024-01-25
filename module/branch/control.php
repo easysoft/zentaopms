@@ -116,6 +116,7 @@ class branch extends control
      */
     public function batchEdit(int $productID)
     {
+        $this->branch->changeBranchLanguage($productID);
         $this->loadModel('product')->setMenu($productID);
         if($this->post->branchID)
         {
