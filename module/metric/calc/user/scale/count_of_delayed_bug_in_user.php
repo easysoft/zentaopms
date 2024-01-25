@@ -38,7 +38,6 @@ class count_of_delayed_bug_in_user extends baseCalc
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.shadow')->eq(0)
             ->andWhere('t1.status')->eq('active')
             ->andWhere('t1.assignedDate')->notZeroDatetime()
             ->andWhere('DATEDIFF(CURDATE(), assignedDate)')->gt($longlife)

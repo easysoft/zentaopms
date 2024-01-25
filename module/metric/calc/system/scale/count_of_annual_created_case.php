@@ -20,7 +20,7 @@
  */
 class count_of_annual_created_case extends baseCalc
 {
-    public $dataset = 'getCases';
+    public $dataset = 'getCasesWithShadowProduct';
 
     public $fieldList = array('t1.openedDate');
 

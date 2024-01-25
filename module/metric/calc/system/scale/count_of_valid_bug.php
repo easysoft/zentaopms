@@ -20,7 +20,7 @@
  */
 class count_of_valid_bug extends baseCalc
 {
-    public $dataset = 'getBugs';
+    public $dataset = 'getBugsWithShadowProduct';
 
     public $fieldList = array('t1.status', 't1.resolution');
 

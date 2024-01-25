@@ -20,7 +20,7 @@
  */
 class count_of_feedback extends baseCalc
 {
-    public $dataset = 'getFeedbacks';
+    public $dataset = 'getFeedbacksWithShadowProduct';
 
     public $fieldList = array('t1.id');
 

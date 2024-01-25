@@ -20,7 +20,7 @@
  */
 class count_of_bug extends baseCalc
 {
-    public $dataset = 'getBugs';
+    public $dataset = 'getBugsWithShadowProduct';
 
     public $fieldList = array('t1.id');
 

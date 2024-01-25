@@ -20,7 +20,7 @@
  */
 class count_of_daily_review_feedback_in_user extends baseCalc
 {
-    public $dataset = 'getFeedbacks';
+    public $dataset = 'getFeedbacksWithShadowProduct';
 
     public $fieldList = array('t1.reviewedBy', 't1.reviewedDate');
 
