@@ -1014,6 +1014,10 @@ class testtask extends control
 
         if($_POST)
         {
+            $this->loadModel('file');
+
+            if(!is_writable($this->file->savePath)) return $this->send(array('result' => 'fail', 'message' => sprintf(strip_tags($this->lang->file->errorCanNotWrite), $this->file->savePath, $this->file->savePath)));
+
             $task   = $this->testtaskZen->buildTaskForImportUnitResult($productID);
             $taskID = $this->testtask->importUnitResult($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
