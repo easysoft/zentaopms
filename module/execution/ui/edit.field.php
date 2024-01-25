@@ -34,7 +34,7 @@ if($project)
         $fields->field('project')
             ->label($lang->execution->method)
             ->disabled()
-            ->value(zget($lang->execution->typeList, data('execution.project')));
+            ->value(zget($lang->execution->typeList, data('execution.type')));
     }
     elseif($app->tab == 'project' && $project->model == 'waterfallplus')
     {
