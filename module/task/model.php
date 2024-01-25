@@ -2735,7 +2735,7 @@ class taskModel extends model
         /* Compute hours and manage team for multi-task. */
         if($teamData && $teamData->team && count(array_filter($teamData->team)) > 1)
         {
-            $teams = $this->manageTaskTeam($oldTask->mode, $task, $teamData);
+            $teams = $this->manageTaskTeam($task->mode, $task, $teamData);
             if(!empty($teams)) $task = $this->computeMultipleHours($oldTask, $task, array(), false);
         }
 
