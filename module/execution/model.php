@@ -518,7 +518,7 @@ class executionModel extends model
 
             $oldExecution = $oldExecutions[$executionID];
             $projectID    = isset($executions[$executionID]->project) ? (int)$executions[$executionID]->project : (int)$oldExecution->project;
-            $project      = $this->project->getByID($projectID);
+            $project      = dao::isError() ? '' : $this->project->getByID($projectID);
 
             /* Check unique code for edited executions. */
             if(isset($postData->code) && empty($executionCode) && strpos(",{$this->config->execution->edit->requiredFields},", ',code,') !== false)
