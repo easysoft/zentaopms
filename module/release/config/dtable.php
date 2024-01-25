@@ -76,7 +76,7 @@ $config->release->dtable->story->fieldList['status']['type']      = 'status';
 $config->release->dtable->story->fieldList['status']['statusMap'] = $lang->story->statusList;
 
 $config->release->dtable->story->fieldList['linkedBuild']['title'] = $lang->build->linkedBuild;
-$config->release->dtable->story->fieldList['linkedBuild']['name']  = 'linkedBuild';
+$config->release->dtable->story->fieldList['linkedBuild']['name']  = 'buildName';
 $config->release->dtable->story->fieldList['linkedBuild']['type']  = 'text';
 
 $config->release->dtable->story->fieldList['openedBy']['title'] = $lang->openedByAB;
