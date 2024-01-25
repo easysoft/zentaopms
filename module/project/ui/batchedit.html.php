@@ -61,6 +61,7 @@ formBatchPanel
     (
         set::name('code'),
         set::label($lang->project->code),
+        set::required(strpos($config->project->edit->requiredFields, 'code') !== false),
         set::width('136px')
     ) : null,
     formBatchItem
