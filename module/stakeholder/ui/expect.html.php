@@ -14,6 +14,7 @@ namespace zin;
 modalHeader(set::entityID($user->id), set::entityText($user->name));
 formPanel
 (
+    set::submitBtnText($lang->save),
     formGroup
     (
         set::label($lang->stakeholder->expect),

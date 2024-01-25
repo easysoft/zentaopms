@@ -18,7 +18,7 @@ formPanel
     formGroup
     (
         set::label($lang->stakeholder->communicate),
-        set::labelWidth('70px'),
+        set::labelWidth(commonModel::checkNotCN() ? '110px' : '70px'),
         set::name('comment'),
         set::control('editor')
     )
