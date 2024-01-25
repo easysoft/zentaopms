@@ -140,7 +140,8 @@ $batchCreateStoryLink = common::hasPriv('story', 'batchCreate') ? $this->createL
 $branchNames = '';
 if($product->type != 'normal')
 {
-    foreach(explode(',', (string)$branch) as $branchID) $branchNames .= "{$branchOption[$branchID]},";
+    foreach(explode(',', (string)$plan->branch) as $branchID) $branchNames .= "{$branchOption[$branchID]},";
+    $branchNames = trim($branchNames, ',');
 }
 
 $fnGetChildrenPlans = function($childrenPlans)
