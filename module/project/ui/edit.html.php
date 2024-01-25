@@ -24,7 +24,7 @@ jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
 jsVar('weekend', $config->execution->weekend);
 jsVar('allProducts', $allProducts);
 jsVar('branchGroups', $branchGroups);
-jsVar('projectID', $projectID);
+jsVar('+projectID', 0);
 jsVar('from', $from);
 jsVar('programID', $programID);
 jsVar('LONG_TIME', LONG_TIME);
