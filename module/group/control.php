@@ -257,7 +257,7 @@ class group extends control
     {
         if(!empty($_POST))
         {
-            $this->group->updateProjectAdmin($groupID, $this->buildProjectAdminForm());
+            $this->group->updateProjectAdmin($this->buildProjectAdminForm());
             return $this->sendSuccess(array('load' => true));
         }
 

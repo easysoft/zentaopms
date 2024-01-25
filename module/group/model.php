@@ -687,12 +687,11 @@ class groupModel extends model
      * 更新项目管理员。
      * Update project admins.
      *
-     * @param  int    $groupID
      * @param  array  $formData
      * @access public
      * @return void
      */
-    public function updateProjectAdmin(int $groupID, array $formData)
+    public function updateProjectAdmin(array $formData)
     {
         $allUsers = $this->dao->select('account')->from(TABLE_PROJECTADMIN)->fetchPairs();
         $this->dao->delete()->from(TABLE_PROJECTADMIN)->exec();
@@ -719,6 +718,8 @@ class groupModel extends model
 
             foreach($data['accounts'] as $account)
             {
+                if(!$account) continue;
+
                 $projectAdmin = new stdclass();
                 $projectAdmin->group      = $lineID;
                 $projectAdmin->account    = $account;
