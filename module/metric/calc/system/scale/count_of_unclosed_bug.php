@@ -20,7 +20,7 @@
  */
 class count_of_unclosed_bug extends baseCalc
 {
-    public $dataset = 'getBugsWithShadowProduct';
+    public $dataset = 'getBugs';
 
     public $fieldList = array('t1.status');
 

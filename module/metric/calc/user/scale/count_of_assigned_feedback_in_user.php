@@ -20,7 +20,7 @@
  */
 class count_of_assigned_feedback_in_user extends baseCalc
 {
-    public $dataset = 'getFeedbacksWithShadowProduct';
+    public $dataset = 'getFeedbacks';
 
     public $fieldList = array('t1.assignedTo');
 

@@ -20,7 +20,7 @@
  */
 class count_of_annual_created_feedback extends baseCalc
 {
-    public $dataset = 'getFeedbacksWithShadowProduct';
+    public $dataset = 'getFeedbacks';
 
     public $fieldList = array('openedDate');
 

@@ -182,14 +182,6 @@ class dataset
             ->query();
     }
 
-    /**
-     * 获取bug数据。
-     * Get bug list with shadow product.
-     *
-     * @param  string       $fieldList
-     * @access public
-     * @return PDOStatement
-     */
     public function getBugsWithShadowProduct($fieldList)
     {
         return $this->dao->select($fieldList)
@@ -236,23 +228,6 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
-            ->query();
-    }
-
-    /**
-     * 获取反馈数据。
-     * Get feedback list with shadow product.
-     *
-     * @param  string       $fieldList
-     * @access public
-     * @return PDOStatement
-     */
-    public function getFeedbacksWithShadowProduct($fieldList)
-    {
-        return $this->dao->select($fieldList)->from(TABLE_FEEDBACK)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
             ->query();
     }
 
@@ -418,25 +393,6 @@ class dataset
     }
 
     /**
-     * 获取用例数据。
-     * Get case list with shadow product.
-     *
-     * @param  string       $fieldList
-     * @access public
-     * @return PDOStatement
-     */
-    public function getCasesWithShadowProduct($fieldList)
-    {
-        return $this->dao->select($fieldList)->from(TABLE_CASE)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere("t2.vision NOT LIKE '%or%'")
-            ->andWhere("t2.vision NOT LIKE '%lite%'")
-            ->query();
-    }
-
-    /**
      * 获取产品数据。
      * Get product list.
      *
@@ -450,24 +406,6 @@ class dataset
             ->from(TABLE_PRODUCT)->alias('t1')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0)
-            ->andWhere("t1.vision NOT LIKE '%or%'")
-            ->andWhere("t1.vision NOT LIKE '%lite%'")
-            ->query();
-    }
-
-    /**
-     * 获取产品数据。
-     * Get product list include shadow product.
-     *
-     * @param  string       $fieldList
-     * @access public
-     * @return PDOStatement
-     */
-    public function getProductsWithShadow($fieldList)
-    {
-        return $this->dao->select($fieldList)
-            ->from(TABLE_PRODUCT)->alias('t1')
-            ->where('t1.deleted')->eq(0)
             ->andWhere("t1.vision NOT LIKE '%or%'")
             ->andWhere("t1.vision NOT LIKE '%lite%'")
             ->query();
@@ -680,14 +618,6 @@ class dataset
             ->query();
     }
 
-    /**
-     * 统计合并请求信息。
-     * Get merge request.
-     *
-     * @param  string       $fieldList
-     * @access public
-     * @return PDOStatement
-     */
     public function getMRs($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_MR)->alias('t1')

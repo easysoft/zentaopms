@@ -20,7 +20,7 @@
  */
 class count_of_annual_fixed_bug extends baseCalc
 {
-    public $dataset = 'getBugsWithShadowProduct';
+    public $dataset = 'getBugs';
 
     public $fieldList = array('t1.closedDate', 't1.status', 't1.resolution');
 

@@ -20,7 +20,7 @@
  */
 class count_of_resolved_bug extends baseCalc
 {
-    public $dataset = 'getBugsWithShadowProduct';
+    public $dataset = 'getBugs';
 
     public $fieldList = array('t1.status');
 
