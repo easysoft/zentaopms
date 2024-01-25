@@ -274,7 +274,7 @@ class branch extends control
         foreach($branchTagOption as $id => $name)
         {
             if($id == '') continue;
-            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+            $items[] = array('text' => $name, 'value' => $id);
         }
 
         if($isTwins == 'yes') return print(html::select("branches[$fieldID]", $branchTagOption, $oldBranch, "onchange='loadBranchRelation(this.value, $fieldID);' class='form-control chosen control-branch'"));
