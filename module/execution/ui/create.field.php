@@ -88,7 +88,7 @@ $fields->field('desc')
     ->width('full')
     ->required(strpos($requiredFields, ",desc,") !== false)
     ->label($showExecutionExec ? $lang->execution->execDesc : $lang->execution->desc)
-    ->control('editor');
+    ->control(array('control' => 'editor', 'templateType' => 'execution'));
 
 $fields->field('PO')->foldable()->required(strpos($requiredFields, ",PO,") !== false)->items(data('poUsers'))->value(data('copyExecution.PO'));
 $fields->field('QD')->foldable()->required(strpos($requiredFields, ",QD,") !== false)->items(data('qdUsers'))->value(data('copyExecution.QD'));

@@ -36,6 +36,10 @@ $fields->field('openedBuild')
     ->className(count(data('builds')) > 1 || data('executionID') ? 'hidden' : '')
     ->itemEnd();
 
+$fields->field('steps')
+    ->width('full')
+    ->control(array('control' => 'editor', 'templateType' => 'bug'));
+
 $fields->field('story')->foldable();
 
 $fields->field('task')->foldable();

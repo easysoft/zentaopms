@@ -146,6 +146,7 @@ formPanel
         editor
         (
             set::name('desc'),
+            set::templateType('testtask'),
             html($task->desc)
         )
     ),

@@ -183,7 +183,7 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->desc),
-        set::control('editor'),
+        set::control(array('control' => 'editor', 'templateType' => 'testtask')),
         set::name('desc'),
         set::rows(10)
     ),

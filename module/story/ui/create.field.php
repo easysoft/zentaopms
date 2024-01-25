@@ -115,7 +115,7 @@ $fields->field('estimate')
 $fields->field('spec')
     ->width('full')
     ->required($createFields['spec']['required'])
-    ->control('editor')
+    ->control(array('control' => 'editor', 'templateType' => 'story'))
     ->placeholder($lang->story->specTemplate . "\n" . $lang->noticePasteImg)
     ->value($createFields['spec']['default']);
 

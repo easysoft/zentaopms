@@ -11,6 +11,10 @@ $fields->field('module')
     ->items(data('modulePairs'))
     ->value(data('task.module'));
 
+$fields->field('desc')
+    ->width('full')
+    ->control(array('control' => 'editor', 'templateType' => 'task'));
+
 /* Set foldable attribute. */
 $fields->field('module')->foldable();
 $fields->field('files')->foldable();
