@@ -161,7 +161,7 @@ detailHeader
     to::prefix
     (
         backBtn(set::icon('back'), set::type('secondary'), set::url($this->session->productPlanList), $lang->goback),
-        div(setClass('nav-divider')),
+        div(setClass('divider')),
         entityLabel(set(array('entityID' => $plan->id, 'level' => 1, 'text' => $plan->title))),
         span(setClass('label circle primary'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
         $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null
