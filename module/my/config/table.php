@@ -647,7 +647,6 @@ $config->my->bug->dtable->fieldList['deadline']['name']   = 'deadline';
 $config->my->bug->dtable->fieldList['deadline']['title']  = $lang->bug->deadline;
 $config->my->bug->dtable->fieldList['deadline']['type']   = 'date';
 $config->my->bug->dtable->fieldList['deadline']['group']  = '5';
-$config->my->bug->dtable->fieldList['deadline']['hidden'] = true;
 
 $config->my->bug->dtable->fieldList['resolvedBy']['name']   = 'resolvedBy';
 $config->my->bug->dtable->fieldList['resolvedBy']['title']  = $lang->bug->resolvedBy;

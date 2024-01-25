@@ -45,7 +45,7 @@ dtable
     set::data($data),
     set::cols($config->my->testcase->dtable->fieldList),
     set::userMap($users),
-    set::fixedLeftWidth('50%'),
+    set::fixedLeftWidth('44%'),
     set::checkable(true),
     set::defaultSummary(array('html' => $defaultSummary)),
     set::checkedSummary($lang->testcase->failCheckedSummary),

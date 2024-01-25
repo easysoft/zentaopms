@@ -51,7 +51,15 @@ if($type == 'resolvedBy')
 if($type == 'assignedBy')     $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
 if($type == 'closedBy')       $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
 if($type == 'assignedTo')     $config->my->bug->dtable->fieldList['assignedTo']['hidden'] = true;
-if($app->rawMethod != 'work') $config->my->bug->dtable->fieldList['deadline']['hidden']   = true;
+if($app->rawMethod == 'work')
+{
+    $config->my->bug->dtable->fieldList['status']['hidden']     = true;
+    $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
+}
+else
+{
+    $config->my->bug->dtable->fieldList['deadline']['hidden']   = true;
+}
 
 if(!$canBatchAction) $config->bug->dtable->fieldList['id']['type'] = 'id';
 
@@ -85,6 +93,7 @@ dtable
     set::cols($cols),
     set::data(array_values($bugs)),
     set::userMap($users),
+    set::fixedLeftWidth('44%'),
     set::onRenderCell(jsRaw('window.onRenderBugNameCell')),
     set::checkable($canBatchAction),
     set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
