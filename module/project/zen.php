@@ -260,17 +260,15 @@ class projectZen extends project
         if($copyProjectID) $copyProject = $this->getCopyProject((int)$copyProjectID);
         $shadow = $copyProjectID && empty($copyProject->hasProduct) ? 1 : 0;
 
-        if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
-
-        $programID    = (int)$programID;
-        $topProgramID = $this->program->getTopByID($programID);
-
         if($model == 'kanban')
         {
             $this->lang->project->aclList    = $this->lang->project->kanbanAclList;
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
+        if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
+        $programID     = (int)$programID;
+        $topProgramID  = $this->program->getTopByID($programID);
         $withProgram   = $this->config->systemMode == 'ALM';
         $allProducts   = $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
         $parentProgram = $this->program->getByID($programID);
@@ -284,7 +282,12 @@ class projectZen extends project
         else
         {
             $linkedProducts = $linkedBranches = array();
-            if(!empty($output['productID'])) $linkedProducts = array($output['productID'] => $this->product->getByID((int)$output['productID']));
+            if(!empty($output['productID']))
+            {
+                $linkedProduct = $this->product->getByID((int)$output['productID']);
+                $linkedProduct->branches = array($output['branchID'] => $output['branchID']);
+                $linkedProducts = array($output['productID'] => $linkedProduct);
+            }
             if(isset($output['branchID']))   $linkedBranches = array($output['branchID'] => $output['branchID']);
         }
         $productPlans = $this->loadModel('productplan')->getGroupByProduct(array_keys($allProducts), 'skipparent|unexpired');
