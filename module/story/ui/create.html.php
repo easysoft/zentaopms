@@ -133,7 +133,8 @@ formGridPanel
     on::change('[name=module]', 'loadURS'),
     on::change('[name=product]', 'loadProduct'),
     on::change('[name=source]', "toggleFeedback(e.target)"),
-    on::change('[name=region]', 'setLane')
+    on::change('[name=region]', 'setLane'),
+    $type == 'requirement' ? on::change('[name=branch]', "loadBranchModule('{$productID}')") : null,
 );
 
 render();

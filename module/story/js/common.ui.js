@@ -81,31 +81,20 @@ window.loadURS = function(e)
     })
 };
 
-window.loadProductModules = function(productID, branch)
+window.loadBranchModule = function(productID)
 {
-    if(typeof(branch) == 'undefined') branch = $('[name=branch]').val();
+    const branch   = $('[name=branch]').val();
+    const moduleID = $('[name=module]').val();
     if(!branch) branch = 0;
 
-    var currentModule = 0;
-    if(config.currentMethod == 'edit') currentModule = $('[name=module]').val();
+    var moduleLink = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&extra=nodeleted&currentModuleID=' + moduleID);
 
-    var moduleLink = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&extra=nodeleted&currentModuleID=' + currentModule);
-    var $moduleBox = $('#moduleBox');
-    $.get(moduleLink, function(data)
+    const $modulePicker = $('[name^=module]').zui('picker');
+    $.getJSON(moduleLink, function(data)
     {
-        if(data)
-        {
-            let $inputGroup = $moduleBox.closest('.input-group');
-            data = JSON.parse(data);
-            $inputGroup.html("<span id='moduleIdBox'><div class='picker-box' id='module'></div></span>");
-            new zui.Picker('#moduleIdBox #module', data);
-            if(data.items.length <= 1)
-            {
-                $inputGroup.append('<a class="btn btn-default" type="button" data-toggle="modal" href="' + $.createLink('tree', 'browse', 'rootID=' + productID + '&view=story&currentModuleID=0&branch=' + branch) + '"><span class="text">' + langTreeManage + '</span></a>');
-                $inputGroup.append('<button class="refresh btn" type="button" onclick="window.loadProductModules(' + productID + ')"><i class="icon icon-refresh"></i></button>');
-            }
-        }
-    })
+        $modulePicker.render({items: data.items})
+        $modulePicker.$.setValue(moduleID);
+    });
 };
 
 window.loadProductPlans = function(productID, branch)
@@ -141,7 +130,6 @@ window.loadBranch = function()
     var productID = $('[name=product]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    window.loadProductModules(productID, branch);
     window.loadProductPlans(productID, branch);
     window.loadURS();
 };
