@@ -45,6 +45,9 @@ window.renderCell = function(result, info)
             result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result + '</span>'};
         }
     }
+
+    if(info.col.name == 'confirmed' && info.row.data.confirmed == 0) result[0] = {html: '<span class="text-gray">' + result[0] + '</span>'};
+
     return result;
 }
 
