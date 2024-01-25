@@ -37,6 +37,7 @@ foreach(explode(',', $config->bug->edit->requiredFields) as $field)
 
 formBatchPanel
 (
+    set::title($lang->bug->batchEdit),
     set::mode('edit'),
     set::data(array_values($bugs)),
     set::onRenderRow(jsRaw('renderRowData')),

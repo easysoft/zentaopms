@@ -174,6 +174,7 @@ else
 
     formBatchPanel
     (
+        set::title($lang->testcase->batchEdit),
         on::change('[data-name="branch"]', 'onBranchChangedForBatch'),
         on::change('[data-name="module"]', 'onModuleChangedForBatch'),
         set::mode('edit'),
