@@ -4,6 +4,10 @@ global $lang,$config;
 
 $fields = defineFieldList('product.create', 'product');
 
+$fields->field('desc')
+    ->width('full')
+    ->control(array('control' => 'editor', 'templateType' => 'product'));
+
 $fields->field('QD')->foldable();
 $fields->field('RD')->foldable();
 $fields->field('acl')->foldable();
