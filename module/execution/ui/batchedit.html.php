@@ -20,6 +20,7 @@ jsVar('confirmSync', $lang->execution->confirmSync);
 
 formBatchPanel
 (
+    set::title($lang->execution->batchEditAction),
     set::mode('edit'),
     set::title($lang->execution->batchEdit),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),

@@ -24,6 +24,7 @@ jsVar('disabledprograms', !empty($globalDisableProgram));
 $setCode = (isset($config->setCode) and $config->setCode == 1);
 formBatchPanel
 (
+    set::title($lang->project->batchEdit),
     set::mode('edit'),
     set::data(array_values($projects)),
     set::onRenderRow(jsRaw('renderRowData')),
