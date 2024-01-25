@@ -11,7 +11,7 @@ $config->execution->dtable->fieldList['rawID']['checkbox'] = true;
 $config->execution->dtable->fieldList['rawID']['width']    = '80';
 $config->execution->dtable->fieldList['rawID']['required'] = true;
 
-$config->execution->dtable->fieldList['nameCol']['title']        = $lang->execution->name;
+$config->execution->dtable->fieldList['nameCol']['title']        = $lang->execution->execName;
 $config->execution->dtable->fieldList['nameCol']['name']         = 'nameCol';
 $config->execution->dtable->fieldList['nameCol']['fixed']        = 'left';
 $config->execution->dtable->fieldList['nameCol']['type']         = 'nestedTitle';
@@ -22,7 +22,7 @@ $config->execution->dtable->fieldList['nameCol']['required']     = true;
 
 if(isset($config->setCode) and $config->setCode == 1)
 {
-    $config->execution->dtable->fieldList['code']['title']    = $lang->execution->code;
+    $config->execution->dtable->fieldList['code']['title']    = $lang->execution->execCode;
     $config->execution->dtable->fieldList['code']['name']     = 'code';
     $config->execution->dtable->fieldList['code']['type']     = 'text';
     $config->execution->dtable->fieldList['code']['sortType'] = true;
@@ -39,7 +39,7 @@ $config->execution->dtable->fieldList['project']['width']    = '160';
 $config->execution->dtable->fieldList['project']['group']    = '1';
 $config->execution->dtable->fieldList['project']['show']     = true;
 
-$config->execution->dtable->fieldList['status']['title']     = $lang->execution->status;
+$config->execution->dtable->fieldList['status']['title']     = $lang->execution->execStatus;
 $config->execution->dtable->fieldList['status']['name']      = 'status';
 $config->execution->dtable->fieldList['status']['type']      = 'status';
 $config->execution->dtable->fieldList['status']['statusMap'] = $lang->execution->statusList;
@@ -48,7 +48,7 @@ $config->execution->dtable->fieldList['status']['width']     = '80';
 $config->execution->dtable->fieldList['status']['group']     = '1';
 $config->execution->dtable->fieldList['status']['show']      = true;
 
-$config->execution->dtable->fieldList['PM']['title']    = $lang->execution->PM;
+$config->execution->dtable->fieldList['PM']['title']    = $lang->execution->execPM;
 $config->execution->dtable->fieldList['PM']['name']     = 'PM';
 $config->execution->dtable->fieldList['PM']['type']     = 'avatarBtn';
 $config->execution->dtable->fieldList['PM']['sortType'] = true;
