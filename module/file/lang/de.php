@@ -61,6 +61,7 @@ $lang->file->saveAndNext         = 'Save and Next';
 $lang->file->importPager         = 'Total: <strong>%s</strong>. Page <strong>%s</strong> of <strong>%s</strong>';
 $lang->file->importSummary       = "Import <strong id='totalAmount'>%s</strong> items  You can <strong>%s</strong> items/page, so you have to import <strong id='times'>%s</strong> times.";
 $lang->file->accessDenied        = 'Access denied to this file!';
+$lang->file->uploadImagesTip     = 'You can click to add or drag and drop to upload. The image format supports jpg, jpeg, gif, and png.';
 
 $lang->file->errorNotExists   = "<span class='text-red'>'%s' wurde nicht gefunden.</span>";
 $lang->file->errorCanNotWrite = "<span class='text-red'>'%s' ist nicht beschreibbar. Bitte passen Sie die Berechtigungen an. Befehl <span class='code'>sudo chmod -R 777 '%s'</span></span> in Linux.";
