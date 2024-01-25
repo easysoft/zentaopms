@@ -11,7 +11,7 @@ $(function()
  */
 window.changeSpace = function()
 {
-    let space = $('[name=space]:checked').val();
+    const space = $('.modal-body [name=space]:checked').val();
     $('.apiTypeTR').toggleClass('hidden', space != 'api');
     $('.projectTR').toggleClass('hidden', space != 'project');
     $('.productTR').toggleClass('hidden', space != 'product');
@@ -21,9 +21,9 @@ window.changeSpace = function()
     $('#typeapi').closest('.radio-primary').toggleClass('hidden', space == 'mine' || space == 'custom');
     $('#docType').toggleClass('hidden', $('#docType [name=type]:not(.hidden)').length == 1);
 
-    let docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
-    if(space == 'project' && docType) $('#projectBox').trigger('change');
-    if(space == 'product' && docType) $('#product').trigger('change');
+    const docType = $('.modal-body .radio-primary [name=type]:not(.hidden):checked').val();
+    if(space == 'project' && docType) loadExecutions();
+    if(space == 'product' && docType) loadObjectModules('product');
     if((space == 'mine' || space == 'custom') && docType) loadDocLibs(space, docType);
     if(space == 'api' && docType) changeApiType();
 
@@ -42,7 +42,7 @@ window.changeSpace = function()
  */
 window.changeDocType = function()
 {
-    let docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
+    let docType = $('.modal-body .radio-primary [name=type]:not(.hidden):checked').val();
     $('.executionTH').removeClass('hidden');
     $('.executionHelp').removeClass('hidden');
     $('#executionBox').removeClass('hidden');
@@ -51,17 +51,9 @@ window.changeDocType = function()
         $('.executionTH').addClass('hidden');
         $('.executionHelp').addClass('hidden');
         $('#executionBox').addClass('hidden');
-        $('#projectBox').attr('onchange', "loadObjectModules('project', '" + docType + "')");
     }
-    else if(docType == 'doc')
-    {
-        $('#projectBox').attr('onchange', "loadExecutions()");
-    }
-    $('#product').attr('onchange', "loadObjectModules('product', '" + docType + "')");
 
-    let space = $('[name=space]:checked').val();
-    if(space) changeSpace();
-
+    if($('[name=space]:checked').val()) changeSpace();
     $('#submit').removeAttr('disabled');
 }
 
@@ -76,14 +68,9 @@ window.changeApiType = function()
     let apiType = $('input[name=apiType]').val();
     $('.projectTR').toggleClass('hidden', apiType != 'project');
     $('.productTR').toggleClass('hidden', apiType != 'product');
-    if(apiType == 'project') $('#projectBox').trigger('change');
-    if(apiType == 'product') $('#product').trigger('change');
+    if(apiType == 'project') loadExecutions();
+    if(apiType == 'product') loadObjectModules('product');;
     if(apiType == 'nolink')  loadDocLibs('api', 'api');
-    if(apiType == '')
-    {
-        const $modulePicker = $('#selectLibTypeForm .moduleBox').zui('picker');
-        $modulePicker.render({items: []});
-    }
 }
 
 /**
@@ -95,15 +82,11 @@ window.changeApiType = function()
 window.loadDocLibs = function(space, type)
 {
     const link = $.createLink('doc', 'ajaxGetLibsByType', `space=${space}&type=${type}`);
-    $.get(link, function(data)
+    $.getJSON(link, function(data)
     {
-        if(data)
-        {
-            data = JSON.parse(data);
-            const $modulePicker = $('#selectLibTypeForm .moduleBox').zui('picker');
-            $modulePicker.render({items: data});
-            $modulePicker.$.setValue('');
-        }
+        const $modulePicker = $('#selectLibTypeForm .moduleBox').zui('picker');
+        $modulePicker.render({items: data});
+        $modulePicker.$.setValue('');
     });
 }
 
@@ -116,40 +99,41 @@ window.loadDocLibs = function(space, type)
  */
 window.loadExecutions = function()
 {
-    const projectID   =  $('.modal-body input[name=project]').val();
-    const executionID = $('#execution').val();
-    if(executionID)
+    const projectID = $('.modal-body input[name=project]').val();
+    const docType   = $('.modal-body .radio-primary [name=type]:not(.hidden):checked').val();
+    if(docType == 'doc')
     {
-        const link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=" + executionID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
-    }
-    else
-    {
-        const link = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
-    }
-    $.get(link, function(data)
-    {
-        if(data)
+        const projectID   = $('.modal-body input[name=project]').val();
+        const executionID = $('.modal-body input[name=execution]').val();
+        const link        = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
+        $.getJSON(link, function(data)
         {
-            data = JSON.parse(data);
-            const $executionPicker = $('.modal-body input[name^=execution]').zui('picker');
-            $executionPicker.render({items: data});
-        }
-    });
-    loadObjectModules('project', 'doc', projectID);
+            const $executionPicker = $('.modal-body input[name=execution]').zui('picker');
+            $executionPicker.render({items: data.items, disabled: !data.multiple});
+            $executionPicker.$.setValue(executionID);
+        });
+    }
+
+    loadObjectModules('project', projectID);
 }
 
-window.loadObjectModules = function(objectType, docType, objectID)
+window.loadObjectModules = function(objectType, objectID)
 {
     if(typeof objectID == 'undefined') objectID = $(`.modal-body input[name=${objectType}]`).val();
+    if(!objectID && objectType == 'execution')
+    {
+        objectType = 'project';
+        objectID   = $(`.modal-body input[name=project]`).val();
+    }
+
     if(!objectID || !objectType) return false;
 
-    docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
+    let docType = $('.modal-body .radio-primary [name=type]:not(.hidden):checked').val();
     if(typeof docType == 'undefined') docType = 'doc';
-    const link = $.createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
 
-    $.get(link, function(data)
+    const link = $.createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
+    $.getJSON(link, function(data)
     {
-        data = JSON.parse(data);
         const $modulePicker = $('#selectLibTypeForm .moduleBox').zui('picker');
         $modulePicker.render({items: data});
         $modulePicker.$.setValue('');

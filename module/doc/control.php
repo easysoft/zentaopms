@@ -488,7 +488,7 @@ class doc extends control
         }
         elseif($docType == 'api')
         {
-            $libs     = $this->doc->getApiLibs('', $objectType, $objectID);
+            $libs     = $this->doc->getApiLibs(0, $objectType, $objectID);
             $libPairs = array();
             foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
         }
@@ -522,7 +522,7 @@ class doc extends control
         }
         elseif($docType == 'api')
         {
-            $libs     = $this->doc->getApiLibs('', 'nolink');
+            $libs     = $this->doc->getApiLibs(0, 'nolink');
             $libPairs = array();
             foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
         }

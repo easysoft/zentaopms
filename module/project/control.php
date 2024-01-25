@@ -1533,13 +1533,17 @@ class project extends control
         $executions = array();
         if($projectID) $executions = (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
 
-        $items = array();
+        $project = $this->project->getByID($projectID);
+
+        $data             = array();
+        $data['items']    = array();
+        $data['multiple'] = empty($project->multiple) ? false : true;
         foreach($executions as $id => $name)
         {
-            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+            $data['items'][] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
 
-        echo json_encode($items);
+        echo json_encode($data);
     }
 
     /**

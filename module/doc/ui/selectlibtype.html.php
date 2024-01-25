@@ -64,6 +64,7 @@ form
                 set::name('apiType'),
                 set::items($lang->doc->apiTypeList),
                 set::value(''),
+                set::required(true),
                 on::change('changeApiType')
             )
         )
@@ -81,7 +82,9 @@ form
                 setID('projectBox'),
                 set::name('project'),
                 set::items($projects),
-                set::value(key($projects))
+                set::value(key($projects)),
+                set::required(true),
+                on::change('loadExecutions')
             )
         ),
         formGroup
@@ -126,6 +129,7 @@ form
                 set::name('product'),
                 set::items($products),
                 set::value(key($products)),
+                set::required(true),
                 on::change("loadObjectModules('product')")
             )
         )
@@ -140,7 +144,8 @@ form
             setClass('moduleBox'),
             set::name('module'),
             set::items(array()),
-            set::value('')
+            set::value(''),
+            set::required(true)
         )
     )
 );
