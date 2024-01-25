@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 /* zin: Define the set::module('task') feature bar on main menu. */
+if(empty($features['story'])) unset($lang->execution->featureBar['task']['needconfirm']);
 featureBar
 (
     set::current($browseType),

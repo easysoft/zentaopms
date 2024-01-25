@@ -207,6 +207,8 @@ class execution extends control
         $this->view->memberPairs = $memberPairs;
         $this->view->execution   = $execution;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->features    = $this->execution->getExecutionFeatures($execution);
+
         $this->display();
     }
 
