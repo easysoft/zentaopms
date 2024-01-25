@@ -16,7 +16,7 @@ detailHeader
 (
     to::prefix
     (
-        !isonlybody() ? backBtn($lang->goback, setClass('secondary'), set::icon('back'), set::back('stackholder-browse')) : null,
+        backBtn($lang->goback, setClass('secondary'), set::icon('back')),
         div(setClass('nav-divider')),
         entityLabel
         (

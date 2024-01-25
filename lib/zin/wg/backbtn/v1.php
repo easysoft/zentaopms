@@ -70,6 +70,7 @@ class backBtn extends btn
             'gitlab'         => 'space-browse,gitlab-browseproject',
             'zanode'         => 'zanode-browse,zanode-view',
             'zahost'         => 'zahost-browse,zahost-view',
+            'stakeholder'    => 'stakeholder-browse'
         );
 
         $props = parent::getProps();
