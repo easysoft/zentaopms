@@ -133,6 +133,7 @@ $config->user->form->cropAvatar['bottom']       = array('required' => false, 'ty
 $config->user->form->cropAvatar['scaled']       = array('required' => false, 'type' => 'bool', 'default' => false);
 
 $config->user->form->ajaxSaveTemplate = array();
-$config->user->form->ajaxSaveTemplate['title']   = array('required' => true,  'type' => 'string', 'default' => '');
-$config->user->form->ajaxSaveTemplate['content'] = array('required' => true,  'type' => 'editor', 'default' => '');
-$config->user->form->ajaxSaveTemplate['public']  = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->ajaxSaveTemplate['type']    = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->ajaxSaveTemplate['title']   = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->ajaxSaveTemplate['content'] = array('required' => false, 'type' => 'editor', 'default' => '');
+$config->user->form->ajaxSaveTemplate['public']  = array('required' => false, 'type' => 'int',    'default' => 0);

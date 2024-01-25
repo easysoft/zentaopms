@@ -1029,39 +1029,54 @@ class user extends control
     }
 
     /**
-     * AJAX: 打印用户模板。
-     * AJAX: Print user templates.
+     * AJAX: 获取用户模板。
+     * AJAX: get user templates.
      *
+     * @param  string $editor
      * @param  string $type
-     * @param  string $link
      * @access public
      * @return void
      */
-    public function ajaxPrintTemplates(string $type, string $link = '')
+    public function ajaxGetTemplates(string $editor, string $type)
     {
-        $this->view->link      = $link;
-        $this->view->type      = $type;
-        $this->view->templates = $this->user->getUserTemplates($type);
-        $this->display();
+        $items     = array();
+        $templates = $this->user->getUserTemplates($type);
+        foreach($templates as $template)
+        {
+            $content = html_entity_decode($template->content);
+            $item    = array('text' => $template->title, 'data-on' => 'click', 'data-call' => "applyTemplate('$editor', '$content')");
+            if($template->account == $this->app->user->account) $item['trailingIcon'] = array('icon' => 'close', 'data-on' => 'click', 'data-call' => "deleteTemplate($template->id)");
+            $items[] = $item;
+        }
+        echo json_encode($items);
     }
 
     /**
      * AJAX: 保存一个用户模板。
      * AJAX: Save a user template.
      *
+     * @param  string $editor
      * @param  string $type
      * @access public
      * @return void
      */
-    public function ajaxSaveTemplate(string $type)
+    public function ajaxSaveTemplate(string $editor, string $type)
     {
-        $template = form::data($this->config->user->form->ajaxSaveTemplate)
-            ->add('account', $this->app->user->account)
-            ->add('type', $type)
-            ->get();
-        $this->user->saveUserTemplate($template);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success', 'load' => inlink('ajaxPrintTemplates', "type=$type")));
+        if($_POST)
+        {
+            $template = form::data($this->config->user->form->ajaxSaveTemplate)
+                ->add('account', $this->app->user->account)
+                ->get();
+            $this->user->saveUserTemplate($template);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        }
+
+        $this->view->title  = $this->lang->user->saveTemplate;
+        $this->view->editor = $editor;
+        $this->view->type   = $type;
+        $this->display();
     }
 
     /**
@@ -1078,7 +1093,7 @@ class user extends control
             ->where('id')->eq($templateID)
             ->beginIF(!$this->app->user->admin)->andWhere('account')->eq($this->app->user->account)->fi()
             ->exec();
-        return $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->deleteSuccess));
     }
 
     /**
