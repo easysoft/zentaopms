@@ -1786,7 +1786,7 @@ class projectModel extends model
 
         /* Create actions. */
         $this->loadModel('action');
-        if($products) $this->action->create('project', $projectID, 'managed', '', implode(',', $products));
+        if(!empty($needUpdate)) $this->action->create('project', $projectID, 'managed', '', implode(',', $products));
         $unlinkedProducts = array_diff($oldProductIdList, $products);
         if(!empty($unlinkedProducts))
         {
