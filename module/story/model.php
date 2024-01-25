@@ -243,9 +243,8 @@ class storyModel extends model
             $execution    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
             $modules      = $this->storyTao->getModules4ExecutionStories($type, $param);
             $storyIdList  = $this->storyTao->getIdListOfExecutionsByProjectID($type, $executionID);
-            $productParam = ($type == 'byproduct' and $param)        ? $param : $this->cookie->storyProductParam;
+            $productParam = ($type == 'byproduct' and $param)        ? $param : $productID;
             $branchParam  = ($type == 'bybranch'  and $param !== '') ? $param : (string)$this->cookie->storyBranchParam;
-            if(str_contains($branchParam, ',')) list($productParam, $branchParam) = explode(',', $branchParam);
 
             /* 设置查询需求的公共 DAO 变量。 */
             $type     = (strpos('bymodule|byproduct', $type) !== false and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $type;
