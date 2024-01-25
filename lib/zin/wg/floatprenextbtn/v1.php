@@ -30,16 +30,16 @@ class floatPreNextBtn extends wg
             (
                 setID('preButton'),
                 set::url($preLink),
-                setClass('float-btn fixed z-10'),
-                set::icon('angle-left'),
+                setClass('float-btn fixed z-10 inverse rounded-full w-12 h-12 center bg-opacity-40 backdrop-blur ring-0'),
+                set::icon('angle-left icon-2x text-white'),
                 set('data-app', $app->tab)
             ) : null,
             !empty($nextLink) ? btn
             (
                 setID('nextButton'),
                 set::url($nextLink),
-                setClass('float-btn fixed z-10'),
-                set::icon('angle-right'),
+                setClass('float-btn fixed z-10 inverse rounded-full w-12 h-12 center bg-opacity-40 backdrop-blur ring-0'),
+                set::icon('angle-right icon-2x text-white'),
                 set('data-app', $app->tab)
             ) : null
         );
