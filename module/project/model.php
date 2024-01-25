@@ -1785,13 +1785,15 @@ class projectModel extends model
         if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
 
         /* Create actions. */
+        $this->loadModel('action');
+        if($products) $this->action->create('project', $projectID, 'managed', '', implode(',', $products));
         $unlinkedProducts = array_diff($oldProductIdList, $products);
         if(!empty($unlinkedProducts))
         {
             $products = $this->dao->select('name')->from(TABLE_PRODUCT)
                 ->where('id')->in($unlinkedProducts)
                 ->fetchPairs();
-            $this->loadModel('action')->create('project', $projectID, 'unlinkproduct', '', implode(',', $products));
+            $this->action->create('project', $projectID, 'unlinkproduct', '', implode(',', $products));
         }
 
         return !dao::isError();
