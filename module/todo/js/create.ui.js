@@ -16,7 +16,7 @@ function toggleCycle(e)
         $('.cycle-config:not(.type-week,.type-month,.type-year)').removeClass('hidden');
         $('[name="switchDate"]').prop('checked', false);
         $('[name="switchDate"]').closest('.input-group-addon').addClass('hidden');
-        $('[name="type"]').closest('.form-row').addClass('hidden');
+        $('[name="type"]').closest('.form-group').addClass('hidden');
         $('[name="type"]').zui('picker').$.setValue('custom');
         loadList('custom'); //Fix bug 3278.
     }
@@ -26,7 +26,7 @@ function toggleCycle(e)
         $date.render({disabled: false});
         $('.cycle-config').addClass('hidden');
         $('[name="switchDate"]').closest('.input-group-addon').removeClass('hidden');
-        $('[name="type"]').closest('.form-row').removeClass('hidden');
+        $('[name="type"]').closest('.form-group').removeClass('hidden');
     }
 }
 
