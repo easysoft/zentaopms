@@ -159,7 +159,8 @@ $buildCycleOfWeekConfig = function(object $todo): mixed
                             'required' => true,
                             'name'     => 'config[week]',
                             'items'    => $lang->todo->dayNames,
-                            'value'    => isset($todo->config->week) ? $todo->config->week : 1
+                            'value'    => isset($todo->config->week) ? $todo->config->week : 1,
+                            'multiple' => true
                         )
                     )
                 )
@@ -194,7 +195,7 @@ $buildCycleOfMonthConfig = function(object $todo): mixed
             inputGroup
             (
                 span(setClass('input-group-addon'), $lang->todo->monthly),
-                picker(set(array('required' => true, 'id' => 'config_month', 'name' => 'config[month]', 'items' => $days, 'value' => isset($todo->config->month) ? $todo->config->month : '')))
+                picker(set(array('required' => true, 'multiple' => true, 'id' => 'config_month', 'name' => 'config[month]', 'items' => $days, 'value' => isset($todo->config->month) ? $todo->config->month : '')))
             )
         )
     );
