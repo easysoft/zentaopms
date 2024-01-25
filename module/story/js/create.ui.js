@@ -77,3 +77,23 @@ window.setLane = function(e)
         $('#myPicker').picker(JSON.parse(lane));
     });
 };
+
+let formSettingLabelClicked = false;
+$(document).on('click', 'form.form-setting-form .row label.state', function()
+{
+    console.log(formSettingLabelClicked);
+    if(formSettingLabelClicked) return;
+    formSettingLabelClicked = true;
+
+    let text = $(this).find('.text-clip').text();
+    $('form.form-setting-form .row label.state').each(function()
+    {
+        if(text == langSource || text == langSourceNote)
+        {
+            $this = $(this);
+            if(text == langSource     && langSourceNote == $this.find('.text-clip').text()) $this[0].click();
+            if(text == langSourceNote && langSource     == $this.find('.text-clip').text()) $this[0].click();
+        }
+    })
+    formSettingLabelClicked = false;
+});

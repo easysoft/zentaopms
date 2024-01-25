@@ -108,6 +108,8 @@ $params = $app->getParams();
 array_shift($params);
 jsVar('createParams', http_build_query($params));
 jsVar('storyType', $type);
+jsVar('langSource', $lang->story->source);
+jsVar('langSourceNote', $lang->story->sourceNote);
 jsVar('feedbackSource', $config->story->feedbackSource);
 
 formGridPanel
