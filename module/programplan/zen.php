@@ -165,7 +165,9 @@ class programplanZen extends programplan
             if(isset($parentStage) && $plan->begin < $parentStage->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
             if(isset($parentStage) && $plan->end > $parentStage->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
         }
+
         if($projectID) $this->execution->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
+        if(dao::isError()) return $plan;
 
         if(!empty($this->config->setPercent))
         {
