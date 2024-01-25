@@ -53,8 +53,10 @@ $fields->field('dateRange')
     ->control('inputGroup')
     ->items(false)
     ->itemBegin('begin')->control('datePicker')->id('begin')->value(empty($plan->begin) ? date('Y-m-d') : $plan->begin)->placeholder($lang->execution->begin)->itemEnd()
-    ->item($lang->project->to)
-    ->itemBegin('end')->control('datePicker')->id('end')->value(empty($plan->end) ? '' : $plan->end)->placeholder($lang->execution->end)->itemEnd();
+    ->item(array('control' => 'span', 'text' => '-'))
+    ->itemBegin('end')->control('datePicker')->id('end')->value(empty($plan->end) ? '' : $plan->end)->placeholder($lang->execution->end)
+    ->menu(array('items' => jsRaw('window.getDateMenu')))
+    ->itemEnd();
 
 $fields->field('days')
     ->width('1/4')

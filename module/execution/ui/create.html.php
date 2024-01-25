@@ -46,6 +46,7 @@ jsVar('weekend', $config->execution->weekend);
 jsVar('isStage', $isStage);
 jsVar('copyExecutionID', $copyExecutionID);
 jsVar('executionID', isset($executionID) ? $executionID : 0);
+jsVar('endList', $lang->execution->endList);
 
 $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc');
 formGridPanel
