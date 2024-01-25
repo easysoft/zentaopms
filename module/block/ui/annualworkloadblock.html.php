@@ -140,8 +140,7 @@ blockPanel
         ),
         cell
         (
-            setClass('flex flex-wrap overflow-hidden px-4 ' . ($longBlock ? 'py-2' : 'py-3 w-full my-2')),
-            !$longBlock ? set::style(array('background-color' => 'var(--color-gray-100)')) : '',
+            setClass('flex flex-wrap overflow-hidden px-4 ' . ($longBlock ? 'py-2' : 'py-3 w-full my-2 border-t')),
             set::width($longBlock ? '1/3' : '100%'),
             cell
             (
@@ -157,7 +156,7 @@ blockPanel
         ),
         cell
         (
-            setClass('flex flex-wrap overflow-hidden px-4 ' . ($longBlock ? 'py-2' : 'w-full my-2')),
+            setClass('flex flex-wrap overflow-hidden px-4 ' . ($longBlock ? 'py-2' : 'py-3 w-full my-2 border-t')),
             set::width($longBlock ? '1/3' : '100%'),
             cell
             (
