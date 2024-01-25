@@ -284,7 +284,7 @@ class productModel extends model
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
             ->beginIF(strpos($mode, 'feedback') === false && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->andWhere("CONCAT(',', t1.vision, ',')")->like("%,{$this->config->vision},%")->fi()
+            ->beginIF(strpos($mode, 'feedback') === false)->andWhere("CONCAT(',', t1.vision, ',')")->like("%,{$this->config->vision},%")->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(in_array($mode, array_keys($this->lang->story->statusList)))->andWhere('t1.status')->in($mode)->fi()
             ->beginIF($mode == 'involved')
