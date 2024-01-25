@@ -24,6 +24,13 @@ if((isset($fields['branch']) && $type == 'story') || $type != 'story')
     $createFields->field('sourceNote')->width('1/2');
 }
 
+if(isset($this->config->story->custom->createFields));
+{
+    $customCreateFields = ',' . $this->config->story->custom->createFields . ',';
+    if(str_contains($customCreateFields, ',source,')) $createFields->field('sourceNote')->pinned();
+    if(str_contains($customCreateFields, ',sourceNote,')) $createFields->field('source')->pinned();
+}
+
 /* Set layout in execution tab. */
 if(!empty($objectID))
 {
