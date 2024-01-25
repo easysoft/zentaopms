@@ -80,6 +80,8 @@ class dropmenu extends wg
 
         if($module == 'testcase' && in_array($method, array('view', 'edit')) && data('isLibCase')) $tab = 'caselib';
 
+        if(strpos(',story-create,story-batchcreate,story-report,product-browse,', ",$module-$method,") !== false) $extra = data('storyType');
+
         $branchMenu = null;
         if(($tab == 'product' || $tab == 'qa') && in_array($module, $app->config->hasBranchMenuModules) && !in_array("{$module}-{$method}", $app->config->excludeBranchMenu))
         {

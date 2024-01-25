@@ -13,6 +13,7 @@ namespace zin;
 jsVar('params', "productID={$productID}&branchID={$branchID}&storyType={$storyType}&browseType={$browseType}&moduleID={$moduleID}");
 jsVar('projectID', $projectID);
 jsVar('storyType', $storyType);
+data('storyType', $storyType);
 
 detailHeader
 (

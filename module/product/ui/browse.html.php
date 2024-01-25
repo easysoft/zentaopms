@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
+data('storyType', $storyType);
 data('activeMenuID', $storyType);
 jsVar('URChanged', $this->lang->story->URChanged);
 
