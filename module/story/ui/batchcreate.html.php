@@ -21,6 +21,8 @@ jsVar('productID', $productID);
 /* Generate fields for the batch create form. */
 $fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $showFields)
 {
+    global $config;
+
     /* Generate fields with the appropriate properties. */
     $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
@@ -45,6 +47,7 @@ $fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $sh
     foreach($cols as $index => $col)
     {
         $colName = $col['name'];
+        if(str_contains(",{$config->story->create->requiredFields},", ",{$colName},")) $cols[$index]['required'] = true;
         if(isset($customFields[$colName]) && strpos(",$showFields,", ",$colName,") === false) $cols[$index]['hidden'] = true;
         if($colName == 'sourceNote' && strpos(",$showFields,", ",source,") === false) $cols[$index]['hidden'] = true;
     }
