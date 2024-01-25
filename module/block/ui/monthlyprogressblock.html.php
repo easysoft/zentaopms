@@ -32,7 +32,8 @@ blockPanel
                     array
                     (
                         'type' => 'line',
-                        'data' => array_values($doneStoryEstimate)
+                        'data' => array_values($doneStoryEstimate),
+                        'emphasis' => array('label' => array('show' => true))
                     )
                 )
             )->size('100%', 200)
@@ -57,13 +58,15 @@ blockPanel
                         (
                             'type' => 'line',
                             'name' => $lang->block->productstatistic->opened,
-                            'data' => array_values($createStoryCount)
+                            'data' => array_values($createStoryCount),
+                            'emphasis' => array('label' => array('show' => true))
                         ),
                         array
                         (
                             'type' => 'line',
                             'name' => $lang->block->productstatistic->done,
-                            'data' => array_values($doneStoryCount)
+                            'data' => array_values($doneStoryCount),
+                            'emphasis' => array('label' => array('show' => true))
                         )
                     )
                 )

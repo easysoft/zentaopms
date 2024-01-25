@@ -203,13 +203,15 @@ panel
                                         (
                                             'type' => 'line',
                                             'name' => $lang->block->productstatistic->opened,
-                                            'data' => $openedData
+                                            'data' => $openedData,
+                                            'emphasis' => array('label' => array('show' => true))
                                         ),
                                         array
                                         (
                                             'type' => 'line',
                                             'name' => $lang->block->productstatistic->done,
-                                            'data' => $doneData
+                                            'data' => $doneData,
+                                            'emphasis' => array('label' => array('show' => true))
                                         )
                                     )
                                 )
