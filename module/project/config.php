@@ -21,7 +21,7 @@ $config->project->edit      = new stdclass();
 $config->project->batchedit = new stdclass();
 $config->project->create->requiredFields    = 'name,begin,end';
 $config->project->edit->requiredFields      = 'name,begin,end';
-$config->project->batchedit->requiredFields = 'name,code,begin,end';
+$config->project->batchedit->requiredFields = 'name,begin,end';
 
 $config->project->start   = new stdclass();
 $config->project->start->requiredFields = 'realBegan';
