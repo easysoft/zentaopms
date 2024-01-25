@@ -2307,7 +2307,8 @@ class storyModel extends model
 
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
             {
-                $storyQuery .= " AND `status` NOT IN ('draft')"; // Fix bug #990.
+                $storyQuery .= " AND `status` != 'draft'"; // Fix bug #990.
+                if($this->app->moduleName == 'build' && $executionID) $storyQuery .= " AND `project` = $executionID";
             }
             else
             {
@@ -2348,7 +2349,7 @@ class storyModel extends model
             ->fetchPairs();
 
         $review = $this->storyTao->getRevertStoryIdList((int)$productID);
-        $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
+        $sql = str_replace(array('`product`', '`version`', '`branch`', '`project`'), array('t1.`product`', 't1.`version`', 't1.`branch`', 't2.`project`'), $sql);
         if(strpos($sql, 'result') !== false)
         {
             if(strpos($sql, 'revert') !== false)
@@ -2373,7 +2374,6 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
-
         if(!$tmpStories) return array();
 
         /* Process plans. */
