@@ -24,7 +24,8 @@ $config->project->dtable->fieldList['id']['checkbox'] = false;
 
 $config->project->dtable->fieldList['hasProduct']['map'] = $lang->project->projectTypeList;
 
-$projects = initTableData($projects, $config->project->dtable->fieldList, $this->project);
+$settings = $this->loadModel('datatable')->getSetting('my');
+$projects = initTableData($projects, $settings, $this->project);
 
 $waitCount      = 0;
 $doingCount     = 0;
@@ -65,8 +66,9 @@ if($status == 'openedbyme') $footerHtml = sprintf($lang->project->allSummary, co
 
 dtable
 (
-    set::cols($config->project->dtable->fieldList),
+    set::cols($settings),
     set::data($projects),
+    set::customCols(true),
     set::onRenderCell(jsRaw('window.onRenderProjectNameCell')),
     set::orderBy($orderBy),
     set::sortLink(createLink('my', 'project', "status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),

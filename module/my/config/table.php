@@ -9,9 +9,11 @@ $app->loadLang('doc');
 $app->loadLang('testtask');
 $app->loadLang('testcase');
 $app->loadLang('product');
+$app->loadLang('project');
 $app->loadModuleConfig('testtask');
 $app->loadModuleConfig('testcase');
 $app->loadModuleConfig('company');
+$app->loadModuleConfig('project');
 
 $config->my->todo = new stdclass();
 $config->my->todo->actionList = array();
@@ -1110,3 +1112,6 @@ $config->my->team = new stdclass();
 $config->my->team->dtable = $config->company->user->dtable;
 $config->my->team->dtable->fieldList['realname']['link'] = array('module' => 'user', 'method' => 'view', 'params' => 'userid={id}&from=my');
 unset($config->my->team->dtable->fieldList['actions']);
+
+$config->my->project = new stdclass();
+$config->my->project->dtable = $config->project->dtable;
