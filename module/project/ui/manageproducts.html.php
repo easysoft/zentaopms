@@ -17,6 +17,7 @@ jsVar('branchGroups', $branchGroups);
 jsVar('projectID', $project->id);
 jsVar('BRANCH_MAIN', BRANCH_MAIN);
 jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
+jsVar('errorNoProduct', sprintf($lang->error->notempty, $lang->productCommon));
 
 $noticeSwitch = ($project->stageBy == 'project' and count($linkedProducts) == 1 and empty($executions) and in_array($project->model, array('waterfall', 'waterfallplus')));
 jsVar('linkedProducts', array_keys($linkedProducts));

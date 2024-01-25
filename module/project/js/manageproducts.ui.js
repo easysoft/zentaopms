@@ -42,6 +42,12 @@ $(function()
     $('#linkProduct [type="submit"]').on('click', function(){
         let checkedProducts = $('[name^="otherProducts"]').val();
 
+        if(checkedProducts.length == 1 && checkedProducts[0] == '')
+        {
+            zui.Modal.alert(errorNoProduct);
+            return false;
+        }
+
         if(noticeSwitch && checkedProducts.length > 1)
         {
             notice('otherProducts');
