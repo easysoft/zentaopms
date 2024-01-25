@@ -53,6 +53,7 @@ $fields->field('begin')
     ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->value(data('project.end'))
     ->menu(array('items' => jsRaw('window.getDateMenu')))
     ->itemEnd()
+    ->tip(' ')
     ->tipProps(array('id' => 'dateTip'))
     ->tipClass('text-warning hidden');
 
