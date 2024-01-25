@@ -73,7 +73,7 @@ class editor extends wg
             dropdown
             (
                 btn($lang->user->applyTemplate),
-                set::items(createLink('user', 'ajaxGetTemplates', "editor=$editor&type=$type"))
+                set::items(array('url' => createLink('user', 'ajaxGetTemplates', "editor=$editor&type=$type")))
             )
         );
     }

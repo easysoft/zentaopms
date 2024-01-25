@@ -36,7 +36,7 @@ $fields->field('name')
     ->value(data('execution.name'));
 
 $fields->field('code')
-    ->required(strpos($requiredFields, ",code,") !== false)
+    ->required()
     ->label($showExecutionExec ? $lang->execution->execCode : $lang->execution->code)
     ->value(data('execution.code'));
 

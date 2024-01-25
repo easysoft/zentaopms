@@ -25,11 +25,19 @@ if(!empty($project->model) && $project->model == 'kanban')
     $fields->remove($typeField);
     $fields->field('name')->width('full');
 }
-if(!empty($project->model) && $project->model == 'agileplus' && !empty($config->setCode))
+if(!empty($project->model) && $project->model == 'agileplus')
 {
-    $fields->field('code')->width('1/4');
-    $fields->field($typeField)->width('1/4');
-    $fields->moveAfter($typeField, 'code');
+    if(!empty($config->setCode))
+    {
+        $fields->field('code')->width('1/4');
+        $fields->field($typeField)->width('1/4');
+        $fields->moveAfter($typeField, 'code');
+    }
+    if($isKanban)
+    {
+        if(empty($config->setCode))  $fields->field('name')->width('full');
+        if(!empty($config->setCode)) $fields->field('code')->width('1/2');
+    }
 }
 
 jsVar('+projectID', $projectID);
