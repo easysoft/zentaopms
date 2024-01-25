@@ -189,7 +189,7 @@ formPanel
                             'id'       => 'config_week',
                             'name'     => 'config[week]',
                             'items'    => $lang->todo->dayNames,
-                            'value'    => 1
+                            'multiple' => true
                         )
                     )
                 )
@@ -226,7 +226,7 @@ formPanel
                             'id'       => 'config_month',
                             'name'     => 'config[month]',
                             'items'    => $days,
-                            'value'    => 1
+                            'multiple' => true
                         )
                     )
                 )
