@@ -816,6 +816,8 @@ class project extends control
         $type      = strtolower($type);
         $products  = $this->product->getProducts($projectID);
 
+        $this->session->set('currentProductType', !isset($product->type) ? 'normal' : $product->type);
+
         /* 项目型项目不展示2.5级产品下拉菜单。 */
         if(!$project->hasProduct) $this->config->excludeSwitcherList[] = 'project-bug';
 
