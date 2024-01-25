@@ -53,6 +53,13 @@ $config->project->dtable->fieldList['PM']['sortType'] = true;
 $config->project->dtable->fieldList['PM']['group']    = 3;
 $config->project->dtable->fieldList['PM']['required'] = true;
 
+$config->project->dtable->fieldList['storyPoints']['title']    = $lang->project->storyPoints;
+$config->project->dtable->fieldList['storyPoints']['type']     = 'number';
+$config->project->dtable->fieldList['storyPoints']['group']    = 4;
+$config->project->dtable->fieldList['storyPoints']['show']     = true;
+$config->project->dtable->fieldList['storyPoints']['width']    = '120px';
+$config->project->dtable->fieldList['storyPoints']['sortType'] = false;
+
 $config->project->dtable->fieldList['storyCount']['title']    = $lang->project->storyCount;
 $config->project->dtable->fieldList['storyCount']['type']     = 'number';
 $config->project->dtable->fieldList['storyCount']['group']    = 4;

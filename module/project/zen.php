@@ -1246,8 +1246,11 @@ class projectZen extends project
         {
             $project = $this->project->formatDataForList($project, $userList);
 
-            $projectStories = $this->story->getExecutionStoryPairs($project->id);
-            $project->storyCount = count($projectStories);
+            $projectStories = $this->story->getExecutionStories($project->id);
+            $project->storyCount  = count($projectStories);
+            $project->storyPoints = 0;
+            foreach($projectStories as $story) $project->storyPoints += $story->estimate;
+            $project->storyPoints .= ' ' . $this->config->hourUnit;
 
             $executions = $this->execution->getStatData($project->id, 'all', 0, 0, false, 'skipParent');
             $project->executionCount = count($executions);
