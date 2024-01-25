@@ -3230,7 +3230,7 @@ class storyModel extends model
 
             if(($this->app->tab == 'execution' || (!empty($execution) && $execution->multiple == '0')) && $story->status == 'active' && $story->type == 'story')
             {
-                $mainMenu[] = commonModel::buildActionItem('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, array('icon' => 'plus', 'text' => $this->lang->task->create, 'data-app' => $execution->multiple == '0' ? 'project' : ''));
+                $mainMenu[] = commonModel::buildActionItem('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, array('icon' => 'plus', 'text' => $this->lang->task->create, 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-app' => $execution->multiple == '0' ? 'project' : ''));
             }
 
             if(!$isInModal) $suffixMenu[] = commonModel::buildActionItem('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, array('icon' => 'edit', 'data-app' => $this->app->tab));
