@@ -60,7 +60,7 @@ formPanel
     (
         set::label($lang->execution->code),
         set::width('2/3'),
-        set::required(true),
+        set::required(in_array('code', explode(',', $requiredFields))),
         input(set::name('code'), set::value($plan->code))
     ): null,
     formGroup

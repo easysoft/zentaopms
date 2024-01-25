@@ -141,6 +141,9 @@ class programplanZen extends programplan
      */
     protected function buildPlanForEdit(int $planID, int $projectID): object
     {
+        $this->loadModel('execution');
+        if(!empty($this->config->setCode) && strpos(",{$this->config->execution->edit->requiredFields},", ',code,') !== false) $this->config->programplan->form->edit['code']['required'] = true;
+
         $plan = form::data()->get();
         if(empty($plan->realBegan)) $plan->realBegan = null;
         if(empty($plan->realEnd))   $plan->realEnd   = null;
@@ -162,7 +165,7 @@ class programplanZen extends programplan
             if(isset($parentStage) && $plan->begin < $parentStage->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
             if(isset($parentStage) && $plan->end > $parentStage->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
         }
-        if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
+        if($projectID) $this->execution->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
 
         if(!empty($this->config->setPercent))
         {
@@ -198,7 +201,7 @@ class programplanZen extends programplan
     protected function buildEditView(object $plan)
     {
         $this->loadModel('project');
-        $this->app->loadLang('execution');
+        $this->loadModel('execution');
         $this->app->loadLang('stage');
 
         $parentStage = $this->project->getByID($plan->parent, 'stage');
@@ -213,6 +216,7 @@ class programplanZen extends programplan
         $this->view->isLeafStage        = $this->programplan->checkLeafStage($plan->id);
         $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
         $this->view->project            = $this->project->getByID($plan->project);
+        $this->view->requiredFields     = $this->config->execution->edit->requiredFields;
         $this->display();
     }
 
