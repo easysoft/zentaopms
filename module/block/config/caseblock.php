@@ -25,8 +25,8 @@ $config->block->case->dtable->fieldList['status']['title'] = $lang->statusAB;
 $config->block->case->dtable->fieldList['status']['sort']  = true;
 
 $config->block->case->dtable->fieldList['lastRunDate']['name'] = 'lastRunDate';
-$config->block->case->dtable->fieldList['lastRunDate']['type'] = 'date';
-$config->block->case->dtable->fieldList['lastRunDate']['sort'] = 'date';
+$config->block->case->dtable->fieldList['lastRunDate']['type'] = 'datetime';
+$config->block->case->dtable->fieldList['lastRunDate']['sort'] = true;
 
 $config->block->case->dtable->fieldList['lastRunResult']['name'] = 'lastRunResult';
 $config->block->case->dtable->fieldList['lastRunResult']['sort'] = true;
