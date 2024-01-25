@@ -9,7 +9,7 @@
  * 度量名称：按人员统计的日解决Bug数
  * 单位：个
  * 描述：按人员统计的日解决Bug数表示每个人每日解决的Bug数量之和。反映了每个人每日解决Bug的规模。该数值越大，可能说明Bug的解决能力越强，工作效率越高。
- * 定义：所有Bug个数求和;bug状态为已解决和已关闭;解决者为某人;过滤已删除的bug;过滤已删除产品的bug;
+ * 定义：所有Bug个数求和;bug状态为已解决和已关闭;解决者为某人;解决日期为某日;过滤已删除的bug;过滤已删除产品的bug;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
