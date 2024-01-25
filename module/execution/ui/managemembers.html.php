@@ -17,7 +17,7 @@ jsVar('executionID', $execution->id);
 
 /* zin: Define the set::module('team') feature bar on main menu. */
 $copyTeamBox = '';
-if(count($teams2Import) != 1)
+if(count($teams2Import) != 0)
 {
     $copyTeamBox = div
         (
