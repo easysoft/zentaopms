@@ -11,19 +11,19 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$fields          = useFields('bug.create');
-$isShadowProduct = $product->shadow;
-
+$fields = useFields('bug.create');
 if(!empty($executionType) && $executionType == 'kanban') $fields->merge('bug.kanban');
 
-$fields->autoLoad('product', 'product,module,openedBuild,execution,project,story,task,assignedTo')
-   ->autoLoad('branch',  'module,openedBuild,execution,project,story,task,assignedTo')
-   ->autoLoad('module',  'assignedTo,story')
-   ->autoLoad('project', 'project,openedBuild,execution,story,task,assignedTo')
-   ->autoLoad('execution', 'execution,openedBuild,story,task,assignedTo')
-   ->autoLoad('allBuilds', 'openedBuild')
-   ->autoLoad('allUsers',  'assignedTo')
-   ->autoLoad('region', 'lane');
+$fields->autoLoad('product',   'product,module,openedBuild,execution,project,story,task,assignedTo')
+       ->autoLoad('branch',    'module,openedBuild,execution,project,story,task,assignedTo')
+       ->autoLoad('module',    'assignedTo,story')
+       ->autoLoad('project',   'project,openedBuild,execution,story,task,assignedTo')
+       ->autoLoad('execution', 'execution,openedBuild,story,task,assignedTo')
+       ->autoLoad('allBuilds', 'openedBuild')
+       ->autoLoad('allUsers',  'assignedTo')
+       ->autoLoad('region',    'lane');
+
+if($product->shadow) $fields->fullModeOrders('module,project,execution');
 
 jsVar('bug',                   $bug);
 jsVar('moduleID',              $bug->moduleID);
@@ -36,6 +36,5 @@ formGridPanel
 (
     set::title($lang->bug->create),
     set::fields($fields),
-    set::fullModeOrders($isShadowProduct ? '' : 'module,project,execution'),
     set::loadUrl($loadUrl)
 );
