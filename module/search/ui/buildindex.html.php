@@ -14,7 +14,6 @@ panel
 (
     set::title($lang->search->index),
     set::titleIcon('refresh'),
-    set::headingClass('border-b'),
     div
     (
         setID('buildResult'),
