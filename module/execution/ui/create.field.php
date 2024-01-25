@@ -92,10 +92,10 @@ $fields->field('desc')
     ->label($showExecutionExec ? $lang->execution->execDesc : $lang->execution->desc)
     ->control(array('control' => 'editor', 'templateType' => 'execution'));
 
-$fields->field('PO')->foldable()->required(strpos($requiredFields, ",PO,") !== false)->items(data('poUsers'))->value(data('copyExecution.PO'));
-$fields->field('QD')->foldable()->required(strpos($requiredFields, ",QD,") !== false)->items(data('qdUsers'))->value(data('copyExecution.QD'));
-$fields->field('PM')->foldable()->required(strpos($requiredFields, ",PM,") !== false)->items(data('pmUsers'))->value(data('copyExecution.PM'));
-$fields->field('RD')->foldable()->required(strpos($requiredFields, ",RD,") !== false)->items(data('rdUsers'))->value(data('copyExecution.RD'));
+$fields->field('PO')->foldable()->required(strpos($requiredFields, ",PO,") !== false)->items(data('poUsers'))->value(data('execution.PO'));
+$fields->field('QD')->foldable()->required(strpos($requiredFields, ",QD,") !== false)->items(data('qdUsers'))->value(data('execution.QD'));
+$fields->field('PM')->foldable()->required(strpos($requiredFields, ",PM,") !== false)->items(data('pmUsers'))->value(data('execution.PM'));
+$fields->field('RD')->foldable()->required(strpos($requiredFields, ",RD,") !== false)->items(data('rdUsers'))->value(data('execution.RD'));
 
 $fields->field('teamName')
     ->foldable()

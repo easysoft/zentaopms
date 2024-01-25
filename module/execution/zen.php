@@ -1750,7 +1750,7 @@ class executionZen extends execution
         $fields->acl       = $copyExecution->acl;
         $fields->whitelist = $copyExecution->whitelist;
 
-        $this->view->copyExecution = $copyExecution;
+        $this->view->execution = $copyExecution;
 
         return $fields;
     }
