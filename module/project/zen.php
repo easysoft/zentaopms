@@ -20,8 +20,8 @@ class projectZen extends project
     protected function prepareCreateExtras(object $postData): object|false
     {
         $project = $postData->setDefault('status', 'wait')
-            ->setIF($this->post->delta    == 999, 'end', LONG_TIME)
-            ->setIF($this->post->delta    == 999, 'days', 0)
+            ->setIF($this->post->longTime, 'end', LONG_TIME)
+            ->setIF($this->post->longTime, 'days', 0)
             ->setIF($this->post->acl      == 'open', 'whitelist', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF($this->post->multiple != 'on', 'multiple', '0')
@@ -83,8 +83,8 @@ class projectZen extends project
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('days', '0')
-            ->setIF($this->post->delta == 999, 'end', LONG_TIME)
-            ->setIF($this->post->delta == 999, 'days', 0)
+            ->setIF($this->post->longTime, 'end', LONG_TIME)
+            ->setIF($this->post->longTime, 'days', 0)
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
             ->join('whitelist', ',')

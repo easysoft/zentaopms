@@ -59,6 +59,7 @@ formGridPanel
             )
     ),
     on::change('[name=hasProduct]', 'changeType'),
+    on::change('[name=longTime]')->do('$("[name=end]").zui("datePicker").render({disabled: $(target).prop("checked")}); $("[data-name=days]").toggleClass("hidden",$(target).prop("checked"));'),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
     on::change('[name=parent], [name=budget]', 'checkBudget'),
