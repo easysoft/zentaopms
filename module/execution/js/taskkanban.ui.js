@@ -187,7 +187,7 @@ window.getItem = function(info)
     let beginAndEnd = '';
     let assignLink  = '';
     let assignedTo  = '';
-    let avatar      = "<span class='avatar rounded-full size-xs ml-1 bg-lighter text-canvas' title='" + noAssigned + "'><i class='icon icon-person'></i></span>";
+    let avatar      = "<span class='avatar rounded-full size-xs ml-1 bg-gray-100 text-canvas' title='" + noAssigned + "'><i class='icon icon-person'></i></span>";
 
     if(begin < '1970-01-01' && end > '1970-01-01')
     {

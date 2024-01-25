@@ -5,7 +5,7 @@
 #copyExecutionModal .copy-title {min-width: 130px;}
 #copyExecutionModal .pickerProject {flex: 0 1 30%;}
 #copyExecutionModal .execution-block {flex: 0 1 30%; padding: 20px 10px; margin: 4px 12px; overflow: hidden;}
-#copyExecutions div.bg-lighter {width: 100%;}
+#copyExecutions div.bg-gray-100 {width: 100%;}
 #copyExecutions .btn:hover {--tw-ring-color: var(--color-primary-500);}
 #copyExecutions .btn:before {background: none;}
 #copyExecutions .btn.primary-outline {background-color: var(--color-primary-50);}

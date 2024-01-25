@@ -335,7 +335,7 @@ else
 {
     $kanbanList[] = div
         (
-            setClass('inline-flex items-center w-full bg-lighter h-12 mt-2 mb-8'),
+            setClass('inline-flex items-center w-full bg-gray-100 h-12 mt-2 mb-8'),
             icon('exclamation-sign icon-2x pl-2 text-warning'),
             span
             (

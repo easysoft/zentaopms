@@ -73,7 +73,7 @@ $buildUsed = function(int $amount, string $unit = ''): array
     (
         $amount ? span
         (
-            setClass('bg-lighter rounded-md text-lg mx-1 px-1 py-0.5'),
+            setClass('bg-gray-100 rounded-md text-lg mx-1 px-1 py-0.5'),
             $amount
         ) : null,
         $amount ? $unit : ''

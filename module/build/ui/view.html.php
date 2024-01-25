@@ -39,7 +39,7 @@ detailHeader
         (
             btn
             (
-                setClass('ghost text-primary bg-light bg-opacity-50'),
+                setClass('ghost text-primary bg-gray-200 bg-opacity-50'),
                 entityLabel
                 (
                     set::entityID($build->id),

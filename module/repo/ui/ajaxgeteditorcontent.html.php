@@ -106,14 +106,14 @@ $logWg = div
     div
     (
         set::className('action-btn pull-right'),
-        div(set::className('btn btn-close pull-right ghost text-black bg-light bg-opacity-50'), icon('close')),
+        div(set::className('btn btn-close pull-right ghost text-black bg-gray-200 bg-opacity-50'), icon('close')),
         !empty($dropMenus) ? dropdown
         (
             set::arrow(false),
             set::staticMenu(true),
             btn
             (
-                setClass('ghost text-black bg-light bg-opacity-50'),
+                setClass('ghost text-black bg-gray-200 bg-opacity-50'),
                 set::icon('ellipsis-v rotate-90')
             ),
             set::items
