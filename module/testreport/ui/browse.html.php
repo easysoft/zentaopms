@@ -40,6 +40,7 @@ toolbar
         (
             setClass('btn primary'),
             set::icon('plus'),
+            set('data-app', $app->tab),
             set::url(helper::createLink('testreport', 'create', "objectID=0&objectType=testtask&productID={$objectID}")),
             $lang->testreport->create
         )
