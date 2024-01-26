@@ -576,8 +576,11 @@ class upgradeModel extends model
      */
     public function fixConsistency(string $version): void
     {
-        $logFile = $this->getConsistencyLogFile();
+        $logFile  = $this->getConsistencyLogFile();
+        $lockFile = $logFile . '.lock';
+        if(file_exists($lockFile) && (time() - filemtime($lockFile)) < 60) return;
         if(file_exists($logFile)) unlink($logFile);
+        touch($lockFile);
 
         $hasError = false;
         $fixSqls  = $this->checkConsistency($version);
@@ -604,6 +607,7 @@ class upgradeModel extends model
         $finishTag = "\nFinished";
         if($hasError) $finishTag = "\nHasError" . $finishTag;
         file_put_contents($logFile, $finishTag, FILE_APPEND);
+        unlink($lockFile);
     }
 
     /**
