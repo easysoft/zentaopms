@@ -43,7 +43,7 @@ else
     jsVar('contentNotEmpty', sprintf($lang->error->notempty, $lang->doc->content));
 
     $projectRow = null;
-    if($linkType == 'project')
+    if($lib->type == 'project')
     {
         $projectRow = formRow
         (
@@ -57,7 +57,6 @@ else
                     set::id('project'),
                     set::items($objects),
                     isset($execution) ? set::value($execution->project) : set::value($objectID),
-                    on::change('loadExecutions')
                 )
             ),
             ($this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
@@ -135,11 +134,11 @@ else
             (
                 set::title($lang->doc->release . $lang->doc->common),
                 set::id('modalBasicInfo'),
-                on::change('#product',   "loadObjectModules"),
-                on::change('#project',   "loadObjectModules"),
-                on::change('#execution', "loadObjectModules"),
+                on::change('#modalBasicInfo [name=product]',   "loadObjectModules"),
+                on::change('#modalBasicInfo [name=project]',   "loadExecutions"),
+                on::change('#modalBasicInfo [name=execution]', "loadObjectModules"),
                 $projectRow,
-                ($linkType == 'execution') ? formGroup
+                ($lib->type == 'execution') ? formGroup
                 (
                     set::width('1/2'),
                     set::label($lang->doc->execution),
@@ -153,7 +152,7 @@ else
                         set::required(true)
                     )
                 ) : null,
-                ($linkType == 'product') ? formGroup
+                ($lib->type == 'product') ? formGroup
                 (
                     set::width('1/2'),
                     set::label($lang->doc->product),

@@ -19,27 +19,30 @@ $(function()
 
         $('#status').val('normal');
     });
+    loadExecutions();
 })
 
 window.loadExecutions = function(e)
 {
-    const projectID   = e.target.value;
-    const executionID = $("#modalBasicInfo input[name='execution']").val();
-    let   link        = '';
-    if(executionID)
+    const projectID = $('#modalBasicInfo input[name="project"]').val();
+    if($("#modalBasicInfo input[name='execution']"))
     {
-        link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=" + executionID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
-    }
-    else
-    {
-        link = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
+        const executionID = $("#modalBasicInfo input[name='execution']").val();
+        const link        = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
+        $.getJSON(link, function(data)
+        {
+            let $picker = $("#modalBasicInfo input[name='execution']").zui('picker');
+            $picker.render({items: data.items, disabled: !data.multiple});
+            $picker.$.setValue(executionID);
+        });
     }
 
+    const link = $.createLink('doc', 'ajaxGetModules', 'objectType=project&objectID=' + projectID + '&type=doc');
     $.getJSON(link, function(data)
     {
-        let $picker = $("#modalBasicInfo input[name='execution']").zui('picker');
+        const $picker = $("#modalBasicInfo [name='module']").zui('picker');
         $picker.render({items: data});
-        $picker.$.setValue(executionID);
+        $picker.$.setValue('');
     });
 }
 
