@@ -177,6 +177,7 @@ $lang->action->objectTypes['domain']           = 'Domain';
 $lang->action->objectTypes['artifactrepo']     = 'Artifact Repo';
 $lang->action->objectTypes['prompt']           = 'Prompt';
 $lang->action->objectTypes['metric']           = 'Metric';
+$lang->action->objectTypes['projectbuild']     = 'Build';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
