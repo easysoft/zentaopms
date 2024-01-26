@@ -899,10 +899,7 @@ class productZen extends product
         if($browseType == '')
         {
             $browseType = 'unclosed';
-        }
-        else
-        {
-            $branch = is_bool($this->cookie->treeBranch) && empty($this->cookie->treeBranch) ? 'all' : $this->cookie->treeBranch;
+            $branch     = is_bool($this->cookie->treeBranch) && empty($this->cookie->treeBranch) ? 'all' : $this->cookie->treeBranch;
         }
 
         /* If invoked by projectstory module and not choose product, then get the modules of project story. */
