@@ -1,11 +1,11 @@
 <?php
 namespace zin;
-global $lang, $config;
+global $lang, $config, $app;
 
 $fields = defineFieldList('testcase.create');
 
 $fields->field('product')
-    ->hidden(data('product.shadow'))
+    ->hidden($app->tab != 'qa' && data('product.shadow'))
     ->control('inputGroup')
     ->items(false)
     ->itemBegin('product')->control('picker')->items(data('products'))->required(true)->value(empty(data('case.product')) ? data('productID') : data('case.product'))->itemEnd()
