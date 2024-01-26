@@ -235,8 +235,8 @@ function checkProjectInfo()
     $.getJSON($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + programID), function(data)
     {
         let dateTip = '';
-        if(typeof(data.selectedProgramBegin) != 'undefined' && $('[name=begin]').val() != '' && $('[name=begin]').val() > data.selectedProgramBegin) dateTip += beginLessThanParent.replace('%s', data.selectedProgramBegin);
-        if(typeof(data.selectedProgramEnd) != 'undefined' && $('[name=end]').val() != '' && $('[name=end]').val() < data.selectedProgramEnd) dateTip += endGreatThanParent.replace('%s', data.selectedProgramEnd);
+        if(typeof(data.selectedProgramBegin) != 'undefined' && $('[name=begin]').val() != '' && $('[name=begin]').val() < data.selectedProgramBegin) dateTip += beginLessThanParent.replace('%s', data.selectedProgramBegin);
+        if(typeof(data.selectedProgramEnd) != 'undefined' && $('[name=end]').val() != '' && $('[name=end]').val() > data.selectedProgramEnd) dateTip += endGreatThanParent.replace('%s', data.selectedProgramEnd);
         if(dateTip != '')
         {
             $('#dateTip').html(dateTip);
