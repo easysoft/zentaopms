@@ -23,7 +23,7 @@ if(!empty($config->setCode)) $fields->moveBefore($typeField, 'name');
 if(!empty($project->model) && $project->model == 'kanban')
 {
     $fields->remove($typeField);
-    $fields->field('name')->width('full');
+    if(empty($config->setCode)) $fields->field('name')->width('full');
 }
 if(!empty($project->model) && $project->model == 'agileplus')
 {
