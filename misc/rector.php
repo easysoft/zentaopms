@@ -8,6 +8,7 @@ use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Misc\Rector\RemoveReturnType;
 use Misc\Rector\DowngradeParameterType;
 use Misc\Rector\RemoveFunctionType;
+use Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector;
 
 $version = getenv('PHP_VERSION');
 $version = $version ?: '72';
@@ -24,7 +25,8 @@ return static function (RectorConfig $rectorConfig) use ($version, $cacheDir): v
     $rectorConfig->rules([
         RemoveReturnType::class,
         RemoveFunctionType::class,
-        DowngradeParameterType::class
+        DowngradeParameterType::class,
+        DowngradeStrictTypeDeclarationRector::class
     ]);
     // $rectorConfig->sets([constant(DowngradeSetList::class . '::PHP_' . $version)]);
     $rectorConfig->cacheClass(FileCacheStorage::class);
