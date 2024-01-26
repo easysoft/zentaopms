@@ -1487,7 +1487,7 @@ class storyTao extends storyModel
         $this->config->story->affect->bugs->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->bug->lastEditedBy);
 
         /* Get affected bugs. */
-        $twinsIdList = $story->id . ($story->twins ? ",{$story->twins}" : '');
+        $twinsIdList = $story->id . ($story->twins ? ',' . trim($story->twins, ',') : '');
         $story->bugs = $this->dao->select('*')->from(TABLE_BUG)->where('status')->ne('closed')
             ->andWhere('story')->in($twinsIdList)
             ->andWhere('status')->ne('closed')
@@ -1527,7 +1527,7 @@ class storyTao extends storyModel
         $this->config->story->affect->cases->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->testcase->lastEditedBy);
 
         /* Get affected cases. */
-        $twinsIdList = $story->id . ($story->twins ? ",{$story->twins}" : '');
+        $twinsIdList = $story->id . ($story->twins ? ',' . trim($story->twins, ',') : '');
         $story->cases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
             ->andWhere('story')->in($twinsIdList)
             ->fetchAll();
