@@ -68,7 +68,6 @@ formPanel
     ) : null,
     formRow
     (
-        set::width($lastPlan ? 'full' : '1/2'),
         formGroup
         (
             set::width('1/2'),
