@@ -31,7 +31,6 @@ class tableChart extends wg
 
         return h::tr
         (
-            setClass('border-t'),
             h::th($tableHeaders['item']),
             h::th(set::width('100px'), $tableHeaders['value']),
             h::th(set::width('120px'), $tableHeaders['percent'])
@@ -67,7 +66,7 @@ class tableChart extends wg
         $overflow    = $this->prop('overflow', true);
         return div
         (
-            set::className('flex border py-2'),
+            set::className('flex border'),
             cell
             (
                 setClass('border-r chart flex-auto'),
