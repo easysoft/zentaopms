@@ -1725,6 +1725,7 @@ class executionZen extends execution
         $execution->acl       = 'private';
         $execution->whitelist = '';
 
+        $this->view->execution = $execution;
         return $execution;
     }
 
