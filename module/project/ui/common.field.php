@@ -44,7 +44,7 @@ if($hasCode)
 
 $fields->field('PM')->control('picker')->items(data('PMUsers'));
 
-$isLongTime = data('copyProject') ? data('copyProject.end') == LONG_TIME : data('project.end') == LONG_TIME;
+$isLongTime = data('project.end') == LONG_TIME;
 $fields->field('begin')
     ->label($lang->project->planDate)
     ->checkbox(array('text' => $lang->project->longTime, 'name' => 'longTime', 'checked' => $isLongTime))
@@ -59,8 +59,7 @@ $fields->field('begin')
     ->tipProps(array('id' => 'dateTip'))
     ->tipClass('text-warning hidden');
 
-$days = data('copyProject') ? data('copyProject.days') : data('project.days');
-$fields->field('days')->label($lang->project->days . $lang->project->daysUnit)->control('input')->disabled($isLongTime)->value(!empty($days) ? $days : '');
+$fields->field('days')->label($lang->project->days . $lang->project->daysUnit)->control('input')->disabled($isLongTime)->value(data('project.end'));
 
 $fields->field('productsBox')
     ->width('full')
