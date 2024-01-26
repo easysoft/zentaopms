@@ -176,7 +176,7 @@ $fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProdu
 
 /* DataTable columns. */
 $config->story->dtable->fieldList['title']['title'] = $lang->story->title;
-if($app->rawModule == 'projectstory') $config->story->dtable->fieldList['title']['link'] = array('url' => helper::createLink('projectstory', 'view', 'storyID={id}&projectID={project}'), 'style' => array('color' => 'var(--color-link)'));
+if($app->rawModule == 'projectstory') $config->story->dtable->fieldList['title']['link'] = array('url' => helper::createLink('projectstory', 'view', 'storyID={id}&projectID={project}'));
 
 $setting = $this->loadModel('datatable')->getSetting('product', 'browse', false, $storyType);
 if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);

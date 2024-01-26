@@ -26,7 +26,7 @@ if($app->tab == 'execution')
 $config->story->dtable->fieldList['title']['name']         = 'title';
 $config->story->dtable->fieldList['title']['title']        = $lang->story->title;
 $config->story->dtable->fieldList['title']['type']         = 'title';
-$config->story->dtable->fieldList['title']['link']         = array('url' => helper::createLink('story', 'view', 'storyID={id}'), 'style' => array('color' => 'var(--color-link)'));
+$config->story->dtable->fieldList['title']['link']         = array('url' => helper::createLink('story', 'view', 'storyID={id}'));
 $config->story->dtable->fieldList['title']['fixed']        = 'left';
 $config->story->dtable->fieldList['title']['sortType']     = true;
 $config->story->dtable->fieldList['title']['minWidth']     = '342';

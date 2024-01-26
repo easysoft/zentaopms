@@ -12,7 +12,7 @@ $config->task->dtable->fieldList['name']['flex']         = 1;
 $config->task->dtable->fieldList['name']['type']         = 'nestedTitle';
 $config->task->dtable->fieldList['name']['nestedToggle'] = true;
 $config->task->dtable->fieldList['name']['sortType']     = true;
-$config->task->dtable->fieldList['name']['link']         = array('url' => array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}'), 'className' => 'text-inherit', 'style' => array('color' => 'var(--color-link)'));
+$config->task->dtable->fieldList['name']['link']         = array('url' => array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}'));
 $config->task->dtable->fieldList['name']['required']     = true;
 $config->task->dtable->fieldList['name']['styleMap']     = array('--color-link' => 'color');
 $config->task->dtable->fieldList['name']['data-app']     = $app->tab;
