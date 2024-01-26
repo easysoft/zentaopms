@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
+data('activeMenuID', 'story');
 jsVar('executionID', $executionID);
 jsVar('langPreview', $lang->preview);
 jsVar('copyStoryTitleTip', $lang->task->copyStoryTitle);
