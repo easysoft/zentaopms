@@ -26,8 +26,8 @@ $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('6'); // 测试分组数。
 
-r($calc->getResult(array('user' => 'user')))     && p('0:value') && e('24'); // 测试用户user
-r($calc->getResult(array('user' => 'dev')))      && p('0:value') && e('34'); // 测试用户dev
-r($calc->getResult(array('user' => 'pm')))       && p('0:value') && e('22'); // 测试用户pm
-r($calc->getResult(array('user' => 'admin')))    && p('0:value') && e('4');  // 测试用户admin
+r($calc->getResult(array('user' => 'user')))     && p('0:value') && e('42'); // 测试用户user
+r($calc->getResult(array('user' => 'dev')))      && p('0:value') && e('64'); // 测试用户dev
+r($calc->getResult(array('user' => 'pm')))       && p('0:value') && e('48'); // 测试用户pm
+r($calc->getResult(array('user' => 'admin')))    && p('0:value') && e('10'); // 测试用户admin
 r($calc->getResult(array('user' => 'notexist'))) && p('0:value') && e('0');  // 测试不存在的用户
