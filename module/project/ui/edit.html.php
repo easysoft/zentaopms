@@ -59,7 +59,7 @@ formGridPanel
             )
     ),
     on::change('[name=hasProduct]', 'changeType'),
-    on::change('[name=longTime]')->do('$("[name=end]").zui("datePicker").render({disabled: $(target).prop("checked")}); $(target).prop("checked") ? $("[name=days]").attr("disabled", "disabled") : $("[name=days]").removeAttr("disabled");'),
+    on::change('[name=longTime]')->do('const $endPicker = $("[name=end]").zui("datePicker"); $endPicker.render({disabled: $(target).prop("checked")}); if($(target).prop("checked")){ $endPicker.$.setValue(""); $("[name=days]").attr("disabled", "disabled");} else{ $("[name=days]").removeAttr("disabled");}'),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
     on::change('[name=parent], [name=budget]', 'checkBudget'),
