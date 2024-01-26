@@ -19,6 +19,7 @@
 .side .metric-item:hover, .side .checkbox-primary:hover {color: var(--color-primary-500);}
 .side .metric-group {padding-left: 16px; padding-top: 6px; padding-bottom: 2px; color: var(--color-gray-600);}
 .side .metric-current {color: var(--color-primary-600); background-color:var(--color-primary-50); font-weight: 600;}
+.side .metric-tree ul {list-style-type: none;}
 
 .side .checkbox-primary {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
 .side .checkbox-primary:hover {background-color: var(--color-gray-100);}
