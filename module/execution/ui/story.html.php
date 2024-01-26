@@ -408,7 +408,7 @@ dtable
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")
+        'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}") . "#app={$app->tab}"
     ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::emptyTip($lang->story->noStory),
