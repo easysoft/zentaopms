@@ -574,14 +574,14 @@ class metricModel extends model
      * @access public
      * @return PDOStatement|string
      */
-    public function getDataStatement($calculator, $returnType = 'statement')
+    public function getDataStatement($calculator, $returnType = 'statement', $vision = 'rnd')
     {
         $dao = $this->getDAO();
         if(!empty($calculator->dataset))
         {
             include_once $this->getDatasetPath();
 
-            $dataset    = new dataset($dao, $this->config);
+            $dataset    = new dataset($dao, $this->config, $vision);
             $dataSource = $calculator->dataset;
             $fieldList  = implode(',', $calculator->fieldList);
 
@@ -665,7 +665,7 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getResultByCode($code, $options = array(), $type = 'realtime', $pager = null)
+    public function getResultByCode($code, $options = array(), $type = 'realtime', $pager = null, $vision = 'rnd')
     {
         if($type == 'cron')
         {
@@ -688,7 +688,7 @@ class metricModel extends model
         include_once $calcPath;
         $calculator = new $metric->code;
 
-        $statement = $this->getDataStatement($calculator);
+        $statement = $this->getDataStatement($calculator, 'statement', $vision);
         $rows = $statement->fetchAll();
 
         foreach($rows as $row) $calculator->calculate($row);
@@ -704,12 +704,12 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getResultByCodes($codes, $options = array())
+    public function getResultByCodes($codes, $options = array(), $vision = 'rnd')
     {
         $results = array();
         foreach($codes as $code)
         {
-            $result = $this->getResultByCode($code, $options);
+            $result = $this->getResultByCode($code, $options, 'realtime', null, $vision);
             if($result) $results[$code] = $result;
         }
 
