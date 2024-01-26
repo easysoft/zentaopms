@@ -102,7 +102,7 @@ function printPreference(array $URSRList)
                     set::name('productLink'),
                     set::required(true),
                     set::items($productItems),
-                    set::value($productLink)
+                    set::value($config->productLink)
                 )
             ),
             $config->vision != 'or' ? formGroup
@@ -114,7 +114,7 @@ function printPreference(array $URSRList)
                     set::name('projectLink'),
                     set::required(true),
                     set::items($projectItems),
-                    set::value($projectLink)
+                    set::value($config->projectLink)
                 )
 
             ) : null,
@@ -127,7 +127,7 @@ function printPreference(array $URSRList)
                     set::name('executionLink'),
                     set::required(true),
                     set::items($executionItems),
-                    set::value($executionLink)
+                    set::value($config->executionLink)
                 )
             ) : null
         )

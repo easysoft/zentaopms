@@ -68,11 +68,11 @@ if(($longBlock && $count > 9) || (!$longBlock && $count > 4))
 $contents = array();
 foreach($hasViewPriv as $type => $bool)
 {
-    $data       = ${"{$type}s"};
     $configType = $type;
-    if($type == 'story')       $data = $stories;
     if($type == 'testcase')    $configType = 'case';
     if($type == 'requirement') $configType = 'story';
+
+    $data = $type == 'story' ? $stories : ${"{$type}s"};
 
     if(empty($config->block->{$configType}->dtable->fieldList)) continue;
     if(!$longBlock && !empty($config->block->{$configType}->dtable->short->fieldList)) $config->block->{$configType}->dtable->fieldList = $config->block->{$configType}->dtable->short->fieldList;
