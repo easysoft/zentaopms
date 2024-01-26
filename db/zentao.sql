@@ -15777,6 +15777,8 @@ CREATE TABLE `zt_demand` (
   `activatedDate` datetime NULL,
   `distributedBy` varchar(30) NOT NULL DEFAULT '',
   `distributedDate` datetime NULL,
+  `feedback` mediumint(9) NOT NULL DEFAULT '0',
+  `keywords` varchar(255) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
