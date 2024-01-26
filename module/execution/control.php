@@ -981,7 +981,7 @@ class execution extends control
 
         $execution = $this->executionZen->initFieldsForCreate($projectID, $output);
         if($copyExecutionID) $this->executionZen->setFieldsByCopyExecution($execution, $copyExecutionID);
-        $projectID = $execution->project;
+        $projectID = isset($execution->project) ? $execution->project : $projectID;
 
         if($executionID) return $this->executionZen->displayAfterCreated($projectID, $executionID, $planID, $confirm);
 
@@ -1034,7 +1034,7 @@ class execution extends control
         $this->view->allProjects         = $allProjects;
         $this->view->multiBranchProducts = $this->loadModel('product')->getMultiBranchPairs();
         $this->view->products            = $products;
-        $this->view->teams               = $this->execution->getCanCopyObjects($projectID);
+        $this->view->teams               = $this->execution->getCanCopyObjects((int)$projectID);
         $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->copyExecutionID     = $copyExecutionID;
         $this->view->productID           = $productID;
