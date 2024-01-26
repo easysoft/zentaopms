@@ -21,7 +21,7 @@ class detailHeader extends wg
         return backBtn
         (
             set::icon('back'),
-            set::type('secondary'),
+            set::type('primary-outline'),
             set::back($this->prop('back')),
             set::url($this->prop('backUrl')),
             $lang->goback
