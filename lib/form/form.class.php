@@ -143,6 +143,7 @@ class form extends fixer
         $module = $app->getModuleName();
         $method = $app->getMethodName();
         if($method == 'batchcreate') $method = 'create';
+        if($method == 'batchedit')   $method = 'edit';
 
         if(empty($config->$module->$method->requiredFields)) return $configObject;
 
