@@ -1,3 +1,4 @@
+
 :root
 {
   --zt-menu-bg: var(--color-gray-900);
@@ -5,5 +6,13 @@
   --zt-menu-active-bg: var(--color-primary-500);
   --zt-header-bg: var(--color-primary-500);
   --zt-header-color: var(--color-canvas);
+  --zt-navbar-active-color: var(--color-canvas);
 }
-#header .btn.primary-pale {background-color: var(--color-primary-400); color: var(--color-canvas)}
+#quickAddMenu-toggle {
+  --tw-ring-color: rgba(var(--color-canvas-rgb),var(--tw-ring-opacity));
+  color: var(--color-canvas);
+}
+#versionMenu-toggle {
+  background-color: var(--color-primary-400);
+  color: var(--color-canvas)
+}
