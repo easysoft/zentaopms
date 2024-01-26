@@ -420,7 +420,7 @@ class blockZen extends block
         $yesterday = strtotime("-1 day");
         /* 获取昨日完成的任务数。 */
         $finishTask      = 0;
-        $finishTaskGroup = $this->loadModel('metric')->getResultByCode('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
+        $finishTaskGroup = $this->loadModel('metric')->getResultByCode('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'realtime', null, $this->config->vision);
         if(!empty($finishTaskGroup))
         {
             $finishTaskGroup = reset($finishTaskGroup);
@@ -937,8 +937,8 @@ class blockZen extends block
         $count  = isset($block->params->count) ? (int)$block->params->count : 15;
 
         /* Get projects. */
-        $excludedModel = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? '' : 'waterfall';
-        $projects      = $this->loadModel('project')->getProjectList($status, 'order_asc', $count, $excludedModel);
+        $excludedModel = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? '' : 'waterfall,waterfallplus';
+        $projects      = $this->loadModel('project')->getProjectList($status, 'order_asc', $count, '');
         $projectIdList = array_keys($projects);
 
         /* Get metric data. */
