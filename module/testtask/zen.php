@@ -703,8 +703,6 @@ class testtaskZen extends testtask
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('$link', 'runCaseModal')"));
         }
-
-        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
     }
 
     /**

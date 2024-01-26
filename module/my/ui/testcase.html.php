@@ -33,7 +33,14 @@ if($type == 'openedbyme')
     unset($config->my->testcase->dtable->fieldList['openedBy']);
 }
 
-if($type == 'assigntome') $config->my->testcase->dtable->fieldList['title']['link']['params'] .= "&from=testtask&taskID={task}";
+if($type == 'assigntome')
+{
+    $config->my->testcase->dtable->fieldList['title']['link']['params'] .= "&from=testtask&taskID={task}";
+    $config->my->testcase->dtable->fieldList['actions']['list']['runCase']['url']   = array('module' => 'testtask', 'method' => 'runCase',   'params' => 'id={run}');
+    $config->my->testcase->dtable->fieldList['actions']['list']['runResult']['url'] = array('module' => 'testtask', 'method' => 'results',   'params' => 'id={run}');
+    $config->my->testcase->dtable->fieldList['actions']['list']['createBug']['url'] = array('module' => 'testcase', 'method' => 'createBug', 'params' => 'product={product}&caseID={case}&version={version}&runID={run}');
+    $config->my->testcase->dtable->fieldList['actions']['menu'] = array('runCase', 'runResult', 'createBug');
+}
 foreach($config->my->testcase->dtable->fieldList['actions']['list'] as &$action) $action['url']['params'] = str_replace('{caseID}', "{id}", $action['url']['params']);
 
 $cases = initTableData($cases, $config->my->testcase->dtable->fieldList, $this->testcase);

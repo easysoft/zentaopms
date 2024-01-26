@@ -880,6 +880,7 @@ class testtask extends control
             $this->loadModel('action')->create('case', $caseID, 'run', '', zget($run, 'task', 0));
 
             $this->testtaskZen->responseAfterRunCase($caseResult, $preAndNext, $runID, $caseID, $version);
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
         $this->testtaskZen->assignForRunCase($run, $preAndNext, $runID, $caseID, $version, $confirm);
