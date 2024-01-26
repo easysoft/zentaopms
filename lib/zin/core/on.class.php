@@ -337,12 +337,12 @@ class on extends jsCallback
      * 绑定事件到部件，使用魔术方法。
      *
      * @access public
-     * @param  null|string|jsCallback $selectorOrCallback
-     * @param  null|array|string      $handlerOrOptions
+     * @param  string $event
+     * @param  array  $args
      * @return on
      * @static
      */
-    public static function __callStatic($event, $args)
+    public static function __callStatic(string $event, array $args)
     {
         list($selectorOrCallback, $options) = array_merge($args, array(null, null));
         return static::bind($event, $selectorOrCallback, $options);

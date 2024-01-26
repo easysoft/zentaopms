@@ -444,8 +444,8 @@ class js extends directive
      * 创建 window 变量上下文操作辅助对象。
      *
      * @access public
-     * @param null|string           $name     Name.
-     * @param mixed                 ...$args  Arguments.
+     * @param string           $name     Name.
+     * @param mixed            ...$args  Arguments.
      */
     public static function __callStatic(string $name, array $args)
     {
