@@ -622,7 +622,7 @@ function setParent(array $items)
             $item->isParent = true;
         }
 
-        if(!empty($item->parent) && isset($items[$item->parent])) $items[$item->parent]->isParent = true;
+        if(!empty($item->parent) && isset($items[$item->parent]) && isset($item->type) && $item->type == 'stage') $items[$item->parent]->isParent = true;
     }
     return $items;
 }
