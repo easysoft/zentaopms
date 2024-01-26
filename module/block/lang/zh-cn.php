@@ -157,7 +157,7 @@ $lang->block->default['ipdproject']           = $lang->block->default['waterfall
 
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon}总览",             'module' => 'product', 'code' => 'overview',         'width' => '3');
 $lang->block->default['product'][] = array('title' => "未关闭的{$lang->productCommon}统计",     'module' => 'product', 'code' => 'statistic',        'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
-$lang->block->default['product'][] = array('title' => "未关闭{$lang->productCommon}的Bug数据",  'module' => 'product', 'code' => 'bugstatistic',     'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+$lang->block->default['product'][] = array('title' => "未关闭{$lang->productCommon}的Bug统计",  'module' => 'product', 'code' => 'bugstatistic',     'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon}月度推进分析",     'module' => 'product', 'code' => 'monthlyprogress',  'width' => '2');
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon}年度工作量统计",   'module' => 'product', 'code' => 'annualworkload',   'width' => '2');
 $lang->block->default['product'][] = array('title' => "未关闭的{$lang->productCommon}列表",     'module' => 'product', 'code' => 'list',             'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20', 'orderBy' => 'id_desc'));
@@ -167,7 +167,7 @@ $lang->block->default['product'][] = array('title' => "{$lang->productCommon}发
 $lang->block->default['product'][] = array('title' => "指派给我的{$lang->SRCommon}",            'module' => 'product', 'code' => 'story',            'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}统计",               'module' => 'singleproduct', 'code' => 'singlestatistic',        'width' => '2', 'params' => array('count' => '20'));
-$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的Bug数据",          'module' => 'singleproduct', 'code' => 'singlebugstatistic',     'width' => '2', 'params' => array('count' => '20'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}的Bug统计",          'module' => 'singleproduct', 'code' => 'singlebugstatistic',     'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}路线图",             'module' => 'singleproduct', 'code' => 'roadmap',                'width' => '2');
 $lang->block->default['singleproduct'][] = array('title' => "指派给我的{$lang->SRCommon}",              'module' => 'singleproduct', 'code' => 'singlestory',            'width' => '2', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}计划列表",           'module' => 'singleproduct', 'code' => 'singleplan',             'width' => '2', 'params' => array('count' => '20'));
