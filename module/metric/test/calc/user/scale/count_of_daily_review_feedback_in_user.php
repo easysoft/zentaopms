@@ -7,11 +7,11 @@ title=count_of_daily_review_feedback_in_user
 timeout=0
 cid=1
 
-- 测试分组数。 @130
-- 测试用户admin @4
-- 测试用户user @24
-- 测试用户dev @34
-- 测试用户pm @22
+- 测试分组数。 @224
+- 测试用户admin @10
+- 测试用户user @42
+- 测试用户dev @64
+- 测试用户pm @48
 - 测试不存在的用户 @0
 
 */

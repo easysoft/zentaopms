@@ -8,10 +8,10 @@ timeout=0
 cid=1
 
 - 测试分组数。 @6
-- 测试用户user第0条的value属性 @24
-- 测试用户dev第0条的value属性 @34
-- 测试用户pm第0条的value属性 @22
-- 测试用户admin第0条的value属性 @4
+- 测试用户user第0条的value属性 @42
+- 测试用户dev第0条的value属性 @64
+- 测试用户pm第0条的value属性 @48
+- 测试用户admin第0条的value属性 @10
 - 测试不存在的用户第0条的value属性 @0
 
 */
