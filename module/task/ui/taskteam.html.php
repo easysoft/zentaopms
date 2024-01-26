@@ -137,7 +137,7 @@ if(!empty($task->team))
     }
 }
 
-$count = $i + 3;
+$count = isset($task->status) && $task->status != 'wait' && $task->status != 'doing' ? 0 : $i + 3;
 for($i; $i < $count; $i ++)
 {
     $teamForm[] = h::tr
@@ -216,6 +216,22 @@ for($i; $i < $count; $i ++)
                     array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
                     array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
                 ))
+            )
+        )
+    );
+}
+
+if($count == 0 && $app->rawMethod == 'edit')
+{
+    $teamForm[] = h::tr
+    (
+        h::td
+        (
+            set('colspan', 6),
+            div
+            (
+                setClass('secondary-pale py-4 pl-4'),
+                sprintf($lang->task->noticeManageTeam, zget($lang->task->statusList, $task->status))
             )
         )
     );
