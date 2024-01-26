@@ -8,7 +8,7 @@ timeout=0
 cid=1
 
 - 测试分组数。 @10
-- 测试执行11的任务数。第0条的value属性 @36
+- 测试执行11的任务数。第0条的value属性 @30
 - 测试执行12的任务数。第0条的value属性 @30
 - 测试执行13的任务数。第0条的value属性 @30
 - 测试不存在执行的任务数。 @0
@@ -25,7 +25,7 @@ $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('10'); // 测试分组数。
-r($calc->getResult(array('execution' => 11))) && p('0:value') && e('36'); // 测试执行11的任务数。
+r($calc->getResult(array('execution' => 11))) && p('0:value') && e('30'); // 测试执行11的任务数。
 r($calc->getResult(array('execution' => 12))) && p('0:value') && e('30'); // 测试执行12的任务数。
 r($calc->getResult(array('execution' => 13))) && p('0:value') && e('30'); // 测试执行13的任务数。
 r($calc->getResult(array('execution' => 110))) && p('') && e('0');        // 测试不存在执行的任务数。
