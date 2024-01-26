@@ -1582,7 +1582,7 @@ class execution extends control
         if(!$this->loadModel('common')->checkPrivByObject('execution', $executionID)) return $this->execution->accessDenied();
 
         $execution->projectInfo = $this->loadModel('project')->getByID($execution->project);
-        $programList = array_filter(explode(',', $execution->projectInfo->path));
+        $programList = $execution->projectInfo ? array_filter(explode(',', $execution->projectInfo->path)) : array();
         array_pop($programList);
 
         if(!$execution->projectInfo->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
