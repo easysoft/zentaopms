@@ -136,16 +136,16 @@ class datatable extends control
             }
         }
 
-        if($module == 'productplan' && $method == 'browse')
+        if(($module == 'productplan' && $method == 'browse') || ($module == 'project' && $method == 'bug'))
         {
             if($this->session->currentProductType == 'normal')
             {
-                unset($cols['branchName']);
+                unset($cols['branchName'], $cols['branch']);
             }
             else
             {
                 $this->app->loadLang('product');
-                $cols['branchName']['title'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$this->session->currentProductType]);
+                $cols['branch']['title'] = $cols['branchName']['title'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$this->session->currentProductType]);
             }
         }
 
