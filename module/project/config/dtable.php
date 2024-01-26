@@ -63,7 +63,6 @@ $config->project->dtable->fieldList['storyPoints']['sortType'] = false;
 $config->project->dtable->fieldList['storyCount']['title']    = $lang->project->storyCount;
 $config->project->dtable->fieldList['storyCount']['type']     = 'number';
 $config->project->dtable->fieldList['storyCount']['group']    = 4;
-$config->project->dtable->fieldList['storyCount']['show']     = true;
 $config->project->dtable->fieldList['storyCount']['width']    = '120px';
 $config->project->dtable->fieldList['storyCount']['sortType'] = false;
 
