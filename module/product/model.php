@@ -439,7 +439,7 @@ class productModel extends model
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
-            if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $programID = (int)zget($product, 'program', $oldProduct->program);
+            $programID  = (int)zget($product, 'program', $oldProduct->program);
 
             $result = $this->productTao->doUpdate($product, $productID, $programID);
             if(!$result) return array('result' => 'fail', 'message' => 'product#' . $productID . dao::getError(true));
