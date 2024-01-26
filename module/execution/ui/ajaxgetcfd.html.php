@@ -9,6 +9,28 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$index       = 0;
+$chartColors = array('#33B4DB', '#7ECF69', '#FFC73A', '#FF5A61', '#50C8D0', '#AF5AFF', '#4EA3FF', '#FF8C5A', '#6C73FF');
+$chartSeries = array();
+if(!empty($chartData['line']))
+{
+    foreach($chartData['line'] as $label => $set)
+    {
+        $chartSeries[] = array(
+            'name'      => $label,
+            'type'      => 'line',
+            'stack'     => 'Total',
+            'data'      => array_values($set),
+            'color'     => $chartColors[$index],
+            'areaStyle' => array('color' => $chartColors[$index], 'opacity' => 0.2),
+            'itemStyle' => array('normal' => array('lineStyle' => array('width' => 1))),
+            'emphasis'  => array('focus' => 'series')
+        );
+
+        $index ++;
+    }
+}
+
 $cfdChart = null;
 if(hasPriv('execution', 'cfd'))
 {
@@ -21,9 +43,6 @@ if(hasPriv('execution', 'cfd'))
             'axisPointer' => array('type' => 'cross', 'label' => array('backgroundColor' => '#6a7985')),
             'textStyle'   => array('fontWeight' => 100),
             'formatter'   => "RAWJS<function(rowDatas){return window.randTipInfo(rowDatas);}>RAWJS"
-        )),
-        set::legend(array(
-            'data' => array_keys(array_reverse($chartData['line']))
         )),
         set::grid(array(
             'left'         => '3%',
