@@ -12,10 +12,15 @@ $(".form-actions .btn[type='submit']").on('click', function(e, hasConfirmed)
     {
         e.preventDefault();
         zui.Modal.confirm(confirmRecord).then(
-            confirmed => 
+            confirmed =>
             {
                 if(confirmed) $this.trigger('click', true);
             }
         );
     }
 });
+
+$(document).on('click', '.modal-actions > button', function()
+{
+    loadCurrentPage();
+})
