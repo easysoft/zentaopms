@@ -1309,8 +1309,8 @@ class productModel extends model
         {
             if(empty($data)) continue;
 
-            if($key == 'productList' || $key == 'projectList') array_map(function($item){return $item->name = htmlspecialchars_decode($item->name, ENT_QUOTES);}, $data);
-            if($key == 'planList')
+            if($key === 'productList' || $key === 'projectList') array_map(function($item){return $item->name = htmlspecialchars_decode($item->name, ENT_QUOTES);}, $data);
+            if($key === 'planList')
             {
                 foreach($data as $plan)
                 {
