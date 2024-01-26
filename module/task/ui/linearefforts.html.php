@@ -63,7 +63,7 @@ foreach($myCountList as $order => $count)
             $tdDom,
             h::td($effort->date),
             h::td(zget($users, $effort->account)),
-            h::td($effort->work),
+            h::td(html($effort->work)),
             h::td($effort->consumed . ' H'),
             h::td($effort->left . ' H'),
             h::td
@@ -104,7 +104,7 @@ foreach($recorders as $order => $accounts)
             $tdDom,
             h::td($effort->date),
             h::td(zget($users, $effort->account)),
-            h::td($effort->work),
+            h::td(html($effort->work)),
             h::td($effort->consumed . ' H'),
             h::td($effort->left . ' H')
         );
