@@ -40,7 +40,7 @@ dtable
     set::cols($config->execution->team->dtable->fieldList),
     set::data($teamMembers),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footer(jsRaw('function(){return window.setStatistics.call(this);}'))
+    set::footer(jsRaw('function(){return window.setTeamStatistics.call(this);}'))
 );
 
 /* ====== Render page ====== */

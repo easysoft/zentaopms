@@ -20,7 +20,7 @@ window.deleteMember = function(executionID, userID)
  * @access public
  * @return object
  */
-window.setStatistics = function()
+window.setTeamStatistics = function()
 {
     const rows     = this.layout.allRows;
     let totalHours = 0;
