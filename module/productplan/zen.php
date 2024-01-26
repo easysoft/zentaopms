@@ -135,7 +135,7 @@ class productplanZen extends productplan
             $plan->projects = array_values($plan->projects);
         }
 
-        return array_values($plans);
+        return $plans;
     }
 
     /**
