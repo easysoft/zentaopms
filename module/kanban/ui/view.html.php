@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$canModify = !empty($this->config->CRKanban) || $kanban->status != 'closed';
+
 $laneCount = 0;
 $groupCols = array(); // 卡片可以移动到的同一group下的列。
 foreach($kanbanList as $current => $region)
@@ -27,8 +29,6 @@ foreach($kanbanList as $current => $region)
         $kanbanList[$current]['kanbanProps']['getLane']       = jsRaw('window.getLane');
         $kanbanList[$current]['kanbanProps']['getCol']        = jsRaw('window.getCol');
         $kanbanList[$current]['kanbanProps']['getItem']       = jsRaw('window.getItem');
-        $kanbanList[$current]['kanbanProps']['canDrop']       = jsRaw('window.canDrop');
-        $kanbanList[$current]['kanbanProps']['onDrop']        = jsRaw('window.onDrop');
         $kanbanList[$current]['kanbanProps']['colWidth']      = 'auto';
         $kanbanList[$current]['kanbanProps']['laneHeight']    = 'auto';
         $kanbanList[$current]['kanbanProps']['minColWidth']   = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->minColWidth;
@@ -37,6 +37,12 @@ foreach($kanbanList as $current => $region)
         $kanbanList[$current]['kanbanProps']['colProps']      = array('actions' => jsRaw('window.getColActions'), 'titleAlign' => $kanban->alignment);
         $kanbanList[$current]['kanbanProps']['laneProps']     = array('actions' => jsRaw('window.getLaneActions'));
         $kanbanList[$current]['kanbanProps']['itemProps']     = array('actions' => jsRaw('window.getItemActions'));
+
+        if($canModify)
+        {
+            $kanbanList[$current]['kanbanProps']['canDrop'] = jsRaw('window.canDrop');
+            $kanbanList[$current]['kanbanProps']['onDrop']  = jsRaw('window.onDrop');
+        }
     }
 
     $laneCount += $region['laneCount'];
@@ -63,6 +69,7 @@ jsVar('groupCols', $groupCols);
 jsVar('vision', $config->vision);
 jsVar('colorList', $config->kanban->cardColorList);
 jsVar('canMoveCard', common::hasPriv('kanban', 'moveCard'));
+jsVar('canModify', (!empty($this->config->CRKanban) || $kanban->status != 'closed'));
 
 dropmenu(set::tab('kanban'), set::objectID($kanban->id));
 

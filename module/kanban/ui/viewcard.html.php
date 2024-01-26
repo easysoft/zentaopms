@@ -32,7 +32,8 @@ detailHeader
     )
 );
 
-$actions = $this->loadModel('common')->buildOperateMenu($card);
+$actions   = $this->loadModel('common')->buildOperateMenu($card);
+$canModify = !empty($this->config->CRKanban) || $kanban->status != 'closed';
 detailBody
 (
     sectionList
@@ -46,13 +47,13 @@ detailBody
         )
     ),
     history(set(array('objectType' => 'kanbancard', 'objectID' => $card->id))),
-    floatToolbar
+    $canModify ? floatToolbar
     (
         set::object($card),
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
         set::main($actions['mainActions']),
         set::suffix($actions['suffixActions'])
-    ),
+    ) : null,
     detailSide
     (
         tabs

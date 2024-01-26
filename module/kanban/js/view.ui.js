@@ -49,6 +49,7 @@ window.getCol = function(col)
 
 window.getColActions = function(col)
 {
+    if(!canModify) return [];
     let actionList = [];
 
     /* 父列不需要创建卡片相关的操作按钮。 */
@@ -303,6 +304,7 @@ function renderAvatar(avatarList)
 
 window.getItemActions = function(item)
 {
+    if(!canModify) return [];
     return [{
         type: 'dropdown',
         icon: 'ellipsis-v',
