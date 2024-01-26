@@ -25,8 +25,8 @@ $getMeasureItem = function($data)
         (
             div
             (
-                set('class', 'text-3xl h-40px'),
-                !empty($info['href']) ? a(set('href', $info['href']), $info['number']) : span($info['number'])
+                set('class', 'text-3xl h-10'),
+                !empty($info['href']) ? a(setClass('text-primary'), set('href', $info['href']), $info['number']) : span($info['number'])
             ),
             div(zget($welcomeLabel, $key, '')),
             !empty($info['delay']) ? div
