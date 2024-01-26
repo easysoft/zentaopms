@@ -111,7 +111,11 @@ class testreportZen extends testreport
         {
             if($testTask->build != 'trunk') $taskPairs[$testTask->id] = $testTask->name;
         }
-        if(!$taskPairs) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->noTestTask, 'confirmed' => $this->createLink('testtask', 'create', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
+        if(!$taskPairs)
+        {
+            $confirmedURL = $this->createLink('testtask', 'create', "proudctID={$productID}" . ($this->app->tab == 'execution' ? "&executionID={$this->session->execution}" : ''));
+            return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->noTestTask, 'confirmed' => $confirmedURL, 'canceled' => inlink('browse', "proudctID={$productID}"))));
+        }
 
         if(!$objectID)
         {
