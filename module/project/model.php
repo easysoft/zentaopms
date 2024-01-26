@@ -1113,13 +1113,18 @@ class projectModel extends model
         $multipleProducts = $this->loadModel('product')->getMultiBranchPairs((int)$topProgramID);
         foreach($products as $index => $productID)
         {
-            if(isset($multipleProducts[$productID]) and empty($branch[$index]))
+            if(isset($multipleProducts[$productID]))
             {
-                dao::$errors[] = $this->lang->project->error->emptyBranch;
-                return false;
+                foreach($branch[$index] as $branchID)
+                {
+                    if(empty($branchID))
+                    {
+                        dao::$errors["branch[{$index}][]"] = $this->lang->project->error->emptyBranch;
+                    }
+                }
             }
         }
-        return true;
+        return !dao::isError();
     }
 
     /**
