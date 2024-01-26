@@ -31,6 +31,7 @@ class form extends formBase
         'labelData?: array|object',        // 表单项标签默认数据。
         'loadUrl?: string',                // 动态更新 URL。
         'autoLoad?: array',                // 自动更新策略。
+        'stickyActions?: array|bool=false',// 是否固定操作按钮栏。
         'actionsClass?: string="form-group no-label"' // 操作按钮栏的 CSS 类。
     );
 
@@ -258,7 +259,16 @@ class form extends formBase
 
     protected function buildActions(): wg|null
     {
+        $sticky  = $this->prop('stickyActions');
         $actions = parent::buildActions();
+
+        if($sticky)
+        {
+            $actions->setProp('zui-create', 'sticky');
+            $actions->setProp('data-side', 'bottom');
+            if(is_array($sticky)) $actions->add(setData($sticky));
+        }
+
         if($this->isLayout('horz') && !empty($actions)) $actions = div(setClass('form-row'), $actions);
         return $actions;
     }
