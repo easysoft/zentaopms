@@ -88,6 +88,7 @@ foreach($cards as $card)
                         (
                             'href'        => inlink('viewCard', "cardID=$card->id"),
                             'data-toggle' => 'modal',
+                            'data-size'   => 'lg',
                             'class'       => 'card-title'
                         )
                     ),

@@ -24,6 +24,8 @@ foreach($kanbanList as $current => $region)
     {
         $group['draggable']     = true;
         $group['colWidth']      = 'auto';
+        $group['minColWidth']   = 'auto';
+        $group['maxColWidth']   = 'auto';
         $group['maxLaneHeight'] = '300px';
         $group['getCol']        = jsRaw('window.getCol');
         $group['getItem']       = jsRaw('window.getItem');

@@ -1,4 +1,4 @@
-.panel-heading {justify-content: center;}
+#archivedCards .panel-heading {justify-content: center;}
 #archivedCards {top: 50px; right: 0px; width: 400px; position: fixed; z-index: 1050; background-color: rgb(255,255,255);}
 #archivedCards .panel .panel-body {overflow: auto; padding: 10px;}
 #archivedCards .card {border: 1px solid #ddd; border-radius: 4px; padding: 5px;}
