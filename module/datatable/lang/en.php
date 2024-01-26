@@ -11,9 +11,11 @@ $lang->datatable->customTip          = 'Check columns to display and drag column
 $lang->datatable->switchToTable      = 'Common Table';
 $lang->datatable->switchToDatatable  = 'Advanced Table';
 $lang->datatable->required           = 'Required';
-$lang->datatable->confirmReset       = 'Do you want to restore the default settings?';
+$lang->datatable->confirmReset       = 'Restoring to default will clear the relevant settings of the list. Are you sure you want to restore to default?';
 $lang->datatable->setGlobal          = 'Set Global';
 $lang->datatable->resetGlobal        = 'Global Reset';
+$lang->datatable->confirmSetGlobal   = 'After applying it globally, the list of all individuals in the system will default to this rule for display. Are you sure you want to apply it globally?';
+$lang->datatable->confirmGlobalReset = 'After restoring to default globally, all individual list settings in the system will be cleared. Are you sure you want to restore to default?';
 
 $lang->datatable->branch   = 'Branch';
 $lang->datatable->platform = 'Platform';

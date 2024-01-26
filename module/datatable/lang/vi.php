@@ -11,9 +11,11 @@ $lang->datatable->customTip          = 'Kiểm tra cột để hiển thị và 
 $lang->datatable->switchToTable      = 'Chuyển sang bảng chung';
 $lang->datatable->switchToDatatable  = 'Chuyển sang bảng nâng cao';
 $lang->datatable->required           = 'Bắt buộc';
-$lang->datatable->confirmReset       = 'Bạn có muốn khôi phục lại thiết lập mặc định?';
+$lang->datatable->confirmReset       = 'Restoring to default will clear the relevant settings of the list. Are you sure you want to restore to default?';
 $lang->datatable->setGlobal          = 'Thiết lập toàn cục';
 $lang->datatable->resetGlobal        = 'Thiết lập lại toàn cục';
+$lang->datatable->confirmSetGlobal   = 'After applying it globally, the list of all individuals in the system will default to this rule for display. Are you sure you want to apply it globally?';
+$lang->datatable->confirmGlobalReset = 'After restoring to default globally, all individual list settings in the system will be cleared. Are you sure you want to restore to default?';
 
 $lang->datatable->branch   = 'Nhánh';
 $lang->datatable->platform = 'Platform';

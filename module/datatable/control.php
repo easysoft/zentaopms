@@ -190,11 +190,19 @@ class datatable extends control
      * @param  string $module
      * @param  string $method
      * @param  int    $system
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function ajaxReset(string $module, string $method, int $system = 0)
+    public function ajaxReset(string $module, string $method, int $system = 0, string $confirm = 'no')
     {
+        if($confirm != 'yes')
+        {
+            $confirmURL = $this->createLink('datatable', 'ajaxreset', "module={$module}&method={$method}&system={$system}&confirm=yes");
+            $tip        = (int)$system ? $this->lang->datatable->confirmGlobalReset : $this->lang->datatable->confirmReset;
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$tip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
+        }
+
         $account = !$system ? $this->app->user->account : 'system';
         $target  = $module . ucfirst($method);
 
@@ -218,11 +226,19 @@ class datatable extends control
      * @param  string $module
      * @param  string $method
      * @param  string $extra
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function ajaxSaveGlobal(string $module, string $method, string $extra = '')
+    public function ajaxSaveGlobal(string $module, string $method, string $extra = '', string $confirm = 'no')
     {
+        if($confirm != 'yes')
+        {
+            $confirmURL = $this->createLink('datatable', 'ajaxsaveglobal', "module={$module}&method={$method}&extra={$extra}&confirm=yes");
+            $tip        = $this->lang->datatable->confirmSetGlobal;
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$tip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
+        }
+
         $target = $module . ucfirst($method);
         if(strpos(',product-browse,execution-story,', ",$module-$method,") !== false && strpos(',story,requirement', ",$extra,") !== false) $target .= ucfirst($extra);
 

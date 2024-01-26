@@ -11,9 +11,11 @@ $lang->datatable->customTip          = "Cochez les colonnes à afficher et dépl
 $lang->datatable->switchToTable      = 'Basculer vers le Tableau Commun';
 $lang->datatable->switchToDatatable  = 'Basculer vers le Tableau Avancé';
 $lang->datatable->required           = 'Obligatoire';
-$lang->datatable->confirmReset       = 'Voulez-vous restaurer les paramétres par défaut ?';
+$lang->datatable->confirmReset       = 'Restoring to default will clear the relevant settings of the list. Are you sure you want to restore to default?';
 $lang->datatable->setGlobal          = 'Paramétrage Global';
 $lang->datatable->resetGlobal        = 'Réinitialisation Globale';
+$lang->datatable->confirmSetGlobal   = 'After applying it globally, the list of all individuals in the system will default to this rule for display. Are you sure you want to apply it globally?';
+$lang->datatable->confirmGlobalReset = 'After restoring to default globally, all individual list settings in the system will be cleared. Are you sure you want to restore to default?';
 
 $lang->datatable->branch   = 'Branche';
 $lang->datatable->platform = 'Plateforme';
