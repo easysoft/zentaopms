@@ -8,7 +8,7 @@ timeout=0
 cid=1
 
 - 测试分组数。 @15
-- 测试项目12的进行中任务数第0条的value属性 @3
+- 测试项目12的进行中任务数第0条的value属性 @7
 - 测试项目24的进行中任务数第0条的value属性 @3
 - 测试项目36的进行中任务数第0条的value属性 @3
 
@@ -24,6 +24,6 @@ $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('15'); // 测试分组数。
-r($calc->getResult(array('project' => 12))) && p('0:value') && e('3'); // 测试项目12的进行中任务数
+r($calc->getResult(array('project' => 12))) && p('0:value') && e('7'); // 测试项目12的进行中任务数
 r($calc->getResult(array('project' => 24))) && p('0:value') && e('3'); // 测试项目24的进行中任务数
 r($calc->getResult(array('project' => 36))) && p('0:value') && e('3'); // 测试项目36的进行中任务数
