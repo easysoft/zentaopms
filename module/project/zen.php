@@ -143,7 +143,6 @@ class projectZen extends project
                         if(empty($branchID))
                         {
                             dao::$errors["branch[{$index}][]"] = $this->lang->project->error->emptyBranch;
-                            return false;
                         }
                     }
                 }
@@ -154,10 +153,9 @@ class projectZen extends project
         if($project->parent && $project->hasProduct && empty($linkedProductsCount) && !isset($rawdata->newProduct))
         {
             dao::$errors['products[0]'] = $this->lang->project->error->productNotEmpty;
-            return false;
         }
 
-        return true;
+        return !dao::isError();
     }
 
     /**
