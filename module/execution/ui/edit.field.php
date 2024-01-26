@@ -20,8 +20,12 @@ if($project)
     {
         $fields->field('project')
             ->label($lang->execution->projectName)
-            ->items(data('allProjects'))
-            ->value(data('execution.project'));
+            ->control(array(
+                'control'  => 'picker',
+                'required' => true,
+                'items'    => data('allProjects'),
+                'value'    => data('execution.project')
+            ));
     }
     elseif($project->model == 'kanban')
     {
