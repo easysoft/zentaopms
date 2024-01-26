@@ -50,7 +50,9 @@ $fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $sh
         if(str_contains(",{$config->story->create->requiredFields},", ",{$colName},")) $cols[$index]['required'] = true;
         if(isset($customFields[$colName]) && strpos(",$showFields,", ",$colName,") === false) $cols[$index]['hidden'] = true;
         if($colName == 'sourceNote' && strpos(",$showFields,", ",source,") === false) $cols[$index]['hidden'] = true;
+        if($colName == 'spec') unset($cols[$index]['control']);
     }
+
     return $cols;
 };
 
