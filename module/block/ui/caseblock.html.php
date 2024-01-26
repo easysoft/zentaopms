@@ -11,13 +11,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-if(!$longBlock)
-{
-    unset($config->block->case->dtable->fieldList['pri']);
-    unset($config->block->case->dtable->fieldList['type']);
-    unset($config->block->case->dtable->fieldList['status']);
-    unset($config->block->case->dtable->fieldList['lastRunDate']);
-}
+$cols = $longBlock ? $config->block->case->dtable->fieldList : $config->block->case->dtable->short->fieldList;
 
 foreach($cases as $case) $case->lastRunDate = formatTime($case->lastRunDate, DT_DATE1);
 
@@ -30,7 +24,7 @@ blockPanel
         set::height(320),
         set::bordered(false),
         set::horzScrollbarPos('inside'),
-        set::cols(array_values($config->block->case->dtable->fieldList)),
+        set::cols(array_values($cols)),
         set::data(array_values($cases))
     )
 );

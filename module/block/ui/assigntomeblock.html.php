@@ -23,7 +23,7 @@ $moreMenus = array();
 foreach($hasViewPriv as $type => $bool)
 {
     $selected = key($hasViewPriv);
-    if(($longBlock && $count > 9 && $index >= 8) || (!$longBlock && $count > 4 && $index >= 3))
+    if(($longBlock && $count > 9 && $index >= 8) || (!$longBlock && $count > 3 && $index >= 2))
     {
         $moreMenus[] = array('text' => $type == 'review' ? $lang->my->audit : zget($lang->block->availableBlocks, $type), 'data-toggle' => 'tab', 'href' => "#assigntome{$type}Tab{$blockNavCode}");
     }

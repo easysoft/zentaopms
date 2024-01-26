@@ -43,4 +43,4 @@ unset($config->block->case->dtable->fieldList['lastRunResult']['sortType']);
 $config->block->case->dtable->short = new stdclass();
 $config->block->case->dtable->short->fieldList['id']            = $config->block->case->dtable->fieldList['id'];
 $config->block->case->dtable->short->fieldList['title']         = $config->block->case->dtable->fieldList['title'];
-$config->block->case->dtable->short->fieldList['lastRunResult'] = $config->block->case->dtable->fieldList['lastRunDate'];
+$config->block->case->dtable->short->fieldList['lastRunResult'] = $config->block->case->dtable->fieldList['lastRunResult'];
