@@ -59,7 +59,8 @@ $fields->field('begin')
     ->tipProps(array('id' => 'dateTip'))
     ->tipClass('text-warning hidden');
 
-$fields->field('days')->label($lang->project->days . $lang->project->daysUnit)->control('input')->hidden($isLongTime);
+$days = data('copyProject') ? data('copyProject.days') : data('project.days');
+$fields->field('days')->label($lang->project->days . $lang->project->daysUnit)->control('input')->disabled($isLongTime)->value(!empty($days) ? $days : '');
 
 $fields->field('productsBox')
     ->width('full')
