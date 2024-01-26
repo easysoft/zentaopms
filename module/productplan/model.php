@@ -276,6 +276,7 @@ class productplanModel extends model
             ->where('t1.deleted')->eq(0)
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge(helper::today())->fi()
+            ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy('t1.' . $orderBy)
             ->fetchAll('id');
         $plans = $this->relationBranch($plans);

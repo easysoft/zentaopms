@@ -69,6 +69,7 @@ $fields->field('productsBox')
         'productItems'   => data('allProducts'),
         'branchGroups'   => data('branchGroups'),
         'planGroups'     => data('productPlans'),
+        'productPlans'   => data('productPlans'),
         'linkedProducts' => data('linkedProducts'),
         'linkedBranches' => data('linkedBranches'),
         'project'        => data('project') ? data('project') : data('copyProject'),
