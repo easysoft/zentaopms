@@ -92,13 +92,15 @@ blockPanel
                         (
                             'type' => 'line',
                             'name' => $lang->block->productstatistic->opened,
-                            'data' => array_values($createBugCount)
+                            'data' => array_values($createBugCount),
+                            'emphasis' => array('label' => array('show' => true))
                         ),
                         array
                         (
                             'type' => 'line',
                             'name' => $lang->bug->resolve,
-                            'data' => array_values($fixedBugCount)
+                            'data' => array_values($fixedBugCount),
+                            'emphasis' => array('label' => array('show' => true))
                         )
                     )
                 )
