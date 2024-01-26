@@ -49,7 +49,7 @@ window.renderCell = function(result, info)
     {
         const testcase = info.row.data;
         let html = "<select name='version[" + testcase.id + "]' id='version" + testcase.id + "' class='form-control' style='width:60px'>";
-        for(i = 1; i <= testcase.version; i++)
+        for(i = testcase.version; i >= 1; i --)
         {
             html += "<option value='" + i + "'>" + i + "</option>";
         }
