@@ -67,6 +67,15 @@ $app->setDebug();
 $config->installedVersion = $common->loadModel('setting')->getVersion();
 if(!$app->session->upgrading && ($config->version[0] == $config->installedVersion[0] or (is_numeric($config->version[0]) and is_numeric($config->installedVersion[0]))) and version_compare($config->version, $config->installedVersion) <= 0) die(header('location: index.php'));
 
+/* 删除临时 model 文件。*/
+/* Delete tmp mode files. */
+if(!isset($_SESSION['deleteTmpModel']))
+{
+    $upgradeModel = $common->loadModel('upgrade');
+    $upgradeModel->deleteTmpModel();
+    $_SESSION['deleteTmpModel'] = true;
+}
+
 /* Upgrade to latest version if it can be upgraded automatically. */
 if($app->canAutoUpgrade())
 {
@@ -79,7 +88,6 @@ if($app->canAutoUpgrade())
     $app->session->set('step', '');
     $app->post->set('fromVersion', str_replace( '.', '_', strtolower($config->installedVersion)));
 }
-
 
 try
 {

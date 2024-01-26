@@ -24,10 +24,6 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
-        /* 删除临时 model 文件。*/
-        /* Delete tmp mode files. */
-        $this->upgrade->deleteTmpModel();
-
         if(version_compare($this->config->installedVersion, '6.4', '<=')) $this->locate(inlink('license'));
         $this->locate(inlink('backup'));
     }
