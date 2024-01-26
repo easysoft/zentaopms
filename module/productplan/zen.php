@@ -124,7 +124,7 @@ class productplanZen extends productplan
         foreach($plans as $plan)
         {
             $plan->branchName = '';
-            if(!empty($plan->branch) && !empty($branchOption))
+            if($this->session->currentProductType != 'normal')
             {
                 foreach(explode(',', $plan->branch) as $branchID) $plan->branchName .= $branchOption[$branchID] . ',';
                 $plan->branchName = trim($plan->branchName, ',');

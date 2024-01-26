@@ -41,7 +41,7 @@ class datatableModel extends model
         }
 
         /* Nomal product without 'branch' field. */
-        if($this->session->currentProductType === 'normal') unset($config->fieldList['branch']);
+        if($this->session->currentProductType === 'normal') unset($config->fieldList['branch'], $config->fieldList['branchName']);
 
         foreach($fieldList as $fieldName => $items)
         {
@@ -121,7 +121,7 @@ class datatableModel extends model
                     continue;
                 }
 
-                if($this->session->currentProductType === 'normal' and $field === 'branch')
+                if($this->session->currentProductType === 'normal' && in_array($field, array('branch', 'branchName')))
                 {
                     unset($setting[$field]);
                     continue;

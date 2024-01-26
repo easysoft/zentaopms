@@ -140,12 +140,12 @@ class datatable extends control
         {
             if($this->session->currentProductType == 'normal')
             {
-                unset($cols['branch']);
+                unset($cols['branchName']);
             }
             else
             {
                 $this->app->loadLang('product');
-                $cols['branch']['title'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$this->session->currentProductType]);
+                $cols['branchName']['title'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$this->session->currentProductType]);
             }
         }
 

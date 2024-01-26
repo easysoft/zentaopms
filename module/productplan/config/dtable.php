@@ -1,5 +1,5 @@
 <?php
-global $app;
+global $app, $lang;
 $config->productplan->dtable = new stdclass();
 
 $config->productplan->dtable->fieldList['id']['name']     = 'id';
@@ -31,12 +31,12 @@ $config->productplan->dtable->fieldList['status']['statusMap'] = $lang->productp
 $config->productplan->dtable->fieldList['status']['group']     = 'g2';
 $config->productplan->dtable->fieldList['status']['show']      = true;
 
-$config->productplan->dtable->fieldList['branch']['name']     = 'branchName';
-$config->productplan->dtable->fieldList['branch']['title']    = '';
-$config->productplan->dtable->fieldList['branch']['type']     = 'text';
-$config->productplan->dtable->fieldList['branch']['sortType'] = true;
-$config->productplan->dtable->fieldList['branch']['group']    = 'g3';
-$config->productplan->dtable->fieldList['branch']['show']     = true;
+$config->productplan->dtable->fieldList['branchName']['name']     = 'branchName';
+$config->productplan->dtable->fieldList['branchName']['title']    = '';
+$config->productplan->dtable->fieldList['branchName']['type']     = 'text';
+$config->productplan->dtable->fieldList['branchName']['sortType'] = true;
+$config->productplan->dtable->fieldList['branchName']['group']    = 'g3';
+$config->productplan->dtable->fieldList['branchName']['show']     = true;
 
 $config->productplan->dtable->fieldList['begin']['name']     = 'begin';
 $config->productplan->dtable->fieldList['begin']['title']    = $lang->productplan->begin;
