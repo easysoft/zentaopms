@@ -111,7 +111,7 @@ class projectTao extends projectModel
             ->autoCheck('begin,end')
             ->check('end',  'gt', $project->begin)
             ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$project->parent' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$project->parent' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$project->parent' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();
