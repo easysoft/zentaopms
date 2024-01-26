@@ -109,6 +109,7 @@ $lang->action->objectTypes['project']          = $lang->projectCommon;
 $lang->action->objectTypes['execution']        = $lang->executionCommon;
 $lang->action->objectTypes['task']             = 'Tâche';
 $lang->action->objectTypes['build']            = 'Build';
+$lang->action->objectTypes['projectbuild']     = 'Project Build';
 $lang->action->objectTypes['job']              = 'Pipeline';
 $lang->action->objectTypes['bug']              = 'Bug';
 $lang->action->objectTypes['case']             = 'CasTest';

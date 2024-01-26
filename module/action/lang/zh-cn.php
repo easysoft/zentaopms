@@ -109,6 +109,7 @@ $lang->action->objectTypes['project']          = $lang->projectCommon;
 $lang->action->objectTypes['execution']        = '执行';
 $lang->action->objectTypes['task']             = '任务';
 $lang->action->objectTypes['build']            = '版本';
+$lang->action->objectTypes['projectbuild']     = '项目版本';
 $lang->action->objectTypes['job']              = '流水线';
 $lang->action->objectTypes['bug']              = 'Bug';
 $lang->action->objectTypes['case']             = '用例';
