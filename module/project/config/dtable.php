@@ -29,7 +29,7 @@ if(!empty($config->setCode))
     $config->project->dtable->fieldList['code']['type']     = 'text';
     $config->project->dtable->fieldList['code']['sortType'] = true;
     $config->project->dtable->fieldList['code']['group']    = 1;
-    $config->project->dtable->fieldList['code']['required'] = true;
+    $config->project->dtable->fieldList['code']['required'] = false;
 }
 
 $config->project->dtable->fieldList['status']['title']     = $lang->project->status;
