@@ -45,11 +45,11 @@ class programZen extends program
         }
 
         $this->app->loadConfig('project');
-        if($this->post->delta == 999) $_POST['end'] = LONG_TIME;
         $program = form::data($fields)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('code', '')
+            ->setIF($this->post->longTime, 'end', LONG_TIME)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->add('type', 'program')
             ->join('whitelist', ',')
@@ -78,7 +78,6 @@ class programZen extends program
         }
 
         $this->app->loadConfig('project');
-        if($this->post->delta == 999) $_POST['end'] = LONG_TIME;
         $program = form::data($fields)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
@@ -86,6 +85,7 @@ class programZen extends program
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
             ->setIF($this->post->realBegan != '' and $oldProgram->status == 'wait', 'status', 'doing')
             ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
+            ->setIF($this->post->longTime, 'end', LONG_TIME)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->get();

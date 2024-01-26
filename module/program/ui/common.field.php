@@ -18,6 +18,11 @@ $fields->field('PM')
     ->items(data('pmUsers'));
 
 $fields->field('begin')
+    ->control('inputGroup')
+    ->required()
+    ->label($lang->project->dateRange)
+    ->checkbox(array('text' => $lang->project->longTime, 'name' => 'longTime'))
+    ->menu(array('items' => jsRaw('window.getDateMenu')))
     ->tip(' ')
     ->tipProps(array('id' => 'dateTip'))
     ->tipClass('text-warning hidden');

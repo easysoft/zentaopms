@@ -15,6 +15,9 @@ jsVar('ignore',              $lang->program->ignore);
 jsVar('currencySymbol',      $lang->project->currencySymbol);
 jsVar('budgetOverrun',       $lang->project->budgetOverrun);
 
+unset($lang->project->endList['999']);
+jsVar('endList', $lang->project->endList);
+
 $fields = useFields('program.create');
 
 $autoLoad = array();
@@ -30,6 +33,7 @@ formGridPanel
     on::change('[name=budget]', 'budgetOverrunTips'),
     on::change('[name=future]', 'onFutureChange'),
     on::change('[name=acl]',    'onAclChange'),
+    on::change('[name=longTime]')->do('$("[name=end]").zui("datePicker").render({disabled: $(target).prop("checked")});'),
     on::change('[name=begin], [name=end]', 'onDateChange')
 );
 

@@ -352,3 +352,19 @@ window.onDateChange = () =>
         $('#dateTip').html(endGreatThanParent + parentEnd + ignoreBtn).removeClass('hidden');
     }
 };
+
+window.getDateMenu = function()
+{
+    if(!endList) return [];
+
+    const begin = $('input[name=begin]').val();
+    if(!begin) return [];
+
+    let endMenu     = [];
+    const beginDate = new Date(begin);
+    for(let key in endList)
+    {
+        endMenu.push({'text': endList[key], 'data-set-date': zui.formatDate(new Date(beginDate.getTime() + 1000 * 60 * 60 * 24 * parseInt(key)), 'yyyy-MM-dd')});
+    }
+    return endMenu;
+}
