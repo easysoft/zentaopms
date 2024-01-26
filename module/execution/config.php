@@ -191,7 +191,7 @@ $config->execution->actionList['createTask']['url']  = helper::createLink('task'
 $config->execution->actionList['createChildStage']['icon'] = 'split';
 $config->execution->actionList['createChildStage']['text'] = $lang->programplan->createSubPlan;
 $config->execution->actionList['createChildStage']['hint'] = $lang->programplan->createSubPlan;
-$config->execution->actionList['createChildStage']['url']  = helper::createLink('programplan', 'create', "projectID={projectID}&productID={product}&executionID={rawID}");
+$config->execution->actionList['createChildStage']['url']  = helper::createLink('programplan', 'create', "projectID={projectID}&productID={productID}&executionID={rawID}");
 
 $config->execution->actionList['edit']['icon']        = 'edit';
 $config->execution->actionList['edit']['text']        = $lang->edit;
