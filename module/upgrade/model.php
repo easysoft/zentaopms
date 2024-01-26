@@ -3738,8 +3738,8 @@ class upgradeModel extends model
         $program->name          = $data->programName;
         $program->type          = 'program';
         $program->status        = $data->programStatus;
-        $program->begin         = isset($data->begin) ? $data->begin : helper::now();
-        $program->end           = isset($data->end) ? $data->end : LONG_TIME;
+        $program->begin         = !empty($data->begin) ? $data->begin : helper::now();
+        $program->end           = !empty($data->end) ? $data->end : LONG_TIME;
         $program->openedBy      = isset($this->app->user->account) ? $this->app->user->account : '';
         $program->openedDate    = helper::now();
         $program->openedVersion = $this->config->version;
@@ -3893,7 +3893,7 @@ class upgradeModel extends model
         $project->status         = $data->projectStatus;
         $project->team           = !empty($data->team) ? $data->team : $data->projectName;
         $project->begin          = $data->begin;
-        $project->end            = isset($data->end) ? $data->end : LONG_TIME;
+        $project->end            = !empty($data->end) ? $data->end : LONG_TIME;
         $project->days           = $this->computeDaysDelta($project->begin, $project->end);
         $project->PM             = $data->PM;
         $project->auth           = 'extend';
