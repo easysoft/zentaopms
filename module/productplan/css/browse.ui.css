@@ -4,3 +4,4 @@
 .label-done {background-color: rgba(var(--color-success-100-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-success-500-rgb),var(--tw-text-opacity)); --tw-ring-color: rgba(var(--color-success-500-rgb),var(--tw-ring-opacity));}
 .label-closed {background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-gray-500-rgb),var(--tw-text-opacity)); --tw-ring-color: rgba(var(--color-gray-500-rgb),var(--tw-ring-opacity));}
 
+#table-productplan-browse .dtable-nested-toggle.is-no-child {display: none}
