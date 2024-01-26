@@ -986,7 +986,7 @@ class execution extends control
         if($executionID) return $this->executionZen->displayAfterCreated($projectID, $executionID, $planID, $confirm);
 
         $allProjects = $this->project->getPairsByModel('all', 'noclosed,multiple');
-        if(empty($projectID)) $projectID = key($allProjects);
+        if(empty($projectID)) $projectID = key($allProjects) ? key($allProjects) : 0;
 
         $project = empty($projectID) ? null : $this->loadModel('project')->fetchByID($projectID);
         if($project) $this->executionZen->correctExecutionCommonLang($project, $execution->type);
