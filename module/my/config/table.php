@@ -440,6 +440,7 @@ $config->my->story->actionList['create']['text']        = $lang->testcase->creat
 $config->my->story->actionList['create']['hint']        = $lang->testcase->create;
 $config->my->story->actionList['create']['url']         = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&module=0&from=&param=0&storyID={id}');
 $config->my->story->actionList['create']['data-toggle'] = 'modal';
+$config->my->story->actionList['create']['data-size']   = 'lg';
 
 $config->my->story->actionList['close']['icon']        = 'off';
 $config->my->story->actionList['close']['text']        = $lang->story->close;
