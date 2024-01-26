@@ -138,14 +138,15 @@ class datatable extends control
 
         if(($module == 'productplan' && $method == 'browse') || ($module == 'project' && $method == 'bug'))
         {
+            $branchField = $module == 'productplan' ? 'branchName' : 'branch';
             if($this->session->currentProductType == 'normal')
             {
-                unset($cols['branchName'], $cols['branch']);
+                unset($cols[$branchField]);
             }
             else
             {
                 $this->app->loadLang('product');
-                $cols['branch']['title'] = $cols['branchName']['title'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$this->session->currentProductType]);
+                $cols[$branchField]['title'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$this->session->currentProductType]);
             }
         }
 
