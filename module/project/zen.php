@@ -140,7 +140,7 @@ class projectZen extends project
                 {
                     foreach($rawdata->branch[$index] as $branchID)
                     {
-                        if(empty($branchID))
+                        if($branchID == '')
                         {
                             dao::$errors["branch[{$index}][]"] = $this->lang->project->error->emptyBranch;
                         }
