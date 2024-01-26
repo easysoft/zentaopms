@@ -1748,7 +1748,7 @@ class kanbanModel extends model
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t4.deleted')->eq(0)
             ->fi()
-            ->groupBy('columnType')
+            ->groupBy('t1.id, t1.cards, t2.`type`, t2.parent, t2.limit, t2.name, t2.color')
             ->orderBy('column_asc')
             ->fetchAll('columnType');
     }
