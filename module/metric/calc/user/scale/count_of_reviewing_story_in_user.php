@@ -40,15 +40,20 @@ class count_of_reviewing_story_in_user extends baseCalc
 
         if(!isset($this->result[$story]))
         {
-            $this->result[$story]['reviewer'] = $reviewer;
+            $this->result[$story]['reviewer'] = array($reviewer);
             $this->result[$story]['version']  = $version;
             return false;
         }
 
         if($version > $this->result[$story]['version'])
         {
-            $this->result[$story]['reviewer'] = $reviewer;
+            $this->result[$story]['reviewer'] = array($reviewer);
             $this->result[$story]['version']  = $version;
+        }
+
+        if($version == $this->result[$story]['version'])
+        {
+            $this->result[$story]['reviewer'][] = $reviewer;
         }
     }
 
@@ -57,9 +62,12 @@ class count_of_reviewing_story_in_user extends baseCalc
         $userReview = array();
         foreach($this->result as $review)
         {
-            $reviewer = $review['reviewer'];
-            if(!isset($userReview[$reviewer])) $userReview[$reviewer] = 0;
-            $userReview[$reviewer] += 1;
+            $reviewers = $review['reviewer'];
+            foreach($reviewers as $reviewer)
+            {
+                if(!isset($userReview[$reviewer])) $userReview[$reviewer] = 0;
+                $userReview[$reviewer] += 1;
+            }
         }
         $records = array();
         foreach($userReview as $user => $value)
