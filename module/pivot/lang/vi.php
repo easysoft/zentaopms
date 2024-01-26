@@ -213,6 +213,7 @@ $lang->pivot->resultFilter    = 'Result Filter';
 $lang->pivot->queryFilter     = 'Query Filter';
 $lang->pivot->noName          = 'Unnamed';
 $lang->pivot->filterName      = 'Name';
+$lang->pivot->showAs          = 'Show as';
 $lang->pivot->default         = 'Default';
 $lang->pivot->unlimited       = 'Unlimited';
 $lang->pivot->colon           = 'To';

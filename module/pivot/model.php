@@ -2482,7 +2482,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getSysOptions($type, $object = '', $field = '', $source = '')
+    public function getSysOptions($type, $object = '', $field = '', $source = '', $saveAs = '')
     {
         $options = array('' => '');
         switch($type)
@@ -2524,7 +2524,10 @@ class pivotModel extends model
                     {
                         $options = array();
                         foreach($source as $row) $options[$row->id] = $row->$field;
-
+                    }
+                    elseif($saveAs)
+                    {
+                        $options = $this->getOptionsFromSql($source, $field, $saveAs);
                     }
                     else
                     {
@@ -2538,17 +2541,15 @@ class pivotModel extends model
                 }
                 break;
             case 'string':
+            case 'number':
                 if($field)
                 {
                     $options = array();
                     if(is_string($source) and !empty($source))
                     {
-                        $cols = $this->dbh->query($source)->fetchAll();
-                        foreach($cols as $col)
-                        {
-                            $data = $col->$field;
-                            $options[$data] = $data;
-                        }
+                        $keyField   = $field;
+                        $valueField = $saveAs ? $saveAs : $field;
+                        $options = $this->getOptionsFromSql($source, $keyField, $valueField);
                     }
                     else if(is_array($source))
                     {
@@ -2557,6 +2558,33 @@ class pivotModel extends model
                 }
                 break;
         }
+        return $options;
+    }
+
+    /**
+     * Get pairs from column by keyField and valueField.
+     *
+     * @param  string $sql
+     * @param  string $keyField
+     * @param  string $valueField
+     * @access public
+     * @return array
+     */
+    public function getOptionsFromSql($sql, $keyField, $valueField)
+    {
+        $options = array();
+        $cols    = $this->dbh->query($sql)->fetchAll();
+        $sample  = current($cols);
+
+        if(!isset($sample->$keyField) or !isset($sample->$valueField)) return $options;
+
+        foreach($cols as $col)
+        {
+            $key   = $col->$keyField;
+            $value = $col->$valueField;
+            $options[$key] = $value;
+        }
+
         return $options;
     }
 

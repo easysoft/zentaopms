@@ -260,8 +260,9 @@ function initQueryControl(container, filter, object, field)
 
 function initResultControl(container, filter, object, field)
 {
-    var type = filter.type;
-    var value = filter.default;
+    var type   = filter.type;
+    var value  = filter.default;
+    var saveAs = 'saveAs' in filter ? filter.saveAs : '';
 
     container.find('.default-block').addClass('hidden');
     container.find('.default-block input[name^="default"]').val('');
@@ -307,7 +308,7 @@ function initResultControl(container, filter, object, field)
         if(value !== '') pickerOptions.defaultValue = value;
 
         var pivotParams = {sql: pivot.sql, filters: getQueryFilters(pivot)};
-        $.post(createLink('pivot', 'ajaxGetSysOptions', 'type=' + options + '&object=' + object + '&field=' + field), pivotParams, function(resp)
+        $.post(createLink('pivot', 'ajaxGetSysOptions', 'type=' + options + '&object=' + object + '&field=' + field + '&saveAs=' + saveAs), pivotParams, function(resp)
         {
             control.html($(resp).html());
             control.picker(pickerOptions);

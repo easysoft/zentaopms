@@ -263,16 +263,17 @@ class pivot extends control
      * @param  string $type
      * @param  string $object
      * @param  string $field
+     * @param  string $saveAs
      * @access public
      * @return string
      */
-    public function ajaxGetSysOptions($type, $object = '', $field = '')
+    public function ajaxGetSysOptions($type, $object = '', $field = '', $saveAs = '')
     {
         $sql     = isset($_POST['sql'])     ? $_POST['sql']     : '';
         $filters = isset($_POST['filters']) ? $_POST['filters'] : '';
 
         $sql     = $this->loadModel('chart')->parseSqlVars($sql, $filters);
-        $options = $this->pivot->getSysOptions($type, $object, $field, $sql);
+        $options = $this->pivot->getSysOptions($type, $object, $field, $sql, $saveAs);
         return print(html::select('default[]', array('' => '') + $options, '', "class='form-control form-select picker-select' multiple"));
     }
 
