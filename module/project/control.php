@@ -817,6 +817,8 @@ class project extends control
         $products  = $this->product->getProducts($projectID);
 
         $this->session->set('currentProductType', !isset($product->type) ? 'normal' : $product->type);
+        if($this->session->currentProductType != 'normal') $this->config->bug->dtable->fieldList['branch']['title'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+        if($this->session->currentProductType == 'normal') unset($this->config->bug->dtable->fieldList['branch']);
 
         /* 项目型项目不展示2.5级产品下拉菜单。 */
         if(!$project->hasProduct) $this->config->excludeSwitcherList[] = 'project-bug';
