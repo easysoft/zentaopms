@@ -136,10 +136,16 @@ class projectZen extends project
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
             foreach($rawdata->products as $index => $productID)
             {
-                if(isset($multipleProducts[$productID]) && empty($rawdata->branch[$index]))
+                if(isset($multipleProducts[$productID]))
                 {
-                    dao::$errors['branch[0]'] = $this->lang->project->error->emptyBranch;
-                    return false;
+                    foreach($rawdata->branch[$index] as $branchID)
+                    {
+                        if(empty($branchID))
+                        {
+                            dao::$errors["branch[{$index}][]"] = $this->lang->project->error->emptyBranch;
+                            return false;
+                        }
+                    }
                 }
             }
         }
