@@ -365,53 +365,53 @@ pipeline {
           stages {
             stage("Package") {
               parallel {
-                stage("Zbox win") {
-                  agent {
-                    kubernetes {
-                      yamlFile 'misc/ci/publish-zbox.yaml'
-                    }
-                  }
+                // stage("Zbox win") {
+                //   agent {
+                //     kubernetes {
+                //       yamlFile 'misc/ci/publish-zbox.yaml'
+                //     }
+                //   }
 
-                  stages() {
-                    stage("Prepare") {
-                      steps {
-                        checkout scmGit(branches: [[name: "main"]],
-                          extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                          userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zbox-builder.git"]]
-                        )
-                      }
-                    }
+                //   stages() {
+                //     stage("Prepare") {
+                //       steps {
+                //         checkout scmGit(branches: [[name: "main"]],
+                //           extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+                //           userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zbox-builder.git"]]
+                //         )
+                //       }
+                //     }
 
-                    stage("Build") {
-                      steps {
-                        script {
-                          buildZboxWin.doBuild()
-                          buildZboxWin.uploadInternal()
-                        }
-                      }
-                    }
+                //     stage("Build") {
+                //       steps {
+                //         script {
+                //           buildZboxWin.doBuild()
+                //           buildZboxWin.uploadInternal()
+                //         }
+                //       }
+                //     }
 
-                    stage("Upload Qiniu") {
-                      when {
-                        environment name: 'BUILD_KIND', value: 'release'
-                      }
+                //     stage("Upload Qiniu") {
+                //       when {
+                //         environment name: 'BUILD_KIND', value: 'release'
+                //       }
 
-                      steps {
-                        container('docker') {
-                          sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
-                          sh "mv `find release/zh-cn/$PMS_VERSION release/en/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$PMS_VERSION"
-                          sh "mv `find release/zh-cn/$BIZ_VERSION release/en/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$BIZ_VERSION"
-                          sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$MAX_VERSION"
-                          sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$IPD_VERSION"
-                        }
-                        container('jnlp') {
-                          sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
-                          sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./release/upload --key-prefix $OBJECT_KEY_PREFIX'
-                        }
-                      }
-                    } // End Upload Qiniu
-                  }
-                } // End Zbox win
+                //       steps {
+                //         container('docker') {
+                //           sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
+                //           sh "mv `find release/zh-cn/$PMS_VERSION release/en/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$PMS_VERSION"
+                //           sh "mv `find release/zh-cn/$BIZ_VERSION release/en/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$BIZ_VERSION"
+                //           sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$MAX_VERSION"
+                //           sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$IPD_VERSION"
+                //         }
+                //         container('jnlp') {
+                //           sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
+                //           sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./release/upload --key-prefix $OBJECT_KEY_PREFIX'
+                //         }
+                //       }
+                //     } // End Upload Qiniu
+                //   }
+                // } // End Zbox win
 
                 stage("Zbox linux") {
                   agent {
