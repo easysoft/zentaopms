@@ -19,7 +19,7 @@ $(function()
 
         $('#status').val('normal');
     });
-    loadExecutions();
+    if($('#modalBasicInfo input[name="project"]').length) loadExecutions();
 })
 
 window.loadExecutions = function(e)
