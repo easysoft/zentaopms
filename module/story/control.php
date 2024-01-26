@@ -279,9 +279,9 @@ class story extends control
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
-            $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
-            $params = $this->app->tab == 'project' ? "storyID=$storyID&project={$this->session->project}" : "storyID=$storyID&version=0&param=0&storyType=$storyType";
-            return $this->send(array('result' => 'success', 'load' => $this->createLink($module, 'view', $params), 'closeModal' => true, 'message' => $message));
+            $response = array('result' => 'success', 'message' => $message);
+            $response['load'] = $this->storyZen->getAfterEditLocation($storyID, $storyType);
+            return $this->send($response);
         }
 
         $story = $this->story->getByID($storyID);

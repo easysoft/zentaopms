@@ -1578,6 +1578,38 @@ class storyZen extends story
     }
 
     /**
+     * 获取编辑需求后的跳转地址。
+     * Get location when after edit a story.
+     *
+     * @param  int       $storyID
+     * @param  string    $storyType
+     * @access protected
+     * @return string
+     */
+    protected function getAfterEditLocation(int $storyID, string $storyType)
+    {
+        $module = 'story';
+        $params = "storyID=$storyID&version=0&param=0&storyType=$storyType";
+        $method = 'view';
+        if($this->app->tab == 'project')
+        {
+            $project = $this->loadModel('project')->getByID($this->session->project);
+            if(empty($project->multiple))
+            {
+                $module = 'execution';
+                $method = 'storyView';
+                $params = "storyID=$storyID&project={$this->session->project}";
+            }
+            else
+            {
+                $module = 'projectstory';
+                $params = "storyID=$storyID&project={$this->session->project}";
+            }
+        }
+        return $this->createLink($module, $method, $params);
+    }
+
+    /**
      * 获取创建需求后的跳转地址。
      * Get location when after create story.
      *
