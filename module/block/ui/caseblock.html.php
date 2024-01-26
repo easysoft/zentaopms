@@ -13,9 +13,10 @@ namespace zin;
 
 if(!$longBlock)
 {
+    unset($config->block->case->dtable->fieldList['pri']);
+    unset($config->block->case->dtable->fieldList['type']);
     unset($config->block->case->dtable->fieldList['status']);
     unset($config->block->case->dtable->fieldList['lastRunDate']);
-    unset($config->block->case->dtable->fieldList['lastRunResult']);
 }
 
 foreach($cases as $case) $case->lastRunDate = formatTime($case->lastRunDate, DT_DATE1);
