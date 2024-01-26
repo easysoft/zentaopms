@@ -83,40 +83,41 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($pmUsers),
+        set::hidden(strpos("{$showFields}", 'PM') === false),
         set::width('112px')
     ),
     formBatchItem
     (
         set::name('PO'),
         set::label($lang->execution->PO),
-        set::control('select'),
+        set::control('picker'),
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($poUsers),
-        set::width('80px'),
-        set::hidden(true)
+        set::hidden(strpos("{$showFields}", 'PO') === false),
+        set::width('180px')
     ),
     formBatchItem
     (
         set::name('QD'),
         set::label($lang->execution->QD),
-        set::control('select'),
+        set::control('picker'),
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($qdUsers),
-        set::width('80px'),
-        set::hidden(true)
+        set::hidden(strpos("{$showFields}", 'QD') === false),
+        set::width('180px')
     ),
     formBatchItem
     (
         set::name('RD'),
         set::label($lang->execution->RD),
-        set::control('select'),
+        set::control('picker'),
         set::ditto(true),
         set::defaultDitto('off'),
         set::items(array()),
-        set::width('80px'),
-        set::hidden(true)
+        set::hidden(strpos("{$showFields}", 'RD') === false),
+        set::width('180px')
     ),
     formBatchItem
     (
@@ -126,8 +127,9 @@ formBatchPanel
         ),
         set::control('picker'),
         set::items($lang->execution->lifeTimeList),
-        set::width('64px'),
+        set::width('120px'),
         set::tipIcon('help'),
+        set::hidden(strpos("{$showFields}", 'lifetime') === false),
         $showMethod ? set::tip($typeTip) : null,
         $showMethod ? set
         (
@@ -145,7 +147,7 @@ formBatchPanel
         set::name('begin'),
         set::label($lang->execution->begin),
         set::control('date'),
-        set::width('76px'),
+        set::width('120px'),
         set::required(true)
     ),
     formBatchItem
@@ -153,7 +155,7 @@ formBatchPanel
         set::name('end'),
         set::label($lang->execution->end),
         set::control('date'),
-        set::width('76px'),
+        set::width('120px'),
         set::required(true)
     ),
     formBatchItem
@@ -162,7 +164,7 @@ formBatchPanel
         set::label($lang->execution->teamName),
         set::control('text'),
         set::width('136px'),
-        set::hidden(true),
+        set::hidden(strpos("{$showFields}", 'team') === false)
     ),
     formBatchItem
     (
@@ -170,7 +172,7 @@ formBatchPanel
         set::label($lang->execution->desc),
         set::control('textarea'),
         set::width('160px'),
-        set::hidden(true)
+        set::hidden(strpos("{$showFields}", 'desc') === false)
     ),
     formBatchItem
     (
@@ -185,7 +187,8 @@ formBatchPanel
                 'suffixWidth' => 20
             )
         ),
-        set::width('64px')
+        set::width('80px'),
+        set::hidden(strpos("{$showFields}", 'days') === false)
     )
 );
 
