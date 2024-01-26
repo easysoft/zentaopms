@@ -20,27 +20,21 @@
  */
 class count_of_projected_story_in_product extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getDevStoriesWithProject';
 
-    public function getStatement()
-    {
-        return $this->dao->select("COUNT(DISTINCT t1.story) as 'value', t1.product")
-            ->from(TABLE_PROJECTSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
-            ->where('t2.deleted')->eq('0')
-            ->andWhere('t3.deleted')->eq('0')
-            ->andWhere("t3.vision NOT LIKE '%or%'")
-            ->andWhere("t3.vision NOT LIKE '%lite%'")
-            ->groupBy('t1.product');
-    }
+    public $fieldList = array('t2.id as product', 't3.story');
+
+    public $result = array();
 
     public function calculate($row)
     {
         $product = $row->product;
-        $value   = $row->value;
+        $story   = $row->story;
 
-        $this->result[$product] = $value;
+        if(empty($story)) return false;
+
+        if(!isset($this->result[$product])) $this->result[$product] = 0;
+        $this->result[$product] += 1;
     }
 
     public function getResult($options = array())

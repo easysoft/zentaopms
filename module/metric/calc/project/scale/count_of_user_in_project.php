@@ -20,32 +20,28 @@
  */
 class count_of_user_in_project extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getTeamMembers';
 
-    public function getStatement()
-    {
-        return $this->dao->select('t3.id as project, COUNT(DISTINCT account) as value')
-            ->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id=t1.root')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id=t2.project')
-            ->where('t1.type')->eq('execution')
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t3.deleted')->eq(0)
-            ->andWhere("t3.vision NOT LIKE '%or%'")
-            ->andWhere("t3.vision NOT LIKE '%lite%'")
-            ->groupBy('t3.id')
-            ->query();
-    }
+    public $fieldList = array('t3.id as project', 't1.account');
+
+    public $result = array();
 
     public function calculate($row)
     {
         $project = $row->project;
-        $value   = $row->value;
-        $this->result[$project] = $value;
+        $account = $row->account;
+
+        if(!isset($this->result[$project])) $this->result[$project] = array();
+        $this->result[$project][$account] = $account;
     }
 
     public function getResult($options = array())
     {
+        foreach($this->result as $project => $users)
+        {
+            if(!is_array($users)) continue;
+            $this->result[$project] = count($users);
+        }
         $records = $this->getRecords(array('project', 'value'));
         return $this->filterByOptions($records, $options);
     }

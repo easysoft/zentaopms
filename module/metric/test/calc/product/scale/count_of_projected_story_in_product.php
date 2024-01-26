@@ -14,6 +14,7 @@ include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
 zdTable('product')->config('product', true, 4)->gen(10);
+zdTable('project')->config('project', true, 4)->gen(10);
 zdTable('story')->config('story_status_closedreason', true, 4)->gen(1000);
 zdTable('projectstory')->config('projectstory', true, 4)->gen(1000);
 

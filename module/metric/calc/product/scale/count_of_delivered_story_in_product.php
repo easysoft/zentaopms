@@ -20,32 +20,27 @@
  */
 class count_of_delivered_story_in_product extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getDevStories';
 
-    public function getStatement()
-    {
-        return $this->dao->select('t1.product,count(t1.id) as value')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.shadow')->eq(0)
-            ->andWhere("t1.vision NOT LIKE '%or%'")
-            ->andWhere("t1.vision NOT LIKE '%lite%'")
-            ->andWhere('t1.stage', true)->eq('released')
-            ->orWhere('t1.closedReason')->eq('done')
-            ->markRight(1)
-            ->groupBy('t1.product')
-            ->query();
-    }
+    public $fieldList = array('t1.product', 't1.stage', 't1.closedReason');
+
+    public $result = array();
 
     public function calculate($row)
     {
-        $this->result[] = $row;
+        $stage        = $row->stage;
+        $product      = $row->product;
+        $closedReason = $row->closedReason;
+
+        if($stage != 'released' && $closedReason != 'done') return false;
+
+        if(!isset($this->result[$row->product])) $this->result[$row->product] = 0;
+        $this->result[$row->product] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->result;
+        $records = $this->getRecords(array('product', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }

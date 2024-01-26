@@ -20,62 +20,39 @@
  */
 class day_of_annual_closed_project extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getProjectTasks';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.closedDate', 't2.consumed', 't1.id as project', 't1.status');
 
     public $result = array();
-
-    public function getStatement()
-    {
-        $task = $this->dao->select('SUM(consumed) as consumed, project')
-            ->from(TABLE_TASK)
-            ->where('deleted')->eq('0')
-            ->andWhere('parent')->ne('-1')
-            ->andWhere("vision NOT LIKE '%or%'")
-            ->andWhere("vision NOT LIKE '%lite%'")
-            ->groupBy('project')
-            ->get();
-
-        return $this->dao->select('t1.id as project, t1.closedDate, t2.consumed')
-            ->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin("($task)")->alias('t2')->on('t1.id = t2.project')
-            ->where('t1.type')->eq('project')
-            ->andWhere('t1.status')->eq('closed')
-            ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t1.closedDate')->notZeroDatetime()
-            ->andWhere("t1.vision NOT LIKE '%or%'")
-            ->andWhere("t1.vision NOT LIKE '%lite%'")
-            ->query();
-    }
 
     public function calculate($data)
     {
         $project  = $data->project;
         $year     = substr($data->closedDate, 0, 4);
         $consumed = $data->consumed;
+        $status   = $data->status;
+        $defaultHours = $data->defaultHours;
 
+        if($status != 'closed') return false;
         if(empty($year) || $year == '0000') return false;
 
-        if(!is_numeric($consumed) || empty($consumed)) return false;
-
         if(!isset($this->result[$year])) $this->result[$year] = array();
+        if(!isset($this->result[$year][$project])) $this->result[$year][$project] = 0;
 
-        $this->result[$year][$project] = round($consumed, 2);
+        $this->result[$year][$project] += $defaultHours ? $consumed / $defaultHours : 0;
     }
 
     public function getResult($options = array())
     {
-        $defaultWorkhours = $this->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('defaultWorkhours')->fetch();
-        $records = array();
         foreach($this->result as $year => $projects)
         {
-            foreach($projects as $project => $value)
+            foreach($projects as $project => $days)
             {
-                $value = $defaultWorkhours ? round($value / $defaultWorkhours->value, 4) : 0;
-                $records[] = array('project' => $project, 'year' => $year, 'value' => $value);
+                $this->result[$year][$project] = round($days, 4);
             }
         }
+        $records = getRecords(array('year', 'project', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }

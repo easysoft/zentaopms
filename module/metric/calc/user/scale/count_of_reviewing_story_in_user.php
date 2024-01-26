@@ -20,31 +20,23 @@
  */
 class count_of_reviewing_story_in_user extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getDevStoriesWithReview';
 
-    public function getStatement()
-    {
-        return $this->dao->select('t3.reviewer, t3.story, t3.version')
-            ->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id=t3.story and t1.version=t3.version')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t1.type')->eq('story')
-            ->andWhere('t1.status')->in('reviewing,changing')
-            ->andWhere('t3.result')->eq('')
-            ->andWhere("t2.vision NOT LIKE '%or%'")
-            ->andWhere("t2.vision NOT LIKE '%lite%'")
-            ->query();
-    }
+    public $fieldList = array('t1.reviewer', 't1.story', 't1.version', 't2.status', 't1.result');
+
+    public $result = array();
 
     public function calculate($row)
     {
         $reviewer = $row->reviewer;
         $story    = $row->story;
         $version  = $row->version;
+        $status   = $row->status;
+        $result   = $row->result;
 
         if(empty($reviewer)) return false;
+        if($status != 'reviewing' and $status != 'changing') return false;
+        if(!empty($result)) return false;
 
         if(!isset($this->result[$story]))
         {

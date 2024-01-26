@@ -172,6 +172,8 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
+            ->andWhere("t2.vision NOT LIKE '%or%'")
+            ->andWhere("t2.vision NOT LIKE '%lite%'")
             ->query();
     }
 
@@ -352,7 +354,6 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story')
-            ->andWhere('t2.shadow')->eq(0)
             ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t4.type')->eq('project')
             ->andWhere("t1.vision NOT LIKE '%or%'")
@@ -370,9 +371,15 @@ class dataset
      */
     public function getDevStories($fieldList)
     {
+        $caseQuery = $this->dao->select('story, count(DISTINCT id) as case_count')
+            ->from(TABLE_CASE)
+            ->groupBy('story')
+            ->get();
+
         return $this->dao->select($fieldList)
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin("($caseQuery)")->alias('t3')->on('t1.id=t3.story')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story')
@@ -461,6 +468,28 @@ class dataset
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere("t2.vision NOT LIKE '%or%'")
+            ->andWhere("t2.vision NOT LIKE '%lite%'")
+            ->query();
+    }
+
+    /**
+     * 获取关联用例的研发需求数据。
+     * Get story list with case.
+     *
+     * @param  string  $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getCasesWithStory($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_CASE)->alias('t0')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t1')->on('t1.story=t0.story')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+            ->where('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
             ->andWhere("t2.vision NOT LIKE '%or%'")
             ->andWhere("t2.vision NOT LIKE '%lite%'")
             ->query();
@@ -693,10 +722,10 @@ class dataset
     }
 
     /**
-     * 统计mr信息。
-     * Get merge request data.
+     * 统计合并请求信息。
+     * Get merge requests.
      *
-     * @param  string       $fieldList
+     * @param  string    $fieldList
      * @access public
      * @return PDOStatement
      */
@@ -706,6 +735,203 @@ class dataset
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.hostID = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
+            ->query();
+    }
+
+    /**
+     * 统计团队成员信息。
+     * Get team members.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getTeamMembers($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id=t1.root')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id=t2.project')
+            ->where('t1.type')->eq('execution')
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere("t3.vision NOT LIKE '%or%'")
+            ->andWhere("t3.vision NOT LIKE '%lite%'")
+            ->query();
+    }
+
+    /**
+     * 统计日志信息。
+     * Get effort.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getEfforts($fieldList)
+    {
+        $defaultHours = $this->dao->select('value')
+            ->from(TABLE_CONFIG)
+            ->where('module')->eq('execution')
+            ->andWhere('key')->eq('defaultWorkhours')
+            ->fetch('value');
+        if(empty($defaultHours)) $defaultHours = 7;
+
+        return $this->dao->select("$fieldList, $defaultHours as defaultHours")
+            ->from(TABLE_EFFORT)->alias('t1')
+            ->where('t1.deleted')->eq('0')
+            ->query();
+    }
+
+    /**
+     * 统计项目日志信息。
+     * Get project effort.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getProjectEfforts($fieldList)
+    {
+        $defaultHours = $this->dao->select('value')
+            ->from(TABLE_CONFIG)
+            ->where('module')->eq('execution')
+            ->andWhere('key')->eq('defaultWorkhours')
+            ->fetch('value');
+        if(empty($defaultHours)) $defaultHours = 7;
+
+        return $this->dao->select("$fieldList, $defaultHours as defaultHours")
+            ->from(TABLE_EFFORT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+            ->where('t3.deleted')->eq('0')
+            ->andWhere('t3.type')->eq('project')
+            ->andWhere("t3.vision NOT LIKE '%or%'")
+            ->andWhere("t3.vision NOT LIKE '%lite%'")
+            ->query();
+    }
+
+    /**
+     * 统计瀑布项目任务信息。
+     * Get waterfall tasks.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getWaterfallTasks($fieldList)
+    {
+        $task = $this->dao->select('project, SUM(estimate) as estimate, SUM(consumed) as consumed, SUM(`left`) as `left`')
+            ->from(TABLE_TASK)
+            ->where('deleted')->eq('0')
+            ->andWhere('parent')->ne('-1')
+            ->andWhere("vision NOT LIKE '%or%'")
+            ->andWhere("vision NOT LIKE '%lite%'")
+            ->andWhere('status', true)->in('done,closed')
+            ->orWhere('closedReason')->eq('done')
+            ->markRight(1)
+            ->groupBy('project')
+            ->get();
+
+        $effort = $this->dao->select('t3.id as project, SUM(t1.consumed) as consumed')
+            ->from(TABLE_EFFORT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+            ->where("t3.vision NOT LIKE '%or%'")
+            ->andWhere("t3.vision NOT LIKE '%lite%'")
+            ->groupBy('t3.id')
+            ->get();
+
+        return $this->dao->select($fieldList)
+            ->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin("($task)")->alias('t2')->on('t1.id=t2.project')
+            ->leftJoin("($effort)")->alias('t3')->on('t1.id=t3.project')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t1.model')->in('waterfall,waterfallplus')
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
+            ->query();
+    }
+
+    /**
+     * 统计测试用例结果信息。
+     * Get test results.
+     *
+     * @param  string  $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getTestresults($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case`=t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
+            ->where('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere("t3.vision NOT LIKE '%or%'")
+            ->andWhere("t3.vision NOT LIKE '%lite%'")
+            ->query();
+    }
+
+    /**
+     * 统计研发需求评审信息。
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getDevStoriesWithReview($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_STORYREVIEW)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere('t2.type')->eq('story')
+            ->andWhere("t3.vision NOT LIKE '%or%'")
+            ->andWhere("t3.vision NOT LIKE '%lite%'")
+            ->query();
+    }
+
+    public function getProjectTasks($fieldList)
+    {
+        $defaultHours = $this->dao->select('value')
+            ->from(TABLE_CONFIG)
+            ->where('module')->eq('execution')
+            ->andWhere('key')->eq('defaultWorkhours')
+            ->fetch('value');
+        if(empty($defaultHours)) $defaultHours = 7;
+
+        $task = $this->dao->select('SUM(consumed) as consumed, project')
+            ->from(TABLE_TASK)
+            ->where('deleted')->eq('0')
+            ->andWhere('parent')->ne('-1')
+            ->andWhere("vision NOT LIKE '%or%'")
+            ->andWhere("vision NOT LIKE '%lite%'")
+            ->groupBy('project')
+            ->get();
+
+        return $this->dao->select("$fieldList, $defaultHours as defaultHours")
+            ->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin("($task)")->alias('t2')->on('t1.id = t2.project')
+            ->where('t1.type')->eq('project')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere("t1.vision NOT LIKE '%or%'")
+            ->andWhere("t1.vision NOT LIKE '%lite%'")
+            ->query();
+    }
+
+    public function getTestRuns($fieldList)
+    {
+        return $this->dao->select($fieldList)
+            ->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case` = t2.id')
+            ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
+            ->where('t3.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->query();
     }
 }

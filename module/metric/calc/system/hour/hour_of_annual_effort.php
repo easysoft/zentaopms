@@ -20,21 +20,20 @@
  */
 class hour_of_annual_effort extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getEfforts';
 
-    public function getStatement()
-    {
-        return $this->dao->select("`date`, `consumed`")
-            ->from(TABLE_EFFORT)
-            ->where('deleted')->eq('0')
-            ->andWhere('date')->notZeroDate()
-            ->query();
-    }
+    public $fieldList = array('t1.date', 't1.consumed');
+
+    public $result = array();
 
     public function calculate($row)
     {
-        $year         = substr($row->date, 0, 4);
-        $consumed     = $row->consumed;
+        if(empty($row->date)) return false;
+
+        $year = substr($row->date, 0, 4);
+        if($year == '0000') return false;
+
+        $consumed = $row->consumed;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
         $this->result[$year] += $consumed;
