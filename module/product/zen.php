@@ -828,10 +828,6 @@ class productZen extends product
      */
     protected function saveAndModifyCookie4Browse(int $productID, string $branch, int $param, string $browseType, string $orderBy): void
     {
-        /* Set product ID and branch of the pre visited product. */
-        helper::setcookie('preProductID', (string)$productID);
-        helper::setcookie('preBranch', $branch);
-
         /* Set module ID of story. */
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
         {
@@ -858,6 +854,10 @@ class productZen extends product
 
         /* Save sort order of product stories list. */
         helper::setcookie('productStoryOrder', $orderBy, 0);
+
+        /* Set product ID and branch of the pre visited product. */
+        helper::setcookie('preProductID', (string)$productID);
+        helper::setcookie('preBranch', $branch, 0);
     }
 
     /**
