@@ -194,6 +194,7 @@ class sonarqube extends control
 
         if($_POST)
         {
+            $oldSonarQube->url      = $this->post->url;
             $oldSonarQube->account  = $this->post->account;
             $oldSonarQube->password = $this->post->password;
             $this->checkToken($oldSonarQube, $sonarqubeID);
