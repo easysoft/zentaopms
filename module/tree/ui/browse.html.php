@@ -80,6 +80,12 @@ foreach($sons as $son)
     );
 }
 
+$initBranch = (int)$branch;
+if($parentModules)
+{
+    $parentModule = end($parentModules);
+    $initBranch   = (int)$parentModule->branch;
+}
 for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
 {
     $moduleRows[] = formRow
@@ -102,7 +108,7 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                     setClass(empty($branches) ? 'hidden' : ''),
                     set::name("branch[$i]"),
                     set::items($branches),
-                    set::value((int)$branch),
+                    set::value($initBranch),
                 ),
                 input
                 (
