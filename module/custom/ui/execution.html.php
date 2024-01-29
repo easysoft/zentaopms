@@ -20,7 +20,8 @@ div
         setID('closedExecutionForm'),
         set::actions(array('submit')),
         set::actionsClass('w-2/3'),
-        setClass('flex-auto ml-4'),
+        setClass('flex-auto'),
+        $config->vision == 'lite' ? null : setClass('ml-4'),
         span
         (
             setClass('text-md font-bold'),
