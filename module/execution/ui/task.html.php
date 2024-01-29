@@ -52,6 +52,15 @@ if(common::canModify('execution', $execution))
 
 $cols = $this->loadModel('datatable')->getSetting('execution');
 $tableData = initTableData($tasks, $cols, $this->task);
+$tableData = array_map(
+    function($task)
+    {
+        if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
+        if(helper::isZeroDate($task->estStarted)) $task->estStarted = '';
+        return $task;
+    },
+    $tableData
+);
 
 toolbar
 (

@@ -481,7 +481,7 @@ detailBody
                     item
                     (
                         set::name($lang->task->estStarted),
-                        $task->estStarted
+                        helper::isZeroDate($task->estStarted) ? '' : $task->estStarted
                     ),
                     item
                     (
@@ -491,7 +491,7 @@ detailBody
                     item
                     (
                         set::name($lang->task->deadline),
-                        $task->deadline
+                        helper::isZeroDate($task->deadline) ? '' : $task->deadline
                     )
                 )
             ),
