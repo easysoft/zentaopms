@@ -9,9 +9,8 @@ class checkBtnGroup extends checkList
 {
     protected static array $defaultProps = array
     (
-        'inline'     => true,
-        'className'     => 'check-btn-group',
-        'type'       => 'radio'
+        'inline' => true,
+        'type'   => 'radio'
     );
 
     public static function getPageCSS(): string|false
@@ -29,5 +28,12 @@ class checkBtnGroup extends checkList
     public function buildItem(array $props)
     {
         return new checkBtn(set($props));
+    }
+
+    protected function build(): wg
+    {
+        $div = parent::build();
+        $div->add(setClass('check-btn-group'));
+        return $div;
     }
 }
