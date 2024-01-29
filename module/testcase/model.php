@@ -165,7 +165,7 @@ class testcaseModel extends model
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
         if(!$case) return false;
 
-        foreach($case as $key => $value) if(strpos($key, 'Date') !== false and $value && !(int)substr($value, 0, 4)) $case->$key = '';
+        $case = $this->processDateField($case);
 
         /* Get project and execution. */
         if($this->app->tab == 'project')
@@ -1361,7 +1361,10 @@ class testcaseModel extends model
             $case->results    = zget($results, $caseID, 0);
             $case->caseFails  = zget($caseFails, $caseID, 0);
             $case->stepNumber = zget($steps, $caseID, 0);
+
+            $case = $this->processDateField($case);
         }
+
         return $cases;
     }
 
@@ -1545,6 +1548,22 @@ class testcaseModel extends model
             }
         }
         return $stepData;
+    }
+
+    /**
+     * Process date field when date is empty.
+     *
+     * @param  object $case
+     * @access public
+     * @return object
+     */
+    public function processDateField(object $case): object
+    {
+        foreach($case as $key => $value)
+        {
+            if(strpos($key, 'Date') !== false && helper::isZeroDate($value)) $case->$key = '';
+        }
+        return $case;
     }
 
     /**

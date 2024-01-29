@@ -2518,6 +2518,11 @@ class taskModel extends model
             $task->teamMembers = implode(',', array_keys($teamMembers));
         }
 
+        foreach($task as $field => $value)
+        {
+            if(in_array($field, $this->config->task->dateFields) && helper::isZeroDate($value)) $task->$field = '';
+        }
+
         return $task;
     }
 
