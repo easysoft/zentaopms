@@ -207,7 +207,6 @@ window.toggleMultiple = function(e)
  * 检查项目预算是否超出父项目集剩余预算。
  * Check if the project budget exceeds the remaining budget of the parent program.
  *
- * @param  int    projectID
  * @access public
  * @return void
  */
@@ -225,14 +224,17 @@ function checkProjectInfo()
     if(programID == 0)
     {
         $('[name=budget]').removeAttr('placeholder');
-        $('#budgetTip').addClass('hidden');
         $('#dateTip').addClass('hidden');
+        $('#budgetTip').addClass('hidden');
+        $('#budgetTip').addClass('text-danger');
+        $('#budgetTip').removeClass('text-warning');
+        $('#budgetTip').heml('');
         return false;
     }
 
-    if(typeof(projectID) == 'undefined') projectID = 0;
+    if(typeof(currentProject) == 'undefined') currentProject = 0;
 
-    $.getJSON($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + programID), function(data)
+    $.getJSON($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + currentProject + "&selectedProgramID=" + programID), function(data)
     {
         let dateTip = '';
         if(typeof(data.selectedProgramBegin) != 'undefined' && $('[name=begin]').val() != '' && $('[name=begin]').val() < data.selectedProgramBegin) dateTip += beginLessThanParent.replace('%s', data.selectedProgramBegin);
@@ -256,6 +258,8 @@ function checkProjectInfo()
                 $('#budgetTip').html(budgetOverrun.replace('%s', currency + availableBudget));
                 $('#budgetTip').append($('<span id="ignoreBudget" class="underline">' + ignore + '</span>'));
                 $('#budgetTip').removeClass('hidden');
+                $('#budgetTip').removeClass('text-danger');
+                $('#budgetTip').addClass('text-warning');
                 $('#budgetTip').off('click', '#ignoreBudget').on('click', '#ignoreBudget', function(){ignoreTip('budgetTip')});
             }
         }
@@ -283,8 +287,8 @@ function checkDate()
         return;
     }
 
-    if(typeof(projectID) == 'undefined') projectID = 0;
-    $.get($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + '&selectedProgramID=' + selectedProgramID), function(response)
+    if(typeof(currentProject) == 'undefined') currentProject = 0;
+    $.get($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + currentProject + '&selectedProgramID=' + selectedProgramID), function(response)
     {
         const data         = JSON.parse(response);
         const parentEnd    = new Date(data.selectedProgramEnd);

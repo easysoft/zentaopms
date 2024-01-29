@@ -102,15 +102,17 @@ foreach($budgetUnitList as $key => $value)
     $budgetItemList[] = array('text' => $value, 'value' => $key, 'url' => "javascript:toggleBudgetUnit('{$key}')");
 }
 
+$budgetHidden = strpos($config->project->{$app->rawMethod}->requiredFields, 'budget') !== false;
+$budgetFuture = data('project.budget') !== null && !data('project.budget') && !$budgetHidden;
 $fields->field('budget')
     ->label($lang->project->budget)
     ->foldable()
-    ->checkbox(array('text' => $lang->project->future, 'name' => 'future', 'checked' => $budgetFuture))
     ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, data('project.budgetUnit') ? data('project.budgetUnit') : $currency), 'className' => 'btn ghost' . ($budgetFuture || data('parentProgram') ? ' disabled pointer-events-none' : '')), 'prefixWidth' => 34, 'disabled' => $budgetFuture))
     ->placeholder(data('parentProgram') && !empty(data('parentProgram.budget')) ? $lang->project->parentBudget . zget($lang->project->currencySymbol, $currency) . data('parentProgram.budget') : '')
-    ->tip(sprintf($lang->project->parentBudget, zget($lang->project->currencySymbol, $currency) . data('parentProgram.budget')))
+    ->tip(' ')
     ->tipProps(array('id' => 'budgetTip'))
-    ->tipClass('text-warning hidden');
+    ->tipClass('text-danger');
+if(!$budgetHidden) $fields->field('budget')->checkbox(array('text' => $lang->project->future, 'name' => 'future', 'checked' => $budgetFuture));
 
 $fields->field('budgetUnit')->control('hidden')->value($currency);
 

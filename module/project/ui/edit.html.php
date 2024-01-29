@@ -25,6 +25,7 @@ jsVar('weekend', $config->execution->weekend);
 jsVar('allProducts', $allProducts);
 jsVar('branchGroups', $branchGroups);
 jsVar('+projectID', 0);
+jsVar('currentProject', $project->id);
 jsVar('from', $from);
 jsVar('programID', $programID);
 jsVar('LONG_TIME', LONG_TIME);
