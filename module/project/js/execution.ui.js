@@ -54,7 +54,7 @@ window.onRenderCell = function(result, {col, row})
 
         if(typeof executionType != 'undefined') executionName += `<span class='label secondary-pale'>${executionType}</span> `;
         executionName += (!row.data.isParent) ? `<a href="${executionLink}" class="text-primary">${row.data.name}</a>` : row.data.name;
-        executionName += (today > row.data.end) ? `<span class="label danger-pale ml-1">${delayed}</span>` : '';
+        executionName += (row.data.end != '' && today > row.data.end) ? `<span class="label danger-pale ml-1">${delayed}</span>` : '';
 
         result[result.length] = {html: executionName};
         return result;
