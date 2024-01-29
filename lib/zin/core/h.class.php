@@ -296,18 +296,23 @@ class h extends wg
 
     public static function jsRaw(): string
     {
-        return 'RAWJS<' . implode("\n", func_get_args()) . '>RAWJS';
+        $js = implode('RAWJS_LINE', func_get_args());
+        $js = str_replace(array("\n", '"'), array('RAWJS_LINE', 'RAWJS_QUOTE'), $js);
+        return "RAWJS<$js>RAWJS";
+    }
+
+    public static function decodeJSRaw(string $str): string
+    {
+        if(!str_contains($str, 'RAWJS')) return $str;
+        return str_replace(array('RAWJS_LINE', 'RAWJS_QUOTE', '"RAWJS<', '>RAWJS"'), array("\n", '"', '', ''), $str);
     }
 
     public static function encodeJsonWithRawJs($data)
     {
-        if(is_string($data) && str_starts_with($data, 'RAWJS<') && str_ends_with($data, '>RAWJS')) return substr($data, 6, -6);
-
         $json = \zin\utils\jsonEncode($data, JSON_UNESCAPED_UNICODE);
         if(empty($json) && (is_array($data) || is_object($data))) return '[]';
 
-        $json = str_replace('"RAWJS<', '', str_replace('>RAWJS"', '', $json));
-        return $json;
+        return static::decodeJSRaw($json);
     }
 
     protected static function splitRawCode($children)
