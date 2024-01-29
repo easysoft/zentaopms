@@ -20,37 +20,16 @@
  */
 class pv_of_task_in_waterfall extends baseCalc
 {
+    public $dataset = 'getWaterfallTasks';
+
+    public $fieldList = array('t1.id as project', 't2.estimate');
+
     public $result = array();
-
-    public function getStatement()
-    {
-        $pv = $this->dao->select('project, SUM(estimate) as estimate')
-            ->from(TABLE_TASK)
-            ->where('deleted')->eq('0')
-            ->andWhere('parent')->ne('-1')
-            ->andWhere("vision NOT LIKE '%or%'")
-            ->andWhere("vision NOT LIKE '%lite%'")
-            ->andWhere('status', true)->in('done,closed')
-            ->orWhere('closedReason')->eq('done')
-            ->markRight(1)
-            ->groupBy('project')
-            ->get();
-
-        return $this->dao->select('t1.id as project, t2.estimate as pv')
-            ->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin("($pv)")->alias('t2')->on('t1.id=t2.project')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.type')->eq('project')
-            ->andWhere('t1.model')->in('waterfall,waterfallplus')
-            ->andWhere("t1.vision NOT LIKE '%or%'")
-            ->andWhere("t1.vision NOT LIKE '%lite%'")
-            ->query();
-    }
 
     public function calculate($row)
     {
         $project = $row->project;
-        $pv      = $row->pv;
+        $pv      = $row->estimate;
 
         if(!isset($this->result[$project])) $this->result[$project] = $pv;
     }

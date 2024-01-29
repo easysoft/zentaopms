@@ -22,7 +22,7 @@ class count_of_assigned_task_in_user extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.assignedTo', 't1.status', 't1.mode', 't4.account', 't3.status as projectStatus', 't2.status as executionStatus', 't4.status as teamStatus');
+    public $fieldList = array('t1.id', 't1.assignedTo', 't1.status', 't1.mode', 't4.account', 't3.status as projectStatus', 't2.status as executionStatus', 't4.status as teamStatus');
 
     public $result = array();
 
@@ -48,12 +48,19 @@ class count_of_assigned_task_in_user extends baseCalc
         if($projectStatus == 'suspended' && $executionStatus == 'suspended') return false;
 
 
-        if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = 0;
-        $this->result[$assignedTo] += 1;
+        if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = array();
+        $this->result[$assignedTo][$row->id] = $row->id;
     }
 
     public function getResult($options = array())
     {
+        foreach($this->result as $assignedTo => $tasks)
+        {
+            if(!is_array($tasks)) continue;
+
+            $this->result[$assignedTo] = count($tasks);
+        }
+
         $records = $this->getRecords(array('user', 'value'));
         return $this->filterByOptions($records, $options);
     }

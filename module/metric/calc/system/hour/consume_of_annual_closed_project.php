@@ -20,41 +20,20 @@
  */
 class consume_of_annual_closed_project extends baseCalc
 {
-    public $dataset = null;
+    public $dataset = 'getProjectTasks';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.closedDate', 't2.consumed', 't1.id as project', 't1.status');
 
     public $result = array();
-
-    public function getStatement()
-    {
-        $task = $this->dao->select('SUM(consumed) as consumed, project')
-            ->from(TABLE_TASK)
-            ->where('deleted')->eq('0')
-            ->andWhere('parent')->ne('-1')
-            ->andWhere("vision NOT LIKE '%or%'")
-            ->andWhere("vision NOT LIKE '%lite%'")
-            ->groupBy('project')
-            ->get();
-
-        return $this->dao->select('t1.id as project, t1.closedDate, t2.consumed')
-            ->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin("($task)")->alias('t2')->on('t1.id = t2.project')
-            ->where('t1.type')->eq('project')
-            ->andWhere('t1.status')->eq('closed')
-            ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t1.closedDate')->notZeroDatetime()
-            ->andWhere("t1.vision NOT LIKE '%or%'")
-            ->andWhere("t1.vision NOT LIKE '%lite%'")
-            ->query();
-    }
 
     public function calculate($data)
     {
         $project  = $data->project;
         $year     = substr($data->closedDate, 0, 4);
         $consumed = $data->consumed;
+        $status   = $data->status;
 
+        if($status != 'closed') return false;
         if(empty($year) || $year == '0000') return false;
 
         if(!is_numeric($consumed) || empty($consumed)) return false;

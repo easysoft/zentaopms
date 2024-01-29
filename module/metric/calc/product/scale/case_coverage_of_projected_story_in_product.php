@@ -20,41 +20,33 @@
  */
 class case_coverage_of_projected_story_in_product extends baseCalc
 {
-    public $idList = array();
+    public $dataset = 'getDevStories';
+
+    public $fieldList = array('t1.product', 't3.case_count');
 
     public $result = array();
-
-    public function getStatement()
-    {
-        $caseQuery = $this->dao->select('story, count(DISTINCT id) as case_count')->from(TABLE_CASE)
-            ->groupBy('story')
-            ->get();
-
-        return $this->dao->select('t1.product, COUNT(t1.id) as total, SUM(CASE WHEN t3.case_count > 0 THEN 1 ELSE 0 END) as hasCase')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin("($caseQuery)")->alias('t3')->on('t1.id=t3.story')
-            ->where('t1.stage')->eq('projected')
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.shadow')->eq(0)
-            ->andWhere("t1.vision NOT LIKE '%or%'")
-            ->andWhere("t1.vision NOT LIKE '%lite%'")
-            ->groupBy('t1.product')
-            ->query();
-    }
 
     public function calculate($row)
     {
         $product = $row->product;
-        $total   = $row->total;
-        $hasCase = $row->hasCase;
+        $case    = $row->case_count;
 
-        $rate = $total ? round($hasCase / $total, 2) : 0;
-        $this->result[$product] = $rate;
+        if(!isset($this->result[$product])) $this->result[$product] = array('total' => 0, 'hasCase' => 0);
+
+        $this->result[$product]['total']   += 1;
+        $this->result[$product]['hasCase'] += $case > 0 ? 1 : 0;
     }
 
     public function getResult($options = array())
     {
+        foreach($this->result as $product => $rate)
+        {
+            if(!isset($rate['total']) || !isset($rate['hasCase'])) continue;
+            $total = $rate['total'];
+            $hasCase = $rate['hasCase'];
+
+            $this->result[$product] = $total ? round($hasCase / $total, 2) : 0;
+        }
         $records = $this->getRecords(array('product', 'value'));
         return $this->filterByOptions($records, $options);
     }

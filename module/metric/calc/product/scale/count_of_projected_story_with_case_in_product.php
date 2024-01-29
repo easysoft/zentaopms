@@ -20,32 +20,28 @@
  */
 class count_of_projected_story_with_case_in_product extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getCasesWithStory';
 
-    public function getStatement()
-    {
-        return $this->dao->select("COUNT(DISTINCT t1.story) as 'value', t1.product")
-            ->from(TABLE_CASE)->alias('t0')
-            ->leftJoin(TABLE_PROJECTSTORY)->alias('t1')->on('t1.story=t0.story')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
-            ->where('t2.deleted')->eq('0')
-            ->andWhere('t3.deleted')->eq('0')
-            ->andWhere("t2.vision NOT LIKE '%or%'")
-            ->andWhere("t2.vision NOT LIKE '%lite%'")
-            ->groupBy('t1.product');
-    }
+    public $fieldList = array('t1.product', 't1.story');
+
+    public $result = array();
 
     public function calculate($row)
     {
         $product = $row->product;
-        $value   = $row->value;
+        $story   = $row->story;
 
-        $this->result[$product] = $value;
+        if(!isset($this->result[$product])) $this->result[$product] = array();
+        $this->result[$product][$story] = $story;
     }
 
     public function getResult($options = array())
     {
+        foreach($this->result as $product => $stories)
+        {
+            if(!is_array($stories)) continue;
+            $this->result[$product] = count($stories);
+        }
         $records = $this->getRecords(array('product', 'value'));
         return $this->filterByOptions($records, $options);
     }

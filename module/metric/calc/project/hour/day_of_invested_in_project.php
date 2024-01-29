@@ -20,28 +20,11 @@
  */
 class day_of_invested_in_project extends baseCalc
 {
+    public $dataset = 'getProjectEfforts';
+
+    public $fieldList = array('t3.id as project', 't1.consumed');
+
     public $result = array();
-
-    public function getStatement()
-    {
-        $defaultHours = $this->dao->select('value')
-            ->from(TABLE_CONFIG)
-            ->where('module')->eq('execution')
-            ->andWhere('key')->eq('defaultWorkhours')
-            ->fetch('value');
-        if(empty($defaultHours)) $defaultHours = 7;
-
-        return $this->dao->select("t3.id as project, SUM(t1.consumed) as consumed, $defaultHours as defaultHours")
-            ->from(TABLE_EFFORT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-            ->where('t3.deleted')->eq('0')
-            ->andWhere('t3.type')->eq('project')
-            ->andWhere("t3.vision NOT LIKE '%or%'")
-            ->andWhere("t3.vision NOT LIKE '%lite%'")
-            ->groupBy('t3.id')
-            ->query();
-    }
 
     public function calculate($row)
     {
@@ -49,11 +32,17 @@ class day_of_invested_in_project extends baseCalc
         $consumed     = $row->consumed;
         $defaultHours = $row->defaultHours;
 
-        if(!isset($this->result[$project])) $this->result[$project] = $defaultHours ? round($consumed / $defaultHours, 2) : 0;
+        if(!isset($this->result[$project])) $this->result[$project] = 0;
+
+        $this->result[$project] += $defaultHours ? $consumed / $defaultHours : 0;
     }
 
     public function getResult($options = array())
     {
+        foreach($this->result as $project => $days)
+        {
+            $this->result[$project] = round($days, 2);
+        }
         $records = $this->getRecords(array('project', 'value'));
         return $this->filterByOptions($records, $options);
     }

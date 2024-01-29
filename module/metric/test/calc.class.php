@@ -327,13 +327,13 @@ class metricTest
      * @access public
      * @return PDOStatement|string
      */
-    public function getDataStatement($code, $scope, $purpose)
+    public function getDataStatement($code, $scope, $purpose, $returnType = 'statement', $vision = 'rnd')
     {
         include_once $this->getBaseCalcPath();
         include_once $this->objectModel->getCalcRoot() . $scope . DS . $purpose . DS . $code . '.php';
 
         $calculator = new $code;
-        $dataStatement = $this->objectModel->getDataStatement($calculator);
+        $dataStatement = $this->objectModel->getDataStatement($calculator, $returnType, $vision);
 
         if($dataStatement instanceof PDOStatement) return strtolower($dataStatement->queryString);
         return false;
