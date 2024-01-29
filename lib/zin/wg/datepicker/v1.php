@@ -52,8 +52,8 @@ class datePicker extends wg
         'todayText?: string',               // 用于显示“今天”的文本。
         'clearText?: string',               // 用于显示“清除”的文本。
         'weekStart?: int',                  // 一周从星期几开始，默认 1。
-        'minDate?: string|int',             // 最小可选的日期。
-        'maxDate?: string|int',             // 最大可选的日期。
+        'minDate?: string|int|function',    // 最小可选的日期。
+        'maxDate?: string|int|function',    // 最大可选的日期。
         'menu?: array',                     // 左侧显示的菜单设置。
         'actions?: array',                  // 底部工具栏设置。
         'onInvalid?: function'              // 日期值无效时的回调函数。
