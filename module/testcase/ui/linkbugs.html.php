@@ -21,7 +21,6 @@ modalHeader
 
 searchForm
 (
-    set::className('surface'),
     set::module('bug'),
     set::simple(true),
     set::show(true)
