@@ -142,6 +142,7 @@ class tutorial extends control
             if(helper::isAjaxRequest()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('tutorial', 'wizard', "module={$module}&method={$method}&params=" . helper::safe64Encode($params))));
             return print(js::locate(helper::createLink('tutorial', 'wizard', "module={$module}&method={$method}&params=" . helper::safe64Encode($params)), $target));
         }
+        if(in_array("{$module}-{$method}", $this->config->excludeDropmenuList)) $this->config->excludeDropmenuList[] = 'tutorial-wizard';
         echo $this->fetch($module, $method, $params);
     }
 
