@@ -123,7 +123,6 @@ $fields->field('days')
 if($hasPercent)
 {
     $fields->field('percent')
-        ->required()
         ->label($lang->stage->percent)
         ->control('inputGroup')
         ->itemBegin('percent')->control('input')->value(data('execution.percent'))->itemEnd()
