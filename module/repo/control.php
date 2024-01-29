@@ -1152,7 +1152,6 @@ class repo extends control
             $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
             $revision = $version == 1 ? 'HEAD' : (in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) ? $latestInDB->commit : $latestInDB->revision);
             $batchNum = $type == 'batch' ? $this->config->repo->batchNum : 0;
-            if($repo->SCM == 'Subversion' && $batchNum) $batchNum = $this->config->repo->svnBatchNum;
             $logs     = $this->scm->getCommits($revision, $batchNum, $branchID);
         }
 
