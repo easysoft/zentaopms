@@ -57,7 +57,7 @@ window.setStoryStatistics = function(element, checkedIDList)
         {
             const story = row.data;
             const cases = storyCases[row.id];
-            checkedEstimate += story.estimate;
+            checkedEstimate += parseFloat(story.estimate);
 
             if(cases > 0)
             {
