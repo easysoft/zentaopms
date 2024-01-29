@@ -67,10 +67,6 @@ class control extends wg
             $id = substr($name, -2) == '[]' ? substr($name, 0, - 2) : $name;
             $this->setProp('id', $id);
         }
-        elseif($id === '')
-        {
-            $this->setProp('id', null);
-        }
     }
 
     /**
