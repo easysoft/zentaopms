@@ -428,6 +428,7 @@ formPanel
                 picker
                 (
                     set::id('begin'),
+                    set::width('80px'),
                     set::name('begin'),
                     set::required(true),
                     set::items($times),
@@ -438,6 +439,7 @@ formPanel
                 picker
                 (
                     set::id('end'),
+                    set::width('80px'),
                     set::name('end'),
                     set::required(true),
                     set::items($times),
