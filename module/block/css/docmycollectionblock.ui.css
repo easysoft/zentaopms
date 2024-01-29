@@ -1,1 +1,2 @@
 .block-docmycollection .flex > .border:hover {border-color: var(--color-primary-600)}
+.block-docmycollection .doc-title {display: flex; align-items: center;}

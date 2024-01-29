@@ -50,7 +50,7 @@ foreach($docList as $doc)
             ),
             div
             (
-                setClass('font-bold my-2 mr-2 clip'),
+                setClass('font-bold my-2 mr-2 clip doc-title'),
                 img
                 (
                     setClass('inline pr-1'),

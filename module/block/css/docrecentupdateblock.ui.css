@@ -1,1 +1,2 @@
 .block-docrecentupdate .flex > .border:hover {border-color: var(--color-primary-600)}
+.block-docrecentupdate .doc-title {display: flex; align-items: center;}
