@@ -97,6 +97,7 @@ class productsBox extends wg
                 setClass('linkProduct'),
                 set::required($project && in_array($project->model, array('waterfall', 'waterfallplus'))),
                 set::label($lang->project->manageProducts),
+                set::labelFor('productBox'),
                 $hasNewProduct ? set::checkbox(array('text' => $lang->project->addProduct, 'name' => 'addProduct', 'checked' => false)) : false,
                 picker
                 (
