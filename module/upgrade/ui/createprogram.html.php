@@ -25,18 +25,18 @@ $createProgram = function($data)
             div(setClass('createProjectTip text-gray ' . ($data->projectType == 'project' ? '' : 'hidden')), html($lang->upgrade->createProjectTip)),
             div(setClass('createExecutionTip text-gray ' . ($data->projectType == 'execution' ? '' : 'hidden')), html($lang->upgrade->createExecutionTip))
         ),
-        formRowGroup(set::title($data->systemMode == 'light' ? $lang->upgrade->setProject : $lang->upgrade->setProgram), set::items(array())),
+        formRowGroup(set::class('formTitle'), set::title($data->systemMode == 'light' ? $lang->upgrade->setProject : $lang->upgrade->setProgram), set::items(array())),
         div
         (
             setClass('programForm mt-4 form-horz'),
             formGroup
             (
-                setClass('programName my-2'),
+                setClass('programName my-2 ' . ($data->systemMode == 'light' ? 'hidden' : '')),
                 set::label($lang->upgrade->programName),
                 set::required(true),
                 inputGroup
                 (
-                    picker(setID('programs'), set::name('programs'), set::items($data->programs), set::value($data->programID), setData(array('on' => 'change', 'call' => 'changePrograms')), setClass('hidden')),
+                    picker(set::required(true), setID('programs'), set::name('programs'), set::items($data->programs), set::value($data->programID), setData(array('on' => 'change', 'call' => 'changePrograms')), setClass('hidden')),
                     input(set::name('programName')),
                     span
                     (
@@ -81,7 +81,7 @@ $createProgram = function($data)
             ),
             formGroup
             (
-                setClass('lineName my-2'),
+                setClass('lineName my-2 ' . ($data->systemMode == 'light' ? 'hidden' : '')),
                 set::label($lang->upgrade->line),
                 inputGroup
                 (

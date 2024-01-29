@@ -24,7 +24,7 @@ $getMergeData = function($data)
             div
             (
                 setClass('sprintItem px-4'),
-                checkbox(set::name("sprints[]"), set::text($sprint->name), set::value($sprint->id), set('data-on', 'change'), set('data-call', 'changeSprints'), set('data-params', 'event'))
+                checkbox(set::name("sprints[]"), set::text($sprint->name), set::value($sprint->id), set('data-on', 'change'), set('data-call', 'changeSprints'), set('data-params', 'event'), set('data-begin', $sprint->begin), set('data-end', $sprint->end), set('data-status', $sprint->status), set('data-pm', $sprint->PM))
             )
         );
     }

@@ -84,7 +84,7 @@ window.changeProjectType = function()
 {
     const projectType = $('input[name=projectType]:checked').val();
 
-    $('.programForm').toggleClass('hidden', projectType == 'project' && mode == 'light');
+    $('.programForm, .formTitle').toggleClass('hidden', projectType == 'project' && mode == 'light');
     $('.createProjectTip').toggleClass('hidden', projectType == 'project');
     $('.createExecutionTip').toggleClass('hidden', projectType == 'execution');
     $('[name=projectAcl]').closest('.check-list').toggleClass('hidden', projectType == 'project');
@@ -386,7 +386,7 @@ window.setProgramStatus = function(projectStatus)
 
 window.initFormData = function()
 {
-    $('#programBox').toggleClass('hidden', mode == 'light');
+    $('#programBox').toggleClass('hidden', $('[name^=sprints]:checked').length == 0 && mode == 'light');
     $('.programParams').toggleClass('hidden', $('[name^=sprints]:checked').length == 0);
     $('.programForm').toggleClass('hidden', $('[name^=sprints]:checked').length != 0 && projectType == 'project' && mode == 'light');
 
@@ -407,6 +407,12 @@ window.initFormData = function()
         $(".projectName .picker-field").zui('picker').render({disabled: false});
 
         changeProjectType();
+
+        if(mode == 'light')
+        {
+            $('.programName').find('input[name=newProgram]').prop('checked', false);
+            changeNewProgram();
+        }
     }
 }
 
