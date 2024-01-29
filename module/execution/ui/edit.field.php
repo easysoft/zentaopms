@@ -133,15 +133,16 @@ if($hasPercent)
 $fields->field('productsBox')
     ->width('full')
     ->control(array(
-        'control'        => 'productsBox',
-        'productItems'   => data('allProducts'),
-        'branchGroups'   => data('branchGroups'),
-        'planGroups'     => data('productPlans'),
-        'linkedProducts' => data('linkedProducts'),
-        'linkedBranches' => data('linkedBranches'),
-        'productPlans'   => data('productPlans'),
-        'project'        => data('project'),
-        'isStage'        => isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'))
+        'control'           => 'productsBox',
+        'productItems'      => data('allProducts'),
+        'branchGroups'      => data('branchGroups'),
+        'planGroups'        => data('productPlans'),
+        'linkedProducts'    => data('linkedProducts'),
+        'linkedBranches'    => data('linkedBranches'),
+        'productPlans'      => data('productPlans'),
+        'project'           => data('project'),
+        'isStage'           => isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')),
+        'errorSameProducts' => $lang->execution->errorSameProducts,
     ));
 
 $fields->field('PO')

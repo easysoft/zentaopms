@@ -23,6 +23,7 @@ class productsBox extends wg
         'project?: object',             // 关联的项目。
         'isStage?: bool',               // 是否是阶段类型。
         'hasNewProduct?: bool=false',   // 是否有新产品。
+        'errorSameProducts?: string',   // 选择同一个产品的提示。
     );
 
     public static function getPageCSS(): string|false
@@ -37,8 +38,7 @@ class productsBox extends wg
 
     protected function build(): wg
     {
-        global $lang;
-        list($project, $productItems, $linkedProducts) = $this->prop(array('project', 'productItems', 'linkedProducts'));
+        list($project, $productItems, $linkedProducts, $errorSameProducts) = $this->prop(array('project', 'productItems', 'linkedProducts', 'errorSameProducts'));
 
         $productsBox = array();
         if((!empty($project->hasProduct) || is_null($project)) && $linkedProducts)
@@ -62,7 +62,7 @@ class productsBox extends wg
             on::change('.productsBox [name^=products]', 'loadBranches'),
             jsVar('multiBranchProducts', data('multiBranchProducts')),
             jsVar('project', \zget($project, 'id', 0)),
-            jsVar('errorSameProducts', $lang->project->errorSameProducts),
+            jsVar('errorSameProducts', $errorSameProducts),
             $productsBox
         );
     }

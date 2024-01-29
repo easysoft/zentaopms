@@ -74,17 +74,18 @@ $fields->field('productsBox')
     ->width('full')
     ->control(array
     (
-        'control'        => 'productsBox',
-        'productItems'   => data('allProducts'),
-        'branchGroups'   => data('branchGroups'),
-        'planGroups'     => data('productPlans'),
-        'linkedProducts' => data('products'),
-        'linkedBranches' => data('linkedBranches'),
-        'currentProduct' => data('productID'),
-        'currentPlan'    => data('planID'),
-        'productPlans'   => data('productPlan'),
-        'project'        => data('project'),
-        'isStage'        => data('isStage'),
+        'control'           => 'productsBox',
+        'productItems'      => data('allProducts'),
+        'branchGroups'      => data('branchGroups'),
+        'planGroups'        => data('productPlans'),
+        'linkedProducts'    => data('products'),
+        'linkedBranches'    => data('linkedBranches'),
+        'currentProduct'    => data('productID'),
+        'currentPlan'       => data('planID'),
+        'productPlans'      => data('productPlan'),
+        'project'           => data('project'),
+        'isStage'           => data('isStage'),
+        'errorSameProducts' => $lang->execution->errorSameProducts,
     ));
 
 $fields->field('desc')

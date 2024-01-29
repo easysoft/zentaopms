@@ -65,16 +65,17 @@ $fields->field('productsBox')
     ->width('full')
     ->control(array
     (
-        'control'        => 'productsBox',
-        'productItems'   => data('allProducts'),
-        'branchGroups'   => data('branchGroups'),
-        'planGroups'     => data('productPlans'),
-        'productPlans'   => data('productPlans'),
-        'linkedProducts' => data('linkedProducts'),
-        'linkedBranches' => data('linkedBranches'),
-        'project'        => data('project') ? data('project') : data('copyProject'),
-        'hasNewProduct'  => data('app.rawMethod') == 'create',
-        'isStage'        => data('isStage')
+        'control'           => 'productsBox',
+        'productItems'      => data('allProducts'),
+        'branchGroups'      => data('branchGroups'),
+        'planGroups'        => data('productPlans'),
+        'productPlans'      => data('productPlans'),
+        'linkedProducts'    => data('linkedProducts'),
+        'linkedBranches'    => data('linkedBranches'),
+        'project'           => data('project') ? data('project') : data('copyProject'),
+        'hasNewProduct'     => data('app.rawMethod') == 'create',
+        'isStage'           => data('isStage'),
+        'errorSameProducts' => $lang->project->errorSameProducts,
     ));
 
 if($model == 'waterfall' || $model == 'waterfallplus')
