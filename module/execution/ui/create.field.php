@@ -46,6 +46,7 @@ $fields->field('type')
     ->label($showExecutionExec ? $lang->execution->execType : $lang->execution->type)
     ->name($isStage ? 'attribute' : 'lifetime')
     ->hidden($isKanban)
+    ->value('short')
     ->items($isStage ? $lang->stage->typeList : $lang->execution->lifeTimeList);
 
 $plan = data('plan');
