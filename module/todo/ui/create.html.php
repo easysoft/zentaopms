@@ -376,14 +376,22 @@ formPanel
         (
             set::width('1/4'),
             setClass('priBox'),
-            set::label($lang->todo->pri),
-            priPicker
+            inputGroup
             (
-                setID('pri'),
-                set::name('pri'),
-                set::items($lang->todo->priList),
-                set::value(3),
-                set::required(true)
+                setClass('flex items-center'),
+                span
+                (
+                    setClass('ml-2 w-20'),
+                    $lang->todo->pri
+                ),
+                priPicker
+                (
+                    setID('pri'),
+                    set::name('pri'),
+                    set::items($lang->todo->priList),
+                    set::value(3),
+                    set::required(true)
+                )
             )
         )
     ),
