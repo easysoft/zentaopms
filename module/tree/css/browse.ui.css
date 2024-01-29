@@ -1,1 +1,2 @@
 .sidebar .tree .item-content > .item-title {white-space: nowrap; overflow: hidden; text-overflow: clip;}
+.flex-auto .tree-item-content .row:not(:first-child) {overflow: hidden;}

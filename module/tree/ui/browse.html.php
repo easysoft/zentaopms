@@ -135,6 +135,7 @@ $parentPath[] = div
         setClass('tree-link text-clip'),
         set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&currentModuleID=0&branch=$branch")),
         set('data-app', $app->tab),
+        set::title($root->name),
         $root->name
     ),
     h::i
@@ -153,6 +154,7 @@ foreach($parentModules as $module)
             setClass('tree-link text-clip'),
             set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&currentModuleID=$module->id&branch=$branch")),
             set('data-app', $app->tab),
+            set::title($module->name),
             $module->name
         ),
         h::i
