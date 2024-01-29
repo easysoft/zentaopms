@@ -19,8 +19,8 @@ window.clickSubmit = function()
             if(result)
             {
                 $.ajaxSubmit({
-                    url:  $('#finishForm').attr('action'),
-                    data: new FormData($('#finishForm')[0])
+                    url:  $('#finishForm form').attr('action'),
+                    data: new FormData($('#finishForm form')[0])
                 });
             }
         });
