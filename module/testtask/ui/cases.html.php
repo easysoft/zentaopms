@@ -147,11 +147,20 @@ if($canBatchAction)
 
 $cols = $this->loadModel('datatable')->getSetting('testtask');
 if(isset($cols['id']['name'])) $cols['id']['name'] = 'case';
-if(isset($cols['title']['link']['params'])) $cols['title']['link']['params'] = 'caseID={case}';
+if(isset($cols['title']['link']['params'])) $cols['title']['link']['params'] = 'caseID={case}&version={version}&from=testtask&taskID=' . $task->id;
 if(isset($cols['bugs']['link']['params'])) $cols['bugs']['link']['params'] = 'caseID={case}';
 if(isset($cols['scene'])) $cols['scene']['map'] = $iscenes;
+if(isset($cols['status'])) $cols['status']['statusMap']['changed'] = $lang->testcase->changed;
 
 $runs = initTableData($runs, $cols);
+$runs = array_map(
+    function($run)
+    {
+        if($run->version < $run->caseVersion) $run->status = 'changed';
+        return $run;
+    },
+    $runs
+);
 
 dtable
 (

@@ -298,6 +298,18 @@ if($case->stage)
 
 }
 
+if($from == 'testtask' && $case->version > $case->currentVersion)
+{
+    $caseChange[] = span
+    (
+        set('title', $lang->testcase->fromTesttask),
+        ' (',
+        $lang->testcase->changed,
+        hasPriv('testcase', 'confirmchange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href($this->createLink('testcase', 'confirmchange', "caseID=$case->id&taskID=$taskID")), $lang->testcase->sync) : '',
+        ')'
+    );
+}
+
 if(isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version && $from != 'testtask' && !empty($case->product))
 {
     $caseChange[] = span
