@@ -36,6 +36,7 @@ class stepsEditor extends wg
         'sameLevelText?: string',           // 同级文本。
         'subLevelText?: string',            // 子级文本。
         'expectDisabledTip?: string',       // 预期输入框禁用提示。
+        'deleteStepTip?: string',           // 有子层级禁用删除提示。
         'dragNestedTip?: string'            // 拖拽超出提示。
     );
 
@@ -63,6 +64,7 @@ class stepsEditor extends wg
         $subLevelText      = $this->prop('subLevelText', data('lang.testcase.stepSubLevel'));
         $id                = $this->prop('id');
         $expectDisabledTip = $this->prop('expectDisabledTip', data('lang.testcase.expectDisabledTip'));
+        $deleteStepTip     = $this->prop('deleteStepTip', data('lang.testcase.deleteStepTip'));
         $dragNestedTip     = $this->prop('dragNestedTip', data('lang.testcase.dragNestedTip'));
 
         return div
@@ -101,6 +103,7 @@ class stepsEditor extends wg
             (
                 set::_to("#$id"),
                 set::expectDisabledTip($expectDisabledTip),
+                set::deleteStepTip($deleteStepTip),
                 set::dragNestedTip($dragNestedTip),
                 set($this->props->pick(array('name', 'expectsName', 'data')))
             )
