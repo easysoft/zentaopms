@@ -16,19 +16,35 @@ if(isset($confirm) && $confirm == 'no')
 {
     div
     (
-        setClass('alert bg-white text-warning'),
-        icon
+        setClass('p-2'),
+        div
         (
-            'exclamation-sign',
-            setClass('alert-icon')
+            setClass('alert bg-white mb-4'),
+            icon
+            (
+                'exclamation-sign',
+                set::size('2x'),
+                setClass('alert-icon text-warning')
+            ),
+            $lang->extension->confirmUninstall
         ),
-        $lang->extension->confirmUninstall,
-        a
+        div
         (
-            set('href', '#'),
-            set('load-url', createLink('extension', 'uninstall', "extension=$code&confirm=yes")),
-            set::onclick('window.loadUrl(this)'),
-            $lang->extension->uninstall
+            setClass('text-center'),
+            btn
+            (
+                setClass('mr-4'),
+                set::type('primary'),
+                set('load-url', createLink('extension', 'uninstall', "extension=$code&confirm=yes")),
+                set::onclick('window.loadUrl(this)'),
+                $lang->extension->uninstall
+            ),
+            btn
+            (
+                $lang->cancel,
+                set('data-dismiss', 'modal'),
+                set::onclick('window.loadPage()')
+            )
         )
     );
 }
@@ -81,7 +97,7 @@ else
         ),
         (!empty($backupFile) || !empty($removeCommands)) ? div
         (
-            setClass('alert'),
+            setClass('alert mb-4'),
             icon
             (
                 'check-circle',

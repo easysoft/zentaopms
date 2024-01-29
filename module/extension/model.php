@@ -465,6 +465,21 @@ class extensionModel extends model
     }
 
     /**
+     * Get hook file for install or uninstall.
+     *
+     * @param  string       $extension
+     * @param  string       $hook      preinstall|postinstall|preuninstall|postuninstall
+     * @access public
+     * @return string|false
+     */
+    public function getHookFile(string $extension, string $hook): string|false
+    {
+        $hookFile = "ext/$extension/hook/$hook.php";
+        if(file_exists($hookFile)) return $hookFile;
+        return false;
+    }
+
+    /**
      * 删除安装的插件文件并返回错误提示。
      * Remove an extension.
      *
