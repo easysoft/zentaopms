@@ -1,2 +1,0 @@
-import{r as t,h as s,F as n}from"./p-fa667546.js";const e=class{constructor(s){t(this,s);this.editor=undefined;this.forceUpdateCounter=undefined;this.toggleFullscreen=null;this.showCharCount=true}render(){const t=this.editor.storage.characterCount.characters();return s(n,null,this.showCharCount?s("span",null,t," character",t>1?"s":"","."):s("div",null),this.toggleFullscreen&&s("button",{id:"fullscreen-button",onClick:this.toggleFullscreen},"Toggle Fullscreen"))}};export{e as tiptap_editor_footer};
-//# sourceMappingURL=p-be8826ab.entry.js.map

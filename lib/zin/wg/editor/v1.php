@@ -41,8 +41,8 @@ class editor extends wg
     public static function getPageJS(): string|false
     {
         // global $app;
-        // $jsFile = $app->getWebRoot() . 'js/zeneditor/tiptap-component.esm.js';
-        $jsFile   = 'https://zui-dist.oop.cc/zen-editor/zen-editor.esm.js';
+        // $jsFile = $app->getWebRoot() . 'js/zui3/zen-editor/zen-editor.esm.js';
+        $jsFile   = 'https://zui-dist.oop.cc/zentao/zen-editor/zen-editor.esm.js';
         $content  = file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
         $content .= '$.getLib("' . $jsFile . '", {type: "module", root: false}, () => {document.body.dataset.loadedEditor = true;});';
         return $content;
