@@ -4,6 +4,7 @@
 /**
 
 title=productModel->getProductLink();
+timeout=0
 cid=0
 
 - 当前页面是product-roadmap，切换1.5级导航时跳转链接。 @/product-roadmap-%s.html
@@ -28,9 +29,9 @@ cid=0
 - 当前页面是product-view，切换1.5级导航时跳转链接。 @/product-view-%s.html
 - 当前页面是product-create，切换1.5级导航时跳转链接。 @/product-browse-%s-.html
 - 当前页面是product-showImport，切换1.5级导航时跳转链接。 @/product-browse-%s-.html
-- 当前页面是product-browse，切换1.5级导航时跳转链接。 @/product-browse-%s-all--0.html
-- 当前页面是product-index，切换1.5级导航时跳转链接。 @/product-browse-%s-all--0.html
-- 当前页面是product-all，切换1.5级导航时跳转链接。 @/product-browse-%s-all--0.html
+- 当前页面是product-browse，切换1.5级导航时跳转链接。 @/product-browse-%s-all-unclosed-0-.html
+- 当前页面是product-index，切换1.5级导航时跳转链接。 @/product-index-%s.html
+- 当前页面是product-all，切换1.5级导航时跳转链接。 @/product-all-%s.html
 - 当前页面是ticket-browse，切换1.5级导航时跳转链接。 @/ticket-browse-byProduct-%s.html
 - 当前页面是ticket-view，切换1.5级导航时跳转链接。 @/ticket-browse-byProduct-%s.html
 - 当前页面是ticket-edit，切换1.5级导航时跳转链接。 @/ticket-browse-byProduct-%s.html
@@ -92,9 +93,9 @@ r($productModel->getProductLink('product',     'doc'))         && p() && e('/pro
 r($productModel->getProductLink('product',     'view'))        && p() && e('/product-view-%s.html');                              //当前页面是product-view，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('product',     'create'))      && p() && e('/product-browse-%s-.html');                           //当前页面是product-create，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('product',     'showImport'))  && p() && e('/product-browse-%s-.html');                           //当前页面是product-showImport，切换1.5级导航时跳转链接。
-r($productModel->getProductLink('product',     'browse'))      && p() && e('/product-browse-%s-all--0.html');                     //当前页面是product-browse，切换1.5级导航时跳转链接。
-r($productModel->getProductLink('product',     'index'))       && p() && e('/product-browse-%s-all--0.html');                     //当前页面是product-index，切换1.5级导航时跳转链接。
-r($productModel->getProductLink('product',     'all'))         && p() && e('/product-browse-%s-all--0.html');                     //当前页面是product-all，切换1.5级导航时跳转链接。
+r($productModel->getProductLink('product',     'browse'))      && p() && e('/product-browse-%s-all-unclosed-0-.html');            //当前页面是product-browse，切换1.5级导航时跳转链接。
+r($productModel->getProductLink('product',     'index'))       && p() && e('/product-index-%s.html');                             //当前页面是product-index，切换1.5级导航时跳转链接。
+r($productModel->getProductLink('product',     'all'))         && p() && e('/product-all-%s.html');                               //当前页面是product-all，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('ticket',      'browse'))      && p() && e('/ticket-browse-byProduct-%s.html');                   //当前页面是ticket-browse，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('ticket',      'view'))        && p() && e('/ticket-browse-byProduct-%s.html');                   //当前页面是ticket-view，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('ticket',      'edit'))        && p() && e('/ticket-browse-byProduct-%s.html');                   //当前页面是ticket-edit，切换1.5级导航时跳转链接。
