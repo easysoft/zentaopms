@@ -102,7 +102,7 @@ foreach($budgetUnitList as $key => $value)
     $budgetItemList[] = array('text' => $value, 'value' => $key, 'url' => "javascript:toggleBudgetUnit('{$key}')");
 }
 
-$budgetHidden = strpos($config->project->{$app->rawMethod}->requiredFields, 'budget') !== false;
+$budgetHidden = isset($config->project->{$app->rawMethod}->requiredFields) && strpos($config->project->{$app->rawMethod}->requiredFields, 'budget') !== false;
 $budgetFuture = data('project.budget') !== null && !data('project.budget') && !$budgetHidden;
 $fields->field('budget')
     ->label($lang->project->budget)
