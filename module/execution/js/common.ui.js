@@ -185,21 +185,3 @@ window.confirmDeleteExecution = function(executionID, confirmDeleteTip)
         if(res) $.ajaxSubmit({url: $.createLink('execution', 'delete', 'executionID=' + executionID + '&comfirm=yes')});
     });
 }
-
-window.getDateMenu = function()
-{
-    if(!endList) return [];
-
-    const begin = $('input[name=begin]').val();
-    if(!begin) return [];
-
-    let endMenu     = [];
-    const beginDate = new Date(begin);
-    for(let key in endList)
-    {
-        let endDate = new Date();
-        endDate.setDate(beginDate.getDate() + parseInt(key));
-        endMenu.push({'text': endList[key], 'data-set-date': zui.formatDate(endDate, 'yyyy-MM-dd')});
-    }
-    return endMenu;
-}

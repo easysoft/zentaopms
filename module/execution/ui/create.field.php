@@ -52,13 +52,15 @@ $fields->field('type')
 $plan = data('plan');
 $fields->field('dateRange')
     ->required()
-    ->control('inputGroup')
-    ->items(false)
-    ->itemBegin('begin')->control('datePicker')->id('begin')->value(empty($plan->begin) ? date('Y-m-d') : $plan->begin)->placeholder($lang->execution->begin)->itemEnd()
-    ->item(array('control' => 'span', 'text' => '-'))
-    ->itemBegin('end')->control('datePicker')->id('end')->value(empty($plan->end) ? '' : $plan->end)->placeholder($lang->execution->end)
-    ->menu(array('items' => jsRaw('window.getDateMenu')))
-    ->itemEnd();
+    ->controlBegin('dateRangePicker')
+    ->beginName('begin')
+    ->beginPlaceholder($lang->execution->begin)
+    ->beginValue(empty($plan->begin) ? date('Y-m-d') : $plan->begin)
+    ->endName('end')
+    ->endPlaceholder($lang->execution->end)
+    ->endValue(empty($plan->end) ? '' : $plan->end)
+    ->endList($lang->execution->endList)
+    ->controlEnd();
 
 $fields->field('days')
     ->width('1/4')

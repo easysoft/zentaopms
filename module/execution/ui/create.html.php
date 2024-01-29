@@ -46,9 +46,33 @@ jsVar('weekend', $config->execution->weekend);
 jsVar('isStage', $isStage);
 jsVar('copyExecutionID', $copyExecutionID);
 jsVar('executionID', isset($executionID) ? $executionID : 0);
-jsVar('endList', $lang->execution->endList);
 
 $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc');
+
+$handleBeginEndChange = jsCallback()
+    ->const('weekend', $config->execution->weekend)
+    ->do(<<<'JS'
+        const $picker   = $this.closest('.date-range-picker');
+        const begin     = $picker.find('[name=begin]').val();
+        const end       = $picker.find('[name=end]').val();
+        if(!zui.isValidDate(begin) || !zui.isValidDate(end)) return;
+        const $days     = $element.find('[name=days]');
+        const beginDate = zui.createDate(begin);
+        const endDate   = zui.createDate(end);
+        const totalDays = Math.floor((endDate.getTime() - beginDate.getTime()) / zui.TIME_DAY);
+        if(totalDays <= 0) return $days.val(0);
+        let workDays  = 0;
+        for(i = 0; i < totalDays; i++)
+        {
+            const date = new Date(beginDate.getTime());
+            date.setDate(date.getDate() + i);
+
+            if((weekend == 2 && date.getDay() == 6) || date.getDay() == 0) continue;
+            workDays++;
+        }
+        $days.val(workDays);
+    JS);
+
 formGridPanel
 (
     to::heading(div
@@ -69,8 +93,7 @@ formGridPanel
     ),
     on::change('[name=project]', 'refreshPage'),
     on::change('[name=type]', 'setType'),
-    on::change('[name=begin]', 'computeWorkDays(NaN)'),
-    on::change('[name=end]', 'computeWorkDays(NaN)'),
+    on::change('[name=begin],[name=end]', $handleBeginEndChange),
     on::change('[name=teams]', 'loadMembers'),
     on::change('#copyTeam', 'toggleCopyTeam'),
     set::fields($fields)
