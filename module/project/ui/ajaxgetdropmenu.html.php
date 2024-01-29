@@ -78,8 +78,8 @@ foreach($data as $key => $value) $data[$key] = array_values($value);
  * Define every group name, include expanded group.
  */
 $tabs = array();
-$tabs[] = array('name' => 'my',     'text' => $lang->project->myProject);
-$tabs[] = array('name' => 'other',  'text' => $lang->project->other);
+if(!empty($data['my']))    $tabs[] = array('name' => 'my',     'text' => $lang->project->myProject);
+if(!empty($data['other'])) $tabs[] = array('name' => 'other',  'text' => $lang->project->other);
 $tabs[] = array('name' => 'closed', 'text' => $lang->project->closedProject);
 
 /**
