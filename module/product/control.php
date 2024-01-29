@@ -279,6 +279,11 @@ class product extends control
 
         if($this->config->vision == 'or') unset($this->lang->product->statusList['normal']);
 
+        /* Set custom. */
+        foreach(explode(',', $this->config->product->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->product->$field;
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->product->custom->batchEditFields;
+
         /* 构造批量编辑页面表单配置数据。*/
         $this->productZen->buildBatchEditForm($programID, $productIdList);
     }

@@ -45,6 +45,7 @@ formBatchPanel
 (
     set::title($lang->product->batchEdit),
     set::mode('edit'),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     set::items($items),
     set::data(array_values($productData))
 );
