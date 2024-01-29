@@ -1,6 +1,3 @@
-.panel-actions {display: flex; align-items: center;}
-.panel-actions .primary-ghost {cursor: pointer;}
-
 #copyExecutionModal .modal-dialog {max-height: unset;}
 #copyExecutionModal .copy-title {min-width: 130px;}
 #copyExecutionModal .pickerProject {flex: 0 1 30%;}

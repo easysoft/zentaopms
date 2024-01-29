@@ -75,21 +75,17 @@ $handleBeginEndChange = jsCallback()
 
 formGridPanel
 (
-    to::heading(div
-    (
-        setClass('panel-title text-lg'),
-        $showExecutionExec ? $lang->execution->createExec : $lang->execution->create,
-    )),
+    set::title($showExecutionExec ? $lang->execution->createExec : $lang->execution->create),
     to::headingActions
     (
-        a
+        btn
         (
-            icon('copy', setClass('mr-1')),
-            setClass('primary-ghost'),
-            setData(array('destoryOnHide' => true, 'toggle' => 'modal', 'target' => '#copyExecutionModal')),
+            set::icon('copy'),
+            setClass('primary-ghost size-md'),
+            toggle::modal(array('target' => '#copyExecutionModal', 'destoryOnHide' => true)),
             $lang->execution->copy
         ),
-        divider(setClass('py-2 my-0.5 mx-4 self-center'))
+        divider(setClass('h-4 mr-4 ml-2 self-center'))
     ),
     on::change('[name=project]', 'refreshPage'),
     on::change('[name=type]', 'setType'),
