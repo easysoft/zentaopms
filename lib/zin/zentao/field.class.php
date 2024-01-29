@@ -268,7 +268,12 @@ class field extends setting
         {
             trigger_error('[ZIN] The field named ' . $this->getName() . ' has no parent, maybe you should call "controlBegin($name)" firstly.', E_USER_ERROR);
         }
-        return $this->parent->control($this->toArray());
+
+        $control = $this->toArray();
+        if(!isset($control['control'])) $control['control'] = $this->getName();
+        unset($control['name']);
+
+        return $this->parent->control($control);
     }
 
     /**
