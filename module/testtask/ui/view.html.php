@@ -25,7 +25,7 @@ detailHeader
 );
 
 $taskType = '';
-foreach(explode(',', $task->type) as $type) $taskType .= zget($lang->testtask->typeList, $type);
+foreach(explode(',', $task->type) as $type) $taskType .= zget($lang->testtask->typeList, $type) . ' ';
 
 $mailto = '';
 if($task->mailto)
