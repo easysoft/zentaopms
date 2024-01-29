@@ -24,7 +24,7 @@ use zin\jQuery;
  *
  * @access public
  */
-class js extends directive
+class js extends directive implements \JsonSerializable
 {
     /**
      * The js code lines.
@@ -81,6 +81,13 @@ class js extends directive
     public function __toString()
     {
         return $this->toJS();
+    }
+
+    public function __debugInfo(): array
+    {
+        return array(
+            'jsLines' => $this->jsLines
+        );
     }
 
     /**
@@ -351,6 +358,20 @@ class js extends directive
     public function applyToWg(wg &$wg, string $blockName): void
     {
         $wg->addToBlock($blockName, h::js($this->toJS()));
+    }
+
+    /**
+     * Serialized to JSON.
+     * 序列化为 JSON。
+     *
+     * @access public
+     * @return string
+     */
+    public function jsonSerialize(): string
+    {
+        $js = trim($this->toJS());
+        if(str_ends_with(';', $js)) $js = substr($js, 0, -1);
+        return h::jsRaw($js);
     }
 
     /**
