@@ -439,7 +439,7 @@ class upgrade extends control
             if($position !== false) $log .= substr($left, 0, $position + 1);
         }
         $log = trim($log);
-        return print(json_encode(array('log' => str_replace("\n", "<br />", $log) . ($log ? '<br />' : ''), 'progress' => $progress, 'offset' => $offset + strlen($log))));
+        return print(json_encode(array('log' => str_replace("\n", "<br />", htmlspecialchars($log)) . ($log ? '<br />' : ''), 'progress' => $progress, 'offset' => $offset + strlen($log))));
     }
 
     /**
