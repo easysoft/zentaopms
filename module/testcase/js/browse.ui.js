@@ -76,6 +76,9 @@ window.onRenderCell = function(result, {row, col})
         }
     }
 
+    if(row.data.lastEditedDate == '0000-00-00 00:00:00') row.data.lastEditedDate = '';
+    if(row.data.reviewedDate == '0000-00-00') row.data.reviewedDate = '';
+
     return result;
 }
 
