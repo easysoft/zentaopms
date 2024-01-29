@@ -325,6 +325,7 @@ class on extends jsCallback
             $on->appendCode($callback->buildBody());
             $on->args(...$callback->funcArgs);
             $on->name($callback->funcName);
+            $callback->parent = $on;
             return $on;
         }
 
