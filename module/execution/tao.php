@@ -201,7 +201,8 @@ class executionTao extends executionModel
             ->andWhere('t1.type')->in('kanban,sprint,stage')
             ->fetchAll();
 
-        $productList = array();
+        $productList    = array();
+        $linkedProducts = array();
         foreach($executions as $execution)
         {
             if(!isset($productList[$execution->id]))
@@ -210,8 +211,12 @@ class executionTao extends executionModel
                 $productList[$execution->id]->product     = '';
                 $productList[$execution->id]->productName = '';
             }
+
+            if($linkedProducts[$execution->id] == $execution->product) continue;
+
             $productList[$execution->id]->product     .= $execution->product . ',';
             $productList[$execution->id]->productName .= $execution->name . ',';
+            $linkedProducts[$execution->id] = $execution->product;
         }
         return $productList;
     }
