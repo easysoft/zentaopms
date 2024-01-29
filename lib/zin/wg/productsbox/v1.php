@@ -72,8 +72,8 @@ class productsBox extends wg
         global $lang, $app;
         list($productItems, $project, $isStage, $hasNewProduct) = $this->prop(array('productItems', 'project', 'isStage', 'hasNewProduct'));
 
-        $productsBox    = array();
-        $hidden         = !empty($project) && empty($project->hasProduct) ? 'hidden' : '';
+        $productsBox   = array();
+        $hidden        = !empty($project) && empty($project->hasProduct) ? 'hidden' : '';
         $productsBox[] = $hasNewProduct ? div
         (
             setClass('addProductBox flex hidden'),
@@ -138,7 +138,7 @@ class productsBox extends wg
                     )
                 ),
             ),
-            div
+            ($isStage && $project->stageBy == 'product') ? null : div
             (
                 setClass('pl-2 flex self-center line-btn c-actions first-action'),
                 btn
@@ -199,7 +199,7 @@ class productsBox extends wg
 
         global $lang;
         list($productItems, $branchGroups, $planGroups, $productPlans) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans'));
-        list($linkedBranches, $currentProduct, $currentPlan, $project) = $this->prop(array('linkedBranches', 'currentProduct', 'currentPlan', 'project'));
+        list($linkedBranches, $currentProduct, $currentPlan, $project, $isStage) = $this->prop(array('linkedBranches', 'currentProduct', 'currentPlan', 'project', 'isStage'));
 
         $unmodifiableProducts = data('unmodifiableProducts') ? data('unmodifiableProducts') : array();
 
@@ -209,7 +209,7 @@ class productsBox extends wg
             $hasBranch = $product->type != 'normal' && isset($branchGroups[$product->id]);
             $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
 
-            $disabledProduct = !empty($project) && in_array($product->id, $unmodifiableProducts);
+            $disabledProduct = !empty($project) && (in_array($product->id, $unmodifiableProducts) || ($isStage && $project->stageBy == 'product'));
 
             $branchIdList = '';
             if(isset($product->branches))             $branchIdList = $product->branches;
