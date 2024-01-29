@@ -109,7 +109,16 @@ modal
 );
 
 $tableData = initTableData($branchList, $config->branch->dtable->fieldList, $this->branch);
-$tableData = array_map(function($data){if($data->id == 0) $data->actions = array(); return $data;}, $tableData); //Remove main branch actions.
+
+/* Process empty data. */
+$tableData = array_map(
+    function($data)
+    {
+        if($data->id == 0) $data->actions = array();
+        if(helper::isZeroDate($data->createdDate)) $data->createdDate = '';
+        if(helper::isZeroDate($data->closedDate))  $data->closedDate  = '';
+        return $data;
+    }, $tableData);
 
 $footToolbar  = array();
 if($canBatchEdit)
