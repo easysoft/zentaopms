@@ -30,7 +30,7 @@ if($project->grade > 1)
 
     $programDom = div
     (
-        icon('program mr-2'),
+        icon('program mr-2 text-primary'),
         html($programList ? implode('/ ', $programList) : '')
     );
 }
@@ -309,7 +309,7 @@ div
                 setClass('flex items-center'),
                 label
                 (
-                    setClass('rounded-full'),
+                    setClass('label rounded-full ring-gray-400 gray-300-pale'),
                     $project->id
                 ),
                 span
@@ -320,7 +320,7 @@ div
                 ),
                 !empty($config->setCode) && !empty($project->code) ? label
                 (
-                    setClass('label gray-pale ml-2 flex-none'),
+                    setClass('label gray-400-pale ring-gray-400 ml-2 flex-none'),
                     $project->code
                 ) : null,
                 label
@@ -339,7 +339,7 @@ div
                     $lang->execution->delayed
                 ) : label
                 (
-                    setClass("ml-2 flex-none status status-{$project->status}"),
+                    setClass("ml-2 flex-none bg-white status status-{$project->status}"),
                     $status
                 ),
                 span
