@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'checklist' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'checkBtn' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'checkbtn' . DS . 'v1.php';
 
 class checkBtnGroup extends checkList
 {
