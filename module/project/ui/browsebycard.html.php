@@ -186,7 +186,7 @@ if(!empty($projectStats))
                         span
                         (
                             set::title($project->budget),
-                            setClass('label gray-pale mr-2'),
+                            setClass('label gray-pale'),
                             $project->budget
                         ),
                         span
