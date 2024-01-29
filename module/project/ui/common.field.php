@@ -23,7 +23,7 @@ if(!$hasCode)
 {
     $fields->field('hasProduct')
         ->label($lang->project->category)
-        ->control('radioListInline')
+        ->control('checkBtnGroup')
         ->items($lang->project->projectTypeList);
 }
 
@@ -35,7 +35,7 @@ $fields->field('name')
 if($hasCode)
 {
     $fields->field('hasProduct')
-        ->control('radioListInline')
+        ->control('checkBtnGroup')
         ->label($lang->project->category)
         ->items($lang->project->projectTypeList);
 
