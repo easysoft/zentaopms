@@ -24,6 +24,7 @@ class projectreleaseTao extends projectreleaseModel
         foreach(explode(',', $release->build) as $buildID)
         {
             if(empty($buildID)) continue;
+            if(!isset($builds[$buildID])) continue;
 
             $build = $builds[$buildID];
             $build->branchName = $this->getBranchName($build->product, $build->branch, $branchGroup);
