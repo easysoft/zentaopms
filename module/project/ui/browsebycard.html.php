@@ -205,7 +205,7 @@ if(!empty($projectStats))
                             setClass('row'),
                             div
                             (
-                                setClass('w-1/3'),
+                                setClass('w-1/4'),
                                 div
                                 (
                                     span
@@ -225,7 +225,7 @@ if(!empty($projectStats))
                             ),
                             div
                             (
-                                setClass('w-1/3'),
+                                setClass('w-1/3 text-center'),
                                 span
                                 (
                                     setClass('statistics-title'),
@@ -240,7 +240,7 @@ if(!empty($projectStats))
                             ),
                             div
                             (
-                                setClass('w-1/3'),
+                                setClass('w-1/3 text-center'),
                                 span
                                 (
                                     setClass('statistics-title'),

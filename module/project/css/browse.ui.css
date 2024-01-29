@@ -18,7 +18,7 @@ input[name="realEnd"] {width: 150px;}
 #cards .project-infos > .budget {max-width: 75px; overflow: hidden; white-space: nowrap;}
 
 #cards .project-detail {margin-top: 10px;}
-#cards .project-detail .statistics-title {color: #5B606E;}
+#cards .project-detail .statistics-title {color: #5B606E; display: block;}
 #cards .project-detail .leftTasks, .totalLeft {display:block; font-size: 18px; font-weight: bold; color: #3C4353;}
 #cards .project-team {display:inline-block;}
 #cards .project-actions {display:inline-block; float: right; margin-bottom: 8px;}
