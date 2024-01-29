@@ -1786,6 +1786,7 @@ class repoModel extends model
     public function handleWebhook(string $event, object $data, object $repo): bool
     {
         if($event != 'Push Hook' && $event != 'Merge Request Hook') return false;
+        if(empty($data->commits)) return false;
 
         /* Update code commit history. */
         $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
