@@ -288,6 +288,7 @@ class screenModel extends model
         if(!isset($component->chartConfig->filters))
         {
             $component->chartConfig->filters = $latestFilters;
+            $component->chartConfig->noSetupGlobalFilterList = array();
         }
         else
         {
@@ -297,12 +298,15 @@ class screenModel extends model
             if(count($oldFilters) != count($latestFilters)) $filterChanged = true;
             foreach($oldFilters as $index => $oldFilter)
             {
-                if($oldFilter->field != $latestFilters[$index]->field) $filterChanged = true;
+                if($oldFilter->field != $latestFilters[$index]->field || $oldFilter->name != $latestFilters[$index]->name || $oldFilter->type != $latestFilters[$index]->type) $filterChanged = true;
             }
 
-            if($filterChanged) $component->chartConfig->filters = $latestFilters;
+            if($filterChanged)
+            {
+                $component->chartConfig->filters = $latestFilters;
+                $component->chartConfig->noSetupGlobalFilterList = array();
+            }
         }
-
         if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
         {
             if(!empty($component->option->series))
