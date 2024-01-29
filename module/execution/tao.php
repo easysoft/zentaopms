@@ -212,11 +212,11 @@ class executionTao extends executionModel
                 $productList[$execution->id]->productName = '';
             }
 
-            if($linkedProducts[$execution->id] == $execution->product) continue;
+            if(isset($linkedProducts[$execution->id][$execution->product])) continue;
 
             $productList[$execution->id]->product     .= $execution->product . ',';
             $productList[$execution->id]->productName .= $execution->name . ',';
-            $linkedProducts[$execution->id] = $execution->product;
+            $linkedProducts[$execution->id][$execution->product] = $execution->product;
         }
         return $productList;
     }
