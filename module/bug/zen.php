@@ -2442,7 +2442,7 @@ class bugZen extends bug
 
         /* 获取用例的标题、步骤、所属需求、所属模块、版本、所属执行。 */
         /* Get title, steps, storyID, moduleID, version, executionID from case. */
-        if(isset($runID) and $runID and isset($resultID) and $resultID) $fields = $this->bug->getBugInfoFromResult($resultID, 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
+        if(isset($runID) and $runID and isset($resultID) and $resultID) $fields = $this->bug->getBugInfoFromResult($resultID, isset($caseID) ? $caseID : 0, isset($stepIdList) ? $stepIdList : '');// If set runID and resultID, get the result info by resultID as template.
         if(isset($runID) and !$runID and isset($caseID) and $caseID) $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
         if(isset($fields))
         {
