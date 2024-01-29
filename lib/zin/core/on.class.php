@@ -58,9 +58,11 @@ class on extends jsCallback
      * @param string|null $selector As a delegate event selector.
      * @param array       $options  Event options.
      */
-    public function __construct(string $event, ?string $selector = null, array $options = array())
+    public function __construct(string $event, ?string $selector = null, ?array $options = array())
     {
         parent::__construct('event', 'args');
+
+        if(is_null($options)) $options = array();
 
         if(str_contains($event, '__'))
         {
