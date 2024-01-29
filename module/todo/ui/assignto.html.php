@@ -89,7 +89,7 @@ formPanel
             checkbox
             (
                 set::name('lblDisableDate'),
-                set::text($lang->todo->lblDisableDate),
+                set::text($lang->todo->future),
                 on::change('switchDateFeature')
             )
         )
