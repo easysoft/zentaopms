@@ -381,7 +381,7 @@ formPanel
                 setClass('flex items-center'),
                 span
                 (
-                    setClass('ml-2 w-20'),
+                    setClass('ml-2 w-18'),
                     $lang->todo->pri
                 ),
                 priPicker
