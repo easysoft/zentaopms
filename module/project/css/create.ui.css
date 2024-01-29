@@ -1,4 +1,3 @@
-.panel-actions {display: flex; align-items: center;}
 #copyProjectModal .copy-title {min-width: 120px;}
 #copyProjectModal #projectName {width: 32%;}
 #copyProjectModal .project-block {flex: 0 1 30%; padding: 20px 10px; margin: 4px 12px; overflow: hidden;}
