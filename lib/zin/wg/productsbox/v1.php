@@ -139,7 +139,7 @@ class productsBox extends wg
                     )
                 ),
             ),
-            ($isStage && $project->stageBy == 'product') ? null : div
+            ($isStage && isset($project->stageBy) && $project->stageBy == 'product') ? null : div
             (
                 setClass('pl-2 flex self-center line-btn c-actions first-action'),
                 btn
