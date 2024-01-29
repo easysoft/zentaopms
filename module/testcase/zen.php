@@ -2057,7 +2057,7 @@ class testcaseZen extends testcase
     protected function processStepsForMindMap(object $case): object
     {
         $mindMapSteps = array();
-        $mindMapSteps['id']      = $case->id;
+        $mindMapSteps['id']      = 'case_' . $case->id;
         $mindMapSteps['text']    = $case->title;
         $mindMapSteps['type']    = 'root';
         $stepItem['subSide']     = 'right';
@@ -2073,7 +2073,7 @@ class testcaseZen extends testcase
             $stepItem['id']      = $step->id;
             $stepItem['text']    = $step->step;
             $stepItem['type']    = $step->grade == 1 ? 'sub' : 'node';
-            $stepItem['parent']  = $step->parent > 0 ? $step->parent : $case->id;
+            $stepItem['parent']  = $step->parent > 0 ? $step->parent : 'case_' . $case->id;
             $stepItem['subSide'] = 'right';
             if(isset($parentSteps[$step->id])) $stepItem['children'] = array_reverse($parentSteps[$step->id]);
 
