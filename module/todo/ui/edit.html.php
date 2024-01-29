@@ -461,17 +461,10 @@ formPanel
             ),
             btn
             (
-                set
-                (
-                    array(
-                        'icon'           => 'help',
-                        'data-toggle'    => 'tooltip',
-                        'data-placement' => 'top-start',
-                        'data-title'     => $lang->todo->privateTip,
-                        'square'         => true,
-                        'class'          => 'ghost h-6 tooltip-btn'
-                    )
-                )
+                set::icon('help'),
+                toggle::tooltip(array('placement' => 'right', 'title' => $lang->todo->privateTip, 'type' => 'white', 'class-name' => 'text-gray border border-light')),
+                set::square(true),
+                setClass('ghost h-6 mt-0.5 tooltip-btn')
             )
         )
     ),
