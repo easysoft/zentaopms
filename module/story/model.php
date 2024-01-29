@@ -24,7 +24,7 @@ class storyModel extends model
     {
         $story = $this->dao->select('*')->from(TABLE_STORY)
             ->where('id')->eq($storyID)
-            ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
+            ->beginIf($this->app->tab != 'feedback')->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")->fi()
             ->fetch();
         if(!$story) return false;
 
