@@ -19,4 +19,6 @@ $lang->custom->story->fields['reviewRules']      = 'Review Rules';
 $lang->custom->story->fields['reviewResultList'] = 'Review Result';
 $lang->custom->story->fields['review']           = 'Need Review';
 
+$lang->custom->execution = new stdClass();
+
 $lang->custom->system = array('required');

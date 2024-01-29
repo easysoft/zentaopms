@@ -19,4 +19,6 @@ $lang->custom->story->fields['reviewRules']      = '评审规则';
 $lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['review']           = '评审流程';
 
+$lang->custom->execution = new stdClass();
+
 $lang->custom->system = array('required');
