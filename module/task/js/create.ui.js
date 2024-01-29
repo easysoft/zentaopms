@@ -17,12 +17,14 @@ function toggleTeam()
         $assignedToBox.find('.add-team').removeClass('hidden');
         $assignedToBox.find('.picker-box').addClass('hidden');
         $assignedToBox.find('.assignedToList').removeClass('hidden');
+        $('input[name=estimate]').attr('disabled', true);
     }
     else
     {
         $assignedToBox.find('.add-team').addClass('hidden');
         $assignedToBox.find('.picker-box').removeClass('hidden');
         $assignedToBox.find('.assignedToList').addClass('hidden');
+        $('input[name=estimate]').removeAttr('disabled');
     }
 }
 
