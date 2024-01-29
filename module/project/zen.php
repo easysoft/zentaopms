@@ -354,20 +354,23 @@ class projectZen extends project
         {
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
 
-            foreach($plans[$productID] as $branchID => $branchPlans)
+            if(!empty($plans[$productID]))
             {
-                if(isset($branchPlans['']))
+                foreach($plans[$productID] as $branchID => $branchPlans)
                 {
-                    if(isset($branchPlans[0]))
+                    if(isset($branchPlans['']))
                     {
-                        $branchPlans[0] = array_merge($branchPlans[0], $branchPlans['']);
+                        if(isset($branchPlans[0]))
+                        {
+                            $branchPlans[0] = array_merge($branchPlans[0], $branchPlans['']);
+                        }
+                        else
+                        {
+                            $branchPlans[0] = $branchPlans[''];
+                        }
+                        unset($plans[$productID]['']);
+                        unset($branchPlans['']);
                     }
-                    else
-                    {
-                        $branchPlans[0] = $branchPlans[''];
-                    }
-                    unset($plans[$productID]['']);
-                    unset($branchPlans['']);
                 }
             }
             if(!empty($linkedProduct->branches))
