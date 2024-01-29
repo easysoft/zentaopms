@@ -591,7 +591,7 @@ class story extends control
             $storyData = $this->storyZen->buildStoryForReview($storyID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->story->review($storyID, $storyData, $this->post->comment);
+            $this->story->review($storyID, $storyData, (string)$this->post->comment);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $message = $this->executeHooks($storyID);
