@@ -35,10 +35,11 @@ function initBurnChar()
     Object.values(executions).forEach(function(execution)
     {
         var chartDom = document.getElementById('burn' + execution.id);
-        var myChart = echarts.init(chartDom);
+        var myChart  = echarts.init(chartDom);
+        var title    = truncateCustomString(execution.name, 38);
         var option = {
           title: {
-            text: execution.name,
+            text: title,
             top: 10,
             textStyle: {
               color: '#a1c4e9',
