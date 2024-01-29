@@ -68,7 +68,7 @@ toolbar
 );
 
 /* zin: Define the sidebar in main content. */
-empty($globalDisableProgram) ? sidebar
+empty($globalDisableProgram) && $config->vision != 'lite' ? sidebar
 (
     moduleMenu(set(array
     (
