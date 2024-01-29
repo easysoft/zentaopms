@@ -363,7 +363,7 @@ formPanel
     (
         formGroup
         (
-            set::width('5/6'),
+            set::width('3/4'),
             set(array('id' => 'nameBox', 'required' => true, 'label' => $lang->todo->name, 'class' => 'name-box')),
             div
             (
@@ -374,7 +374,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/5'),
+            set::width('1/4'),
             setClass('priBox'),
             set::label($lang->todo->pri),
             priPicker
@@ -412,8 +412,9 @@ formPanel
         setClass('items-center'),
         formGroup
         (
+            setClass('flex items-center'),
             set::label($lang->todo->beginAndEnd),
-            set::width('1/3'),
+            set::width('1/2'),
             inputGroup
             (
                 picker
@@ -435,15 +436,15 @@ formPanel
                     set::value(date('Y-m-d') != $date ? $timesKeys[3] : $defaultEnd),
                     on::change('verifyEndTime')
                 )
-            )
-        ),
-        div
-        (
-            setClass('ml-4 flex items-center'),
-            checkbox
+            ),
+            div
             (
-                set(array('id' => 'switchTime', 'name' => 'switchTime', 'text' => $lang->todo->periods['future'])),
-                on::change('switchDateFeature')
+                setClass('ml-4 flex items-center'),
+                checkbox
+                (
+                    set(array('id' => 'switchTime', 'name' => 'switchTime', 'text' => $lang->todo->periods['future'])),
+                    on::change('switchDateFeature')
+                )
             )
         )
     )
