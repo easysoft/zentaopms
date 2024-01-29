@@ -572,7 +572,7 @@ class upgradeTao extends upgradeModel
     /**
      * 将执行下的所有需求相关转移到项目下。
      * Move all stories under execution to project.
-     * 
+     *
      * @param  int       $projectID
      * @param  array     $sprintIdList
      * @access protected
@@ -617,7 +617,7 @@ class upgradeTao extends upgradeModel
 
     /**
      * 将执行下虽有的测试用例相关都转移到项目下。
-     * 
+     *
      * @param  int       $projectID
      * @param  array     $sprintIdList
      * @access protected
@@ -633,6 +633,8 @@ class upgradeTao extends upgradeModel
 
         foreach($sprintCases as $sprintCase)
         {
+            $this->dao->replace(TABLE_PROJECTCASE)->data($sprintCase)->exec();
+
             $sprintCase->order   = $sprintCase->case * 5;
             $sprintCase->project = $projectID;
             $this->dao->replace(TABLE_PROJECTCASE)->data($sprintCase)->exec();
