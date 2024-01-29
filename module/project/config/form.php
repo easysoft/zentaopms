@@ -24,7 +24,6 @@ $config->project->form->create['end']        = array('type' => 'date',   'requir
 $config->project->form->create['days']       = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->project->form->create['desc']       = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 $config->project->form->create['acl']        = array('type' => 'string', 'required' => false, 'default' => '');
-$config->project->form->create['groups']     = array('type' => 'array',  'required' => false, 'default' => array(), 'filter' => 'join');
 $config->project->form->create['whitelist']  = array('type' => 'array',  'required' => false, 'default' => '');
 $config->project->form->create['auth']       = array('type' => 'array',  'required' => false, 'default' => '');
 $config->project->form->create['model']      = array('type' => 'string', 'required' => false, 'default' => '');

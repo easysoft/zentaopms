@@ -15,7 +15,6 @@ $config->program->form->create['end']        = array('type' => 'date',     'cont
 $config->program->form->create['desc']       = array('type' => 'string',   'control' => 'editor',     'required' => false, 'default' => '');
 $config->program->form->create['status']     = array('type' => 'string',   'control' => 'text',       'required' => false, 'default' => 'wait');
 $config->program->form->create['acl']        = array('type' => 'string',   'control' => 'radio',      'required' => false, 'default' => '');
-$config->program->form->create['groups']     = array('type' => 'array',    'control' => 'picker',     'required' => false, 'default' => '', 'filter' => 'join');
 $config->program->form->create['whitelist']  = array('type' => 'array',    'control' => 'picker',     'required' => false, 'default' => '', 'filter' => 'join');
 
 $config->program->form->edit['parent']     = array('type' => 'int',      'control' => 'picker',     'required' => false, 'default' => 0);
@@ -27,7 +26,6 @@ $config->program->form->edit['begin']      = array('type' => 'date',     'contro
 $config->program->form->edit['end']        = array('type' => 'date',     'control' => 'datepicker', 'required' => false, 'default' => '');
 $config->program->form->edit['desc']       = array('type' => 'string',   'control' => 'editor',     'required' => false, 'default' => '');
 $config->program->form->edit['acl']        = array('type' => 'string',   'control' => 'radio',      'required' => false, 'default' => '');
-$config->program->form->edit['groups']     = array('type' => 'array',    'control' => 'picker',     'required' => false, 'default' => '', 'filter' => 'join');
 $config->program->form->edit['whitelist']  = array('type' => 'array',    'control' => 'picker',     'required' => false, 'default' => '', 'filter' => 'join');
 
 $config->program->form->close['realEnd']        = array('type' => 'date',     'required' => true,  'default' => $now, 'filter' => 'trim');
