@@ -408,6 +408,22 @@ function radioList(): radioList
 }
 
 /**
+ * Check button widget.
+ */
+function checkBtn(): checkBtn
+{
+    return createWg('checkBtn', func_get_args());
+}
+
+/**
+ * Check button group widget.
+ */
+function checkBtnGroup(): checkBtnGroup
+{
+    return createWg('checkBtnGroup', func_get_args());
+}
+
+/**
  * Color picker widget which extends input.
  *
  * ?string heading

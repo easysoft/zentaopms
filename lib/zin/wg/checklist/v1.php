@@ -8,6 +8,7 @@ class checkList extends wg
 {
     protected static array $defineProps = array(
         'primary: bool=true',
+        'className?: string',
         'type: string="checkbox"',
         'name?: string',
         'value?: string|array',
@@ -22,7 +23,7 @@ class checkList extends wg
         if(is_null($value)) return array();
 
         if($this->prop('type') === 'checkbox') return is_array($value) ? $value : explode(',', $value);
-        return [$value];
+        return array($value);
     }
 
     public function onBuildItem($item): checkbox
@@ -38,15 +39,19 @@ class checkList extends wg
             $item['disabled'] = $this->prop('disabled');
         }
 
-        $props = $this->props->pick(['primary', 'type', 'name', 'disabled']);
+        $props = $this->props->pick(array('primary', 'type', 'name', 'disabled'));
         if(!empty($props['name']) && !empty($item['value'])) $props['id'] = $props['name'] . $item['value'];
+        return $this->buildItem(array_merge($props, $item));
+    }
 
-        return new checkbox(set($props), set($item));
+    public function buildItem(array $props)
+    {
+        return new checkbox(set($props));
     }
 
     protected function build(): wg
     {
-        list($items, $inline, $disabled) = $this->prop(['items', 'inline', 'disabled']);
+        list($items, $inline, $disabled, $className) = $this->prop(array('items', 'inline', 'disabled', 'className'));
 
         if(!empty($items))
         {
@@ -61,9 +66,8 @@ class checkList extends wg
 
         return div
         (
-            setClass($inline ? 'check-list-inline' : 'check-list'),
+            setClass($inline ? 'check-list-inline' : 'check-list', $className, $disabled ? 'disabled' : ''),
             set($this->getRestProps()),
-            $disabled ? set('disabled', 'disabled') : '',
             $items,
             $this->children()
         );
