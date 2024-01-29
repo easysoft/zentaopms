@@ -1,6 +1,6 @@
 [English](README.md) | 中文
 
-<p align="center"><a href="https://www.zentao.net" target="_blank" rel="noopener noreferrer"><img src="doc/img/zentao-cn.png" alt="ZenTao Logo"></a></p>
+<p align="center"><a href="https://www.zentao.net" target="_blank" rel="noopener noreferrer"><img src="doc/img/zentao-cn.svg" width="300" alt="ZenTao Logo"></a></p>
 
 <p align="center">
   <a href="https://www.php.net"><img src="https://img.shields.io/badge/php-%3E=5.6-brightgreen.svg?maxAge=2592000" alt="PHP Version"></a>
