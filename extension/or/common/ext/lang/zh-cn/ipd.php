@@ -28,6 +28,7 @@ $lang->mainNav->demandpool  = "{$lang->navIcons['demandpool']} {$lang->demandpoo
 $lang->mainNav->market      = "{$lang->navIcons['market']} {$lang->market->common}|marketreport|all|";
 $lang->mainNav->product     = "{$lang->navIcons['product']} {$lang->productCommon}|product|all|";
 $lang->mainNav->charter     = "{$lang->navIcons['project']} {$lang->charter->common}|charter|browse|";
+$lang->mainNav->feedback    = "{$lang->navIcons['feedback']} {$lang->feedback->common}|feedback|admin|";
 $lang->mainNav->doc         = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
 $lang->mainNav->admin       = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
@@ -45,9 +46,9 @@ $lang->mainNav->menuOrder[10] = 'demandpool';
 $lang->mainNav->menuOrder[15] = 'market';
 $lang->mainNav->menuOrder[20] = 'product';
 $lang->mainNav->menuOrder[25] = 'charter';
-//$lang->mainNav->menuOrder[25] = 'feedback';
-$lang->mainNav->menuOrder[30] = 'doc';
-$lang->mainNav->menuOrder[35] = 'admin';
+$lang->mainNav->menuOrder[30] = 'feedback';
+$lang->mainNav->menuOrder[35] = 'doc';
+$lang->mainNav->menuOrder[40] = 'admin';
 
 $lang->navGroup->demandpool     = 'demandpool';
 $lang->navGroup->demand         = 'demandpool';
@@ -106,6 +107,8 @@ unset($lang->my->menu->contribute);
 unset($lang->my->menu->meeting);
 unset($lang->doc->menu->project);
 unset($lang->doc->menu->api);
+unset($lang->feedback->menu->ticket);
+unset($lang->feedback->menu->faq);
 
 $lang->my->menu->work = array('link' => "{$lang->my->work}|my|work|mode=requirement", 'subModule' => 'task');
 
