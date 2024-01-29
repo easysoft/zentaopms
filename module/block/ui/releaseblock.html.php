@@ -17,10 +17,13 @@ if(!$longBlock)
 {
     unset($config->block->release->dtable->fieldList['id']);
     unset($config->block->release->dtable->fieldList['productName']);
-    unset($config->block->release->dtable->fieldList['buildName']);
+    unset($config->block->release->dtable->fieldList['build']);
+}
+else
+{
+    $this->config->block->release->dtable->fieldList['build']['map'] = $builds;
 }
 
-$this->config->block->release->dtable->fieldList['build']['map'] = $builds;
 
 blockPanel
 (
