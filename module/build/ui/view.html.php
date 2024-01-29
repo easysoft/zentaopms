@@ -215,11 +215,11 @@ detailBody
                 div(
                     tableData
                     (
-                        item
+                        !$hidden ? item
                         (
                             set::name($lang->build->product),
                             $build->productName
-                        ),
+                        ) : null,
                         $build->productType != 'normal' ? item
                         (
                             set::name($lang->build->branch),
