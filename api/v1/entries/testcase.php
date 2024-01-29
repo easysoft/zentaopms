@@ -46,7 +46,7 @@ class testcaseEntry extends entry
         $oldCase = $this->loadModel('testcase')->getByID($caseID);
 
         /* Set $_POST variables. */
-        $fields = 'title,pri,story,type,stage,product,module,branch,precondition,script';
+        $fields = 'title,pri,story,type,stage,product,module,branch,precondition,script,keywords';
         $this->batchSetPost($fields, $oldCase);
         if(isset($this->requestBody->script)) $this->setPost('auto', 'auto');
 
