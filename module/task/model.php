@@ -2408,7 +2408,7 @@ class taskModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')
             ->on('t1.assignedTo = t3.account')
             ->where('t1.id')->eq((int)$taskID)
-            ->beginIf($this->config->vision != 'or')->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->beginIF($this->config->vision != 'or')->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->fetch();
         if(!$task) return false;
         $task->openedDate     = substr($task->openedDate, 0, 19)     ? substr($task->openedDate, 0, 19)     : '';
