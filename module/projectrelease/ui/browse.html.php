@@ -33,6 +33,7 @@ jsVar('canViewProjectbuild', hasPriv('projectbuild', 'view'));
 
 if(!$showBranch) unset($config->projectrelease->dtable->fieldList['branch']);
 $config->projectrelease->dtable->fieldList['product']['map'] = $products;
+if(empty($project->hasProduct)) unset($config->projectrelease->dtable->fieldList['product']);
 
 $tableData = initTableData($releases, $config->projectrelease->dtable->fieldList);
 dtable
