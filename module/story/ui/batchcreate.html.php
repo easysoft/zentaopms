@@ -59,7 +59,7 @@ $fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $sh
 formBatchPanel
 (
     setID('dataform'),
-    on::change('[data-name="branch"]', 'setModuleByBranch'),
+    on::change('[data-name="branch"]', 'setModuleAndPlanByBranch'),
     $stories ? set::data($stories) : null,
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::title($storyID ? $storyTitle . $lang->colon . $this->lang->story->subdivide : $this->lang->story->batchCreate),

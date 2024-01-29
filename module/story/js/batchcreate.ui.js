@@ -1,4 +1,4 @@
-window.setModuleByBranch = function(e)
+window.setModuleAndPlanByBranch = function(e)
 {
     const $branch  = $(e.target);
     const branchID = $branch.val();
@@ -18,5 +18,21 @@ window.setModuleByBranch = function(e)
 
         $row = $row.next('tr');
         if(!$row.find('td[data-name="module"][data-ditto="on"]').length) break;
+    }
+
+    var planLink = $.createLink('productPlan', 'ajaxGetProductPlans', 'productID=' + productID + '&branch=' + branchID);
+    let $rows    = $branch.closest('tr');
+    while($rows.length)
+    {
+        const $planPicker = $rows.find('[name^=plan]').zui('picker');
+        const planID      = $rows.find('[name^=plan]').val();
+        $.getJSON(planLink, function(data)
+        {
+            $planPicker.render({items: data})
+            $planPicker.$.setValue(planID);
+        });
+
+        $rows = $rows.next('tr');
+        if(!$rows.find('td[data-name="plan"][data-ditto="on"]').length) break;
     }
 }
