@@ -3,6 +3,7 @@ var codeHeight = 0;
 
 window.onMouseDown = function(obj)
 {
+    if(!obj.target.position) return;
     showBlameAndRelation(obj.target.position.lineNumber);
 }
 

@@ -198,12 +198,13 @@ class mr extends control
         $repo   = $this->repo->getByID($repoID);
         if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList))
         {
-            $repoList = $this->repo->getListBySCM($this->config->repo->gitServiceTypeList);
+            $repoList = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList));
             $repoID   = key($repoList);
             $repoID   = $this->loadModel('repo')->saveState($repoID);
             $repo     = $repoList[$repoID];
         }
 
+        if($repo->SCM == 'Gitlab') $repo->serviceProject = (int)$repo->serviceProject;
         $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
 
         $jobPairs = array();
