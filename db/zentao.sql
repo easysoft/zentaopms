@@ -1469,7 +1469,6 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `RD` varchar(30) NOT NULL DEFAULT '',
   `team` varchar(90) NOT NULL DEFAULT '',
   `acl` char(30) NOT NULL DEFAULT 'open',
-  `groups` text NULL,
   `whitelist` text NULL,
   `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
