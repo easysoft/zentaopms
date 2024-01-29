@@ -225,8 +225,8 @@ class blockZen extends block
             if(empty($block->height)) $block->height = zget($sizeConfig, $block->width, reset($sizeConfig));
 
             /* 设置区块距离左侧的宽度和距离顶部的高度。 */
-            if(!isset($block->left)) $block->left = $block->width == 1 ? 2 : 0;
-            if(!isset($block->top))  $block->top  = -1; // -1 将会自动计算高度。
+            if($block->left === '') $block->left = $block->width == 1 ? 2 : 0;
+            if($block->top  === 0)  $block->top  = -1; // -1 将会自动计算高度。
 
             $block->width  = (int)$block->width;
             $block->height = (int)$block->height;

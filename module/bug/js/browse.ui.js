@@ -39,7 +39,6 @@ window.onRenderCell = function(result, {row, col})
         {
             caseLink = $.createLink('testcase', 'view', "caseID=" + row.data.case + "&version=" + row.data.caseVersion);
             result.push({html: '<a href="' + caseLink + '"class="text-gray" title="' + row.data.case + '">[' + caseCommonLang + '#' + row.data.case + ']</a>'});
-
         }
     }
 
