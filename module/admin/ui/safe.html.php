@@ -196,7 +196,8 @@ div
                             setClass('text-warning mr-1'),
                             'help'
                         ),
-                        $lang->admin->safe->noticeGd
+                        $lang->admin->safe->noticeGd,
+                        formHidden('loginCaptcha', isset($config->safe->loginCaptcha) ? $config->safe->loginCaptcha : 0)
                     ) : null
                 )
             )
