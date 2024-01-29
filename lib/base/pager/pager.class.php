@@ -179,7 +179,7 @@ class basePager
         $this->pageCookie = 'pager' . ucfirst($this->app->getModuleName()) . ucfirst($this->app->getMethodName());
 
         if(isset($_COOKIE[$this->pageCookie])) $recPerPage = $_COOKIE[$this->pageCookie];
-        $this->recPerPage = ($recPerPage > 0) ? $recPerPage : PAGER::DEFAULT_REC_PER_PAGE;
+        $this->recPerPage = ($recPerPage > 0) ? (int)$recPerPage : PAGER::DEFAULT_REC_PER_PAGE;
     }
 
     /**
