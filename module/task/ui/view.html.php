@@ -55,7 +55,7 @@ detailHeader
         ),
         $task->deleted ? span(setClass('label danger'), $lang->task->deleted) : null
     ),
-    !isAjaxRequest('modal') && common::hasPriv('task', 'create', $task) ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
+    !isAjaxRequest('modal') && common::hasPriv('task', 'create', $task) ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), set('data-app', $app->tab), $lang->task->create)) : null
 );
 
 /* Construct suitable actions for the current task. */
