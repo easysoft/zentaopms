@@ -13,6 +13,7 @@ namespace zin;
 formPanel
 (
     // on::click('#refresh', 'clickRefresh'),
+    set::title($lang->caselib->createCase),
     formRow
     (
         formGroup
