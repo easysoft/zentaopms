@@ -30,7 +30,7 @@
 .table .c-status{width: 100px;}
 .table .text-center {text-align: center}
 .table .text-right {text-align: right}
-.table th{text-align: center}
+.table th{text-align: left}
 .table td.c-name {max-width: 120px; white-space: nowrap; overflow: hidden;}
 
 .group-menu > .dropdown > .dropdown-menu {right: 0; width: 100%;}
