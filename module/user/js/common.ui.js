@@ -27,6 +27,8 @@ function changePassword(event)
  */
 function encryptPassword()
 {
+    $('#verifyPassword').on('change', function(){verifyEncrypted = false});
+
     const rand = $('input[name=verifyRand]').val();
 
     /* 加密当前登录用户的密码。*/
