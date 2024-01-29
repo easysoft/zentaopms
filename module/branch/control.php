@@ -257,7 +257,7 @@ class branch extends control
         $product = $this->loadModel('product')->getByID($productID);
         if(empty($product) || $product->type == 'normal') return print(json_encode(array()));
 
-        $branches        = $this->branch->getList($productID, $projectID, $browseType, 'order', null, $withMainBranch);
+        $branches        = $this->branch->getList($productID, $projectID, $browseType, 'order', null, $withMainBranch !== 'false' && !empty($withMainBranch));
         $branchTagOption = array();
         foreach($branches as $branchInfo)
         {
@@ -273,7 +273,7 @@ class branch extends control
         $items = array();
         foreach($branchTagOption as $id => $name)
         {
-            if($id == '') continue;
+            if($id === '') continue;
             $items[] = array('text' => $name, 'value' => $id);
         }
 
