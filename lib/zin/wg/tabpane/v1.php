@@ -5,7 +5,7 @@ namespace zin;
 class tabPane extends wg
 {
     protected static array $defineProps = array(
-        'key: string',
+        'key?: string',
         'title?: string',
         'active?: bool=false',
         'param?: string'
@@ -16,6 +16,15 @@ class tabPane extends wg
         'suffix'  => array(),
         'divider' => false
     );
+
+    protected function created()
+    {
+        $key = $this->prop('key');
+
+        if(is_null($key)) $key = $this->gid;
+        else              $key = $this->gid . '-' . $key;
+        $this->setProp('key', $key);
+    }
 
     protected function build(): wg
     {
