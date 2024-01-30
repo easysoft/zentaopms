@@ -45,7 +45,7 @@ else
 
 featureBar
 (
-    li
+    !empty($tasks) ? li
     (
         setClass('nav-item feature-actions'),
         a
@@ -54,7 +54,7 @@ featureBar
             span(setClass('text'), $lang->execution->treeLevel['root']),
             icon('fold-all')
         )
-    ),
+    ) : null,
     li
     (
         setClass('nav-item hidden feature-actions'),
