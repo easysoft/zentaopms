@@ -247,7 +247,6 @@ detailBody
             set::collapse(true),
             tabPane
             (
-                set::key('legendBasicInfo'),
                 set::title($lang->story->legendBasicInfo),
                 set::active(true),
                 tableData
@@ -346,7 +345,6 @@ detailBody
             ),
             tabPane
             (
-                set::key('legendLifeTime'),
                 set::title($lang->story->legendLifeTime),
                 tableData
                 (
@@ -399,7 +397,6 @@ detailBody
             set::collapse(true),
             !empty($twins) ? tabPane
             (
-                set::key('legendTwins'),
                 set::title($lang->story->twins),
                 set::active(true),
                 h::ul
@@ -425,7 +422,6 @@ detailBody
             ) : null,
             ($this->config->URAndSR && !$hiddenURS && $config->vision != 'or') ? tabPane
             (
-                set::key('legendStories'),
                 set::title($story->type == 'story' ? $lang->story->requirement : $lang->story->story),
                 set::active(empty($twins)),
                 h::ul
@@ -450,14 +446,12 @@ detailBody
             ) : null,
             $story->type == 'story' && common::hasPriv('story', 'tasks') ? tabPane
             (
-                set::key('legendProjectAndTask'),
                 set::title($lang->story->legendProjectAndTask),
                 set::active((!$this->config->URAndSR || $hiddenURS) && empty($twins)),
                 h::ul(setClass('list-unstyled'), $taskItems)
             ) : null,
             tabPane
             (
-                set::key('legendRelated'),
                 set::title($lang->story->legendRelated),
                 tableData
                 (
