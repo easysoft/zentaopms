@@ -2763,9 +2763,9 @@ class testcaseZen extends testcase
     protected function processStepForExport(object $case, array $results, array $relatedSteps): void
     {
         $case->real = '';
-        if(!empty($result) && !isset($relatedSteps[$case->id]))
+        if(!empty($results) && !isset($relatedSteps[$case->id]))
         {
-            $firstStep  = reset($result);
+            $firstStep  = reset($results);
             $case->real = $firstStep['real'];
         }
 
@@ -2791,7 +2791,7 @@ class testcaseZen extends testcase
                 $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
                 $case->stepDesc   .= $stepID . ". " . htmlspecialchars_decode($step->desc) . $sign;
                 $case->stepExpect .= $stepID . ". " . htmlspecialchars_decode($step->expect) . $sign;
-                $case->real       .= $stepID . ". " . zget($result, $step->id, '') . $sign;
+                $case->real       .= $stepID . ". " . zget($results, $step->id, '') . $sign;
                 $childID ++;
             }
         }
