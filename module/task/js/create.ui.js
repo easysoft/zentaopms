@@ -480,7 +480,7 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
     }
     else
     {
-        $('#estimate').val(totalEstimate);
+        $('[data-name=estimate] input').val(totalEstimate);
     }
 
     /* 将选中的团队成员展示在指派给后面. */
