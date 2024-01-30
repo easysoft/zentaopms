@@ -273,7 +273,7 @@ class executionZen extends execution
         $this->view->pager        = $pager;
         $this->view->product      = $this->product->getById($productID);
         $this->view->allPlans     = $allPlans;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->multiBranch  = $multiBranch;
         $this->view->execution    = $execution;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
