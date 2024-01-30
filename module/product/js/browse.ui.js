@@ -81,7 +81,7 @@ window.renderCell = function(result, info)
 
 window.setStatistics = function(element, checkedIdList, pageSummary)
 {
-    if(checkedIdList.length == 0) return {html: pageSummary};
+    if(checkedIdList != undefined && checkedIdList.length == 0) return {html: pageSummary};
 
     let total     = 0;
     let SRTotal   = 0;
