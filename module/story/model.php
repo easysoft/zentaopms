@@ -312,6 +312,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
             ->where('t1.project')->in($executionIdList)
             ->andWhere('t2.type')->eq($storyType)
+            ->andWhere('t2.parent')->ge(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
             ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
@@ -2269,6 +2270,8 @@ class storyModel extends model
         }
         if($excludeStatus) $storyQuery = $storyQuery . ' AND `status` NOT ' . helper::dbIN($excludeStatus);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
+        if($this->app->rawModule == 'build'   and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
+        if($this->app->rawModule == 'release' and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
         $allBranch = "`branch` = 'all'";
         if(!empty($executionID))
         {
@@ -2313,8 +2316,6 @@ class storyModel extends model
             {
                 $storyQuery .= " AND `status` NOT IN ('draft', 'reviewing', 'changing', 'closed')";
             }
-
-            if($this->app->rawModule == 'build' and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
         }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {
