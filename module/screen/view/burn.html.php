@@ -36,7 +36,7 @@ function initBurnChar()
     {
         var chartDom = document.getElementById('burn' + execution.id);
         var myChart  = echarts.init(chartDom);
-        var title    = truncateCustomString(execution.name, 38);
+        var title    = truncateCustomString(execution.name, 36);
         var option = {
           title: {
             text: title,
