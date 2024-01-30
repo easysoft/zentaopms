@@ -3,3 +3,5 @@
 
 #manageProducts .product-block.more-product {min-height: 220px;}
 #manageProducts .product-block.more-product .border {line-height: 136px;}
+
+.product-block {overflow: hidden;}
