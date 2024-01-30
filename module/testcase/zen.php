@@ -2744,7 +2744,7 @@ class testcaseZen extends testcase
         unset($case->stepNumber);
         unset($case->caseFails);
 
-        $this->processStepForExport($case, $results, $relatedSteps);
+        $this->processStepForExport($case, zget($results, $case->id, array()), $relatedSteps);
         $this->processStageForExport($case);
         $this->processFileForExport($case, $relatedFiles);
         if($case->linkCase) $this->processLinkCaseForExport($case);
@@ -2755,17 +2755,17 @@ class testcaseZen extends testcase
      * Process step of case for export.
      *
      * @param  object    $case
-     * @param  array     $results
+     * @param  array     $result
      * @param  array     $relatedSteps
      * @access protected
      * @return void
      */
-    protected function processStepForExport(object $case, array $results, array $relatedSteps): void
+    protected function processStepForExport(object $case, array $result, array $relatedSteps): void
     {
         $case->real = '';
-        if(!empty($results) && !isset($relatedSteps[$case->id]))
+        if(!empty($result) && !isset($relatedSteps[$case->id]))
         {
-            $firstStep  = reset($results);
+            $firstStep  = reset($result);
             $case->real = $firstStep['real'];
         }
 
@@ -2791,7 +2791,7 @@ class testcaseZen extends testcase
                 $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
                 $case->stepDesc   .= $stepID . ". " . htmlspecialchars_decode($step->desc) . $sign;
                 $case->stepExpect .= $stepID . ". " . htmlspecialchars_decode($step->expect) . $sign;
-                $case->real       .= $stepID . ". " . zget($results, $step->id, '') . $sign;
+                $case->real       .= $stepID . ". " . (isset($result[$step->id]) ? $result[$step->id]['real'] : '') . $sign;
                 $childID ++;
             }
         }
