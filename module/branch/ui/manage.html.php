@@ -56,6 +56,7 @@ modal
         formGroup
         (
             set::label($lang->branch->mergeTo),
+            setClass('mt-4'),
             inputGroup
             (
                 setClass('text-left'),
