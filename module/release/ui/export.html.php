@@ -14,7 +14,6 @@ formPanel
 (
     set::title($lang->release->export),
     set::ajax(array('closeModal' => 'onlySuccess')),
-    set::target('_self'),
     formGroup
     (
         set::label($lang->release->fileName),
@@ -30,7 +29,7 @@ formPanel
         set::required(true)
     ),
     set::submitBtnText($lang->export),
-    set::formClass('border-0')
+    set::formClass('border-0 form-ajax')
 );
 
 /* ====== Render page ====== */

@@ -315,7 +315,7 @@ class release extends control
             $release  = $this->release->getByID($releaseID);
             $type     = $this->post->type;
             $fileName = $this->post->fileName;
-            if(empty($fileName)) return $this->sendError(array('fileName' => sprintf($this->lang->error->notempty, $this->lang->release->fileName)));
+            if(empty($fileName)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->release->fileName));
 
             $html    = '';
             $release = $this->release->getByID($releaseID, true);
