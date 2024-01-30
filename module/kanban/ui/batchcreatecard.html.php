@@ -18,7 +18,7 @@ $items[] = array('name' => 'assignedTo', 'label' => $lang->kanbancard->assignedT
 $items[] = array('name' => 'estimate',   'label' => $lang->kanbancard->estimate,   'control' => 'input',      'width' => '60px');
 $items[] = array('name' => 'begin',      'label' => $lang->kanbancard->begin,      'control' => 'datePicker', 'width' => '160px', 'ditto' => true);
 $items[] = array('name' => 'end',        'label' => $lang->kanbancard->end,        'control' => 'datePicker', 'width' => '160px', 'ditto' => true);
-$items[] = array('name' => 'pri',        'label' => $lang->kanbancard->pri,        'control' => 'priPicker',  'width' => '60px', 'items' => $lang->kanbancard->priList, 'value' => '3');
+$items[] = array('name' => 'pri',        'label' => $lang->kanbancard->pri,        'control' => 'priPicker',  'width' => '80px', 'items' => $lang->kanbancard->priList, 'value' => '3');
 
 formBatchPanel
 (
