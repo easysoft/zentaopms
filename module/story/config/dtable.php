@@ -223,6 +223,7 @@ $config->story->dtable->fieldList['lastEditedDate']['name']     = 'lastEditedDat
 $config->story->dtable->fieldList['lastEditedDate']['title']    = $lang->story->lastEditedDate;
 $config->story->dtable->fieldList['lastEditedDate']['sortType'] = true;
 $config->story->dtable->fieldList['lastEditedDate']['type']     = 'date';
+$config->story->dtable->fieldList['lastEditedDate']['width']    = 120;
 $config->story->dtable->fieldList['lastEditedDate']['group']    = 9;
 
 $config->story->dtable->fieldList['keywords']['name']     = 'keywords';
