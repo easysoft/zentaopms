@@ -158,7 +158,7 @@
         </div>
       </div>
     </div>
-    <?php $this->printExtendFields($suite, 'div', "position=right&inForm=0&inCell=1");?>
+    <?php $this->printExtendFields($suite, 'div', "position=left&inForm=0&inCell=1");?>
     <div class='cell'>
       <?php include '../../common/view/action.html.php';?>
     </div>
