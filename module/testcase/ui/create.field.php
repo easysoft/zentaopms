@@ -12,7 +12,7 @@ $fields->field('product')
     ->item(data('product.type') == 'normal' ? null : field('branch')->control('picker', array('required' => true))->width('100px')->items(data('branches'))->value((int)data('branch')));
 
 $fields->field('module')
-    ->controlBegin('module')
+    ->controlBegin('modulePicker')
     ->type('modulePicker')
     ->items(data('moduleOptionMenu'))
     ->value(data('currentModuleID'))
