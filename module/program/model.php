@@ -926,6 +926,7 @@ class programModel extends model
     public function setTreePath(int $programID): bool
     {
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+        if(!$program) return false;
 
         $path['path']  = ",{$program->id},";
         $path['grade'] = 1;
