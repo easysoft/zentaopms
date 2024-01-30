@@ -1863,7 +1863,7 @@ class storyModel extends model
         if($story->status == 'closed') return $this->storyTao->setStageToClosed($storyID, array_merge($linkedBranches, array_keys($stages)), $linkedProjects);
 
         /* If no executions, in plan, stage is planned. No plan, wait. */
-        if(!$linkedProjects) return $this->storyTao->setStageToPlanned($storyID, $stages, $oldStages);
+        if(!$linkedProjects) $this->storyTao->setStageToPlanned($storyID, $stages, $oldStages);
 
         /* 根据需求关联的任务状态统计，计算需求的阶段。 */
         $taskStat = $this->storyTao->getLinkedTaskStat($storyID, $linkedProjects);
