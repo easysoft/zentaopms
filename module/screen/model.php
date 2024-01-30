@@ -285,7 +285,6 @@ class screenModel extends model
 
         // 如果传过来的component->chartConfig中有filters，判断filters是否发生了改变，改变则重置filters，其中单个filter的linkedGlobalFilter属性就不存在了
         $latestFilters = $this->getChartFilters($chart);
-        $filterChanged = false;
         if(!isset($component->chartConfig->filters))
         {
             $component->chartConfig->filters = $latestFilters;
@@ -307,7 +306,6 @@ class screenModel extends model
                 $component->chartConfig->noSetupGlobalFilterList = array();
             }
         }
-        $component->chartConfig->filterChange = $filterChanged;
 
         if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
         {
