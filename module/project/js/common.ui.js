@@ -81,22 +81,8 @@ function computeWorkDays()
     const begin = $('[name=begin]').val();
     const end   = $('[name=end]').val();
 
-    if(end == LONG_TIME)
-    {
-        $('#delta999').prop('checked', true);
-        $('#days').val(0).trigger('change');
-    }
-    else
-    {
-        $('#days').val(computeDaysDelta(begin, end)).trigger('change');
-        const time = new Date(end) - new Date(begin);
-        const days = parseInt(time / DAY_MILLISECONDS) + 1;
-        if(days != $("input[name='delta']:checked").val())
-        {
-            $("input[name='delta']:checked").prop('checked', false);
-            $('#delta' + days).prop('checked', true);
-        }
-    }
+    $('[name=days]').val(computeDaysDelta(begin, end)).trigger('change');
+
     checkProjectInfo();
 }
 
