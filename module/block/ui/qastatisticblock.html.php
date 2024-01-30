@@ -151,7 +151,7 @@ statisticBlock
     set::block($block),
     set::active($active),
     set::items($items),
-    div
+    $product ? div
     (
         setClass($longBlock ? 'row' : 'col gap-3', 'h-full overflow-hidden items-stretch px-2 py-3'),
         center
@@ -213,5 +213,5 @@ statisticBlock
             ),
             $testTasksView
         )
-    )
+    ) : null
 );

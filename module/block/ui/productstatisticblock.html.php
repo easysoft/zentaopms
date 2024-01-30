@@ -16,7 +16,6 @@ $app->loadLang('execution');
 $active  = isset($params['active']) ? $params['active'] : key($products); // 当前产品 ID。
 $product = null;        // 当前产品。 Current active product.
 $items   = array();     // 产品导航列表。 Product nav list.
-
 foreach($products as $productItem)
 {
     $projectID = isset($params['projectID']) ? $params['projectID'] : 0;
@@ -33,23 +32,26 @@ foreach($products as $productItem)
 
 $doneData   = array();
 $openedData = array();
-foreach($product->monthFinish as $date => $count)
+if($product)
 {
-    if($date == date('Y-m'))
+    foreach($product->monthFinish as $date => $count)
     {
-        $product->monthFinish[$lang->datepicker->dpText->TEXT_THIS_MONTH] = $count;
-        unset($product->monthFinish[$date]);
+        if($date == date('Y-m'))
+        {
+            $product->monthFinish[$lang->datepicker->dpText->TEXT_THIS_MONTH] = $count;
+            unset($product->monthFinish[$date]);
+        }
+        $doneData[] = $count;
     }
-    $doneData[] = $count;
-}
-foreach($product->monthCreated as $date => $count)
-{
-    if($date == date('Y-m'))
+    foreach($product->monthCreated as $date => $count)
     {
-        $product->monthCreated[$lang->datepicker->dpText->TEXT_THIS_MONTH] = $count;
-        unset($product->monthCreated[$date]);
+        if($date == date('Y-m'))
+        {
+            $product->monthCreated[$lang->datepicker->dpText->TEXT_THIS_MONTH] = $count;
+            unset($product->monthCreated[$date]);
+        }
+        $openedData[] = $count;
     }
-    $openedData[] = $count;
 }
 
 $monthFinish  = !empty($product) ? $product->monthFinish : array();
@@ -61,7 +63,7 @@ statisticBlock
     set::active($active),
     set::moreLink(createLink('product', 'all', 'browseType=' . $block->params->type)),
     set::items($items),
-    div
+    $product ? div
     (
         setClass($longBlock ? 'row' : 'col gap-3', 'h-full overflow-hidden items-stretch p-2'),
         center
@@ -279,5 +281,5 @@ statisticBlock
                 )
             ) : null
         ) : null
-    )
+    ) : null
 );
