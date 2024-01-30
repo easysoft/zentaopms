@@ -628,6 +628,7 @@ class projectZen extends project
      */
     protected function processBugSearchParams(object $project, string $type, int $param, int $projectID, int $productID, string $branchID, string $orderBy, int $build, array $products)
     {
+        $this->loadModel('bug');
         if(!$project->hasProduct)
         {
             unset($this->config->bug->search['fields']['product']);
@@ -635,7 +636,7 @@ class projectZen extends project
         }
         if(!$project->multiple and !$project->hasProduct) unset($this->config->bug->search['fields']['plan']);
 
-        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         /* Build the search form. */
         $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&branchID=$branchID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
