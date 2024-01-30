@@ -31,6 +31,7 @@ class searchModel extends model
             if($module == 'projectStory' || $module == 'executionStory') $flowModule = 'story';
             if($module == 'projectBuild' || $module == 'executionBuild') $flowModule = 'build';
             if($module == 'projectBug') $flowModule = 'bug';
+            if($module == 'caselib') $flowModule = 'testcase';
 
             $buildin = false;
 
