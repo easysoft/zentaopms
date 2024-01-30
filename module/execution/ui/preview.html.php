@@ -240,12 +240,12 @@ function initBurnChar()
             color: "#CCC",
             fillColor: "rgba(0,0,0,0)",
             showTooltips: false,
-            data: <?php echo $chartData['baseLine']?>
+            data: <?php echo isset($chartData['baseLine']) ? $chartData['baseLine'] : '';?>
         },
         {
             label: "<?php echo $lang->execution->charts->burn->graph->actuality;?>",
             color: "#0033CC",
-            data: <?php echo $chartData['burnLine']?>
+            data: <?php echo isset($chartData['burnLine']) ? $chartData['burnLine'] : '';?>
         }]
     };
 
