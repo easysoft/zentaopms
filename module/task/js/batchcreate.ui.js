@@ -81,7 +81,7 @@ function setStoryRelated(event)
         let $module        = $row.find('input[name^="module"]');
         let $preview       = $row.find('.form-batch-input[data-name="preview"] + button');
 
-        if(storyID)
+        if(storyID > 0)
         {
             $.getJSON(link, function(data)
             {
