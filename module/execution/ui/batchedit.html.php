@@ -135,9 +135,11 @@ formBatchPanel
             'tipProps',
             array
             (
-                'id'             => 'tooltipHover',
-                'data-toggle'    => 'tooltip',
-                'data-placement' => 'right'
+                'id'              => 'tooltipHover',
+                'data-toggle'     => 'tooltip',
+                'data-placement'  => 'right',
+                'data-type'       => 'white',
+                'data-class-name' => 'text-gray border border-gray-300'
             )
         )
     ),

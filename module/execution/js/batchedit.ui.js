@@ -23,11 +23,6 @@ window.renderRowData = function($row, index, row)
     $row.find('[data-name="project"]').attr('data-lastselected', row.project).attr('data-execution', row.id);
 }
 
-$().ready(function()
-{
-    new zui.Tooltip('#tooltipHover', {trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light'});
-})
-
 window.changeProject = function(e)
 {
     const $project    = $(e.target);
