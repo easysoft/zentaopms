@@ -692,7 +692,7 @@ $(function()
         }).fail(function()
         {
             trigger.close();
-            $('.prompt-result-area .preview-container').html('Network error');
+            new $.zui.Messager('Network error', {close: false, type: 'danger', icon: 'exclamation-sign'}).show();
         });
     });
 });
