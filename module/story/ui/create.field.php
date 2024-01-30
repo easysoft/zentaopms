@@ -20,12 +20,9 @@ $fields->field('product')
 $fields->field('module')
     ->wrapAfter(true)
     ->required($createFields['module']['required'])
-    ->controlBegin('module')
-    ->type('modulePicker')
+    ->control(array('control' => 'modulePicker', 'required' => true, 'manageLink' => createLink('tree', 'browse', 'rootID=' . data('productID') . '&view=story&currentModuleID=0&branch=' . data('branch'))))
     ->items($createFields['module']['options'])
-    ->value($createFields['module']['default'])
-    ->manageLink(createLink('tree', 'browse', 'rootID=' . data('productID') . '&view=story&currentModuleID=0&branch=' . data('branch')))
-    ->controlEnd();
+    ->value($createFields['module']['default']);
 
 if(isset($createFields['branch']) && $type == 'story')
 {
