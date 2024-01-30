@@ -56,6 +56,7 @@ class story extends control
         $copyStoryID = $storyID;
         list($productID, $objectID) = $this->storyZen->setMenuForCreate($productID, $objectID);
         if($productID == 0 && $objectID == 0) return $this->locate($this->createLink('product', 'create'));
+        if($productID == 0 && $objectID != 0) return $this->sendError($this->lang->execution->errorNoLinkedProducts, $this->createLink('execution', 'manageproducts', "executionID=$objectID"));
 
         if(!empty($_POST))
         {
@@ -166,6 +167,8 @@ class story extends control
         }
 
         $this->storyZen->setMenuForBatchCreate($productID, $branch, $executionID, $extra);
+
+        if($productID == 0 && $executionID != 0) return $this->sendError($this->lang->execution->errorNoLinkedProducts, $this->createLink('execution', 'manageproducts', "executionID=$executionID"));
 
         /* Check can subdivide or not. */
         $product = $this->product->getByID($productID);
