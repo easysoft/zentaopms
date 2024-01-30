@@ -27,6 +27,7 @@ $lang->stakeholder->id          = '编号';
 $lang->stakeholder->user        = '用户';
 $lang->stakeholder->type        = '用户类型';
 $lang->stakeholder->name        = '姓名';
+$lang->stakeholder->role        = '职位';
 $lang->stakeholder->phone       = '手机';
 $lang->stakeholder->qq          = 'QQ';
 $lang->stakeholder->weixin      = '微信';

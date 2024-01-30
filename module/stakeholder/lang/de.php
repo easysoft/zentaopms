@@ -27,6 +27,7 @@ $lang->stakeholder->id          = 'ID';
 $lang->stakeholder->user        = 'User';
 $lang->stakeholder->type        = 'Type';
 $lang->stakeholder->name        = 'Name';
+$lang->stakeholder->role        = 'Role';
 $lang->stakeholder->phone       = 'Mobile';
 $lang->stakeholder->qq          = 'QQ';
 $lang->stakeholder->weixin      = 'WeChat';
