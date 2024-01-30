@@ -195,24 +195,27 @@ class metricZen extends metric
             $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope);
 
             $results = $calc->getResult($options);
-            foreach($results as $record)
+            if(is_array($results))
             {
-                $record = (object)$record;
-                if(empty($record->value)) continue;
-
-                $record->metricID   = $calc->id;
-                $record->metricCode = $code;
-                $record->date       = $now;
-                $record->system     = $metric->scope == 'system' ? 1 : 0;
-
-                $uniqueKey = $this->getUniqueKeyByRecord($record);
-                if(!isset($initRecords[$uniqueKey]))
+                foreach($results as $record)
                 {
-                    $initRecords[$uniqueKey] = $record;
-                    continue;
-                }
+                    $record = (object)$record;
+                    if(empty($record->value)) continue;
 
-                $initRecords[$uniqueKey]->value = $record->value;
+                    $record->metricID   = $calc->id;
+                    $record->metricCode = $code;
+                    $record->date       = $now;
+                    $record->system     = $metric->scope == 'system' ? 1 : 0;
+
+                    $uniqueKey = $this->getUniqueKeyByRecord($record);
+                    if(!isset($initRecords[$uniqueKey]))
+                    {
+                        $initRecords[$uniqueKey] = $record;
+                        continue;
+                    }
+
+                    $initRecords[$uniqueKey]->value = $record->value;
+                }
             }
 
             $records[$code] = array_values($initRecords);
