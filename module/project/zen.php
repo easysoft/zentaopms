@@ -342,18 +342,21 @@ class projectZen extends project
      */
     protected function buildEditForm(int $projectID, object $project, string $from = '', int $programID = 0): void
     {
-        $productPlans     = array();
-        $parentProject    = $this->loadModel('program')->getByID($project->parent);
-        $linkedProducts   = $this->loadModel('product')->getProducts($projectID, 'all', '', true);
-        $plans            = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipparent|unexpired|noclosed');
-        $withProgram      = $this->config->systemMode == 'ALM';
-        $allProducts      = $this->program->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
-        $branchGroups     = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
+        $withProgram         = $this->config->systemMode == 'ALM';
+        $allProducts         = $this->loadModel('program')->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
+        $branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
+        $projectBranches     = $this->project->getBranchesByProject($projectID);
+        $linkedProductIdList = empty($branchGroups) ? '' : array_keys($branchGroups);
+        $parentProject       = $this->program->getByID($project->parent);
+        $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList, false);
+        $plans               = $this->loadModel('productplan')->getGroupByProduct(array_keys($linkedProducts), 'skipparent|unexpired');
+        $productPlans        = $linkedBranches = array();
 
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
 
+            foreach($projectBranches[$productID] as $branchID => $branch) $linkedBranches[$productID][$branchID] = $branchID;
             if(!empty($plans[$productID]))
             {
                 foreach($plans[$productID] as $branchID => $branchPlans)
@@ -428,6 +431,7 @@ class projectZen extends project
         $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
         $this->view->productPlans         = array_filter($productPlansOrder);
         $this->view->linkedProducts       = $linkedProducts;
+        $this->view->linkedBranches       = $linkedBranches;
         $this->view->unmodifiableProducts = $this->getUnmodifiableProducts($projectID, $project);
         $this->view->branchGroups         = $branchGroups;
         $this->view->executions           = $this->execution->getPairs($projectID);
