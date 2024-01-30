@@ -231,6 +231,7 @@ $dataType = '';
 <script>
 function initBurnChar()
 {
+    <?php if(!empty($chartData)):?>
     var data =
     {
         labels: <?php echo json_encode($chartData['labels'])?>,
@@ -240,16 +241,17 @@ function initBurnChar()
             color: "#CCC",
             fillColor: "rgba(0,0,0,0)",
             showTooltips: false,
-            data: <?php echo isset($chartData['baseLine']) ? $chartData['baseLine'] : '';?>
+            data: <?php echo isset($chartData['baseLine']) ? json_encode($chartData['baseLine']) : '';?>
         },
         {
             label: "<?php echo $lang->execution->charts->burn->graph->actuality;?>",
             color: "#0033CC",
-            data: <?php echo isset($chartData['burnLine']) ? $chartData['burnLine'] : '';?>
+            data: <?php echo isset($chartData['burnLine']) ? json_encode($chartData['burnLine']) : '';?>
         }]
     };
 
     var burnChart = $("#burnChart").lineChart(data, {animation: !($.zui.browser && $.zui.browser.ie === 8)});
+    <?php endif;?>
 }
 $(function()
 {
