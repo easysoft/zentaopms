@@ -251,7 +251,7 @@ $config->block->modules['scrumproject']->moreLinkList->scrumtest = 'project|test
 
 $config->block->modules['product'] = new stdclass();
 $config->block->modules['product']->moreLinkList = new stdclass();
-$config->block->modules['product']->moreLinkList->list  = 'product|all|';
+$config->block->modules['product']->moreLinkList->list  = 'product|all|browseType=%s';
 $config->block->modules['product']->moreLinkList->story = 'my|story|type=%s';
 
 $config->block->modules['execution'] = new stdclass();
