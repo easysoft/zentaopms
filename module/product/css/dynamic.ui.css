@@ -1,1 +1,2 @@
 .collapsed .actions-box { display:none;}
+.collapsed .dynamic-collapse-icon {transform: rotate(-90deg);}
