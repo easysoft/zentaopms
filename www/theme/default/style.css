@@ -102,16 +102,13 @@ th.c-confirmed, th.c-confirm {text-align: center;}
 .icon-size-width:before {content: "\e9c5"; transform: rotate(90deg); -ms-transform: rotate(90deg); -moz-transform: rotate(90deg); -webkit-transform: rotate(90deg); -o-transform: rotate(90deg);}
 .checkbox-primary > label{overflow: hidden;}
 
-body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-product-browse,body.xxc-embed.m-execution-story,body.xxc-embed.m-execution-bug,body.xxc-embed.m-execution-task {height: unset;}
 .xxc-embed #header {position: fixed;top: 0;width: 100%;z-index: 100;}
 .xxc-embed #header > #mainHeader > .container {z-index: 10;}
 .xxc-embed #toolbar {position: fixed;right: 120px!important;}
-.xxc-embed #main {position: absolute;top: 50px;bottom: 0;left: 0;right: 0;overflow: auto;}
-.xxc-embed.body-modal #main {top: 0;}
+.xxc-embed #header~#main {margin-top: 50px;}
 .xxc-embed .fix-table-copy-wrapper {top: 50px!important;}
 .xxc-embed #headerActions {right: 310px!important;}
 .xxc-embed .modal-iframe .modal-header .close {font-size: 28px !important;}
-.xxc-embed .modal-body {min-height: 300px!important;}
 .xxc-embed #userDropDownMenu, .xxc-embed #visionSwitcher {display: none!important;}
 .xxc-embed .book-search {transform: translateX(-112px);}
 .xxc-embed #headerBox .btn-tools {padding-right: 124px;}
