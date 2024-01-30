@@ -205,7 +205,10 @@ class blockZen extends block
             if($block->code == 'scrumissue'     && !helper::hasFeature('scrum_issue'))     continue;
 
             /* 将没有视图权限的区块过滤。 */
-            if(!empty($block->module) && $block->module != 'todo' && !empty($acls['views']) && !isset($acls['views'][$block->module]))
+            $module = $block->module;
+            if($module == 'scrumproject' || $module == 'waterfallproject') $module = 'project';
+            if($module == 'singleproduct') $module = 'product';
+            if(!empty($module) && $module != 'todo' && !empty($acls['views']) && !isset($acls['views'][$module]))
             {
                 unset($blocks[$key]);
                 continue;
