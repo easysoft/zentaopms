@@ -35,11 +35,12 @@ div
             ),
             in_array($result, array('fail', 'sqlFail')) ? div
             (
-                textarea
+                h::textarea
                 (
+                    setClass('form-control w-full'),
                     set::name('errors'),
                     set::rows(10),
-                    set('readonly', 'readonly'),
+                    set::readonly('readonly'),
                     implode("\n", $errors)
                 )
             ) : null,

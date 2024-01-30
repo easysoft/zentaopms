@@ -28,8 +28,12 @@ div
             set::title($lang->upgrade->license),
             set::titleClass('text-xl'),
             set::actions(array()),
-            textarea
+            h::textarea
             (
+                setClass('form-control'),
+                setStyle(array('background-color' => 'unset')),
+                set::rows('10'),
+                set::readonly('readonly'),
                 $license
             ),
             cell
