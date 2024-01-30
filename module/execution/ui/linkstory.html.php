@@ -71,7 +71,7 @@ dtable
     set::showToolbarOnChecked(false),
     set::footToolbar($footToolbar),
     set::footPager(usePager(array(
-        'linkCreator' => helper::createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recPerPage={recPerPage}&page={page}&extra=$extra")
+        'linkCreator' => helper::createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recPerPage={recPerPage}&page={page}&extra=$extra") . "#app={$app->tab}"
     )))
 );
 
