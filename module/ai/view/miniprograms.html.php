@@ -201,7 +201,7 @@ $isNotOpen = $config->edition != 'open';
                       class="btn iframe"
                       data-toggle="modal"
                       data-width="800"
-                      data-height="600"<?= $isPublished || $isBuiltIn ? ' disabled' : ''; ?>
+                      data-height="500"<?= $isPublished || $isBuiltIn ? ' disabled' : ''; ?>
                       title="<?= $lang->ai->prompts->action->test; ?>"
                       data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
                     >
