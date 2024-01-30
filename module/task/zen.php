@@ -56,6 +56,9 @@ class taskZen extends task
         /* Set Custom fields. */
         foreach(explode(',', $this->config->task->list->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
 
+        $executionTypeLang = zget($this->lang->execution->typeList, $execution->type, '');
+        $this->lang->task->noticeLinkStory = sprintf($this->lang->task->noticeLinkStory, $executionTypeLang);
+
         $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->create;
         $this->view->customFields  = $customFields;
         $this->view->modulePairs   = $modulePairs;
