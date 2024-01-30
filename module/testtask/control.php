@@ -562,11 +562,10 @@ class testtask extends control
 
         /* Get test cases. */
         $runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $task);
-        if($this->config->edition == 'ipd') $runs = $this->loadModel('story')->getAffectObject($runs, 'case');
-
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-        $runs = $this->loadModel('story')->checkNeedConfirm($runs);
 
+        if($this->config->edition == 'ipd') $runs = $this->loadModel('story')->getAffectObject($runs, 'case');
+        $runs = $this->loadModel('story')->checkNeedConfirm($runs);
 
         $case2RunMap = array();
         foreach($runs as $run) $case2RunMap[$run->case] = $run->id;
