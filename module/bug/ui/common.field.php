@@ -30,7 +30,7 @@ $fields->field('module')
 $fields->field('openedBuild')
     ->checkbox(array('text' => $lang->bug->allBugs, 'name' => 'allBuilds', 'checked' => data('allBuilds') ? true : false))
     ->control('inputGroup')
-    ->itemBegin('openedBuild[]')->control('picker')->items(data('builds'))->multiple()->itemEnd();
+    ->itemBegin('openedBuild[]')->control('picker')->items(data('builds'))->value(data('bug.buildID'))->multiple()->itemEnd();
 
 $fields->field('assignedTo')
     ->checkbox(array('text' => $lang->bug->loadAll, 'name' => 'allUsers', 'checked' => data('allUsers') ? true : false))
