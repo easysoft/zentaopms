@@ -477,7 +477,7 @@ detailBody
     floatToolbar
     (
         set::object($case),
-        $isInModal ? null : to::prefix(backBtn(set::icon('back'), setClass('ghost text-white'), $lang->goback, set('back', 'testcase-browse,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,qa-index,caselib-browse,'))),
+        $isInModal ? null : to::prefix(backBtn(set::icon('back'), setClass('ghost text-white'), $lang->goback)),
         set::main($actions['mainActions']),
         set::suffix($actions['suffixActions'])
     ),
