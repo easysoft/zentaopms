@@ -39,7 +39,7 @@ foreach($config->execution->view->operateList['common'] as $operate)
 }
 
 $programDom = null;
-if($config->systemMode == 'ALM' && $execution->projectInfo->grade > 1)
+if($config->systemMode == 'ALM' && isset($execution->projectInfo->grade) && $execution->projectInfo->grade > 1)
 {
     foreach($programList as $programID => $name)
     {
@@ -62,14 +62,14 @@ if($config->systemMode == 'ALM' && $execution->projectInfo->grade > 1)
 }
 
 $relatedProducts = null;
-if($execution->projectInfo->hasProduct || $features['plan'])
+if(!empty($execution->projectInfo->hasProduct) || $features['plan'])
 {
     foreach($products as $productID => $product)
     {
         $productDom = null;
         $planDom    = null;
         $branches   = array();
-        if($execution->projectInfo->hasProduct)
+        if(!empty($execution->projectInfo->hasProduct))
         {
             foreach($product->branches as $branchID)
             {
@@ -299,13 +299,13 @@ div
                     (
                         setClass('clip'),
                         set::href($this->createLink('project', 'index', "projectID={$execution->project}")),
-                        set::title($execution->projectInfo->name),
-                        $execution->projectInfo->name
+                        set::title(empty($execution->projectInfo->name) ? '' : $execution->projectInfo->name),
+                        empty($execution->projectInfo->name) ? '' : $execution->projectInfo->name
                     ) : span
                     (
                         setClass('clip w-full'),
-                        set::title($execution->projectInfo->name),
-                        $execution->projectInfo->name
+                        set::title(empty($execution->projectInfo->name) ? '' : $execution->projectInfo->name),
+                        empty($execution->projectInfo->name) ? '' : $execution->projectInfo->name
                     )
                 )
             ),
@@ -469,14 +469,14 @@ div
         div
         (
             /* Linked product and plan.  */
-            ($execution->projectInfo->hasProduct || $features['plan']) ? h::table
+            (!empty($execution->projectInfo->hasProduct) || $features['plan']) ? h::table
             (
                 setClass('table condensed bordered'),
                 h::thead
                 (
                     h::tr
                     (
-                        $execution->projectInfo->hasProduct ? h::th
+                        !empty($execution->projectInfo->hasProduct) ? h::th
                         (
                             setClass('w-1/3'),
                             div

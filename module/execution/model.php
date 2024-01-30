@@ -82,7 +82,7 @@ class executionModel extends model
         }
 
         /* The plan function is disabled for no-product project. */
-        if(isset($execution->projectInfo) && in_array($execution->projectInfo->model, array('waterfall', 'kanban', 'waterfallplus')) && empty($execution->projectInfo->hasProduct))
+        if(isset($execution->projectInfo) && !empty($execution->projectInfo->model) && in_array($execution->projectInfo->model, array('waterfall', 'kanban', 'waterfallplus')) && empty($execution->projectInfo->hasProduct))
         {
             $features['plan'] = false;
         }
