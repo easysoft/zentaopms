@@ -3812,7 +3812,7 @@ class executionModel extends model
         {
             global $dao;
             $tasks = $dao->select('id')->from(TABLE_TASK)->where('execution')->eq($execution->rawID)->andWhere('deleted')->eq(0)->fetchPairs();
-            return commonModel::hasPriv('programplan', 'create') && empty($tasks);
+            return commonModel::hasPriv('programplan', 'create') && empty($tasks) && $execution->type == 'stage';
         }
         if($action == 'createTask')  return commonModel::hasPriv('task', 'create') && commonModel::hasPriv('execution', 'create') && empty($execution->isParent);
         if(!commonModel::hasPriv('execution', $action)) return false;
