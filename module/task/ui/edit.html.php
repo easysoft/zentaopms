@@ -239,7 +239,7 @@ detailBody
                             set::value($task->assignedTo),
                             set::items($assignedToOptions),
                             !empty($task->team) ? set::required(true) : null,
-                            !empty($task->team) && $task->mode == 'linear' ? set::disabled(true) : null
+                            !empty($task->team) && $task->mode == 'linear' && !in_array($task->status, array('done', 'closed')) ? set::disabled(true) : null
                         )
                     ),
                     div
@@ -323,6 +323,15 @@ detailBody
                 (
                     setID('teamTable'),
                     setClass('table table-form'),
+                    h::tr
+                    (
+                        setClass('text-left'),
+                        h::th(),
+                        h::th($lang->task->teamMember),
+                        h::th($lang->task->estimate),
+                        h::th($lang->task->consumedAB),
+                        h::th($lang->task->left)
+                    ),
                     $teamForm,
                     h::tr
                     (
