@@ -58,7 +58,7 @@ formPanel
     ),
     isset($config->setCode) && $config->setCode == 1 ? formGroup
     (
-        set::label($lang->execution->code),
+        set::label($lang->execution->stage . $lang->programplan->code),
         set::width('2/3'),
         set::required(in_array('code', explode(',', $requiredFields))),
         input(set::name('code'), set::value($plan->code))
