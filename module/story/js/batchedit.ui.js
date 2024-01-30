@@ -72,9 +72,10 @@ window.renderRowData = function($row, index, story)
                 if(branch == '') continue;
                 items.push({text: branches[branch], value: branch});
             }
-            options.items = items;
-            options.onChange = function(){loadBranches(story.product, this)};
+            options.items        = items;
+            options.onChange     = function(){loadBranches(story.product, this)};
             options.defaultValue = story.branch;
+            options.required     = true;
 
             $picker.render(options);
         });
