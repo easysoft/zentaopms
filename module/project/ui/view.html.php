@@ -240,15 +240,12 @@ div
                         (
                             setClass('text-sm text-gray'),
                             $lang->allProgress,
-                            icon
+                            btn
                             (
-                                'help ml-1',
-                                set('data-toggle', 'tooltip'),
-                                set('data-title', $lang->execution->progressTip),
-                                set('data-placement', 'bottom'),
-                                set('data-type', 'white'),
-                                set('data-class-name', 'text-gray border border-light'),
-                                setClass('text-light')
+                                set::size('sm'),
+                                set::icon('help'),
+                                setClass('ghost form-label-hint text-gray-300 ml-2'),
+                                toggle::tooltip(array('title' => $lang->execution->progressTip, 'className' => 'text-gray border border-gray-300', 'type' => 'white', 'placement' => 'right'))
                             )
                         )
                     )
@@ -346,15 +343,12 @@ div
                 (
                     setClass('ml-2 text-gray flex-none acl'),
                     $lang->project->shortAclList[$project->acl],
-                    icon
+                    btn
                     (
-                        'help',
-                        set('data-toggle', 'tooltip'),
-                        set('data-title', $lang->project->subAclList[$project->acl]),
-                        set('data-placement', 'right'),
-                        set('data-type', 'white'),
-                        set('data-class-name', 'text-gray border border-light'),
-                        setClass('ml-2 text-gray')
+                        set::size('sm'),
+                        set::icon('help'),
+                        setClass('ghost form-label-hint text-gray-300 ml-2'),
+                        toggle::tooltip(array('title' => $lang->project->subAclList[$project->acl], 'className' => 'text-gray border border-gray-300', 'type' => 'white', 'placement' => 'right'))
                     )
                 )
             ),
