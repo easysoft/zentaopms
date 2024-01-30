@@ -325,10 +325,14 @@ foreach($bugInfo as $infoKey => $infoValue)
     );
 }
 
-div
+$mainActions = array();
+if(hasPriv('testreport', 'create')) $mainActions[] = array('icon' => 'refresh', 'url' => inlink('create', "objectID={$report->objectID}&objectType={$report->objectType}" . ($report->objectType == 'execution' ? "&extra=$report->tasks" : '')));
+if(hasPriv('testreport', 'edit'))   $mainActions[] = array('icon' => 'edit', 'url' => inlink('edit', "objectID={$report->id}"));
+if(hasPriv('testreport', 'delete')) $mainActions[] = array('icon' => 'trash', 'className' => 'ajax-submit', 'data-confirm' => $lang->testreport->confirmDelete, 'url' => inlink('delete', "objectID={$report->id}"));
+
+detailBody
 (
-    set::className('detail-body rounded flex gap-1'),
-    div
+    sectionList
     (
         set::className('col gap-1 grow'),
         tabs
@@ -479,6 +483,12 @@ div
                 )
             )
         )
+    ),
+    floatToolbar
+    (
+        set::object($report),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), setClass('ghost text-white'), $lang->goback)),
+        !$report->deleted ? set::main($mainActions) : null
     )
 );
 
