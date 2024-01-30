@@ -231,7 +231,7 @@ class executionModel extends model
         }
 
         /* Save session. */
-        $this->executionTao->saveSession($executionID);
+        $this->executionTao->saveSession((int)$executionID);
 
         /* Return execution id. */
         return $executionID;
