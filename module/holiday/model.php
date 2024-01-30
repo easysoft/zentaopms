@@ -419,21 +419,21 @@ class holidayModel extends model
      */
     public function getHolidayByAPI(string $year = ''): array
     {
-        /* Get holidays by api. */
-        if(empty($year)) $year = date('Y');
-        $apiRoot = sprintf($this->config->holiday->apiRoot, $year);
-        $data    = json_decode(common::http($apiRoot));
-        $days    = isset($data->days) ? (array)$data->days : array();
-
         /* Get holidays by file. */
+        $yearFile    = $this->app->wwwRoot . 'static/json/holiday/' . $year . '.json';
+        $defaultFile = $this->app->wwwRoot . 'static/json/holiday/json/default.json';
+
+        $data = file_exists($yearFile) ? file_get_contents($yearFile) : file_get_contents($defaultFile);
+        $data = json_decode($data);
+        $days = isset($data->days) ? (array)$data->days : array();
+
         if(empty($days))
         {
-            $yearFile    = $this->app->wwwRoot . 'static/json/holiday/' . $year . '.json';
-            $defaultFile = $this->app->wwwRoot . 'static/json/holiday/json/default.json';
-
-            $data = file_exists($yearFile) ? file_get_contents($yearFile) : file_get_contents($defaultFile);
-            $data = json_decode($data);
-            $days = isset($data->days) ? (array)$data->days : array();
+            /* Get holidays by api. */
+            if(empty($year)) $year = date('Y');
+            $apiRoot = sprintf($this->config->holiday->apiRoot, $year);
+            $data    = json_decode(common::http($apiRoot));
+            $days    = isset($data->days) ? (array)$data->days : array();
         }
 
         /* Build holiday data. */
