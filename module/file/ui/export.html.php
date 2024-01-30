@@ -74,16 +74,14 @@ if($isCustomExport)
     );
 
     /* Panel for customize template. */
-    $customExportRowList[] = formRow
+    $customExportRowList[] = div
     (
-        setClass('customFieldsBox'),
-        formGroup
+        setClass('customFieldsBox border p-4'),
+        formRow
         (
-            set::width('full'),
-            panel
+            formGroup
             (
-                set::title($lang->file->exportFields),
-                setClass('w-full'),
+                set::label($lang->file->exportFields),
                 control
                 (
                     set::type('picker'),
@@ -92,10 +90,16 @@ if($isCustomExport)
                     set::value($selectedFields),
                     set::multiple(true),
                     set::required(true)
-                ),
+                )
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->file->tplTitle),
                 inputGroup
                 (
-                    $lang->file->tplTitle,
                     setClass('mt-4'),
                     input(set::name('title'), set::value($lang->file->defaultTPL)),
                     hasPriv('file', 'setPublic') ? div
