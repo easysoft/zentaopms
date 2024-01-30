@@ -20,6 +20,8 @@ jsVar('weekend', $config->execution->weekend);
 jsVar('programAclList', $programAclList);
 jsVar('projectAclList', $projectAclList);
 jsVar('disabledprograms', !empty($globalDisableProgram));
+jsVar('beginLessThanParent', $lang->project->beginLessThanParent);
+jsVar('endGreatThanParent', $lang->project->endGreatThanParent);
 
 $setCode = (isset($config->setCode) and $config->setCode == 1);
 formBatchPanel

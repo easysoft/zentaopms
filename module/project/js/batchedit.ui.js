@@ -57,8 +57,8 @@ function batchCheckDate()
         }
 
         if($tr.next('tr.dateTip').length == 0) $tr.after($('#dateTipTemplate tr').clone());
-        $tr.next('tr.dateTip').find('.beginLess').toggleClass('hidden', projectBegin >= parentBegin).find('.parentBegin').text(data.selectedProgramBegin);
-        $tr.next('tr.dateTip').find('.endGreater').toggleClass('hidden', projectEnd <= parentEnd).find('.parentEnd').text(data.selectedProgramEnd);
+        $tr.next('tr.dateTip').find('.beginLess').toggleClass('hidden', projectBegin >= parentBegin).text(beginLessThanParent.replace('%s', data.selectedProgramBegin));
+        $tr.next('tr.dateTip').find('.endGreater').toggleClass('hidden', projectEnd <= parentEnd).text(endGreatThanParent.replace('%s', data.selectedProgramEnd));
         $tr.next('tr.dateTip').find('a').attr('onclick', 'batchIgnoreTip(' + index + ')');
     });
 }
