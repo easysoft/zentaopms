@@ -214,7 +214,7 @@ function checkProjectInfo()
         $('#budgetTip').addClass('hidden');
         $('#budgetTip').addClass('text-danger');
         $('#budgetTip').removeClass('text-warning');
-        $('#budgetTip').heml('');
+        $('#budgetTip').html('');
         return false;
     }
 
