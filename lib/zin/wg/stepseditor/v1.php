@@ -62,7 +62,7 @@ class stepsEditor extends wg
         $expectText        = $this->prop('expectText', data('lang.testcase.stepExpect'));
         $sameLevelText     = $this->prop('sameLevelText', data('lang.testcase.stepSameLevel'));
         $subLevelText      = $this->prop('subLevelText', data('lang.testcase.stepSubLevel'));
-        $id                = $this->prop('id');
+        $id                = $this->prop('id') ? $this->prop('id') : $this->gid;
         $expectDisabledTip = $this->prop('expectDisabledTip', data('lang.testcase.expectDisabledTip'));
         $deleteStepTip     = $this->prop('deleteStepTip', data('lang.testcase.deleteStepTip'));
         $dragNestedTip     = $this->prop('dragNestedTip', data('lang.testcase.dragNestedTip'));
