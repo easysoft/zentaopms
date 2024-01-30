@@ -168,7 +168,7 @@ form
 
         $unlinkList ? h::hr() : null,
 
-        $unlinkList ? section
+        section
         (
             set::title($lang->execution->unlinkedProducts),
             $config->systemMode == 'ALM' ? to::actions
@@ -183,12 +183,12 @@ form
                     p($lang->project->manageOtherProducts)
                 )
             ) : null,
-            div
+            $unlinkList ? div
             (
                 setClass('flex flex-wrap'),
                 $unlinkList
-            )
-        ) : null,
+            ) : null
+        ),
 
         h::hr()
     ),
