@@ -243,12 +243,12 @@ class groupZen extends group
         $formData = array();
 
         $actions = $this->post->actions;
-        $formData['views']    = isset($actions['views'])    ? $actions['views'] : array();
-        $formData['programs'] = isset($actions['programs']) ? $actions['programs'] : array();
-        $formData['projects'] = isset($actions['projects']) ? $actions['projects'] : array();
-        $formData['products'] = isset($actions['products']) ? $actions['products'] : array();
-        $formData['sprints']  = isset($actions['sprints'])  ? $actions['sprints']  : array();
-        $formData['actions']  = isset($actions['actions'])  ? $actions['actions']  : array();
+        $formData['views']    = isset($actions['views'])    ? array_filter($actions['views']) : array();
+        $formData['programs'] = isset($actions['programs']) ? array_filter($actions['programs']) : array();
+        $formData['projects'] = isset($actions['projects']) ? array_filter($actions['projects']) : array();
+        $formData['products'] = isset($actions['products']) ? array_filter($actions['products']) : array();
+        $formData['sprints']  = isset($actions['sprints'])  ? array_filter($actions['sprints'])  : array();
+        $formData['actions']  = isset($actions['actions'])  ? array_filter($actions['actions'])  : array();
 
         $formData['actionallchecker'] = isset($_POST['actionallchecker']);
 
