@@ -195,7 +195,7 @@ row
             (
                 common::hasPriv('execution', 'setKanban') ? array('text' => $lang->execution->setKanban, 'url' => createLink('execution', 'setKanban', "executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'sm') : null,
                 common::hasPriv('execution', 'printKanban') ? array('text' => $lang->execution->printKanban, 'url' => createLink('execution', 'printKanban', "executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'sm', 'id' => 'printKanban') : null,
-                array('text' => $lang->execution->fullScreen, 'url' => 'javascript:fullScreen()')
+                array('text' => $lang->execution->fullScreen, 'url' => "javascript:$(\"#kanbanList\").fullscreen();")
             ))
         ),
         $canCreateObject ? dropdown

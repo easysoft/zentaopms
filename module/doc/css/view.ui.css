@@ -2,6 +2,9 @@
 .panel-heading { justify-content: space-between; }
 .panel-actions { margin-left: auto; }
 
+#docPanel.is-in-fullscreen {background: #fff; overflow-y: scroll}
+#docPanel.is-in-fullscreen .panel-actions, #docPanel.is-in-fullscreen .selelct-version {display: none;}
+#docPanel .panel-actions, #docPanel .selelct-version {display: flex;}
 #docPanel {flex: 1 1 100%; margin-right: 1.5rem;}
 
 .scrollbar-hover { overflow-y: scroll; }

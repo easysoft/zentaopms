@@ -1,26 +1,3 @@
-/**
- * Display the document in full screen.
- *
- * @access public
- * @return void
- */
-window.customFullScreen = function()
-{
-    $('#docPanel').fullscreen({
-        afterEnter: function(){
-           $('#docPanel').addClass('scrollbar-hover');
-           $('#docPanel').css('background', '#fff');
-           $('#docPanel .panel-actions, #docPanel .selelct-version').addClass('hidden');
-           $.cookie.set('isFullScreen', 1, {expires:config.cookieLife, path:config.webRoot});
-        },
-        afterExit: function(){
-            $('#docPanel').removeClass('scrollbar-hover');
-            $('#docPanel .panel-actions, #docPanel .selelct-version').removeClass('hidden');
-            $.cookie.set('isFullScreen', 0, {expires:config.cookieLife, path:config.webRoot});
-        },
-    });
-}
-
 window.showHistory = function()
 {
     const showHistory = !$('#hisTrigger').hasClass('text-primary');
