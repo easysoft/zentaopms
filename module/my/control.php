@@ -211,7 +211,7 @@ class my extends control
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'planTitle') !== false) $sort = str_replace('planTitle', 'plan', $sort);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
-        $queryID = $type == 'bysearch' ? $param : 0;
+        $queryID = $type == 'bysearch' ? (int)$param : 0;
 
         $this->loadModel('story');
         if($type == 'assignedBy')
@@ -276,7 +276,7 @@ class my extends control
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'productTitle') !== false) $sort = str_replace('productTitle', 'product', $sort);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
-        $queryID = ($type == 'bysearch') ? $param : 0;
+        $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         $this->loadModel('story');
         if($type == 'assignedBy')
@@ -344,7 +344,7 @@ class my extends control
 
         /* Get tasks. */
         $this->loadModel('task');
-        $queryID = $type == 'bySearch' ? $param : 0;
+        $queryID = $type == 'bySearch' ? (int)$param : 0;
         if($type == 'assignedBy')
         {
             $tasks = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'task');
@@ -396,7 +396,7 @@ class my extends control
     {
         /* Save session. load Lang. */
         $this->loadModel('bug');
-        $queryID  = $type == 'bySearch' ? $param : 0;
+        $queryID  = $type == 'bySearch' ? (int)$param : 0;
         if($type != 'bySearch')            $this->session->set('myBugType', $type);
         if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
@@ -523,7 +523,7 @@ class my extends control
 
         /* Append id for second sort. */
         $sort    = common::appendOrder($orderBy);
-        $queryID = $type == 'bysearch' ? $param : 0;
+        $queryID = $type == 'bysearch' ? (int)$param : 0;
 
         $cases = array();
         if($type == 'assigntome') $cases = $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, 'skip|run', $sort, $pager);
@@ -586,7 +586,7 @@ class my extends control
 
         /* Append id for second sort. */
         $sort    = common::appendOrder($orderBy);
-        $queryID = $type == 'bySearch' ? $param : 0;
+        $queryID = $type == 'bySearch' ? (int)$param : 0;
         $docs    = $this->loadModel('doc')->getDocsByBrowseType($type, $queryID, 0, $sort, $pager);
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=doc&browseType=bySearch&queryID=myQueryID");
@@ -713,7 +713,7 @@ class my extends control
 
         /* Build the search form. */
         $browseType = strtolower($type);
-        $queryID    = $browseType == 'bysearch' ? $param : 0;
+        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
         $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bySearch&param=myQueryID");
         $this->loadModel('issue')->buildSearchForm($actionURL, $queryID);
 
@@ -755,7 +755,7 @@ class my extends control
 
         /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
-        $queryID       = $type == 'bysearch' ? $param : 0;
+        $queryID       = $type == 'bysearch' ? (int)$param : 0;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=risk&type=bysearch&param=myQueryID");
         $this->my->buildRiskSearchForm($queryID, $actionURL, $currentMethod);
 
@@ -957,7 +957,7 @@ class my extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
-        $queryID   = $browseType == 'bysearch' ? $param : 0;
+        $queryID   = $browseType == 'bysearch' ? (int)$param : 0;
         $actionURL = $this->createLink('my', 'work', "mode=myMeeting&browseType=bysearch&param=myQueryID");
         $this->loadModel('meeting')->buildSearchForm($queryID, $actionURL);
 
@@ -1046,7 +1046,7 @@ class my extends control
 
         $this->app->loadClass('pager', $static = true);
         $pager   = pager::init($recTotal, $recPerPage, $pageID);
-        $queryID = $browseType == 'bysearch' ? $param : 0;
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
         if($browseType != 'bysearch')
         {
             $tickets = $this->loadModel('ticket')->getList($browseType, $orderBy, $pager);
