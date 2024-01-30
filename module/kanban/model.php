@@ -865,13 +865,13 @@ class kanbanModel extends model
                 {
                     if($this->productplan->isClickable($plan, $action)) $item['actionList'][] = $action;
                 }
-                $planList[$id][$plan->status][] = $item;
+                $planList['lane' . $id][$plan->status][] = $item;
 
                 if(!isset($columnCards[$plan->status])) $columnCards[$plan->status] = 0;
                 $columnCards[$plan->status] ++;
             }
 
-            $lanes[] = array('id' => $id, 'name' => $id, 'title' => $name, 'color' => $this->config->productplan->laneColorList[$colorIndex], 'order' => $laneOrder);
+            $lanes[] = array('id' => $id, 'name' => 'lane' . $id, 'title' => $name, 'color' => $this->config->productplan->laneColorList[$colorIndex], 'order' => $laneOrder);
             $laneOrder ++;
             $colorIndex ++;
             if($colorIndex == count($this->config->productplan->laneColorList)) $colorIndex = 0;
