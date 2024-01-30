@@ -207,13 +207,11 @@ class executionZen extends execution
             foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
         }
 
-        $summary = $this->loadModel('product')->summary($stories, $storyType);
-
         $this->view->stories    = $stories;
         $this->view->storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList, $executionID);
         $this->view->storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $this->view->storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
-        $this->view->summary    = $storyType == 'requirement' ? str_replace($this->lang->SRCommon, $this->lang->URCommon, $summary) : $summary;
+        $this->view->summary    = $this->loadModel('product')->summary($stories, $storyType);
     }
 
     /**
