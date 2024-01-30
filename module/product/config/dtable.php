@@ -154,6 +154,17 @@ $config->product->all->dtable->fieldList['name']['link']         = helper::creat
 $config->product->all->dtable->fieldList['name']['sortType']     = true;
 $config->product->all->dtable->fieldList['name']['group']        = 'g1';
 
+if(!empty($config->setCode))
+{
+    $config->product->all->dtable->fieldList['code']['name']     = 'code';
+    $config->product->all->dtable->fieldList['code']['title']    = $lang->product->code;
+    $config->product->all->dtable->fieldList['code']['width']    = 80;
+    $config->product->all->dtable->fieldList['code']['type']     = 'format';
+    $config->product->all->dtable->fieldList['code']['show']     = true;
+    $config->product->all->dtable->fieldList['code']['sortType'] = true;
+    $config->product->all->dtable->fieldList['code']['group']    = 'g1';
+}
+
 $config->product->all->dtable->fieldList['productLine']['name']     = 'productLine';
 $config->product->all->dtable->fieldList['productLine']['title']    = $lang->product->belongingLine;
 $config->product->all->dtable->fieldList['productLine']['width']    = 136;
