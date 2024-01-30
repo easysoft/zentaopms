@@ -1467,7 +1467,7 @@ class screenModel extends model
         /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
-            $this->screenTao->setChartDefault('waterpolo', $component);  
+            $this->screenTao->setChartDefault('waterpolo', $component);
             $this->setComponentDefaults($component);
         }
         else
@@ -1483,6 +1483,7 @@ class screenModel extends model
                     $result     = $this->dao->query($this->setFilterSQL($chart))->fetch();
                     $group      = $settings->group[0]->field;
                     $sourceData = zget($result, $group, 0);
+                    if(empty($sourceData)) $sourceData = 0;
                 }
                 $component->option->dataset = $sourceData;
             }
