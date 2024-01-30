@@ -628,7 +628,6 @@ class projectZen extends project
      */
     protected function processBugSearchParams(object $project, string $type, int $param, int $projectID, int $productID, string $branchID, string $orderBy, int $build, array $products)
     {
-        if(!$project->multiple) unset($this->config->bug->datatable->fieldList['execution']);
         if(!$project->hasProduct)
         {
             unset($this->config->bug->search['fields']['product']);
