@@ -100,7 +100,7 @@ class executionModel extends model
      */
     public function setMenu(int $executionID)
     {
-        $execution = $this->fetchByID($executionID);
+        $execution = $this->fetchByID((int)$executionID); //新手教程模式下将 s% 转成0
         if(!$execution) return;
 
         if($execution->type == 'kanban') $this->executionTao->setKanbanMenu();
