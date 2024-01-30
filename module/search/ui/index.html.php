@@ -105,6 +105,7 @@ form
             set::className('shadow-none border-l'),
             set::name('type[]'),
             set::value($type),
+            set::menu(array('checkbox' => true)),
             set::items($typeList),
             set::multiple(true)
         ),
