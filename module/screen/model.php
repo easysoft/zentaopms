@@ -292,13 +292,8 @@ class screenModel extends model
         }
         else
         {
-            $oldFilters    = $component->chartConfig->filters;
-
-            if(count($oldFilters) != count($latestFilters)) $filterChanged = true;
-            foreach($oldFilters as $index => $oldFilter)
-            {
-                if($oldFilter->field != $latestFilters[$index]['field'] || $oldFilter->name != $latestFilters[$index]['name'] || $oldFilter->type != $latestFilters[$index]['type']) $filterChanged = true;
-            }
+            $oldFilters = $component->chartConfig->filters;
+            $filterChanged = $this->isFilterChange($oldFilters, $latestFilters);
 
             if($filterChanged)
             {
@@ -332,6 +327,45 @@ class screenModel extends model
         }
 
         return $component;
+    }
+
+    /**
+     * 判断图表/透视表的筛选器是否发生了变化。
+     * Determine if the filter for the chart/pivot has changed.
+     *
+     * @param  array  $oldFilters
+     * @param  array  $latestFilters
+     * @access public
+     * @return void
+     */
+    public function isFilterChange($oldFilters, $latestFilters)
+    {
+        $filterChanged = false;
+
+        if(count($oldFilters) != count($latestFilters)) $filterChanged = true;
+        foreach($oldFilters as $index => $oldFilter)
+        {
+            $newFilter = (object)$latestFilters[$index];
+
+            // 结果筛选器和查询筛选器都有的三个字段
+            if($oldFilter->field != $newFilter->field || $oldFilter->name != $newFilter->name || $oldFilter->type != $newFilter->type) $filterChanged = true;
+
+            // 如果一个是查询筛选器一个不是，也判定为更改
+            $oldHaveQuery = isset($oldFilter->from) and $oldFilter->from = 'query';
+            $newHaveQuery = isset($newFilter->from) and $newFilter->from = 'query';
+            if($oldHaveQuery != $newHaveQuery) $filterChanged = true;
+
+            // 对于查询筛选器，可以再做进一步判断，如果下拉选择器的typeOption发生了变化，也应该判定为更改
+            if($oldHaveQuery and $newHaveQuery)
+            {
+                if($oldFilter->type == 'select' && $newFilter->type == 'select' && $oldFilter->typeOption != $newFilter->typeOption) $filterChanged = true;
+            }
+
+            // 如果发生了变化，不必再去判断后续
+            if($filterChanged) break;
+        }
+
+        return $filterChanged;
     }
 
     /**
