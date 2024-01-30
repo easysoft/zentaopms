@@ -18,6 +18,4 @@ $budgetFuture = data('project.budget') !== null && !data('project.budget');
 if(strpos($config->project->edit->requiredFields, 'budget') === false) $fields->field('budget')->checkbox(array('text' => $lang->project->future, 'name' => 'future', 'checked' => $budgetFuture));
 $fields->field('budget')->value(data('project.budget') !== null && data('project.budget') == 0 ? '' : data('project.budget'));
 
-$fields->field('acl')
-       ->foldable()
-       ->control(array('control' => 'aclBox', 'aclItems' => data('programID') ? $lang->project->subAclList : $lang->project->aclList, 'aclValue' => data('project.acl'), 'whitelistLabel' => $lang->project->whitelist, 'userValue' => data('project.whitelist')));
+$fields->field('acl')->control(array('control' => 'aclBox', 'aclItems' => data('programID') ? $lang->project->subAclList : $lang->project->aclList, 'aclValue' => data('project.acl'), 'whitelistLabel' => $lang->project->whitelist, 'userValue' => data('project.whitelist')));

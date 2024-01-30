@@ -12,6 +12,7 @@ namespace zin;
 
 $fields = useFields('project.edit');
 $fields->autoLoad('parent', 'acl');
+$fields->orders('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin');
 $loadUrl = $this->createLink('project', 'create', "model={$model}&program={parent}");
 
 jsVar('model', $model);
@@ -65,9 +66,7 @@ formGridPanel
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
     on::change('[name=parent], [name=budget]', 'checkBudget'),
     on::change('[name^=products]', 'toggleStageBy'),
-    set::fullModeOrders(array('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin')),
     set::modeSwitcher(false),
-    set::defaultMode('full'),
     set::title($lang->project->edit),
     set::fields($fields)
 );
