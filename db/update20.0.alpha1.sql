@@ -4,7 +4,7 @@ ALTER TABLE `zt_block` ADD `dashboard` varchar(20) NOT NULL DEFAULT '' AFTER `ac
 ALTER TABLE `zt_block` CHANGE `block` `code` varchar(30) NOT NULL DEFAULT '' AFTER `module`;
 ALTER TABLE `zt_block` ADD `width` enum ('1', '2', '3') NOT NULL DEFAULT '1' AFTER `code`;
 ALTER TABLE `zt_block` MODIFY `height` smallint(5) UNSIGNED NOT NULL DEFAULT 3 AFTER `width`;
-ALTER TABLE `zt_block` ADD `left` enum('0', '1', '2') NOT NULL DEFAULT '0' AFTER `height`;
+ALTER TABLE `zt_block` ADD `left` enum('', '0', '1', '2') NOT NULL DEFAULT '' AFTER `height`;
 ALTER TABLE `zt_block` ADD `top` smallint(5) UNSIGNED NOT NULL DEFAULT 0 AFTER `left`;
 ALTER TABLE `zt_block` MODIFY `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `hidden`;
 
