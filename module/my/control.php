@@ -1195,6 +1195,8 @@ class my extends control
     {
         if($_POST)
         {
+            $this->lang->my->listName = $this->lang->user->contacts->listName;
+            $this->lang->my->userList = $this->lang->user->contacts->selectedUsers;
             if($listID)
             {
                 $userContact = form::data($this->config->my->form->manageContacts)->add('account', $this->app->user->account)->add('id', $listID)->get();
