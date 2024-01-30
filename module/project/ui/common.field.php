@@ -63,6 +63,7 @@ $fields->field('days')->label($lang->project->days . $lang->project->daysUnit)->
 
 $fields->field('productsBox')
     ->width('full')
+    ->required(data('copyProject.parent') || data('parentProgram.id') || data('project.parent'))
     ->control(array
     (
         'control'           => 'productsBox',

@@ -24,6 +24,7 @@ class productsBox extends wg
         'isStage?: bool',               // 是否是阶段类型。
         'hasNewProduct?: bool=false',   // 是否有新产品。
         'errorSameProducts?: string',   // 选择同一个产品的提示。
+        'required?: bool=false'         // 是否是必填。
     );
 
     public static function getPageCSS(): string|false
@@ -95,7 +96,7 @@ class productsBox extends wg
                 on::change('[name=addProduct]', 'toggleNewProduct'),
                 set::width('1/2'),
                 setClass('linkProduct'),
-                set::required($project && in_array($project->model, array('waterfall', 'waterfallplus'))),
+                set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus')))),
                 set::label($lang->project->manageProducts),
                 set::labelFor('productBox'),
                 $hasNewProduct ? set::checkbox(array('text' => $lang->project->addProduct, 'name' => 'addProduct', 'checked' => false)) : false,
@@ -243,7 +244,7 @@ class productsBox extends wg
                 (
                     set::width($hasBranch ? '1/4' : '1/2'),
                     setClass('linkProduct'),
-                    set::required($project && in_array($project->model, array('waterfall', 'waterfallplus'))),
+                    set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus')))),
                     $i == 0 ? set::label($lang->project->manageProducts) : null,
                     inputGroup
                     (
