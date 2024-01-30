@@ -54,7 +54,7 @@ if($config->systemMode == 'ALM')
 
 $index      = 0;
 $linkedList = array();
-foreach($allProducts as $productID => $productName)
+foreach($linkedProducts as $productID => $product)
 {
     if(empty($linkedBranches[$productID])) continue;
 
@@ -68,7 +68,7 @@ foreach($allProducts as $productID => $productName)
             checkbox
             (
                 set::name("products[{$index}]"),
-                set::text($productName),
+                set::text($product->name),
                 set::checked(true),
                 set::disabled($cannotUnlink),
                 set::value($productID),
