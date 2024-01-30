@@ -70,7 +70,7 @@ if(!$hideStory)
                 array
                 (
                     'type' => 'btn',
-                    'icon' => 'copy',
+                    'icon' => 'arrow-right',
                     'class' => 'ghost',
                     'hint' => $lang->task->copyStoryTitle
                 )
