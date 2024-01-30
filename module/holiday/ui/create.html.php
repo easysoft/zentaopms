@@ -10,10 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader(set::title($lang->holiday->create));
-
 formPanel
 (
+    set::title($lang->holiday->create),
     set::formClass('border-0'),
     formRow
     (
