@@ -1710,7 +1710,13 @@ class storyZen extends story
      */
     protected function getAfterReviewLocation(int $storyID, string $storyType = 'story', string $from = ''): string
     {
-        if($from == 'project') return helper::createLink('projectstory', 'view', "storyID={$storyID}&projectID={$this->session->project}");
+        if($from == 'project')
+        {
+            $project = $this->project->getByID($this->session->project);
+            if($project && !$project->multiple) return helper::createLink('execution', 'storyView', "storyID=$storyID");
+            return helper::createLink('projectstory', 'view', "storyID={$storyID}&projectID={$this->session->project}");
+        }
+
         if($from != 'execution') return helper::createLink('story', 'view', "storyID={$storyID}&version=0&param=0&storyType={$storyType}");
 
         $execution = $this->execution->getByID($this->session->execution);
