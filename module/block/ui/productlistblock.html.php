@@ -22,9 +22,9 @@ foreach($productStats as $product)
 {
     if(!empty($product->PO))
     {
-        $product->PO        = zget($users, $product->PO);
         $product->POAvatar  = zget($avatarList, $product->PO);
         $product->POAccount = $product->PO;
+        $product->PO        = zget($users, $product->PO);
     }
     $product->progress = $product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories * 100);
     if($product->progress) $product->progress .= '%';
