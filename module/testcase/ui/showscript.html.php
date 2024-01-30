@@ -17,29 +17,48 @@ modalHeader
     set::entityText($case->title)
 );
 
-$rows  = array();
-$lines = explode("\n", $case->script);
-foreach($lines as $key => $line)
+if(empty($case->script))
 {
-    $rows[] = h::tr
+    div
     (
-        h::td
+        setClass('dtable-empty-tip'),
+        div
         (
-            setClass('align-top text-right border-r gray-pale px-1 py-0'),
-            ++$key
-        ),
-        h::td
-        (
-            setClass('px-1 py-0'),
-            html_entity_decode(str_replace(' ', '&nbsp;', $line))
+            setClass('row gap-4 items-center'),
+            span
+            (
+                setClass('text-gray'),
+                $lang->noData
+            )
         )
     );
 }
+else
+{
+    $rows  = array();
+    $lines = explode("\n", $case->script);
+    foreach($lines as $key => $line)
+    {
+        $rows[] = h::tr
+        (
+            h::td
+            (
+                setClass('align-top text-right border-r gray-pale px-1 py-0'),
+                ++$key
+            ),
+            h::td
+            (
+                setClass('px-1 py-0'),
+                html_entity_decode(str_replace(' ', '&nbsp;', $line))
+            )
+        );
+    }
 
-h::table
-(
-    setClass('border w-full'),
-    $rows
-);
+    h::table
+    (
+        setClass('border w-full'),
+        $rows
+    );
+}
 
 render();
