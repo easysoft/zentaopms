@@ -110,9 +110,10 @@ $bodyTrs[] = h::tr
     (
         picker
         (
-            set::name("blockUser"),
+            set::name('blockUser'),
             set::items($users),
             set::value(isset($config->message->blockUser) ? $config->message->blockUser: ''),
+            set::menu(array('checkbox' => true)),
             set::multiple(true)
         )
     )
