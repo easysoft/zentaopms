@@ -288,6 +288,8 @@ if($canBatchAction)
         $assignedToItems = array();
         foreach ($users as $account => $name)
         {
+            if($account == 'closed') continue;
+
             $assignedToItems[] = array(
                 'text'       => $name,
                 'innerClass' => 'batch-btn ajax-btn',
