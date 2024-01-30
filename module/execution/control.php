@@ -1044,6 +1044,7 @@ class execution extends control
         $this->view->isStage             = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
         $this->view->isKanban            = isset($output['type']) && $output['type'] == 'kanban';
         $this->view->project             = $project;
+        $this->view->planID              = $planID;
 
         $this->display();
     }
