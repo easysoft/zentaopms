@@ -6,74 +6,20 @@
  */
 window.fullScreen = function()
 {
-    var element       = document.getElementById('docPanel');
-    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
-    if(requestMethod)
-    {
-        var afterEnterFullscreen = function()
-        {
-            $('#docPanel').addClass('scrollbar-hover');
-            $('#docPanel').css('background', '#fff');
-            $('#docPanel .panel-actions, #docPanel .selelct-version').addClass('hidden');
-            $.cookie.set('isFullScreen', 1, {expires:config.cookieLife, path:config.webRoot});
-        };
-
-        var whenFailEnterFullscreen = function(error)
-        {
+    $('#docPanel').fullscreen({
+        afterEnter: function(){
+           $('#docPanel').addClass('scrollbar-hover');
+           $('#docPanel').css('background', '#fff');
+           $('#docPanel .panel-actions, #docPanel .selelct-version').addClass('hidden');
+           $.cookie.set('isFullScreen', 1, {expires:config.cookieLife, path:config.webRoot});
+        },
+        afterExit: function(){
+            $('#docPanel').removeClass('scrollbar-hover');
+            $('#docPanel .panel-actions, #docPanel .selelct-version').removeClass('hidden');
             $.cookie.set('isFullScreen', 0, {expires:config.cookieLife, path:config.webRoot});
-        };
-
-        try
-        {
-            var result = requestMethod.call(element);
-            if(result && (typeof result.then === 'function' || result instanceof window.Promise))
-            {
-                result.then(afterEnterFullscreen).catch(whenFailEnterFullscreen);
-            }
-            else
-            {
-                afterEnterFullscreen();
-            }
-        }
-        catch (error)
-        {
-            whenFailEnterFullscreen(error);
-        }
-    }
+        },
+    });
 }
-
-/**
- * Exit full screen.
- *
- * @access public
- * @return void
- */
-function exitFullScreen()
-{
-    $('#docPanel').removeClass('scrollbar-hover');
-    $('#docPanel .panel-actions, #docPanel .selelct-version').removeClass('hidden');
-    $.cookie.set('isFullScreen', 0, {expires:config.cookieLife, path:config.webRoot});
-}
-
-document.addEventListener('fullscreenchange', function (e)
-{
-    if(!document.fullscreenElement) exitFullScreen();
-});
-
-document.addEventListener('webkitfullscreenchange', function (e)
-{
-    if(!document.webkitFullscreenElement) exitFullScreen();
-});
-
-document.addEventListener('mozfullscreenchange', function (e)
-{
-    if(!document.mozFullScreenElement) exitFullScreen();
-});
-
-document.addEventListener('msfullscreenChange', function (e)
-{
-    if(!document.msfullscreenElement) exitFullScreen();
-});
 
 window.showHistory = function()
 {
