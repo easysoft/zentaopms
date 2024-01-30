@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
+data('activeMenuID', $type);
 data('storyType', $type);
 jsVar('storyType', $type);
 jsVar('productID', $productID);
