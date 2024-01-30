@@ -871,9 +871,8 @@ class projectModel extends model
         $project = $this->projectTao->fetchProjectInfo($projectID);
         if(!$project) return false;
 
-        if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);
-
         $this->loadModel('build');
+        if(!$project->hasProduct) unset($this->config->build->search['fields']['product']);
         $product = $productID ? $this->loadModel('product')->getByID($productID) : '';
         if($product && $product->type != 'normal')
         {
