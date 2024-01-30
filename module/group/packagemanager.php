@@ -2504,7 +2504,7 @@ $config->group->package->workflow->privs['workflow-ui']          = array('editio
 $config->group->package->workflow->privs['workflow-release']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 60, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-deactivate']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 65, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-activate']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 70, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflow->privs['workflow-setApproval'] = array('edition' => 'max', 'vision' => 'rnd', 'order' => 75, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflow->privs['workflow-setApproval'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 75, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setJS']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 80, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setCSS']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 85, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 
