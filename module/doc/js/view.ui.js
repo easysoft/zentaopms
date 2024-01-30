@@ -4,7 +4,7 @@
  * @access public
  * @return void
  */
-window.fullScreen = function()
+window.customFullScreen = function()
 {
     $('#docPanel').fullscreen({
         afterEnter: function(){

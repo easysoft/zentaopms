@@ -156,7 +156,7 @@ $contentDom = div
                 (
                     setClass('btn ghost'),
                     icon('fullscreen'),
-                    on::click('fullScreen')
+                    on::click('customFullScreen')
                 ),
                 common::hasPriv('doc', 'collect') && !$doc->deleted ? html($starBtn) : null,
                 ($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project') ? $importLibBtn : null,
