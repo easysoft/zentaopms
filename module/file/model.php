@@ -930,9 +930,6 @@ class fileModel extends model
         $extension = $fileType ? ('.' . $fileType) : '';
         if(strpos($fileName, $extension) === false) $fileName .= $extension;
 
-        /* urlencode the filename for ie. */
-        if(strpos($this->server->http_user_agent, 'MSIE') !== false or strpos($this->server->http_user_agent, 'Trident') !== false or strpos($this->server->http_user_agent, 'Edge') !== false) $fileName = urlencode($fileName);
-
         /* Judge the content type. */
         $mimes       = $this->config->file->mimes;
         $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
