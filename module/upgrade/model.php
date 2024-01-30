@@ -3976,6 +3976,7 @@ class upgradeModel extends model
         if(!$projectID || !$sprintIdList) return false;
 
         if($lineID) $this->dao->update(TABLE_MODULE)->set('root')->eq($programID)->where('id')->eq($lineID)->andWhere('root')->eq('0')->exec();
+        if(empty($productIdList)) $productIdList = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in($sprintIdList)->fetchPairs('product', 'product');
         $this->computeProductAcl($productIdList, $programID, $lineID);
 
         $this->upgradeTao->updateProjectByProduct($projectID, $productIdList);
