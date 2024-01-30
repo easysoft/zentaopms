@@ -79,7 +79,6 @@ dtable
     set::userMap($users),
     set::fixedLeftWidth('44%'),
     set::checkable($canBatchAction ? true : false),
-    set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
     set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
