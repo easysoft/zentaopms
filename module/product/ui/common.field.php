@@ -18,7 +18,7 @@ if($config->systemMode != 'light')
         ->value(data('fields.line.default'));
 }
 
-$fields->field('name')->wrapBefore()->control('input');
+$fields->field('name')->wrapBefore()->required()->control('input');
 
 $fields->field('type')
     ->control(array('type' => 'picker', 'required' => true))
