@@ -2,7 +2,8 @@ window.renderCell = function(result, {col, row})
 {
     if(col.name === 'name')
     {
-        if(row.data.postponed) result[result.length] = {html:'<span class="label size-sm circle danger-pale">' + row.data.delayInfo + '</span>', className:'flex items-end w-full', style:{flexDirection:"column"}};
+        if(typeof result[0].props == 'object') result[0].props.className = 'clip w-max';
+        if(row.data.postponed) result[result.length] = {html:'<span class="label size-sm circle danger-pale w-max">' + row.data.delayInfo + '</span>'};
         return result;
     }
 
