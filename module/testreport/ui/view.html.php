@@ -341,8 +341,10 @@ div
                 set::active(true),
                 sectionList
                 (
+                    setClass('border rounded mb-4'),
                     section
                     (
+                        setClass('px-4'),
                         set::title($lang->testreport->legendBasic),
                         set::useHtml(true),
                         tableData
@@ -383,9 +385,9 @@ div
                             set::files($report->files),
                             set::fieldset(false)
                         )
-                    ) : null,
-                    history(set::objectID($report->id))
-                )
+                    ) : null
+                ),
+                history(set::objectID($report->id))
             ),
             tabPane
             (
