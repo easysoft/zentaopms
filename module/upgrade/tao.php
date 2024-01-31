@@ -763,7 +763,7 @@ class upgradeTao extends upgradeModel
             {
                 foreach($projectProducts[$productID] as $branchID => $projectProduct)
                 {
-                    $data->plan   = ($isProjectType && isset($projectProduct->plan)) ? $projectProduct->plan : 0;
+                    $data->plan   = $projectProduct->plan;
                     $data->branch = $branchID;
                     $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 }
