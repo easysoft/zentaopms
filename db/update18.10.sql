@@ -13,3 +13,16 @@ UPDATE `zt_metric` SET `definition` = '所有任务个数求和\r\n指派给为�
 UPDATE `zt_metric` SET `definition` = '所有研发需求个数求和\r\n过滤已删除的研发需求\r\n过滤状态为已关闭的研发需求\r\n过滤已删除产品下的研发需求\r\n过滤已删除的无产品项目下的研发需求' WHERE `code` = 'count_of_pending_story_in_user';
 UPDATE `zt_metric` SET `definition` = '所有研发需求个数求和\r\n评审人为某人\r\n评审结果为空\r\n评审状态为评审中或变更中\r\n过滤已删除的需求\r\n过滤已删除产品的需求' WHERE `code` = 'count_of_reviewing_story_in_user';
 UPDATE `zt_metric` SET `definition` = '所有Bug个数求和\r\nbug状态为已解决和已关闭\r\n解决者为某人\r\n解决日期为某日\r\n过滤已删除的bug\r\n过滤已删除产品的bug' WHERE `code` = 'count_of_daily_fixed_bug_in_user';
+
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n状态为已完成\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_finished_task';
+UPDATE `zt_metric` SET `definition` = '复用：\r\n按系统统计的任务总数\r\n按系统统计的已完成任务数\r\n公式：\r\n按系统统计的未完成任务数=按系统统计的任务总数-按系统统计的已完成任务数' WHERE `code` = 'count_of_unfinished_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n状态为已关闭\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_closed_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n创建时间为某年\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_annual_created_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n完成时间为某年\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_annual_finished_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n创建时间为某年某月\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_monthly_created_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n完成时间为某年某月\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_monthly_finished_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务的预计工时数求和\r\n过滤父任务\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'estimate_of_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务的消耗工时数求和\r\n过滤父任务\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'consume_of_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务的剩余工时数求和\r\n过滤父任务\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'left_of_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n完成时间为某日\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_daily_finished_task';
