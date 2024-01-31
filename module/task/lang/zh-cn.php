@@ -279,14 +279,14 @@ $lang->task->addChildTask              = '因该任务已经产生消耗，为�
 $lang->task->selectTestStoryTip        = "以下{$lang->SRCommon}将作为此任务的子任务";
 
 $lang->task->error                    = new stdclass();
-$lang->task->error->totalNumber       = '"总计消耗"必须为数字';
+$lang->task->error->totalNumber       = '"耗时"必须为数字';
 $lang->task->error->consumedNumber    = '"本次消耗"必须为数字';
 $lang->task->error->estimateNumber    = '"最初预计"必须为正数';
-$lang->task->error->leftNumber        = '"预计剩余"必须为数字';
+$lang->task->error->leftNumber        = '"剩余"必须为数字';
 $lang->task->error->recordMinus       = '%s不能为负数';
 $lang->task->error->consumedSmall     = '"总计消耗"必须大于之前消耗';
 $lang->task->error->dateEmpty         = '请填写"日期"';
-$lang->task->error->consumedThisTime  = '请填写"消耗"';
+$lang->task->error->consumedThisTime  = '请填写"耗时"';
 $lang->task->error->left              = '请填写"剩余"';
 $lang->task->error->work              = '"备注"必须小于%d个字符';
 $lang->task->error->teamMember        = '团队成员必须大于1人';
