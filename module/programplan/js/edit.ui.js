@@ -46,7 +46,7 @@ window.editStage = function()
             {
                 if(res)
                 {
-                    var $form    = $('#editForm');
+                    var $form    = $('#editForm form');
                     var formUrl  = $form.attr('action');
                     var formData = new FormData($form[0]);
                     $.ajaxSubmit({url: formUrl, data: formData});
@@ -65,7 +65,7 @@ window.editStage = function()
         {
             if(res)
             {
-                var $form    = $('#editForm');
+                var $form    = $('#editForm form');
                 var formUrl  = $form.attr('action');
                 var formData = new FormData($form[0]);
                 $.ajaxSubmit({url: formUrl, data: formData});
