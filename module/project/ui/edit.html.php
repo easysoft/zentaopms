@@ -13,6 +13,7 @@ namespace zin;
 $fields = useFields('project.edit');
 $fields->autoLoad('parent', 'acl');
 $fields->orders('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin');
+$fields->fullModeOrders('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin');
 $loadUrl = $this->createLink('project', 'create', "model={$model}&program={parent}");
 
 jsVar('model', $model);
