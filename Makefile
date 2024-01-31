@@ -130,7 +130,7 @@ zentaoxx:
 	sed -i "/loadModel('push')/d" zentaoxx/extension/xuan/im/control.php
 	sed -i "/this->push/d" zentaoxx/extension/xuan/im/control.php
 	sed -i "s/(int)(microtime/(double)(microtime/" zentaoxx/extension/xuan/im/control.php
-	sed -i -z 's/class im extends control\n{/class im extends control\n{ public function __construct($$moduleName = "", $$methodName = "") { parent::__construct($$moduleName, $$methodName); $$this->dao->exec("SET @@sql_mode=''"); }/' zentaoxx/extension/xuan/im/control.php # use strict mode later.
+	sed -i -z 's/class im extends control\n{/class im extends control\n{ public function __construct($$moduleName = "", $$methodName = "") { parent::__construct($$moduleName, $$methodName); $$this->dao->exec("SET @@sql_mode=\'\'"); }/' zentaoxx/extension/xuan/im/control.php # use strict mode later.
 	sed -i 's/$$output->data\s*= $$fileID;/$$output->data = "$$fileID";/' zentaoxx/extension/xuan/im/control.php
 	sed -i "s/'yahoo', //g" zentaoxx/extension/xuan/im/config.php
 	sed -i "s/'gtalk', //g" zentaoxx/extension/xuan/im/config.php
