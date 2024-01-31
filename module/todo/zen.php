@@ -577,12 +577,22 @@ class todoZen extends todo
             unset($todoData->config['day'], $todoData->config['month']);
             if(!is_array($todoData->config['week'])) $todoData->config['week'] = (array)$todoData->config['week'];
             $todoData->config['week'] = implode(',', $todoData->config['week']);
+            if(empty($todoData->config['week']))
+            {
+                dao::$errors['config[week][]'] = sprintf($this->lang->error->notempty, $this->lang->todo->weekly);
+                return false;
+            }
         }
         if($todoData->config['type'] == 'month')
         {
             unset($todoData->config['day'], $todoData->config['week']);
             if(!is_array($todoData->config['month'])) $todoData->config['month'] = (array)$todoData->config['month'];
             $todoData->config['month'] = implode(',', $todoData->config['month']);
+            if(empty($todoData->config['month']))
+            {
+                dao::$errors['config[month][]'] = sprintf($this->lang->error->notempty, $this->lang->todo->monthly);
+                return false;
+            }
         }
 
         if(!empty($todoData->config['beforeDays']) && !validater::checkInt($todoData->config['beforeDays']))

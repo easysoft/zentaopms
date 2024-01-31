@@ -52,7 +52,7 @@ class todo extends control
             $todoData = $this->todoZen->beforeCreate($form);
 
             $todo = $this->todoZen->prepareCreateData($todoData);
-            if(!$todo) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $todoID = $this->todo->create($todo);
             if($todoID === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
