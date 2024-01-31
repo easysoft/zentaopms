@@ -43,7 +43,7 @@ formGridPanel
     on::change('[name=acl]',    'onAclChange'),
     on::change('[name=longTime]', $handleLongTimeChange),
     on::change('[name=begin], [name=end]', 'onDateChange'),
-    on::inited()->triggerEvent('$element.find("[name=longTime]")', 'change')
+    on::init()->do('setTimeout(() => $element.find("[name=longTime]").trigger("change"), 500)')
 );
 
 render();
