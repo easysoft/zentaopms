@@ -6,3 +6,5 @@
 
 .card-prefix {position: absolute; right: 10px}
 .card-suffix {min-width: 46px;}
+
+.card-heading .text-black {max-width: 90%}
