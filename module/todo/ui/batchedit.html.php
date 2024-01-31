@@ -98,7 +98,7 @@ formBatchPanel
     (
         set::name('pri'),
         set::label($lang->todo->pri),
-        set::width('60px'),
+        set::width('80px'),
         set::control('priPicker'),
         set::items($lang->todo->priList)
     ),
