@@ -5,13 +5,21 @@ global $lang;
 $fields = defineFieldList('program.edit', 'program');
 
 $isLongTime = data('program.end') && data('program.end') == LONG_TIME;
-$fields->field('begin')
+$fields->field('dateRange')
     ->checkbox(array('text' => $lang->project->longTime, 'name' => 'longTime', 'checked' => $isLongTime))
-    ->itemBegin('begin')->require()->type('datePicker')->value(data('program.begin'))->placeholder($lang->project->begin)->itemEnd()
-    ->itemBegin()->type('addon')->label($lang->project->to)->text($lang->colon)->itemEnd()
-    ->itemBegin('end')->require()->type('datePicker')->value(data('program.end'))->placeholder($lang->project->end)->disabled($isLongTime)
-    ->menu(array('items' => jsRaw('window.getDateMenu')))
-    ->itemEnd();
+    ->controlBegin('dateRangePicker')
+    ->beginName('begin')
+    ->beginPlaceholder($lang->project->begin)
+    ->beginValue(data('program.begin'))
+    ->endName('end')
+    ->endPlaceholder($lang->project->end)
+    ->endValue(data('program.end'))
+    ->endDisabled($isLongTime)
+    ->endList($lang->execution->endList)
+    ->controlEnd()
+    ->tip(' ')
+    ->tipProps(array('id' => 'dateTip'))
+    ->tipClass('text-warning hidden');
 
 $fields->field('acl')
     ->items(data('program.parent') ? $lang->program->subAclList : $lang->program->aclList)
