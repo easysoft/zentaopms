@@ -22,7 +22,7 @@ class count_of_daily_run_case extends baseCalc
 {
     public $dataset = 'getTestResults';
 
-    public $fieldList = array('t1.id', 't1.`date`');
+    public $fieldList = array('t1.id', 't1.date');
 
     public $result = array();
 
