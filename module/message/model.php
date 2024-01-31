@@ -194,6 +194,7 @@ class messageModel extends model
         if(empty($toList) and $objectType == 'meeting') $toList = $object->host . $object->participant;
         if(empty($toList) and $objectType == 'mr') $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
+        if(empty($toList) and $objectType == 'feedback') $toList = $object->openedBy;
         if(empty($toList) and $objectType == 'release')
         {
             /* Get notifiy persons. */
@@ -212,7 +213,6 @@ class messageModel extends model
         }
 
         if($toList == 'closed') $toList = '';
-        if($objectType == 'feedback' and $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
         if($objectType == 'story' and $actionID)
         {
             $action = $this->loadModel('action')->getById($actionID);
