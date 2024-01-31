@@ -2367,11 +2367,11 @@ class executionModel extends model
     public function updateProducts(int $executionID, object|array $postData): bool
     {
         $this->loadModel('user');
-        $products    = array_filter(zget($postData, 'products', array()));
+        $products    = array_filter(array_merge(zget($postData, 'products', array()), zget($postData, 'otherProducts', array())));
         $branches    = zget($postData, 'branch', array(0));
         $plans       = zget($postData, 'plans',  array());
         $oldProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchGroup('product', 'branch');
-        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->exec();
+        if(empty($postData['otherProducts'])) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->exec();
         $members = array_keys($this->getTeamMembers($executionID));
         if(empty($products))
         {
