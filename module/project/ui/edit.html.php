@@ -67,6 +67,7 @@ formGridPanel
     on::change('[name=parent], [name=budget]', 'checkBudget'),
     on::change('[name^=products]', 'toggleStageBy'),
     set::modeSwitcher(false),
+    set::defaultMode('full'),
     set::title($lang->project->edit),
     set::fields($fields)
 );
