@@ -20,10 +20,11 @@ class tabPane extends wg
     protected function created()
     {
         $key = $this->prop('key');
-
-        if(is_null($key)) $key = $this->gid;
-        else              $key = $this->gid . '-' . $key;
-        $this->setProp('key', $key);
+        if(is_null($key))
+        {
+            $key = $this->gid;
+            $this->setProp('key', $key);
+        }
     }
 
     protected function build(): wg
