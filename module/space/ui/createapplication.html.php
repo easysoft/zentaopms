@@ -39,7 +39,7 @@ if($config->inQuickon)
     formPanel
     (
         setClass('storePanel'),
-        set::id('createStoreAppForm'),
+        set::formID('createStoreAppForm'),
         set::title($lang->space->install),
         $appID ? set::url(createLink('instance', 'install', "appID={$appID}")) : null,
         $appID ? set::submitBtnText($lang->instance->install) : null,

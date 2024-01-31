@@ -8,6 +8,7 @@ $lang->instance->ajaxStart        = '启动应用';
 $lang->instance->ajaxStop         = '关闭应用';
 $lang->instance->ajaxUninstall    = '卸载应用';
 $lang->instance->name             = '名称';
+$lang->instance->customName       = '名称';
 $lang->instance->appName          = '应用类型';
 $lang->instance->version          = '版本';
 $lang->instance->status           = '状态';
