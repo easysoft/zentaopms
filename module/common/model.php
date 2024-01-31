@@ -1097,6 +1097,7 @@ class commonModel extends model
             /* Check whether the menu of this group have permissions. If yes, point to them. */
             if($display == false and isset($lang->$group->menu) and $config->vision != 'or')
             {
+                $acls = $app->user->rights['acls'];
                 foreach($lang->$group->menu as $menu)
                 {
                     if(!isset($menu['link'])) continue;
@@ -1105,7 +1106,7 @@ class commonModel extends model
                     if(count($linkPart) < 3) continue;
                     list($label, $module, $method) = $linkPart;
 
-                    if(common::hasPriv($module, $method))
+                    if(common::hasPriv($module, $method) && isset($acls['views'][$group]))
                     {
                         $display       = true;
                         $currentModule = $module;
