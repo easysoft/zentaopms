@@ -21,8 +21,8 @@ $checkDeltaChecked = jsCallback()->do(<<<'JS'
     const beginDate = new Date($('[name=begin]').zui('datePicker').$.value);
     const endDate   = new Date($('[name=end]').zui('datePicker').$.value);
     const days      = parseInt((endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-    $('[name=delta]').prop('checked', false);
-    if($('#delta' + days).length > 0) $('#delta' + days).prop('checked', true);
+    if(parseInt($('input[name=delta]:checked').val()) != 999) $('[name=delta]').prop('checked', false);
+    if($('#delta' + days).length > 0 && days != 999) $('#delta' + days).prop('checked', true);
 JS);
 
 formPanel
@@ -137,6 +137,7 @@ formPanel
             set::multiple(true)
         )
     ),
+    formHidden('LONG_TIME', LONG_TIME),
     formHidden('parent', 0),
     formHidden('model', $model),
     formHidden('vision', 'lite'),
