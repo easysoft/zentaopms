@@ -18,6 +18,8 @@ jsVar('expiredLang', $lang->productplan->expired);
 featureBar
 (
     set::current($browseType),
+    set::module('productplan'),
+    set::method('browse'),
     set::linkParams("productID={$productID}&branch={$branch}&browseType={key}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li(searchToggle(set::module('productplan'), set::open($browseType == 'bySearch')))
 );
