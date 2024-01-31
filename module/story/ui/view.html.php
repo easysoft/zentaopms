@@ -11,12 +11,16 @@ declare(strict_types=1);
 namespace zin;
 
 $confirmDelete = $this->lang->story->confirmDelete;
-if($story->type == 'requirement') $confirmDelete = str_replace($lang->SRCommon, $lang->URCommon, $confirmDelete);
+if($story->type == 'requirement')
+{
+    $confirmDelete = str_replace($lang->SRCommon, $lang->URCommon, $confirmDelete);
+    $lang->story->unlinkStory = str_replace($lang->URCommon, $lang->SRCommon, $lang->story->unlinkStory);
+}
 
 data('branchID', $story->branch);
 data('activeMenuID', $story->type);
 jsVar('relievedTip', $lang->story->relievedTip);
-jsVar('unlinkStoryTip', $lang->story->unlinkStory);
+jsVar('unlinkStoryTip', $story->type == 'story' ? str_replace($lang->SRCommon, $lang->URCommon, $lang->story->unlinkStory) : $lang->story->unlinkStory);
 jsVar('confirmDeleteTip', $confirmDelete);
 jsVar('storyType', $story->type);
 

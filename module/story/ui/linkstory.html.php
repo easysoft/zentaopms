@@ -29,9 +29,9 @@ $cols['title']['flex']         = 1;
 $cols = array_map(function($col){unset($col['sortType']); return $col;}, $cols);
 
 $data = array();
-foreach($stories2Link as $story) $data[] = $this->story->formatStoryForList($story);
+foreach($stories2Link as $linkStory) $data[] = $this->story->formatStoryForList($linkStory);
 
-modalHeader(set::title($lang->story->linkStory));
+modalHeader(set::title($lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story)));
 
 searchForm
 (
