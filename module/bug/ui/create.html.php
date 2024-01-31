@@ -14,7 +14,7 @@ namespace zin;
 $fields = useFields('bug.create');
 if(!empty($executionType) && $executionType == 'kanban') $fields->merge('bug.kanban');
 
-$fields->autoLoad('product',   'product,module,openedBuild,execution,project,story,task,assignedTo')
+$fields->autoLoad('product')
        ->autoLoad('branch',    'module,openedBuild,execution,project,story,task,assignedTo')
        ->autoLoad('module',    'assignedTo,story')
        ->autoLoad('project',   'project,openedBuild,execution,story,task,assignedTo')
