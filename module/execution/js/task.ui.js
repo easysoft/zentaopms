@@ -36,7 +36,7 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
  */
 window.setStatistics = function(element, checkedIDList)
 {
-    if(typeof element != 'undefined') return;
+    if(typeof element == 'undefined') return;
 
     let totalLeft     = 0;
     let totalEstimate = 0;
