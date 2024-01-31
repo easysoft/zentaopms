@@ -2029,7 +2029,7 @@ class docModel extends model
             $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
             $objectID = isset($doclib->{$type}) ? $doclib->{$type} : 0;
         }
-        $isExecution    = $this->app->tab == 'doc' && $type == 'execution';
+        $isExecution    = in_array($this->app->tab, array('project', 'doc')) && $type == 'execution';
         $type           = $isExecution ? 'project' : $type;
         $objectDropdown = array('text' => '', 'link' => '');
         $appendObject   = $objectID;
