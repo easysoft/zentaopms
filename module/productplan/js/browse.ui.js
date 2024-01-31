@@ -218,7 +218,7 @@ window.getItem = function(info)
         info.item.suffixClass = 'label danger rounded-xl' + (info.item.status == 'doing' ? ' mr-8' : '');
     }
     info.item.icon         = 'delay';
-    info.item.titleAttrs   = {'class': 'text-black clip', 'title' : info.item.title};
+    info.item.titleAttrs   = {'class': 'text-black clip', 'title' : info.item.title, 'data-app': currentTab};
     info.item.content      = {html: info.item.desc};
     info.item.contentClass = 'text-gray';
     info.item.footer       = {html: "<div class='flex'><span class='label label-" + info.item.status + "'>" + info.item.statusLabel + "</span><span class='label gray-pale ml-2'>" + info.item.dateLine + "</span></div>"};

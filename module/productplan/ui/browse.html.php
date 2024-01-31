@@ -22,4 +22,5 @@ jsVar('productID',       $productID);
 jsVar('productplanLang', $lang->productplan);
 jsVar('privs',           $privs);
 jsVar('rawModule',       $app->rawModule);
+jsVar('currentTab',      $app->tab);
 include("browseby{$viewType}.html.php");
