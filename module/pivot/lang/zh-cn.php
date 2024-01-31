@@ -70,7 +70,7 @@ $lang->pivot->item        = '条目';
 $lang->pivot->percent     = '百分比';
 $lang->pivot->undefined   = '未设定';
 $lang->pivot->project     = $lang->projectCommon;
-$lang->pivot->PO          = 'PO';
+$lang->pivot->PO          = '产品负责人';
 
 $lang->pivot->showOriginItem = '展示原始条目';
 
