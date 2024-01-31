@@ -79,7 +79,7 @@ formGridPanel
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
     on::change('[name^=products]', 'toggleStageBy'),
     on::change('[name=parent], [name=budget]', 'checkBudget'),
-    on::inited()->triggerEvent('$element.find("[name=longTime]")', 'change'),
+    on::init()->do('setTimeout(() => $element.find("[name=longTime]").trigger("change"), 500)'),
     set::title($lang->project->create),
     set::fullModeOrders(array('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin')),
     set::fields($fields),
