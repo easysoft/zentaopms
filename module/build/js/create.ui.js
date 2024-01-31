@@ -7,7 +7,7 @@ $().ready(function()
         $('#name').val($(this).text());
     });
 
-    $(document).off('change', '#product, #branch').on('change', '#product, #branch', function()
+    $(document).off('change', '[name=product], [name^=branch]').on('change', '[name=product], [name^=branch]', function()
     {
         let projectID = $('input[name=project]').val();
         let productID = $('input[name=product]').val();
@@ -18,6 +18,7 @@ $().ready(function()
                 data = JSON.parse(data);
                 const $buildsPicker = $('select[name^=builds]').zui('picker');
                 $buildsPicker.render({items: data, multiple: true});
+                $buildsPicker.$.setValue('');
                 $('select[name^=builds]').attr('data-placeholder', multipleSelect);
             }
         });

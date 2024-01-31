@@ -11,22 +11,22 @@ window.loadBranches = function(productID)
     if(!productID) productID = $('input[name=product]').val();
     if($('input[name=isIntegrated]:checked').val() == 'yes')
     {
-        $('#branch').closest('.form-row').addClass('hidden');
+        $('[name^=branch]').closest('.form-row').addClass('hidden');
         return false;
     }
 
     $.get($.createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + $('input[name=execution]').val() + '&withMainBranch=true&isSiblings=no&fieldID=0&multiple=multiple'), function(data)
     {
-        if(data)
+        if(data.length > 0)
         {
-            data = JSON.parse(data);
-            const $branchPicker = $('input[name^=branch]').zui('picker');
+            const $branchPicker = $('[name^=branch]').zui('picker');
             $branchPicker.render({items: data});
-            $('#branch').closest('.form-row').removeClass('hidden');
+            $branchPicker.$.setValue('');
+            $('[name^=branch]').closest('.form-row').removeClass('hidden');
         }
         else
         {
-            $('#branch').closest('.form-row').addClass('hidden');
+            $('[name^=branch]').closest('.form-row').addClass('hidden');
         }
-    });
+    }, 'json');
 }

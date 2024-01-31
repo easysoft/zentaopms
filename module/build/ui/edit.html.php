@@ -30,7 +30,7 @@ if(!$hidden)
             set::items($products),
             set::required(true),
             set::disabled($build->stories || $build->bugs || $testtaskID),
-            on::change('loadBranches')
+            on::change('changeProduct')
         ),
         $build->stories || $build->bugs || $testtaskID ? formGroup
         (
@@ -109,7 +109,8 @@ formPanel
                 set::name('branch[]'),
                 set::value($build->branch),
                 set::items($branchTagOption),
-                set::multiple(true)
+                set::multiple(true),
+                on::change('changeBranches')
             )
         )
     ),
