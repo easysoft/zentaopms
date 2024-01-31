@@ -121,29 +121,29 @@ formPanel
             )
         )
     ),
-    formGroup
-    (
-        set::label(''),
-        set::width('2/3'),
-        inputGroup
-        (
-            setClass('w-1'),
-            span
-            (
-                setClass('input-group-addon'),
-                $lang->task->common . $space . $lang->task->logEfforts
-            ),
-            input
-            (
-                setID("rules[task][logEfforts]"),
-                set::name("rules[task][logEfforts]"),
-                set::value($config->repo->rules['task']['logEfforts'])
-            )
-        )
-    ),
     formRow
     (
-        setClass('mt-0'),
+        setClass('flex-wrap'),
+        formGroup
+        (
+            set::label(''),
+            set::width('2/3'),
+            inputGroup
+            (
+                setClass('w-1'),
+                span
+                (
+                    setClass('input-group-addon'),
+                    $lang->task->common . $space . $lang->task->logEfforts
+                ),
+                input
+                (
+                    setID("rules[task][logEfforts]"),
+                    set::name("rules[task][logEfforts]"),
+                    set::value($config->repo->rules['task']['logEfforts'])
+                )
+            )
+        ),
         formGroup
         (
             set::label($lang->repo->manHourRule),
@@ -193,11 +193,7 @@ formPanel
                     set::value($config->repo->rules['unit']['consumed'])
                 )
             )
-        )
-    ),
-    formRow
-    (
-        setClass('mt-0'),
+        ),
         formGroup
         (
             set::label(''),
