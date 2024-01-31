@@ -145,11 +145,11 @@ formPanel
     formGroup
     (
         set::label($lang->entry->desc),
-        editor
+        control
         (
+            set::type('textarea'),
             set::name('desc'),
-            set::rows('3'),
-            html($entry->desc)
+            set::value($entry->desc)
         )
     )
 );
