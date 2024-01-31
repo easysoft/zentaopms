@@ -49,6 +49,11 @@ jsVar('unlinkbugurl', helper::createLink($releaseModule, 'unlinkBug', "releaseID
 
 $config->release->dtable->bug->fieldList['resolvedBuild']['map'] = $builds;
 $bugTableData = initTableData($bugs, $config->release->dtable->bug->fieldList, $this->release);
+$bugTableData = array_map(function($bug)
+{
+    if(helper::isZeroDate($bug->resolvedDate)) $bug->resolvedDate = '';
+    return $bug;
+}, $bugTableData);
 
 $canBatchUnlinkBug = $canBeChanged && common::hasPriv($releaseModule, 'batchUnlinkBug');
 $canBatchCloseBug  = $canBeChanged && common::hasPriv('bug', 'batchClose');
@@ -64,6 +69,11 @@ jsVar('unlinkleftbugurl', helper::createLink($releaseModule, 'unlinkBug', "relea
 $releaseBuild = array();
 foreach($release->builds as $build) $releaseBuild[] = $build->name;
 $leftBugTableData = initTableData($leftBugs, $config->release->dtable->leftBug->fieldList, $this->release);
+$leftBugTableData = array_map(function($bug)
+{
+    if(helper::isZeroDate($bug->resolvedDate)) $bug->resolvedDate = '';
+    return $bug;
+}, $leftBugTableData);
 if(commonModel::hasPriv($releaseModule, 'unlinkBug'))
 {
     foreach($leftBugTableData as $leftBug)
