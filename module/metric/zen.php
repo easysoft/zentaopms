@@ -210,7 +210,7 @@ class metricZen extends metric
                     $uniqueKey = $this->getUniqueKeyByRecord($record);
                     if(!isset($initRecords[$uniqueKey]))
                     {
-                        $initRecords[$uniqueKey] = $record;
+                        // $initRecords[$uniqueKey] = $record;
                         continue;
                     }
 

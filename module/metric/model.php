@@ -1098,8 +1098,9 @@ class metricModel extends model
                 break;
             case 'execution':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
-                    ->where('deleted')->eq(0)
-                    ->andWhere('type')->in('sprint,stage')
+                    ->where('deleted')->eq('0')
+                    ->andWhere('type')->in('sprint,stage,kanban')
+                    ->andWhere('multiple')->eq('1')
                     ->fetchPairs();
                 break;
             case 'code':
