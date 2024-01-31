@@ -19,6 +19,11 @@ jsVar('productID', $productID);
 
 !isAjaxRequest() && dropmenu();
 
+foreach(explode(',', $this->config->story->create->requiredFields) as $requiredField)
+{
+    if(isset($customFields[$requiredField]) and strpos(",{$showFields},", ",{$requiredField},") === false) $showFields .= ',' . $requiredField;
+}
+
 /* Generate fields for the batch create form. */
 $fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $showFields)
 {
