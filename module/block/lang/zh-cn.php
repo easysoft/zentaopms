@@ -378,8 +378,8 @@ $lang->block->typeList->case['assigntome'] = '指派给我';
 $lang->block->typeList->case['openedbyme'] = '由我创建';
 
 $lang->block->typeList->story['assignedTo'] = '指派给我';
-$lang->block->typeList->story['openedBy']   = '由我创建';
 $lang->block->typeList->story['reviewBy']   = '待我评审';
+$lang->block->typeList->story['openedBy']   = '由我创建';
 $lang->block->typeList->story['reviewedBy'] = '我评审过';
 $lang->block->typeList->story['closedBy']   = '由我关闭';
 
