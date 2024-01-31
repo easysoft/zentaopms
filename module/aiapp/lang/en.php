@@ -32,7 +32,6 @@ $lang->aiapp->clearContext     = 'The context content has been cleared.';
 $lang->aiapp->newChatTip       = 'Please enter the fields on the left to start a new conversation.';
 $lang->aiapp->disabledTip      = 'The current mini program is disabled.';
 $lang->aiapp->continueasking   = 'Continue asking';
-$lang->aiapp->modelList        = array('openai-gpt35' => 'openai / GPT-3.5');
 
 $lang->aiapp->miniProgramSquare  = 'Browse AI Mini Program List';
 $lang->aiapp->collectMiniProgram = 'Collect AI Mini Program';

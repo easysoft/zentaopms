@@ -14,6 +14,8 @@ jsVar('postLink', createLink('aiapp', 'miniProgramChat', "id={$miniProgram->id}"
 jsVar('messages', $messages);
 jsVar('isAppDisabled', $miniProgram->published === '0');
 
+$app->loadLang('ai');
+
 $isDeleted = $miniProgram->deleted === '1';
 
 $formGroups = array();
@@ -231,7 +233,7 @@ div(
                         setStyle(array('color' => 'var(--color-slate-700)')),
                         $lang->aiapp->modelCurrent
                     ),
-                    span($lang->aiapp->modelList[$miniProgram->model]),
+                    span($lang->ai->models->typeList[$miniProgram->model]),
                 ),
                 empty($formGroups)
                     ? null

@@ -442,7 +442,6 @@ $lang->ai->miniPrograms->categoryList      = array('work' => '工作', 'personal
 $lang->ai->miniPrograms->allCategories     = array('' => '所有分组');
 $lang->ai->miniPrograms->collect           = '收藏';
 $lang->ai->miniPrograms->more              = '更多';
-$lang->ai->miniPrograms->modelList         = array('openai-gpt35' => 'OpenAI / GPT-3.5');
 $lang->ai->miniPrograms->iconModification  = '图标修改';
 $lang->ai->miniPrograms->customBackground  = '自定义背景色';
 $lang->ai->miniPrograms->customIcon        = '自定义icon';
