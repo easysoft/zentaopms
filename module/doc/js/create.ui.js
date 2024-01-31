@@ -16,6 +16,7 @@ $(function()
                 return false;
             }
         }
+        $('span.showTitle').text($('#title').val());
 
         $('#status').val('normal');
     });

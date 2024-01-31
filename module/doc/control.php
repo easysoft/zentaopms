@@ -349,7 +349,7 @@ class doc extends control
         if(!$libID && !empty($libs)) $libID = key($libs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
 
-        $this->docZen->setObjectsForCreate($lib->type, $lib, $unclosed, $objectID);
+        $this->docZen->setObjectsForCreate($lib->type, $lib, $unclosed, zget($lib, $lib->type, 0));
 
         $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->create;
         $this->view->objectType       = $objectType;

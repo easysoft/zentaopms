@@ -137,6 +137,14 @@ else
                 on::change('#modalBasicInfo [name=product]',   "loadObjectModules"),
                 on::change('#modalBasicInfo [name=project]',   "loadExecutions"),
                 on::change('#modalBasicInfo [name=execution]', "loadObjectModules"),
+                formGroup
+                (
+                    setClass('flex items-center'),
+                    set::label($lang->doc->title),
+                    set::name('showTitle'),
+                    set::control(array('type' => 'input', 'className' => 'hidden')),
+                    span(setClass('showTitle'))
+                ),
                 $projectRow,
                 ($lib->type == 'execution') ? formGroup
                 (

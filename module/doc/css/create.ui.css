@@ -16,3 +16,4 @@
 .m-doc-create #main > .container {max-width: initial!important; padding: 0!important}
 
 .form{display: flex; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; padding: 0px 2px 2px 2px}
+[data-name='showTitle'].items-center {align-items: center !important;}
