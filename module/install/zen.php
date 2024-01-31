@@ -399,10 +399,10 @@ class installZen extends install
 
                 session_start();
                 $this->session->set('installing', true);
-                $_SESSION['installing'] = true;
             }
         }
 
+        $_SESSION['installing'] = true;
         return $customSession;
     }
 
