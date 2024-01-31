@@ -111,7 +111,6 @@ $budgetHidden = isset($config->project->{$app->rawMethod}->requiredFields) && st
 $budgetFuture = data('project.budget') !== null && !data('project.budget') && !$budgetHidden;
 $fields->field('budget')
     ->label($lang->project->budget)
-    ->foldable()
     ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, data('project.budgetUnit') ? data('project.budgetUnit') : $currency), 'className' => 'btn ghost' . ($budgetFuture || data('parentProgram') ? ' disabled pointer-events-none' : '')), 'prefixWidth' => 34, 'disabled' => $budgetFuture))
     ->placeholder(data('parentProgram') && !empty(data('parentProgram.budget')) ? $lang->project->parentBudget . zget($lang->project->currencySymbol, $currency) . data('parentProgram.budget') : '')
     ->tip(' ')
