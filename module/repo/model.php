@@ -657,6 +657,17 @@ class repoModel extends model
         $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
+        /* Update repo table for old version. */
+        if(empty($repo->serviceHost) && in_array($repo->SCM, $this->config->repo->gitServiceTypeList))
+        {
+            $repo->serviceHost    = $repo->client;
+            $repo->serviceProject = $repo->extra;
+            $this->dao->update(TABLE_REPO)->data($repo)->where('id')->eq($repoID)->exec();
+
+            /* Add webhook. */
+            if($repo->SCM == 'Gitlab') $this->loadModel('gitlab')->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+        }
+
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
         $repo->codePath = $repo->path;
         if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo);
@@ -1745,6 +1756,8 @@ class repoModel extends model
     public function processGitService(object $repo, bool $getCodePath = false): object
     {
         $service = $this->loadModel('pipeline')->getByID((int)$repo->serviceHost);
+        if(!$service) return $repo;
+
         if($repo->SCM == 'Gitlab')
         {
             if($getCodePath)
