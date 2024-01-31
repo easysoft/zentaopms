@@ -2371,7 +2371,7 @@ class executionModel extends model
         $branches    = zget($postData, 'branch', array(0));
         $plans       = zget($postData, 'plans',  array());
         $oldProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchGroup('product', 'branch');
-        if(empty($postData['otherProducts'])) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->exec();
+        if(empty($_POST['otherProducts'])) $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->exec();
         $members = array_keys($this->getTeamMembers($executionID));
         if(empty($products))
         {
