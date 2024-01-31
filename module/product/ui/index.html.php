@@ -21,7 +21,7 @@ if(empty($products))
             $lang->product->noProduct
         ),
         a(
-            setClass('btn ghost text-primary'),
+            setClass('btn primary-pale border-primary'),
             icon('plus'),
             set::href(createLink('product', 'create')),
             $lang->product->create
