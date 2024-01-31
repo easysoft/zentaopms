@@ -77,3 +77,15 @@ ALTER table `zt_metric` ADD `lastCalcRows` int NOT NULL DEFAULT 0 AFTER `order`;
 ALTER table `zt_metric` ADD `lastCalcTime` datetime DEFAULT NULL AFTER `lastCalcRows`;
 
 UPDATE `zt_metric` SET `desc` = '按系统统计的年度关闭执行数是指在关闭时间在某年的执行数。该度量项可以反映团队或组织在某年的工作效率。较高的年度关闭执行数可能表示团队或组织在完成任务方面表现出较高的效率，反之则可能需要审查工作流程和资源分配情况，以提高执行效率。' WHERE `code` = 'count_of_annual_closed_execution';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n状态为已完成\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_finished_task';
+UPDATE `zt_metric` SET `definition` = '复用：\r\n按系统统计的任务总数\r\n按系统统计的已完成任务数\r\n公式：\r\n按系统统计的未完成任务数=按系统统计的任务总数-按系统统计的已完成任务数' WHERE `code` = 'count_of_unfinished_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n状态为已关闭\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_closed_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n创建时间为某年\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_annual_created_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n完成时间为某年\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_annual_finished_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n创建时间为某年某月\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_monthly_created_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n完成时间为某年某月\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_monthly_finished_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务的预计工时数求和\r\n过滤父任务\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'estimate_of_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务的消耗工时数求和\r\n过滤父任务\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'consume_of_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务的剩余工时数求和\r\n过滤父任务\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'left_of_task';
+UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n完成时间为某日\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_daily_finished_task';
