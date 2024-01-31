@@ -1251,7 +1251,7 @@ class testtaskModel extends model
         $runs = $this->loadModel('testcase')->appendData($runs, 'run');
         foreach($runs as $id => $run)
         {
-            $run->run     = $run->id;
+            $run->run     = $id;
             $run->id      = 'case_' . $run->case;
             $run->parent  = 0;
             $run->isScene = false;
@@ -1980,7 +1980,7 @@ class testtaskModel extends model
 
                 common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=executionID=$task->execution,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->run,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
 
-                common::printIcon('testtask', 'runCase', "id=$run->run", $run, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'runCase', "id=$run->run&caseID=$run->case", $run, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
                 common::printIcon('testtask', 'results', "id=$run->run", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
 
                 if(common::hasPriv('testtask', 'unlinkCase', $run))
