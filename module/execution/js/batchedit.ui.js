@@ -1,16 +1,17 @@
 window.renderRowData = function($row, index, row)
 {
-    if(row.type == 'stage')
+    if(row.type == 'stage' || row.attribute != '')
     {
+        const parentType = row.grade > 1 && parents[row.parent] ? parents[row.parent].attribute : '';
         /* If is stage, modify lifetime to attribute. */
-
         let stageItems = [];
         for(let key in stageList) stageItems.push({value: key, text: stageList[key]});
 
         $row.find('[data-name="lifetime"]').find('.picker-box').on('inited', function(e, info)
         {
             let $attribute = info[0];
-            $attribute.render({items: stageItems, required: true, name: 'attribute'});
+            $attribute.render({items: stageItems, required: true, name: 'attribute', disabled: row.grade > 1 && parentType != 'mix'});
+            $(e.target).attr('data-parent', row.parent);
         });
     }
 
@@ -50,4 +51,24 @@ window.changeProject = function(e)
             $("#syncStories" + executionID).val(res ? 'yes' : 'no');
         });
     }
+}
+
+window.changeAttribute = function(e)
+{
+    const $attribute = $(e.target);
+    const attribute  = $attribute.val();
+    const parentID   = $attribute.closest('tr').find('input[name^=id]').val();
+    $('[data-parent="' + parentID + '"]').each(function()
+    {
+        const $attributePicker = $(this).find('input[name^=attribute]').zui('picker');
+        if(attribute == 'mix')
+        {
+            $attributePicker.render({disabled: false});
+        }
+        else
+        {
+            $attributePicker.render({disabled: true});
+            $attributePicker.$.setValue(attribute);
+        }
+    })
 }

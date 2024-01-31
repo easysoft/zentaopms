@@ -16,6 +16,7 @@ $showMethod = $app->tab == 'project' && isset($project) && ($project->model == '
 jsVar('weekend', $config->execution->weekend);
 jsVar('stageList', $lang->stage->typeList);
 jsVar('confirmSync', $lang->execution->confirmSync);
+jsVar('parents', $parents);
 
 formBatchPanel
 (
@@ -28,6 +29,7 @@ formBatchPanel
     on::change('[data-name="project"]', 'changeProject'),
     on::change('[data-name="begin"]', "computeWorkDays($(e.target).attr('name'))"),
     on::change('[data-name="end"]', "computeWorkDays($(e.target).attr('name'))"),
+    on::change('[data-name="attribute"]', 'changeAttribute'),
     formBatchItem
     (
         set::name('id'),
@@ -62,10 +64,10 @@ formBatchPanel
     (
         set::name('type'),
         set::label($lang->execution->method),
-        set::control('picker'),
+        set::control(array('type' => 'picker', 'required' => true)),
         set::items($lang->execution->typeList),
         set::disabled(true),
-        set::width('80px')
+        set::width('100px')
     ) : null,
     $setCode ? formBatchItem
     (

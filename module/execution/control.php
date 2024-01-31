@@ -1264,6 +1264,13 @@ class execution extends control
             $customFields[$field] = $field == 'lifetime' ? $this->lang->execution->type : str_replace($this->lang->executionCommon, $this->lang->execution->common, $this->lang->execution->$field);
         }
 
+        $parentIdList = array();
+        foreach($executions as $execution)
+        {
+            if($execution->parent == 0) continue;
+            $parentIdList[] = $execution->parent;
+        }
+
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->execution->custom->batchEditFields;
         $this->view->title        = $this->lang->execution->batchEdit;
@@ -1275,6 +1282,7 @@ class execution extends control
         $this->view->qdUsers      = $qdUsers;
         $this->view->rdUsers      = $rdUsers;
         $this->view->from         = $this->app->tab;
+        $this->view->parents      = $this->execution->getByIdList($parentIdList);
         $this->display();
     }
 
