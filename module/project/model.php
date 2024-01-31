@@ -629,6 +629,7 @@ class projectModel extends model
             ->beginIF(!empty($productIdList))->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF(!empty($status))->andWhere('t2.status')->in($status)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->fetchGroup('product');
     }
 
