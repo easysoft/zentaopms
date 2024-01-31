@@ -135,7 +135,10 @@ class on extends jsCallback
         $selector   = $this->selector ? (',' . static::json($this->selector)) : '';
 
         $callback = parent::toJS($joiner);
-        return "\$element.$bindMethod('{$this->event}.zin.on'$selector,$callback);";
+        $events   = array_map(function($event){return $event . '.zin.on';}, explode('_', $this->event));
+        $events   = implode(' ', $events);
+
+        return "\$element.$bindMethod('$events'$selector,$callback);";
     }
 
     /**
