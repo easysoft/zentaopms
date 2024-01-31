@@ -100,4 +100,4 @@ r($task->recordWorkhourTest(3, $finishTaskEffort))        && p('0:field,old,new'
 r($task->recordWorkhourTest(4, $normalTaskEffort))        && p('2:field,old,new') && e('status,done,doing');             // 正常记录工时
 r($task->recordWorkhourTest(6, $normalTaskEffort))        && p('2:field,old,new') && e('status,cancel,doing');           // 正常记录工时
 r($task->recordWorkhourTest(7, $normalTaskEffort))        && p('2:field,old,new') && e('status,closed,doing');           // 正常记录工时
-r($task->recordWorkhourTest(5, $noconsumedTaskEffort))    && p('consumed[1]')     && e('请填写"消耗"');                    // 无消耗时返回提示信息，因为没有填写消耗所以应该提示填写消耗
+r($task->recordWorkhourTest(5, $noconsumedTaskEffort))    && p('consumed[1]')     && e('请填写"耗时"');                    // 无消耗时返回提示信息，因为没有填写消耗所以应该提示填写耗时
