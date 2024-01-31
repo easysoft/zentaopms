@@ -51,7 +51,7 @@ window.getColActions = function(col)
 
     if(firstCol.includes(col.type))
     {
-        if(productID)
+        if(productID || col.type == 'wait')
         {
             actionList.push(
                 {
