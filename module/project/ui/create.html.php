@@ -48,6 +48,14 @@ $modeDropdown = dropdown
     set::items($modelMenuItems)
 );
 
+$handleLongTimeChange = jsCallback()->do(<<<'JS'
+    const endPicker = $element.find('[name=end]').zui('datePicker');
+    const longTime = $element.find('[name=longTime]').prop('checked');
+    endPicker.render({disabled: longTime});
+    if(longTime) endPicker.$.setValue('');
+    $element.find('[name=days]').attr('disabled', longTime ? 'disabled' : null);
+JS);
+
 formGridPanel
 (
     to::titleSuffix($modeDropdown),
@@ -66,11 +74,12 @@ formGridPanel
     on::click('[type=submit]', 'removeAllTips'),
     on::change('[name=parent]')->toggleClass('.productsBox .linkProduct .form-label', 'required', "\$(target).val() > 0"),
     on::change('[name=hasProduct]', 'changeType'),
-    on::change('[name=longTime]')->do('const $endPicker = $("[name=end]").zui("datePicker"); $endPicker.render({disabled: $(target).prop("checked")}); if($(target).prop("checked")){ $endPicker.$.setValue(""); $("[name=days]").attr("disabled", "disabled");} else{ $("[name=days]").removeAttr("disabled");}'),
+    on::change('[name=longTime]', $handleLongTimeChange),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
     on::change('[name^=products]', 'toggleStageBy'),
     on::change('[name=parent], [name=budget]', 'checkBudget'),
+    on::inited()->triggerEvent('$element.find("[name=longTime]")', 'change'),
     set::title($lang->project->create),
     set::fullModeOrders(array('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin')),
     set::fields($fields),
