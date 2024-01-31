@@ -321,9 +321,6 @@ class doc extends control
      */
     public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '')
     {
-        $linkType = $objectType;
-        if($objectType == 'execution' && $this->app->tab != 'execution') $linkType = 'project';
-
         if(!empty($_POST))
         {
             $docLib   = $this->loadModel('doc')->getLibByID($libID);
@@ -347,15 +344,14 @@ class doc extends control
 
         /* Get libs and the default lib ID. */
         $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-        $libs       = $this->doc->getLibs($objectType, "withObject,{$unclosed}", $libID, $objectID);
+        $libs       = $this->doc->getLibs($lib->type, "withObject,{$unclosed}", $libID, $objectID);
         $moduleID   = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         if(!$libID && !empty($libs)) $libID = key($libs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
 
-        $this->docZen->setObjectsForCreate($linkType, $lib, $unclosed, $objectID);
+        $this->docZen->setObjectsForCreate($lib->type, $lib, $unclosed, $objectID);
 
         $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->create;
-        $this->view->linkType         = $linkType;
         $this->view->objectType       = $objectType;
         $this->view->objectID         = zget($lib, $lib->type, 0);
         $this->view->libID            = $libID;
