@@ -10,8 +10,3 @@ window.renderStoryCell = function(result, info)
 
     return result;
 };
-
-window.onSearchLinks = function(type, result)
-{
-    loadComponent('#linkStoryDTable', {url: result.load, component: 'dtable', partial: true});
-};

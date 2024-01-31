@@ -38,7 +38,7 @@ window.showLink = function(type, params, onlyUpdateTable)
         return;
     }
 
-    loadTarget({url: url, target: type + 'DTable'});
+    loadTarget({url: url, target: type});
 };
 
 window.onSearchLinks = function(type, result)
