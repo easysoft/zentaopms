@@ -381,13 +381,15 @@ $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyC
 foreach($stories as $story)
 {
     $story->moduleID = $story->module;
-    $story = $this->story->formatStoryForList($story, $options);
-    if($story->parent > 0)
+    $data[] = $this->story->formatStoryForList($story, $options, $storyType);
+    if(!isset($story->children)) continue;
+
+    /* Children. */
+    foreach($story->children as $key => $child)
     {
-        $story->parent  = 0;
-        $story->isChild = true;
+        $child->moduleID = $child->module;
+        $data[] = $this->story->formatStoryForList($child, $options, $storyType);
     }
-    $data[] = $story;
 }
 
 jsVar('cases', $storyCases);
