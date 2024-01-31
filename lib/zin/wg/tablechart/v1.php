@@ -31,6 +31,7 @@ class tableChart extends wg
 
         return h::tr
         (
+            setClass('text-left'),
             h::th($tableHeaders['item']),
             h::th(set::width('100px'), $tableHeaders['value']),
             h::th(set::width('120px'), $tableHeaders['percent'])
