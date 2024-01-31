@@ -168,6 +168,7 @@ detailBody
                 ),
                 dtable
                 (
+                    setID('finishedStory'),
                     set::cols(array_values($config->release->dtable->story->fieldList)),
                     set::data($storyTableData),
                     set::userMap($users),
@@ -196,6 +197,7 @@ detailBody
                 ),
                 dtable
                 (
+                    setID('resolvedBug'),
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->bug->fieldList)),
                     set::data($bugTableData),
@@ -223,6 +225,7 @@ detailBody
                 ),
                 dtable
                 (
+                    setID('leftBug'),
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->leftBug->fieldList)),
                     set::data($leftBugTableData),

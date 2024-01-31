@@ -37,7 +37,8 @@ window.showLink = function(type, params, onlyUpdateTable)
         loadComponent($('#' + type).find('.dtable').attr('id'), {url: url, component: 'dtable', partial: true});
         return;
     }
-    loadTarget({url: url, target: type});
+
+    loadTarget({url: url, target: type + 'DTable'});
 };
 
 window.onSearchLinks = function(type, result)

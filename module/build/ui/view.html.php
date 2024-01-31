@@ -130,7 +130,7 @@ detailBody
                 ),
                 dtable
                 (
-                    set::id('storyDTable'),
+                    setID('linkStoryDTable'),
                     set::userMap($users),
                     set::cols(array_values($config->build->story->dtable->fieldList)),
                     set::data($stories),
@@ -167,7 +167,7 @@ detailBody
                 ),
                 dtable
                 (
-                    set::id('bugDTable'),
+                    setID('bugDTable'),
                     set::userMap($users),
                     set::cols(array_values($config->build->bug->dtable->fieldList)),
                     set::data($bugs),
