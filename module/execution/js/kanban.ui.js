@@ -53,24 +53,20 @@ window.getColActions = function(col)
     {
         if(productID || col.type == 'wait')
         {
-            actionList.push(
-                {
-                    type: 'dropdown',
-                    icon: 'expand-alt text-primary',
-                    caret: false,
-                    items: buildColCardActions(col),
-                }
-            );
+            actionList.push({
+                type: 'dropdown',
+                icon: 'expand-alt text-primary',
+                caret: false,
+                items: buildColCardActions(col),
+            });
         }
         else
         {
-            actionList.push(
-                {
-                    type: 'ghost',
-                    icon: 'expand-alt text-primary',
-                    onClick: checkProducts
-                }
-            );
+            actionList.push({
+                type: 'ghost',
+                icon: 'expand-alt text-primary',
+                onClick: checkProducts
+            });
         }
     }
 

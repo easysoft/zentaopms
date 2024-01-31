@@ -50,15 +50,15 @@ $canCreateTask      = common::hasPriv('task', 'create') && common::canModify('ex
 $canBatchCreateTask = common::hasPriv('task', 'batchCreate') && common::canModify('execution', $execution);
 $canImportTask      = common::hasPriv('execution', 'importTask') && $execution->multiple && common::canModify('execution', $execution);
 
-$canCreateBug        = $features['qa'] && common::hasPriv('bug', 'create') && common::canModify('execution', $execution);
-$canBatchCreateBug   = $features['qa'] && common::hasPriv('bug', 'batchCreate') && $execution->multiple && common::canModify('execution', $execution);
-$canImportBug        = $features['qa'] && common::hasPriv('execution', 'importBug') && $execution->multiple && common::canModify('execution', $execution);
+$canCreateBug        = $features['qa'] && common::hasPriv('bug', 'create') && common::canModify('execution', $execution) && $productID;
+$canBatchCreateBug   = $features['qa'] && common::hasPriv('bug', 'batchCreate') && $execution->multiple && common::canModify('execution', $execution) && $productID;
+$canImportBug        = $features['qa'] && common::hasPriv('execution', 'importBug') && $execution->multiple && common::canModify('execution', $execution) && $productID;
 $hasBugButton        = $features['qa'] && ($canCreateBug || $canBatchCreateBug);
 
-$canCreateStory      = $features['story'] && common::hasPriv('story', 'create') && common::canModify('execution', $execution);
-$canBatchCreateStory = $features['story'] && common::hasPriv('story', 'batchCreate') && common::canModify('execution', $execution);
-$canLinkStory        = $features['story'] && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct) && common::canModify('execution', $execution);
-$canLinkStoryByPlan  = $features['story'] && common::hasPriv('execution', 'importplanstories') && !empty($project->hasProduct) && common::canModify('execution', $execution);
+$canCreateStory      = $features['story'] && common::hasPriv('story', 'create') && common::canModify('execution', $execution) && $productID;
+$canBatchCreateStory = $features['story'] && common::hasPriv('story', 'batchCreate') && common::canModify('execution', $execution) && $productID;
+$canLinkStory        = $features['story'] && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct) && common::canModify('execution', $execution) && $productID;
+$canLinkStoryByPlan  = $features['story'] && common::hasPriv('execution', 'importplanstories') && !empty($project->hasProduct) && common::canModify('execution', $execution) && $productID;
 $hasStoryButton      = $features['story'] && ($canCreateStory || $canBatchCreateStory || $canLinkStory || $canLinkStoryByPlan);
 
 $hasTaskButton = $canCreateTask || $canBatchCreateTask || $canImportBug;
