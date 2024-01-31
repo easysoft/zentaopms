@@ -59,10 +59,11 @@ $createProgram = function($data)
             (
                 setClass('projectName hidden my-2'),
                 set::label($lang->upgrade->projectName),
+                set::required(true),
                 inputGroup
                 (
                     input(set::name('projectName'), set::value(isset($data->sprintName) ? $data->sprintName : '')),
-                    picker(setID('projects'), set::name('projects'), set::items($data->projects), setClass('picker-field hidden')),
+                    picker(set::required(true), setID('projects'), set::name('projects'), set::items($data->projects), setClass('picker-field hidden')),
                     span
                     (
                         setClass('input-group-addon ' . (count($data->projects) ? '' : 'hidden')),
