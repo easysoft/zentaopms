@@ -52,12 +52,12 @@ $fields->field('begin')
     ->control('inputGroup')
     ->itemBegin('begin')->control('datePicker')->placeholder($lang->project->begin)->value(data('project.begin') ? data('project.begin') : date('Y-m-d'))->required(true)->itemEnd()
     ->item(array('control' => 'span', 'text' => '-'))
-    ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->value(data('project.end'))->className('end-picker')->disabled($isLongTime)->value(data('project.end') == LONG_TIME ? '' : data('project.end'))
+    ->itemBegin('end')->control('datePicker')->placeholder($lang->project->end)->required(true)->value(data('project.end'))->className('end-picker' . (data('copyProject') ? ' has-warning' : ''))->disabled($isLongTime)->value(data('project.end') == LONG_TIME ? '' : data('project.end'))
     ->menu(array('items' => jsRaw('window.getDateMenu')))
     ->itemEnd()
     ->tip(' ')
     ->tipProps(array('id' => 'dateTip'))
-    ->tipClass('text-warning hidden');
+    ->tipClass('text-warning' . (data('copyProject') ? '' : ' hidden'));
 
 $fields->field('days')->label($lang->project->days . $lang->project->daysUnit)->control('input')->disabled($isLongTime)->value(!empty(data('project.days')) ? data('project.days') : '');
 

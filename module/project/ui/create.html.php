@@ -62,7 +62,7 @@ formGridPanel
         ),
         divider(setClass('h-4 mr-4 ml-2 self-center'))
     ),
-    on::click('[name=name], [name=code], [name=end], [name=days], [data-name="parent"] .pick *', 'removeTips'),
+    on::click('[name=name], [name=code], [data-name=begin] .has-warning *, [name=days], [data-name="parent"] .pick *', 'removeTips'),
     on::click('[type=submit]', 'removeAllTips'),
     on::change('[name=parent]')->toggleClass('.productsBox .linkProduct .form-label', 'required', "\$(target).val() > 0"),
     on::change('[name=hasProduct]', 'changeType'),

@@ -33,6 +33,10 @@ if($hasCode)
         ->value($copyProject ? data('copyProject.code') : '');
 }
 
+$fields->field('begin')
+    ->tip($copyProject ? $lang->project->copyProject->endTips : null)
+    ->tipClass('text-warning');
+
 $fields->field('days')
     ->control('input', array('className' => $copyProject ? 'has-warning' : ''))
     ->className($copyProject ? 'has-warning' : '')
