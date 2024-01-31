@@ -49,7 +49,7 @@ $modeDropdown = dropdown
 );
 
 $handleLongTimeChange = jsCallback()->do(<<<'JS'
-    const endPicker = $element.find('[name=end]').zui('datePicker');
+    const endPicker = $element.find('[name=end]').closest('[data-zui-datepicker]').zui('datePicker');
     const longTime = $element.find('[name=longTime]').prop('checked');
     endPicker.render({disabled: longTime});
     if(longTime) endPicker.$.setValue('');
