@@ -180,7 +180,8 @@ form
                     btn
                     (
                         setClass('btn primary'),
-                        on::click('window.saveDoc'),
+                        set::btnType('button'),
+                        setData('dismiss', 'modal'),
                         $lang->save
                     )
                 )
