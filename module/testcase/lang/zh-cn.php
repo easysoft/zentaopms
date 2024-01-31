@@ -302,7 +302,7 @@ $lang->testcase->close = '关闭';
 
 $lang->testcase->xmindImportSetting = '导入特征字符设置';
 $lang->testcase->xmindExportSetting = '导出特征字符设置';
-$lang->testcase->xmindSettingTip    = '特征字符设置后，XMind主题可与禅道测试用例结构相对应。';
+$lang->testcase->xmindSettingTip    = '特征字符设置后，Xmind主题可与禅道测试用例结构相对应。';
 
 $lang->testcase->settingModule = '模块';
 $lang->testcase->settingScene  = '场景';
