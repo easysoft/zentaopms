@@ -33,6 +33,8 @@ class dateRangePicker extends wg
         'endValue?: string',                // 结束日期默认值。
         'beginPlaceholder?: string',        // 开始日期占位文本。
         'endPlaceholder?: string',          // 结束日期占位文本。
+        'beginDisabled?: bool',             // 开始日期禁用。
+        'endDisabled?: bool',               // 结束日期禁用。
         'addon?: string="-"',               // 开始和结束日期之间的分隔符。
         'format?: string',                  // 日期格式。
         'required?: bool',                  // 是否必填。
@@ -44,7 +46,7 @@ class dateRangePicker extends wg
 
     protected function buildBeginProps(): array
     {
-        list($beginName, $beginValue, $beginPlaceholder, $format, $required, $begin) = $this->prop(array('beginName', 'beginValue', 'beginPlaceholder', 'format', 'required', 'begin'));
+        list($beginName, $beginValue, $beginPlaceholder, $format, $required, $begin, $beginDisabled) = $this->prop(array('beginName', 'beginValue', 'beginPlaceholder', 'format', 'required', 'begin', 'beginDisabled'));
 
         $props = array();
         $props['icon']        = '';
@@ -53,13 +55,14 @@ class dateRangePicker extends wg
         $props['placeholder'] = $beginPlaceholder;
         $props['format']      = $format;
         $props['required']    = $required;
+        $props['disabled']    = $beginDisabled;
 
         return is_array($begin) ? array_merge($props, $begin) : $props;
     }
 
     protected function buildEndProps(): array
     {
-        list($endName, $endValue, $endPlaceholder, $format, $required, $end, $endMenu, $endList) = $this->prop(array('endName', 'endValue', 'endPlaceholder', 'format', 'required', 'end', 'endMenu', 'endList'));
+        list($endName, $endValue, $endPlaceholder, $format, $required, $end, $endMenu, $endList, $endDisabled) = $this->prop(array('endName', 'endValue', 'endPlaceholder', 'format', 'required', 'end', 'endMenu', 'endList', 'endDisabled'));
 
         $id = "{$this->gid}_end";
 
@@ -94,6 +97,7 @@ class dateRangePicker extends wg
         $props['placeholder'] = $endPlaceholder;
         $props['format']      = $format;
         $props['required']    = $required;
+        $props['disabled']    = $endDisabled;
         $props['menu']        = $endMenu;
         $props['minDate']     = jsRaw(<<<JS
         () => zui.formatDate($('#$id').closest('.date-range-picker').find('.date-picker>input.pick-value').first().val(), 'yyyy-MM-dd')
