@@ -690,6 +690,11 @@ class executionModel extends model
                 $this->changeProject($execution->project, $oldExecution->project, $executionID, isset($postData->syncStories[$executionID]) ? $postData->syncStories[$executionID] : 'no');
             }
 
+            if(!empty($execution->attribute) && $oldExecution->attribute != $execution->attribute && $execution->attribute != 'mix')
+            {
+                $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($execution->attribute)->where('parent')->eq($executionID)->exec();
+            }
+
             $changedAccounts = array();
             foreach($this->config->execution->ownerFields as $ownerField)
             {
