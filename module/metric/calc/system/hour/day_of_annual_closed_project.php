@@ -52,7 +52,7 @@ class day_of_annual_closed_project extends baseCalc
                 $this->result[$year][$project] = round($days, 4);
             }
         }
-        $records = getRecords(array('year', 'project', 'value'));
+        $records = $this->getRecords(array('year', 'project', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }

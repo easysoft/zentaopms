@@ -22,7 +22,7 @@ class sv_in_waterfall extends baseCalc
 {
     public $dataset = 'getWaterfallTasks';
 
-    public $fieldList = array('t1.id as project', 't2.estimate', 't2.consumed', 't2.`left`');
+    public $fieldList = array('t1.id as project', 't2.estimate', 't2.consumed', 't2.left');
 
     public $result = array();
 
