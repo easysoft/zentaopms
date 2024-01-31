@@ -43,20 +43,43 @@ class storeModel extends model
      */
     public function searchApps(string $orderBy = '', string $keyword = '', array $categories = array(), int $page = 1, int $pageSize = 20): object
     {
+        $apps  = array();
+        $total = 0;
+
         $apiUrl  = $this->config->cloud->api->host;
         $apiUrl .= '/api/market/applist?channel='. $this->config->cloud->api->channel;
         $apiUrl .= "&q=" . rawurlencode(trim($keyword));
         $apiUrl .= "&sort=" . rawurlencode(trim($orderBy));
-        $apiUrl .= "&page=$page";
         $apiUrl .= "&page_size=$pageSize";
         foreach($categories as $category) $apiUrl .= "&category=$category"; // The names of category are same that reason is CNE api is required.
 
-        $result = commonModel::apiGet($apiUrl, array(), $this->config->cloud->api->headers);
-        if($result->code == 200) return $result->data;
+        $pageID = 1;
+        while(true)
+        {
+            $result = commonModel::apiGet("{$apiUrl}&page={$pageID}", array(), $this->config->cloud->api->headers);
+            if(empty($result) || $result->code != 200) break;
+
+            $total = $result->data->total;
+            $apps  = array_merge($apps, $result->data->apps);
+
+            if(count($result->data->apps) < $pageSize) break;
+            $pageID ++;
+        }
+
+        foreach($apps as $index => $app)
+        {
+            if(strpos($app->name, 'zentao') === 0)
+            {
+                $total --;
+                unset($apps[$index]);
+                continue;
+            }
+        }
+        $apps = array_chunk($apps, $pageSize);
 
         $pagedApps = new stdclass();
-        $pagedApps->apps  = array();
-        $pagedApps->total = 0;
+        $pagedApps->apps  = empty($apps[$page - 1]) ? array() : $apps[$page - 1];
+        $pagedApps->total = $total;
         return $pagedApps;
     }
 

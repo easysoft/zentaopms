@@ -81,7 +81,6 @@ class space extends control
             $pagedApps = $this->loadModel('store')->searchApps('', '', array(), 1, 10000);
             foreach($pagedApps->apps as $app)
             {
-                if(strpos($app->name, 'zentao') === 0 || strpos($app->name, 'zdoo') === 0 || strpos($app->name, 'xuanxuan') === 0) continue;
                 if(!$appID && $app->alias == 'GitLab') $defaultApp = $app->id;
 
                 $apps[$app->id] = $app->alias;
