@@ -11,4 +11,9 @@
  */
 class dataview extends control
 {
+    public function __construct(string $moduleName = '', string $methodName = '', string $appName = '')
+    {
+        parent::__construct($moduleName, $methodName, $appName);
+        $this->dao->exec("SET @@sql_mode=''");
+    }
 }

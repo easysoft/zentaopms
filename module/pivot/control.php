@@ -11,6 +11,12 @@
  */
 class pivot extends control
 {
+    public function __construct(string $moduleName = '', string $methodName = '', string $appName = '')
+    {
+        parent::__construct($moduleName, $methodName, $appName);
+        $this->dao->exec("SET @@sql_mode=''");
+    }
+
     /**
      * 透视表首页，跳转到访问透视表页面。
      * The index of pivot, goto preview.

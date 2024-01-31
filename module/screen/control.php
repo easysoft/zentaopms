@@ -11,6 +11,12 @@
  */
 class screen extends control
 {
+    public function __construct(string $moduleName = '', string $methodName = '', string $appName = '')
+    {
+        parent::__construct($moduleName, $methodName, $appName);
+        $this->dao->exec("SET @@sql_mode=''");
+    }
+
     /**
      * 浏览一个维度下的所有大屏。
      * Browse screens of a dimension.
