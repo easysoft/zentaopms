@@ -71,7 +71,7 @@ sidebar
     h::header
     (
         setClass('h-10 flex items-center pl-4 flex-none gap-3'),
-        span(setClass('text-lg font-semibold'), icon('list'), $lang->dev->dbList),
+        span(setClass('text-lg font-semibold'), icon(setClass('pr-2'), 'list'), $lang->dev->dbList),
     ),
     treeEditor(set(array('items' => $tableTree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false)))
 );
