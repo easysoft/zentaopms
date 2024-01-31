@@ -27,7 +27,6 @@ class dateRangePicker extends wg
      */
     protected static array $defineProps = array
     (
-        'id?: string="$GID"',               // 部件ID。
         'beginName?: string',               // 开始日期表单项名称。
         'endName?: string',                 // 结束日期表单项名称。
         'beginValue?: string',              // 开始日期默认值。
@@ -60,7 +59,9 @@ class dateRangePicker extends wg
 
     protected function buildEndProps(): array
     {
-        list($endName, $endValue, $endPlaceholder, $format, $required, $end, $endMenu, $endList, $id) = $this->prop(array('endName', 'endValue', 'endPlaceholder', 'format', 'required', 'end', 'endMenu', 'endList', 'id'));
+        list($endName, $endValue, $endPlaceholder, $format, $required, $end, $endMenu, $endList) = $this->prop(array('endName', 'endValue', 'endPlaceholder', 'format', 'required', 'end', 'endMenu', 'endList'));
+
+        $id = "{$this->gid}_end";
 
         if($endMenu === true || (empty($endMenu) && !empty($endList))) $endMenu = array();
         if(is_array($endMenu) && !empty($endList))
@@ -69,12 +70,12 @@ class dateRangePicker extends wg
             {
                 $endMenu['items'] = jsCallback()
                     ->const('endList', $endList)
-                    ->const('$ele', jsRaw("$('#$id')"))
-                    ->const('beginDate', jsRaw('zui.createDate($ele.find(".date-picker>input").first().val())'))
+                    ->const('$ele', jsRaw("$('#$id').closest('.date-range-picker')"))
+                    ->const('beginDate', jsRaw('zui.createDate($ele.find(".date-picker>input.pick-value").first().val())'))
                     ->do(<<<'JS'
                     return Object.keys(endList).map((key) =>
                     {
-                        const date = zui.addDate(beginDate, key);
+                        const date = zui.addDate(beginDate, key - 1);
                         return {text: endList[key], 'data-set-date': zui.formatDate(date, "yyyy-MM-dd")};
                     });
                     JS);
@@ -87,6 +88,7 @@ class dateRangePicker extends wg
 
         $props = array();
         $props['icon']        = '';
+        $props['id']          = $id;
         $props['name']        = $endName;
         $props['value']       = $endValue;
         $props['placeholder'] = $endPlaceholder;
@@ -94,7 +96,7 @@ class dateRangePicker extends wg
         $props['required']    = $required;
         $props['menu']        = $endMenu;
         $props['minDate']     = jsRaw(<<<JS
-        () => zui.formatDate($('#$id').find('.date-picker>input').first().val(), 'yyyy-MM-dd')
+        () => zui.formatDate($('#$id').closest('.date-range-picker').find('.date-picker>input.pick-value').first().val(), 'yyyy-MM-dd')
         JS);
 
         return is_array($end) ? array_merge($props, $end) : $props;
@@ -114,7 +116,6 @@ class dateRangePicker extends wg
         return div
         (
             setClass('date-range-picker center-row'),
-            setID($this->prop('id')),
             set($this->getRestProps()),
             $begin,
             div(setClass('addon px-2'), $this->prop('addon')),
