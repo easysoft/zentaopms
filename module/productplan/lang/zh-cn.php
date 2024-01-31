@@ -83,9 +83,9 @@ $lang->productplan->confirmRemoveStory = "分支『%s』解除关联后，分支
 $lang->productplan->confirmRemoveBug   = "分支『%s』解除关联后，分支下的%s个Bug将同步从计划中移除，是否解除？";
 
 $lang->productplan->id         = '编号';
-$lang->productplan->product    = $lang->productCommon;
+$lang->productplan->product    = '所属' . $lang->productCommon;
 $lang->productplan->branch     = '平台/分支';
-$lang->productplan->title      = '名称';
+$lang->productplan->title      = '计划名称';
 $lang->productplan->desc       = '描述';
 $lang->productplan->begin      = '开始日期';
 $lang->productplan->end        = '结束日期';
