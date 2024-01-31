@@ -28,7 +28,7 @@ function computeWorkDays(currentID)
     if(beginDate && endDate)
     {
         if(isBatchEdit)  $("input[name=days\\[" + index + "\\]]").val(computeDaysDelta(beginDate, endDate));
-        if(!isBatchEdit) $('#days').val(computeDaysDelta(beginDate, endDate));
+        if(!isBatchEdit) $('[name=days]').val(computeDaysDelta(beginDate, endDate));
     }
     else if($('input[checked="true"]').val())
     {
