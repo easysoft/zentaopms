@@ -351,6 +351,8 @@ class metricZen extends metric
             $pureRow->$pureField = $row->$aliasField;
         }
 
+        if(isset($row->defaultHours)) $pureRow->defaultHours = $row->defaultHours;
+
         return $pureRow;
     }
 
