@@ -86,7 +86,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/4'),
+            set::width(isInModal() ? '1/2' : '1/4'),
             set::name('date'),
             set::label($lang->release->date),
             set::value(helper::today()),
