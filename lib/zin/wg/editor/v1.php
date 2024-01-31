@@ -27,7 +27,7 @@ class editor extends wg
         zen-editor-menu-item > .menu-item {color: #9ea3b0!important;}
         zen-editor-menu-item > .menu-item:hover, zen-editor-menu-item > .menu-item.is-active {color: #fff!important; background-color: var(--color-primary-400)!important;}
         zen-editor-menu-item > .menu-item:has(.color):hover, zen-editor-menu-item > .menu-item:has(.color).is-active {background-color: transparent!important; box-shadow: inset 0 0 0 1px #9ea3b0!important;}
-        .menubar {border-bottom: 1px solid #d8dbde!important; height: 1.5rem; padding: 0.25rem;}
+        .menubar {border-bottom: 1px solid #d8dbde!important; padding: 0.25rem;}
         .tippy-content > div {border: 1px solid #d8dbde!important;}
         .tippy-content zen-editor-menu-item {line-height: normal;}
         .tippy-content zen-editor-menu-item .label {all: unset;}
