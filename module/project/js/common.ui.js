@@ -78,8 +78,8 @@ function computeDaysDelta(date1, date2)
  */
 function computeWorkDays()
 {
-    const begin = $('[name=begin]').val();
-    const end   = $('[name=end]').val();
+    const begin = $('input[name=begin]').val();
+    const end   = $('input[name=end]').val();
 
     $('[name=days]').val(computeDaysDelta(begin, end)).trigger('change');
 
