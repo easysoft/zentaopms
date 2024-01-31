@@ -747,24 +747,27 @@ class upgradeTao extends upgradeModel
      * @access protected
      * @return void
      */
-    protected function setProjectProductsRelation(int $projectID, array $productIdList, array $sprintIdList, bool $isProjectType = false): void
+    protected function setProjectProductsRelation(int $projectID, array $productIdList, array $sprintIdList): void
     {
-        $projectProducts = $this->dao->select('product,branch,plan')->from(TABLE_PROJECTPRODUCT)
-            ->where('project')->in($sprintIdList)
-            ->andWhere('product')->in($productIdList)
-            ->fetchGroup('product', 'branch');
+        $sprintProducts  = $this->dao->select('product,branch,plan')->from(TABLE_PROJECTPRODUCT)->where('project')->in($sprintIdList)->andWhere('product')->in($productIdList)->fetchGroup('product', 'branch');
+        $projectProducts = $this->dao->select('product,branch,plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('product')->in($productIdList)->fetchGroup('product', 'branch');
 
         foreach($productIdList as $productID)
         {
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
-            if(isset($projectProducts[$productID]))
+            if(isset($sprintProducts[$productID]))
             {
-                foreach($projectProducts[$productID] as $branchID => $projectProduct)
+                foreach($sprintProducts[$productID] as $branchID => $sprintProduct)
                 {
-                    $data->plan   = $projectProduct->plan;
+                    $data->plan   = $sprintProduct->plan;
                     $data->branch = $branchID;
+                    if(isset($projectProducts[$productID][$branchID]) and !empty($projectProducts[$productID][$branchID]->plan))
+                    {
+                        $data->plan .= ',' . $projectProducts[$productID][$branchID]->plan;
+                        $data->plan  = implode(',', array_unique(array_filter(explode(',', $data->plan))));
+                    }
                     $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 }
             }
