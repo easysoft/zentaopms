@@ -6,5 +6,6 @@
 #copyExecutions .btn:hover {--tw-ring-color: var(--color-primary-500);}
 #copyExecutions .btn:before {background: none;}
 #copyExecutions .btn.primary-outline {background-color: var(--color-primary-50);}
-#copyExecutions .btn.primary-outline:after {position: absolute; content: '\e92f'; font-family: ZentaoIcon; font-size: 20px; right: 25px;}
+#copyExecutions .btn.primary-outline:after {position: absolute; content: '\e92f'; font-family: ZentaoIcon; font-size: 20px; right: 10px;}
 #copyExecutions .btn.primary-outline span{color: rgba(var(--color-fore-rgb),var(--tw-text-opacity));}
+#copyExecutions .execution-block span {width: calc(100% - 45px); overflow: hidden;}
