@@ -15,6 +15,7 @@ jsVar('confirmSync', $lang->execution->confirmSync);
 jsVar('isWaterfall', isset($project) && ($project->model == 'waterfall' || $project->model == 'waterfallplus'));
 jsVar('executionAttr', $execution->attribute);
 jsVar('window.lastProjectID', $execution->project);
+jsVar('weekend', $config->execution->weekend);
 
 formGridPanel
 (
