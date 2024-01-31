@@ -103,10 +103,9 @@ function computeEndDate()
 
     const isLongTime = delta == 999;
     const endDate    = isLongTime ? LONG_TIME : formatDate(beginDate, delta - 1);
-
-    $('#end').toggleClass('hidden', isLongTime).zui('datePicker').$.setValue(endDate);
-    $('#end').next().toggleClass('hidden', !isLongTime);
-    $('#days').closest('.form-row').toggleClass('hidden', isLongTime);
+    const $endPicker = $('[name=end]').zui('datePicker');
+    $endPicker.render({disabled: isLongTime});
+    $endPicker.$.setValue(endDate);
 }
 
 /**

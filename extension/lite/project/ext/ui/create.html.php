@@ -15,6 +15,15 @@ jsVar('codeTips', $lang->project->copyProject->codeTips);
 jsVar('endTips', $lang->project->copyProject->endTips);
 jsVar('daysTips', $lang->project->copyProject->daysTips);
 jsVar('programTip', $lang->program->tips);
+jsVar('LONG_TIME', LONG_TIME);
+
+$checkDeltaChecked = jsCallback()->do(<<<'JS'
+    const beginDate = new Date($('[name=begin]').zui('datePicker').$.value);
+    const endDate   = new Date($('[name=end]').zui('datePicker').$.value);
+    const days      = parseInt((endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+    $('[name=delta]').prop('checked', false);
+    if($('#delta' + days).length > 0) $('#delta' + days).prop('checked', true);
+JS);
 
 formPanel
 (
@@ -66,6 +75,7 @@ formPanel
             set::required(true),
             inputGroup
             (
+                on::change('[name=end], [name=begin]', $checkDeltaChecked),
                 datepicker
                 (
                     set::name('begin'),

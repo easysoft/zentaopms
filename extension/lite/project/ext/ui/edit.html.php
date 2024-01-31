@@ -5,9 +5,6 @@ jsVar('model', $project->model);
 jsVar('labelClass', $config->project->labelClass);
 jsVar('longTime', $lang->project->longTime);
 jsVar('weekend', $config->execution->weekend);
-jsVar('unmodifiableProducts', $unmodifiableProducts);
-jsVar('unmodifiableBranches', $unmodifiableBranches);
-jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
 jsVar('multiBranchProducts', $multiBranchProducts);
 jsVar('errorSameProducts', $lang->project->errorSameProducts);
 jsVar('beginLessThanParent', $lang->project->beginLessThanParent);
@@ -19,6 +16,7 @@ jsVar('branchGroups', $branchGroups);
 jsVar('programTip', $lang->program->tips);
 jsVar('projectID', $project->id);
 jsVar('from', $from);
+jsVar('LONG_TIME', LONG_TIME);
 
 $labelClass     = $config->project->labelClass[$model];
 $delta          = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;
@@ -39,7 +37,7 @@ formPanel
             )
         )
     ),
-    on::change('[name=delta]', 'computeenddate'),
+    on::change('[name=delta]', 'computeEndDate'),
     formHidden('parent', $project->parent),
     formHidden('model', $project->model),
     formHidden('hasProduct', $project->hasProduct),
