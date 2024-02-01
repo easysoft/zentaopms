@@ -147,12 +147,13 @@ $config->pivot->dtable->workload->fieldList['user']['align'] = 'center';
 $config->pivot->dtable->workload->fieldList['user']['fixed'] = 'left';
 
 $config->pivot->dtable->workload->fieldList['projectName']['title'] = $lang->pivot->project;
+$config->pivot->dtable->workload->fieldList['projectName']['type']  = 'title';
 $config->pivot->dtable->workload->fieldList['projectName']['link']  = common::hasPriv('project', 'view') ? array('module' => 'project', 'method' => 'view', 'params' => 'projectID={projectID}') : '';
-$config->pivot->dtable->workload->fieldList['projectName']['align'] = 'center';
+$config->pivot->dtable->workload->fieldList['projectName']['align'] = 'left';
 
 $config->pivot->dtable->workload->fieldList['executionName']['title'] = $lang->pivot->execution;
 $config->pivot->dtable->workload->fieldList['executionName']['type']  = 'html';
-$config->pivot->dtable->workload->fieldList['executionName']['align'] = 'center';
+$config->pivot->dtable->workload->fieldList['executionName']['align'] = 'left';
 
 $config->pivot->dtable->workload->fieldList['executionTasks']['title'] = $lang->pivot->task;
 $config->pivot->dtable->workload->fieldList['executionTasks']['width'] = 80;
