@@ -1103,7 +1103,7 @@ class taskZen extends task
             if($task->consumed < $oldTask->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
             if($oldTask->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
         }
-        if(!$task->left && !$task->consumed) dao::$errors['consumed'] = sprintf($this->lang->error->notempty, $this->lang->task->consumed);
+        if(!$task->left && !$task->consumed) dao::$errors['message'] = $this->lang->task->noticeTaskStart;
         return !dao::isError();
     }
 
