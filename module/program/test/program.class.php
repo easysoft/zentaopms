@@ -583,4 +583,20 @@ class programTest
         $program = $this->program->getByID($programID);
         return $this->program->hasUnfinishedChildren($program);
     }
+
+    /**
+     * 刷新项目的统计数据。
+     * Refresh stats fields(estimate,consumed,left,progress) of project.
+     *
+     * @param  int               $projectID
+     * @access public
+     * @return array|object|bool
+     */
+    public function refreshProjectStatsTest(int $projectID): array|object|bool
+    {
+        $this->program->refreshProjectStats($projectID);
+        if(dao::isError()) return dao::getError();
+
+        return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+    }
 }

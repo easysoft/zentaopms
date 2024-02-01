@@ -91,8 +91,11 @@ class taskModel extends model
         $effort->vision     = $this->config->vision;
         $effort->order      = isset($data->order) ? $data->order : 0;
         $this->dao->insert(TABLE_EFFORT)->data($effort)->autoCheck()->exec();
+        $effortID = $this->dao->lastInsertID();
 
-        return $this->dao->lastInsertID();
+        $this->loadModel('program')->refreshProjectStats($effort->project);
+
+        return $effortID;
     }
 
     /**
@@ -278,6 +281,7 @@ class taskModel extends model
 
         $this->updateParentStatus(current($childrenIdList));
         $this->computeBeginAndEnd($parentID);
+        $this->loadModel('program')->refreshProjectStats($oldParentTask->project);
 
         /* Create a action. */
         $extra    = implode(',', $childrenIdList);
@@ -2222,7 +2226,11 @@ class taskModel extends model
             $removedMembers = array_diff($oldMembers, $teams);
             $changeUsers    = array_merge($changeUsers, $removedMembers);
         }
-        if($changeUsers) $this->taskTao->resetEffortLeft($task->id, $changeUsers);
+        if($changeUsers)
+        {
+            $this->taskTao->resetEffortLeft($task->id, $changeUsers);
+            $this->loadModel('program')->refreshProjectStats($task->project);
+        }
 
         return $teams;
     }
@@ -2614,6 +2622,7 @@ class taskModel extends model
             if($task->status != $oldStatus) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
             if($task->status == 'done' && !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
         }
+        $this->loadModel('program')->refreshProjectStats($task->project);
 
         return $allChanges;
     }
@@ -2789,6 +2798,8 @@ class taskModel extends model
             ->autoCheck()
             ->where('id')->eq((int)$effort->id)
             ->exec();
+
+        $this->loadModel('program')->refreshProjectStats($oldEffort->project);
 
         $task = $this->getById($oldEffort->objectID);
         $data = $this->buildTaskForUpdateEffort($task, $oldEffort, $effort);

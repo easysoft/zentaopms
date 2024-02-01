@@ -1356,6 +1356,20 @@ class programModel extends model
         $this->loadModel('action')->cleanActions();
     }
 
+
+    /**
+     * 刷新项目的统计数据。
+     * Refresh stats fields(estimate,consumed,left,progress) of project.
+     *
+     * @param  bool $refreshAll
+     * @access public
+     * @return void
+     */
+    public function refreshProjectStats(int $projectID): void
+    {
+        $this->programTao->updateStats(array($projectID));
+    }
+
     /**
      * Check the privilege.
      *
