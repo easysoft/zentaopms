@@ -1059,6 +1059,12 @@ class screenModel extends model
                 $this->buildCardChart($component, $chart);
                 break;
             case 'line':
+                if($chart->builtin == '0')
+                {
+                    $chart->sql = $this->setFilterSQL($chart);
+                    $this->getLineChartOption($component, $chart, array());
+                    break;
+                }
                 $this->buildLineChart($component, $chart);
                 break;
             case 'bar':
@@ -1070,10 +1076,13 @@ class screenModel extends model
             case 'pie':
                 /* 通过判断是否是内置图表调用不同的方法。 */
                 /* Call different methods by judging whether it is a builtin chart. */
-                $chart->builtin == '0' ? $this->getPieChartOption($component, $chart) : $this->buildPieChart($component, $chart);
+                $chart->builtin == '0' ? $this->getPieChartOption($component, $chart, array()) : $this->buildPieChart($component, $chart);
                 break;
             case 'radar':
                 $this->buildRadarChart($component, $chart);
+                break;
+            case 'org':
+                $this->buildOrgChart($component, $chart);
                 break;
             case 'funnel':
                 $this->buildFunnelChart($component, $chart);
@@ -1085,8 +1094,11 @@ class screenModel extends model
             case 'stackedBarY':
             case 'cluBarX':
             case 'stackedBar':
+                $chart->sql = $this->setFilterSQL($chart);
                 $this->getBarChartOption($component, $chart);
                 break;
+            case 'waterpolo':
+                $this->getWaterPoloOption($component, $chart, array());
         }
     }
 
