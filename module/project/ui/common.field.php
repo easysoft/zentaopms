@@ -44,6 +44,7 @@ if($hasCode)
 
 $fields->field('PM')->control('picker')->items(data('PMUsers'));
 
+unset($lang->project->endList[999]);
 $isLongTime = data('project.end') == LONG_TIME;
 $fields->field('begin')
     ->label($lang->project->planDate)
