@@ -418,6 +418,8 @@ $lang->bug->placeholder->duplicate    = '请输入关键字';
 /* 交互提示。*/
 $lang->bug->notice = new stdclass();
 $lang->bug->notice->summary               = "本页共 <strong>%s</strong> 个Bug，未解决 <strong>%s</strong>。";
+$lang->bug->notice->unClosedSummary       = "本页共 %s 个Bug，未关闭 %s。";
+$lang->bug->notice->checkedSummary        = "已选择 {checked} 项，共 {total} 项。";
 $lang->bug->notice->confirmChangeProduct  = "修改{$lang->productCommon}会导致相应的{$lang->executionCommon}、{$lang->SRCommon}和任务发生变化，确定吗？";
 $lang->bug->notice->confirmDelete         = '您确认要删除该Bug吗？';
 $lang->bug->notice->remindTask            = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';

@@ -27,3 +27,19 @@ window.onRenderBugNameCell = function(result, info)
 
     return result;
 }
+
+/**
+ * 计算表格信息的统计。
+ * Set summary for table footer.
+ *
+ * @param  element element
+ * @param  array   checks
+ * @access public
+ * @return object
+ */
+window.setStatistics = function(element, checks)
+{
+    if(checks.length) return checkedSummary.replace('{checked}', checks.length);
+
+    return element.options.customData.pageSummary;
+}

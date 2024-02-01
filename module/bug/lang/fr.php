@@ -418,6 +418,8 @@ $lang->bug->placeholder->duplicate    = 'Please enter keyword search';
 /* Interactive prompt. */
 $lang->bug->notice = new stdclass();
 $lang->bug->notice->summary               = "Total de <strong>%s</strong> bugs sur cette page, et <strong>%s</strong> sont Actifs.";
+$lang->bug->notice->unClosedSummary       = "Bugs on this page : %s Total, %s Unclosed.";
+$lang->bug->notice->checkedSummary        = "Selected {checked} items，total {total} items.";
 $lang->bug->notice->confirmChangeProduct  = "Tout changement aux {$lang->productCommon} fera que les {$lang->executionCommon}s, stories et tâches associées vont changer. Voulez-vous faire cela ?";
 $lang->bug->notice->confirmDelete         = 'Voulez-vous supprimer ce bug ?';
 $lang->bug->notice->remindTask            = 'Ce bug a été converti en tâche. Voulez-vous mettre à jour le statut de la Tâche(ID %s) ?';

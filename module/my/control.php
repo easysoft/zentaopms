@@ -419,11 +419,21 @@ class my extends control
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
         $bugs = $this->bug->batchAppendDelayedDays($bugs);
-
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
         $this->my->buildBugSearchForm($queryID, $actionURL);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
+        if($type == 'resolvedBy')
+        {
+            $unclosedCount = 0;
+            foreach($bugs as $bug)
+            {
+                if($bug->status != 'closed') $unclosedCount ++;
+            }
+            $this->view->summary        = sprintf($this->lang->bug->notice->unClosedSummary, count($bugs), $unclosedCount);
+            $this->view->checkedSummary = str_replace('{total}', (string)count($bugs), $this->lang->bug->notice->checkedSummary);
+        }
 
         /* assign. */
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;

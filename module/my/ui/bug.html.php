@@ -17,6 +17,7 @@ $testcaseLink = createLink('testcase', 'view', "caseID={case}&version={caseVersi
 
 jsVar('testcaseTitle', $testcaseTitle);
 jsVar('testcaseLink', $testcaseLink);
+jsVar('checkedSummary', $checkedSummary);
 
 $linkParam = "mode=bug&type={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 if($app->rawMethod == 'contribute') $linkParam = "mode=$mode&$linkParam";
@@ -48,9 +49,9 @@ if($type == 'resolvedBy')
     $config->my->bug->dtable->fieldList['resolvedBy']['hidden'] = true;
 }
 
-if($type == 'assignedBy')     $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
-if($type == 'closedBy')       $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
-if($type == 'assignedTo')     $config->my->bug->dtable->fieldList['assignedTo']['hidden'] = true;
+if($type == 'assignedBy') $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
+if($type == 'closedBy')   $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
+if($type == 'assignedTo') $config->my->bug->dtable->fieldList['assignedTo']['hidden'] = true;
 if($app->rawMethod == 'work')
 {
     $config->my->bug->dtable->fieldList['status']['hidden']     = true;
@@ -58,7 +59,7 @@ if($app->rawMethod == 'work')
 }
 else
 {
-    $config->my->bug->dtable->fieldList['deadline']['hidden']   = true;
+    $config->my->bug->dtable->fieldList['deadline']['hidden'] = true;
 }
 
 if(!$canBatchAction) $config->bug->dtable->fieldList['id']['type'] = 'id';
@@ -96,12 +97,14 @@ dtable
     set::fixedLeftWidth('44%'),
     set::onRenderCell(jsRaw('window.onRenderBugNameCell')),
     set::checkable($canBatchAction),
+    set::checkInfo($type == 'resolvedBy' ? jsRaw('function(checks){return window.setStatistics(this, checks);}') : null),
     set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
     set::orderBy($orderBy),
     set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::emptyTip($lang->bug->notice->noBug)
+    set::emptyTip($lang->bug->notice->noBug),
+    set::customData($type == 'resolvedBy' ? array('pageSummary' => $summary) : null)
 );
 
 render();
