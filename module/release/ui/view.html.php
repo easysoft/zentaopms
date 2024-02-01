@@ -18,9 +18,15 @@ $canBeChanged = common::canBeChanged($releaseModule, $release);
 $menus        = $this->release->buildOperateViewMenu($release);
 detailHeader
 (
-    to::title
+    to::prefix
     (
-        entityLabel(set(array('entityID' => $release->id, 'level' => 1, 'text' => $release->name))),
+        backBtn
+        (
+            set::icon('back'),
+            set::type('secondary'),
+            $lang->goback
+        ),
+        entityLabel(set(array('entityID' => $release->id, 'level' => 2, 'text' => $release->name))),
         $release->deleted ? span(setClass('label danger'), $lang->release->deleted) : null
     ),
     !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
@@ -178,7 +184,7 @@ detailBody
                 ),
                 dtable
                 (
-                    setID('finishedStory'),
+                    setID('finishedStoryDTable'),
                     set::cols(array_values($config->release->dtable->story->fieldList)),
                     set::data($storyTableData),
                     set::userMap($users),
@@ -207,7 +213,7 @@ detailBody
                 ),
                 dtable
                 (
-                    setID('resolvedBug'),
+                    setID('resolvedBugDTable'),
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->bug->fieldList)),
                     set::data($bugTableData),
@@ -235,7 +241,7 @@ detailBody
                 ),
                 dtable
                 (
-                    setID('leftBug'),
+                    setID('leftBugDTable'),
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->leftBug->fieldList)),
                     set::data($leftBugTableData),
@@ -301,10 +307,7 @@ detailBody
                             )
                         )
                     ),
-                    fileList
-                    (
-                        set::files($release->files)
-                    ),
+                    fileList(set::files($release->files)),
                     h::hr(set::className('mt-6')),
                     history(set::objectID($release->id))
                 )
