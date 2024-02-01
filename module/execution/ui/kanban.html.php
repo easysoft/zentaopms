@@ -346,10 +346,7 @@ modal
 modal
 (
     setID('batchCreateBug'),
-    to::header
-    (
-        h4($lang->bug->product)
-    ),
+    set::title($lang->bug->product),
     setData('size', '500px'),
     inputGroup
     (

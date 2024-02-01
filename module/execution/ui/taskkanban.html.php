@@ -210,7 +210,7 @@ row
                 ($features['story'] and $hasStoryButton and $canLinkStoryByPlan) ? array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm') : null,
                 ($features['story'] and $hasStoryButton and $features['qa']) ? array('class' => 'divider menu-divider') : null,
                 ($features['qa'] && $canCreateBug) ? array('text' => $lang->bug->create, 'url' => createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
-                ($features['qa'] && $canBatchCreateBug) ? array('text' => $lang->bug->batchCreate, 'url' => ($productNum >= 1 ? '#batchCreateBug' : createLink('bug', 'batchCreate', "productID=$productID&branch=0&executionID=$execution->id")), 'data-toggle' => 'modal', $productNum > 1 ? null : 'data-size' => 'lg') : null,
+                ($features['qa'] && $canBatchCreateBug) ? array('text' => $lang->bug->batchCreate, 'url' => ($productNum >= 1 ? '#batchCreateBug' : createLink('bug', 'batchCreate', "productID=$productID&branch=0&executionID=$execution->id")), 'data-toggle' => 'modal') : null,
                 ($features['qa'] && $canImportBug) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($features['story'] and $hasStoryButton and $features['qa']) ? array('text' => '', 'class' => 'divider menu-divider') : null,
                 ($canCreateTask) ? array('text' => $lang->task->create, 'url' => createLink('task', 'create', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
@@ -262,20 +262,22 @@ modal
 (
     setID('batchCreateBug'),
     set::title($lang->bug->product),
+    setData('size', '500px'),
     inputGroup
     (
         setClass('mt-3'),
         picker
         (
-            set::width(200),
+            set::width(300),
             setID('product'),
             set::name('productName'),
             set::items($productNames),
+            set::required(true),
             set::onchange('changeBugProduct()')
         ),
         span
         (
-            setClass('input-group-btn'),
+            setClass('input-group-btn ml-2'),
             btn
             (
                 setClass('primary'),
