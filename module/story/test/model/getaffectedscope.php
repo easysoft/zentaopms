@@ -44,7 +44,7 @@ $task->gen(60);
 $team = zdTable('team');
 $team->account->range('admin,user1,user2,user3,user4');
 $team->root->range('11-40{3}');
-$team->type->range('project');
+$team->type->range('execution');
 $team->gen(90);
 
 $bug = zdTable('bug');
@@ -62,8 +62,18 @@ zdTable('branch')->gen(5);
 /**
 
 title=测试 storyModel->getAffectedScope();
+timeout=0
 cid=1
-pid=1
+
+- 获取需求2团队成员的数量 @22|30|37
+- 获取需求2影响任务的数量 @26|21
+- 获取需求2影响任务的指派给属性assignedTo @A:admin
+- 获取需求2关联bug数 @3
+- 获取需求28关联bug数，包含孪生需求 @4
+- 获取需求2关联用例数 @3
+- 获取需求28关联用例数，包含孪生需求 @4
+- 检查需求2孪生需求 @1
+- 检查需求28孪生需求 @1
 
 */
 

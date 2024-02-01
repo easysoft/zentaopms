@@ -31,8 +31,11 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
+zdTable('productplan')->gen(0);
 zdTable('story')->gen(0);
 zdTable('storyspec')->gen(0);
+zdTable('storystage')->gen(0);
+zdTable('storyreview')->gen(0);
 zdTable('projectproduct')->gen(0);
 zdTable('projectstory')->gen(0);
 zdTable('planstory')->gen(0);

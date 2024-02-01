@@ -43,7 +43,7 @@ $task->gen(60);
 $team = zdTable('team');
 $team->account->range('admin,user1,user2,user3,user4');
 $team->root->range('11-40{3}');
-$team->type->range('project');
+$team->type->range('execution');
 $team->gen(90);
 
 zdTable('storystage')->gen(30);
