@@ -111,6 +111,9 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['20.0.beta1']  = '2024-01-26';
+$lang->misc->releaseDate['20.0.alpha1'] = '2024-01-08';
+$lang->misc->releaseDate['18.10']       = '2023-12-18';
 $lang->misc->releaseDate['18.9']        = '2023-11-09';
 $lang->misc->releaseDate['18.8']        = '2023-09-28';
 $lang->misc->releaseDate['18.7']        = '2023-08-29';
@@ -216,6 +219,9 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['20.0.beta1'][]  = array('title' => 'This release mainly involves a large-scale refactoring of the code and a brand new upgrade to the user interface (UI), bringing better product performance, stronger security, and a more user-friendly experience.', 'desc' => '');
+$lang->misc->feature->all['20.0.alpha1'][] = array('title' => 'Internal release of comprehensive user interface (UI) upgrades for large-scale refactoring and reconstruction.', 'desc' => '');
+$lang->misc->feature->all['18.10'][]       = array('title' => 'The use case library offers the capability to import test cases from other libraries, enables document export with image proportions automatically adjusted to fit Word, includes the addition of cookie records to the history record sorting method, and incorporates optimized logic for modifying logs of other users.When converting feedback or tickets, attachments can now be automatically included. Feedback functionality has been enhanced with the addition of keywords and CC fields. Additionally, a new water drop chart type has been introduced, and improvements have been made to the logic and visual presentation of metric collection.', 'desc' => '');
 $lang->misc->feature->all['18.9'][]        = array('title' => 'We have now implemented comprehensive integration of AI Large Language Models, introduced an upgraded client version for meetings, and improved the ability to add participants in test requests. To enhance usability, we have also implemented online preview capabilities for video attachments and increased flexibility in customizing review inspection categories.', 'desc' => '');
 $lang->misc->feature->all['18.8'][]        = array('title' => 'In the BI section, we have introduced new features such as metric item functionality and an application inspection report dashboard. The DevOps platform edition now includes a configuration wizard. Additionally, we have enhanced the requitement and market management interface by adding a market management feature. New revision of client navigation and personal center.', 'desc' => '');
 $lang->misc->feature->all['18.7'][]        = array('title' => 'DevOps has introduced new features such as cloud-native platform, artifact repository, and application management, while also enhancing the navigation structure and improving the UI interactions. Additionally, a new AI suggestion designer has been added, which supports integration with large language models and allows for customization of AI applications.', 'desc' => '');
