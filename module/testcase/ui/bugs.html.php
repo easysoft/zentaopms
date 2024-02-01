@@ -13,16 +13,15 @@ namespace zin;
 
 set::title($lang->testcase->bugs);
 
-$linkParams = '';
-foreach($app->rawParams as $key => $value) $linkParams = $key != 'orderBy' ? "{$linkParams}&{$key}={$value}" : "{$linkParams}&orderBy={name}_{sortType}";
+$cols = $config->testcase->bug->dtable->fieldList;
+foreach(array_keys($cols) as $colName) $cols[$colName]['sortType'] = false;
 
 dtable
 (
-    set::cols($config->testcase->bug->dtable->fieldList),
+    set::cols($cols),
     set::data(array_values($bugs)),
     set::userMap($users),
-    set::orderBy($orderBy),
-    set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
+    set::orderBy($orderBy)
 );
 
 render();
