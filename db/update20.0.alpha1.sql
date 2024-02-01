@@ -89,3 +89,5 @@ UPDATE `zt_metric` SET `definition` = '所有的任务的预计工时数求和\r
 UPDATE `zt_metric` SET `definition` = '所有的任务的消耗工时数求和\r\n过滤父任务\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'consume_of_task';
 UPDATE `zt_metric` SET `definition` = '所有的任务的剩余工时数求和\r\n过滤父任务\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'left_of_task';
 UPDATE `zt_metric` SET `definition` = '所有的任务个数求和\r\n完成时间为某日\r\n过滤已删除的任务\r\n过滤已删除项目的任务\r\n过滤已删除执行的任务' WHERE `code` = 'count_of_daily_finished_task';
+
+DELETE FROM `zt_config` WHERE `module` = 'datatable' AND `key` in ('cols', 'tablecols');

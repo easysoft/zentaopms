@@ -547,7 +547,7 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
             if(isset($actionMenu['other']))
             {
                 $currentActionMenu = $actionMenu[0];
-                initItemActions($item, $currentActionMenu, $fieldList['actions']['list'], $model);
+                initItemActions($item, $currentActionMenu, zget($fieldList['actions'], 'list', array()), $model);
 
                 $otherActionMenus = $actionMenu['other'];
                 $otherAction      = '';
@@ -583,13 +583,13 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
                  */
                 $item->actions = array();
                 $isClickable   = false;
-                foreach($actionMenu as $actionName) $isClickable |= initItemActions($item, $actionName, $fieldList['actions']['list'], $model);
+                foreach($actionMenu as $actionName) $isClickable |= initItemActions($item, $actionName, zget($fieldList['actions'], 'list', array()), $model);
 
                 if($isClickable) break;     // If the action is clickable, use this group.
             }
             else // Only one group of action menus.
             {
-                initItemActions($item, $actionMenu, $fieldList['actions']['list'], $model);
+                initItemActions($item, $actionMenu, zget($fieldList['actions'], 'list', array()), $model);
             }
         }
 
