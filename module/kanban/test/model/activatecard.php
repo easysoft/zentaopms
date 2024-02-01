@@ -55,9 +55,9 @@ $kanban = new kanbanTest();
 
 r($kanban->activateCardTest($cardIDList[0], $progressList[0])) && p('id,name,status,progress') && e('1,卡片1,doing,0');  // 测试激活卡片1，进度0
 r($kanban->activateCardTest($cardIDList[0], $progressList[1])) && p('id,name,status,progress') && e('1,卡片1,doing,50'); // 测试激活卡片1，进度50
-r($kanban->activateCardTest($cardIDList[0], $progressList[2])) && p('0')                      && e('请输入正确的进度');  // 测试激活卡片1，进度100
-r($kanban->activateCardTest($cardIDList[0], $progressList[3])) && p('0')                      && e('请输入正确的进度');  // 测试激活卡片1，进度101
-r($kanban->activateCardTest($cardIDList[0], $progressList[4])) && p('0')                      && e('请输入正确的进度');  // 测试激活卡片1，进度-1
+r($kanban->activateCardTest($cardIDList[0], $progressList[2])) && p('progress:0')              && e('请输入正确的进度');  // 测试激活卡片1，进度100
+r($kanban->activateCardTest($cardIDList[0], $progressList[3])) && p('progress:0')              && e('请输入正确的进度');  // 测试激活卡片1，进度101
+r($kanban->activateCardTest($cardIDList[0], $progressList[4])) && p('progress:0')              && e('请输入正确的进度');  // 测试激活卡片1，进度-1
 r($kanban->activateCardTest($cardIDList[1], $progressList[0])) && p('id,name,status,progress') && e('2,卡片2,doing,0');  // 测试激活卡片2，进度0
 r($kanban->activateCardTest($cardIDList[2], $progressList[1])) && p('id,name,status,progress') && e('3,卡片3,doing,50'); // 测试激活卡片3，进度0
 r($kanban->activateCardTest($cardIDList[3], $progressList[0])) && p('id,name,status,progress') && e('4,卡片4,doing,0');  // 测试激活卡片4，进度0
