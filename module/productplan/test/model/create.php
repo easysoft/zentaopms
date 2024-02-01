@@ -45,7 +45,7 @@ $isFutureList = array(0, 1);
 $planTester = new productPlan('admin');
 r($planTester->createTest($postData,   $isFutureList[0])) && p('title')   && e('测试创建1');              // 测试正常创建
 r($planTester->createTest($postData,   $isFutureList[1])) && p('title')   && e('测试创建1');              // 测试正常创建
-r($planTester->createTest($noTitle,    $isFutureList[0])) && p('title:0') && e('『名称』不能为空。');     // 测试不填名称创建失败
+r($planTester->createTest($noTitle,    $isFutureList[0])) && p('title:0') && e('『计划名称』不能为空。'); // 测试不填名称创建失败
 r($planTester->createTest($noBegin,    $isFutureList[0])) && p('begin')   && e('『开始日期』不能为空。'); // 测试不填开始时间创建失败
 r($planTester->createTest($noEnd,      $isFutureList[0])) && p('end')     && e('『结束日期』不能为空。'); // 测试不填结束日期创建失败
 r($planTester->createTest($noBeginEnd, $isFutureList[0])) && p('begin')   && e('『开始日期』不能为空。'); // 测试不填开始日期和结束日期创建失败
