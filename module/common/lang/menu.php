@@ -60,7 +60,7 @@ $lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
-$lang->dividerMenu = ',kanban,oa,admin,';
+$lang->dividerMenu = ',bi,kanban,system,';
 
 $lang->mainNav->menuOrder[5]  = 'my';
 $lang->mainNav->menuOrder[10] = 'program';
@@ -69,9 +69,9 @@ $lang->mainNav->menuOrder[20] = 'project';
 $lang->mainNav->menuOrder[25] = 'execution';
 $lang->mainNav->menuOrder[30] = 'qa';
 $lang->mainNav->menuOrder[35] = 'devops';
-$lang->mainNav->menuOrder[40] = 'kanban';
-$lang->mainNav->menuOrder[45] = 'doc';
-$lang->mainNav->menuOrder[50] = 'bi';
+$lang->mainNav->menuOrder[40] = 'bi';
+$lang->mainNav->menuOrder[45] = 'kanban';
+$lang->mainNav->menuOrder[50] = 'doc';
 $lang->mainNav->menuOrder[55] = 'system';
 $lang->mainNav->menuOrder[60] = 'admin';
 
