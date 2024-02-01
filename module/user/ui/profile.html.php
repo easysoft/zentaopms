@@ -24,7 +24,7 @@ if($deptPath)
 
 div
 (
-    set::style(array('width' => '60%')),
+    set::style(array('width' => isInModal() ? '100%' : '60%')),
     setClass('bg-white m-auto p-5 mb-4'),
     div
     (

@@ -1278,7 +1278,7 @@ class projectZen extends project
      */
     protected function processProjectListData(array $projectList): array
     {
-        $userList = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->fetchAll('account');
+        $userList = $this->dao->select('id,account,realname,avatar')->from(TABLE_USER)->fetchAll('account');
 
         $this->loadModel('story');
         $this->loadModel('execution');

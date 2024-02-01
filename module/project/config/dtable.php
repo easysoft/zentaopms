@@ -46,12 +46,15 @@ $config->project->dtable->fieldList['hasProduct']['type']     = 'category';
 $config->project->dtable->fieldList['hasProduct']['sortType'] = true;
 $config->project->dtable->fieldList['hasProduct']['group']    = 2;
 
-$config->project->dtable->fieldList['PM']['title']    = $lang->project->PM;
-$config->project->dtable->fieldList['PM']['name']     = 'PM';
-$config->project->dtable->fieldList['PM']['type']     = 'avatarBtn';
-$config->project->dtable->fieldList['PM']['sortType'] = true;
-$config->project->dtable->fieldList['PM']['group']    = 3;
-$config->project->dtable->fieldList['PM']['required'] = true;
+$config->project->dtable->fieldList['PM']['title']       = $lang->project->PM;
+$config->project->dtable->fieldList['PM']['name']        = 'PM';
+$config->project->dtable->fieldList['PM']['type']        = 'avatarBtn';
+$config->project->dtable->fieldList['PM']['sortType']    = true;
+$config->project->dtable->fieldList['PM']['link']        = array('module' => 'user', 'method' => 'profile', 'params' => 'userID={PMUserID}');
+$config->project->dtable->fieldList['PM']['data-toggle'] = 'modal';
+$config->project->dtable->fieldList['PM']['data-size']   = 'sm';
+$config->project->dtable->fieldList['PM']['group']       = 3;
+$config->project->dtable->fieldList['PM']['required']    = true;
 
 $config->project->dtable->fieldList['storyPoints']['title']    = $lang->project->storyPoints;
 $config->project->dtable->fieldList['storyPoints']['type']     = 'number';

@@ -100,7 +100,6 @@ foreach($settings as $key => $value)
     if(commonModel::isTutorialMode() && in_array($value['name'], array('PM', 'budget', 'teamCount'))) unset($settings[$key]);
 }
 $tableData = initTableData($projectStats, $settings, $this->project);
-
 /* zin: Define the dtable in main content. */
 dtable
 (

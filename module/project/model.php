@@ -2468,10 +2468,10 @@ class projectModel extends model
 
         if($project->PM)
         {
-            $user = zget($PMList, $project->PM, '');
-            $project->PM        = zget($user, 'realname', $project->PM);
-            $project->PMAvatar  = zget($user, 'avatar', '');
-            $project->PMUserID  = zget($user, 'id', 0);
+            $user              = zget($PMList, $project->PM, '');
+            $project->PM       = zget($user, 'realname', $project->PM);
+            $project->PMAvatar = zget($user, 'avatar', '');
+            $project->PMUserID = zget($user, 'id', 0);
         }
 
         return $project;
