@@ -13,6 +13,9 @@ namespace zin;
 jsVar('checkedSummary', $lang->productplan->checkedSummary);
 jsVar('childrenAB', $lang->productplan->childrenAB);
 jsVar('expiredLang', $lang->productplan->expired);
+jsVar('nextStep', $lang->productplan->nextStep);
+jsVar('enterProjectList', $lang->productplan->enterProjectList);
+jsVar('plans', $plans);
 
 /* zin: Define the set::module('productplan') feature bar on main menu. */
 featureBar
@@ -129,10 +132,11 @@ modal
             array(
                 array
                 (
-                    'text' => !empty($projects) ? $lang->productplan->nextStep : $lang->productplan->enterProjectList,
-                    'id'   => !empty($projects) ? 'createExecutionButton' : '',
-                    'type' => 'primary',
-                    'url'  => !empty($projects) ? '###' : createLink('product', 'project', "status=all&productID={$productID}&branch={$branch}")
+                    'class' => 'createExecutionBtn',
+                    'text'  => !empty($projects) ? $lang->productplan->nextStep : $lang->productplan->enterProjectList,
+                    'id'    => !empty($projects) ? 'createExecutionButton' : '',
+                    'type'  => 'primary',
+                    'url'   => !empty($projects) ? '###' : createLink('product', 'project', "status=all&productID={$productID}&branch={$branch}")
                 ),
                 array
                 (

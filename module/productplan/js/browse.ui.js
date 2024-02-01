@@ -134,6 +134,28 @@ $(document).on('click', '[data-target="#createExecutionModal"]', function()
 {
     const planID = $(this).closest('.dtable-cell').data('row');
     $('#createExecutionModal [name=planID]').val(planID);
+
+    const productID = plans[planID].product;
+    const branch    = plans[planID].branch;
+    const link = $.createLink('productplan', 'ajaxGetProjects', `productID=${productID}&branch=${branch}`);
+    $.getJSON(link, function(projects)
+    {
+        const $projectPicker = $('#createExecutionModal [name=project]').zui('picker');
+        $projectPicker.render({items: projects, disabled: projects.length == 0});
+        if(projects.length > 0)
+        {
+            $('#createExecutionModal .createExecutionBtn').attr('id', 'createExecutionButton');
+            $('#createExecutionModal .createExecutionBtn').attr('href', '###');
+            $('#createExecutionModal .createExecutionBtn').text(nextStep);
+        }
+        else
+        {
+            $projectPicker.$.setValue('');
+            $('#createExecutionModal .createExecutionBtn').attr('id', '');
+            $('#createExecutionModal .createExecutionBtn').attr('href', $.createLink('product', 'project', `status=all&productID=${productID}&branch=${branch}`));
+            $('#createExecutionModal .createExecutionBtn').text(enterProjectList);
+        }
+    })
 });
 
 $(document).on('click', '#createExecutionButton', function()

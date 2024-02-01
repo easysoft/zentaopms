@@ -288,7 +288,7 @@ class productplan extends control
     public function browse(int $productID = 0, string $branch = '', string $browseType = 'undone', int $queryID = 0, string $orderBy = 'begin_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $branchID = $branch === '' ? 'all' : $branch;
-        if(!$branch) $branch = 0;
+        if(!$branch) $branch = '';
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
