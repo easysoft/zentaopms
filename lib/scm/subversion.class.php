@@ -355,6 +355,7 @@ class Subversion
         if(!scm::checkRevision($toRevision))   return array();
 
         $resourcePath = $path;
+        if(empty($toRevision)) $fromRevision = '';
         if($fromRevision == '^') $fromRevision = $toRevision - 1;
         $path = '"' . $this->root . '/' . str_replace(array('%2F', '+'), array('/', ' '), urlencode($path)) . '"';
         $cmd  = $this->replaceAuth(escapeCmd($this->buildCMD($path, 'diff', "-r $fromRevision:$toRevision")));

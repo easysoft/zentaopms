@@ -108,6 +108,7 @@ if($repo->SCM != 'Subversion')
 }
 else
 {
+    if(empty($newRevision)) $oldRevision = '';
     $oldRevision = $oldRevision == '^' ? $newRevision - 1 : $oldRevision;
 
     $breadcrumbItems[] = input(set::type('hidden'), set::name('isBranchOrTag'), set::value($isBranchOrTag));
