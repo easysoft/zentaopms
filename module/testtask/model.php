@@ -1707,8 +1707,6 @@ class testtaskModel extends model
         $taskID = $this->create($task);
         if(dao::isError()) return false;
 
-        $this->loadModel('action')->create('testtask', $taskID, 'opened');
-
         unlink($filePath);
         unset($_SESSION['resultFile']);
 
