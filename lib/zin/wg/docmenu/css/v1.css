@@ -33,3 +33,4 @@
 .tree > .tree-item.project-tree-title > .tree-toggle-icon {display: none;}
 
 .has-module-menu-header #mainMenu {padding-left: 180px;}
+.has-module-menu-header.is-sidebar-left-collapsed #mainMenu {padding-left: 0;}
