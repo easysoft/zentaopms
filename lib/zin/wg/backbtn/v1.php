@@ -66,7 +66,7 @@ class backBtn extends btn
             'space'          => 'space-browse',
             'serverroom'     => 'serverroom-browse',
             'project'        => 'program-browse,program-project,project-browse,project-view,project-team',
-            'product'        => 'product-all,program-productview,program-product',
+            'product'        => 'product-all,program-productview,program-product,product-view',
             'gitlab'         => 'space-browse,gitlab-browseproject',
             'zanode'         => 'zanode-browse,zanode-view',
             'zahost'         => 'zahost-browse,zahost-view',
