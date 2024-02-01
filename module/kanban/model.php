@@ -2756,7 +2756,7 @@ class kanbanModel extends model
     {
         if($this->post->progress >= 100 || $this->post->progress < 0)
         {
-            dao::$errors[] = $this->lang->kanbancard->error->progressIllegal;
+            dao::$errors['progress'][] = $this->lang->kanbancard->error->progressIllegal;
             return false;
         }
 
