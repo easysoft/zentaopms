@@ -1450,7 +1450,7 @@ class storyTao extends storyModel
 
         if(empty($story->executions)) return $story;
         foreach($story->executions as $executionID => $execution) if($execution->status == 'done') unset($story->executions[$executionID]);
-        $story->teams = $this->dao->select('account, root')->from(TABLE_TEAM)->where('root')->in(array_keys($story->executions))->andWhere('type')->eq('project')->fetchGroup('root');
+        $story->teams = $this->dao->select('account, root')->from(TABLE_TEAM)->where('root')->in(array_keys($story->executions))->andWhere('type')->eq('execution')->fetchGroup('root');
 
         foreach($story->tasks as $executionTasks)
         {
