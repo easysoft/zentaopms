@@ -102,15 +102,15 @@ window.renderCell = function(result, info)
         let html = '';
 
         const module = this.options.modules[info.row.data.module];
-        if(module) html += '<span class="label gray-pale rounded-full">' + module + '</span>'; // 添加模块标签
+        if(module) html += '<span class="label gray-pale rounded-full mr-1">' + module + '</span>'; // 添加模块标签
 
         if(task.mode)
         {
-            html += "<span class='label gray-pale rounded-xl'>" + multipleAB + "</span>";
+            html += "<span class='label gray-pale rounded-xl mr-1'>" + multipleAB + "</span>";
         }
         if(task.parent > 0)
         {
-            html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+            html += "<span class='label gray-pale rounded-xl mr-1'>" + childrenAB + "</span>";
         }
         if(html) result.unshift({html});
 
