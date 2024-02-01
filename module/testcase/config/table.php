@@ -199,9 +199,8 @@ $config->testcase->group->dtable->fieldList['actions']['menu']  = array('edit', 
 
 $config->testcase->bug = new stdclass();
 $config->testcase->bug->dtable = new stdclass();
-$config->testcase->bug->dtable->fieldList['id']['title']    = $lang->idAB;
-$config->testcase->bug->dtable->fieldList['id']['type']     = 'id';
-$config->testcase->bug->dtable->fieldList['id']['sortType'] = false;
+$config->testcase->bug->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->testcase->bug->dtable->fieldList['id']['type']  = 'id';
 
 $app->loadLang('bug');
 $app->loadModuleConfig('bug');
