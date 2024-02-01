@@ -47,6 +47,8 @@ class task extends control
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
 
+        $this->session->set('executionStoryList', $this->app->getURI(true), 'execution');
+
         /* Set menu and get execution information. */
         $executionID = $this->taskZen->setMenu($executionID);
         $execution   = $this->execution->getById($executionID);
