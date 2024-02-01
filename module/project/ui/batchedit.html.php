@@ -125,7 +125,7 @@ h::table
         setClass('dateTip'),
         h::td
         (
-            set::colspan(9),
+            set::colspan($setCode ? 9 : 8),
             div
             (
                 setClass('text-right'),
