@@ -56,6 +56,16 @@ $handleLongTimeChange = jsCallback()->do(<<<'JS'
     $element.find('[name=days]').attr('disabled', longTime ? 'disabled' : null);
 JS);
 
+$toggleLongTime = jsCallback()->do(<<<'JS'
+    const isMultiple = $('#form-project-create [name=multiple]').prop('checked');
+    if(!isMultiple) $('#form-project-create [name=longTime]').prop('checked', false);
+    $('#form-project-create [name=longTime]').closest('.checkbox-primary').toggleClass('hidden', !isMultiple);
+
+    const $endPicker = $('#form-project-create [name=end]').closest('[data-zui-datepicker]').zui('datePicker');
+    $endPicker.render({disabled: false});
+    $('#form-project-create [name=days]').removeAttr('disabled');
+JS);
+
 formGridPanel
 (
     to::titleSuffix($modeDropdown),
@@ -72,6 +82,7 @@ formGridPanel
     ),
     on::click('[name=name], [name=code], [data-name=begin] .has-warning *, [name=days], [data-name="parent"] .pick *', 'removeTips'),
     on::click('[type=submit]', 'removeAllTips'),
+    on::click('[name=multiple]', $toggleLongTime),
     on::change('[name=parent]')->toggleClass('.productsBox .linkProduct .form-label', 'required', "\$(target).val() > 0"),
     on::change('[name=hasProduct]', 'changeType'),
     on::change('[name=longTime]', $handleLongTimeChange),
