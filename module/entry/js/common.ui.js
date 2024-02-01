@@ -35,22 +35,3 @@ function toggleAllIP(event)
         $('input.hidden#ip').remove();
     }
 }
-
-/**
- * Hide account row when enabling password-free login.
- *
- * @param  event  $event
- * @access public
- * @return void
- */
-function toggleFreePasswd(event)
-{
-    if($(event.target).val() == '1')
-    {
-      $('#account').closest('.form-row').addClass('hidden');
-    }
-    else
-    {
-      $('#account').closest('.form-row').removeClass('hidden');
-    }
-}

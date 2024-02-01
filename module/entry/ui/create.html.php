@@ -70,7 +70,7 @@ formPanel
             set::label($lang->entry->freePasswd),
             radioList
             (
-                on::change('toggleFreePasswd'),
+                on::change()->toggleClass('.accountRow', 'hidden','$(target).val() == 1'),
                 set::name('freePasswd'),
                 set::items($lang->entry->freePasswdList),
                 set::value(0),
@@ -80,6 +80,7 @@ formPanel
     ),
     formRow
     (
+        setClass('accountRow'),
         formGroup
         (
             set::width('1/2'),

@@ -35,7 +35,10 @@ formPanel
                 set('target', '_blank'),
                 $lang->entry->help
             ),
-            item(set::type('divider')),
+            div
+            (
+                setClass('w-px h-3 bg-gray mx-2'),
+            ),
             a
             (
                 setClass('text-darken'),
@@ -77,7 +80,7 @@ formPanel
             set::label($lang->entry->freePasswd),
             radioList
             (
-                on::change('toggleFreePasswd'),
+                on::change()->toggleClass('.accountRow', 'hidden','$(target).val() == 1'),
                 set::name('freePasswd'),
                 set::items($lang->entry->freePasswdList),
                 set::value($entry->freePasswd),
@@ -88,14 +91,20 @@ formPanel
     formRow
     (
         setClass($entry->freePasswd ? 'hidden' : ''),
+        setClass('accountRow'),
         formGroup
         (
             set::width('1/2'),
             set::label($lang->entry->account),
-            set::placeholder($lang->entry->note->account),
-            set::name('account'),
-            set::items($users),
-            set::value($entry->account)
+            set::requried(true),
+            picker
+            (
+                set::placeholder($lang->entry->note->account),
+                set::name('account'),
+                set::items($users),
+                set::requried(false),
+                set::value($entry->account)
+            )
         )
     ),
     formRow
@@ -132,13 +141,16 @@ formPanel
         ),
         formGroup
         (
-            setClass('items-center ml-2'),
-            checkbox
+            div
             (
-                set::name('allIP'),
-                on::change('toggleAllIP'),
-                set::checked($entry->ip == '*'),
-                $lang->entry->note->allIP
+                setClass('items-center ml-2 my-auto'),
+                checkbox
+                (
+                    set::name('allIP'),
+                    on::change('toggleAllIP'),
+                    set::checked($entry->ip == '*'),
+                    $lang->entry->note->allIP
+                )
             )
         )
     ),
