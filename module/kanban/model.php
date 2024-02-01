@@ -859,7 +859,7 @@ class kanbanModel extends model
                 $item['statusLabel'] = zget($this->lang->productplan->statusList, $plan->status);
                 $item['delay']       = helper::today() > $plan->end ? true : false;
                 $item['desc']        = strip_tags(htmlspecialchars_decode($plan->desc));
-                $item['dateLine']    = $planBegin . ' ' . $this->lang->productplan->to . ' ' . $planEnd;
+                $item['dateLine']    = in_array($this->lang->productplan->future, array($planBegin, $planEnd)) ? $this->lang->productplan->future : $planBegin . ' ' . $this->lang->productplan->to . ' ' . $planEnd;
                 $item['actionList']  = array();
                 foreach($cardActions as $action)
                 {
