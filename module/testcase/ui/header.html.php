@@ -60,6 +60,8 @@ if($canSwitchCaseType)
     $caseTypeItems   = array();
     foreach($lang->testcase->typeList as $type => $typeName)
     {
+        if($rawMethod == 'groupcase' && $type == 'unit') continue;
+
         if($canBrowseUnits && $type == 'unit')
         {
             $url  = $this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
