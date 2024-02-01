@@ -1,3 +1,5 @@
 #mainContent > div.detail-header.flex.justify-between.mb-3 > div > div > div > span > a {color: #000;}
 #mainContent > div.detail-header.flex.justify-between.mb-3 > div > div > div > span > a:hover {color: #2e7fff;}
 #mainContent .table-data tbody > tr > td,#mainContent .table-data tbody > tr > th {word-break: break-all;}
+#mainContent .detail-body .section > .h4 {font-size: 1rem !important;}
+#mainContent .detail-body .section > .article {font-size: 13px; font-weight: 400;}

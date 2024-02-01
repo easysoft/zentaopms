@@ -186,7 +186,7 @@ detailBody
     (
         section
         (
-            set::title($lang->task->legendDesc),
+            set::title($lang->task->legendDesc, setClass('h4')),
             set::content(empty($task->desc) ? $lang->noData : $task->desc),
             set::useHtml(true)
         ),
@@ -211,22 +211,40 @@ detailBody
         !$task->fromBug && $task->story ?
         section
         (
-            set::title($lang->task->story),
+            set::title($lang->task->story, setClass('h4')),
             sectionCard
             (
                 entityLabel
                 (
                     set::entityID($task->storyID),
-                    set::text($task->storyTitle)
+                    set::text($task->storyTitle),
+                    set::href(createLink('story', 'view', "storyID=$task->storyID")),
+                    set::textClass('clip'),
+                    $task->needConfirm  ? to::suffix
+                    (
+                        div
+                        (
+                            setClass('flex-1 text-right nowrap'),
+                            span($lang->task->storyChange),
+                            a
+                            (
+                                setClass('mx-2 btn primary size-sm'),
+                                set::href(createLink('task', 'confirmStoryChange', "taskID={$task->id}")),
+                                $lang->confirm
+                            )
+                        )
+                    ) : null
                 ),
-                item
+                div
                 (
-                    set::title($lang->story->legendSpec),
+                    setClass('p-4'),
+                    span("[{$lang->story->legendSpec}]", setClass('text-gray')),
                     empty($task->storySpec) && empty($task->storyFiles) ? $lang->noData : html($task->storySpec)
                 ),
-                item
+                div
                 (
-                    set::title($lang->task->storyVerify),
+                    setClass('p-4'),
+                    span("[{$lang->task->storyVerify}]", setClass('text-gray')),
                     empty($task->storyVerify) ? $lang->noData : html($task->storyVerify)
                 )
             )
@@ -282,35 +300,6 @@ detailBody
                         set::name($lang->task->module),
                         set::title($moduleTitle),
                         $moduleItems
-                    ),
-                    item
-                    (
-                        set::name($lang->task->story),
-                        a
-                        (
-                            setData(
-                                array
-                                (
-                                    'toggle' => 'modal',
-                                    'size'   => 'lg'
-                                )
-                            ),
-                            set::href(createLink('story', 'view', "id={$task->story}")),
-                            set::title($task->storyTitle),
-                            $task->storyTitle
-                        ),
-                        $task->needConfirm ? span
-                        (
-                            setClass('ml-1'),
-                            '(' . $lang->story->changed,
-                            a
-                            (
-                                setClass('mx-1 rounded primary-pale p-1'),
-                                set::href(createLink('task', 'confirmStoryChange', "taskID={$task->id}")),
-                                $lang->confirm
-                            ),
-                            ')'
-                        ) : null
                     ),
                     item
                     (
