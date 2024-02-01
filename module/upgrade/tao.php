@@ -733,6 +733,12 @@ class upgradeTao extends upgradeModel
             $data->days  = $this->computeDaysDelta($data->begin, $data->end);
         }
 
+        if(helper::isZeroDate($data->realBegan)) unset($data->realBegan);
+        if(isset($data->realEnd)    and helper::isZeroDate($data->realEnd))    unset($data->realEnd);
+        if(isset($data->closedDate) and helper::isZeroDate($data->closedDate)) unset($data->closedDate);
+        if(isset($data->begin)      and helper::isZeroDate($data->begin))      unset($data->begin);
+        if(isset($data->end)        and helper::isZeroDate($data->end))        unset($data->end);
+
         $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
         $this->dao->update(TABLE_PROGRAM)->data($data)->where('id')->eq($programID)->exec();
     }
@@ -820,6 +826,10 @@ class upgradeTao extends upgradeModel
             $project->code     = $sprint->code;
             $project->team     = $sprint->team;
         }
+
+        if(helper::isZeroDate($project->realBegan)) unset($project->realBegan);
+        if(helper::isZeroDate($project->realEnd))   unset($project->realEnd);
+
         return $project;
     }
 
