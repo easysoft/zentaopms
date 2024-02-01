@@ -363,6 +363,7 @@ class taskTest
         $task->id           = $taskID;
         $task->status       = $status;
         $task->lastEditedBy = $this->objectModel->app->user->account;
+        $task->project      = 10 + $taskID;
 
         $postData = new stdclass();
         $postData->team         = $team;
@@ -994,9 +995,7 @@ class taskTest
     public function addTaskEffortTest($data)
     {
         $data->date = date("Y-m-d");
-        $this->objectModel->addTaskEffort($data);
-
-        $objectID = $this->objectModel->dao->lastInsertID();
+        $objectID = $this->objectModel->addTaskEffort($data);
         $object   = $this->objectModel->getEffortByID($objectID);
 
         if(dao::isError())
@@ -1555,8 +1554,9 @@ class taskTest
     public function manageTaskTeamTest(int $taskID, string $taskStatus, string $mode, array $teamData): array|false
     {
         $task = new stdclass();
-        $task->id     = $taskID;
-        $task->status = $taskStatus;
+        $task->id      = $taskID;
+        $task->status  = $taskStatus;
+        $task->project = 10 + $taskID;
 
         $teamInfo = new stdclass();
         foreach($teamData as $key => $value) $teamInfo->{$key} = $value;
