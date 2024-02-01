@@ -543,6 +543,8 @@ class upgradeTao extends upgradeModel
      */
     protected function updateProjectByProduct(int $projectID, array $productIdList): void
     {
+        if(empty($productIdList)) return;
+
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
         $this->dao->update(TABLE_TESTSUITE)->set('project')->eq($projectID)->where('product')->in($productIdList)->andWhere('project')->eq(0)->exec();
@@ -738,6 +740,7 @@ class upgradeTao extends upgradeModel
         if(isset($data->closedDate) and helper::isZeroDate($data->closedDate)) unset($data->closedDate);
         if(isset($data->begin)      and helper::isZeroDate($data->begin))      unset($data->begin);
         if(isset($data->end)        and helper::isZeroDate($data->end))        unset($data->end);
+        if(empty(get_object_vars($data))) return;
 
         $this->dao->update(TABLE_PROJECT)->data($data)->where('id')->eq($projectID)->exec();
         $this->dao->update(TABLE_PROGRAM)->data($data)->where('id')->eq($programID)->exec();
