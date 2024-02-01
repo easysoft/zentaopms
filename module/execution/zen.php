@@ -1771,6 +1771,8 @@ class executionZen extends execution
         if($planID)
         {
             $plan     = $this->loadModel('productplan')->fetchByID($planID);
+            if($plan->begin == $this->config->productplan->future) $plan->begin = '';
+            if($plan->end   == $this->config->productplan->future) $plan->end   = '';
             $products = $this->dao->select('t1.id, t1.name, t1.type, t2.branch')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
                 ->where('t1.id')->eq($plan->product)
