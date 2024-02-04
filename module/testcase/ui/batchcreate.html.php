@@ -16,6 +16,7 @@ $visibleFields  = array();
 $requiredFields = array();
 foreach(explode(',', $showFields) as $field)
 {
+    if(!$needReview && $field == 'review') continue;
     if($field) $visibleFields[$field] = '';
 }
 foreach(explode(',', $config->testcase->create->requiredFields) as $field)
@@ -27,6 +28,7 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
     }
 }
 $hiddenStory = isAjaxRequest('modal') && $story;
+if(!$needReview) unset($customFields['review']);
 
 $items = array();
 
