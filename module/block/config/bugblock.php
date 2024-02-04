@@ -50,6 +50,7 @@ $config->block->bug->dtable->fieldList['deadline']['type']  = 'date';
 $config->block->bug->dtable->fieldList['deadline']['sort']  = 'date';
 
 $config->block->bug->dtable->short = new stdclass();
-$config->block->bug->dtable->short->fieldList['id']     = $config->block->bug->dtable->fieldList['id'];
-$config->block->bug->dtable->short->fieldList['title']  = $config->block->bug->dtable->fieldList['title'];
-$config->block->bug->dtable->short->fieldList['status'] = $config->block->bug->dtable->fieldList['status'];
+$config->block->bug->dtable->short->fieldList['title']    = $config->block->bug->dtable->fieldList['title'];
+$config->block->bug->dtable->short->fieldList['severity'] = $config->block->bug->dtable->fieldList['severity'];
+$config->block->bug->dtable->short->fieldList['pri']      = $config->block->bug->dtable->fieldList['pri'];
+$config->block->bug->dtable->short->fieldList['status']   = $config->block->bug->dtable->fieldList['status'];
