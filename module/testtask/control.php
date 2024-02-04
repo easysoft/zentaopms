@@ -379,7 +379,7 @@ class testtask extends control
 
         /* 保存部分内容到 session 中供后面使用。*/
         /* Save session. */
-        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+        $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
         if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
 
         /* 保存部分内容到 cookie 中供后面使用。*/
