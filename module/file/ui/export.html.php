@@ -98,9 +98,9 @@ if($isCustomExport)
             formGroup
             (
                 set::label($lang->file->tplTitle),
+                set::className('mt-4'),
                 inputGroup
                 (
-                    setClass('mt-4'),
                     input(set::name('title'), set::value($lang->file->defaultTPL)),
                     hasPriv('file', 'setPublic') ? div
                     (
