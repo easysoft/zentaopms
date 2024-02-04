@@ -26,3 +26,4 @@ window.ajaxDelete = function(storyID)
         if(res) $.get($.createLink('story', 'delete', 'storyID=' + storyID + '&confirm=yes'), function(data){if(data.result == 'success') loadPage(data.load)});
     });
 }
+$('#mainContent .files').removeClass('px-6');
