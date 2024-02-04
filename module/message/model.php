@@ -188,11 +188,12 @@ class messageModel extends model
     public function getToList(object $object, string $objectType, int $actionID = 0): string
     {
         $toList = '';
-        if(!empty($object->assignedTo))                 $toList = $object->assignedTo;
-        if(empty($toList) && $objectType == 'todo')     $toList = $object->account;
-        if(empty($toList) && $objectType == 'testtask') $toList = $object->owner;
-        if(empty($toList) && $objectType == 'meeting')  $toList = $object->host . $object->participant;
-        if(empty($toList) && $objectType == 'mr')       $toList = $object->createdBy . ',' . $object->assignee;
+        if(!empty($object->assignedTo))                    $toList = $object->assignedTo;
+        if(empty($toList) && $objectType == 'todo')        $toList = $object->account;
+        if(empty($toList) && $objectType == 'testtask')    $toList = $object->owner;
+        if(empty($toList) && $objectType == 'meeting')     $toList = $object->host . $object->participant;
+        if(empty($toList) && $objectType == 'mr')          $toList = $object->createdBy . ',' . $object->assignee;
+        if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
         if(empty($toList) && $objectType == 'release')
         {
             /* Get notifiy persons. */

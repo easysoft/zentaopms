@@ -121,6 +121,11 @@ class xuanxuanMessage extends messageModel
                     $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('feedback', 'browse', "id=$object->product", 'html'));
                     $subcontent->cardURL    = $url;
                 }
+                elseif($objectType == 'demandpool')
+                {
+                    if(!empty($object->owner))    $target .= trim($object->owner, ',');
+                    if(!empty($object->reviewer)) $target .= ',' . trim($object->reviewer, ',');
+                }
                 else
                 {
                     $subcontent->parentType = $objectType;
