@@ -75,7 +75,7 @@ div
                                 (
                                     'help ml-1',
                                     toggle::tooltip(array('title' => $lang->product->storyDeliveryRateTip)),
-                                    set('data-placement', 'bottom'),
+                                    set('data-placement', 'right'),
                                     set('data-type', 'white'),
                                     set('data-class-name', 'text-gray border border-light'),
                                     setClass('text-gray ')
