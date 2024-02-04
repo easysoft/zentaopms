@@ -52,4 +52,5 @@ $config->block->task->dtable->fieldList['progress']['sort']  = 'number';
 $config->block->task->dtable->short = new stdclass();
 $config->block->task->dtable->short->fieldList['id']     = $config->block->task->dtable->fieldList['id'];
 $config->block->task->dtable->short->fieldList['name']   = $config->block->task->dtable->fieldList['name'];
+$config->block->task->dtable->short->fieldList['pri']    = $config->block->task->dtable->fieldList['pri'];
 $config->block->task->dtable->short->fieldList['status'] = $config->block->task->dtable->fieldList['status'];
