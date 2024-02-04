@@ -1044,6 +1044,7 @@ class user extends control
         foreach($templates as $template)
         {
             $content = html_entity_decode($template->content);
+            $content = str_replace(array("\n", '', $content);
             $item    = array('text' => $template->title, 'data-on' => 'click', 'data-call' => "applyTemplate('$editor', '$content')");
             if($template->account == $this->app->user->account) $item['trailingIcon'] = array('icon' => 'close', 'data-on' => 'click', 'data-call' => "deleteTemplate($template->id)");
             $items[] = $item;
