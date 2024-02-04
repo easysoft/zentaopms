@@ -14,6 +14,6 @@ $config->block->story->dtable->fieldList['estimate'] = array('name' => 'estimate
 $config->block->story->dtable->fieldList['stage']    = array('name' => 'stage',    'title' => $this->lang->story->stageAB,    'type' => 'stage',    'sort' => true, 'map' => $lang->story->stageList);
 
 $config->block->story->dtable->short = new stdclass();
-$config->block->story->dtable->short->fieldList['id']     = $config->block->story->dtable->fieldList['id'];
-$config->block->story->dtable->short->fieldList['title']  = $config->block->story->dtable->fieldList['title'];
-$config->block->story->dtable->short->fieldList['status'] = $config->block->story->dtable->fieldList['status'];
+$config->block->story->dtable->short->fieldList['id']    = $config->block->story->dtable->fieldList['id'];
+$config->block->story->dtable->short->fieldList['title'] = $config->block->story->dtable->fieldList['title'];
+$config->block->story->dtable->short->fieldList['pri']   = $config->block->story->dtable->fieldList['pri'];
