@@ -27,6 +27,11 @@ class pageBase extends wg
 
     protected static array $defineBlocks = array('head' => array());
 
+    public static function getPageCSS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function created()
     {
         if($this->prop('display')) $this->display();
@@ -98,12 +103,16 @@ class pageBase extends wg
 
         $currentLang = $this->props->get('lang');
         if(empty($currentLang)) $currentLang = $app->getClientLang();
+        $setXuanClass = str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')
+            ? setClass('xxc-embed')
+            : null;
 
         return h::html
         (
             before(html('<!DOCTYPE html>')),
             set($attrs),
             set::className("theme-$themeName", $this->prop('class')),
+            $setXuanClass,
             set::lang($currentLang),
             h::head
             (
@@ -117,6 +126,7 @@ class pageBase extends wg
             (
                 set($bodyProps),
                 set::className($bodyClass),
+                $setXuanClass,
                 empty($imports) ? null : h::import($imports),
                 h::css($css, setClass('zin-page-css')),
                 $body,
