@@ -85,7 +85,7 @@ if($project)
             $lang->block->projectstatistic->lastestExecution,
             hasPriv('execution', 'task') ? a
             (
-                setClass('pl-2'),
+                setClass('pl-2 text-primary'),
                 set::href(helper::createLink('execution', 'task', "executionID={$project->executions[0]->id}")),
                 set('title', $project->executions[0]->name),
                 $project->executions[0]->name
