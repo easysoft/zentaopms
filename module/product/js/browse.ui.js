@@ -64,6 +64,7 @@ window.renderCell = function(result, info)
         let html = '';
         if(typeof modulePairs[story.rawModule] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.rawModule] + "</span> ";
         if(story.parent > 0) html += "<span class='label gray-pale rounded-xl clip'>" + (storyType == 'requirement' ? 'SR' : childrenAB) + "</span> ";
+        if(story.color) result[0].props.style = 'color: ' + story.color;
         if(html) result.unshift({html});
     }
     if(info.col.name == 'status' && result)
