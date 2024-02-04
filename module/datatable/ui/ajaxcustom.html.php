@@ -55,6 +55,7 @@ function buildItem(array $item): wg
                 ),
                 select
                 (
+                    set::name(''),
                     setClass('size-sm w-12'),
                     set::name('width'),
                     set::required(true),
