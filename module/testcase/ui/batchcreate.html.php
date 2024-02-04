@@ -161,6 +161,7 @@ $items[] = array
     'items'    => $lang->testcase->reviewList,
     'value'    => $needReview,
     'width'    => '160px',
+    'required' => true,
     'ditto'    => true
 );
 
