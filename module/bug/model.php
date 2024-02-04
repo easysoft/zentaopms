@@ -934,7 +934,7 @@ class bugModel extends model
             {
                 $conditions = array();
 
-                if(!is_array($builds)) $builds = array_unique(explode(',', $builds));
+                if(!is_array($builds)) $builds = array_filter(array_unique(explode(',', $builds)));
                 foreach($builds as $build) $conditions[] = "FIND_IN_SET('$build', t1.openedBuild)";
 
                 $condition = implode(' OR ', $conditions);

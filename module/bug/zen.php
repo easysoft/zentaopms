@@ -688,7 +688,7 @@ class bugZen extends bug
     protected function setEditMenu(object $bug): bool
     {
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($bug->project);
-        if($this->app->tab == 'execution') $this->execution->setMenu($bug->execution);
+        if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($bug->execution);
         if($this->app->tab == 'qa')        $this->loadModel('qa')->setMenu($bug->product, $bug->branch);
         if($this->app->tab == 'devops')
         {
