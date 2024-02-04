@@ -1948,6 +1948,7 @@ class testcaseZen extends testcase
         $libCase->status          = $case->status;
         $libCase->fromCaseID      = $case->id;
         $libCase->fromCaseVersion = $case->version;
+        $libCase->color           = $case->color;
         $libCase->order           = $maxOrder;
         $libCase->module          = empty($case->module) ? 0 : $this->testcase->importCaseRelatedModules($libID, $case->module, $maxModuleOrder);
 
