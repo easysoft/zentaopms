@@ -112,6 +112,7 @@ window.renderCell = function(result, info)
         {
             html += "<span class='label gray-pale rounded-xl mr-1'>" + childrenAB + "</span>";
         }
+        if(task.color) result[0].props.style = 'color: ' + task.color;
         if(html) result.unshift({html});
 
         if(task.fromBug > 0)
