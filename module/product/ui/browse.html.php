@@ -311,10 +311,12 @@ if($isProjectStory and $storyType == 'requirement')
     unset($lang->projectstory->featureBar['story']['unlinkedexecution']);
 }
 
+$queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}");
 featureBar
 (
     set::current($storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID")),
+    set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle(set::open($browseType == 'bysearch'), set::module('story')))
 );
 
