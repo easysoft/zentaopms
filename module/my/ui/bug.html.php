@@ -17,7 +17,7 @@ $testcaseLink = createLink('testcase', 'view', "caseID={case}&version={caseVersi
 
 jsVar('testcaseTitle', $testcaseTitle);
 jsVar('testcaseLink', $testcaseLink);
-jsVar('checkedSummary', $checkedSummary);
+jsVar('checkedSummary', isset($checkedSummary) ? $checkedSummary : '');
 
 $linkParam = "mode=bug&type={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 if($app->rawMethod == 'contribute') $linkParam = "mode=$mode&$linkParam";
