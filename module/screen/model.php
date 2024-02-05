@@ -300,6 +300,16 @@ class screenModel extends model
                 $component->chartConfig->filters = $latestFilters;
                 $component->chartConfig->noSetupGlobalFilterList = array();
             }
+            else
+            {
+                foreach($oldFilters as $index => $filter)
+                {
+                    $oldDefault = $filter->default;
+                    $newDefault = $latestFilters[$index]->default;
+
+                    if($oldDefault !== $newDefault) $component->chartConfig->filters[$index]->default = $newDefault;
+                }
+            }
         }
 
         if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
@@ -345,7 +355,7 @@ class screenModel extends model
         if(count($oldFilters) != count($latestFilters)) $filterChanged = true;
         foreach($oldFilters as $index => $oldFilter)
         {
-            $newFilter = (object)$latestFilters[$index];
+            $newFilter = $latestFilters[$index];
 
             // 结果筛选器和查询筛选器都有的三个字段
             if($oldFilter->field != $newFilter->field || $oldFilter->name != $newFilter->name || $oldFilter->type != $newFilter->type) $filterChanged = true;
@@ -950,7 +960,7 @@ class screenModel extends model
                     $filter['options'] = $screenOptions;
                 }
 
-                $screenFilters[] = $filter;
+                $screenFilters[] = (object)$filter;
                 continue;
             }
 
@@ -994,7 +1004,7 @@ class screenModel extends model
                 $filter['options'] = $screenOptions;
             }
 
-            $screenFilters[] = $filter;
+            $screenFilters[] = (object)$filter;
         }
 
         return $screenFilters;
