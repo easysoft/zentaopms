@@ -665,7 +665,7 @@ class repoModel extends model
             $this->dao->update(TABLE_REPO)->data($repo)->where('id')->eq($repoID)->exec();
 
             /* Add webhook. */
-            if($repo->SCM == 'Gitlab') $this->loadModel('gitlab')->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+            if($repo->SCM == 'Gitlab') $this->loadModel('gitlab')->updateCodePath((int)$repo->serviceHost, (int)$repo->serviceProject, $repo->id);
         }
 
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
