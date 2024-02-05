@@ -2976,7 +2976,7 @@ class pivotModel extends model
 
             $fieldStr = implode('`,`', $fields);
             $table    = zget($this->config->objectTables, $object, '');
-            if(empty($table) continue;
+            if(empty($table)) continue;
 
             $data = $this->dao->select("`$fieldStr`")->from($table)->fetchAll();
             $tableRecords[$object] = $data;
