@@ -20,40 +20,11 @@
  */
 class cv_in_waterfall extends baseCalc
 {
+    public $dataset = 'getWaterfallTasks';
+
+    public $fieldList = array('t1.id as project', 't2.estimate', 't2.consumed', 't2.left', 't3.consumed as ac');
+
     public $result = array();
-
-    public function getStatement()
-    {
-        $ev = $this->dao->select('project, SUM(estimate) as estimate, SUM(consumed) as consumed, SUM(`left`) as `left`')
-            ->from(TABLE_TASK)
-            ->where('deleted')->eq('0')
-            ->andWhere('parent')->ne('-1')
-            ->andWhere("vision NOT LIKE '%or%'")
-            ->andWhere("vision NOT LIKE '%lite%'")
-            ->andWhere('status', true)->in('done,closed')
-            ->orWhere('closedReason')->eq('done')
-            ->markRight(1)
-            ->groupBy('project')
-            ->get();
-
-        $ac = $this->dao->select('t3.id as project, SUM(t1.consumed) as consumed')
-            ->from(TABLE_EFFORT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-            ->where("t3.vision NOT LIKE '%or%'")
-            ->andWhere("t3.vision NOT LIKE '%lite%'")
-            ->groupBy('t3.id')
-            ->get();
-
-        return $this->dao->select('t1.id as project, t2.estimate, t2.consumed, t2.`left`, t3.consumed as ac')
-            ->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin("($ev)")->alias('t2')->on('t1.id=t2.project')
-            ->leftJoin("($ac)")->alias('t3')->on('t1.id=t3.project')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.type')->eq('project')
-            ->andWhere('t1.model')->in('waterfall,waterfallplus')
-            ->query();
-    }
 
     public function calculate($row)
     {

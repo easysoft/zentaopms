@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_created_case
 timeout=0
 cid=1
+
+- 测试年度新增用例分组数。 @11
+- 测试2017年用例Bug数第0条的value属性 @22
+- 测试2018年用例Bug数第0条的value属性 @9
+- 测试2023年用例Bug数第0条的value属性 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

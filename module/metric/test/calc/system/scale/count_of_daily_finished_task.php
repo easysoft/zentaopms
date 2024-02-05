@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_daily_finished_task
 timeout=0
 cid=1
+
+- 测试分组数。 @244
+- 测试2020.09.05。第0条的value属性 @1
+- 测试2020.09.15。第0条的value属性 @1
+- 测试不存在。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

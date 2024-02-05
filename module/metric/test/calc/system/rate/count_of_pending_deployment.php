@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_pending_deployment
 timeout=0
 cid=1
+
+- 测试待处理上线计划数。第0条的value属性 @6
 
 */
 

@@ -9,7 +9,7 @@
  * 度量名称：按人员统计的待处理用例数
  * 单位：个
  * 描述：按人员统计的待处理用例数表示每个人待处理的用例数量之和。反映了每个人需要处理的用例数量上的规模。该数值越大，说明需要投入越多的时间处理用例。
- * 定义：所有用例个数求和;指派给为某人;测试单的状态不为已完成;过滤已删除的用例;过滤已删除测试单的用例;过滤已删除产品的用例;
+ * 定义：按人员统计的待处理的用例个数;所有测试单中的用例个数求和（不去重）;指派给某人;过滤已删除的用例;过滤已删除的测试单中的用例;过滤已关闭的测试单中的用例;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
@@ -20,23 +20,17 @@
  */
 class count_of_assigned_case_in_user extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getTestRuns';
 
-    public function getStatement()
-    {
-        return $this->dao->select('t1.assignedTo')->from(TABLE_TESTRUN)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case` = t2.id')
-            ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
-            ->where('t3.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t3.status')->ne('done')
-            ->query();
-    }
+    public $fieldList = array('t1.assignedTo', 't3.status');
+
+    public $result = array();
 
     public function calculate($row)
     {
         $assignedTo = $row->assignedTo;
 
+        if($row->status == 'done') return false;
         if(empty($assignedTo) || $assignedTo == 'closed') return false;
 
         if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = 0;

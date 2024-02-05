@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_bug_in_project
 timeout=0
 cid=1
+
+- 测试分组数。 @6
+- 测试项目1的bug数第0条的value属性 @72
+- 测试项目2的bug数第0条的value属性 @48
+- 测试项目5的bug数第0条的value属性 @48
+- 测试项目6的bug数第0条的value属性 @48
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

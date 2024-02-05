@@ -13,8 +13,11 @@ $calc   = $metric->calcMetric(__FILE__);
 /**
 
 title=count_of_dealyed_task_in_user
+timeout=0
 cid=1
-pid=1
+
+- 测试分组数。 @8
+- 测试用户dev。第0条的value属性 @27
 
 */
 

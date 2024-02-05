@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_created_feedback
 timeout=0
 cid=1
+
+- 测试分组数。 @3
+- 测试2010年新增的反馈数。第0条的value属性 @12
+- 测试2011年新增的反馈数。第0条的value属性 @7
+- 测试不存在年份的反馈数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

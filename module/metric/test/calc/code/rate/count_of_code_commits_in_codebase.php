@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_code_commits_in_codebase
-cid=1
 timeout=0
+cid=1
+
+- 测试提交数。第0条的value属性 @10000
 
 */
 

@@ -1,10 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=progress_of_task_in_project
 timeout=0
 cid=1
+
+- 测试分组数。 @90
+- 测试项目11的进度第0条的value属性 @0.5
+- 测试项目12的进度第0条的value属性 @0.5
+- 测试项目13的进度第0条的value属性 @0.5
+- 测试不存在项目的进度 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

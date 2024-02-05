@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_daily_created_story
 timeout=0
 cid=1
+
+- 测试分组数。 @160
+- 测试2017.09.21。第0条的value属性 @2
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

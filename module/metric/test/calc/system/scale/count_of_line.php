@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_line
 timeout=0
 cid=1
+
+- 测试产品线数第0条的value属性 @80
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

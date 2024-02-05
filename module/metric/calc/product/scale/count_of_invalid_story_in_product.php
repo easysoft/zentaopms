@@ -20,31 +20,26 @@
  */
 class count_of_invalid_story_in_product extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getDevStories';
 
-    public function getStatement()
-    {
-        return $this->dao->select('t1.product,count(t1.id) as value')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.type')->eq('story')
-            ->andWhere('t2.shadow')->eq(0)
-            ->andWhere('t1.closedReason')->in('duplicate,willnotdo,bydesign,cancel')
-            ->andWhere("t1.vision NOT LIKE '%or%'")
-            ->andWhere("t1.vision NOT LIKE '%lite%'")
-            ->groupBy('t1.product')
-            ->query();
-    }
+    public $fieldList = array('t1.product', 't1.closedReason');
+
+    public $result = array();
 
     public function calculate($row)
     {
-        $this->result[] = $row;
+        $product      = $row->product;
+        $closedReason = $row->closedReason;
+
+        if(!in_array($closedReason, array('duplicate', 'willnotdo', 'bydesign', 'cancel'))) return false;
+
+        if(!isset($this->result[$product])) $this->result[$product] = 0;
+        $this->result[$product] += 1;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->result;
+        $records = $this->getRecords(array('product', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }

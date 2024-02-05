@@ -20,28 +20,19 @@
  */
 class consume_of_all_in_project extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getProjectEfforts';
 
-    public function getStatement()
-    {
-        return $this->dao->select('t3.id as project, SUM(t1.consumed) as consumed')
-            ->from(TABLE_EFFORT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-            ->where('t3.deleted')->eq('0')
-            ->andWhere('t3.type')->eq('project')
-            ->andWhere("t3.vision NOT LIKE '%or%'")
-            ->andWhere("t3.vision NOT LIKE '%lite%'")
-            ->groupBy('t3.id')
-            ->query();
-    }
+    public $fieldList = array('t3.id as project', 't1.consumed');
+
+    public $result = array();
 
     public function calculate($row)
     {
         $project  = $row->project;
         $consumed = $row->consumed;
 
-        if(!isset($this->result[$project])) $this->result[$project] = $consumed;
+        if(!isset($this->result[$project])) $this->result[$project] = 0;
+        $this->result[$project] += $consumed;
     }
 
     public function getResult($options = array())

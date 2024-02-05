@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_monthly_created_execution
 timeout=0
 cid=1
+
+- 测试分组数。 @85
+- 测试2010-01新增的执行数。第0条的value属性 @8
+- 测试2018-03新增的执行数。第0条的value属性 @3
+- 测试不存在年份的新增执行数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

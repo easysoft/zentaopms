@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_closed_top_program
 timeout=0
 cid=1
+
+- 测试关闭的一级项目集数量第0条的value属性 @45
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

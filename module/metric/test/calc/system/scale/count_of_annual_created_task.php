@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_created_task
 timeout=0
 cid=1
+
+- 测试分组数。 @11
+- 测试2011年度新增任务数。第0条的value属性 @18
+- 测试2012年度新增任务数。第0条的value属性 @37
+- 测试2017年度新增任务数。第0条的value属性 @19
+- 测试2018年度新增任务数。第0条的value属性 @24
+- 测试不存在的年度新增任务数。 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

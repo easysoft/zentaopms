@@ -19,6 +19,7 @@
 .side .metric-item:hover, .side .checkbox-primary:hover {color: var(--color-primary-500);}
 .side .metric-group {padding-left: 16px; padding-top: 6px; padding-bottom: 2px; color: var(--color-gray-600);}
 .side .metric-current {color: var(--color-primary-600); background-color:var(--color-primary-50); font-weight: 600;}
+.side .metric-tree ul {list-style-type: none;}
 
 .side .checkbox-primary {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
 .side .checkbox-primary:hover {background-color: var(--color-gray-100);}
@@ -53,6 +54,8 @@ i.star {color: var(--color-warning-300);}
 .table-and-chart .table-side {flex-shrink: 1; max-width: 50%; border-style: solid; border-width: 1px 0px 1px 1px; border-color: var(--color-gray-300);}
 .table-and-chart .chart-side {flex-grow: 1; border: 1px solid var(--color-gray-300); padding: 20px;}
 .table-and-chart .chart-center {display:flex; justify-content: center; align-items: center;}
+.table-and-chart.no-data {justify-content: center; align-items: center;}
+.table-and-chart.no-data span {color: var(--color-gray-400);}
 
 .icon-18 {font-size: 18px;}
 .primary-hover-500 {color: var(--color-gray-800)}

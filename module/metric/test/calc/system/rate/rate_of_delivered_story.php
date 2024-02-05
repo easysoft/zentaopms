@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=rate_of_delivered_story
 timeout=0
 cid=1
+
+- 测试按全局统计的研发需求交付率第0条的value属性 @0.4035
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

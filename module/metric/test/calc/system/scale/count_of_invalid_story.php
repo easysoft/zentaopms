@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_valid_story
 timeout=0
 cid=1
+
+- 测试500条数据全局无效研发需求数。第0条的value属性 @60
+- 测试839条数据全局无效研发需求数。第0条的value属性 @90
+- 测试1252条数据全局无效研发需求数。第0条的value属性 @135
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

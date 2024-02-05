@@ -1,16 +1,24 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_weekly_created_release
 timeout=0
 cid=1
 
+- 测试新增发布分组数。 @200
+- 测试2019年3月月度新增发布数。第0条的value属性 @1
+- 测试2019年9月月度新增发布数。第0条的value属性 @0
+- 测试2020年5月月度新增发布数。第0条的value属性 @1
+- 测试2020年12月月度新增发布数。第0条的value属性 @0
+
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
 zdTable('product')->config('product', true, 4)->gen(10);
+zdTable('project')->config('project', true, 4)->gen(10);
 zdTable('release')->config('release', true, 4)->gen(1000);
 
 $metric = new metricTest();

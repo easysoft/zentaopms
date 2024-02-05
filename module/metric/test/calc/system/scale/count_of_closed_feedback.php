@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_closed_feedback
 timeout=0
 cid=1
+
+- 测试356条数据。第0条的value属性 @15
+- 测试652条数据。第0条的value属性 @27
+- 测试1265条数据。第0条的value属性 @53
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

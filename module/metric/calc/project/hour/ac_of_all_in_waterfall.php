@@ -20,29 +20,22 @@
  */
 class ac_of_all_in_waterfall extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getProjectEfforts';
 
-    public function getStatement()
-    {
-        return $this->dao->select('t3.id as project, SUM(t1.consumed) as ac')
-            ->from(TABLE_EFFORT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-            ->where('t3.deleted')->eq('0')
-            ->andWhere('t3.type')->eq('project')
-            ->andWhere('t3.model')->in('waterfall,waterfallplus')
-            ->andWhere("t3.vision NOT LIKE '%or%'")
-            ->andWhere("t3.vision NOT LIKE '%lite%'")
-            ->groupBy('t3.id')
-            ->query();
-    }
+    public $fieldList = array('t3.id as project', 't1.consumed', 't3.model');
+
+    public $result = array();
 
     public function calculate($row)
     {
         $project = $row->project;
-        $ac      = $row->ac;
+        $ac      = $row->consumed;
+        $model   = $row->model;
 
-        if(!isset($this->result[$project])) $this->result[$project] = $ac;
+        if($model != 'waterfall' && $model != 'waterfallplus') return false;
+
+        if(!isset($this->result[$project])) $this->result[$project] = 0;
+        $this->result[$project] += $ac;
     }
 
     public function getResult($options = array())

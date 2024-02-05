@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_application
 timeout=0
 cid=1
+
+- 测试应用数。第0条的value属性 @10
 
 */
 

@@ -20,28 +20,20 @@
  */
 class day_of_daily_effort extends baseCalc
 {
+    public $dataset = 'getEfforts';
+
+    public $fieldList = array('t1.date', 't1.consumed');
+
     public $result = array();
-
-    public function getStatement()
-    {
-        $defaultHours = $this->dao->select('value')
-            ->from(TABLE_CONFIG)
-            ->where('module')->eq('execution')
-            ->andWhere('key')->eq('defaultWorkhours')
-            ->fetch('value');
-        if(empty($defaultHours)) $defaultHours = 7;
-
-        return $this->dao->select("`date`, `consumed`, $defaultHours as defaultHours")
-            ->from(TABLE_EFFORT)
-            ->where('deleted')->eq('0')
-            ->andWhere('date')->notZeroDate()
-            ->query();
-    }
 
     public function calculate($row)
     {
-        $date         = $row->date;
-        $year         = substr($date, 0, 4);
+        $date = $row->date;
+        if(empty($date)) return false;
+
+        $year = substr($date, 0, 4);
+        if($year == '0000') return false;
+
         $month        = substr($date, 5, 2);
         $day          = substr($date, 8, 2);
         $consumed     = $row->consumed;

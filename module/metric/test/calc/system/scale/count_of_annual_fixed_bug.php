@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_fixed_bug
 timeout=0
 cid=1
+
+- 测试年度修复Bug分组数。 @10
+- 测试2017年修复Bug数第0条的value属性 @1
+- 测试2018年修复Bug数第0条的value属性 @2
+- 测试2023年修复Bug数第0条的value属性 @0
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

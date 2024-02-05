@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_delayed_closed_execution_which_annual_finished
 timeout=0
 cid=1
+
+- 测试分组数 @2
+- 测试2011年完成执行中执行的延期关闭率第0条的value属性 @1
+- 测试2012年完成执行中执行的延期关闭率第0条的value属性 @1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

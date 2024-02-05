@@ -20,21 +20,11 @@
  */
 class count_of_daily_run_case extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getTestResults';
 
-    public function getStatement()
-    {
-        return $this->dao->select('t1.`date` as `date`, t1.id')
-            ->from(TABLE_TESTRESULT)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case`=t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
-            ->where('t2.deleted')->eq('0')
-            ->andWhere('t3.deleted')->eq('0')
-            ->andWhere('t1.date')->notZeroDatetime()
-            ->andWhere("t3.vision NOT LIKE '%or%'")
-            ->andWhere("t3.vision NOT LIKE '%lite%'")
-            ->query();
-    }
+    public $fieldList = array('t1.id', 't1.date');
+
+    public $result = array();
 
     public function calculate($row)
     {

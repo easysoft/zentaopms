@@ -23,6 +23,10 @@ fields:
   range: "20120101 000000-20220101 230000:10D"
   type: timestamp
   format: YYYY-MM-DD hh:mm:ss
+- field: assignedDate
+  range: "20130101 000000-20230101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
 - field: status
   range: active{1},resolved{1},closed{1}
 - field: resolution

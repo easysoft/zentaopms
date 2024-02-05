@@ -20,7 +20,7 @@
  */
 class count_of_monthly_created_bug extends baseCalc
 {
-    public $dataset = 'getBugs';
+    public $dataset = 'getAllBugs';
 
     public $fieldList = array('t1.openedDate');
 

@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_doing_execution
 timeout=0
 cid=1
+
+- 测试356条数据。第0条的value属性 @30
+- 测试652条数据。第0条的value属性 @63
+- 测试1265条数据。第0条的value属性 @117
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

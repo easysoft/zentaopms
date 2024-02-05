@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_case
 timeout=0
 cid=1
+
+- 测试356条数据用例数。第0条的value属性 @116
+- 测试652条数据用例数。第0条的value属性 @172
+- 测试1265条数据用例数。第0条的value属性 @320
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

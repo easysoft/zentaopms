@@ -20,35 +20,33 @@
  */
 class rate_of_approved_story_in_product extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getDevStoriesWithReview';
 
-    public function getStatement()
-    {
-        return $this->dao->select("COUNT(t1.result) as total, SUM(CASE WHEN result = 'pass' THEN 1 ELSE 0 END) as pass, t2.product")
-            ->from(TABLE_STORYREVIEW)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
-            ->where('t2.deleted')->eq(0)
-            ->andWhere('t3.deleted')->eq(0)
-            ->andWhere('t2.type')->eq('story')
-            ->andWhere('t3.shadow')->eq(0)
-            ->andWhere("t3.vision NOT LIKE '%or%'")
-            ->andWhere("t3.vision NOT LIKE '%lite%'")
-            ->groupBy('t2.product')
-            ->query();
-    }
+    public $fieldList = array('t2.product', 't1.result');
+
+    public $result = array();
 
     public function calculate($row)
     {
-        $total   = $row->total;
-        $pass    = $row->pass;
+        $result = $row->result;
         $product = $row->product;
 
-        $this->result[$product] = $total == 0 ? 0 : round($pass / $total, 4);
+        if(!isset($this->result[$product])) $this->result[$product] = array('total' => 0, 'pass' => 0);
+
+        $this->result[$product]['total'] += 1;
+        if($result == 'pass') $this->result[$product]['pass'] += 1;
     }
 
     public function getResult($options = array())
     {
+        foreach($this->result as $product => $rate)
+        {
+            if(!isset($rate['total']) || !isset($rate['pass'])) continue;
+            $pass  = $rate['pass'];
+            $total = $rate['total'];
+
+            $this->result[$product] = $total == 0 ? 0 : round($pass / $total, 4);
+        }
         $records = $this->getRecords(array('product', 'value'));
         return $this->filterByOptions($records, $options);
     }

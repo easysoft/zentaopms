@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_product
 timeout=0
 cid=1
+
+- 测试356条数据产品数。第0条的value属性 @89
+- 测试652条数据产品数。第0条的value属性 @163
+- 测试1265条数据产品数。第0条的value属性 @316
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

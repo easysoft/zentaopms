@@ -20,21 +20,22 @@
  */
 class hour_of_daily_effort extends baseCalc
 {
-    public $result = array();
+    public $dataset = 'getEfforts';
 
-    public function getStatement()
-    {
-        return $this->dao->select("`date`, `consumed`")
-            ->from(TABLE_EFFORT)
-            ->where('deleted')->eq('0')
-            ->andWhere('date')->notZeroDate()
-            ->query();
-    }
+    public $fieldList = array('t1.date', 't1.consumed');
+
+    public $result = array();
 
     public function calculate($row)
     {
-        $date     = $row->date;
-        $year     = substr($date, 0, 4);
+        $date = $row->date;
+
+        if(empty($date)) return false;
+
+        $year = substr($date, 0, 4);
+
+        if($year == '0000') return false;
+
         $month    = substr($date, 5, 2);
         $day      = substr($date, 8, 2);
         $consumed = $row->consumed;

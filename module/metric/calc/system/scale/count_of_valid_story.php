@@ -20,25 +20,19 @@
  */
 class count_of_valid_story extends baseCalc
 {
-    public $result = 0;
+    public $dataset = 'getAllDevStories';
 
-    public function getStatement()
-    {
-        return $this->dao->select('count(t1.id) as value')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.shadow')->eq(0)
-            ->andWhere('t1.type')->eq('story')
-            ->andWhere('t1.closedReason')->notin('duplicate,willnotdo,bydesign,cancel')
-            ->andWhere("t1.vision NOT LIKE '%or%'")
-            ->andWhere("t1.vision NOT LIKE '%lite%'")
-            ->query();
-    }
+    public $fieldList = array('t1.id', 't1.closedReason');
+
+    public $result = 0;
 
     public function calculate($row)
     {
-        $this->result = $row->value;
+        $closedReason = $row->closedReason;
+
+        if(in_array($closedReason, array('duplicate', 'willnotdo', 'bydesign', 'cancel'))) return false;
+
+        $this->result += 1;
     }
 
     public function getResult($options = array())

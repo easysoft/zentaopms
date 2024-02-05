@@ -68,21 +68,24 @@ class metric extends control
         $allResultData = array();
         if(!empty($current))
         {
-            $metric = $this->metric->getByID($current->id);
+            $current = $this->metric->getByID($current->id);
 
-            $result    = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
-            $allResult = $this->metric->getResultByCode($metric->code, array(), 'cron');
+            $result    = $this->metric->getResultByCode($current->code, array(), 'cron', $pager);
+            $allResult = $this->metric->getResultByCode($current->code, array(), 'cron');
 
-            $resultHeader  = $this->metric->getViewTableHeader($metric);
-            $resultData    = $this->metric->getViewTableData($metric, $result);
-            $allResultData = $this->metric->getViewTableData($metric, $allResult);
+            $resultHeader  = $this->metric->getViewTableHeader($current);
+            $resultData    = $this->metric->getViewTableData($current, $result);
+            $allResultData = $this->metric->getViewTableData($current, $allResult);
         }
 
-        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData);
+        $currentDateType = $current ? $current->dateType : 'nodate';
+        $currentCode     = $current ? $current->code : '';
+        $currentScope    = $current ? $current->scope : '';
+        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, $currentDateType);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
-        $this->view->dateType      = $current ? $this->metric->getDateTypeByCode($current->code) : 'nodate';
-        $this->view->dateLabels    = $this->metric->getDateLabels($this->view->dateType);
+        $this->view->dateType      = $currentDateType;
+        $this->view->dateLabels    = $this->metric->getDateLabels($currentDateType);
         $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
         $this->view->pagerExtra    = $this->metricZen->getPagerExtra($this->view->tableWidth);
@@ -101,7 +104,9 @@ class metric extends control
         $this->view->dtablePager   = $pager;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $allResultData);
-        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($currentCode, $currentScope);
+        $this->view->noDataTip     = $this->metric->getNoDataTip($currentCode);
+
         $this->display();
     }
 
@@ -164,7 +169,6 @@ class metric extends control
     {
         // 保存当前的错误报告级别和显示错误的设置
         $originalDebug = $this->config->debug;
-        $isFirstGenerate = $this->metric->isFirstGenerate();
 
         // 开启调试模式
         $this->config->debug = 2;
@@ -175,6 +179,7 @@ class metric extends control
         foreach($classifiedCalcGroup as $calcGroup)
         {
             if($this->config->edition == 'open' and in_array($calcGroup->dataset, array('getFeedbacks', 'getIssues', 'getRisks'))) continue;
+            if($this->config->edition == 'biz' and in_array($calcGroup->dataset, array('getIssues', 'getRisks'))) continue;
 
             try
             {
@@ -184,8 +189,8 @@ class metric extends control
                 $rows = $statement->fetchAll();
                 $this->metricZen->calcMetric($rows, $calcGroup->calcList);
 
-                $records = $this->metricZen->prepareMetricRecord($calcGroup->calcList, $isFirstGenerate);
-                $this->metric->insertMetricLib($records);
+                $recordWithCode = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
+                $this->metric->insertMetricLib($recordWithCode);
             }
             catch(Exception $e)
             {
@@ -266,6 +271,15 @@ class metric extends control
         return $this->send($optionList);
     }
 
+    /**
+     * 获取度量项的侧边栏。
+     * Get side tree widget by ajax.
+     *
+     * @param  string $scope
+     * @param  string $checkedList
+     * @access public
+     * @return string
+     */
     public function ajaxGetMetricSideTree($scope, $checkedList)
     {
         $checkedList = explode(',', $checkedList);
@@ -290,17 +304,18 @@ class metric extends control
         $resultData    = $this->metric->getViewTableData($metric, $result);
         $allResultData = $this->metric->getViewTableData($metric, $allResult);
 
-        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData);
+        $dateType = $metric->dateType;
+        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, $dateType);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
-        $this->view->dateType      = $this->metric->getDateTypeByCode($metric->code);
-        $this->view->dateLabels    = $this->metric->getDateLabels($this->view->dateType);
+        $this->view->dateType      = $dateType;
+        $this->view->dateLabels    = $this->metric->getDateLabels($dateType);
         $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
         $this->view->pagerExtra    = $this->metricZen->getPagerExtra($this->view->tableWidth);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
         $this->view->dtablePager   = $pager;
-        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($metric->code, $metric->scope);
 
         $this->view->metric        = $metric;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
@@ -324,18 +339,19 @@ class metric extends control
         $allResultData = $this->metric->getViewTableData($metric, $allResult);
         if($usePager) $this->view->dtablePager = $pager;
 
-        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData);
+        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, $metric->dateType);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
         $this->view->pagerExtra    = $this->metricZen->getPagerExtra($this->view->tableWidth);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
-        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($metric->code, $metric->scope);
 
         $this->view->viewType      = $viewType;
         $this->view->metric        = $metric;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $allResultData);
+        $this->view->noDataTip     = $this->metric->getNoDataTip($metric->code);
 
         $this->display();
     }
@@ -344,7 +360,8 @@ class metric extends control
      * 获取数据表格的数据。
      * Get data of datatable.
      *
-     * @param  int $metricID
+     * @param  int    $metricID
+     * @param  string $chartType
      * @access public
      * @return string
      */

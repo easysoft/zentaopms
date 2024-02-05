@@ -86,18 +86,20 @@ class metricZen extends metric
      */
     protected function prepareDataset($calcGroup)
     {
+        $dao = $this->metric->getDAO();
+
         $dataSource = $calcGroup->dataset;
         $calcList   = $calcGroup->calcList;
 
         if(empty($dataSource))
         {
             $calc = current($calcList);
-            $calc->setDAO($this->dao);
+            $calc->setDAO($dao);
 
             return $calc->getStatement();
         }
 
-        $dataset   = $this->metric->getDataset($this->dao);
+        $dataset   = $this->metric->getDataset($dao);
         $fieldList = $this->metric->uniteFieldList($calcList);
 
         return $dataset->$dataSource($fieldList);
@@ -174,42 +176,133 @@ class metricZen extends metric
      * Build measurements that can be inserted into tables based on the results of the measurements computed.
      *
      * @param  array     $calcList
-     * @param  bool      $isFirstGenerate
      * @access protected
      * @return array
      */
-    protected function prepareMetricRecord($calcList, $isFirstGenerate = false)
+    protected function prepareMetricRecord($calcList)
     {
-        $options = $isFirstGenerate ? array() : array('year' => date('Y'), 'month' => date('n'), 'week' => date('W'), 'day' => date('j'));
+        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => date('j'));
 
-        $now = helper::now();
+        $now        = helper::now();
+        $dateValues = $this->metric->generateDateValues($now);
+
         $records = array();
         foreach($calcList as $code => $calc)
         {
+            $metric       = $this->metric->getByCode($code);
+            $dateType     = $this->metric->getDateTypeByCode($code);
+            $recordCommon = $this->buildMetricRecordCommonFields($metric->id, $code, $now, $dateValues->$dateType);
+            $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope);
+
             $results = $calc->getResult($options);
-            if(!is_array($results) || count($results) == 0) continue;
-
-            $system = (int)$this->metric->isSystemMetric($results);
-
-            $firstRecord = (object)current($results);
-            $cycle = $this->metric->getMetricCycle($firstRecord);
-            $this->metric->clearOutDatedRecords($code, $cycle);
-
             foreach($results as $record)
             {
                 $record = (object)$record;
+                if(empty($record->value)) continue;
 
-                if(empty($record->value)) $record->value = 0;
                 $record->metricID   = $calc->id;
                 $record->metricCode = $code;
                 $record->date       = $now;
-                $record->system     = $system;
+                $record->system     = $metric->scope == 'system' ? 1 : 0;
 
-                $records[] = $record;
+                $uniqueKey = $this->getUniqueKeyByRecord($record);
+                if(!isset($initRecords[$uniqueKey]))
+                {
+                    $initRecords[$uniqueKey] = $record;
+                    continue;
+                }
+
+                $initRecords[$uniqueKey]->value = $record->value;
+            }
+
+            $records[$code] = array_values($initRecords);
+        }
+
+        return $records;
+    }
+
+    /**
+     * 根据度量项编码，初始化度量数据。
+     * Initialize metric data based on metric code.
+     *
+     * @param  string    $code
+     * @param  string    $dateType
+     * @param  string    $date
+     * @access protected
+     * @return array
+     */
+    protected function initMetricRecords($recordCommon, $scope)
+    {
+        $records = array();
+        if($scope == 'system')
+        {
+            $record = clone $recordCommon;
+            $record->system = 1;
+            $uniqueKey = $this->getUniqueKeyByRecord($record);
+
+            $records[$uniqueKey] = $record;
+        }
+        else
+        {
+            $scopeList = $this->metric->getPairsByScope($scope);
+            foreach($scopeList as $key => $value)
+            {
+                $record = clone $recordCommon;
+                $record->$scope = $key;
+                $uniqueKey = $this->getUniqueKeyByRecord($record);
+
+                $records[$uniqueKey] = $record;
             }
         }
 
         return $records;
+    }
+
+    /**
+     * 根据度量项范围，构建度量数据的通用字段。
+     * Build common fields of metric data based on metric scope.
+     *
+     * @param  int     $metricID
+     * @param  string  $code
+     * @param  string  $scope
+     * @param  string  $scopeValue
+     * @param  string  $date
+     * @access protected
+     * @return array
+     */
+    protected function buildMetricRecordCommonFields($metricID, $code, $date, $dateValues)
+    {
+        $record = new stdclass();
+        $record->value      = 0;
+        $record->metricID   = $metricID;
+        $record->metricCode = $code;
+        $record->date       = $date;
+
+        $record = (object)array_merge((array)$record, $dateValues);
+
+        return $record;
+    }
+
+    /**
+     * 根据度量数据，获取度量数据的唯一键。
+     * Get the unique key of metric data based on metric data.
+     *
+     * @param  object    $record
+     * @access protected
+     * @return string
+     */
+    protected function getUniqueKeyByRecord($record)
+    {
+        $record = (array)$record;
+        $uniqueKeys = array();
+        $ignoreFields = array('value', 'metricID', 'metricCode', 'date');
+        foreach($record as $field => $value)
+        {
+            if(in_array($field, $ignoreFields) || empty($value)) continue;
+            $uniqueKeys[] = $field . $value;
+        }
+
+        return implode('_', $uniqueKeys);
     }
 
     /**
@@ -257,6 +350,8 @@ class metricZen extends metric
 
             $pureRow->$pureField = $row->$aliasField;
         }
+
+        if(isset($row->defaultHours)) $pureRow->defaultHours = $row->defaultHours;
 
         return $pureRow;
     }

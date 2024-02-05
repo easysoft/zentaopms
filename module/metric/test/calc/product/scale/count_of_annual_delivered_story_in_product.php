@@ -1,10 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_annual_delivered_story_in_product
 timeout=0
 cid=1
+
+- 测试分组数。 @18
+- 测试产品5 2014年。第0条的value属性 @1
+- 测试产品5 2015年。第0条的value属性 @12
+- 测试产品7 2015年。第0条的value属性 @3
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';

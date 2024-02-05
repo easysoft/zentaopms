@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=count_of_delayed_finished_execution_which_finished
 timeout=0
 cid=1
+
+- 测试分组数第0条的value属性 @16
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
