@@ -1572,9 +1572,16 @@ class storyZen extends story
     protected function getResponseInModal(string $message = ''): array|false
     {
         if(!isInModal()) return false;
-        if($this->app->tab != 'execution') return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);
 
-        return array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "refreshKanban()");
+        $execution = $this->execution->getByID((int)$this->session->execution);
+        if($this->app->tab == 'execution' and $execution->type == 'kanban')
+        {
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "refreshKanban()", 'closeModal' => true));
+        }
+        else
+        {
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+        }
     }
 
     /**
