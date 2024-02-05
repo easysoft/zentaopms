@@ -188,8 +188,11 @@ class tree extends control
             $title = $this->lang->tree->edit;
         }
 
+        if($type == 'host') $this->app->loadLang('host');
+
         $this->view->name   = $name;
         $this->view->title  = $title;
+        $this->view->title  = $type == 'host' ? $this->lang->host->groupMaintenance : $title;
         $this->view->module = $module;
         $this->view->type   = $type;
         $this->view->branch = $branch;
