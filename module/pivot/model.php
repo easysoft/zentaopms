@@ -2531,12 +2531,23 @@ class pivotModel extends model
                     }
                     else
                     {
-                        $table = zget($this->config->objectTables, $object, '');
-                        $columns = $this->dbh->query("SHOW COLUMNS FROM $table")->fetchAll();
-                        foreach($columns as $id => $column) $columns[$id] = (array)$column;
-                        $fieldList = array_column($columns, 'Field');
+                        $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
+                        if(is_file($path))
+                        {
+                            include $path;
+                            $fieldObject = $schema->fields[$field]['object'];
+                            $table = zget($this->config->objectTables, $fieldObject, '');
+                            $showField = 'id';
+                            $show = explode('.', $schema->fields[$field]['show']);
+                            if(count($show) == 2) $showField = $show[1];
 
-                        if(in_array($field, $fieldList)) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                            if($table) $options = $this->dao->select("id, {$showField}")->from($table)->fetchPairs();
+                        }
+                        else
+                        {
+                            $table = zget($this->config->objectTables, $object, '');
+                            if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                        }
                     }
                 }
                 break;
