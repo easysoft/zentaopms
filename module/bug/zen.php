@@ -472,8 +472,8 @@ class bugZen extends bug
         if(empty($product->shadow) || !empty($project->multiple)) $legendBasic['productplan'] = array('name' => $this->lang->bug->plan, 'text' => $bug->planName, 'href' => $planLink);
         $legendBasic['fromCase']       = array('name' => $this->lang->bug->fromCase,       'text' => $fromCaseName, 'href' => $fromCaseLink, 'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
         $legendBasic['type']           = array('name' => $this->lang->bug->type,           'text' => zget($this->lang->bug->typeList, $bug->type));
-        $legendBasic['severity']       = array('name' => $this->lang->bug->severity,       'text' => zget($this->lang->bug->severityList, $bug->severity));
-        $legendBasic['pri']            = array('name' => $this->lang->bug->pri,            'text' => zget($this->lang->bug->priList, $bug->pri));
+        $legendBasic['severity']       = array('name' => $this->lang->bug->severity,       'text' => $bug->severity);
+        $legendBasic['pri']            = array('name' => $this->lang->bug->pri,            'text' => $bug->pri);
         $legendBasic['status']         = array('name' => $this->lang->bug->status,         'text' => $this->processStatus('bug', $bug), 'attr' => array('class' => 'status-' . $bug->status));
         $legendBasic['activatedCount'] = array('name' => $this->lang->bug->activatedCount, 'text' => $bug->activatedCount ? $bug->activatedCount : '');
         $legendBasic['activatedDate']  = array('name' => $this->lang->bug->activatedDate,  'text' => formatTime($bug->activatedDate));
