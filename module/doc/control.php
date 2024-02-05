@@ -654,13 +654,12 @@ class doc extends control
     public function view(int $docID = 0, int $version = 0, int $appendLib = 0)
     {
         $doc = $this->doc->getByID($docID, $version, true);
-        if(!$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->doc->accessDenied, inlink('index'));
-
         if(!$doc || !isset($doc->id))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->sendError($this->lang->notFound, $this->inlink('index'));
         }
+        if(!$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->doc->accessDenied, inlink('index'));
 
         $lib = $this->doc->getLibByID((int)$doc->lib);
         if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->lib;
