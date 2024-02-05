@@ -20,7 +20,7 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 
 window.onRenderBugNameCell = function(result, info)
 {
-    if(info.col.name === 'title' && info.row.data.case)
+    if(info.col.name === 'title' && info.row.data.case && info.row.data.case != '0')
     {
         result[result.length] = {html: '<a href=\'' + testcaseLink.replace('{case}', info.row.data.case).replace('{caseVersion}', info.row.data.caseVersion) + '\' title=\'' + info.row.data.case + '\'>' + testcaseTitle.replace('{case}', info.row.data.case) + '</a>'};
     }
