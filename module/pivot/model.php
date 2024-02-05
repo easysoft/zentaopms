@@ -2962,7 +2962,7 @@ class pivotModel extends model
             $object = $fieldSetting['object'];
             $field  = $fieldSetting['field'];
 
-            if($type == 'object')
+            if(in_array($type, array('string', 'number', 'date')))
             {
                 if(!isset($tableObjects[$object])) $tableObjects[$object] = array();
                 $tableObjects[$object][] = $field;
@@ -2990,7 +2990,6 @@ class pivotModel extends model
             $field  = $fieldSetting['field'];
 
             $source = $sql;
-            if($type == 'object' and isset($tableRecords[$object])) $source = $tableRecords[$object];
             if($type == 'string') $source = $sqlRecords;
 
             $options[$key] = $this->getSysOptions($type, $object, $field, $source);
