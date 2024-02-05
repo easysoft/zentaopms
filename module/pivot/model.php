@@ -2955,32 +2955,6 @@ class pivotModel extends model
     public function getFieldsOptions($fieldSettings, $sql)
     {
         $options = array();
-        $tableObjects = array();
-        foreach($fieldSettings as $key => $fieldSetting)
-        {
-            $type   = $fieldSetting['type'];
-            $object = $fieldSetting['object'];
-            $field  = $fieldSetting['field'];
-
-            if(in_array($type, array('string', 'number', 'date')))
-            {
-                if(!isset($tableObjects[$object])) $tableObjects[$object] = array();
-                $tableObjects[$object][] = $field;
-            }
-        }
-
-        $tableRecords = array();
-        foreach($tableObjects as $object => $fields)
-        {
-            if(empty($fields)) continue;
-
-            $fieldStr = implode('`,`', $fields);
-            $table    = zget($this->config->objectTables, $object, '');
-            if(empty($table)) continue;
-
-            $data = $this->dao->select("`$fieldStr`")->from($table)->fetchAll();
-            $tableRecords[$object] = $data;
-        }
 
         $sqlRecords = $this->dbh->query($sql)->fetchAll();
 
@@ -2991,7 +2965,7 @@ class pivotModel extends model
             $field  = $fieldSetting['field'];
 
             $source = $sql;
-            if($type == 'string') $source = $sqlRecords;
+            if(in_array($type, array('string', 'number', 'date'))) $source = $sqlRecords;
 
             $options[$key] = $this->getSysOptions($type, $object, $field, $source);
         }
