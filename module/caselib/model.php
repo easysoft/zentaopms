@@ -211,10 +211,6 @@ class caselibModel extends model
         if(!in_array($browseType, array('bymodule', 'all', 'wait', 'review', 'bysearch'))) return array();
 
         $moduleIdList = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
-        $stmt         = $this->dao->select('*')->from(TABLE_CASE)
-            ->where('product')->eq(0)
-            ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
-            ->andWhere('deleted')->eq('0');
         if($browseType == 'bysearch')
         {
             if($queryID)
@@ -242,13 +238,21 @@ class caselibModel extends model
             }
             $caseQuery .= ')';
 
-            $stmt = $stmt->andWhere($caseQuery)
+            $stmt = $this->dao->select('*')->from(TABLE_CASE)
+                ->where('product')->eq(0)
+                ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
+                ->andWhere('deleted')->eq('0')
+                ->andWhere($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq($libID)->fi()
                 ->beginIF($this->app->tab != 'qa')->andWhere('project')->eq($this->session->project)->fi();
         }
         else
         {
-            $stmt = $stmt->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
+            $stmt = $this->dao->select('*')->from(TABLE_CASE)
+                ->where('product')->eq(0)
+                ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
+                ->andWhere('deleted')->eq('0')
+                ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
                 ->beginIF($browseType == 'wait')->andWhere('status')->eq($browseType)->fi()
                 ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi();
         }
