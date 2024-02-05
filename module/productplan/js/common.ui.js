@@ -66,14 +66,15 @@ function formatDate(dateString, days)
  */
 function toggleDateBox()
 {
+    const beginPicker = $('#begin').zui('datePicker');
     if($('[name=future]').prop('checked'))
     {
-        $('#begin').attr('disabled', 'disabled');
+        beginPicker.render({disabled: true});
         $('#end').attr('disabled', 'disabled').parents('.form-row').addClass('hidden');
     }
     else
     {
-        $('#begin').removeAttr('disabled');
+        beginPicker.render({disabled: false});
         $('#end').removeAttr('disabled').parents('.form-row').removeClass('hidden');
     }
 }

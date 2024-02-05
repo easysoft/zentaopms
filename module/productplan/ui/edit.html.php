@@ -75,10 +75,13 @@ formPanel
         (
             set::width('1/4'),
             set::label($lang->productplan->begin),
-            set::control('date'),
-            setID('begin'),
-            set::name('begin'),
-            set::value($plan->begin != $config->productplan->future ? formatTime($plan->begin) : '')
+            datepicker
+            (
+                setID('begin'),
+                set::name('begin'),
+                set::value($plan->begin != $config->productplan->future ? formatTime($plan->begin) : ''),
+                set::disabled(!$deltaValue)
+            )
         ),
         formGroup
         (
@@ -89,7 +92,7 @@ formPanel
                 set::text($lang->productplan->future),
                 set::value(1),
                 set::rootClass('ml-4'),
-                set::checked($plan->begin  == $config->productplan->future && $plan->end == $config->productplan->future),
+                set::checked($plan->begin == $config->productplan->future && $plan->end == $config->productplan->future),
                 on::change('toggleDateBox')
             )
         )
