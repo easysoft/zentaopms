@@ -206,9 +206,9 @@ class dataviewModel extends model
      * @access public
      * @return array
      */
-    public function getColumns($sql)
+    public function getColumns($sql, $columns = null)
     {
-        $columns = $this->dao->getColumns($sql);
+        if(empty($columns)) $columns = $this->dao->getColumns($sql);
 
         $columnTypes = new stdclass();
         foreach($columns as $column)
@@ -232,9 +232,9 @@ class dataviewModel extends model
      * @access public
      * @return bool
      */
-    public function checkUniColumn($sql, $repeat = false)
+    public function checkUniColumn($sql, $repeat = false, $columns = null)
     {
-        $columns = $this->dao->getColumns($sql);
+        if(empty($columns)) $columns = $this->dao->getColumns($sql);
 
         $isUnique     = true;
         $columnList   = array();

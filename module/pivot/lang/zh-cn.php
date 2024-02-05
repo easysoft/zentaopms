@@ -225,6 +225,7 @@ $lang->pivot->resultFilter    = '结果筛选器';
 $lang->pivot->queryFilter     = '查询筛选器';
 $lang->pivot->noName          = '未命名';
 $lang->pivot->filterName      = '名称';
+$lang->pivot->showAs          = '显示为';
 $lang->pivot->default         = '默认值';
 $lang->pivot->unlimited       = '不限';
 $lang->pivot->colon           = '至';

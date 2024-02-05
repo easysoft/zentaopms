@@ -172,7 +172,7 @@ class pivotModel extends model
      * @access public
      * @return object|array
      */
-    public function processPivot($pivots, $isObject = true)
+    public function processPivot($pivots, $isObject = true, $processFieldSettings = true)
     {
         if($isObject) $pivots = array($pivots);
 
@@ -209,7 +209,7 @@ class pivotModel extends model
                 $pivots[$index]->used = $this->screen->checkIFChartInUse($pivot->id, 'pivot', $screenList);
             }
 
-            if($isObject and $pivots[$index]->stage == 'published') $pivots[$index] = $this->processFieldSettings($pivots[$index]);
+            if($isObject and $processFieldSettings and $pivots[$index]->stage == 'published') $pivots[$index] = $this->processFieldSettings($pivots[$index]);
         }
 
         return $isObject ? reset($pivots) : $pivots;
@@ -2482,7 +2482,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getSysOptions($type, $object = '', $field = '', $sql = '')
+    public function getSysOptions($type, $object = '', $field = '', $source = '', $saveAs = '')
     {
         $options = array('' => '');
         switch($type)
@@ -2520,9 +2520,18 @@ class pivotModel extends model
             case 'object':
                 if($field)
                 {
-                    $table = zget($this->config->objectTables, $object, '');
-                    if($table)
+                    if(is_array($source))
                     {
+                        $options = array();
+                        foreach($source as $row) $options[$row->id] = $row->$field;
+                    }
+                    elseif($saveAs)
+                    {
+                        $options = $this->getOptionsFromSql($source, $field, $saveAs);
+                    }
+                    else
+                    {
+                        $table = zget($this->config->objectTables, $object, '');
                         $columns = $this->dbh->query("SHOW COLUMNS FROM $table")->fetchAll();
                         foreach($columns as $id => $column) $columns[$id] = (array)$column;
                         $fieldList = array_column($columns, 'Field');
@@ -2532,21 +2541,50 @@ class pivotModel extends model
                 }
                 break;
             case 'string':
+            case 'number':
                 if($field)
                 {
                     $options = array();
-                    if($sql)
+                    if(is_string($source) and !empty($source))
                     {
-                        $cols = $this->dbh->query($sql)->fetchAll();
-                        foreach($cols as $col)
-                        {
-                            $data = $col->$field;
-                            $options[$data] = $data;
-                        }
+                        $keyField   = $field;
+                        $valueField = $saveAs ? $saveAs : $field;
+                        $options = $this->getOptionsFromSql($source, $keyField, $valueField);
+                    }
+                    else if(is_array($source))
+                    {
+                        foreach($source as $row) $options[$row->$field] = $row->$field;
                     }
                 }
                 break;
         }
+        return $options;
+    }
+
+    /**
+     * Get pairs from column by keyField and valueField.
+     *
+     * @param  string $sql
+     * @param  string $keyField
+     * @param  string $valueField
+     * @access public
+     * @return array
+     */
+    public function getOptionsFromSql($sql, $keyField, $valueField)
+    {
+        $options = array();
+        $cols    = $this->dbh->query($sql)->fetchAll();
+        $sample  = current($cols);
+
+        if(!isset($sample->$keyField) or !isset($sample->$valueField)) return $options;
+
+        foreach($cols as $col)
+        {
+            $key   = $col->$keyField;
+            $value = $col->$valueField;
+            $options[$key] = $value;
+        }
+
         return $options;
     }
 
@@ -2903,7 +2941,7 @@ class pivotModel extends model
         return $sql;
     }
 
-    public function getFieldsOptions($fields, $sql)
+    public function getFieldsOptions($fieldSettings, $sql)
     {
         $options = array();
         $tableObjects = array();
@@ -2936,7 +2974,15 @@ class pivotModel extends model
 
         foreach($fieldSettings as $key => $fieldSetting)
         {
-            $options[$key] = $this->getSysOptions($field['type'], $field['object'], $field['field'], $sql);
+            $type   = $fieldSetting['type'];
+            $object = $fieldSetting['object'];
+            $field  = $fieldSetting['field'];
+
+            $source = $sql;
+            if($type == 'object' and isset($tableRecords[$object])) $source = $tableRecords[$object];
+            if($type == 'string') $source = $sqlRecords;
+
+            $options[$key] = $this->getSysOptions($type, $object, $field, $source);
         }
 
         return $options;

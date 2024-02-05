@@ -91,17 +91,22 @@ class chart extends control
             $type    = $filter['type'];
             $default = isset($filter['default']) ? $filter['default'] : '';
 
+            $saveAs      = isset($filter['saveAs']) ? $filter['saveAs'] : '';
+            $saveAsClass = $type == 'select' ? '' : 'hidden'; // 只有是选择的时候，才展示显示为
+
             $options = array();
             if($type == 'select')
             {
                 $fieldSetting = $fieldSettings[$field];
-                $options      = $this->chart->getSysOptions(zget($fieldSetting, 'type', ''), zget($fieldSetting, 'object', ''), zget($fieldSetting, 'field', ''), $sql);
+                $options      = $this->chart->getSysOptions(zget($fieldSetting, 'type', ''), zget($fieldSetting, 'object', ''), zget($fieldSetting, 'field', ''), $sql, zget($filter, 'saveAs', ''));
             }
 
             $filterHtml = array();
 
             /* field html */
-            $filterHtml['field'] = html::select('field', $fieldPairs, $field, "class='form-control picker-select' onchange='initFilterForm(this, this.value)'");
+            $filterHtml['field']  = html::select('field', $fieldPairs, $field, "class='form-control picker-select' onchange='initFilterForm(this, this.value)'");
+            $filterHtml['saveAs'] = html::select('saveAs', array('' => '') + $fieldPairs, $saveAs, "class='form-control picker-select' onchange='changeSaveAs(this, this.value)'");
+            $filterHtml['saveAsClass'] = $saveAsClass;
 
             /* default html */
             $filterHtml['default'] = '';

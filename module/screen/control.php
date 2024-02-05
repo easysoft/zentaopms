@@ -23,8 +23,12 @@ class screen extends control
         $dimensionID = $this->loadModel('dimension')->setSwitcherMenu($dimensionID);
         $this->checkShowGuide();
 
+        $screens = $this->screen->getList($dimensionID);
+        $screens = $this->screen->getThumbnail($screens);
+        $screens = $this->screen->removeScheme($screens);
+
         $this->view->title      = $this->lang->screen->common;
-        $this->view->screens    = $this->screen->getList($dimensionID);
+        $this->view->screens    = $screens;
         $this->view->dimension  = $dimensionID;
         $this->display();
     }
@@ -84,7 +88,7 @@ class screen extends control
             return;
         }
 
-        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account);
+        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account, false);
 
         $this->view->title  = $screen->name;
         $this->view->screen = $screen;
@@ -106,6 +110,12 @@ class screen extends control
         }
     }
 
+    public function ajaxGetScreenScheme($screenID, $year = 0, $month = 0, $dept = 0, $account = '')
+    {
+        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account);
+        echo(json_encode($screen));
+    }
+
     /**
      * Ajax get chart.
      *
@@ -118,11 +128,19 @@ class screen extends control
         {
             $chartID      = $this->post->sourceID;
             $type         = $this->post->type;
-            $queryType    = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
 
-            $type = ($type == 'Tables' or $type == 'pivot') ? 'pivot' : 'chart';
+            if($type == 'Filters')
+            {
+                $filterComponent = $this->screen->genFilterComponent($chartID);
+                return print(json_encode($filterComponent));
+            }
 
-            $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
+            $queryType = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
+            $component = isset($_POST['component']) ? json_decode($this->post->component) : null;
+
+            $type = $this->screen->getChartType($type);
+
+            $table = $this->config->objectTables[$type];
             $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
 
             $filterFormat = '';
@@ -134,6 +152,8 @@ class screen extends control
 
                 foreach($filters as $index => $filter)
                 {
+                    if($filterParams[$index]['default'] === null) continue;
+
                     $default = isset($filterParams[$index]['default']) ? $filterParams[$index]['default'] : null;
                     $filterType = $filter['type'];
                     if($filterType == 'date' or $filterType == 'datetime')
@@ -165,19 +185,50 @@ class screen extends control
                     $mergeFilters[] = $filter;
                 }
 
-                if($table == TABLE_PIVOT)
+                if($type != 'metric')
                 {
-                    list($sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chart->sql, $mergeFilters);
-                    $chart->sql = $sql;
-                }
-                else
-                {
-                    $filterFormat = $this->loadModel($type)->getFilterFormat($mergeFilters);
+                    if($table == TABLE_PIVOT)
+                    {
+                        list($sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chart->sql, $mergeFilters);
+                        $chart->sql = $sql;
+                    }
+                    else
+                    {
+                        $filterFormat = $this->loadModel($type)->getFilterFormat($mergeFilters);
+                    }
                 }
             }
 
-            $chartData = $this->screen->genComponentData($chart, $type, null, $filterFormat);
+            if($type == 'metric')
+            {
+                $metric = $this->loadModel('metric')->getByID($chartID);
+                $chartData = $this->screen->genMetricComponent($metric, $component, (array)$filterParams);
+            }
+            else
+            {
+                $chartData = $this->screen->genComponentData($chart, $type, $component, $filterFormat);
+            }
             print(json_encode($chartData));
         }
+    }
+
+    /**
+     * 获取度量数据。
+     * Ajax get metric data.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMetricData()
+    {
+        $metricID = $this->post->metricID;
+        $metric   = $this->loadModel('metric')->getByID($metricID);
+        $result   = $this->metric->getResultByCode($metric->code, $_POST, 'cron');
+
+        $metricData = new stdclass();
+        $metricData->header  = $this->metric->getViewTableHeader($metric);
+        $metricData->data    = $this->metric->getViewTableData($metric, $result);
+
+        echo(json_encode($metricData));
     }
 }

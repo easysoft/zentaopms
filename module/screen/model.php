@@ -51,11 +51,48 @@ class screenModel extends model
     {
         $hasUsageReport = $this->config->edition !== 'open';
 
-        return $this->dao->select('*')->from(TABLE_SCREEN)
+        $screens = $this->dao->select('*')->from(TABLE_SCREEN)
             ->where('dimension')->eq($dimensionID)
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$hasUsageReport)->andWhere('id')->ne(1001)->fi()
             ->fetchAll('id');
+
+        return $screens;
+    }
+
+    /**
+     * Get screen thumbnail.
+     *
+     * @param  array    $screens
+     * @access public
+     * @return array
+     */
+    public function getThumbnail($screens)
+    {
+        foreach($screens as $screen)
+        {
+            $images = $this->loadModel('file')->getByObject('screen', $screen->id);
+            if(empty($images)) continue;
+
+            $image = end($images);
+            $screen->cover = helper::createLink('file', 'read', "fileID={$image->id}", 'png');
+        }
+
+        return $screens;
+    }
+
+    /**
+     * Remove scheme field of screen.
+     *
+     * @param  array    $screens
+     * @access public
+     * @return array
+     */
+    public function removeScheme($screens)
+    {
+        foreach($screens as $screen) unset($screen->scheme);
+
+        return $screens;
     }
 
     /**
@@ -68,11 +105,11 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getByID($screenID, $year = '', $month = '', $dept = '', $account = '')
+    public function getByID($screenID, $year = '', $month = '', $dept = '', $account = '', $withChartData = true)
     {
         $screen = $this->dao->select('*')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
         if(!isset($screen->scheme) or empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
-        $screen->chartData = $this->genChartData($screen, $year, $month, $dept, $account);
+        if($withChartData) $screen->chartData = $this->genChartData($screen, $year, $month, $dept, $account);
 
         return $screen;
     }
@@ -97,27 +134,29 @@ class screenModel extends model
         $this->filter->account = $account;
         $this->filter->charts  = array();
 
-        if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $month, $dept, $account);
+        if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen))
+        {
+            $scheme = json_decode($screen->scheme);
 
-        $config = new stdclass();
-        $config->width            = 1300;
-        $config->height           = 1080;
-        $config->filterShow       = false;
-        $config->hueRotate        = 0;
-        $config->saturate         = 1;
-        $config->contrast         = 1;
-        $config->brightness       = 1;
-        $config->opacity          = 1;
-        $config->rotateZ          = 0;
-        $config->rotateX          = 0;
-        $config->rotateY          = 0;
-        $config->skewX            = 0;
-        $config->skewY            = 0;
-        $config->blendMode        = 'normal';
-        $config->background       = '#001028';
-        $config->selectColor      = true;
-        $config->chartThemeColor  = 'dark';
-        $config->previewScaleType = 'scrollY';
+            foreach($scheme->componentList as $component)
+            {
+                if(!empty($component->isGroup))
+                {
+                    foreach($component->groupList as $key => $groupComponent)
+                    {
+                        if(isset($groupComponent->key) and $groupComponent->key === 'Select') $groupComponent = $this->buildSelect($groupComponent);
+                    }
+                }
+                else
+                {
+                    if(isset($component->key) and $component->key === 'Select') $component = $this->buildSelect($component);
+                }
+            }
+
+            return $scheme;
+        }
+
+        $editCanvasConfig = $this->config->screen->editCanvasConfig;
 
         $componentList = json_decode($screen->scheme);
         if(empty($componentList)) $componentList = array();
@@ -128,14 +167,13 @@ class screenModel extends model
             if(!isset($component->attr)) continue;
 
             $height = $component->attr->y + $component->attr->h;
-            if($height > $config->height) $config->height = $height;
+            if($height > $editCanvasConfig->height) $editCanvasConfig->height = $height;
         }
-        $config->height += 50;
+        $editCanvasConfig->height += 50;
 
         $chartData = new stdclass();
-        $chartData->editCanvasConfig    = $config;
-        $chartData->componentList       = $this->buildComponentList($componentList);
-        $chartData->requestGlobalConfig =  json_decode('{ "requestDataPond": [], "requestOriginUrl": "", "requestInterval": 30, "requestIntervalUnit": "second", "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
+        $chartData->editCanvasConfig = $editCanvasConfig;
+        $chartData->componentList    = $this->buildComponentList($componentList);
 
         return $chartData;
     }
@@ -170,25 +208,6 @@ class screenModel extends model
             }
         }
 
-        foreach($scheme->componentList as $index => $component)
-        {
-            if(!empty($component->isGroup))
-            {
-                foreach($component->groupList as $key => $groupComponent)
-                {
-                    $groupComponent = $this->getLatestChart($groupComponent);
-                }
-            }
-            else if($component)
-            {
-                $component = $this->getLatestChart($component);
-            }
-            else
-            {
-                unset($scheme->componentList[$index]);
-            }
-        }
-
         return $scheme;
     }
 
@@ -205,10 +224,20 @@ class screenModel extends model
         $chartID = zget($component->chartConfig, 'sourceID', '');
         if(!$chartID) return $component;
 
-        $type  = $component->chartConfig->package == 'Tables' ? 'pivot' : 'chart';
-        $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
-        $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+        $type  = $component->chartConfig->package;
+        $type  = $this->getChartType($type);
+        $table = $this->config->objectTables[$type];
 
+        if($type == 'metric')
+        {
+            $chart = $this->loadModel('metric')->getByID($chartID);
+        }
+        else
+        {
+            $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+        }
+
+        if($type == 'metric') return $this->genMetricComponent($chart);
         return $this->genComponentData($chart, $type, $component);
     }
 
@@ -223,38 +252,7 @@ class screenModel extends model
      */
     public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
     {
-        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
-        {
-            if(empty($component)) $component = new stdclass();
-            $component->option = new stdclass();
-            if($type == 'chart')
-            {
-                $component->option->title = new stdclass();
-                $component->option->title->text = sprintf($this->lang->screen->noChartData, $chart->name);
-                $component->option->title->left = 'center';
-                $component->option->title->top  = '50%';
-
-                $component->option->xAxis = new stdclass();
-                $component->option->xAxis->show = false;
-                $component->option->yAxis = new stdclass();
-                $component->option->yAxis->show = false;
-            }
-            else if($type == 'pivot')
-            {
-                $component->option->ineffective = 1;
-                $component->option->header      = array();
-                $component->option->align       = array('center');
-                $component->option->headerBGC   = 'transparent';
-                $component->option->oddRowBGC   = 'transparent';
-                $component->option->evenRowBGC  = 'transparent';
-                $component->option->columnWidth = array();
-                $component->option->rowspan     = array();
-                $component->option->colspan     = array();
-                $component->option->rowNum      = 1;
-                $component->option->dataset     = array(array(sprintf($this->lang->screen->noPivotData, $chart->name)));
-            }
-            return $component;
-        }
+        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1')) return $this->genNotFoundOrDraftComponentOption($component);
 
         $chart = clone($chart);
         if($type == 'pivot' and $chart)
@@ -279,11 +277,30 @@ class screenModel extends model
         list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
 
         $component = $this->getChartOption($chart, $component, $filters);
+
         if($type == 'chart') $component = $this->getAxisRotateOption($chart, $component);
 
         $component->chartConfig->dataset  = $component->option->dataset;
         $component->chartConfig->fields   = json_decode($chart->fields);
-        $component->chartConfig->filters  = $this->getChartFilters($chart);
+
+        // 如果传过来的component->chartConfig中有filters，判断filters是否发生了改变，改变则重置filters，其中单个filter的linkedGlobalFilter属性就不存在了
+        $latestFilters = $this->getChartFilters($chart);
+        if(!isset($component->chartConfig->filters))
+        {
+            $component->chartConfig->filters = $latestFilters;
+            $component->chartConfig->noSetupGlobalFilterList = array();
+        }
+        else
+        {
+            $oldFilters = $component->chartConfig->filters;
+            $filterChanged = $this->isFilterChange($oldFilters, $latestFilters);
+
+            if($filterChanged)
+            {
+                $component->chartConfig->filters = $latestFilters;
+                $component->chartConfig->noSetupGlobalFilterList = array();
+            }
+        }
 
         if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
         {
@@ -300,11 +317,7 @@ class screenModel extends model
                     foreach($component->option->dataset->seriesData as $seriesData) $legends[] = $seriesData->name;
                     $component->option->legend->data = $legends;
                 }
-                elseif($component->type == 'waterpolo')
-                {
-                    // Do nothing
-                }
-                else
+                elseif($component->type != 'waterpolo')
                 {
                     $series = array();
                     for($i = 1; $i < count($component->option->dataset->dimensions); $i ++) $series[] = $defaultSeries[0];
@@ -314,6 +327,210 @@ class screenModel extends model
         }
 
         return $component;
+    }
+
+    /**
+     * 判断图表/透视表的筛选器是否发生了变化。
+     * Determine if the filter for the chart/pivot has changed.
+     *
+     * @param  array  $oldFilters
+     * @param  array  $latestFilters
+     * @access public
+     * @return void
+     */
+    public function isFilterChange($oldFilters, $latestFilters)
+    {
+        $filterChanged = false;
+
+        if(count($oldFilters) != count($latestFilters)) $filterChanged = true;
+        foreach($oldFilters as $index => $oldFilter)
+        {
+            $newFilter = (object)$latestFilters[$index];
+
+            // 结果筛选器和查询筛选器都有的三个字段
+            if($oldFilter->field != $newFilter->field || $oldFilter->name != $newFilter->name || $oldFilter->type != $newFilter->type) $filterChanged = true;
+
+            // 如果一个是查询筛选器一个不是，也判定为更改
+            $oldHaveQuery = isset($oldFilter->from) and $oldFilter->from = 'query';
+            $newHaveQuery = isset($newFilter->from) and $newFilter->from = 'query';
+            if($oldHaveQuery != $newHaveQuery) $filterChanged = true;
+
+            // 对于查询筛选器，可以再做进一步判断，如果下拉选择器的typeOption发生了变化，也应该判定为更改
+            if($oldHaveQuery and $newHaveQuery)
+            {
+                if($oldFilter->type == 'select' && $newFilter->type == 'select' && $oldFilter->typeOption != $newFilter->typeOption) $filterChanged = true;
+            }
+
+            // 如果发生了变化，不必再去判断后续
+            if($filterChanged) break;
+        }
+
+        return $filterChanged;
+    }
+
+    /**
+     * 生成不存在的图表或者草稿图表的参数。
+     * Generate not found or draft chart option.
+     *
+     * @param  int    $component
+     * @access public
+     * @return void
+     */
+    public function genNotFoundOrDraftComponentOption($component)
+    {
+        if(empty($component)) $component = new stdclass();
+
+        $component->option = new stdclass();
+        $component->option->title = new stdclass();
+        $component->option->title->text = sprintf($this->lang->screen->noChartData, $chart->name);
+        $component->option->isDeleted   = true;
+
+        return $component;
+    }
+
+    /**
+     * 生成全局筛选器的组件。
+     * Generate component of global filters.
+     *
+     * @param  string $filterType
+     * @access public
+     * @return object
+     */
+    public function genFilterComponent($filterType)
+    {
+        $this->loadModel('metric');
+        $type = ucfirst($filterType);
+
+        $component = new stdclass();
+        $component->chartConfig = new stdclass();
+        $component->chartConfig->id           = $type;
+        $component->chartConfig->key          = "{$type}Filter";
+        $component->chartConfig->chartKey     = "V{$type}Filter";
+        $component->chartConfig->conKey       = "VC{$type}Filter";
+        $component->chartConfig->category     = 'Filters';
+        $component->chartConfig->categoryName = $this->lang->screen->globalFilter;
+        $component->chartConfig->package      = 'Decorates';
+
+        if(in_array($filterType, $this->config->metric->scopeList))
+        {
+            $objectPairs = $this->metric->getPairsByScope($filterType, true);
+            $component->chartConfig->objectList = array_map(function($objectID, $objectTitle)
+            {
+                $object = new stdclass();
+                $object->label = $objectTitle;
+                $object->value = $objectID;
+                return $object;
+            }, array_keys($objectPairs), array_values($objectPairs));
+        }
+
+        $firstAction = $this->dao->select('YEAR(date) as year')->from(TABLE_ACTION)->orderBy('id_asc')->limit(1)->fetch();
+        $yearRange = range((int)date('Y'), $firstAction->year);
+        $component->chartConfig->yearList = array_map(function($year)
+        {
+            $yearObject = new stdclass();
+            $yearObject->label = $year;
+            $yearObject->value = $year;
+            return $yearObject;
+        }, $yearRange);
+
+        return $component;
+    }
+
+    /**
+     * Generate metric component.
+     *
+     * @param  object      $metric
+     * @param  object|null $component
+     * @param  array       $filterParams
+     * @access public
+     * @return object
+     */
+    public function genMetricComponent($metric, $component = null, $filterParams = array())
+    {
+        $this->loadModel('metric');
+
+        $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
+
+        $resultHeader   = $this->metric->getViewTableHeader($metric);
+        $resultData     = $this->metric->getViewTableData($metric, $result);
+        $isObjectMetric = $metric->scope != 'system';
+        $isDateMetric   = $metric->dateType != 'nodate';
+
+        $chartOption = $this->getMetricChartOption($metric, $resultHeader, $resultData, $component);
+        $tableOption = $this->getMetricTableOption($metric, $resultHeader, $resultData, $filterParams);
+        $card        = $this->getMetricCardOption($metric, $resultData, $component);
+
+        list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
+
+        $component->chartConfig->title       = $metric->name;
+        $component->chartConfig->sourceID    = $metric->id;
+        $component->chartConfig->chartOption = $chartOption;
+        $component->chartConfig->tableOption = $tableOption;
+        $component->chartConfig->card        = $card;
+        if(!isset($component->chartConfig->filters)) $component->chartConfig->filters = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
+        $component->chartConfig->scope       = $metric->scope;
+
+        $component->option->chartOption          = $chartOption;
+        $component->option->tableOption          = $tableOption;
+        $component->option->card                 = $card;
+        $component->option->card->isDateMetric   = $isDateMetric;
+        $component->option->card->isObjectMetric = $isObjectMetric;
+        $component->option->card->cardDateDefault = $component->option->card->filterValue ? $component->option->card->filterValue->dateString : '';
+
+        return $component;
+    }
+
+    /**
+     * Build filters for metric.
+     *
+     * @param  object $metric
+     * @access public
+     * @return array
+     */
+    public function buildMetricFilters($metric, $isObjectMetric, $isDateMetric)
+    {
+        $this->loadModel('metric');
+        $scope = $metric->scope;
+
+        $filters = array();
+        if($isObjectMetric)
+        {
+            $scopeFilter = new stdclass();
+            $scopeFilter->belong     = 'metric';
+            $scopeFilter->field      = $scope;
+            $scopeFilter->name       = $this->lang->screen->belong . $this->lang->$scope->common;
+            $scopeFilter->type       = 'select';
+            $scopeFilter->typeOption = $scope;
+            $scopeFilter->default    = null;
+
+            $objectPairs = $this->metric->getPairsByScope($scope, true);
+            $scopeFilter->options = array_map(function($objectID, $objectName)
+            {
+                return array(
+                    'label' => $objectName,
+                    'value' => $objectID
+                );
+            },
+            array_keys($objectPairs),
+            array_values($objectPairs));
+
+            $filters[] = $scopeFilter;
+        }
+
+        if($isDateMetric)
+        {
+            $dateFilter = new stdclass();
+            $dateFilter->belong     = 'metric';
+            $dateFilter->field      = 'date';
+            $dateFilter->name       = $this->lang->screen->dateRange;
+            $dateFilter->type       = 'dateRange';
+            $dateFilter->typeOption = null;
+            $dateFilter->default    = null;
+
+            $filters[] = $dateFilter;
+        }
+
+        return $filters;
     }
 
     /**
@@ -350,6 +567,8 @@ class screenModel extends model
             case 'waterpolo':
                 if(strpos($chart->settings, 'waterpolo') === false) return $this->buildWaterPolo($component, $chart);
                 return $this->getWaterPoloOption($component, $chart, $filters);
+            case 'metric':
+                return $this->getMetricOption($component, $chart, $filters);
             default:
                 return '';
         }
@@ -765,7 +984,8 @@ class screenModel extends model
             if($filter['type'] == 'select')
             {
                 $field = zget($fields, $filter['field']);
-                $options = $this->getSysOptions($field['type'], $field['object'], $field['field'], $chart->sql);
+                $saveAs = zget($filter, 'saveAs', '');
+                $options = $this->getSysOptions($field['type'], $field['object'], $field['field'], $chart->sql, $saveAs);
                 $screenOptions = array();
                 foreach($options as $value => $label)
                 {
@@ -803,13 +1023,80 @@ class screenModel extends model
     }
 
     /**
-     * Get system options.
+     * Process metric filter.
      *
-     * @param string $type
+     * @param  array  $filterParams
+     * @param  string $dateType
      * @access public
      * @return array
      */
-    public function getSysOptions($type, $object = '', $field = '', $sql = '')
+    public function processMetricFilter($filterParams, $dateType)
+    {
+        $filters = array();
+        foreach($filterParams as $filterParam)
+        {
+            $field = $filterParam['field'];
+            $value = $filterParam['default'];
+            if(empty($value)) continue;
+
+            if($field == 'date')
+            {
+                $beginValue = $value[0];
+                $endValue   = $value[1];
+
+                $beginFilter = $this->formatMetricDateByType($beginValue, $dateType);
+                $endFilter   = $this->formatMetricDateByType($endValue, $dateType);
+
+                $beginFilter->value = $beginValue;
+                $endFilter->value   = $endValue;
+
+                $filters['begin'] = $beginFilter;
+                $filters['end']   = $endFilter;
+            }
+            else
+            {
+                $scopeFilter = new stdclass();
+                $scopeFilter->value = $value;
+                $scopeFilter->type  = $field;
+
+                $filters['scope'] = $scopeFilter;
+            }
+        }
+
+        return $filters;
+    }
+
+    /**
+     * Format date of metric's filter by type.
+     *
+     * @param string  $stamp
+     * @param string  $dateType
+     * @access public
+     * @return array
+     */
+    public function formatMetricDateByType($stamp, $dateType)
+    {
+        $formatedDate = new stdclass();
+        $formatedDate->year = date('Y', $stamp/1000);
+        if($dateType == 'month') $formatedDate->month = date('Y-m', $stamp/1000);
+        if($dateType == 'week')  $formatedDate->week  = date('Y-W', $stamp/1000);
+        if($dateType == 'day')   $formatedDate->day   = date('Y-m-d', $stamp/1000);
+
+        return $formatedDate;
+    }
+
+    /**
+     * Get system options.
+     *
+     * @param string $type
+     * @param string $object
+     * @param string $field
+     * @param string $sql
+     * @param string $saveAs
+     * @access public
+     * @return array
+     */
+    public function getSysOptions($type, $object = '', $field = '', $sql = '', $saveAs = '')
     {
         $options = array();
         switch($type)
@@ -847,12 +1134,25 @@ class screenModel extends model
             case 'object':
                 if($field)
                 {
-                    $table = zget($this->config->objectTables, $object, '');
-                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    if($sql and $saveAs)
+                    {
+                        $options = $this->getOptionsFromSql($sql, $field, $saveAs);
+                    }
+                    else
+                    {
+                        $table = zget($this->config->objectTables, $object, '');
+                        if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    }
                 }
                 break;
             default:
-                if($field && $sql)
+                if($sql and $saveAs)
+                {
+                    $keyField   = $field;
+                    $valueField = $saveAs ? $saveAs : $field;
+                    $options = $this->getOptionsFromSql($sql, $keyField, $valueField);
+                }
+                elseif($field && $sql)
                 {
                     $cols = $this->dao->query("select tt.`$field` from ($sql) tt group by tt.`$field` order by tt.`$field` desc")->fetchAll();
                     foreach($cols as $col)
@@ -864,6 +1164,33 @@ class screenModel extends model
         }
 
         $options = array_filter($options);
+        return $options;
+    }
+
+    /**
+     * Get pairs from column by keyField and valueField.
+     *
+     * @param  string $sql
+     * @param  string $keyField
+     * @param  string $valueField
+     * @access public
+     * @return array
+     */
+    public function getOptionsFromSql($sql, $keyField, $valueField)
+    {
+        $options = array();
+        $cols    = $this->dbh->query($sql)->fetchAll();
+        $sample  = current($cols);
+
+        if(!isset($sample->$keyField) or !isset($sample->$valueField)) return $options;
+
+        foreach($cols as $col)
+        {
+            $key   = $col->$keyField;
+            $value = $col->$valueField;
+            $options[$key] = $value;
+        }
+
         return $options;
     }
 
@@ -1444,13 +1771,29 @@ class screenModel extends model
      */
     public function buildPieCircleChart($component, $chart)
     {
+        $option = new stdclass();
+        $option->type = 'nomal';
+        $option->series = array();
+        $option->series[0] = new stdclass();
+        $option->series[0]->type = 'pie';
+        $option->series[0]->radius = '70%';
+        $option->series[0]->roseType = false;
+        $option->backgroundColor = 'rgba(0,0,0,0)';
+        $option->series[0]->data = array();
+        $option->series[0]->data[0] = new stdclass();
+        $option->series[0]->data[0]->value = array();
+        $option->series[0]->data[0]->value[0] = 0;
+        $option->series[0]->data[1] = new stdclass();
+        $option->series[0]->data[1]->value = array();
+        $option->series[0]->data[1]->value[0] = 0;
+
         if(!$chart->settings)
         {
             $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
             $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
             $component->key         = "PieCircle";
             $component->chartConfig = json_decode('{"key":"PieCircle","chartKey":"VPieCircle","conKey":"VCPieCircle","title":"饼图","category":"Pies","categoryName":"饼图","package":"Charts","chartFrame":"echarts","image":"/static/png/pie-circle-258fcce7.png"}');
-            $component->option      = json_decode('{"type":"nomal","series":[{"type":"pie","radius":"70%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
+            $component->option      = $option;
 
             return $this->setComponentDefaults($component);
         }
@@ -1481,6 +1824,8 @@ class screenModel extends model
                 }
                 $doneData = round((array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0, 4);
                 $component->option->dataset = $doneData;
+                if(!isset($component->option->series) || !is_array($component->option->series)) $component->option->series = $option->series;
+                if(!isset($component->option)) $component->option = $option;
                 $component->option->series[0]->data[0]->value  = array($doneData);
                 $component->option->series[0]->data[1]->value  = array(1 - $doneData);
             }
@@ -1558,6 +1903,259 @@ class screenModel extends model
             $component->option->dataset = $options['series'][0]['data'][0];
             return $this->setComponentDefaults($component);
         }
+    }
+
+    /**
+     * Get option of metric chart.
+     *
+     * @param  object $metric
+     * @param  array  $resultHeader
+     * @param  array  $resultData
+     * @access public
+     * @return object
+     */
+    public function getMetricChartOption($metric, $resultHeader, $resultData, $component = null)
+    {
+        $chartOption = $this->metric->getEchartsOptions($resultHeader, $resultData);
+
+        if(!isset($chartOption['title'])) $chartOption['title'] = array('text' => $metric->name, 'show' => false, 'titleShow' => true, 'textStyle' => array('color' => '#BFBFBF'));
+        $chartOption['title']['text'] = $metric->name;
+        $chartOption['backgroundColor'] = "#0B1727FF";
+        $chartOption['legend']['textStyle']['color'] = 'white';
+        $chartOption['legend']['inactiveColor'] = 'gray';
+
+        if(!empty($component))
+        {
+            $preChartOption = $component->option->chartOption;
+            $preChartOption->series = $chartOption['series'];
+            return $preChartOption;
+        }
+
+        return $chartOption;
+    }
+
+    /**
+     * Get option of metric table.
+     *
+     * @param  object $metric
+     * @param  array $resultHeader
+     * @param  array $resultData
+     * @param  array $filterParams
+     * @access public
+     * @return object
+     */
+    public function getMetricTableOption($metric, $resultHeader, $resultData, $filterParams = array())
+    {
+        $this->loadModel('metric');
+
+        $isObjectMetric = $this->metric->isObjectMetric($resultHeader);
+        $dateType       = $metric->dateType;
+
+        $filters = $this->processMetricFilter($filterParams, $dateType);
+
+        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, $metric->dateType, false);
+
+        $tableOption = new stdclass();
+        $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType, $filters) : array($groupHeader);
+        $tableOption->data    = $this->filterMetricData($groupData, $dateType, $isObjectMetric, $filters);
+
+        if($metric->scope != 'system') $tableOption->objectPairs = $this->loadModel('metric')->getPairsByScope($metric->scope);
+        $tableOption->scope       = $metric->scope;
+        $tableOption->noDataTip   = $this->metric->getNoDataTip($metric->code);
+
+        return $tableOption;
+    }
+
+    /**
+     * Filter metric data.
+     *
+     * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $isObjectMetric
+     * @param  array  $filters
+     * @access public
+     * @return array
+     */
+    public function filterMetricData($data, $dateType, $isObjectMetric, $filters = array())
+    {
+        if(empty($filters)) return $data;
+
+        if($isObjectMetric)
+        {
+            if(isset($filters['scope']))
+            {
+                $scopeFilter     = $filters['scope'];
+                $objectPairs     = $this->loadModel('metric')->getPairsByScope($scopeFilter->type);
+                $selectedObjects = array_intersect_key($objectPairs, array_flip($scopeFilter->value));
+
+                foreach($data as $index => $row)
+                {
+                    if(!in_array($row['scope'], $selectedObjects)) unset($data[$index]);
+                }
+            }
+
+            $filteredData = array();
+            if(isset($filters['begin'], $filters['end']))
+            {
+                $beginFilter = $filters['begin']->$dateType;
+                $endFilter   = $filters['end']->$dateType;
+                foreach($data as $index => $row)
+                {
+                    $filteredData[$index] = array_filter($row, function($value, $key) use ($beginFilter, $endFilter)
+                    {
+                        if($key == 'scope') return true;
+                        if($key >= $beginFilter && $key <= $endFilter) return true;
+                        return false;
+                    }, ARRAY_FILTER_USE_BOTH);
+                }
+            }
+            else
+            {
+                $filteredData = $data;
+            }
+        }
+        else
+        {
+            $beginFilter = $filters['begin']->$dateType;
+            $endFilter   = $filters['end']->$dateType;
+            $filteredData = array_filter($data, function($row) use ($beginFilter, $endFilter)
+            {
+                if($row['date'] >= $beginFilter && $row['date'] <= $endFilter) return true;
+            });
+        }
+
+        return array_values($filteredData);
+    }
+
+    /**
+     * 获取度量项卡片参数。
+     * Get card option of metric.
+     *
+     * @param  object $metric
+     * @access public
+     * @return object
+     */
+    public function getMetricCardOption(object $metric, $resultData, $component = null): object
+    {
+        $this->loadModel('metric');
+
+        $option = new stdclass();
+        if(empty($component))
+        {
+            $option->displayType = 'normal';
+            $option->cardType    = 'A';
+            $option->dateType    = $metric->dateType;
+            $option->bgColor     = '#26292EFF';
+            $option->border      = array('color' => '#515458FF', 'width' => 1, 'radius' => 2);
+            $option->scope       = $metric->scope;
+            $option->objectPairs = array();
+        }
+        else
+        {
+            $option = $component->option->card;
+        }
+        $option->data        = $resultData;
+        $option->filterValue = (is_array($option->data) && !empty($option->data)) ? current($option->data) : array();
+
+        if($metric->scope != 'system')
+        {
+            $objectPairs = $this->metric->getPairsByScope($metric->scope);
+            foreach($objectPairs as $value => $label)
+            {
+                $option->objectPairs[] = array('label' => $label, 'value' => "$value");
+            }
+        }
+
+        return $option;
+    }
+
+    /**
+     * Get table headers of metric in screen designer.
+     *
+     * @param  array  $resultHeaders
+     * @param  string $dateType
+     * @param  object $filters
+     * @access public
+     * @return object
+     */
+    public function getMetricHeaders($resultHeader, $dateType, $filters)
+    {
+        $headers = array_fill(0, 2, array());
+
+        foreach($resultHeader as $head)
+        {
+            if($head['name'] == 'scope')
+            {
+                if($dateType != 'year') $head['rowspan'] = 2;
+                $headers[0][] = $head;
+            }
+            else
+            {
+                $row = $dateType == 'year' ? 0 : 1;
+
+                $head['type']  = $dateType;
+                $head['value'] = $head['name'];
+                $headers[$row][] = $head;
+            }
+        }
+
+        $dateGroups = array_count_values(array_column($resultHeader, 'headerGroup'));
+        foreach($dateGroups as $date => $count)
+        {
+            $dateGroup = array();
+            $dateGroup['colspan'] = $count;
+            $dateGroup['title']   = $date;
+            $dateGroup['name']    = $date;
+            $dateGroup['value']   = substr($date, 0, 4);
+            $dateGroup['type']    = 'year';
+
+            $headers[0][] = $dateGroup;
+        }
+
+        if($dateType == 'year') unset($headers[1]);
+        if(!isset($filters['begin'], $filters['end'])) return $headers;
+
+        $beginFilter = $filters['begin'];
+        $endFilter   = $filters['end'];
+
+        $filteredHeaders = array();
+        if($dateType == 'year')
+        {
+            $filteredHeaders[0] = array_filter($headers[0], function($item) use ($beginFilter, $endFilter)
+            {
+                if($item['name'] == 'scope') return true;
+                if($item['value'] >= $beginFilter->year && $item['value'] <= $endFilter->year) return true;
+                return false;
+            });
+        }
+        if($dateType == 'month')
+        {
+            foreach($headers as $index => $headerRow)
+            {
+                $filteredHeaders[$index] = array_filter($headerRow, function($item) use ($beginFilter, $endFilter)
+                {
+                    if($item['name'] == 'scope') return true;
+                    if($item['type'] == 'year'  && $item['value'] >= $beginFilter->year  && $item['value'] <= $endFilter->year)  return true;
+                    if($item['type'] == 'month' && $item['value'] >= $beginFilter->month && $item['value'] <= $endFilter->month) return true;
+                    return false;
+                });
+            }
+        }
+        if($dateType == 'day')
+        {
+            foreach($headers as $index => $headerRow)
+            {
+                $filteredHeaders[$index] = array_filter($headerRow, function($item) use ($beginFilter, $endFilter)
+                {
+                    if($item['name'] == 'scope') return true;
+                    if($item['type'] == 'year' && $item['value'] >= $beginFilter->year && $item['value'] <= $endFilter->year) return true;
+                    if($item['type'] == 'day'  && $item['value'] >= $beginFilter->day  && $item['value'] <= $endFilter->day)  return true;
+                    return false;
+                });
+            }
+        }
+
+        return $filteredHeaders;
     }
 
     /**
@@ -1664,7 +2262,7 @@ class screenModel extends model
             $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
             $component->key         = "Funnel";
             $component->chartConfig = json_decode('{"key":"Funnel","chartKey":"VFunnel","conKey":"VCFunnel","title":"漏斗图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"echarts","image":"/static/png/funnel-d032fdf6.png"}');
-            $component->option      = json_decode('{"dataset":{"dimensions":["product","dataOne"],"source":[{"product":"data1","dataOne":20},{"product":"data2","dataOne":40},{"product":"data3","dataOne":60},{"product":"data4","dataOne":80},{"product":"data5","dataOne":100}]},"series":[{"name":"Funnel","type":"funnel","gap":5,"label":{"show":true,"position":"inside","fontSize":12}}],"backgroundColor":"rgba(0,0,0,0)"}');
+            $component->option      = json_decode('{"dataset":{"dimensions":["product","dataOne"],"source":[{"product":"data1","dataOne":20},{"product":"data2","dataOne":40},{"product":"data3","dataOne":60},{"product":"data4","dataOne":80},{"product":"data5","dataOne":100}]},"series":[{"name":"Funnel","type":"funnel","gap":5,"label":{"show":true,"position":"inside"}}],"backgroundColor":"rgba(0,0,0,0)"}');
 
             return $this->setComponentDefaults($component);
         }
@@ -1723,17 +2321,43 @@ class screenModel extends model
      */
     public function initComponent($chart, $type, $component = null)
     {
+        if($type == 'metric') return $this->initMetricComponent($chart, $component);
+        if($type == 'chart' || $type == 'pivot') return $this->initChartAndPivotComponent($chart, $type, $component);
+
+        return array($component, false);
+    }
+
+    public function initMetricComponent($metric, $component = null)
+    {
+        if(!$component)                     $component = new stdclass();
+        if(!isset($component->id))          $component->id          = $metric->id;
+        if(!isset($component->sourceID))    $component->sourceID    = $metric->id;
+        if(!isset($component->title))       $component->title       = $metric->name;
+        if(!isset($component->type))        $component->type        = 'metric';
+        if(!isset($component->chartConfig)) $component->chartConfig = json_decode($this->config->screen->chartConfig['metric']);
+        if(!isset($component->option))      $component->option      = json_decode($this->config->screen->chartOption['metric']);
+
+        return array($component, false);
+    }
+
+    public function initChartAndPivotComponent($chart, $type, $component = null)
+    {
         if(!$component) $component = new stdclass();
         if(!$chart) return array($component, false);
 
-        $settings = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
+        $chartID   = $chart->id;
+        $chartName = $chart->name;
+        $settings  = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
+        $builtin   = $chart->builtin;
+        $isBuiltin = ($builtin and !in_array($chartID, $this->config->screen->builtinChart));
 
-        if(!isset($component->id))       $component->id       = $chart->id;
-        if(!isset($component->sourceID)) $component->sourceID = $chart->id;
-        if(!isset($component->title))    $component->title    = $chart->name;
+        if(!isset($component->id))       $component->id       = $chartID;
+        if(!isset($component->sourceID)) $component->sourceID = $chartID;
+        if(!isset($component->title))    $component->title    = $chartName;
 
-        if($type == 'chart') $chartType = ($chart->builtin and !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : $settings[0]->type;
-        if($type == 'pivot') $chartType = 'table';
+        if($type == 'chart')  $chartType = ($chart->builtin and !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : $settings[0]->type;
+        if($type == 'pivot')  $chartType = 'table';
+        if($type == 'metric') $chartType = 'metric';
         $component->type = $chartType;
 
         $typeChanged = false;
@@ -1761,7 +2385,7 @@ class screenModel extends model
 
         if(!isset($component->option) or $typeChanged)
         {
-            $component->option = json_decode(zget($this->config->screen->chartOption, $component->type));
+            $component->option = new stdclass();
             $component->option->dataset = new stdclass();
         }
 
@@ -1816,6 +2440,20 @@ class screenModel extends model
             }
         }
         return false;
+    }
+
+    /**
+     * Get chart type.
+     *
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function getChartType($type)
+    {
+        if($type == 'Tables' || $type == 'pivot') return 'pivot';
+        if($type == 'Metrics') return 'metric';
+        return 'chart';
     }
 
     /**

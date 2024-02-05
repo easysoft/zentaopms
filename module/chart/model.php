@@ -670,10 +670,14 @@ class chartModel extends model
      * Get sys options.
      *
      * @param  string $type
+     * @param  string $object
+     * @param  string $field
+     * @param  string $sql
+     * @param  string $saveAs
      * @access public
      * @return array
      */
-    public function getSysOptions($type, $object = '', $field = '', $sql = '')
+    public function getSysOptions($type, $object = '', $field = '', $sql = '', $saveAs = '')
     {
         $options = array('' => '');
         switch($type)
@@ -707,22 +711,53 @@ class chartModel extends model
             case 'object':
                 if($field)
                 {
-                    $table = zget($this->config->objectTables, $object, '');
-                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    if($sql and $saveAs)
+                    {
+                        $options = $this->getOptionsFromSql($sql, $field, $saveAs);
+                    }
+                    else
+                    {
+                        $table = zget($this->config->objectTables, $object, '');
+                        if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    }
                 }
                 break;
             case 'string':
             case 'number':
                 if($field and $sql)
                 {
-                    $cols = $this->dbh->query($sql)->fetchAll();
-                    foreach($cols as $col)
-                    {
-                        $data = $col->$field;
-                        $options[$data] = $data;
-                    }
+                    $keyField   = $field;
+                    $valueField = $saveAs ? $saveAs : $field;
+                    $options = $this->getOptionsFromSql($sql, $keyField, $valueField);
                 }
                 break;
+        }
+
+        return $options;
+    }
+
+     /**
+     * Get pairs from column by keyField and valueField.
+     *
+     * @param  string $sql
+     * @param  string $keyField
+     * @param  string $valueField
+     * @access public
+     * @return array
+     */
+    public function getOptionsFromSql($sql, $keyField, $valueField)
+    {
+        $options = array();
+        $cols    = $this->dbh->query($sql)->fetchAll();
+        $sample  = current($cols);
+
+        if(!isset($sample->$keyField) or !isset($sample->$valueField)) return $options;
+
+        foreach($cols as $col)
+        {
+            $key   = $col->$keyField;
+            $value = $col->$valueField;
+            $options[$key] = $value;
         }
 
         return $options;
