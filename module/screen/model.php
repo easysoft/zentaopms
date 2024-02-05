@@ -302,12 +302,15 @@ class screenModel extends model
             }
             else
             {
-                foreach($oldFilters as $index => $filter)
+                if(!isset($_POST['filters'])) // 如果不是前端进行筛选操作，则说明是第一次打开页面，此时看看后台的默认值有没有发生变更
                 {
-                    $oldDefault = $filter->default;
-                    $newDefault = $latestFilters[$index]->default;
+                    foreach($oldFilters as $index => $filter)
+                    {
+                        $oldDefault = $filter->default;
+                        $newDefault = $latestFilters[$index]->default;
 
-                    if($oldDefault !== $newDefault) $component->chartConfig->filters[$index]->default = $newDefault;
+                        if($oldDefault !== $newDefault) $component->chartConfig->filters[$index]->default = $newDefault;
+                    }
                 }
             }
         }
