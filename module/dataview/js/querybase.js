@@ -263,7 +263,7 @@ function getFieldSettings()
         var defaultType   = columns[index];
         var defaultObject = relatedObject[index];
 
-        if(typeof(objectFields) != 'undefined' && typeof(objectFields[defaultObject]) != 'undefined' && typeof(objectFields[defaultObject][index]) != 'undefined') defaultType = objectFields[defaultObject][index].type == 'object' ? 'string' : objectFields[defaultObject][index].type;
+        if(typeof(objectFields) != 'undefined' && typeof(objectFields[defaultObject]) != 'undefined' && typeof(objectFields[defaultObject][index]) != 'undefined') defaultType = objectFields[defaultObject][index].type;
 
         if(!fieldSettings[index])
         {
@@ -433,7 +433,7 @@ $(document).ready(function()
 
                 var html = $($.zui.formatString(tbodyTpl, {field: field, name: fieldSettings[field].name}));
                 html.find('select#relatedTable' + field).picker({list: fieldTypeOptions, defaultValue: fieldSettings[field].object});
-                html.find('select#relatedField' + field).picker({list: relatedFieldOptions, defaultValue: fieldSettings[field].field});
+                html.find('select#relatedField' + field).picker({list: relatedFieldOptions, defaultValue: fieldSettings[field].field, allowSingleDeselect: true});
                 html.find("input[name^='langs']").each(function()
                 {
                     var field = $(this).data('field');

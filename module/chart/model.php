@@ -717,8 +717,23 @@ class chartModel extends model
                     }
                     else
                     {
-                        $table = zget($this->config->objectTables, $object, '');
-                        if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                        $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
+                        if(is_file($path))
+                        {
+                            include $path;
+                            $fieldObject = $schema->fields[$field]['object'];
+                            $table = zget($this->config->objectTables, $fieldObject, '');
+                            $showField = 'id';
+                            $show = explode('.', $schema->fields[$field]['show']);
+                            if(count($show) == 2) $showField = $show[1];
+
+                            if($table) $options = $this->dao->select("id, {$showField}")->from($table)->fetchPairs();
+                        }
+                        else
+                        {
+                            $table = zget($this->config->objectTables, $object, '');
+                            if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                        }
                     }
                 }
                 break;
