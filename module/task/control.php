@@ -333,7 +333,7 @@ class task extends control
         if(!$task)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound, 'load' => $this->createLink('execution', 'all')));
+            return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('execution', 'all'))));
         }
         if(!$this->loadModel('common')->checkPrivByObject('execution', $task->execution)) return print(js::error($this->lang->execution->accessDenied) . js::locate($this->createLink('execution', 'all')));
 
