@@ -123,6 +123,7 @@ window.getColActions = function(col)
     {
         let cardActions = buildColCardActions(col);
         if(cardActions.length > 0) actionList.push({type:'dropdown', icon:'expand-alt text-primary', caret:false, items:cardActions});
+        if(cardActions.length == 0 && ((col.type == 'backlog' && !priv.canCreateStory && productID == '0') || (col.type == 'unconfirmed' && !priv.canCreateBug && productID == '0'))) actionList.push({icon:'expand-alt text-primary', 'data-on': 'click', 'data-do': "zui.Modal.alert('" + needLinkProducts + "')"});
     }
 
     actionList.push({type:'dropdown', icon:'ellipsis-v', caret:false, items:buildColActions(col)});
