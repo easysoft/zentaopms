@@ -475,6 +475,7 @@ class screenModel extends model
         $component->option->card                 = $card;
         $component->option->card->isDateMetric   = $isDateMetric;
         $component->option->card->isObjectMetric = $isObjectMetric;
+        $component->option->card->cardDateDefault = $component->option->card->filterValue ? $component->option->card->filterValue->dateString : '';
 
         return $component;
     }
