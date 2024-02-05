@@ -57,6 +57,7 @@ function buildItem(array $item): wg
                 (
                     set::name('width'),
                     setClass('size-sm w-12'),
+                    set::name('width'),
                     set::required(true),
                     set::items($unitTypes),
                     set::value($isPercent ? '%' : 'px')
