@@ -402,15 +402,16 @@ class testcase extends control
         $this->session->set('bugList', $this->app->getURI(true), $this->app->tab);
 
         $case = $this->testcase->getById($caseID, $version);
-        $case->caseID = $case->id;
 
         /* 如果用例不存在，返回到测试仪表盘页面。 */
         /* If testcase isn't exist, locate to qa-ndex.*/
         if(!$case)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
-            return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+            return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound)));
         }
+
+        $case->caseID = $case->id;
         $this->executeHooks($caseID);
 
         if(defined('RUN_MODE') && RUN_MODE == 'api' && !empty($this->app->version)) return $this->send(array('status' => 'success', 'case' => $case));
