@@ -25,7 +25,7 @@ namespace zin;
 .timeline > li.active > a:after, .timeline > li.active > div:after {opacity: 1;}
 .timeline > li.active:before {top: 8px; left: -30px; width: 15px; z-index: 3; height: 15px; background-color: #FFF; border: none;}
 .timeline > li.collected > div:after {background-color: #FFAF65;}
-.timeline > li.releaseddoc > div:after {background-color: #66A2FF;}
+.timeline > li.releaseddoc > div:after {background-color: var(--color-success-500);}
 .timeline > li > div:after {left: -27px;}
 .timeline > li > div > .timeline-tag, .timeline > li > div > .timeline-text > .label-action {color: #838A9D;}
 
