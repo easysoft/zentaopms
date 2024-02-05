@@ -317,7 +317,6 @@ class bug extends control
             /* 初始化 bug 数据。*/
             /* Init bug data. */
             $bug = form::data($this->config->bug->form->assignTo)->add('id', $bugID)->get();
-            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->assignto['id'], $this->post->uid);
 
             if($this->app->rawMethod == 'batchassignto') unset($bug->mailto);
 
@@ -379,7 +378,6 @@ class bug extends control
             /* 构造 bug 的表单数据。*/
             /* Structure the bug form data. */
             $bug = form::data($this->config->bug->form->confirm)->add('id', $bugID)->setDefault('confirmed', 1)->get();
-            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->confirm['id'], $this->post->uid);
 
             $this->bug->confirm($bug, $kanbanData);
 
@@ -501,7 +499,6 @@ class bug extends control
             /* 获取bug信息。 */
             /* Build bug data. */
             $bug = form::data($this->config->bug->form->activate)->setDefault('assignedTo', $oldBug->resolvedBy)->add('activatedCount', $oldBug->activatedCount + 1)->add('id', $bugID)->add('resolvedDate', null)->add('closedDate', null)->get();
-            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
 
             /* 解析看板信息。 */
             /* Parse kanban information. */
@@ -551,7 +548,6 @@ class bug extends control
             /* 设置bug信息。 */
             /* Set bug information. */
             $bug = form::data($this->config->bug->form->close)->add('id', $bugID)->get();
-            $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $this->post->uid);
 
             /* 设置额外变量。 */
             /* Set extra variables. */
