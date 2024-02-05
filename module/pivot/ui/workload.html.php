@@ -42,7 +42,7 @@ $generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, 
                 $lang->pivot->to,
                 datePicker(set(array('name' => 'end', 'value' => $end))),
                 $lang->pivot->diffDays,
-                input(set(array('name' => 'days', 'value' => $days, 'class' => 'text-right readonly w-1/6')))
+                input(set(array('name' => 'days', 'value' => $days, 'class' => 'text-left readonly w-1/6')))
             ),
             div
             (
@@ -51,7 +51,7 @@ $generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, 
                 (
                     setClass('w-5/12'),
                     $lang->pivot->workhour,
-                    input(set(array('name' => 'workhour', 'value' => $workhour, 'class' => 'text-right')))
+                    input(set(array('name' => 'workhour', 'value' => $workhour, 'class' => 'text-left')))
                 ),
                 picker
                 (
