@@ -25,7 +25,8 @@ class treeZen extends tree
         /* 产品线没有root。 Product line has no root. */
         if($viewType == 'line') return (object)array('id' => 0, 'name' => $this->lang->tree->mangeLine, 'rootType' => 'line');
 
-        if(in_array($viewType, array('host', 'datasource')) || strpos($viewType, '_') !== false) return (object)array('id' => 0, 'name' => $this->lang->tree->manage, 'rootType' => 'line');
+        if(in_array($viewType, array('host'))) return (object)array('id' => 0, 'name' => $this->lang->host->groupMaintenance, 'rootType' => 'line');
+        if(in_array($viewType, array('datasource')) || strpos($viewType, '_') !== false) return (object)array('id' => 0, 'name' => $this->lang->tree->manage, 'rootType' => 'line');
 
         /* 用例库的root是caselib，其他都是产品。 The root of caselib is caselib, others are product. */
         if(strpos($viewType, 'caselib') !== false)
