@@ -46,6 +46,7 @@ class upload extends wg
         global $lang, $app;
 
         if(!$this->prop('class')) $this->setProp('class', 'w-full');
+        if(!$this->prop('icon'))  $this->setProp('icon',  'paper-clip');
         if(!$this->prop('tip'))   $this->setProp('tip', sprintf($lang->noticeDrag, strtoupper(ini_get('upload_max_filesize'))));
         if($this->prop('limitCount') && !$this->prop('exceededCountHint'))
         {
