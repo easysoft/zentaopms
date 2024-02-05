@@ -26,6 +26,7 @@ class dynamic extends wg
         if($objectType == 'project' && $action == 'closed') return 'trophy';
 
         if(strpos($action, 'assigned') !== false) return 'blue';
+        if(strpos($action, 'releaseddoc') !== false) return 'green';
         if(strpos($action, 'finished') !== false || strpos($action, 'resolved') !== false || ($action == 'closed' && $objectType != 'product')) return 'green';
 
         return '';
