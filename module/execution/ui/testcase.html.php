@@ -61,6 +61,7 @@ foreach($cases as $case)
 
 $cols = $config->testcase->dtable->fieldList;
 unset($cols['module']);
+unset($cols['branch']);
 
 dtable
 (
