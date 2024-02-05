@@ -2213,7 +2213,7 @@ class testcaseZen extends testcase
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $caseID));
         /* If link from no head then reload. */
-        if(isonlybody() || helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
+        if(isonlybody() || helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
 
         /* 判断是否当前一级菜单不是 QA，并且 caseList session 存在，并且 caseList 不是动态页面。 */
         /* Use this session link, when the tab is not QA, a session of the case list exists, and the session is not from the Dynamic page. */
