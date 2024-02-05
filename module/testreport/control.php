@@ -252,7 +252,7 @@ class testreport extends control
     public function view(int $reportID, string $tab = 'basic', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         $report = $this->testreport->getById($reportID);
-        if(!$report) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => array('load' => true))));
+        if(!$report) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound)));
 
         /* Set session. */
         $this->session->project = $report->project;
