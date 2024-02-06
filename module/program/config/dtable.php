@@ -221,13 +221,16 @@ $config->program->browse->dtable->fieldList['status']['statusMap'] = $lang->prog
 $config->program->browse->dtable->fieldList['status']['show']      = true;
 $config->program->browse->dtable->fieldList['status']['group']     = 2;
 
-$config->program->browse->dtable->fieldList['PM']['name']     = 'PM';
-$config->program->browse->dtable->fieldList['PM']['title']    = $lang->program->PM;
-$config->program->browse->dtable->fieldList['PM']['minWidth'] = 80;
-$config->program->browse->dtable->fieldList['PM']['type']     = 'avatarBtn';
-$config->program->browse->dtable->fieldList['PM']['sortType'] = true;
-$config->program->browse->dtable->fieldList['PM']['show']     = true;
-$config->program->browse->dtable->fieldList['PM']['group']    = 2;
+$config->program->browse->dtable->fieldList['PM']['name']        = 'PM';
+$config->program->browse->dtable->fieldList['PM']['title']       = $lang->program->PM;
+$config->program->browse->dtable->fieldList['PM']['minWidth']    = 80;
+$config->program->browse->dtable->fieldList['PM']['type']        = 'avatarBtn';
+$config->program->browse->dtable->fieldList['PM']['sortType']    = true;
+$config->program->browse->dtable->fieldList['PM']['link']        = array('module' => 'user', 'method' => 'profile', 'params' => 'userID={PMUserID}');
+$config->program->browse->dtable->fieldList['PM']['data-toggle'] = 'modal';
+$config->program->browse->dtable->fieldList['PM']['data-size']   = 'sm';
+$config->program->browse->dtable->fieldList['PM']['show']        = true;
+$config->program->browse->dtable->fieldList['PM']['group']       = 2;
 
 $config->program->browse->dtable->fieldList['budget']['name']     = 'budget';
 $config->program->browse->dtable->fieldList['budget']['title']    = $lang->program->budget;

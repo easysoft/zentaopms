@@ -35,6 +35,7 @@ foreach($programs as $program)
     {
         $userName = zget($users, $program->PM, '');
         $program->PMAvatar = $usersAvatar[$program->PM];
+        $program->PMUserID = $PMList[$program->PM]->id;
         $program->PM       = $userName;
     }
     else
