@@ -18,14 +18,14 @@ require_once dirname(__DIR__) . DS . 'pripicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'severitypicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'colorpicker' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'colorinput' . DS . 'v1.php';
-require_once dirname(__DIR__) . DS . 'upload' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'datetimepicker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'fileselector' . DS . 'v1.php';
 
 class control extends wg
 {
     protected static array $defineProps = array
     (
-        'control?: string',      // 表单输入元素类型，值可以为：static, text, input, password, email, number, date, time, datetime, month, url, search, color, picker, pri, severity, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, textarea, editor, upload
+        'control?: string',      // 表单输入元素类型，值可以为：static, text, input, password, email, number, date, time, datetime, month, url, search, color, picker, pri, severity, select, checkbox, radio, checkboxList, radioList, checkboxListInline, radioListInline, file, image, textarea, editor
         'type?: string',         // 请使用 control 属性，如果已经指定 control 属性，则此属性作为具体控件的 type 属性。
         'id?: string',           // ID。
         'name: string',          // 控件名称，可能影响到表单提交的域名称，如果是多个值的表单控件，可能需要将名称定义为 `key[]` 的形式。
@@ -43,6 +43,11 @@ class control extends wg
     (
         'button', 'datetime-local', 'email', 'file', 'hidden', 'image', 'month', 'number', 'password', 'range', 'reset', 'search', 'submit', 'tel', 'text', 'url', 'week'
     );
+
+    protected function checkErrors()
+    {
+        if($this->prop('control') == 'upload') trigger_error('[ZIN] The control property value "upload" is deprecated, use "file" instead.', E_USER_WARNING);
+    }
 
     protected function created()
     {
@@ -193,9 +198,14 @@ class control extends wg
         return new colorInput(set($this->props->skip('control')));
     }
 
+    protected function buildFile(): wg
+    {
+        return new fileSelector(set($this->props->skip('control')));
+    }
+
     protected function buildFiles(): wg
     {
-        return new upload(set($this->props->skip('control')));
+        return $this->buildFile();
     }
 
     protected function buildHidden(): wg
