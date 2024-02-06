@@ -56,7 +56,7 @@ class fileSelector extends wg
         }
         if(!$this->hasProp('exceededCountTip'))
         {
-            global $app;
+            global $app, $lang;
             $app->loadLang('file');
             $this->setProp('exceededCountHint', sprintf($lang->file->errorFileCount, '{maxCount}'));
         }
