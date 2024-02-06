@@ -1950,6 +1950,7 @@ class pivotModel extends model
         $sql = $this->appendWhereFilterToSql($sql, $filters);
 
         $records = $this->dao->query($sql)->fetchAll();
+        $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql);
 
         $showColTotal = zget($settings, 'columnTotal', 'noShow');
 
@@ -1997,7 +1998,7 @@ class pivotModel extends model
         $data              = new stdclass();
         $data->groups      = $groups;
         $data->cols        = $cols;
-        $data->array       = $this->mapRecordValueWithFieldOptions($mergeRecords, $fields, $sql);
+        $data->array       = json_decode(json_encode($mergeRecords), true);
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
 
         $configs = $this->calculateMergeCellConfig($groups, $mergeRecords);
@@ -2033,7 +2034,7 @@ class pivotModel extends model
                 $record[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
             }
 
-            $records[$index] = $record;
+            $records[$index] = (object)$record;
         }
 
         return $records;

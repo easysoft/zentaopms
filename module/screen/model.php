@@ -1187,7 +1187,7 @@ class screenModel extends model
 
         if($sql and $field and in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'project.status', 'option', 'object')))
         {
-            $options = $this->getOptionsFromSql($source, $field, $saveAs);
+            $options = $this->getOptionsFromSql($sql, $field, $saveAs);
         }
 
         return array_filter($options);
