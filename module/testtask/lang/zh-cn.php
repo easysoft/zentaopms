@@ -88,6 +88,7 @@ $lang->testtask->realFinishedDate  = '实际完成日期';
 $lang->testtask->desc              = '描述';
 $lang->testtask->mailto            = '抄送给';
 $lang->testtask->status            = '当前状态';
+$lang->testtask->statusAB          = '状态';
 $lang->testtask->subStatus         = '子状态';
 $lang->testtask->testreport        = '相关测试报告';
 $lang->testtask->assignedTo        = '指派给';

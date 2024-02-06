@@ -14,10 +14,20 @@ include './featurebar.html.php';
 jsVar('trunkLang', $lang->trunk);
 
 $that = zget($lang->user->thirdPerson, $user->gender);
-$testtaskNavs['assignedTo'] = array('text' => sprintf($lang->user->testTask2Him, $that), 'url' => inlink('testtask', "userID={$user->id}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table', 'active' => true); 
+$testtaskNavs['assignedTo'] = array('text' => sprintf($lang->user->testTask2Him, $that), 'url' => inlink('testtask', "userID={$user->id}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table', 'active' => true);
 
 $cols = array();
 foreach($config->user->defaultFields['testtask'] as $field) $cols[$field] = $config->testtask->dtable->fieldList[$field];
+
+$statusKey            = 'status';
+$titleKey             = 'title';
+$statusValue          = $cols[$statusKey];
+$statusValue['title'] = $lang->testtask->statusAB;
+unset($cols[$statusKey]);
+
+$titleIndex = array_search($titleKey, array_keys($cols)) + 1;
+$cols       = array_merge(array_slice($cols, 0, $titleIndex), array($statusKey => $statusValue), array_slice($cols, $titleIndex));
+
 $cols['id']['checkbox'] = false;
 
 $cols = array_map(function($col)
