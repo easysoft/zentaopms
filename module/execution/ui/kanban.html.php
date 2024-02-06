@@ -79,7 +79,7 @@ if($canBatchCreateBug)
     }
     else
     {
-        $createMenu[] = array('text' => $lang->bug->batchCreate, 'url' => helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branchID&extra=executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg');
+        $createMenu[] = array('text' => $lang->bug->batchCreate, 'url' => helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branchID&extra=&executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
 if(($hasStoryButton or $hasBugButton) and $hasTaskButton) $createMenu[] = array('type' => 'divider');
