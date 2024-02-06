@@ -59,6 +59,12 @@ window.onRenderCell = function(result, {row, col})
         if(row.data.color) result[0].props.style = 'color: ' + row.data.color;
         const module = this.options.modules[row.data.module];
         if(module) result.unshift({html: '<span class="label gray-pale rounded-full">' + module + '</span>'}); // 添加模块标签
+
+        if(parseInt(row.data.case))
+        {
+            const caseLink = $.createLink('testcase', 'view', "caseID=" + row.data.case + "&version=" + row.data.caseVersion);
+            result.push({html: '<a href="' + caseLink + '"class="text-gray" title="' + row.data.case + '">[' + caseCommonLang + '#' + row.data.case + ']</a>'});
+        }
     }
 
     return result;

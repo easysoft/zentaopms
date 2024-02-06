@@ -71,6 +71,7 @@ if($canBatchAssignTo)
 
 jsVar('+pageSummary', $summary);
 jsVar('checkedSummary', $lang->selectedItems);
+jsVar('caseCommonLang', $this->lang->testcase->common);
 
 $cols = $this->loadModel('datatable')->getSetting('execution');
 if(isset($cols['module']))      $cols['module']['map']      = $modulePairs;
