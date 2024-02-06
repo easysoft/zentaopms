@@ -156,6 +156,7 @@ if(!empty($story->children))
     $cols['actions']    = $config->story->dtable->fieldList['actions'];
     $cols['id']['checkbox']        = false;
     $cols['title']['nestedToggle'] = false;
+    $cols['actions']['minWidth']   = 190;
     if($isInModal)
     {
         $cols['title']['data-toggle'] = 'modal';
