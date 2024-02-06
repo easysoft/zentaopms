@@ -711,22 +711,29 @@ class chartModel extends model
             case 'object':
                 if($field)
                 {
+                    $useField = $field;
+                    $useTable = $object;
+
                     $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
                     if(is_file($path))
                     {
                         include $path;
                         $fieldObject = $schema->fields[$field]['object'];
-                        $table = zget($this->config->objectTables, $fieldObject, '');
-                        $showField = 'id';
-                        $show = explode('.', $schema->fields[$field]['show']);
-                        if(count($show) == 2) $showField = $show[1];
+                        $fieldShow   = explode('.', $schema->fields[$field]['show']);
 
-                        if($table) $options = $this->dao->select("id, {$showField}")->from($table)->fetchPairs();
+                        if($fieldObject) $useTable = $fieldObject;
+                        if(count($fieldShow) == 2) $useField = $show[1];
                     }
-                    else
+
+                    $table = isset($this->config->objectTables[$useTable]) ? $this->config->objectTables[$useTable] : zget($this->config->objectTables, $object, '');
+                    if($table)
                     {
-                        $table = zget($this->config->objectTables, $object, '');
-                        if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                        $columns = $this->dbh->query("SHOW COLUMNS FROM $table")->fetchAll();
+                        foreach($columns as $id => $column) $columns[$id] = (array)$column;
+                        $fieldList = array_column($columns, 'Field');
+
+                        $useField = in_array($useField, $fieldList) ? $useField : 'id';
+                        $options = $this->dao->select("id, {$useField}")->from($table)->fetchPairs();
                     }
                 }
                 break;
