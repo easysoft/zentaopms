@@ -12,13 +12,33 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('uploadUrl',   createLink('file', 'uploadImages', "module=$module&params=$params&uid=$uid"));
-jsVar('locateUrl',   createLink('file', 'uploadImages', "module=$module&params=$params&uid=$uid&locate=true"));
-jsVar('uploadEmpty', $lang->file->errorUploadEmpty);
-jsVar('uploadingImages', $lang->file->uploadingImages);
+$selectorID    = uniqid('uploader');
+$uploadOptions = array();
+$uploadOptions['uploadUrl']        = createLink('file', 'uploadImages', "module=$module&params=$params&uid=$uid");
+$uploadOptions['locateUrl']        = createLink('file', 'uploadImages', "module=$module&params=$params&uid=$uid&locate=true");
+$uploadOptions['errorUploadEmpty'] = $lang->file->errorUploadEmpty;
+$uploadOptions['uploadingImages']  = $lang->file->uploadingImages;
+$uploadOptions['chunkSize']        = 1024 * 1024;
 
-set::title(array('html' => div(setClass('uploadTitle'), span($lang->uploadImages), span(set::className('text-gray text-sm font-normal'), $lang->uploadImagesTip))));
-uploadImgs(set::name('uploader'), set::tip($lang->file->uploadImagesTip));
-div(btn(setClass('primary uploadBtn'), set('onclick', 'uploadImages()'), $lang->file->beginUpload));
+set::title($lang->uploadImages);
+set::titleClass('flex-none');
+to::header(span(setClass('text-gray text-sm font-normal'), $lang->uploadImagesTip));
 
-render();
+imageSelector
+(
+    set::_id($selectorID),
+    set::className('surface'),
+    set::name('uploader'),
+    set::tip(false)
+);
+
+toolbar
+(
+    btn
+    (
+        setClass('primary uploadBtn'),
+        on::click()->call('uploadImages', "#$selectorID", $uploadOptions, jsRaw('$this')),
+        $lang->file->beginUpload,
+        span(setClass('as-progress'))
+    )
+);

@@ -55,45 +55,49 @@ function uploadFileByChunk(url, file, chunkSize = 1024 * 1024, onProgress = null
     });
 };
 
-window.uploadImages = function(event)
+window.uploadImages = function(selector, options, $uploadBtn)
 {
-    const $uploadBox = $('[data-zui-uploadimgs]');
-    const files      = document.getElementById('uploader').files;
-    const length     = files.length;
+    const $fileBox = $(selector);
+    const fileBox  = $fileBox.zui();
+    const files    = fileBox.$.files;
 
-    $uploadBox.children('div.py-1').html(uploadingImages.replace('%s', length));
-    $('.uploadBtn').attr('disabled', 'disabled');
-    if(length == 0)
+    if(!files.length)
     {
-        $('.uploadBtn').removeAttr('disabled');
-        return zui.Modal.alert(uploadEmpty);
+        zui.Modal.alert(options.uploadEmpty);
+        return;
     }
 
-    let count = 0;
-    let chunkSize = 1024 * 1024;
+    const progressMap = new Map();
+    let uploadedCount = 0;
+    $uploadBtn.attr('disabled', 'disabled');
+    $uploadBtn.find('.as-progress').text(' 0%');
+    const render = () =>
+    {
+        fileBox.render({disabled: true, itemProps: (file) =>
+        {
+            const progress = progressMap.get(file.file);
+            if(progress === undefined) return {};
+            if(progress === 1) return {icon: 'check text-success absolute right-0 bottom-2'};
+
+            return {title: Math.round(progress * 100) + '% | ' + file.name};
+        }});
+    };
+
+    render();
     for(const file of files)
     {
-        const $fileItem    = $uploadBox.find('ul.file-list').find('input[value="' + file.name + '"]').closest('li.file-item');
-        let   $progressBox = $fileItem.find('.file-progress');
-        if($progressBox.length == 0)
+        uploadFileByChunk(options.uploadUrl, file, options.chunkSize, function(progress)
         {
-            $fileItem.append('<span class="alert warning circle h-5 pl-2 pr-2 file-progress absolute left-0 top-0"></span>');
-            $progressBox = $fileItem.find('.file-progress');
-        }
-
-        uploadFileByChunk(uploadUrl, file, chunkSize, function(progress)
-        {
-            progress = Math.round(progress * 100) + '%'
-            $progressBox.html(progress);
-            if(progress == '100%') $progressBox.removeClass('warning').addClass('success');
+            progressMap.set(file, progress);
+            render();
+            $uploadBtn.find('.as-progress').text(' ' + Math.round((uploadedCount + progress) / files.length * 100) + '%' );
         }).then(() =>
         {
-            count++;
-            if(count == length)
+            uploadedCount++;
+            if(uploadedCount === files.length)
             {
-                let uploadimages = $uploadBox.zui('uploadimgs');
-                let modalID      = uploadimages.$element.closest('.modal').attr('id');
-                zui.Modal.hide('#' . modalID);
+                const modalID = $uploadBtn.closest('.modal').attr('id');
+                zui.Modal.hide('#' + modalID);
 
                 const $form  = $('body').find('form.form-batch[data-zui-batchform]');
                 const $modal = $form.closest('.modal')
@@ -116,8 +120,14 @@ window.uploadImages = function(event)
                     });
                     return;
                 }
-                loadPage(locateUrl);
+                loadPage(options.locateUrl);
             }
-        }).catch(json => {$('.uploadBtn').removeAttr('disabled'); if(typeof(json.message) != 'undefined') zui.Modal.alert(json.message)});
+        }).catch(error =>
+        {
+            $uploadBtn.removeAttr('disabled');
+            $uploadBtn.find('.as-progress').text('');
+            fileBox.render({disabled: false});
+            if(typeof(error.message) != 'undefined') zui.Modal.alert(error.message);
+        });
     }
 };
