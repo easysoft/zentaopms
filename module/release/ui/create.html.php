@@ -108,7 +108,7 @@ formPanel
     formGroup
     (
         set::label($lang->release->files),
-        upload(set::name('releaseFiles[]'))
+        fileSelector(set::name('releaseFiles[]'))
     )
 );
 

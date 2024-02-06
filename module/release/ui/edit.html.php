@@ -92,7 +92,7 @@ formPanel
     formGroup
     (
         set::label($lang->release->files),
-        upload()
+        fileSelector()
     ),
     formHidden('product', $release->product)
 );

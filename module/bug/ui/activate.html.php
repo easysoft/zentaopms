@@ -56,7 +56,7 @@ formPanel
     formGroup
     (
         set::label($lang->bug->files),
-        upload()
+        fileSelector()
     )
 );
 hr();

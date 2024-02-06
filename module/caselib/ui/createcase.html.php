@@ -167,7 +167,7 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->files),
-            upload()
+            fileSelector()
         )
     )
 );

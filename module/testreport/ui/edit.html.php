@@ -466,7 +466,7 @@ panel
                     set::files($report->files),
                     set::fieldset(false)
                 ) : null,
-                upload()
+                fileSelector()
             )
         )
     ),

@@ -98,7 +98,7 @@ detailBody
         section
         (
             set::title($lang->files),
-            upload()
+            fileSelector()
         ),
         section
         (

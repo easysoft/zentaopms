@@ -164,7 +164,7 @@ else
         formGroup
         (
             set::label($lang->story->files),
-            upload()
+            fileSelector()
         ),
         formGroup
         (

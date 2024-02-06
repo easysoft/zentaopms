@@ -134,7 +134,7 @@ detailBody
         section
         (
             set::title($lang->files),
-            upload()
+            fileSelector()
         ),
         formHidden('lastEditedDate', helper::isZeroDate($task->lastEditedDate) ? '' : $task->lastEditedDate)
     ),

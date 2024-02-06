@@ -96,7 +96,7 @@ formPanel
             set::label($lang->testtask->resultFile),
             set::width('1/2'),
             set::required(true),
-            upload
+            fileSelector
             (
                 set::name('resultFile'),
                 set::multiple(false),

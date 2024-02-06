@@ -143,7 +143,7 @@ detailBody
                 set::showEdit(true),
                 set::showDelete(true)
             ) : null,
-            upload()
+            fileSelector()
         ),
         section
         (
@@ -257,7 +257,7 @@ detailBody
             (
                 $case->auto == 'auto' ? set::trClass('autoScript') : set::trClass('hidden autoScript'),
                 set::name($lang->testcase->autoScript),
-                upload
+                fileSelector
                 (
                     set::name('scriptFile'),
                     set::accept($config->testcase->scriptAcceptFileTypes),

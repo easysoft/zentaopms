@@ -171,7 +171,7 @@ formPanel
     formGroup
     (
         set::label($lang->story->legendAttach),
-        upload()
+        fileSelector()
     ),
     formGroup
     (

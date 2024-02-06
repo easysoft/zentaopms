@@ -151,7 +151,7 @@ detailBody
         $canEditContent || $story->files ? section
         (
             set::title($lang->story->legendAttach),
-            $canEditContent ? upload() : null,
+            $canEditContent ? fileSelector() : null,
             $story->files ? fileList
             (
                 set::files($story->files),

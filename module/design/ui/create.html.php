@@ -84,7 +84,7 @@ formPanel
         formGroup
         (
             set::label($lang->design->file),
-            upload()
+            fileSelector()
         )
     )
 );

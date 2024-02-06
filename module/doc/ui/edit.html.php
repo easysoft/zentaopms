@@ -132,7 +132,7 @@ form
             formGroup
             (
                 set::label($lang->doc->files),
-                upload()
+                fileSelector()
             ),
             formGroup
             (

@@ -158,7 +158,7 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->files),
-        upload()
+        fileSelector()
     ),
     formGroup
     (

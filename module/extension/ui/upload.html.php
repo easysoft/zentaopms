@@ -37,7 +37,7 @@ else
     (
         formGroup
         (
-            upload
+            fileSelector
             (
                 set::multiple(false),
                 set::limitSize($maxUploadSize . 'B'),

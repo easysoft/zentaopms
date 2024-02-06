@@ -485,7 +485,7 @@ panel
             formGroup
             (
                 set::label($lang->files),
-                upload()
+                fileSelector()
             )
         )
     ),
