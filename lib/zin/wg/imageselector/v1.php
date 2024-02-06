@@ -6,6 +6,11 @@ require_once dirname(__DIR__) . DS . 'fileSelector' . DS . 'v1.php';
 
 class imageSelector extends fileSelector
 {
+    protected static array $defaultProps = array
+    (
+        'mode' => 'grid'
+    );
+
     /**
      * Build the widget.
      *
