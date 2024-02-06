@@ -14,6 +14,7 @@ class fileSelector extends wg
     (
         'name?: string="files[]"',                     // 作为表单字段的名称。
         'accept?: string',                             // 限制文件类型。
+        'disabled?: bool',                             // 是否禁用。
         'mode?: string="box"',                         // 界面模式，包括 'button'、'box'、'grid'
         'tip?: string',                                // 提示信息。
         'thumbnail?: bool=true',                       // 是否显示缩略图。
