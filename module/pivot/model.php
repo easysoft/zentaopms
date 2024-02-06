@@ -1438,6 +1438,9 @@ class pivotModel extends model
                         $begin = $default['begin'];
                         $end   = $default['end'];
 
+                        if(!empty($begin)) $begin = date('Y-m-d 00:00:00', strtotime($begin));
+                        if(!empty($end))   $end   = date('Y-m-d 23:59:59', strtotime($end));
+
                         if(!empty($begin) and empty($end))  $filterFormat[$field] = array('operator' => '>', 'value' => "'$begin'");
                         if(empty($begin) and !empty($end))  $filterFormat[$field] = array('operator' => '<', 'value' => "'$end'");
                         if(!empty($begin) and !empty($end)) $filterFormat[$field] = array('operator' => 'BETWEEN', 'value' => "'$begin' and '$end'");
