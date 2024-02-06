@@ -1385,7 +1385,7 @@
         e.preventDefault();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
@@ -1458,60 +1458,4 @@
             if(!isInAppTab && !zui.store.get('Zinbar:hidden') && $('#navbar').length) loadCurrentPage();
         }
     });
-
-    const getChunks = (file, chunkSize) => {
-        const chunks = [];
-        let start = 0;
-        let end = Math.min(chunkSize, file.size);
-
-        while (start < end)
-        {
-            chunks.push(file.slice(start, end));
-            start = end;
-            end = Math.min(start + chunkSize, file.size);
-        }
-
-        return chunks;
-    };
-
-    const uploadChunk = (url, chunk, headers) => {
-        return fetch(url, {
-            method: 'POST',
-            body: chunk,
-            headers,
-        }).then(response => response.json()).then(json => {if(json.result == 'fail') return Promise.reject(json);})
-    }
-
-    function uploadFileByChunk(url, file, chunkSize = 1024 * 1024, onProgress = null)
-    {
-        const chunks = getChunks(file, chunkSize);
-        let i = 0;
-
-        return new Promise((resolve, reject) => {
-            const uploadNextChunk = () => {
-                if(i >= chunks.length)
-                {
-                    if(typeof onProgress === 'function') onProgress(1);
-                    resolve();
-                    return;
-                }
-
-                const headers = {
-                    'X-CHUNK-INDEX': i,
-                    'X-TOTAL-CHUNKS': chunks.length,
-                    'X-FILENAME': encodeURIComponent(file.name),
-                    'X-FILESIZE': file.size,
-                };
-                uploadChunk(url, chunks[i], headers)
-                    .then(() => {
-                        i++;
-                        if(typeof onProgress === 'function') onProgress(i / chunks.length);
-                        uploadNextChunk();
-                    })
-                    .catch(reject);
-            };
-
-            uploadNextChunk();
-        });
-    };
 }());
