@@ -408,7 +408,7 @@ class testcase extends control
         if(!$case)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
-            return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound)));
+            return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('testcase', 'browse'))));
         }
 
         $case->caseID = $case->id;
