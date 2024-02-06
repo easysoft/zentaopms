@@ -308,21 +308,21 @@ class screenModel extends model
                     {
                         $oldDefault = $filter->default;
                         $newDefault = $latestFilters[$index]->default;
-
-                        $isSelect  = $filter->type == 'select' && $latestFilters[$index]->type == 'select';
-                        $oldSaveAs = zget($filter, 'saveAs', '');
-                        $oldOption = zget($filter, 'options', array());
-                        $newSaveAs = zget($latestFilters[$index], 'saveAs', '');
-                        $newOption = zget($latestFilters[$index], 'options', array());
-
                         if($oldDefault !== $newDefault) $component->chartConfig->filters[$index]->default = $newDefault;
-                        if($isSelect and $oldSaveAs !== $newSaveAs) $component->chartConfig->filters[$index]->saveAs  = $newSaveAs;
-                        if($isSelect and $oldOption !== $newOption) $component->chartConfig->filters[$index]->options = $newOption;
                     }
+                }
+                foreach($oldFilters as $index => $filter)
+                {
+                    $isSelect  = $filter->type == 'select' && $latestFilters[$index]->type == 'select';
+                    $oldSaveAs = zget($filter, 'saveAs', '');
+                    $newSaveAs = zget($latestFilters[$index], 'saveAs', '');
+
+                    if($oldDefault !== $newDefault) $component->chartConfig->filters[$index]->default = $newDefault;
+                    if($isSelect and $oldSaveAs !== $newSaveAs) $component->chartConfig->filters[$index]->saveAs  = $newSaveAs;
+                    $component->chartConfig->filters[$index]->options = zget($latestFilters[$index], 'options', array());
                 }
             }
         }
-        $component->chartConfig->filters = $latestFilters;
 
         if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
         {
