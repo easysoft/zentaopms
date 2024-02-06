@@ -17,7 +17,7 @@ class stakeholder extends control
      */
     public function browse(int $projectID, string $browseType = 'all', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadLang('user');
+        $this->app->loadLang('user');
         $this->loadModel('project')->setMenu($projectID);
 
         /* Get stake holders list. */
