@@ -12,6 +12,7 @@ $config->build->dtable->fieldList['name']['title']    = $lang->build->nameAB;
 $config->build->dtable->fieldList['name']['name']     = 'name';
 $config->build->dtable->fieldList['name']['link']     = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={id}');
 $config->build->dtable->fieldList['name']['type']     = 'title';
+$config->build->dtable->fieldList['name']['width']    = '300';
 $config->build->dtable->fieldList['name']['sortType'] = false;
 
 $config->build->dtable->fieldList['product']['title'] = $lang->build->product;
@@ -107,6 +108,7 @@ $config->build->bug->dtable->fieldList['id']['sortType'] = 'desc';
 $config->build->bug->dtable->fieldList['title']['title']       = $lang->bug->title;
 $config->build->bug->dtable->fieldList['title']['name']        = 'title';
 $config->build->bug->dtable->fieldList['title']['type']        = 'title';
+$config->build->bug->dtable->fieldList['title']['width']       = '300';
 $config->build->bug->dtable->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
 $config->build->bug->dtable->fieldList['title']['data-toggle'] = 'modal';
 $config->build->bug->dtable->fieldList['title']['data-size']   = 'lg';
