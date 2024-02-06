@@ -1526,6 +1526,22 @@ function floatPreNextBtn(): floatPreNextBtn
 }
 
 /**
+ * The zui file selector widget.
+ */
+function fileSelector(): fileSelector
+{
+    return createWg('fileSelector', func_get_args());
+}
+
+/**
+ * The zui file selector widget.
+ */
+function imageSelector(): imageSelector
+{
+    return createWg('imageSelector', func_get_args());
+}
+
+/**
  * Upload widget.
  *
  * string            name
@@ -1561,6 +1577,7 @@ function floatPreNextBtn(): floatPreNextBtn
  * ?string           duplicatedHint
  * ?string           exceededSizeHint
  * ?string           exceededCountHint
+ * @deprecated use "fileSelector" instead.
  */
 function upload(): upload
 {
@@ -1597,6 +1614,7 @@ function upload(): upload
  * ?string           exceededSizeHint
  * ?string           exceededCountHint
  * ?string           totalCountText
+ * @deprecated use "imageSelector" instead.
  */
 function uploadImgs(): uploadImgs
 {

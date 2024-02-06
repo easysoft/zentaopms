@@ -2,6 +2,9 @@
 declare(strict_types=1);
 namespace zin;
 
+/**
+ * @deprecated Use `imageSelector` instead.
+ */
 class uploadImgs extends wg
 {
     protected static array $defineProps = array(

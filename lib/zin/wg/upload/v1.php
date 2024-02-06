@@ -2,6 +2,9 @@
 declare(strict_types=1);
 namespace zin;
 
+/**
+ * @deprecated Use `fileSelector` instead.
+ */
 class upload extends wg
 {
     protected static array $defineProps = array(
