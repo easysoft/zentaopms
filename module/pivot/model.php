@@ -2525,10 +2525,6 @@ class pivotModel extends model
                         $options = array();
                         foreach($source as $row) $options[$row->id] = $row->$field;
                     }
-                    elseif($saveAs)
-                    {
-                        $options = $this->getOptionsFromSql($source, $field, $saveAs);
-                    }
                     else
                     {
                         $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
@@ -2556,20 +2552,29 @@ class pivotModel extends model
                 if($field)
                 {
                     $options = array();
-                    if(is_string($source) and !empty($source))
-                    {
-                        $keyField   = $field;
-                        $valueField = $saveAs ? $saveAs : $field;
-                        $options = $this->getOptionsFromSql($source, $keyField, $valueField);
-                    }
-                    else if(is_array($source))
+                    if(is_array($source))
                     {
                         foreach($source as $row) $options[$row->$field] = $row->$field;
                     }
                 }
                 break;
         }
-        return $options;
+
+        if(is_string($source) and $source)
+        {
+            if(in_array($type, array('string', 'number')))
+            {
+                $keyField   = $field;
+                $valueField = $saveAs ? $saveAs : $field;
+                $options = $this->getOptionsFromSql($source, $keyField, $valueField);
+            }
+            elseif($saveAs)
+            {
+                $options = $this->getOptionsFromSql($source, $field, $saveAs);
+            }
+        }
+
+        return array_filter($options);
     }
 
     /**

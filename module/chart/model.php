@@ -711,29 +711,22 @@ class chartModel extends model
             case 'object':
                 if($field)
                 {
-                    if($sql and $saveAs)
+                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
+                    if(is_file($path))
                     {
-                        $options = $this->getOptionsFromSql($sql, $field, $saveAs);
+                        include $path;
+                        $fieldObject = $schema->fields[$field]['object'];
+                        $table = zget($this->config->objectTables, $fieldObject, '');
+                        $showField = 'id';
+                        $show = explode('.', $schema->fields[$field]['show']);
+                        if(count($show) == 2) $showField = $show[1];
+
+                        if($table) $options = $this->dao->select("id, {$showField}")->from($table)->fetchPairs();
                     }
                     else
                     {
-                        $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                        if(is_file($path))
-                        {
-                            include $path;
-                            $fieldObject = $schema->fields[$field]['object'];
-                            $table = zget($this->config->objectTables, $fieldObject, '');
-                            $showField = 'id';
-                            $show = explode('.', $schema->fields[$field]['show']);
-                            if(count($show) == 2) $showField = $show[1];
-
-                            if($table) $options = $this->dao->select("id, {$showField}")->from($table)->fetchPairs();
-                        }
-                        else
-                        {
-                            $table = zget($this->config->objectTables, $object, '');
-                            if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
-                        }
+                        $table = zget($this->config->objectTables, $object, '');
+                        if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                     }
                 }
                 break;
@@ -748,7 +741,12 @@ class chartModel extends model
                 break;
         }
 
-        return $options;
+        if($sql and $field and in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'option', 'object')))
+        {
+            $options = $this->getOptionsFromSql($source, $field, $saveAs);
+        }
+
+        return array_filter($options);
     }
 
      /**
