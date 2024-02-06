@@ -16,4 +16,15 @@ class imageSelector extends fileSelector
     {
         return zui::imageSelector(inherit($this));
     }
+
+    protected function created()
+    {
+        if(!$this->hasProp('tip'))
+        {
+            global $lang;
+            $this->setProp('tip', $lang->uploadImagesTip);
+        }
+
+        parent::created();
+    }
 }
