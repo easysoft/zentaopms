@@ -80,11 +80,11 @@ pipeline {
             checkout scm
             script {
               def triggeredBy = currentBuild.getBuildCauses()
-              println "Build triggered by: ${triggeredBy}"              
+              println "Build triggered by: ${triggeredBy}"
 
               env.GIT_URL = sh(returnStdout: true, script: 'git config --get remote.origin.url').trim()
               env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-              
+
               def j = job.newJob()
 
               env.GIT_BRANCH = j.getBranchById(env.GIT_COMMIT)
@@ -103,7 +103,7 @@ pipeline {
               zentaopms.setupEnvAfterCheckoutExt()
 
             }
-          
+
           }
         }
 
@@ -178,7 +178,7 @@ pipeline {
             }
 
             stage("SAFe") {
-              when { 
+              when {
                 allOf {
                   expression { return params.publish_biz || params.publish_plugin_safe }
                   environment name: 'PLUGIN_SAFE_EXIST', value: '0'
@@ -256,7 +256,7 @@ pipeline {
             }
 
             stages {
-              
+
               stage("ZIP") {
                 environment {
                   ARTIFACT_NAME = """${sh(
@@ -296,7 +296,7 @@ pipeline {
                         buildPkg.uploadExt()
                       }
 
-                      
+
                     }
                   } // End upload zip
 
@@ -321,7 +321,7 @@ pipeline {
                       container('jnlp') {
                         sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
                         sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir $OUTPUT_PKG_PATH --key-prefix $OBJECT_KEY_PREFIX'
-                      }    
+                      }
                     }
                   }
 
@@ -520,19 +520,19 @@ pipeline {
 
                   //sh 'make test-biz'
                   //sh 'make build-biz'
-                  
+
                   //sh 'make test-biz-k8s'
                   //sh 'make build-biz-k8s'
 
                   //sh 'make test-max'
                   //sh 'make build-max'
-                  
+
                   //sh 'make test-max-k8s'
                   //sh 'make build-max-k8s'
-                  
+
                   //sh 'make test-ipd'
                   //sh 'make build-ipd'
-                  
+
                   //sh 'make test-ipd-k8s'
                   //sh 'make build-ipd-k8s'
 
@@ -568,7 +568,7 @@ pipeline {
               expression { return params.publish_biz }
               environment name:'BUILD_KIND', value:'release'
             }
-            
+
             beforeAgent true
           }
 
@@ -594,7 +594,7 @@ pipeline {
 
       }
 
-      
+
     } // end publish
 
   }
