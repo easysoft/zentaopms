@@ -1176,19 +1176,11 @@ class screenModel extends model
                 }
                 break;
             default:
-                if($sql and $saveAs)
+                if($field and $sql)
                 {
                     $keyField   = $field;
                     $valueField = $saveAs ? $saveAs : $field;
                     $options = $this->getOptionsFromSql($sql, $keyField, $valueField);
-                }
-                elseif($field && $sql)
-                {
-                    $cols = $this->dao->query("select tt.`$field` from ($sql) tt group by tt.`$field` order by tt.`$field` desc")->fetchAll();
-                    foreach($cols as $col)
-                    {
-                        $options[$col->$field] = $col->$field;
-                    }
                 }
                 break;
         }
