@@ -329,7 +329,7 @@ class docZen extends doc
         }
         elseif($lib->type == 'mine')
         {
-            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList['private'];
+            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList;
         }
         elseif($lib->type != 'custom')
         {

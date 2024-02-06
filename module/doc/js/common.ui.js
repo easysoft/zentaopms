@@ -17,8 +17,11 @@ function toggleAcl(type)
     }
     if(acl == 'private')
     {
-        $('#whiteListBox').removeClass('hidden');
-        $('#groupBox').removeClass('hidden');
+        if(libType != 'mine')
+        {
+            $('#whiteListBox').removeClass('hidden');
+            $('#groupBox').removeClass('hidden');
+        }
     }
     else
     {
