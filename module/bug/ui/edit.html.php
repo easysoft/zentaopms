@@ -33,6 +33,15 @@ detailHeader
     ),
 );
 
+$clickCases = jsCallback()->do(<<<'JS'
+    $.getJSON($.createLink('bug', 'ajaxGetProductCases', 'bugID=' + $('[name=id]').val()),function(cases)
+    {
+        if(!cases) return;
+
+        $('[name="case"]').zui('picker').render({items: cases});
+    });
+JS);
+
 detailBody
 (
     on::change('[name="product"]',       'changeProduct'),
@@ -53,6 +62,7 @@ detailBody
         (
             set::title($lang->bug->title),
             set::required(true),
+            formHidden('id', $bug->id),
             formGroup
             (
                 inputControl
@@ -164,6 +174,7 @@ detailBody
                     set('id', 'caseBox'),
                     picker
                     (
+                        on::click($clickCases),
                         set::name('case'),
                         set::items($cases),
                         set::value($bug->case)

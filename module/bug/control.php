@@ -1559,21 +1559,25 @@ class bug extends control
     }
 
     /**
+     * Ajax 方式获取 bug 所在产品的用例。
      * Ajax get relation cases.
      *
      * @param  int        $bugID
      * @access public
      * @return string
      */
-    public function ajaxGetProductCases($bugID)
+    public function ajaxGetProductCases(int $bugID)
     {
-        $search = $this->get->search;
-        $limit  = $this->get->limit;
-
         $bug = $this->bug->getByID($bugID);
 
-        $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $search, $limit);
+        $items = array();
+        $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
+        foreach($cases as $caseID => $caseTitle)
+        {
+            if(empty($caseID)) continue;
+            $items[] = array('text' => $caseTitle, 'value' => $caseID);
+        }
 
-        return print(helper::jsonEncode($cases));
+        return print(helper::jsonEncode($items));
     }
 }
