@@ -1185,7 +1185,7 @@ class screenModel extends model
                 break;
         }
 
-        if($sql and $field and in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'project.status', 'option', 'object')))
+        if($sql and $field and $saveAs and in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'project.status', 'option', 'object')))
         {
             $options = $this->getOptionsFromSql($sql, $field, $saveAs);
         }
