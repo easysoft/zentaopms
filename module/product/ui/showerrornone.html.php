@@ -40,7 +40,7 @@ div
     ),
     a
     (
-        setClass('btn ghost text-primary'),
+        setClass('btn primary-pale'),
         set::href($link),
         setData('app', $tab),
         icon('plus'),
