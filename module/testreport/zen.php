@@ -310,7 +310,11 @@ class testreportZen extends testreport
         $caseList = array();
         foreach($cases as $casesList)
         {
-            foreach($casesList as $caseID => $case) $caseList[$caseID] = $case;
+            foreach($casesList as $caseID => $case)
+            {
+                $case->caseID = $caseID;
+                $caseList[$caseID] = $case;
+            }
         }
         $this->view->caseList = $caseList;
 
