@@ -1,3 +1,6 @@
+$('#kanbanList').on('enterFullscreen', () => {$('#kanbanList > div').css('height', '100%')});
+$('#kanbanList').on('exitFullscreen', () => {$('#kanbanList > div').css('height', 'calc(100vh - 120px)')});
+
 searchValue = '';
 const kanbanDropRules =
 {
