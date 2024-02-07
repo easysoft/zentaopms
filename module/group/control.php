@@ -240,6 +240,7 @@ class group extends control
         $this->view->otherUsers   = $otherUsers;
         $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
         $this->view->deptID       = $deptID;
+        $this->view->noUsers      = empty($groupUsers) && empty($otherUsers);
 
         $this->display();
     }

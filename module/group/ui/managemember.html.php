@@ -34,7 +34,7 @@ div
     cell
     (
         setClass('w-4/5'),
-        formPanel
+        $noUsers ? null : formPanel
         (
             set::submitBtnText($lang->save),
             set::formClass('border-0'),
