@@ -7,6 +7,15 @@ window.getLane = function(lane)
 $('#kanbanList').on('enterFullscreen', () => {$('#kanbanList > div').css('height', '100%')});
 $('#kanbanList').on('exitFullscreen', () => {$('#kanbanList > div').css('height', 'calc(100vh - 120px)')});
 
+$('#kanbanList').on('exitFullscreen', () => {$('.card-heading a').off('click.disabled')});
+$('#kanbanList').on('enterFullscreen', () => {
+    $('.card-heading a').on('click.disabled', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    });
+});
+
 /*
  * 构造看板泳道上的操作按钮。
  * Build action buttons on the kanban lane.
