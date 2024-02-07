@@ -401,7 +401,7 @@ window.changCardColor = function(cardID, color)
 
 window.canDrop = function(dragInfo, dropInfo)
 {
-    if(!dragInfo) return false;
+    if(!dragInfo || $.getFullscreenElement()) return false;
 
     const column = this.getCol(dropInfo.col);
     const lane   = this.getLane(dropInfo.lane);
