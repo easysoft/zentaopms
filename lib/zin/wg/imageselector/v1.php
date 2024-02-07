@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'fileSelector' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'fileselector' . DS . 'v1.php';
 
 class imageSelector extends fileSelector
 {
