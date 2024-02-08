@@ -35,3 +35,11 @@ window.toggleOutline = function()
     $('#outlineToggle .icon').toggleClass('icon-menu-arrow-left').toggleClass('icon-menu-arrow-right')
     $('#contentTree').toggleClass('hidden');
 }
+
+$("#docPanel").on('enterFullscreen', () => {
+    $('.right-icon').attr('id', 'right-icon').removeClass('right-icon');
+});
+
+$("#docPanel").on('exitFullscreen', () => {
+    $('#right-icon').addClass('right-icon');
+});
