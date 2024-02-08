@@ -22,6 +22,8 @@ $(function()
     if($.cookie.get('isFullScreen') == 1) fullScreen();
 
     $('#history').append('<a id="closeBtn" href="###" class="btn btn-link hidden"><i class="icon icon-close"></i></a>');
+
+    if($.cookie.get('hiddenOutline') == 'true') toggleOutline();
 });
 
 $(document).on('click', '#closeBtn', function()
@@ -34,6 +36,7 @@ window.toggleOutline = function()
 {
     $('#outlineToggle .icon').toggleClass('icon-menu-arrow-left').toggleClass('icon-menu-arrow-right')
     $('#contentTree').toggleClass('hidden');
+    $.cookie.set('hiddenOutline', $('#contentTree').hasClass('hidden'));
 }
 
 $("#docPanel").on('enterFullscreen', () => {
