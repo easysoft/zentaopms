@@ -1369,8 +1369,6 @@ class productModel extends model
             if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
         }
 
-        if(isset($products[$productID])) return $productID;
-
         /* 产品ID已经被删除，不存在于产品列表中。*/
         /* Product ID does not exist in products list, it may be deleted. */
         /* Confirm if product exist. */
