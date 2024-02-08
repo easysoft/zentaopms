@@ -190,7 +190,7 @@ div
     ),
     div
     (
-        setStyle('max-width', '70%'),
+        setStyle('min-width', '60%'),
         panel
         (
             setClass('pb-4'),
@@ -203,6 +203,9 @@ div
                     setClass('pr-2 tree-item-content row items-center'),
                     setStyle('padding-bottom', '48px'),
                     setStyle('max-width', '30%'),
+                    setStyle('flex-direction', 'row'),
+                    setStyle('flex-wrap', 'wrap'),
+                    setStyle('align-content', 'center'),
                     $parentPath
                 ),
                 form
