@@ -177,7 +177,7 @@ formGridPanel
     modal
     (
         setID('modalTeam'),
-        set::title($lang->task->teamMember),
+        set::title($lang->task->addMember),
         h::table
         (
             setID('teamTable'),
@@ -193,6 +193,7 @@ formGridPanel
                     picker
                     (
                         set::name("mode"),
+                        set::width('300px'),
                         !empty($task->mode) ? set::value($task->mode) : set::value("linear"),
                         set::items($lang->task->modeList),
                         set::required(true)
