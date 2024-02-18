@@ -370,25 +370,25 @@ $config->story->taskTable->fieldList['assignedTo']['name']     = 'assignedTo';
 $config->story->taskTable->fieldList['assignedTo']['title']    = $lang->task->assignedToAB;
 $config->story->taskTable->fieldList['assignedTo']['type']     = 'user';
 $config->story->taskTable->fieldList['assignedTo']['sortType'] = false;
-$config->story->taskTable->fieldList['assignedTo']['group']    = 3;
+$config->story->taskTable->fieldList['assignedTo']['group']    = 4;
 
 $config->story->taskTable->fieldList['estimate']['name']     = 'estimate';
 $config->story->taskTable->fieldList['estimate']['title']    = $lang->task->estimateAB;
 $config->story->taskTable->fieldList['estimate']['type']     = 'number';
 $config->story->taskTable->fieldList['estimate']['sortType'] = false;
-$config->story->taskTable->fieldList['estimate']['group']    = 4;
+$config->story->taskTable->fieldList['estimate']['group']    = 5;
 
 $config->story->taskTable->fieldList['consumed']['name']     = 'consumed';
 $config->story->taskTable->fieldList['consumed']['title']    = $lang->task->consumedAB;
 $config->story->taskTable->fieldList['consumed']['type']     = 'number';
 $config->story->taskTable->fieldList['consumed']['sortType'] = false;
-$config->story->taskTable->fieldList['consumed']['group']    = 4;
+$config->story->taskTable->fieldList['consumed']['group']    = 5;
 
 $config->story->taskTable->fieldList['left']['name']     = 'left';
 $config->story->taskTable->fieldList['left']['title']    = $lang->task->leftAB;
 $config->story->taskTable->fieldList['left']['type']     = 'number';
 $config->story->taskTable->fieldList['left']['sortType'] = false;
-$config->story->taskTable->fieldList['left']['group']    = 4;
+$config->story->taskTable->fieldList['left']['group']    = 5;
 
 $config->story->taskTable->fieldList['progress']['name']     = 'progress';
 $config->story->taskTable->fieldList['progress']['title']    = $lang->task->progress;
