@@ -45,16 +45,11 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->story->module),
-            inputGroup
+            modulePicker
             (
-                span
-                (
-                    set::id('moduleIdBox'),
-                    setClass('w-full'),
-                    picker(setID('module'), set::name('module'), set::items($fields['module']['options']), set::value($fields['module']['default']), set::required(true))
-                ),
-                count($fields['module']['options']) == 1 ? btn(set::url($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch")), setClass('primary'), set('data-toggle', 'modal'), $lang->tree->manage) : null,
-                count($fields['module']['options']) == 1 ? btn(set('data-on', 'click'), set('data-call', 'loadProductModules'), set('data-params', $productID), setClass('refresh'), icon('refresh')) : null
+                set::required(true),
+                set::manageLink($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch")),
+                set::items($fields['modules']['options'])
             )
         )
     ),
