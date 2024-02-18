@@ -526,7 +526,6 @@ class task extends control
             return $this->send(array(
                 'result'     => 'success',
                 'message'    => $this->lang->saveSuccess,
-                'closeModal' => true,
                 'callback'   => "loadModal('" . inLink('recordWorkhour', "taskID={$effort->objectID}") . "')"
             ));
         }
