@@ -102,7 +102,7 @@ function computeEndDate()
     if(isNaN(delta)) return;
 
     const isLongTime = delta == 999;
-    const endDate    = isLongTime ? LONG_TIME : formatDate(beginDate, delta - 1);
+    const endDate    = isLongTime ? '' : formatDate(beginDate, delta - 1);
     const $endPicker = $('[name=end]').zui('datePicker');
     $endPicker.render({disabled: isLongTime});
     $endPicker.$.setValue(endDate);
