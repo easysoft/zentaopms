@@ -46,19 +46,19 @@ function checkScript()
     $('.autoScript').toggleClass('hidden', !$('#auto').prop('checked'));
 }
 
-function readScriptContent()
+window.readScriptContent = function(object)
 {
-    $uploadBtnLabel = $('#scriptFile').next();
-
-    $uploadBtnLabel.toggle($('#scriptFile').parents('td').find('.file-list').length < 1);
+    $uploadBtnLabel = $('[name=scriptFile]').siblings().first();
+    $uploadBtnLabel.toggle($('[name=scriptFile]').siblings().first().parents('td').find('.file-list').length < 1);
+    $uploadBtnLabel.hide();
 
     var reader = new FileReader();
-    reader.readAsText($('#scriptFile')[0].files[0], 'UTF-8');
+    reader.readAsText(object.file, 'UTF-8');
     reader.onload = function(evt){$('#script').val(evt.target.result);}
 }
 
-function showUploadScriptBtn()
+window.showUploadScriptBtn = function()
 {
-    $('#scriptFile').next().show();
+    $('[name=scriptFile]').siblings().first().show();
     $('#script').val('');
 }

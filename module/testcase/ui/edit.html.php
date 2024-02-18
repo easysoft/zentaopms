@@ -66,10 +66,8 @@ detailBody
     on::change('#product', 'loadProductRelated'),
     on::change('#module', 'loadModuleRelated'),
     on::change('#branch', 'loadBranchRelated'),
-    on::change('#scriptFile', 'readScriptContent'),
     on::click('#refresh', $isLibCase ? 'loadLibModules' : 'loadProductModules'),
     on::click('#auto', 'checkScript'),
-    on::click('.autoScript .file-delete', 'showUploadScriptBtn'),
     sectionList
     (
         section
@@ -261,7 +259,9 @@ detailBody
                 (
                     set::name('scriptFile'),
                     set::accept($config->testcase->scriptAcceptFileTypes),
-                    set::limitCount(1)
+                    set::maxFileCount(1),
+                    set::onAdd(jsRaw('window.readScriptContent')),
+                    set::onRemove(jsRaw('window.showUploadScriptBtn'))
                 ),
                 input
                 (
