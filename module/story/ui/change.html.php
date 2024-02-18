@@ -193,7 +193,7 @@ formPanel
     $formTitle,
     $formItems,
     h::hr(),
-    history()
+    history(set::objectID($story->id))
 );
 
 render();
