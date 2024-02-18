@@ -250,7 +250,6 @@ class requirement extends control
         echo $this->fetch('story', 'batchClose', "productID=$productID&executionID=$executionID&storyType=requirement&from=$from");
     }
 
-
     /**
      * 激活需求。
      * Activate a requirement.
