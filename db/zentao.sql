@@ -15985,7 +15985,6 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   `name` varchar(90) NOT NULL DEFAULT '',
   `code` varchar(90) NOT NULL DEFAULT '',
   `unit` varchar(10) NOT NULL DEFAULT '',
-  `dateType` varchar(50) NOT NULL DEFAULT '',
   `collector` text,
   `desc` text,
   `definition` text,
