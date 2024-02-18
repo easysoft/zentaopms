@@ -17,13 +17,13 @@ $config->projectrelease->actionList['play']['icon']         = 'play';
 $config->projectrelease->actionList['play']['hint']         = $lang->release->changeStatusList['normal'];
 $config->projectrelease->actionList['play']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&status=normal');
 $config->projectrelease->actionList['play']['className']    = 'ajax-submit';
-$config->projectrelease->actionList['play']['data-confirm'] = $lang->release->confirmActivate;
+$config->projectrelease->actionList['play']['data-confirm'] = array('message' => $lang->release->confirmActivate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->projectrelease->actionList['pause']['icon']         = 'pause';
 $config->projectrelease->actionList['pause']['hint']         = $lang->release->changeStatusList['terminate'];
 $config->projectrelease->actionList['pause']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&status=terminate');
 $config->projectrelease->actionList['pause']['className']    = 'ajax-submit';
-$config->projectrelease->actionList['pause']['data-confirm'] = $lang->release->confirmTerminate;
+$config->projectrelease->actionList['pause']['data-confirm'] = array('message' => $lang->release->confirmTerminate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->projectrelease->actionList['edit']['icon'] = 'edit';
 $config->projectrelease->actionList['edit']['hint'] = $lang->release->edit;
@@ -38,7 +38,7 @@ $config->projectrelease->actionList['delete']['icon']         = 'trash';
 $config->projectrelease->actionList['delete']['hint']         = $lang->release->delete;
 $config->projectrelease->actionList['delete']['url']          = helper::createLink('projectrelease', 'delete', 'releaseID={id}');
 $config->projectrelease->actionList['delete']['class']        = 'btn ghost toolbar-item text-primary square size-sm ajax-submit';
-$config->projectrelease->actionList['delete']['data-confirm'] = $lang->release->confirmDelete;
+$config->projectrelease->actionList['delete']['data-confirm'] = array('message' => $lang->release->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->projectrelease->dtable = new stdclass();
 $config->projectrelease->dtable->fieldList['id']['name']  = 'id';
