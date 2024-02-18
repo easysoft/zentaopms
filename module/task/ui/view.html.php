@@ -186,7 +186,7 @@ detailBody
     (
         section
         (
-            set::title($lang->task->legendDesc, setClass('h4')),
+            set::title($lang->task->legendDesc),
             set::content(empty($task->desc) ? $lang->noData : $task->desc),
             set::useHtml(true)
         ),
@@ -211,7 +211,7 @@ detailBody
         !$task->fromBug && $task->story ?
         section
         (
-            set::title($lang->task->story, setClass('h4')),
+            set::title($lang->task->story),
             sectionCard
             (
                 entityLabel
