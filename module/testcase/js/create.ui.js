@@ -50,20 +50,17 @@ function checkScript()
     if(!$('#auto').prop('checked')) $('[name=script]').val('');
 }
 
-function showUploadScriptBtn()
+window.showUploadScriptBtn = function()
 {
-    $('#scriptFile').next().show();
+    $('[name=scriptFile]').siblings().first().show();
     $('[name=script]').val('');
 }
 
-function hideUploadScriptBtn()
+window.readScriptContent = function(object)
 {
-    $('#scriptFile').next().hide();
-}
+    $('[name=scriptFile]').siblings().first().hide();
 
-function readScriptContent()
-{
     var reader = new FileReader();
-    reader.readAsText($('#scriptFile')[0].files[0], 'UTF-8');
+    reader.readAsText(object.file, 'UTF-8');
     reader.onload = function(evt){$('[name=script]').val(evt.target.result);}
 }

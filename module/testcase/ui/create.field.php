@@ -49,7 +49,7 @@ $fields->field('scriptFile')
     ->label($lang->testcase->autoScript)
     ->className('autoScript')
     ->hidden(data('case.auto') != 'auto')
-    ->control('upload', array('accept' => $config->testcase->scriptAcceptFileTypes, 'limitCount' => 1));
+    ->control('fileSelector', array('accept' => $config->testcase->scriptAcceptFileTypes, 'multiple' => false, 'onAdd' => jsRaw('window.readScriptContent'), 'onRemove' => jsRaw('window.showUploadScriptBtn')));
 
 $fields->field('script')
     ->control('hidden')
@@ -81,4 +81,4 @@ $fields->field('keywords')
 
 $fields->field('files')
     ->width('full')
-    ->control('upload');
+    ->control('fileSelector');

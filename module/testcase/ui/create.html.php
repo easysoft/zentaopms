@@ -29,9 +29,6 @@ formGridPanel
     set::fields($fields),
     set::loadUrl(helper::createLink('testcase', 'create', "productID={product}&branch={branch}&moduleID={module}")),
     !empty($gobackLink) ? set::backUrl($gobackLink) : null,
-    on::change('#scriptFile', 'readScriptContent'),
-    on::change('#scriptFile', 'hideUploadScriptBtn'),
     on::change('#story', 'changeStory'),
     on::click('#auto', 'checkScript'),
-    on::click('.autoScript .file-delete', 'showUploadScriptBtn')
 );
