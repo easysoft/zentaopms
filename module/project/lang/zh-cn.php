@@ -386,6 +386,7 @@ $lang->project->endList[31]  = '一个月';
 $lang->project->endList[93]  = '三个月';
 $lang->project->endList[186] = '半年';
 $lang->project->endList[365] = '一年';
+$lang->project->endList[999] = '长期';
 
 $lang->project->ipdTitle           = "集成产品开发";
 $lang->project->scrumTitle         = "敏捷开发全流程{$lang->projectCommon}管理";

@@ -385,6 +385,7 @@ $lang->project->endList[31]  = 'One month';
 $lang->project->endList[93]  = 'Trimester';
 $lang->project->endList[186] = 'Half year';
 $lang->project->endList[365] = 'One year';
+$lang->project->endList[999] = 'Longtime';
 
 $lang->project->ipdTitle           = "Integrated Product Development";
 $lang->project->scrumTitle         = 'Agile Development Management';
