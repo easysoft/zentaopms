@@ -25,3 +25,15 @@ window.changeLaneHeight = function (e)
         $('#displayCards').closest('.form-group').addClass('hidden');
     }
 }
+
+window.setCardCount = function (e)
+{
+    if(e.target.value == 'custom')
+    {
+        $('#cardBox').removeClass('hidden');
+    }
+    else
+    {
+        $('#cardBox').addClass('hidden');
+    }
+}

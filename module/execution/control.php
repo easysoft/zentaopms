@@ -1811,11 +1811,6 @@ class execution extends control
 
         if($_POST)
         {
-            foreach($this->config->execution->form->setkanban as $field => $fieldConfig)
-            {
-                if(!isset($_POST[$field])) unset($this->config->execution->form->setkanban[$field]);
-            }
-
             $executionData = form::data($this->config->execution->form->setkanban)
                 ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
                 ->setDefault('minColWidth', $execution->minColWidth)

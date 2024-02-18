@@ -64,5 +64,34 @@ formPanel
                 span('px')
             )
         )
-    )
+    ),
+    $laneCount > 1 ? formRow
+    (
+        formGroup
+        (
+            set::label($lang->kanban->laneHeight),
+            radioList
+            (
+                set::name('heightType'),
+                set::items($lang->kanbanlane->heightTypeList),
+                set::value($heightType),
+                on::change('setCardCount')
+            ),
+        )
+    ) : null,
+    $laneCount > 1 ? formRow
+    (
+        $displayCards <= 2 ? set::className('hidden') : null,
+        set::id('cardBox'),
+        formGroup
+        (
+            set::label($lang->kanban->cardCount),
+            input
+            (
+                set::name('displayCards'),
+                set::value($displayCards),
+                set::placeholder($lang->kanbanlane->error->mustBeInt),
+            ),
+        )
+    ) : null,
 );

@@ -26,6 +26,12 @@ foreach($kanbanList as $current => $region)
         $group['laneProps']   = array('actions' => jsRaw('window.getLaneActions'));
         $group['itemProps']   = array('actions' => jsRaw('window.getItemActions'));
 
+        if($execution->displayCards > 0)
+        {
+            $group['minLaneHeight'] = $execution->displayCards * 70;
+            $group['maxLaneHeight'] = $execution->displayCards * 70;
+        }
+
         if(common::canModify('execution', $execution))
         {
             $group['canDrop'] = jsRaw('window.canDrop');
