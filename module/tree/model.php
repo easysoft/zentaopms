@@ -793,7 +793,7 @@ class treeModel extends model
                 while($module = $stmt->fetch())
                 {
                     /* Ignore unused modules. */
-                    if(!isset($executionModules[$module->id])) continue;
+                    if(!isset($executionModules[$module->id]) && $this->config->vision != 'lite') continue;
 
                     $treeMenu = $this->buildTree($module, 'story', '0', $userFunc, $extra);
                     if($productNum > 1 && $module->parent == 0) $treeMenu->parent = $module->root;
