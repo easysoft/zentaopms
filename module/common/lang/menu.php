@@ -9,7 +9,7 @@ $lang->navIcons['qa']        = "<i class='icon icon-test'></i>";
 $lang->navIcons['devops']    = "<i class='icon icon-devops'></i>";
 $lang->navIcons['kanban']    = "<i class='icon icon-kanban'></i>";
 $lang->navIcons['doc']       = "<i class='icon icon-doc'></i>";
-$lang->navIcons['aiapp']        = "<i class='icon icon-ztf'></i>";
+$lang->navIcons['aiapp']     = "<i class='icon icon-ai'></i>";
 $lang->navIcons['bi']        = "<i class='icon icon-statistic'></i>";
 $lang->navIcons['system']    = "<i class='icon icon-group'></i>";
 $lang->navIcons['admin']     = "<i class='icon icon-cog-outline'></i>";
