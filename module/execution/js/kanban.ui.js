@@ -537,6 +537,7 @@ window.refreshKanban = function(url)
                 group.minColWidth = minColWidth;
                 group.maxColWidth = maxColWidth;
                 group.colProps    = {'actions': window.getColActions};
+                group.laneProps   = {'actions': window.getLaneActions};
                 group.itemProps   = {'actions': window.getItemActions};
             }
         }
