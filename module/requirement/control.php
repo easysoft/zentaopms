@@ -13,11 +13,10 @@ class requirement extends control
      * @param  int    $planID
      * @param  int    $todoID
      * @param  string $extra for example feedbackID=0
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function create(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '', string $storyType = 'requirement')
+    public function create(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '')
     {
         echo $this->fetch('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=requirement");
     }
@@ -51,7 +50,7 @@ class requirement extends control
      * @access public
      * @return void
      */
-    public function view(int $storyID, int $version = 0, int $param = 0, string $storyType = 'requirement')
+    public function view(int $storyID, int $version = 0, int $param = 0)
     {
         echo $this->fetch('story', 'view', "storyID=$storyID&version=$version&param=$param&storyType=requirement");
     }
@@ -61,11 +60,10 @@ class requirement extends control
      *
      * @param  int    $storyID
      * @param  string $kanbanGroup
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function edit(int $storyID, string $kanbanGroup = 'default', string $storyType = 'requirement')
+    public function edit(int $storyID, string $kanbanGroup = 'default')
     {
         echo $this->fetch('story', 'edit', "storyID=$storyID&kanbanGroup=$kanbanGroup&storyType=requirement");
     }
@@ -95,11 +93,10 @@ class requirement extends control
      * @param  int    $linkedStoryID
      * @param  string $browseType    ''|bySearch
      * @param  int    $queryID
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function linkStory(int $storyID, string $type = 'linkStories', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0, string $storyType = 'requirement')
+    public function linkStory(int $storyID, string $type = 'linkStories', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0)
     {
         echo $this->fetch('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=$browseType&queryID=$queryID&storyType=requirement");
     }
@@ -112,11 +109,10 @@ class requirement extends control
      * @param  string $orderBy
      * @param  int    $executionID
      * @param  string $browseType
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function export(int $productID, string $orderBy, int $executionID = 0, string $browseType = '', string $storyType = 'requirement')
+    public function export(int $productID, string $orderBy, int $executionID = 0, string $browseType = '')
     {
         echo $this->fetch('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$executionID&browseType=$browseType&storyType=requirement");
     }
@@ -127,11 +123,10 @@ class requirement extends control
      * @param  int    $storyID
      * @param  string $confirm   yes|no
      * @param  string $from      taskkanban
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function delete(int $storyID, string $confirm = 'no', string $from = '', string $storyType = 'requirement')
+    public function delete(int $storyID, string $confirm = 'no', string $from = '')
     {
         echo $this->fetch('story', 'delete', "storyID=$storyID&confirm=$confirm&from=$from&storyType=requirement");
     }
@@ -141,11 +136,10 @@ class requirement extends control
      *
      * @param  int    $storyID
      * @param  string $from
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function change(int $storyID, string $from = '', string $storyType = 'requirement')
+    public function change(int $storyID, string $from = '')
     {
         echo $this->fetch('story', 'change', "storyID=$storyID&from=$from&storyType=requirement");
     }
@@ -155,11 +149,10 @@ class requirement extends control
      *
      * @param  int    $storyID
      * @param  string $from      product|project
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function review(int $storyID, string $from = 'product', string $storyType = 'requirement')
+    public function review(int $storyID, string $from = 'product')
     {
         echo $this->fetch('story', 'review', "storyID=$storyID&from=$from&storyType=requirement");
     }
@@ -168,11 +161,10 @@ class requirement extends control
      * Submit review.
      *
      * @param  int    $storyID
-     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function submitReview(int $storyID, string $storyType = 'requirement')
+    public function submitReview(int $storyID)
     {
         echo $this->fetch('story', 'submitReview', "storyID=$storyID&storyType=requirement");
     }
@@ -182,11 +174,10 @@ class requirement extends control
      *
      * @param  string $result
      * @param  string $reason
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function batchReview(string $result, string $reason = '', string $storyType = 'requirement')
+    public function batchReview(string $result, string $reason = '')
     {
         echo $this->fetch('story', 'batchReview', "result=$result&reason=$reason&storyType=requirement");
     }
@@ -197,11 +188,10 @@ class requirement extends control
      * @param  int    $storyID
      * @param  string $from      list
      * @param  string $confirm   no|yes
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function recall(int $storyID, string $from = 'list', string $confirm = 'no', string $storyType = 'requirement')
+    public function recall(int $storyID, string $from = 'list', string $confirm = 'no')
     {
         echo $this->fetch('story', 'recall', "storyID=$storyID&from=$from&confirm=$confirm&storyType=requirement");
     }
@@ -225,11 +215,10 @@ class requirement extends control
      *
      * @param  int    $storyID
      * @param  string $from      taskkanban
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function close(int $storyID, string $from = '', string $storyType = 'requirement')
+    public function close(int $storyID, string $from = '')
     {
         echo $this->fetch('story', 'close', "storyID=$storyID&from=$from&storyType=requirement");
     }
@@ -255,11 +244,10 @@ class requirement extends control
      * Activate a requirement.
      *
      * @param  int    $storyID
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function activate(int $storyID, string $storyType = 'requirement')
+    public function activate(int $storyID)
     {
         echo $this->fetch('story', 'activate', "storyID=$storyID&storyType=requirement");
     }
@@ -289,11 +277,10 @@ class requirement extends control
      * @param  int    $branchID
      * @param  string $confirm  yes|no
      * @param  string $storyIdList
-     * @param  string $storyType story|requirement
      * @access public
      * @return void
      */
-    public function batchChangeBranch(int $branchID, string $confirm = '', string $storyIdList = '', string $storyType = 'requirement')
+    public function batchChangeBranch(int $branchID, string $confirm = '', string $storyIdList = '')
     {
         echo $this->fetch('story', 'batchChangeBranch', "branchID=$branchID&confirm=$confirm&storyIdList=$storyIdList&storyType=requirement");
     }
@@ -314,11 +301,10 @@ class requirement extends control
      * Batch change the module of story.
      *
      * @param  int    $moduleID
-     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function batchChangeModule(int $moduleID, string $storyType = 'requirement')
+    public function batchChangeModule(int $moduleID)
     {
         echo $this->fetch('story', 'batchChangeModule', "moduleID=$moduleID&storyType=requirement");
     }

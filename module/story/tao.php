@@ -1614,14 +1614,14 @@ class storyTao extends storyModel
         $executionID     = empty($execution) ? 0 : $execution->id;
         if(!isset($story->from)) $story->from = '';
 
-        $closeLink              = helper::createLink($story->type, 'close', $params . "&from=&storyType=$story->type");
+        $closeLink              = helper::createLink($story->type, 'close', $params . "&from=$story->from");
         $processStoryChangeLink = helper::createLink($story->type, 'processStoryChange', $params);
-        $changeLink             = helper::createLink($story->type, 'change', $params . "&from=$story->from&storyType=$story->type");
-        $submitReviewLink       = helper::createLink($story->type, 'submitReview', "storyID=$story->id&storyType=$story->type");
-        $reviewLink             = helper::createLink($story->type, 'review', $params . "&from=$story->from&storyType=$story->type") . ($this->app->tab == 'project' ? '#app=project' : '');
-        $recallLink             = helper::createLink($story->type, 'recall', $params . "&from=list&confirm=no&storyType=$story->type");
-        $batchCreateStoryLink   = helper::createLink($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story");
-        $editLink               = helper::createLink($story->type, 'edit', $params . "&kanbanGroup=default&storyType=$story->type") . ($this->app->tab == 'project' ? '#app=project' : '');
+        $changeLink             = helper::createLink($story->type, 'change', $params . "&from=$story->from");
+        $submitReviewLink       = helper::createLink($story->type, 'submitReview', "storyID=$story->id");
+        $reviewLink             = helper::createLink($story->type, 'review', $params . "&from=$story->from") . ($this->app->tab == 'project' ? '#app=project' : '');
+        $recallLink             = helper::createLink($story->type, 'recall', $params . "&from=list&confirm=no");
+        $batchCreateStoryLink   = helper::createLink($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0");
+        $editLink               = helper::createLink($story->type, 'edit', $params . "&kanbanGroup=default") . ($this->app->tab == 'project' ? '#app=project' : '');
         $createCaseLink         = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
 
         /* If the story cannot be changed, render the close button. */

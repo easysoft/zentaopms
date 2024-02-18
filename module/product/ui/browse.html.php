@@ -56,8 +56,8 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
     if(!common::canModify('product', $product)) return null;
 
     global $app;
-    $createLink      = createLink($storyType, 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '');
-    $batchCreateLink = createLink($storyType, 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType"). ($isProjectStory ? '#app=project' : '');
+    $createLink      = createLink($storyType, 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=") . ($isProjectStory ? '#app=project' : '');
+    $batchCreateLink = createLink($storyType, 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0"). ($isProjectStory ? '#app=project' : '');
 
     $createBtnLink  = '';
     $createBtnTitle = '';
@@ -246,7 +246,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     $reviewResultItems = array_values($reviewResultItems);
 
     $navActionItems = array();
-    if($canBatchClose)  $navActionItems[] = array('class' => 'batch-btn batchClostBtn', 'text' => $lang->close, 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchClose', "productID={$productID}&executionID=0&storyType={$storyType}"));
+    if($canBatchClose)  $navActionItems[] = array('class' => 'batch-btn batchClostBtn', 'text' => $lang->close, 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchClose', "productID={$productID}&executionID=0"));
     if($canBatchReview) $navActionItems[] = array('class' => 'not-hide-menu batchReviewBtn', 'text' => $lang->story->review, 'items' => $reviewResultItems);
     if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu batchChangeStageBtn', 'text' => $lang->story->stageAB, 'items' => $stageItems);
 
@@ -263,7 +263,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
                 'className' => 'secondary batch-btn',
                 'disabled'  => ($canBatchEdit ? '': 'disabled'),
                 'data-page' => 'batch',
-                'data-formaction' => $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType")
+                'data-formaction' => $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch")
             ),
             /* Popup menu trigger icon. */
             array('caret' => 'up', 'className' => 'size-sm secondary', 'items' => $navActionItems, 'data-toggle' => 'dropdown', 'data-placement' => 'top-start')
@@ -323,7 +323,7 @@ featureBar
 toolbar
 (
     (!hasPriv('story', 'report') || !$productID) ? null : item(set(array('id' => 'reportBtn', 'text' => $lang->story->report->common, 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => helper::createLink('story', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID" . ($app->tab == 'project' ? '#app=project' : ''))))),
-    !hasPriv('story', 'export') ? null : item(set(array('id' => 'exportBtn', 'text' => $lang->export, 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType"), 'data-toggle' => 'modal'))),
+    !hasPriv('story', 'export') ? null : item(set(array('id' => 'exportBtn', 'text' => $lang->export, 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType"), 'data-toggle' => 'modal'))),
     $fnBuildCreateStoryButton(),
     $fnBuildLinkStoryButton()
 );
