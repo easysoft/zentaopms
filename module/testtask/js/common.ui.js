@@ -48,8 +48,6 @@ window.loadExecutionBuilds = function()
         $buildPicker.$.setValue(oldBuild);
         if(data.length == 0)
         {
-            const url = $.createLink('build', 'create', "executionID=" + executionID + "&productID=" + productID + "&projectID=" + projectID);
-            $('[name="build"]').closest('.input-group').find('.input-group-addon a').attr('href', url);
             $('[name="build"]').closest('.input-group').find('.input-group-addon').removeClass('hidden');
         }
         else
