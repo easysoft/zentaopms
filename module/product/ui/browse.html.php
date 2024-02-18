@@ -263,7 +263,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
                 'className' => 'secondary batch-btn',
                 'disabled'  => ($canBatchEdit ? '': 'disabled'),
                 'data-page' => 'batch',
-                'data-formaction' => $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch")
+                'data-formaction' => $this->createLink($storyType, 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch")
             ),
             /* Popup menu trigger icon. */
             array('caret' => 'up', 'className' => 'size-sm secondary', 'items' => $navActionItems, 'data-toggle' => 'dropdown', 'data-placement' => 'top-start')
