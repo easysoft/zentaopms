@@ -50,6 +50,7 @@ formPanel
                 span
                 (
                     set::id('moduleIdBox'),
+                    setClass('w-full'),
                     picker(setID('module'), set::name('module'), set::items($fields['module']['options']), set::value($fields['module']['default']), set::required(true))
                 ),
                 count($fields['module']['options']) == 1 ? btn(set::url($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch")), setClass('primary'), set('data-toggle', 'modal'), $lang->tree->manage) : null,
