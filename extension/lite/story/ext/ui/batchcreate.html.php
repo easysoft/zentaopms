@@ -41,9 +41,8 @@ $fnGenerateFields = function() use ($lang, $fields)
 
 formBatchPanel
 (
-    on::click('#saveButton', 'customSubmit'),
-    on::click('#saveDraftButton', 'customSubmit'),
     set::id('dataform'),
+    set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::title($storyID ? $storyTitle . $lang->colon . $this->lang->story->subdivide : $this->lang->story->batchCreate),
     set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")),
     set::pasteField('title'),
@@ -51,10 +50,12 @@ formBatchPanel
     set::items($fnGenerateFields()),
     set::actions(array
     (
-        array('text' => $lang->save,             'id' => 'saveButton',      'class' => 'primary'),
-        array('text' => $lang->story->saveDraft, 'id' => 'saveDraftButton', 'class' => 'secondary'),
-        array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url')
-    ))
+        array('text' => $lang->save,             'data-status' => 'active', 'class' => 'primary',   'btnType' => 'submit'),
+        array('text' => $lang->story->saveDraft, 'data-status' => 'draft',  'class' => 'secondary', 'btnType' => 'submit'),
+        array('text' => $lang->goback,           'data-back'   => 'APP',    'class' => 'open-url')
+    )),
+    formHidden('type', $type),
+    formHidden('status')
 );
 
 render();

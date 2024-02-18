@@ -22,8 +22,7 @@ jsVar('branchCount', isset($fields['branches']['options']) ? count($fields['bran
 
 formPanel
 (
-    on::click('#saveButton', 'customSubmit'),
-    on::click('#saveDraftButton', 'customSubmit'),
+    set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::id('dataform'),
     to::heading(div
     (
@@ -33,11 +32,13 @@ formPanel
     )),
     set::actions(array
     (
-        array('text' => $lang->save,             'id' => 'saveButton',      'class' => 'primary'),
-        array('text' => $lang->story->saveDraft, 'id' => 'saveDraftButton', 'class' => 'secondary'),
-        array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url')
+        array('text' => $lang->save,             'data-status' => 'active', 'class' => 'primary',   'btnType' => 'submit'),
+        array('text' => $lang->story->saveDraft, 'data-status' => 'draft',  'class' => 'secondary', 'btnType' => 'submit'),
+        array('text' => $lang->goback,           'data-back'   => 'APP',    'class' => 'open-url')
     )),
     set::customFields(true),
+    formHidden('product', $productID),
+    formHidden('project', !empty($projectID) ? $projectID : 0),
     formRow
     (
         formGroup
