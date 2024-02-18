@@ -140,8 +140,9 @@ class form extends fixer
     {
         global $app, $config;
 
-        $module = $app->getModuleName();
+        $module = $app->getModuleName() == 'story' ? $app->rawModule : $app->getModuleName();
         $method = $app->getMethodName();
+
         if($method == 'batchcreate') $method = 'create';
         if($method == 'batchedit')   $method = 'edit';
 

@@ -1139,9 +1139,10 @@ class storyZen extends story
      */
     protected function buildStoryForCreate(int $executionID, int $bugID): object|false
     {
+        $moduleName   = $this->app->rawModule;
         $fields       = $this->config->story->form->create;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
-        foreach(explode(',', trim($this->config->story->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+        foreach(explode(',', trim($this->config->{$moduleName}->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
         if($this->post->type == 'requirement') $fields['plan']['required'] = false;
 
         $storyData = form::data($fields)

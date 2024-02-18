@@ -180,12 +180,13 @@ $lang->product->homeMenu->kanban = array('link' => "{$lang->product->kanban}|pro
 
 $lang->product->menu              = new stdclass();
 $lang->product->menu->dashboard   = array('link' => "{$lang->dashboard}|product|dashboard|productID=%s");
+$lang->product->menu->epic        = array('link' => "{$lang->epic->common}|epic|browse|productID=%s");
+$lang->product->menu->requirement = array('link' => "{$lang->URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story', 'exclude' => (isset($_GET['storyType']) ? ($_GET['storyType'] == 'requirement' ? 'browse,story-report,story-create,story-batchcreate' : '') : '') . ',batchtotask');
 $lang->product->menu->plan        = array('link' => "{$lang->productplan->shortCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan,bug');
 $lang->product->menu->project     = array('link' => "{$lang->projectCommon}|product|project|status=all&productID=%s");
 $lang->product->menu->release     = array('link' => "{$lang->release->common}|release|browse|productID=%s", 'subModule' => 'release');
 $lang->product->menu->roadmap     = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s");
-$lang->product->menu->requirement = array('link' => "{$lang->URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->track       = array('link' => "{$lang->track}|product|track|productID=%s");
 $lang->product->menu->doc         = array('link' => "{$lang->doc->common}|doc|productSpace|objectID=%s", 'subModule' => 'doc,api');
 $lang->product->menu->dynamic     = array('link' => "{$lang->dynamic}|product|dynamic|productID=%s");
@@ -193,18 +194,19 @@ $lang->product->menu->settings    = array('link' => "{$lang->settings}|product|v
 
 /* Product menu order. */
 $lang->product->menuOrder[5]  = 'dashboard';
-$lang->product->menuOrder[10] = 'story';
-$lang->product->menuOrder[15] = 'plan';
-$lang->product->menuOrder[20] = 'project';
-$lang->product->menuOrder[25] = 'release';
-$lang->product->menuOrder[30] = 'roadmap';
-$lang->product->menuOrder[35] = 'requirement';
-$lang->product->menuOrder[40] = 'track';
-$lang->product->menuOrder[45] = 'doc';
-$lang->product->menuOrder[50] = 'dynamic';
-$lang->product->menuOrder[55] = 'settings';
-$lang->product->menuOrder[60] = 'create';
-$lang->product->menuOrder[65] = 'all';
+$lang->product->menuOrder[10] = 'epic';
+$lang->product->menuOrder[15] = 'requirement';
+$lang->product->menuOrder[20] = 'story';
+$lang->product->menuOrder[25] = 'plan';
+$lang->product->menuOrder[30] = 'project';
+$lang->product->menuOrder[35] = 'release';
+$lang->product->menuOrder[40] = 'roadmap';
+$lang->product->menuOrder[45] = 'track';
+$lang->product->menuOrder[50] = 'doc';
+$lang->product->menuOrder[55] = 'dynamic';
+$lang->product->menuOrder[60] = 'settings';
+$lang->product->menuOrder[65] = 'create';
+$lang->product->menuOrder[70] = 'all';
 
 $lang->product->menu->settings['subMenu'] = new stdclass();
 $lang->product->menu->settings['subMenu']->view      = array('link' => "{$lang->overview}|product|view|productID=%s", 'alias' => 'edit');
@@ -212,7 +214,7 @@ $lang->product->menu->settings['subMenu']->module    = array('link' => "{$lang->
 $lang->product->menu->settings['subMenu']->branch    = array('link' => "@branch@|branch|manage|product=%s", 'subModule' => 'branch');
 $lang->product->menu->settings['subMenu']->whitelist = array('link' => "{$lang->whitelist}|product|whitelist|product=%s", 'subModule' => 'personnel');
 
-$lang->product->dividerMenu = $config->URAndSR ? ',story,requirement,settings,' : ',story,track,settings,';
+$lang->product->dividerMenu = ',epic,track,settings,';
 
 /* Project menu. */
 $lang->project->homeMenu         = new stdclass();

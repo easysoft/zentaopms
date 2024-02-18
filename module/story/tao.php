@@ -672,10 +672,11 @@ class storyTao extends storyModel
      */
     protected function doCreateStory(object $story): int|false
     {
+        $module = $story->type == 'story' ? 'story' : 'requirement';
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,URS,region,lane,branches,plans,modules,uploadImage')
             ->autoCheck()
             ->checkIF(!empty($story->notifyEmail), 'notifyEmail', 'email')
-            ->batchCheck($this->config->story->create->requiredFields, 'notempty')
+            ->batchCheck($this->config->{$module}->create->requiredFields, 'notempty')
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;
@@ -1613,36 +1614,36 @@ class storyTao extends storyModel
         $executionID     = empty($execution) ? 0 : $execution->id;
         if(!isset($story->from)) $story->from = '';
 
-        $closeLink              = helper::createLink('story', 'close', $params . "&from=&storyType=$story->type");
-        $processStoryChangeLink = helper::createLink('story', 'processStoryChange', $params);
-        $changeLink             = helper::createLink('story', 'change', $params . "&from=$story->from&storyType=$story->type");
-        $submitReviewLink       = helper::createLink('story', 'submitReview', "storyID=$story->id&storyType=$story->type");
-        $reviewLink             = helper::createLink('story', 'review', $params . "&from=$story->from&storyType=$story->type") . ($this->app->tab == 'project' ? '#app=project' : '');
-        $recallLink             = helper::createLink('story', 'recall', $params . "&from=list&confirm=no&storyType=$story->type");
-        $batchCreateStoryLink   = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story");
-        $editLink               = helper::createLink('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type") . ($this->app->tab == 'project' ? '#app=project' : '');
+        $closeLink              = helper::createLink($story->type, 'close', $params . "&from=&storyType=$story->type");
+        $processStoryChangeLink = helper::createLink($story->type, 'processStoryChange', $params);
+        $changeLink             = helper::createLink($story->type, 'change', $params . "&from=$story->from&storyType=$story->type");
+        $submitReviewLink       = helper::createLink($story->type, 'submitReview', "storyID=$story->id&storyType=$story->type");
+        $reviewLink             = helper::createLink($story->type, 'review', $params . "&from=$story->from&storyType=$story->type") . ($this->app->tab == 'project' ? '#app=project' : '');
+        $recallLink             = helper::createLink($story->type, 'recall', $params . "&from=list&confirm=no&storyType=$story->type");
+        $batchCreateStoryLink   = helper::createLink($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=story");
+        $editLink               = helper::createLink($story->type, 'edit', $params . "&kanbanGroup=default&storyType=$story->type") . ($this->app->tab == 'project' ? '#app=project' : '');
         $createCaseLink         = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
 
         /* If the story cannot be changed, render the close button. */
-        $canClose = common::hasPriv('story', 'close') && $this->isClickable($story, 'close');
-        if(!common::canBeChanged('story', $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
-        $canProcess = common::hasPriv('story', 'processStoryChange');
+        $canClose = common::hasPriv($story->type, 'close') && $this->isClickable($story, 'close');
+        if(!common::canBeChanged($story->type, $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
+        $canProcess = common::hasPriv($story->type, 'processStoryChange');
         if($story->URChanged) return array(array('name' => 'processStoryChange', 'data-toggle' => 'modal', 'url' => $canProcess ? $processStoryChangeLink : null, 'disabled' => !$canProcess));
 
         /* Change button. */
-        $canChange = common::hasPriv('story', 'change') && $this->isClickable($story, 'change');
+        $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change');
         $title     = $canChange ? $lang->story->change : $this->lang->story->changeTip;
         $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange);
 
         /* Submitreview, review, recall buttons. */
         if(strpos('draft,changing', $story->status) !== false)
         {
-            $canSubmitReview = common::hasPriv('story', 'submitReview');
+            $canSubmitReview = common::hasPriv($story->type, 'submitReview');
             $actSubmitreview = array('name' => 'submitreview', 'data-toggle' => 'modal', 'url' => $canSubmitReview ? $submitReviewLink : null);
         }
         else
         {
-            $canReview = common::hasPriv('story', 'review') && $this->isClickable($story, 'review');
+            $canReview = common::hasPriv($story->type, 'review') && $this->isClickable($story, 'review');
             $title     = $this->lang->story->review;
             if(!$canReview && $story->status != 'closed')
             {
@@ -1663,7 +1664,7 @@ class storyTao extends storyModel
             $actReview = array('name' => 'review', 'url' => $canReview ? $reviewLink : null, 'hint' => $title, 'disabled' => !$canReview);
         }
 
-        $canRecall = common::hasPriv('story', 'recall') && $this->isClickable($story, 'recall');
+        $canRecall = common::hasPriv($story->type, 'recall') && $this->isClickable($story, 'recall');
         $title     = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
         if(!$canRecall) $title = $this->lang->story->recallTip['actived'];
         $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'url' => $canRecall ? $recallLink : null, 'hint' => $title, 'disabled' => !$canRecall);
@@ -1691,7 +1692,7 @@ class storyTao extends storyModel
         $actions[] = array('name' => 'divider', 'type'=>'divider');
 
         /* Edit button. */
-        $canEdit = common::hasPriv('story', 'edit') && $this->isClickable($story, 'edit');
+        $canEdit = common::hasPriv($story->type, 'edit') && $this->isClickable($story, 'edit');
         $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit') ? $editLink : null, 'disabled' => !$canEdit);
 
         /* Create test case button. */
