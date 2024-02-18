@@ -6,7 +6,6 @@ global $app, $lang;
 $config->story->form = new stdclass();
 $config->story->form->create = array();
 $config->story->form->create['product']     = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
-$config->story->form->create['project']     = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
 $config->story->form->create['branch']      = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
 $config->story->form->create['module']      = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
 $config->story->form->create['plan']        = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
