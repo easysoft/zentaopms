@@ -61,6 +61,13 @@ class fileSelector extends wg
             $app->loadLang('file');
             $this->setProp('exceededCountHint', sprintf($lang->file->errorFileCount, '{maxCount}'));
         }
+
+        /* Auto prepend suffix "[]" to multiple mode. */
+        $name = $this->prop('name');
+        if(!str_ends_with($name, ']') && ($this->prop('multiple') !== false || $this->prop('maxFileCount') === 1))
+        {
+            $this->setProp('name', $name . '[]');
+        }
     }
 
     /**
