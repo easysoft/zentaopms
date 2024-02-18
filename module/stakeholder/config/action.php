@@ -27,6 +27,6 @@ $config->stakeholder->actionList['delete']['text']         = $lang->delete;
 $config->stakeholder->actionList['delete']['hint']         = $lang->delete;
 $config->stakeholder->actionList['delete']['url']          = helper::createLink('stakeholder', 'delete', 'id={id}');
 $config->stakeholder->actionList['delete']['className']    = 'ajax-submit';
-$config->stakeholder->actionList['delete']['data-confirm'] = $lang->stakeholder->confirmDelete;
+$config->stakeholder->actionList['delete']['data-confirm'] = array('message' => $lang->stakeholder->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 if(!isset($config->stakeholder->menu)) $config->stakeholder->menu = array_keys($config->stakeholder->actionList);
