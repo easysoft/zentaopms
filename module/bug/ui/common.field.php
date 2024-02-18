@@ -81,7 +81,7 @@ $fields->field('steps')
 
 $fields->field('files')
     ->width('full')
-    ->control('files');
+    ->control('fileSelector');
 
 $fields->field('story')
     ->wrapBefore()

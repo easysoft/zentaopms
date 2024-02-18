@@ -122,7 +122,7 @@ $fields->field('verify')
     ->control('editor')
     ->value($createFields['verify']['default']);
 
-$fields->field('files')->width('full')->control('files');
+$fields->field('files')->width('full')->control('fileSelector');
 
 if(!isset($createFields['branch']) && $type == 'story' and isset($createFields['plan']))
 {
