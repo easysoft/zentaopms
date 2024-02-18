@@ -280,8 +280,7 @@ class screenModel extends model
 
         if($type == 'chart') $component = $this->getAxisRotateOption($chart, $component);
 
-        $component->chartConfig->dataset  = $component->option->dataset;
-        $component->chartConfig->fields   = json_decode($chart->fields);
+        $component->option->fields = json_decode($chart->fields);
 
         // 如果传过来的component->chartConfig中有filters，判断filters是否发生了改变，改变则重置filters，其中单个filter的linkedGlobalFilter属性就不存在了
         $latestFilters = $this->getChartFilters($chart);
@@ -918,11 +917,11 @@ class screenModel extends model
             }
 
             if(!isset($component->chartConfig->tableInfo)) $component->chartConfig->tableInfo = new stdclass();
-            $component->option->header      = $component->chartConfig->tableInfo->header      = $headers;
-            $component->option->align       = $component->chartConfig->tableInfo->align       = $align;
-            $component->option->columnWidth = $component->chartConfig->tableInfo->columnWidth = array();
-            $component->option->rowspan     = $component->chartConfig->tableInfo->rowspan     = $config;
-            $component->option->colspan     = $component->chartConfig->tableInfo->colspan     = $colspan;
+            $component->option->header      = $headers;
+            $component->option->align       = $align;
+            $component->option->columnWidth = array();
+            $component->option->rowspan     = $config;
+            $component->option->colspan     = $colspan;
             $component->option->dataset     = $dataset;
         }
 
