@@ -429,6 +429,7 @@ class testtaskZen extends testtask
         $this->view->project      = $this->project->getByID($projectID);
         $this->view->productID    = $productID;
         $this->view->executions   = $executions;
+        $this->view->executionID  = $executionID;
         $this->view->builds       = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'noempty,notrunk,withexecution', $executionID ? $executionID : $task->project, $executionID ? 'execution' : 'project', $task->build, false);
         $this->view->testreports  = $this->loadModel('testreport')->getPairs($task->product, $task->testreport);
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted|noclosed', $task->owner);
