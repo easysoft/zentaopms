@@ -173,6 +173,13 @@ class story extends control
         $product = $this->product->getByID($productID);
         if($product) $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
+        if($storyID)
+        {
+            $story = $this->story->getByID($storyID);
+            $this->view->storyTitle = isset($story->title) ? $story->title : '';
+            if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->errorNotSubdivide)));
+        }
+
         /* The 'batchCreateFields' of global variable $config will be changed and used by the following business logic. */
         $customFields = $this->storyZen->getCustomFields($this->config, $storyType, $this->view->hiddenPlan, $product);
         $showFields   = $this->storyZen->getShowFields($this->config->story->custom->batchCreateFields, $storyType, $product);
