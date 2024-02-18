@@ -1292,6 +1292,8 @@ class kanbanModel extends model
                     $object    = $objects[$objectID];
                     $fieldType = $fromType . 'Field';
 
+                    if($fromType == 'execution') $objectCard->progress = $object->progress;
+
                     foreach($this->config->kanban->$fieldType as $field) $objectCard->$field = $object->$field;
 
                     $objectCard = $this->kanbanTao->buildObjectCard($objectCard, $object, $fromType, $creators);
