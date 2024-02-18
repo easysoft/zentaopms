@@ -53,6 +53,7 @@ formPanel
     ),
     formRow
     (
+        set::width('160px'),
         formGroup
         (
             set::label($lang->kanbanlane->color),
