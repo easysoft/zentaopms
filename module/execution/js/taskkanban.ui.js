@@ -268,7 +268,7 @@ window.buildCardActions = function(item)
 
 window.canDrop = function(dragInfo, dropInfo)
 {
-    if(!dragInfo) return false;
+    if(!dragInfo || $.getFullscreenElement()) return false;
 
     const fromColumn  = this.getCol(dragInfo.col);
     const toColumn    = this.getCol(dropInfo.col);
