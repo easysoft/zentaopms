@@ -2442,17 +2442,31 @@ class screenModel extends model
             $component->option          = new stdclass();
             $component->option->dataset = new stdclass();
         }
-        if(!isset($component->option->title))
-        {
-            $component->option->title       = new stdclass();
-            $component->option->title->text = $chartName;
-        }
+        $component = $this->initOptionTitle($component, $type, $chartName);
         if(!isset($component->option->dataset)) $component->option->dataset = new stdclass();
 
         $component->chartConfig->title    = $chartName;
         $component->chartConfig->sourceID = $component->sourceID;
 
         return array($component, $typeChanged);
+    }
+
+    public function initOptionTitle($component, $type, $chartName)
+    {
+        if($type == 'pivot')
+        {
+            if(!isset($component->option->caption)) $component->option->caption = $chartName;
+        }
+        elseif($type == 'chart')
+        {
+            if(!isset($component->option->title))
+            {
+                $component->option->title       = new stdclass();
+                $component->option->title->text = $chartName;
+            }
+        }
+
+        return $component;
     }
 
     /**
