@@ -2439,12 +2439,17 @@ class screenModel extends model
 
         if(!isset($component->option) or $typeChanged)
         {
-            $component->option = new stdclass();
+            $component->option          = new stdclass();
             $component->option->dataset = new stdclass();
         }
-
+        if(!isset($component->option->title))
+        {
+            $component->option->title       = new stdclass();
+            $component->option->title->text = $chartName;
+        }
         if(!isset($component->option->dataset)) $component->option->dataset = new stdclass();
-        $component->chartConfig->title    = $chart->name;
+
+        $component->chartConfig->title    = $chartName;
         $component->chartConfig->sourceID = $component->sourceID;
 
         return array($component, $typeChanged);
