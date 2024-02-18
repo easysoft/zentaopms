@@ -926,12 +926,12 @@ class testtask extends control
         $modules = array('/');
         foreach($cases as $case) $modules += $this->tree->getModulesName((array)$case->module);
 
-        $this->view->title     = $this->lang->testtask->batchRun;
-        $this->view->steps     = $this->loadModel('testcase')->getStepGroupByIdList($caseIdList);
-        $this->view->modules   = $modules;
-        $this->view->cases     = $cases;
-        $this->view->productID = $productID;
-        $this->view->from      = $from;
+        $this->view->title       = $this->lang->testtask->batchRun;
+        $this->view->steps       = $this->loadModel('testcase')->getStepGroupByIdList($caseIdList);
+        $this->view->modules     = $modules;
+        $this->view->cases       = $cases;
+        $this->view->productID   = $productID;
+        $this->view->from        = $from;
         $this->display();
     }
 

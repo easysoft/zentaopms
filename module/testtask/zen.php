@@ -558,6 +558,10 @@ class testtaskZen extends testtask
         {
             if(isset($runs[$caseID]) && $runs[$caseID] < $case->version) unset($cases[$caseID]);
         }
+
+        $testtask = $this->testtask->fetchByID($taskID);
+        $this->view->executionID = $testtask->execution;
+
         return $cases;
     }
 
