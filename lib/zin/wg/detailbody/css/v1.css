@@ -1,1 +1,3 @@
+.detail-body {height: calc(100vh - 108px);}
 .detail-body > .form-actions:last-child {margin-top: 0;}
+#mainNavbar + #mainContainer .detail-body {height: calc(100vh - 152px);}
