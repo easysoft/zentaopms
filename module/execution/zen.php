@@ -397,7 +397,8 @@ class executionZen extends execution
             $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $executionID, 'productID' => $productID, 'branchID' => $branchID), $branchID);
         }
 
-        $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
+        $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
+        $showModule = !empty($this->config->execution->testcase->showModule) ? $this->config->execution->testcase->showModule : '';
 
         $this->view->cases           = $cases;
         $this->view->scenes          = $this->testcase->getSceneMenu($productID, $moduleID);;
@@ -417,6 +418,7 @@ class executionZen extends execution
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleID        = $moduleID;
         $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
     }
 
     /**

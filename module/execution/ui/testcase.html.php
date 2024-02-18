@@ -73,6 +73,8 @@ dtable
     set::footPager(
         usePager(array('linkCreator' => helper::createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={$type}&param=0&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
     ),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::modules($modulePairs),
     set::emptyTip($lang->testcase->noCase),
     set::createTip($lang->testcase->create),
     set::createLink($canCreateTestcase ? createLink('testcase', 'create', "productID={$productID}&branch=0&moduleID=0&from=execution&param={$execution->id}") : '')
