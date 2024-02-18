@@ -252,7 +252,7 @@ class screenModel extends model
      */
     public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
     {
-        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1')) return $this->genNotFoundOrDraftComponentOption($component);
+        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1')) return $this->genNotFoundOrDraftComponentOption($component, $type);
 
         $chart = clone($chart);
         if($type == 'pivot' and $chart)
@@ -398,13 +398,14 @@ class screenModel extends model
      * @access public
      * @return void
      */
-    public function genNotFoundOrDraftComponentOption($component)
+    public function genNotFoundOrDraftComponentOption($component, $type)
     {
         if(empty($component)) $component = new stdclass();
+        $noDataLang = $type == 'chart' ? 'noChartData' : 'noPivotData';
 
         $component->option = new stdclass();
         $component->option->title = new stdclass();
-        $component->option->title->text = sprintf($this->lang->screen->noChartData, $chart->name);
+        $component->option->title->text = $this->lang->screen->$noDataLang;
         $component->option->isDeleted   = true;
 
         return $component;
