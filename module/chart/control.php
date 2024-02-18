@@ -71,6 +71,10 @@ class chart extends control
         $sql           = $this->post->sql;
         $clientLang    = $this->app->getClientLang();
 
+        $verifyResult = $this->loadModel('dataview')->verifySqlWithModify($sql);
+
+        if($verifyResult !== true) return $this->send($verifyResult);
+
         $fieldPairs = array();
         foreach($fieldList as $field => $fieldName)
         {
