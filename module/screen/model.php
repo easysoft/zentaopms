@@ -252,7 +252,14 @@ class screenModel extends model
      */
     public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
     {
-        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1')) return $this->genNotFoundOrDraftComponentOption($component, $type);
+        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
+        {
+            return $this->genNotFoundOrDraftComponentOption($component, $type);
+        }
+        else
+        {
+            $component = $this->unsetComponentDraftMarker($component);
+        }
 
         $chart = clone($chart);
         if($type == 'pivot' and $chart)
@@ -393,7 +400,7 @@ class screenModel extends model
      * 生成不存在的图表或者草稿图表的参数。
      * Generate not found or draft chart option.
      *
-     * @param  int    $component
+     * @param  object $component
      * @access public
      * @return void
      */
@@ -407,6 +414,20 @@ class screenModel extends model
         $component->option->title->text = $this->lang->screen->$noDataLang;
         $component->option->isDeleted   = true;
 
+        return $component;
+    }
+    /**
+     * 删除component的已删除标记。
+     * Unset component option isDeleted.
+     *
+     * @param  object $component
+     * @access public
+     * @return object
+     */
+    public function unsetComponentDraftMarker($component)
+    {
+        if(isset($component->option->isDeleted)) unset($component->option->isDeleted);
+        if(isset($component->option->title))     unset($component->option->title);
         return $component;
     }
 
