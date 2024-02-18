@@ -24,17 +24,25 @@ $fields->field('execution')
     ->className($isShadowProduct && $isOriginalProduct ? 'full:w-1/2' : 'full:w-1/4')
     ->foldable(!$isShadowProduct);
 
-$fields->field('openedBuild')
-    ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'id' => 'createBuild'))
-    ->text($lang->build->create)->hint($lang->build->create)
-    ->url(createLink('build', 'create', 'executionID=' . data('executionID') . '&productID=' . data('bug.productID') . '&projectID=' . data('projectID')))
-    ->className(count(data('builds')) > 1 || !data('executionID') ? 'hidden' : '')
-    ->itemEnd()
-    ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'id' => 'createRelease'))
-    ->text($lang->release->create)->hint($lang->release->create)
-    ->url(createLink('release', 'create', 'productID=' . data('bug.productID') . '&branch=' . data('bug.branch')))
-    ->className(count(data('builds')) > 1 || data('executionID') ? 'hidden' : '')
-    ->itemEnd();
+if(common::hasPriv('build', 'create'))
+{
+    $fields->field('openedBuild')
+        ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'id' => 'createBuild'))
+        ->text($lang->build->create)->hint($lang->build->create)
+        ->url(createLink('build', 'create', 'executionID=' . data('executionID') . '&productID=' . data('bug.productID') . '&projectID=' . data('projectID')))
+        ->className(count(data('builds')) > 1 || !data('executionID') ? 'hidden' : '')
+        ->itemEnd();
+}
+
+if(common::hasPriv('release', 'create'))
+{
+    $fields->field('openedBuild')
+        ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'id' => 'createRelease'))
+        ->text($lang->release->create)->hint($lang->release->create)
+        ->url(createLink('release', 'create', 'productID=' . data('bug.productID') . '&branch=' . data('bug.branch')))
+        ->className(count(data('builds')) > 1 || data('executionID') ? 'hidden' : '')
+        ->itemEnd();
+}
 
 $fields->field('steps')
     ->width('full')
