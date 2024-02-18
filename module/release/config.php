@@ -34,13 +34,13 @@ $config->release->actionList['play']['icon']         = 'play';
 $config->release->actionList['play']['hint']         = $this->lang->release->changeStatusList['normal'];
 $config->release->actionList['play']['url']          = helper::createLink($app->tab == 'project' ? 'projectrelease' : 'release', 'changeStatus', 'releaseID={id}&status=normal');
 $config->release->actionList['play']['className']    = 'ajax-submit';
-$config->release->actionList['play']['data-confirm'] = $lang->release->confirmActivate;
+$config->release->actionList['play']['data-confirm'] = array('message' => $lang->release->confirmActivate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->release->actionList['pause']['icon']         = 'pause';
 $config->release->actionList['pause']['hint']         = $this->lang->release->changeStatusList['terminate'];
 $config->release->actionList['pause']['url']          = helper::createLink($app->tab == 'project' ? 'projectrelease' : 'release', 'changeStatus', 'releaseID={id}&status=terminate');
 $config->release->actionList['pause']['className']    = 'ajax-submit';
-$config->release->actionList['pause']['data-confirm'] = $lang->release->confirmTerminate;
+$config->release->actionList['pause']['data-confirm'] = array('message' => $lang->release->confirmTerminate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->release->actionList['edit']['icon'] = 'edit';
 $config->release->actionList['edit']['hint'] = $lang->release->edit;
@@ -55,7 +55,7 @@ $config->release->actionList['delete']['icon']         = 'trash';
 $config->release->actionList['delete']['hint']         = $lang->release->delete;
 $config->release->actionList['delete']['url']          = helper::createLink($app->tab == 'project' ? 'projectrelease' : 'release', 'delete', 'releaseID={id}');
 $config->release->actionList['delete']['className']    = 'ajax-submit';
-$config->release->actionList['delete']['data-confirm'] = $lang->release->confirmDelete;
+$config->release->actionList['delete']['data-confirm'] = array('message' => $lang->release->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 /* Search config. */
 $config->release->search['module']            = 'release';
