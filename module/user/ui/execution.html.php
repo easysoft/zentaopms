@@ -23,12 +23,15 @@ foreach($config->user->defaultFields['execution'] as $field) $cols[$field] = zge
 $cols['name']['nestedToggle'] = false;
 $cols['name']['type']         = 'text';
 $cols['name']['link']         = $config->user->execution->dtable->name['link'];
+$cols['name']['name']         = 'name';
+$cols['name']['title']        = $lang->execution->name;
+
+$cols['status']['title'] = $lang->statusAB;
 
 $cols['id']    = array('type' => 'checkID', 'title' => $lang->idAB, 'checkbox' => false);
 $cols['role']  = array('type' => 'user',    'title' => $lang->team->role, 'sortType' => false);
 $cols['join']  = array('type' => 'date',    'title' => $lang->team->join, 'sortType' => false);
 $cols['hours'] = array('type' => 'number',  'width' => 100, 'title' => $lang->team->hours, 'sortType' => false);
-$cols['name']['name'] = 'name';
 
 $cols = array_map(function($col)
 {
