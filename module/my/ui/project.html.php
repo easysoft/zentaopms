@@ -22,6 +22,8 @@ $this->loadModel('project');
 $config->project->dtable->fieldList['id']['type']     = 'id';
 $config->project->dtable->fieldList['id']['checkbox'] = false;
 
+$config->project->dtable->fieldList['status']['show']    = false;
+$config->project->dtable->fieldList['budget']['show']    = false;
 $config->project->dtable->fieldList['hasProduct']['map'] = $lang->project->projectTypeList;
 
 $settings = $this->loadModel('datatable')->getSetting('my');
