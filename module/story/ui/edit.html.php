@@ -187,7 +187,7 @@ detailBody
             formGroup(editor(set::name('comment')))
         )
     ),
-    history(),
+    history(set::objectID($story->id)),
     detailSide
     (
         tableData
