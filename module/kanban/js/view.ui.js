@@ -4,15 +4,26 @@ window.getLane = function(lane)
     if(laneCount < 2) lane.minHeight = window.innerHeight - 235;
 }
 
-$('#kanbanList').on('enterFullscreen', () => {$('#kanbanList > div').css('height', '100%')});
-$('#kanbanList').on('exitFullscreen', () => {$('#kanbanList > div').css('height', 'calc(100vh - 120px)')});
-
-$('#kanbanList').on('exitFullscreen', () => {$('.card-heading a').off('click.disabled')});
 $('#kanbanList').on('enterFullscreen', () => {
-    $('.card-heading a').on('click.disabled', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
+    $('#kanbanList > div').css('height', '100%');
+    $('.card-heading a').each(function()
+    {
+        const $this  = $(this);
+        const newDiv = $('<div></div>').addClass($this.attr('class')).html($this.html());
+        $this.data('relatedDiv', newDiv).before(newDiv).hide();
+    });
+});
+$('#kanbanList').on('exitFullscreen', () => {
+    $('#kanbanList > div').css('height', 'calc(100vh - 120px)');
+    $('.card-heading a').each(function()
+    {
+        const $this      = $(this);
+        const relatedDiv = $this.data('relatedDiv');
+        if(relatedDiv)
+        {
+            relatedDiv.remove();
+            $this.show().removeData('relatedDiv');
+        }
     });
 });
 
