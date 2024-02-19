@@ -31,7 +31,6 @@
 #mainContent {background-color: white;}
 #mainContent .row {margin:10px 0px; padding: 12px;}
 #mainContent .row .col-md-3 {padding: 8px;}
-#mainContent .row .col-md-3 a {min-width: 297px;}
 
 #firstGuide .modal-dialog {width: 800px !important;}
 #firstGuide .modal-body {padding: 0 !important; max-height: 465px !important;}
