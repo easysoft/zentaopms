@@ -260,6 +260,7 @@ detailBody
                     set::name('scriptFile'),
                     set::accept($config->testcase->scriptAcceptFileTypes),
                     set::maxFileCount(1),
+                    set::multiple(false),
                     set::onAdd(jsRaw('window.readScriptContent')),
                     set::onRemove(jsRaw('window.showUploadScriptBtn'))
                 ),

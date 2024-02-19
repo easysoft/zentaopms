@@ -49,7 +49,7 @@ $fields->field('scriptFile')
     ->label($lang->testcase->autoScript)
     ->className('autoScript')
     ->hidden(data('case.auto') != 'auto')
-    ->control('fileSelector', array('accept' => $config->testcase->scriptAcceptFileTypes, 'multiple' => false, 'onAdd' => jsRaw('window.readScriptContent'), 'onRemove' => jsRaw('window.showUploadScriptBtn')));
+    ->control('fileSelector', array('accept' => $config->testcase->scriptAcceptFileTypes, 'multiple' => false, 'maxFileCount' => 1, 'onAdd' => jsRaw('window.readScriptContent'), 'onRemove' => jsRaw('window.showUploadScriptBtn')));
 
 $fields->field('script')
     ->control('hidden')
