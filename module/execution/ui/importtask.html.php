@@ -51,12 +51,6 @@ dtable
                 'text'      => $lang->execution->importTask,
                 'className' => 'btn secondary toolbar-item batch-btn size-sm',
                 'data-url'  => createLink('execution', 'importtask', "executionID={$execution->id}&fromExecution={$fromExecution}")
-            ),
-            array(
-                'text'      => $lang->goback,
-                'btnType'   => 'info',
-                'className' => 'btn-info toolbar-item size-sm text-gray',
-                'url'       => createLink('execution', 'task', "executionID={$execution->id}")
             )
         )
     )),
