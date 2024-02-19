@@ -835,7 +835,7 @@ class story extends control
         $this->story->replaceURLang($story->type);
 
         /* Set the closed reason options and remove subdivided options. */
-        $reasonList = $this->lang->story->reasonList;
+        $reasonList = $this->lang->{$storyType}->reasonList;
         if($story->status == 'draft') unset($reasonList['cancel']);
         unset($reasonList['subdivided']);
 

@@ -180,6 +180,10 @@ if($app->rawModule == 'projectstory') $config->story->dtable->fieldList['title']
 
 $setting = $this->loadModel('datatable')->getSetting('product', 'browse', false, $storyType);
 if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
+if(isset($setting['category']))     $setting['category']['map']     = $lang->{$storyType}->categoryList;
+if(isset($setting['source']))       $setting['source']['map']       = $lang->{$storyType}->sourceList;
+if(isset($setting['pri']))          $setting['pri']['map']          = $lang->{$storyType}->priList;
+if(isset($setting['closedReason'])) $setting['closedReason']['map'] = $lang->{$storyType}->reasonList;
 $cols = array_values($setting);
 
 /* DataTable data. */

@@ -27,7 +27,7 @@ foreach(explode(',', $this->config->story->create->requiredFields) as $requiredF
 }
 
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($lang, $fields, $stories, $customFields, $showFields)
+$fnGenerateFields = function() use ($app, $lang, $fields, $stories, $customFields, $showFields)
 {
     global $config;
 

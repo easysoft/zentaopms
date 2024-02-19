@@ -283,7 +283,7 @@ detailBody
             item
             (
                 set::name($lang->story->category),
-                picker(setID('category'), set::name('category'), set::items($fields['category']['options']), set::value($fields['category']['default']))
+                picker(setID('category'), set::name('category'), set::items($lang->{$story->type}->categoryList), set::value($fields['category']['default']))
             ),
             item
             (

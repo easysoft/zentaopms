@@ -14,8 +14,8 @@ jsVar('twinsCount', $twinsCount);
 jsVar('langTwins', $lang->story->twins . ': ');
 if(!empty($errorTips)) pageJS("zui.Modal.alert({message: '{$errorTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 
-unset($lang->story->reasonList['subdivided']);
-foreach($lang->story->reasonList as $key => $value)
+unset($lang->{$storyType}->reasonList['subdivided']);
+foreach($lang->{$storyType}->reasonList as $key => $value)
 {
     if($key == 'cancel') continue;
     $reasonList[] = array('text' => $value, 'value' => $key);

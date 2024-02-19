@@ -293,7 +293,7 @@ detailBody
                     (
                         setID('source'),
                         set::name($lang->story->source),
-                        zget($lang->story->sourceList, $story->source, '')
+                        zget($lang->{$story->type}->sourceList, $story->source, '')
                     ),
                     item
                     (
@@ -319,12 +319,12 @@ detailBody
                     item
                     (
                         set::name($lang->story->category),
-                        zget($lang->story->categoryList, $story->category)
+                        zget($lang->{$story->type}->categoryList, $story->category)
                     ),
                     item
                     (
                         set::name($lang->story->pri),
-                        priLabel($story->pri, set::text($lang->story->priList))
+                        priLabel($story->pri, set::text($lang->{$story->type}->priList))
                     ),
                     item
                     (
@@ -391,7 +391,7 @@ detailBody
                     (
                         set::tdClass('resolution'),
                         set::name($lang->story->closedReason),
-                        $story->closedReason ? zget($lang->story->reasonList, $story->closedReason) : null,
+                        $story->closedReason ? zget($lang->{$story->type}->reasonList, $story->closedReason) : null,
                         isset($story->extraStories[$story->duplicateStory]) ? a(set::href(inlink('view', "storyID=$story->duplicateStory")), set::title($story->extraStories[$story->duplicateStory]), "#{$story->duplicateStory} {$story->extraStories[$story->duplicateStory]}") : null
                     ),
                     item

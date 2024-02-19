@@ -493,22 +493,24 @@ class storyZen extends story
         }
         $branch = str_contains($branch, ',') ? current(explode(',', $branch)) : $branch;
 
-        $moduleName  = $this->app->rawModule;
-        $product     = $this->product->getByID($productID);
-        $users       = $this->user->getPairs('pdfirst|noclosed|nodeleted');
-        $stories     = $this->story->getParentStoryPairs($productID);
-        $plans       = $this->loadModel('productplan')->getPairs($productID, $branch == 0 ? '' : $branch, 'unexpired|noclosed', true);
-        $plans       = array_map(function($planName){return str_replace(FUTURE_TIME, $this->lang->story->undetermined, $planName);}, $plans);
-        $forceReview = $this->story->checkForceReview();
-        $needReview  = ($account == $product->PO || $objectID > 0 || $this->config->{$moduleName}->needReview == 0 || !$forceReview);
-        $reviewers   = $this->story->getProductReviewers($productID);
+        $moduleName     = $this->app->rawModule;
+        $product        = $this->product->getByID($productID);
+        $users          = $this->user->getPairs('pdfirst|noclosed|nodeleted');
+        $stories        = $this->story->getParentStoryPairs($productID);
+        $plans          = $this->loadModel('productplan')->getPairs($productID, $branch == 0 ? '' : $branch, 'unexpired|noclosed', true);
+        $plans          = array_map(function($planName){return str_replace(FUTURE_TIME, $this->lang->story->undetermined, $planName);}, $plans);
+        $forceReview    = $this->story->checkForceReview();
+        $needReview     = ($account == $product->PO || $objectID > 0 || $this->config->{$moduleName}->needReview == 0 || !$forceReview);
+        $reviewers      = $this->story->getProductReviewers($productID);
+        $requiredFields = $this->config->{$moduleName}->create->requiredFields;
 
         /* 追加字段的name、title属性，展开user数据。 */
         foreach($fields as $field => $attr)
         {
             if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
-            if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
-            if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->story, $field);
+            if(!isset($fields[$field]['name']))       $fields[$field]['name']     = $field;
+            if(!isset($fields[$field]['title']))      $fields[$field]['title']    = zget($this->lang->story, $field);
+            if(str_contains($requiredFields, $field)) $fields[$field]['required'] = true;
         }
 
         /* 设置下拉菜单内容。 */
@@ -634,6 +636,8 @@ class storyZen extends story
         $product = $this->loadModel('product')->getByID($productID);
         $fields  = $this->config->story->form->batchCreate;
 
+        foreach(explode(',', trim($this->config->{$storyType}->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+
         if($executionID)
         {
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($productID), $executionID, 'noclosed|withMain') : array();
@@ -661,7 +665,6 @@ class storyZen extends story
 
         $storyTypes = strpos($product->vision, 'or') !== false ? 'launched' : 'active';
         $URS        = $storyType != 'story' ? array() : $this->story->getProductStoryPairs($productID, $branch, 0, $storyTypes, 'id_desc', 0, '', 'requirement');
-
         /* 追加字段的label属性。 */
         foreach($fields as $field => $attr)
         {

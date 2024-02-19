@@ -72,7 +72,7 @@ $fields->field('assignedTo')
 
 $fields->field('category')
     ->required($createFields['category']['required'])
-    ->items($createFields['category']['options'])
+    ->items($lang->{$type}->categoryList)
     ->value($createFields['category']['default']);
 
 if($isKanban)
@@ -100,7 +100,7 @@ $fields->field('pri')
     ->width('1/4')
     ->required($createFields['pri']['required'])
     ->control('priPicker')
-    ->items($createFields['pri']['options'])
+    ->items($lang->{$type}->priList)
     ->value($createFields['pri']['default']);
 
 $fields->field('estimate')
@@ -140,7 +140,7 @@ $fields->field('source')
     ->foldable()
     ->width('1/4')
     ->required($createFields['source']['required'])
-    ->items($createFields['source']['options'])
+    ->items($lang->{$type}->sourceList)
     ->value($createFields['source']['default']);
 
 $fields->field('sourceNote')

@@ -129,6 +129,7 @@ class product extends control
         $browseType = strtolower($browseType);
 
         /* Pre process. */
+        $this->loadModel('requirement');
         $this->loadModel('tree');
         $isProjectStory = $this->app->rawModule == 'projectstory';
         $cookieOrderBy  = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
