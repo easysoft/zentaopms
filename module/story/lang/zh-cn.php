@@ -98,7 +98,7 @@ $lang->story->reportAction    = "统计报表";
 
 $lang->story->skipStory        = '需求：%s 为父需求，将不会被关闭。';
 $lang->story->closedStory      = '需求：%s 已关闭，将不会被关闭。';
-$lang->story->batchToTaskTips  = "已关闭的需求不会转为任务。";
+$lang->story->batchToTaskTips  = "只有激活状态的{$lang->SRCommon}才能转为任务。";
 $lang->story->successToTask    = '批量转任务成功';
 $lang->story->storyRound       = '第 %s 轮估算';
 $lang->story->float            = "『%s』应当是正数，可以是小数。";
