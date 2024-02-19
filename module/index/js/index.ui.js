@@ -658,7 +658,7 @@ function initAppsMenu(items)
         apps.map[item.code] = item;
 
         $('<li></li>').attr('data-app', item.code)
-            .attr({'data-toggle': 'tooltip', 'data-placement': 'right', 'data-title': item.text})
+            .attr({'data-toggle': 'tooltip', 'data-placement': 'right', 'data-title': item.text, 'data-class-name': 'menu-tooltip'})
             .append($link)
             .appendTo($menuMainNav);
 
