@@ -166,7 +166,7 @@ class aiModel extends model
         $modelConfig->type        = $model->type;
         $modelConfig->vendor      = $model->vendor;
         $modelConfig->credentials = json_encode($credentials);
-        $modelConfig->enabled     = $model->status == '1';
+        $modelConfig->enabled     = $model->enabled;
 
         if(!empty($model->proxyType) && !empty($model->proxyAddr))
         {
@@ -222,6 +222,8 @@ class aiModel extends model
      */
     public function createModel($model)
     {
+        $model->enabled = '1';
+
         $modelConfig = $this->serializeModel($model);
         if(!$modelConfig) return false;
 
