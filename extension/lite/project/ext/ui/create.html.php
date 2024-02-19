@@ -50,8 +50,7 @@ formPanel
         set::width('1/2'),
         set::name('name'),
         set::label($lang->project->name),
-        set::value($copyProjectID ? $copyProject->name : ''),
-        set::strong(true)
+        set::value($copyProjectID ? $copyProject->name : '')
     ),
     isset($config->setCode) && $config->setCode == 1 ? formGroup
     (
