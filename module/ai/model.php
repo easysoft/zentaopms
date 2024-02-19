@@ -801,7 +801,7 @@ class aiModel extends model
         $errors = array();
         foreach($requiredFields as $field => $fieldLang)
         {
-            if(!isset($_POST[$field])) $errors[$field] = sprintf($this->lang->error->notempty, $fieldLang);
+            if(!isset($_POST[$field]) || $_POST[$field] === "") $errors[$field] = sprintf($this->lang->error->notempty, $fieldLang);
         }
         if(!empty($errors)) return $errors;
         return false;
