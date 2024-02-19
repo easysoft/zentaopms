@@ -41,7 +41,7 @@ $buildAssginedTo = function($props)
     $hiddenTeamBtn = empty(data('task.mode')) ? 'hidden' : '';
     return div
         (
-            setClass('assignedToBox flex'),
+            setClass('assignedToBox flex border rounded h-8'),
             picker
             (
                 setClass($hiddenTeamBtn ? '' : 'hidden'),

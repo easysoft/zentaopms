@@ -1,6 +1,7 @@
 .empty-story-tip .input-control-prefix {z-index: 2;}
 .assignedToBox {align-items: center !important}
-.assignedToBox .add-team {margin-bottom: 5px}
 .assignedToList {display: flex; align-items: center; overflow: hidden;}
-.assignedToList .picker-multi-selection, .assignedToList .icon{margin-right: 5px; margin-bottom: 5px}
+.assignedToList .picker-multi-selection, .assignedToList .icon{margin-right: 5px;}
+.assignedToBox .add-team {height: 24px; width: 81px; margin-left: 0.25rem;}
 .panel-heading {z-index: 2 !important;}
+.assignedToBox.border {border-color: var(--form-control-border); padding-top: 0.25rem; padding-bottom: 0.25rem;}
