@@ -938,97 +938,105 @@ $config->my->execution->dtable->fieldList['name']['type']  = 'title';
 $config->my->execution->dtable->fieldList['name']['link']  = 'RAWJS<function(info){ if(info.row.data.isParent) return false; else return \'' . helper::createLink('execution', 'browse', 'id={id}&from=my') . '\'; }>RAWJS';
 $config->my->execution->dtable->fieldList['name']['fixed'] = 'left';
 $config->my->execution->dtable->fieldList['name']['group'] = '1';
+$config->my->execution->dtable->fieldList['name']['show']  = true;
 
 $config->my->execution->dtable->fieldList['code']['name']   = 'code';
 $config->my->execution->dtable->fieldList['code']['title']  = $lang->execution->code;
 $config->my->execution->dtable->fieldList['code']['type']   = 'text';
 $config->my->execution->dtable->fieldList['code']['fixed']  = 'left';
 $config->my->execution->dtable->fieldList['code']['group']  = '1';
-$config->my->execution->dtable->fieldList['code']['hidden'] = true;
+$config->my->execution->dtable->fieldList['code']['show']   = false;
 
 $config->my->execution->dtable->fieldList['project']['name']   = 'project';
 $config->my->execution->dtable->fieldList['project']['title']  = $lang->execution->project;
 $config->my->execution->dtable->fieldList['project']['type']   = 'text';
 $config->my->execution->dtable->fieldList['project']['link']   = array('module' => 'project', 'method' => 'view', 'params' => 'id={project}');
 $config->my->execution->dtable->fieldList['project']['group']  = '2';
-$config->my->execution->dtable->fieldList['project']['hidden'] = true;
+$config->my->execution->dtable->fieldList['project']['show']   = false;
 
 $config->my->execution->dtable->fieldList['status']['name']      = 'status';
 $config->my->execution->dtable->fieldList['status']['title']     = $lang->execution->status;
 $config->my->execution->dtable->fieldList['status']['type']      = 'status';
 $config->my->execution->dtable->fieldList['status']['statusMap'] = $lang->execution->statusList;
 $config->my->execution->dtable->fieldList['status']['group']     = '2';
+$config->my->execution->dtable->fieldList['status']['show']      = true;
 
 $config->my->execution->dtable->fieldList['PM']['name']   = 'PM';
 $config->my->execution->dtable->fieldList['PM']['title']  = $lang->execution->PM;
 $config->my->execution->dtable->fieldList['PM']['type']   = 'avatarBtn';
 $config->my->execution->dtable->fieldList['PM']['group']  = '2';
-$config->my->execution->dtable->fieldList['PM']['hidden'] = true;
+$config->my->execution->dtable->fieldList['PM']['show']   = false;
 
 $config->my->execution->dtable->fieldList['role']['name']  = 'role';
 $config->my->execution->dtable->fieldList['role']['title'] = $lang->team->roleAB;
 $config->my->execution->dtable->fieldList['role']['type']  = 'category';
 $config->my->execution->dtable->fieldList['role']['group'] = '2';
+$config->my->execution->dtable->fieldList['role']['show']  = true;
 
 $config->my->execution->dtable->fieldList['assignedToMeTasks']['name']     = 'assignedToMeTasks';
 $config->my->execution->dtable->fieldList['assignedToMeTasks']['title']    = $lang->execution->myTask;
 $config->my->execution->dtable->fieldList['assignedToMeTasks']['type']     = 'count';
 $config->my->execution->dtable->fieldList['assignedToMeTasks']['group']    = '2';
 $config->my->execution->dtable->fieldList['assignedToMeTasks']['sortType'] = false;
+$config->my->execution->dtable->fieldList['assignedToMeTasks']['show']     = true;
 
 $config->my->execution->dtable->fieldList['openedDate']['name']   = 'openedDate';
 $config->my->execution->dtable->fieldList['openedDate']['title']  = $lang->execution->openedDate;
 $config->my->execution->dtable->fieldList['openedDate']['type']   = 'date';
 $config->my->execution->dtable->fieldList['openedDate']['group']  = '3';
-$config->my->execution->dtable->fieldList['openedDate']['hidden'] = true;
+$config->my->execution->dtable->fieldList['openedDate']['show']   = false;
 
 $config->my->execution->dtable->fieldList['begin']['name']  = 'begin';
 $config->my->execution->dtable->fieldList['begin']['title'] = $lang->execution->begin;
 $config->my->execution->dtable->fieldList['begin']['type']  = 'date';
 $config->my->execution->dtable->fieldList['begin']['group'] = '3';
+$config->my->execution->dtable->fieldList['begin']['show']  = true;
 
 $config->my->execution->dtable->fieldList['end']['name']  = 'end';
 $config->my->execution->dtable->fieldList['end']['title'] = $lang->execution->end;
 $config->my->execution->dtable->fieldList['end']['type']  = 'date';
 $config->my->execution->dtable->fieldList['end']['group'] = '3';
+$config->my->execution->dtable->fieldList['end']['show']  = true;
 
 $config->my->execution->dtable->fieldList['join']['name']     = 'join';
 $config->my->execution->dtable->fieldList['join']['title']    = $lang->team->join;
 $config->my->execution->dtable->fieldList['join']['type']     = 'date';
 $config->my->execution->dtable->fieldList['join']['group']    = '4';
 $config->my->execution->dtable->fieldList['join']['sortType'] = false;
+$config->my->execution->dtable->fieldList['join']['show']     = true;
 
 $config->my->execution->dtable->fieldList['hours']['name']     = 'hours';
 $config->my->execution->dtable->fieldList['hours']['title']    = $lang->my->hours;
 $config->my->execution->dtable->fieldList['hours']['type']     = 'number';
 $config->my->execution->dtable->fieldList['hours']['group']    = '4';
 $config->my->execution->dtable->fieldList['hours']['sortType'] = false;
+$config->my->execution->dtable->fieldList['hours']['show']     = true;
 
 $config->my->execution->dtable->fieldList['realBegan']['name']   = 'realBegan';
 $config->my->execution->dtable->fieldList['realBegan']['title']  = $lang->execution->realBegan;
 $config->my->execution->dtable->fieldList['realBegan']['type']   = 'date';
 $config->my->execution->dtable->fieldList['realBegan']['group']  = '4';
-$config->my->execution->dtable->fieldList['realBegan']['hidden'] = true;
+$config->my->execution->dtable->fieldList['realBegan']['show']   = false;
 
 $config->my->execution->dtable->fieldList['realEnd']['name']   = 'realEnd';
 $config->my->execution->dtable->fieldList['realEnd']['title']  = $lang->execution->realEnd;
 $config->my->execution->dtable->fieldList['realEnd']['type']   = 'date';
 $config->my->execution->dtable->fieldList['realEnd']['group']  = '4';
-$config->my->execution->dtable->fieldList['realEnd']['hidden'] = true;
+$config->my->execution->dtable->fieldList['realEnd']['show']   = false;
 
 $config->my->execution->dtable->fieldList['totalEstimate']['title']    = $lang->execution->totalEstimate;
 $config->my->execution->dtable->fieldList['totalEstimate']['name']     = 'totalEstimate';
 $config->my->execution->dtable->fieldList['totalEstimate']['type']     = 'number';
 $config->my->execution->dtable->fieldList['totalEstimate']['sortType'] = false;
 $config->my->execution->dtable->fieldList['totalEstimate']['group']    = '4';
-$config->my->execution->dtable->fieldList['totalEstimate']['hidden']   = true;
+$config->my->execution->dtable->fieldList['totalEstimate']['show']     = false;
 
 $config->my->execution->dtable->fieldList['totalConsumed']['title']    = $lang->execution->totalConsumed;
 $config->my->execution->dtable->fieldList['totalConsumed']['name']     = 'totalConsumed';
 $config->my->execution->dtable->fieldList['totalConsumed']['type']     = 'number';
 $config->my->execution->dtable->fieldList['totalConsumed']['sortType'] = false;
 $config->my->execution->dtable->fieldList['totalConsumed']['group']    = '4';
-$config->my->execution->dtable->fieldList['totalConsumed']['hidden']   = true;
+$config->my->execution->dtable->fieldList['totalConsumed']['show']     = false;
 
 $config->my->execution->dtable->fieldList['totalLeft']['title']    = $lang->execution->totalLeft;
 $config->my->execution->dtable->fieldList['totalLeft']['name']     = 'totalLeft';
@@ -1036,26 +1044,27 @@ $config->my->execution->dtable->fieldList['totalLeft']['type']     = 'number';
 $config->my->execution->dtable->fieldList['totalLeft']['sortType'] = false;
 $config->my->execution->dtable->fieldList['totalLeft']['width']    = '64';
 $config->my->execution->dtable->fieldList['totalLeft']['group']    = '4';
-$config->my->execution->dtable->fieldList['totalLeft']['hidden']   = true;
+$config->my->execution->dtable->fieldList['totalLeft']['show']     = false;
 
 $config->my->execution->dtable->fieldList['progress']['title']    = $lang->execution->progress;
 $config->my->execution->dtable->fieldList['progress']['name']     = 'progress';
 $config->my->execution->dtable->fieldList['progress']['type']     = 'progress';
 $config->my->execution->dtable->fieldList['progress']['sortType'] = false;
 $config->my->execution->dtable->fieldList['progress']['group']    = '4';
+$config->my->execution->dtable->fieldList['progress']['show']     = true;
 
 $config->my->execution->dtable->fieldList['burn']['title']    = $lang->execution->burn;
 $config->my->execution->dtable->fieldList['burn']['name']     = 'burn';
 $config->my->execution->dtable->fieldList['burn']['type']     = 'burn';
 $config->my->execution->dtable->fieldList['burn']['sortType'] = false;
 $config->my->execution->dtable->fieldList['burn']['group']    = '4';
-$config->my->execution->dtable->fieldList['burn']['hidden']   = true;
+$config->my->execution->dtable->fieldList['burn']['show']     = false;
 
 $config->my->execution->dtable->fieldList['subStatus']['name']   = 'subStatus';
 $config->my->execution->dtable->fieldList['subStatus']['title']  = $lang->execution->subStatus;
 $config->my->execution->dtable->fieldList['subStatus']['type']   = 'text';
 $config->my->execution->dtable->fieldList['subStatus']['group']  = '5';
-$config->my->execution->dtable->fieldList['subStatus']['hidden'] = true;
+$config->my->execution->dtable->fieldList['subStatus']['show']   = false;
 
 $config->my->doc = new stdclass();
 $config->my->doc->actionList = array();

@@ -21,12 +21,13 @@ featurebar
 
 foreach($executions as $execution) $execution->isParent = isset($parentGroup[$execution->id]);
 
-$executions = array_values($executions);
+$settings = $this->loadModel('datatable')->getSetting('my');
 
 dtable
 (
-    set::cols($config->my->execution->dtable->fieldList),
-    set::data($executions),
+    set::cols($settings),
+    set::data(array_values($executions)),
+    set::customCols(true),
     set::onRenderCell(jsRaw('window.onRenderExecutionCell')),
     set::orderBy($orderBy),
     set::sortLink(createLink('my', 'execution', "type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
