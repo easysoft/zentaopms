@@ -13,7 +13,7 @@ body {padding-left: 96px;}
 #menu .nav > li.has-avatar > a {padding: 4px 0; text-align: center;}
 body.menu-hide {padding-left: 0;}
 .menu-hide #menu {width: 40px;}
-.menu-hide .menu-toggle .icon-menu-collapse:before {content: '\e981';}
+.menu-hide .menu-toggle .icon:before {content: '\e9f1';}
 .menu-toggle .is-unfold, .menu-hide .menu-toggle .is-collapse {display: none;}
 .menu-hide .menu-toggle .is-unfold {display: inline;}
 #menuToggleItem,

@@ -76,7 +76,7 @@ div
                 (
                     setClass('menu-toggle justify-center cursor-pointer'),
                     toggle::tooltip(array('placement' => 'right', 'collapse-text' => $lang->collapseMenu, 'unfold-text' => $lang->unfoldMenu)),
-                    icon('menu-collapse icon-sm')
+                    icon('menu-arrow-left icon-sm')
                 )
             )
         )
