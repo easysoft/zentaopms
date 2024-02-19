@@ -41,11 +41,11 @@ class modalHeader extends wg
 
         $header = h::div
         (
-            setClass('flex items-center'),
+            setClass('flex items-center overflow-hidden'),
             $title ? div
             (
                 $title,
-                set::className($this->prop('titleClass'))
+                set::className($this->prop('titleClass'), 'whitespace-nowrap')
             ) : null,
             ($entityText || $entityID) ? entityLabel
             (
