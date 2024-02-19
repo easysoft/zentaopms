@@ -299,7 +299,12 @@ class projectZen extends project
         {
             foreach($branchPlans as $branchID => $plans)
             {
-                $productPlans[$productID][$branchID] = array_combine(array_column($plans, 'id'), array_column($plans, 'title'));
+                foreach($plans as $planID => $plan)
+                {
+                    if(empty($plan)) continue;
+                    $planDate = $plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future ? ' ' . $this->lang->productplan->future : " [{$plan->begin} ~ {$plan->end}]";
+                    $productPlans[$productID][$branchID][$planID] = $plan->title . $planDate;
+                }
             }
         }
 
