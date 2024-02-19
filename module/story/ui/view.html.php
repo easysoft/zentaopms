@@ -17,14 +17,17 @@ if($story->type == 'requirement')
     $lang->story->unlinkStory = str_replace($lang->URCommon, $lang->SRCommon, $lang->story->unlinkStory);
 }
 
+$isInModal = isInModal();
+
 data('branchID', $story->branch);
 data('activeMenuID', $story->type);
 jsVar('relievedTip', $lang->story->relievedTip);
 jsVar('unlinkStoryTip', $story->type == 'story' ? str_replace($lang->SRCommon, $lang->URCommon, $lang->story->unlinkStory) : $lang->story->unlinkStory);
 jsVar('confirmDeleteTip', $confirmDelete);
 jsVar('storyType', $story->type);
+jsVar('storyID', $story->id);
+jsVar('isInModal', $isInModal);
 
-$isInModal  = isInModal();
 $otherParam = 'storyID=&projectID=';
 $tab        = 'product';
 if($this->app->rawModule == 'projectstory' or $this->app->tab == 'project')
