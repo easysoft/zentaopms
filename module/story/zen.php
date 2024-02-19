@@ -154,13 +154,13 @@ class storyZen extends story
      * Set menu for batch edit page.
      *
      * @param  int       $productID
-     * @param  string    $branch
      * @param  int       $executionID
-     * @param  string    $from
+     * @param  string    $storyType   story|requirement
+     * @param  string    $from        work|contribute
      * @access protected
      * @return void
      */
-    protected function setMenuForBatchEdit(int $productID, string $branch = '', int $executionID = 0, string $from = ''): void
+    protected function setMenuForBatchEdit(int $productID, int $executionID = 0, string $storyType = 'story', string $from = ''): void
     {
         $this->view->hiddenPlan = false;
         if($this->app->tab == 'product')
@@ -185,8 +185,11 @@ class storyZen extends story
         if($this->app->tab == 'my')
         {
             $this->loadModel('my');
-            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
-            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
+            if($from == 'work' || $from == 'contribute')
+            {
+                $this->lang->my->menu->{$from}['subModule'] = 'story';
+                $this->lang->my->menu->{$from}['subMenu']->{$storyType}['subModule'] = 'story';
+            }
             return;
         }
 
@@ -214,11 +217,12 @@ class storyZen extends story
      *
      * @param  int       $productID
      * @param  int       $executionID
+     * @param  string    $storyType   story|requirement
      * @param  string    $from        work|contribute
      * @access protected
      * @return void
      */
-    protected function setMenuForBatchClose(int $productID, int $executionID = 0, string $from = '')
+    protected function setMenuForBatchClose(int $productID, int $executionID = 0, string $storyType = 'story', string $from = '')
     {
         /* The stories of a product. */
         if($this->app->tab == 'product' && $productID)
@@ -245,11 +249,14 @@ class storyZen extends story
         }
         else
         {
+            if($from == 'work' || $from == 'contribute')
+            {
+                $this->lang->my->menu->{$from}['subModule'] = 'story';
+                $this->lang->my->menu->{$from}['subMenu']->{$storyType}['subModule'] = 'story';
+            }
+
             $this->lang->story->menu      = $this->lang->my->menu;
             $this->lang->story->menuOrder = $this->lang->my->menuOrder;
-
-            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
-            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
 
             $this->view->title = $this->lang->story->batchClose;
         }

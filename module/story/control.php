@@ -317,7 +317,7 @@ class story extends control
     public function batchEdit(int $productID = 0, int $executionID = 0, string $branch = '', string $storyType = 'story', string $from = '')
     {
         $this->story->replaceURLang($storyType);
-        $this->storyZen->setMenuForBatchEdit($productID, $branch, $executionID, $from);
+        $this->storyZen->setMenuForBatchEdit($productID, $executionID, $storyType, $from);
 
         /* Load model. */
         $this->loadModel('productplan');
@@ -357,6 +357,7 @@ class story extends control
         $this->view->storyType   = $storyType;
         $this->view->stories     = $stories;
         $this->view->executionID = $executionID;
+        $this->view->from        = $from;
         $this->display();
     }
 
@@ -874,7 +875,7 @@ class story extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->storyList));
         }
 
-        $this->storyZen->setMenuForBatchClose($productID, $executionID, $from, $storyType);
+        $this->storyZen->setMenuForBatchClose($productID, $executionID, $storyType, $from);
 
         /* Get the skipped and already closed stories, and the count of stories which have a twin. */
         $stories      = $this->story->getByList($storyIdList);

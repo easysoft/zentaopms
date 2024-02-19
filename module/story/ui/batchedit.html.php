@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-data('activeMenuID', $storyType);
+data('activeMenuID', $from != 'work' && $from != 'contribute' ? $storyType : $from);
 jsVar('branchTagOption', $branchTagOption);
 jsVar('moduleList', $moduleList);
 jsVar('planGroups', $plans);
