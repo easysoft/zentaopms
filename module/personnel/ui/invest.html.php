@@ -14,7 +14,7 @@ dropmenu();
 ?>
 <div class='main-table bg-white'>
   <?php if(!empty($investList)):?>
-  <table class="table has-sort-head table-fixed table-bordered text-center">
+  <table class="table has-sort-head bordered table-fixed text-center">
     <thead>
       <tr>
         <th rowspan='2' class="c-role"><?php echo $lang->personnel->role;?></th>
