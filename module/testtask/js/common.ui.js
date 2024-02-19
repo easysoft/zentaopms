@@ -38,14 +38,14 @@ window.loadExecutionBuilds = function()
 
     var link = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=testTaskBuild&build=' + selectedBuild);
     if(executionID == 0) link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=build&build=' + selectedBuild + '&branch=&needCreate=&type=noempty,notrunk,withexecution');
-    if(executionID == 0 && projectID == 0) link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=build&build=&branch=all&index=&type=notrunk,withexecution');
+    if(executionID == 0 && projectID == 0) link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=build&build=&branch=all&type=notrunk,withexecution');
 
     $.getJSON(link, function(data)
     {
         let $buildPicker = $('[name="build"]').zui('picker');
         let oldBuild     = $('[name="build"]').val();
         $buildPicker.render({items: data});
-        $buildPicker.$.setValue(oldBuild);
+        executionID == 0 ? $buildPicker.$.setValue('') : $buildPicker.$.setValue(oldBuild);
         if(data.length == 0)
         {
             $('[name="build"]').closest('.input-group').find('.input-group-addon').removeClass('hidden');
