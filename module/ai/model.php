@@ -35,6 +35,32 @@ class aiModel extends model
     public $errors = array();
 
     /**
+     * Check if object action is clickable, used in datatables.
+     *
+     * @param  object  $object  object to check, model objects are supported, add support for more if needed.
+     * @param  string  $method  method on object
+     * @access public
+     * @static
+     * @return boolean
+     */
+    public static function isClickable($object, $action)
+    {
+        if(empty($object) || empty($action)) return false;
+
+        /* Assumes object is a language model record. */
+        if(strtolower($action) === 'modelenable')
+        {
+            if($object->enabled == '1') return false;
+        }
+        elseif(strtolower($action) === 'modeldisable')
+        {
+            if($object->enabled == '0') return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Set model config with model stored in database.
      *
      * @param  object $config
@@ -154,17 +180,24 @@ class aiModel extends model
     }
 
     /**
-     * Extract model config for use with actual API calls.
+     * Extract model config for use with actual API calls or for viewing details.
      *
      * @param  object        $model
-     * @access private
+     * @access public
      * @return object|false
      */
-    private function unserializeModel($model)
+    public function unserializeModel($model)
     {
         $modelConfig = new stdclass();
-        $modelConfig->type   = $model->type;
-        $modelConfig->vendor = $model->vendor;
+        $modelConfig->id      = $model->id;
+        $modelConfig->type    = $model->type;
+        $modelConfig->vendor  = $model->vendor;
+        $modelConfig->desc    = $model->desc;
+        $modelConfig->enabled = $model->enabled;
+        $modelConfig->deleted = $model->deleted;
+
+        /* Set default name. */
+        if(empty($model->name)) $modelConfig->name = $this->lang->ai->models->typeList[$model->type];
 
         /* Extract credential props. */
         $credentials = json_decode($model->credentials);
@@ -264,6 +297,28 @@ class aiModel extends model
             ->exec();
 
         return !dao::isError();
+    }
+
+    /**
+     * Make a test request to the model.
+     *
+     * @param  int     $modelID
+     * @access public
+     * @return bool
+     */
+    public function testModelConnection($modelID)
+    {
+        if($this->config->ai->models[$this->modelConfig->type] == 'ernie' || $this->modelConfig->vendor == 'azure' || $this->modelConfig->type == 'openai-gpt4')
+        {
+            $messages = array((object)array('role' => 'user', 'content' => 'test'));
+            $result = $this->converse($modelID, $messages, array('maxTokens' => 1));
+        }
+        else
+        {
+            $result = $this->complete($modelID, 'test', 1); // Test completing 'test' with length of 1.
+        }
+
+        return !empty($result);
     }
 
     /**
@@ -1887,7 +1942,7 @@ class aiModel extends model
         $schema      = $this->getFunctionCallSchema($prompt->targetForm);
         if(empty($schema)) return -4;
 
-        $response = $this->{$this->config->ai->models[$this->modelConfig->type] == 'ernie' ? 'converseTwiceForJSON' : 'converseForJSON'}(array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
+        $response = $this->{$this->config->ai->models[$this->modelConfig->type] == 'ernie' ? 'converseTwiceForJSON' : 'converseForJSON'}($model = 0, array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema); // TODO: use model from prompt.
         if(empty($response)) return -5;
 
         return current($response);
