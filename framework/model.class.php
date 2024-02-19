@@ -289,6 +289,7 @@ class model extends baseModel
      */
     public function processStatus($module, $record)
     {
+        if($module == 'story') $module = $this->app->rawModule;
         if($this->config->edition == 'open' or empty($record->subStatus)) return zget($this->lang->$module->statusList, $record->status);
 
         return $this->loadModel('workflowfield')->processSubStatus($module, $record);

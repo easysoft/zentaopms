@@ -184,6 +184,7 @@ if(isset($setting['category']))     $setting['category']['map']     = $lang->{$s
 if(isset($setting['source']))       $setting['source']['map']       = $lang->{$storyType}->sourceList;
 if(isset($setting['pri']))          $setting['pri']['map']          = $lang->{$storyType}->priList;
 if(isset($setting['closedReason'])) $setting['closedReason']['map'] = $lang->{$storyType}->reasonList;
+if(isset($setting['status']))       $setting['status']['statusMap'] = $lang->{$storyType}->statusList;
 $cols = array_values($setting);
 
 /* DataTable data. */
