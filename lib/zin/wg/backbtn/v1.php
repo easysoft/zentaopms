@@ -82,7 +82,10 @@ class backBtn extends btn
         }
         elseif(isset($backs[$app->rawModule]))
         {
-            $props['data-back'] = $backs[$app->rawModule];
+            $backList = explode(',', $backs[$app->rawModule]);
+            $backList = array_diff($backList, array("$app->rawModule-$app->rawMethod"));
+
+            $props['data-back'] = implode(',', $backList);
         }
         else
         {
