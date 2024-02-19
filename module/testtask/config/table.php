@@ -75,11 +75,10 @@ foreach($config->testcase->dtable->fieldList as $field => $setting)
 
     if($field == 'keywords')
     {
-        $config->testtask->cases->dtable->fieldList['assignedTo']['title']      = $lang->testcase->assignedTo;
-        $config->testtask->cases->dtable->fieldList['assignedTo']['type']       = 'assign';
-        $config->testtask->cases->dtable->fieldList['assignedTo']['assignLink'] = array('module' => 'testcase', 'method' => 'assignTo', 'params' => 'caseID={case}');
-        $config->testtask->cases->dtable->fieldList['assignedTo']['show']       = true;
-        $config->testtask->cases->dtable->fieldList['assignedTo']['group']      = 99; // Set a different group between testcase.
+        $config->testtask->cases->dtable->fieldList['assignedTo']['title'] = $lang->testcase->assignedTo;
+        $config->testtask->cases->dtable->fieldList['assignedTo']['type']  = 'user';
+        $config->testtask->cases->dtable->fieldList['assignedTo']['show']  = true;
+        $config->testtask->cases->dtable->fieldList['assignedTo']['group'] = 99; // Set a different group between testcase.
     }
 }
 
