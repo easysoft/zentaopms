@@ -36,6 +36,21 @@ featureBar
 $config->task->dtable->importTask->fieldList['execution']['map'] = $executions;
 if($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))) unset($config->task->dtable->importTask->fieldList['story']);
 
+$footToolbar['items'][] = array(
+    'text'      => $lang->execution->importTask,
+    'className' => 'btn secondary toolbar-item batch-btn size-sm',
+    'data-url'  => createLink('execution', 'importtask', "executionID={$execution->id}&fromExecution={$fromExecution}")
+);
+if(!isInModal())
+{
+    $footToolbar['items'][] = array(
+        'text'      => $lang->goback,
+        'btnType'   => 'info',
+        'className' => 'btn-info toolbar-item size-sm text-gray',
+        'url'       => createLink('execution', 'task', "executionID={$execution->id}")
+    );
+}
+
 jsVar('executionID', $execution->id);
 dtable
 (
@@ -45,15 +60,7 @@ dtable
     set::showToolbarOnChecked(false),
     set::orderBy($orderBy),
     set::sortLink(createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}")),
-    set::footToolbar(array(
-        'items' => array(
-            array(
-                'text'      => $lang->execution->importTask,
-                'className' => 'btn secondary toolbar-item batch-btn size-sm',
-                'data-url'  => createLink('execution', 'importtask', "executionID={$execution->id}&fromExecution={$fromExecution}")
-            )
-        )
-    )),
+    set::footToolbar($footToolbar),
     set::footPager(
         usePager
         (
