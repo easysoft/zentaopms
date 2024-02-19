@@ -595,12 +595,15 @@ class bugZen extends bug
         /* Clear cookie of bug module if the product or the branch is changed. */
         $productChanged = $this->cookie->preProductID != $product->id;
         $branchChanged  = $product->type != 'normal' && $this->cookie->preBranch != $branch;
-        if($productChanged || $branchChanged) helper::setcookie('bugModule', '0', 0);
+        if($productChanged || $branchChanged || $browseType == 'bysearch') helper::setcookie('bugModule', '0', 0);
 
         /* 如果浏览类型为按模块浏览或者浏览类型为空，设置 bug 模块的 cookie 为当前模块，清空 bug 分支的 cookie。*/
         /* Set cookie of bug module and clear cookie of bug branch if browse type is by module or is empty. */
-        helper::setcookie('bugModule', (string)$param, 0);
-        if($browseType == 'bymodule' || $browseType == '') helper::setcookie('bugBranch', '0', 0);
+        if($browseType == 'bymodule' || $browseType == '')
+        {
+            helper::setcookie('bugModule', (string)$param, 0);
+            helper::setcookie('bugBranch', '0', 0);
+        }
 
         /* 设置测试应用的 bug 排序 cookie。*/
         /* Set the cookie of bug order in qa. */
