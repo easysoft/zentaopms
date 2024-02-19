@@ -46,6 +46,7 @@ $lang->todo->reasonList['bug']   = '转Bug';
 $lang->todo->reasonList['done']  = '完成';
 
 $lang->todo->id           = '编号';
+$lang->todo->idAB         = '序号';
 $lang->todo->account      = '由谁创建';
 $lang->todo->date         = '日期';
 $lang->todo->begin        = '开始';

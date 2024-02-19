@@ -36,6 +36,7 @@ formBatchPanel
 (
     setID('batchCreateTodoForm'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
+    set::actions(array('submit', array('text' => $lang->goback, 'data-dismiss' => 'modal'))),
 
     on::change('[data-name="type"]', 'changeType'),
     on::change('.time-input', 'initTime'),
@@ -61,7 +62,7 @@ formBatchPanel
                     setID('todoDate'),
                     set::name('date'),
                     set::value($date),
-                    on::change('window.changFuture')
+                    on::change('window.changeTodoDate')
                 ),
                 span
                 (
@@ -80,49 +81,9 @@ formBatchPanel
     formBatchItem
     (
         set::name('id'),
-        set::label($lang->idAB),
+        set::label($lang->todo->idAB),
         set::control('index'),
         set::width('30px')
-    ),
-    formBatchItem
-    (
-        set::name('type'),
-        set::label($lang->todo->type),
-        set::width('120px'),
-        set::control(array('type' => 'picker', 'required' => true)),
-        set::value('custom'),
-        set::items($lang->todo->typeList)
-    ),
-    formBatchItem
-    (
-        set::name('pri'),
-        set::label($lang->todo->pri),
-        set::width('80px'),
-        set::control(array('type' => 'priPicker', 'required' => true)),
-        set::value('3'),
-        set::items($lang->todo->priList)
-    ),
-    formBatchItem
-    (
-        set::name('name'),
-        set::label($lang->todo->name),
-        set::minWidth('100px')
-    ),
-    formBatchItem
-    (
-        set::name('desc'),
-        set::label($lang->todo->desc),
-        set::control('textarea')
-    ),
-    formBatchItem
-    (
-        set::name('assignedTo'),
-        set::label($lang->todo->assignedTo),
-        set::value($app->user->account),
-        set::ditto(true),
-        set::width('140px'),
-        set::control(array('type' => 'picker', 'required' => true)),
-        set::items($users)
     ),
     formBatchItem
     (
@@ -160,6 +121,47 @@ formBatchPanel
                 )
             )
         )
+    ),
+    formBatchItem
+    (
+        set::name('type'),
+        set::label($lang->todo->type),
+        set::width('120px'),
+        set::control(array('type' => 'picker', 'required' => true)),
+        set::value('custom'),
+        set::items($lang->todo->typeList)
+    ),
+    formBatchItem
+    (
+        set::name('name'),
+        set::label($lang->todo->name),
+        set::required(true),
+        set::minWidth('100px')
+    ),
+    formBatchItem
+    (
+        set::name('desc'),
+        set::label($lang->todo->desc),
+        set::control('textarea')
+    ),
+    formBatchItem
+    (
+        set::name('assignedTo'),
+        set::label($lang->todo->assignedTo),
+        set::value($app->user->account),
+        set::ditto(true),
+        set::width('140px'),
+        set::control(array('type' => 'picker', 'required' => true)),
+        set::items($users)
+    ),
+    formBatchItem
+    (
+        set::name('pri'),
+        set::label($lang->todo->pri),
+        set::width('80px'),
+        set::control(array('type' => 'priPicker', 'required' => true)),
+        set::value('3'),
+        set::items($lang->todo->priList)
     ),
     input(set::type('hidden'), set::name('date'), set::value($date)),
     input(set::type('hidden'), set::name('futureDate'), set::value(0))

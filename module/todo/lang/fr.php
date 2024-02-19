@@ -46,6 +46,7 @@ $lang->todo->reasonList['bug']   = 'Convertir en Bug';
 $lang->todo->reasonList['done']  = 'Fait';
 
 $lang->todo->id           = 'ID';
+$lang->todo->idAB         = 'ID';
 $lang->todo->account      = 'Owner';
 $lang->todo->date         = 'Date';
 $lang->todo->begin        = 'Début';

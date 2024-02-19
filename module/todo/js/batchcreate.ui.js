@@ -37,11 +37,17 @@ window.changeType = function(e)
 window.changFuture = function()
 {
     const isChecked = $('#futureDate[type="checkbox"]').prop('checked');
-    $todoDate = $('#todoDate').zui('datePicker');
+    const $todoDate = $('#todoDate').zui('datePicker');
+    if(isChecked) $todoDate.$.setValue('');
 
-    $('#batchCreateTodoForm #date').val($todoDate.$.state.value);
-    $('#batchCreateTodoForm #futureDate').val(isChecked ? 1 : 0);
-    $todoDate.render({disabled: isChecked});
+    $('.panel-body form [name=futureDate]').val(isChecked ? 1 : 0);
+}
+
+window.changeTodoDate = function()
+{
+    const todoDate = $('#todoDate [name=date]').val();
+    if(todoDate) $('#futureDate[type="checkbox"]').prop('checked', false);
+    $('.panel-body form [name=date]').val(todoDate);
 }
 
 window.initTime = function(e)
