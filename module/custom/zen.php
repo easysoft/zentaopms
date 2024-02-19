@@ -91,7 +91,7 @@ class customZen extends custom
         {
             $this->app->loadConfig($module);
             $this->loadModel('user');
-            if(in_array($module, array('story', 'demand')))
+            if(in_array($module, array('story', 'requirement', 'demand')))
             {
                 $this->view->depts               = $this->loadModel('dept')->getDeptPairs();
                 $this->view->forceReviewRoles    = zget($this->config->$module, 'forceReviewRoles', '');
