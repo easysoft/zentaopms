@@ -463,7 +463,7 @@ $lang->story->chosen->reviewedBy = 'Choisir valideur';
 
 $lang->story->notice = new stdClass();
 $lang->story->notice->closed           = "La {$lang->SRCommon} que vous avez sélectionnée est malheureusement fermée !";
-$lang->story->notice->reviewerNotEmpty = "This {$lang->SRCommo} needs to be reviewed, and the reviewedby is required.";
+$lang->story->notice->reviewerNotEmpty = "This {$lang->SRCommon} needs to be reviewed, and the reviewedby is required.";
 $lang->story->notice->changePlan       = 'The plan can be changed to only one item.';
 
 $lang->story->convertToTask = new stdClass();
