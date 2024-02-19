@@ -254,7 +254,7 @@ class screenModel extends model
     {
         if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
         {
-            return $this->genNotFoundOrDraftComponentOption($component, $type);
+            return $this->genNotFoundOrDraftComponentOption($component, $chart, $type);
         }
         else
         {
@@ -401,17 +401,18 @@ class screenModel extends model
      * Generate not found or draft chart option.
      *
      * @param  object $component
+     * @param  object   $chart
      * @access public
      * @return void
      */
-    public function genNotFoundOrDraftComponentOption($component, $type)
+    public function genNotFoundOrDraftComponentOption($component, $chart, $type)
     {
         if(empty($component)) $component = new stdclass();
         $noDataLang = $type == 'chart' ? 'noChartData' : 'noPivotData';
 
         $component->option = new stdclass();
         $component->option->title = new stdclass();
-        $component->option->title->text = $this->lang->screen->$noDataLang;
+        $component->option->title->text = sprintf($this->lang->screen->$noDataLang, $chart->name);
         $component->option->isDeleted   = true;
 
         return $component;
@@ -507,10 +508,10 @@ class screenModel extends model
 
         $component->chartConfig->title       = $metric->name;
         $component->chartConfig->sourceID    = $metric->id;
-        $component->chartConfig->chartOption = $chartOption;
-        $component->chartConfig->tableOption = $tableOption;
-        $component->chartConfig->card        = $card;
-        if(!isset($component->chartConfig->filters)) $component->chartConfig->filters = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
+        // $component->chartConfig->chartOption = $chartOption;
+        // $component->chartConfig->tableOption = $tableOption;
+        // $component->chartConfig->card        = $card;
+        $component->chartConfig->filters = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
         $component->chartConfig->scope       = $metric->scope;
 
         $component->option->chartOption          = $chartOption;
@@ -2389,7 +2390,7 @@ class screenModel extends model
         if(!isset($component->title))       $component->title       = $metric->name;
         if(!isset($component->type))        $component->type        = 'metric';
         if(!isset($component->chartConfig)) $component->chartConfig = json_decode($this->config->screen->chartConfig['metric']);
-        if(!isset($component->option))      $component->option      = json_decode($this->config->screen->chartOption['metric']);
+        if(!isset($component->option))      $component->option      = new stdclass();
 
         return array($component, false);
     }
