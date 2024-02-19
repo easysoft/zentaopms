@@ -40,7 +40,7 @@ div
                 (
                     set::style(array('height' => '200px', 'width' => '100%', 'overflow' => 'auto')),
                     set::id('logBox'),
-                    $hasError ? html($alterSQL) : null
+                    $hasError ? html($alterSQL . ';') : null
                 )
             ),
             $hasError ? div
