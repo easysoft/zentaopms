@@ -168,6 +168,17 @@ class action extends control
             }
         }
 
+        if($oldAction->objectType == 'module' && $confirmChange == 'no')
+        {
+            $module     = $this->loadModel('tree')->getById($oldAction->objectID);
+            $repeatName = $this->loadModel('tree')->checkUnique($module);
+            if($module->type == 'doc' && $module->parent > 0 && !$repeatName)
+            {
+                $url = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({message: '{$this->lang->action->undeleteModuleTip}'}); $.ajaxSubmit({url: '{$url}'});"));
+            }
+        }
+
         $result = $this->action->undelete($actionID);
         if(true !== $result) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $result)));
 

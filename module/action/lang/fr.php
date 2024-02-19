@@ -68,6 +68,7 @@ $lang->action->hasCreatedTask     = 'Tasks have been created in this parent phas
 $lang->action->hasDeletedParent   = 'Restoring this phase requires restoring the deleted parent phase %s at the same time.';
 $lang->action->hasChangedAttr     = "After recovery, the phase type will be adjusted to '%s' according to the parent phase type.";
 $lang->action->whetherToRestore   = 'Confirm to restore?';
+$lang->action->undeleteModuleTip  = 'Once the subdirectory has been restored, its parent directory will also be automatically recovered and synchronized.';
 
 $lang->action->hasOtherType = array();
 $lang->action->hasOtherType['stage']  = "Only subtypes of {$lang->executionCommon} / Kanban types can be created at this parent stage, so the current stage cannot be restored.";

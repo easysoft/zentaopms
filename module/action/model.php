@@ -1268,6 +1268,16 @@ class actionModel extends model
         if($action->objectType == 'doc') $table = TABLE_DOC;
         $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();
 
+        if($action->objectType == 'module')
+        {
+            $module = $this->loadModel('tree')->getById($action->objectID);
+            if($module->type == 'doc' && $module->parent > 0)
+            {
+                $parentActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('module')->andWhere('objectID')->eq($module->parent)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
+                if($parentActionID) $this->undelete($parentActionID);
+            }
+        }
+
         $this->recoverRelatedData($action, $object);
 
         /* 在action表中更新action记录。 */
@@ -1874,7 +1884,7 @@ class actionModel extends model
             $repeatName = $this->loadModel('tree')->checkUnique($object);
             if($repeatName) return sprintf($this->lang->tree->repeatName, $repeatName);
 
-            if($object->parent > 0)
+            if($object->parent > 0 && $object->type != 'doc')
             {
                 $parent = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($object->parent)->fetch();
                 if($parent && $parent->deleted == '1') return $this->lang->action->refusemodule;
