@@ -123,6 +123,9 @@ $lang->custom->story->fields['reviewRules']      = '评审规则';
 $lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['review']           = '评审流程';
 
+$lang->custom->requirement = clone $lang->custom->story;
+unset($lang->custom->requirement->fields['stageList']);
+
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['required']      = $lang->custom->required;
 $lang->custom->task->fields['priList']       = '优先级';

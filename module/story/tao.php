@@ -1779,7 +1779,8 @@ class storyTao extends storyModel
      */
     protected function isSuperReviewer(): bool
     {
-        return str_contains(',' . zget($this->config->story, 'superReviewers', '') . ',', ",{$this->app->user->account},");
+        $moduleName = $this->app->rawModule;
+        return str_contains(',' . zget($this->config->{$moduleName}, 'superReviewers', '') . ',', ",{$this->app->user->account},");
     }
 
     /**

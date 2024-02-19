@@ -20,8 +20,8 @@ $config->admin->menuGroup['ai']        = array('ai|adminindex', 'ai|prompts', 'a
 
 $config->admin->menuModuleGroup['model']['custom|set']        = array('project', 'issue', 'risk', 'opportunity', 'nc');
 $config->admin->menuModuleGroup['model']['custom|required']   = array('project', 'build');
-$config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'block', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user', 'ticket');
-$config->admin->menuModuleGroup['feature']['custom|required'] = array('bug', 'doc', 'product', 'story', 'productplan', 'release', 'task', 'testcase', 'testsuite', 'testtask', 'testreport', 'caselib', 'doc', 'feedback', 'user', 'execution');
+$config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'block', 'requirement', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user', 'ticket');
+$config->admin->menuModuleGroup['feature']['custom|required'] = array('bug', 'doc', 'product', 'requirement', 'story', 'productplan', 'release', 'task', 'testcase', 'testsuite', 'testtask', 'testreport', 'caselib', 'doc', 'feedback', 'user', 'execution');
 $config->admin->menuModuleGroup['template']['custom|set']     = array('baseline');
 if($config->vision == 'lite')
 {
@@ -90,7 +90,7 @@ $config->admin->helpURL['platform']  = 'https://www.zentao.net/book/devops/1072.
 $config->admin->helpURL['ai']        = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 $config->admin->navsGroup['feature']['my']        = ',todo,block,';
-$config->admin->navsGroup['feature']['product']   = ',product,story,productplan,release,';
+$config->admin->navsGroup['feature']['product']   = ',product,requirement,story,productplan,release,';
 $config->admin->navsGroup['feature']['project']   = ',project,';
 $config->admin->navsGroup['feature']['execution'] = ',execution,task,';
 $config->admin->navsGroup['feature']['project']   = ',project,story,';

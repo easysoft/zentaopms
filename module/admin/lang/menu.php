@@ -114,6 +114,7 @@ $lang->admin->menuList->feature['tabMenu']['my']['todo']  = array('link' => "{$l
 $lang->admin->menuList->feature['tabMenu']['my']['block'] = array('link' => "{$lang->block->common}|custom|set|module=block&field=closed", 'exclude' => 'custom-set');
 
 $lang->admin->menuList->feature['tabMenu']['product']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'links' => array("custom|browsestoryconcept|", 'custom|product|'), 'alias' => 'browsestoryconcept,product', 'exclude' => 'custom-required');
+$lang->admin->menuList->feature['tabMenu']['product']['requirement'] = array('link' => "{$lang->URCommon}|custom|required|module=requirement", 'links' => array("custom|set|module=requirement&field=categoryList"), 'exclude' => 'custom-required,custom-set');
 $lang->admin->menuList->feature['tabMenu']['product']['story']       = array('link' => "{$lang->SRCommon}|custom|required|module=story", 'links' => array("custom|set|module=story&field=categoryList"), 'exclude' => 'custom-required,custom-set');
 $lang->admin->menuList->feature['tabMenu']['product']['productplan'] = array('link' => "{$lang->productplan->shortCommon}|custom|required|module=productplan", 'exclude' => 'custom-required');
 $lang->admin->menuList->feature['tabMenu']['product']['release']     = array('link' => "{$lang->release->common}|custom|required|module=release", 'exclude' => 'custom-required');
@@ -131,9 +132,10 @@ $lang->admin->menuList->feature['tabMenu']['qa']['caselib']    = array('link' =>
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['my']['5']         = 'todo';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['my']['10']        = 'block';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['5']    = 'product';
-$lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['10']   = 'story';
-$lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['15']   = 'productplan';
-$lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['20']   = 'release';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['10']   = 'requirement';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['15']   = 'story';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['20']   = 'productplan';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['25']   = 'release';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['execution']['5']  = 'execution';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['execution']['10'] = 'task';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['5']         = 'bug';

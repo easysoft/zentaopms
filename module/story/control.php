@@ -760,7 +760,7 @@ class story extends control
         $this->view->actions      = $this->action->getList('story', $storyID);
         $this->view->reviewers    = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
         $this->view->users        = $this->user->getPairs('noclosed|noletter');
-        $this->view->needReview   = (($this->app->user->account == $product->PO or $this->config->story->needReview == 0 or !$this->story->checkForceReview()) and empty($story->reviewer)) ? "checked='checked'" : "";
+        $this->view->needReview   = (($this->app->user->account == $product->PO or $this->config->{$storyType}->needReview == 0 or !$this->story->checkForceReview()) and empty($story->reviewer)) ? "checked='checked'" : "";
         $this->view->lastReviewer = $this->story->getLastReviewer($story->id);
 
         $this->display();
@@ -1907,10 +1907,11 @@ class story extends control
 
         if($type == 'review')
         {
+            $moduleName      = $this->app->rawModule;
             $story           = $this->story->getByID($storyID);
             $reviewers       = $this->story->getReviewerPairs($storyID, $story->version);
             $isChanged       = $story->changedBy ? true : false;
-            $superReviewers  = trim(zget($this->config->story, 'superReviewers', ''), ',');
+            $superReviewers  = trim(zget($this->config->{$moduleName}, 'superReviewers', ''), ',');
             $isSuperReviewer = strpos(",{$superReviewers},", ",{$this->app->user->account},") !== false;
 
             if(count($reviewers) == 1)

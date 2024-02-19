@@ -637,10 +637,11 @@ class storyModel extends model
      */
     public function change(int $storyID, object $story): array|false
     {
-        $oldStory = $this->getById($storyID);
+        $oldStory   = $this->getById($storyID);
+        $moduleName = $this->app->rawModule;
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,relievedTwins,reviewer,reviewerHasChanged')
             ->autoCheck()
-            ->batchCheck($this->config->story->change->requiredFields, 'notempty')
+            ->batchCheck($this->config->{$moduleName}->change->requiredFields, 'notempty')
             ->checkFlow()
             ->where('id')->eq($storyID)->exec();
         if(dao::isError()) return false;
@@ -719,9 +720,10 @@ class storyModel extends model
             $oldStory->twins = '';
         }
 
+        $moduleName = $this->app->rawModule;
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,finalResult')
             ->autoCheck()
-            ->batchCheck($this->config->story->edit->requiredFields, 'notempty')
+            ->batchCheck($this->config->{$moduleName}->edit->requiredFields, 'notempty')
             ->checkIF(!empty($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
@@ -1355,9 +1357,10 @@ class storyModel extends model
         if(strpos($this->config->story->close->requiredFields, 'comment') !== false and !$this->post->comment) dao::$errors['comment'][] = sprintf($this->lang->error->notempty, $this->lang->comment);
 
         $this->lang->story->comment = $this->lang->comment;
+        $moduleName = $this->app->rawModule;
         $this->dao->update(TABLE_STORY)->data($story, 'comment,closeSync')
             ->autoCheck()
-            ->batchCheck($this->config->story->close->requiredFields, 'notempty')
+            ->batchCheck($this->config->{$moduleName}->close->requiredFields, 'notempty')
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
             ->checkFlow()
             ->where('id')->eq($storyID)
@@ -3343,13 +3346,14 @@ class storyModel extends model
     public function checkForceReview(): bool
     {
         $forceReview = false;
+        $moduleName  = $this->app->rawModule;
 
-        $forceField       = $this->config->story->needReview == 0 ? 'forceReview' : 'forceNotReview';
-        $forceReviewRoles = !empty($this->config->story->{$forceField . 'Roles'}) ? $this->config->story->{$forceField . 'Roles'} : '';
-        $forceReviewDepts = !empty($this->config->story->{$forceField . 'Depts'}) ? $this->config->story->{$forceField . 'Depts'} : '';
+        $forceField       = $this->config->{$moduleName}->needReview == 0 ? 'forceReview' : 'forceNotReview';
+        $forceReviewRoles = !empty($this->config->{$moduleName}->{$forceField . 'Roles'}) ? $this->config->{$moduleName}->{$forceField . 'Roles'} : '';
+        $forceReviewDepts = !empty($this->config->{$moduleName}->{$forceField . 'Depts'}) ? $this->config->{$moduleName}->{$forceField . 'Depts'} : '';
 
         $forceUsers = '';
-        if(!empty($this->config->story->{$forceField})) $forceUsers = $this->config->story->{$forceField};
+        if(!empty($this->config->{$moduleName}->{$forceField})) $forceUsers = $this->config->{$moduleName}->{$forceField};
 
         if(!empty($forceReviewRoles) or !empty($forceReviewDepts))
         {
@@ -3368,7 +3372,7 @@ class storyModel extends model
             $forceUsers .= "," . implode(',', array_keys($users));
         }
 
-        $forceReview = $this->config->story->needReview == 0 ? strpos(",{$forceUsers},", ",{$this->app->user->account},") !== false : strpos(",{$forceUsers},", ",{$this->app->user->account},") === false;
+        $forceReview = $this->config->{$moduleName}->needReview == 0 ? strpos(",{$forceUsers},", ",{$this->app->user->account},") !== false : strpos(",{$forceUsers},", ",{$this->app->user->account},") === false;
 
         return $forceReview;
     }
@@ -3823,7 +3827,8 @@ class storyModel extends model
         $rejectCount  = 0;
         $revertCount  = 0;
         $clarifyCount = 0;
-        $reviewRule   = !empty($this->config->story->reviewRules) ? $this->config->story->reviewRules : 'allpass';
+        $moduleName   = $this->app->rawModule;
+        $reviewRule   = !empty($this->config->{$moduleName}->reviewRules) ? $this->config->{$moduleName}->reviewRules : 'allpass';
         foreach($reviewerList as $result)
         {
             $passCount    = $result == 'pass'    ? $passCount    + 1 : $passCount;

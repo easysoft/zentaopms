@@ -1,18 +1,20 @@
 <?php
 $config->custom = new stdClass();
-$config->custom->canAdd['story']    = 'reasonList,sourceList,priList,categoryList';
-$config->custom->canAdd['task']     = 'priList,typeList,reasonList';
-$config->custom->canAdd['bug']      = 'priList,severityList,osList,browserList,typeList,resolutionList';
-$config->custom->canAdd['testcase'] = 'priList,typeList,stageList,resultList,statusList';
-$config->custom->canAdd['testtask'] = 'priList,typeList';
-$config->custom->canAdd['todo']     = 'priList,typeList';
-$config->custom->canAdd['user']     = 'roleList';
-$config->custom->canAdd['block']    = '';
-$config->custom->canAdd['project']  = 'unitList';
+$config->custom->canAdd['story']       = 'reasonList,sourceList,priList,categoryList';
+$config->custom->canAdd['requirement'] = 'reasonList,sourceList,priList,categoryList';
+$config->custom->canAdd['task']        = 'priList,typeList,reasonList';
+$config->custom->canAdd['bug']         = 'priList,severityList,osList,browserList,typeList,resolutionList';
+$config->custom->canAdd['testcase']    = 'priList,typeList,stageList,resultList,statusList';
+$config->custom->canAdd['testtask']    = 'priList,typeList';
+$config->custom->canAdd['todo']        = 'priList,typeList';
+$config->custom->canAdd['user']        = 'roleList';
+$config->custom->canAdd['block']       = '';
+$config->custom->canAdd['project']     = 'unitList';
 
 $config->custom->noModuleMenu = array();
 
-$config->custom->requiredModules[10] = 'product';
+$config->custom->requiredModules[5]  = 'product';
+$config->custom->requiredModules[10] = 'requirement';
 $config->custom->requiredModules[15] = 'story';
 $config->custom->requiredModules[20] = 'productplan';
 $config->custom->requiredModules[25] = 'release';
@@ -32,9 +34,7 @@ $config->custom->requiredModules[60] = 'testsuite';
 $config->custom->requiredModules[65] = 'testreport';
 $config->custom->requiredModules[70] = 'caselib';
 $config->custom->requiredModules[75] = 'testtask';
-
 $config->custom->requiredModules[80] = 'doc';
-
 $config->custom->requiredModules[85] = 'user';
 
 $config->custom->fieldList['program']['create']      = 'budget,PM,desc';
@@ -47,6 +47,10 @@ $config->custom->fieldList['story']['create']        = 'module,plan,source,pri,e
 $config->custom->fieldList['story']['change']        = 'comment,spec,verify';
 $config->custom->fieldList['story']['close']         = 'comment';
 $config->custom->fieldList['story']['review']        = 'reviewedDate,comment';
+$config->custom->fieldList['requirement']['create']  = 'module,source,pri,estimate,keywords,spec,verify';
+$config->custom->fieldList['requirement']['change']  = 'comment,spec,verify';
+$config->custom->fieldList['requirement']['close']   = 'comment';
+$config->custom->fieldList['requirement']['review']  = 'reviewedDate,comment';
 $config->custom->fieldList['productplan']            = 'begin,end,desc';
 $config->custom->fieldList['release']['create']      = 'desc';
 $config->custom->fieldList['release']['edit']        = 'desc';

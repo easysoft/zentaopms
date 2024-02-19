@@ -493,13 +493,14 @@ class storyZen extends story
         }
         $branch = str_contains($branch, ',') ? current(explode(',', $branch)) : $branch;
 
+        $moduleName  = $this->app->rawModule;
         $product     = $this->product->getByID($productID);
         $users       = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $stories     = $this->story->getParentStoryPairs($productID);
         $plans       = $this->loadModel('productplan')->getPairs($productID, $branch == 0 ? '' : $branch, 'unexpired|noclosed', true);
         $plans       = array_map(function($planName){return str_replace(FUTURE_TIME, $this->lang->story->undetermined, $planName);}, $plans);
         $forceReview = $this->story->checkForceReview();
-        $needReview  = ($account == $product->PO || $objectID > 0 || $this->config->story->needReview == 0 || !$forceReview);
+        $needReview  = ($account == $product->PO || $objectID > 0 || $this->config->{$moduleName}->needReview == 0 || !$forceReview);
         $reviewers   = $this->story->getProductReviewers($productID);
 
         /* 追加字段的name、title属性，展开user数据。 */
@@ -745,8 +746,9 @@ class storyZen extends story
         $forceReview = $this->story->checkForceReview();
         if($forceReview) $fields['reviewer']['required'] = true;
 
+        $moduleName = $this->app->rawModule;
         $this->view->forceReview = $forceReview;
-        $this->view->needReview  = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0 || !$forceReview) && empty($reviewer);
+        $this->view->needReview  = ($this->app->user->account == $this->view->product->PO || $this->config->{$moduleName}->needReview == 0 || !$forceReview) && empty($reviewer);
 
         $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment);
 
@@ -1251,11 +1253,12 @@ class storyZen extends story
      */
     protected function buildStoryForChange(int $storyID): object|false
     {
-        $oldStory = $this->story->getByID($storyID);
-        if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate)       dao::$errors[] = $this->lang->error->editedByOther;
-        if(strpos($this->config->story->change->requiredFields, 'comment') !== false and !$this->post->comment) dao::$errors['comment'][] = sprintf($this->lang->error->notempty, $this->lang->comment);
-        if(strpos($this->config->story->change->requiredFields, 'spec') !== false and !$this->post->spec)       dao::$errors['spec'][]    = sprintf($this->lang->error->notempty, $this->lang->story->spec);
-        if(strpos($this->config->story->change->requiredFields, 'verify') !== false and !$this->post->spec)     dao::$errors['verify'][]  = sprintf($this->lang->error->notempty, $this->lang->story->verify);
+        $moduleName = $this->app->rawModule;
+        $oldStory   = $this->story->getByID($storyID);
+        if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
+        if(strpos($this->config->{$moduleName}->change->requiredFields, 'comment') !== false and !$this->post->comment) dao::$errors[]            = sprintf($this->lang->error->notempty, $this->lang->comment);
+        if(strpos($this->config->{$moduleName}->change->requiredFields, 'spec') !== false and !$this->post->spec)       dao::$errors['spec'][]    = sprintf($this->lang->error->notempty, $this->lang->story->spec);
+        if(strpos($this->config->{$moduleName}->change->requiredFields, 'verify') !== false and !$this->post->spec)     dao::$errors['verify'][]  = sprintf($this->lang->error->notempty, $this->lang->story->verify);
 
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
         if(!$this->post->needNotReview and empty($_POST['reviewer'])) dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
@@ -1389,9 +1392,10 @@ class storyZen extends story
      */
     protected function buildStoryForReview(int $storyID): object|false
     {
-        $now    = helper::now();
-        $fields = $this->config->story->form->review;
-        foreach(explode(',', trim($this->config->story->review->requiredFields, ',')) as $field)
+        $now        = helper::now();
+        $fields     = $this->config->story->form->review;
+        $moduleName = $this->app->rawModule;
+        foreach(explode(',', trim($this->config->{$moduleName}->create->requiredFields, ',')) as $field)
         {
             if($field == 'comment' && !$this->post->comment)
             {
