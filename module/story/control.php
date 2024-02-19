@@ -1310,7 +1310,7 @@ class story extends control
             $this->story->linkStories($storyID, $this->post->stories);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'callback' => 'refreshViewModal'));
+            return $this->send(array('result' => 'success', 'callback' => "const modal = zui.Modal.query('.modal-dialog[data-auto-load=\"story:$storyID\"]'); if(modal) modal.render(); else loadCurrentPage();", 'closeModal' => true));
         }
 
         /* Get story, product, products, and queryID. */
