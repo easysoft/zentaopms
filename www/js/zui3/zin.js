@@ -735,7 +735,7 @@
         if(!$(target).closest('.modal').length && !options.selector)
         {
             selector += ',#featureBar>*,pageJS/.zin-page-js';
-            if($('#moduleMenu').length) selector += ',#moduleMenu';
+            if($('#moduleMenu').length) selector += ',#moduleMenu,.module-menu-header';
         }
         delete options.selector;
         return loadComponent(target, $.extend({component: 'dtable', url: url, selector: selector}, options));
