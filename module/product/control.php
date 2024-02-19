@@ -130,6 +130,7 @@ class product extends control
 
         /* Pre process. */
         $this->loadModel('requirement');
+        $this->loadModel('epic');
         $this->loadModel('tree');
         $isProjectStory = $this->app->rawModule == 'projectstory';
         $cookieOrderBy  = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';

@@ -180,7 +180,7 @@ $lang->product->homeMenu->kanban = array('link' => "{$lang->product->kanban}|pro
 
 $lang->product->menu              = new stdclass();
 $lang->product->menu->dashboard   = array('link' => "{$lang->dashboard}|product|dashboard|productID=%s");
-$lang->product->menu->epic        = array('link' => "{$lang->epic->common}|epic|browse|productID=%s");
+$lang->product->menu->epic        = array('link' => "{$lang->epic->common}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=epic");
 $lang->product->menu->requirement = array('link' => "{$lang->URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->story       = array('link' => "$lang->SRCommon|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story', 'exclude' => (isset($_GET['storyType']) ? ($_GET['storyType'] == 'requirement' ? 'browse,story-report,story-create,story-batchcreate' : '') : '') . ',batchtotask');
 $lang->product->menu->plan        = array('link' => "{$lang->productplan->shortCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan,bug');

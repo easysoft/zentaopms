@@ -3753,50 +3753,48 @@ class storyModel extends model
      */
     public function replaceURLang(string $type): void
     {
-        if($type != 'requirement') return;
+        $storyLang   = $this->lang->story;
+        $SRCommon    = $this->lang->SRCommon;
+        $replacement = $type == 'requirement' ? $this->lang->URCommon : $this->lang->epic->common;
 
-        $storyLang = $this->lang->story;
-        $SRCommon  = $this->lang->SRCommon;
-        $URCommon  = $this->lang->URCommon;
+        $storyLang->create             = str_replace($SRCommon, $replacement, $storyLang->create);
+        $storyLang->changeAction       = str_replace($SRCommon, $replacement, $storyLang->changeAction);
+        $storyLang->changed            = str_replace($SRCommon, $replacement, $storyLang->changed);
+        $storyLang->assignAction       = str_replace($SRCommon, $replacement, $storyLang->assignAction);
+        $storyLang->reviewAction       = str_replace($SRCommon, $replacement, $storyLang->reviewAction);
+        $storyLang->subdivideAction    = str_replace($SRCommon, $replacement, $storyLang->subdivideAction);
+        $storyLang->closeAction        = str_replace($SRCommon, $replacement, $storyLang->closeAction);
+        $storyLang->activateAction     = str_replace($SRCommon, $replacement, $storyLang->activateAction);
+        $storyLang->deleteAction       = str_replace($SRCommon, $replacement, $storyLang->deleteAction);
+        $storyLang->view               = str_replace($SRCommon, $replacement, $storyLang->view);
+        $storyLang->linkStory          = str_replace($SRCommon, $replacement, $storyLang->linkStory);
+        $storyLang->exportAction       = str_replace($SRCommon, $replacement, $storyLang->exportAction);
+        $storyLang->zeroCase           = str_replace($SRCommon, $replacement, $storyLang->zeroCase);
+        $storyLang->zeroTask           = str_replace($SRCommon, $replacement, $storyLang->zeroTask);
+        $storyLang->copyTitle          = str_replace($SRCommon, $replacement, $storyLang->copyTitle);
+        $storyLang->common             = str_replace($SRCommon, $replacement, $storyLang->common);
+        $storyLang->title              = str_replace($SRCommon, $replacement, $storyLang->title);
+        $storyLang->spec               = str_replace($SRCommon, $replacement, $storyLang->spec);
+        $storyLang->children           = str_replace($SRCommon, $replacement, $storyLang->children);
+        $storyLang->linkStories        = str_replace($SRCommon, $replacement, $storyLang->linkStories);
+        $storyLang->childStories       = str_replace($SRCommon, $replacement, $storyLang->childStories);
+        $storyLang->duplicateStory     = str_replace($SRCommon, $replacement, $storyLang->duplicateStory);
+        $storyLang->newStory           = str_replace($SRCommon, $replacement, $storyLang->newStory);
+        $storyLang->copy               = str_replace($SRCommon, $replacement, $storyLang->copy);
+        $storyLang->total              = str_replace($SRCommon, $replacement, $storyLang->total);
+        $storyLang->released           = str_replace($SRCommon, $replacement, $storyLang->released);
+        $storyLang->legendLifeTime     = str_replace($SRCommon, $replacement, $storyLang->legendLifeTime);
+        $storyLang->legendLinkStories  = str_replace($SRCommon, $replacement, $storyLang->legendLinkStories);
+        $storyLang->legendChildStories = str_replace($SRCommon, $replacement, $storyLang->legendChildStories);
+        $storyLang->legendSpec         = str_replace($SRCommon, $replacement, $storyLang->legendSpec);
+        $storyLang->unlinkStory        = str_replace($SRCommon, $replacement, $storyLang->unlinkStory);
 
-        $storyLang->create             = str_replace($SRCommon, $URCommon, $storyLang->create);
-        $storyLang->changeAction       = str_replace($SRCommon, $URCommon, $storyLang->changeAction);
-        $storyLang->changed            = str_replace($SRCommon, $URCommon, $storyLang->changed);
-        $storyLang->assignAction       = str_replace($SRCommon, $URCommon, $storyLang->assignAction);
-        $storyLang->reviewAction       = str_replace($SRCommon, $URCommon, $storyLang->reviewAction);
-        $storyLang->subdivideAction    = str_replace($SRCommon, $URCommon, $storyLang->subdivideAction);
-        $storyLang->closeAction        = str_replace($SRCommon, $URCommon, $storyLang->closeAction);
-        $storyLang->activateAction     = str_replace($SRCommon, $URCommon, $storyLang->activateAction);
-        $storyLang->deleteAction       = str_replace($SRCommon, $URCommon, $storyLang->deleteAction);
-        $storyLang->view               = str_replace($SRCommon, $URCommon, $storyLang->view);
-        $storyLang->linkStory          = str_replace($SRCommon, $URCommon, $storyLang->linkStory);
-        $storyLang->exportAction       = str_replace($SRCommon, $URCommon, $storyLang->exportAction);
-        $storyLang->zeroCase           = str_replace($SRCommon, $URCommon, $storyLang->zeroCase);
-        $storyLang->zeroTask           = str_replace($SRCommon, $URCommon, $storyLang->zeroTask);
-        $storyLang->copyTitle          = str_replace($SRCommon, $URCommon, $storyLang->copyTitle);
-        $storyLang->common             = str_replace($SRCommon, $URCommon, $storyLang->common);
-        $storyLang->title              = str_replace($SRCommon, $URCommon, $storyLang->title);
-        $storyLang->spec               = str_replace($SRCommon, $URCommon, $storyLang->spec);
-        $storyLang->children           = str_replace($SRCommon, $URCommon, $storyLang->children);
-        $storyLang->linkStories        = str_replace($SRCommon, $URCommon, $storyLang->linkStories);
-        $storyLang->childStories       = str_replace($SRCommon, $URCommon, $storyLang->childStories);
-        $storyLang->duplicateStory     = str_replace($SRCommon, $URCommon, $storyLang->duplicateStory);
-        $storyLang->newStory           = str_replace($SRCommon, $URCommon, $storyLang->newStory);
-        $storyLang->copy               = str_replace($SRCommon, $URCommon, $storyLang->copy);
-        $storyLang->total              = str_replace($SRCommon, $URCommon, $storyLang->total);
-        $storyLang->released           = str_replace($SRCommon, $URCommon, $storyLang->released);
-        $storyLang->legendLifeTime     = str_replace($SRCommon, $URCommon, $storyLang->legendLifeTime);
-        $storyLang->legendLinkStories  = str_replace($SRCommon, $URCommon, $storyLang->legendLinkStories);
-        $storyLang->legendChildStories = str_replace($SRCommon, $URCommon, $storyLang->legendChildStories);
-        $storyLang->legendSpec         = str_replace($SRCommon, $URCommon, $storyLang->legendSpec);
-        $storyLang->unlinkStory        = str_replace($SRCommon, $URCommon, $storyLang->unlinkStory);
+        $storyLang->notice->closed           = str_replace($SRCommon, $replacement, $storyLang->notice->closed);
+        $storyLang->notice->reviewerNotEmpty = str_replace($SRCommon, $replacement, $storyLang->notice->reviewerNotEmpty);
 
-        $storyLang->notice->closed           = str_replace($SRCommon, $URCommon, $storyLang->notice->closed);
-        $storyLang->notice->reviewerNotEmpty = str_replace($SRCommon, $URCommon, $storyLang->notice->reviewerNotEmpty);
-
-        $storyLang->report->charts['storiesPerProduct'] = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storiesPerProduct']);
-        $storyLang->report->charts['storiesPerModule']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storiesPerModule']);
-        $storyLang->report->charts['storiesPerSource']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storiesPerSource']);
+        $storyLang->report->charts['storiesPerProduct'] = str_replace($SRCommon, $replacement, $storyLang->report->charts['storiesPerProduct']);
+        $storyLang->report->charts['storiesPerModule']  = str_replace($SRCommon, $replacement, $storyLang->report->charts['storiesPerModule']);
+        $storyLang->report->charts['storiesPerSource']  = str_replace($SRCommon, $replacement, $storyLang->report->charts['storiesPerSource']);
     }
 
     /**

@@ -11,3 +11,5 @@ $config->requirement->edit->requiredFields   = 'title';
 $config->requirement->change->requiredFields = 'title';
 $config->requirement->close->requiredFields  = 'closedReason';
 $config->requirement->review->requiredFields = '';
+
+$config->requirement->needReview = 1;
