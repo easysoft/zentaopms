@@ -220,14 +220,17 @@ class executionModel extends model
         }
 
         /* If the execution doesn't exist in the list, use the first execution in the list. */
-        if(!isset($executions[$executionID])) $executionID = key($executions);
-
-        /* Check execution again. */
-        if($executionID)
+        if(!isset($executions[$executionID]))
         {
-            $execution = $this->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch();
-            if(empty($execution)) return $this->app->control->sendError($this->lang->notFound, helper::createLink('execution', 'all'));
-            if(!$this->app->user->admin && strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
+            /* Check execution. */
+            if($executionID)
+            {
+                $execution = $this->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch();
+                if(empty($execution)) return $this->app->control->sendError($this->lang->notFound, helper::createLink('execution', 'all'));
+                if(!$this->app->user->admin && strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
+            }
+
+            $executionID = key($executions);
         }
 
         /* Save session. */
