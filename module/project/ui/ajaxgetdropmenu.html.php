@@ -32,6 +32,12 @@ $getProjectGroup = function($project): string
  */
 $data = array('my' => array(), 'other' => array(), 'closed' => array());
 
+/**
+ * 定义高亮的分组标签。
+ * Define the active group.
+ */
+$activeGroup = '';
+
 /* 处理分组数据。Process grouped data. */
 foreach($projects as $programID => $programProjects)
 {
@@ -50,13 +56,15 @@ foreach($projects as $programID => $programProjects)
         $group = $getProjectGroup($project);
 
         $item = array();
-        $item['id']    = $project->id;
-        $item['text']  = $project->name;
-        $item['icon']  = $project->model == 'scrum' ? 'sprint' : $project->model;
-        $item['keys']  = zget(common::convert2Pinyin(array($project->name)), $project->name, '');
-        $item['url']   = sprintf($link, $project->id);
+        $item['id']   = $project->id;
+        $item['text'] = $project->name;
+        $item['icon'] = $project->model == 'scrum' ? 'sprint' : $project->model;
+        $item['keys'] = zget(common::convert2Pinyin(array($project->name)), $project->name, '');
+        $item['url']  = sprintf($link, $project->id);
 
         if(empty($project->multiple) || $project->type == 'kanban' || $project->model == 'kanban') $item['url'] = helper::createLink('project', 'index', "projectID={$project->id}");
+
+        if(empty($activeGroup) && $projectID == $project->id) $activeGroup = $group;
 
         if($config->systemMode == 'light' || $config->vision == 'lite')
         {
@@ -78,8 +86,8 @@ foreach($data as $key => $value) $data[$key] = array_values($value);
  * Define every group name, include expanded group.
  */
 $tabs = array();
-if(!empty($data['my']))    $tabs[] = array('name' => 'my',     'text' => $lang->project->myProject);
-if(!empty($data['other'])) $tabs[] = array('name' => 'other',  'text' => $lang->project->other);
+if(!empty($data['my']))    $tabs[] = array('name' => 'my',     'text' => $lang->project->myProject, 'active' => $activeGroup === 'my');
+if(!empty($data['other'])) $tabs[] = array('name' => 'other',  'text' => $lang->project->other, 'active' => $activeGroup === 'other');
 $tabs[] = array('name' => 'closed', 'text' => $lang->project->closedProject);
 
 /**
