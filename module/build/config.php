@@ -62,7 +62,7 @@ $config->build->actionList['delete']['icon']         = 'trash';
 $config->build->actionList['delete']['hint']         = $lang->build->delete;
 $config->build->actionList['delete']['url']          = helper::createLink($app->tab == 'project' ? 'projectbuild' : 'build', 'delete', 'buildID={id}');
 $config->build->actionList['delete']['className']    = 'ajax-submit';
-$config->build->actionList['delete']['data-confirm'] = $lang->build->confirmDelete;
+$config->build->actionList['delete']['data-confirm'] = array('message' => $lang->build->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->build->actionList['unlinkBug']['icon']         = 'unlink';
 $config->build->actionList['unlinkBug']['hint']         = $lang->build->unlinkBug;
