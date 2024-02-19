@@ -129,8 +129,9 @@ class productplanZen extends productplan
                 foreach(explode(',', $plan->branch) as $branchID) $plan->branchName .= $branchOption[$branchID] . ',';
                 $plan->branchName = trim($plan->branchName, ',');
             }
-            $plan->begin    = $plan->begin == $this->config->productplan->future ? $this->lang->productplan->future : $plan->begin;
-            $plan->end      = $plan->end == $this->config->productplan->future ? $this->lang->productplan->future : $plan->end;
+
+            if($plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future) $plan->begin = $plan->end = $this->lang->productplan->future;
+
             $plan->actions  = $this->buildActionsList($plan);
             $plan->projects = array_values($plan->projects);
         }
