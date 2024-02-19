@@ -285,7 +285,9 @@ class screenModel extends model
 
         $component = $this->getChartOption($chart, $component, $filters);
         if($type == 'chart') $component = $this->getAxisRotateOption($chart, $component);
-        $component = $this->updateComponentFilters($component, $chart);
+
+        $latestFilters = $this->getChartFilters($chart);
+        $component = $this->updateComponentFilters($component, $latestFilters);
 
         if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
         {
@@ -315,17 +317,16 @@ class screenModel extends model
     }
 
     /**
-     * Update component chartConfig filters.
+     * Update piovt or chart component chartConfig filters.
      *
      * @param  object $component
-     * @param  object $chart
+     * @param  array  $latestFilters
      * @access public
      * @return object
      */
-    public function updateComponentFilters($component, $chart)
+    public function updateComponentFilters($component, $latestFilters)
     {
         // 如果传过来的component->chartConfig中有filters，判断filters是否发生了改变，改变则重置filters，其中单个filter的linkedGlobalFilter属性就不存在了
-        $latestFilters = $this->getChartFilters($chart);
         if(!isset($component->chartConfig->filters))
         {
             $component->chartConfig->filters = $latestFilters;
@@ -520,12 +521,14 @@ class screenModel extends model
 
         $component->chartConfig->title       = $metric->name;
         $component->chartConfig->sourceID    = $metric->id;
+        $component->chartConfig->scope       = $metric->scope;
+        $component->chartConfig->dateType    = $metric->dateType;
         // $component->chartConfig->chartOption = $chartOption;
         // $component->chartConfig->tableOption = $tableOption;
         // $component->chartConfig->card        = $card;
-        $component->chartConfig->filters = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
-        $component->chartConfig->scope       = $metric->scope;
-        $component->chartConfig->dateType    = $metric->dateType;
+
+        $latestFilters = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
+        $component     = $this->updateMetricFilters($component, $latestFilters);
 
         $component->option->chartOption          = $chartOption;
         $component->option->tableOption          = $tableOption;
@@ -533,6 +536,31 @@ class screenModel extends model
         $component->option->card->isDateMetric   = $isDateMetric;
         $component->option->card->isObjectMetric = $isObjectMetric;
         $component->option->card->cardDateDefault = $component->option->card->filterValue ? $component->option->card->filterValue->dateString : '';
+
+        return $component;
+    }
+
+    /**
+     * Update metric component chartConfig filters.
+     *
+     * @param  object $component
+     * @param  array  $latestFilters
+     * @access public
+     * @return object
+     */
+    public function updateMetricFilters($component, $latestFilters)
+    {
+        if(!isset($component->chartConfig->filters))
+        {
+            $component->chartConfig->filters = $latestFilters;
+        }
+        else
+        {
+            foreach($component->chartConfig->filters as $index => $filter)
+            {
+                $component->chartConfig->filters[$index]->options = zget($latestFilters[$index], 'option', array());
+            }
+        }
 
         return $component;
     }
