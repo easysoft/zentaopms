@@ -52,6 +52,7 @@ class treeEditor extends wg
         $canSplit  = $this->prop('canSplit');
         $editType  = $this->prop('type');
         $selected  = $this->prop('selected');
+        $typeList  = array('task' => 'T', 'bug' => 'B', 'case' => 'C');
 
         foreach($items as $key => $item)
         {
@@ -63,6 +64,7 @@ class treeEditor extends wg
 
                 $item['titleAttrs']['data-app'] = $app->tab;
                 $item['titleAttrs']['title']    = $item['text'];
+                if($app->rawModule == 'tree' && isset($item['type']) && isset($typeList[$item['type']]))  $item['text']  = array('html' => $item['text'] . '<span class="text-gray ml-1">[' . $typeList[$item['type']] . ']</span>');
 
                 $item['innerClass'] = 'py-0';
                 $item['titleClass'] = 'text-clip';
