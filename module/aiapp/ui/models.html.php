@@ -8,7 +8,7 @@ toolbar(
     item(
         set(array(
             'text' => $lang->ai->models->create,
-            'url' => createLink('ai', 'editmodel'),
+            'url' => createLink('ai', 'modelcreate'),
             'data-app' => $app->tab,
             'icon'  => 'plus',
             'class' => 'btn primary',
