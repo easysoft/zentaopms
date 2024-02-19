@@ -98,7 +98,7 @@ formPanel
                 (
                     set::name('end'),
                     set('id', 'end'),
-                    set::value($project->end),
+                    set::value($project->end != LONG_TIME ? $project->end : ''),
                     set::placeholder($lang->project->end),
                     set::required(true),
                     set::disabled($project->end == LONG_TIME)
