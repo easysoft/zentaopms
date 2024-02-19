@@ -447,7 +447,7 @@ detailBody
                             setClass('relateStories'),
                             set::title($relation->title),
                             label(setClass('circle size-sm'), $relation->id),
-                            $canViewStory ? a(set::href(helper::createLink('story', 'view', "id={$relation->id}&version=0&param=0&storyType=$relationType")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), $relation->title) : span(setClass('title'), $relation->title),
+                            $canViewStory ? a(set::href(helper::createLink($relationType, 'view', "id={$relation->id}&version=0&param=0&storyType=$relationType")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), $relation->title) : span(setClass('title'), $relation->title),
                             $canLinkStory ? a(set('url', helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}&browseType=&queryID=0&storyType=$story->type")), setClass('unlink unlinkStory hidden'), icon('unlink')) : null
                         );
                     }, $relations)),
@@ -568,7 +568,7 @@ detailBody
                                 (
                                     set::title($storyTitle),
                                     label(setClass('circle size-sm'), $storyID),
-                                    $hasPriv ? a(set::href(helper::createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), set::title($storyTitle), $storyTitle) : span(setClass('title'), $storyTitle)
+                                    $hasPriv ? a(set::href(helper::createLink($story->type, 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), set::title($storyTitle), $storyTitle) : span(setClass('title'), $storyTitle)
                                 );
                             }, array_keys($story->linkStoryTitles), array_values($story->linkStoryTitles)))
                         )

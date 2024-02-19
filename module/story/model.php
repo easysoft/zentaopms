@@ -3209,7 +3209,7 @@ class storyModel extends model
             $executionID = empty($execution) ? 0 : $execution->id;
             if(!helper::isAjaxRequest('modal') && $this->config->vision != 'lite')
             {
-                $mainMenu[] = commonModel::buildActionItem($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'split', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
+                $mainMenu[] = commonModel::buildActionItem('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'split', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
             }
 
             $mainMenu[] = commonModel::buildActionItem($story->type, 'assignTo', $params . "&kanbanGroup=default&from=", $story, array('icon' => 'hand-right', 'text' => $this->lang->story->assignTo, 'data-toggle' => 'modal'));
