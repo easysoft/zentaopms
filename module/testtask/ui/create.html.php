@@ -61,7 +61,6 @@ formPanel
                 on::change('setExecutionByBuild'),
                 set::name('build'),
                 set::items($builds),
-                set::required(true),
                 set::value($build)
             ),
             span
