@@ -284,11 +284,46 @@ class screenModel extends model
         list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
 
         $component = $this->getChartOption($chart, $component, $filters);
-
         if($type == 'chart') $component = $this->getAxisRotateOption($chart, $component);
+        $component = $this->updateComponentFilters($component, $chart);
 
-        $component->option->fields = json_decode($chart->fields);
+        if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
+        {
+            if(!empty($component->option->series))
+            {
 
+                $defaultSeries = $component->option->series;
+                if($component->type == 'radar')
+                {
+                    $component->option->radar->indicator = $component->option->dataset->radarIndicator;
+                    $defaultSeries[0]->data = $component->option->dataset->seriesData;
+
+                    $legends = array();
+                    foreach($component->option->dataset->seriesData as $seriesData) $legends[] = $seriesData->name;
+                    $component->option->legend->data = $legends;
+                }
+                elseif($component->type != 'waterpolo')
+                {
+                    $series = array();
+                    for($i = 1; $i < count($component->option->dataset->dimensions); $i ++) $series[] = $defaultSeries[0];
+                    $component->option->series = $series;
+                }
+            }
+        }
+
+        return $component;
+    }
+
+    /**
+     * Update component chartConfig filters.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function updateComponentFilters($component, $chart)
+    {
         // 如果传过来的component->chartConfig中有filters，判断filters是否发生了改变，改变则重置filters，其中单个filter的linkedGlobalFilter属性就不存在了
         $latestFilters = $this->getChartFilters($chart);
         if(!isset($component->chartConfig->filters))
@@ -326,30 +361,6 @@ class screenModel extends model
                     if($oldDefault !== $newDefault) $component->chartConfig->filters[$index]->default = $newDefault;
                     if($isSelect and $oldSaveAs !== $newSaveAs) $component->chartConfig->filters[$index]->saveAs  = $newSaveAs;
                     $component->chartConfig->filters[$index]->options = zget($latestFilters[$index], 'options', array());
-                }
-            }
-        }
-
-        if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
-        {
-            if(!empty($component->option->series))
-            {
-
-                $defaultSeries = $component->option->series;
-                if($component->type == 'radar')
-                {
-                    $component->option->radar->indicator = $component->option->dataset->radarIndicator;
-                    $defaultSeries[0]->data = $component->option->dataset->seriesData;
-
-                    $legends = array();
-                    foreach($component->option->dataset->seriesData as $seriesData) $legends[] = $seriesData->name;
-                    $component->option->legend->data = $legends;
-                }
-                elseif($component->type != 'waterpolo')
-                {
-                    $series = array();
-                    for($i = 1; $i < count($component->option->dataset->dimensions); $i ++) $series[] = $defaultSeries[0];
-                    $component->option->series = $series;
                 }
             }
         }
@@ -417,6 +428,7 @@ class screenModel extends model
 
         return $component;
     }
+
     /**
      * 删除component的已删除标记。
      * Unset component option isDeleted.
@@ -2382,6 +2394,14 @@ class screenModel extends model
         return array($component, false);
     }
 
+    /**
+     * Init metric component.
+     *
+     * @param  object $metric
+     * @param  object $component
+     * @access public
+     * @return array
+     */
     public function initMetricComponent($metric, $component = null)
     {
         if(!$component)                     $component = new stdclass();
@@ -2395,6 +2415,15 @@ class screenModel extends model
         return array($component, false);
     }
 
+    /**
+     * Init chart or pivot component.
+     *
+     * @param  object $metric
+     * @param  string $type
+     * @param  object $component
+     * @access public
+     * @return array
+     */
     public function initChartAndPivotComponent($chart, $type, $component = null)
     {
         if(!$component) $component = new stdclass();
@@ -2445,6 +2474,7 @@ class screenModel extends model
         }
         $component = $this->initOptionTitle($component, $type, $chartName);
         if(!isset($component->option->dataset)) $component->option->dataset = new stdclass();
+        if(!isset($component->option->fields))  $component->option->fields  = json_decode($chart->fields);
 
         $component->chartConfig->title    = $chartName;
         $component->chartConfig->sourceID = $component->sourceID;
