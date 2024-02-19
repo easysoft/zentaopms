@@ -3,7 +3,8 @@ global $app;
 $config->jenkins->form = new stdclass();
 
 $config->jenkins->form->create = array();
-$config->jenkins->form->create['type']        = array('type' => 'string',   'required' => true,  'default' => 'jenkins');
+$config->jenkins->form->create['appType']     = array('type' => 'string',   'required' => true,  'default' => 'jenkins');
+$config->jenkins->form->create['type']        = array('type' => 'string',   'required' => true,  'default' => 'external');
 $config->jenkins->form->create['name']        = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
 $config->jenkins->form->create['url']         = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
 $config->jenkins->form->create['account']     = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');

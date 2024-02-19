@@ -102,7 +102,9 @@ class pipelineModel extends model
      */
     public function create(object $server): int|false
     {
-        $type = $server->type;
+        $type = $server->appType;
+        $server->type = $type;
+        unset($server->appType);
         $server->url = rtrim($server->url, '/');
 
         if(isset($server->password)) $server->password = base64_encode($server->password);

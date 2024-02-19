@@ -167,7 +167,7 @@ if($config->inQuickon)
 formPanel
 (
     $config->inQuickon ? setClass('externalPanel hidden') : setClass('externalPanel'),
-    set::id('createAppForm'),
+    set::formID('createAppForm'),
     set::title($lang->space->install),
     set::url($this->createLink('gitlab', 'create')),
     set::actionsClass('w-2/3'),

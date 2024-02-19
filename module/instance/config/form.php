@@ -2,6 +2,7 @@
 global $app;
 $config->instance->form = new stdclass();
 $config->instance->form->create = array();
+$config->instance->form->create['appType']     = array('type' => 'string',   'required' => true,  'default' => '');
 $config->instance->form->create['name']        = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
 $config->instance->form->create['url']         = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
 $config->instance->form->create['account']     = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
