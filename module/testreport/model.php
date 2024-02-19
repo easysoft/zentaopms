@@ -230,14 +230,14 @@ class testreportModel extends model
         /* Get case result. */
         $datas = $this->dao->select("t1.caseResult AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')
-            ->on('t1.run= t2.id')
+            ->on('t1.run = t2.id')
             ->where('t2.task')->in(array_keys($tasks))
             ->andwhere('t1.date = t2.lastRunDate')
             ->andWhere('t1.`case`')->in($cases)
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->groupBy('t1.caseResult')
-            ->orderBy('value DESC, t1.id ASC')
+            ->orderBy('value DESC')
             ->fetchAll('name');
 
         if(!$datas) return array();
@@ -272,7 +272,7 @@ class testreportModel extends model
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->groupBy('t1.lastRunner')
-            ->orderBy('value DESC, t1.id ASC')
+            ->orderBy('value DESC')
             ->fetchAll('name');
 
         if(!$datas) return array();
