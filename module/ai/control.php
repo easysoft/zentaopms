@@ -66,78 +66,212 @@ class ai extends control
     /**
      * List models.
      *
-     * TODO: not fully implemented yet, currently shows the only model config.
-     *
+     * @param  string  $orderBy
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
      * @access public
      * @return void
      */
-    public function models()
+    public function models($orderBy = 'id_asc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $modelConfig = new stdclass();
-        $modelConfig->type        = '';
-        $modelConfig->key         = '';
-        $modelConfig->proxyType   = '';
-        $modelConfig->proxyAddr   = '';
-        $modelConfig->description = '';
-        $modelConfig->status      = '';
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
-        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
+        $models = $this->ai->getLanguageModels('', false, $pager, $orderBy);
 
-        $this->view->modelConfig = $modelConfig;
-        $this->view->title       = $this->lang->ai->models->title;
+        /* Process model props to displayable format. */
+        foreach($models as $model)
+        {
+            $model->usesProxy = !empty($model->proxy) ? 'on' : 'off';
+            $model->vendor    = $this->lang->ai->models->vendorList->{$model->type}[$model->vendor];
+
+            if(empty($model->name)) $model->name = $this->lang->ai->models->typeList[$model->type];
+        }
+
+        $this->view->models  = $models;
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
+        $this->view->title   = $this->lang->ai->models->title;
         $this->display();
     }
 
     /**
-     * Edit model configuration, store in system.ai settings.
+     * View language model configuration.
+     *
+     * @param  int     $modelID
+     * @access public
+     * @return void
+     */
+    public function modelView($modelID)
+    {
+        $model = $this->ai->getLanguageModel($modelID);
+        if(empty($model)) return $this->locate($this->createLink('ai', 'models'));
+
+        $this->view->model = $this->ai->unserializeModel($model);
+        $this->view->title = $this->lang->ai->models->view;
+        $this->display();
+    }
+
+    /**
+     * Create language model configuration.
      *
      * @access public
      * @return void
      */
-    public function editModel()
+    public function modelCreate()
     {
         if(strtolower($this->server->request_method) == 'post')
         {
             $modelConfig = fixer::input('post')->get();
 
-            $currentVendor = empty($modelConfig->vendor) ? key($this->lang->ai->models->vendorList->{empty($modelConfig->type) ? key($this->lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
-            $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['credentials'];
+            $result = $this->ai->createModel($modelConfig);
 
-            $errors = array();
-            if(empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
-            foreach($vendorRequiredFields as $field)
-            {
-                if(empty($modelConfig->$field)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$field);
-            }
-            if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr))
-            {
-                $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
-            }
-            if(!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode(' ', $errors)));
-
-            $this->loadModel('setting')->setItems('system.ai', $modelConfig);
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('models') . '#app=admin'));
+            if($result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('modelView', "modelID=$result") . '#app=admin'));
         }
 
-        $modelConfig = new stdclass();
-        $modelConfig->type        = '';
-        $modelConfig->key         = '';
-        $modelConfig->proxyType   = '';
-        $modelConfig->proxyAddr   = '';
-        $modelConfig->description = '';
-        $modelConfig->status      = '';
-
-        $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
-        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
-
-        $this->view->modelConfig = $modelConfig;
-        $this->view->title       = $this->lang->ai->models->title;
+        $this->view->title = $this->lang->ai->models->create;
         $this->display();
     }
 
+    /**
+     * Edit language model configuration.
+     *
+     * @param  int     $modelID
+     * @access public
+     * @return void
+     */
+    public function modelEdit($modelID)
+    {
+        if(strtolower($this->server->request_method) == 'post')
+        {
+            $modelConfig = fixer::input('post')->get();
+
+            $result = $this->ai->updateModel($modelID, $modelConfig);
+
+            if($result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('modelView', "modelID=$modelID") . '#app=admin'));
+        }
+
+        $model = $this->ai->getLanguageModel($modelID);
+        if(empty($model)) return $this->locate($this->createLink('ai', 'models'));
+
+        $this->view->model = $model;
+        $this->view->title = $this->lang->ai->models->edit;
+        $this->display();
+    }
+
+    /**
+     * Enable language model.
+     *
+     * @param  int     $modelID
+     * @access public
+     * @return void
+     */
+    public function modelEnable($modelID)
+    {
+        $result = $this->ai->toggleModel($modelID, true);
+        if($result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * Disable language model.
+     *
+     * @param  int     $modelID
+     * @access public
+     * @return void
+     */
+    public function modelDisable($modelID)
+    {
+        $result = $this->ai->toggleModel($modelID, false);
+        if($result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * Delete language model.
+     *
+     * @param  int     $modelID
+     * @access public
+     * @return void
+     */
+    public function modelDelete($modelID)
+    {
+        $result = $this->ai->deleteModel($modelID);
+        if($result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * Test connection with model configuration.
+     *
+     * @param  int     $modelID
+     * @access public
+     * @return void
+     */
+    public function modelTestConnection($modelID)
+    {
+        $result = $this->ai->testModelConnection($modelID);
+
+        if($result === false)
+        {
+            return $this->send(array('result' => 'fail', 'message' => empty($this->ai->errors) ? $this->lang->ai->models->testConnectionResult->fail : sprintf($this->lang->ai->models->testConnectionResult->failFormat, implode(', ', $this->ai->errors))));
+        }
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->models->testConnectionResult->success));
+    }
+
+
+    /**
+     * Test connection to API endpoint.
+     *
+     * @access public
+     * @return void
+     */
+    public function testConnection()
+    {
+        $modelConfig = fixer::input('post')->get();
+
+        $currentVendor = empty($modelConfig->vendor) ? key($this->lang->ai->models->vendorList->{empty($modelConfig->type) ? key($this->lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
+        $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['credentials'];
+
+        $errors = array();
+        if(empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
+        foreach($vendorRequiredFields as $field)
+        {
+            if(empty($modelConfig->$field)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$field);
+        }
+        if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr))
+        {
+            $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
+        }
+        if(!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode(' ', $errors)));
+
+        $this->ai->setModelConfig($modelConfig);
+
+        if($this->config->ai->models[$modelConfig->type] == 'ernie' || $currentVendor == 'azure' || $modelConfig->type == 'openai-gpt4')
+        {
+            $messages = array((object)array('role' => 'user', 'content' => 'test'));
+            $result = $this->ai->converse($messages, array('maxTokens' => 1));
+        }
+        else
+        {
+            $result = $this->ai->complete('test', 1); // Test completing 'test' with length of 1.
+        }
+
+        if($result === false)
+        {
+            return $this->send(array('result' => 'fail', 'message' => empty($this->ai->errors) ? $this->lang->ai->models->testConnectionResult->fail : sprintf($this->lang->ai->models->testConnectionResult->failFormat, implode(', ', $this->ai->errors))));
+        }
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->models->testConnectionResult->success));
+    }
+    
     /**
      * List mini programs.
      *
@@ -259,51 +393,6 @@ class ai extends control
 
             return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
         }
-    }
-
-    /**
-     * Test connection to API endpoint.
-     *
-     * @access public
-     * @return void
-     */
-    public function testConnection()
-    {
-        $modelConfig = fixer::input('post')->get();
-
-        $currentVendor = empty($modelConfig->vendor) ? key($this->lang->ai->models->vendorList->{empty($modelConfig->type) ? key($this->lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
-        $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['credentials'];
-
-        $errors = array();
-        if(empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
-        foreach($vendorRequiredFields as $field)
-        {
-            if(empty($modelConfig->$field)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$field);
-        }
-        if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr))
-        {
-            $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
-        }
-        if(!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode(' ', $errors)));
-
-        $this->ai->setConfig($modelConfig);
-
-        if($this->config->ai->models[$modelConfig->type] == 'ernie' || $currentVendor == 'azure' || $modelConfig->type == 'openai-gpt4')
-        {
-            $messages = array((object)array('role' => 'user', 'content' => 'test'));
-            $result = $this->ai->converse($messages, array('maxTokens' => 1));
-        }
-        else
-        {
-            $result = $this->ai->complete('test', 1); // Test completing 'test' with length of 1.
-        }
-
-        if($result === false)
-        {
-            return $this->send(array('result' => 'fail', 'message' => empty($this->ai->errors) ? $this->lang->ai->models->testConnectionResult->fail : sprintf($this->lang->ai->models->testConnectionResult->failFormat, implode(', ', $this->ai->errors))));
-        }
-
-        return $this->send(array('result' => 'success', 'message' => $this->lang->ai->models->testConnectionResult->success));
     }
 
     /**
@@ -861,7 +950,7 @@ class ai extends control
 
             if($this->ai->hasModelsAvailable())
             {
-                $response = $this->ai->converse($messages);
+                $response = $this->ai->converse($model = 0, $messages); // TODO: set model.
                 if(empty($response))
                 {
                     $this->view->error = $this->lang->ai->chatNoResponse;
