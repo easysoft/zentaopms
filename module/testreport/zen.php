@@ -297,7 +297,7 @@ class testreportZen extends testreport
             }
             $taskMembers = explode(',', $taskMembers);
             $members     = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
-            $this->view->members = array_merge($members, $taskMembers);
+            $this->view->members = implode(',', array_merge($members, $taskMembers));
         }
 
         $this->view->storySummary = $this->product->summary($reportData['stories']);
