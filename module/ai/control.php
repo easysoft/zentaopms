@@ -164,7 +164,10 @@ class ai extends control
         $model = $this->ai->getLanguageModel($modelID);
         if(empty($model)) return $this->locate($this->createLink('ai', 'models'));
 
-        $this->view->model = $model;
+        $modelData = $this->ai->unserializeModel($model);
+        if(empty($model->name)) $modelData->name = ''; // Set name to empty if it was not set.
+
+        $this->view->model = $modelData;
         $this->view->title = $this->lang->ai->models->edit;
         $this->display();
     }

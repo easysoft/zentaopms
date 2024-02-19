@@ -227,10 +227,11 @@ class aiModel extends model
         $modelConfig = $this->serializeModel($model);
         if(!$modelConfig) return false;
 
+        $modelConfig->createdDate = helper::now();
+        $modelConfig->createdBy   = $this->app->user->account;
+
         $this->dao->insert(TABLE_AI_MODEL)
             ->data($modelConfig)
-            ->set('createdDate')->eq(helper::now())
-            ->set('createdBy')->eq($this->app->user->account)
             ->exec();
 
         return dao::isError() ? false : $this->dao->lastInsertID();
@@ -249,13 +250,15 @@ class aiModel extends model
         $currentModel = $this->getLanguageModel($modelID);
         if(!$currentModel) return false;
 
+        $model->enabled = $currentModel->enabled;
         $modelConfig = $this->serializeModel($model);
         if(!$modelConfig) return false;
 
+        $modelConfig->editedDate = helper::now();
+        $modelConfig->editedBy   = $this->app->user->account;
+
         $this->dao->update(TABLE_AI_MODEL)
             ->data($modelConfig)
-            ->set('editedDate')->eq(helper::now())
-            ->set('editedBy')->eq($this->app->user->account)
             ->where('id')->eq($modelID)
             ->exec();
 
