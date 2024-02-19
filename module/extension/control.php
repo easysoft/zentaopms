@@ -136,7 +136,7 @@ class extension extends control
             if($return->result != 'ok')
             {
                 unlink($dest);
-                return $this->send(array('result' => 'fail', 'message' => str_replace(array("'", "<br />"), array("\'", ""), sprintf($this->lang->extension->errorExtracted, $fileName, $return->error))));
+                return $this->send(array('result' => 'fail', 'callback' => 'zui.Modal.alert({message: {html:"' .  sprintf($this->lang->extension->errorExtracted, $fileName, $return->error) . '"}});'));
             }
 
             $info = $this->extension->parseExtensionCFG($extension);
