@@ -68,6 +68,7 @@ function generatePrompt(fields)
     fields.forEach((value, key) =>
     {
         promptStr = promptStr.replace(new RegExp(`\\s&lt;${key}&gt;\\s`, 'g'), value);
+        promptStr = promptStr.replace(new RegExp(`\\s<${key}>\\s`, 'g'), value);
     });
     return promptStr;
 }

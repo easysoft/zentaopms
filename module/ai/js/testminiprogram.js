@@ -47,6 +47,7 @@ function updatePromptPreview()
         const fieldValue = $(`.field-content [data-id="${fieldIndex}"] .field-type`).val();
         if(!fieldValue) return;
         innerHTML = innerHTML.replace(new RegExp(`&lt;${result}&gt;`, 'g'), fieldValue);
+        innerHTML = innerHTML.replace(new RegExp(`<${result}>`, 'g'), fieldValue);
     });
 
     innerHTML = innerHTML.replace(/&nbsp;/g, ' ')
