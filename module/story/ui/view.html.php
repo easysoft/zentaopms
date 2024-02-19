@@ -433,9 +433,9 @@ detailBody
                 (
                     array_values(array_map(function($relation) use($story)
                     {
-                        $relationType  = $story->type == 'story' ? 'requirement' : 'story';
-                        $canViewStory  = common::hasPriv($relationType, 'view', null, "storyType=$relationType");
-                        $canLinkStory  = common::hasPriv($story->type, 'linkStory');
+                        $relationType = $story->type == 'story' ? 'requirement' : 'story';
+                        $canViewStory = common::hasPriv($relationType, 'view', null, "storyType=$relationType");
+                        $canLinkStory = common::hasPriv($story->type, 'linkStory');
 
                         return h::li
                         (
