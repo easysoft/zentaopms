@@ -170,7 +170,7 @@ $contentDom = div
                 (
                     set::url(createLink('doc', 'delete', "docID=$doc->id")),
                     setClass('btn ghost ajax-submit'),
-                    set('data-confirm', $lang->doc->confirmDelete),
+                    set('data-confirm', array('message' => $lang->doc->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x')),
                     icon('trash')
                 ) : null,
                 btn
