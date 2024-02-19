@@ -246,7 +246,8 @@ formBatchPanel
         )
     ),
     on::change('[data-name="module"]', 'setStories'),
-    on::change('[data-name="story"]', 'setStoryRelated'),
+    on::change('input[name^=story]', 'setStoryRelated'),
+    on::click('[data-name=story] [data-type=ditto]', 'setStoryRelated'),
     on::click('[data-name="copyStory"]', 'copyStoryTitle'),
     on::change('[data-name="region"]', 'loadLanes')
 );

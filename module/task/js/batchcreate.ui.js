@@ -67,8 +67,8 @@ function toggleZeroTaskStory()
  */
 function setStoryRelated(event)
 {
-    let $story      = $(event.target);
-    let $currentRow = $story.closest('tr');
+    let $story      = $(event.target).closest('td').find('input[name^=story]');
+    let $currentRow = $(event.target).closest('tr');
     let storyID     = $story.val();
     let link        = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID + '&pageType=batch');
     let $row        = $currentRow;
