@@ -348,8 +348,9 @@ class screenModel extends model
                 {
                     foreach($oldFilters as $index => $filter)
                     {
-                        $oldDefault = $filter->default;
-                        $newDefault = $latestFilters[$index]->default;
+                        $newFilter = $latestFilters[$index];
+                        $oldDefault = isset($filter->default) ? $filter->default : '';
+                        $newDefault = isset($newFilter->default) ? $newFilter->default : '';
                         if($oldDefault !== $newDefault) $component->chartConfig->filters[$index]->default = $newDefault;
                     }
                 }
@@ -359,7 +360,7 @@ class screenModel extends model
                     $oldSaveAs = zget($filter, 'saveAs', '');
                     $newSaveAs = zget($latestFilters[$index], 'saveAs', '');
 
-                    if($oldDefault !== $newDefault) $component->chartConfig->filters[$index]->default = $newDefault;
+                    if($oldSaveAs !== $newSaveAs) $component->chartConfig->filters[$index]->default = $newSaveAs;
                     if($isSelect and $oldSaveAs !== $newSaveAs) $component->chartConfig->filters[$index]->saveAs  = $newSaveAs;
                 }
             }
@@ -693,7 +694,7 @@ class screenModel extends model
             foreach($yStats as $index => $dataList)
             {
                 $field     = zget($fields, $metrics[$index]);
-                $fieldName = $field->name;
+                $fieldName = $field['name'];
                 if(isset($langs[$field['field']]) and !empty($langs[$field['field']][$clientLang])) $fieldName = $langs[$field['field']][$clientLang];
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
                 $dimensions[] = $field;
