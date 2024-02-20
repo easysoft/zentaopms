@@ -170,15 +170,8 @@ class story extends control
 
         if($productID == 0 && $executionID != 0) return $this->sendError($this->lang->execution->errorNoLinkedProducts, $this->createLink('execution', 'manageproducts', "executionID=$executionID"));
 
-        /* Check can subdivide or not. */
         $product = $this->product->getByID($productID);
         if($product) $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-        if($storyID)
-        {
-            $story = $this->story->getByID($storyID);
-            $this->view->storyTitle = isset($story->title) ? $story->title : '';
-            if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return $this->send(array('result' => 'fail', 'message' => $this->lang->story->errorNotSubdivide, 'load' => array('alert' => $this->lang->story->errorNotSubdivide)));
-        }
 
         /* The 'batchCreateFields' of global variable $config will be changed and used by the following business logic. */
         $customFields = $this->storyZen->getCustomFields($this->config, $storyType, $this->view->hiddenPlan, $product);
@@ -186,6 +179,16 @@ class story extends control
 
         $fields = $this->storyZen->getFormFieldsForBatchCreate($productID, $branch, $executionID, $storyType);
         $fields = $this->storyZen->removeFormFieldsForBatchCreate($fields, $this->view->hiddenPlan, isset($this->view->execution) ? $this->view->execution->type : '');
+
+        if($storyID)
+        {
+            $story = $this->story->getByID($storyID);
+            if($story) unset($customFields['parent'], $fields['parent']);
+            $this->view->storyTitle = isset($story->title) ? $story->title : '';
+
+            /* Check can subdivide or not. */
+            if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return $this->send(array('result' => 'fail', 'message' => $this->lang->story->errorNotSubdivide, 'load' => array('alert' => $this->lang->story->errorNotSubdivide)));
+        }
 
         $this->view->title        = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
         $this->view->customFields = $customFields;
