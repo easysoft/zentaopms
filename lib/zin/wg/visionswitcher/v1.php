@@ -19,9 +19,11 @@ class visionSwitcher extends wg
 
     public array $icons = array
     (
-        'lite' => 'target',
-        'rnd'  => 'remote',
-        'ipd'  => 'ipd'
+        'lite'    => 'target',
+        'rnd'     => 'remote',
+        'or'      => 'or',
+        'manager' => 'manager',
+        'ipd'     => 'ipd'
     );
 
     protected function getVisionIcon(string $vision): string
@@ -75,7 +77,7 @@ class visionSwitcher extends wg
             );
         }
 
-        return dropdown
+        return new dropdown
         (
             new btn
             (
