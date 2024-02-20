@@ -56,6 +56,11 @@ class featureBar extends wg
         foreach($rawItems as $item)
         {
             if(isset($item->hidden)) continue;
+            if(isset($item->type) && $item->type === 'divider')
+            {
+                $items[] = array('type' => 'divider');
+                continue;
+            }
 
             $link     = ($itemLink && isset($itemLink[$item->name])) ? $itemLink[$item->name] : $commonLink;
             $isActive = $item->name == $current;

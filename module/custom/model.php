@@ -363,7 +363,7 @@ class customModel extends model
                 }
 
                 /* Process menu item's order and hidden attirbute. */
-                $menuItem = static::buildMenuItem($item, $customMenuMap, $name, $label, $itemLink, $isTutorialMode, $subMenu);
+                $menuItem = static::buildMenuItem($item, $customMenuMap, is_string($name) ? $name : '', $label, $itemLink, $isTutorialMode, $subMenu);
                 $menuItem->order = (isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order ++);
                 if($app->viewType == 'mhtml' && isset($config->custom->moblieHidden[$menuModuleName]) && in_array($name, $config->custom->moblieHidden[$menuModuleName])) $menuItem->hidden = 1; // Hidden menu by config in mobile.
                 while(isset($menu[$menuItem->order])) $menuItem->order ++;
@@ -390,6 +390,13 @@ class customModel extends model
      */
     public static function buildMenuItem(array|string $item, $customMenuMap, string $name = '', string $label = '', string|array $itemLink = '', bool $isTutorialMode = false, array $subMenu = array()): object
     {
+        if($item === '-')
+        {
+            $menuItem = new stdclass();
+            $menuItem->type = 'divider';
+            return $menuItem;
+        }
+
         if(is_array($item) && (isset($item['subMenu']) || isset($item['dropMenu'])))
         {
             foreach(array('subMenu', 'dropMenu') as $key)
