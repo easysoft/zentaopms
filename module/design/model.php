@@ -242,10 +242,15 @@ class designModel extends model
         $design->project     = (int)$design->project;
         $design->product     = (int)$design->product;
 
+        $revisions = $this->dao->select('id,revision')->from(TABLE_REPOHISTORY)->where('id')->in($design->commit)->fetchPairs('id', 'revision');
 
         $design->commit = '';
         $relations = $this->loadModel('common')->getRelations('design', $designID, 'commit');
-        foreach($relations as $relation) $design->commit .= html::a(helper::createLink('design', 'revision', "revisionID={$relation->BID}&projectID={$design->project}"), "#{$relation->BID}");
+        foreach($relations as $relation)
+        {
+            $revision = zget($revisions, $relation->BID, '');
+            $design->commit .= html::a(helper::createLink('design', 'revision', "revisionID={$relation->BID}&projectID={$design->project}"), "# {$revision}", '', "title='{$revision}' class='flex clip'");
+        }
 
         return $this->loadModel('file')->replaceImgURL($design, 'desc');
     }
