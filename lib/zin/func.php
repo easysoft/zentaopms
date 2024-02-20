@@ -424,6 +424,14 @@ function checkBtnGroup(): checkBtnGroup
 }
 
 /**
+ * Check color group widget.
+ */
+function checkColorGroup(): checkColorGroup
+{
+    return createWg('checkColorGroup', func_get_args());
+}
+
+/**
  * Color picker widget which extends input.
  *
  * ?string heading

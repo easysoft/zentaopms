@@ -15,14 +15,13 @@ formPanel
 (
     formRow
     (
-        set::width('120px'),
         formGroup
         (
             set::label($lang->kanbanlane->color),
-            colorPicker
+            checkColorGroup
             (
                 set::name('color'),
-                set::items($config->kanban->laneColorList),
+                set::items(array_flip($config->kanban->laneColorList)),
                 set::value($lane->color)
             )
         )
