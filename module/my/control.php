@@ -1031,7 +1031,7 @@ class my extends control
         $this->view->depts       = $this->dept->getOptionMenu();
         $this->view->users       = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->projects    = $this->loadModel('project')->getPairsByProgram(0, 'noclosed');
-        $this->view->allProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
+        $this->view->allProducts = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs();
         $this->view->modulePairs = $this->loadModel('tree')->getModulePairs(0, 'feedback');
         $this->view->modules     = $this->tree->getOptionMenu(0, 'feedback', 0);
         $this->display();
