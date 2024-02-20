@@ -278,6 +278,7 @@ $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <st
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = '待评审';
+$lang->testcase->featureBar['browse'][]              = '-';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 
 $lang->testcase->importXmind     = "导入Xmind";

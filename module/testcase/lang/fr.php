@@ -280,6 +280,7 @@ $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, removed
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = 'En Attente';
+$lang->testcase->featureBar['browse'][]              = '-';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 
 $lang->testcase->importXmind     = "Import Xmind";
