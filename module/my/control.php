@@ -1012,14 +1012,14 @@ class my extends control
         $feedbacks = $browseType != 'bysearch' ?$this->loadModel('feedback')->getList($browseType, $orderBy, $pager) : $this->loadModel('feedback')->getBySearch($queryID, $orderBy, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'workFeedback');
 
-        $this->myZen->assignRelatedData($feedbacks);
-        $this->myZen->buildSearchFormForFeedback($queryID, $orderBy);
-        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
-
         $this->loadModel('datatable');
         $this->lang->datatable->moduleSetting  = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->moduleSetting);
         $this->lang->datatable->showModule     = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->showModule);
         $this->lang->datatable->showModuleList = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->showModuleList);
+
+        $this->myZen->assignRelatedData($feedbacks);
+        $this->myZen->buildSearchFormForFeedback($queryID, $orderBy);
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         $this->view->title       = $this->lang->my->feedback;
         $this->view->mode        = 'feedback';
