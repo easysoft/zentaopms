@@ -1107,13 +1107,17 @@ class my extends control
         /* Get users by dept. */
         $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
         $users  = $this->loadModel('company')->getUsers('inside', 'bydept', 0, $deptID, $sort, $pager);
-        foreach($users as $user) unset($user->password); // Remove passwd.
+        foreach($users as $user)
+        {
+            unset($user->password); // Remove passwd.
+            $user->last = $user->last ? date(DT_DATETIME1, $user->last) : '';
+        }
 
-        $this->view->title      = $this->lang->my->team;
-        $this->view->users      = $users;
-        $this->view->deptID     = $deptID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title   = $this->lang->my->team;
+        $this->view->users   = $users;
+        $this->view->deptID  = $deptID;
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
         $this->display();
     }
 
