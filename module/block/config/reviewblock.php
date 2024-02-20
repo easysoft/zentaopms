@@ -23,6 +23,8 @@ unset($config->block->review->dtable->fieldList['type']['sortType']);
 unset($config->block->review->dtable->fieldList['time']['sortType']);
 unset($config->block->review->dtable->fieldList['result']['sortType']);
 unset($config->block->review->dtable->fieldList['status']['sortType']);
+unset($config->block->review->dtable->fieldList['title']['data-toggle']);
+unset($config->block->review->dtable->fieldList['title']['data-size']);
 
 $config->block->review->dtable->short = new stdclass();
 $config->block->review->dtable->short->fieldList['id']     = $config->block->review->dtable->fieldList['id'];
