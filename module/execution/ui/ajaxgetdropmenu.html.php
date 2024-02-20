@@ -32,6 +32,12 @@ $getExecutionGroup = function($execution): string
  */
 $data = array('my' => array(), 'other' => array(), 'closed' => array());
 
+/**
+ * 定义执行所属分组。
+ * Define the group of execution.
+ */
+$executionGroup = array();
+
 /* 处理分组数据。Process grouped data. */
 foreach($projectExecutions as $projectID => $executions)
 {
@@ -43,7 +49,7 @@ foreach($projectExecutions as $projectID => $executions)
 
     foreach($executions as $index => $execution)
     {
-        $group = $getExecutionGroup($execution);
+        $group = $executionGroup[$execution->id] = $getExecutionGroup($execution);
 
         $item = array();
         $item['id']       = $execution->id;
@@ -67,8 +73,8 @@ foreach ($data as $key => $value) $data[$key] = array_values($value);
  * Define every group name, include expanded group.
  */
 $tabs = array();
-$tabs[] = array('name' => 'my',     'text' => $lang->execution->involved);
-$tabs[] = array('name' => 'other',  'text' => $lang->execution->other);
+$tabs[] = array('name' => 'my',     'text' => $lang->execution->involved, 'active' => $executionGroup[$executionID] === 'my');
+$tabs[] = array('name' => 'other',  'text' => $lang->execution->other, 'active' => $executionGroup[$executionID] == 'other');
 $tabs[] = array('name' => 'closed', 'text' => $lang->execution->closedExecution);
 
 /**
