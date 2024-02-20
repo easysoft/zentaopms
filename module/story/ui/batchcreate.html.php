@@ -27,7 +27,7 @@ foreach(explode(',', $this->config->story->create->requiredFields) as $requiredF
 }
 
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($app, $lang, $fields, $stories, $customFields, $showFields)
+$fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $customFields, $showFields)
 {
     global $config;
 
@@ -59,6 +59,9 @@ $fnGenerateFields = function() use ($app, $lang, $fields, $stories, $customField
         if(isset($customFields[$colName]) && strpos(",$showFields,", ",$colName,") === false) $cols[$index]['hidden'] = true;
         if($colName == 'sourceNote' && strpos(",$showFields,", ",source,") === false) $cols[$index]['hidden'] = true;
         if($colName == 'spec') unset($cols[$index]['control']);
+        if($colName == 'source')   $cols[$index]['items'] = $lang->{$type}->sourceList;
+        if($colName == 'category') $cols[$index]['items'] = $lang->{$type}->categoryList;
+        if($colName == 'pri')      $cols[$index]['items'] = $lang->{$type}->priList;
     }
 
     return $cols;

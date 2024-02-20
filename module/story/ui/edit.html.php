@@ -262,7 +262,7 @@ detailBody
             item
             (
                 set::name($lang->story->source),
-                picker(setID('source'), set::name('source'), set::items($fields['source']['options']), set::value($fields['source']['default']), on::change('window.toggleFeedback(e.target)'))
+                picker(setID('source'), set::name('source'), set::items($lang->{$story->type}->sourceList), set::value($fields['source']['default']), on::change('window.toggleFeedback(e.target)'))
             ),
             item
             (
@@ -288,7 +288,7 @@ detailBody
             item
             (
                 set::name($lang->story->pri),
-                priPicker(set::name('pri'), set::items($fields['pri']['options']), set::value($fields['pri']['default']))
+                priPicker(set::name('pri'), set::items($lang->{$story->type}->priList), set::value($fields['pri']['default']))
             ),
             item
             (

@@ -2853,8 +2853,10 @@ class storyModel extends model
             ->groupBy('source')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
-        $this->lang->story->sourceList[''] = $this->lang->report->undefined;
-        foreach($datas as $key => $data) $data->name = isset($this->lang->story->sourceList[$key]) ? $this->lang->story->sourceList[$key] : $this->lang->report->undefined;
+
+        $moduleName = $this->app->rawModule;
+        $this->lang->{$moduleName}->sourceList[''] = $this->lang->report->undefined;
+        foreach($datas as $key => $data) $data->name = isset($this->lang->{$moduleName}->sourceList[$key]) ? $this->lang->{$moduleName}->sourceList[$key] : $this->lang->report->undefined;
         return $datas;
     }
 
@@ -2925,7 +2927,9 @@ class storyModel extends model
             ->groupBy('status')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
-        foreach($datas as $status => $data) if(isset($this->lang->story->statusList[$status])) $data->name = $this->lang->story->statusList[$status];
+
+        $moduleName = $this->app->rawModule;
+        foreach($datas as $status => $data) if(isset($this->lang->{$moduleName}->statusList[$status])) $data->name = $this->lang->{$moduleName}->statusList[$status];
         return $datas;
     }
 
@@ -2961,10 +2965,12 @@ class storyModel extends model
             ->groupBy('pri')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
+
+        $moduleName = $this->app->rawModule;
         foreach($datas as $pri => $data)
         {
-            if(isset($this->lang->story->priList[$pri]) && $this->lang->story->priList[$pri] != '')
-                $data->name = $this->lang->story->priList[$pri];
+            if(isset($this->lang->{$moduleName}->priList[$pri]) && $this->lang->{$moduleName}->priList[$pri] != '')
+                $data->name = $this->lang->{$moduleName}->priList[$pri];
             else
                 $data->name = $this->lang->report->undefined;
         }
@@ -3038,7 +3044,9 @@ class storyModel extends model
             ->groupBy('closedReason')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
-        foreach($datas as $reason => $data) $data->name = $this->lang->story->reasonList[$reason] != '' ? $this->lang->story->reasonList[$reason] : $this->lang->report->undefined;
+
+        $moduleName = $this->app->rawModule;
+        foreach($datas as $reason => $data) $data->name = $this->lang->{$moduleName}->reasonList[$reason] != '' ? $this->lang->{$moduleName}->reasonList[$reason] : $this->lang->report->undefined;
         return $datas;
     }
 

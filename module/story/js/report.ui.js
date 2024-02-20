@@ -29,9 +29,5 @@ function initReport()
     {
         if($(this).prop('checked')) form.append('charts[]', $(this).val());
     })
-    postAndLoadPage($.createLink('story', 'report', params + '&chartType=' + chartType + '&projectID=' + projectID), form, '#report');
+    postAndLoadPage($.createLink(storyType, 'report', params + '&chartType=' + chartType + '&projectID=' + projectID), form, '#report');
 }
-
-
-
-
