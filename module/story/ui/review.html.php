@@ -57,7 +57,7 @@ panel
     setClass('panel-form mx-auto'),
     form($formItems),
     h::hr(setClass('mt-6 mb-6')),
-    history()
+    history(set::objectID($story->id))
 );
 
 render();
