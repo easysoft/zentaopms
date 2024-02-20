@@ -138,6 +138,7 @@ class dropdown extends wg
                         'strategy'       => $strategy,
                         'arrow'          => $arrow,
                         'flip'           => $flip,
+                        'id'             => $id,
                         'offset'         => $offset,
                         'target'         => $target,
                         'className'      => $menuClass,
