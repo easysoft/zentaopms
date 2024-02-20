@@ -56,7 +56,7 @@ $('#teamTable').on('click.team', '.btn-delete', function()
     disableMembers();
 });
 
-$('#teamTable').on('click.team', '.picker-select', function()
+$('#teamTable').on('change.team', '.picker-select', function()
 {
     disableMembers();
 });
