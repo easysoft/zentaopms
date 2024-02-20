@@ -449,14 +449,14 @@ $lang->ai->miniPrograms->backToListPage    = 'Return to list page';
 $lang->ai->miniPrograms->lastStep          = 'Previous step';
 $lang->ai->miniPrograms->backToListPageTip = 'The parameter configuration for selecting the object has been changed. Do you want to save and return?';
 $lang->ai->miniPrograms->saveAndBack       = 'Save and Go Back';
-$lang->ai->miniPrograms->publishConfirm    = array('Are you sure you want to publish?', 'It will be displayed on the front-end mini program plaza in the client.');
+$lang->ai->miniPrograms->publishConfirm    = array('Are you sure you want to publish?', 'After release, it will be displayed in the first-level navigation AI module, and the client will be updated simultaneously.');
 $lang->ai->miniPrograms->emptyPrompterTip  = 'The prompter of the mini program is empty. Please edit it before publishing.';
 $lang->ai->miniPrograms->maintenanceGroup  = 'Maintenance mini program group';
 
 $lang->ai->miniPrograms->latestPublishedDate = 'Latest Published Date';
 $lang->ai->miniPrograms->deleteTip           = 'Are you sure you want to delete this mini program?';
 $lang->ai->miniPrograms->disableTip          = 'Disabling the mini program will prevent users from accessing it. Are you sure you want to disable it?';
-$lang->ai->miniPrograms->publishTip          = 'After release, it will be displayed in the AI Mini Program Plaza, and the client will also be updated simultaneously.';
+$lang->ai->miniPrograms->publishTip          = 'After release, it will be displayed in the first-level navigation AI module, and the client will be updated simultaneously.';
 $lang->ai->miniPrograms->unpublishedTip      = 'The mini program you are using is not published.';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
