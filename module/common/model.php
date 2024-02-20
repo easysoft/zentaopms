@@ -359,19 +359,21 @@ class commonModel extends model
         global $config, $app;
         if($config->edition == 'open') return array();
 
-        $required   = $app->dbQuery("SELECT * FROM " . TABLE_WORKFLOWRULE . " WHERE `type` = 'system' and `rule` = 'notempty'")->fetch();
-        $fields     = $app->control->loadModel('flow')->getExtendFields($module, $method);
-        $fields     = (new self())->loadModel('flow')->getExtendFields($module, $method);
         $formConfig = array();
+        $common     = new self();
+        $required   = $common->dao->select('*')->from(TABLE_WORKFLOWRULE)->where('type')->eq('system')->andWhere('rule')->eq('notempty')->fetch();
+        $fields     = $common->loadModel('flow')->getExtendFields($module, $method);
+
         $type       = 'string';
         foreach($fields as $fieldObject)
         {
-            if(strpos($fieldObject->type, 'int') !== false) $type = 'int';
-            if(strpos($fieldObject->type, 'date') !== false) $type = 'date';
+            if(strpos($fieldObject->type, 'int')  !== false)            $type = 'int';
+            if(strpos($fieldObject->type, 'date') !== false)            $type = 'date';
             if(in_array($fieldObject->type, array('float', 'decimal'))) $type = 'float';
 
             $formConfig[$fieldObject->field] = array('type' => $type, 'default' => $fieldObject->default, 'control' => $fieldObject->control, 'rules' => $fieldObject->rules);
             $formConfig[$fieldObject->field]['required'] = strpos(",{$fieldObject->rules},", ",{$required->id},") !== false;
+
             if(in_array($fieldObject->control, array('multi-select', 'checkbox'))) $formConfig[$fieldObject->field]['filter'] = 'join';
         }
         return $formConfig;
