@@ -191,7 +191,7 @@ $config->product->all->dtable->fieldList['createdBy']['group']    = '1';
 $config->product->all->dtable->fieldList['createdDate']['name']     = 'createdDate';
 $config->product->all->dtable->fieldList['createdDate']['title']    = $lang->product->createdDate;
 $config->product->all->dtable->fieldList['createdDate']['width']    = 90;
-$config->product->all->dtable->fieldList['createdDate']['type']     = 'datetime';
+$config->product->all->dtable->fieldList['createdDate']['type']     = 'date';
 $config->product->all->dtable->fieldList['createdDate']['sortType'] = true;
 $config->product->all->dtable->fieldList['createdDate']['group']    = '1';
 
