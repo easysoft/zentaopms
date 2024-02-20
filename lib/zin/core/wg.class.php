@@ -298,7 +298,7 @@ class wg
         return $this->block('after');
     }
 
-    protected function build(): array|wg|directive
+    protected function build()
     {
         if($this->removed) return array();
 
