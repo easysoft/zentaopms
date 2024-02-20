@@ -180,11 +180,6 @@ if($app->rawModule == 'projectstory') $config->story->dtable->fieldList['title']
 
 $setting = $this->loadModel('datatable')->getSetting('product', 'browse', false, $storyType);
 if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
-if(isset($setting['category']))     $setting['category']['map']     = $lang->{$storyType}->categoryList;
-if(isset($setting['source']))       $setting['source']['map']       = $lang->{$storyType}->sourceList;
-if(isset($setting['pri']))          $setting['pri']['map']          = $lang->{$storyType}->priList;
-if(isset($setting['closedReason'])) $setting['closedReason']['map'] = $lang->{$storyType}->reasonList;
-if(isset($setting['status']))       $setting['status']['statusMap'] = $lang->{$storyType}->statusList;
 $cols = array_values($setting);
 
 /* DataTable data. */
@@ -195,6 +190,11 @@ $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyC
 foreach($stories as $story)
 {
     $story->rawModule    = $story->module;
+    $story->status       = zget($lang->{$storyType}->statusList, $story->status, '');
+    $story->pri          = zget($lang->{$storyType}->priList, $story->pri, '');
+    $story->source       = zget($lang->{$storyType}->sourceList, $story->source, '');
+    $story->category     = zget($lang->{$storyType}->categoryList, $story->category, '');
+    $story->closedReason = zget($lang->{$storyType}->reasonList, $story->closedReason, '');
     $options['branches'] = zget($branchOptions, $story->product, array());
     $data[] = $this->story->formatStoryForList($story, $options, $storyType);
     if(!isset($story->children)) continue;
