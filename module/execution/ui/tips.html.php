@@ -26,7 +26,7 @@ panel
         span
         (
             set::className('text-md font-bold tip-title'),
-            $lang->execution->afterInfo
+            sprintf($lang->execution->afterInfo, zget($lang->execution->typeList, $execution->type))
         )
     ),
     div
