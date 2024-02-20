@@ -935,8 +935,9 @@ $lang->ai->execute->executeErrors = array();
 $lang->ai->execute->executeErrors['-1'] = '提词不存在';
 $lang->ai->execute->executeErrors['-2'] = '对象数据获取失败';
 $lang->ai->execute->executeErrors['-3'] = '序列化对象数据失败';
-$lang->ai->execute->executeErrors['-4'] = '表单结构获取失败';
-$lang->ai->execute->executeErrors['-5'] = 'API 返回值为空或返回了错误';
+$lang->ai->execute->executeErrors['-4'] = '没有可用的语言模型';
+$lang->ai->execute->executeErrors['-5'] = '表单结构获取失败';
+$lang->ai->execute->executeErrors['-6'] = 'API 返回值为空或返回了错误';
 
 $lang->ai->audit = new stdclass();
 $lang->ai->audit->designPrompt = '提词设计';

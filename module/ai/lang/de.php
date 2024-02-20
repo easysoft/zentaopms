@@ -927,8 +927,9 @@ $lang->ai->execute->executeErrors = array();
 $lang->ai->execute->executeErrors['-1'] = 'unable to get prompt';
 $lang->ai->execute->executeErrors['-2'] = 'unable to get object data';
 $lang->ai->execute->executeErrors['-3'] = 'failed to serialize object data';
-$lang->ai->execute->executeErrors['-4'] = 'unable to get target form schema';
-$lang->ai->execute->executeErrors['-5'] = 'request failed or API returned error';
+$lang->ai->execute->executeErrors['-4'] = 'unable to find available model';
+$lang->ai->execute->executeErrors['-5'] = 'unable to get target form schema';
+$lang->ai->execute->executeErrors['-6'] = 'request failed or API returned error';
 
 $lang->ai->audit = new stdclass();
 $lang->ai->audit->designPrompt = 'Prompt Design';
