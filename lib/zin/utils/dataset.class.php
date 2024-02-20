@@ -284,6 +284,37 @@ class dataset
     }
 
     /**
+     * Get string value, if not value exists, return an empty string.
+     *
+     * @access public
+     * @param string $prop          Property name.
+     * @return string
+     */
+    public function getStr(string $prop): string
+    {
+       $val = $this->get($prop);
+       if(is_null($val)) return '';
+       return (string)$val;
+    }
+
+    /**
+     * Append string to property.
+     *
+     * @access public
+     * @param string $prop    Property name.
+     * @param string $str     String to append.
+     * @param string $joiner  Joiner string.
+     * @return dataset
+     */
+    public function appendToStr(string $prop, string $str, string $joiner = ''): dataset
+    {
+        $val = $this->getStr($prop);
+        if(strlen($val) > 0) $val .= $joiner . $str;
+        else                 $val  = $str;
+        return $this->set($prop, $val);
+    }
+
+    /**
      * Delete property by name.
      *
      * @access public
