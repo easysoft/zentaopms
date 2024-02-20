@@ -231,4 +231,59 @@ class screen extends control
 
         echo(json_encode($metricData));
     }
+
+    public function ajaxGetMetricFilterOptions()
+    {
+        $this->loadModel('metric');
+
+        $scope        = $_POST['scope'];
+        $query        = $_POST['query'];
+        $defaultValue = $_POST['defaultValue'];
+
+        $objectPairs = $this->metric->getPairsByScope($scope, true);
+
+        $options = array_map(function($objectID, $objectName)
+        {
+            return array(
+                'label' => $objectName,
+                'value' => "$objectID"
+            );
+        }, array_keys($objectPairs), array_values($objectPairs));
+
+        if(empty($query))
+        {
+            if(!empty($defaultValue))
+            {
+                $defaultValue = is_array($defaultValue) ? $defaultValue : array($defaultValue);
+                $defaultOptions = array_filter($options, function($option) use($defaultValue)
+                {
+                    return in_array($option['value'], $defaultValue);
+                });
+            }
+
+            // return limit 10 options.
+            $options = array_slice($options, 0, 10);
+
+            if(!empty($defaultOptions))
+            {
+                $uniqueOptions = array_udiff($options, $defaultOptions, function($a, $b)
+                {
+                    return $a['value'] - $b['value'];
+                });
+                $options = array_merge($defaultOptions, $options);
+            }
+
+            echo(json_encode($options));
+            return;
+        }
+
+        $options = array_filter($options, function($option) use($query)
+        {
+            return strpos($option['label'], $query) !== false;
+        });
+
+        $options = array_values($options);
+
+        echo(json_encode($options));
+    }
 }
