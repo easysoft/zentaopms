@@ -126,7 +126,7 @@ class myZen extends my
         $this->config->feedback->search['onMenuBar'] = 'no';
         $this->config->feedback->search['params']['product']['values']     = $products;
         $this->config->feedback->search['params']['module']['values']      = $this->loadModel('tree')->getOptionMenu(0, 'feedback', 0);
-        $this->config->feedback->search['params']['processedBy']['values'] = $this->feedback->getFeedbackPairs('admin');
+        $this->config->feedback->search['params']['processedBy']['values'] = $this->loadModel('feedback')->getFeedbackPairs('admin');
 
         unset($this->config->feedback->search['fields']['assignedTo']);
         unset($this->config->feedback->search['fields']['closedBy']);

@@ -1032,7 +1032,7 @@ class my extends control
         $this->view->users       = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->projects    = $this->loadModel('project')->getPairsByProgram(0, 'noclosed');
         $this->view->allProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
-        $this->view->modulePairs = $this->tree->getModulePairs(0, 'feedback');
+        $this->view->modulePairs = $this->loadModel('tree')->getModulePairs(0, 'feedback');
         $this->view->modules     = $this->tree->getOptionMenu(0, 'feedback', 0);
         $this->display();
     }
