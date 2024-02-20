@@ -24,6 +24,9 @@ $cols['title']['nestedToggle'] = false;
 $cols['title']['data-toggle']  = 'modal';
 $cols['title']['data-size']    = 'lg';
 $cols['type']['flex']          = false;
+$cols['pri']['title']          = $lang->priAB;
+$cols['type']['title']         = $lang->typeAB;
+$cols['status']['title']       = $lang->statusAB;
 $cols['status']['statusMap']['changed'] = $lang->story->changed;
 
 $cols = array_map(function($col)
