@@ -3761,6 +3761,8 @@ class storyModel extends model
      */
     public function replaceURLang(string $type): void
     {
+        if($type == 'story') return;
+
         $storyLang   = $this->lang->story;
         $SRCommon    = $this->lang->SRCommon;
         $replacement = $type == 'requirement' ? $this->lang->URCommon : $this->lang->epic->common;
