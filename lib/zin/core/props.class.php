@@ -120,7 +120,8 @@ class props extends \zin\utils\dataset
             return;
         }
 
-        $events = parent::getVal("@$name") ?? [];
+        $events = parent::getVal("@$name");
+        if(empty($events))      $events   = array();
         if(is_array($callback)) $events   = array_merge($events, $callback);
         else                    $events[] = $callback;
 
