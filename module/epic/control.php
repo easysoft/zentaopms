@@ -308,23 +308,4 @@ class epic extends control
     {
         echo $this->fetch('story', 'batchChangeModule', "moduleID=$moduleID&storyType=epic");
     }
-
-    /**
-     * 关联用户需求。
-     * Link related epics.
-     *
-     * @param  int    $storyID
-     * @param  string $browseType
-     * @param  string $excludeStories
-     * @param  int    $param
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function linkepics(int $storyID, string $browseType = '', string $excludeStories = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
-    {
-        echo $this->fetch('story', 'linkepics', "storyID=$storyID&browseType=$browseType&excludeStories=$excludeStories&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
-    }
 }

@@ -1597,13 +1597,14 @@ class storyTao extends storyModel
 
         $tutorialMode = commonModel::isTutorialMode();
 
-        if($storyType == 'requirement')
+        if($storyType != 'story')
         {
-            $this->lang->story->changeTip                = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->changeTip);
-            $this->lang->story->reviewTip['active']      = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->reviewTip['active']);
-            $this->lang->story->reviewTip['notReviewer'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->reviewTip['notReviewer']);
-            $this->lang->story->recallTip['actived']     = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->recallTip['actived']);
-            $this->lang->story->subDivideTip['notWait']  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->subDivideTip['notWait']);
+            $replacement = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->epic->common;
+            $this->lang->story->changeTip                = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->changeTip);
+            $this->lang->story->reviewTip['active']      = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->reviewTip['active']);
+            $this->lang->story->reviewTip['notReviewer'] = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->reviewTip['notReviewer']);
+            $this->lang->story->recallTip['actived']     = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->recallTip['actived']);
+            $this->lang->story->subDivideTip['notWait']  = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->subDivideTip['notWait']);
         }
 
         static $taskGroups = array();
@@ -1697,7 +1698,7 @@ class storyTao extends storyModel
         $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit') ? $editLink : null, 'disabled' => !$canEdit);
 
         /* Create test case button. */
-        if($story->type != 'requirement' && $this->config->vision != 'lite') $actions[] = array('name' => 'testcase', 'url' => common::hasPriv('testcase', 'create') && $story->parent >= 0 ? $createCaseLink : null, 'disabled' => $story->parent < 0 || !common::hasPriv('testcase', 'create'), 'data-toggle' => 'modal', 'data-size' => 'lg');
+        if($story->type == 'story' && $this->config->vision != 'lite') $actions[] = array('name' => 'testcase', 'url' => common::hasPriv('testcase', 'create') && $story->parent >= 0 ? $createCaseLink : null, 'disabled' => $story->parent < 0 || !common::hasPriv('testcase', 'create'), 'data-toggle' => 'modal', 'data-size' => 'lg');
 
         /* Batch create button. */
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');

@@ -722,9 +722,13 @@ class productModel extends model
         $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
         $searchConfig['params']['module']['values'] = $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
 
-        $replacement = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->epic->common;
-        $this->lang->story->title  = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->title);
-        $this->lang->story->create = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->create);
+        if($storyType != 'story')
+        {
+            $replacement = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->epic->common;
+            $this->lang->story->title  = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->title);
+            $this->lang->story->create = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->create);
+        }
+
         if($storyType == 'requirement')
         {
             /* Change for requirement story title. */
