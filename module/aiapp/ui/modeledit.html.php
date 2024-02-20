@@ -110,7 +110,7 @@ formPanel
         (
             set::name('description'),
             set::rows(3),
-            set::value($model->description)
+            set::value($model->desc)
         )
     )
 );
