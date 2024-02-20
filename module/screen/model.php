@@ -361,7 +361,6 @@ class screenModel extends model
 
                     if($oldDefault !== $newDefault) $component->chartConfig->filters[$index]->default = $newDefault;
                     if($isSelect and $oldSaveAs !== $newSaveAs) $component->chartConfig->filters[$index]->saveAs  = $newSaveAs;
-                    $component->chartConfig->filters[$index]->options = zget($latestFilters[$index], 'options', array());
                 }
             }
         }
@@ -1013,17 +1012,6 @@ class screenModel extends model
                     }
                 }
 
-                if($filter['type'] == 'select')
-                {
-                    $options = $this->getSysOptions($filter['typeOption']);
-                    $screenOptions = array();
-                    foreach($options as $value => $label)
-                    {
-                        $screenOptions[] = array('label' => $label, 'value' => "$value");
-                    }
-                    $filter['options'] = $screenOptions;
-                }
-
                 $screenFilters[] = (object)$filter;
                 continue;
             }
@@ -1053,19 +1041,6 @@ class screenModel extends model
                 {
                     $filter['default'] = null;
                 }
-            }
-
-            if($filter['type'] == 'select')
-            {
-                $field = zget($fields, $filter['field']);
-                $saveAs = zget($filter, 'saveAs', '');
-                $options = $this->getSysOptions($field['type'], $field['object'], $field['field'], $chart->sql, $saveAs);
-                $screenOptions = array();
-                foreach($options as $value => $label)
-                {
-                    $screenOptions[] = array('label' => $label, 'value' => "$value");
-                }
-                $filter['options'] = $screenOptions;
             }
 
             $screenFilters[] = (object)$filter;
