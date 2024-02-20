@@ -1398,7 +1398,7 @@ class storyZen extends story
         $now        = helper::now();
         $fields     = $this->config->story->form->review;
         $moduleName = $this->app->rawModule;
-        foreach(explode(',', trim($this->config->{$moduleName}->create->requiredFields, ',')) as $field)
+        foreach(explode(',', trim($this->config->{$moduleName}->review->requiredFields, ',')) as $field)
         {
             if($field == 'comment' && !$this->post->comment)
             {
