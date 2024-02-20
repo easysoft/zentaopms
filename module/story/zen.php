@@ -775,7 +775,8 @@ class storyZen extends story
         $story      = $this->view->story;
         $fields     = $this->config->story->form->review;
         $users      = $this->loadModel('user')->getPairs('nodeleted|noclosed', "$story->lastEditedBy,$story->openedBy");
-        $resultList = $this->lang->story->reviewResultList;
+        $moduleName = $this->app->rawModule;
+        $resultList = $this->lang->{$moduleName}->reviewResultList;
         if($story->status == 'reviewing')
         {
             if($story->version == 1) unset($resultList['revert']);
