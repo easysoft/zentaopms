@@ -313,7 +313,7 @@ $config->program->browse->dtable->fieldList['actions']['actionsMap'] = array
     'program_activate'  => array('icon'  => 'icon-active',       'hint' => $lang->program->activate,       'url'  => helper::createLink('program', 'activate', "programID={id}"), 'data-toggle' => 'modal'),
     'program_other'     => array('caret' => true,                'hint' => $lang->other,                   'type' => 'dropdown'),
     'program_edit'      => array('icon'  => 'icon-edit',         'hint' => $lang->program->edit,           'url'  => helper::createLink('program', 'edit', "programID={id}")),
-    'program_create'    => array('icon'  => 'icon-split',        'hint' => $lang->program->create,         'url'  => helper::createLink('program', 'create', "programID={id}")),
+    'program_create'    => array('icon'  => 'icon-split',        'hint' => $lang->program->children,       'url'  => helper::createLink('program', 'create', "programID={id}")),
     'program_delete'    => array('icon'  => 'icon-trash',        'hint' => $lang->program->delete),
     'project_start'     => array('icon'  => 'icon-start',        'hint' => $lang->project->start,          'url'  => helper::createLink('project', 'start', "projectID={id}"),    'data-toggle' => 'modal'),
     'project_suspend'   => array('icon'  => 'icon-pause',        'hint' => $lang->project->suspend,        'url'  => helper::createLink('project', 'suspend', "projectID={id}"),  'data-toggle' => 'modal'),

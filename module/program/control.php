@@ -165,8 +165,7 @@ class program extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $this->view->title      = $this->lang->program->create;
-
+        $this->view->title          = isset($parentProgram->id) ? $this->lang->program->children : $this->lang->program->create;
         $this->view->gobackLink     = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('program', 'browse') : '';
         $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->poUsers        = $this->user->getPairs('noclosed|nodeleted|pofirst');
