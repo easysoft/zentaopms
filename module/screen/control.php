@@ -202,7 +202,7 @@ class screen extends control
             if($type == 'metric')
             {
                 $metric = $this->loadModel('metric')->getByID($chartID);
-                $chartData = $this->screen->genMetricComponent($metric, $component, (array)$filterParams);
+                $chartData = $this->screen->genMetricComponent($metric, $component);
             }
             else
             {
@@ -258,7 +258,7 @@ class screen extends control
             {
                 $sourceId = $params->sourceID;
                 $field    = $params->field;
-                $saveAs   = $params->saveAs;
+                $saveAs   = isset($params->saveAs) ? $params->saveAs : '';
 
                 $table = $this->config->objectTables[$type];
                 $chart = $this->dao->select('*')->from($table)->where('id')->eq($sourceId)->fetch();
