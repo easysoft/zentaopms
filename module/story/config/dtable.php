@@ -158,7 +158,7 @@ $config->story->dtable->fieldList['bugCount']['title']       = 'B';
 $config->story->dtable->fieldList['bugCount']['sortType']    = false;
 $config->story->dtable->fieldList['bugCount']['width']       = '30';
 $config->story->dtable->fieldList['bugCount']['type']        = 'text';
-$config->story->dtable->fieldList['bugCount']['link']        = "RAWJS<function(info){ if(info.row.data.taskCount == 0) return 0; else return '" . helper::createLink('story', 'bugs', 'storyID={id}') . "'; }>RAWJS";
+$config->story->dtable->fieldList['bugCount']['link']        = "RAWJS<function(info){ if(info.row.data.bugCount == 0) return 0; else return '" . helper::createLink('story', 'bugs', 'storyID={id}') . "'; }>RAWJS";
 $config->story->dtable->fieldList['bugCount']['data-toggle'] = 'modal';
 $config->story->dtable->fieldList['bugCount']['group']       = 7;
 
@@ -167,7 +167,7 @@ $config->story->dtable->fieldList['caseCount']['title']       = 'C';
 $config->story->dtable->fieldList['caseCount']['sortType']    = false;
 $config->story->dtable->fieldList['caseCount']['width']       = '30';
 $config->story->dtable->fieldList['caseCount']['type']        = 'text';
-$config->story->dtable->fieldList['caseCount']['link']        = "RAWJS<function(info){ if(info.row.data.taskCount == 0) return 0; else return '" . helper::createLink('story', 'cases', 'storyID={id}') . "'; }>RAWJS";
+$config->story->dtable->fieldList['caseCount']['link']        = "RAWJS<function(info){ if(info.row.data.caseCount == 0) return 0; else return '" . helper::createLink('story', 'cases', 'storyID={id}') . "'; }>RAWJS";
 $config->story->dtable->fieldList['caseCount']['data-toggle'] = 'modal';
 $config->story->dtable->fieldList['caseCount']['group']       = 7;
 
