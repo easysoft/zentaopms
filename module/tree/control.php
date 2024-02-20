@@ -56,6 +56,18 @@ class tree extends control
             $this->view->projectID = $this->session->project;
         }
 
+        /* 无产品迭代也可以维护模块。 */
+        if($this->app->tab == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($this->session->execution);
+
+            $menuType = $viewType == 'case' ? 'testcase' : $viewType;
+            if(isset($this->lang->execution->menu->qa['subMenu']->{$menuType})) $this->lang->execution->menu->qa['subMenu']->{$menuType}['subModule'] = 'tree';
+            if($menuType == 'story' && isset($this->lang->execution->menu->story)) $this->lang->execution->menu->story['subModule'] = 'tree';
+
+            $this->view->executionID = $this->session->execution;
+        }
+
         if($viewType == 'feedback' or $viewType == 'ticket')
         {
             $syncConfig             = json_decode($this->config->global->syncProduct, true);
