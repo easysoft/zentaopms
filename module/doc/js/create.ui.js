@@ -29,7 +29,7 @@ window.loadExecutions = function(e)
     if($("#modalBasicInfo input[name='execution']"))
     {
         const executionID = $("#modalBasicInfo input[name='execution']").val();
-        const link        = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
+        const link        = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix");
         $.getJSON(link, function(data)
         {
             let $picker = $("#modalBasicInfo input[name='execution']").zui('picker');

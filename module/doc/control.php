@@ -147,18 +147,17 @@ class doc extends control
         if($type == 'product') $objects = $this->product->getPairs();
         if($type == 'project')
         {
-            $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
-            $objects       = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', $excludedModel);
+            $objects       = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
             if($this->app->tab == 'doc')
             {
-                $this->view->executionPairs = $this->execution->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
+                $this->view->executionPairs = $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
                 $this->view->project        = $this->project->getById($objectID);
             }
         }
 
         if($type == 'execution')
         {
-            $objects   = $this->execution->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix,withobject');
+            $objects   = $this->execution->getPairs(0, 'all', 'multiple,leaf,noprefix,withobject');
             $execution = $this->execution->getByID($objectID);
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
@@ -922,7 +921,7 @@ class doc extends control
         $json  = array();
         $items = array();
 
-        $executionPairs = $this->execution->getPairs($projectID, 'sprint,stage', 'multiple,leaf,noprefix');
+        $executionPairs = $this->execution->getPairs($projectID, 'all', 'multiple,leaf,noprefix');
         foreach($executionPairs as $id => $name) $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
 
         $json['items']   = $items;

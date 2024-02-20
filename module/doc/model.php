@@ -1389,7 +1389,6 @@ class docModel extends model
                 ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.deleted')->eq(0)
-                ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
                 ->fetchPairs();
         }
@@ -1397,7 +1396,6 @@ class docModel extends model
             ->where('type')->eq('project')
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($append)->orWhere('id')->eq($append)->fi()
             ->orderBy('order_asc')

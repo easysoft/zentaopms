@@ -420,10 +420,9 @@ class docZen extends doc
         $objects  = array();
         if($linkType == 'project')
         {
-            $excludedModel = $this->config->vision == 'lite' ? '' : 'kanban';
-            $objects       = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', $excludedModel);
+            $objects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
 
-            $this->view->executions = $this->execution->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
+            $this->view->executions = $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
             if($lib->type == 'execution')
             {
                 $execution = $this->loadModel('execution')->getByID($lib->execution);
@@ -436,7 +435,7 @@ class docZen extends doc
         elseif($linkType == 'execution')
         {
             $execution = $this->loadModel('execution')->getById($objectID);
-            $objects   = $this->execution->getPairs($execution->project, 'sprint,stage', "multiple,leaf,noprefix");
+            $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
         }
         elseif($linkType == 'product')
         {
@@ -551,7 +550,7 @@ class docZen extends doc
         $objects = array();
         if($objectType == 'project')
         {
-            $objects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', 'kanban');
+            $objects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
         }
         elseif($objectType == 'execution')
         {

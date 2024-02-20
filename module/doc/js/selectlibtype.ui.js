@@ -105,7 +105,7 @@ window.loadExecutions = function()
     {
         const projectID   = $('.modal-body input[name=project]').val();
         const executionID = $('.modal-body input[name=execution]').val();
-        const link        = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
+        const link        = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix");
         $.getJSON(link, function(data)
         {
             const $executionPicker = $('.modal-body input[name=execution]').zui('picker');
