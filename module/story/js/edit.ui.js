@@ -47,8 +47,8 @@ window.linkStories = function(e)
     });
     storyIdList = storyIdList.join(',');
 
-    var link = $.createLink('story', 'linkStories', 'storyID=' + storyID + '&browseType=&excludeStories=' + storyIdList);
-    if(storyType != 'story') link = $.createLink('story', 'linkRequirements', 'storyID=' + storyID + '&browseType=&excludeStories=' + storyIdList);
+    var link = $.createLink('story', 'linkStories', 'storyID=' + storyID + '&browseType=bySearch&excludeStories=' + storyIdList);
+    if(storyType != 'story') link = $.createLink('story', 'linkRequirements', 'storyID=' + storyID + '&browseType=bySearch&excludeStories=' + storyIdList);
 
     $('#linkStoriesLink').attr('data-url', link);
 }
