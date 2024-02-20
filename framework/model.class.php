@@ -334,7 +334,7 @@ class model extends baseModel
         $moduleName = $this->getModuleName();
         $taoClass   = $moduleName . 'Tao';
 
-        if(is_callable(array($this->{$taoClass}, $method))) return call_user_func_array(array($this->{$taoClass}, $method), $arguments);
+        if(isset($this->{$taoClass}) && is_callable(array($this->{$taoClass}, $method))) return call_user_func_array(array($this->{$taoClass}, $method), $arguments);
 
         $this->app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, true);
     }

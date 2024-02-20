@@ -647,7 +647,7 @@ class control extends baseControl
         $moduleName = $this->app->getModuleName();
         $zenClass   = $moduleName . 'Zen';
 
-        if(is_callable(array($this->{$zenClass}, $method))) return call_user_func_array(array($this->{$zenClass}, $method), $arguments);
+        if(isset($this->{$zenClass}) && is_callable(array($this->{$zenClass}, $method))) return call_user_func_array(array($this->{$zenClass}, $method), $arguments);
 
         $this->app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, true);
     }
