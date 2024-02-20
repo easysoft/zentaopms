@@ -236,7 +236,6 @@ class ai extends control
         return $this->send(array('result' => 'success', 'message' => $this->lang->ai->models->testConnectionResult->success));
     }
 
-
     /**
      * Test connection to API endpoint.
      *
@@ -340,7 +339,7 @@ class ai extends control
     /**
      * Publish a mini program.
      *
-     * @param string $appID
+     * @param  string  $appID
      * @access public
      * @return void
      */
@@ -354,7 +353,7 @@ class ai extends control
     /**
      * Unpublish a mini program.
      *
-     * @param string $appID
+     * @param  string  $appID
      * @access public
      * @return void
      */
