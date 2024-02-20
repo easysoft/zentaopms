@@ -4,7 +4,7 @@
  * @access public
  * @return bool
  */
-function ajaxGetChart(check = true, chart = DataStorage.chart, echart = window.echart)
+function ajaxGetChart(check = true, chart = DataStorage.chart, echart = window.echart, noDataDom = window.noDataDom)
 {
     var chartParams = JSON.parse(JSON.stringify(chart));
     if(typeof DataStorage != 'undefined') chartParams.fieldSettings = JSON.parse(JSON.stringify(DataStorage.fieldSettings));
@@ -38,12 +38,38 @@ function ajaxGetChart(check = true, chart = DataStorage.chart, echart = window.e
                 data.yAxis.axisLabel.formatter = labelFormatter;
             }
 
-            echart.resize();
-            echart.clear();
-            echart.setOption(data, true);
-            $('.btn-export').removeClass('hidden');
+            if(isChartHaveData(data, type))
+            {
+                echart.resize();
+                echart.clear();
+                echart.setOption(data, true);
+                $('.btn-export').removeClass('hidden');
+                noDataDom.addClass('hidden');
+            }
+            else
+            {
+                noDataDom.removeClass('hidden');
+            }
         }
     });
+}
+
+/**
+ * Determine whether the returned data is available.
+ *
+ * @access public
+ * @return bool
+ */
+function isChartHaveData(dataInfo, type)
+{
+    var data = [];
+    if(type == 'pie') data = dataInfo.series[0].data;
+    if(type == 'line') data = dataInfo.xAxis.data;
+    if(type == 'radar') data = dataInfo.radar.indicator;
+    if(type == 'cluBarY' || type == 'stackedBarY') data = dataInfo.yAxis.data;
+    if(type == 'cluBarX' || type == 'stackedBar') data = dataInfo.xAxis.data;
+
+    return data.length;
 }
 
 function resizeChart()

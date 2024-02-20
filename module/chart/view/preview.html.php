@@ -104,7 +104,8 @@
             <div class='queryBtn query-outside'><?php echo html::submitButton($lang->chart->query, "onclick='queryData(this)'", 'btn btn-primary btn-query');?></div>
             <?php endif;?>
           </div>
-          <div id="chartDraw<?php echo $chart->currentGroup . '_';?><?php echo $chart->id;?>" data-group="<?php echo $chart->currentGroup;?>" data-id="<?php echo $chart->id;?>" class='echart-content'></div>
+          <div id="chartDraw<?php echo $chart->currentGroup . '_' . $chart->id;?>" data-group="<?php echo $chart->currentGroup;?>" data-id="<?php echo $chart->id;?>" class='echart-content'></div>
+          <div id="noData<?php echo $chart->currentGroup . '_' . $chart->id;?>" class='no-data-dom'><span class='text-muted'><?php echo $this->lang->chart->noData;?></span></div>
         </div>
       </div>
       <?php endforeach;?>
