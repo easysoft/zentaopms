@@ -455,7 +455,7 @@ $lang->ai->miniPrograms->maintenanceGroup  = '维护小程序分组';
 
 $lang->ai->miniPrograms->latestPublishedDate = '最新发布时间';
 $lang->ai->miniPrograms->deleteTip           = '确定删除该小程序？';
-$lang->ai->miniPrograms->disableTip          = '禁用小程序用户将无法使用，是否确认禁用？';
+$lang->ai->miniPrograms->disableTip          = '下架小程序用户将无法使用，是否确认下架？';
 $lang->ai->miniPrograms->publishTip          = '发布后将在一级导航AI模块中显示，客户端将会同步更新。';
 $lang->ai->miniPrograms->unpublishedTip      = '您使用的小程序没有发布';
 
