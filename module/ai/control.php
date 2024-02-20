@@ -960,7 +960,7 @@ class ai extends control
 
             if($this->ai->hasModelsAvailable())
             {
-                $response = $this->ai->converse($model = 0, $messages); // TODO: set model.
+                $response = $this->ai->converse(null, $messages);
                 if(empty($response))
                 {
                     $this->view->error = $this->lang->ai->chatNoResponse;

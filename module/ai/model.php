@@ -80,15 +80,15 @@ class aiModel extends model
     }
 
     /**
-     * Setup $modelConfig with model stored in database.
+     * Setup $modelConfig with model stored in database, or default model if not specified.
      *
-     * @param  int      $modelID
+     * @param  int|mixed  $modelID or falsy values, if falsy, will use default model.
      * @access private
      * @return bool
      */
     private function useLanguageModel($modelID)
     {
-        $model = $this->getLanguageModel($modelID);
+        $model = empty($modelID) ? $this->getDefaultLanguageModel() : $this->getLanguageModel($modelID);
         if(empty($model)) return false;
 
         return $this->setModelConfig($model);
@@ -140,6 +140,20 @@ class aiModel extends model
             ->where('id')->eq($modelID)
             ->andWhere('deleted')->eq('0')
             ->fetch();
+    }
+
+    /**
+     * Get default (first enabled available) LLM config.
+     *
+     * @access private
+     * @return object|false  default LLM config, false if cannot find any.
+     */
+    private function getDefaultLanguageModel()
+    {
+        $models = $this->getLanguageModels('', true);
+        if(empty($models)) return false;
+
+        return current($models);
     }
 
     /**
@@ -328,13 +342,12 @@ class aiModel extends model
 
     /**
      * Make request to OpenAI API.
-     * TODO: change this.
      *
      * @param  string   $type     chat | completion | edit
      * @param  mixed    $data     data to send
      * @param  int      $timeout  request timeout in seconds
      * @access private
-     * @return object   response object, three properties: result, message (iffail), content(ifsuccess).
+     * @return object   response object, three properties: result, message (if fail), content (if success).
      */
     private function makeRequest($type, $data, $timeout = 10)
     {
@@ -1943,12 +1956,25 @@ class aiModel extends model
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
         if(empty($dataPrompt)) return -3;
 
+        if(!empty($prompt->model))
+        {
+            /* Check if model required by prompt is available, fallback to default (first enabled) model if not. */
+            $model = $this->getLanguageModel($prompt->model);
+            if(empty($model) || !$model->enabled)
+            {
+                $defaultModel = $this->getDefaultLanguageModel();
+                if(empty($defaultModel)) return -4;
+
+                $prompt->model = $defaultModel->id;
+            }
+        }
+
         $wholePrompt = static::assemblePrompt($prompt, $dataPrompt);
         $schema      = $this->getFunctionCallSchema($prompt->targetForm);
-        if(empty($schema)) return -4;
+        if(empty($schema)) return -5;
 
-        $response = $this->{$this->config->ai->models[$this->modelConfig->type] == 'ernie' ? 'converseTwiceForJSON' : 'converseForJSON'}($model = 0, array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema); // TODO: use model from prompt.
-        if(empty($response)) return -5;
+        $response = $this->{$this->config->ai->models[$this->modelConfig->type] == 'ernie' ? 'converseTwiceForJSON' : 'converseForJSON'}($prompt->model , array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
+        if(empty($response)) return -6;
 
         return current($response);
     }
