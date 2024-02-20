@@ -554,13 +554,6 @@ class screenModel extends model
         {
             $component->chartConfig->filters = $latestFilters;
         }
-        // else
-        // {
-        //     foreach($component->chartConfig->filters as $index => $filter)
-        //     {
-        //         $component->chartConfig->filters[$index]->options = zget($latestFilters[$index], 'options', array());
-        //     }
-        // }
 
         return $component;
     }
@@ -587,17 +580,6 @@ class screenModel extends model
             $scopeFilter->type       = 'select';
             $scopeFilter->typeOption = $scope;
             $scopeFilter->default    = null;
-
-            // $objectPairs = $this->metric->getPairsByScope($scope, true);
-            // $scopeFilter->options = array_map(function($objectID, $objectName)
-            // {
-            //     return array(
-            //         'label' => $objectName,
-            //         'value' => $objectID
-            //     );
-            // },
-            // array_keys($objectPairs),
-            // array_values($objectPairs));
 
             $filters[] = $scopeFilter;
         }
