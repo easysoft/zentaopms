@@ -32,6 +32,12 @@ $getProductGroup = function($product): string
  */
 $data = array('my' => array(), 'other' => array(), 'closed' => array());
 
+/**
+ * 定义产品所属分组。
+ * Define the group of product.
+ */
+$productGroup = array();
+
 /* 处理分组数据。Process grouped data. */
 foreach($products as $programID => $programProducts)
 {
@@ -45,7 +51,7 @@ foreach($products as $programID => $programProducts)
 
     foreach($programProducts as $index => $product)
     {
-        $group = $getProductGroup($product);
+        $group = $productGroup[$product->id] = $getProductGroup($product);
         $name  = (in_array($this->config->systemMode, array('ALM', 'PLM')) and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
 
         $item = array();
@@ -75,8 +81,8 @@ foreach($data as $key => $value) $data[$key] = array_values($value);
  * Define every group name, include expanded group.
  */
 $tabs = array();
-$tabs[] = array('name' => 'my',     'text' => $lang->product->mine);
-$tabs[] = array('name' => 'other',  'text' => $lang->product->other);
+$tabs[] = array('name' => 'my',     'text' => $lang->product->mine, 'active' => $productGroup[$productID] === 'my');
+$tabs[] = array('name' => 'other',  'text' => $lang->product->other, 'active' => $productGroup[$productID] === 'other');
 $tabs[] = array('name' => 'closed', 'text' => $lang->product->closedProduct);
 
 /**
