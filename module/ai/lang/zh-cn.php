@@ -449,14 +449,14 @@ $lang->ai->miniPrograms->backToListPage    = '返回列表页';
 $lang->ai->miniPrograms->lastStep          = '上一步';
 $lang->ai->miniPrograms->backToListPageTip = '选择对象的参数配置已变动，是否保存并返回？';
 $lang->ai->miniPrograms->saveAndBack       = '保存并返回';
-$lang->ai->miniPrograms->publishConfirm    = array('您确定要发布吗？', '发布后将在客户端前台小程序广场显示。');
+$lang->ai->miniPrograms->publishConfirm    = array('您确定要发布吗？', '发布后将在一级导航AI模块中显示，客户端将会同步更新。');
 $lang->ai->miniPrograms->emptyPrompterTip  = '小程序提词为空，请编辑后再进行发布';
 $lang->ai->miniPrograms->maintenanceGroup  = '维护小程序分组';
 
 $lang->ai->miniPrograms->latestPublishedDate = '最新发布时间';
 $lang->ai->miniPrograms->deleteTip           = '确定删除该小程序？';
 $lang->ai->miniPrograms->disableTip          = '禁用小程序用户将无法使用，是否确认禁用？';
-$lang->ai->miniPrograms->publishTip          = '发布后将在AI小程序广场显示，客户端也会同步更新。';
+$lang->ai->miniPrograms->publishTip          = '发布后将在一级导航AI模块中显示，客户端将会同步更新。';
 $lang->ai->miniPrograms->unpublishedTip      = '您使用的小程序没有发布';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
