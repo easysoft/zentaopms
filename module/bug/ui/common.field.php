@@ -30,7 +30,7 @@ $fields->field('module')
 $fields->field('openedBuild')
     ->checkbox(array('text' => $lang->bug->allBugs, 'name' => 'allBuilds', 'checked' => data('allBuilds') ? true : false))
     ->control('inputGroup')
-    ->itemBegin('openedBuild[]')->control('picker')->items(data('builds'))->value(data('bug.buildID'))->multiple()->itemEnd();
+    ->itemBegin('openedBuild[]')->control('picker')->items(data('builds'))->value(data('bug.buildID'))->multiple()->menu(array('checkbox' => true))->itemEnd();
 
 $fields->field('assignedTo')
     ->checkbox(array('text' => $lang->bug->loadAll, 'name' => 'allUsers', 'checked' => data('allUsers') ? true : false))
@@ -101,12 +101,12 @@ $fields->field('notifyEmail')
     ->control('input');
 
 $fields->field('browser')
-    ->control('picker')
+    ->control('picker', array('menu' => array('checkbox' => true)))
     ->items($lang->bug->browserList)
     ->multiple();
 
 $fields->field('os')
-    ->control('picker')
+    ->control('picker', array('menu' => array('checkbox' => true)))
     ->items($lang->bug->osList)
     ->multiple();
 

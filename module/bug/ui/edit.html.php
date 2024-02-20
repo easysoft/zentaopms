@@ -307,6 +307,7 @@ detailBody
                     picker
                     (
                         set::items($lang->bug->osList),
+                        set::menu(array('checkbox' => true)),
                         set::multiple(true),
                         set::name('os[]'),
                         set::value($bug->os)
@@ -323,8 +324,9 @@ detailBody
                     (
                         set::items($lang->bug->browserList),
                         set::name('browser'),
-                        set::value($bug->browser),
                         set::multiple(true),
+                        set::menu(array('checkbox' => true)),
+                        set::value($bug->browser)
                     )
                 )
             ),
@@ -439,6 +441,7 @@ detailBody
                             set::name('openedBuild[]'),
                             set::items($openedBuilds),
                             set::value($bug->openedBuild),
+                            set::menu(array('checkbox' => true)),
                             set::multiple(true)
                         ),
                         span
