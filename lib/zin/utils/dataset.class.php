@@ -23,7 +23,7 @@ class dataset
      * @var    array
      * @access protected
      */
-    protected array $_data = array();
+    protected array $storedData = array();
 
     /**
      * Create an instance, the initialed data can be passed.
@@ -56,7 +56,7 @@ class dataset
      */
     public function __debugInfo(): array
     {
-        return $this->_data;
+        return $this->storedData;
     }
 
     /**
@@ -69,7 +69,7 @@ class dataset
      */
     protected function setVal(string $prop, mixed $value): dataset
     {
-        $this->_data[$prop] = $value;
+        $this->storedData[$prop] = $value;
         return $this;
     }
 
@@ -82,7 +82,7 @@ class dataset
      */
     protected function getVal(string $prop): mixed
     {
-        return isset($this->_data[$prop]) ? $this->_data[$prop] : null;
+        return isset($this->storedData[$prop]) ? $this->storedData[$prop] : null;
     }
 
     /**
@@ -94,10 +94,10 @@ class dataset
      */
     public function getCount(bool $skipEmpty = false): int
     {
-        if(!$skipEmpty) return count($this->_data);
+        if(!$skipEmpty) return count($this->storedData);
 
         $count = 0;
-        foreach($this->_data as $value) if($value !== null) $count++;
+        foreach($this->storedData as $value) if($value !== null) $count++;
         return $count;
     }
 
@@ -133,7 +133,7 @@ class dataset
      */
     public function toArray(): array
     {
-        return $this->_data;
+        return $this->storedData;
     }
 
     /**
@@ -145,7 +145,7 @@ class dataset
      */
     public function toJSON(): array
     {
-        return $this->_data;
+        return $this->storedData;
     }
 
     /**
@@ -179,7 +179,7 @@ class dataset
      */
     public function get(string|array $prop = null, mixed $defaultValue = null): mixed
     {
-        if(is_null($prop)) return $this->_data;
+        if(is_null($prop)) return $this->storedData;
 
         if(is_array($prop))
         {
@@ -334,7 +334,7 @@ class dataset
      */
     public function clear(): dataset
     {
-        $this->_data = array();
+        $this->storedData = array();
         return $this;
     }
 
@@ -351,6 +351,18 @@ class dataset
     }
 
     /**
+     * Check whether has specified property.
+     *
+     * @access public
+     * @param string $prop  Property name.
+     * @return bool
+     */
+    public function isset(string $prop): bool
+    {
+        return isset($this->storedData[$prop]);
+    }
+
+    /**
      * Clone a new instance.
      *
      * @access public
@@ -359,7 +371,7 @@ class dataset
     public function copy(): object
     {
         $className = get_called_class();
-        return new $className($this->_data);
+        return new $className($this->storedData);
     }
 
     /**
