@@ -23,4 +23,5 @@ $lang->jenkins->tips       = '使用密码时，请在Jenkins全局安全设置�
 $lang->jenkins->serverList = '服务器列表';
 
 $lang->jenkins->error = new stdclass();
-$lang->jenkins->error->linkedJob = '删除失败，该Jenkins跟构建有关联，请取消关联或删除构建。';
+$lang->jenkins->error->linkedJob    = '删除失败，该Jenkins跟构建有关联，请取消关联或删除构建。';
+$lang->jenkins->error->unauthorized = 'Jenkins权限验证失败，请检查账号信息是否正确';

@@ -19,7 +19,7 @@ class jenkinsZen extends jenkins
      * @access public
      * @return array
      */
-    function buildTree(array $tasks): array
+    protected function buildTree(array $tasks): array
     {
         $result = array();
         foreach($tasks as $groupName => $task)
@@ -42,5 +42,23 @@ class jenkinsZen extends jenkins
         }
         return $result;
     }
-}
 
+    /**
+     * 检查Jenkins账号信息是否正确。
+     * Check jenkins account and password.
+     *
+     * @param  string $url
+     * @param  string $account
+     * @param  string $password
+     * @param  string $token
+     * @access protected
+     * @return bool
+     */
+    protected function checkTokenAccess(string $url, string $account, string $password, string $token): bool
+    {
+        $password = $token ? $token : $password;
+        $response = json_decode(common::http("{$url}/api/json", '', array(CURLOPT_USERPWD => "{$account}:{$password}")));
+        if(empty($response) || empty($response->_class)) dao::$errors['account'] = $this->lang->jenkins->error->unauthorized;
+        return dao::isError();
+    }
+}

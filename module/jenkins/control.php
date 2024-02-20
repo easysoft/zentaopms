@@ -38,12 +38,14 @@ class jenkins extends control
     {
         if($_POST)
         {
-            $jenkins   = form::data($this->config->jenkins->form->create)->get();
+            $jenkins = form::data($this->config->jenkins->form->create)->get();
+            $this->jenkinsZen->checkTokenAccess($jenkins->url, $jenkins->account, $jenkins->password, $jenkins->token);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $jenkinsID = $this->loadModel('pipeline')->create($jenkins);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('jenkins', $jenkinsID, 'created');
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jenkinsID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
     }
@@ -62,6 +64,9 @@ class jenkins extends control
         if($_POST)
         {
             $jenkins = form::data($this->config->jenkins->form->edit)->get();
+            $this->jenkinsZen->checkTokenAccess($jenkins->url, $jenkins->account, $jenkins->password, $jenkins->token);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->pipeline->update($jenkinsID, $jenkins);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

@@ -23,4 +23,5 @@ $lang->jenkins->tips       = 'Cancel "Prevent Cross Site Request Forgery exploit
 $lang->jenkins->serverList = 'Server List';
 
 $lang->jenkins->error = new stdclass();
-$lang->jenkins->error->linkedJob = 'Failed. This jenkins has associated with the compile.';
+$lang->jenkins->error->linkedJob    = 'Failed. This jenkins has associated with the compile.';
+$lang->jenkins->error->unauthorized = 'Permission verification failed, please check account information';
