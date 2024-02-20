@@ -390,7 +390,7 @@ class customModel extends model
      */
     public static function buildMenuItem(array|string $item, $customMenuMap, string $name = '', string $label = '', string|array $itemLink = '', bool $isTutorialMode = false, array $subMenu = array()): object
     {
-        if($item === '-')
+        if($item === '|')
         {
             $menuItem = new stdclass();
             $menuItem->type = 'divider';
