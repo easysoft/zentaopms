@@ -59,7 +59,7 @@ if(is_array($formSession))
 }
 
 /* Build saved query list. */
-$canSaveQuery = !empty($_SESSION[$module . 'Query']);
+$canSaveQuery = !empty($_SESSION[$module . 'Query']) && common::hasPriv('search', 'saveQuery');
 $canDeleteQuery = hasPriv('search', 'deleteQuery');
 $deleteQueryConfirm = $canDeleteQuery ? $lang->search->confirmDelete : null;
 $savedQueryList = array();
@@ -83,7 +83,7 @@ $setting->andText             = $lang->search->andor['and'];
 $setting->orText              = $lang->search->andor['or'];
 $setting->searchBtnText       = $lang->search->common;
 $setting->resetBtnText        = $lang->search->reset;
-$setting->canSaveQuery        = $canSaveQuery;
+$setting->canSaveQuery        = $canSaveQuery ? $this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar") : false;
 $setting->canDeleteQuery      = $canDeleteQuery;
 $setting->savedQueryList      = $savedQueryList;
 $setting->deleteQueryConfirm  = $deleteQueryConfirm;

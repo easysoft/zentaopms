@@ -123,6 +123,8 @@ class search extends control
                 echo 'success';
                 return;
             }
+
+            if(!empty($_POST['onMenuBar'])) return $this->send(array('closeModal' => true, 'load' => true));
             return $this->send(array('closeModal' => true, 'callback' => array('name' => 'zui.SearchForm.addQuery', 'params' => array(array('module' => $module, 'id' => $queryID, 'text' => $this->post->title)))));
         }
 
