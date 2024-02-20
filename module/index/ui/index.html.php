@@ -90,6 +90,7 @@ div(setID('apps'));
 div
 (
     setID('appsBar'),
+    div(setID('visionSwitcher'), visionSwitcher()),
     ul
     (
         setID('appTabs'),

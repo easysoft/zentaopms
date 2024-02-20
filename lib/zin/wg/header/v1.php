@@ -42,8 +42,7 @@ class header extends wg
             (
                 setClass('gap-5'),
                 static::quickAddMenu(),
-                static::userBar(),
-                static::visionSwitcher()
+                static::userBar()
             );
         }
         $pageToolbar = data('pageToolbar');
@@ -77,59 +76,6 @@ class header extends wg
                 $this->buildNavbar(),
                 $this->buildToolbar()
             )
-        );
-    }
-
-    static function visionSwitcher()
-    {
-        global $lang, $app, $config;
-
-        if(!isset($app->user)) return;
-
-        if(!isset($app->user->visions)) $app->user->visions = trim($config->visions, ',');
-        $currentVision = $app->config->vision;
-        $userVisions   = array_filter(explode(',', $app->user->visions));
-        $configVisions = array_filter(explode(',', trim($config->visions, ',')));
-
-        /* The standalone lite version removes the lite interface button */
-        if(trim($config->visions, ',') == 'lite') return true;
-
-        if(count($userVisions) < 2 || count($configVisions) < 2)
-        {
-            return btn
-            (
-                setClass('secondary ring-0 rounded'),
-                $lang->visionList[$currentVision]
-            );
-        }
-
-        $items = array();
-        foreach($userVisions as $vision)
-        {
-            $items[] = array
-            (
-                'active' => $currentVision == $vision,
-                'url' => "javascript:selectVision(\"$vision\")",
-                'data-type' => 'ajax',
-                'text' => isset($lang->visionList[$vision]) ? $lang->visionList[$vision] : $vision,
-            );
-        }
-
-        return dropdown
-        (
-            btn
-            (
-                setClass('primary-pale text-primary-600'),
-                set::text($lang->visionList[$currentVision]),
-                set::caret(false)
-            ),
-
-            set::id('versionMenu'),
-            set::trigger('hover'),
-            set::placement('bottom'),
-            set::menu(array('style' => array('color' => 'var(--color-fore)'))),
-            set::arrow(true),
-            set::items($items)
         );
     }
 

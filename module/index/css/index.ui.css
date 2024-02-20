@@ -27,18 +27,23 @@
 .hide-menu #menu .nav > li > a > .text {display: none;}
 .hide-menu #menu .menu-toggle > .icon {transform: rotate(180deg);}
 
-#apps {position: fixed; left: var(--zt-menu-width, 96px); top: 0; bottom: var(--zt-apps-bar-height, 40px); right: 0; background-color: var(--zt-page-bg); transition: left .2s;}
+#apps {position: fixed; left: var(--zt-menu-width, 96px); top: 0; bottom: 40px; right: 0; background-color: var(--zt-page-bg); transition: left .2s;}
 .hide-menu #apps {left: var(--zt-menu-fold-width, 40px)!important;}
 
-#appsBar {position: fixed; left: var(--zt-menu-width, 96px); bottom: 0; right: 0; height: var(--zt-apps-bar-height, 40px); background: var(--zt-apps-bar-bg, var(--color-canvas)); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s; border-top-width: 1px;}
+#appsBar {display: flex; flex-wrap: nowrap; align-items: center; position: fixed; left: var(--zt-menu-width, 96px); bottom: 0; right: 0; height: 40px; padding: 0 4px; background: var(--zt-apps-bar-bg, var(--color-canvas)); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s; border-top-width: 1px;}
 .hide-menu #appsBar {left: var(--zt-menu-fold-width, 40px)!important;}
-#appTabs {position: absolute; left: 4px; right: 360px; top: 0; bottom: 0; user-select: none; --nav-active-color: currentColor}
+#appTabs {flex: auto; user-select: none; --nav-active-color: currentColor}
 #appTabs > li > a {border-radius: var(--radius-md); opacity: .6;}
 #appTabs > li + li::before {display: block; content: ' '; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--color-inverse); opacity: .12;}
 #appTabs > li > a.active {opacity: 1;}
-#appsToolbar {position: absolute; right: 4px; width: 360px; top: 0; bottom: 0; display: flex; justify-content: flex-end;}
+#appsToolbar {width: 360px; display: flex; justify-content: flex-end;}
 #appsToolbar > .btn {color: inherit}
 #appsToolbar > .btn-zentao > .icon {color: var(--color-primary-400)}
+
+#visionSwitcher {flex: none; position: relative; margin-right: 12px; margin-left: 4px;}
+#visionSwitcher::before, #visionSwitcher::after {content: ''; display: block; position: absolute; right: -9px; top: -4px; width: 0; height: 0; border-style: solid; border-width: 20px 0 20px 10px; border-color: transparent transparent transparent var(--color-canvas);}
+#visionSwitcher::before {right: -10px; border-left-color: var(--color-fore); opacity: .1;}
+#versionSwitchBtn {padding: 0 6px;}
 
 .app-container {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; transition-duration: .3s; background: var(--zt-page-bg) linear-gradient(180deg, var(--zt-header-bg) 0, var(--zt-header-bg) 48px, rgba(255,0,0,0) 48px) no-repeat;}
 .app-container.loading:before {background-color: rgba(0,0,0,.1);}
@@ -50,7 +55,7 @@
 .browser-message-content {color: rgba(30,168,254)}
 .browser-message-content > a {color: rgba(49,60,82)}
 
-.hl-tutorial { position: relative!important; z-index: 1010!important; -webkit-box-shadow: 0 0 0 0 #000!important; box-shadow: 0 0 0 0 #000!important; -webkit-transition: -webkit-box-shadow 1s!important; -o-transition: box-shadow 1s!important; transition: -webkit-box-shadow 1s!important; transition: box-shadow 1s!important; transition: box-shadow 1s,-webkit-box-shadow 1s!important }
+.hl-tutorial {position: relative!important; z-index: 1010!important; -webkit-box-shadow: 0 0 0 0 #000!important; box-shadow: 0 0 0 0 #000!important; -webkit-transition: -webkit-box-shadow 1s!important; -o-transition: box-shadow 1s!important; transition: -webkit-box-shadow 1s!important; transition: box-shadow 1s!important; transition: box-shadow 1s,-webkit-box-shadow 1s!important }
 .hl-tutorial.hl-in { -webkit-box-shadow: 0 0 20px 0 #ffff8d,0 0 0 2px #ffd180,0 0 0 3000px rgba(0,0,0,.2)!important; box-shadow: 0 0 20px 0 #ffff8d,0 0 0 2px #ffd180,0 0 0 3000px rgba(0,0,0,.2)!important }
 .btn.tooltip-tutorial,.hl-tutorial.hl-in:hover { position: relative!important; z-index: 1010!important; -webkit-box-shadow: 0 0 30px 0 #ffff8d,0 0 0 5px #ffd180,0 0 0 3000px rgba(0,0,0,.3)!important; box-shadow: 0 0 30px 0 #ffff8d,0 0 0 5px #ffd180,0 0 0 3000px rgba(0,0,0,.3)!important
 }
