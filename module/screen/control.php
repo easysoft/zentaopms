@@ -232,15 +232,42 @@ class screen extends control
         echo(json_encode($metricData));
     }
 
-    public function ajaxGetMetricFilterOptions()
+    public function ajaxGetFilterOptions()
     {
         $this->loadModel('metric');
 
-        $scope        = $_POST['scope'];
+        $type         = $_POST['type'];
+        $params       = json_decode($_POST['params']);
         $query        = $_POST['query'];
         $defaultValue = $_POST['defaultValue'];
 
-        $objectPairs = $this->metric->getPairsByScope($scope, true);
+        $type = $this->screen->getChartType($type);
+
+        if($type == 'metric')
+        {
+            $scope = $params->typeOption;
+            $objectPairs = $this->metric->getPairsByScope($scope, true);
+        }
+        else
+        {
+            if(isset($params->typeOption))
+            {
+                $objectPairs = $this->screen->getSysOptions($params->typeOption);
+            }
+            else
+            {
+                $sourceId = $params->sourceID;
+                $field    = $params->field;
+                $saveAs   = $params->saveAs;
+
+                $table = $this->config->objectTables[$type];
+                $chart = $this->dao->select('*')->from($table)->where('id')->eq($sourceId)->fetch();
+                $fields = json_decode($chart->fields, true);
+
+                $fieldObj = zget($fields, $field);
+                $objectPairs = $this->screen->getSysOptions($fieldObj['type'], $fieldObj['object'], $fieldObj['field'], $chart->sql, $saveAs);
+            }
+        }
 
         $options = array_map(function($objectID, $objectName)
         {
