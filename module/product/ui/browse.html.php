@@ -190,11 +190,6 @@ $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyC
 foreach($stories as $story)
 {
     $story->rawModule    = $story->module;
-    $story->status       = zget($lang->{$storyType}->statusList, $story->status, '');
-    $story->pri          = zget($lang->{$storyType}->priList, $story->pri, '');
-    $story->source       = zget($lang->{$storyType}->sourceList, $story->source, '');
-    $story->category     = zget($lang->{$storyType}->categoryList, $story->category, '');
-    $story->closedReason = zget($lang->{$storyType}->reasonList, $story->closedReason, '');
     $options['branches'] = zget($branchOptions, $story->product, array());
     $data[] = $this->story->formatStoryForList($story, $options, $storyType);
     if(!isset($story->children)) continue;
@@ -205,6 +200,8 @@ foreach($stories as $story)
         $child->rawModule = $child->module;
         $data[] = $this->story->formatStoryForList($child, $options, $storyType);
     }
+
+    $story->status = zget($lang->{$storyType}->statusList, $story->status, '');
 }
 
 /* Generate toolbar of DataTable footer. */

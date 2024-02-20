@@ -4416,9 +4416,10 @@ class storyModel extends model
         $story->branch    = zget(zget($options, 'branches',   array()), $story->branch, '');
         $story->plan      = isset($story->planTitle) ? $story->planTitle : zget(zget($options, 'plans', array()), $story->plan, '');
 
-        $story->source       = zget($this->lang->story->sourceList,   $story->source, '');
-        $story->category     = zget($this->lang->story->categoryList, $story->category);
-        $story->closedReason = zget($this->lang->story->reasonList,   $story->closedReason);
+        $story->pri          = zget($this->lang->{$storyType}->priList,      $story->pri, '');
+        $story->source       = zget($this->lang->{$storyType}->sourceList,   $story->source, '');
+        $story->category     = zget($this->lang->{$storyType}->categoryList, $story->category);
+        $story->closedReason = zget($this->lang->{$storyType}->reasonList,   $story->closedReason);
 
         /* Set rowKey to uniqueID in dTable. */
         $story->uniqueID = $story->parent > 0 ? $story->parent . '-' . $story->id : $story->id;
