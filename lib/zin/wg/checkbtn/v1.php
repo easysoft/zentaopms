@@ -38,7 +38,7 @@ class checkBtn extends checkbox
             (
                 set('for', $id),
                 setClass($labelClass, 'btn'),
-                setStyle($labelStyle),
+                setStyle($labelStyle ? $labelStyle : array()),
                 html($text),
                 html('<svg class="opacity-0 absolute top-0 right-0 transition-all" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" xmlns:v="https://vecta.io/nano"><path d="M0 0h16a2 2 0 0 1 2 2v16L9.818 9.818 0 0z" fill="currentColor"/><path d="M11.307 7.2L9 4.96l.631-.613 1.676 1.628L14.369 3l.631.613L11.307 7.2h0z" fill="#fff" stroke="#fff" stroke-width=".16"/></svg>'),
             ),
