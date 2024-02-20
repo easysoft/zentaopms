@@ -8,8 +8,9 @@ $(function()
         var chartPros = charts.map(function(chart)
         {
             var echartDom = $('#chartDraw' + chart.currentGroup + '_' + chart.id).get(0);
-            var echart = echarts.init(echartDom);
-            ajaxGetChart(false, chart, echart);
+            var noDataDom = $('#noData' + chart.currentGroup + '_' + chart.id);
+            var echart    = echarts.init(echartDom);
+            ajaxGetChart(false, chart, echart, noDataDom);
             return renderFilters(chart);
         });
 

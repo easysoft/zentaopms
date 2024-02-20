@@ -43,6 +43,14 @@
 #mainContent .chart-item.main-row .ant-table-bordered .ant-table-body>table tr:last-child td {border-bottom: 0;}
 
 .echart-content {width: 100%; min-height: 500px;}
+.no-data-dom {
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
 
 .filterBox{display: flex; margin-bottom: 20px;}
 .filter-items{display: flex; flex: 1; flex-wrap: wrap;}
