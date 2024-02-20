@@ -2012,7 +2012,6 @@ class screenModel extends model
         $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType, $filters) : array($groupHeader);
         $tableOption->data    = $this->filterMetricData($groupData, $dateType, $isObjectMetric, $filters);
 
-        if($metric->scope != 'system') $tableOption->objectPairs = $this->loadModel('metric')->getPairsByScope($metric->scope);
         $tableOption->scope       = $metric->scope;
         $tableOption->noDataTip   = $this->metric->getNoDataTip($metric->code);
 
@@ -2109,15 +2108,6 @@ class screenModel extends model
         }
         $option->data        = $resultData;
         $option->filterValue = (is_array($option->data) && !empty($option->data)) ? current($option->data) : array();
-
-        if($metric->scope != 'system')
-        {
-            $objectPairs = $this->metric->getPairsByScope($metric->scope);
-            foreach($objectPairs as $value => $label)
-            {
-                $option->objectPairs[] = array('label' => $label, 'value' => "$value");
-            }
-        }
 
         return $option;
     }

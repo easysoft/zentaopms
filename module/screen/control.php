@@ -281,10 +281,10 @@ class screen extends control
         {
             if(!empty($defaultValue))
             {
-                $defaultValue = is_array($defaultValue) ? $defaultValue : array($defaultValue);
+                $defaultValue = is_array($defaultValue) ? $defaultValue : explode(',', $defaultValue);
                 $defaultOptions = array_filter($options, function($option) use($defaultValue)
                 {
-                    return in_array($option['value'], $defaultValue);
+                    return in_array(strtolower($option['value']), strtolower($defaultValue));
                 });
             }
 
@@ -293,11 +293,20 @@ class screen extends control
 
             if(!empty($defaultOptions))
             {
-                $uniqueOptions = array_udiff($options, $defaultOptions, function($a, $b)
+                $uniqueOptions = array();
+                foreach($options as $option)
                 {
-                    return $a['value'] - $b['value'];
-                });
-                $options = array_merge($defaultOptions, $options);
+                    $findInDefault = array_filter($defaultOptions, function($defaultOption) use($option)
+                    {
+                        return $defaultOption['value'] == $option['value'];
+                    });
+
+                    if(empty($findInDefault))
+                    {
+                        $uniqueOptions[] = $option;
+                    }
+                }
+                $options = array_merge($defaultOptions, $uniqueOptions);
             }
 
             echo(json_encode($options));
