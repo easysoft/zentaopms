@@ -20,7 +20,7 @@ $isNotOpen = $config->edition != 'open';
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('ai', 'importMiniProgram')): ?>
-      <a class="btn btn-link" data-toggle="tooltip" data-placement="top" title="<?= $lang->ai->toZentaoStoreAIPage; ?>" href="https://www.zentao.net/extension-browse-1625.html">
+      <a class="btn btn-link" data-toggle="tooltip" data-placement="top" title="<?= $lang->ai->toZentaoStoreAIPage; ?>" href="https://www.zentao.net/extension-browse-1625.html" target="_blank">
         <i class="icon icon-help"></i>
         <?= $lang->help; ?>
       </a>
