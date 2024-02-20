@@ -937,22 +937,6 @@ class releaseModel extends model
     }
 
     /**
-     * 通过产品ID列表获取产品下发布。
-     * Get releases of the product through the product ID list.
-     *
-     * @param  array  $productIdList
-     * @access public
-     * @return array
-     */
-    public function getPairsByProduct(array $productIdList): array
-    {
-        return $this->dao->select('id,name')->from(TABLE_RELEASE)
-            ->where('product')->in($productIdList)
-            ->andWhere('deleted')->eq('0')
-            ->fetchPairs();
-    }
-
-    /**
      * 通过产品ID列表获取产品下近期的发布列表。
      * statisticRecentReleases
      *
