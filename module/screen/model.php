@@ -524,6 +524,7 @@ class screenModel extends model
         $type = ucfirst($filterType);
 
         $component = new stdclass();
+        $component->option      = new stdclass();
         $component->chartConfig = new stdclass();
         $component->chartConfig->id           = $type;
         $component->chartConfig->key          = "{$type}Filter";
@@ -536,24 +537,30 @@ class screenModel extends model
         if(in_array($filterType, $this->config->metric->scopeList))
         {
             $objectPairs = $this->metric->getPairsByScope($filterType, true);
-            $component->chartConfig->objectList = array_map(function($objectID, $objectTitle)
+            $objectList = array_map(function($objectID, $objectTitle)
             {
                 $object = new stdclass();
                 $object->label = $objectTitle;
                 $object->value = $objectID;
                 return $object;
             }, array_keys($objectPairs), array_values($objectPairs));
+
+            $component->chartConfig->objectList = $objectList;
+            $component->option->objectList      = $objectList;
         }
 
         $firstAction = $this->dao->select('YEAR(date) as year')->from(TABLE_ACTION)->orderBy('id_asc')->limit(1)->fetch();
         $yearRange = range((int)date('Y'), $firstAction->year);
-        $component->chartConfig->yearList = array_map(function($year)
+        $yearList = array_map(function($year)
         {
             $yearObject = new stdclass();
             $yearObject->label = $year;
             $yearObject->value = $year;
             return $yearObject;
         }, $yearRange);
+
+        $component->chartConfig->yearList = $yearList;
+        $component->option->yearList      = $yearList;
 
         return $component;
     }
