@@ -339,7 +339,7 @@ class dataset
     }
 
     /**
-     * Check whether has specified property.
+     * Check whether the specified property is not null.
      *
      * @access public
      * @param string $prop  Property name.

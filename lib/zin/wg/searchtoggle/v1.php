@@ -38,7 +38,7 @@ class searchToggle extends wg
             set::active($open),
             set::text($lang->searchAB),
             toggle::searchform(array('module' => $module, 'target' => $target, 'url' => $url, 'searchUrl' => $searchUrl)),
-            $open ? h::jsCall('~zui.toggleSearchForm', array('module' => $module, 'target' => $target, 'show' => true, 'url' => $url, 'searchUrl' => $searchUrl)) : null
+            $open ? on::inited()->call('zui.toggleSearchForm', array('module' => $module, 'target' => $target, 'show' => $open, 'url' => $url, 'searchUrl' => $searchUrl)) : null
         );
     }
 }
