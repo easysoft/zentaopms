@@ -283,6 +283,8 @@ $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
 
+$lang->switchVision = 'Giao diện chuyển đổi';
+
 $lang->exportTypeList['all']      = 'Tất cả dữ liệu';
 $lang->exportTypeList['selected'] = 'Dữ liệu đã chọn';
 

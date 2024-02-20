@@ -1898,3 +1898,11 @@ function modulePicker(): modulePicker
 {
     return createWg('modulePicker', func_get_args());
 }
+
+/**
+ * visionSwitcher widget.
+ */
+function visionSwitcher(): visionSwitcher
+{
+    return createWg('visionSwitcher', func_get_args());
+}

@@ -458,6 +458,8 @@ $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
 
+$lang->switchVision = 'Schnittstelle wechseln';
+
 $lang->exportTypeList['all']      = 'Alle';
 $lang->exportTypeList['selected'] = 'Ausgewählte';
 

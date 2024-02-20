@@ -458,6 +458,8 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
 
+$lang->switchVision = '切换工作界面';
+
 $lang->visionList = array();
 $lang->visionList['rnd']  = '研发综合界面';
 $lang->visionList['lite'] = '运营管理界面';

@@ -339,6 +339,18 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = '全部記錄';
 $lang->exportTypeList['selected'] = '選中記錄';
 
+$lang->switchVision = '切換工作介面';
+
+$lang->visionList = array();
+$lang->visionList['rnd']  = '研發綜合介面';
+$lang->visionList['lite'] = '營運管理介面';
+
+if($config->edition == 'ipd')
+{
+    $lang->visionList['or']   = '需求與市場管理介面';
+    $lang->visionList['rnd']  = 'IPD研發管理介面';
+}
+
 $lang->createObjects['todo']        = '待辦';
 $lang->createObjects['effort']      = '日誌';
 $lang->createObjects['bug']         = 'Bug';
