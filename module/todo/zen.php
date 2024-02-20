@@ -178,6 +178,9 @@ class todoZen extends todo
             if(isset($object->title)) $todo->name = $object->title;
         }
 
+        $isModuleType = isset($todo->type) && in_array($todo->type, $this->config->todo->moduleList);
+        if($isModuleType && empty($todo->objectID)) dao::$errors[$todo->type] = sprintf($this->lang->error->notempty, $this->lang->todo->name);
+
         if($todo->end < $todo->begin)
         {
             dao::$errors['end'] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
