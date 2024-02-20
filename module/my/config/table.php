@@ -875,7 +875,7 @@ $config->my->testcase->dtable->fieldList['actions']['menu'] = array('runCase', '
 
 $config->my->audit = new stdclass();
 $config->my->audit->actionList = array();
-$config->my->audit->actionList['review']['icon']        = 'search';
+$config->my->audit->actionList['review']['icon']        = 'glasses';
 $config->my->audit->actionList['review']['text']        = $lang->review->common;
 $config->my->audit->actionList['review']['hint']        = $lang->review->common;
 $config->my->audit->actionList['review']['url']         = array('module' => 'story', 'method' => 'review', 'params' => 'storyID={id}');
