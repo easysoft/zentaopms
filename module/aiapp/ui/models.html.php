@@ -16,13 +16,41 @@ toolbar(
     )
 );
 
-$models = initTableData($models, $config->ai->dtable->models, $this->ai);
+if(empty($models))
+{
+    panel
+    (
+        center
+        (
+            set::style(array('height' => 'calc(100vh - 145px)')), // 145px is sum of header and footer height.
+            div
+            (
+                span
+                (
+                    set::class('p-8 text-gray'),
+                    $lang->ai->models->noModels
+                ),
+                btn
+                (
+                    set::text($lang->ai->models->create),
+                    set::icon('plus'),
+                    set::class('btn secondary'),
+                    set::url(createLink('ai', 'modelcreate'))
+                )
+            )
+        )
+    );
+}
+else
+{
+    $models = initTableData($models, $config->ai->dtable->models, $this->ai);
 
-dtable
-(
-    set::cols($config->ai->dtable->models),
-    set::data($models),
-    set::orderBy($orderBy),
-    set::sortLink(inlink('models', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
-    set::footPager(usePager()),
-);
+    dtable
+    (
+        set::cols($config->ai->dtable->models),
+        set::data($models),
+        set::orderBy($orderBy),
+        set::sortLink(inlink('models', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+        set::footPager(usePager()),
+    );
+}
