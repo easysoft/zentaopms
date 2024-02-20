@@ -5,7 +5,7 @@
       "version": "8.0"
     },
     "zentaoext": {
-      "gitVersion": "release-ipd1.2",
+      "gitVersion": "release-18.11",
       "gitRepo": "easycorp/zentaoext"
     },
     "zdoo": {
@@ -15,7 +15,7 @@
       "gitVersion": "master"
     },
     "downgrade": {
-      "gitVersion": "release-ipd1.2",
+      "gitVersion": "release-18.11",
       "gitRepo": "devops/zentaopms-downgrade"
     }
   },

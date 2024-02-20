@@ -111,6 +111,7 @@ $lang->misc->feature->aiChatImage       = 'theme/default/images/main/ai_chat.svg
 $lang->misc->feature->learnMoreLink     = 'https://www.zentao.net/book/zentaopms/1096.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.11']        = '2024-02-20';
 $lang->misc->releaseDate['18.10.1']     = '2024-01-17';
 $lang->misc->releaseDate['18.10']       = '2023-12-18';
 $lang->misc->releaseDate['18.9']        = '2023-11-09';
@@ -218,6 +219,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.11'][]       = array('title' => '兼容企业版8.11', 'desc' => '');
 $lang->misc->feature->all['18.10.1'][]     = array('title' => '需求池增加通知功能，支持产品线功能，支持一个需求分发到多个产品。', 'desc' => '');
 $lang->misc->feature->all['18.10'][]       = array('title' => '用例库可以从其他用例库导入用例，文档导出可以按Word自适应图片比例，历史记录排序方式增加cookie记录，优化修改他人日志逻辑。反馈、工单转化时可自动带入附件，反馈增加关键词、抄送字段，图表类型新增水球图，优化度量项的采集逻辑和展示样式。', 'desc' => '');
 $lang->misc->feature->all['18.9'][]        = array('title' => '全面接入AI大模型，客户端引入增强版会议，测试单增加参与人，视频附件增加在线预览，评审检查分类增加自定义等。', 'desc' => '');
