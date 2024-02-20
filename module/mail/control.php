@@ -148,7 +148,7 @@ class mail extends control
             $this->mail->send($this->post->to, $this->lang->mail->testSubject, $this->lang->mail->testContent, '', true);
             if($this->mail->isError()) return $this->sendError(array('error' => implode("\n", $this->mail->getError())));
 
-            return $this->sendSuccess(array('load' => inLink('test')));
+            return $this->sendSuccess(array('load' => inLink('test'), 'message' => $this->lang->mail->noticeResend));
         }
 
         $this->view->title = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
