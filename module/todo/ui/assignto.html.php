@@ -11,7 +11,7 @@ namespace zin;
  * @link        https://www.zentao.net
  */
 
-set::title($lang->todo->assignedTo);
+modalHeader(set::title($lang->todo->assignedTo));
 
 $todoDate = formatTime($todo->date, DT_DATE1);
 $isFuture = FUTURE_TIME == $todoDate;
@@ -21,11 +21,14 @@ formPanel
     set::submitBtnText($lang->save),
     formGroup
     (
-        set::name('assignedTo'),
-        set::label($lang->todo->assignedTo),
         set::width('1/2'),
-        set::items($members),
-        set::required(true)
+        set::label($lang->todo->assignedTo),
+        picker
+        (
+            set::name('assignedTo'),
+            set::items($members),
+            set::required(true)
+        )
     ),
     formRow
     (
