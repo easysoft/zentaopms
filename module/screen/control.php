@@ -284,7 +284,7 @@ class screen extends control
                 $defaultValue = is_array($defaultValue) ? $defaultValue : explode(',', $defaultValue);
                 $defaultOptions = array_filter($options, function($option) use($defaultValue)
                 {
-                    return in_array(strtolower($option['value']), strtolower($defaultValue));
+                    return in_array($option['value'], $defaultValue);
                 });
             }
 
@@ -315,7 +315,7 @@ class screen extends control
 
         $options = array_filter($options, function($option) use($query)
         {
-            return strpos($option['label'], $query) !== false;
+            return strpos(strtolower($option['label']), strtolower($query)) !== false;
         });
 
         $options = array_values($options);
