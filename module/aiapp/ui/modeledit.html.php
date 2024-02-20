@@ -13,7 +13,7 @@ jsVar('window.vendorTipsLang', $lang->ai->models->vendorTips);
 
 formPanel
 (
-    set::title($lang->ai->models->create),
+    set::title($lang->ai->models->edit . (empty($model->name) ? '' : " - {$model->name}")),
     set::id('model-form'),
     set::actions(array('submit', array('text' => $lang->ai->models->testConnection, 'id' => 'test-conn-btn', 'class' => 'btn secondary', 'url' => 'javascript:testConnection()'), 'cancel')),
     formGroup
