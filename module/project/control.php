@@ -993,11 +993,7 @@ class project extends control
     public function managePriv(int $projectID, int $groupID = 0)
     {
         $this->loadModel('group');
-
-        foreach($this->lang->resource as $moduleName => $action)
-        {
-            $this->app->loadLang($moduleName);
-        }
+        foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
 
         if(!empty($_POST))
         {
@@ -1017,9 +1013,25 @@ class project extends control
 
         $this->lang->resource = $this->project->getPrivsByModel($project->multiple ? $project->model : 'noSprint');
 
+        $getPrivs = $this->group->getPrivs($groupID);
+        foreach($getPrivs as $moduleName => $actions)
+        {
+            if(!isset($this->lang->resource->$moduleName))
+            {
+                unset($getPrivs[$moduleName]);
+            }
+            else
+            {
+                foreach($actions as $method => $value)
+                {
+                    if(!isset($this->lang->resource->{$moduleName}->{$method})) unset($getPrivs[$moduleName][$method]);
+                }
+            }
+        }
+
         $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->managePriv;
         $this->view->group      = $group;
-        $this->view->groupPrivs = $this->group->getPrivs($groupID);
+        $this->view->groupPrivs = $getPrivs;
         $this->view->groupID    = $groupID;
         $this->view->projectID  = $projectID;
         $this->view->project    = $project;
