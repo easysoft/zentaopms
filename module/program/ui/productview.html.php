@@ -287,8 +287,8 @@ dtable
         )
     )),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$pageSummary}');}")),
-    set::emptyTip($lang->product->noProduct),
-    set::createTip($lang->product->create),
+    set::emptyTip($lang->program->noProgram),
+    set::createTip($lang->program->create),
     set::createLink(hasPriv('product', 'create') ? createLink('product', 'create') : null)
 );
 
