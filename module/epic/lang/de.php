@@ -1,11 +1,11 @@
 <?php
 global $app;
 $app->loadLang('story');
-$lang->requirement = clone $lang->story;
-$lang->requirement->common = $lang->URCommon;
+$lang->epic = clone $lang->story;
+$lang->epic->common = 'Epic';
 
-foreach($lang->requirement as $key => $value)
+foreach($lang->epic as $key => $value)
 {
     if(!is_string($value)) continue;
-    if(strpos($value, $lang->SRCommon) !== false) $lang->requirement->$key = str_replace($lang->SRCommon, $lang->URCommon, $value);
+    if(strpos($value, $lang->SRCommon) !== false) $lang->epic->$key = str_replace($lang->SRCommon, $lang->URCommon, $value);
 }
