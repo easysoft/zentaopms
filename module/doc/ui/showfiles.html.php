@@ -56,7 +56,7 @@ if(!empty($files))
                                 set::href($url),
                                 set::title($file->title),
                                 set::target('_blank'),
-                                set('onclick', "return downloadFile({$file->id}, '{$file->extension}', {$file->imageWidth})"),
+                                in_array($file->extension, array('jpg', 'jpeg', 'gif', 'png', 'bmp')) ? set('onclick', "return downloadFile({$file->id}, '{$file->extension}', {$file->imageWidth})") : null,
                                 in_array($file->extension, $config->file->imageExtensions) ? div
                                 (
                                     setClass('img-holder'),
