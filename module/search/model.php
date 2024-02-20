@@ -26,7 +26,7 @@ class searchModel extends model
     {
         $module = $searchConfig['module'];
 
-        if($this->config->edition != 'open') $searchConfig = $this->searchTao->processBuildinFields($module);
+        if($this->config->edition != 'open') $searchConfig = $this->searchTao->processBuildinFields($module, $searchConfig);
 
         $searchParams['module']       = $searchConfig['module'];
         $searchParams['searchFields'] = json_encode($searchConfig['fields']);
