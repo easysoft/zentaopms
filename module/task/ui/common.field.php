@@ -31,7 +31,7 @@ $fields->field('pri')
     ->width('1/4')
     ->control('priPicker')
     ->items($lang->task->priList)
-    ->value('3');
+    ->value(data('task.pri'));
 
 $fields->field('estimate')
     ->control('input')
