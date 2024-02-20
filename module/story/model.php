@@ -3649,7 +3649,7 @@ class storyModel extends model
             }
             $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
 
-            if($products) $productID = key($products);
+            if($this->app->rawModule != 'projectstory' and $products) $productID = key($products);
             $review = $this->getRevertStoryIDList($productID);
 
             if(strpos($storyQuery, 'result') !== false)
