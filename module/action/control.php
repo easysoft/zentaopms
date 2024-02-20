@@ -178,6 +178,13 @@ class action extends control
                 return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({message: '{$this->lang->action->undeleteModuleTip}'}); $.ajaxSubmit({url: '{$url}'});"));
             }
         }
+        elseif($oldAction->objectType == 'task' && $confirmChange == 'no')
+        {
+            $task      = $this->loadModel('task')->getById($oldAction->objectID);
+            $isDeleted = $this->dao->select('deleted')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch();
+            $url       = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
+            if($isDeleted) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->action->undeleteTaskTip}'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});});"));
+        }
 
         $result = $this->action->undelete($actionID);
         if(true !== $result) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $result)));

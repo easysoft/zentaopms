@@ -69,6 +69,7 @@ $lang->action->hasDeletedParent   = '恢复该阶段需要同时恢复已删除�
 $lang->action->hasChangedAttr     = '恢复后阶段类型将根据父阶段类型均调整为“%s”，';
 $lang->action->whetherToRestore   = '是否恢复？';
 $lang->action->undeleteModuleTip  = '子目录恢复后，会同步恢复他的上级目录。';
+$lang->action->undeleteTaskTip    = '该任务所属执行已删除，还原后不能看到该任务，是否继续还原任务？';
 
 $lang->action->hasOtherType = array();
 $lang->action->hasOtherType['stage']  = "当前阶段的父级现在只允许创建{$lang->executionCommon}/看板类型的子级,故无法恢复当前阶段。";
