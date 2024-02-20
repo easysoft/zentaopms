@@ -47,11 +47,16 @@ const handleVendorChange = () =>
 }
 handleVendorChange();
 
+const handleProxyTypeChange = () =>
+{
+    $('#proxy-addr-container').toggle($('select[name="proxyType"]').val() != '');
+}
+
 $(() =>
 {
     $('select[name="type"]').on('change', handleModelTypeChange);
     $('select[name="vendor"]').on('change', handleVendorChange);
-    $('select[name="proxyType"]').on('change', e =>{$('#proxy-addr-container').toggle(e.target.value != '');});
+    $('select[name="proxyType"]').on('change', handleProxyTypeChange);
     $('button[type="submit"]]').on('click', e =>
     {
         $('button[type="submit"]').attr('disabled', 'disabled');

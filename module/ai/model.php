@@ -204,6 +204,7 @@ class aiModel extends model
     {
         $modelConfig = new stdclass();
         $modelConfig->id      = $model->id;
+        $modelConfig->name    = $model->name;
         $modelConfig->type    = $model->type;
         $modelConfig->vendor  = $model->vendor;
         $modelConfig->desc    = $model->desc;
