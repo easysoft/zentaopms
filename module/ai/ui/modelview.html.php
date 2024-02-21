@@ -44,7 +44,7 @@ detailBody
                 item
                 (
                     set::name($lang->ai->models->proxyType),
-                    $lang->ai->models->proxyTypes[$model->proxyType]
+                    $lang->ai->models->proxyTypes[empty($model->proxyType) ? '' : $model->proxyType]
                 ),
                 !empty($model->proxyType) ? item
                 (
