@@ -57,6 +57,7 @@ class customZen extends custom
         }
         $this->view->fieldList = $fieldList;
         $this->view->dbFields  = $dbFields;
+        $this->view->lang2Set  = str_replace('_', '-', $lang);
     }
 
     /**

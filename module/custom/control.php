@@ -60,7 +60,6 @@ class custom extends control
 
         $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->$module->common;
         $this->view->field       = $field;
-        $this->view->lang2Set    = str_replace('_', '-', $lang);
         $this->view->module      = $module;
         $this->view->currentLang = $currentLang;
         $this->view->canAdd      = strpos($this->config->custom->canAdd[$module], $field) !== false;

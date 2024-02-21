@@ -210,6 +210,7 @@ $lang->metric->common       = 'Metric';
 $lang->report->common       = 'Report';
 $lang->system->common       = 'System';
 $lang->admin->common        = 'Admin';
+$lang->epic->common         = 'Epic';
 $lang->story->common        = 'Story';
 $lang->task->common         = 'Task';
 $lang->bug->common          = 'Bug';
