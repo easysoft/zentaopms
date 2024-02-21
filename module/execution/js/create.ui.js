@@ -103,4 +103,5 @@ window.toggleCopyTeam = function(e)
         $('[data-name=team]').removeClass('w-1/2').addClass('w-full');
         $('[data-name=teams]').addClass('hidden');
     }
+    $('[data-name=team]').hasClass('is-pinned') && !$('[data-name=teams]').hasClass('hidden') ? $('[data-name=teams]').addClass('is-pinned') : $('[data-name=teams]').removeClass('is-pinned');
 }
