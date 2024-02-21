@@ -23,6 +23,7 @@ formPanel
         input
         (
             set::name('name'),
+            set('maxlength', 20),
             set::value($model->name)
         )
     ),
