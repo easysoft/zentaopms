@@ -1084,7 +1084,7 @@ class myModel extends model
      * @access public
      * @return array|bool
      */
-    public function getReviewingFlows($objectType = 'all', $orderBy = 'id_desc', $checkExists = false): array|bool
+    public function getReviewingFlows($objectType = 'all', $orderBy = 't2.id_desc', $checkExists = false): array|bool
     {
         if($this->config->edition != 'max') return array();
 
