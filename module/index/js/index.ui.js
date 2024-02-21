@@ -693,11 +693,11 @@ function initAppsMenu(items)
 }
 
 /** Update apps menu. */
-function updateAppsMenu(includeAppsToolbar)
+function updateAppsMenu(includeAppsBar)
 {
     loadCurrentPage(
     {
-        selector: (includeAppsToolbar ? '#appsToolbar>*,' : '') + 'appsItems()',
+        selector: (includeAppsBar ? '#appsToolbar>*,#visionSwitcher>*,' : '') + 'appsItems()',
         onRender: function(info)
         {
             if(info.name === 'appsItems')
