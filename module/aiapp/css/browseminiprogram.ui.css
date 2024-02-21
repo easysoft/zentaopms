@@ -101,6 +101,7 @@
     height: 24px !important;
     border-radius: 50%;
     overflow: hidden;
+    flex: none !important;
 }
 
 .message-content {
