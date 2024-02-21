@@ -461,6 +461,58 @@ class chartModel extends model
     }
 
     /**
+     * 使用设置的内容，在sql结果中计算百分比
+     * Get water polo option.
+     *
+     * @param  array   $settings
+     * @param  string  $sql
+     * @param  array   $filters
+     * @access public
+     * @return array
+     */
+    public function genWaterpolo(array $settings, string $sql, array $filters)
+    {
+        $operate = "{$settings['calc']}({$settings['goal']})";
+        $sql = "select $operate count from ($sql) tt ";
+
+        $moleculeSQL    = $sql;
+        $denominatorSQL = $sql;
+
+        $moleculeWheres    = array();
+        $denominatorWheres = array();
+        foreach($settings['conditions'] as $condition)
+        {
+            $where = "{$condition['field']} {$this->config->chart->conditionList[$condition['condition']]} '{$condition['value']}'";
+            $moleculeWheres[]    = $where;
+        }
+
+        if(!empty($filters))
+        {
+            $wheres = array();
+            foreach($filters as $field => $filter)
+            {
+                $wheres[] = "$field {$filter['operator']} {$filter['value']}";
+            }
+            $moleculeWheres    = array_merge($moleculeWheres, $wheres);
+            $denominatorWheres = $wheres;
+        }
+
+        if($moleculeWheres)    $moleculeSQL    .= 'where ' . implode(' and ', $moleculeWheres);
+        if($denominatorWheres) $denominatorSQL .= 'where ' . implode(' and ', $denominatorWheres);
+
+        $molecule    = $this->dao->query($moleculeSQL)->fetch();
+        $denominator = $this->dao->query($denominatorSQL)->fetch();
+
+        $percent = $denominator->count ? round((int)$molecule->count / (int)$denominator->count, 4) : 0;
+
+        $series  = array(array('type' => 'liquidFill', 'data' => array($percent), 'color' => array('#2e7fff'), 'outline' => array('show' => false), 'label' => array('fontSize' => 26)));
+        $tooltip = array('show' => true);
+        $options = array('series' => $series, 'tooltip' => $tooltip);
+
+        return $options;
+    }
+
+    /**
      * 根据用户设置的字段展示对应的下拉菜单。
      * Get field options.
      *

@@ -8,4 +8,6 @@ $config->chart->dateConvert['month'] = 'MONTH';
 $config->chart->dateConvert['week']  = 'YEARWEEK';
 $config->chart->dateConvert['day']   = 'DATE';
 
+$config->chart->conditionList['eq'] = '=';
+
 $config->chart->chartMaxChecked = 6;
