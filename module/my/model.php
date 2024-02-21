@@ -1084,7 +1084,7 @@ class myModel extends model
      * @access public
      * @return array|bool
      */
-    public function getReviewingFlows($objectType = 'all', $orderBy = 't2.id_desc', $checkExists = false): array|bool
+    public function getReviewingFlows($objectType = 'all', $orderBy = 'id_desc', $checkExists = false): array|bool
     {
         if($this->config->edition != 'max') return array();
 
@@ -1094,7 +1094,7 @@ class myModel extends model
             ->beginIF($objectType != 'all')->andWhere('t2.objectType')->eq($objectType)->fi()
             ->andWhere('t1.account')->eq($this->app->user->account)
             ->andWhere('t1.status')->eq('doing')
-            ->orderBy($orderBy)
+            ->orderBy("t2.{$orderBy}")
             ->query();
         $objectIdList = array();
         while($object = $stmt->fetch()) $objectIdList[$object->objectType][$object->objectID] = $object->objectID;
