@@ -144,7 +144,7 @@ $(function() {
         $.ajax(
         {
             type: 'POST',
-            url: createLink('ai', 'testConnection'),
+            url: createLink('ai', 'modelTestConnection'),
             data: $('.main-form').serialize(),
             dataType: 'json',
             success: function(data)

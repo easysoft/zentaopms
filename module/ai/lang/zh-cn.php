@@ -31,9 +31,13 @@ $lang->prompt->editedDate       = '编辑时间';
 $lang->prompt->deleted          = '是否已删除';
 
 /* Lang for privs, keys are paired with privlang items. */
-$lang->ai->modelCurrent            = '当前语言模型';
 $lang->ai->modelBrowse             = '浏览语言模型';
+$lang->ai->modelView               = '查看语言模型详情';
+$lang->ai->modelCreate             = '创建语言模型';
 $lang->ai->modelEdit               = '编辑语言模型';
+$lang->ai->modelEnable             = '启用语言模型';
+$lang->ai->modelDisable            = '禁用语言模型';
+$lang->ai->modelDelete             = '删除语言模型';
 $lang->ai->modelTestConnection     = '测试连接';
 $lang->ai->promptCreate            = '创建提词';
 $lang->ai->promptEdit              = '编辑提词';
