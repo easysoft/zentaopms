@@ -1057,7 +1057,6 @@ class projectZen extends project
         $formerIds       = array_keys($formerProducts);
         $currentIds      = array_keys($currentProducts);
         $changes         = array_merge(array_diff($formerIds, $currentIds), array_diff($currentIds, $formerIds));
-        if($changes) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($this->post->products) ? implode(',', $this->post->products) : '');
 
         $this->loadModel('execution');
 
