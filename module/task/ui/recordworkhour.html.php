@@ -63,6 +63,8 @@ if($efforts)
         $effortRows = array();
         foreach($efforts as $effort)
         {
+            $canOperateEffort = $this->task->canOperateEffort($task, $effort);
+            $operateTips      = $canOperateEffort ? '' : $lang->task->effortOperateTips;
             $effortRows[] = h::tr
             (
                 h::td($effort->id),
@@ -77,6 +79,8 @@ if($efforts)
                     (
                         setClass('btn ghost toolbar-item square size-sm text-primary edit-effort'),
                         on::click()->call('loadModal', createLink('task', 'editEffort', "id={$effort->id}")),
+                        !$canOperateEffort ? set::disabled(true) : null,
+                        set::title($operateTips ? sprintf($operateTips, $lang->task->update) : ''),
                         icon('edit'),
                     ) : null,
                     common::hasPriv('task', 'deleteWorkhour') ? a
@@ -84,6 +88,8 @@ if($efforts)
                         setClass('btn ghost toolbar-item square size-sm ajax-submit text-primary'),
                         set('data-confirm', $lang->task->confirmDeleteEffort),
                         set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
+                        !$canOperateEffort ? set::disabled(true) : null,
+                        set::title($operateTips ? sprintf($operateTips, $lang->delete) : ''),
                         icon('trash')
                     ) : null
                 )

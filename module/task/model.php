@@ -667,7 +667,11 @@ class taskModel extends model
      */
     public function canOperateEffort(object $task, object $effort = null): bool
     {
-        if(empty($task->team)) return true;
+        if(empty($task->team))
+        {
+            if($effort === null) $effort = new stdclass();
+            return $this->loadModel('common')->canOperateEffort($effort);
+        }
 
         /* Check for add effort. */
         if(empty($effort))

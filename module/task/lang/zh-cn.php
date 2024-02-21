@@ -177,6 +177,7 @@ $lang->task->teamMember        = '团队成员';
 $lang->task->addMember         = '添加成员';
 $lang->task->to                = '至';
 $lang->task->suffixHour        = 'h';
+$lang->task->update            = '更新';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = '任务';
@@ -277,6 +278,7 @@ $lang->task->createDenied              = "你不能在该{$lang->projectCommon}�
 $lang->task->cannotDeleteParent        = '不能删除父任务。';
 $lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
 $lang->task->selectTestStoryTip        = "以下{$lang->SRCommon}将作为此任务的子任务";
+$lang->task->effortOperateTips         = '只有项目负责人、执行负责人、所属部门负责人才能%s他人日志。';
 
 $lang->task->error                    = new stdclass();
 $lang->task->error->totalNumber       = '"耗时"必须为数字';
