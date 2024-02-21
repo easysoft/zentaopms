@@ -114,7 +114,7 @@ $lang->misc->feature->aiMiniProgramConfig       = 'AI Mini Program Configuration
 $lang->misc->feature->aiMiniProgramConfigImage  = 'theme/default/images/main/ai_mini_program_config_en.svg';
 $lang->misc->feature->aiMiniProgramStencil      = 'AI Mini Program Stencil Input';
 $lang->misc->feature->aiMiniProgramStencilImage = 'theme/default/images/main/ai_mini_program_stencil_en.svg';
-$lang->misc->feature->learnMoreLink             = 'https://www.zentao.net/book/zentaopms/1096.html';
+$lang->misc->feature->learnMoreLink             = 'https://www.zentao.net/book/zentaopms/1168.html';
 
 /* Release Date. */
 $lang->misc->releaseDate['18.11']        = '2024-02-20';
