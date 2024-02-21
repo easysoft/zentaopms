@@ -131,7 +131,7 @@ class props extends \zin\utils\dataset
     public function events(): array
     {
         $events = array();
-        foreach($this->_data as $name => $value)
+        foreach($this->storedData as $name => $value)
         {
             if(str_starts_with($name, '@')) $events[substr($name, 1)] = $value;
         }
@@ -141,7 +141,7 @@ class props extends \zin\utils\dataset
 
     public function hasEvent(): bool
     {
-        foreach($this->_data as $name => $value)
+        foreach($this->storedData as $name => $value)
         {
             if(str_starts_with($name, '@')) return true;
         }
@@ -185,7 +185,7 @@ class props extends \zin\utils\dataset
         if($this->class->count())     $pairs[] = 'class="' . $this->class->toStr() . '"';
         if($this->style->getCount(true)) $pairs[] = 'style="' . $this->style->toStr() . '"';
 
-        foreach($this->_data as $name => $value)
+        foreach($this->storedData as $name => $value)
         {
             /* Handle boolean attributes */
             if(in_array($name, static::$booleanAttrs)) $value = $value ? true : null;
@@ -211,7 +211,7 @@ class props extends \zin\utils\dataset
 
     public function toJSON(bool $skipEvents = false): array
     {
-        $data      = $this->_data;
+        $data      = $this->storedData;
         $styleData = $this->style->get();
 
         if(!empty($styleData)) $data['style'] = $styleData;
@@ -279,7 +279,7 @@ class props extends \zin\utils\dataset
      */
     public function copy(): props
     {
-        $props = new props($this->_data);
+        $props = new props($this->storedData);
         $props->style = clone $this->style;
         $props->class = clone $this->class;
         return $props;

@@ -81,7 +81,7 @@ class setting extends \zin\utils\dataset
     protected function setVal(string $prop, mixed $value): setting
     {
         if($value instanceof setting) $value = $value->toArray();
-        $this->_data[$prop] = $value;
+        $this->storedData[$prop] = $value;
         return $this;
     }
 
@@ -94,7 +94,7 @@ class setting extends \zin\utils\dataset
      */
     public function toDirective(string $type = 'prop'): directive
     {
-        return new directive($type, $this->_data);
+        return new directive($type, $this->storedData);
     }
 
     /**
