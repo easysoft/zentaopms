@@ -94,12 +94,12 @@ class pageBase extends wg
                 $zinDebugData['definedProps'] = wg::$definedPropsMap;
                 $zinDebugData['wgBlockMap']   = wg::$wgToBlockMap;
             }
-            $js[] = 'window.zin = ' . json_encode($zinDebugData) . ';';
+            $js[] = h::createJsVarCode('window.zin', $zinDebugData);
             $js[] = 'console.log("[ZIN] ", window.zin);';
         }
         else
         {
-            $js[] = 'window.zin = [];';
+            $js[] = h::createJsVarCode('window.zin', array());
         }
         if($zui) array_unshift($js, 'zui.defineFn();');
 
