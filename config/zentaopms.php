@@ -541,7 +541,7 @@ $config->objectTables['metric']           = TABLE_METRIC;
 $config->objectTables['aiapp']            = TABLE_MINIPROGRAM;
 $config->objectTables['miniprogram']      = TABLE_MINIPROGRAM;
 
-$config->newFeatures      = array('aiChat', 'aiPrompts');
+$config->newFeatures      = array('promptExec', 'aiChat', 'aiMiniProgramStencil');
 $config->disabledFeatures = '';
 $config->closedFeatures   = '';
 
