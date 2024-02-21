@@ -14,7 +14,7 @@ $isNotOpen = $config->edition != 'open';
     <?php
     foreach($this->lang->ai->miniPrograms->statuses as $statusKey => $statusName)
     {
-      echo html::a($this->createLink('ai', 'miniPrograms', "module=$module&status=$statusKey"), "<span class='text'>{$this->lang->ai->miniPrograms->statuses[$statusKey]}" . ($status == $statusKey ? '<span class="label label-light label-badge" style="margin-left: 4px;">' . $pager->recTotal . '</span>' : '') . "</span>", '', "id='status-$statusKey' class='btn btn-link" . ($status == $statusKey ? ' btn-active-text' : '') . "'");
+      echo html::a($this->createLink('ai', 'miniPrograms', "category=$category&status=$statusKey"), "<span class='text'>{$this->lang->ai->miniPrograms->statuses[$statusKey]}" . ($status == $statusKey ? '<span class="label label-light label-badge" style="margin-left: 4px;">' . $pager->recTotal . '</span>' : '') . "</span>", '', "id='status-$statusKey' class='btn btn-link" . ($status == $statusKey ? ' btn-active-text' : '') . "'");
     }
     ?>
   </div>
