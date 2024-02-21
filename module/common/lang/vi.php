@@ -116,6 +116,7 @@ $lang->notFound      = 'Không tìm thấy';
 $lang->notPage       = 'Xin lỗi, tính năng bạn đang ghé thăm đang phát triển!';
 $lang->showAll       = '[[Hiện tất cả]]';
 $lang->selectedItems = 'Đã chọn <strong>{0}</strong> mục';
+$lang->noAssigned    = 'Không được chỉ định';
 
 $lang->future      = 'Đang đợi';
 $lang->year        = 'Năm';

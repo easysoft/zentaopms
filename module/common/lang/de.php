@@ -168,6 +168,7 @@ $lang->notFound      = 'Nicht gefunden!';
 $lang->notPage       = 'Sorry, the features you are visiting are in development!';
 $lang->showAll       = '[[Alle anzeigen]]';
 $lang->selectedItems = 'Seleted <strong>{0}</strong> items';
+$lang->noAssigned    = 'Nicht zugewiesen';
 
 $lang->future      = 'Warte';
 $lang->year        = 'Jahr';

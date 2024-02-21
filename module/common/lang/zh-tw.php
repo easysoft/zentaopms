@@ -129,6 +129,7 @@ $lang->notFound      = '抱歉，您訪問的對象不存在！';
 $lang->notPage       = '抱歉，您訪問的功能正在開發中！';
 $lang->showAll       = '[[全部顯示]]';
 $lang->selectedItems = '已選擇 <strong>{0}</strong> 項';
+$lang->noAssigned    = '未指派';
 
 $lang->future      = '未來';
 $lang->year        = '年';

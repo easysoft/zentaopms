@@ -164,6 +164,7 @@ $lang->notFound      = 'Not found!';
 $lang->notPage       = 'Sorry, the features you are visiting are in development!';
 $lang->showAll       = '[[Show All]]';
 $lang->selectedItems = 'Selected <strong>{0}</strong> items';
+$lang->noAssigned    = 'No assigned';
 
 $lang->future      = 'Waiting';
 $lang->year        = 'Year';

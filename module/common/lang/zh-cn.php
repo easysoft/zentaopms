@@ -165,6 +165,7 @@ $lang->notFound      = '抱歉，您访问的对象不存在！';
 $lang->notPage       = '抱歉，您访问的功能正在开发中！';
 $lang->showAll       = '[[全部显示]]';
 $lang->selectedItems = '已选择 <strong>{0}</strong> 项';
+$lang->noAssigned    = '未指派';
 
 $lang->future      = '未来';
 $lang->year        = '年';

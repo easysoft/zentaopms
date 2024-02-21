@@ -19,7 +19,8 @@ class dtable extends wg
         'orderBy?:string',                       // 排序字段。
         'loadPartial?: bool',                    // 启用部分加载，不更新浏览器地址栏 URL。
         'loadOptions?: array',                   // 分页和排序加载选项。
-        'userMap?: array'                        // 用户账号姓名对应列表
+        'userMap?: array',                       // 用户账号姓名对应列表
+        'unassignedText?: string'                // 未指派文本
     );
 
     static $dtableID = 0;
@@ -291,14 +292,22 @@ class dtable extends wg
             $this->setProp('customCols', false);
         }
 
-        $this->setProp('checkInfo', jsRaw(<<<JS
-        function(_, layout)
+        if(!$this->prop('checkInfo'))
         {
-            const checkedCount = this.getChecks().length;
-            if(checkedCount) return {html: "{$lang->selectedItems}".replace('{0}', checkedCount)};
-            return {html: "{$lang->pager->totalCount}".replace('{recTotal}', this.layout.allRows.length)};
+            $this->setProp('checkInfo', jsRaw(<<<JS
+            function(_, layout)
+            {
+                const checkedCount = this.getChecks().length;
+                if(checkedCount) return {html: "{$lang->selectedItems}".replace('{0}', checkedCount)};
+                return {html: "{$lang->pager->totalCount}".replace('{recTotal}', this.layout.allRows.length)};
+            }
+            JS));
         }
-        JS));
+
+        if(!$this->prop('unassignedText'))
+        {
+            $this->setProp('unassignedText', $lang->noAssigned);
+        }
 
         return zui::dtable(inherit($this));
     }
