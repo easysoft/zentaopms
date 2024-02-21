@@ -1398,9 +1398,9 @@ class storyModel extends model
      *
      * @param  array $stories
      * @access public
-     * @return array|bool
+     * @return bool
      */
-    public function batchClose(array $stories): array|bool
+    public function batchClose(array $stories): bool
     {
         $this->loadModel('action');
         $oldStories = $this->getByList(array_keys($stories));
@@ -1415,7 +1415,11 @@ class storyModel extends model
                 ->where('id')->eq($storyID)
                 ->exec();
 
-            if(dao::isError()) return dao::$errors[] = 'story#' . $storyID . dao::getError(true);
+            if(dao::isError())
+            {
+                dao::$errors[] = 'story#' . $storyID . dao::getError(true);
+                return false;
+            }
 
             /* Update parent story status. */
             if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
