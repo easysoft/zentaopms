@@ -1323,6 +1323,8 @@ class aiModel extends model
         if($data->published === '1')   $data->publishedDate = helper::now();
         $data->builtIn = '0';
 
+        $data->model = $data->model == 'default' ? 0 : $data->model;
+
         if(!empty($data->iconName) && !empty($data->iconTheme))
         {
             $data->icon = $data->iconName . '-' . $data->iconTheme;
