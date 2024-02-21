@@ -4,6 +4,11 @@ $(function()
     loadResult();
 });
 
+$('#runCaseModal').closest('.modal').on('hide.zui.modal', function()
+{
+    loadCurrentPage();
+});
+
 /**
  * Load result.
  *
