@@ -40,13 +40,10 @@ class index extends control
         if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList, true);
 
         $showFeatures = false;
-        if($this->config->edition != 'ipd')
+        foreach($this->config->newFeatures as $feature)
         {
-            foreach($this->config->newFeatures as $feature)
-            {
-                $accounts = zget($this->config->global, 'skip' . ucfirst($feature), '');
-                if(strpos(",$accounts,", $this->app->user->account) === false) $showFeatures = true;
-            }
+            $accounts = zget($this->config->global, 'skip' . ucfirst($feature), '');
+            if(strpos(",$accounts,", $this->app->user->account) === false) $showFeatures = true;
         }
 
         $this->view->title             = $this->lang->index->common;
