@@ -524,20 +524,20 @@ pipeline {
                   sh "make markdown-init"
                 }
                 stage("docker build") {
-                  //sh 'make test-open'
-                  //sh 'make build'
+                  sh 'make test-open'
+                  sh 'make build'
 
-                  //sh 'make test-biz'
-                  //sh 'make build-biz'
+                  sh 'make test-biz'
+                  sh 'make build-biz'
                   
-                  //sh 'make test-biz-k8s'
-                  //sh 'make build-biz-k8s'
+                  sh 'make test-biz-k8s'
+                  sh 'make build-biz-k8s'
 
-                  //sh 'make test-max'
-                  //sh 'make build-max'
+                  sh 'make test-max'
+                  sh 'make build-max'
                   
-                  //sh 'make test-max-k8s'
-                  //sh 'make build-max-k8s'
+                  sh 'make test-max-k8s'
+                  sh 'make build-max-k8s'
                   
                   sh 'make test-ipd'
                   sh 'make build-ipd'
