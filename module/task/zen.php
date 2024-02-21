@@ -368,6 +368,7 @@ class taskZen extends task
         $this->view->customFields  = $customFields;
         $this->view->checkedFields = $checkedFields;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
+        $this->view->showFields    = $this->config->task->custom->batchCreateFields;
 
         $this->display();
     }

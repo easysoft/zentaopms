@@ -79,6 +79,7 @@ if(!$hideStory)
     );
 
     $storyEstimateItem = formBatchItem(
+        set::hidden(true),
         set::name('storyEstimate'),
         set::label(''),
         set('labelClass', 'hidden'),
@@ -87,6 +88,7 @@ if(!$hideStory)
     );
 
     $storyDescItem = formBatchItem(
+        set::hidden(true),
         set::name('storyDesc'),
         set::label(''),
         set('labelClass', 'hidden'),
@@ -95,6 +97,7 @@ if(!$hideStory)
     );
 
     $storyPriItem = formBatchItem(
+        set::hidden(true),
         set::name('storyPri'),
         set::label(''),
         set('labelClass', 'hidden'),
@@ -138,7 +141,17 @@ formBatchPanel
 (
     set::title($lang->task->batchCreate),
     set::pasteField('name'),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
     set::headingActionsClass('flex-auto'),
+    to::headingActions
+    (
+        checkbox
+        (
+            setID('zeroTaskStory'),
+            set::text($lang->story->zeroTask),
+            on::change('toggleZeroTaskStory')
+        )
+    ),
     formBatchItem
     (
         set::name('id'),
@@ -235,15 +248,6 @@ formBatchPanel
         set::label($lang->task->desc),
         set::control('textarea'),
         set::width('240px')
-    ),
-    to::headingActions
-    (
-        checkbox
-        (
-            setID('zeroTaskStory'),
-            set::text($lang->story->zeroTask),
-            on::change('toggleZeroTaskStory')
-        )
     ),
     on::change('[data-name="module"]', 'setStories'),
     on::change('input[name^=story]', 'setStoryRelated'),
