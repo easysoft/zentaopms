@@ -21,7 +21,8 @@ $config->stage->actionList['edit']['hint']        = $lang->stage->edit;
 $config->stage->actionList['edit']['url']         = helper::createLink('stage', 'edit', 'stageID={id}', '', true);
 $config->stage->actionList['edit']['data-toggle'] = 'modal';
 
-$config->stage->actionList['delete']['icon']       = 'trash';
-$config->stage->actionList['delete']['hint']       = $lang->stage->delete;
-$config->stage->actionList['delete']['url']        = helper::createLink('stage', 'delete', 'stageID={id}');
-$config->stage->actionList['delete']['ajaxSubmit'] = true;
+$config->stage->actionList['delete']['icon']         = 'trash';
+$config->stage->actionList['delete']['hint']         = $lang->stage->delete;
+$config->stage->actionList['delete']['data-confirm'] = array('message' => $lang->stage->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->stage->actionList['delete']['url']          = helper::createLink('stage', 'delete', 'stageID={id}');
+$config->stage->actionList['delete']['ajaxSubmit']   = true;

@@ -17,7 +17,7 @@ $config->entry->actionList['delete']['text']         = '';
 $config->entry->actionList['delete']['hint']         = $lang->entry->delete;
 $config->entry->actionList['delete']['url']          = array('module' => 'entry', 'method' => 'delete', 'params' => 'entryID={id}');
 $config->entry->actionList['delete']['class']        = 'btn ghost toolbar-item text-primary square size-sm ajax-submit';
-$config->entry->actionList['delete']['data-confirm'] = $lang->entry->confirmDelete;
+$config->entry->actionList['delete']['data-confirm'] = array('message' => $lang->entry->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->entry->dtable = new stdclass();
 $config->entry->dtable->fieldList['id']['name']     = 'id';

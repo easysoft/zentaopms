@@ -13,7 +13,7 @@ $config->holiday->actionList['delete']['text']         = '';
 $config->holiday->actionList['delete']['hint']         = $lang->holiday->delete;
 $config->holiday->actionList['delete']['url']          = array('module' => 'holiday', 'method' => 'delete', 'params' => 'holidayID={id}');
 $config->holiday->actionList['delete']['className']    = 'ajax-submit';
-$config->holiday->actionList['delete']['data-confirm'] = $lang->holiday->confirmDelete;
+$config->holiday->actionList['delete']['data-confirm'] = array('message' => $lang->holiday->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->holiday->dtable = new stdclass();
 $config->holiday->dtable->fieldList['name']['name']  = 'name';

@@ -152,7 +152,7 @@ $config->task->actionList['delete']['icon']         = 'trash';
 $config->task->actionList['delete']['hint']         = $lang->task->delete;
 $config->task->actionList['delete']['text']         = $lang->task->delete;
 $config->task->actionList['delete']['url']          = helper::createLink('task', 'delete', 'executionID={execution}&taskID={id}');
-$config->task->actionList['delete']['data-confirm'] = $lang->task->confirmDelete;
+$config->task->actionList['delete']['data-confirm'] = array('message' => $lang->task->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->task->actionList['delete']['class']        = 'ajax-submit';
 
 $config->task->actionList['view']['icon'] = 'chevron-double-up';

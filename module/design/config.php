@@ -50,7 +50,7 @@ $config->design->actionList['delete']['icon']         = 'trash';
 $config->design->actionList['delete']['hint']         = $lang->design->delete;
 $config->design->actionList['delete']['url']          = helper::createLink('design', 'delete', 'designID={id}');
 $config->design->actionList['delete']['className']    = 'ajax-submit';
-$config->design->actionList['delete']['data-confirm'] = $lang->design->confirmDelete;
+$config->design->actionList['delete']['data-confirm'] = array('message' => $lang->design->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->design->actionList['assignTo']['icon']        = 'hand-right';
 $config->design->actionList['assignTo']['text']        = $lang->design->assignTo;

@@ -21,5 +21,4 @@ $config->backup->actionList['delete']['text']         = $lang->delete;
 $config->backup->actionList['delete']['hint']         = $lang->delete;
 $config->backup->actionList['delete']['className']    = 'ajax-submit';
 $config->backup->actionList['delete']['url']          = helper::createLink('backup', 'delete', 'file={name}');
-$config->backup->actionList['delete']['data-confirm'] = $lang->backup->confirmDelete;
-
+$config->backup->actionList['delete']['data-confirm'] = array('message' => $lang->backup->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');

@@ -25,7 +25,7 @@ $config->caselib->testcase->actionList['delete']['text']         = $lang->testca
 $config->caselib->testcase->actionList['delete']['url']          = array('module' => 'testcase', 'method' => 'delete', 'params' => 'caseID={id}');
 $config->caselib->testcase->actionList['delete']['order']        = 10;
 $config->caselib->testcase->actionList['delete']['className']    = 'ajax-submit';
-$config->caselib->testcase->actionList['delete']['data-confirm'] = $lang->testcase->confirmDelete;
+$config->caselib->testcase->actionList['delete']['data-confirm'] = array('message' => $lang->testcase->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->caselib->dtable = new stdclass();
 $config->caselib->dtable->fieldList = array();

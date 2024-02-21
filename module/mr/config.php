@@ -65,7 +65,7 @@ $config->mr->actionList['delete'] = array();
 $config->mr->actionList['delete']['icon']         = 'trash';
 $config->mr->actionList['delete']['hint']         = $lang->mr->delete;
 $config->mr->actionList['delete']['url']          = helper::createLink('mr', 'delete', "MRID={id}");
-$config->mr->actionList['delete']['data-confirm'] = $lang->mr->confirmDelete;
+$config->mr->actionList['delete']['data-confirm'] = array('message' => $lang->mr->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->mr->actionList['delete']['className']    = 'ajax-submit';
 $config->mr->actionList['delete']['data-app']     = $app->tab;
 

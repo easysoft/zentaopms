@@ -155,4 +155,4 @@ $config->bug->actionList['delete']['text']         = $lang->bug->delete;
 $config->bug->actionList['delete']['hint']         = $lang->bug->delete;
 $config->bug->actionList['delete']['url']          = array('module' => 'bug', 'method' => 'delete', 'params' => 'bugID={id}');
 $config->bug->actionList['delete']['className']    = 'ajax-submit';
-$config->bug->actionList['delete']['data-confirm'] = $lang->bug->notice->confirmDelete;
+$config->bug->actionList['delete']['data-confirm'] = array('message' => $lang->bug->notice->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');

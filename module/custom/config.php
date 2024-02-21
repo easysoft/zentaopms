@@ -98,4 +98,4 @@ $config->custom->browseStoryConcept->actionList['delete']['icon']         = 'tra
 $config->custom->browseStoryConcept->actionList['delete']['hint']         = $lang->delete;
 $config->custom->browseStoryConcept->actionList['delete']['url']          = array('module' => 'custom', 'method' => 'deleteStoryConcept', 'params' => 'id={key}');
 $config->custom->browseStoryConcept->actionList['delete']['className']    = 'ajax-submit';
-$config->custom->browseStoryConcept->actionList['delete']['data-confirm'] = $lang->custom->notice->confirmDelete;
+$config->custom->browseStoryConcept->actionList['delete']['data-confirm'] = array('message' => $lang->custom->notice->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');

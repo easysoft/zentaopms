@@ -68,7 +68,7 @@ $config->repo->dtable->fieldList['actions']['list']['reportView']['data-toggle']
 
 $config->repo->dtable->fieldList['actions']['list']['delete']['icon']         = 'trash';
 $config->repo->dtable->fieldList['actions']['list']['delete']['hint']         = $lang->repo->delete;
-$config->repo->dtable->fieldList['actions']['list']['delete']['data-confirm'] = $lang->repo->notice->delete;
+$config->repo->dtable->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->repo->notice->delete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->repo->dtable->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
 $config->repo->dtable->fieldList['actions']['list']['delete']['url']          = helper::createLink('repo', 'delete', 'repoID={id}');
 

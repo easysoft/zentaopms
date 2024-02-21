@@ -56,7 +56,7 @@ $config->zahost->dtable->fieldList['actions']['list']['delete']['icon']         
 $config->zahost->dtable->fieldList['actions']['list']['delete']['hint']         = $lang->zahost->delete;
 $config->zahost->dtable->fieldList['actions']['list']['delete']['url']          = helper::createLink('zahost', 'delete', 'hostID={hostID}');
 $config->zahost->dtable->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
-$config->zahost->dtable->fieldList['actions']['list']['delete']['data-confirm'] = $lang->zahost->confirmDelete;
+$config->zahost->dtable->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->zahost->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->zahost->imageDtable = new stdclass();
 

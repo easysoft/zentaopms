@@ -86,7 +86,7 @@ $config->host->actionList['delete']['text']         = $lang->delete;
 $config->host->actionList['delete']['hint']         = $lang->delete;
 $config->host->actionList['delete']['showText']     = true;
 $config->host->actionList['delete']['ajaxSubmit']   = true;
-$config->host->actionList['delete']['data-confirm'] = $lang->host->confirmDelete;
+$config->host->actionList['delete']['data-confirm'] = array('message' => $lang->host->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->host->actionList['delete']['url']          = array('module' => 'host', 'method' => 'delete', 'params' => 'id={id}');
 
 $config->host->dtable->fieldList['actions']['name']     = 'actions';

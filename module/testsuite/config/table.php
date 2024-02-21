@@ -21,7 +21,7 @@ $config->testsuite->actionList['delete']['text']         = $lang->testsuite->del
 $config->testsuite->actionList['delete']['url']          = array('module' => 'testsuite', 'method' => 'delete', 'params' => 'suiteID={id}');
 $config->testsuite->actionList['delete']['order']        = 10;
 $config->testsuite->actionList['delete']['show']         = 'clickable';
-$config->testsuite->actionList['delete']['data-confirm'] = $lang->testsuite->confirmDelete;
+$config->testsuite->actionList['delete']['data-confirm'] = array('message' => $lang->testsuite->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->testsuite->actionList['delete']['className']    = 'ajax-submit';
 
 $config->testsuite->dtable = new stdclass();

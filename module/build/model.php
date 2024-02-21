@@ -805,7 +805,7 @@ class buildModel extends model
                 'icon'  => 'trash',
                 'url'   => helper::createLink($moduleName, 'delete', $params),
                 'class' => 'btn ghost ajax-submit',
-                'data-confirm' => $this->lang->build->confirmDelete
+                'data-confirm' =>  array('message' => $this->lang->build->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x')
             );
         }
 

@@ -18,7 +18,7 @@ $config->testreport->actionList['delete']['url']          = array('module' => 't
 $config->testreport->actionList['delete']['order']        = 10;
 $config->testreport->actionList['delete']['show']         = 'clickable';
 $config->testreport->actionList['delete']['class']        = 'ajax-submit';
-$config->testreport->actionList['delete']['data-confirm'] = $lang->testreport->confirmDelete;
+$config->testreport->actionList['delete']['data-confirm'] = array('message' => $lang->testreport->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->testreport->dtable->fieldList['id']['name']     = 'id';
 $config->testreport->dtable->fieldList['id']['title']    = $lang->idAB;

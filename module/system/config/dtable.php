@@ -53,7 +53,7 @@ $config->system->dtable->backup->fieldList['actions']['list']['restore']['data-c
 $config->system->dtable->backup->fieldList['actions']['list']['delete']['icon'] = 'trash';
 $config->system->dtable->backup->fieldList['actions']['list']['delete']['hint'] = $lang->delete;
 $config->system->dtable->backup->fieldList['actions']['list']['delete']['url']  = array('module' => 'system', 'method' => 'deleteBackup', 'params' => 'name={name}');
-$config->system->dtable->backup->fieldList['actions']['list']['delete']['data-confirm'] = $lang->system->backup->confirmDelete;
+$config->system->dtable->backup->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->system->backup->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->system->dtable->instanceList = new stdclass();
 

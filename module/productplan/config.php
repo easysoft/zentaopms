@@ -81,7 +81,7 @@ $config->productplan->actionList['delete']['icon']         = 'trash';
 $config->productplan->actionList['delete']['hint']         = $lang->productplan->delete;
 $config->productplan->actionList['delete']['text']         = $lang->productplan->delete;
 $config->productplan->actionList['delete']['url']          = helper::createLink('productplan', 'delete', 'planID={id}');
-$config->productplan->actionList['delete']['data-confirm'] = $lang->productplan->confirmDelete;
+$config->productplan->actionList['delete']['data-confirm'] = array('message' => $lang->productplan->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->productplan->actionList['delete']['innerClass']   = 'ajax-submit';
 
 $config->productplan->actionList['unlinkBug']['icon'] = 'unlink';

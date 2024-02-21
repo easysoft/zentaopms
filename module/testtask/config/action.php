@@ -68,7 +68,7 @@ $config->testtask->actionList['delete']['text']         = $lang->testtask->delet
 $config->testtask->actionList['delete']['hint']         = $lang->testtask->delete;
 $config->testtask->actionList['delete']['url']          = array('module' => 'testtask', 'method' => 'delete', 'params' => 'taskID={id}');
 $config->testtask->actionList['delete']['className']    = 'ajax-submit';
-$config->testtask->actionList['delete']['data-confirm'] = $lang->testtask->confirmDelete;
+$config->testtask->actionList['delete']['data-confirm'] = array('message' => $lang->testtask->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 if(!isset($config->testtask->cases)) $config->testtask->cases = new stdclass();
 $config->testtask->cases->actionList['confirmChange']['icon']  = 'search';

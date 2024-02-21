@@ -96,7 +96,7 @@ $config->testcase->actionList['delete']['text']         = $lang->testcase->delet
 $config->testcase->actionList['delete']['hint']         = $lang->testcase->deleteAction;
 $config->testcase->actionList['delete']['url']          = array('module' => 'testcase', 'method' => 'delete', 'params' => 'caseID={id}');
 $config->testcase->actionList['delete']['class']        = 'ajax-submit';
-$config->testcase->actionList['delete']['data-confirm'] = $lang->testcase->confirmDelete;
+$config->testcase->actionList['delete']['data-confirm'] = array('message' => $lang->testcase->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->testcase->actionList['delete']['notInModal']   = true;
 
 $config->scene = new stdclass();

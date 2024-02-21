@@ -99,7 +99,7 @@ $config->doc->actionList['delete']['hint']         = $lang->delete;
 $config->doc->actionList['delete']['text']         = $lang->delete;
 $config->doc->actionList['delete']['url']          = helper::createLink('doc', 'delete', 'docID={id}');
 $config->doc->actionList['delete']['className']    = 'ajax-submit';
-$config->doc->actionList['delete']['data-confirm'] = $lang->doc->confirmDelete;
+$config->doc->actionList['delete']['data-confirm'] = array('message' => $lang->doc->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->doc->showfiles->actionList['download']['icon']   = 'import';
 $config->doc->showfiles->actionList['download']['hint']   = $lang->doc->download;
