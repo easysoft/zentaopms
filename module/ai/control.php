@@ -280,7 +280,7 @@ class ai extends control
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->ai->models->testConnectionResult->success));
     }
-    
+
     /**
      * List mini programs.
      *
@@ -464,7 +464,10 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptById($id);
 
+        $model = empty($prompt->model) ? null : $this->ai->getLanguageModel($prompt->model);
+
         $this->view->prompt      = $prompt;
+        $this->view->modelName   = empty($model) ? $this->lang->ai->models->default : (empty($model->name) ? $this->lang->ai->models->typeList[$model->type] : $model->name);
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
         $this->view->actions     = $this->loadModel('action')->getList('prompt', $id);
         $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
@@ -556,7 +559,7 @@ class ai extends control
 
             $originalPrompt = clone $prompt;
 
-            $prompt->model            = 0; // TODO: use actual $data->model;
+            $prompt->model            = $data->model == 'default' ? 0 : $data->model;
             $prompt->role             = $data->role;
             $prompt->characterization = $data->characterization;
 
@@ -574,6 +577,14 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptAssignRole', "promptID=$promptID") . '#app=admin'));
         }
 
+        $models = $this->ai->getLanguageModels();
+        $models = array_reduce($models, function ($carry, $model)
+        {
+            $carry[$model->id] = $model->name;
+            return $carry;
+        }, array('default' => $this->lang->ai->models->default));
+
+        $this->view->models         = $models;
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
