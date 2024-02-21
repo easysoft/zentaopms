@@ -139,3 +139,5 @@ RENAME TABLE `zt_prompt` TO `zt_ai_prompt`;
 RENAME TABLE `zt_promptrole` TO `zt_ai_promptrole`;
 ALTER TABLE `zt_kanban` CHANGE `minColWidth` `minColWidth` smallint(4) NOT NULL DEFAULT '264';
 ALTER TABLE `zt_project` CHANGE `minColWidth` `minColWidth` smallint(4) NOT NULL DEFAULT '264';
+UPDATE `zt_kanban` SET `minColWidth` = '264' WHERE `minColWidth` <= '264';
+UPDATE `zt_project` SET `minColWidth` = '264' WHERE `minColWidth` <= '264';
