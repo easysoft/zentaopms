@@ -1755,7 +1755,7 @@ CREATE TABLE `zt_kanban` (
   `showWIP` enum('0','1') NOT NULL DEFAULT '1',
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
   `colWidth` smallint(4) NOT NULL DEFAULT 264,
-  `minColWidth` smallint(4) NOT NULL DEFAULT 200,
+  `minColWidth` smallint(4) NOT NULL DEFAULT 264,
   `maxColWidth` smallint(4) NOT NULL DEFAULT 384,
   `object` varchar(255) NOT NULL DEFAULT '',
   `alignment` varchar(10) NOT NULL DEFAULT 'center',
@@ -2654,7 +2654,7 @@ CREATE TABLE `zt_project` (
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
   `multiple` enum('0','1') NOT NULL DEFAULT '1',
   `colWidth` smallint(4) NOT NULL DEFAULT 264,
-  `minColWidth` smallint(4) NOT NULL DEFAULT 200,
+  `minColWidth` smallint(4) NOT NULL DEFAULT 264,
   `maxColWidth` smallint(4) NOT NULL DEFAULT 384,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `parallel` mediumint(9) NOT NULL DEFAULT 0,
@@ -2712,7 +2712,7 @@ CREATE TABLE `zt_projectstory` (
   UNIQUE KEY `project` (`project`,`story`),
   KEY `story` (`story`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_prompt` (
+CREATE TABLE `zt_ai_prompt` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   `desc` text DEFAULT NULL,
@@ -2732,7 +2732,7 @@ CREATE TABLE `zt_prompt` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_promptrole` (
+CREATE TABLE `zt_ai_promptrole` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) DEFAULT NULL,
   `desc` text DEFAULT NULL,
@@ -4220,12 +4220,28 @@ CREATE TABLE `zt_zoutput` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=250 DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_miniprogram` (
+CREATE TABLE `zt_ai_model` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(20) NOT NULL,
+  `vendor` varchar(20) NOT NULL,
+  `credentials` text NOT NULL,
+  `proxy` text DEFAULT NULL,
+  `name` varchar(20) DEFAULT NULL,
+  `desc` text DEFAULT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) DEFAULT NULL,
+  `editedDate` datetime DEFAULT NULL,
+  `enabled` enum('0', '1') NOT NULL DEFAULT '1',
+  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `zt_ai_miniprogram` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `category` varchar(30) NOT NULL,
   `desc` text DEFAULT NULL,
-  `model` varchar(30) NOT NULL,
+  `model` mediumint(8) unsigned DEFAULT NULL,
   `icon` varchar(30) NOT NULL DEFAULT 'writinghand-7',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
@@ -4238,7 +4254,7 @@ CREATE TABLE `zt_miniprogram` (
   `builtIn` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_aimessage` (
+CREATE TABLE `zt_ai_message` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `appID` mediumint(8) unsigned NOT NULL,
   `user` mediumint(8) unsigned NOT NULL,
@@ -4247,7 +4263,7 @@ CREATE TABLE `zt_aimessage` (
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_miniprogramfield` (
+CREATE TABLE `zt_ai_miniprogramfield` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `appID` mediumint(8) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
@@ -4255,10 +4271,9 @@ CREATE TABLE `zt_miniprogramfield` (
   `placeholder` text DEFAULT NULL,
   `options` text DEFAULT NULL,
   `required` enum('0', '1') DEFAULT '1',
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`appID`) REFERENCES `zt_miniprogram`(`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `zt_miniprogramstar` (
+CREATE TABLE `zt_ai_miniprogramstar` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `appID` mediumint(8) unsigned NOT NULL,
   `userID` mediumint(8) unsigned NOT NULL,
