@@ -2,6 +2,7 @@
 <?php include '../../common/view/carousel.html.php';?>
 <?php js::set('features', $features);?>
 <main id='features' class="is-first-item">
+  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class='icon icon-close'></i></span><span class="sr-only">关闭</span></button>
   <div id='featuresCarousel' class='carousel slide' data-ride='carousel' data-interval='false'>
     <ol class='carousel-indicators'>
       <?php if(count($features) > 1):?>
@@ -27,8 +28,8 @@
   <footer style='display: flex; gap: 16px; justify-content: center; padding: 24px 0 24px 0;'>
     <button type='button' class='btn btn-wide slide-feature-to-prev btn-slide-prev'><?php echo $lang->misc->feature->prevStep; ?></button>
     <button type='button' class='btn btn-primary btn-wide slide-feature-to-next btn-slide-next'><?php echo $lang->misc->feature->nextStep; ?></button>
-    <button type='button' data-dismiss='modal' class='btn btn-primary btn-wide btn-close-modal'><?php echo $lang->misc->feature->close; ?></button>
-    <a class='btn-close-modal' href='<?php echo $lang->misc->feature->learnMoreLink;?>' target='_blank'><button type='button' data-dismiss='modal' class='btn btn-info btn-wide' style='background: none;'><?php echo $lang->misc->feature->learnMore; ?></button></a>
+    <button type='button' data-dismiss='modal' class='btn btn-primary btn-wide btn-last'><?php echo $lang->misc->feature->close; ?></button>
+    <a class='btn-last' href='<?php echo $lang->misc->feature->learnMoreLink;?>' target='_blank'><button type='button' data-dismiss='modal' class='btn btn-info btn-wide' style='background: none;'><?php echo $lang->misc->feature->learnMore; ?></button></a>
   </footer>
 </main>
 <?php include '../../common/view/footer.lite.html.php';?>

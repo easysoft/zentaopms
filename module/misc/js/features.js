@@ -12,10 +12,18 @@ $(function()
         $('#featuresCarousel').carousel('prev');
     });
 
-    $('#features').on('click', '.btn-close-modal', function()
+    $('#features').on('click', '.btn-last', function()
     {
         var feature = features[features.length - 1];
         $.post(createLink('misc', 'ajaxSaveViewed', 'feature=' + feature));
+    });
+
+    $('#features').on('click', '.close', function()
+    {
+        features.forEach(function(feature)
+        {
+            $.post(createLink('misc', 'ajaxSaveViewed', 'feature=' + feature));
+        });
     });
 
     $('#featuresCarousel').on('slide.zui.carousel', function(e)
