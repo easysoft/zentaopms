@@ -21,7 +21,7 @@
 </div>
 <div id="mainContent" class="main-row">
   <div class="main-col">
-    <form method='post'>
+    <form class="main-form form-ajax" method='post'>
       <div class='panel'>
         <div class='panel-body'>
           <div class="category-container" style="width: 600px;">
