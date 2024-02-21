@@ -398,7 +398,7 @@ class aiModel extends model
         $data = array_filter($_POST);
         if(empty($data)) return false;
 
-        $categories = array();
+        $categories = array_values($this->lang->ai->miniPrograms->categoryList);
         foreach($data as $value)
         {
             if(is_string($value))
