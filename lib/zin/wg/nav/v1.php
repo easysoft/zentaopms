@@ -23,7 +23,7 @@ class nav extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build()
     {
         list($items, $type, $stacked, $justified) = $this->prop(array('items', 'type', 'stacked', 'justified'));
         return h::menu

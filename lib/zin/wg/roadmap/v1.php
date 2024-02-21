@@ -100,7 +100,7 @@ class roadMap extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $releases = $this->prop('releases');
         $releasePaths = array();

@@ -10,7 +10,7 @@ class dynamic extends wg
         'className?: string'
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
@@ -115,7 +115,7 @@ class dynamic extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $users    = $this->prop('users', (array)data('users'));
         $dynamics = $this->prop('dynamics', (array)data('dynamics'));

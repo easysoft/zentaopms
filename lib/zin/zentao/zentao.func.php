@@ -141,6 +141,6 @@ function bind(string $name, bool|string|array $callback, array|string $options =
 function renderJson(mixed $data, int $flags = 0)
 {
     ob_end_flush();
-    zin::$rendered = true;
+    context()->rendered = true;
     echo json_encode($data, $flags);
 }

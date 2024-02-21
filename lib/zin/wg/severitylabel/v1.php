@@ -28,7 +28,7 @@ class severityLabel extends wg
         return $child;
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $level  = $this->prop('level', 0);
         $text   = $this->prop('text');

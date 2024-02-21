@@ -9,7 +9,7 @@ class riskLabel extends wg
         'level?: string' // 风险等级：高('high' 或 'h')、中('middle' 或 'm')、低('low' 或 'l')
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
@@ -31,7 +31,7 @@ class riskLabel extends wg
         return 'risk-low';
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $text = $this->prop('text');
         return span

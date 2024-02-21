@@ -218,7 +218,7 @@ class control extends wg
         return new dropdown($this->prop('text'), set($this->props->skip('control,text,name,widget')));
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $builder = $this->prop('builder');
         if(is_callable($builder)) return $builder($this->props->skip('builder'), $this->children());

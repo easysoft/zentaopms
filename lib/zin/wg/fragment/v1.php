@@ -13,7 +13,7 @@ class fragment extends wg
     {
         $css        = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
         $js         = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));
-        $rawContent = $this->prop('rawContent', !zin::$rawContentCalled);
+        $rawContent = $this->prop('rawContent', !context()->rawContentCalled);
 
         return array
         (

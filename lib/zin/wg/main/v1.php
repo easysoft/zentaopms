@@ -134,7 +134,7 @@ class main extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build()
     {
         return div
         (

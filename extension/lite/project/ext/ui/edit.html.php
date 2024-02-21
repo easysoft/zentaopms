@@ -155,6 +155,6 @@ formPanel
     )
 );
 
-useData('title', $title);
+setPageData('title', $title);
 
 render();

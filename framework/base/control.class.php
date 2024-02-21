@@ -1002,28 +1002,26 @@ class baseControl
         chdir(dirname($viewFile));
 
         /**
-         * Set zin context data
+         * Init zin context data.
+         * 设置 zin 渲染上下文数据。
          */
-        \zin\zin::$globalRenderList = array();
-        \zin\zin::$enabledGlobalRender = true;
-        \zin\zin::$rendered = false;
-        \zin\zin::$rawContentCalled = false;
+        $context = \zin\context();
+        $context->data = (array)$this->view;
+        $context->data['zinDebug'] = array();
 
-        \zin\zin::$data = (array)$this->view;
-        \zin\zin::$data['zinDebug'] = array();
         if($this->config->debug && $this->config->debug >= 2 && $this->config->installed)
         {
-            \zin\zin::$data['zinDebug']['trace'] = $this->app->loadClass('trace')->getTrace();
+            $context->data['zinDebug']['trace'] = $this->app->loadClass('trace')->getTrace();
         }
 
         /**
          * 使用extract和ob方法渲染$viewFile里面的代码。
          * Use extract and ob functions to eval the codes in $viewFile.
          */
-        extract(\zin\zin::$data);
+        extract($context->data);
 
         /* 将 hooks 文件添加到当前 context 中。 */
-        if(!empty($hookFiles)) \zin\context::current()->addHookFiles($hookFiles);
+        if(!empty($hookFiles)) $context->addHookFiles($hookFiles);
 
         /* 加载 common.field.php 和 method.field.php。 */
         $commonFieldFile = dirname($viewFile) . DS . 'common.field.php';
@@ -1034,7 +1032,7 @@ class baseControl
         ob_start();
         include $viewFile;
 
-        if(!\zin\zin::$rendered) \zin\render();
+        if(!$context->rendered) \zin\render();
         $content = ob_get_clean();
 
         ob_start();

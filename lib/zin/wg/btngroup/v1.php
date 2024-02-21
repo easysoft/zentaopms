@@ -28,7 +28,7 @@ class btnGroup extends wg
         return $className;
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $items     = $this->prop('items');
         $className = $this->getclassName();

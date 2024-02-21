@@ -4,7 +4,7 @@ namespace zin;
 
 class divider extends wg
 {
-    protected function build(): wg
+    protected function build()
     {
         return div
         (

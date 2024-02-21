@@ -130,8 +130,7 @@ class dom
      * @access public
      * @return array
      */
-    public function build()
-    {
+    public function build(): mixed    {
         if($this->wg->removed) return array();
 
         if($this->buildList !== null && $this->buildListInner === $this->renderInner) return $this->buildList;

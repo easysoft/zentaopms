@@ -10,17 +10,17 @@ class pasteDialog extends wg
         'name?: string="importLines"' // 多行文本控件名称，默认为“importLines”
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function build(): wg
+    protected function build()
     {
         global $lang;
         $field = $this->prop('field');

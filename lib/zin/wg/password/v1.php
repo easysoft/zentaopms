@@ -13,7 +13,7 @@ class password extends wg
         'strengthClass?: string="passwordStrength"'
     );
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }

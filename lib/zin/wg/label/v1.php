@@ -8,7 +8,7 @@ class label extends wg
         'text?:string'
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
@@ -22,7 +22,7 @@ class label extends wg
         }
     }
 
-    public function build(): wg
+    public function build()
     {
         return span
         (

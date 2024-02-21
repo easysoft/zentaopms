@@ -65,7 +65,7 @@ class formPanel extends panel
         'customFields?: array=[]'                      // @deprecated 自定义表单项。
     );
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }

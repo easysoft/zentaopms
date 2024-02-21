@@ -9,16 +9,16 @@ class floatPreNextBtn extends wg
         'nextLink?:string'
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
-    protected function build(): wg|array
+    protected function build()
     {
         global $app;
         $preLink  = $this->prop('preLink');

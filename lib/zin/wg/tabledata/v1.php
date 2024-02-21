@@ -16,7 +16,7 @@ class tableData extends wg
         'required?: bool=false'
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
@@ -105,7 +105,7 @@ class tableData extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $useTable   = $this->prop('useTable');
         $tableClass = $this->prop('class');

@@ -90,7 +90,7 @@ class btn extends wg
         return $classList;
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $props     = $this->getProps();
         $children  = $this->getChildren();

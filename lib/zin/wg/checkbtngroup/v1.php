@@ -13,7 +13,7 @@ class checkBtnGroup extends checkList
         'type'   => 'radio'
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return <<<CSS
         .check-btn-group {gap: 1px; border: 1px solid var(--form-control-border); padding: 0; border-radius: var(--radius)}
@@ -30,7 +30,7 @@ class checkBtnGroup extends checkList
         return new checkBtn(set($props));
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $div = parent::build();
         $div->add(setClass('check-btn-group'));

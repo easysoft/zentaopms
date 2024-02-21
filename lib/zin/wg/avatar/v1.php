@@ -38,7 +38,7 @@ class avatar extends wg
         return $child;
     }
 
-    protected function build(): wg
+    protected function build()
     {
         /* Attach classes. */
         $this->finalClass[]           = $this->prop('className');

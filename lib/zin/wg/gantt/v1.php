@@ -9,7 +9,7 @@ class gantt extends wg
         return file_get_contents(dirname(__DIR__, 4) . '/www/js/dhtmlxgantt/min.css');
     }
 
-    protected function build(): wg
+    protected function build()
     {
         global $app;
         $jsFile = $app->getWebRoot() . 'js/dhtmlxgantt/min.js';

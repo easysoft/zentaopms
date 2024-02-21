@@ -118,7 +118,7 @@ class panel extends wg
         return array(setID($id), setClass('panel', $class, empty($size) ? null : "size-$size", $shadow ? 'shadow' : null));
     }
 
-    protected function build(): wg
+    protected function build()
     {
         return div
         (

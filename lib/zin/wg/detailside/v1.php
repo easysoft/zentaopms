@@ -4,7 +4,7 @@ namespace zin;
 
 class detailSide extends wg
 {
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return <<<CSS
         .detail-side {width: 370px;}
@@ -15,7 +15,7 @@ class detailSide extends wg
         CSS;
     }
 
-    protected function build(): wg
+    protected function build()
     {
         return div
         (

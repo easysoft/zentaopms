@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'core' . DS . 'wg.class.php';
-require_once dirname(__DIR__) . DS . 'core' . DS . 'wg.func.php';
-require_once dirname(__DIR__) . DS . 'core' . DS . 'wg.func.php';
+require_once dirname(__DIR__) . DS . 'core' . DS . 'zin.func.php';
 require_once __DIR__ . DS . 'toggle.func.php';
 require_once __DIR__ . DS . 'toggle.class.php';
 
@@ -34,7 +33,7 @@ class zui extends wg
         '_initWithShareData?: bool',
     );
 
-    protected function build(): wg|array
+    protected function build(): mixed
     {
         list($name, $target, $tagName, $targetProps, $size, $id, $class, $map, $call, $initWithShareData, $userOptions) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map', '_call', '_initWithShareData', '_options'));
         list($width, $height) = $size;

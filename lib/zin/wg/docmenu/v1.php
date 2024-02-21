@@ -25,12 +25,12 @@ class docMenu extends wg
         'hover?: bool=true'
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }

@@ -57,7 +57,7 @@ class colorPicker extends wg
      *
      * @access protected
      */
-    protected function build(): wg
+    protected function build()
     {
         list($props, $restProps) = $this->props->split(array_keys(static::definedPropsList()));
         if(isset($props['id']))

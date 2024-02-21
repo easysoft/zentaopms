@@ -23,7 +23,7 @@ class formRow extends wg
         return new formGroup(inherit($item));
     }
 
-    protected function build(): wg
+    protected function build()
     {
         list($width, $items, $hidden) = $this->prop(['width', 'items', 'hidden']);
 

@@ -13,35 +13,27 @@ declare(strict_types=1);
 namespace zin;
 
 require_once __DIR__ . DS . 'h.class.php';
-require_once __DIR__ . DS . 'item.class.php';
-require_once __DIR__ . DS . 'wg.func.php';
-require_once __DIR__ . DS . 'set.class.php';
-require_once __DIR__ . DS . 'to.class.php';
-require_once __DIR__ . DS . 'data.func.php';
-require_once __DIR__ . DS . 'on.class.php';
 
-function h(): h          {return call_user_func_array('\zin\h::create', func_get_args());}
-
-function div(): h        {return call_user_func_array('\zin\h::div', func_get_args());}
-function span(): h       {return call_user_func_array('\zin\h::span', func_get_args());}
-function code(): h       {return call_user_func_array('\zin\h::code', func_get_args());}
-function canvas(): h     {return call_user_func_array('\zin\h::canvas', func_get_args());}
-function br(): h         {return call_user_func_array('\zin\h::br', func_get_args());}
-function a(): h          {return call_user_func_array('\zin\h::a', func_get_args());}
-function p(): h          {return call_user_func_array('\zin\h::p', func_get_args());}
-function img(): h        {return call_user_func_array('\zin\h::img', func_get_args());}
-function button(): h     {return call_user_func_array('\zin\h::button', func_get_args());}
-function h1(): h         {return call_user_func_array('\zin\h::h1', func_get_args());}
-function h2(): h         {return call_user_func_array('\zin\h::h2', func_get_args());}
-function h3(): h         {return call_user_func_array('\zin\h::h3', func_get_args());}
-function h4(): h         {return call_user_func_array('\zin\h::h4', func_get_args());}
-function h5(): h         {return call_user_func_array('\zin\h::h5', func_get_args());}
-function h6(): h         {return call_user_func_array('\zin\h::h6', func_get_args());}
-function ul(): h         {return call_user_func_array('\zin\h::ul', func_get_args());}
-function li(): h         {return call_user_func_array('\zin\h::li', func_get_args());}
-function template(): h   {return call_user_func_array('\zin\h::template', func_get_args());}
-function formHidden(): h {return call_user_func_array('\zin\h::formHidden', func_get_args());}
-function fieldset(): h   {return call_user_func_array('\zin\h::fieldset', func_get_args());}
-function legend(): h     {return call_user_func_array('\zin\h::legend', func_get_args());}
-
-function jsRaw(): string    {return call_user_func_array('\zin\h::jsRaw', func_get_args());}
+function h(mixed ...$args): h          {return h::create(...$args);}
+function div(mixed ...$args): h        {return h::div(...$args);}
+function span(mixed ...$args): h       {return h::span(...$args);}
+function code(mixed ...$args): h       {return h::code(...$args);}
+function canvas(mixed ...$args): h     {return h::canvas(...$args);}
+function br(mixed ...$args): h         {return h::br(...$args);}
+function a(mixed ...$args): h          {return h::a(...$args);}
+function p(mixed ...$args): h          {return h::p(...$args);}
+function img(mixed ...$args): h        {return h::img(...$args);}
+function button(mixed ...$args): h     {return h::button(...$args);}
+function h1(mixed ...$args): h         {return h::h1(...$args);}
+function h2(mixed ...$args): h         {return h::h2(...$args);}
+function h3(mixed ...$args): h         {return h::h3(...$args);}
+function h4(mixed ...$args): h         {return h::h4(...$args);}
+function h5(mixed ...$args): h         {return h::h5(...$args);}
+function h6(mixed ...$args): h         {return h::h6(...$args);}
+function ul(mixed ...$args): h         {return h::ul(...$args);}
+function li(mixed ...$args): h         {return h::li(...$args);}
+function template(mixed ...$args): h   {return h::template(...$args);}
+function formHidden(mixed ...$args): h {return h::formHidden(...$args);}
+function fieldset(mixed ...$args): h   {return h::fieldset(...$args);}
+function legend(mixed ...$args): h     {return h::legend(...$args);}
+function rawContent(): text            {return h::comment('{{RAW_CONTENT}}');}

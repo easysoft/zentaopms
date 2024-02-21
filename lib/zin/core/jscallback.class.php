@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-require_once __DIR__ . DS . 'wg.func.php';
+require_once __DIR__ . DS . 'zin.func.php';
 require_once __DIR__ . DS . 'jshelper.class.php';
 
 /**

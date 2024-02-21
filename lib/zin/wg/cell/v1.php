@@ -13,7 +13,7 @@ class cell extends wg
         'align?: string'        // align-self 属性，例如 'auto'、'flex-start'、'flex-end'、'center'、'baseline'、'stretch'。
     );
 
-    protected function build(): wg
+    protected function build()
     {
         $basis = null;
         $class = array('cell');

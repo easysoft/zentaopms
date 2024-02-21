@@ -70,8 +70,6 @@ class props extends \zin\utils\dataset
         elseif(str_starts_with($prop, '~'))        $this->style->set(substr($prop, 1), $value);
         elseif($prop === '--')                     $this->style->cssVar($value);
         elseif(str_starts_with($prop, '--'))       $this->style->cssVar(substr($prop, 2), $value);
-        elseif($prop === '!')                      $this->hx($value);
-        elseif(str_starts_with($prop, '!'))        $this->hx(substr($prop, 1), $value);
         elseif(str_starts_with($prop, ':'))        $this->set('data-' . substr($prop, 1), $value);
         elseif($prop === '@')                      $this->bindEvent($value);
         elseif(str_starts_with($prop, '@'))        $this->bindEvent(substr($prop, 1), $value);
@@ -147,17 +145,6 @@ class props extends \zin\utils\dataset
         }
 
         return false;
-    }
-
-    public function hx(array|string $name, ?string $value = null)
-    {
-        if(is_array($name))
-        {
-            foreach($name as $key => $val) $this->set("hx-$key", $val);
-            return;
-        }
-
-        $this->set("hx-$name", $value);
     }
 
     /**

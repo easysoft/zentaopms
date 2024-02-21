@@ -11,7 +11,7 @@ class collapseBtn extends wg
         'parent: string' // 目标元素与按钮共同的父级元素选择器，使用 closest 辅助目标元素的确定。
     );
 
-    protected function build(): wg
+    protected function build()
     {
         $target = $this->prop('target');
         $parent = $this->prop('parent');

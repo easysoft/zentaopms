@@ -28,7 +28,7 @@ class detailHeader extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $prefix = $this->block('prefix');
         $title  = $this->block('title');

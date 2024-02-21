@@ -39,7 +39,7 @@ class toolbar extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $items = $this->prop('items');
         return div

@@ -19,7 +19,7 @@ class treeEditor extends wg
         'canSplit?: bool=true'
     );
 
-    protected function build(): wg
+    protected function build()
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
         $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'onSort'));

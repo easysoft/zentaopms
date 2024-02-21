@@ -37,7 +37,7 @@ class userAvatar extends wg
         return parent::onAddChild($child);
     }
 
-    protected function build(): wg
+    protected function build()
     {
         list($user, $avatar, $account, $realname) = $this->prop(array('user', 'avatar', 'account', 'realname'));
         if(is_array($user))

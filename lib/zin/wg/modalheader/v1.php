@@ -34,7 +34,7 @@ class modalHeader extends wg
         $this->setDefaultProps(array('title' => $title, 'entityText' => $entityText, 'entityID' => $entityID));
     }
 
-    protected function build(): wg|array
+    protected function build()
     {
         list($title, $entityText, $entityID, $inModal) = $this->prop(array('title', 'entityText', 'entityID', 'inModal'));
         if(empty($inModal)) $inModal = false;

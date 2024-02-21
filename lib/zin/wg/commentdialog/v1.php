@@ -13,7 +13,7 @@ class commentDialog extends wg
         'load?: bool|string'
     );
 
-    protected function build(): wg
+    protected function build()
     {
         global $lang;
         $id     = $this->prop('id');

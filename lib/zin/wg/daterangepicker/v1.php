@@ -112,7 +112,7 @@ class dateRangePicker extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build()
     {
         $begin = new datePicker(set($this->buildBeginProps()));
         $end   = new datePicker(set($this->buildEndProps()));

@@ -50,7 +50,7 @@ class inputGroup extends wg
         return new input(set::type($control), set($item->props->skip('control')));
     }
 
-    protected function build(): wg
+    protected function build()
     {
         list($items, $seg) = $this->prop(['items', 'seg']);
         $children = $this->children();

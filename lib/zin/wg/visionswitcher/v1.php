@@ -7,7 +7,7 @@ require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 
 class visionSwitcher extends wg
 {
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return <<<CSS
         #versionSwitchBtn > .icon, #versionMenu .item-icon {display: flex; width: 18px; height: 18px; border-radius: var(--radius-md); align-items: center; justify-content: center; background: rgba(var(--color-inverse-rgb), .1); opacity: .7;}

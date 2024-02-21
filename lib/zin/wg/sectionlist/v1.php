@@ -11,7 +11,7 @@ class sectionList extends wg
         return new section(inherit($item));
     }
 
-    protected function build(): wg
+    protected function build()
     {
         return div
         (

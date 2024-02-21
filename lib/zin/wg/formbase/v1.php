@@ -107,7 +107,7 @@ class formBase extends wg
         return $after;
     }
 
-    protected function build(): wg
+    protected function build()
     {
         return h::form
         (

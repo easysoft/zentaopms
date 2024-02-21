@@ -31,7 +31,7 @@ class textarea extends wg
         return $child;
     }
 
-    protected function build(): wg
+    protected function build()
     {
         return h::textarea
         (

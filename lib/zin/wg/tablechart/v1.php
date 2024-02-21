@@ -39,7 +39,7 @@ class tableChart extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $type        = $this->prop('type');
         $item        = $this->prop('item');

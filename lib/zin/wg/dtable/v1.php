@@ -25,7 +25,7 @@ class dtable extends wg
 
     static $dtableID = 0;
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
@@ -266,7 +266,7 @@ class dtable extends wg
         return $setting;
     }
 
-    protected function build(): wg
+    protected function build()
     {
         global $lang, $app;
 

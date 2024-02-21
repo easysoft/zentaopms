@@ -291,7 +291,7 @@ class navbar extends wg
      *
      * @access protected
      */
-    protected function build(): wg
+    protected function build()
     {
         return h::nav
         (

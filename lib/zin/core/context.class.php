@@ -16,13 +16,110 @@ use function zin\utils\flat;
 
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'deep.func.php';
 
 class context extends \zin\utils\dataset
 {
+    public string $name;
+
+    public array $globalRenderList = array();
+
+    public int $globalRenderLevel = 0;
+
+    public array $data = array();
+
+    public bool $rendered = false;
+
+    public bool $rawContentCalled = false;
+
+    public function __construct(string $name)
+    {
+        parent::__construct();
+        $this->name = $name;
+    }
+
+    public function __debugInfo(): array
+    {
+        return array_merge(array
+        (
+            'name'                => $this->name,
+            'globalRenderListLen' => count($this->globalRenderList),
+            'globalRenderList'    => $this->globalRenderList,
+            'globalRenderLevel'   => $this->globalRenderLevel,
+            'rendered'            => $this->rendered,
+            'rawContentCalled'    => $this->rawContentCalled,
+        ), $this->storedData);
+    }
+
+    public function getData(string $namePath, mixed $defaultValue = null): mixed
+    {
+        return \zin\utils\deepGet($this->data, $namePath, $defaultValue);
+    }
+
+    public function setData(string $namePath, mixed $value)
+    {
+        \zin\utils\deepSet($this->data, $namePath, $value);
+    }
+
+    public function enableGlobalRender()
+    {
+        $this->globalRenderLevel--;
+    }
+
+    public function disableGlobalRender()
+    {
+        $this->globalRenderLevel++;
+    }
+
+    public function enabledGlobalRender()
+    {
+        return $this->globalRenderLevel < 1;
+    }
+
+    public function renderInGlobal(node|iDirective $item): bool
+    {
+        if($this->globalRenderLevel > 0)
+        {
+            return false;
+        }
+
+        if($item instanceof node)
+        {
+            if($item->parent || $item->shortType() === 'wg') return false;
+
+            if(!isset($this->globalRenderList[$item->gid])) $this->globalRenderList[$item->gid] = $item;
+            return true;
+        }
+
+        if(in_array($item, $this->globalRenderList)) return false;
+
+        $this->globalRenderList[] = $item;
+        return true;
+    }
+
+    public function getGlobalRenderList(bool $clear = true): array
+    {
+        $globalItems = array();
+
+        foreach($this->globalRenderList as $item)
+        {
+            if(is_object($item) && ((isset($item->parent) && $item->parent) || (isset($item->notRenderInGlobal) && $item->notRenderInGlobal)))
+            {
+                continue;
+            }
+            $globalItems[] = $item;
+        }
+
+        /* Clear globalRenderList. */
+        if($clear) $this->globalRenderList = array();
+
+        return $globalItems;
+    }
+
     public function addHookFiles(string|array ...$files)
     {
         $files = flat($files);
-        return $this->mergeToList('hookFiles', $files);
+        return $this->mergeToList('hookFiles', array_filter(array_values($files)));
     }
 
     public function getHookFiles(): array
@@ -30,12 +127,12 @@ class context extends \zin\utils\dataset
         return $this->getList('hookFiles');
     }
 
-    public function addImport(string ...$files)
+    public function addImports(string ...$files)
     {
         return $this->mergeToList('import', $files);
     }
 
-    public function getImportList(): array
+    public function getImports(): array
     {
         return $this->getList('import');
     }
@@ -57,7 +154,7 @@ class context extends \zin\utils\dataset
 
     public function addJSVar(string $name, mixed $value)
     {
-        return $this->addToList('jsVar', h::createJsVarCode($name, $value));
+        // return $this->addToList('jsVar', h::createJsVarCode($name, $value));
     }
 
     public function addWgWithEvents($wg)
@@ -107,7 +204,7 @@ class context extends \zin\utils\dataset
         return $js;
     }
 
-    public static $map = array();
+    public static array $stack = array();
 
     public static function js(/* string ...$code */)
     {
@@ -120,7 +217,6 @@ class context extends \zin\utils\dataset
         $context = static::current();
         call_user_func_array(array($context, 'addJSCall'), func_get_args());
     }
-
 
     public static function jsVar($name, $value)
     {
@@ -137,7 +233,7 @@ class context extends \zin\utils\dataset
     public static function import(/* string ...$files */)
     {
         $context = static::current();
-        call_user_func_array(array($context, 'addImport'), func_get_args());
+        call_user_func_array(array($context, 'addImports'), func_get_args());
     }
 
     /**
@@ -148,35 +244,38 @@ class context extends \zin\utils\dataset
      */
     public static function current(): context
     {
-        if(empty(static::$map)) static::$map['current'] = new context();
-        return static::$map['current'];
+        if(empty(static::$stack))
+        {
+            $context = new context('default');
+            static::$stack['default'] = $context;
+            return $context;
+        }
+        return end(static::$stack);
     }
 
     /**
-     * Create widget context.
+     * Create context.
      *
      * @access public
-     * @param string $gid  The widget gid.
+     * @param string $name  Context name.
      * @return context
      */
-    public static function create(string $gid): context
+    public static function create(string $name): context
     {
-        if(isset(static::$map[$gid])) return static::$map[$gid];
-        $context = new context();
-        static::$map[$gid] = $context;
+        if(isset(static::$stack[$name])) return static::$stack[$name];
+        $context = new context($name);
+        static::$stack[$name] = $context;
         return $context;
     }
 
     /**
-     * Destroy widget context.
+     * Pop last context.
      *
      * @access public
-     * @param string $gid  The widget gid.
-     * @return void
+     * @return ?context
      */
-    public static function destroy(string $gid = null): void
+    public static function pop(): ?context
     {
-        if($gid === null) unset(static::$map['current']);
-        elseif(isset(static::$map[$gid])) unset(static::$map[$gid]);
+        return array_pop(static::$stack);
     }
 }

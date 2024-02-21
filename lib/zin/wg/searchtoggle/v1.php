@@ -17,7 +17,7 @@ class searchToggle extends wg
         if($this->hasProp('formName')) trigger_error('[ZIN] The property "formName" is not supported in the "searchToggle()"', E_USER_WARNING);
     }
 
-    protected function build(): wg
+    protected function build()
     {
         global $lang, $app, $config;
         list($target, $module, $open, $url, $searchUrl) = $this->prop(array('target', 'module', 'open', 'url', 'searchUrl'));

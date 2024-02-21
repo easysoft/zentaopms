@@ -44,7 +44,7 @@ class users extends wg
         }
     }
 
-    protected function build(): wg|array
+    protected function build()
     {
         return inputGroup
         (

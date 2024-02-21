@@ -23,7 +23,7 @@ class entityLabel extends wg
         'suffix' => array()
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
@@ -86,7 +86,7 @@ class entityLabel extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $reverse    = $this->prop('reverse');
         $prefix     = $this->block('prefix');

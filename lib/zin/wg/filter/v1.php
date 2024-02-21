@@ -82,7 +82,7 @@ class filter extends wg
         return $this->buildInput();
     }
 
-    protected function build(): wg|array
+    protected function build()
     {
         $type  = $this->prop('type');
         $class = $this->prop('class', 'w-1/4');

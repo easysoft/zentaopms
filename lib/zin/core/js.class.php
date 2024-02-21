@@ -12,11 +12,14 @@ declare(strict_types=1);
 
 namespace zin;
 
-require_once __DIR__ . DS . 'wg.func.php';
+require_once __DIR__ . DS . 'node.class.php';
+require_once __DIR__ . DS . 'directive.class.php';
+require_once __DIR__ . DS . 'zin.func.php';
 
 use zin\jsContext;
 use zin\jsCallback;
 use zin\jQuery;
+use zin\node;
 
 /**
  * Class for generating js code.
@@ -24,8 +27,10 @@ use zin\jQuery;
  *
  * @access public
  */
-class js extends directive implements \JsonSerializable
+class js implements \JsonSerializable, iDirective
 {
+    public bool $notRenderInGlobal = true;
+
     /**
      * The js code lines.
      * JS 代码行。
@@ -43,7 +48,6 @@ class js extends directive implements \JsonSerializable
      */
     public function __construct(null|string|js|array ...$codes)
     {
-        parent::__construct('js');
         $this->appendLines(...$codes);
     }
 
@@ -104,9 +108,10 @@ class js extends directive implements \JsonSerializable
         $argCodes = array();
         foreach($args as $arg)
         {
-            $argCodes[] = ($arg instanceof js) ? $arg->toJS() : static::json($arg);
+            $argCodes[] = ($arg instanceof js) ? $arg->toJS() : static::value($arg);
         }
-        return $this->appendLine($func, '(', implode(',', $argCodes), ')');
+
+        return $this->appendLine($func . '(' . implode(',', $argCodes) . ')');
     }
 
     /**
@@ -133,7 +138,7 @@ class js extends directive implements \JsonSerializable
      */
     public function let(string $name, mixed $value): self
     {
-        return $this->appendLine('let', $name, '=', static::json($value));
+        return $this->appendLine('let', $name, '=', static::value($value));
     }
 
     /**
@@ -147,7 +152,7 @@ class js extends directive implements \JsonSerializable
      */
     public function const(string $name, mixed $value): self
     {
-        return $this->appendLine('const', $name, '=', static::json($value));
+        return $this->appendLine('const', $name, '=', static::value($value));
     }
 
     /**
@@ -162,7 +167,21 @@ class js extends directive implements \JsonSerializable
     public function globalVar(string $name, mixed $value): self
     {
         if(!str_starts_with($name, 'window.')) $name = 'window.' . $name;
-        return $this->appendLine($name, '=', static::json($value));
+        return $this->appendLine($name, '=', static::value($value));
+    }
+
+    public function var(string|array $nameOrVars, mixed $value = null): self
+    {
+        if(is_array($nameOrVars))
+        {
+            foreach($nameOrVars as $name => $val) $this->var($name, $val);
+            return $this;
+        }
+
+        $name = $nameOrVars;
+        if(str_starts_with($name, '+'))       return $this->let(substr($name, 1), $value);
+        if(str_starts_with($name, 'window.')) return $this->globalVar($name, $value);
+        return $this->const($name, $value);
     }
 
     /**
@@ -295,7 +314,6 @@ class js extends directive implements \JsonSerializable
             }
             if($line instanceof js)
             {
-                $line->parent = $this;
                 $line = $line->toJS();
             }
             $this->appendLine($line);
@@ -348,16 +366,16 @@ class js extends directive implements \JsonSerializable
     }
 
     /**
-     * Apply JS code to zin widget.
+     * Apply JS code to zin node.
      * 将 JS 代码应用到指定的 zin 部件中。
      *
      * @access public
-     * @param wg     $wg        zin widget object.
-     * @param string $blockName zin widget block name.
+     * @param node     $node        zin node object.
+     * @param string   $blockName   zin node block name.
      */
-    public function applyToWg(wg &$wg, string $blockName): void
+    public function apply(node $node, string $blockName): void
     {
-        $wg->addToBlock($blockName, h::js($this->toJS()));
+        $node->addToBlock($blockName, h::js($this->toJS()));
     }
 
     /**
@@ -371,7 +389,20 @@ class js extends directive implements \JsonSerializable
     {
         $js = trim($this->toJS());
         if(str_ends_with(';', $js)) $js = substr($js, 0, -1);
-        return h::jsRaw($js);
+        return js::raw($js);
+    }
+
+    public static function raw(string ...$codes)
+    {
+        $js = implode('<RAWJS_LINE>', $codes);
+        $js = str_replace(array("\n", '"'), array('<RAWJS_LINE>', '<RAWJS_QUOTE>'), $js);
+        return "RAWJS<$js>RAWJS";
+    }
+
+    public static function decodeRaw(string $str): string
+    {
+        if(!str_contains($str, 'RAWJS')) return $str;
+        return str_replace(array('<RAWJS_LINE>', '<RAWJS_QUOTE>', '"RAWJS<', '>RAWJS"'), array("\n", '"', '', ''), $str);
     }
 
     /**
@@ -389,16 +420,19 @@ class js extends directive implements \JsonSerializable
     }
 
     /**
-     * Encode php value to JSON.
-     * 将 PHP 值编码为 JSON。
+     * Encode php value to JS code.
+     * 将 PHP 值编码为 JS 代码。
      *
      * @access public
      * @param mixed $data PHP value.
      * @return string
      */
-    public static function json($data): string
+    public static function value(mixed $data): string
     {
-        return h::encodeJsonWithRawJs($data);
+        $js = \zin\utils\jsonEncode($data, JSON_UNESCAPED_UNICODE);
+        if(empty($js) && (is_array($data) || is_object($data))) return '[]';
+
+        return static::decodeRaw($js);
     }
 
     /**
@@ -487,4 +521,9 @@ class js extends directive implements \JsonSerializable
 function js(null|string|js|array ...$codes): js
 {
     return new js(...$codes);
+}
+
+function jsRaw(string ...$codes): string
+{
+    return js::raw(...$codes);
 }

@@ -136,7 +136,7 @@ class formGroup extends wg
         );
     }
 
-    protected function build(): wg|array
+    protected function build()
     {
         list($name, $labelWidth, $required, $width, $id, $hidden, $foldable, $pinned, $children, $wrapBefore, $wrapAfter, $data) = $this->prop(array('name', 'labelWidth', 'required', 'width', 'id', 'hidden', 'foldable', 'pinned', 'children', 'wrapBefore', 'wrapAfter', 'data'));
 

@@ -18,7 +18,7 @@ class formLabel extends wg
         'checkbox?: bool|array'
     );
 
-    protected function build(): wg
+    protected function build()
     {
         list($text, $required, $for, $hint, $hintClass, $hintProps, $hintIcon, $actions, $actionsClass, $actionsProps, $checkbox) = $this->prop(array('text', 'required', 'for', 'hint', 'hintClass', 'hintProps', 'hintIcon', 'actions', 'actionsClass', 'actionsProps', 'checkbox'));
 

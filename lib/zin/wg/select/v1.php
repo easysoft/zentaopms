@@ -99,7 +99,7 @@ class select extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build()
     {
         list($items, $multiple, $required) = $this->prop(array('items', 'multiple', 'required'));
 

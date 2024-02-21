@@ -6,7 +6,7 @@ require_once dirname(__DIR__) . DS . 'checkbtngroup' . DS . 'v1.php';
 
 class checkColorGroup extends checkBtnGroup
 {
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return <<<CSS
         .check-btn-group {gap: 1px; padding: 0; border-radius: var(--radius); margin-top: 4px;}
@@ -25,7 +25,7 @@ class checkColorGroup extends checkBtnGroup
         return parent::buildItem($props);
     }
 
-    protected function build(): wg
+    protected function build()
     {
         return parent::build();
     }

@@ -14,12 +14,12 @@ class checkboxGroup extends wg
         'disabled' => false
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
@@ -30,7 +30,7 @@ class checkboxGroup extends wg
         return checkbox(set($title), setClass('checkbox-title'));
     }
 
-    private function buildCheckboxList(): wg
+    private function buildCheckboxList(): node
     {
         $items = $this->prop('items');
         $title = array_merge(self::$checkboxProps, $this->prop('title'));
@@ -52,7 +52,7 @@ class checkboxGroup extends wg
         return $list;
     }
 
-    public function build(): wg
+    public function build()
     {
         return div
         (

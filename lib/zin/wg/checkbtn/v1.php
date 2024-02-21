@@ -6,7 +6,7 @@ require_once dirname(__DIR__) . DS . 'checkbox' . DS . 'v1.php';
 
 class checkBtn extends checkbox
 {
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return <<<CSS
         .check-btn > input + label {color: var(--color-gray-500)}

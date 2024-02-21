@@ -27,7 +27,7 @@ class tabPane extends wg
         }
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $key    = $this->prop('key');
         $active = $this->prop('active');

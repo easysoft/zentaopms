@@ -20,9 +20,9 @@ class pageBase extends wg
 
     protected static array $defaultProps = array
     (
-        'zui' => false,
+        'zui'     => false,
         'display' => true,
-        'metas' => array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')
+        'metas'   => array('<meta charset="utf-8">', '<meta http-equiv="X-UA-Compatible" content="IE=edge">', '<meta name="viewport" content="width=device-width, initial-scale=1">', '<meta name="renderer" content="webkit">')
     );
 
     protected static array $defineBlocks = array('head' => array());
@@ -42,7 +42,7 @@ class pageBase extends wg
         return $this->children();
     }
 
-    protected function build(): wg
+    protected function build()
     {
         global $lang, $config, $app;
 
@@ -50,16 +50,17 @@ class pageBase extends wg
         $head = $this->buildHead();
         $body = $this->buildBody();
 
+        $context    = context();
         $jsConfig   = \js::getJSConfigVars();
         $bodyProps  = $this->prop('bodyProps');
         $bodyClass  = $this->prop('bodyClass');
         $metas      = $this->prop('metas');
-        $rawContent = $this->prop('rawContent', !zin::$rawContentCalled);
+        $rawContent = $this->prop('rawContent', !$context->rawContentCalled);
         $title      = $this->props->get('title', data('title')) . " - $lang->zentaoPMS";
         $attrs      = $this->getRestProps();
         $css        = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
         $js         = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));
-        $imports    = context::current()->getImportList();
+        $imports    = $context->getImports();
         $webRoot    = $app->getWebRoot();
         $themeName  = $app->cookie->theme;
         $zuiPath    = $config->zin->zuiPath;
@@ -94,12 +95,12 @@ class pageBase extends wg
                 $zinDebugData['definedProps'] = wg::$definedPropsMap;
                 $zinDebugData['wgBlockMap']   = wg::$wgToBlockMap;
             }
-            $js[] = h::createJsVarCode('window.zin', $zinDebugData);
+            $js[] = 'window.zin = ' . js::value($zinDebugData) . ';';
             $js[] = 'console.log("[ZIN] ", window.zin);';
         }
         else
         {
-            $js[] = h::createJsVarCode('window.zin', array());
+            $js[] = 'window.zin = {};';
         }
         if($zui) array_unshift($js, 'zui.defineFn();');
 

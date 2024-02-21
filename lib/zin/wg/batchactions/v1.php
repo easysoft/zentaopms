@@ -8,12 +8,12 @@ class batchActions extends wg
         'actionClass?: string=""',
     );
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function build(): wg
+    protected function build()
     {
         return formGroup
         (

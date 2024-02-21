@@ -49,7 +49,7 @@ class checkList extends wg
         return new checkbox(set($props));
     }
 
-    protected function build(): wg
+    protected function build()
     {
         list($items, $inline, $disabled, $className) = $this->prop(array('items', 'inline', 'disabled', 'className'));
 

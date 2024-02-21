@@ -18,12 +18,12 @@ class aclBox extends wg
         'userValue?: string=""',               // 用户组默认选中值。
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function build(): wg
+    protected function build()
     {
         list($aclItems, $aclValue, $whitelistLabel, $groupLabel, $userLabel, $groupName, $userName, $groupItems, $groupValue, $userValue) = $this->prop(array('aclItems', 'aclValue', 'whitelistLabel', 'groupLabel', 'userLabel', 'groupName', 'userName', 'groupItems', 'groupValue', 'userValue'));
 

@@ -40,7 +40,7 @@ class mainNavbar extends nav
      * @access public
      * @return string|false
      */
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
@@ -99,7 +99,7 @@ class mainNavbar extends nav
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build()
     {
         global $app, $config;
 

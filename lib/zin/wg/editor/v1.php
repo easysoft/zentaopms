@@ -33,12 +33,12 @@ class editor extends wg
         .tippy-content zen-editor-menu-item .label {all: unset;}
     CSS;
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         $content  = file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
         $content .= '$.getLib(\'zen-editor/zen-editor.esm.js\', {type: "module"}, () => {document.body.dataset.loadedEditor = true;});';
@@ -75,7 +75,7 @@ class editor extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build()
     {
         global $lang;
 

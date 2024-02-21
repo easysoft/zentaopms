@@ -80,7 +80,7 @@ class section extends wg
         return $this->content($content);
     }
 
-    protected function build(): wg
+    protected function build()
     {
         return div
         (

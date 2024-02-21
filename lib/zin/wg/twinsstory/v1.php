@@ -20,17 +20,17 @@ class twinsStory extends wg
         'defaultPlan?: int=0',           // 默认计划。
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function build(): wg
+    protected function build()
     {
         global $lang, $config;
         list($productType, $branchItems, $defaultBranch, $moduleItems, $defaultModule, $planItems, $defaultPlan) = $this->prop(array('productType', 'branchItems', 'defaultBranch', 'moduleItems', 'defaultModule', 'planItems', 'defaultPlan'));

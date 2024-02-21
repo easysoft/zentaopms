@@ -23,7 +23,7 @@ class input extends wg
         'class' => 'form-control'
     );
 
-    protected function build(): wg
+    protected function build()
     {
         $props    = $this->props->skip('required');
         $required = $this->prop('required');

@@ -44,7 +44,7 @@ class colorInput extends inputControl
      *
      * @access protected
      */
-    protected function build(): wg
+    protected function build()
     {
         list($id, $name, $value, $inputClass, $colorName, $colorValue, $syncColor) = $this->prop(array('id', 'name', 'value', 'inputClass', 'colorName', 'colorValue', 'syncColor'));
 

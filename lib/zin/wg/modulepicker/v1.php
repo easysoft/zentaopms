@@ -22,12 +22,12 @@ class modulePicker extends wg
         'manageLink?: string'       // 维护模块链接
     );
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function build(): wg|array
+    protected function build()
     {
         global $app, $lang;
         $app->loadLang('tree');

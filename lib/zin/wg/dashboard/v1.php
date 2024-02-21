@@ -55,7 +55,7 @@ class dashboard extends wg
     /**
      * Build widget.
      */
-    protected function build(): wg
+    protected function build()
     {
         return zui::dashboard
         (

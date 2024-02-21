@@ -131,7 +131,7 @@ class overviewBlock extends wg
         return $body;
     }
 
-    protected function build(): wg
+    protected function build()
     {
         list($id, $title, $block, $groups) = $this->prop(array('id', 'title', 'block', 'groups'));
 

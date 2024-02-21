@@ -20,7 +20,7 @@ class tabs extends wg
         'headerClass?:string=""'
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
@@ -109,7 +109,7 @@ class tabs extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $isVertical = $this->prop('direction') === 'v';
 

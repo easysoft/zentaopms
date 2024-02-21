@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace zin;
 
-require_once __DIR__ . DS . 'wg.func.php';
+require_once __DIR__ . DS . 'zin.func.php';
 require_once __DIR__ . DS . 'jscallback.class.php';
 
-use zin\wg;
+use zin\node;
 
 /**
  * Events binding class.
@@ -170,16 +170,16 @@ class on extends jsCallback
     }
 
     /**
-     * Apply to widget.
+     * Apply to node.
      * 应用到部件。
      *
      * @access public
-     * @param  wg     $wg        The widget instance.
+     * @param  node     $node        The node instance.
      * @param  string $blockName The block name.
      * @return void
      * @override
      */
-    public function applyToWg(wg &$wg, string $blockName): void
+    public function apply(node $node, string $blockName): void
     {
         if($this->compatible)
         {
@@ -187,12 +187,12 @@ class on extends jsCallback
             $options['selector'] = $this->selector;
             $options['handler']  = parent::buildBody('');
 
-            $wg->setProp("@{$this->event}", (object)$options);
+            $node->setProp("@{$this->event}", (object)$options);
             return;
         }
 
-        $zuiInitCode = $wg->prop('zui-init', '');
-        $wg->setProp('zui-init', $zuiInitCode . "\n" . $this->toJS());
+        $zuiInitCode = $node->prop('zui-init', '');
+        $node->setProp('zui-init', $zuiInitCode . "\n" . $this->toJS());
     }
 
     /**

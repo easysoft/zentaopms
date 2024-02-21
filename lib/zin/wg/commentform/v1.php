@@ -12,7 +12,7 @@ class commentForm extends wg
         'method?:string="POST"'
     );
 
-    protected function build(): wg
+    protected function build()
     {
         global $lang;
         $url        = $this->prop('url');

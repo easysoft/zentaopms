@@ -16,12 +16,12 @@ class fileList extends wg
         'padding?:bool=true'
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
@@ -47,7 +47,7 @@ class fileList extends wg
         return $fileListView;
     }
 
-    protected function build(): wg
+    protected function build()
     {
         global $lang;
 

@@ -19,7 +19,7 @@ class inputControl extends wg
         'suffix' => array()
     );
 
-    protected function build(): wg
+    protected function build()
     {
         list($prefix, $suffix, $prefixWidth, $suffixWidth, $class) = $this->prop(array('prefix', 'suffix', 'prefixWidth', 'suffixWidth', 'class'));
 

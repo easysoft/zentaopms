@@ -88,7 +88,7 @@ class modalDialog extends wg
 
     protected function buildBody()
     {
-        $rawContent = $this->prop('rawContent', !zin::$rawContentCalled);
+        $rawContent = $this->prop('rawContent', !context()->rawContentCalled);
         return div
         (
             setClass('modal-body scrollbar-hover', $this->prop('bodyClass')),
@@ -125,7 +125,7 @@ class modalDialog extends wg
         return "$objectType:$objectID";
     }
 
-    protected function build(): wg
+    protected function build()
     {
         return div
         (

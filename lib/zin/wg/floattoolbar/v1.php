@@ -74,7 +74,7 @@ class floatToolbar extends wg
         return array_merge($btns, $block);
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $prefixBtns = $this->buildBtns($this->prop('prefix'));
         $mainBtns   = $this->buildBtns($this->prop('main'));

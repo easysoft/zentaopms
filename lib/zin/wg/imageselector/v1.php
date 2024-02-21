@@ -17,7 +17,7 @@ class imageSelector extends fileSelector
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build()
     {
         return zui::imageSelector(inherit($this));
     }

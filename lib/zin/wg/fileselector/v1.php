@@ -76,7 +76,7 @@ class fileSelector extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build()
     {
         return zui::fileSelector(inherit($this));
     }

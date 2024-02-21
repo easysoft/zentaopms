@@ -24,7 +24,7 @@ class menu extends wg
     /**
      * @return builder
      */
-    protected function build(): wg
+    protected function build()
     {
         $items = $this->prop('items');
         return h::menu

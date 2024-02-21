@@ -43,7 +43,7 @@ class searchForm extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build()
     {
         global $config;
         if(isset($config->zin->mode) && $config->zin->mode == 'compatible')

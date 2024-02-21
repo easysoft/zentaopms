@@ -20,7 +20,7 @@ class contactList extends wg
         'placeholder?: string',         // picker 占位符。
     );
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
@@ -45,7 +45,7 @@ class contactList extends wg
         }
     }
 
-    protected function build(): wg|array
+    protected function build()
     {
         global $app, $lang;
         $app->loadLang('user');

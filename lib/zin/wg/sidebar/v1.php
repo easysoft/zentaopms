@@ -27,7 +27,7 @@ class sidebar extends wg
         }
     }
 
-    protected function build(): wg
+    protected function build()
     {
         list($side, $showToggle, $width, $preserve, $parent, $maxWidth, $minWidth, $dragToResize, $onToggle, $toggleBtn) = $this->prop(array('side', 'showToggle', 'width', 'preserve', 'parent', 'maxWidth', 'minWidth', 'dragToResize', 'onToggle', 'toggleBtn'));
         if($preserve === null)

@@ -27,7 +27,7 @@ class sectionCard extends wg
         );
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $title = $this->block('title');
 

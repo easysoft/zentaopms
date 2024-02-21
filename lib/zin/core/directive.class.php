@@ -13,8 +13,16 @@ declare(strict_types=1);
 namespace zin;
 
 require_once __DIR__ . DS . 'zin.class.php';
+require_once __DIR__ . DS . 'context.func.php';
 
-class directive
+use zin\node;
+
+interface iDirective
+{
+    public function apply(node $node, string $blockName): void;
+}
+
+class directive implements iDirective
 {
     public string $type;
 
@@ -37,7 +45,10 @@ class directive
         $this->data    = $data;
         $this->options = $options;
 
-        zin::renderInGlobal($this);
+        if(!$options || !isset($options['notRenderInGlobal']) || !$options['notRenderInGlobal'])
+        {
+            renderInGlobal($this);
+        }
     }
 
     public function __debugInfo(): array
@@ -49,50 +60,52 @@ class directive
         );
     }
 
-    public function applyToWg(wg &$wg, string $blockName): void
+    public function apply(node $node, string $blockName): void
     {
-        $this->parent = $wg;
+        $this->parent = $node;
 
         $data = $this->data;
         $type = $this->type;
 
         if($type === 'prop')
         {
-            $wg->setProp($data);
+            $node->setProp($data);
             return;
         }
         if($type === 'class' || $type === 'style')
         {
-            $wg->setProp($type, $data);
+            $node->setProp($type, $data);
             return;
         }
         if($type === 'cssVar')
         {
-            $wg->setProp('--', $data);
+            $node->setProp('--', $data);
             return;
         }
         if($type === 'html')
         {
-            $wg->addToBlock($blockName, $this);
+            $html = new stdClass();
+            $html->html = implode("\n", $data);
+            $node->addToBlock($blockName, $html);
             return;
         }
         if($type === 'text')
         {
-            $wg->addToBlock($blockName, htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false));
+            $node->addToBlock($blockName, $data);
             return;
         }
         if($type === 'block')
         {
             foreach($data as $blockName => $blockChildren)
             {
-                $wg->add($blockChildren, $blockName);
+                $node->add($blockChildren, $blockName);
             }
         }
     }
 
-    public static function is(mixed $item, ?string $type = null): bool
+    public static function is(mixed $item): bool
     {
-        return $item instanceof directive && ($type === null || $item->type === $type);
+        return ($item instanceof directive) || $item instanceof iDirective || (is_object($item) && method_exists($item, 'apply'));
     }
 }
 
@@ -103,5 +116,5 @@ function directive($type, $data, $options = null): directive
 
 function isDirective(mixed $item, ?string $type = null): bool
 {
-    return directive::is($item, $type);
+    return directive::is($item);
 }

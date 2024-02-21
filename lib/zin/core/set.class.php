@@ -12,12 +12,34 @@ declare(strict_types=1);
 
 namespace zin;
 
+require_once __DIR__ . DS . 'setting.class.php';
 require_once __DIR__ . DS . 'directive.class.php';
+require_once __DIR__ . DS . 'context.func.php';
 
-class set
+class set extends setting implements iDirective
 {
-    public static function __callStatic($prop, $args)
+    /**
+     * Create an instance, the initialed data can be passed.
+     *
+     * @access public
+     * @param array|object|string $data  Properties list array.
+     * @param mixed               $value Property value.
+     */
+    public function __construct(array|string $data = null, mixed $value = null)
     {
+        parent::__construct($data, $value);
+
+        renderInGlobal($this);
+    }
+
+    public function apply(node $node, string $blockName): void
+    {
+        $node->setProp($this->toArray());
+    }
+
+    public static function __callStatic($prop, $args): set
+    {
+        $set = new set();
         if($prop === 'class' || strtolower($prop) === 'classname')
         {
             global $config;
@@ -25,13 +47,13 @@ class set
             {
                 trigger_error("[ZIN] Use set::className() instead of set::class() to compatible with php 5.4.", E_USER_WARNING);
             }
-            return directive('prop', array('class' => $args));
+            return $set->setClass('class', $args);
         }
 
         /* Compatible with zui prop className. */
         if($prop === '_className')
         {
-            return directive('prop', array('className' => $args));
+            return $set->setClass('className', $args);
         }
 
         /* Support to set url with createLink params. */
@@ -44,6 +66,102 @@ class set
             $value = count($args) > 1 ? $args : array_shift($args);
         }
 
-        return directive('prop', array($prop => $value));
+        return $set->set($prop, $value);
     }
+}
+
+/**
+ * Set widget properties.
+ *
+ * @param  string|array|props|null $name
+ * @param  mixed                   $value
+ * @return set
+ */
+function set(string|array|props|null $name = null, mixed $value = null): set
+{
+    $set = new set();
+    if($name === null) return $set;
+
+    $props = null;
+    if($name instanceof props) $props = $name->toArray();
+    else if(is_array($name))   $props = $name;
+    else if(is_object($name))  $props = (array)$name;
+    else if(is_string($name))  $props = array($name => $value);
+    $set->set($props);
+    return $set;
+}
+
+
+/**
+ * Set widget CSS class attribute.
+ *
+ * @param  mixed ...$class
+ * @return set
+ */
+function setClass(mixed ...$class): set
+{
+    return set()->setClass('class', ...$class);
+}
+
+/**
+ * Set widget style attribute.
+ *
+ * @return set
+ */
+function setStyle(array|string $name, ?string $value = null): set
+{
+    return set()->addToMap('style', is_array($name) ? $name : array($name => $value));
+}
+
+/**
+ * Set widget CSS variable.
+ *
+ * @return set
+ */
+function setCssVar(array|string $name, ?string $value = null): set
+{
+    return set()->addToMap('--', is_array($name) ? $name : array($name => $value));
+}
+
+/**
+ * Set widget ID attribute.
+ *
+ * @return ?set
+ */
+function setID(?string $id = null): set
+{
+    return set('id', $id);
+}
+
+/**
+ * Set widget element tag name.
+ *
+ * @return set
+ */
+function setTag(string $id): set
+{
+    return set('tagName', $id);
+}
+
+/**
+ * Set widget data-* attribute.
+ *
+ * @param  string|array $name
+ * @param  mixed        $value
+ * @return set
+ */
+function setData(null|string|array $name, mixed $value = null): set
+{
+    if($name === null) return set();
+    $map   = is_array($name) ? $name : array($name => $value);
+    $attrs = array();
+    foreach($map as $key => $value)
+    {
+        if(is_numeric($key)) $key = (string)$key;
+        $name = 'data-' . strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $key));
+        if(is_bool($value))       $attrs[$name] = $value ? 'true' : 'false';
+        else if(is_array($value)) $attrs[$name] = json_encode($value);
+        else                      $attrs[$name] = $value;
+    }
+    return set($attrs);
 }

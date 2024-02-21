@@ -68,7 +68,7 @@ class resultFilter extends filter
         );
     }
 
-    protected function build(): wg|array
+    protected function build()
     {
         $type  = $this->prop('type');
         $class = $this->prop('class');

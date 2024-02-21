@@ -40,12 +40,12 @@ class stepsEditor extends wg
         'dragNestedTip?: string'            // 拖拽超出提示。
     );
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
@@ -56,7 +56,7 @@ class stepsEditor extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build()
     {
         $stepText          = $this->prop('stepText',   data('lang.testcase.stepDesc'));
         $expectText        = $this->prop('expectText', data('lang.testcase.stepExpect'));

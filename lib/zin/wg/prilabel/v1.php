@@ -27,7 +27,7 @@ class priLabel extends wg
         return $child;
     }
 
-    protected function build(): wg
+    protected function build()
     {
         $pri  = $this->prop('pri', 0);
         $text = $this->prop('text');

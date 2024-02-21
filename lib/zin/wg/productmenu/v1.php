@@ -12,7 +12,7 @@ class productMenu extends wg
         'leading?:bool=true'
     );
 
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }

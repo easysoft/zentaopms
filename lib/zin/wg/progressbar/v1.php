@@ -41,7 +41,7 @@ class progressBar extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build()
     {
         list($percent, $color, $background, $height, $width, $striped, $active) = $this->prop(array('percent', 'color', 'background', 'height', 'width', 'striped', 'active'));
         $style = array

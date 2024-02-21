@@ -48,7 +48,7 @@ class progressCircle extends wg
      * @access protected
      * @return wg
      */
-    protected function build(): wg
+    protected function build()
     {
         $children    = $this->children();
         $class       = $this->prop('class');
