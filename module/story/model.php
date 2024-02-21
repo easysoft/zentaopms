@@ -1352,6 +1352,8 @@ class storyModel extends model
             return false;
         }
 
+        if(strpos($this->config->story->close->requiredFields, 'comment') !== false and !$this->post->comment) dao::$errors['comment'][] = sprintf($this->lang->error->notempty, $this->lang->comment);
+
         $this->lang->story->comment = $this->lang->comment;
         $this->dao->update(TABLE_STORY)->data($story, 'comment,closeSync')
             ->autoCheck()
