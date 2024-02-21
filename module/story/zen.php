@@ -749,6 +749,11 @@ class storyZen extends story
         $this->view->needReview  = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0 || !$forceReview) && empty($reviewer);
 
         $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment);
+
+        if(strpos(",{$this->config->story->change->requiredFields},", ',comment,') !== false) $fields['comment']['required'] = true;
+        if(strpos(",{$this->config->story->change->requiredFields},", ',spec,')    !== false) $fields['spec']['required']    = true;
+        if(strpos(",{$this->config->story->change->requiredFields},", ',verify,')  !== false) $fields['verify']['required']  = true;
+
         return $fields;
     }
 
@@ -790,6 +795,10 @@ class storyZen extends story
         $fields['duplicateStory']['required'] = true;
 
         $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment, 'width' => 'full');
+
+        if(strpos($this->config->story->review->requiredFields, 'reviewedDate') !== false) $fields['reviewedDate']['required'] = true;
+        if(strpos($this->config->story->review->requiredFields, 'comment') !== false)      $fields['comment']['required']      = true;
+
         $this->view->users = $users;
         return $fields;
     }
@@ -1381,11 +1390,11 @@ class storyZen extends story
     {
         $now    = helper::now();
         $fields = $this->config->story->form->review;
-        foreach(explode(',', trim($this->config->story->create->requiredFields, ',')) as $field)
+        foreach(explode(',', trim($this->config->story->review->requiredFields, ',')) as $field)
         {
             if($field == 'comment' && !$this->post->comment)
             {
-                dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
+                dao::$errors['comment'][] = sprintf($this->lang->error->notempty, $this->lang->comment);
                 return false;
             }
             if(isset($fields[$field])) $fields[$field]['required'] = true;
