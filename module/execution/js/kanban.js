@@ -349,7 +349,14 @@ function updateLaneColor(laneID, color)
  */
 function updateColumnName(columnID, name, color)
 {
-    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).attr('title', name).css('color', color);
+    if($('.kanban-col[data-id="' + columnID + '"] > div.title').length > 0)
+    {
+        $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).attr('title', name).css('color', color);
+    }
+    else
+    {
+        $('.kanban-col[data-id="' + columnID + '"] > .kanban-header-col > div.title > span:first').text(name).attr('title', name).css('color', color);
+    }
 }
 
 /**
