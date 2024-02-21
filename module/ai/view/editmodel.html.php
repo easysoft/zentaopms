@@ -12,7 +12,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php
 $currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->vendorList->{empty($modelConfig->type) ? key($lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
-$requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
+$requiredFields = $config->ai->vendorList[$currentVendor]['credentials'];
 if(empty($requiredFields)) $requiredFields = array();
 js::set('vendorList', $config->ai->vendorList);
 js::set('vendorListLang', $lang->ai->models->vendorList);
@@ -106,7 +106,7 @@ $(function() {
     $('select[name="vendor"]').change(function()
     {
         var vendor = $(this).val();
-        var requiredFields = vendorList[vendor]['requiredFields'];
+        var requiredFields = vendorList[vendor]['credentials'];
         const vendorTip = vendorTipsLang[vendor];
         $('#vendor-tips').html(vendorTip ? vendorTip : '').toggle(!!vendorTip);
         $('.vendor-row').each(function()

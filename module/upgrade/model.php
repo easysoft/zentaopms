@@ -9556,4 +9556,49 @@ class upgradeModel extends model
             $this->dao->update(TABLE_METRIC)->set('dateType')->eq($dateType)->where('code')->eq($code)->exec();
         }
     }
+
+    /**
+     * Migrate configured AI model into table.
+     * TODO: add into actual upgrading procedure.
+     *
+     * @access public
+     * @return void
+     */
+    public function migrateAIModelConfig()
+    {
+        $aiSettings = $this->loadModel('setting')->getItems('owner=system&module=ai');
+        if(empty($aiSettings)) return;
+
+        $aiConfig = new stdclass();
+        foreach($aiSettings as $item) $aiConfig->{$item->key} = $item->value;
+
+        $model = new stdclass();
+        $model->type        = $aiConfig->type;
+        $model->vendor      = $aiConfig->vendor ?: '';
+        $model->enabled     = $aiConfig->status == 'on' ? '1' : '0';
+        $model->desc        = $aiConfig->description ?: '';
+        $model->createdDate = helper::now();
+        $model->createdBy   = 'system';
+
+        $credentials = new stdclass();
+        if($model->type == 'baidu-ernie')
+        {
+            $credentials->secret = $aiConfig->secret ?: '';
+        }
+        else
+        {
+            if($aiConfig->vendor == 'azure')
+            {
+                $credentials->resource   = $aiConfig->resource ?: '';
+                $credentials->deployment = $aiConfig->deployment ?: '';
+            }
+            $credentials->key = $aiConfig->key ?: '';
+        }
+        $model->credentials = json_encode($credentials);
+
+        $model->proxy = $aiConfig->proxyType == 'socks5' ? json_encode((object)array('type' => 'socks5', 'addr' => $aiConfig->proxyAddr)) : null;
+
+        $this->dao->insert(TABLE_AI_MODEL)->data($model)->exec();
+        if(!dao::isError()) $this->setting->deleteItems('owner=system&module=ai');
+    }
 }

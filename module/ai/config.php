@@ -1,8 +1,8 @@
 <?php
 $config->ai->vendorList = array();
-$config->ai->vendorList['openai']['requiredFields'] = array('key');
-$config->ai->vendorList['azure']['requiredFields']  = array('key', 'resource', 'deployment');
-$config->ai->vendorList['baidu']['requiredFields']  = array('key', 'secret');
+$config->ai->vendorList['openai']['credentials'] = array('key');
+$config->ai->vendorList['azure']['credentials']  = array('key', 'resource', 'deployment');
+$config->ai->vendorList['baidu']['credentials']  = array('key', 'secret');
 
 $config->ai->models = array('openai-gpt35' => 'openai', 'openai-gpt4' => 'openai', 'baidu-ernie' => 'ernie');
 

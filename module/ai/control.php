@@ -102,7 +102,7 @@ class ai extends control
             $modelConfig = fixer::input('post')->get();
 
             $currentVendor = empty($modelConfig->vendor) ? key($this->lang->ai->models->vendorList->{empty($modelConfig->type) ? key($this->lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
-            $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['requiredFields'];
+            $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['credentials'];
 
             $errors = array();
             if(empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
@@ -272,7 +272,7 @@ class ai extends control
         $modelConfig = fixer::input('post')->get();
 
         $currentVendor = empty($modelConfig->vendor) ? key($this->lang->ai->models->vendorList->{empty($modelConfig->type) ? key($this->lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
-        $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['requiredFields'];
+        $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['credentials'];
 
         $errors = array();
         if(empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
