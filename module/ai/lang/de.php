@@ -62,7 +62,7 @@ $lang->ai->unpublishMiniProgram    = 'Disable AI Mini Program';
 $lang->ai->deleteMiniProgram       = 'Delete AI Mini Program';
 $lang->ai->exportMiniProgram       = 'Export AI Mini Program';
 $lang->ai->importMiniProgram       = 'Import AI Mini Program';
-$lang->ai->editMiniProgramCategory = 'Module maintenance';
+$lang->ai->editMiniProgramCategory = 'Manage group';
 
 $lang->ai->export                 = 'Export';
 $lang->ai->import                 = 'Import';
