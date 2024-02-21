@@ -470,6 +470,7 @@ define('TABLE_MINIPROGRAM',       '`' . $config->db->prefix . 'miniprogram`');
 define('TABLE_MINIPROGRAMFIELD',  '`' . $config->db->prefix . 'miniprogramfield`');
 define('TABLE_MINIPROGRAMSTAR',   '`' . $config->db->prefix . 'miniprogramstar`');
 define('TABLE_AIMESSAGE',         '`' . $config->db->prefix . 'aimessage`');
+define('TABLE_AI_MODEL',          '`' . $config->db->prefix . 'ai_model`');
 
 $config->objectTables['product']          = TABLE_PRODUCT;
 $config->objectTables['productplan']      = TABLE_PRODUCTPLAN;

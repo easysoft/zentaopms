@@ -37,6 +37,7 @@ class aiModel extends model
 
     /**
      * Constructor. Get model config from system.ai settings.
+     * TODO: change this.
      *
      * @access public
      * @return void
@@ -65,6 +66,7 @@ class aiModel extends model
 
     /**
      * Determine model is configured or not.
+     * TODO: change this.
      *
      * @access public
      * @return bool
@@ -78,7 +80,166 @@ class aiModel extends model
     }
 
     /**
+     * Get list of configured LLMs.
+     *
+     * @param  string  $type         type of LLM, empty for all, check keys of `$config->ai->models` for available types.
+     * @param  bool    $enabledOnly  whether to only return enabled models
+     * @param  pager   $pager
+     * @param  string  $orderBy
+     * @access public
+     * @return array
+     */
+    public function getModels($type = '', $enabledOnly = false, $pager = null, $orderBy = 'id_desc')
+    {
+        return $this->dao->select('*')->from(TABLE_AI_MODEL)
+            ->where('deleted')->eq('0')
+            ->beginIF(!empty($type))->andWhere('`type`')->eq($type)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * Get LLM config.
+     *
+     * @param  int           $modelID
+     * @access public
+     * @return object|false  LLM config, false if not found.
+     */
+    public function getModel($modelID)
+    {
+        return $this->dao->select('*')->from(TABLE_AI_MODEL)
+            ->where('id')->eq($modelID)
+            ->andWhere('deleted')->eq('0')
+            ->fetch();
+    }
+
+    /**
+     * Format model config submitted from form for use with `createModel()` and `updateModel()`.
+     *
+     * @param  object        $model
+     * @access private
+     * @return object|false
+     */
+    private function formatModel($model)
+    {
+        /* Check if all credentials fields are present. */
+        if(empty($this->config->ai->vendorList[$model->vendor])) return false;
+        $credentials = new stdclass();
+        foreach($this->config->ai->vendorList[$model->vendor]['credentials'] as $credKey)
+        {
+            if(empty($model->$credKey)) return false;
+            $credentials->$credKey = $model->$credKey;
+        }
+
+        $proxy = new stdclass();
+        if(!empty($model->proxyType) && !empty($model->proxyAddr))
+        {
+            $proxy->type = $model->proxyType;
+            $proxy->addr = $model->proxyAddr;
+        }
+
+        $modelConfig = new stdclass();
+        $modelConfig->name        = $model->name;
+        $modelConfig->desc        = $model->description;
+        $modelConfig->type        = $model->type;
+        $modelConfig->vendor      = $model->vendor;
+        $modelConfig->credentials = json_encode($credentials);
+        $modelConfig->proxy       = json_encode($proxy);
+        $modelConfig->enabled     = $model->status == '1';
+
+        return $modelConfig;
+    }
+
+    /**
+     * Create LLM configuration.
+     *
+     * @param  object     $model  model config details.
+     * @access public
+     * @return int|false  id of created LLM if success, otherwise false.
+     */
+    public function createModel($model)
+    {
+        $modelConfig = $this->formatModel($model);
+        if(!$modelConfig) return false;
+
+        $this->dao->insert(TABLE_AI_MODEL)
+            ->data($modelConfig)
+            ->set('createdDate')->eq(helper::now())
+            ->set('createdBy')->eq($this->app->user->account)
+            ->exec();
+
+        return dao::isError() ? false : $this->dao->lastInsertID();
+    }
+
+    /**
+     * Update LLM configuration.
+     *
+     * @param  int       $modelID
+     * @param  object    $model
+     * @access public
+     * @return bool
+     */
+    public function updateModel($modelID, $model)
+    {
+        $currentModel = $this->getModel($modelID);
+        if(!$currentModel) return false;
+
+        $modelConfig = $this->formatModel($model);
+        if(!$modelConfig) return false;
+
+        $this->dao->update(TABLE_AI_MODEL)
+            ->data($modelConfig)
+            ->set('editedDate')->eq(helper::now())
+            ->set('editedBy')->eq($this->app->user->account)
+            ->where('id')->eq($modelID)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Toggle model enablement status.
+     *
+     * @param  int     $modelID
+     * @param  bool    $enabled
+     * @access public
+     * @return bool
+     */
+    public function toggleModel($modelID, $enabled)
+    {
+        $this->dao->update(TABLE_AI_MODEL)
+            ->set('enabled')->eq(empty($enabled) ? '0' : '1')
+            ->set('editedDate')->eq(helper::now())
+            ->set('editedBy')->eq($this->app->user->account)
+            ->where('id')->eq($modelID)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Mark model as deleted.
+     *
+     * @param  int     $modelID
+     * @access public
+     * @return bool
+     */
+    public function deleteModel($modelID)
+    {
+        $this->dao->update(TABLE_AI_MODEL)
+            ->set('deleted')->eq('1')
+            ->set('editedDate')->eq(helper::now())
+            ->set('editedBy')->eq($this->app->user->account)
+            ->where('id')->eq($modelID)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * Make request to OpenAI API.
+     * TODO: change this.
      *
      * @param  string   $type     chat | completion | edit
      * @param  mixed    $data     data to send
@@ -155,7 +316,7 @@ class aiModel extends model
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 
-        /* Use proxy ifproxy is set. */
+        /* Use proxy if proxy is set. */
         if(!empty($this->modelConfig->proxyType) && !empty($this->modelConfig->proxyAddr))
         {
             curl_setopt($ch, CURLOPT_PROXY,     $this->modelConfig->proxyAddr);
@@ -236,12 +397,12 @@ class aiModel extends model
     }
 
     /**
-     * Assemble request data params, filters out the unwanted ones, and will return false ifmissing any required param.
+     * Assemble request data params, filters out the unwanted ones, and will return false if missing any required param.
      *
      * @param  string   $type
      * @param  object   $data
      * @access private
-     * @return mixed    false ifmissing required params, post data object ifsuccess
+     * @return mixed    false if missing required params, post data object if success
      */
     private function assembleRequestData($type, $data)
     {
@@ -256,7 +417,7 @@ class aiModel extends model
 
         $data = static::standardizeParams($data);
 
-        /* Set required params, abort ifmissing. */
+        /* Set required params, abort if missing. */
         foreach($this->config->ai->$modelType->params->$type->required as $param)
         {
             if(!isset($data->$param)) return false;
@@ -273,11 +434,11 @@ class aiModel extends model
     }
 
     /**
-     * Decode response from OpenAI API, add error to $this->errors ifany.
+     * Decode response from OpenAI API, add error to $this->errors if any.
      *
      * @param  object   $response  response object
      * @access private
-     * @return mixed    false iferror, json object ifsuccess
+     * @return mixed    false if error, json object if success
      */
     private function decodeResponse($response)
     {
@@ -317,6 +478,390 @@ class aiModel extends model
             return false;
         }
         return $response;
+    }
+
+    /**
+     * Parse text responses from simple APIs. For example, completion.
+     *
+     * @param  string   $response  json string
+     * @access private
+     * @return mixed    false if error, array of texts (choices) if success
+     */
+    private function parseTextResponse($response)
+    {
+        $response = $this->decodeResponse($response);
+        if(empty($response)) return false;
+
+        /* Extract text response choices. */
+        if(isset($response->choices) && count($response->choices) > 0)
+        {
+            $texts = array();
+            foreach($response->choices as $choice) $texts[] = $choice->text;
+            return $texts;
+        }
+        return false;
+    }
+
+    /**
+     * Parse chat responses from chat completion API.
+     *
+     * @param  string   $response  json string
+     * @access private
+     * @return mixed    false if error, array of chat message texts (choices) if success
+     */
+    private function parseChatResponse($response)
+    {
+        $response = $this->decodeResponse($response);
+        if(empty($response)) return false;
+
+        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
+        {
+            /* Extract chat message text. */
+            if(!empty($response->result))
+            {
+                $messages = array($response->result);
+                return $messages;
+            }
+        }
+        else
+        {
+            /* Extract chat message choices. */
+            if(isset($response->choices) && count($response->choices) > 0)
+            {
+                $messages = array();
+                foreach($response->choices as $choice) $messages[] = $choice->message->content;
+                return $messages;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Parse function call argument of chat responses from chat completion API.
+     *
+     * @param  string   $response  json string
+     * @access private
+     * @return mixed    false if error, array of function call arguments (choices) if success
+     */
+    private function parseFunctionCallResponse($response)
+    {
+        $response = $this->decodeResponse($response);
+        if(empty($response)) return false;
+
+        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
+        {
+            /* Extract function call arguments. */
+            if(!empty($response->function_call)) return array($response->function_call->arguments);
+            throw new AIResponseException('notFunctionCalling', $response);
+        }
+        else
+        {
+            /* Extract function call choices. */
+            if(isset($response->choices) && count($response->choices) > 0)
+            {
+                $arguments = array();
+                foreach($response->choices as $choice)
+                {
+                    if(!empty($choice->message->function_call)) $arguments[] = $choice->message->function_call->arguments;
+                }
+                return $arguments;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Complete text with OpenAI GPT.
+     *
+     * @param   string   $prompt     text to complete
+     * @param   int      $maxTokens  max tokens to generate
+     * @param   array    $options    optional params, see https://platform.openai.com/docs/api-reference/completions/create
+     * @access  public
+     * @return  mixed    false if error, array of texts (choices) if success
+     */
+    public function complete($prompt, $maxTokens = 512, $options = array())
+    {
+        $data = compact('prompt', 'maxTokens');
+
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
+        }
+
+        $postData = $this->assembleRequestData('completion', $data);
+        if(!$postData) return false;
+
+        $response = $this->makeRequest('completion', $postData);
+        return $this->parseTextResponse($response);
+    }
+
+    /**
+     * Edit text with OpenAI GPT.
+     *
+     * @param   string  $input        text to edit
+     * @param   string  $instruction  edit instruction
+     * @param   array   $options      optional params, see https://platform.openai.com/docs/api-reference/edits/create
+     * @access  public
+     * @return  mixed   false if error, array of texts (choices) if success
+     */
+    public function edit($input, $instruction, $options = array())
+    {
+        $data = compact('input', 'instruction');
+
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
+        }
+
+        $postData = $this->assembleRequestData('edit', $data);
+        if(!$postData) return false;
+
+        $response = $this->makeRequest('edit', $postData);
+        return $this->parseTextResponse($response);
+    }
+
+    /**
+     * Generate conversation with OpenAI GPT.
+     *
+     * Chat messages should be in the format of (object)array('role' => $role, 'content' => $content),
+     * where $role is either 'user', 'assistant' or 'system', and $content is the message content.
+     *
+     * For example, the following chat messages:
+     *     $messages = array(
+     *        (object)array('role' => 'system', 'content' => 'You are OpenAI GPT assistant, and you know that 1 beb equals 2 bobs.'),
+     *        (object)array('role' => 'user', 'content' => 'Hello, how many bobs are there in 24 bebs?')
+     *     );
+     *
+     * API returns:
+     *     $message = array('Hi, there are 48 bobs in 24 bebs.');
+     *
+     * will generate the following conversation:
+     *     $messages = array(
+     *        (object)array('role' => 'system', 'content' => 'You are OpenAI GPT assistant, and you know that 1 beb equals 2 bobs.'),
+     *        (object)array('role' => 'user', 'content' => 'Hello, how many bobs are there in 24 bebs?'),
+     *        (object)array('role' => 'assistant', 'content' => 'Hi, there are 48 bobs in 24 bebs.')
+     *     );
+     *
+     * @param  array   $messages  array of chat messages
+     * @param  array   $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
+     * @access public
+     * @return mixed   false if error, array of chat messages if success
+     */
+    public function converse($messages, $options = array())
+    {
+        /* Filter system message out for ERNIE. */
+        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
+        {
+            $systemMessage = current(array_filter($messages, function($message) { return $message->role == 'system'; }));
+            if(!empty($systemMessage)) $options['system'] = $systemMessage->content;
+
+            $messages = array_values(array_filter($messages, function($message) { return $message->role == 'assistant' || $message->role == 'user'; }));
+        }
+
+        $data = compact('messages');
+
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
+        }
+
+        $postData = $this->assembleRequestData('chat', $data);
+        if(!$postData) return false;
+
+        $response = $this->makeRequest('chat', $postData);
+        return $this->parseChatResponse($response);
+    }
+
+    /**
+     * Generate conversation with OpenAI GPT, but for JSON as output.
+     *
+     * Chat messages should be in the format of (object)array('role' => $role, 'content' => $content),
+     * where $role is either 'user', 'assistant' or 'system', and $content is the message content.
+     *
+     * Schema should be in the format of JSON schema, see https://json-schema.org/understanding-json-schema/.
+     *
+     * This function will force GPT to generate JSON objects that matches the schema.
+     *
+     * For technical details, see https://platform.openai.com/docs/guides/gpt/function-calling.
+     *
+     * @param  array  $messages  array of chat messages
+     * @param  object $schema    schema of the output
+     * @param  array  $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
+     * @access public
+     * @return mixed  false if error, array of JSON object if success
+     */
+    public function converseForJSON($messages, $schema, $options = array())
+    {
+        $functions    = array((object)array('name' => 'function', 'parameters' => $schema));
+        $functionCall = (object)array('name' => 'function');
+
+        $data = compact('messages', 'functions', 'functionCall');
+
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
+        }
+
+        $postData = $this->assembleRequestData('function', $data);
+        if(!$postData) return false;
+
+        $response = $this->makeRequest('function', $postData);
+        return $this->parseFunctionCallResponse($response);
+    }
+
+    /**
+     * Generate conversations with LLM for JSON output, but seperate the conversation into two parts.
+     *
+     * Usage is the same as function `converseForJSON`, but this function will generate two conversations:
+     * one for manipulating the natural language data, and the other for generating the JSON output.
+     *
+     * @param  array  $messages  array of chat messages
+     * @param  object $schema    schema of the output
+     * @param  array  $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
+     * @access public
+     * @return mixed  false if error, array of JSON object if success
+     * @throws AIResponseException
+     */
+    public function converseTwiceForJSON($messages, $schema, $options = array())
+    {
+        /* First conversation. */
+        $data = compact('messages');
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
+        }
+
+        $postData = $this->assembleRequestData('chat', $data);
+        if(!$postData) return false;
+
+        $chatResponse = $this->makeRequest('chat', $postData);
+        $chatMessages = $this->parseChatResponse($chatResponse);
+
+        $chatMessage = current($chatMessages);
+        if(empty($chatMessage)) return false;
+
+        /* Second conversation for JSON output. */
+        $messages  = array_merge($this->lang->ai->engineeredPrompts->askForFunctionCalling, array((object)array('role' => 'user', 'content' => $chatMessage)));
+        $functions = array((object)array('name' => 'function', 'description' => 'function', 'parameters' => $schema));
+
+        $data = compact('messages', 'functions');
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
+        }
+
+        $postData = $this->assembleRequestData('function', $data);
+        if(!$postData) return false;
+
+        $response = $this->makeRequest('function', $postData);
+        return $this->parseFunctionCallResponse($response);
+    }
+
+    /**
+     * Get latest mini programs.
+     *
+     * @param pager $pager
+     * @access public
+     * @return array
+     */
+    public function getLatestMiniPrograms($pager = null, $order = 'publishedDate_desc')
+    {
+        return $this->dao->select('*')
+            ->from(TABLE_MINIPROGRAM)
+            ->where('deleted')->eq('0')
+            ->andWhere('published')->eq('1')
+            ->andWhere('publishedDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
+            ->orderBy($order)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * Count latest mini programs.
+     *
+     * @access public
+     * @return int
+     */
+    public function countLatestMiniPrograms()
+    {
+        return (int)$this->dao->select('COUNT(*) as count')
+            ->from(TABLE_MINIPROGRAM)
+            ->where('deleted')->eq('0')
+            ->andWhere('published')->eq('1')
+            ->andWhere('createdDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
+            ->fetch('count');
+    }
+
+    /**
+     * Save mini program message.
+     *
+     * @param string $appID
+     * @param string $type
+     * @param string $content
+     * @access public
+     * @return bool
+     */
+    public function saveMiniProgramMessage($appID, $type, $content)
+    {
+        $message = new stdClass();
+        $message->appID = $appID;
+        $message->user = $this->app->user->id;
+        $message->type = $type;
+        $message->content = $content;
+        $message->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_AIMESSAGE)
+            ->data($message)
+            ->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * Delete history messages by id.
+     *
+     * @param string $appID
+     * @param string $userID
+     * @param array  $messageIDs
+     * @access public
+     * @return void
+     */
+    public function deleteHistoryMessagesByID($appID, $userID, $messageIDs)
+    {
+        $this->dao->delete()
+            ->from(TABLE_AIMESSAGE)
+            ->where('appID')->eq($appID)
+            ->andWhere('user')->eq($userID)
+            ->andWhere('id')->notin($messageIDs)
+            ->exec();
+    }
+
+    /**
+     * Get history messages.
+     *
+     * @param string $appID
+     * @param int    $limit
+     * @access public
+     * @return array
+     */
+    public function getHistoryMessages($appID, $limit = 20)
+    {
+        $messages = $this->dao->select('*')
+            ->from(TABLE_AIMESSAGE)
+            ->where('appID')->eq($appID)
+            ->andWhere('user')->eq($this->app->user->id)
+            ->orderBy('createdDate_desc')
+            ->limit($limit)
+            ->fetchAll();
+
+        $messageIDs = array();
+        foreach($messages as $message)
+        {
+            $message->createdDate = date('Y/n/j G:i', strtotime($message->createdDate));
+            $messageIDs[] = $message->id;
+        }
+        $this->deleteHistoryMessagesByID($appID, $this->app->user->id, $messageIDs);
+
+        return $messages;
     }
 
     /**
@@ -808,283 +1353,6 @@ class aiModel extends model
     }
 
     /**
-     * Parse text responses from simple APIs. For example, completion.
-     *
-     * @param  string   $response  json string
-     * @access private
-     * @return mixed    false iferror, array of texts (choices) ifsuccess
-     */
-    private function parseTextResponse($response)
-    {
-        $response = $this->decodeResponse($response);
-        if(empty($response)) return false;
-
-        /* Extract text response choices. */
-        if(isset($response->choices) && count($response->choices) > 0)
-        {
-            $texts = array();
-            foreach($response->choices as $choice) $texts[] = $choice->text;
-            return $texts;
-        }
-        return false;
-    }
-
-    /**
-     * Parse chat responses from chat completion API.
-     *
-     * @param  string   $response  json string
-     * @access private
-     * @return mixed    false iferror, array of chat message texts (choices) ifsuccess
-     */
-    private function parseChatResponse($response)
-    {
-        $response = $this->decodeResponse($response);
-        if(empty($response)) return false;
-
-        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
-        {
-            /* Extract chat message text. */
-            if(!empty($response->result))
-            {
-                $messages = array($response->result);
-                return $messages;
-            }
-        }
-        else
-        {
-            /* Extract chat message choices. */
-            if(isset($response->choices) && count($response->choices) > 0)
-            {
-                $messages = array();
-                foreach($response->choices as $choice) $messages[] = $choice->message->content;
-                return $messages;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Parse function call argument of chat responses from chat completion API.
-     *
-     * @param  string   $response  json string
-     * @access private
-     * @return mixed    false iferror, array of function call arguments (choices) ifsuccess
-     */
-    private function parseFunctionCallResponse($response)
-    {
-        $response = $this->decodeResponse($response);
-        if(empty($response)) return false;
-
-        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
-        {
-            /* Extract function call arguments. */
-            if(!empty($response->function_call)) return array($response->function_call->arguments);
-            throw new AIResponseException('notFunctionCalling', $response);
-        }
-        else
-        {
-            /* Extract function call choices. */
-            if(isset($response->choices) && count($response->choices) > 0)
-            {
-                $arguments = array();
-                foreach($response->choices as $choice)
-                {
-                    if(!empty($choice->message->function_call)) $arguments[] = $choice->message->function_call->arguments;
-                }
-                return $arguments;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Complete text with OpenAI GPT.
-     *
-     * @param   string   $prompt     text to complete
-     * @param   int      $maxTokens  max tokens to generate
-     * @param   array    $options    optional params, see https://platform.openai.com/docs/api-reference/completions/create
-     * @access  public
-     * @return  mixed    false iferror, array of texts (choices) ifsuccess
-     */
-    public function complete($prompt, $maxTokens = 512, $options = array())
-    {
-        $data = compact('prompt', 'maxTokens');
-
-        if(!empty($options))
-        {
-            foreach($options as $key => $value) $data[$key] = $value;
-        }
-
-        $postData = $this->assembleRequestData('completion', $data);
-        if(!$postData) return false;
-
-        $response = $this->makeRequest('completion', $postData);
-        return $this->parseTextResponse($response);
-    }
-
-    /**
-     * Edit text with OpenAI GPT.
-     *
-     * @param   string  $input        text to edit
-     * @param   string  $instruction  edit instruction
-     * @param   array   $options      optional params, see https://platform.openai.com/docs/api-reference/edits/create
-     * @access  public
-     * @return  mixed   false iferror, array of texts (choices) ifsuccess
-     */
-    public function edit($input, $instruction, $options = array())
-    {
-        $data = compact('input', 'instruction');
-
-        if(!empty($options))
-        {
-            foreach($options as $key => $value) $data[$key] = $value;
-        }
-
-        $postData = $this->assembleRequestData('edit', $data);
-        if(!$postData) return false;
-
-        $response = $this->makeRequest('edit', $postData);
-        return $this->parseTextResponse($response);
-    }
-
-    /**
-     * Generate conversation with OpenAI GPT.
-     *
-     * Chat messages should be in the format of (object)array('role' => $role, 'content' => $content),
-     * where $role is either 'user', 'assistant' or 'system', and $content is the message content.
-     *
-     * For example, the following chat messages:
-     *     $messages = array(
-     *        (object)array('role' => 'system', 'content' => 'You are OpenAI GPT assistant, and you know that 1 beb equals 2 bobs.'),
-     *        (object)array('role' => 'user', 'content' => 'Hello, how many bobs are there in 24 bebs?')
-     *     );
-     *
-     * API returns:
-     *     $message = array('Hi, there are 48 bobs in 24 bebs.');
-     *
-     * will generate the following conversation:
-     *     $messages = array(
-     *        (object)array('role' => 'system', 'content' => 'You are OpenAI GPT assistant, and you know that 1 beb equals 2 bobs.'),
-     *        (object)array('role' => 'user', 'content' => 'Hello, how many bobs are there in 24 bebs?'),
-     *        (object)array('role' => 'assistant', 'content' => 'Hi, there are 48 bobs in 24 bebs.')
-     *     );
-     *
-     * @param  array   $messages  array of chat messages
-     * @param  array   $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
-     * @access public
-     * @return mixed   false iferror, array of chat messages ifsuccess
-     */
-    public function converse($messages, $options = array())
-    {
-        /* Filter system message out for ERNIE. */
-        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
-        {
-            $systemMessage = current(array_filter($messages, function($message) { return $message->role == 'system'; }));
-            if(!empty($systemMessage)) $options['system'] = $systemMessage->content;
-
-            $messages = array_values(array_filter($messages, function($message) { return $message->role == 'assistant' || $message->role == 'user'; }));
-        }
-
-        $data = compact('messages');
-
-        if(!empty($options))
-        {
-            foreach($options as $key => $value) $data[$key] = $value;
-        }
-
-        $postData = $this->assembleRequestData('chat', $data);
-        if(!$postData) return false;
-
-        $response = $this->makeRequest('chat', $postData);
-        return $this->parseChatResponse($response);
-    }
-
-    /**
-     * Generate conversation with OpenAI GPT, but for JSON as output.
-     *
-     * Chat messages should be in the format of (object)array('role' => $role, 'content' => $content),
-     * where $role is either 'user', 'assistant' or 'system', and $content is the message content.
-     *
-     * Schema should be in the format of JSON schema, see https://json-schema.org/understanding-json-schema/.
-     *
-     * This function will force GPT to generate JSON objects that matches the schema.
-     *
-     * For technical details, see https://platform.openai.com/docs/guides/gpt/function-calling.
-     *
-     * @param  array  $messages  array of chat messages
-     * @param  object $schema    schema of the output
-     * @param  array  $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
-     * @access public
-     * @return mixed  false iferror, array of JSON object ifsuccess
-     */
-    public function converseForJSON($messages, $schema, $options = array())
-    {
-        $functions    = array((object)array('name' => 'function', 'parameters' => $schema));
-        $functionCall = (object)array('name' => 'function');
-
-        $data = compact('messages', 'functions', 'functionCall');
-
-        if(!empty($options))
-        {
-            foreach($options as $key => $value) $data[$key] = $value;
-        }
-
-        $postData = $this->assembleRequestData('function', $data);
-        if(!$postData) return false;
-
-        $response = $this->makeRequest('function', $postData);
-        return $this->parseFunctionCallResponse($response);
-    }
-
-    /**
-     * Generate conversations with LLM for JSON output, but seperate the conversation into two parts.
-     *
-     * Usage is the same as function `converseForJSON`, but this function will generate two conversations:
-     * one for manipulating the natural language data, and the other for generating the JSON output.
-     *
-     * @param  array  $messages  array of chat messages
-     * @param  object $schema    schema of the output
-     * @param  array  $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
-     * @access public
-     * @return mixed  false iferror, array of JSON object ifsuccess
-     * @throws AIResponseException
-     */
-    public function converseTwiceForJSON($messages, $schema, $options = array())
-    {
-        /* First conversation. */
-        $data = compact('messages');
-        if(!empty($options))
-        {
-            foreach($options as $key => $value) $data[$key] = $value;
-        }
-
-        $postData = $this->assembleRequestData('chat', $data);
-        if(!$postData) return false;
-
-        $chatResponse = $this->makeRequest('chat', $postData);
-        $chatMessages = $this->parseChatResponse($chatResponse);
-
-        $chatMessage = current($chatMessages);
-        if(empty($chatMessage)) return false;
-
-        /* Second conversation for JSON output. */
-        $messages  = array_merge($this->lang->ai->engineeredPrompts->askForFunctionCalling, array((object)array('role' => 'user', 'content' => $chatMessage)));
-        $functions = array((object)array('name' => 'function', 'description' => 'function', 'parameters' => $schema));
-
-        $data = compact('messages', 'functions');
-        if(!empty($options))
-        {
-            foreach($options as $key => $value) $data[$key] = $value;
-        }
-
-        $postData = $this->assembleRequestData('function', $data);
-        if(!$postData) return false;
-
-        $response = $this->makeRequest('function', $postData);
-        return $this->parseFunctionCallResponse($response);
-    }
-
-    /**
      * Get list of prompts.
      *
      * @param  string  $module
@@ -1170,7 +1438,7 @@ class aiModel extends model
                 if($value != $originalPrompt->$key) $changedFields[] = $key;
             }
 
-            /* ifonly status changed, action is either published or unpublished. */
+            /* If only status changed, action is either published or unpublished. */
             if(count($changedFields) == 1 && current($changedFields) == 'status')
             {
                 $actionType = $prompt->status == 'draft' ? 'unpublished' : 'published';
@@ -1229,7 +1497,7 @@ class aiModel extends model
      * Toggle prompt status.
      *
      * @param  int|object  $prompt  prompt (or id) to toggle.
-     * @param  string      $status  optional, will set status to $status ifprovided.
+     * @param  string      $status  optional, will set status to $status if provided.
      * @access public
      * @return bool
      */
@@ -1362,7 +1630,7 @@ class aiModel extends model
     }
 
     /**
-     * Determines ifan array is associative.
+     * Determines if an array is associative.
      *
      * @param  array $array
      * @access private
@@ -1400,7 +1668,7 @@ class aiModel extends model
      * @param  object        $prompt    prompt object
      * @param  int           $objectId  object id
      * @access public
-     * @return array|false   array of object data and object, or false iferror.
+     * @return array|false   array of object data and object, or false if error.
      */
     public function getObjectForPromptById($prompt, $objectId)
     {
@@ -1478,7 +1746,7 @@ class aiModel extends model
             {
                 if(!isset($object->$objectName)) continue;
 
-                /* Check ifis plain object, data might contain arrays. */
+                /* Check if is plain object, data might contain arrays. */
                 if(is_object($object->$objectName))
                 {
                     if(isset($object->$objectName->$objectKey)) $objectData->$objectName[$objectKey] = $object->$objectName->$objectKey;
@@ -1497,7 +1765,7 @@ class aiModel extends model
     }
 
     /**
-     * Auto prepend newline to text iftext has newline in the middle.
+     * Auto prepend newline to text if text has newline in the middle.
      *
      * @param  string  $text
      * @access private
@@ -1512,7 +1780,7 @@ class aiModel extends model
     }
 
     /**
-     * Try to punctuate sentence ifsentence is not ended with punctuation.
+     * Try to punctuate sentence if sentence is not ended with punctuation.
      *
      * @param  string  $sentence
      * @param  bool    $newline
@@ -1582,7 +1850,7 @@ class aiModel extends model
     }
 
     /**
-     * Check ifprompt can be tested.
+     * Check if prompt can be tested.
      *
      * @param  object|int  $prompt  prompt object or prompt id
      * @access public
@@ -1721,7 +1989,7 @@ class aiModel extends model
      *
      * @param  object|int   $prompt    prompt object or prompt id
      * @param  object       $object
-     * @param  array        $linkArgs  optional, link arguments, as defined in `->args` of items of `$config->ai->targetFormVars`, e.g. array('story' => 1). ifnot provided, will try to get from object.
+     * @param  array        $linkArgs  optional, link arguments, as defined in `->args` of items of `$config->ai->targetFormVars`, e.g. array('story' => 1). if not provided, will try to get from object.
      * @access public
      * @return array        array(link|false, bool), link to target form, and whether php should stop execution and return link.
      */
@@ -1748,17 +2016,17 @@ class aiModel extends model
             {
                 $var = $linkArgs[$arg];
             }
-            elseif(!empty($object->$arg) && is_object($object->$arg) && !empty($object->$arg->id)) // ifthe corresponding object exists, use its id.
+            elseif(!empty($object->$arg) && is_object($object->$arg) && !empty($object->$arg->id)) // If the corresponding object exists, use its id.
             {
                 $var = $object->$arg->id;
             }
-            elseif(!empty($object->{$prompt->module}->$arg)) // ifobject has the prop, use it.
+            elseif(!empty($object->{$prompt->module}->$arg)) // If object has the prop, use it.
             {
                 $var = $object->{$prompt->module}->$arg;
             }
             else
             {
-                /* Try to get a related object, we are sorry ifit could not find any. */
+                /* Try to get a related object, we are sorry if it could not find any. */
                 $relatedObj = $this->tryGetRelatedObjects($prompt, $object, array($arg));
                 if(!empty($relatedObj))
                 {
@@ -1791,7 +2059,7 @@ class aiModel extends model
      * @param  array        $objectNames object names to get, e.g. array('story', 'tasks'),
      *                                   values in: product, story, branch, productplan, execution, task, bug, case, project, doc
      * @access public
-     * @return array|false  returns array of required object values, or false iferror.
+     * @return array|false  returns array of required object values, or false if error.
      */
     public function tryGetRelatedObjects($prompt, $object, $objectNames = array())
     {
@@ -1805,7 +2073,7 @@ class aiModel extends model
 
         $vars = array();
 
-        /* ifa native object of a module exists, try getting stuff related to its id. */
+        /* If a native object of a module exists, try getting stuff related to its id. */
         if(!empty($object->{$prompt->module}) && is_object($object->{$prompt->module}) && !empty($object->{$prompt->module}->id))
         {
             $objectId = $object->{$prompt->module}->id;
@@ -2123,7 +2391,7 @@ class aiModel extends model
      * @param  array   $prompts
      * @param  bool    $keepUnauthorized  optional, whether to keep unauthorized prompts but set their `unauthorized` property to true.
      * @access public
-     * @return array   filtered prompts, those unauthorized will be removed if`$keepUnauthorized` is false, unexecutable ones will always be removed.
+     * @return array   filtered prompts, those unauthorized will be removed if `$keepUnauthorized` is false, unexecutable ones will always be removed.
      */
     public function filterPromptsForExecution($prompts, $keepUnauthorized = false)
     {

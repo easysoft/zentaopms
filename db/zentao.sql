@@ -15876,6 +15876,24 @@ REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `projectType`, `createdBy`, 
 ('发布',        '10',   'launch',    'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
 ('全生命周期',  '5',    'lifecycle', 'ipd', 'admin', '2020-02-08 21:08:45',  'admin', '2020-02-12 13:50:27',  '0');
 
+-- DROP TABLE IF EXISTS `zt_ai_model`;
+CREATE TABLE IF NOT EXISTS `zt_ai_model` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(20) NOT NULL,
+  `vendor` varchar(20) NOT NULL,
+  `credentials` text NOT NULL,
+  `proxy` text DEFAULT NULL,
+  `name` varchar(20) DEFAULT NULL,
+  `desc` text DEFAULT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) DEFAULT NULL,
+  `editedDate` datetime DEFAULT NULL,
+  `enabled` enum('0', '1') NOT NULL DEFAULT '1',
+  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_prompt`;
 CREATE TABLE IF NOT EXISTS `zt_prompt` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

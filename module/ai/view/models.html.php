@@ -12,7 +12,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php
 $currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->vendorList->{empty($modelConfig->type) ? key($lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
-$requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
+$requiredFields = $config->ai->vendorList[$currentVendor]['credentials'];
 if(empty($requiredFields)) $requiredFields = array();
 ?>
 <div id='mainContent' class='main-content'>
