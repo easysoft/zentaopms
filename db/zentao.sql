@@ -15982,8 +15982,7 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogramfield` (
   `placeholder` text DEFAULT NULL,
   `options` text DEFAULT NULL,
   `required` enum('0', '1') DEFAULT '1',
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`appID`) REFERENCES `zt_miniprogram`(`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `zt_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
@@ -16061,9 +16060,7 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogramstar` (
   `userID` mediumint(8) unsigned NOT NULL,
   `createdDate` datetime NOT NULL,
   UNIQUE (`appID`, `userID`),
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`appID`) REFERENCES `zt_miniprogram`(`id`),
-  FOREIGN KEY (`userID`) REFERENCES `zt_user`(`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
