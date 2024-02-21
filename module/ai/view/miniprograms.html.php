@@ -167,8 +167,8 @@ $isNotOpen = $config->edition != 'open';
               <th class="c-status"><?= $lang->prompt->status; ?></th>
               <th class="c-category"><?= $lang->prompt->module; ?></th>
               <th class="c-createdby"><?= $lang->prompt->createdBy; ?></th>
-              <th class="c-createddate"><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->prompt->createdDate); ?></th>
-              <th class="c-publisheddate"><?php common::printOrderLink('publishedDate', $orderBy, $vars, $lang->ai->miniPrograms->latestPublishedDate); ?></th>
+              <th class="c-createddate w-130px"><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->prompt->createdDate); ?></th>
+              <th class="c-publisheddate w-130px"><?php common::printOrderLink('publishedDate', $orderBy, $vars, $lang->ai->miniPrograms->latestPublishedDate); ?></th>
               <th class="c-actions" style="width: 160px;"><?= $lang->actions; ?></th>
             </tr>
           </thead>
