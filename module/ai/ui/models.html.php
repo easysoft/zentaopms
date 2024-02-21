@@ -27,14 +27,14 @@ if(empty($models))
             (
                 span
                 (
-                    set::class('p-8 text-gray'),
+                    set::className('p-8 text-gray'),
                     $lang->ai->models->noModels
                 ),
                 btn
                 (
                     set::text($lang->ai->models->create),
                     set::icon('plus'),
-                    set::class('btn secondary'),
+                    set::className('btn secondary'),
                     set::url(createLink('ai', 'modelcreate'))
                 )
             )
