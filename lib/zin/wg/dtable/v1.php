@@ -267,9 +267,10 @@ class dtable extends wg
 
     protected function build(): wg
     {
+        global $lang, $app;
+
         if(empty($this->prop('data')))
         {
-            global $lang, $app;
             $emptyTip   = $this->prop('emptyTip', $lang->noData);
             $createLink = !empty($this->prop('createLink')) ? $this->prop('createLink') : '';
             if(is_string($emptyTip))
@@ -289,6 +290,16 @@ class dtable extends wg
             $this->setProp('emptyTip', $emptyTip);
             $this->setProp('customCols', false);
         }
+
+        $this->setProp('checkInfo', jsRaw(<<<JS
+        function(_, layout)
+        {
+            const checkedCount = this.getChecks().length;
+            if(checkedCount) return {html: "{$lang->selectedItems}".replace('{0}', checkedCount)};
+            return {html: "{$lang->pager->totalCount}".replace('{recTotal}', this.layout.allRows.length)};
+        }
+        JS));
+
         return zui::dtable(inherit($this));
     }
 }
