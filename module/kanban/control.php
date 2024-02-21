@@ -521,7 +521,7 @@ class kanban extends control
             $this->kanban->createLane($kanbanID, $regionID, $lane, 'new');
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($from == 'execution') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "refreshKanban();"));
+            if($from == 'execution') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
@@ -584,24 +584,15 @@ class kanban extends control
      */
     public function deleteLane(int $regionID, int $laneID)
     {
-        $lane = $this->kanban->getLaneById($laneID);
         $this->kanban->delete(TABLE_KANBANLANE, $laneID);
 
         if($this->app->tab == 'execution')
         {
             if(dao::isError()) return $this->sendError(dao::getError());
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "refreshKanban();"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $lanes = $this->kanban->getLanePairsByGroup($lane->group);
-        if($lanes)
-        {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $lane->region, array('items' => array(array('key' => 'group' . $lane->group, 'data' => array('lanes' => array(array('id' => $laneID, 'name' => $laneID, 'deleted' => true))))))))));
-        }
-        else
-        {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, array('items' => array(array('key' => 'group' . $lane->group, 'deleted' => true)))))));
-        }
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
