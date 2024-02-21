@@ -138,7 +138,7 @@ class treeZen extends tree
             default:
                 if(strpos($viewType, '_') !== false) // viewType is workflow building category.
                 {
-                    $this->updateWorkflowLang();
+                    $this->updateWorkflowLang($viewType);
                 }
                 break;
         }
@@ -152,11 +152,10 @@ class treeZen extends tree
      * Update workflow lang.
      *
      * @param  string $viewType
-     * @static
      * @access protected
      * @return void
      */
-    protected function updateWorkflowLang($viewType)
+    protected function updateWorkflowLang(string $viewType): void
     {
         $params = explode('_', $viewType);
         if(count($params) == 2)
