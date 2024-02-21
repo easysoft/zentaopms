@@ -22,7 +22,8 @@ formPanel
         set::width('1/2'),
         input
         (
-            set::name('name')
+            set::name('name'),
+            set('maxlength', 20)
         )
     ),
     formGroup
