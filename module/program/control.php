@@ -396,7 +396,7 @@ class program extends control
         if($childrenCount)
         {
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'Can not delete the program has children.'));
-            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->hasChildren}');"));
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x',  message: '{$this->lang->program->hasChildren}'})"));
         }
 
         /* The program can NOT be deleted if it has a product. */
