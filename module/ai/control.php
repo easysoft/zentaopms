@@ -564,14 +564,7 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptAssignRole', "promptID=$promptID") . '#app=admin'));
         }
 
-        $models = $this->ai->getLanguageModels();
-        $models = array_reduce($models, function ($carry, $model)
-        {
-            $carry[$model->id] = $model->name;
-            return $carry;
-        }, array('default' => $this->lang->ai->models->default));
-
-        $this->view->models         = $models;
+        $this->view->models         = $this->ai->getLanguageModelNamesWithDefault();
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);

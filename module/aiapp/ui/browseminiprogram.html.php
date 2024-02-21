@@ -233,7 +233,7 @@ div(
                         setStyle(array('color' => 'var(--color-slate-700)')),
                         $lang->aiapp->modelCurrent
                     ),
-                    span($lang->ai->models->typeList[$miniProgram->model]),
+                    span($models[$miniProgram->model]),
                 ),
                 empty($formGroups)
                     ? null
