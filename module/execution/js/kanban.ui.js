@@ -699,7 +699,7 @@ window.changeBugProduct = function()
     if(productID) $('#batchCreateBugButton').attr('href', $.createLink('bug', 'batchCreate', 'productID=' + productID + '&branch=&executionID=' + executionID));
 };
 
-window.linkPlanStory = function()
+$(document).off('click', '#linkStoryByPlan button[type="submit"]').on('click', '#linkStoryByPlan button[type="submit"]', function()
 {
     const planID = $('[name=plan]').val();
     if(planID)
@@ -707,4 +707,5 @@ window.linkPlanStory = function()
         var param = "&param=executionID=" + executionID + ",browseType=" + browseType + ",orderBy=id_asc,groupBy=" + groupBy;
         $.ajaxSubmit({url: $.createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=taskKanban&extra=' + param)});
     }
-};
+    return false;
+})
