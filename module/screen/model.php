@@ -276,7 +276,7 @@ class screenModel extends model
                 }
                 else
                 {
-                    $component->option->series = array_pad([], count($component->option->dataset->dimensions), $defaultSeries[0]);
+                    if(isset($component->option->dataset->dimensions)) $component->option->series = array_pad([], count($component->option->dataset->dimensions), $defaultSeries[0]);
                 }
             }
         }
