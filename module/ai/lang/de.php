@@ -566,8 +566,16 @@ $lang->ai->models->testConnectionResult->fail       = 'Failed to connect';
 $lang->ai->models->testConnectionResult->failFormat = 'Failed to connect: %s';
 
 $lang->ai->models->statusList = array();
-$lang->ai->models->statusList['on']  = 'Enable';
-$lang->ai->models->statusList['off'] = 'Disable';
+$lang->ai->models->statusList['0'] = 'Disabled';
+$lang->ai->models->statusList['off'] = 'Disabled';
+$lang->ai->models->statusList['1']  = 'Enabled';
+$lang->ai->models->statusList['on']  = 'Enabled';
+
+$lang->ai->models->proxyStatusList = array();
+$lang->ai->models->proxyStatusList['0']   = 'No';
+$lang->ai->models->proxyStatusList['off'] = 'No';
+$lang->ai->models->proxyStatusList['1']   = 'Yes';
+$lang->ai->models->proxyStatusList['on']  = 'Yes';
 
 $lang->ai->models->typeList = array();
 $lang->ai->models->typeList['openai-gpt35'] = 'OpenAI / GPT-3.5';
