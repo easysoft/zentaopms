@@ -13,12 +13,27 @@ namespace zin;
  */
 function buildParamsRows(object $block = null, ?array $params = null, string $module = '', string $code = ''): array
 {
+    global $lang;
+
     if(empty($params)) $params = data('params');
     $rows        = array();
     $isSameBlock = !empty($block) && $block->module == $module && $block->code == $code;
+
+    $nameRow = formRow
+    (
+        formGroup
+        (
+            set::label($lang->block->name),
+            set::name('title'),
+            set::value(data('blockTitle')),
+            set::control('input')
+        )
+    );
+
+    $rows['name'] = $nameRow;
     foreach($params as $key => $row)
     {
-        $rows[] = formRow
+        $rows[$key] = formRow
         (
             formGroup
             (
@@ -34,6 +49,13 @@ function buildParamsRows(object $block = null, ?array $params = null, string $mo
                 set::required($row['control'] === 'picker')
             )
         );
+
+        /* 如果有type字段， name字段放到type字段后面。*/
+        if($key == 'type')
+        {
+            unset($rows['name']);
+            $rows['name'] = $nameRow;
+        }
     }
     return $rows;
 }

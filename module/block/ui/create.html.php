@@ -75,16 +75,6 @@ row
             (
                 setID('paramsRow'),
                 setClass('space-y-4'),
-                formRow
-                (
-                    formGroup
-                    (
-                        set::label($lang->block->name),
-                        set::name('title'),
-                        set::value($blockTitle),
-                        set::control('input')
-                    )
-                ),
                 buildParamsRows(),
                 formRow
                 (
