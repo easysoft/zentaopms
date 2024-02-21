@@ -344,6 +344,7 @@ class aiModel extends model
      */
     public function testModelConnection($modelID)
     {
+        $this->useLanguageModel($modelID);
         if($this->config->ai->models[$this->modelConfig->type] == 'ernie' || $this->modelConfig->vendor == 'azure' || $this->modelConfig->type == 'openai-gpt4')
         {
             $messages = array((object)array('role' => 'user', 'content' => 'test'));
