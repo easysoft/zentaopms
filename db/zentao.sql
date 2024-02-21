@@ -15967,7 +15967,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogram` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `zt_miniprogram` (`id`, `name`, `category`, `desc`, `model`, `icon`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `published`, `publishedDate`, `deleted`, `prompt`, `builtIn`) VALUES
+INSERT INTO `zt_ai_miniprogram` (`id`, `name`, `category`, `desc`, `model`, `icon`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `published`, `publishedDate`, `deleted`, `prompt`, `builtIn`) VALUES
 (1, '职业发展导航', 'personal', '职业发展导航是一个旨在帮助用户规划和实现职业目标的AI小程序，为用户提供个性化的建议。', 0, 'technologist-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份职业发展导航，我的教育背景为 <教育背景> ，职位信息为 <职位信息> ，工作经验描述如下： <工作经验> ，掌握的技能为 <掌握技能> ，为了实现 <职业目标> ，我想做一个 <规划时长> 的计划，我有更多感兴趣的领域为 <更多感兴趣的领域> ，有更多补充内容 <补充信息> ，来追求相关机会和进一步发展，控制在30字以内。', '1'),
 (2, '工作汇报', 'work', '旨在帮助您轻松撰写和管理您的工作汇报。无论是每周、每月还是季度性的报告，我们提供了一个简单而高效的平台，让您能够清晰、有条理地记录和展示您的工作成果。', 0, 'technologist-2', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '我的基本信息如下: <身份描述> ，请根据我的工作情况生成一份工作汇报，需要包含 <汇报内容维度> ，汇报对象描述为 <汇报对象> ，另外还需要补充 <补充信息> 。下面是我的工作内容基本描述: <工作内容描述> ，控制在30字以内。', '1'),
 (3, '市场分析报告', 'work', '市场分析报告小程序是一个旨在帮助用户根据互联网信息快速生成市场分析报告的AI小程序。', 0, 'chart-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份市场分析报告，我目标市场是 <目标市场> ,市场概况为 <市场概况> ，该领域的细分市场有 <细分市场> ,同时我希望能针对 <竞品名称> 展开竞品分析,竞品分析的维度是 <竞品分析维度> ,来帮助我快速的了解市场。', '1'),
@@ -15980,6 +15980,10 @@ INSERT INTO `zt_miniprogram` (`id`, `name`, `category`, `desc`, `model`, `icon`,
 (10, '营销策划创意', 'creative', '营销策划创意旨在帮助用户生成针对目标受众的策划创意，从而吸引更多用户关注。', 0, 'pushpin-4', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请为 <产品名称> 产品 ，基于 <产品定位> <目标受众> 和期望的 <营销渠道> 等要素形成创意策划策略，更多信息依据 <补充信息> 进行完善，以吸引更多目标客户的关注、提高产品品牌知名度，降低每次点击成本并转化为实际购买行为。', '1'),
 (11, '简历优化助手', 'personal', '简历撰写是一个求职简历撰写的小助手，旨在帮助用户优化个人简历、展现职业亮点。', 0, 'writinghand-5', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我优化一份简历使其更具吸引力和专业性，简历需要包括个人信息、教育背景、工作经历、技能专长、项目经验和其他相关信息。我的简历具体内容为： <简历内容> ,期望应聘的目标职位及要求为 <目标职位> ，希望简历能够突出以下工作经历和成就： <工作经验> ，以凸显适用于目标职位的相关经验和能力。请确保满足 <简历格式> 的设计风格 ，更多信息依据 <补充信息> 进行完善。', '1'),
 (12, '家装设计', 'life', '家装设计是一个旨在帮助用户轻松设计梦想家居，提供更多设计思路和灵感。', 0, 'palette-7', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '我的家在 <居住城市> ，是 <房屋面积> 的 <房屋户型> 户型，想要装修成 <风格偏好> 的风格，预算成本需要控制在 <预算成本> 之内，更多信息依据 <补充信息> 进行完善，请帮我生成具体的设计建议。', '1');
+
+CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramfield` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `appID` mediumint(8) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
   `type` enum('radio', 'checkbox', 'text', 'textarea') DEFAULT 'text',
   `placeholder` text DEFAULT NULL,
