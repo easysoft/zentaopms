@@ -138,11 +138,12 @@ foreach($fields as $field => $attr)
 
     if($attr['control'] == 'editor')
     {
+        $required = $field == 'comment' || $field == 'verify' ? strpos(",{$this->config->story->change->requiredFields},", ",{$field},") : $attr['required'];
         $formItems[$field] = formGroup
         (
             set::width('full'),
             set::label($attr['title']),
-            set::required($attr['required']),
+            set::required($required),
             editor
             (
                 set::name($fieldName),
