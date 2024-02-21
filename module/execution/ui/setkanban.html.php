@@ -86,6 +86,7 @@ formPanel
         formGroup
         (
             set::label($lang->kanban->cardCount),
+            set::required(true),
             input
             (
                 set::name('displayCards'),
