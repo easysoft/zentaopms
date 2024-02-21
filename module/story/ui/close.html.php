@@ -32,15 +32,15 @@ formPanel
     (
         set::hidden(true),
         setID('duplicateStoryBox'),
-	set::required(true),
-	set::label($lang->story->duplicateStory),
-	set::width('1/3'),
-	set::value(''),
-	picker
-	(
-	    set::name('duplicateStory'),
-	    set::items($productStories)
-	)
+	    set::required(true),
+	    set::label($lang->story->duplicateStory),
+	    set::width('1/3'),
+	    set::value(''),
+	    picker
+	    (
+	        set::name('duplicateStory'),
+	        set::items($productStories)
+	    )
     ),
     formGroup
     (
