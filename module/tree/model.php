@@ -1717,7 +1717,7 @@ class treeModel extends model
 
         foreach($childs as $moduleID => $moduleName)
         {
-            if(preg_match('/(\s+)/', $moduleName))
+            if(preg_match('/(\s+)/', trim($moduleName)))
             {
                 dao::$errors['root'] = $this->lang->tree->shouldNotBlank;
                 return false;
