@@ -98,8 +98,8 @@ class docModel extends model
         }
 
         $products   = $this->loadModel('product')->getPairs();
-        $projects   = $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '');
-        $executions = $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf');
+        $projects   = $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc');
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
         $waterfalls = array();
         if(empty($objectID) and $type == 'execution')
         {
@@ -1206,8 +1206,8 @@ class docModel extends model
             $this->config->doc->search['module'] = 'contributeDoc';
             $products = $this->product->getPairs();
 
-            $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '') + array('all' => $this->lang->doc->allProjects);
-            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix,withobject') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc') + array('all' => $this->lang->doc->allProjects);
+            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf,noprefix,withobject') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '') + $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
             $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
 
@@ -1228,7 +1228,7 @@ class docModel extends model
 
             if($type == 'project')
             {
-                $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+                $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
             }
             else
             {
