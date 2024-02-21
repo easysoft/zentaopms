@@ -59,7 +59,7 @@ formPanel
         {
             return formRow
             (
-                set::class('vendor-row'),
+                set::className('vendor-row'),
                 formGroup
                 (
                     set::label($lang->ai->models->{$field}),
