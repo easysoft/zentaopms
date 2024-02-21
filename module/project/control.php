@@ -1391,7 +1391,7 @@ class project extends control
 
         $response['result']     = 'success';
         $response['closeModal'] = true;
-        $response['load']       = helper::createLink('project', 'browse');
+        $response['load']       = true;
 
         $message = $this->executeHooks($projectID);
         if($message) $response['message'] = $message;
