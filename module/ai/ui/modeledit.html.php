@@ -68,7 +68,7 @@ formPanel
                     input
                     (
                         set::name($field),
-                        set::value($model->{$field}),
+                        set::value(empty($model->{$field}) ? '' : $model->{$field}),
                         set::required(true)
                     )
                 )
