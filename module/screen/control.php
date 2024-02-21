@@ -126,12 +126,12 @@ class screen extends control
     {
         if(!empty($_POST))
         {
-            $chartID      = $this->post->sourceID;
-            $type         = $this->post->type;
+            $sourceID = $this->post->sourceID;
+            $type     = $this->post->type;
 
             if($type == 'Filters')
             {
-                $filterComponent = $this->screen->genFilterComponent($chartID);
+                $filterComponent = $this->screen->genFilterComponent($sourceID);
                 return print(json_encode($filterComponent));
             }
 
@@ -141,74 +141,21 @@ class screen extends control
 
             $type = $this->screen->getChartType($type);
 
-            $table = $this->config->objectTables[$type];
-            $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
-
-            $filterFormat = '';
-            if($queryType == 'filter')
-            {
-                $filters      = json_decode($chart->filters, true);
-                $mergeFilters = array();
-
-                foreach($filters as $index => $filter)
-                {
-                    if($filterParams[$index]['default'] === null) continue;
-
-                    $default = isset($filterParams[$index]['default']) ? $filterParams[$index]['default'] : null;
-                    $filterType = $filter['type'];
-                    if($filterType == 'date' or $filterType == 'datetime')
-                    {
-                        if(isset($filter['from']) and $filter['from'] == 'query')
-                        {
-                            if(is_numeric($default)) $default = date('Y-m-d H:i:s', $default / 1000);
-                        }
-                        else
-                        {
-                            if(is_array($default))
-                            {
-                                $begin = $default[0];
-                                $end   = $default[1];
-
-                                $begin = date('Y-m-d H:i:s', $begin / 1000);
-                                $end = date('Y-m-d H:i:s', $end / 1000);
-
-                                $default = array('begin' => $begin, 'end' => $end);
-                            }
-                            else
-                            {
-                                $default = array('begin' => '', 'end' => '');
-                            }
-                        }
-
-                    }
-                    $filter['default'] = $default;
-                    $mergeFilters[] = $filter;
-                }
-
-                if($type != 'metric')
-                {
-                    if($table == TABLE_PIVOT)
-                    {
-                        list($sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chart->sql, $mergeFilters);
-                        $chart->sql = $sql;
-                    }
-                    else
-                    {
-                        $filterFormat = $this->loadModel($type)->getFilterFormat($mergeFilters);
-                    }
-                }
-            }
-
             if($type == 'metric')
             {
-                $metric = $this->loadModel('metric')->getByID($chartID);
-                $chartData = $this->screen->genMetricComponent($metric, $component, $filterParams);
+                $metric     = $this->loadModel('metric')->getByID($sourceID);
+                $metricData = $this->screen->genMetricComponent($metric, $component, $filterParams);
+                return print(json_encode($metricData));
             }
-            else
-            {
-                $chartData = $this->screen->genComponentData($chart, $type, $component, $filterFormat);
-            }
-            print(json_encode($chartData));
+
+            $table = $this->config->objectTables[$type];
+            $chartOrPivot = $this->dao->select('*')->from($table)->where('id')->eq($sourceID)->fetch();
+
+            $filterFormat = '';
+            if($queryType == 'filter') list($chartOrPivot, $filterFormat) = $this->screen->mergeChartAndPivotFilters($type, $chartOrPivot, $sourceID, $filterParams);
+
+            $component = $this->screen->genComponentData($chartOrPivot, $type, $component, $filterFormat);
+            print(json_encode($component));
         }
     }
 
