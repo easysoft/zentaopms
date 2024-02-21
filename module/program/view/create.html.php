@@ -82,6 +82,7 @@
               <?php echo html::input('budget', '', "class='form-control' onchange='budgetOverrunTips()' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon fix-border'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
+              <?php echo html::hidden('budgetUnit', $parentProgram->budgetUnit);?>
               <?php else:?>
               <span class='input-group-addon fix-border'></span>
               <?php echo html::select('budgetUnit', $budgetUnitList, $config->project->defaultCurrency, "class='form-control'");?>
