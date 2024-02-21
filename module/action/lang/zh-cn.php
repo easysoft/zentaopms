@@ -875,7 +875,7 @@ $lang->action->label->domian       = '域名|domian|view|id=%s';
 $lang->action->label->service      = '服务|service|view|id=%s';
 $lang->action->label->artifactrepo = '制品库|artifactrepo|browse|';
 $lang->action->label->prompt       = '提词|ai|promptview|id=%s';
-$lang->action->label->miniprogram  = '小程序|ai|miniprogramview|id=%s';
+$lang->action->label->miniprogram  = '小程序|aiapp|browseminiprogram|id=%s';
 $lang->action->label->dataset      = '数据集';
 
 /* Object type. */
