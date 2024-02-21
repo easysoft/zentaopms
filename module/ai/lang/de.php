@@ -31,9 +31,13 @@ $lang->prompt->editedDate       = 'Edited Date';
 $lang->prompt->deleted          = 'Deleted';
 
 /* Lang for privs, keys are paired with privlang items. */
-$lang->ai->modelCurrent            = 'Current Model';
-$lang->ai->modelBrowse             = 'Browse Models';
-$lang->ai->modelEdit               = 'Edit Models';
+$lang->ai->modelBrowse             = 'Browse Language Models';
+$lang->ai->modelView               = 'View Language Model';
+$lang->ai->modelCreate             = 'Create Language Model';
+$lang->ai->modelEdit               = 'Edit Language Model';
+$lang->ai->modelEnable             = 'Enable Language Model';
+$lang->ai->modelDisable            = 'Disable Language Model';
+$lang->ai->modelDelete             = 'Delete Language Model';
 $lang->ai->modelTestConnection     = 'Test Model Connection';
 $lang->ai->promptCreate            = 'Create Prompt';
 $lang->ai->promptEdit              = 'Edit Prompt';

@@ -1854,8 +1854,13 @@ $lang->resource->api->sql          = 'sql';
 /* AI methods. */
 $lang->resource->ai = new stdclass();
 $lang->resource->ai->models                  = 'modelBrowse';
-$lang->resource->ai->editModel               = 'modelEdit';
-$lang->resource->ai->testConnection          = 'modelTestConnection';
+$lang->resource->ai->modelView               = 'modelView';
+$lang->resource->ai->modelCreate             = 'modelCreate';
+$lang->resource->ai->modelEdit               = 'modelEdit';
+$lang->resource->ai->modelEnable             = 'modelEnable';
+$lang->resource->ai->modelDisable            = 'modelDisable';
+$lang->resource->ai->modelDelete             = 'modelDelete';
+$lang->resource->ai->modelTestConnection     = 'modelTestConnection';
 $lang->resource->ai->promptPublish           = 'promptPublish';
 $lang->resource->ai->promptUnpublish         = 'promptUnpublish';
 $lang->resource->ai->prompts                 = 'promptBrowse';
