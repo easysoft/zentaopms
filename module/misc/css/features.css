@@ -1,3 +1,4 @@
+#features {position: relative;}
 #features > header {text-align: center;}
 #features > footer {text-align: center; padding-top: 18px; border-top: 1px solid #eee}
 
@@ -15,7 +16,9 @@
 
 #features [data-slide-to] {pointer-events: none;}
 #features.enabled [data-slide-to] {pointer-events: auto;}
-#features .btn-close-modal {display: none;}
+#features .btn-last {display: none;}
 #features.is-last-item .btn-slide-next {display: none;}
-#features.is-last-item .btn-close-modal {display: inline-block;}
+#features.is-last-item .btn-last {display: inline-block;}
 #features.is-first-item .btn-slide-prev {display: none;}
+
+#features .close {position: absolute; top: 5px; right: 10px; z-index: 2;}
