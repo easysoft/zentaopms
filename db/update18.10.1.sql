@@ -54,8 +54,7 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogramfield` (
   `placeholder` text DEFAULT NULL,
   `options` text DEFAULT NULL,
   `required` enum('0', '1') DEFAULT '1',
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`appID`) REFERENCES `zt_miniprogram`(`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `zt_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
