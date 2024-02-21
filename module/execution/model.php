@@ -4699,14 +4699,17 @@ class executionModel extends model
     {
         $rows = array();
         $this->app->loadConfig('project');
-        foreach($executions as $execution)
+
+        $executionList = array();
+        foreach($executions as $execution) $executionList[$execution->id] = $execution;
+        foreach($executionList as $execution)
         {
             $execution->rawID       = $execution->id;
             $execution->isExecution = 1;
             $execution->id          = 'pid' . (string)$execution->id;
             $execution->projectID   = $execution->project;
             $execution->project     = $execution->projectName;
-            $execution->parent      = ($execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
+            $execution->parent      = (isset($executionList[$execution->parent]) && $execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->isParent    = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->actions     = array();
             if(isset($this->config->projectExecution->dtable->actionsRule[$execution->projectModel]))
