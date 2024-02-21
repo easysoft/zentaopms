@@ -14,6 +14,7 @@ class visionSwitcher extends wg
         #versionSwitchBtn > .icon, #versionMenu .selected .item-icon {background: var(--color-primary-500); color: #fff; opacity: 1;}
         #versionSwitchBtn > .icon::before, #versionMenu .item-icon::before {transform: scale(.8);}
         #versionMenu {min-width: 160px;}
+        #versionMenu .selected:not(:hover) .item-title {color: var(--color-fore)}
         CSS;
     }
 
