@@ -1804,7 +1804,7 @@ class testtaskModel extends model
 
         $run->caseVersion = isset($run->caseVersion) ? $run->caseVersion : 1;
         $run->assignedTo  = isset($run->assignedTo) ? $run->assignedTo : '';
-        $caseChanged = $run->version < $run->caseVersion;
+        $caseChanged = !$run->isScene && $run->version < $run->caseVersion;
         $fromCaseID  = $run->fromCaseID;
 
         if($col->show)
