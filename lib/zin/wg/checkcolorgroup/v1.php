@@ -11,8 +11,10 @@ class checkColorGroup extends checkBtnGroup
         return <<<CSS
         .check-btn-group {gap: 1px; padding: 0; border-radius: var(--radius); margin-top: 4px;}
         .check-btn-group > .check-btn {flex: auto; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;}
-        .check-btn-group > .check-btn + .check-btn::before {content: ' '; display: block; position: absolute; left: -1px; top: 8px; bottom: 8px; width: 1px; background: var(--color-border)}
         .check-btn-group > .check-btn > label {width: 20px; height: 20px; padding: 0; margin-right: 6px; --tw-ring-color: transparent; border-radius: var(--radius-full);}
+        .check-btn-group > .check-btn > input:checked + label {font-family: ZentaoIcon; text-align: center; color: #fff;}
+        .check-btn-group > .check-btn > input:checked + label.btn::after {font-size: 14px; content: '\\e5ca';}
+        .check-btn-group > .check-btn > label > svg {display: none}
         CSS;
     }
 
