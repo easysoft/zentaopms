@@ -9559,7 +9559,6 @@ class upgradeModel extends model
 
     /**
      * Migrate configured AI model into table.
-     * TODO: add into actual upgrading procedure.
      *
      * @access public
      * @return void
