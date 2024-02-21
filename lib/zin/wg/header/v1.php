@@ -227,7 +227,7 @@ class header extends wg
 
             set::id('userMenu'),
             set::trigger('hover'),
-            set::placement('bottom'),
+            set::placement('bottom-start'),
             set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::strategy('fixed'),
             set::arrow(true),
