@@ -137,3 +137,5 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramstar` (
 
 RENAME TABLE `zt_prompt` TO `zt_ai_prompt`;
 RENAME TABLE `zt_promptrole` TO `zt_ai_promptrole`;
+ALTER TABLE `zt_kanban` CHANGE `minColWidth` `minColWidth` smallint(4) NOT NULL DEFAULT '264';
+ALTER TABLE `zt_project` CHANGE `minColWidth` `minColWidth` smallint(4) NOT NULL DEFAULT '264';
