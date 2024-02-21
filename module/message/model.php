@@ -188,11 +188,12 @@ class messageModel extends model
     public function getToList(object $object, string $objectType, int $actionID = 0): string
     {
         $toList = '';
-        if(!empty($object->assignedTo))                 $toList = $object->assignedTo;
-        if(empty($toList) && $objectType == 'todo')     $toList = $object->account;
-        if(empty($toList) && $objectType == 'testtask') $toList = $object->owner;
-        if(empty($toList) && $objectType == 'meeting')  $toList = $object->host . $object->participant;
-        if(empty($toList) && $objectType == 'mr')       $toList = $object->createdBy . ',' . $object->assignee;
+        if(!empty($object->assignedTo))                    $toList = $object->assignedTo;
+        if(empty($toList) && $objectType == 'todo')        $toList = $object->account;
+        if(empty($toList) && $objectType == 'testtask')    $toList = $object->owner;
+        if(empty($toList) && $objectType == 'meeting')     $toList = $object->host . $object->participant;
+        if(empty($toList) && $objectType == 'mr')          $toList = $object->createdBy . ',' . $object->assignee;
+        if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
         if(empty($toList) && $objectType == 'release')
         {
             /* Get notifiy persons. */
@@ -223,6 +224,18 @@ class messageModel extends model
             $toList = array_merge(explode(',', $toList), explode(',', $object->members));
             $toList = array_filter(array_unique($toList));
             $toList = implode(',', $toList);
+        }
+
+        if(empty($toList) and $objectType == 'demand' and $this->config->edition == 'ipd')
+        {
+            $toList  = $object->assignedTo;
+            $toList .= ',' . str_replace(' ', '', trim($object->mailto, ','));
+            $toList .= ",$object->createdBy";
+
+            $reviewers = $this->loadModel('demand')->getReviewerPairs($object->id, $object->version);
+            $reviewers = array_keys($reviewers);
+            if($reviewers) $toList .= ',' . implode(',', $reviewers);
+            $toList = trim($toList, ',');
         }
 
         return $toList;
