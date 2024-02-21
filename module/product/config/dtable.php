@@ -3,8 +3,8 @@ $config->product->dtable = new stdclass();
 
 $config->product->dtable->fieldList['name']['name']         = 'name';
 $config->product->dtable->fieldList['name']['title']        = $lang->product->name;
-$config->product->dtable->fieldList['name']['minWidth']     = 248;
-$config->product->dtable->fieldList['name']['type']         = 'link';
+$config->product->dtable->fieldList['name']['width']        = 0.2;
+$config->product->dtable->fieldList['name']['type']         = 'title';
 $config->product->dtable->fieldList['name']['flex']         = 1;
 $config->product->dtable->fieldList['name']['nestedToggle'] = false;
 $config->product->dtable->fieldList['name']['checkbox']     = true;
