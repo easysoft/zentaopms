@@ -6948,7 +6948,10 @@ class storyModel extends model
                     if(isset($branches[$story->branch]) and $showBranch and $this->config->vision != 'lite') $storyTitle .= "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
                     if($story->module and isset($modulePairs[$story->module])) $storyTitle .= "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                     if($story->parent > 0 and !($storyType == 'requirement' and $story->type == 'story')) $storyTitle .= '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
-                    $storyTitle .= $canView ? html::a($storyLink, $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$story->title}</span>";
+
+                    $storyColor = $story->color ? "style='color: {$story->color}'" : "class='text-primary'";
+                    if(!$canView && !$story->color) $storyColor = '';
+                    $storyTitle .= $canView ? html::a($storyLink, $story->title, '', "title='$story->title' $storyColor data-app='$tab'") : "<span $storyColor>{$story->title}</span>";
                     $data->title = $storyTitle;
                 }
                 if($col->name == 'mailto')
