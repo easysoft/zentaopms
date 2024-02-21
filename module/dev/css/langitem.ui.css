@@ -34,3 +34,4 @@
 
 /* bottom-btn */
 .bottom-btn {display: flex; align-items: center; background: #fff; padding-left: 150px; padding-bottom: 20px;}
+.form .form-actions {width: 500px;}
