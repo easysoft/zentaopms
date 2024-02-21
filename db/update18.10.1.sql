@@ -1,13 +1,13 @@
 ALTER TABLE `zt_demand` ADD COLUMN `feedback` mediumint(9) NOT NULL DEFAULT '0';
 ALTER TABLE `zt_demand` ADD COLUMN `keywords` varchar(255) NOT NULL DEFAULT '';
 
--- DROP TABLE IF EXISTS `zt_miniprogram`;
-CREATE TABLE IF NOT EXISTS `zt_miniprogram` (
+-- DROP TABLE IF EXISTS `zt_ai_miniprogram`;
+CREATE TABLE IF NOT EXISTS `zt_ai_miniprogram` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `category` varchar(30) NOT NULL,
   `desc` text DEFAULT NULL,
-  `model` varchar(30) NOT NULL,
+  `model` mediumint(8) unsigned DEFAULT NULL,
   `icon` varchar(30) NOT NULL DEFAULT 'writinghand-7',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
@@ -21,19 +21,19 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogram` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `zt_miniprogram` (`id`, `name`, `category`, `desc`, `model`, `icon`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `published`, `publishedDate`, `deleted`, `prompt`, `builtIn`) VALUES
-(1, '职业发展导航', 'personal', '职业发展导航是一个旨在帮助用户规划和实现职业目标的AI小程序，为用户提供个性化的建议。', 'openai-gpt35', 'technologist-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份职业发展导航，我的教育背景为 <教育背景> ，职位信息为 <职位信息> ，工作经验描述如下： <工作经验> ，掌握的技能为 <掌握技能> ，为了实现 <职业目标> ，我想做一个 <规划时长> 的计划，我有更多感兴趣的领域为 <更多感兴趣的领域> ，有更多补充内容 <补充信息> ，来追求相关机会和进一步发展，控制在30字以内。', '1'),
-(2, '工作汇报', 'work', '旨在帮助您轻松撰写和管理您的工作汇报。无论是每周、每月还是季度性的报告，我们提供了一个简单而高效的平台，让您能够清晰、有条理地记录和展示您的工作成果。', 'openai-gpt35', 'technologist-2', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '我的基本信息如下: <身份描述> ，请根据我的工作情况生成一份工作汇报，需要包含 <汇报内容维度> ，汇报对象描述为 <汇报对象> ，另外还需要补充 <补充信息> 。下面是我的工作内容基本描述: <工作内容描述> ，控制在30字以内。', '1'),
-(3, '市场分析报告', 'work', '市场分析报告小程序是一个旨在帮助用户根据互联网信息快速生成市场分析报告的AI小程序。', 'openai-gpt35', 'chart-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份市场分析报告，我目标市场是 <目标市场> ,市场概况为 <市场概况> ，该领域的细分市场有 <细分市场> ,同时我希望能针对 <竞品名称> 展开竞品分析,竞品分析的维度是 <竞品分析维度> ,来帮助我快速的了解市场。', '1'),
-(4, '健身计划', 'life', '健身计划小程序旨在帮助您制定和管理个性化的健身计划，让您更轻松、高效地实现健康和体能目标。', 'openai-gpt35', 'cactus-5', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '我的基本信息如下： <性别> 、 <基本信息> ，我想做一份健身计划，达成 <目标设定> 的效果，对于目标我有如下更多补充:： <目标补充> 。我的初步想法是进行 <计划类型> 方面的类型，训练频次为 <训练频率> ，同时给身体足够的休息和恢复时间，要求如下 <休息与恢复> ，请根据我的上述情况生成一份健身计划，控制在30字以内。', '1'),
-(5, '广告创意大师', 'creative', '广告创意大师是一个根据产品卖点，快速为用户提供广告文案的AI小程序。', 'openai-gpt35', 'palette-3', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '假设我是一名 <角色> ,请结合产品卖点和目标用户，帮我为 <产品名称> 生成 <文案数量> 条计划投放在 <投放渠道> 的广告文案，且保证每条文案的字数不超过30字；产品的核心卖点是 <核心卖点> ，目标用户是 <目标用户> 。', '1'),
-(6, '文章撰写助手', 'creative', '旨在为自媒体创作者提供一个强大而便捷的平台，助力您撰写优质的文章并实现更广泛的影响力。', 'openai-gpt35', 'writinghand-3', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '生成一篇标题为 <文章主题> 的文章，文章内容概要为 <内容概要> ，计划发布到 <发布平台> ，需要注意控制 <规范要求> 。', '1'),
-(7, '视频脚本创意工坊', 'creative', '视频脚本创意工房是一个帮助新手视频博主快速梳理视频创作思路，生成拍摄脚本的AI小程序。', 'openai-gpt35', 'notebook-3', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '假设我是一个新手视频博主,现请以 <主题> 为题，创作一个时长不超过 <视频时长> 分钟， <视频风格> 风格的视频脚本。', '1'),
-(8, '旅行规划师', 'life', '旅行规划师可以为您量身定制独一无二的旅程体验，让旅行变得简单而完美。', 'openai-gpt35', 'airplane-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份 <旅行天数> 天 <旅行人数> 人的 <目标城市> 旅行规划，期望的交通方式是 <交通方式> ，住宿类型可接受 <住宿类型> ，期望推荐包含 <景点活动> 的行程活动，预算控制在 <预算成本> 之内，更多信息依据 <补充信息> 进行完善。', '1'),
-(9, '新人介绍', 'personal', '新人介绍小程序是一个旨在帮助用户在入职当天，快速编写自我介绍的AI小程序。', 'openai-gpt35', 'pencil-7', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份新人介绍，我的年龄是 <年龄>  ,籍贯是 <籍贯信息> ，毕业于 <毕业院校> ,工作经验为 <工作经验> ,日常爱好是 <爱好> ,请将字数控制在300字以内，来帮助我完成新人入职的自我介绍，', '1'),
-(10, '营销策划创意', 'creative', '营销策划创意旨在帮助用户生成针对目标受众的策划创意，从而吸引更多用户关注。', 'openai-gpt35', 'pushpin-4', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请为 <产品名称> 产品 ，基于 <产品定位> <目标受众> 和期望的 <营销渠道> 等要素形成创意策划策略，更多信息依据 <补充信息> 进行完善，以吸引更多目标客户的关注、提高产品品牌知名度，降低每次点击成本并转化为实际购买行为。', '1'),
-(11, '简历优化助手', 'personal', '简历撰写是一个求职简历撰写的小助手，旨在帮助用户优化个人简历、展现职业亮点。', 'openai-gpt35', 'writinghand-5', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我优化一份简历使其更具吸引力和专业性，简历需要包括个人信息、教育背景、工作经历、技能专长、项目经验和其他相关信息。我的简历具体内容为： <简历内容> ,期望应聘的目标职位及要求为 <目标职位> ，希望简历能够突出以下工作经历和成就： <工作经验> ，以凸显适用于目标职位的相关经验和能力。请确保满足 <简历格式> 的设计风格 ，更多信息依据 <补充信息> 进行完善。', '1'),
-(12, '家装设计', 'life', '家装设计是一个旨在帮助用户轻松设计梦想家居，提供更多设计思路和灵感。', 'openai-gpt35', 'palette-7', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '我的家在 <居住城市> ，是 <房屋面积> 的 <房屋户型> 户型，想要装修成 <风格偏好> 的风格，预算成本需要控制在 <预算成本> 之内，更多信息依据 <补充信息> 进行完善，请帮我生成具体的设计建议。', '1');
+INSERT INTO `zt_ai_miniprogram` (`id`, `name`, `category`, `desc`, `model`, `icon`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `published`, `publishedDate`, `deleted`, `prompt`, `builtIn`) VALUES
+(1, '职业发展导航', 'personal', '职业发展导航是一个旨在帮助用户规划和实现职业目标的AI小程序，为用户提供个性化的建议。', 0, 'technologist-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份职业发展导航，我的教育背景为 <教育背景> ，职位信息为 <职位信息> ，工作经验描述如下： <工作经验> ，掌握的技能为 <掌握技能> ，为了实现 <职业目标> ，我想做一个 <规划时长> 的计划，我有更多感兴趣的领域为 <更多感兴趣的领域> ，有更多补充内容 <补充信息> ，来追求相关机会和进一步发展，控制在30字以内。', '1'),
+(2, '工作汇报', 'work', '旨在帮助您轻松撰写和管理您的工作汇报。无论是每周、每月还是季度性的报告，我们提供了一个简单而高效的平台，让您能够清晰、有条理地记录和展示您的工作成果。', 0, 'technologist-2', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '我的基本信息如下: <身份描述> ，请根据我的工作情况生成一份工作汇报，需要包含 <汇报内容维度> ，汇报对象描述为 <汇报对象> ，另外还需要补充 <补充信息> 。下面是我的工作内容基本描述: <工作内容描述> ，控制在30字以内。', '1'),
+(3, '市场分析报告', 'work', '市场分析报告小程序是一个旨在帮助用户根据互联网信息快速生成市场分析报告的AI小程序。', 0, 'chart-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份市场分析报告，我目标市场是 <目标市场> ,市场概况为 <市场概况> ，该领域的细分市场有 <细分市场> ,同时我希望能针对 <竞品名称> 展开竞品分析,竞品分析的维度是 <竞品分析维度> ,来帮助我快速的了解市场。', '1'),
+(4, '健身计划', 'life', '健身计划小程序旨在帮助您制定和管理个性化的健身计划，让您更轻松、高效地实现健康和体能目标。', 0, 'cactus-5', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '我的基本信息如下： <性别> 、 <基本信息> ，我想做一份健身计划，达成 <目标设定> 的效果，对于目标我有如下更多补充:： <目标补充> 。我的初步想法是进行 <计划类型> 方面的类型，训练频次为 <训练频率> ，同时给身体足够的休息和恢复时间，要求如下 <休息与恢复> ，请根据我的上述情况生成一份健身计划，控制在30字以内。', '1'),
+(5, '广告创意大师', 'creative', '广告创意大师是一个根据产品卖点，快速为用户提供广告文案的AI小程序。', 0, 'palette-3', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '假设我是一名 <角色> ,请结合产品卖点和目标用户，帮我为 <产品名称> 生成 <文案数量> 条计划投放在 <投放渠道> 的广告文案，且保证每条文案的字数不超过30字；产品的核心卖点是 <核心卖点> ，目标用户是 <目标用户> 。', '1'),
+(6, '文章撰写助手', 'creative', '旨在为自媒体创作者提供一个强大而便捷的平台，助力您撰写优质的文章并实现更广泛的影响力。', 0, 'writinghand-3', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '生成一篇标题为 <文章主题> 的文章，文章内容概要为 <内容概要> ，计划发布到 <发布平台> ，需要注意控制 <规范要求> 。', '1'),
+(7, '视频脚本创意工坊', 'creative', '视频脚本创意工房是一个帮助新手视频博主快速梳理视频创作思路，生成拍摄脚本的AI小程序。', 0, 'notebook-3', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '假设我是一个新手视频博主,现请以 <主题> 为题，创作一个时长不超过 <视频时长> 分钟， <视频风格> 风格的视频脚本。', '1'),
+(8, '旅行规划师', 'life', '旅行规划师可以为您量身定制独一无二的旅程体验，让旅行变得简单而完美。', 0, 'airplane-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份 <旅行天数> 天 <旅行人数> 人的 <目标城市> 旅行规划，期望的交通方式是 <交通方式> ，住宿类型可接受 <住宿类型> ，期望推荐包含 <景点活动> 的行程活动，预算控制在 <预算成本> 之内，更多信息依据 <补充信息> 进行完善。', '1'),
+(9, '新人介绍', 'personal', '新人介绍小程序是一个旨在帮助用户在入职当天，快速编写自我介绍的AI小程序。', 0, 'pencil-7', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份新人介绍，我的年龄是 <年龄>  ,籍贯是 <籍贯信息> ，毕业于 <毕业院校> ,工作经验为 <工作经验> ,日常爱好是 <爱好> ,请将字数控制在300字以内，来帮助我完成新人入职的自我介绍，', '1'),
+(10, '营销策划创意', 'creative', '营销策划创意旨在帮助用户生成针对目标受众的策划创意，从而吸引更多用户关注。', 0, 'pushpin-4', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请为 <产品名称> 产品 ，基于 <产品定位> <目标受众> 和期望的 <营销渠道> 等要素形成创意策划策略，更多信息依据 <补充信息> 进行完善，以吸引更多目标客户的关注、提高产品品牌知名度，降低每次点击成本并转化为实际购买行为。', '1'),
+(11, '简历优化助手', 'personal', '简历撰写是一个求职简历撰写的小助手，旨在帮助用户优化个人简历、展现职业亮点。', 0, 'writinghand-5', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我优化一份简历使其更具吸引力和专业性，简历需要包括个人信息、教育背景、工作经历、技能专长、项目经验和其他相关信息。我的简历具体内容为： <简历内容> ,期望应聘的目标职位及要求为 <目标职位> ，希望简历能够突出以下工作经历和成就： <工作经验> ，以凸显适用于目标职位的相关经验和能力。请确保满足 <简历格式> 的设计风格 ，更多信息依据 <补充信息> 进行完善。', '1'),
+(12, '家装设计', 'life', '家装设计是一个旨在帮助用户轻松设计梦想家居，提供更多设计思路和灵感。', 0, 'palette-7', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '我的家在 <居住城市> ，是 <房屋面积> 的 <房屋户型> 户型，想要装修成 <风格偏好> 的风格，预算成本需要控制在 <预算成本> 之内，更多信息依据 <补充信息> 进行完善，请帮我生成具体的设计建议。', '1');
 
 -- DROP TABLE IF EXISTS `zt_aimessage`;
 CREATE TABLE IF NOT EXISTS `zt_aimessage` (
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `zt_aimessage` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `zt_miniprogramfield` (
+CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramfield` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `appID` mediumint(8) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogramfield` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `zt_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
+INSERT INTO `zt_ai_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
 (1, '教育背景', 'textarea', '学历/专业', NULL, '0'),
 (1, '职位信息', 'text', '行业领域/职位描述', NULL, '0'),
 (1, '工作经验', 'textarea', '简要概述工作成果、团队合作沟通经验等', NULL, '0'),
@@ -126,7 +126,7 @@ INSERT INTO `zt_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `opti
 (12, '预算成本', 'text', '请输入预算成本金额', NULL, '0'),
 (12, '补充信息', 'textarea', '请输入更多补充信息', NULL, '0');
 
-CREATE TABLE IF NOT EXISTS `zt_miniprogramstar` (
+CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramstar` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `appID` mediumint(8) unsigned NOT NULL,
   `userID` mediumint(8) unsigned NOT NULL,
@@ -134,3 +134,6 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogramstar` (
   UNIQUE (`appID`, `userID`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+RENAME TABLE `zt_prompt` TO `zt_ai_prompt`;
+RENAME TABLE `zt_promptrole` TO `zt_ai_promptrole`;

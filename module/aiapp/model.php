@@ -42,7 +42,7 @@ class aiappModel extends model
     public function getLatestMiniPrograms($pager = null, $order = 'publishedDate_desc')
     {
         return $this->dao->select('*')
-            ->from(TABLE_MINIPROGRAM)
+            ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')
             ->andWhere('publishedDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
@@ -60,7 +60,7 @@ class aiappModel extends model
     private function countLatestMiniPrograms()
     {
         return (int)$this->dao->select('COUNT(*) as count')
-            ->from(TABLE_MINIPROGRAM)
+            ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')
             ->andWhere('createdDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
@@ -85,7 +85,7 @@ class aiappModel extends model
         $message->content = $content;
         $message->createdDate = helper::now();
 
-        $this->dao->insert(TABLE_AIMESSAGE)
+        $this->dao->insert(TABLE_AI_MESSAGE)
             ->data($message)
             ->exec();
         return !dao::isError();
@@ -103,7 +103,7 @@ class aiappModel extends model
     private function deleteHistoryMessagesByID($appID, $userID, $messageIDs)
     {
         $this->dao->delete()
-            ->from(TABLE_AIMESSAGE)
+            ->from(TABLE_AI_MESSAGE)
             ->where('appID')->eq($appID)
             ->andWhere('user')->eq($userID)
             ->andWhere('id')->notin($messageIDs)
@@ -121,7 +121,7 @@ class aiappModel extends model
     public function getHistoryMessages($appID, $limit = 20)
     {
         $messages = $this->dao->select('*')
-            ->from(TABLE_AIMESSAGE)
+            ->from(TABLE_AI_MESSAGE)
             ->where('appID')->eq($appID)
             ->andWhere('user')->eq($this->app->user->id)
             ->orderBy('createdDate_desc')
@@ -150,7 +150,7 @@ class aiappModel extends model
     public function getCollectedMiniProgramIDs($userID, $pager = null)
     {
         $programs = $this->dao->select('*')
-            ->from(TABLE_MINIPROGRAMSTAR)
+            ->from(TABLE_AI_MINIPROGRAMSTAR)
             ->where('userID')->eq($userID)
             ->orderBy('createdDate_desc')
             ->page($pager)

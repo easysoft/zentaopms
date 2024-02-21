@@ -885,7 +885,7 @@ class aiModel extends model
     public function getLatestMiniPrograms($pager = null, $order = 'publishedDate_desc')
     {
         return $this->dao->select('*')
-            ->from(TABLE_MINIPROGRAM)
+            ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')
             ->andWhere('publishedDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
@@ -903,7 +903,7 @@ class aiModel extends model
     public function countLatestMiniPrograms()
     {
         return (int)$this->dao->select('COUNT(*) as count')
-            ->from(TABLE_MINIPROGRAM)
+            ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->andWhere('published')->eq('1')
             ->andWhere('createdDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
@@ -928,7 +928,7 @@ class aiModel extends model
         $message->content = $content;
         $message->createdDate = helper::now();
 
-        $this->dao->insert(TABLE_AIMESSAGE)
+        $this->dao->insert(TABLE_AI_MESSAGE)
             ->data($message)
             ->exec();
         return !dao::isError();
@@ -946,7 +946,7 @@ class aiModel extends model
     public function deleteHistoryMessagesByID($appID, $userID, $messageIDs)
     {
         $this->dao->delete()
-            ->from(TABLE_AIMESSAGE)
+            ->from(TABLE_AI_MESSAGE)
             ->where('appID')->eq($appID)
             ->andWhere('user')->eq($userID)
             ->andWhere('id')->notin($messageIDs)
@@ -964,7 +964,7 @@ class aiModel extends model
     public function getHistoryMessages($appID, $limit = 20)
     {
         $messages = $this->dao->select('*')
-            ->from(TABLE_AIMESSAGE)
+            ->from(TABLE_AI_MESSAGE)
             ->where('appID')->eq($appID)
             ->andWhere('user')->eq($this->app->user->id)
             ->orderBy('createdDate_desc')
@@ -993,7 +993,7 @@ class aiModel extends model
     public function getMiniProgramsByID($ids, $sort = false)
     {
         $miniPrograms = $this->dao->select('*')
-            ->from(TABLE_MINIPROGRAM)
+            ->from(TABLE_AI_MINIPROGRAM)
             ->where('id')->in($ids)
             ->fetchAll();
         if(!$sort) return $miniPrograms;
@@ -1015,7 +1015,7 @@ class aiModel extends model
     public function getMiniProgramByID($id)
     {
         return $this->dao->select('*')
-            ->from(TABLE_MINIPROGRAM)
+            ->from(TABLE_AI_MINIPROGRAM)
             ->where('id')->eq($id)
             ->fetch();
     }
@@ -1044,7 +1044,7 @@ class aiModel extends model
     public function getUsedCustomCategories()
     {
         $categories = $this->dao->select('distinct `category`')
-            ->from(TABLE_MINIPROGRAM)
+            ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->fetchAll('category');
         return array_keys($categories);
@@ -1155,7 +1155,7 @@ class aiModel extends model
     public function getMiniPrograms($category = '', $status = '', $order = 'createdDate_desc', $pager = null)
     {
         $progarms = $this->dao->select('*')
-            ->from(TABLE_MINIPROGRAM)
+            ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->beginIF(!empty($category))->andWhere('category')->eq($category)->fi()
             ->beginIF($status === 'active')->andWhere('published')->eq('1')->fi()
@@ -1178,7 +1178,7 @@ class aiModel extends model
     public function getMiniProgramFields($appID)
     {
         return $this->dao->select('*')
-            ->from(TABLE_MINIPROGRAMFIELD)
+            ->from(TABLE_AI_MINIPROGRAMFIELD)
             ->where('appID')->eq($appID)
             ->fetchAll();
     }
@@ -1191,7 +1191,7 @@ class aiModel extends model
     public function createNewVersionNotification($appID)
     {
         $users = $this->dao->select('user')
-            ->from(TABLE_AIMESSAGE)
+            ->from(TABLE_AI_MESSAGE)
             ->where('appID')->eq($appID)
             ->fetchAll('user');
         $users = array_keys($users);
@@ -1206,13 +1206,13 @@ class aiModel extends model
             $data->createdDate = helper::now();
 
             $this->dao->delete()
-                ->from(TABLE_AIMESSAGE)
+                ->from(TABLE_AI_MESSAGE)
                 ->where('appID')->eq($appID)
                 ->andWhere('user')->eq($user)
                 ->andWhere('type')->eq('ntf')
                 ->exec();
 
-            $this->dao->insert(TABLE_AIMESSAGE)
+            $this->dao->insert(TABLE_AI_MESSAGE)
                 ->data($data)
                 ->exec();
         }
@@ -1240,7 +1240,7 @@ class aiModel extends model
             }
         }
 
-        $this->dao->update(TABLE_MINIPROGRAM)
+        $this->dao->update(TABLE_AI_MINIPROGRAM)
             ->data($data)
             ->where('id')->eq($appID)
             ->exec();
@@ -1265,7 +1265,7 @@ class aiModel extends model
         if($delete === 'true')
         {
             $this->dao->delete()
-                ->from(TABLE_MINIPROGRAMSTAR)
+                ->from(TABLE_AI_MINIPROGRAMSTAR)
                 ->where('appID')->eq($appID)
                 ->beginIF(!empty($userID))->andWhere('userID')->eq($userID)->fi()
                 ->exec();
@@ -1277,7 +1277,7 @@ class aiModel extends model
         $data->userID = $userID;
         $data->createdDate = helper::now();
 
-        $this->dao->insert(TABLE_MINIPROGRAMSTAR)
+        $this->dao->insert(TABLE_AI_MINIPROGRAMSTAR)
             ->data($data)
             ->exec();
         return !dao::isError();
@@ -1338,7 +1338,7 @@ class aiModel extends model
             unset($data->fields);
         }
 
-        $this->dao->insert(TABLE_MINIPROGRAM)
+        $this->dao->insert(TABLE_AI_MINIPROGRAM)
             ->data($data)
             ->exec();
         $appID = $this->dao->lastInsertID();
@@ -1398,14 +1398,14 @@ class aiModel extends model
 
         if(isset($data->prompt))
         {
-            $this->dao->update(TABLE_MINIPROGRAM)
+            $this->dao->update(TABLE_AI_MINIPROGRAM)
                 ->set('prompt')->eq($data->prompt)
                 ->where('id')->eq($appID)
                 ->exec();
         }
 
         $this->dao->delete()
-            ->from(TABLE_MINIPROGRAMFIELD)
+            ->from(TABLE_AI_MINIPROGRAMFIELD)
             ->where('appID')->eq($appID)
             ->exec();
 
@@ -1414,7 +1414,7 @@ class aiModel extends model
         {
             $field = (array)$field;
             if(is_array($field['options'])) $field['options'] = implode(',', $field['options']);
-            $this->dao->insert(TABLE_MINIPROGRAMFIELD)
+            $this->dao->insert(TABLE_AI_MINIPROGRAMFIELD)
                 ->data($field)
                 ->exec();
         }
@@ -1431,7 +1431,7 @@ class aiModel extends model
     public function checkDuplicatedAppName($name, $appID = '-1')
     {
         $miniProgram = $this->dao->select('*')
-            ->from(TABLE_MINIPROGRAM)
+            ->from(TABLE_AI_MINIPROGRAM)
             ->where('name')->eq($name)
             ->andWhere('id')->ne($appID)
             ->andWhere('deleted')->eq('0')
@@ -1482,7 +1482,7 @@ class aiModel extends model
      */
     public function getPrompts($module = '', $status = '', $order = 'id_desc', $pager = null)
     {
-        $prompts = $this->dao->select('*')->from(TABLE_PROMPT)
+        $prompts = $this->dao->select('*')->from(TABLE_AI_PROMPT)
             ->where('deleted')->eq(0)
             ->beginIF(!empty($module))->andWhere('module')->eq($module)->fi()
             ->beginIF(!empty($status))->andWhere('status')->eq($status)->fi()
@@ -1502,7 +1502,7 @@ class aiModel extends model
      */
     public function getPromptById($id)
     {
-        return $this->dao->select('*')->from(TABLE_PROMPT)
+        return $this->dao->select('*')->from(TABLE_AI_PROMPT)
             ->where('id')->eq($id)
             ->fetch();
     }
@@ -1522,7 +1522,7 @@ class aiModel extends model
         /* Override uniqueness error message. */
         $this->lang->error->unique = $this->lang->ai->validate->nameNotUnique;
 
-        $this->dao->insert(TABLE_PROMPT)
+        $this->dao->insert(TABLE_AI_PROMPT)
             ->data($prompt)
             ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
             ->check('name', 'unique')
@@ -1575,7 +1575,7 @@ class aiModel extends model
         /* Override uniqueness error message. */
         $this->lang->error->unique = $this->lang->ai->validate->nameNotUnique;
 
-        $this->dao->update(TABLE_PROMPT)
+        $this->dao->update(TABLE_AI_PROMPT)
             ->data($prompt)
             ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
             ->check('name', 'unique', "`id` != {$prompt->id}")
@@ -1602,7 +1602,7 @@ class aiModel extends model
         $prompt = $this->getPromptById($id);
         if(empty($prompt)) return false;
 
-        $this->dao->update(TABLE_PROMPT)
+        $this->dao->update(TABLE_AI_PROMPT)
             ->set('deleted')->eq(1)
             ->where('id')->eq($id)
             ->exec();
@@ -2510,7 +2510,7 @@ class aiModel extends model
      */
     public function getPromptsForUser($module)
     {
-        return $this->dao->select('*')->from(TABLE_PROMPT)
+        return $this->dao->select('*')->from(TABLE_AI_PROMPT)
             ->where('deleted')->eq(0)
             ->andWhere('module')->eq($module)
             ->beginIF(!commonModel::hasPriv('ai', 'promptaudit') || $this->config->edition == 'open')->andWhere('status')->eq('active')->fi() // Only show active prompts to non-auditors.
@@ -2587,7 +2587,7 @@ class aiModel extends model
      */
     public function getRoleTemplates()
     {
-        return $this->dao->select('*')->from(TABLE_PROMPTROLE)
+        return $this->dao->select('*')->from(TABLE_AI_PROMPTROLE)
             ->where('deleted')->eq(0)
             ->fetchAll();
     }
@@ -2606,7 +2606,7 @@ class aiModel extends model
         $roleTemplate->role = $role;
         $roleTemplate->characterization = $characterization;
 
-        $this->dao->insert(TABLE_PROMPTROLE)
+        $this->dao->insert(TABLE_AI_PROMPTROLE)
             ->data($roleTemplate)
             ->exec();
         if(dao::isError()) return false;
@@ -2623,7 +2623,7 @@ class aiModel extends model
      */
     public function deleteRoleTemplate($id)
     {
-        $this->dao->update(TABLE_PROMPTROLE)
+        $this->dao->update(TABLE_AI_PROMPTROLE)
             ->set('deleted')->eq(1)
             ->where('id')->eq($id)
             ->exec();
@@ -2646,7 +2646,7 @@ class aiModel extends model
         $roleTemplate->role = $role;
         $roleTemplate->characterization = $characterization;
 
-        $this->dao->update(TABLE_PROMPTROLE)
+        $this->dao->update(TABLE_AI_PROMPTROLE)
             ->data($roleTemplate)
             ->where('id')->eq($id)
             ->exec();
