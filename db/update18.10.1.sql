@@ -35,8 +35,8 @@ INSERT INTO `zt_ai_miniprogram` (`id`, `name`, `category`, `desc`, `model`, `ico
 (11, '简历优化助手', 'personal', '简历撰写是一个求职简历撰写的小助手，旨在帮助用户优化个人简历、展现职业亮点。', 0, 'writinghand-5', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我优化一份简历使其更具吸引力和专业性，简历需要包括个人信息、教育背景、工作经历、技能专长、项目经验和其他相关信息。我的简历具体内容为： <简历内容> ,期望应聘的目标职位及要求为 <目标职位> ，希望简历能够突出以下工作经历和成就： <工作经验> ，以凸显适用于目标职位的相关经验和能力。请确保满足 <简历格式> 的设计风格 ，更多信息依据 <补充信息> 进行完善。', '1'),
 (12, '家装设计', 'life', '家装设计是一个旨在帮助用户轻松设计梦想家居，提供更多设计思路和灵感。', 0, 'palette-7', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '我的家在 <居住城市> ，是 <房屋面积> 的 <房屋户型> 户型，想要装修成 <风格偏好> 的风格，预算成本需要控制在 <预算成本> 之内，更多信息依据 <补充信息> 进行完善，请帮我生成具体的设计建议。', '1');
 
--- DROP TABLE IF EXISTS `zt_aimessage`;
-CREATE TABLE IF NOT EXISTS `zt_aimessage` (
+-- DROP TABLE IF EXISTS `zt_ai_message`;
+CREATE TABLE IF NOT EXISTS `zt_ai_message` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `appID` mediumint(8) unsigned NOT NULL,
   `user` mediumint(8) unsigned NOT NULL,
