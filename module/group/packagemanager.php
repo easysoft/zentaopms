@@ -3668,6 +3668,7 @@ $config->group->package->browseDemandPool->order  = 5;
 $config->group->package->browseDemandPool->subset = 'demandpool';
 $config->group->package->browseDemandPool->privs  = array();
 $config->group->package->browseDemandPool->privs['demandpool-browse'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array(), 'recommend' => array('demandpool-edit', 'demandpool-view'));
+$config->group->package->browseDemandPool->privs['demandpool-track']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array(), 'recommend' => array());
 $config->group->package->browseDemandPool->privs['demandpool-view']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('demandpool-browse'), 'recommend' => array('demandpool-activate', 'demandpool-close', 'demandpool-delete', 'demandpool-edit'));
 
 $config->group->package->browseCharter = new stdclass();
