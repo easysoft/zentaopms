@@ -127,6 +127,13 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
 }
 
 $parentPath = array();
+$parentLinkData = array('app' => $app->tab);
+if(isInModal())
+{
+    $parentLinkData['size']    = 'lg';
+    $parentLinkData['toggle']  = 'modal';
+    $parentLinkData['dismiss'] = 'modal';
+}
 $parentPath[] = div
 (
     setClass('row flex-nowrap items-center'),
@@ -134,7 +141,7 @@ $parentPath[] = div
     (
         setClass('tree-link text-clip'),
         set('href', helper::createLink('tree', 'browse', "rootID=$root->id&view={$viewType}&currentModuleID=0&branch=$branch")),
-        set('data-app', $app->tab),
+        setData($parentLinkData),
         set::title($root->name),
         $root->name
     ),
