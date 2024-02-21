@@ -1111,7 +1111,7 @@ class myModel extends model
         }
 
         $this->app->loadConfig('action');
-        return $this->myTao->buildApprovalList($objectGroup, $flows, $this->config->action->objectNameFields);
+        return $this->myTao->buildReviewingFlows($objectGroup, $flows, $this->config->action->objectNameFields);
     }
 
     /**
