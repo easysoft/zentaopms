@@ -590,9 +590,18 @@ class upgradeZen extends upgrade
      */
     protected function displayExecuteProcess(string $fromVersion, array $needProcess): void
     {
-        $this->view->title       = $this->lang->upgrade->result;
-        $this->view->needProcess = $needProcess;
-        $this->view->fromVersion = $fromVersion;
+        $showPrivTips = false;
+        if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.9', '<='))               $showPrivTips = true;
+        if(strpos($fromVersion, 'pro') !== false)                                                     $showPrivTips = true;
+        if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.9',   '<=')) $showPrivTips = true;
+        if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.9',   '<=')) $showPrivTips = true;
+        if(strpos($fromVersion, 'ipd') !== false and version_compare($fromVersion, 'ipd1.1.1', '<=')) $showPrivTips = true;
+        if($showPrivTips and $this->config->edition == 'open') $showPrivTips = false;
+
+        $this->view->title        = $this->lang->upgrade->result;
+        $this->view->needProcess  = $needProcess;
+        $this->view->fromVersion  = $fromVersion;
+        $this->view->showPrivTips = $showPrivTips;
 
         $this->display();
     }

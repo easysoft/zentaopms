@@ -102,6 +102,11 @@ div
                 setClass('flex justify-center items-start font-bold text-lg h-12'),
                 html($lang->upgrade->success)
             ),
+            $showPrivTips ? cell
+            (
+                setClass('flex justify-center priv-tips'),
+                $lang->upgrade->addTraincoursePrivTips
+            ) : null,
             cell
             (
                 setClass('flex justify-center'),
