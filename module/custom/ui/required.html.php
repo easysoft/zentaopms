@@ -61,6 +61,7 @@ div
         setClass(isset($sidebarMenu) ? 'ml-0.5' : null),
         set::actionsClass('w-1/2'),
         set::actions($formActions),
+        $module == 'story' ? set::labelWidth('9em') : null,
         span
         (
             setClass('text-md font-bold'),
