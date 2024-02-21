@@ -461,7 +461,7 @@
                 {
                     if(data.includes('RAWJS<'))
                     {
-                        const func = new Function(`return ${data.split('"RAWJS<').join('').split('>RAWJS"').join('')}`);
+                        const func = new Function(`return ${data.split('"RAWJS<').join('').split('>RAWJS"').join('').split('RAWJS_QUOTE').join('"').split('RAWJS_LINE').join('\n')}`);
                         data = func();
                     }
                     else
@@ -471,6 +471,7 @@
                 }
                 catch(e)
                 {
+                    if(DEBUG) console.error('[APP] ', 'Parse data failed from ' + url, e);
                     if(!isInAppTab && config.zin) return;
                     hasFatal = data.includes('Fatal error') || data.includes('Uncaught TypeError:');
                     data = [{name: hasFatal ? 'fatal' : 'html', data: data}];
