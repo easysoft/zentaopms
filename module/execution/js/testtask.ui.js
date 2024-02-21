@@ -61,6 +61,7 @@ window.setStatistics = function(element, checkedIDList)
             totalCount ++;
         }
     })
+    resetFooterPadding();
 
     const summary = checkedIDList.length > 0 ? checkedAllSummary : pageSummary;
     return {
@@ -77,6 +78,12 @@ $(function()
     const options  = zui.DTable.query().options;
     initialOptions = $.extend(true, {}, options);
 });
+
+function resetFooterPadding()
+{
+    const width = $('#taskTable .dtable-body .dtable-cells-container .dtable-cell.is-last-row').width();
+    $('#taskTable .dtable-footer').css('padding-left', width + 12);
+}
 
 /**
  * 产品列显示展开收起的图标。
