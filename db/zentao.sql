@@ -1019,7 +1019,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanban` (
   `showWIP` enum('0','1') NOT NULL DEFAULT '1',
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
   `colWidth` smallint(4) NOT NULL DEFAULT '264',
-  `minColWidth` smallint(4) NOT NULL DEFAULT '200',
+  `minColWidth` smallint(4) NOT NULL DEFAULT '264',
   `maxColWidth` smallint(4) NOT NULL DEFAULT '384',
   `object` varchar(255) NOT NULL DEFAULT '',
   `alignment` varchar(10) NOT NULL default 'center',
@@ -1475,7 +1475,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `multiple` enum('0','1') NOT NULL DEFAULT '1',
   `parallel` mediumint(9) NOT NULL DEFAULT '0',
   `colWidth` smallint(4) NOT NULL DEFAULT '264',
-  `minColWidth` smallint(4) NOT NULL DEFAULT '200',
+  `minColWidth` smallint(4) NOT NULL DEFAULT '264',
   `maxColWidth` smallint(4) NOT NULL DEFAULT '384',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)

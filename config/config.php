@@ -99,7 +99,7 @@ $config->CSPs[] = "form-action 'self';connect-src 'self'";
 
 /* Config for kanban col setting */
 $config->colWidth    = 264;
-$config->minColWidth = 200;
+$config->minColWidth = 264;
 $config->maxColWidth = 384;
 
 /* 系统框架配置。Framework settings. */
