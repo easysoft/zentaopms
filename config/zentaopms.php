@@ -458,19 +458,19 @@ define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');
 define('TABLE_INSTANCE', '`' . $config->db->prefix . 'instance`');
 define('TABLE_SOLUTION', '`' . $config->db->prefix . 'solution`');
 define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
-define('TABLE_PROMPT', '`' . $config->db->prefix . 'prompt`');
-define('TABLE_PROMPTROLE', '`' . $config->db->prefix . 'promptrole`');
 
 define('TABLE_METRIC', '' . $config->db->prefix . 'metric');
 define('TABLE_METRICLIB', '' . $config->db->prefix . 'metriclib');
 define('TABLE_METRICRECORDS', '' . $config->db->prefix . 'metricrecords');
 define('TABLE_BASICMEAS', '' . $config->db->prefix . 'basicmeas');
 
-define('TABLE_MINIPROGRAM',       '`' . $config->db->prefix . 'miniprogram`');
-define('TABLE_MINIPROGRAMFIELD',  '`' . $config->db->prefix . 'miniprogramfield`');
-define('TABLE_MINIPROGRAMSTAR',   '`' . $config->db->prefix . 'miniprogramstar`');
-define('TABLE_AIMESSAGE',         '`' . $config->db->prefix . 'aimessage`');
-define('TABLE_AI_MODEL',          '`' . $config->db->prefix . 'ai_model`');
+define('TABLE_AI_PROMPT',           '`' . $config->db->prefix . 'ai_prompt`');
+define('TABLE_AI_PROMPTROLE',       '`' . $config->db->prefix . 'ai_promptrole`');
+define('TABLE_AI_MINIPROGRAM',      '`' . $config->db->prefix . 'ai_miniprogram`');
+define('TABLE_AI_MINIPROGRAMFIELD', '`' . $config->db->prefix . 'ai_miniprogramfield`');
+define('TABLE_AI_MINIPROGRAMSTAR',  '`' . $config->db->prefix . 'ai_miniprogramstar`');
+define('TABLE_AI_MESSAGE',          '`' . $config->db->prefix . 'ai_message`');
+define('TABLE_AI_MODEL',            '`' . $config->db->prefix . 'ai_model`');
 
 $config->objectTables['product']          = TABLE_PRODUCT;
 $config->objectTables['productplan']      = TABLE_PRODUCTPLAN;
@@ -537,10 +537,10 @@ $config->objectTables['instance']         = TABLE_INSTANCE;
 $config->objectTables['space']            = TABLE_SPACE;
 $config->objectTables['solution']         = TABLE_SOLUTION;
 $config->objectTables['artifactrepo']     = TABLE_ARTIFACTREPO;
-$config->objectTables['prompt']           = TABLE_PROMPT;
+$config->objectTables['prompt']           = TABLE_AI_PROMPT;
 $config->objectTables['metric']           = TABLE_METRIC;
-$config->objectTables['aiapp']            = TABLE_MINIPROGRAM;
-$config->objectTables['miniprogram']      = TABLE_MINIPROGRAM;
+$config->objectTables['aiapp']            = TABLE_AI_MINIPROGRAM;
+$config->objectTables['miniprogram']      = TABLE_AI_MINIPROGRAM;
 
 $config->newFeatures      = array('promptExec', 'aiChat', 'aiMiniProgramStencil');
 $config->disabledFeatures = '';
