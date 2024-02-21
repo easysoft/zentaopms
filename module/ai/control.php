@@ -41,14 +41,8 @@ class ai extends control
      */
     public function adminIndex()
     {
-        $modelConfig     = new stdclass();
-        $modelConfigData = $this->loadModel('setting')->getItems('owner=system&module=ai');
-        foreach($modelConfigData as $item) $modelConfig->{$item->key} = $item->value;
-
-        $modelConfigured = !empty($modelConfig->key) && !empty($modelConfig->type) && (empty($modelConfig->proxyType) || !empty($modelConfig->proxyAddr));
-
         /* Redirect to model edit ifuser has priv and model is unconfigured. */
-        if(commonModel::hasPriv('ai', 'editModel') && !$modelConfigured) return $this->locate($this->createLink('ai', 'editModel'));
+        if(commonModel::hasPriv('ai', 'models') && !$this->ai->hasModelsAvailable()) return $this->locate($this->createLink('ai', 'models'));
 
         /* Redirect to prompts ifuser has priv. */
         if(commonModel::hasPriv('ai', 'prompts')) return $this->locate($this->createLink('ai', 'prompts'));
