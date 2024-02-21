@@ -184,6 +184,7 @@ class ai extends control
         {
             if($this->ai->checkDuplicatedCategory()) return $this->sendError($this->lang->ai->maintenanceGroupDuplicated);
             $this->ai->updateCustomCategories();
+            return $this->sendSuccess(array());
         }
 
         $this->view->usedCustomCategories = $this->ai->getUsedCustomCategories();
