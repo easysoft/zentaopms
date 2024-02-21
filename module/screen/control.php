@@ -135,8 +135,9 @@ class screen extends control
                 return print(json_encode($filterComponent));
             }
 
-            $queryType = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
-            $component = isset($_POST['component']) ? json_decode($this->post->component) : null;
+            $queryType    = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
+            $component    = isset($_POST['component']) ? json_decode($this->post->component) : null;
+            $filterParams = isset($_POST['filters']) ? json_decode($this->post->filters, true) : null;
 
             $type = $this->screen->getChartType($type);
 
@@ -146,7 +147,6 @@ class screen extends control
             $filterFormat = '';
             if($queryType == 'filter')
             {
-                $filterParams = json_decode($this->post->filters, true);
                 $filters      = json_decode($chart->filters, true);
                 $mergeFilters = array();
 
@@ -202,7 +202,7 @@ class screen extends control
             if($type == 'metric')
             {
                 $metric = $this->loadModel('metric')->getByID($chartID);
-                $chartData = $this->screen->genMetricComponent($metric, $component);
+                $chartData = $this->screen->genMetricComponent($metric, $component, $filterParams);
             }
             else
             {
