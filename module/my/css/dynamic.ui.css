@@ -8,4 +8,4 @@
 
 .timeline > li + li:after {position: absolute; top: 90px; bottom: 20px; left: 40px; z-index: 1; display: block; content: ' '; border-left: 2px solid #eee;}
 
-.actions-box {background-color: var(--color-gray-100);}
+.actions-box {background-color: rgba(var(--color-gray-100-rgb), .5);}
