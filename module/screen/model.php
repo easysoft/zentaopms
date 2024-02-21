@@ -242,6 +242,73 @@ class screenModel extends model
     }
 
     /**
+     * mergeChartAndPivotFilters
+     *
+     * @param  int    $type
+     * @param  int    $chartOrPivot
+     * @param  int    $sourceID
+     * @param  int    $filters
+     * @access public
+     * @return void
+     */
+    public function mergeChartAndPivotFilters($type, $chartOrPivot, $sourceID, $filters)
+    {
+        $filterFormat = '';
+        $chartOrPivotFilters = json_decode($chartOrPivot->filters, true);
+        $mergeFilters = array();
+
+        foreach($chartOrPivotFilters as $index => $chartOrPivotFilter)
+        {
+            if(!isset($filters[$index]['default'])) continue;
+
+            $filterDefault = $filters[$index]['default'];
+            if($filterDefault === null) continue;
+
+            $filterType = $chartOrPivotFilter['type'];
+            $filterFrom = zget($chartOrPivotFilter, 'from', '');
+            if($filterType == 'date' or $filterType == 'datetime')
+            {
+                if($filterFrom == 'query')
+                {
+                    if(is_numeric($filterDefault)) $filterDefault = date('Y-m-d H:i:s', $filterDefault / 1000);
+                }
+                else
+                {
+                    if(is_array($filterDefault))
+                    {
+                        $begin = $filterDefault[0];
+                        $end   = $filterDefault[1];
+
+                        $begin = date('Y-m-d H:i:s', $begin / 1000);
+                        $end = date('Y-m-d H:i:s', $end / 1000);
+
+                        $filterDefault = array('begin' => $begin, 'end' => $end);
+                    }
+                    else
+                    {
+                        $filterDefault = array('begin' => '', 'end' => '');
+                    }
+                }
+
+            }
+            $chartOrPivotFilter['default'] = $filterDefault;
+            $mergeFilters[] = $chartOrPivotFilter;
+        }
+
+        if($type == 'pivot')
+        {
+            list($sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chartOrPivot->sql, $mergeFilters);
+            $chartOrPivot->sql = $sql;
+        }
+        else
+        {
+            $filterFormat = $this->loadModel($type)->getFilterFormat($mergeFilters);
+        }
+
+        return array($chartOrPivot, $filterFormat);
+    }
+
+    /**
      * Generate a component of screen.
      *
      * @param  object $chart
@@ -256,10 +323,8 @@ class screenModel extends model
         {
             return $this->genNotFoundOrDraftComponentOption($component, $chart, $type);
         }
-        else
-        {
-            $component = $this->unsetComponentDraftMarker($component);
-        }
+
+        $component = $this->unsetComponentDraftMarker($component);
 
         $chart = clone($chart);
         if($type == 'pivot' and $chart)
