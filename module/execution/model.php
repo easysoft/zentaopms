@@ -4440,8 +4440,7 @@ class executionModel extends model
         if(!isset($node->id)) $node->id = 0;
         if($node->type == 'story')
         {
-            static $users, $storyGroups;
-            if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+            static $storyGroups;
             if(empty($storyGroups))
             {
                 if($this->config->vision == 'lite') $execution = $this->getById($executionID);
@@ -4451,7 +4450,7 @@ class executionModel extends model
                 foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
             }
 
-            $node = $this->executionTao->processStoryNode($node, $storyGroups, $taskGroups, $users, $executionID);
+            $node = $this->executionTao->processStoryNode($node, $storyGroups, $taskGroups, $executionID);
         }
         elseif($node->type == 'task')
         {
@@ -4583,19 +4582,19 @@ class executionModel extends model
                     $label = $tree->parent > 0 ? $this->lang->task->children : $this->lang->task->common;
                     $treeData[$index]['url']    = helper::createLink('execution', 'treeTask', "taskID={$tree->id}");
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$label}</span><span class='ml-4'>{$tree->id}</span><span class='title ml-4 text-primary' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span></div>',
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$label}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 text-primary align-sub' title='{$tree->title}'>" . $tree->title . '</span> <span class="user align-sub"><div class="avatar rounded-full size-xs ml-1 align-' . (strlen(zget($tree, 'avatar')) == 1 ? 'middle primary' : 'sub') . '">' . zget($tree, 'avatar') . '</div> ' . zget($tree, 'avatarAccount') . '</span></div>',
                     );
                     break;
                 case 'product':
                     $treeData[$index]['content'] = array(
-                        'html' => "<span class='label rounded-full p-2' title='{$tree->name}'>{$tree->name}</span>"
+                        'html' => "<span class='label rounded-full p-2 gray-outline' title='{$tree->name}'>{$tree->name}</span>"
                     );
                     break;
                 case 'story':
                     $this->app->loadLang('story');
                     $treeData[$index]['url']    = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$this->lang->story->common}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span> <span class='user'><i class='icon icon-person'></i> " . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . "</span></div>",
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$this->lang->story->common}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span> <span class='user align-sub'><div class='avatar rounded-full size-xs ml-1 align-" . (strlen(zget($tree, 'avatar')) == 1 ? 'middle primary' : 'sub') . '">' . zget($tree, 'avatar') . '</div> ' . zget($tree, 'avatarAccount') . '</span></div>',
                     );
                     break;
                 case 'branch':
@@ -4605,7 +4604,7 @@ class executionModel extends model
                     );
                     break;
                 default:
-                    $firstClass = $tree->id == 0 ? 'label rounded-full p-2' : '';
+                    $firstClass = $tree->id == 0 ? 'label rounded-full p-2 gray-outline' : '';
                     $treeData[$index]['content'] = array(
                         'html' => "<span class='{$firstClass} title' title='{$tree->name}'>" . $tree->name . '</span>'
                     );

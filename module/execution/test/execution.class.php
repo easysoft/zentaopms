@@ -2876,7 +2876,7 @@ class executionTest
 
         $node = (object)$fullTrees[0];
         if(!isset($node->id)) $node->id = 0;
-        return $this->executionModel->processStoryNode($node, $storyGroups, $taskGroups, array(), 0);
+        return $this->executionModel->processStoryNode($node, $storyGroups, $taskGroups, 0);
     }
 
     /**

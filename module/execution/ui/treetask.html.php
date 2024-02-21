@@ -18,7 +18,7 @@ div
         setClass('flex items-center flex-nowrap mb-4'),
         label
         (
-            setClass('flex-none rounded-full dark-outline'),
+            setClass('flex-none rounded-full gray-outline'),
             $task->id
         ),
         $task->parent > 0 ?  label
@@ -33,12 +33,12 @@ div
         ) : null,
         span
         (
-            setClass('text-md font-bold mx-2 clip'),
+            setClass('text-lg font-bold mx-2 clip'),
             (isset($task->parentName) ? $task->parentName . '/' : '') . $task->name
         ),
         label
         (
-            setClass('flex-none rounded-full status-' . $task->status),
+            setClass('flex-none rounded-full task-status status-' . $task->status),
             $this->processStatus('task', $task)
         )
     ),
@@ -116,7 +116,7 @@ div
         ) : null,
         ($task->status == 'wait' && hasPriv('task', 'start')) ? btn
         (
-            setClass('text-primary ml-2'),
+            setClass('text-primary'),
             set::icon('play'),
             set::hint($lang->task->start),
             set::url(createLink('task', 'start', array('taskID' => $task->id))),
@@ -152,7 +152,7 @@ div
         ) : null,
         hasPriv('task', 'recordWorkhour') ? btn
         (
-            setClass('text-primary ml-2'),
+            setClass('text-primary'),
             set::icon('time'),
             set::hint($lang->task->recordWorkhour),
             set::url(createLink('task', 'recordWorkhour', array('taskID' => $task->id))),
@@ -161,7 +161,7 @@ div
         ) : null,
         hasPriv('task', 'edit') ? btn
         (
-            setClass('text-primary ml-2'),
+            setClass('text-primary'),
             set::icon('edit'),
             set::hint($lang->task->edit),
             set::url(createLink('task', 'edit', array('taskID' => $task->id))),
@@ -170,7 +170,7 @@ div
         ) : null,
         ((empty($task->team) || empty($task->children)) && hasPriv('task', 'batchCreate') && $config->vision != 'lite') ? btn
         (
-            setClass('text-primary ml-2'),
+            setClass('text-primary'),
             set::icon('split'),
             set::hint($lang->task->batchCreate),
             set::url(createLink('task', 'batchCreate', "execution={$task->execution}&storyID={$task->story}&moduleID={$task->module}&askID={$task->id}&ifame=0")),

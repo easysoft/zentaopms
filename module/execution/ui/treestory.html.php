@@ -95,24 +95,26 @@ div
         setClass('flex items-center flex-nowrap mb-4'),
         label
         (
-            setClass('flex-none rounded-full dark-outline'),
+            setClass('flex-none rounded-full gray-outline'),
             $story->id
-        ),
-        label
-        (
-            setClass('mx-2 flex-none rounded-full status-' . $story->status),
-            $this->processStatus('story', $story)
         ),
         span
         (
-            setClass('text-md font-bold clip'),
+            setClass('mx-2 text-lg font-bold clip'),
             $story->title
+        ),
+        label
+        (
+            setClass('flex-none rounded-full story-status status-' . $story->status),
+            $this->processStatus('story', $story)
         )
     ),
     div
     (
+        setClass('flex items-center flex-nowrap mb-4'),
         div
         (
+            setClass('flex-1'),
             $lang->story->stage,
             span
             (
@@ -122,7 +124,7 @@ div
         ),
         div
         (
-            setClass('mt-4'),
+            setClass('flex-1'),
             $lang->story->estimate,
             span
             (
@@ -262,7 +264,7 @@ div
                 set::name($lang->story->status),
                 span
                 (
-                    setClass("status-story status-{$story->status}"),
+                    setClass("status-{$story->status}"),
                     $this->processStatus('story', $story)
                 )
             ),

@@ -1,3 +1,14 @@
 #actionButtons.btn-group > .btn.disabled {z-index: 0;}
 #taskTree .tree-item-content.active {background: var(--menu-active-bg); color: var(--menu-active-color);}
 #taskTree .tree-item-content.active .title {font-weight: 700;}
+
+#detailBlock .task-status, #detailBlock .story-status {--tw-ring-color: initial}
+#detailBlock .task-status.status-wait, #detailBlock .story-status.status-active {background-color: #313c520d;}
+#detailBlock .task-status.status-doing {background-color: #ff6f420d;}
+#detailBlock .task-status.status-done {background-color: #0dbb7d0d;}
+#detailBlock .task-status.status-pause {background-color: #b896640d;}
+#detailBlock .task-status.status-cancel {background-color: #838a9d0d;}
+#detailBlock .task-status.status-closed, #detailBlock .story.status-closed {background-color: #9ea3b00d;}
+#detailBlock .story-status.status-draft {background-color: #8166ee0d;}
+#detailBlock .story-status.status-reviewing {background-color: #18a6fd0d;}
+#detailBlock .story-status.status-changing {background-color: #fb2b2b0d;}

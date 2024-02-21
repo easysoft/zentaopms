@@ -360,17 +360,25 @@ class executionTao extends executionModel
      * @param  object    $node
      * @param  array     $storyGroups
      * @param  array     $taskGroups
-     * @param  array     $users
      * @param  int       $executionID
      * @access protected
      * @return object
      */
-    protected function processStoryNode(object $node, array $storyGroups, array $taskGroups, array $users, int $executionID): object
+    protected function processStoryNode(object $node, array $storyGroups, array $taskGroups, int $executionID): object
     {
         $node->type = 'module';
         $stories = isset($storyGroups[$node->root][$node->id]) ? $storyGroups[$node->root][$node->id] : array();
+
+        static $users, $avatarPairs;
+        if(empty($users))       $users       = $this->loadModel('user')->getPairs('noletter');
+        if(empty($avatarPairs)) $avatarPairs = $this->loadModel('user')->getAvatarPairs();
+
         foreach($stories as $story)
         {
+            $avatarAccount = empty($story->assignedTo) ? zget($story, 'openedBy', '') : $story->assignedTo;
+            $userAvatar    = zget($avatarPairs, $avatarAccount);
+            $userAvatar    = $userAvatar && $avatarAccount != 'closed' ? "<img src='{$userAvatar}'/>" : strtoupper(mb_substr($avatarAccount, 0, 1, 'utf-8'));
+
             $storyItem = new stdclass();
             $storyItem->type          = 'story';
             $storyItem->id            = 'story' . $story->id;
@@ -382,6 +390,8 @@ class executionTao extends executionModel
             $storyItem->assignedTo    = zget($users, $story->assignedTo);
             $storyItem->url           = helper::createLink('execution', 'storyView', "storyID=$story->id&execution=$executionID");
             $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "executionID={$executionID}&story={$story->id}");
+            $storyItem->avatarAccount = zget($users, $avatarAccount);
+            $storyItem->avatar        = $userAvatar;
 
             $storyTasks = isset($taskGroups[$node->id][$story->id]) ? $taskGroups[$node->id][$story->id] : array();
             if(!empty($storyTasks))
@@ -504,28 +514,34 @@ class executionTao extends executionModel
      */
     protected function formatTasksForTree(array $tasks, object $story = null): array
     {
-        static $users;
-        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+        static $users, $avatarPairs;
+        if(empty($users))       $users       = $this->loadModel('user')->getPairs('noletter');
+        if(empty($avatarPairs)) $avatarPairs = $this->loadModel('user')->getAvatarPairs();
 
         $taskItems = array();
         foreach($tasks as $task)
         {
-            $taskItem = new stdclass();
-            $taskItem->type         = 'task';
-            $taskItem->id           = $task->id;
-            $taskItem->title        = $task->name;
-            $taskItem->color        = $task->color;
-            $taskItem->pri          = (int)$task->pri;
-            $taskItem->status       = $task->status;
-            $taskItem->parent       = $task->parent;
-            $taskItem->estimate     = $task->estimate;
-            $taskItem->consumed     = $task->consumed;
-            $taskItem->left         = $task->left;
-            $taskItem->openedBy     = zget($users, $task->openedBy);
-            $taskItem->assignedTo   = zget($users, $task->assignedTo);
-            $taskItem->url          = helper::createLink('task', 'view', "task=$task->id");
-            $taskItem->storyChanged = $story && $story->status == 'active' && $story->version > $story->taskVersion;
+            $avatarAccount = empty($task->assignedTo) ? zget($task, 'openedBy', '') : $task->assignedTo;
+            $userAvatar    = zget($avatarPairs, $avatarAccount);
+            $userAvatar    = $userAvatar && $avatarAccount != 'closed' ? "<img src='{$userAvatar}'/>" : strtoupper(mb_substr($avatarAccount, 0, 1, 'utf-8'));
 
+            $taskItem = new stdclass();
+            $taskItem->type          = 'task';
+            $taskItem->id            = $task->id;
+            $taskItem->title         = $task->name;
+            $taskItem->color         = $task->color;
+            $taskItem->pri           = (int)$task->pri;
+            $taskItem->status        = $task->status;
+            $taskItem->parent        = $task->parent;
+            $taskItem->estimate      = $task->estimate;
+            $taskItem->consumed      = $task->consumed;
+            $taskItem->left          = $task->left;
+            $taskItem->openedBy      = zget($users, $task->openedBy);
+            $taskItem->assignedTo    = zget($users, $task->assignedTo);
+            $taskItem->url           = helper::createLink('task', 'view', "task=$task->id");
+            $taskItem->storyChanged  = $story && $story->status == 'active' && $story->version > $story->taskVersion;
+            $taskItem->avatarAccount = zget($users, $avatarAccount);
+            $taskItem->avatar        = $userAvatar;
             $taskItems[] = $taskItem;
         }
 
