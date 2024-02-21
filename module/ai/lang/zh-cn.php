@@ -58,11 +58,11 @@ $lang->ai->testMiniProgram         = '调试AI小程序';
 $lang->ai->miniProgramList         = '浏览AI小程序列表';
 $lang->ai->miniProgramView         = '查看AI小程序详情';
 $lang->ai->publishMiniProgram      = '发布AI小程序';
-$lang->ai->unpublishMiniProgram    = '禁用AI小程序';
+$lang->ai->unpublishMiniProgram    = '下架AI小程序';
 $lang->ai->deleteMiniProgram       = '删除AI小程序';
 $lang->ai->exportMiniProgram       = '导出AI小程序';
 $lang->ai->importMiniProgram       = '导入AI小程序';
-$lang->ai->editMiniProgramCategory = '模块维护';
+$lang->ai->editMiniProgramCategory = '维护分组';
 
 $lang->ai->export                 = '导出';
 $lang->ai->import                 = '导入';
