@@ -177,7 +177,7 @@ $isNotOpen = $config->edition != 'open';
               <tr>
                 <td class="c-id"><?= $miniProgram->id; ?></td>
                 <?php $link = $isNotOpen && common::hasPriv('ai', 'miniProgramView') ? $this->createLink('ai', 'miniProgramView', "id={$miniProgram->id}") : null; ?>
-                <td class="c-name"><?= is_null($link) ? $miniProgram->name : "<a href='$link'>{$miniProgram->name}</a>" ?></td>
+                <td class="c-name" title="<?= $miniProgram->name; ?>"><?= is_null($link) ? $miniProgram->name : "<a href='$link'>{$miniProgram->name}</a>" ?></td>
                 <td class="c-status"><?= $miniProgram->publishedLabel; ?></td>
                 <td class="c-category"><?= $miniProgram->categoryLabel; ?></td>
                 <td class="c-createdby"><?= $miniProgram->createdByLabel; ?></td>
