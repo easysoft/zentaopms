@@ -522,8 +522,7 @@ class kanban extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($from == 'execution') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "refreshKanban();"));
-            $callback = $this->kanban->getKanbanCallback($kanbanID, $regionID);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $this->view->lanes    = $this->kanban->getLanePairsByRegion($regionID, $from == 'kanban' ? 'all' : 'story');
