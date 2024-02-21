@@ -52,7 +52,7 @@ $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseTy
             'browseType' => $browseType == 'bySearch' ? 'noclosed' : $browseType,
             'orderBy'    => $orderBy,
             'param'      => $browseType == 'bySearch' ? 0 : $param,
-            'recTotal'   => $recTotal,
+            'recTotal'   => 0,
             'recPerPage' => $recPerPage,
             'pageID'     => $pageID,
             'programID'  => '{id}'
