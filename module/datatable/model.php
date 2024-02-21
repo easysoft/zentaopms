@@ -64,10 +64,8 @@ class datatableModel extends model
             foreach($fields as $field)
             {
                 if($field->buildin) continue;
-                $fieldList[$field->field]['title']    = $field->name;
-                $fieldList[$field->field]['width']    = '120';
-                $fieldList[$field->field]['fixed']    = 'no';
-                $fieldList[$field->field]['required'] = 'no';
+                $fieldList[$field->field]['title'] = $field->name;
+                $fieldList[$field->field]['width'] = '120';
             }
         }
 
