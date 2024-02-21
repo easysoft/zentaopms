@@ -1070,7 +1070,7 @@ class projectZen extends project
 
         /* 如果是瀑布项目单套阶段，更新关联产品。*/
         /* If it is a single stage of the waterfall project, update associated products. */
-        if($project->stageBy == 'project')
+        if($project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus')))
         {
             foreach($IdList as $executionID)
             {
