@@ -128,6 +128,22 @@ class aiModel extends model
     }
 
     /**
+     * Get key-value of all LLMs, includes default.
+     *
+     * @return array
+     */
+    public function getLanguageModelNamesWithDefault()
+    {
+        $models = $this->getLanguageModels();
+        $models = array_reduce($models, function ($carry, $model)
+        {
+            $carry[$model->id] = $model->name;
+            return $carry;
+        }, array('default' => $this->lang->ai->models->default));
+        return $models;
+    }
+
+    /**
      * Get LLM config.
      *
      * @param  int           $modelID

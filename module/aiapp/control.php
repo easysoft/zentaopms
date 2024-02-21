@@ -48,9 +48,11 @@ class aiapp extends control
     public function browseMiniProgram($id)
     {
         $miniProgram = $this->ai->getMiniProgramByID($id);
+        if($miniProgram->model == 0) $miniProgram->model = 'default';
         if(empty($miniProgram)) return $this->sendError($this->lang->aiapp->noMiniProgram);
 
         $this->view->miniProgram  = $miniProgram;
+        $this->view->models       = $this->ai->getLanguageModelNamesWithDefault();
         $this->view->messages     = $this->aiapp->getHistoryMessages($id);
         $this->view->fields       = $this->ai->getMiniProgramFields($id);
         $this->view->collectedIDs = $this->aiapp->getCollectedMiniProgramIDs($this->app->user->id);
