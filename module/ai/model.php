@@ -382,7 +382,7 @@ class aiModel extends model
     {
         $categories = $this->dao->select('distinct `category`')
             ->from(TABLE_MINIPROGRAM)
-            ->where('published')->eq('1')
+            ->where('deleted')->eq('0')
             ->fetchAll('category');
         return array_keys($categories);
     }
