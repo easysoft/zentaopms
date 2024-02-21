@@ -130,7 +130,5 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogramstar` (
   `userID` mediumint(8) unsigned NOT NULL,
   `createdDate` datetime NOT NULL,
   UNIQUE (`appID`, `userID`),
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`appID`) REFERENCES `zt_miniprogram`(`id`),
-  FOREIGN KEY (`userID`) REFERENCES `zt_user`(`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
