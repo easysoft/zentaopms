@@ -285,10 +285,13 @@ ciCommon:
 
 	make package
 	make cleanAssets
+	cp -a zentaopms zentaoalm
+	sed -i '/^\s*$$config->langs\['"'"'en'"'"']/d' zentaopms/config/config.php
+	sed -i '/^\s*$$config->langs\['"'"'de'"'"']/d' zentaopms/config/config.php
+	sed -i '/^\s*$$config->langs\['"'"'fr'"'"']/d' zentaopms/config/config.php
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms -x "*de.php" "*fr.php" "*vi.php" "*de/" "*fr/" "*vi/"
 	tar -cJf ZenTaoPMS.$(VERSION).tar.xz --exclude="*/de.php" --exclude="*/fr.php" --exclude="*/vi.php" --exclude="*/de/" --exclude="*/fr/" --exclude="*/vi/" zentaopms
 	# en
-	cp -a zentaopms zentaoalm
 	cd zentaoalm/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
 	cd zentaoalm/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
 	cd zentaoalm/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
