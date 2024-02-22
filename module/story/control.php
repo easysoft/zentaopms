@@ -29,6 +29,8 @@ class story extends control
         $this->loadModel('tree');
         $this->loadModel('user');
         $this->loadModel('action');
+        $this->loadModel('requirement');
+        $this->loadModel('epic');
 
         if($this->app->rawModule == 'projectstory') $this->app->tab = 'project';
     }
