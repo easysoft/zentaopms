@@ -1057,7 +1057,7 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getPairsByScope($scope, $withHierarchy = false)
+    public function getPairsByScope($scope, $withHierarchy = false, $vision = 'rnd')
     {
         if(empty($scope) || $scope == 'system') return array();
         if($scope == 'dept'    && $withHierarchy) $scope = 'deptWithHierarchy';
@@ -1088,18 +1088,24 @@ class metricModel extends model
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PRODUCT)
                     ->where('deleted')->eq(0)
                     ->andWhere('shadow')->eq(0)
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
                 break;
             case 'project':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->eq('project')
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
                 break;
             case 'execution':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->in('sprint,stage')
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
                 break;
             case 'code':
