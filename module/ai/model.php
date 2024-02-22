@@ -205,6 +205,10 @@ class aiModel extends model
             $proxy->addr = $model->proxyAddr;
             $modelConfig->proxy = json_encode($proxy);
         }
+        else
+        {
+            $modelConfig->proxy = '';
+        }
 
         return $modelConfig;
     }
