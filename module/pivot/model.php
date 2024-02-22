@@ -1983,7 +1983,7 @@ class pivotModel extends model
                 }
                 elseif(!empty($columnStat))
                 {
-                    $columnRecords = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records, $columnRecords);
+                    $columnRecords = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records);
                     $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
 
                     $columnSetting['records']  = $columnRecords;

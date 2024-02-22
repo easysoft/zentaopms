@@ -811,7 +811,7 @@ class screenModel extends model
             foreach($yStats as $index => $dataList)
             {
                 $field     = zget($fields, $metrics[$index]);
-                $fieldName = $field->name;
+                $fieldName = $field['name'];
                 if(isset($langs[$field['field']]) and !empty($langs[$field['field']][$clientLang])) $fieldName = $langs[$field['field']][$clientLang];
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
                 $dimensions[] = $field;
@@ -917,14 +917,14 @@ class screenModel extends model
 
             foreach($yStats as $index => $dataList)
             {
-                $field     = zget($fields, $metrics[$index]);
-                $fieldName = $field->name;
+                $fieldObj  = zget($fields, $metrics[$index]);
+                $fieldName = $fieldObj['name'];
+                $field     = $fieldObj['field'];
 
-                if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
-                $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
+                if(isset($langs[$field])) $fieldName = zget($langs[$field], $clientLang, $fieldName);
 
                 $seriesData[$index] = new stdclass();
-                $seriesData[$index]->name = $field;
+                $seriesData[$index]->name = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
 
                 $values = array();
                 foreach($dataList as $valueField => $value)
@@ -1249,11 +1249,14 @@ class screenModel extends model
                     if(is_file($path))
                     {
                         include $path;
-                        $fieldObject = $schema->fields[$field]['object'];
-                        $fieldShow   = explode('.', $schema->fields[$field]['show']);
+                        if(isset($schema->fields[$field]['object']))
+                        {
+                            $fieldObject = $schema->fields[$field]['object'];
+                            $fieldShow   = explode('.', $schema->fields[$field]['show']);
 
-                        if($fieldObject) $useTable = $fieldObject;
-                        if(count($fieldShow) == 2) $useField = $show[1];
+                            if($fieldObject) $useTable = $fieldObject;
+                            if(count($fieldShow) == 2) $useField = $fieldShow[1];
+                        }
                     }
 
                     $table = isset($this->config->objectTables[$useTable]) ? $this->config->objectTables[$useTable] : zget($this->config->objectTables, $object, '');
