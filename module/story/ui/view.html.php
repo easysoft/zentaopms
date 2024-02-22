@@ -293,7 +293,7 @@ detailBody
                     (
                         setID('source'),
                         set::name($lang->story->source),
-                        zget($lang->{$story->type}->sourceList, $story->source, '')
+                        zget($lang->{$story->type}->sourceList, $story->source)
                     ),
                     item
                     (
