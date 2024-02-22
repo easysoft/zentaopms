@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('langDefault',    $lang->ai->models->default);
+jsVar('langDefaultTip', $lang->ai->models->defaultTip);
+
 featureBar();
 toolbar(
     item(
@@ -49,6 +52,7 @@ else
     (
         set::cols($config->ai->dtable->models),
         set::data($models),
+        set::onRenderCell(jsRaw('window.onRenderCell')),
         set::orderBy($orderBy),
         set::sortLink(inlink('models', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
         set::footPager(usePager()),
