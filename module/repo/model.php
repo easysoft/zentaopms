@@ -2188,6 +2188,14 @@ class repoModel extends model
         }
         elseif(in_array($repo->SCM, array('Gitea', 'Gogs')))
         {
+            if(!is_dir($repo->path) && !is_writable(dirname($repo->path)))
+            {
+                $path = $this->app->getAppRoot() . "www/data/repo/{$repo->name}_{$repo->SCM}";
+                $repo->path = $path;
+
+                $this->dao->update(TABLE_REPO)->set('path')->eq($repo->path)->where('id')->eq($repo->id)->exec();
+            }
+
             $repo->codePath = $service ? "{$service->url}/{$repo->serviceProject}" : $repo->path;
         }
         $repo->gitService = $repo->serviceHost;
