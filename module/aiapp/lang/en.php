@@ -36,4 +36,4 @@ $lang->aiapp->continueasking   = 'Continue asking';
 $lang->aiapp->miniProgramSquare  = 'Browse AI Mini Program List';
 $lang->aiapp->collectMiniProgram = 'Collect AI Mini Program';
 $lang->aiapp->miniProgramChat    = 'Execute AI Mini Program';
-$lang->aiapp->browseMiniProgram  = 'View AI Mini Program Details';
+$lang->aiapp->view               = 'View AI Mini Program Details';

@@ -35,7 +35,7 @@ class aiapp extends control
 
     public function view($id)
     {
-        $this->locate($this->createLink('aiapp', 'browseMiniProgram', "id=$id"));
+        echo $this->fetch('aiapp', 'browseMiniProgram', "id=$id");
     }
 
     /**
