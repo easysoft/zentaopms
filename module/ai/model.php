@@ -1072,6 +1072,21 @@ class aiModel extends model
     }
 
     /**
+     * Get published custom categories.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPublishedCustomCategories()
+    {
+        $categories = $this->dao->select('distinct `category`')
+            ->from(TABLE_AI_MINIPROGRAM)
+            ->where('published')->eq('1')
+            ->fetchAll('category');
+        return array_keys($categories);
+    }
+
+    /**
      * Check duplicated category name.
      *
      * @access public

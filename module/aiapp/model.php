@@ -186,13 +186,13 @@ class aiappModel extends model
      */
     public function getUsedCategoryArray()
     {
-        $usedCustomCategories = $this->ai->getUsedCustomCategories();
+        $publishedCustomCategories = $this->ai->getPublishedCustomCategories();
         $categoryArray = array_merge($this->lang->aiapp->categoryList, $this->ai->getCustomCategories());
 
         $usedCategoryArray = array();
         foreach($categoryArray as $key => $value)
         {
-            if(in_array($key, $usedCustomCategories)) $usedCategoryArray[$key] = $value;
+            if(in_array($key, $publishedCustomCategories)) $usedCategoryArray[$key] = $value;
         }
         return $usedCategoryArray;
     }
