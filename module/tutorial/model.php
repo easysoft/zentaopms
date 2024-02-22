@@ -164,7 +164,7 @@ class tutorialModel extends model
         $project->displayCards = 0;
         $project->fluidBoard   = 0;
         $project->deleted      = '0';
-        $project->hasProduct   = '1';
+        $project->hasProduct   = 1;
         $project->multiple     = '1';
         $project->stageBy      = 'project';
 

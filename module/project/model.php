@@ -2070,7 +2070,7 @@ class projectModel extends model
         if(!$this->loadModel('common')->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
         $projectID = (int)$this->checkAccess($projectID, $this->getPairsByProgram());
-        $project   = $this->projectTao->fetchProjectInfo($projectID);
+        $project   = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProject() : $this->projectTao->fetchProjectInfo($projectID);
         if(!$project) return false;
 
         /* Reset project priv. */

@@ -696,6 +696,7 @@ div
         setClass('mt-4'),
         history
         (
+            set::objectID($project->id),
             set::commentUrl(createLink('action', 'comment', array('objectType' => 'project', 'objectID' => $project->id))),
             set::bodyClass('maxh-80 overflow-y-auto')
         )
