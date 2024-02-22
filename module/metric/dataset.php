@@ -797,7 +797,8 @@ class dataset
             ->from(TABLE_EFFORT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-            ->where('t3.deleted')->eq('0')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t3.type')->eq('project');
 
         return $this->defaultWhere($stmt, 't3')->query();
