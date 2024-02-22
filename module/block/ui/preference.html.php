@@ -42,7 +42,7 @@ function printPreference(array $URSRList)
     $URSRItems = array();
     foreach($URSRList as $URSRKey => $URSRValue)
     {
-        $contentHtml = "<div class=''><span class='label light-pale circle mr-4'>{$URSRKey}</span>{$URSRValue}</div>";
+        $contentHtml = "<div class=''><span class='inline-block primary-pale circle mr-4 text-center h-5 w-5'><p class='leading-5'>{$URSRKey}</p></span>{$URSRValue}</div>";
         $URSRItems[] = array('value' => $URSRKey, 'text' => $URSRValue, 'content' => array('html' => $contentHtml, 'class' => 'flex w-full border p-4 preference-box'));
     }
 

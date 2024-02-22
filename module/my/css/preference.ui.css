@@ -1,5 +1,9 @@
-.picker-menu-list .menu-item>a.active, .picker-menu-list .menu-item>a.hover, .picker-menu-list .menu-item>a:hover{background: unset}
-.picker-menu-list .menu-item>a.active .preference-box{background: var(--menu-active-bg); color: var(--menu-active-color)}
-.picker-menu-list .menu-item>a:hover .preference-box, .picker-menu-list .menu-item>a.hover .preference-box{background: var(--menu-active-bg); color: var(--menu-active-color); box-shadow: 0px 0px 1px 1px #2E7FFF;}
-.picker-menu-list .menu-item>a.active .preference-box .label, .picker-menu-list .menu-item>a:hover .preference-box .label, .picker-menu-list .menu-item>a.hover .preference-box .label{background: var(--menu-active-bg); color: var(--menu-active-color);}
+.preference-menu.picker-menu-list {padding: 0.25rem;}
+.preference-menu.picker-menu-list .menu-item {padding: 0.25rem;}
+.preference-menu.picker-menu-list .menu-item > a {padding: 0; border-width: 1px;}
+.preference-menu.picker-menu-list .menu-item>a.active, .picker-menu-list .menu-item>a.hover, .picker-menu-list .menu-item>a:hover{background: unset; border-color: var(--color-primary-500);}
+.preference-menu.picker-menu-list .menu-item>a:hover:before {opacity: 0;}
+.preference-menu.picker-menu-list .menu-item>a.active .preference-box {background: var(--color-primary-50); color: var(--color-primary-500);}
+.preference-menu.picker-menu-list .menu-item>a:hover .preference-box, .picker-menu-list .menu-item>a.hover .preference-box{background: var(--color-primary-50); color: var(--color-primary-500); box-shadow: 0px 0px 1px 1px #2E7FFF;}
+.preference-menu.picker-menu-list .menu-item>a.active .preference-box .label, .picker-menu-list .menu-item>a:hover .preference-box .label, .picker-menu-list .menu-item>a.hover .preference-box .label{background: var(--menu-active-bg); color: var(--color-primary-500);}
 .ursr-menu > li{width: 50%;}

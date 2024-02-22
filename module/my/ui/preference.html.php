@@ -35,7 +35,7 @@ $imageList['execution-executionkanban'] = 'kanban';
 $URSRItems = array();
 foreach($URSRList as $URSRKey => $URSRValue)
 {
-    $contentHtml = "<div class=''><span class='label light-pale circle mr-4'>{$URSRKey}</span>{$URSRValue}</div>";
+    $contentHtml = "<div class=''><span class='inline-block primary-pale circle mr-4 text-center h-5 w-5'><p class='leading-5'>{$URSRKey}</p></span>{$URSRValue}</div>";
     $URSRItems[] = array('value' => $URSRKey, 'text' => $URSRValue, 'content' => array('html' => $contentHtml, 'class' => 'flex w-full border p-4 preference-box'));
 }
 
@@ -62,7 +62,7 @@ formPanel
         set::label($lang->my->storyConcept),
         picker
         (
-            set('menu', array('class' => 'menu picker-menu-list no-nested-items menu-nested flex flex-wrap content-between ursr-menu')),
+            set('menu', array('class' => 'menu picker-menu-list no-nested-items menu-nested flex flex-wrap content-between ursr-menu preference-menu')),
             set::name('URSR'),
             set::required(true),
             set::items($URSRItems),
@@ -74,6 +74,7 @@ formPanel
         set::label($lang->my->programLink),
         picker
         (
+            set('menu', array('class' => 'preference-menu')),
             set::name('programLink'),
             set::required(true),
             set::items($programItems),
@@ -85,6 +86,7 @@ formPanel
         set::label($lang->my->productLink),
         picker
         (
+            set('menu', array('class' => 'preference-menu')),
             set::name('productLink'),
             set::required(true),
             set::items($productItems),
@@ -96,6 +98,7 @@ formPanel
         set::label($lang->my->projectLink),
         picker
         (
+            set('menu', array('class' => 'preference-menu')),
             set::name('projectLink'),
             set::required(true),
             set::items($projectItems),
@@ -107,6 +110,7 @@ formPanel
         set::label($lang->my->executionLink),
         picker
         (
+            set('menu', array('class' => 'preference-menu')),
             set::name('executionLink'),
             set::required(true),
             set::items($executionItems),
