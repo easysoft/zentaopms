@@ -269,9 +269,9 @@ $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
 $lang->project->modelList['']          = '';
-if($config->systemMode == 'PML') $lang->project->modelList['ipd']       = "IPD";
+if($config->systemMode == 'PML') $lang->project->modelList['ipd'] = "IPD";
 $lang->project->modelList['scrum']     = "Scrum";
-if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfall'] = "CMMI";
+if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfall'] = "Waterfall";
 $lang->project->modelList['kanban']    = "Kanban";
 $lang->project->modelList['agileplus'] = "Agile +";
 if(helper::hasFeature('waterfallplus')) $lang->project->modelList['waterfallplus'] = "Waterfall +";
