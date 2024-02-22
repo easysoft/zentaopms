@@ -76,6 +76,7 @@ class priPicker extends wg
             $moduleName = $app->getModuleName();
             if(isset($lang->$moduleName->priList)) $props['items'] = $lang->$moduleName->priList;
         }
+        if(isset($props['items'][0])) unset($props['items'][0]);
         return zui::priPicker
         (
             set::_class('form-group-wrapper'),
