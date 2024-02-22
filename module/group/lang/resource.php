@@ -1882,7 +1882,7 @@ $lang->resource->ai->editMiniProgramCategory = 'editMiniProgramCategory';
 
 $lang->resource->aiapp = new stdclass();
 $lang->resource->aiapp->square                  = 'miniProgramSquare';
-$lang->resource->aiapp->browseMiniProgram       = 'browseMiniProgram';
+$lang->resource->aiapp->view                    = 'view';
 $lang->resource->aiapp->miniProgramChat         = 'miniProgramChat';
 $lang->resource->aiapp->collectMiniProgram      = 'collectMiniProgram';
 
