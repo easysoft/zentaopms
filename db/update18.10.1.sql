@@ -157,3 +157,5 @@ ALTER TABLE `zt_kanban` CHANGE `minColWidth` `minColWidth` smallint(4) NOT NULL 
 ALTER TABLE `zt_project` CHANGE `minColWidth` `minColWidth` smallint(4) NOT NULL DEFAULT '264';
 UPDATE `zt_kanban` SET `minColWidth` = '264' WHERE `minColWidth` <= '264';
 UPDATE `zt_project` SET `minColWidth` = '264' WHERE `minColWidth` <= '264';
+UPDATE `zt_project` SET `colWidth` = '264' WHERE `colWidth` <= '264';
+UPDATE `zt_kanban` SET `colWidth` = '264' WHERE `colWidth` <= '264';
