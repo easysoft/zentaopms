@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('confirmDeleteTip', $lang->ai->models->confirmDelete);
+jsVar('confirmDeleteTip',  $lang->ai->models->confirmDelete);
+jsVar('confirmDisableTip', $lang->ai->models->confirmDisable);
 
 detailHeader
 (
@@ -32,6 +33,11 @@ detailBody
                 (
                     set::name($lang->ai->models->type),
                     $lang->ai->models->typeList[$model->type]
+                ),
+                item
+                (
+                    set::name($lang->ai->models->vendor),
+                    $lang->ai->models->vendorList->{$model->type}[$model->vendor]
                 ),
                 array_map(function($field) use ($model, $lang)
                 {

@@ -25,7 +25,7 @@ window.testConnection = () =>
             $('#test-conn-btn').removeAttr('disabled');
         }
     });
-}
+};
 
 const handleModelTypeChange = () =>
 {
@@ -35,7 +35,7 @@ const handleModelTypeChange = () =>
     for(const vendor in vendorList) $('select[name="vendor"]').append('<option value="' + vendor + '">' + vendorList[vendor] + '</option>');
     $('select[name="vendor"]').trigger('chosen:updated');
     $('select[name="vendor"]').trigger('change');
-}
+};
 
 const handleVendorChange = () =>
 {
@@ -44,13 +44,13 @@ const handleVendorChange = () =>
     const vendorTip = window.vendorTipsLang[vendor];
     $('.vendor-tips').html(vendorTip ? vendorTip : '');
     $('.vendor-row').each((_, el) => {$(el).toggle(requiredFields.includes($(el).find('input').attr('name')));});
-}
+};
 handleVendorChange();
 
 const handleProxyTypeChange = () =>
 {
     $('#proxy-addr-container').toggle($('select[name="proxyType"]').val() != '');
-}
+};
 handleProxyTypeChange();
 
 $(() =>

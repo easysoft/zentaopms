@@ -6962,7 +6962,14 @@ class storyModel extends model
                 {
                     $link    = helper::createLink('story', 'relation', "storyID=$story->id&storyType=$story->type");
                     $storySR = $this->getStoryRelationCounts($story->id, $story->type);
-                    $data->{$col->name} = $storySR > 0 ? html::a($link, $storySR, '', 'class="iframe" data-toggle="modal"') : 0;
+                    if($col->name == 'URS' && $story->type == 'story')
+                    {
+                        $data->{$col->name} = 0;
+                    }
+                    else
+                    {
+                        $data->{$col->name} = $storySR > 0 ? html::a($link, $storySR, '', 'class="iframe" data-toggle="modal"') : 0;
+                    }
                 }
                 if(in_array($col->name, $userFields)) $data->{$col->name} = zget($users, $story->{$col->name});
                 if(in_array($col->name, $dateFields)) $data->{$col->name} = helper::isZeroDate($story->{$col->name}) ? '' : substr($story->{$col->name}, 5, 11);
