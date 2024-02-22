@@ -85,9 +85,9 @@ class aiapp extends control
             $messages[] = (object)array('role' => 'user', 'content' => $message);
             if($this->post->test !== '1') $this->aiapp->saveMiniProgramMessage($id, 'req', $message);
         }
-        if($this->ai->isModelConfigured())
+        if($this->ai->hasModelsAvailable())
         {
-            $response = $this->ai->converse($messages);
+            $response = $this->ai->converse($miniProgram->model, $messages);
             if(empty($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->aiapp->chatNoResponse, 'reason' => 'no response'));
 
             if($this->post->test !== '1') $this->aiapp->saveMiniProgramMessage($id, 'res', is_array($response) ? current($response) : $response);
