@@ -88,7 +88,8 @@ class aiModel extends model
      */
     private function useLanguageModel($modelID)
     {
-        $model = empty($modelID) ? $this->getDefaultLanguageModel() : $this->getLanguageModel($modelID);
+        if(!empty($modelID)) $model = $this->getLanguageModel($modelID, true);
+        if(empty($model))    $model = $this->getDefaultLanguageModel();
         if(empty($model)) return false;
 
         return $this->setModelConfig($model);
@@ -147,13 +148,15 @@ class aiModel extends model
      * Get LLM config.
      *
      * @param  int           $modelID
+     * @param  bool          $enabledOnly
      * @access public
      * @return object|false  LLM config, false if not found.
      */
-    public function getLanguageModel($modelID)
+    public function getLanguageModel($modelID, $enabledOnly = false)
     {
         return $this->dao->select('*')->from(TABLE_AI_MODEL)
             ->where('id')->eq($modelID)
+            ->beginIF($enabledOnly)->andWhere('`enabled`')->eq('1')->fi()
             ->andWhere('deleted')->eq('0')
             ->fetch();
     }
