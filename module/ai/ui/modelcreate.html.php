@@ -30,6 +30,7 @@ formPanel
     (
         set::label($lang->ai->models->type),
         set::width('1/2'),
+        set::required(true),
         select
         (
             set::name('type'),
@@ -45,6 +46,7 @@ formPanel
             /* Update vendor group on model type change. */
             set::label($lang->ai->models->vendor),
             set::width('1/2'),
+            set::required(true),
             select
             (
                 set::name('vendor'),
@@ -64,6 +66,7 @@ formPanel
                 formGroup
                 (
                     set::label($lang->ai->models->{$field}),
+                    set::required(true),
                     input
                     (
                         set::name($field),
@@ -80,6 +83,7 @@ formPanel
         (
             set::label($lang->ai->models->proxyType),
             set::width('1/2'),
+            set::required(true),
             select
             (
                 set::name('proxyType'),
@@ -91,6 +95,7 @@ formPanel
         (
             set::label($lang->ai->models->proxyAddr),
             set::width('1/2'),
+            set::required(true),
             set::style(array('display' => 'none')), // Hide proxy address input by default.
             set::id('proxy-addr-container'),
             input
