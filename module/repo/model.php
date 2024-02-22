@@ -67,6 +67,8 @@ class repoModel extends model
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
 
+        $repoID = (int)$repoID;
+
         /* Check the privilege. */
         if($repoID)
         {
