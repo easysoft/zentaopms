@@ -588,7 +588,18 @@ class actionModel extends model
         $extra = strtolower($action->extra);
 
         /* Fix bug #741. */
-        if(isset($desc['extra'])) $desc['extra'] = $this->lang->{$objectType}->{$desc['extra']};
+        if(isset($desc['extra']))
+        {
+            if($objectType == 'story')
+            {
+                $moduleName = $this->app->rawModule;
+                $desc['extra'] = $this->lang->{$moduleName}->{$desc['extra']};
+            }
+            else
+            {
+                $desc['extra'] = $this->lang->{$objectType}->{$desc['extra']};
+            }
+        }
 
         $actionDesc = '';
         if(isset($desc['extra'][$extra]))
