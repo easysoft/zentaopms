@@ -27,3 +27,4 @@
 .c-limited {width: 110px;}
 .c-actions {width: 90px;}
 .c-hours {width: 90px;}
+#execution_chosen .project-name-content {display: inline-block; max-width: calc(100% - 30px); vertical-align: sub; overflow: hidden;}
