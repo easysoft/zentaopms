@@ -1125,23 +1125,23 @@ class testtaskModel extends model
         /* By search. */
         elseif($browseType == 'bysearch')
         {
-            if($this->session->testtaskQuery == false) $this->session->set('testtaskQuery', ' 1 = 1');
+            if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
             if($queryID)
             {
                 $query = $this->loadModel('search')->getQuery($queryID);
                 if($query)
                 {
-                    $this->session->set('testtaskQuery', $query->sql);
+                    $this->session->set('testcaseQuery', $query->sql);
                     $this->session->set('testtaskForm', $query->form);
                 }
             }
 
             $queryProductID = $productID;
             $allProduct     = "`product` = 'all'";
-            $caseQuery      = $this->session->testtaskQuery;
-            if(strpos($this->session->testtaskQuery, $allProduct) !== false)
+            $caseQuery      = $this->session->testcaseQuery;
+            if(strpos($this->session->testcaseQuery, $allProduct) !== false)
             {
-                $caseQuery = str_replace($allProduct, '1', $this->session->testtaskQuery);
+                $caseQuery = str_replace($allProduct, '1', $this->session->testcaseQuery);
                 $caseQuery = $caseQuery . ' AND `product` ' . helper::dbIN($this->app->user->view->products);
                 $queryProductID = 'all';
             }
