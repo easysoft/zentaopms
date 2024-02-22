@@ -44,7 +44,7 @@ div
         h::header
         (
             setClass('h-10 flex items-center pl-4 flex-none gap-3'),
-            span(setClass('text-lg font-semibold'), icon('list'), $lang->editor->moduleList)
+            span(setClass('text-lg font-semibold flex items-center'), icon(setClass('mr-2'), 'list'), $lang->editor->moduleList)
         ),
         ul(setID('moduleTree'))
     ),

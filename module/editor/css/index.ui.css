@@ -1,3 +1,4 @@
 .sidebar .tree {padding-left: 1rem;}
 .sidebar .tree .item-content {cursor: pointer;}
 .sidebar .tree .tree-item.active .item-content {color: var(--color-primary-600); font-weight:bolder;}
+#moduleTree .tree-toggle.is-empty {display: none};
