@@ -34,6 +34,6 @@ $lang->aiapp->noModel          = array('尚未配置语言模型，请联系管�
 $lang->aiapp->continueasking   = '继续追问';
 
 $lang->aiapp->miniProgramSquare       = '查看AI小程序列表';
-$lang->aiapp->browseMiniProgram       = '查看AI小程序详情';
+$lang->aiapp->view                    = '查看AI小程序详情';
 $lang->aiapp->miniProgramChat         = '执行AI小程序';
 $lang->aiapp->collectMiniProgram      = '收藏AI小程序';

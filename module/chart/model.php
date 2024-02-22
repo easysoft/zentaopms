@@ -508,14 +508,20 @@ class chartModel extends model
             $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'bar', 'stack' => $stack, 'label' => $label);
         }
 
-        $dataZoomX = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"xAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":"80%","height":"5","xAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"bottom":"0","left":"10%"}]';
-        $dataZoomY = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"yAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":5,"height":"80%","yAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"top":"10%","right":0}]';
-        $isY = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
-        $dataZoom = $isY ? json_decode($dataZoomY, true) : json_decode($dataZoomX, true);
-
         $grid = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
 
-        $options = array('series' => $series, 'grid' => $grid, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'), 'dataZoom' => $dataZoom);
+        $options = array('series' => $series, 'grid' => $grid, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'));
+        if(is_array($xLabels) and count($xLabels) > 10)
+        {
+            $isY = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
+            $axisIndex = $isY ? 'yAxisIndex' : 'xAxisIndex';
+            $dataZoomCommon = $this->config->chart->dataZoom->common;
+            $dataZoomCommon->inside->$axisIndex = array(0);
+            $dataZoomCommon->slider->$axisIndex = array(0);
+            $dataZoom = array($dataZoomCommon->inside, $dataZoomCommon->slider);
+
+            $options['dataZoom'] = $dataZoom;
+        }
         return $options;
     }
 
@@ -718,11 +724,14 @@ class chartModel extends model
                     if(is_file($path))
                     {
                         include $path;
-                        $fieldObject = $schema->fields[$field]['object'];
-                        $fieldShow   = explode('.', $schema->fields[$field]['show']);
+                        if(isset($schema->fields[$field]['object']))
+                        {
+                            $fieldObject = $schema->fields[$field]['object'];
+                            $fieldShow   = explode('.', $schema->fields[$field]['show']);
 
-                        if($fieldObject) $useTable = $fieldObject;
-                        if(count($fieldShow) == 2) $useField = $show[1];
+                            if($fieldObject) $useTable = $fieldObject;
+                            if(count($fieldShow) == 2) $useField = $show[1];
+                        }
                     }
 
                     $table = isset($this->config->objectTables[$useTable]) ? $this->config->objectTables[$useTable] : zget($this->config->objectTables, $object, '');

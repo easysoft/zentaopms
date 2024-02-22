@@ -6949,8 +6949,7 @@ class storyModel extends model
                     if($story->module and isset($modulePairs[$story->module])) $storyTitle .= "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                     if($story->parent > 0 and !($storyType == 'requirement' and $story->type == 'story')) $storyTitle .= '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
 
-                    $storyColor = $story->color ? "style='color: {$story->color}'" : "class='text-primary'";
-                    if(!$canView && !$story->color) $storyColor = '';
+                    $storyColor  = $story->color ? "style='color: {$story->color}'" : '';
                     $storyTitle .= $canView ? html::a($storyLink, $story->title, '', "title='$story->title' $storyColor data-app='$tab'") : "<span $storyColor>{$story->title}</span>";
                     $data->title = $storyTitle;
                 }

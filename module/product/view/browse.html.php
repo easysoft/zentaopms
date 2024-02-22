@@ -92,6 +92,11 @@ js::set('pageSummary',       $summary);
 #customDatatable div.col[data-key=plan] {display: none !important;}
 </style>
 <?php endif;?>
+<?php if($app->tab == 'project'):?>
+<style>
+.btn-toolbar.pull-right .btn-link > span.text {display: none;}
+</style>
+<?php endif;?>
 <div id="mainMenu" class="clearfix">
   <?php if(!$isProjectStory):?>
   <div id="sidebarHeader">

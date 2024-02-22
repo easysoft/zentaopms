@@ -205,6 +205,10 @@ class aiModel extends model
             $proxy->addr = $model->proxyAddr;
             $modelConfig->proxy = json_encode($proxy);
         }
+        else
+        {
+            $modelConfig->proxy = '';
+        }
 
         return $modelConfig;
     }
@@ -1067,6 +1071,21 @@ class aiModel extends model
         $categories = $this->dao->select('distinct `category`')
             ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
+            ->fetchAll('category');
+        return array_keys($categories);
+    }
+
+    /**
+     * Get published custom categories.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPublishedCustomCategories()
+    {
+        $categories = $this->dao->select('distinct `category`')
+            ->from(TABLE_AI_MINIPROGRAM)
+            ->where('published')->eq('1')
             ->fetchAll('category');
         return array_keys($categories);
     }

@@ -1,5 +1,5 @@
 <?php include '../../common/view/header.lite.html.php';?>
-<style> 
+<style>
 .actions {margin-top: 10px;}
 .actions .btn {margin-right: 5px;}
 .table {border: 1px solid #ddd;}
@@ -17,7 +17,7 @@
       <thead>
         <tr>
           <th class='w-60px'><?php echo $lang->story->id;?></th>
-          <th><?php echo $lang->story->title;?></th>
+          <th><?php echo str_replace($lang->SRCommon, $lang->URCommon, $lang->story->title);?></th>
           <th class='w-100px'><?php echo $lang->story->status;?></th>
           <th class='w-70px'><?php echo $lang->story->version;?></th>
           <th class='w-100px'><?php echo $lang->story->openedBy;?></th>
@@ -28,7 +28,7 @@
           <tr>
             <td><?php echo $story->id;?></td>
             <td><?php echo $story->title;?></td>
-            <td style='color: red'><?php echo $lang->story->changed;?></td>
+            <td style='color: red'><?php echo str_replace($lang->SRCommon, $lang->URCommon, $lang->story->changed);?></td>
             <td><?php echo $story->version;?></td>
             <td><?php echo zget($users, $story->openedBy);?></td>
          </tr>
