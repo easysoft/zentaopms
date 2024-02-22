@@ -1406,6 +1406,11 @@ class storyZen extends story
                 dao::$errors['comment'][] = sprintf($this->lang->error->notempty, $this->lang->comment);
                 return false;
             }
+            if($field == 'reviewedDate' && !$this->post->reviewedDate)
+            {
+                dao::$errors['reviewedDate'] = sprintf($this->lang->error->notempty, $this->lang->story->reviewedDate);
+                return false;
+            }
             if(isset($fields[$field])) $fields[$field]['required'] = true;
         }
         if($this->post->result == false)
