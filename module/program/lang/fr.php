@@ -52,6 +52,7 @@ $lang->program->lastEditedBy   = 'LastEditedBy';
 $lang->program->lastEditedDate = 'LastEditedDate';
 $lang->program->childProgram   = 'sous-programme';
 $lang->program->ignore         = 'Ignorer';
+$lang->program->other          = 'Other';
 
 /* Actions. */
 $lang->program->common                  = 'Program';
