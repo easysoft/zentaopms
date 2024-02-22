@@ -230,11 +230,10 @@ featureBar
 sidebar
 (
     setClass('bg-white'),
-    set::style(array('width' => '180px')),
     h::header
     (
         setClass('h-10 flex items-center pl-4 flex-none gap-3'),
-        span(setClass('text-lg font-semibold'), icon(setClass('pr-2'), 'list'), $lang->dev->moduleList)
+        div(setClass('text-lg font-semibold flex items-center'), icon(setClass('pr-2'), 'list'), span($lang->dev->moduleList))
     ),
     treeEditor(set(array('className' => 'pl-3', 'items' => $moduleTree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false)))
 );

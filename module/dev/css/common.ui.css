@@ -1,4 +1,4 @@
 .detail+.detail {padding-top: 25px;}
-#mainContent .sidebar {width: 180px;}
+#mainContent .sidebar {width: 180px !important;}
 .sidebar .tree {padding-left: 1rem;}
 .sidebar .tree .tree-item-content {cursor: pointer;}

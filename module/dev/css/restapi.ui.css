@@ -5,3 +5,5 @@
 pre { display: block; padding: 9.5px; margin: 0px 0px 10px; font-size: 12px; line-height: 1.38462; color: rgb(49, 60, 82); word-break: break-all; overflow-wrap: break-word; background-color: rgb(245, 245, 245); border: 1px solid rgb(204, 204, 204); border-radius: 4px; }
 
 .scrollbar-hover { overflow-y: scroll; }
+#mainContent .sidebar {width: 240px !important;}
+#mainContent .sidebar .tree-item > .active {color: unset;}

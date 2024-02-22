@@ -1182,6 +1182,7 @@ class devModel extends model
             {
                 $child         = new stdclass();
                 $child->id     = $moduleAPI->id;
+                $child->icon   = 'icon-file-text';
                 $child->name   = $moduleAPI->title;
                 $child->url    = helper::createLink('dev', 'api', "module=restapi&apiID={$moduleAPI->id}");
                 $child->active = $apiID == $moduleAPI->id ? 1 : 0;
