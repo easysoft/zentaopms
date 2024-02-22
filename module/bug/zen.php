@@ -408,13 +408,23 @@ class bugZen extends bug
      */
     protected function getExportFields(int $executionID, object|bool $product): string
     {
-        $exportFields = $this->config->bug->exportFields;
-        if(isset($product->type) and $product->type == 'normal') $exportFields = str_replace('branch,', '', $exportFields);
+        $exportFields = str_replace(' ', '', $this->config->bug->exportFields);
+        if(isset($product->type) and $product->type == 'normal') $exportFields = str_replace(',branch,', ',', ",{$exportFields},");;
+        if(!$product)
+        {
+            $products  = $this->loadModel('product')->getProducts($executionID);
+            $hasBranch = false;
+            foreach($products as $product)
+            {
+                if($product->type != 'normal') $hasBranch = true;
+            }
+            if(!$hasBranch) $exportFields = str_replace(',branch,', ',', ",{$exportFields},");
+        }
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $execution = $this->loadModel('execution')->getByID($executionID);
-            if(empty($execution->multiple)) $exportFields = str_replace('execution,', '', $exportFields);
-            if(empty($execution->hasProduct) || !empty($product->shadow)) $exportFields = str_replace(array('product,', 'branch,'),   '', $exportFields);
+            if(empty($execution->multiple)) $exportFields = str_replace(',execution,', ',', ",{$exportFields},");
+            if(empty($execution->hasProduct) || !empty($product->shadow)) $exportFields = str_replace(array(',product,', ',branch,'), ',', ",{$exportFields},");
         }
 
         return $exportFields;
