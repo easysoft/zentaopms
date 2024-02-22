@@ -89,6 +89,7 @@ $lang->tree->all          = 'All Modules';
 $lang->tree->executionDoc = "{$lang->executionCommon} Document";
 $lang->tree->product      = $lang->productCommon;
 $lang->tree->editDir      = "Edit Directory";
+$lang->tree->editGroup    = "Edit Group";
 
 $lang->tree->emptyHistory = "No History";
 
