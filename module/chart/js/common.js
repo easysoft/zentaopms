@@ -38,10 +38,10 @@ function ajaxGetChart(check = true, chart = DataStorage.chart, echart = window.e
                 data.yAxis.axisLabel.formatter = labelFormatter;
             }
 
+            echart.resize();
+            echart.clear();
             if(isChartHaveData(data, type))
             {
-                echart.resize();
-                echart.clear();
                 echart.setOption(data, true);
                 $('.btn-export').removeClass('hidden');
                 noDataDom.addClass('hidden');
