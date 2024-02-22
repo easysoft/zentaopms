@@ -1481,4 +1481,40 @@ class productZen extends product
 
         $this->display();
     }
+
+    /**
+     * 处理项目列表展示数据。
+     * Process project list display data.
+     *
+     * @param  array     $projectList
+     * @access protected
+     * @return array
+     */
+    protected function processProjectListData(array $projectList): array
+    {
+        $userPairs = $this->loadModel('user')->getPairs();
+        $userList  = $this->user->getListByAccounts(array_keys($userPairs), 'account');
+
+        $this->loadModel('story');
+        $this->loadModel('execution');
+        $this->loadModel('project');
+        foreach($projectList as $project)
+        {
+            $project = $this->project->formatDataForList($project, $userList);
+
+            $projectStories = $this->story->getExecutionStories($project->id);
+            $project->storyCount  = count($projectStories);
+            $project->storyPoints = 0;
+            foreach($projectStories as $story) $project->storyPoints += $story->estimate;
+            $project->storyPoints .= ' ' . $this->config->hourUnit;
+
+            $executions = $this->execution->getStatData($project->id, 'all', 0, 0, false, 'skipParent');
+            $project->executionCount = count($executions);
+
+            $project->from    = 'project';
+            $project->actions = $this->project->buildActionList($project);
+        }
+
+        return array_values($projectList);
+    }
 }

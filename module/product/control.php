@@ -93,7 +93,7 @@ class product extends control
         foreach($projectStats as $project) unset($projects[$project->id]);
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
-        $this->view->projectStats = $projectStats;
+        $this->view->projectStats = $this->productZen->processProjectListData($projectStats);
         $this->view->PMList       = $this->loadModel('user')->getListByAccounts(helper::arrayColumn($projectStats, 'PM'), 'account');
         $this->view->product      = $product;
         $this->view->projects     = $projects;

@@ -137,7 +137,7 @@ $config->product->dtable->extendField['align']    = 'center';
 $config->product->dtable->extendField['border']   = 'left';
 
 $config->productProject = new stdclass();
-$config->productProject->showFields = array('id', 'program', 'name', 'status', 'PM', 'budget', 'begin', 'end', 'estimate', 'consume', 'progress');
+$config->productProject->showFields = array('id', 'program', 'name', 'status', 'PM', 'storyPoints', 'storyCount', 'executionCount', 'budget', 'teamCount', 'invested', 'begin', 'end', 'realBegan', 'realEnd', 'estimate', 'consume', 'progress');
 
 /* Fields of product list page. */
 if(!isset($config->product->all)) $config->product->all = new stdclass();

@@ -94,10 +94,6 @@ foreach($config->productProject->showFields as $showField)
 }
 $cols['id']['checkbox'] = false;
 
-$cols['PM']['type']        = 'link';
-$cols['PM']['link']        = helper::createLink('user', 'profile', 'userID={PMUserID}', '', true);
-$cols['PM']['data-toggle'] = 'modal';
-
 if(!in_array($this->config->systemMode, array('ALM', 'PLM'))) unset($cols['program']);
 if(!str_contains('all,undone', $status)) unset($cols['status']);
 
@@ -122,8 +118,6 @@ foreach($projectStats as $project)
     if($project->status == 'doing')     $doingCount ++;
     if($project->status == 'suspended') $suspendedCount ++;
     if($project->status == 'closed')    $closedCount ++;
-
-    $project = $this->project->formatDataForList($project, $PMList);
 }
 $summary = sprintf($lang->project->summary, count($projectStats));
 if($status == 'all') $summary = sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount);
