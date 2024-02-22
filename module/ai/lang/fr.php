@@ -533,6 +533,7 @@ $lang->ai->models->common         = 'Language Model';
 $lang->ai->models->name           = 'Name';
 $lang->ai->models->type           = 'Model';
 $lang->ai->models->vendor         = 'Vendor';
+$lang->ai->models->base           = 'API Base URL';
 $lang->ai->models->key            = 'API Key';
 $lang->ai->models->secret         = 'Secret Key';
 $lang->ai->models->resource       = 'Resource';
@@ -584,12 +585,13 @@ $lang->ai->models->typeList['openai-gpt4']  = 'OpenAI / GPT-4';
 $lang->ai->models->typeList['baidu-ernie']  = 'Baidu / ERNIE';
 
 $lang->ai->models->vendorList = new stdclass();
-$lang->ai->models->vendorList->{'openai-gpt35'} = array('openai' => 'OpenAI', 'azure' => 'Azure');
-$lang->ai->models->vendorList->{'openai-gpt4'}  = array('openai' => 'OpenAI', 'azure' => 'Azure');
+$lang->ai->models->vendorList->{'openai-gpt35'} = array('openai' => 'OpenAI', 'azure' => 'Azure', 'openaiCompatible' => 'Custom');
+$lang->ai->models->vendorList->{'openai-gpt4'}  = array('openai' => 'OpenAI', 'azure' => 'Azure', 'openaiCompatible' => 'Custom');
 $lang->ai->models->vendorList->{'baidu-ernie'}  = array('baidu' => 'Baidu Qianfan LLM Platform');
 
 $lang->ai->models->vendorTips = new stdclass();
-$lang->ai->models->vendorTips->azure = 'OpenAI GPT version is specified during model deployment creation on Azure.';
+$lang->ai->models->vendorTips->azure            = 'OpenAI GPT version is specified during model deployment creation on Azure.';
+$lang->ai->models->vendorTips->openaiCompatible = 'Custom API needs to support Function Calling, otherwise some functions may not work properly.';
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = 'No Proxy';
