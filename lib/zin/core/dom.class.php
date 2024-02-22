@@ -120,9 +120,9 @@ class dom
         }
     }
 
-    public function isMatch($selector)
+    public function is($selector)
     {
-        return $this->wg->isMatch($selector);
+        return $this->wg->is($selector);
     }
 
     /**
@@ -353,7 +353,7 @@ class dom
         {
             if(!($item instanceof dom) || $item->wg->removed || in_array($item->wg->gid, $filteredList)) continue;
 
-            if($item->wg->isMatch($selector))
+            if($item->wg->is($selector))
             {
                 $item->selector    = $selector;
                 $item->renderInner = isset($selector->inner) ? $selector->inner : false;

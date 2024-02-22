@@ -152,7 +152,7 @@ class hook
         $selectors = parseWgSelectors($selectors);
         foreach($this->items as $item)
         {
-            if($item->isMatch($selectors)) return true;
+            if($item->is($selectors)) return true;
         }
         return false;
     }
