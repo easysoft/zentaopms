@@ -1934,7 +1934,7 @@ class executionZen extends execution
 
         if(isset($project->hasProduct) and empty($project->hasProduct)) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
-        return true;;
+        return true;
     }
 
     /**
