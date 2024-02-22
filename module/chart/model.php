@@ -718,11 +718,14 @@ class chartModel extends model
                     if(is_file($path))
                     {
                         include $path;
-                        $fieldObject = $schema->fields[$field]['object'];
-                        $fieldShow   = explode('.', $schema->fields[$field]['show']);
+                        if(isset($schema->fields[$field]['object']))
+                        {
+                            $fieldObject = $schema->fields[$field]['object'];
+                            $fieldShow   = explode('.', $schema->fields[$field]['show']);
 
-                        if($fieldObject) $useTable = $fieldObject;
-                        if(count($fieldShow) == 2) $useField = $show[1];
+                            if($fieldObject) $useTable = $fieldObject;
+                            if(count($fieldShow) == 2) $useField = $show[1];
+                        }
                     }
 
                     $table = isset($this->config->objectTables[$useTable]) ? $this->config->objectTables[$useTable] : zget($this->config->objectTables, $object, '');
