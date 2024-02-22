@@ -286,7 +286,6 @@ ciCommon:
 	make package
 	make cleanAssets
 	cp -a zentaopms zentaoalm
-	sed -i '/^\s*$$config->langs\['"'"'en'"'"']/d' zentaopms/config/config.php
 	sed -i '/^\s*$$config->langs\['"'"'de'"'"']/d' zentaopms/config/config.php
 	sed -i '/^\s*$$config->langs\['"'"'fr'"'"']/d' zentaopms/config/config.php
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms -x  "*/de.php" "*/fr.php" "*/vi.php" "*/de/*" "*/fr/*" "*/vi/*"
