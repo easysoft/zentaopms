@@ -501,7 +501,7 @@ class repo extends control
 
         /* Get repo and synchronous commit. */
         $repo = $this->repo->getByID($repoID);
-        if($repo->SCM == 'Git' and !is_dir($repo->path))
+        if(in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) and !is_dir($repo->path))
         {
             $error = sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path);
             $link  = $this->repo->createLink($this->app->tab == 'execution' ? 'create' : 'maintain', "objectID={$objectID}");
