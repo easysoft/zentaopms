@@ -533,6 +533,7 @@ $lang->ai->models->common         = '语言模型';
 $lang->ai->models->name           = '语言模型名称';
 $lang->ai->models->type           = '语言模型';
 $lang->ai->models->vendor         = '供应商';
+$lang->ai->models->base           = 'API 基础地址';
 $lang->ai->models->key            = 'API Key';
 $lang->ai->models->secret         = 'Secret Key';
 $lang->ai->models->resource       = 'Resource';
@@ -584,12 +585,13 @@ $lang->ai->models->typeList['openai-gpt4']  = 'OpenAI / GPT-4';
 $lang->ai->models->typeList['baidu-ernie']  = '百度 / 文心一言';
 
 $lang->ai->models->vendorList = new stdclass();
-$lang->ai->models->vendorList->{'openai-gpt35'} = array('openai' => 'OpenAI', 'azure' => 'Azure');
-$lang->ai->models->vendorList->{'openai-gpt4'}  = array('openai' => 'OpenAI', 'azure' => 'Azure');
+$lang->ai->models->vendorList->{'openai-gpt35'} = array('openai' => 'OpenAI', 'azure' => 'Azure', 'openaiCompatible' => '自定义');
+$lang->ai->models->vendorList->{'openai-gpt4'}  = array('openai' => 'OpenAI', 'azure' => 'Azure', 'openaiCompatible' => '自定义');
 $lang->ai->models->vendorList->{'baidu-ernie'}  = array('baidu' => '百度千帆大模型平台');
 
 $lang->ai->models->vendorTips = new stdclass();
-$lang->ai->models->vendorTips->azure = 'Azure 中 OpenAI GPT 版本 (3.5 或 4) 需要在创建资源时指定。';
+$lang->ai->models->vendorTips->azure            = 'Azure 中 OpenAI GPT 版本 (3.5 或 4) 需要在创建资源时指定。';
+$lang->ai->models->vendorTips->openaiCompatible = '指定的 API 需要支持 Function Calling，否则某些功能可能无法正常使用。';
 
 $lang->ai->models->proxyTypes = array();
 $lang->ai->models->proxyTypes['']       = '不使用代理';

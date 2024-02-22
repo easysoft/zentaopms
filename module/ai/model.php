@@ -345,7 +345,7 @@ class aiModel extends model
     public function testModelConnection($modelID)
     {
         $this->useLanguageModel($modelID);
-        if($this->config->ai->models[$this->modelConfig->type] == 'ernie' || $this->modelConfig->vendor == 'azure' || $this->modelConfig->type == 'openai-gpt4')
+        if($this->config->ai->models[$this->modelConfig->type] == 'ernie' || $this->modelConfig->vendor == 'azure' || $this->modelConfig->type == 'openai-gpt4' || $this->modelConfig->vendor == 'openaiCompatible')
         {
             $messages = array((object)array('role' => 'user', 'content' => 'test'));
             $result = $this->converse($modelID, $messages, array('maxTokens' => 1));
@@ -384,7 +384,11 @@ class aiModel extends model
         /* Assemble request url. */
         if($modelType == 'openai')
         {
-            if($modelVendor == 'azure')
+            if($modelVendor == 'openaiCompatible')
+            {
+                $url = sprintf($this->config->ai->openai->api->openaiCompatible->format, rtrim($this->modelConfig->base, '/'), $this->config->ai->openai->api->methods[$type]);
+            }
+            elseif($modelVendor == 'azure')
             {
                 $url = sprintf($this->config->ai->openai->api->azure->format, $this->modelConfig->resource, $this->modelConfig->deployment, $this->config->ai->openai->api->methods[$type], $this->config->ai->openai->api->azure->apiVersion);
             }

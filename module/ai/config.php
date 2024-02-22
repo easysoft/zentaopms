@@ -1,15 +1,16 @@
 <?php
 $config->ai->vendorList = array();
-$config->ai->vendorList['openai']['credentials'] = array('key');
-$config->ai->vendorList['azure']['credentials']  = array('key', 'resource', 'deployment');
-$config->ai->vendorList['baidu']['credentials']  = array('key', 'secret');
+$config->ai->vendorList['openai']['credentials']           = array('key');
+$config->ai->vendorList['azure']['credentials']            = array('key', 'resource', 'deployment');
+$config->ai->vendorList['openaiCompatible']['credentials'] = array('key', 'base');
+$config->ai->vendorList['baidu']['credentials']            = array('key', 'secret');
 
 $config->ai->models = array('openai-gpt35' => 'openai', 'openai-gpt4' => 'openai', 'baidu-ernie' => 'ernie');
 
 /* OpenAI GPT configurations. */
 $config->ai->openai = new stdclass();
 $config->ai->openai->api = new stdclass();
-$config->ai->openai->api->vendor = array('openai', 'azure');
+$config->ai->openai->api->vendor = array('openai', 'azure', 'openaiCompatible');
 $config->ai->openai->api->openai = new stdclass();
 $config->ai->openai->api->openai->version    = 'v1';                           // OpenAI API version, required.
 $config->ai->openai->api->openai->format     = 'https://api.openai.com/%s/%s'; // OpenAI API format, args: API version, API name.
@@ -20,7 +21,10 @@ $config->ai->openai->api->azure->deployment  = '';                             /
 $config->ai->openai->api->azure->apiVersion  = '2023-07-01-preview';           // Azure OpenAI API version, required.
 $config->ai->openai->api->azure->format      = 'https://%s.openai.azure.com/openai/deployments/%s/%s?api-version=%s'; // Azure API format, args: resource name, deployment name, API name, API version.
 $config->ai->openai->api->azure->authFormat  = 'api-key: %s';                  // Azure API auth header format.
-$config->ai->openai->api->methods            = array('function' => 'chat/completions', 'chat' => 'chat/completions', 'completion' => 'completions');
+$config->ai->openai->api->openaiCompatible = new stdclass();
+$config->ai->openai->api->openaiCompatible->format     = '%s/%s';                    // OpenAI API format, args: API base URL, API name.
+$config->ai->openai->api->openaiCompatible->authFormat = 'Authorization: Bearer %s'; // OpenAI API auth header format.
+$config->ai->openai->api->methods = array('function' => 'chat/completions', 'chat' => 'chat/completions', 'completion' => 'completions');
 
 $config->ai->openai->params = new stdclass();
 $config->ai->openai->params->chat       = new stdclass();
