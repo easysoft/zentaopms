@@ -140,7 +140,7 @@ class router extends baseRouter
             $customMenus = array();
             try
             {
-                $customMenus = $this->dbQuery('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
+                $customMenus = $this->dbQuery('SELECT * FROM ' . TABLE_LANG . " WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
             }
             catch(PDOException){}
 
