@@ -91,7 +91,7 @@ formPanel
             (
                 set::name('proxyType'),
                 set::items($lang->ai->models->proxyTypes),
-                set::value($model->proxyType),
+                set::value(empty($model->proxyType) ? '' : $model->proxyType),
                 set::required(true)
             )
         ),
@@ -105,7 +105,7 @@ formPanel
             input
             (
                 set::name('proxyAddr'),
-                set::value($model->proxyAddr)
+                set::value(empty($model->proxyAddr) ? '' : $model->proxyAddr),
             )
         )
     ),
