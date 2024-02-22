@@ -131,7 +131,7 @@ function sendMessagesToAI(message)
             $sendBtn.removeAttr('disabled');
             $generateBtn.removeAttr('disabled');
             response = JSON.parse(response);
-            const {message, result} = response;
+            const {message, result, reason} = response;
             if(result === 'success')
             {
                 const {content, time} = message;
@@ -141,11 +141,10 @@ function sendMessagesToAI(message)
                 $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
 
                 messageList.append(curMsgObj);
-                messageList.append(response.message);
+                messageList.append(message);
                 return;
             }
 
-            const {reason} = response;
             if(reason === 'no model')
             {
                 $('.chat').addClass('hidden');
@@ -156,6 +155,15 @@ function sendMessagesToAI(message)
             if(reason === 'unpublished')
             {
                 $('#open-dialog').trigger('click')
+                return;
+            }
+            if(reason === 'no response')
+            {
+                const $message = createMessage('ai', message);
+                $messageList.find('.tmp-message').remove();
+                $messageList.append($message);
+                $messageList[0].scrollTo(0, $messageList[0].scrollHeight);
+                return;
             }
         }
     );
