@@ -67,7 +67,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function models($orderBy = 'id_asc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function models($orderBy = 'id_asc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
