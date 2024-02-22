@@ -54,3 +54,7 @@ a.removeModule:hover {color: red;}
 .dtable .label-pri {overflow: hidden;}
 
 #mainContent .scroll-wrapper {z-index: 11;}
+
+.main-table .dtable-cell-html > a:hover, .main-table .dtable-cell-html > a:visited:hover{color: #2e7fff}
+.main-table .dtable-cell-html > a {color: #2463c7;}
+.main-table .dtable-cell-html > a:not(.btn):visited {color: #003994;}
