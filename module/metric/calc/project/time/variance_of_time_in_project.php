@@ -35,10 +35,20 @@ class variance_of_time_in_project extends baseCalc
         $realEnd   = $row->realEnd;
         $status    = $row->status;
 
+        if($status != 'doing' and $status != 'closed') return false;
+
         $plan = (strtotime($end) - strtotime($begin)) / 86400;
 
-        if($status == 'closed') $actual = (strtotime($realEnd) - strtotime($realBegan)) / 86400;
-        if($status != 'closed') $actual = (strtotime(date('Y-m-d')) - strtotime($realBegan)) / 86400;
+        if($status == 'doing')
+        {
+            if(!$this->isDate($realBegan)) return false;
+
+            $realEnd = date('Y-m-d');
+        }
+
+        if($status == 'closed' && (!$this->isDate($realBegan) || !$this->isDate($realEnd))) return false;
+
+        $actual = (strtotime($realEnd) - strtotime($realBegan)) / 86400;
 
         $this->result[$project] = $actual - $plan;
     }

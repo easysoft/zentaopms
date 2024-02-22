@@ -171,6 +171,22 @@ class baseCalc
     }
 
     /**
+     * 判断是否为日期。
+     * Check if a string is a date.
+     *
+     * @param  string    $dateString
+     * @access public
+     * @return bool
+     */
+    public function isDate($dateString)
+    {
+        $format   = 'Y-m-d';
+        $dateTime = DateTime::createFromFormat($format, $dateString);
+
+        return $dateTime && $dateTime->format($format) === $dateString;
+    }
+
+    /**
      * 扩展选项。
      * Expand options.
      *
