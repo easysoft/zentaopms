@@ -148,6 +148,7 @@ $config->pivot->dtable->workload->fieldList['user']['fixed'] = 'left';
 
 $config->pivot->dtable->workload->fieldList['projectName']['title'] = $lang->pivot->project;
 $config->pivot->dtable->workload->fieldList['projectName']['type']  = 'title';
+$config->pivot->dtable->workload->fieldList['projectName']['width'] = 0.3;
 $config->pivot->dtable->workload->fieldList['projectName']['link']  = common::hasPriv('project', 'view') ? array('module' => 'project', 'method' => 'view', 'params' => 'projectID={projectID}') : '';
 $config->pivot->dtable->workload->fieldList['projectName']['align'] = 'left';
 
