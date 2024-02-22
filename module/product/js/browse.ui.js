@@ -73,7 +73,14 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'status' && result)
     {
-        if(info.row.data.URChanged == '1') result[0] = {html: "<span class='status-changed'>" + URChanged + "</span>"};
+        if(info.row.data.URChanged == '1')
+        {
+            result[0] = {html: "<span class='status-changed'>" + URChanged + "</span>"};
+        }
+        else
+        {
+            result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
+        }
     }
     if(info.col.name == 'assignedTo' && info.row.data.status == 'closed')
     {
