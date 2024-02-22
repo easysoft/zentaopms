@@ -7,7 +7,7 @@ jsVar('langDefault',    $lang->ai->models->default);
 jsVar('langDefaultTip', $lang->ai->models->defaultTip);
 
 featureBar();
-toolbar(
+hasPriv('ai', 'modelcreate') && toolbar(
     item(
         set(array(
             'text' => $lang->ai->models->create,
