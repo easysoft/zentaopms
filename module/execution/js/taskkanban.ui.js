@@ -174,8 +174,8 @@ window.buildColActions = function(col)
 {
     let actions = [];
 
-    if(priv.canEditName && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(priv.canSetWIP   && col.actionList.includes('setWIP'))    actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
+    if(priv.canEditName && col.actionList && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
+    if(priv.canSetWIP   && col.actionList && col.actionList.includes('setWIP'))    actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
 
     return actions;
 }

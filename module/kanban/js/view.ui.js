@@ -133,6 +133,8 @@ window.buildColCardActions = function(col)
  */
 window.buildColActions = function(col)
 {
+    if(!col.actionList) return [];
+
     let actions = [];
 
     if(col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'edit'});
