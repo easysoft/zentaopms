@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('langDefault',    $lang->ai->models->default);
-jsVar('langDefaultTip', $lang->ai->models->defaultTip);
+jsVar('langDefault',       $lang->ai->models->default);
+jsVar('langDefaultTip',    $lang->ai->models->defaultTip);
+jsVar('confirmDisableTip', $lang->ai->models->confirmDisable);
 
 featureBar();
 hasPriv('ai', 'modelcreate') && toolbar(

@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('confirmDeleteTip', $lang->ai->models->confirmDelete);
+jsVar('confirmDeleteTip',  $lang->ai->models->confirmDelete);
+jsVar('confirmDisableTip', $lang->ai->models->confirmDisable);
 
 detailHeader
 (

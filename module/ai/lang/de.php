@@ -558,6 +558,7 @@ $lang->ai->models->upgradeBiz     = 'For more AI features, all in <a target="_bl
 $lang->ai->models->noModelError   = 'No language model is configured, please contact the administrator.';
 $lang->ai->models->noModels       = 'There is currently no language model.';
 $lang->ai->models->confirmDelete  = 'Are you sure you want to delete this language model?';
+$lang->ai->models->confirmDisable = 'Are you sure you want to disable this language model?';
 $lang->ai->models->default        = 'Default model';
 $lang->ai->models->defaultTip     = 'The default language model (the first available language model) will be used to run prompts and mini programs that are not specified with a language model, and will also be used for chat.';
 
