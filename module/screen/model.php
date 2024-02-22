@@ -2510,6 +2510,7 @@ class screenModel extends model
             if(empty($chartConfig)) return null;
 
             $component->chartConfig = $chartConfig;
+            $component->key         = $chartConfig->key;
         }
 
         if(!isset($component->option) or $typeChanged)
@@ -2519,7 +2520,6 @@ class screenModel extends model
         }
         $component = $this->initOptionTitle($component, $type, $chartName);
         if(!isset($component->option->dataset)) $component->option->dataset = new stdclass();
-        if(!isset($component->option->fields))  $component->option->fields  = json_decode($chart->fields);
 
         $component->chartConfig->title    = $chartName;
         $component->chartConfig->sourceID = $component->sourceID;

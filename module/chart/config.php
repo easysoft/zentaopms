@@ -32,13 +32,18 @@ $config->chart->dataZoom->common->slider->startValue      = 0;
 $config->chart->dataZoom->common->slider->endValue        = 5;
 $config->chart->dataZoom->common->slider->zoomLock        = true;
 $config->chart->dataZoom->common->slider->brushSelect     = false;
-$config->chart->dataZoom->common->slider->width           = '80%';
-$config->chart->dataZoom->common->slider->height          = 5;
 $config->chart->dataZoom->common->slider->fillerColor     = '#ccc';
 $config->chart->dataZoom->common->slider->borderColor     = '#33aaff00';
 $config->chart->dataZoom->common->slider->backgroundColor = '#cfcfcf00';
 $config->chart->dataZoom->common->slider->handleSize      = 0;
 $config->chart->dataZoom->common->slider->showDataShadow  = false;
 $config->chart->dataZoom->common->slider->showDetail      = false;
-$config->chart->dataZoom->common->slider->bottom          = 0;
-$config->chart->dataZoom->common->slider->left            = '10%';
+
+$config->chart->dataZoom->slider = new stdclass();
+$config->chart->dataZoom->slider->width  = 5;
+$config->chart->dataZoom->slider->height = '80%';
+$config->chart->dataZoom->slider->bottom = 0;
+$config->chart->dataZoom->slider->left   = '10%';
+$config->chart->dataZoom->slider->top    = '10%';
+$config->chart->dataZoom->slider->right  = 0;
+
