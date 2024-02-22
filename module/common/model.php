@@ -2537,6 +2537,864 @@ class commonModel extends model
 
         return false;
     }
+
+    /**
+     * Build icon button.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $vars
+     * @param  object $object
+     * @param  string $type button|list
+     * @param  string $icon
+     * @param  string $target
+     * @param  string $extraClass
+     * @param  bool   $onlyBody
+     * @param  string $misc
+     * @param  bool   $extraEnabled
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function buildIconButton($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0, $extraEnabled = '')
+    {
+        if(isonlybody() and strpos($extraClass, 'showinonlybody') === false) return false;
+
+        /* Remove iframe for operation button in modal. Prevent pop up in modal. */
+        if(isonlybody() and strpos($extraClass, 'showinonlybody') !== false) $extraClass = str_replace('iframe', '', $extraClass);
+
+        global $app, $lang, $config;
+
+        /* Judge the $method of $module clickable or not, default is clickable. */
+        $clickable = true;
+        if(is_bool($extraEnabled))
+        {
+            $clickable = $extraEnabled;
+        }
+        else if(is_object($object))
+        {
+            if($app->getModuleName() != $module) $app->control->loadModel($module);
+            $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
+            if(class_exists($modelClass) and method_exists($modelClass, 'isClickable'))
+            {
+                //$clickable = call_user_func_array(array($modelClass, 'isClickable'), array('object' => $object, 'method' => $method));
+                // fix bug on php  8.0 link: https://www.php.net/manual/zh/function.call-user-func-array.php#125953
+                $clickable = call_user_func_array(array($modelClass, 'isClickable'), array($object, $method));
+            }
+        }
+
+        /* Add data-app attribute. */
+        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
+        if($onlyBody && strpos($misc, 'data-toggle') === false && $clickable && !isonlybody()) $misc .= ' data-toggle="modal"';
+
+        /* Set module and method, then create link to it. */
+        if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
+        if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
+        if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
+        $currentModule = strtolower($module);
+        $currentMethod = strtolower($method);
+        if(!commonModel::hasPriv($module, $method, $object, $vars) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
+
+        $link = helper::createLink($module, $method, $vars, '', $onlyBody);
+
+        /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
+        if(empty($title))
+        {
+            $title = $method;
+            if($method == 'create' and $icon == 'copy') $method = 'copy';
+            if(isset($lang->$method) and is_string($lang->$method)) $title = $lang->$method;
+            if((isset($lang->$module->$method) or $app->loadLang($module)) and isset($lang->$module->$method))
+            {
+                $title = $method == 'report' ? $lang->$module->$method->common : $lang->$module->$method;
+            }
+            if($icon == 'toStory')   $title  = $lang->bug->toStory;
+            if($icon == 'createBug') $title  = $lang->testtask->createBug;
+        }
+
+        /* set the class. */
+        if(!$icon)
+        {
+            $icon = isset($lang->icons[$method]) ? $lang->icons[$method] : $method;
+        }
+        if(strpos(',edit,copy,report,export,delete,', ",$method,") !== false) $module = 'common';
+        $class = "icon-$module-$method";
+
+        if(!$clickable) $class .= ' disabled';
+        if($icon)       $class .= ' icon-' . $icon;
+
+        /* Create the icon link. */
+        if($clickable)
+        {
+            if($app->getViewType() == 'mhtml')
+            {
+                return "<a data-remote='$link' class='$extraClass' $misc>$title</a>";
+            }
+            if($type == 'button')
+            {
+                if($method == 'edit' or $method == 'copy' or $method == 'delete' or ($method == 'review' and $module == 'charter'))
+                {
+                    return html::a($link, "<i class='$class'></i>", $target, "class='btn btn-link $extraClass' title=\"$title\" $misc", false);
+                }
+                else
+                {
+                    return html::a($link, "<i class='$class'></i> " . "<span class='text'>{$title}</span>", $target, "class='btn btn-link $extraClass' $misc", true);
+                }
+            }
+            else
+            {
+                return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title=\"$title\" $misc", false) . "\n";
+            }
+        }
+        else
+        {
+            if($type == 'list')
+            {
+                return "<button type='button' class='disabled btn $extraClass'><i class='$class' title=\"$title\" $misc></i></button>\n";
+            }
+        }
+    }
+
+    /**
+     * Build more executions button.
+     *
+     * @param  int    $executionID
+     * @param  bool   $printHtml
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function buildMoreButton(int $executionID, bool $printHtml = true): string
+    {
+        global $lang, $app;
+
+        if(commonModel::isTutorialMode()) return '';
+
+        $object = $app->dbQuery('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
+        if(empty($object)) return '';
+
+        $executionPairs = array();
+        $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
+        $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
+
+        $executionList  = $app->dbQuery("SELECT id,name,parent,project FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
+        $executions     = array();
+        foreach($executionList as $execution) $executions[$execution->id] = $execution;
+
+        $executionList = $app->control->loadModel('execution')->resetExecutionSorts($executions);
+        foreach($executionList as $execution)
+        {
+            if(isset($executionPairs[$execution->parent])) unset($executionPairs[$execution->parent]);
+            if($execution->id == $executionID) continue;
+            $executionPairs[$execution->id] = $execution->name;
+        }
+
+        if(empty($executionPairs)) return '';
+
+        $html  = "<li class='divider'></li><li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->more}<span class='caret'></span></a>";
+        $html .= "<ul class='dropdown-menu'>";
+
+        $showCount = 0;
+        foreach($executionPairs as $executionID => $executionName)
+        {
+            $html .= "<li style='max-width: 300px;'>" . html::a(helper::createLink('execution', 'task', "executionID=$executionID"), $executionName, '', "title='{$executionName}' class='text-ellipsis' style='padding: 2px 10px'") . '</li>';
+
+            $showCount ++;
+            if($showCount == 10) break;
+        }
+
+        if(count($executionPairs) > 10) $html .= '<li>' . html::a(helper::createLink('project', 'execution', "status=all&projectID={$object->project}"), $lang->preview . $lang->more, '', "data-app='project' style='padding: 2px 10px'") . '</li>';
+
+        $html .= "</ul></li>\n";
+
+        if($printHtml) echo $html;
+        return $html;
+    }
+
+    /**
+     * Print about bar.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printAboutBar()
+    {
+        global $app, $config, $lang;
+        echo "<li class='dropdown-submenu zentao-help'>";
+        echo "<a data-toggle='dropdown'>" . "<i class='icon icon-help'></i> " . $lang->help . "</a>";
+        echo "<ul class='dropdown-menu pull-left'>";
+
+        $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
+        echo '<li>' . html::a($manualUrl, $lang->manual, '', "class='show-in-app' id='helpLink' data-app='help'") . '</li>';
+
+        echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+        echo "</ul></li>\n";
+
+        self::printClientLink();
+
+        echo '<li class="zentao-about">' . html::a(helper::createLink('misc', 'about'), "<i class='icon icon-about'></i> " . $lang->aboutZenTao, '', "class='about iframe' data-width='1050' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
+        echo '<li class="AIUX">' . $lang->designedByAIUX . '</li>';
+    }
+
+    /**
+     * Print the link for zentao client.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printClientLink()
+    {
+        global $config, $lang;
+        if(isset($config->xxserver->installed) and $config->xuanxuan->turnon)
+        {
+            echo "<li class='dropdown-submenu zentao-client'>";
+            echo "<a href='javascript:;'>" . "<i class='icon icon-download'></i> " . $lang->clientName . "</a><ul class='dropdown-menu pull-left'>";
+            echo '<li>' . html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='iframe text-ellipsis' data-width='600'") . '</li>';
+            echo "<li class='dropdown-submenu' id='downloadMobile'><a href='javascript:;'>" . $lang->downloadMobile . "</a><ul class='dropdown-menu pull-left''>";
+            echo "<li><div class='mobile-qrcode local-img'><img src='{$config->webRoot}static/images/app-qrcode.png' /></li>";
+            echo "</ul></li>";
+            echo '<li>' . html::a($lang->clientHelpLink, $lang->clientHelp, '', "title='$lang->clientHelp' target='_blank'") . '</li>';
+            echo '</ul></li>';
+        }
+    }
+
+    /**
+     * Print create button list.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printCreateList()
+    {
+        global $app, $config, $lang;
+
+        $html = "<ul class='dropdown-menu pull-right create-list'>";
+
+        /* Initialize the default values. */
+        $showCreateList = $needPrintDivider = false;
+
+        /* Get default product id. */
+        $productID = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
+        if($productID)
+        {
+            $product = $app->dbQuery("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id = '{$productID}'")->fetch();
+            if(empty($product)) $productID = 0;
+        }
+        if(!$productID and $app->user->view->products)
+        {
+            $product = $app->dbQuery("SELECT id FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id " . helper::dbIN($app->user->view->products) . " order by `order` desc limit 1")->fetch();
+            if($product) $productID = $product->id;
+        }
+
+        if($config->vision == 'lite')
+        {
+            $condition  = " WHERE `deleted` = '0' AND `vision` = 'lite' AND `model` = 'kanban'";
+            if(!$app->user->admin) $condition .= " AND `id` " . helper::dbIN($app->user->view->projects);
+
+            $object = $app->dbQuery("select id from " . TABLE_PROJECT . $condition . ' LIMIT 1')->fetch();
+            if(empty($object)) unset($lang->createIcons['story'], $lang->createIcons['task'], $lang->createIcons['execution']);
+        }
+
+        if($config->edition == 'open')     unset($lang->createIcons['effort']);
+        if($config->systemMode == 'light') unset($lang->createIcons['program']);
+
+        /* Check whether the creation permission is available, and print create buttons. */
+        foreach($lang->createIcons as $objectType => $objectIcon)
+        {
+            $createMethod = 'create';
+            $module       = $objectType == 'kanbanspace' ? 'kanban' : $objectType;
+            if($objectType == 'effort') $createMethod = 'batchCreate';
+            if($objectType == 'kanbanspace') $createMethod = 'createSpace';
+            if(strpos('|bug|execution|kanbanspace|', "|$objectType|") !== false) $needPrintDivider = true;
+
+            $hasPriv = common::hasPriv($module, $createMethod);
+            if(!$hasPriv and $objectType == 'doc' and  common::hasPriv('api', 'create'))        $hasPriv = true;
+            if(!$hasPriv) continue;
+
+            /* Determines whether to print a divider. */
+            if($needPrintDivider and $showCreateList)
+            {
+                $html .= '<li class="divider"></li>';
+                $needPrintDivider = false;
+            }
+
+            $showCreateList = true;
+            $isOnlyBody     = false;
+            $attr           = '';
+
+            $params = '';
+            switch($objectType)
+            {
+                case 'doc':
+                    $params       = "objectType=&objectID=0&libID=0";
+                    $createMethod = 'selectLibType';
+                    $isOnlyBody   = true;
+                    $attr         = "class='iframe' data-width='750px'";
+                    break;
+                case 'project':
+                    $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
+                    if($config->vision == 'lite')
+                    {
+                        $params = "model=kanban";
+                    }
+                    elseif(!defined('TUTORIAL'))
+                    {
+                        $params       = "programID=0&from=global";
+                        $createMethod = 'createGuide';
+                        $attr         = 'data-toggle="modal"';
+                    }
+                    break;
+                case 'bug':
+                    $params = "productID=$productID&branch=&extras=from=global";
+                    break;
+                case 'story':
+                    if(!$productID and $config->vision == 'lite')
+                    {
+                        $module = 'project';
+                        $params = "model=kanban";
+                    }
+                    else
+                    {
+                        $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                        if($config->vision == 'lite')
+                        {
+                            $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
+                            $projects  = $app->dbQuery("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
+
+                            $projectIdList = array();
+                            foreach($projects as $project) $projectIdList[$project->id] = $project->id;
+                            if($projectID and !isset($projectIdList[$projectID])) $projectID = 0;
+                            if(empty($projectID)) $projectID = key($projectIdList);
+
+                            $params = "productID={$productID}&branch=0&moduleID=0&storyID=0&objectID={$projectID}&bugID=0&planID=0&todoID=0&extra=from=global";
+                        }
+                    }
+
+                    break;
+                case 'task':
+                    $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
+                    break;
+                case 'testcase':
+                    $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
+                    break;
+                case 'execution':
+                    $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
+                    $params = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
+                    break;
+                case 'product':
+                    $params = "programID=&extra=from=global";
+                    break;
+                case 'program':
+                    $params = "parentProgramID=0&extra=from=global";
+                    break;
+                case 'kanbanspace':
+                    $isOnlyBody = true;
+                    $attr       = "class='iframe' data-width='75%'";
+                    break;
+                case 'kanban':
+                    $isOnlyBody = true;
+                    $attr       = "class='iframe' data-width='75%'";
+                    break;
+            }
+
+            $html .= '<li>' . html::a(helper::createLink($module, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', "$attr data-app=''") . '</li>';
+        }
+
+        if(!$showCreateList) return '';
+
+        $html .= "</ul>";
+        $html .= "<a class='dropdown-toggle' data-toggle='dropdown'>";
+        $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
+        $html .= "</a>";
+
+        echo $html;
+    }
+
+    /**
+     * Print upper left corner home button.
+     *
+     * @param  string $tab
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printHomeButton($tab)
+    {
+        global $lang, $config, $app;
+
+        if(!$tab) return;
+        if($tab == 'admin' and $app->control and method_exists($app->control, 'loadModel')) $app->control->loadModel('admin')->setMenu();
+        $icon = zget($lang->navIcons, $tab, '');
+
+        if(!in_array($tab, array('program', 'product', 'project')))
+        {
+            if(!isset($lang->mainNav->$tab)) return;
+            $nav = $lang->mainNav->$tab;
+            list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
+            if($tab == 'execution') $currentMethod = 'all';
+        }
+        else
+        {
+            $currentModule = $tab;
+            if($tab == 'program' or $tab == 'project') $currentMethod = 'browse';
+            if($tab == 'product') $currentMethod = 'all';
+        }
+
+        $btnTitle  = isset($lang->db->custom['common']['mainNav'][$tab]) ? $lang->db->custom['common']['mainNav'][$tab] : $lang->$tab->common;
+        $commonKey = $tab . 'Common';
+        if(isset($lang->$commonKey) and $tab != 'execution') $btnTitle = $lang->$commonKey;
+
+        $link      = helper::createLink($currentModule, $currentMethod);
+        $className = $tab == 'devops' ? 'btn num' : 'btn';
+        $html      = $link ? html::a($link, "$icon $btnTitle", '', "class='$className' style='padding-top: 2px'") : "$icon $btnTitle";
+
+        echo "<div class='btn-group header-btn'>" . $html . '</div>';
+    }
+
+    /**
+     * Print link icon.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $vars
+     * @param  object $object
+     * @param  string $type button|list
+     * @param  string $icon
+     * @param  string $target
+     * @param  string $extraClass
+     * @param  bool   $onlyBody
+     * @param  string $misc
+     * @param  string $extraEnabled
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0, $extraEnabled = '')
+    {
+        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc, $title, $programID, $extraEnabled);
+    }
+
+    /**
+     * Print the main menu.
+     *
+     * @param  bool   $printHtml
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function printMainMenu(bool $printHtml = true): string
+    {
+        global $app, $lang, $config;
+
+        /* Set main menu by app tab and module. */
+        static::replaceMenuLang();
+        static::setMainMenu();
+        static::checkMenuVarsReplaced();
+
+        $activeMenu = '';
+        $tab = $app->tab;
+
+        $isTutorialMode = commonModel::isTutorialMode();
+        $currentModule = $app->rawModule;
+        $currentMethod = $app->rawMethod;
+
+        if($isTutorialMode && isset($_SESSION['wizardModule'])) $currentModule = $_SESSION['wizardModule'];
+        if($isTutorialMode && isset($_SESSION['wizardMethod'])) $currentMethod = $_SESSION['wizardMethod'];
+
+        /* Print all main menus. */
+        $menu = customModel::getMainMenu();
+
+        $menuHtml = "<ul class='nav nav-default'>\n";
+        foreach($menu as $menuItem)
+        {
+            if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
+            if(empty($menuItem->link)) continue;
+            if($menuItem->divider) $menuHtml .= "<li class='divider'></li>";
+
+            /* Init the these vars. */
+            $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
+            $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
+            $class     = isset($menuItem->class) ? $menuItem->class : '';
+            $exclude   = isset($menuItem->exclude) ? $menuItem->exclude : '';
+
+            $active = '';
+            if($menuItem->name == $currentModule and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false)
+            {
+                $activeMenu = $menuItem->name;
+                $active = 'active';
+            }
+            if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false)
+            {
+                $activeMenu = $menuItem->name;
+                $active = 'active';
+            }
+
+            if($menuItem->link['module'] == 'execution' and $menuItem->link['method'] == 'more')
+            {
+                $executionID = $menuItem->link['vars'];
+                $menuHtml .= commonModel::buildMoreButton((int)$executionID, false);
+            }
+            elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
+            {
+                $menuHtml .= commonModel::buildAppButton(false);
+            }
+            else
+            {
+                if($menuItem->link)
+                {
+                    $target = '';
+                    $module = '';
+                    $method = '';
+                    $link   = commonModel::createMenuLink($menuItem);
+
+                    if($menuItem->link['module'] == 'project' and $menuItem->link['method'] == 'other') $link = 'javascript:void(0);';
+
+                    if(is_array($menuItem->link))
+                    {
+                        if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
+                        if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
+                        if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
+                    }
+                    if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and strpos(",$exclude,", ",$currentMethod,") === false)
+                    {
+                        $activeMenu = $menuItem->name;
+                        $active = 'active';
+                    }
+
+                    $label    = $menuItem->text;
+                    $dropMenu = '';
+                    $misc     = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? "data-app='$tab'" : '';
+
+                    /* Print drop menus. */
+                    if(isset($menuItem->dropMenu))
+                    {
+                        foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
+                        {
+                            if(empty($dropMenuItem)) continue;
+                            if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
+
+                            /* Parse drop menu link. */
+                            $dropMenuLink = zget($dropMenuItem, 'link', $dropMenuItem);
+
+                            list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
+                            if(!common::hasPriv($subModule, $subMethod)) continue;
+
+                            $subLink = helper::createLink($subModule, $subMethod, $subParams);
+
+                            $subActive = '';
+                            $activeMainMenu = false;
+                            if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod))
+                            {
+                                $activeMainMenu = true;
+                            }
+                            else
+                            {
+                                $subModule  = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                                $subExclude = isset($dropMenuItem['exclude']) ? $dropMenuItem['exclude'] : $exclude;
+                                if($subModule and in_array($currentModule, $subModule) and strpos(",$subExclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                            }
+
+                            if($activeMainMenu)
+                            {
+                                $activeMenu = $dropMenuName;
+                                $active     = 'active';
+                                $subActive  = 'active';
+                                $label      = $subLabel;
+                            }
+                            $dropMenu .= "<li class='$subActive' data-id='$dropMenuName'>" . html::a($subLink, $subLabel, '', "data-app='$tab'") . '</li>';
+                        }
+
+                        if(empty($dropMenu)) continue;
+
+                        $label    .= "<span class='caret'></span>";
+                        $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
+
+                        $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
+                    }
+                    else
+                    {
+                        $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . "</li>\n";
+                    }
+                }
+                else
+                {
+                    $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
+                }
+            }
+        }
+
+        $menuHtml .= "</ul>\n";
+
+        if($printHtml) echo $menuHtml;
+        return $activeMenu;
+    }
+
+    /**
+     * Print the module menu.
+     *
+     * @param  string $activeMenu
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printModuleMenu($activeMenu)
+    {
+        global $app, $lang;
+        $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
+
+        $tab = $app->tab;
+
+        if(!isset($lang->$tab->menu))
+        {
+            echo "<ul></ul>";
+            return;
+        }
+
+        /* get current module and method. */
+        $isTutorialMode = commonModel::isTutorialMode();
+        $currentModule  = $app->getModuleName();
+        $currentMethod  = $app->getMethodName();
+        $isMobile       = $app->viewType === 'mhtml';
+
+        /* When use workflow then set rawModule to moduleName. */
+        if($moduleName == 'flow') $activeMenu = $app->rawModule;
+        $menu = customModel::getModuleMenu($activeMenu);
+
+        /* If this is not workflow then use rawModule and rawMethod to judge highlight. */
+        if($app->isFlow)
+        {
+            $currentModule = $app->rawModule;
+            $currentMethod = $app->rawMethod;
+        }
+
+        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule = WIZARD_MODULE;
+        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod = WIZARD_METHOD;
+
+        /* The beginning of the menu. */
+        echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
+
+        /* Cycling to print every sub menu. */
+        foreach($menu as $menuItem)
+        {
+            if(isset($menuItem->hidden) and $menuItem->hidden) continue;
+            if($isMobile and empty($menuItem->link)) continue;
+            if($menuItem->divider) echo "<li class='divider'></li>";
+
+            /* Init the these vars. */
+            $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
+            $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
+            $class     = isset($menuItem->class) ? $menuItem->class : '';
+            $exclude   = isset($menuItem->exclude) ? $menuItem->exclude : '';
+            $active    = '';
+
+            if($subModule and in_array($currentModule, $subModule)) $active = 'active';
+            if($menuItem->link)
+            {
+                $target = '';
+                $module = '';
+                $method = '';
+                $link   = commonModel::createMenuLink($menuItem, $tab);
+                if(is_array($menuItem->link))
+                {
+                    if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
+                    if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
+                    if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
+                }
+
+                if($module == $currentModule and $method == $currentMethod) $active = 'active';
+                if($module == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'active';
+                if(strpos(",$exclude,", ",$currentModule-$currentMethod,") !== false or strpos(",$exclude,", ",$currentModule,") !== false) $active = '';
+
+                $label    = $menuItem->text;
+                $dropMenu = '';
+
+                /* Print sub menus. */
+                if(isset($menuItem->dropMenu))
+                {
+                    foreach($menuItem->dropMenu as $dropMenuKey => $dropMenuItem)
+                    {
+                        if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
+
+                        $subActive = '';
+                        $subModule = '';
+                        $subMethod = '';
+                        $subParams = '';
+                        $subLabel  = '';
+                        list($dropMenuName, $dropMenuModule, $dropMenuMethod, $dropMenuParams) = explode('|', $dropMenuItem['link']);
+                        if(isset($dropMenuModule)) $subModule = $dropMenuModule;
+                        if(isset($dropMenuMethod)) $subMethod = $dropMenuMethod;
+                        if(isset($dropMenuParams)) $subParams = $dropMenuParams;
+                        if(isset($dropMenuName))   $subLabel  = $dropMenuName;
+
+                        $subLink = helper::createLink($subModule, $subMethod, $subParams);
+
+                        if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod)) $subActive = 'active';
+
+                        $misc = (isset($lang->navGroup->$subModule) and $tab != $lang->navGroup->$subModule) ? "data-app='$tab'" : '';
+                        $dropMenu .= "<li class='$subActive' data-id='$dropMenuKey'>" . html::a($subLink, $subLabel, '', $misc) . '</li>';
+                    }
+
+                    if(empty($dropMenu)) continue;
+
+                    $label   .= "<span class='caret'></span>";
+                    $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
+                }
+
+                $misc = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? "data-app='$tab'" : '';
+                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
+
+                if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, $misc . " class='$class $active'") . "\n";
+                echo $menuItemHtml;
+            }
+            else
+            {
+                echo $isMobile ? $menuItem->text : "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
+            }
+        }
+        echo $isMobile ? '' : "</ul>\n";
+    }
+
+    /**
+     * Print the link contains orderBy field.
+     *
+     * This method will auto set the orderby param according the params. Fox example, if the order by is desc,
+     * will be changed to asc.
+     *
+     * @param  string $fieldName    the field name to sort by
+     * @param  string $orderBy      the order by string
+     * @param  string $vars         the vars to be passed
+     * @param  string $label        the label of the link
+     * @param  string $module       the module name
+     * @param  string $method       the method name
+     *
+     * @access public
+     * @return void
+     */
+    public static function printOrderLink($fieldName, $orderBy, $vars, $label, $module = '', $method = '')
+    {
+        global $lang, $app;
+        if(empty($module)) $module = isset($app->rawModule) ? $app->rawModule : $app->getModuleName();
+        if(empty($method)) $method = isset($app->rawMethod) ? $app->rawMethod : $app->getMethodName();
+        $className = 'header';
+        $isMobile  = $app->viewType === 'mhtml';
+
+        $order = explode('_', $orderBy);
+        $order[0] = trim($order[0], '`');
+        if($order[0] == $fieldName)
+        {
+            if(isset($order[1]) and $order[1] == 'asc')
+            {
+                $orderBy   = "{$order[0]}_desc";
+                $className = $isMobile ? 'SortUp' : 'sort-up';
+            }
+            else
+            {
+                $orderBy = "{$order[0]}_asc";
+                $className = $isMobile ? 'SortDown' : 'sort-down';
+            }
+        }
+        else
+        {
+            $orderBy   = trim($fieldName, '`') . '_' . 'asc';
+            $className = 'header';
+        }
+
+        $params = sprintf($vars, $orderBy);
+        if($app->getModuleName() == 'my' and $app->rawMethod == 'work') $params = "mode={$app->getMethodName()}&" . $params;
+
+        $link = helper::createLink($module, $method, $params);
+        echo $isMobile ? html::a($link, $label, '', "class='$className' data-app={$app->tab}") : html::a($link, $label, '', "class='$className' data-app={$app->tab}");
+    }
+
+    /**
+     * Print top bar.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printUserBar()
+    {
+        global $lang, $app;
+
+        if(isset($app->user))
+        {
+            $isGuest = $app->user->account == 'guest';
+
+            echo "<ul class='dropdown-menu pull-right'>";
+            if(!$isGuest)
+            {
+                $noRole = (!empty($app->user->role) and isset($lang->user->roleList[$app->user->role])) ? '' : ' no-role';
+                echo '<li class="user-profile-item">';
+                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='700' class='iframe $noRole'" . '>';
+                echo html::avatar($app->user, '', 'avatar-circle', 'id="menu-avatar"');
+                echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
+                if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
+                echo '</a></li><li class="divider"></li>';
+
+                $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
+
+                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='700'") . '</li>';
+
+                if($app->config->vision === 'rnd')
+                {
+                    if(!commonModel::isTutorialMode())
+                    {
+                        echo '<li class="user-tutorial">' . html::a(helper::createLink('tutorial', 'start', '', '', true), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+                    }
+
+                    echo '<li class="preference-setting">' . html::a(helper::createLink('my', 'preference', 'showTip=false', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='700'") . '</li>';
+                }
+
+                if(common::hasPriv('my', 'changePassword')) echo '<li class="change-password">' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
+
+                echo "<li class='divider'></li>";
+            }
+
+            echo "<li class='dropdown-submenu top'>";
+            echo "<a href='javascript:;'>" . "<i class='icon icon-theme'></i> " . $lang->theme . "</a><ul class='dropdown-menu pull-left'>";
+            foreach($app->lang->themes as $key => $value)
+            {
+                echo "<li " . ($app->cookie->theme == $key ? "class='selected'" : '') . "><a href='javascript:selectTheme(\"$key\");' data-value='" . $key . "'>" . $value . "</a></li>";
+            }
+            echo '</ul></li>';
+
+            echo "<li class='dropdown-submenu top switch-language'>";
+            echo "<a href='javascript:;'>" . "<i class='icon icon-lang'></i> " . $lang->lang . "</a><ul class='dropdown-menu pull-left'>";
+            foreach ($app->config->langs as $key => $value)
+            {
+                echo "<li " . ($app->cookie->lang == $key ? "class='selected'" : '') . "><a href='javascript:selectLang(\"$key\");'>" . $value . "</a></li>";
+            }
+            echo '</ul></li>';
+
+            //if(!$isGuest and !commonModel::isTutorialMode() and $app->viewType != 'mhtml')
+            //{
+            //    $customLink = helper::createLink('custom', 'ajaxMenu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
+            //    echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' data-icon='cog' data-width='80%'>$lang->customMenu</a></li>";
+            //}
+
+            commonModel::printAboutBar();
+            echo '<li class="divider"></li>';
+            echo '<li>';
+            if($isGuest)
+            {
+                echo html::a(helper::createLink('user', 'login'), $lang->login, '_top');
+            }
+            else
+            {
+                echo html::a(helper::createLink('user', 'logout'), "<i class='icon icon-exit'></i> " . $lang->logout, '_top');
+            }
+            echo '</li></ul>';
+
+            echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
+            echo html::avatar($app->user);
+            echo '</a>';
+            echo '<script>$("#userDropDownMenu").on("click", function(){$(this).removeClass("dropdown-hover");});$("#userDropDownMenu").on("hover", function(){$(this).next().removeClass("open");$(this).addClass("dropdown-hover");});</script>';
+        }
+    }
 }
 
 class common extends commonModel
