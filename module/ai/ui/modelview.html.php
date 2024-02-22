@@ -34,6 +34,11 @@ detailBody
                     set::name($lang->ai->models->type),
                     $lang->ai->models->typeList[$model->type]
                 ),
+                item
+                (
+                    set::name($lang->ai->models->vendor),
+                    $lang->ai->models->vendorList->{$model->type}[$model->vendor]
+                ),
                 array_map(function($field) use ($model, $lang)
                 {
                     return item
