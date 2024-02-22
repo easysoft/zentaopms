@@ -41,6 +41,8 @@ unset($config->execution->dtable->fieldList['progress']);
 unset($config->execution->dtable->fieldList['burn']);
 unset($config->execution->dtable->fieldList['actions']);
 
+foreach($config->execution->dtable->fieldList as $id => $field) $config->execution->dtable->fieldList[$id]['sortType'] = false;
+
 $cols = array_values($config->execution->dtable->fieldList);
 foreach($cols as $key => $col)
 {
@@ -48,7 +50,6 @@ foreach($cols as $key => $col)
     if($cols[$key]['name'] == 'PM')   $cols[$key]['title'] = $lang->execution->execPM;
 }
 
-foreach($config->execution->dtable->fieldList as $id => $field) $config->execution->dtable->fieldList[$id]['sortType'] = false;
 formBase
 (
     setID('linkForm'),
