@@ -126,6 +126,7 @@ class ai extends control
             foreach($this->config->ai->vendorList[$modelConfig->vendor]['credentials'] as $credKey)
             {
                 if(empty($modelConfig->$credKey)) dao::$errors[$credKey][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$credKey);
+                if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr)) dao::$errors['proxyAddr'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
             }
             if(!empty(dao::$errors)) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -151,6 +152,14 @@ class ai extends control
         if(strtolower($this->server->request_method) == 'post')
         {
             $modelConfig = fixer::input('post')->get();
+
+            /* Check for required credentials. */
+            foreach($this->config->ai->vendorList[$modelConfig->vendor]['credentials'] as $credKey)
+            {
+                if(empty($modelConfig->$credKey)) dao::$errors[$credKey][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$credKey);
+                if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr)) dao::$errors['proxyAddr'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
+            }
+            if(!empty(dao::$errors)) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $result = $this->ai->updateModel($modelID, $modelConfig);
 

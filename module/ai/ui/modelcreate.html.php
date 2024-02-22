@@ -100,7 +100,8 @@ formPanel
             set::id('proxy-addr-container'),
             input
             (
-                set::name('proxyAddr')
+                set::name('proxyAddr'),
+                set::required(true)
             )
         )
     ),

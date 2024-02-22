@@ -106,6 +106,7 @@ formPanel
             (
                 set::name('proxyAddr'),
                 set::value(empty($model->proxyAddr) ? '' : $model->proxyAddr),
+                set::required(true)
             )
         )
     ),
