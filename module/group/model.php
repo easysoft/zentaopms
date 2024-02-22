@@ -822,6 +822,7 @@ class groupModel extends model
     }
 
     /**
+     * 加载resource的语言配置。
      * Load language of resource.
      *
      * @access public
@@ -842,26 +843,31 @@ class groupModel extends model
     }
 
     /**
+     * 处理权限依赖关系
      * Process circular dependency.
      *
      * @param array $depends
      * @param array $privs
      * @param array $excludes
+     * @param array $processedPrivs
      * @access protected
      * @return array
      */
-    protected function processDepends(array $depends, array $privs, array $excludes): array
+    protected function processDepends(array $depends, array $privs, array $excludes, array $processedPrivs = array()): array
     {
         foreach($privs as $priv)
         {
-            if(!isset($depends[$priv])) continue;
+            if(!isset($depends[$priv]) || isset($processedPrivs[$priv])) continue;
+
+            /* 不重复处理权限，防止出现死循环。Avoid the infinite loop. */
+            $processedPrivs[$priv] = true;
 
             foreach($depends[$priv] as $dependPriv)
             {
                 if(isset($privs[$dependPriv]) || in_array($dependPriv, $excludes)) continue;
                 $privs[$dependPriv] = $dependPriv;
 
-                $dependPrivs = $this->processDepends($depends, $depends[$dependPriv], $excludes);
+                $dependPrivs = $this->processDepends($depends, $depends[$dependPriv], $excludes, $processedPrivs);
 
                 foreach($dependPrivs as $depend)
                 {
