@@ -65,7 +65,7 @@ class repoModel extends model
     public function setMenu(array $repos, int $repoID = 0)
     {
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
-        if($repos && !isset($repos[$repoID])) $repoID = key($repos);
+        if(!isset($repos[$repoID])) $repoID = key($repos);
 
         /* Check the privilege. */
         if($repoID)
