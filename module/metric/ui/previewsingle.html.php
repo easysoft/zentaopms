@@ -356,6 +356,7 @@ div
                         set::bordered(true),
                         set::height(jsRaw('window.getTableHeight')),
                         set::rowHeight(32),
+                        set::rowHover(true),
                         set::cols($groupHeader),
                         set::data(array_values($groupData)),
                         set::footPager(usePager('dtablePager', $pagerExtra)),
