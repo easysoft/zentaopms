@@ -47,4 +47,36 @@ $config->api->dtable->struct->fieldList['actions']['list']['deleteStruct']['icon
 $config->api->dtable->struct->fieldList['actions']['list']['deleteStruct']['hint']         = $lang->api->deleteStruct;
 $config->api->dtable->struct->fieldList['actions']['list']['deleteStruct']['url']          = helper::createLink('api', 'deleteStruct', 'lib={lib}&id={id}');
 $config->api->dtable->struct->fieldList['actions']['list']['deleteStruct']['className']    = 'ajax-submit';
-$config->api->dtable->struct->fieldList['actions']['list']['deleteStruct']['data-confirm'] = $lang->api->confirmDeleteStruct;
+$config->api->dtable->struct->fieldList['actions']['list']['deleteStruct']['data-confirm'] = array('message' => $lang->api->confirmDeleteStruct, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+
+$config->api->dtable->release = new stdclass();
+$config->api->dtable->release->fieldList['id']['name']  = 'id';
+$config->api->dtable->release->fieldList['id']['title'] = $lang->idAB;
+$config->api->dtable->release->fieldList['id']['type']  = 'id';
+
+$config->api->dtable->release->fieldList['version']['name']  = 'version';
+$config->api->dtable->release->fieldList['version']['title'] = $lang->api->version;
+$config->api->dtable->release->fieldList['version']['width'] = '100px';
+$config->api->dtable->release->fieldList['version']['type']  = 'title';
+
+$config->api->dtable->release->fieldList['desc']['name']  = 'desc';
+$config->api->dtable->release->fieldList['desc']['title'] = $lang->api->desc;
+$config->api->dtable->release->fieldList['desc']['type']  = 'desc';
+
+$config->api->dtable->release->fieldList['addedBy']['name']  = 'addedBy';
+$config->api->dtable->release->fieldList['addedBy']['title'] = $lang->api->addedBy;
+$config->api->dtable->release->fieldList['addedBy']['type']  = 'user';
+
+$config->api->dtable->release->fieldList['addedDate']['name']  = 'addedDate';
+$config->api->dtable->release->fieldList['addedDate']['title'] = $lang->api->structAddedDate;
+$config->api->dtable->release->fieldList['addedDate']['type']  = 'date';
+
+$config->api->dtable->release->fieldList['actions']['name']  = 'actions';
+$config->api->dtable->release->fieldList['actions']['title'] = $lang->actions;
+$config->api->dtable->release->fieldList['actions']['type']  = 'actions';
+$config->api->dtable->release->fieldList['actions']['menu']  = array('deleteRelease');
+$config->api->dtable->release->fieldList['actions']['list']['deleteRelease']['icon']         = 'trash';
+$config->api->dtable->release->fieldList['actions']['list']['deleteRelease']['hint']         = $lang->delete;
+$config->api->dtable->release->fieldList['actions']['list']['deleteRelease']['url']          = helper::createLink('api', 'deleteRelease', 'lib={lib}&id={id}');
+$config->api->dtable->release->fieldList['actions']['list']['deleteRelease']['data-confirm'] = array('message' => $lang->custom->notice->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->api->dtable->release->fieldList['actions']['list']['deleteRelease']['className']    = 'ajax-submit';
