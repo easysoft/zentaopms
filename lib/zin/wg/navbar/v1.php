@@ -132,12 +132,12 @@ class navbar extends wg
             {
                 if($menuItem->divider) $items[] = array('type' => 'divider');
                 $items[] = array
-                    (
-                        'class'   => $menuItem->class,
-                        'text'    => $menuItem->text,
-                        'type'    => 'text',
-                        'tagName' => 'span',
-                    );
+                (
+                    'class'   => $menuItem->class,
+                    'text'    => $menuItem->text,
+                    'type'    => 'text',
+                    'tagName' => 'span',
+                );
                 continue;
 
             }
