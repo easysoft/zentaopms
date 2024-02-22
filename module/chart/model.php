@@ -513,11 +513,18 @@ class chartModel extends model
         $options = array('series' => $series, 'grid' => $grid, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'));
         if(is_array($xLabels) and count($xLabels) > 10)
         {
+            $sliderConfig = $this->config->chart->dataZoom->slider;
             $isY = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
             $axisIndex = $isY ? 'yAxisIndex' : 'xAxisIndex';
+
             $dataZoomCommon = $this->config->chart->dataZoom->common;
             $dataZoomCommon->inside->$axisIndex = array(0);
             $dataZoomCommon->slider->$axisIndex = array(0);
+            $dataZoomCommon->slider->width  = $sliderConfig->{$isY ? 'width' : 'height'};
+            $dataZoomCommon->slider->height = $sliderConfig->{$isY ? 'height' : 'width'};
+            $dataZoomCommon->slider->{$isY ? 'top' : 'bottom'} = $sliderConfig->{$isY ? 'top' : 'bottom'};
+            $dataZoomCommon->slider->{$isY ? 'right' : 'left'} = $sliderConfig->{$isY ? 'right' : 'left'};
+
             $dataZoom = array($dataZoomCommon->inside, $dataZoomCommon->slider);
 
             $options['dataZoom'] = $dataZoom;
