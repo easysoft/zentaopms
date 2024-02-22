@@ -251,7 +251,7 @@ class hook
     {
         return array(
             'gid'       => $this->root->gid,
-            'type'      => $this->root->type(),
+            'type'      => $this->root->fullType(),
             'count'     => $this->count(),
             'selectors' => $this->selectors,
             'items'     => $this->items

@@ -24,10 +24,10 @@ class text extends node
 
     public function type(): string
     {
-        return 'node::' . $this->shortType();
+        return 'node::' . $this->type();
     }
 
-    public function shortType(): string
+    public function type(): string
     {
         return $this->prop('html') ? 'html' : 'text';
     }

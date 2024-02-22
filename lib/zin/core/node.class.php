@@ -75,14 +75,14 @@ class node implements \JsonSerializable
         return $this->render();
     }
 
-    public function type(): string
+    public function fullType(): string
     {
         return get_called_class();
     }
 
-    public function shortType(): string
+    public function type(): string
     {
-        $type = $this->type();
+        $type = $this->fullType();
         if(str_contains($type, '\\'))
         {
             $type = substr($type, strrpos($type, '\\') + 1);
@@ -97,7 +97,7 @@ class node implements \JsonSerializable
 
     public function displayID(): string
     {
-        $displayID = $this->type() . '~' . $this->gid;
+        $displayID = $this->fullType() . '~' . $this->gid;
 
         $id = $this->id();
         if(!empty($id)) $displayID .= "#$id";
@@ -213,7 +213,7 @@ class node implements \JsonSerializable
 
         if($name === 'children' && $child instanceof node)
         {
-            $blockName = static::getNameFromBlockMap($child->type());
+            $blockName = static::getNameFromBlockMap($child->fullType());
             if($blockName !== null) $name = $blockName;
         }
 
@@ -294,7 +294,7 @@ class node implements \JsonSerializable
     {
         $json = new stdClass();
         $json->gid   = $this->gid;
-        $json->type  = $this->shortType();
+        $json->type  = $this->type();
         $json->props = $this->props->toJSON();
 
         $json->blocks = array();

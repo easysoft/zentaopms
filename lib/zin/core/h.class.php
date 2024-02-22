@@ -35,7 +35,7 @@ class h extends node
         return 'h::' . $this->tagName();
     }
 
-    public function shortType(): string
+    public function type(): string
     {
         return $this->tagName();
     }

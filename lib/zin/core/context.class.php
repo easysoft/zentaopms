@@ -85,7 +85,7 @@ class context extends \zin\utils\dataset
 
         if($item instanceof node)
         {
-            if($item->parent || $item->shortType() === 'wg') return false;
+            if($item->parent || $item->type() === 'wg') return false;
 
             if(!isset($this->globalRenderList[$item->gid])) $this->globalRenderList[$item->gid] = $item;
             return true;

@@ -62,7 +62,7 @@ class dom
     {
         return array(
             'gid'          => $this->wg->gid,
-            'type'         => $this->wg->type(),
+            'type'         => $this->wg->fullType(),
             'count'        => count($this->children),
             'renderInner'  => $this->renderInner,
             'renderType'   => $this->renderType,

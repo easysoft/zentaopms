@@ -113,7 +113,7 @@ function groupWgInList(wg|array $items, string|array $types): array
     {
         if(!($item instanceof wg)) continue;
 
-        $type = $item->shortType();
+        $type = $item->type();
         if(isset($typesMap[$type])) $typesMap[$type][] = $item;
         else $restList[] = $item;
     }
