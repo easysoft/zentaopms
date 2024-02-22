@@ -2671,7 +2671,8 @@ class execution extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('story', $storyID, 'estimated', '', $executionID);
-            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+            $link = $this->createLink('execution', 'storyEstimate', "executionID={$executionID}&storyID={$storyID}&round={$round}");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal(\"$link\", '#storyEstimateModal');"));
         }
 
         $estimateInfo = $this->story->getEstimateInfo($storyID, $round);

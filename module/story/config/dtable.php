@@ -335,6 +335,7 @@ $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['ico
 $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['hint']        = $lang->execution->storyEstimate;
 $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['data-size']   = 'sm';
 $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['data-toggle'] = 'modal';
+$config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['data-id']     = 'storyEstimateModal';
 
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['icon'] = 'unlink';
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['hint'] = $lang->execution->unlinkStory;
