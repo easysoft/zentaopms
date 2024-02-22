@@ -13,7 +13,7 @@ $config->ai->actionList['modelenable']['url']          = array('module' => 'ai',
 $config->ai->actionList['modeldisable']['icon']        = 'ban-circle';
 $config->ai->actionList['modeldisable']['text']        = $lang->ai->models->disable;
 $config->ai->actionList['modeldisable']['hint']        = $lang->ai->models->disable;
-$config->ai->actionList['modeldisable']['url']         = array('module' => 'ai', 'method' => 'modeldisable', 'params' => 'modeIDl={id}');
+$config->ai->actionList['modeldisable']['url']         = 'javascript:confirmDisable("{id}")';
 $config->ai->actionList['modeltestconnection']['icon'] = 'controls';
 $config->ai->actionList['modeltestconnection']['text'] = $lang->ai->models->testConnection;
 $config->ai->actionList['modeltestconnection']['hint'] = $lang->ai->models->testConnection;
