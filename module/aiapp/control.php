@@ -87,6 +87,19 @@ class aiapp extends control
         }
         if($this->ai->hasModelsAvailable())
         {
+            if(!empty($miniProgram->model))
+            {
+                /* Check if model required by miniProgram is available, fallback to default (first enabled) model if not. */
+                $model = $this->getLanguageModel($miniProgram->model);
+                if(empty($model) || !$model->enabled)
+                {
+                    $defaultModel = $this->getDefaultLanguageModel();
+                    if(empty($defaultModel)) return $this->send(array('result' => 'fail', 'message' => $this->lang->aiapp->noModelError, 'reason' => 'no model'));
+
+                    $miniProgram->model = $defaultModel->id;
+                }
+            }
+
             $response = $this->ai->converse($miniProgram->model, $messages);
             if(empty($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->aiapp->chatNoResponse, 'reason' => 'no response'));
 
