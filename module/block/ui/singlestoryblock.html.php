@@ -25,11 +25,9 @@ else
 
 $method = $block->params->type == 'assignedTo' ? 'work' : 'contribute';
 
-panel
+blockPanel
 (
-    setClass('p-0'),
-    set::title($block->title),
-    set::bodyClass('p-0 no-shadow border-t'),
+    setClass('singlestory-block list-block'),
     to::headingActions
     (
         hasPriv('my', $method) && $block->params->type != 'reviewBy' ? h::nav

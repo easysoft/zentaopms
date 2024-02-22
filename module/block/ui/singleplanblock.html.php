@@ -26,11 +26,9 @@ else
     foreach($plans as $plan) $plan->hour .= $config->hourUnit;
 }
 
-panel
+blockPanel
 (
-    setClass('p-0 plan-block'),
-    set::title($block->title),
-    set::bodyClass('p-0 no-shadow border-t'),
+    setClass('plan-block list-block'),
     dtable
     (
         set::height(318),

@@ -24,11 +24,9 @@ else
     $this->config->block->release->dtable->fieldList['build']['map'] = $builds;
 }
 
-panel
+blockPanel
 (
-    setClass('p-0'),
-    set::title($block->title),
-    set::bodyClass('p-0 no-shadow border-t'),
+    setClass('singlereleaseblock list-block'),
     dtable
     (
         set::height(318),
