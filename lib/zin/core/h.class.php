@@ -30,7 +30,7 @@ class h extends node
         return $tagName === null ? '' : $tagName;
     }
 
-    public function type(): string
+    public function fullType(): string
     {
         return 'h::' . $this->tagName();
     }

@@ -22,7 +22,7 @@ class text extends node
         'html' => '?bool',
     );
 
-    public function type(): string
+    public function fullType(): string
     {
         return 'node::' . $this->type();
     }
