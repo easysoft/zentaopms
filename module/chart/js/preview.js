@@ -121,8 +121,9 @@ function queryData(obj)
 
     //* Reload echart. */
     var echartDom  = $('#chartDraw' + chartID).get(0);
+    var noDataDom  = $('#noData' + chartID);
     var echartInfo = echarts.init(echartDom);
-    ajaxGetChart(false, chartInfo, echartInfo);
+    ajaxGetChart(false, chartInfo, echartInfo, noDataDom);
 }
 
 function calcPreviewGrowFilter(resize = false)
