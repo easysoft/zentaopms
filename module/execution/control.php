@@ -3102,6 +3102,9 @@ class execution extends control
      */
     public function ajaxGetCopyProjectExecutions(int $projectID = 0, int $copyExecutionID = 0)
     {
+        $project = $this->loadModel('project')->fetchByID($projectID);
+        if($project) $this->executionZen->correctExecutionCommonLang($project, zget($this->config->execution->modelList, $project->model, 'scrum'));
+
         $this->view->executions      = $this->execution->getList($projectID, 'all', 'all', 0, 0, 0, null, false);
         $this->view->copyExecutionID = $copyExecutionID;
         $this->display();
