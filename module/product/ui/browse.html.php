@@ -200,8 +200,6 @@ foreach($stories as $story)
         $child->rawModule = $child->module;
         $data[] = $this->story->formatStoryForList($child, $options, $storyType);
     }
-
-    $story->status = zget($lang->{$storyType}->statusList, $story->status, '');
 }
 
 /* Generate toolbar of DataTable footer. */

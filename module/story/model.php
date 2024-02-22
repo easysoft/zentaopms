@@ -4451,6 +4451,7 @@ class storyModel extends model
             $story->actions = $actions;
         }
 
+        $story->status = zget($this->lang->{$story->type}->statusList, $story->status);
         return $story;
     }
 
