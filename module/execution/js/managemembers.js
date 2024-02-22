@@ -27,7 +27,8 @@ $(function()
             if(index == 0)
             {
                 var projectName = subString($(this).text(), 56);
-                $(this).text(projectName);
+                var projectNameHtml = `<span class='project-name-content'>${projectName}</span>`;
+                $(this).html(projectNameHtml);
                 $(this).append(' <label class="label">' + projectCommon + '</label>');
             }
             else
