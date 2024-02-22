@@ -1674,6 +1674,21 @@ class pivotModel extends model
     {
         return isset($pivot->{$key}) && !empty($pivot->{$key}) ? ($jsonDecode ? json_decode($pivot->{$key}, $needArray) : $pivot->{$key}) : $default;
     }
+
+    /**
+     * Adjust the action is clickable.
+     *
+     * @param  object $pivot
+     * @param  string $action
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($pivot, $action)
+    {
+        if($pivot->builtin) return false;
+        return true;
+    }
 }
 
 /**
