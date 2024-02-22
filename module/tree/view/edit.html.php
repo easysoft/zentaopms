@@ -31,6 +31,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
         }
         if($type == 'line') $lblEditTree = $lang->tree->manageLine;
         if($type == 'host') $lblEditTree = $lang->tree->editHost;
+        if($type == 'pivot' or $type == 'chart') $lblEditTree = $lang->tree->editGroup;
         echo $lblEditTree;
         ?>
       </strong>
@@ -66,7 +67,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
         <?php
         $parentName = $lang->tree->parent;
         if($type == 'doc' or $type == 'api') $parentName = $lang->tree->parentCate;
-        if($type == 'host') $parentName = $lang->tree->parentGroup;
+        if($type == 'host' or $type == 'pivot' or $type == 'chart') $parentName = $lang->tree->parentGroup;
         ?>
           <th class='thWidth'><?php echo $parentName;?></th>
           <td>
@@ -82,7 +83,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
             $lblTreeName = $lang->tree->name;
             if($type == 'doc' or $type == 'api') $lblTreeName = $lang->tree->dir;
             if($type == 'line') $lblTreeName = $lang->tree->line;
-            if($type == 'host') $lblTreeName = $lang->tree->groupName;
+            if($type == 'host' or $type == 'pivot' or $type == 'chart') $lblTreeName = $lang->tree->groupName;
             echo $lblTreeName;
             ?>
           </th>
