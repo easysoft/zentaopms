@@ -559,6 +559,7 @@ $lang->ai->models->noModelError   = 'No language model is configured, please con
 $lang->ai->models->noModels       = 'There is currently no language model.';
 $lang->ai->models->confirmDelete  = 'Are you sure you want to delete this language model?';
 $lang->ai->models->default        = 'Default model';
+$lang->ai->models->defaultTip     = 'The default language model (the first available language model) will be used to run prompts and mini programs that are not specified with a language model, and will also be used for chat.';
 
 $lang->ai->models->testConnectionResult = new stdclass();
 $lang->ai->models->testConnectionResult->success    = 'Successfully connected';
