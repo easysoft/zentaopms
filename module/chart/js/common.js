@@ -62,6 +62,7 @@ function ajaxGetChart(check = true, chart = DataStorage.chart, echart = window.e
  */
 function isChartHaveData(dataInfo, type)
 {
+    if(type == 'waterpolo') return true;
     var data = [];
     if(type == 'pie') data = dataInfo.series[0].data;
     if(type == 'line') data = dataInfo.xAxis.data;
