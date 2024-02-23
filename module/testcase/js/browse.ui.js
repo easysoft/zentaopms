@@ -15,7 +15,14 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 
     if($(this).hasClass('ajax-btn'))
     {
-        $.ajaxSubmit({url, data:form});
+        if($(this).hasClass('batch-delete-btn'))
+        {
+            zui.Modal.confirm(confirmBatchDeleteSceneCase).then((res) => {if(res) $.ajaxSubmit({url, data:form});});
+        }
+        else
+        {
+            $.ajaxSubmit({url, data:form});
+        }
     }
     else
     {

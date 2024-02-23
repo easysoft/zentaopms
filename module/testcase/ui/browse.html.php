@@ -12,6 +12,8 @@ namespace zin;
 
 include 'header.html.php';
 
+jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
+
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
 $canBatchRun                = hasPriv('testtask', 'batchRun') && !$isOnlyScene;
@@ -43,7 +45,7 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirm
         }
         $navActions[] = array('text' => $lang->testcase->review, 'class' => 'not-hide-menu', 'items' => $reviewItems);
     }
-    if($canBatchDelete) $navActions[] = array('text' => $lang->delete, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchDelete', "productID=$productID"));
+    if($canBatchDelete) $navActions[] = array('text' => $lang->delete, 'innerClass' => 'batch-btn ajax-btn not-open-url batch-delete-btn', 'data-url' => helper::createLink('testcase', 'batchDelete', "productID=$productID"));
     if($canBatchChangeType)
     {
         $typeItems = array();
