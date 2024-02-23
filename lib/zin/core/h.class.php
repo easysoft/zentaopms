@@ -235,8 +235,17 @@ class h extends node
             else                  $funcArgs[] = $arg;
         }
 
-        $js = js()->call($funcName, ...$funcArgs);
-        return static::js($js->toJS(), $directives);
+        if(str_starts_with($funcName, '~'))
+        {
+            $funcName = substr($funcName, 1);
+            $js = js()->call('$', jsCallback()->do(js()->call($funcName, ...$funcArgs)));
+        }
+        else
+        {
+            $js = js()->call($funcName, ...$funcArgs);
+        }
+
+        return static::js($js, $directives);
     }
 
     protected static function splitRawCode($children)
@@ -246,6 +255,7 @@ class h extends node
         $args = array();
         foreach($children as $child)
         {
+            if($child instanceof js) $child = $child->toJS();
             if(is_string($child)) $code[] = $child;
             else                  $args[] = $child;
         }
