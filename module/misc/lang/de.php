@@ -104,10 +104,14 @@ $lang->misc->feature->tutorialDesc              = '<p>ZenTao 15.0 has new functi
 $lang->misc->feature->themeDesc                 = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
 $lang->misc->feature->visionsDesc               = "<p>The concept of interface has been added since 16.5. Users can deal with R&D affairs in <span style='color: #0c60e1'>[Full Feature Interface]</span> and daily office affairs in <span style='color: #0c60e1'>[Operation Management Interface]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
 $lang->misc->feature->visionsImage              = 'theme/default/images/main/visions_en.png';
+$lang->misc->feature->promptDesign              = 'Prompt Engineering';
+$lang->misc->feature->promptDesignImage         = 'theme/default/images/main/prompt_design_en.svg';
 $lang->misc->feature->promptExec                = 'Prompt Execution';
 $lang->misc->feature->promptExecImage           = 'theme/default/images/main/prompt_exec_en.svg';
 $lang->misc->feature->aiChat                    = 'AI chat';
 $lang->misc->feature->aiChatImage               = 'theme/default/images/main/ai_chat_en.svg';
+$lang->misc->feature->aiMiniProgramConfig       = 'AI Mini Program Configuration';
+$lang->misc->feature->aiMiniProgramConfigImage  = 'theme/default/images/main/ai_mini_program_config_en.svg';
 $lang->misc->feature->aiMiniProgramStencil      = 'AI Mini Program Stencil Input';
 $lang->misc->feature->aiMiniProgramStencilImage = 'theme/default/images/main/ai_mini_program_stencil_en.svg';
 $lang->misc->feature->learnMoreLink             = 'https://www.zentao.net/book/zentaopms/1168.html';

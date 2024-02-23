@@ -40,7 +40,8 @@ class index extends control
         if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList, true);
 
         $showFeatures = false;
-        foreach($this->config->newFeatures as $feature)
+        $newFeatures  = $this->config->edition == 'open' ? $this->config->newFeaturesForOpen : $this->config->newFeatures;
+        foreach($newFeatures as $feature)
         {
             $accounts = zget($this->config->global, 'skip' . ucfirst($feature), '');
             if(strpos(",$accounts,", $this->app->user->account) === false) $showFeatures = true;

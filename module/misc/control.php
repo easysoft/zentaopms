@@ -316,7 +316,8 @@ class misc extends control
     public function features()
     {
         $features = array();
-        foreach($this->config->newFeatures as $feature)
+        $newFeatures  = $this->config->edition == 'open' ? $this->config->newFeaturesForOpen : $this->config->newFeatures;
+        foreach($newFeatures as $feature)
         {
             $accounts = zget($this->config->global, 'skip' . ucfirst($feature), '');
             if(strpos(",$accounts,", $this->app->user->account) === false) $features[] = $feature;
