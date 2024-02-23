@@ -14,12 +14,27 @@ namespace zin;
 
 require_once __DIR__ . DS . 'node.class.php';
 require_once __DIR__ . DS . 'directive.class.php';
+require_once __DIR__ . DS . 'context.func.php';
 
-class text extends node
+class htm extends node
 {
+    public function addToBlock(string $name, mixed $child)
+    {
+        if(is_string($child))
+        {
+            $child = (object)array('html' => $child);
+        }
+        return parent::addToBlock($name, $child);
+    }
 }
 
-function text(mixed ...$texts): text
+function html(mixed ...$codes): htm
 {
-    return new text(...$texts);
+    return new htm(...$codes);
+}
+
+function rawContent(): htm
+{
+    context()->rawContentCalled = true;
+    return h::comment('{{RAW_CONTENT}}');
 }

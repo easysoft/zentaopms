@@ -14,13 +14,17 @@ namespace zin;
 
 require_once __DIR__ . DS . 'context.class.php';
 
-function context(?string $name = null): context
+function context(): context
 {
-    if($name) return context::create($name);
     return context::current();
 }
 
-function popContext()
+function contextBegin(string $name)
+{
+    return context::create($name);
+}
+
+function contextEnd()
 {
     return context::pop();
 }

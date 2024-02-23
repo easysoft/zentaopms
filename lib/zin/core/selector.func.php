@@ -27,13 +27,14 @@ function parseWgSelector(string|object $selector): ?object
     if($len < 1) return null;
 
     $result = array(
-        'class' => array(),
-        'id' => null,
-        'tag' => null,
-        'inner' => false,
-        'name' => null,
-        'first' => false,
-        'selector' => $selector
+        'class'    => array(),
+        'id'       => null,
+        'tag'      => null,
+        'inner'    => false,
+        'name'     => null,
+        'first'    => false,
+        'selector' => $selector,
+        'options'  => array()
     );
     if(str_contains($selector, '/'))
     {
@@ -64,7 +65,7 @@ function parseWgSelector(string|object $selector): ?object
         {
             $options = array();
             parse_str($current, $options);
-            foreach($options as $key => $value) $result[$key] = empty($value) ? true : $value;
+            foreach($options as $key => $value) $result['options'][$key] = empty($value) ? true : $value;
         }
         else
         {
@@ -155,11 +156,17 @@ function stringifyWgSelectors(array|object|null $selector): string
     }
 
     $result = '';
-    if(!empty($selector->name) && $selector->name !== $selector->selector) $result .= $selector->name . '/';
+    if(!empty($selector->name) && $selector->name !== $selector->selector && $selector->name !== $selector->tag) $result .= $selector->name . '/';
     if(!empty($selector->tag))   $result .= $selector->tag;
     if(!empty($selector->id))    $result .= '#' . $selector->id;
     if(!empty($selector->class)) $result .= '.' . implode('.', $selector->class);
     if(!empty($selector->first)) $result .= ':first';
     if($selector->inner)         $result .= '>*';
+    if(!empty($selector->options))
+    {
+        $options = array();
+        foreach($selector->options as $key => $value) $options[] = $value === true ? $key : ($key . '=' . $value);
+        $result .= ':' . implode('&', $options);
+    }
     return $result;
 }

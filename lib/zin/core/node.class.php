@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 require_once __DIR__ . DS . 'helper.func.php';
+require_once __DIR__ . DS . 'selector.func.php';
 require_once __DIR__ . DS . 'props.class.php';
 
 /**
@@ -48,7 +49,7 @@ class node implements \JsonSerializable
 
     public bool $removed = false;
 
-    public ?array $buildList = null;
+    public ?stdClass $buildData = null;
 
     public function __construct(mixed ...$args)
     {
@@ -103,6 +104,24 @@ class node implements \JsonSerializable
         if(!empty($id)) $displayID .= "#$id";
 
         return $displayID;
+    }
+
+    /**
+     * Check if the element is match any of the selectors
+     * @param  string|array|object $selectors
+     */
+    public function is(string|array|object $selectors): bool
+    {
+        $list = parseWgSelectors($selectors);
+        foreach($list as $selector)
+        {
+            if(isset($selector->command)) continue;
+            if(!empty($selector->id)    && $this->id() !== $selector->id) continue;
+            if(!empty($selector->tag)   && $this->type() !== $selector->tag) continue;
+            if(!empty($selector->class) && !$this->props->class->has($selector->class)) continue;
+            return true;
+        }
+        return false;
     }
 
     public function prop(array|string $name, mixed $defaultValue = null): mixed
@@ -216,6 +235,11 @@ class node implements \JsonSerializable
             $blockName = static::getNameFromBlockMap($child->fullType());
             if($blockName !== null) $name = $blockName;
         }
+        elseif(is_string($child))
+        {
+            /* Encode html special chars. */
+            $child = htmlspecialchars(strval($child), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false);
+        }
 
         $result = $name === 'children' ? $this->onAddChild($child) : $this->onAddBlock($child, $name);
         if($result === false) return;
@@ -240,23 +264,50 @@ class node implements \JsonSerializable
     {
         if($this->removed) return '';
 
-        return renderToHtml(...$this->prebuild());
+        $data = new stdClass();
+        $data->html = renderToHtml(...$this->buildAll());
+
+        context()->handleRenderNode($data, $this);
+
+        return $data->html;
     }
 
-    public function prebuild(): array
+    public function renderInner(): string
     {
-        if($this->removed) return array();
+        if($this->removed) return '';
 
-        if($this->buildList === null)
+        return renderToHtml(...$this->children());
+    }
+
+    public function prebuild(bool $force = false): stdClass
+    {
+        if($this->buildData === null || $force)
         {
-            $list = $this->build();
-            $list = is_array($list) ? $list : array($list);
-            $list = array_merge($this->buildBefore(), $list, $this->buildAfter());
+            $context = context();
+            $context->handleBeforeBuildNode($this);
 
-            $this->buildList = $list;
+            $build = $this->build();
+            if(is_null($build) || is_bool($build)) $build = array();
+            elseif(!is_array($build))              $build = array($build);
+
+            $cache = new stdClass();
+            $cache->before   = prebuild($this->buildBefore());
+            $cache->children = prebuild($this->children());
+            $cache->build    = prebuild($build);
+            $cache->after    = prebuild($this->buildAfter());
+
+            $context->handleBuildNode($cache, $this);
+
+            $this->buildData = $cache;
         }
 
-        return $this->buildList;
+        return $this->buildData;
+    }
+
+    public function buildAll(): array
+    {
+        $buildData = $this->prebuild();
+        return array_merge($buildData->before, $buildData->build, $buildData->after);
     }
 
     public function children(): array
@@ -300,6 +351,14 @@ class node implements \JsonSerializable
         $json->blocks = array();
         foreach($this->blocks as $key => $block)
         {
+            foreach($block as $index => $child)
+            {
+                if($child instanceof wg || (is_object($child) && method_exists($child, 'toJSON')))
+                {
+                    $block[$index] = $child->toJSON();
+                }
+            }
+
             if($key === 'children')
             {
                 $json->$key = $block;
@@ -532,10 +591,20 @@ function renderToHtml(mixed ...$items): string
             continue;
         }
         if(!is_string($item)) $item = strval($item);
-        $html .= htmlspecialchars(strval($item), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false);
+        $html .= strval($item);
     }
 
     return $html;
+}
+
+function prebuild(array $items)
+{
+    foreach($items as $item)
+    {
+        if(!($item instanceof node)) continue;
+        $item->prebuild();
+    }
+    return $items;
 }
 
 /**

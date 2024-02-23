@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'json.func.php';
 require_once __DIR__ . DS . 'node.class.php';
 require_once __DIR__ . DS . 'directive.class.php';
 require_once __DIR__ . DS . 'zin.func.php';
@@ -433,6 +434,22 @@ class js implements \JsonSerializable, iDirective
         if(empty($js) && (is_array($data) || is_object($data))) return '[]';
 
         return static::decodeRaw($js);
+    }
+
+    /**
+     * Create js var definition.
+     * 创建 JS 变量定义。
+     *
+     * @access public
+     * @param string $name  Variable name.
+     * @param mixed  $value Variable value.
+     * @return string
+     */
+    public static function defineVar(string $name, mixed $value): string
+    {
+        $js = new js();
+        $js->var($name, $value);
+        return $js->toJS();
     }
 
     /**

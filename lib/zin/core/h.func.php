@@ -36,4 +36,3 @@ function template(mixed ...$args): h   {return h::template(...$args);}
 function formHidden(mixed ...$args): h {return h::formHidden(...$args);}
 function fieldset(mixed ...$args): h   {return h::fieldset(...$args);}
 function legend(mixed ...$args): h     {return h::legend(...$args);}
-function rawContent(): text            {return h::comment('{{RAW_CONTENT}}');}

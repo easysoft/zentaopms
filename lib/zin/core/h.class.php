@@ -158,7 +158,7 @@ class h extends node
      * @param  string $comment
      * @return node
      */
-    public static function comment(string $comment): text
+    public static function comment(string $comment): htm
     {
         return html("<!-- $comment -->");
     }
@@ -213,7 +213,7 @@ class h extends node
         list($code, $args) = h::splitRawCode($args);
         if(empty($code)) return null;
         $code = ';(function(){' . implode("\n", $code) . '}());';
-        return static::create('script', html($code, $args));
+        return static::create('script', html($code), ...$args);
     }
 
     public static function jsVar(string $name, mixed $value, mixed ...$args): ?h

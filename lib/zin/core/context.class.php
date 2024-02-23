@@ -17,6 +17,9 @@ use function zin\utils\flat;
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'deep.func.php';
+require_once __DIR__ . DS . 'helper.func.php';
+require_once __DIR__ . DS . 'render.class.php';
+require_once __DIR__ . DS . 'js.class.php';
 
 class context extends \zin\utils\dataset
 {
@@ -31,6 +34,16 @@ class context extends \zin\utils\dataset
     public bool $rendered = false;
 
     public bool $rawContentCalled = false;
+
+    public array $beforeBuildNodeCallbacks = array();
+
+    public array $onBuildNodeCallbacks = array();
+
+    public array $onRenderNodeCallbacks = array();
+
+    public array $onRenderCallbacks = array();
+
+    public ?render $renderer = null;
 
     public function __construct(string $name)
     {
@@ -204,36 +217,145 @@ class context extends \zin\utils\dataset
         return $js;
     }
 
-    public static array $stack = array();
-
-    public static function js(/* string ...$code */)
+    public function getDebugData() : ?array
     {
-        $context = static::current();
-        call_user_func_array(array($context, 'addJS'), \zin\utils\flat(func_get_args()));
+        global $app, $config;
+        $zinDebug = null;
+        if(isDebug() && (!isAjaxRequest() || isAjaxRequest('zin')))
+        {
+            $zinDebug = data('zinDebug');
+            if(is_array($zinDebug))
+            {
+                $zinDebug['basePath'] = $app->getBasePath();
+                if(isset($app->zinErrors)) $zinDebug['errors'] = $app->zinErrors;
+            }
+        }
+        return $zinDebug;
     }
 
-    public static function jsCall(/* string ...$code */)
+    public function getRawContent(): string
     {
-        $context = static::current();
-        call_user_func_array(array($context, 'addJSCall'), func_get_args());
+        $rawContent = ob_get_contents();
+        if(!is_string($rawContent)) $rawContent = '';
+        ob_end_clean();
+        return $rawContent;
+    }
+
+    public function render(node $node, null|object|string|array $selectors = null, string $renderType = 'html', null|string|array $dataCommands = null, bool $renderInner = false): string|array|object
+    {
+        $renderer = new render($node, $selectors, $renderType, $dataCommands, $renderInner);
+        $this->rendered = true;
+        $this->renderer = $renderer;
+
+        $rawContent = $this->getRawContent();
+        $zinDebug   = $this->getDebugData();
+        $result     = $renderer->render();
+        $js         = $this->getJS();
+        $css        = $this->getCSS();
+
+        if(is_object($result)) // renderType = json
+        {
+            if($zinDebug && isset($result->zinDebug)) $result->zinDebug = $zinDebug;
+            $result = json_encode($result, JSON_PARTIAL_OUTPUT_ON_ERROR);
+        }
+        elseif(is_array($result)) // renderType = list
+        {
+            foreach($result as $item)
+            {
+                if($item->name === 'zinDebug' && $zinDebug)
+                {
+                    $item->data = $zinDebug;
+                    continue;
+                }
+                if(!isset($item->type) || $item->type !== 'html') continue;
+
+                $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
+                $item->data    = str_replace(array_keys($replace), array_values($replace), $item->data);
+            }
+
+            $result = json_encode($result, JSON_PARTIAL_OUTPUT_ON_ERROR);
+        }
+        else // renderType = html
+        {
+            if($zinDebug) $js .= js::defineVar('window.zinDebug', $zinDebug);
+
+            $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
+            $result  = str_replace(array_keys($replace), array_values($replace), $result);
+        }
+
+        $data = new stdClass();
+        $data->type   = $renderType;
+        $data->output = $result;
+
+        foreach($this->onRenderCallbacks as $callback)
+        {
+            call_user_func($callback, $data);
+        }
+
+        return $data->output;
+    }
+
+    public function handleBeforeBuildNode($node)
+    {
+        foreach($this->beforeBuildNodeCallbacks as $callback)
+        {
+            call_user_func($callback, $node);
+        }
+    }
+
+    public function handleBuildNode(stdClass &$data, node $node)
+    {
+        foreach($this->onBuildNodeCallbacks as $callback)
+        {
+            call_user_func($callback, $data, $node);
+        }
+
+        if($this->renderer) $this->renderer->handleBuildNode($data, $node);
+    }
+
+    public function handleRenderNode(stdClass &$data, node $node)
+    {
+        foreach($this->onRenderNodeCallbacks as $callback)
+        {
+            call_user_func($callback, $data, $node);
+        }
+    }
+
+    public function onBuildNode(callable $callback)
+    {
+        $this->onBuildNodeCallbacks[] = $callback;
+    }
+
+    public function onRenderNode(callable $callback)
+    {
+        $this->onRenderNodeCallbacks[] = $callback;
+    }
+
+    public static array $stack = array();
+
+    public static function js(string ...$code)
+    {
+        static::current()->addJS(...flat($code));
+    }
+
+    public static function jsCall(string ...$code)
+    {
+        static::current()->addJSCall(...flat($code));
     }
 
     public static function jsVar($name, $value)
     {
-        $context = static::current();
-        $context->addJSVar($name, $value);
+        static::current()->addJSVar($name, $value);
     }
 
-    public static function css(/* string ...$code */)
+    public static function css(string ...$code)
     {
-        $context = static::current();
-        call_user_func_array(array($context, 'addCSS'), \zin\utils\flat(func_get_args()));
+        static::current()->addCSS(...flat($code));
     }
 
-    public static function import(/* string ...$files */)
+    public static function import(string ...$files)
     {
-        $context = static::current();
-        call_user_func_array(array($context, 'addImports'), func_get_args());
+        static::current()->addImports(...$files);
     }
 
     /**
@@ -262,7 +384,10 @@ class context extends \zin\utils\dataset
      */
     public static function create(string $name): context
     {
-        if(isset(static::$stack[$name])) return static::$stack[$name];
+        if(isset(static::$stack[$name]))
+        {
+            triggerError("Context name \"$name\" already exists.");
+        }
         $context = new context($name);
         static::$stack[$name] = $context;
         return $context;

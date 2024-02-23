@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace zin;
 
 require_once __DIR__ . DS . 'zin.class.php';
-require_once __DIR__ . DS . 'hook.class.php';
 
 /**
  * 将视图页面声明的所有内容通过一个部件进行渲染，并输出 HTML。
@@ -55,14 +54,7 @@ function render(string $wgName = '', array $options = array())
     /* 如果不是渲染一个完整页面，则使用 fragment 进行渲染。 If not render in full page, then render all items in a fragment. */
     if(!$isFullPage && $wgName !== 'fragment') $wg = fragment($wg);
 
-    /* 设置全局根部件。 Set global root widget. */
-    hook::$globalRoot = $wg;
-
-    /* 添加 hooks 内容。Add hooks contents. */
-    $wg->add(includeHooks());
-
     /* 渲染并输出 HTML。 Render and display html. */
-    // $wg->display($options);
-
-    $context->rendered = true;
+    $html = $context->render($wg, zget($options, 'selectors', null), zget($options, 'type', 'html'), zget($options, 'data', null));
+    echo $html;
 }
