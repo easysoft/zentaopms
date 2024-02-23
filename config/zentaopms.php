@@ -542,9 +542,10 @@ $config->objectTables['metric']           = TABLE_METRIC;
 $config->objectTables['aiapp']            = TABLE_AI_MINIPROGRAM;
 $config->objectTables['miniprogram']      = TABLE_AI_MINIPROGRAM;
 
-$config->newFeatures      = array('promptExec', 'aiChat', 'aiMiniProgramStencil');
-$config->disabledFeatures = '';
-$config->closedFeatures   = '';
+$config->newFeaturesForOpen = array('promptExec', 'aiChat', 'aiMiniProgramStencil');
+$config->newFeatures        = array('promptDesign', 'promptExec', 'aiChat', 'aiMiniProgramConfig', 'aiMiniProgramStencil');
+$config->disabledFeatures   = '';
+$config->closedFeatures     = '';
 
 $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
 
