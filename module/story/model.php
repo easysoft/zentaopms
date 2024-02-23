@@ -4778,7 +4778,12 @@ class storyModel extends model
                 if($canClose) $menu .= "<div class='dividing-line'></div>";
 
                 $menu .= $this->buildMenu('story', 'close', $params . "&from=&storyType=$story->type", $story, $type, '', '', 'iframe', true);
-                if(!empty($execution) and $execution->hasProduct and !($storyType == 'requirement' and $story->type == 'story')) $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
+                if(!empty($execution) and $execution->hasProduct and !($storyType == 'requirement' and $story->type == 'story'))
+                {
+                    $moduleName = $execution->multiple ? 'projectstory' : 'execution';
+                    $objectID   = $execution->multiple ? $this->session->project : $execution->id;
+                    $menu .= $this->buildMenu($moduleName, 'unlinkStory', "projectID={$objectID}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
+                }
             }
 
             if($this->app->tab == 'product' and $storyType == 'story')

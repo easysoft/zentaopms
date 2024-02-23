@@ -193,7 +193,7 @@
         {
             if($canLinkStory && common::hasPriv('execution', 'linkStory'))
             {
-                echo html::a($this->createLink('execution', 'linkStory', "execution=$execution->id"), "<i class='icon icon-link'></i> " . $lang->execution->linkStory, '', "class='btn btn-info'");
+                echo html::a(inlink('linkStory', "execution={$execution->id}&browseType=&param=0&recTotal=0&recPerPage=50&pageID=1&extra=&storyType={$storyType}"), "<i class='icon icon-link'></i> " . $lang->execution->linkStory, '', "class='btn btn-info'");
             }
             else
             {
