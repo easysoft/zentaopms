@@ -90,7 +90,7 @@ class aiapp extends control
             if(!empty($miniProgram->model))
             {
                 /* Check if model required by miniProgram is available, fallback to default (first enabled) model if not. */
-                $model = $this->getLanguageModel($miniProgram->model);
+                $model = $this->ai->getLanguageModel($miniProgram->model);
                 if(empty($model) || !$model->enabled)
                 {
                     $defaultModel = $this->getDefaultLanguageModel();
