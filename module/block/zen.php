@@ -1229,6 +1229,7 @@ class blockZen extends block
         if(isset($params['productID'])) $productID = (int)$params['productID'];
 
         $productID = isset($products[$productID]) ? $productID : key($products);
+        $productID = !empty($productID) ? $productID : 0;
 
         $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->project, $productID, 0, 'task', false);
         $this->view->products  = $products;
@@ -1240,11 +1241,12 @@ class blockZen extends block
      * Print waterfall issue block.
      *
      * @access protected
+     * @param  object    $block
      * @return void
      */
-    protected function printWaterfallIssueBlock(): void
+    protected function printWaterfallIssueBlock(object $block): void
     {
-        $this->printIssueBlock();
+        $this->printIssueBlock($block);
     }
 
     /**
@@ -1252,11 +1254,12 @@ class blockZen extends block
      * Print waterfall risk block.
      *
      * @access protected
+     * @param  object    $block
      * @return void
      */
-    protected function printWaterfallRiskBlock(): void
+    protected function printWaterfallRiskBlock(object $block): void
     {
-        $this->printRiskBlock();
+        $this->printRiskBlock($block);
     }
 
     /**
@@ -1402,11 +1405,12 @@ class blockZen extends block
      * Print scrum issue block.
      *
      * @access protected
+     * @param  object    $block
      * @return void
      */
-    protected function printScrumIssueBlock(): void
+    protected function printScrumIssueBlock(object $block): void
     {
-        $this->printIssueBlock();
+        $this->printIssueBlock($block);
     }
 
     /**
@@ -1414,11 +1418,12 @@ class blockZen extends block
      * Print scrum risk block.
      *
      * @access protected
+     * @param  object    $block
      * @return void
      */
-    protected function printScrumRiskBlock(): void
+    protected function printScrumRiskBlock(object $block): void
     {
-        $this->printRiskBlock();
+        $this->printRiskBlock($block);
     }
 
     /**
@@ -1972,9 +1977,9 @@ class blockZen extends block
         {
             foreach($executions as $execution)
             {
-                $execution->totalEstimate  = $execution->hours->totalEstimate;
-                $execution->totalLeft      = $execution->hours->totalLeft;
-                $execution->progress       = $execution->hours->progress;
+                $execution->totalEstimate  = !empty($execution->hours) ? $execution->hours->totalEstimate : 0;
+                $execution->totalLeft      = !empty($execution->hours) ? $execution->hours->totalLeft : 0;
+                $execution->progress       = !empty($execution->hours) ? $execution->hours->progress : 0;
                 $execution->burns          = !empty($execution->burns) ? join(',', $execution->burns) : array();
             }
         }

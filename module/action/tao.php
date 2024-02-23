@@ -219,16 +219,15 @@ class actionTao extends actionModel
      */
     protected function getGenerateRelated(string $objectType, int $objectID): array
     {
-        $product = array(0);
-        $project = $execution = 0;
-        $result  = $this->dao->select('product,project,execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+        $product = $project = $execution = 0;
+        $result  = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
         if($result)
         {
-            $product   = array($result->product);
-            $project   = $result->project;
-            $execution = $result->execution;
+            $product   = zget($result, 'product', 0);
+            $project   = zget($result, 'project', 0);
+            $execution = zget($result, 'execution', 0);
         }
-        return array($product, $project, $execution);
+        return array(array($product), $project, $execution);
     }
 
     /**
