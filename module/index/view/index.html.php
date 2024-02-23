@@ -88,6 +88,7 @@ js::set('showFeatures',  $showFeatures);
 <div id='apps'>
 </div>
 <div id='appsBar'>
+  <?php common::printVisionSwitcher();?>
   <ul id='bars' class='nav nav-default'></ul>
   <div id='poweredBy'>
     <div id="globalBarLogo">
