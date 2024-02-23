@@ -487,10 +487,11 @@ class screenModel extends model
         if(empty($component)) $component = new stdclass();
         $noDataLang = $type == 'chart' ? 'noChartData' : 'noPivotData';
 
-        $component->option = new stdclass();
-        $component->option->title = new stdclass();
-        $component->option->title->text = sprintf($this->lang->screen->$noDataLang, $chart->name);
-        $component->option->isDeleted   = true;
+        if(!isset($component->option)) $component->option = new stdclass();
+        if(!isset($component->option->title)) $component->option->title = new stdclass();
+
+        $component->option->title->notFoundText = sprintf($this->lang->screen->$noDataLang, $chart->name);
+        $component->option->isDeleted = true;
 
         return $component;
     }
@@ -506,7 +507,7 @@ class screenModel extends model
     public function unsetComponentDraftMarker($component)
     {
         if(isset($component->option->isDeleted)) unset($component->option->isDeleted);
-        if(isset($component->option->title))     unset($component->option->title);
+        if(isset($component->option->title))     unset($component->option->title->notFoundText);
         return $component;
     }
 
@@ -2537,8 +2538,10 @@ class screenModel extends model
         {
             if(!isset($component->option->title))
             {
-                $component->option->title       = new stdclass();
-                $component->option->title->text = $chartName;
+                $component->option->title = new stdclass();
+                $component->option->title->text      = $chartName;
+                $component->option->title->show      = false;
+                $component->option->title->titleShow = true;
             }
         }
 
