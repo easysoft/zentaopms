@@ -9625,6 +9625,6 @@ class upgradeModel extends model
         $overtimes = $this->dao->select('id')->from(TABLE_OVERTIME)->count();
         if($overtimes) return;
 
-        $this->setting->setItem('system.common.closedFeatures', $closedFeatures . ',otherOA');
+        $this->setting->setItem('system.common.closedFeatures', trim($closedFeatures . ',otherOA', ','));
     }
 }
