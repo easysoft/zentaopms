@@ -511,6 +511,7 @@
                 }
             }
         };
+        $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         return $.ajax(ajaxOptions);
     }
 
