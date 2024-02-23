@@ -9600,4 +9600,31 @@ class upgradeModel extends model
         $this->dao->insert(TABLE_AI_MODEL)->data($model)->exec();
         if(!dao::isError()) $this->setting->deleteItems('owner=system&module=ai');
     }
+
+    /**
+     * 检查办公应用是否有数据，没有就隐藏。
+     * Check if the office app has data, if not, hide it.
+     *
+     * @access public
+     * @return void
+     */
+    public function hideOA()
+    {
+        $closedFeatures = $this->loadModel('setting')->getItem('owner=system&module=common&section=&key=closedFeatures');
+        if(strpos($closedFeatures, 'otherOA') !== false) return;
+
+        $attends = $this->dao->select('id')->from(TABLE_ATTEND)->count();
+        if($attends) return;
+
+        $leaves = $this->dao->select('id')->from(TABLE_LEAVE)->count();
+        if($leaves) return;
+
+        $lieus = $this->dao->select('id')->from(TABLE_LIEU)->count();
+        if($lieus) return;
+
+        $overtimes = $this->dao->select('id')->from(TABLE_OVERTIME)->count();
+        if($overtimes) return;
+
+        $this->setting->setItem('system.common.closedFeatures', $closedFeatures . ',otherOA');
+    }
 }
