@@ -60,3 +60,6 @@
 
   --zt-header-bg: var(--color-primary-800);
 }
+
+#header{--zt-header-bg: var(--color-primary-500); --zt-header-color: #fff; --zt-navbar-active-color: #fff; background: #114f8e linear-gradient(-90deg,#036 0,#114f8e 100%); border-top-color: #036; border-bottom-color: #edf3fe;}
+#header .btn.secondary {background-color: rgba(var(--color-canvas-rgb), .2); color: #036;}
