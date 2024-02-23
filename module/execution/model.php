@@ -3541,7 +3541,15 @@ class executionModel extends model
         if($execution->type == 'project')
         {
             $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->fetchAll('id');
-            $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
+            $executionStories = $this->dao->select('t1.project,t1.story')
+                ->from(TABLE_PROJECTSTORY)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story=t2.id')
+                ->where('t1.story')->eq($storyID)
+                ->andWhere('t1.project')->in(array_keys($executions))
+                ->andWhere('t2.multiple')->eq('1')
+                ->andWhere('t3.type')->eq('story')
+                ->fetchAll();
             if(!empty($executionStories)) return print(js::alert($this->lang->execution->notAllowedUnlinkStory));
         }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();

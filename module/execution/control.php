@@ -3704,7 +3704,9 @@ class execution extends control
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        return print(js::locate($this->createLink('execution', 'story', "executionID=$executionID")));
+        $story     = $storyID ? $this->loadModel('story')->getByID($storyID) : '';
+        $storyType = isset($story->type) ? $story->type : 'story';
+        return print(js::locate(inlink('story', "execution={$executionID}&storyType={$storyType}")));
     }
 
     /**
