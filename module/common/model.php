@@ -1802,6 +1802,7 @@ EOF;
             }
             if($icon == 'toStory')   $title  = $lang->bug->toStory;
             if($icon == 'createBug') $title  = $lang->testtask->createBug;
+            if($module == 'projectstory' && $method == 'unlinkStory' && isset($object->type) && $object->type == 'requirement') $title = str_replace($lang->SRCommon, $lang->URCommon, $lang->execution->unlinkStory);
         }
 
         /* set the class. */
