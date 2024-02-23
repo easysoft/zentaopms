@@ -54,3 +54,6 @@
   --color-link-hover-rgb: var(--color-primary-600-rgb);
   --color-link-visited-rgb: var(--color-primary-800-rgb);
 }
+
+#header{--zt-header-bg: var(--color-primary-500); --zt-header-color: #fff; --zt-navbar-active-color: #fff; background: #f7889c linear-gradient(-90deg,#a050d7 0,#f7889c 100%); border-top-color: #a050d7; border-bottom-color: #ffebf8;}
+#header .btn.secondary {background-color: rgba(var(--color-canvas-rgb), .2); color: #a050d7;}
