@@ -1,9 +1,4 @@
 :root
 {
-  /* --zt-menu-bg: var(--color-primary-500); */
-  /* --zt-menu-hover-bg: var(--color-primary-600); */
-  /* --zt-header-bg: var(--color-canvas); */
-  /* --zt-header-color: var(--color-fore); */
-  /* --zt-header-border: var(--color-border-light); */
-  /* --zt-navbar-active-color: var(--color-primary-500); */
+  --zt-menu-bg: var(--color-primary-500);
 }

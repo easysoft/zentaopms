@@ -12,7 +12,3 @@
   --tw-ring-color: rgba(var(--color-canvas-rgb),var(--tw-ring-opacity));
   color: var(--color-canvas);
 }
-#versionMenu-toggle {
-  background-color: var(--color-primary-400);
-  color: var(--color-canvas)
-}
