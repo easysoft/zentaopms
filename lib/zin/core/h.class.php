@@ -166,7 +166,7 @@ class h extends node
     public static function importJs(string $src, mixed ...$args): h
     {
         $script = static::create('script', ...$args);
-        $script->setDefaultProps('src', 'src');
+        $script->setDefaultProps('src', $src);
         return $script;
     }
 
