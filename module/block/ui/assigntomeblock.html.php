@@ -101,12 +101,6 @@ foreach($hasViewPriv as $type => $bool)
         $config->block->review->dtable->fieldList['status']['statusMap'] = $statusList;
     }
     if($type == 'requirement') $config->block->story->dtable->fieldList['title']['title'] = str_replace($lang->story->story, $lang->story->requirement, $lang->story->title);
-    if($type == 'risk')
-    {
-        $config->block->risk->dtable->fieldList['status']['statusMap']   = $lang->risk->statusList;
-        $config->block->risk->dtable->fieldList['pri']['statusMap']      = $lang->risk->priList;
-        $config->block->risk->dtable->fieldList['strategy']['statusMap'] = $lang->risk->strategyList;
-    }
 
     $selected  = key($hasViewPriv);
     $contents[] = div
