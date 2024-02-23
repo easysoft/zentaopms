@@ -1214,8 +1214,8 @@ class commonModel extends model
         $currentModule = $app->rawModule;
         $currentMethod = $app->rawMethod;
 
-        if($isTutorialMode && isset($_SESSION['wizardModule'])) $currentModule = $_SESSION['wizardModule'];
-        if($isTutorialMode && isset($_SESSION['wizardMethod'])) $currentMethod = $_SESSION['wizardMethod'];
+        if($isTutorialMode && defined('WIZARD_MODULE')) $currentModule = WIZARD_MODULE;
+        if($isTutorialMode && defined('WIZARD_METHOD')) $currentMethod = WIZARD_METHOD;
 
         /* Print all main menus. */
         $menu = customModel::getMainMenu();
