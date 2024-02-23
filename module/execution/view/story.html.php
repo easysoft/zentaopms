@@ -386,7 +386,7 @@
           if($canLinkStory && common::hasPriv('execution', 'batchUnlinkStory'))
           {
               $actionLink = $this->createLink('execution', 'batchUnlinkStory', "executionID=$execution->id");
-              echo html::commonButton($lang->execution->unlinkStoryAB, "data-form-action='$actionLink'");
+              echo html::commonButton($storyType == 'requirement' ? str_replace($lang->SRCommon, $lang->URCommon, $lang->execution->unlinkStoryAB) : $lang->execution->unlinkStoryAB, "data-form-action='$actionLink'");
           }
           ?>
         </div>
