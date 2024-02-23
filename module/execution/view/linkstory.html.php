@@ -94,7 +94,7 @@
           ?>
         </td>
         <?php if($project->hasProduct):?>
-        <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=&param=0&storyType=story&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID={$project->id}"), $products[$story->product]->name);?></td>
+        <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=&param=0&storyType=story&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID={$project->id}"), $products[$story->product]->name, '', "data-app=product");?></td>
         <?php endif;?>
         <td class='c-module text-left' title='<?php echo zget($modules, $story->module, '')?>'><?php echo zget($modules, $story->module, '')?></td>
         <td class='text-ellipsis <?php if((empty($project->hasProduct) && $project->model != 'scrum') || $storyType != 'story') echo 'hide';?>' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
