@@ -110,6 +110,7 @@ $lang->testtask->resultFile        = "结果文件";
 $lang->testtask->caseCount         = '用例数';
 $lang->testtask->passCount         = '成功';
 $lang->testtask->failCount         = '失败';
+$lang->testtask->skipChangedCases  = '待确认的用例将会被忽略。';
 $lang->testtask->summary           = '有%s个用例，失败%s个，耗时%s。';
 $lang->testtask->stepSummary       = '共有%s个步骤，%s个通过，%s个失败。';
 $lang->testtask->unitSummary       = '本页共 <strong>%s</strong> 个单元测试结果。';

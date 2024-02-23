@@ -10,6 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if(count($cases) != count($caseIdList))
+{
+    h::js("zui.Modal.alert('{$lang->testtask->skipChangedCases}');");
+}
+
 unset($lang->testcase->resultList['n/a']);
 
 $caseItems = array();

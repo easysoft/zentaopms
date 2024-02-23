@@ -918,7 +918,7 @@ class testtask extends control
         /* Get cases to run according to different situations. */
         $caseIdList = array_unique($this->post->caseIdList);
         $cases      = $this->testtaskZen->prepareCasesForBatchRun($productID, $orderBy, $from, $taskID, $confirm, $caseIdList);
-        if(empty($cases)) return $this->send(array('result' => 'fail', 'load' => $url));
+        if(empty($cases)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->skipChangedCases, 'locate' => $url)));
 
         /* 获取用例所属模块的键值对。*/
         /* Get key-value pairs of case module. */
@@ -930,6 +930,7 @@ class testtask extends control
         $this->view->steps       = $this->loadModel('testcase')->getStepGroupByIdList($caseIdList);
         $this->view->modules     = $modules;
         $this->view->cases       = $cases;
+        $this->view->caseIdList  = $caseIdList;
         $this->view->productID   = $productID;
         $this->view->from        = $from;
         $this->display();

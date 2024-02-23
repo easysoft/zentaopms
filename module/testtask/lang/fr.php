@@ -109,6 +109,7 @@ $lang->testtask->resultFile        = "Fichier Résultats";
 $lang->testtask->caseCount         = 'Compteur CasTest';
 $lang->testtask->passCount         = 'Pass';
 $lang->testtask->failCount         = 'Fail';
+$lang->testtask->skipChangedCases  = 'The testcases that are not to be confirmed are ignored.';
 $lang->testtask->summary           = '%s CasTest, %s échecs, %s heures.';
 $lang->testtask->stepSummary       = 'Total %s steps, %s passes, %s failures.';
 $lang->testtask->unitSummary       = 'Total %s unit test results.';
