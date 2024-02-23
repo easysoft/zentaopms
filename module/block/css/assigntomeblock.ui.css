@@ -2,3 +2,9 @@
 .assigntome-block .nav-tabs>.nav-item>a:before {background: none;}
 .assigntome-block .nav-tabs>.nav-item>a.active {color: var(--color-primary-500);}
 .assigntome-block .nav-tabs>.nav-item>a.active:after {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px; bottom: -0.5rem}
+.assigntome-block .assigntome-risk .status-high, .assigntome-block .assigntome-risk .status-active {color: #FB2B2B;}
+.assigntome-block .assigntome-risk .status-middle {color: #FF9F46;}
+.assigntome-block .assigntome-risk .status-low {color: #313C52;}
+.assigntome-block .assigntome-risk .status-hangup {color: #B89664:}
+.assigntome-block .assigntome-risk .status-canceled {color: #838A9D:}
+.assigntome-block .assigntome-risk .status-closed {color: #9EA3B0:}

@@ -103,15 +103,15 @@ foreach($hasViewPriv as $type => $bool)
     if($type == 'requirement') $config->block->story->dtable->fieldList['title']['title'] = str_replace($lang->story->story, $lang->story->requirement, $lang->story->title);
     if($type == 'risk')
     {
-        $config->block->risk->dtable->fieldList['status']['statusMap'] = $lang->risk->statusList;
-        $config->block->risk->dtable->fieldList['pri']['map']          = $lang->risk->priList;
-        $config->block->risk->dtable->fieldList['strategy']['map']     = $lang->risk->strategyList;
+        $config->block->risk->dtable->fieldList['status']['statusMap']   = $lang->risk->statusList;
+        $config->block->risk->dtable->fieldList['pri']['statusMap']      = $lang->risk->priList;
+        $config->block->risk->dtable->fieldList['strategy']['statusMap'] = $lang->risk->strategyList;
     }
 
     $selected  = key($hasViewPriv);
     $contents[] = div
     (
-        setClass('tab-pane ' . ($type == $selected ? 'active' : '')),
+        setClass("assigntome-{$type} tab-pane " . ($type == $selected ? 'active' : '')),
         setID("assigntome{$type}Tab{$blockNavCode}"),
         dtable
         (
