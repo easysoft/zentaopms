@@ -55,7 +55,7 @@ class modalTrigger extends wg
         if(empty($triggerBlock)) $triggerBlock = h::a($this->children());
         elseif(is_array($triggerBlock)) $triggerBlock = $triggerBlock[0];
 
-        if($triggerBlock instanceof wg)
+        if($triggerBlock instanceof node)
         {
             $triggerBlock->setProp($this->getRestProps());
 

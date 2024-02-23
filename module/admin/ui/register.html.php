@@ -15,7 +15,7 @@ $canBind = hasPriv('admin', 'bind');
 $account = zget($config->global, 'community', '');
 if($account == 'na') $account = '';
 
-$buildCaptchRow = function($type) : wg
+$buildCaptchRow = function($type) : node
 {
     global $lang;
     return formRow

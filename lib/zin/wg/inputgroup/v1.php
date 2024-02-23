@@ -14,11 +14,11 @@ class inputGroup extends wg
         'seg?:bool'
     );
 
-    public function onBuildItem($item): ?wg
+    public function onBuildItem($item): ?node
     {
         if(is_string($item)) $item = new item(set(array('control' => 'addon', 'text' => $item)));
         elseif(is_array($item)) $item = new item(set($item));
-        elseif($item instanceof wg || is_null($item)) return $item;
+        elseif($item instanceof node || is_null($item)) return $item;
 
         list($control, $type) = $item->prop(array('control', 'type'));
         if(is_array($control))

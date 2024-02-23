@@ -36,7 +36,7 @@ foreach($products as $productItem)
  * @param object $product   产品。
  * @param bool   $longBlock 是否为长块。
  */
-$buildProgressBars = function(object $product, bool $longBlock): wg
+$buildProgressBars = function(object $product, bool $longBlock): node
 {
     global $lang;
     $progressMax = max($product->addYesterday, $product->addToday, $product->resolvedYesterday, $product->resolvedToday, $product->closedYesterday, $product->closedToday);
@@ -92,7 +92,7 @@ $buildProgressBars = function(object $product, bool $longBlock): wg
  * @param object $product   产品。
  * @param bool   $longBlock 是否为长块。
  */
-$buildTesttasks = function(object $product, bool $longBlock): wg|null
+$buildTesttasks = function(object $product, bool $longBlock): node|null
 {
     global $lang;
     $waitTesttasks = array();

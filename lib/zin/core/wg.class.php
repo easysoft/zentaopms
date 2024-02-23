@@ -85,7 +85,7 @@ class wg extends node
  *
  * @return wg
  */
-function wg(mixed ...$args): wg
+function wg(mixed ...$args): node
 {
     return new wg(...$args);
 }

@@ -20,7 +20,7 @@ class page extends pageBase
         'footer'   => array()
     );
 
-    protected function buildHeader(): array|wg
+    protected function buildHeader(): array|node
     {
         if($this->hasBlock('header')) return $this->block('header');
 

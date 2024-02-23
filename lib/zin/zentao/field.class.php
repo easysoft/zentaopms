@@ -252,7 +252,7 @@ class field extends setting
 
         if(is_object($props)) $props = get_object_vars($props);
         if(is_string($control) && is_array($props)) $control = array('control' => $control) + $props;
-        elseif($control instanceof wg)              $control = wg($control);
+        elseif($control instanceof node)            $control = node($control);
 
         return $this->setVal('control', $control);
     }

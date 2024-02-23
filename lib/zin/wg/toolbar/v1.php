@@ -14,13 +14,13 @@ class toolbar extends wg
         'btnProps?: array'
     );
 
-    public function onBuildItem($item): wg|null
+    public function onBuildItem($item): node|null
     {
         if($item === null) return null;
 
         if(!($item instanceof item))
         {
-            if($item instanceof wg) return $item;
+            if($item instanceof node) return $item;
             $item = item(set($item));
         }
 

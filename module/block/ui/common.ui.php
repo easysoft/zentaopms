@@ -67,7 +67,7 @@ function buildParamsRows(object $block = null, ?array $params = null, string $mo
  * @param string $module
  * @return array
  */
-function buildBlockModuleNav(?array $modules = null, ?string $module = null): wg
+function buildBlockModuleNav(?array $modules = null, ?string $module = null): node
 {
     if(empty($modules)) $modules = data('modules');
     if(empty($module)) $module   = data('module');

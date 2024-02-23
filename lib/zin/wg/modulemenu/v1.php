@@ -110,7 +110,7 @@ class moduleMenu extends wg
         return '';
     }
 
-    private function buildActions(): wg|null
+    private function buildActions(): node|null
     {
         $settingLink = $this->prop('settingLink');
         $settingText = $this->prop('settingText');
@@ -149,7 +149,7 @@ class moduleMenu extends wg
         );
     }
 
-    private function buildCloseBtn(): wg|null
+    private function buildCloseBtn(): node|null
     {
         $closeLink  = $this->prop('closeLink');
         $tab        = $this->prop('app');

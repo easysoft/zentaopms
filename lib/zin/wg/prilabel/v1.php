@@ -9,7 +9,7 @@ class priLabel extends wg
         'text?: string|array'   // 优先级显示的文本或优先级文本映射对象。
     );
 
-    protected function onAddChild(mixed $child): mixed
+    protected function onAddChild(mixed $child)
     {
         if(is_string($child) || is_int($child))
         {

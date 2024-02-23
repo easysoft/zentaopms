@@ -51,7 +51,7 @@ class editor extends wg
         $this->setDefaultProps(array('uploadUrl' => createLink('file', 'ajaxUpload', 'uid=' . $this->prop('uid'))));
     }
 
-    protected function buildTemplate(string $editor, string $type): wg
+    protected function buildTemplate(string $editor, string $type): node
     {
         global $app, $lang;
         $app->loadLang('user');

@@ -58,11 +58,11 @@ class select extends wg
      /**
      * Handle building inner options.
      *
-     * @param  wg|array  wg
+     * @param  node|array $item
      * @access public
-     * @return wg
+     * @return node
      */
-    public function onBuildItem(wg|array $item): wg
+    public function onBuildItem(node|array $item): node
     {
         if($item instanceof item) $item = $item->props->toJSON();
 
@@ -97,7 +97,7 @@ class select extends wg
      * The lifecycle method of building.
      *
      * @access protected
-     * @return wg
+     * @return mixed
      */
     protected function build()
     {

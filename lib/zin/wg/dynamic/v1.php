@@ -32,7 +32,7 @@ class dynamic extends wg
         return '';
     }
 
-    protected function dynamicItem(object $dynamic, array $users): wg
+    protected function dynamicItem(object $dynamic, array $users): node
     {
         global $config;
         $dynamicLabel = zget($dynamic, 'dynamicLabel', '');

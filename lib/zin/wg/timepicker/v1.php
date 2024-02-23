@@ -52,9 +52,9 @@ class timePicker extends wg
      * Build the widget.
      *
      * @access protected
-     * @return wg
+     * @return mixed
      */
-    protected function build(): zui
+    protected function build()
     {
         list($props, $restProps) = $this->props->split(array_keys(static::definedPropsList()));
         if(isset($props['id']))

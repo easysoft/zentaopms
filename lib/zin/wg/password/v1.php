@@ -18,7 +18,7 @@ class password extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function build(): array|wg
+    protected function build(): array|node
     {
         global $app, $config, $lang;
         $app->loadLang('user');

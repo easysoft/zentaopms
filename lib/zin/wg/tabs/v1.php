@@ -25,7 +25,7 @@ class tabs extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function buildTitleView(tabPane $tabPane): wg
+    protected function buildTitleView(tabPane $tabPane): node
     {
         $key    = $tabPane->prop('key');
         $title  = $tabPane->prop('title');
@@ -51,10 +51,10 @@ class tabs extends wg
     }
 
     /**
-     * @param wg[] $titleViews
-     * @return wg
+     * @param array $titleViews
+     * @return node
      */
-    protected function buildTabHeader(array $titleViews): wg
+    protected function buildTabHeader(array $titleViews): node
     {
         $isVertical  = $this->prop('direction') === 'v';
         $collapse    = $this->prop('collapse');
@@ -70,10 +70,10 @@ class tabs extends wg
     }
 
     /**
-     * @param wg[] $titleViews
-     * @return wg
+     * @param array $titleViews
+     * @return node
      */
-    protected function buildTabBody(array $contentViews): wg
+    protected function buildTabBody(array $contentViews): node
     {
         return div
         (
@@ -96,7 +96,7 @@ class tabs extends wg
         }
     }
 
-    private function buildCollapseBtn(): ?wg
+    private function buildCollapseBtn(): ?node
     {
         $collapse = $this->prop('collapse');
         if(!$collapse) return null;

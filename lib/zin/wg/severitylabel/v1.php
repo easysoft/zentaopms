@@ -10,7 +10,7 @@ class severityLabel extends wg
         'isIcon?: bool=false'    // 是否显示为图标。
     );
 
-    protected function onAddChild(mixed $child): mixed
+    protected function onAddChild(mixed $child)
     {
         if(is_string($child) || is_int($child))
         {

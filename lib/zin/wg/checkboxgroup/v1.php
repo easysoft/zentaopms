@@ -24,7 +24,7 @@ class checkboxGroup extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    private function buildTitle(): wg
+    private function buildTitle(): node
     {
         $title = array_merge(self::$checkboxProps, $this->prop('title'));
         return checkbox(set($title), setClass('checkbox-title'));

@@ -40,9 +40,9 @@ class main extends wg
      * Define the properties.
      *
      * @access protected
-     * @return wg
+     * @return ?node
      */
-    protected function buildMenu(): wg|null
+    protected function buildMenu(): ?node
     {
         $menuBlocks = $this->block('menu');
         if(empty($menuBlocks)) return null;
@@ -55,7 +55,7 @@ class main extends wg
 
         $toolbar = null;
         if(!empty($toolbarList)) $toolbar = $toolbarList[0];
-        if($toolbar instanceof wg && !$toolbar->hasProp('id')) $toolbar->setProp('id', 'actionBar');
+        if($toolbar instanceof node && !$toolbar->hasProp('id')) $toolbar->setProp('id', 'actionBar');
 
         return div
         (
@@ -70,7 +70,7 @@ class main extends wg
      * Build main content.
      *
      * @access protected
-     * @return wg
+     * @return node
      */
     protected function buildContent()
     {
@@ -82,7 +82,7 @@ class main extends wg
         {
             foreach($sidebars as $sidebar)
             {
-                if(!($sidebar instanceof wg)) continue;
+                if(!($sidebar instanceof node)) continue;
                 $sidebar->setDefaultProps(array('parent' => '#mainContainer'));
                 if($sidebar->prop('side') === 'left') $leftSides[] = $sidebar;
                 else $rightSides[] = $sidebar;
@@ -132,7 +132,7 @@ class main extends wg
      * Override the build method.
      *
      * @access protected
-     * @return wg
+     * @return mixed
      */
     protected function build()
     {

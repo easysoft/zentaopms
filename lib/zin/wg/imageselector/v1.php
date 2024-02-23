@@ -15,7 +15,7 @@ class imageSelector extends fileSelector
      * Build the widget.
      *
      * @access protected
-     * @return wg
+     * @return node
      */
     protected function build()
     {

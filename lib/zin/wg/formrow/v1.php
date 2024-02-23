@@ -12,11 +12,11 @@ class formRow extends wg
         'hidden?: boolean'
     );
 
-    public function onBuildItem($item): wg
+    public function onBuildItem($item): node
     {
         if(!($item instanceof item))
         {
-            if($item instanceof wg) return $item;
+            if($item instanceof node) return $item;
             $item = item(set($item));
         }
 

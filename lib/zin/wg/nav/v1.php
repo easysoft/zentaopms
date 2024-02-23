@@ -13,7 +13,7 @@ class nav extends wg
         'items?:array'       // 使用数组指定导航中的每一项。
     );
 
-    public function onBuildItem($item): wg
+    public function onBuildItem($item): node
     {
         return new actionItem
         (

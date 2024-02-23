@@ -14,7 +14,7 @@ class riskLabel extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function onAddChild(mixed $child): mixed
+    protected function onAddChild(mixed $child)
     {
         if(is_string($child) && !$this->props->has('text'))
         {

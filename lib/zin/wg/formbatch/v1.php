@@ -58,11 +58,11 @@ class formBatch extends formBase
     /**
      * Handle building inner items.
      *
-     * @param  wg|array  wg
+     * @param  node|array  $item
      * @access public
-     * @return wg
+     * @return mixed
      */
-    public function onBuildItem(wg|array $item): wg
+    public function onBuildItem(node|array $item): node
     {
         if($item instanceof formBatchItem) return $item;
 
@@ -87,9 +87,9 @@ class formBatch extends formBase
      * Build batch form content.
      *
      * @access protected
-     * @return array|wg
+     * @return array|node
      */
-    protected function buildContent(): array|wg
+    protected function buildContent(): array|node
     {
         $items         = array_merge($this->block('children'), $this->prop('items', array()));
         $templateItems = array();

@@ -41,7 +41,7 @@ class searchForm extends wg
      * Build widget.
      *
      * @access protected
-     * @return wg
+     * @return mixed
      */
     protected function build()
     {

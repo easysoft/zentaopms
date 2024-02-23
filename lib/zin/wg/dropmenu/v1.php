@@ -56,7 +56,7 @@ class dropmenu extends wg
      * Override the build method.
      *
      * @access protected
-     * @return wg
+     * @return array
      */
     protected function build(): array
     {

@@ -54,7 +54,7 @@ class stepsEditor extends wg
      * Build the widget.
      *
      * @access protected
-     * @return wg
+     * @return mixed
      */
     protected function build()
     {

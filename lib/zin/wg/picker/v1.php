@@ -146,9 +146,9 @@ class picker extends wg
      * Build the widget.
      *
      * @access protected
-     * @return wg
+     * @return node
      */
-    protected function build(): zui
+    protected function build()
     {
         return zui::picker
         (

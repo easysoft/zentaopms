@@ -66,7 +66,7 @@ class formGroup extends wg
         }
     }
 
-    protected function buildLabel(): wg|directive
+    protected function buildLabel(): node|directive
     {
         list($name, $label, $labelFor, $labelClass, $labelProps, $labelHint, $labelHintClass, $labelHintProps, $labelHintIcon, $labelActions, $labelActionsClass, $labelActionsProps, $checkbox, $required, $strong) = $this->prop(array('name', 'label', 'labelFor', 'labelClass', 'labelProps', 'labelHint', 'labelHintClass', 'labelHintProps', 'labelHintIcon', 'labelActions', 'labelActionsClass', 'labelActionsProps', 'checkbox', 'required', 'strong'));
 
@@ -90,11 +90,11 @@ class formGroup extends wg
         );
     }
 
-    protected function buildControl(): wg|null
+    protected function buildControl(): node|null
     {
         $control = $this->prop('control');
 
-        if($control instanceof wg)                              return $control;
+        if($control instanceof node)                              return $control;
         if(!is_string($control) && is_callable($control, true)) return $control($this->props->toJSON());
 
         if(is_string($control))                             $control = array('control' => $control);
@@ -123,7 +123,7 @@ class formGroup extends wg
         return $controlView;
     }
 
-    protected function buildTip(): ?wg
+    protected function buildTip(): ?node
     {
         list($tip, $tipClass, $tipProps) = $this->prop(array('tip', 'tipClass', 'tipProps'));
         if(empty($tip)) return null;

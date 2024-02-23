@@ -27,7 +27,7 @@ class avatar extends wg
     private $finalClass     = array('avatar');
     private $finalStyle;
 
-    protected function onAddChild($child)
+    protected function onAddChild(mixed $child)
     {
         if(is_string($child) && !$this->props->has('text'))
         {

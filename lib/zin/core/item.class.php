@@ -17,9 +17,9 @@ require_once __DIR__ . DS . 'zin.func.php';
 
 class item extends wg
 {
-    public function build(): array|wg|directive
+    public function build(): array|node|directive
     {
-        if($this->parent instanceof wg && method_exists($this->parent, 'onBuildItem'))
+        if($this->parent instanceof node && method_exists($this->parent, 'onBuildItem'))
         {
             return call_user_func(array($this->parent, 'onBuildItem'), $this);
         }

@@ -137,7 +137,7 @@ class form extends formBase
         return null;
     }
 
-    public function onBuildItem(item $item): wg
+    public function onBuildItem(item $item): node
     {
         return new formGroup(inherit($item));
     }
@@ -215,7 +215,7 @@ class form extends formBase
         foreach($items as $key => $item)
         {
             if(empty($item)) continue;
-            if($item instanceof wg && !($item instanceof item))
+            if($item instanceof node && !($item instanceof item))
             {
                 $list[] = $item;
                 continue;
@@ -257,7 +257,7 @@ class form extends formBase
         return array_merge($list, $foldableList);
     }
 
-    protected function buildActions(): wg|null
+    protected function buildActions(): node|null
     {
         $sticky  = $this->prop('stickyActions');
         $actions = parent::buildActions();

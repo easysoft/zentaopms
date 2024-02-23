@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The widget function file of zin module of ZenTaoPMS.
+ * The node function file of zin module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -65,7 +65,7 @@ function after(mixed ...$args): directive
 }
 
 /**
- * Create widget contents inherited from the given widget.
+ * Create node contents inherited from the given node.
  *
  * @param  node|array $item
  * @return array
@@ -77,7 +77,7 @@ function inherit(node|array $item): array
 }
 
 /**
- * Divorce widget from parent.
+ * Divorce node from parent.
  *
  * @param  node|array $item
  * @return array
@@ -96,13 +96,13 @@ function divorce(node|array $item): node|array
 }
 
 /**
- * Group widgets by type.
+ * Group nodes by type.
  *
- * @param  wg|array $items
+ * @param  node|array $items
  * @param  string   $types
  * @return array
  */
-function groupWgInList(wg|array $items, string|array $types): array
+function groupWgInList(node|array $items, string|array $types): array
 {
     if(is_string($types)) $types = explode(',', $types);
     $typesMap = array();
@@ -112,7 +112,7 @@ function groupWgInList(wg|array $items, string|array $types): array
 
     foreach($items as $item)
     {
-        if(!($item instanceof wg)) continue;
+        if(!($item instanceof node)) continue;
 
         $type = $item->type();
         if(isset($typesMap[$type])) $typesMap[$type][] = $item;

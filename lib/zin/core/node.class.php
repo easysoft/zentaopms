@@ -353,7 +353,7 @@ class node implements \JsonSerializable
         {
             foreach($block as $index => $child)
             {
-                if($child instanceof wg || (is_object($child) && method_exists($child, 'toJSON')))
+                if($child instanceof node || (is_object($child) && method_exists($child, 'toJSON')))
                 {
                     $block[$index] = $child->toJSON();
                 }

@@ -20,7 +20,7 @@ class textarea extends wg
         'rows' => 10
     );
 
-    protected function onAddChild(array|string|wg|directive $child)
+    protected function onAddChild(mixed $child)
     {
         if(is_string($child) && !$this->props->has('value'))
         {

@@ -36,7 +36,7 @@ function getWgVer($name)
     return isset($config->zin->verMap[$name]) ? $config->zin->verMap[$name] : $config->zin->wgVer;
 }
 
-function createWg($name, $args, ?string $fallbackWgName = null): wg
+function createWg($name, $args, ?string $fallbackWgName = null): node
 {
     $name  = strtolower($name);
     $wgVer = getWgVer($name);

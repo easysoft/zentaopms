@@ -26,7 +26,7 @@ class fileList extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    private function fileList(): wg
+    private function fileList(): node
     {
         global $app;
 

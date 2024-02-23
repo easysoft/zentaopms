@@ -31,7 +31,7 @@ class panel extends wg
         'footer'         => array('map' => 'nav')
     );
 
-    protected function buildHeadingActions(): ?wg
+    protected function buildHeadingActions(): ?node
     {
         $actionsBlock        = $this->block('headingActions');
         $actions             = $this->prop('headingActions');
@@ -47,14 +47,14 @@ class panel extends wg
         );
     }
 
-    protected function buildContainer(): array|wg
+    protected function buildContainer(): array|node
     {
         $content = func_get_args();
         if(!$this->prop('container')) return $content;
         return div(setClass('container'), $content);
     }
 
-    protected function buildHeading(): ?wg
+    protected function buildHeading(): ?node
     {
         list($title, $size) = $this->prop(array('title', 'size'));
         $headingBlock       = $this->block('heading');
@@ -82,7 +82,7 @@ class panel extends wg
         );
     }
 
-    protected function buildBody(): wg
+    protected function buildBody(): node
     {
         list($bodyClass, $bodyProps) = $this->prop(array('bodyClass', 'bodyProps'));
         return div
@@ -93,7 +93,7 @@ class panel extends wg
         );
     }
 
-    protected function buildFooter(): ?wg
+    protected function buildFooter(): ?node
     {
         list($footerActions) = $this->prop(array('footerActions'));
         $footerBlock         = $this->block('footer');

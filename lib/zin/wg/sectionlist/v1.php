@@ -6,7 +6,7 @@ require_once dirname(__DIR__) . DS . 'section' . DS . 'v1.php';
 
 class sectionList extends wg
 {
-    public function onBuildItem(wg $item): wg
+    public function onBuildItem(node $item): node
     {
         return new section(inherit($item));
     }

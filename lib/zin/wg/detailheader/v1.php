@@ -15,7 +15,7 @@ class detailHeader extends wg
         'suffix' => array()
     );
 
-    private function backBtn(): wg
+    private function backBtn(): node
     {
         global $lang;
         return backBtn

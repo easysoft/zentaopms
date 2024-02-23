@@ -15,7 +15,7 @@ class tableChart extends wg
         'overflow?:bool'
     );
 
-    private function genTableHeaders(): wg
+    private function genTableHeaders(): node
     {
         global $lang;
 

@@ -17,7 +17,7 @@ class floatToolbar extends wg
         'suffix' => array()
     );
 
-    private function buildDivider(wg|array|null $wg1, wg|array|null $wg2): wg|null
+    private function buildDivider(node|array|null $wg1, node|array|null $wg2): node|null
     {
         if(empty($wg1) || empty($wg2)) return null;
 
@@ -55,7 +55,7 @@ class floatToolbar extends wg
         return zget($this->object, $matches[1]);
     }
 
-    private function mergeBtns(array|null $btns, array|wg|null $block): array|wg|null
+    private function mergeBtns(array|null $btns, array|node|null $block): array|node|null
     {
         if(empty($btns) && empty($block)) return null;
         if(empty($block)) return $btns;

@@ -16,7 +16,7 @@ class section extends wg
         'actions'  => array()
     );
 
-    protected function onAddChild($child)
+    protected function onAddChild(mixed $child)
     {
         if(is_string($child) && !$this->props->has('content'))
         {
@@ -25,7 +25,7 @@ class section extends wg
         }
     }
 
-    private function title(): wg
+    private function title(): node
     {
         $title       = $this->prop('title');
         $actionsView = $this->block('actions');
@@ -60,7 +60,7 @@ class section extends wg
         );
     }
 
-    private function content(string|wg $content): wg
+    private function content(string|node $content): node
     {
         $useHtml = $this->prop('useHtml') === true && is_string($content);
 
@@ -72,7 +72,7 @@ class section extends wg
 
     }
 
-    private function buildContent(): wg|array|null
+    private function buildContent(): node|array|null
     {
         $content = $this->prop('content');
         if(!isset($content)) return null;

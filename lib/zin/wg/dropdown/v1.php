@@ -45,7 +45,7 @@ class dropdown extends wg
         if(empty($triggerBlock))        $triggerBlock = h::a($this->children());
         elseif(is_array($triggerBlock)) $triggerBlock = $triggerBlock[0];
         $triggerID = '';
-        if($triggerBlock instanceof wg)
+        if($triggerBlock instanceof node)
         {
             if($triggerBlock instanceof btn) $triggerBlock->setDefaultProps(array('caret' => true));
             $triggerBlock->setProp($this->getRestProps());
@@ -88,7 +88,7 @@ class dropdown extends wg
                     {
                         foreach($items as $item)
                         {
-                            if((is_array($item) and isset($item['icon'])) || (($item instanceof wg) && $item->hasProp('icon')))
+                            if((is_array($item) and isset($item['icon'])) || (($item instanceof node) && $item->hasProp('icon')))
                             {
                                 $hasIcons = true;
                                 break;
@@ -99,7 +99,7 @@ class dropdown extends wg
                     {
                         foreach($itemsList as $item)
                         {
-                            if(($item instanceof wg) && $item->hasProp('icon'))
+                            if(($item instanceof node) && $item->hasProp('icon'))
                             {
                                 $hasIcons = true;
                                 break;

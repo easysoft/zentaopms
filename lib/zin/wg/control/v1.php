@@ -77,9 +77,9 @@ class control extends wg
     /**
      * Build control with static content.
      *
-     * @return wg
+     * @return node
      */
-    protected function buildStatic(): wg
+    protected function buildStatic(): node
     {
         $name = $this->prop('name');
         return div
@@ -91,12 +91,12 @@ class control extends wg
         );
     }
 
-    protected function buildTextarea(): wg
+    protected function buildTextarea(): node
     {
         return new textarea(set($this->props->skip('control')));
     }
 
-    protected function buildInputControl(): wg
+    protected function buildInputControl(): node
     {
         $controlProps = array();
         $allProps     = $this->props->skip(array('control'));
@@ -117,7 +117,7 @@ class control extends wg
         );
     }
 
-    protected function buildInputGroup(): wg
+    protected function buildInputGroup(): node
     {
         return new inputGroup
         (
@@ -125,7 +125,7 @@ class control extends wg
         );
     }
 
-    protected function buildCheckbox(): wg
+    protected function buildCheckbox(): node
     {
         if($this->hasProp('items')) return $this->buildCheckList();
         return new checkList
@@ -134,7 +134,7 @@ class control extends wg
         );
     }
 
-    protected function buildCheckList(): wg
+    protected function buildCheckList(): node
     {
         return new checkList
         (
@@ -142,7 +142,7 @@ class control extends wg
         );
     }
 
-    protected function buildRadioList(): wg
+    protected function buildRadioList(): node
     {
         return new radioList
         (
@@ -150,7 +150,7 @@ class control extends wg
         );
     }
 
-    protected function buildCheckListInline(): wg
+    protected function buildCheckListInline(): node
     {
         return new checkList
         (
@@ -159,7 +159,7 @@ class control extends wg
         );
     }
 
-    protected function buildRadioListInline(): wg
+    protected function buildRadioListInline(): node
     {
         return new radioList
         (
@@ -168,52 +168,52 @@ class control extends wg
         );
     }
 
-    protected function buildDate(): wg
+    protected function buildDate(): node
     {
         return new datePicker(set($this->props->skip('control')));
     }
 
-    protected function buildTime(): wg
+    protected function buildTime(): node
     {
         return new timePicker(set($this->props->skip('control')));
     }
 
-    protected function buildPri(): wg
+    protected function buildPri(): node
     {
         return new priPicker(set($this->props->skip('control')));
     }
 
-    protected function buildSeverity(): wg
+    protected function buildSeverity(): node
     {
         return new severityPicker(set($this->props->skip('control')));
     }
 
-    protected function buildColor(): wg
+    protected function buildColor(): node
     {
         return new colorPicker(set($this->props->skip('control')));
     }
 
-    protected function buildColorInput(): wg
+    protected function buildColorInput(): node
     {
         return new colorInput(set($this->props->skip('control')));
     }
 
-    protected function buildFile(): wg
+    protected function buildFile(): node
     {
         return new fileSelector(set($this->props->skip('control')));
     }
 
-    protected function buildFiles(): wg
+    protected function buildFiles(): node
     {
         return $this->buildFile();
     }
 
-    protected function buildHidden(): wg
+    protected function buildHidden(): node
     {
         return new input(set::type('hidden'), set($this->props->skip('control')));
     }
 
-    protected function buildDropdown(): wg
+    protected function buildDropdown(): node
     {
         return new dropdown($this->prop('text'), set($this->props->skip('control,text,name,widget')));
     }

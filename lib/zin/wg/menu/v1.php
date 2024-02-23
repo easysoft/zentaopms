@@ -10,7 +10,7 @@ class menu extends wg
         'items?:array'
     );
 
-    public function onBuildItem($item): wg
+    public function onBuildItem($item): node
     {
         if(!($item instanceof item)) $item = item(set($item));
         return actionItem

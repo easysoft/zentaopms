@@ -43,7 +43,7 @@ class formBase extends wg
         $this->setDefaultProps(array('actions' => $actions));
     }
 
-    protected function buildActions(): wg|null
+    protected function buildActions(): node|null
     {
         if($this->hasBlock('actions')) return $this->block('actions');
 
@@ -71,7 +71,7 @@ class formBase extends wg
         );
     }
 
-    protected function buildContent(): array|wg|null
+    protected function buildContent(): array|node|null
     {
         return null;
     }

@@ -23,7 +23,7 @@ class overviewBlock extends wg
         'groups?: array'
     );
 
-    protected function buildCard($card): wg
+    protected function buildCard($card): node
     {
         $class = array('text-2xl text-center leading-relaxed num', isset($card->class) ? $card->class : '');
 
@@ -48,7 +48,7 @@ class overviewBlock extends wg
         );
     }
 
-    protected function buildCards($group): wg
+    protected function buildCards($group): node
     {
         $cards = array();
         foreach($group->cards as $index => $card)
@@ -65,7 +65,7 @@ class overviewBlock extends wg
         );
     }
 
-    protected function buildBarChart($group): wg
+    protected function buildBarChart($group): node
     {
         $bars   = array();
         $labels = array();

@@ -21,10 +21,10 @@ require_once __DIR__ . DS . 'selector.func.php';
 class hook
 {
     /** The global root widget. */
-    public static wg $globalRoot;
+    public static node $globalRoot;
 
     /** The root widget. */
-    public wg $root;
+    public node $root;
 
     /** The selectors object. */
     public object|null $selectors;
@@ -32,18 +32,18 @@ class hook
     /**
      * The items list.
      *
-     * @var wg[]
+     * @var node[]
      */
     public array $items;
 
     /**
      * Construct the select object.
      *
-     * @param  array|string|wg     $selector
-     * @param  wg|null             $root
+     * @param  array|string|node     $selector
+     * @param  node|null             $root
      * @access public
      */
-    public function __construct(array|string|wg $selector = '', wg|null $root = null)
+    public function __construct(array|string|node $selector = '', node|null $root = null)
     {
         $this->root      = empty($root) ? static::$globalRoot : $root;
         $this->selectors = null;
@@ -69,9 +69,9 @@ class hook
      *
      * @param  int $index
      * @access public
-     * @return wg|null
+     * @return node|null
      */
-    public function get(int $index = 0): wg | null
+    public function get(int $index = 0): node | null
     {
         return isset($this->items[$index]) ? $this->items[$index] : null;
     }
@@ -180,11 +180,11 @@ class hook
     /**
      * Append contents to parent.
      *
-     * @param  wg|array|string ...$item
+     * @param  node|array|string ...$item
      * @access public
      * @return hook
      */
-    public function append(/* wg|array|string ...$item */): hook
+    public function append(/* node|array|string ...$item */): hook
     {
         $newItems = func_get_args();
         foreach($this->items as $item) $item->add($newItems);
@@ -194,7 +194,7 @@ class hook
     /**
      * Set widget classNames.
      *
-     * @param  wg|array|string ...$item
+     * @param  node|array|string ...$item
      * @access public
      * @return hook
      */
@@ -263,7 +263,7 @@ class hook
  * Create a hook object.
  *
  * @param  array|string|object $selectors
- * @param  wg|null             $root
+ * @param  node|null             $root
  */
 function hook($selectors = '', $root = null): hook
 {

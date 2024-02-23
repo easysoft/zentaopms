@@ -131,7 +131,7 @@ class formPanel extends panel
      * @access protected
      * @return ?wg
      */
-    protected function buildHeadingActions(): ?wg
+    protected function buildHeadingActions(): ?node
     {
         $headingActions = $this->prop('headingActions');
         if(!$headingActions) $headingActions = array();
@@ -165,9 +165,9 @@ class formPanel extends panel
      * Build form widget by mode.
      *
      * @access protected
-     * @return wg
+     * @return node
      */
-    protected function buildForm(): wg
+    protected function buildForm(): node
     {
         $customFields = $this->prop('customFields', array());
         $listFields   = zget($customFields, 'list', array());
@@ -230,9 +230,9 @@ class formPanel extends panel
      * Build panel body.
      *
      * @access protected
-     * @return wg
+     * @return node
      */
-    protected function buildBody(): wg
+    protected function buildBody(): node
     {
         return div
         (

@@ -50,9 +50,9 @@ class statisticBlock extends blockPanel
      * @param array  $items
      * @param string $active
      * @param bool   $longBlock
-     * @return wg|null
+     * @return node|null
      */
-    protected function buildNav($id, $items, $active, $longBlock): wg|null
+    protected function buildNav($id, $items, $active, $longBlock): node|null
     {
         if(empty($items)) return null;
 
@@ -122,9 +122,9 @@ class statisticBlock extends blockPanel
      * @param array  $items
      * @param string $active
      * @param bool   $longBlock
-     * @return wg|null
+     * @return node|null
      */
-    protected function buildPanes($id, $items, $active, $longBlock): wg|null
+    protected function buildPanes($id, $items, $active, $longBlock): node|null
     {
         if(empty($items))
         {
@@ -168,9 +168,9 @@ class statisticBlock extends blockPanel
     /**
      * Build panel body.
      *
-     * @return wg
+     * @return node
      */
-    protected function buildBody(): wg
+    protected function buildBody(): node
     {
         list($id, $title, $block, $longBlock, $items, $active, $bodyProps) = $this->prop(array('id', 'title', 'block', 'longBlock', 'items', 'active', 'bodyProps'));
         if($longBlock === null) $longBlock = data('longBlock');

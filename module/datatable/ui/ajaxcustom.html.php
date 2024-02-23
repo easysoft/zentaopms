@@ -16,7 +16,7 @@ global $lang, $app;
 $app->loadLang('datatable');
 jsVar('ajaxSaveUrl', $this->createLink('datatable', 'ajaxSaveFields', "module={$module}&method={$method}&extra={$extra}"));
 
-function buildItem(array $item): wg
+function buildItem(array $item): node
 {
     global $lang;
 

@@ -97,7 +97,7 @@ class mainNavbar extends nav
      * Override the build method.
      *
      * @access protected
-     * @return wg
+     * @return mixed
      */
     protected function build()
     {

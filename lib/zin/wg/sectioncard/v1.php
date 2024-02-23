@@ -8,7 +8,7 @@ class sectionCard extends wg
         'title' => array('map' => 'entityLabel')
     );
 
-    private function title(string $text): wg
+    private function title(string $text): node
     {
         return div
         (
@@ -17,7 +17,7 @@ class sectionCard extends wg
         );
     }
 
-    public function onBuildItem(item $item): wg
+    public function onBuildItem(item $item): node
     {
         return div
         (

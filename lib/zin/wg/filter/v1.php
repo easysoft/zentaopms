@@ -74,7 +74,7 @@ class filter extends wg
         );
     }
 
-    protected function buildControl(string $type): wg|array
+    protected function buildControl(string $type): node|array
     {
         if($type == 'select')   return $this->buildPicker();
         if($type == 'date')     return $this->buildDatePicker();

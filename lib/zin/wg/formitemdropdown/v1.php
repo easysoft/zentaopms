@@ -19,7 +19,7 @@ class formItemDropdown extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    private function buildFormPanel(): wg
+    private function buildFormPanel(): node
     {
         global $lang;
 
