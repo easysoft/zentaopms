@@ -458,8 +458,6 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = 'All Data';
 $lang->exportTypeList['selected'] = 'Selected Data';
 
-$lang->switchVision = 'Switch Interface';
-
 $lang->visionList = array();
 $lang->visionList['rnd']  = 'Full Feature Interface';
 $lang->visionList['lite'] = 'Operation Management Interface';

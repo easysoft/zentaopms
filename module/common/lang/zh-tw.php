@@ -86,6 +86,7 @@ $lang->comment         = '備註';
 $lang->history         = '歷史記錄';
 $lang->attach          = '附件';
 $lang->reverse         = '切換順序';
+$lang->switchTo        = '切換工作介面';
 $lang->switchDisplay   = '切換顯示';
 $lang->expand          = '展開全部';
 $lang->collapse        = '收起';
@@ -339,8 +340,6 @@ $lang->exportFileTypeList['html'] = 'html';
 
 $lang->exportTypeList['all']      = '全部記錄';
 $lang->exportTypeList['selected'] = '選中記錄';
-
-$lang->switchVision = '切換工作介面';
 
 $lang->visionList = array();
 $lang->visionList['rnd']  = '研發綜合介面';

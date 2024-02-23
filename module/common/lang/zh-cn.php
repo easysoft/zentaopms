@@ -109,7 +109,7 @@ $lang->history         = '历史记录';
 $lang->attach          = '附件';
 $lang->reverse         = '切换顺序';
 $lang->switchDisplay   = '切换显示';
-$lang->switchTo        = '切换到';
+$lang->switchTo        = '切换工作界面';
 $lang->expand          = '展开全部';
 $lang->collapse        = '收起';
 $lang->liteMode        = '简洁版';
@@ -458,8 +458,6 @@ $lang->exportFileTypeList['html'] = 'html';
 
 $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
-
-$lang->switchVision = '切换工作界面';
 
 $lang->visionList = array();
 $lang->visionList['rnd']  = '研发综合界面';

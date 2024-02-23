@@ -459,8 +459,6 @@ $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
 
-$lang->switchVision = 'Interface de commutation';
-
 $lang->exportTypeList['all']      = 'Toutes les Données';
 $lang->exportTypeList['selected'] = 'Données sélectionnées';
 

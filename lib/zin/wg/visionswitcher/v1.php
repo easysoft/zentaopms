@@ -63,7 +63,7 @@ class visionSwitcher extends wg
         (
             'type' => 'heading',
             'titleClass' => 'font-normal',
-            'text' => $lang->switchVision
+            'text' => $lang->switchTo
         );
         foreach($userVisions as $vision)
         {
