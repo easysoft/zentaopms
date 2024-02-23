@@ -430,6 +430,7 @@ class js implements \JsonSerializable, iDirective
      */
     public static function value(mixed $data): string
     {
+        if($data instanceof js) return $data->toJS();
         $js = \zin\utils\jsonEncode($data, JSON_UNESCAPED_UNICODE);
         if(empty($js) && (is_array($data) || is_object($data))) return '[]';
 
