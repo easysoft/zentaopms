@@ -1,13 +1,23 @@
 <?php
+/**
+ * The pivot module English file of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     pivot
+ * @version     $Id: vi.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
+ * @link        http://www.zentao.net
+ */
 $lang->pivot->index        = 'Home';
 $lang->pivot->list         = 'Liste';
-$lang->pivot->preview      = 'View pivot';
-$lang->pivot->create       = 'Create pivot';
-$lang->pivot->edit         = 'Edit pivot';
-$lang->pivot->browse       = 'Browse pivot';
-$lang->pivot->delete       = 'Delete pivot';
-$lang->pivot->design       = 'Design pivot';
-$lang->pivot->export       = 'Export pivot';
+$lang->pivot->preview      = 'View pivot table';
+$lang->pivot->create       = 'Create pivot table';
+$lang->pivot->edit         = 'Edit pivot table';
+$lang->pivot->browse       = 'Browse pivot table';
+$lang->pivot->delete       = 'Delete pivot table';
+$lang->pivot->design       = 'Design pivot table';
+$lang->pivot->export       = 'Export pivot table';
 $lang->pivot->query        = 'Query';
 $lang->pivot->browseAction = 'Design in Pivot Table';
 $lang->pivot->designAB     = 'Design';
@@ -62,10 +72,12 @@ $lang->pivot->percent     = '%';
 $lang->pivot->undefined   = 'Undefiniert';
 $lang->pivot->project     = $lang->projectCommon;
 $lang->pivot->PO          = 'PO';
-$lang->pivot->showPivot   = 'Show Pivot';
+$lang->pivot->showPivot   = 'Show Pivot table';
 $lang->pivot->showOrigin  = 'Show Origin Data';
 
 $lang->pivot->showOriginItem = 'Show origin item';
+$lang->pivot->recTotalTip    = '<strong> %s </strong> items in total';
+$lang->pivot->recPerPageTip  = " <strong>%s</strong> per page";
 
 $lang->pivot->showOriginPlaceholder = new stdclass();
 $lang->pivot->showOriginPlaceholder->slice    = 'No need to configure';
@@ -153,7 +165,7 @@ $lang->pivot->testTaskName = 'Testaufgabe-Name';
 $lang->pivot->deadline     = 'Fällig';
 
 $lang->pivot->deviationDesc = 'According to the Closed Execution Deviation Rate = ((Total Cost - Total Estimate) / Total Estimate), the Deviation Rate is n/a when the Total Estimate is 0.';
-$lang->pivot->workloadDesc  = 'Workload = the total left hours of all tasks of the user / selected days * hours per day.  For example: the begin and end date is January 1st to January 7th, and the total work days is 5 days, 8 hours per day. The Work load is all unfinished tasks assigned to this user to be finished in 5 days, 8 hours per day.';
+$lang->pivot->workloadDesc  = 'Workload = the total left hours of all tasks of the user / selected days * hours per day. For example: the begin and end date is January 1st to January 7th, and the total work days is 5 days, 8 hours per day. The Work load is all unfinished tasks assigned to this user to be finished in 5 days, 8 hours per day.';
 
 $lang->pivot->featureBar = array();
 $lang->pivot->featureBar['preview'] = array();
@@ -251,26 +263,26 @@ $lang->pivot->pastDays   = 'Past Days';
 
 $lang->pivot->saveAsDataview = 'Save as Custom Table';
 
-$lang->pivot->confirmDelete = 'Do you want to delete this pivot?';
+$lang->pivot->confirmDelete = 'Do you want to delete this pivot table?';
 $lang->pivot->nameEmpty     = '『Name』should not be blank';
 
-$lang->pivot->noPivotTip      = 'After you save the Settings, you can display the Pivot table';
+$lang->pivot->noPivotTip      = 'After you save the Settings, you can display the pivot table';
 $lang->pivot->noQueryTip      = 'No filter.';
-$lang->pivot->noPivot         = 'No Pivot';
+$lang->pivot->noPivot         = 'No Pivot table';
 $lang->pivot->dataError       = '"%s" is not valid';
-$lang->pivot->noChartSelected = 'Please select one pivot.';
+$lang->pivot->noChartSelected = 'Please select one pivot table.';
 $lang->pivot->beginGtEnd      = 'Begin time should not be >= end time.';
-$lang->pivot->resetSettings   = 'The configuration of the query data has been modified, requiring redesign of the pivot, whether to continue.';
-$lang->pivot->clearSettings   = 'The configuration of the query data has been modified, whether to clear the pivot and save.';
+$lang->pivot->resetSettings   = 'The configuration of the query data has been modified, requiring redesign of the pivot table, whether to continue.';
+$lang->pivot->clearSettings   = 'The configuration of the query data has been modified, whether to clear the pivot table and save.';
 $lang->pivot->draftSave       = 'The pivot table has been published and will be in draft state. Do you want to continue?';
 $lang->pivot->cannotAddQuery  = 'Result filter has been added, query filter cannot be added.';
 $lang->pivot->cannotAddResult = 'Query filter has been added, result filter cannot be added.';
 
 $lang->pivot->confirm = new stdclass();
-$lang->pivot->confirm->design  = 'This pivot is referenced by a published screen. Do you want to continue?';
-$lang->pivot->confirm->publish = 'This pivot is referenced by a published screen and will be displayed as a modified pivot after publication. Do you want to continue?';
-$lang->pivot->confirm->draft   = 'This pivot is referenced by a published screen and will be displayed as prompts on the large screen after being saved as a draft. Do you want to continue?';
-$lang->pivot->confirm->delete  = 'This pivot is referenced by a published screen and will be displayed as prompts on the large screen after deletion. Do you want to continue?';
+$lang->pivot->confirm->design  = 'This pivot table is referenced by a published screen. Do you want to continue?';
+$lang->pivot->confirm->publish = 'This pivot table is referenced by a published screen and will be displayed as a modified pivot table after publication. Do you want to continue?';
+$lang->pivot->confirm->draft   = 'This pivot table is referenced by a published screen and will be displayed as prompts on the large screen after being saved as a draft. Do you want to continue?';
+$lang->pivot->confirm->delete  = 'This pivot table is referenced by a published screen and will be displayed as prompts on the large screen after deletion. Do you want to continue?';
 
 $lang->pivot->orderList = array();
 $lang->pivot->orderList['asc']  = 'ASC';
@@ -310,7 +322,7 @@ $lang->pivot->dateList['year']  = 'YEAR';
 
 $lang->pivot->designStepNav = array();
 $lang->pivot->designStepNav['1'] = 'Query Data';
-$lang->pivot->designStepNav['2'] = 'Design pivot';
+$lang->pivot->designStepNav['2'] = 'Design table';
 $lang->pivot->designStepNav['3'] = 'Set Filter';
 $lang->pivot->designStepNav['4'] = 'Release';
 
