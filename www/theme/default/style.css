@@ -51,11 +51,6 @@ a.showMoreImage:hover {opacity: 1;}
 .create-list>li>a {padding-left: 35px !important;}
 .create-list>li>a>.icon {left: 5px !important;}
 
-#visionSwitcher .dropdown-menu {z-index: 2000;}
-#visionSwitcher .dropdown-toggle>div, #visionSwitcher>div {font-size: 14px; padding: 5px 8px; background: rgba(255,255,255, .3); border-radius: 5px;}
-#visionSwitcher>div {margin: 10px 5px;}
-#visionSwitcher li.switchTo {padding-top: 5px;}
-
 th.c-confirmed, th.c-confirm {text-align: center;}
 .c-icon {width: 20px;}
 .c-count {width: 30px;}
