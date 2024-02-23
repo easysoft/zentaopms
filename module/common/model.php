@@ -578,20 +578,42 @@ class commonModel extends model
             /* The standalone lite version removes the lite interface button */
             if(trim($config->visions, ',') == 'lite') return true;
 
-            if(count($userVisions) < 2)   return print("<div>{$lang->visionList[$currentVision]}</div>");
-            if(count($configVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
+            $icons = array('lite' => 'target', 'rnd' => 'remote', 'or'=> 'or', 'manager' => 'manager', 'ipd' => 'ipd');
 
-            echo "<ul class='dropdown-menu pull-right'>";
-            echo "<li class='text-gray switchTo'>{$lang->switchTo}</li>";
+            $currentIcon = zget($icons, $currentVision, 'target');
+            if(count($userVisions) < 2 || count($configVisions) < 2)
+            {
+                echo "<div id='visionSwitcher'>";
+                echo    "<a id='versionSwitchBtn' class='btn btn-link'>";
+                echo        "<i class='icon icon-$currentIcon'></i>";
+                echo        "<span class='text'>{$lang->visionList[$currentVision]}</span>";
+                echo    '</a>';
+                echo '</div>';
+                return;
+            }
+
+            echo "<div class='dropdown dropup' id='visionSwitcher'>";
+            echo    "<ul id='versionMenu' class='dropdown-menu'>";
+            echo        "<li class='dropdown-header'>{$lang->switchTo}</li>";
             foreach($userVisions as $vision)
             {
-                if(isset($lang->visionList[$vision])) echo ($currentVision == $vision ? '<li class="active">' : '<li>') . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), $lang->visionList[$vision], '', "data-type='ajax'") . '</li>';
-            }
-            echo '</ul>';
+                if(!isset($lang->visionList[$vision])) continue;
 
-            echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
-            echo "<div>{$lang->visionList[$currentVision]}</div>";
-            echo '</a>';
+                $icon   = zget($icons, $vision, 'target');
+                $active = $currentVision == $vision;
+                $text   = "<i class='icon item-icon icon-$icon'></i> " . $lang->visionList[$vision] . ($active ? " <i class='icon icon-check'></i>" : '');
+
+                echo '<li' . ($active ? ' class="active"' : '') . '>';
+                echo html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), $text, '', "data-type='ajax'");
+                echo '</li>';
+            }
+            echo    '</ul>';
+            echo    "<a id='versionSwitchBtn' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>";
+            echo        "<i class='icon icon-$currentIcon'></i>";
+            echo        " <span class='text'>{$lang->visionList[$currentVision]}</span>";
+            echo        " <span class='caret'></span>";
+            echo    '</a>';
+            echo '</div>';
         }
     }
 
