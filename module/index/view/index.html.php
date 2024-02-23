@@ -78,7 +78,7 @@ js::set('showFeatures',  $showFeatures);
     <ul id="flodNav" class="nav">
       <li id='menuToggleMenu'>
         <a class='menu-toggle' data-collapse-text='<?php echo $lang->collapseMenu; ?>' data-unfold-text='<?php echo $lang->unfoldMenu; ?>'>
-          <i class='icon icon-sm icon-menu-collapse'></i>
+          <i class='icon icon-sm icon-menu-arrow-left'></i>
         </a>
       </li>
     </ul>
