@@ -105,7 +105,7 @@ function initOriginQueryBtn()
 
 function queryPivotByPager(obj)
 {
-    var pivotInfo  = JSON.parse(JSON.stringify(pivot));
+    var pivotInfo  = getQueryInfo();
     pivotInfo.page = $(obj).find('a').data('page');
 
     var isOrigin = $('.btn-query-origin').hasClass('hidden');
