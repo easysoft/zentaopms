@@ -1171,7 +1171,7 @@ class productModel extends model
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array();
         if(empty($product) and isset($products[$productID])) $product = array($productID => $products[$productID]);
 
-        $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
+        $this->config->product->search['params']['product']['values'] = array('' => '') + $product + array('all' => $this->lang->product->allProduct);
 
         $this->config->product->search['params']['stage']['values'] = array('' => '') + $this->lang->story->stageList;
 
