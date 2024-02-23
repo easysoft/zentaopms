@@ -182,17 +182,17 @@ if(!empty($projectStats))
                     setClass('panel-body'),
                     div
                     (
-                        setClass('project-infos pl-8'),
+                        setClass('project-infos'),
                         span
                         (
                             set::title($project->budget),
-                            setClass('label gray-pale'),
+                            setClass('label gray-100'),
                             $project->budget
                         ),
                         span
                         (
                             set::title($project->date),
-                            setClass('label gray-pale mr-2'),
+                            setClass('label gray-100 mr-2'),
                             setStyle('color', $status == 'delay' ? 'var(--color-danger-500)' : 'inherit'),
                             $project->date
                         )
