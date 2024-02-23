@@ -66,7 +66,7 @@
     <?php if($type == 'all') echo "<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i> {$lang->testcase->bySearch}</a>";?>
   </div>
 </div>
-<div class="cell show" id="queryBox" data-module='testcase'></div>
+<div class="cell show" id="queryBox" data-module='linkcase'></div>
 <div id='mainContent'>
   <form class='main-table table-case' data-ride='table' method='post' id='linkCaseForm'>
     <table class='table tablesorter'>

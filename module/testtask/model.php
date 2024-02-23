@@ -376,8 +376,8 @@ class testtaskModel extends model
      */
     public function getLinkableCases($productID, $task, $taskID, $type, $param, $pager)
     {
-        if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
-        $query = $this->session->testcaseQuery;
+        if($this->session->linkcaseQuery == false) $this->session->set('linkcaseQuery', ' 1 = 1');
+        $query = $this->session->linkcaseQuery;
         $allProduct = "`product` = 'all'";
         if(strpos($query, '`product` =') === false && $type != 'bysuite') $query .= " AND `product` = $productID";
         if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);
