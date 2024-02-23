@@ -14,7 +14,6 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'core' . DS . 'wg.class.php';
 require_once dirname(__DIR__) . DS . 'core' . DS . 'zin.func.php';
-require_once __DIR__ . DS . 'toggle.func.php';
 require_once __DIR__ . DS . 'toggle.class.php';
 
 class zui extends wg

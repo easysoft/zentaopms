@@ -12,12 +12,24 @@ declare(strict_types=1);
 
 namespace zin;
 
-require_once __DIR__ . DS . 'toggle.func.php';
+require_once dirname(__DIR__) . DS . 'core' . DS . 'set.class.php';
 
 class toggle
 {
-    public static function __callStatic(string $name, array $args): directive
+    public static function __callStatic(string $name, array $args): set
     {
         return toggle($name, empty($args) ? array() : $args[0]);
     }
+}
+
+/**
+ * Add data-toggle=* to widget element and set other data attributes.
+ *
+ * @param  string $name
+ * @param  array  $dataset
+ */
+function toggle(string $name, array $dataset = array()): set
+{
+    $dataset['toggle'] = $name;
+    return setData($dataset);
 }
