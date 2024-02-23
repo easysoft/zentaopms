@@ -167,7 +167,7 @@ class context extends \zin\utils\dataset
 
     public function addJSVar(string $name, mixed $value)
     {
-        // return $this->addToList('jsVar', h::createJsVarCode($name, $value));
+        return $this->addToList('jsVar', js::defineVar($name, $value));
     }
 
     public function addWgWithEvents($wg)
