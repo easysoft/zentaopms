@@ -441,7 +441,7 @@ function setDateField(query)
             var target = $(query).parents('table, #queryFilters, #filterItems,#filterForm').find('[data-index="' + $period.attr('data-index') + '"]').find('#default:visible');
             if(target.length)
             {
-                target.val($(this).attr('href').replace('#', '$'));
+                target.val($(this).attr('href').replace('#', '$')).trigger('change');
                 $period.hide();
             }
             event.stopPropagation();

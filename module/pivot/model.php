@@ -53,7 +53,7 @@ class pivotModel extends model
             foreach($filters as $key => $filter)
             {
                 if(empty($filter['default'])) continue;
-                $filters[$key]['default'] = $this->processDateVar($filter['default']);
+                //$filters[$key]['default'] = $this->processDateVar($filter['default']);
             }
             $pivot->filters = $filters;
         }
