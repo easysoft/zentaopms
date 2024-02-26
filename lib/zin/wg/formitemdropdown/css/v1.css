@@ -1,5 +1,5 @@
 .form-item-dropdown .check-list-inline .checkbox-primary {width: 45%;}
-.form-item-dropdown .form-grid .form-group>.check-list-inline {padding-left: 0; padding-right: 0;}
+.form-item-dropdown .form-horz .form-group>.check-list-inline {padding-left: 0; padding-right: 0;}
 .form-item-dropdown .dropdown-menu .form-row {width: 240px;}
 .form-item-dropdown .dropdown-menu .form-actions {gap: 0;}
 .form-item-dropdown .dropdown-menu .form-actions .btn {min-width: 68px; max-width: 68px; margin-left: 16px;}
