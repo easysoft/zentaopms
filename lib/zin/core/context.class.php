@@ -35,6 +35,8 @@ class context extends \zin\utils\dataset
 
     public bool $rawContentCalled = false;
 
+    public bool $hookContentCalled = false;
+
     public array $beforeBuildNodeCallbacks = array();
 
     public array $onBuildNodeCallbacks = array();
@@ -269,7 +271,7 @@ class context extends \zin\utils\dataset
                 }
                 if(!isset($item->type) || $item->type !== 'html') continue;
 
-                $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
+                $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '<!-- {{HOOK_CONTENT}} -->' => $hookHtml, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
                 $item->data    = str_replace(array_keys($replace), array_values($replace), $item->data);
             }
 
@@ -279,7 +281,7 @@ class context extends \zin\utils\dataset
         {
             if($zinDebug) $js .= js::defineVar('window.zinDebug', $zinDebug);
 
-            $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
+            $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '<!-- {{HOOK_CONTENT}} -->' => $hookHtml, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
             $result  = str_replace(array_keys($replace), array_values($replace), $result);
         }
 

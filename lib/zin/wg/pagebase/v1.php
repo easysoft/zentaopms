@@ -50,20 +50,21 @@ class pageBase extends wg
         $head = $this->buildHead();
         $body = $this->buildBody();
 
-        $context    = context();
-        $jsConfig   = \js::getJSConfigVars();
-        $bodyProps  = $this->prop('bodyProps');
-        $bodyClass  = $this->prop('bodyClass');
-        $metas      = $this->prop('metas');
-        $rawContent = $this->prop('rawContent', !$context->rawContentCalled);
-        $title      = $this->props->get('title', data('title')) . " - $lang->zentaoPMS";
-        $attrs      = $this->getRestProps();
-        $css        = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
-        $js         = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));
-        $imports    = $context->getImports();
-        $webRoot    = $app->getWebRoot();
-        $themeName  = $app->cookie->theme;
-        $zuiPath    = $config->zin->zuiPath;
+        $context     = context();
+        $jsConfig    = \js::getJSConfigVars();
+        $bodyProps   = $this->prop('bodyProps');
+        $bodyClass   = $this->prop('bodyClass');
+        $metas       = $this->prop('metas');
+        $rawContent  = $this->prop('rawContent', !$context->rawContentCalled);
+        $hookContent = $this->prop('hookContent', !$context->hookContentCalled);
+        $title       = $this->props->get('title', data('title')) . " - $lang->zentaoPMS";
+        $attrs       = $this->getRestProps();
+        $css         = array(data('pageCSS'), '/*{{ZIN_PAGE_CSS}}*/');
+        $js          = array('/*{{ZIN_PAGE_JS}}*/', data('pageJS'));
+        $imports     = $context->getImports();
+        $webRoot     = $app->getWebRoot();
+        $themeName   = $app->cookie->theme;
+        $zuiPath     = $config->zin->zuiPath;
 
         $zinMode       = isset($config->zin->mode) ? $config->zin->mode : '';
         $jsConfig->zin = !empty($zinMode) ? $zinMode : true;
@@ -129,6 +130,7 @@ class pageBase extends wg
                 h::css($css, setClass('zin-page-css')),
                 $body,
                 $rawContent ? rawContent() : null,
+                $hookContent ? hookContent() : null,
                 h::js($js, setClass('zin-page-js'))
             )
         );

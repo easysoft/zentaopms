@@ -20,6 +20,7 @@ class modalDialog extends wg
         'footerClass?: string',
         'footerProps?: array',
         'rawContent?: bool',
+        'hookContent?: bool',
         'autoLoad?: string'
     );
 
@@ -89,12 +90,14 @@ class modalDialog extends wg
     protected function buildBody()
     {
         $rawContent = $this->prop('rawContent', !context()->rawContentCalled);
+        $hookContent = $this->prop('hookContent', !context()->hookContentCalled);
         return div
         (
             setClass('modal-body scrollbar-hover', $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
             $this->children(),
-            $rawContent ? rawContent() : null
+            $rawContent ? rawContent() : null,
+            $hookContent ? hookContent() : null
         );
     }
 

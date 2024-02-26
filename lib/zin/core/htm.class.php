@@ -38,3 +38,9 @@ function rawContent(): htm
     context()->rawContentCalled = true;
     return h::comment('{{RAW_CONTENT}}');
 }
+
+function hookContent(): htm
+{
+    context()->hookContentCalled = true;
+    return h::comment('{{HOOK_CONTENT}}');
+}
