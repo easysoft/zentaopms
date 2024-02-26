@@ -256,6 +256,8 @@ $lang->contact->common      = 'Contacts';
 $lang->space->common        = 'Service';
 $lang->store->common        = 'Store';
 $lang->instance->common     = 'Instance';
+$lang->ai->common           = 'AI';
+$lang->aiapp->common        = 'AI';
 
 $lang->programstakeholder->common = 'Stakeholder';
 $lang->featureswitch->common      = 'Features On/Off';
@@ -443,6 +445,7 @@ $lang->searchObjects['program']     = 'Program';
 $lang->searchObjects['project']     = $lang->projectCommon;
 $lang->searchObjects['execution']   = $lang->execution->common;
 $lang->searchObjects['user']        = 'User';
+$lang->searchObjects['aiapp']       = 'AI';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
 /* Code formats for import. */

@@ -477,11 +477,13 @@ $config->group->subset->roadmap = new stdclass();
 $config->group->subset->roadmap->order = 125;
 $config->group->subset->roadmap->nav   = 'product';
 
-/* TODO(@Wenrui LI): resurrect AI-related features later. *//*
 $config->group->subset->ai = new stdclass();
 $config->group->subset->ai->order = 2020;
 $config->group->subset->ai->nav   = 'admin';
-*/
+
+$config->group->subset->aiapp = new stdclass();
+$config->group->subset->aiapp->order = 2030;
+$config->group->subset->aiapp->nav   = 'aiapp';
 
 $config->group->subset->codereview = new stdclass();
 $config->group->subset->codereview->order = 2580;
@@ -3712,7 +3714,6 @@ $config->group->package->exportDatatable->subset = 'dataview';
 $config->group->package->exportDatatable->privs  = array();
 $config->group->package->exportDatatable->privs['dataview-export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('dataview-browse', 'dataview-query'), 'recommend' => array());
 
-/* TODO(@Wenrui LI): resurrect AI-related features later. *//*
 $config->group->package->aiChatting = new stdclass();
 $config->group->package->aiChatting->order  = 2020;
 $config->group->package->aiChatting->subset = 'ai';
@@ -3730,9 +3731,14 @@ $config->group->package->manageLLM = new stdclass();
 $config->group->package->manageLLM->order  = 2060;
 $config->group->package->manageLLM->subset = 'ai';
 $config->group->package->manageLLM->privs  = array();
-$config->group->package->manageLLM->privs['ai-models']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5,  'depend' => array('admin-index'), 'recommend' => array());
-$config->group->package->manageLLM->privs['ai-editModel']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('admin-index', 'ai-models', 'ai-testConnection'), 'recommend' => array());
-$config->group->package->manageLLM->privs['ai-testConnection'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array('admin-index', 'ai-editModel', 'ai-models'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-models']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5,  'depend' => array('admin-index'), 'recommend' => array('ai-modelView'));
+$config->group->package->manageLLM->privs['ai-modelView']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('admin-index', 'ai-models'), 'recommend' => array('ai-modelTestConnection'));
+$config->group->package->manageLLM->privs['ai-modelCreate']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array('admin-index', 'ai-models', 'ai-modelView', 'ai-modelTestConnection'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-modelEdit']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 20, 'depend' => array('admin-index', 'ai-models', 'ai-modelView', 'ai-modelTestConnection'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-modelEnable']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 25, 'depend' => array('admin-index', 'ai-models', 'ai-modelView', 'ai-modelDisable'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-modelDisable']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array('admin-index', 'ai-models', 'ai-modelView', 'ai-modelEnable'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-modelDelete']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 35, 'depend' => array('admin-index', 'ai-models', 'ai-modelView'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-modelTestConnection'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array('admin-index', 'ai-models', 'ai-modelView'), 'recommend' => array());
 
 $config->group->package->browsePrompt = new stdclass();
 $config->group->package->browsePrompt->order  = 2080;
@@ -3767,7 +3773,51 @@ $config->group->package->deletePrompt->order  = 2140;
 $config->group->package->deletePrompt->subset = 'ai';
 $config->group->package->deletePrompt->privs  = array();
 $config->group->package->deletePrompt->privs['ai-promptDelete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('admin-index', 'ai-prompts', 'ai-promptView'), 'recommend' => array());
-*/
+
+$config->group->package->manageMiniProgram = new stdclass();
+$config->group->package->manageMiniProgram->order = 2150;
+$config->group->package->manageMiniProgram->subset = 'ai';
+$config->group->package->manageMiniProgram->privs  = array();
+$config->group->package->manageMiniProgram->privs['ai-createMiniProgram']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-editMiniProgram', 'ai-testMiniProgram'));
+$config->group->package->manageMiniProgram->privs['ai-editMiniProgram']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-publishMiniProgram'));
+$config->group->package->manageMiniProgram->privs['ai-testMiniProgram']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView', 'aiapp-miniProgramChat'), 'recommend' => array('ai-createMiniProgram', 'ai-editMiniProgram', 'ai-publishMiniProgram'));
+$config->group->package->manageMiniProgram->privs['ai-editMiniProgramCategory'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('admin-index', 'ai-miniPrograms'), 'recommend' => array());
+
+$config->group->package->browseMiniProgram = new stdclass();
+$config->group->package->browseMiniProgram->order  = 2160;
+$config->group->package->browseMiniProgram->subset = 'ai';
+$config->group->package->browseMiniProgram->privs  = array();
+$config->group->package->browseMiniProgram->privs['ai-miniPrograms']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('admin-index'), 'recommend' => array());
+$config->group->package->browseMiniProgram->privs['ai-miniProgramView'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms'), 'recommend' => array());
+
+$config->group->package->miniProgramSquare = new stdclass();
+$config->group->package->miniProgramSquare->order  = 2170;
+$config->group->package->miniProgramSquare->subset = 'aiapp';
+$config->group->package->miniProgramSquare->privs  = array();
+$config->group->package->miniProgramSquare->privs['aiapp-square']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array('aiapp-view', 'aiapp-miniProgramChat', 'aiapp-collectMiniProgram'));
+$config->group->package->miniProgramSquare->privs['aiapp-collectMiniProgram'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('aiapp-square', 'aiapp-view'), 'recommend' => array('aiapp-miniProgramChat'));
+$config->group->package->miniProgramSquare->privs['aiapp-miniProgramChat']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('aiapp-view'), 'recommend' => array('aiapp-collectMiniProgram'));
+$config->group->package->miniProgramSquare->privs['aiapp-view']               = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('aiapp-square'), 'recommend' => array('aiapp-miniProgramChat', 'aiapp-collectMiniProgram'));
+
+$config->group->package->publishMiniProgram = new stdclass();
+$config->group->package->publishMiniProgram->order  = 2180;
+$config->group->package->publishMiniProgram->subset = 'ai';
+$config->group->package->publishMiniProgram->privs  = array();
+$config->group->package->publishMiniProgram->privs['ai-publishMiniProgram']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-deleteMiniProgram', 'ai-unpublishMiniProgram', 'ai-testMiniProgram'));
+$config->group->package->publishMiniProgram->privs['ai-unpublishMiniProgram']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-editMiniProgram', 'ai-testMiniProgram'));
+
+$config->group->package->deleteMiniProgram = new stdclass();
+$config->group->package->deleteMiniProgram->order   = 2190;
+$config->group->package->deleteMiniProgram->subset  = 'ai';
+$config->group->package->deleteMiniProgram->privs   = array();
+$config->group->package->deleteMiniProgram->privs['ai-deleteMiniProgram'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-publishMiniProgram', 'ai-testMiniProgram', 'ai-editMiniProgram'));
+
+$config->group->package->impAndExpMiniProgram = new stdclass();
+$config->group->package->impAndExpMiniProgram->order  = 2191;
+$config->group->package->impAndExpMiniProgram->subset = 'ai';
+$config->group->package->impAndExpMiniProgram->privs  = array();
+$config->group->package->impAndExpMiniProgram->privs['ai-exportMiniProgram'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-importMiniProgram'));
+$config->group->package->impAndExpMiniProgram->privs['ai-importMiniProgram'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms'), 'recommend' => array('ai-exportMiniProgram'));
 
 $config->group->package->resource = new stdclass();
 $config->group->package->resource->order  = 2200;

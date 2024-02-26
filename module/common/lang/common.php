@@ -104,6 +104,9 @@ $lang->service     = new stdclass();
 $lang->deploy      = new stdclass();
 $lang->metric      = new stdclass();
 
+$lang->ai          = new stdclass();
+$lang->aiapp       = new stdclass();
+
 $lang->serverroom         = new stdclass();
 $lang->programstakeholder = new stdclass();
 $lang->researchplan       = new stdclass();

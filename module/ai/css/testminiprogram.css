@@ -1,0 +1,18 @@
+html, body, #main, .container {width: 100%; height: 100%;}
+#main {min-width: 100%; padding: 0;}
+.container {padding: 0!important;}
+#test-miniprogram {display: flex; flex: auto; overflow: hidden;}
+textarea.field-type {height: 32px;}
+#test-miniprogram > div {background-color: #fafafa;}
+
+.content-debug-area,
+.prompt-design-area,
+.prompt-preview-area,
+.prompt-result-area {padding: 16px;}
+
+.table-form {table-layout: auto;}
+.table-form th {width: auto!important;}
+
+.preview-container {border: 1px solid #D8DBDE; background: #f8f8f8; top: 50px; position: absolute; bottom: 16px; left: 16px; right: 16px; padding: 5px 8px; word-break: break-all; overflow-y: auto;}
+
+#autocomplete-textarea {overflow-y: auto; position: absolute; top: 32px; left: 16px; right: 16px; bottom: 16px; height: auto; width: auto;}

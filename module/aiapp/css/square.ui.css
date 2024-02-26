@@ -1,0 +1,105 @@
+#featureBar .text {
+    max-width: 6em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.miniprogram-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 8px;
+    background: #FCFDFE;
+    padding: 8px;
+}
+
+.miniprogram-card {
+    position: relative;
+    border-radius: 2px;
+    border: 1px solid #EEE;
+    background-color: #FCFDFE;
+    height: 140px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 6px;
+}
+
+.program-content {
+    display: flex;
+    flex-wrap: nowrap;
+    flex: auto;
+    overflow: hidden;
+    gap: 16px;
+    padding-right: 2px;
+}
+
+.program-text {
+    height: 100%;
+    overflow: hidden;
+    flex: auto;
+}
+
+.program-text .title {
+    margin-bottom: 16px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--color-slate-800);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.program-text .desc {
+    font-size: 12px;
+    color: #838A9D;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.program-avatar {
+    display: flex;
+    align-items: center;
+    flex: none;
+}
+
+.program-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: none;
+}
+
+.program-actions .badge {
+    font-size: 12px;
+    color: #313C52;
+    border: 1px solid #DEDEDE;
+    padding: 4px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pager-container {
+    margin-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+    background: #fff;
+    padding: 12px;
+}
+
+.btn-star {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}

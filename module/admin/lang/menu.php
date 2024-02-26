@@ -224,23 +224,22 @@ if(helper::hasFeature('devops'))
     $lang->admin->menuList->platform['dividerMenu'] = ',plat,setrules,';
 }
 
-/* TODO(@Wenrui LI): resurrect AI-related features later. *//*
+$lang->admin->menuList->ai['name']  = $lang->admin->menuSetting['ai']['name'];
+$lang->admin->menuList->ai['desc']  = $lang->admin->menuSetting['ai']['desc'];
+$lang->admin->menuList->ai['link']  = 'ai|adminindex';
+$lang->admin->menuList->ai['order'] = 60;
+
+$lang->admin->menuList->ai['subMenu']['models'] = array('link' => "{$lang->admin->ai->model}|ai|models|", 'alias' => 'editmodel,modelcreate,modelview,modeledit');
+$lang->admin->menuList->ai['menuOrder']['15']   = 'models';
+
 if($config->vision != 'or')
 {
-    $lang->admin->menuList->ai['name']  = $lang->admin->menuSetting['ai']['name'];
-    $lang->admin->menuList->ai['desc']  = $lang->admin->menuSetting['ai']['desc'];
-    $lang->admin->menuList->ai['link']  = 'ai|adminindex';
-    $lang->admin->menuList->ai['order'] = 60;
-
-    $lang->admin->menuList->ai['subMenu']['prompts']       = array('link' => "{$lang->admin->ai->prompt}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize,promptedit');
-    // $lang->admin->menuList->ai['subMenu']['conversations'] = array('link' => "{$lang->admin->ai->conversation}|ai|conversations|");
-    $lang->admin->menuList->ai['subMenu']['models']        = array('link' => "{$lang->admin->ai->model}|ai|models|", 'alias' => 'editmodel');
+    $lang->admin->menuList->ai['subMenu']['prompts']      = array('link' => "{$lang->admin->ai->prompt}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize,promptedit');
+    $lang->admin->menuList->ai['subMenu']['miniPrograms'] = array('link' => "{$lang->admin->ai->miniPrograms}|ai|miniPrograms|", 'alias' => 'miniprograms,createminiprogram,editminiprogram,configuredminiprogram,editminiprogramcategory,miniprogramview');
 
     $lang->admin->menuList->ai['menuOrder']['5']  = 'prompts';
-    // $lang->admin->menuList->ai['menuOrder']['10'] = 'conversations';
-    $lang->admin->menuList->ai['menuOrder']['15'] = 'models';
+    $lang->admin->menuList->ai['menuOrder']['10'] = 'miniPrograms';
 }
-*/
 
 if($config->edition != 'max' and $config->edition != 'ipd')
 {

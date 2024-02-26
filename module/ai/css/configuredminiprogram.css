@@ -1,0 +1,33 @@
+.field-configuration .drag-area {cursor: move; text-align: right;}
+.field-configuration .drag-area > div {display: inline-flex; align-items: center; gap: 4px;}
+.options-container {display: flex; flex-direction: column; gap: 16px;}
+
+#mainContent {position: fixed; left: 20px; right: 20px; top: 70px; bottom: 56px; display: flex; background: #f0f2f5; padding: 0;}
+#mainContent > div {height: 100%; background: #fff; display: flex; flex-direction: column;}
+#mainContent > div > header {background: #f8f8fa; height: 40px; display: flex; align-items: center; padding-left: 24px;}
+#mainContent > div > header > strong {font-size: 16px;}
+#mainContent > div > main {flex-grow: 1; overflow-y: auto;}
+
+.modal-body {padding-top: 0; padding-bottom: 0; max-height: 420px !important; overflow: auto!important;}
+
+.area-title {display: flex; align-items: center; padding-bottom: 20px; overflow: hidden;}
+.area-title > strong {font-size: 14px; text-wrap: nowrap;}
+.area-title > span {font-size: 12px;}
+.area-title > i {margin-left: 16px; margin-right: 4px;}
+
+.content-debug-area,
+.prompt-design-area,
+.prompt-preview-area,
+.prompt-result-area,
+.field-configuration-main {padding: 24px;}
+
+.prompt-preview-area .preview-container,
+.prompt-result-area .preview-container {word-break: break-word; border: 1px solid #D8DBDE; background: #f8f8f8; position: absolute; left: 24px; right: 24px; bottom: 24px; padding: 8px; overflow-y: auto;}
+.prompt-preview-area .preview-container {top: 64px;}
+.prompt-result-area .preview-container  {top: 34px;}
+
+.table-form > tbody > tr > th {width: 80px; padding-left: 0; text-wrap: nowrap; overflow: hidden;}
+
+.text-muted {flex-shrink: 1;}
+
+textarea.field-type {height: 32px;}

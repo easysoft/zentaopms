@@ -257,6 +257,8 @@ $lang->contact->common      = '联系人';
 $lang->space->common        = '服务管理';
 $lang->store->common        = '应用市场';
 $lang->instance->common     = '应用';
+$lang->ai->common           = 'AI';
+$lang->aiapp->common        = 'AI';
 
 $lang->programstakeholder->common = '干系人';
 $lang->featureswitch->common      = '功能开关';
@@ -444,6 +446,7 @@ $lang->searchObjects['program']     = '项目集';
 $lang->searchObjects['project']     = $lang->projectCommon;
 $lang->searchObjects['execution']   = $lang->execution->common;
 $lang->searchObjects['user']        = '用户';
+$lang->searchObjects['aiapp']       = 'AI';
 $lang->searchTips                   = '编号(ctrl+g)';
 
 /* 导入支持的编码格式。*/
