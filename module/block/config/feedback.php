@@ -1,23 +1,21 @@
 <?php
-if(in_array($config->edition, array('max', 'ipd')))
+if(in_array($config->edition, array('max', 'biz', 'ipd')))
 {
     global $lang, $app;
-    $app->loadLang('issue');
+    $app->loadLang('feedback');
 
-    $config->block->issue = new stdclass();
-    $config->block->issue->dtable = new stdclass();
-    $config->block->issue->dtable->fieldList = array();
-    $config->block->issue->dtable->fieldList['id']       = array('name' => 'id',       'title' => $lang->idAB,            'type' => 'id' ,      'sort' => 'number');
-    $config->block->issue->dtable->fieldList['title']    = array('name' => 'title',    'title' => $lang->issue->title,    'type' => 'title',    'sort' => true,  'flex' => 1, 'link' => array('module' => 'issue', 'method' => 'view', 'params' => 'issueID={id}'));
-    $config->block->issue->dtable->fieldList['type']     = array('name' => 'type',     'title' => $lang->issue->type,     'type' => 'category', 'sort' => true, 'map' => $lang->issue->typeList);
-    $config->block->issue->dtable->fieldList['pri']      = array('name' => 'pri',      'title' => $lang->issue->priAB,    'type' => 'pri',      'sort' => true);
-    $config->block->issue->dtable->fieldList['severity'] = array('name' => 'severity', 'title' => $lang->issue->severity, 'type' => 'severity', 'sort' => true);
-    $config->block->issue->dtable->fieldList['owner']    = array('name' => 'owner',    'title' => $lang->issue->owner,    'type' => 'user',     'sort' => true);
-    $config->block->issue->dtable->fieldList['status']   = array('name' => 'status',   'title' => $lang->issue->status,   'type' => 'status',   'sort' => true, 'statusMap' => $lang->issue->statusList);
+    $config->block->feedback = new stdclass();
+    $config->block->feedback->dtable = new stdclass();
+    $config->block->feedback->dtable->fieldList = array();
+    $config->block->feedback->dtable->fieldList['id']       = array('name' => 'id',      'title' => $lang->idAB,              'type' => 'id' ,      'sort' => 'number');
+    $config->block->feedback->dtable->fieldList['title']    = array('name' => 'title',   'title' => $lang->feedback->title,   'type' => 'title',    'sort' => true,  'flex' => 1, 'link' => array('module' => 'feedback', 'method' => 'view', 'params' => 'feedbackID={id}'));
+    $config->block->feedback->dtable->fieldList['product']  = array('name' => 'product', 'title' => $lang->feedback->product, 'type' => 'category', 'sort' => true);
+    $config->block->feedback->dtable->fieldList['pri']      = array('name' => 'pri',     'title' => $lang->feedback->pri,     'type' => 'pri',      'sort' => true);
+    $config->block->feedback->dtable->fieldList['status']   = array('name' => 'status',  'title' => $lang->feedback->status,  'type' => 'status',   'sort' => true, 'statusMap' => $lang->feedback->statusList);
+    $config->block->feedback->dtable->fieldList['type']     = array('name' => 'type',    'title' => $lang->feedback->type,    'type' => 'category', 'sort' => true, 'map' => $lang->feedback->typeList);
 
-    $config->block->issue->dtable->short = new stdclass();
-    $config->block->issue->dtable->short->fieldList['id']       = $config->block->issue->dtable->fieldList['id'];
-    $config->block->issue->dtable->short->fieldList['title']    = $config->block->issue->dtable->fieldList['title'];
-    $config->block->issue->dtable->short->fieldList['pri']      = $config->block->issue->dtable->fieldList['pri'];
-    $config->block->issue->dtable->short->fieldList['severity'] = $config->block->issue->dtable->fieldList['severity'];
+    $config->block->feedback->dtable->short = new stdclass();
+    $config->block->feedback->dtable->short->fieldList['id']    = $config->block->feedback->dtable->fieldList['id'];
+    $config->block->feedback->dtable->short->fieldList['title'] = $config->block->feedback->dtable->fieldList['title'];
+    $config->block->feedback->dtable->short->fieldList['pri']   = $config->block->feedback->dtable->fieldList['pri'];
 }
