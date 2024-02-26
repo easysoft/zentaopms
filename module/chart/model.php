@@ -333,7 +333,7 @@ class chartModel extends model
         $label  = array('show' => true, 'position' => 'outside', 'formatter' => '{b} {d}%');
         $legend = new stdclass();
         $legend->type = 'scroll';
-        $legend->orient = 'vertical';
+        $legend->orient = 'horizontal';
         $legend->right  = 0;
 
         $series[] = array('data' => $data, 'type' => 'pie', 'label' => $label);
