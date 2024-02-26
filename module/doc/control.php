@@ -845,6 +845,7 @@ class doc extends control
 
                     if($from == 'lib')
                     {
+                        $module   = 'doc';
                         $method   = 'teamSpace';
                         $objectID = 0;
                         if($objectType == 'product')
@@ -860,9 +861,11 @@ class doc extends control
                         elseif($this->app->tab == 'execution')
                         {
                             $objectID = $doc->execution;
+                            $module   = 'execution';
+                            $method   = 'doc';
                         }
                         $params = "objectID={$objectID}&libID={$doc->lib}";
-                        $response['locate'] = $this->createLink('doc', $method, $params);
+                        $response['locate'] = $this->createLink($module, $method, $params);
                     }
                 }
                 return $this->send($response);
