@@ -20,7 +20,8 @@ detailHeader
             set::level(1),
             set::text($lang->bug->report->common)
         )
-    )
+    ),
+    $this->config->edition == 'biz' ? to::suffix(btn(set(array('type' => 'primary', 'text' => $lang->export, 'url' => createLink('report', 'export', "module=bug"), 'data-toggle' => 'modal')))) : null
 );
 
 $reports = array();
@@ -32,6 +33,7 @@ foreach($charts as $type => $option)
     $chartData = $datas[$type];
     $echarts[] = tableChart
     (
+        set::item('chart-' . $type),
         set::type($option->type),
         set::title($lang->bug->report->charts[$type]),
         set::datas((array)$chartData)

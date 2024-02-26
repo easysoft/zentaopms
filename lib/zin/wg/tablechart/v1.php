@@ -6,6 +6,7 @@ class tableChart extends wg
 {
     protected static array $defineProps = array(
         'type:string',
+        'item:string',
         'title:string',
         'tableHeaders?:array',
         'datas?:array',
@@ -41,6 +42,7 @@ class tableChart extends wg
     protected function build(): wg
     {
         $type        = $this->prop('type');
+        $item        = $this->prop('item');
         $title       = $this->prop('title');
         $datas       = $this->prop('datas');
         $colorList   = array('#5470C6', '#91CC75', '#FAC858', '#EE6666', '#73C0DE', '#3BA272', '#FC8452', '#9A60B4', '#EA7CCC');
@@ -70,6 +72,7 @@ class tableChart extends wg
             set::className('flex border'),
             cell
             (
+                set::id($item),
                 setClass('border-r chart flex-auto'),
                 div(set::className('center text-base font-bold py-2'), $title),
                 echarts
