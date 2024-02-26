@@ -200,5 +200,3 @@ dtable
     set::createTip($lang->task->create),
     set::createLink($canCreate && common::canModify('execution', $execution) ? $createLink : '')
 );
-
-$query = query('sidebar')->remove();
