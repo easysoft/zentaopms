@@ -311,10 +311,10 @@ class node implements \JsonSerializable
             elseif(!is_array($build))              $build = array($build);
 
             $cache = new stdClass();
-            $cache->before   = $this->buildBefore();
-            $cache->children = $this->children();
-            $cache->build    = $build;
-            $cache->after    = $this->buildAfter();
+            $cache->before   = prebuild($this->buildBefore());
+            $cache->children = prebuild($this->children());
+            $cache->build    = prebuild($build);
+            $cache->after    = prebuild($this->buildAfter());
 
             $context->handleBuildNode($cache, $this);
 
@@ -467,6 +467,7 @@ class node implements \JsonSerializable
     {
         if($prop === 'id' && $value === '$GID') $value = $this->gid;
         $this->props->set($prop, $value);
+        $this->buildData = null;
     }
 
     protected function onGetProp(string $prop, mixed $defaultValue): mixed
