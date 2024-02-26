@@ -140,10 +140,13 @@ class dept extends control
      */
     public function ajaxGetUsers(int $dept, string $user = '', string $key = 'account')
     {
-        $items = array();
         $users = $this->dept->getDeptUserPairs($dept, $key);
-        foreach($users as $userID => $userName) $items[] = array('text' => $userName, 'value' => $userID);
 
+        $isJsonView = $this->app->getViewType() == 'json';
+        if(!$isJsonView) return print(html::select('user', array('' => '') + $users, $user, "class='form-control chosen'"));
+
+        $items = array();
+        foreach($users as $userID => $userName) $items[] = array('text' => $userName, 'value' => $userID);
         return print(json_encode($items));
     }
 }
