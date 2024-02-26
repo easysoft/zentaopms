@@ -32,7 +32,7 @@ class h extends node
 
     public function fullType(): string
     {
-        return 'h::' . $this->tagName();
+        return 'zin\\' . $this->tagName();
     }
 
     public function type(): string
