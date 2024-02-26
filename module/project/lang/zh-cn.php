@@ -268,6 +268,12 @@ $lang->project->currencySymbol['NZD'] = 'NZ$';
 $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
+$lang->project->dbTypeList['program'] = '项目集';
+$lang->project->dbTypeList['project'] = '项目';
+$lang->project->dbTypeList['sprint']  = '迭代';
+$lang->project->dbTypeList['kanban']  = '看板';
+$lang->project->dbTypeList['stage']   = '阶段';
+
 $lang->project->modelList['']            = "";
 if($config->systemMode == 'PLM') $lang->project->modelList['ipd'] = "IPD";
 $lang->project->modelList['scrum']       = "Scrum";

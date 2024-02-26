@@ -263,6 +263,12 @@ $lang->project->currencySymbol['NZD'] = 'NZ$';
 $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
+$lang->project->dbTypeList['program'] = 'Program';
+$lang->project->dbTypeList['project'] = 'Project';
+$lang->project->dbTypeList['sprint']  = 'Sprint';
+$lang->project->dbTypeList['kanban']  = 'Kanban';
+$lang->project->dbTypeList['stage']   = 'Stage';
+
 $lang->project->modelList['']          = '';
 if($config->systemMode == 'PML') $lang->project->modelList['ipd'] = "IPD";
 $lang->project->modelList['scrum']     = "Scrum";
