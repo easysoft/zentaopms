@@ -325,7 +325,8 @@ class context extends \zin\utils\dataset
 
         foreach($this->onRenderCallbacks as $callback)
         {
-            call_user_func($callback, $data);
+            if($callback instanceof \Closure) $callback($data);
+            else call_user_func($callback, $data);
         }
 
         $this->enabledGlobalRender();
@@ -336,7 +337,8 @@ class context extends \zin\utils\dataset
     {
         foreach($this->beforeBuildNodeCallbacks as $callback)
         {
-            call_user_func($callback, $node);
+            if($callback instanceof \Closure) $callback($node);
+            else call_user_func($callback, $node);
         }
 
         if($this->queries)
@@ -357,7 +359,8 @@ class context extends \zin\utils\dataset
     {
         foreach($this->onBuildNodeCallbacks as $callback)
         {
-            call_user_func($callback, $data, $node);
+            if($callback instanceof \Closure) $callback($node);
+            else call_user_func($callback, $node);
         }
 
         if($this->renderer) $this->renderer->handleBuildNode($data, $node);
@@ -367,18 +370,29 @@ class context extends \zin\utils\dataset
     {
         foreach($this->onRenderNodeCallbacks as $callback)
         {
-            call_user_func($callback, $data, $node);
+            if($callback instanceof \Closure) $callback($data);
+            else call_user_func($callback, $data);
         }
     }
 
-    public function onBuildNode(callable $callback)
+    public function onBuildNode(callable|\Closure $callback)
     {
         $this->onBuildNodeCallbacks[] = $callback;
     }
 
-    public function onRenderNode(callable $callback)
+    public function onRenderNode(callable|\Closure $callback)
     {
         $this->onRenderNodeCallbacks[] = $callback;
+    }
+
+    public function onBeforeBuildNode(callable|\Closure $callback)
+    {
+        $this->beforeBuildNodeCallbacks[] = $callback;
+    }
+
+    public function onRender(callable|\Closure $callback)
+    {
+        $this->onRenderCallbacks[] = $callback;
     }
 
     public static array $stack = array();

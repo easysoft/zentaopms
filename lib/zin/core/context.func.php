@@ -44,6 +44,26 @@ function renderInGlobal(node|iDirective $item): bool
     return context::current()->renderInGlobal($item);
 }
 
+function onBuildNode(callable $callback)
+{
+    return context::current()->onBuildNode($callback);
+}
+
+function onRenderNode(callable $callback)
+{
+    return context::current()->onRenderNode($callback);
+}
+
+function onBeforeBuildNode(callable $callback)
+{
+    return context::current()->onBeforeBuildNode($callback);
+}
+
+function onRender(callable $callback)
+{
+    return context::current()->onRender($callback);
+}
+
 function pageJS()
 {
     call_user_func_array('\zin\context::js', func_get_args());
