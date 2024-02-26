@@ -187,7 +187,8 @@ class admin extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $this->view->title = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
+        $this->view->title  = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
+        $this->view->gdInfo = function_exists('gd_info') ? gd_info() : array();
         $this->display();
     }
 
