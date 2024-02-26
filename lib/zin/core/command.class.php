@@ -81,6 +81,11 @@ class command
         $node->replaceWith(...$args);
     }
 
+    public static function on(node $node, array $args)
+    {
+        $node->add(on(...$args), 'children');
+    }
+
     /**
      * Magic static method for setting property value.
      *
