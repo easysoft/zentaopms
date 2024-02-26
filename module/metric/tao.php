@@ -314,10 +314,17 @@ class metricTao extends metricModel
      */
     protected function fetchMetricRecordByDate($code = 'all', $date = '', $limit = 100)
     {
-        $records = $this->dao->select('*')->from(TABLE_METRICLIB)
+        if(!empty($date))
+        {
+            $nextDate = date('Y-m-d', strtotime($date) + 86400);
+        }
+        $records = $this->dao->select('id')->from(TABLE_METRICLIB)
             ->where('1 = 1')
             ->beginIF($code != 'all')->andWhere('metricCode')->eq($code)->fi()
-            ->beginIF(!empty($date))->andWhere('left(date, 10)')->eq($date)->fi()
+            ->beginIF(!empty($date))
+            ->andWhere('date')->ge($date)
+            ->andWhere('date')->lt($nextDate)
+            ->fi()
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll();
 
