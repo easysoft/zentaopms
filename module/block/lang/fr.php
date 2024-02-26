@@ -693,6 +693,15 @@ $lang->block->teamachievement->consumedHours  = 'Consumed Hours';
 $lang->block->teamachievement->totalWorkload  = 'Total Workload';
 $lang->block->teamachievement->vs             = 'VS';
 
+$lang->block->estimate = new stdclass();
+$lang->block->estimate->costs    = 'Costs';
+$lang->block->estimate->workhour = 'Workhour';
+$lang->block->estimate->people   = 'People';
+$lang->block->estimate->expect   = 'Expect';
+$lang->block->estimate->consumed = 'Consumed';
+$lang->block->estimate->surplus  = 'Surplus';
+$lang->block->estimate->hour     = 'H';
+
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
 $lang->block->moduleList['execution']       = $lang->execution->common;

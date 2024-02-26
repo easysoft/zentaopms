@@ -691,6 +691,15 @@ $lang->block->teamachievement->consumedHours  = '消耗工时';
 $lang->block->teamachievement->totalWorkload  = '累计工作量';
 $lang->block->teamachievement->vs             = '较昨日';
 
+$lang->block->estimate = new stdclass();
+$lang->block->estimate->costs    = '人工';
+$lang->block->estimate->workhour = '工时';
+$lang->block->estimate->people   = '人';
+$lang->block->estimate->expect   = '预计';
+$lang->block->estimate->consumed = '已消耗';
+$lang->block->estimate->surplus  = '剩余';
+$lang->block->estimate->hour     = 'H';
+
 $lang->block->moduleList['product']         = $lang->productCommon;
 $lang->block->moduleList['project']         = $lang->projectCommon;
 $lang->block->moduleList['execution']       = $lang->execution->common;
