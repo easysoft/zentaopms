@@ -16,7 +16,7 @@ $schema->fields['id']          = array('type' => 'number', 'name' => $this->lang
 $schema->fields['name']        = array('type' => 'string', 'name' => $this->lang->project->name);
 $schema->fields['code']        = array('type' => 'string', 'name' => $this->lang->project->code);
 $schema->fields['model']       = array('type' => 'option', 'name' => $this->lang->project->model, 'options' => $this->lang->project->modelList);
-$schema->fields['type']        = array('type' => 'option', 'name' => $this->lang->project->type, 'options' => $this->lang->project->typeList);
+$schema->fields['type']        = array('type' => 'option', 'name' => $this->lang->project->type, 'options' => $this->lang->project->dbTypeList);
 $schema->fields['status']      = array('type' => 'option', 'name' => $this->lang->project->status, 'options' => $this->lang->project->statusList);
 $schema->fields['desc']        = array('type' => 'string', 'name' => $this->lang->project->desc);
 $schema->fields['begin']       = array('type' => 'date',   'name' => $this->lang->project->begin);
