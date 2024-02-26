@@ -102,7 +102,7 @@ class baseHelper
             if($viewType != 'html') $link .= "&{$config->viewVar}=" . $viewType;
             foreach($vars as $key => $value) $link .= "&$key=$value";
 
-            return $link;
+            return self::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
@@ -117,7 +117,7 @@ class baseHelper
             foreach($vars as $value) $link .= "{$config->requestFix}$value";
             $link .= '.' . $viewType;
 
-            return $link;
+            return self::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
