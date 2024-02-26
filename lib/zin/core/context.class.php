@@ -272,6 +272,8 @@ class context extends \zin\utils\dataset
 
     public function render(node $node, null|object|string|array $selectors = null, string $renderType = 'html', null|string|array $dataCommands = null, bool $renderInner = false): string|array|object
     {
+        $this->disableGlobalRender();
+
         $renderer = new render($node, $selectors, $renderType, $dataCommands, $renderInner);
         $this->rendered = true;
         $this->renderer = $renderer;
@@ -326,6 +328,7 @@ class context extends \zin\utils\dataset
             call_user_func($callback, $data);
         }
 
+        $this->enabledGlobalRender();
         return $data->output;
     }
 

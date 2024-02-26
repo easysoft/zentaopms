@@ -26,12 +26,54 @@ class command
 
     public static function removeClass(node $node, array $args)
     {
-
+        $node->props->class->remove(...$args);
     }
 
-    public static function remove(node $node)
+    public static function prop(node $node, array $args)
     {
-        $node->removed = true;
+        $node->setProp(...$args);
+    }
+
+    public static function toggleClass(node $node, array $args)
+    {
+        $node->props->class->toggle(...$args);
+    }
+
+    public static function html(node $node, array $args)
+    {
+        $node->empty();
+        $node->add(html(...$args));
+    }
+
+    public static function append(node $node, array $args)
+    {
+        $node->add($args);
+    }
+
+    public static function text(node $node, array $args)
+    {
+        $node->empty();
+        $node->add(text(...$args));
+    }
+
+    public static function prepend(node $node, array $args)
+    {
+        $node->add($args, 'children', true);
+    }
+
+    public static function before(node $node, array $args)
+    {
+        $node->add($args, 'before');
+    }
+
+    public static function after(node $node, array $args)
+    {
+        $node->add($args, 'after');
+    }
+
+    public static function replaceWith(node $node, array $args)
+    {
+        $node->replaceWith(...$args);
     }
 
     /**

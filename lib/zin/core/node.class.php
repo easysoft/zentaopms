@@ -49,6 +49,8 @@ class node implements \JsonSerializable
 
     public bool $removed = false;
 
+    public ?array $replacedWith = null;
+
     public ?stdClass $buildData = null;
 
     public function __construct(mixed ...$args)
@@ -201,7 +203,7 @@ class node implements \JsonSerializable
         return $this->props->pick(array_keys(static::definedPropsList()));
     }
 
-    public function add($item, string $blockName = 'children')
+    public function add($item, string $blockName = 'children', bool $prepend = false)
     {
         if($item === null || is_bool($item)) return;
 
@@ -212,10 +214,10 @@ class node implements \JsonSerializable
         }
 
         if(isDirective($item)) $this->directive($item, $blockName);
-        else $this->addToBlock($blockName, $item);
+        else $this->addToBlock($blockName, $item, $prepend);
     }
 
-    public function addToBlock(string $name, mixed $child)
+    public function addToBlock(string $name, mixed $child, bool $prepend = false)
     {
         if($child === null || is_bool($child)) return;
 
@@ -223,7 +225,7 @@ class node implements \JsonSerializable
         {
             foreach($child as $blockChild)
             {
-                $this->addToBlock($name, $blockChild);
+                $this->addToBlock($name, $blockChild, $prepend);
             }
             return;
         }
@@ -245,8 +247,15 @@ class node implements \JsonSerializable
         if($result === false) return;
         if($result !== null && $result !== true) $child = $result;
 
-        if(isset($this->blocks[$name])) $this->blocks[$name][] = $child;
-        else                            $this->blocks[$name]   = array($child);
+        if(isset($this->blocks[$name]))
+        {
+            if($prepend) array_unshift($this->blocks[$name], $child);
+            else         $this->blocks[$name][] = $child;
+        }
+        else
+        {
+            $this->blocks[$name]   = array($child);
+        }
     }
 
     public function directive(iDirective $directive, string $blockName = 'children')
@@ -258,6 +267,17 @@ class node implements \JsonSerializable
     public function addChild(mixed $child)
     {
         return $this->addToBlock('children', $child);
+    }
+
+    public function remove()
+    {
+        $this->removed = true;
+    }
+
+    public function empty(?string $blockName = null)
+    {
+        if($blockName) unset($this->blocks[$blockName]);
+        else           $this->blocks = array();
     }
 
     public function render(): string
@@ -291,10 +311,10 @@ class node implements \JsonSerializable
             elseif(!is_array($build))              $build = array($build);
 
             $cache = new stdClass();
-            $cache->before   = prebuild($this->buildBefore());
-            $cache->children = prebuild($this->children());
-            $cache->build    = prebuild($build);
-            $cache->after    = prebuild($this->buildAfter());
+            $cache->before   = $this->buildBefore();
+            $cache->children = $this->children();
+            $cache->build    = $build;
+            $cache->after    = $this->buildAfter();
 
             $context->handleBuildNode($cache, $this);
 
@@ -306,8 +326,15 @@ class node implements \JsonSerializable
 
     public function buildAll(): array
     {
+        if($this->replacedWith !== null) return $this->replacedWith;
+
         $buildData = $this->prebuild();
         return array_merge($buildData->before, $buildData->build, $buildData->after);
+    }
+
+    public function replaceWith(mixed ...$args)
+    {
+        $this->replacedWith = $args;
     }
 
     public function children(): array
