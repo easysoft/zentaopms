@@ -188,7 +188,7 @@ class execution extends control
         $this->app->session->set('taskList', $uri . "#app={$this->app->tab}", 'execution');
 
         /* Process the order by field. */
-        if(!$orderBy) $orderBy = $this->cookie->executionTaskOrder ? $this->cookie->executionTaskOrder : 'status,id_desc';
+        if(!$orderBy) $orderBy = $this->cookie->executionTaskOrder ? $this->cookie->executionTaskOrder : 'status,id_asc';
         setcookie('executionTaskOrder', $orderBy, 0, $this->config->webRoot, '', false, true);
 
         /* Append id for secend sort. */
