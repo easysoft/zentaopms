@@ -18,13 +18,13 @@ require_once __DIR__ . DS . 'context.func.php';
 
 class htm extends node
 {
-    public function addToBlock(string $name, mixed $child)
+    public function addToBlock(string $name, mixed $child, bool $prepend = false)
     {
         if(is_string($child))
         {
             $child = (object)array('html' => $child);
         }
-        return parent::addToBlock($name, $child);
+        return parent::addToBlock($name, $child, $prepend);
     }
 }
 
