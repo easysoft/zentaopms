@@ -3416,6 +3416,38 @@ class commonModel extends model
         $title = $lang->goback . $lang->backShortcutKey;
         echo html::a($backLink, '<i class="icon-goback icon-back"></i> ' . $lang->goback, '', "id='back' class='{$class}' title={$title} $misc");
     }
+
+    /**
+     * Print link to a module's method.
+     *
+     * Before printing, check the privilege first. If no privilege, return false. Else, print the link, return true.
+     *
+     * @param string $module    the module name
+     * @param string $method    the method
+     * @param string $vars      vars to be passed
+     * @param string $label     the label of the link
+     * @param string $target    the target of the link
+     * @param string $misc      others
+     * @param bool   $newline
+     * @param bool   $onlyBody
+     * @param        $object
+     *
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function printLink($module, $method, $vars = '', $label = '', $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
+    {
+        /* Add data-app attribute. */
+        global $app, $config;
+        $currentModule = strtolower($module);
+        $currentMethod = strtolower($method);
+        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
+
+        if(!commonModel::hasPriv($module, $method, $object, $vars) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
+        echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
+        return true;
+    }
 }
 
 class common extends commonModel
