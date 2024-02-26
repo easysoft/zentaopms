@@ -56,5 +56,6 @@ function render(string $wgName = '', array $options = array())
 
     /* 渲染并输出 HTML。 Render and display html. */
     $html = $context->render($wg, zget($options, 'selector', null), zget($options, 'type', 'html'), zget($options, 'data', null));
+    ob_start();
     echo $html;
 }

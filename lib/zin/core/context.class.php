@@ -19,6 +19,7 @@ require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 require_once dirname(__DIR__) . DS . 'utils' . DS . 'deep.func.php';
 require_once __DIR__ . DS . 'helper.func.php';
 require_once __DIR__ . DS . 'render.class.php';
+require_once __DIR__ . DS . 'command.class.php';
 require_once __DIR__ . DS . 'js.class.php';
 
 class context extends \zin\utils\dataset
@@ -44,6 +45,10 @@ class context extends \zin\utils\dataset
     public array $onRenderNodeCallbacks = array();
 
     public array $onRenderCallbacks = array();
+
+    public array $queries = array();
+
+    public ?node $rootNode = null;
 
     public ?render $renderer = null;
 
@@ -243,17 +248,44 @@ class context extends \zin\utils\dataset
         return $rawContent;
     }
 
+    public function addQuery(query $query)
+    {
+        $this->queries[] = $query;
+    }
+
+    /**
+     * Include hooks files.
+     */
+    public function includeHooks(): string
+    {
+        $hookFiles = $this->getHookFiles();
+        ob_start();
+        foreach($hookFiles as $hookFile)
+        {
+            if(!empty($hookFile) && file_exists($hookFile)) include $hookFile;
+        }
+        $hookCode = ob_get_clean();
+        if(!$hookCode) return $hookCode;
+        return '';
+    }
+
+
     public function render(node $node, null|object|string|array $selectors = null, string $renderType = 'html', null|string|array $dataCommands = null, bool $renderInner = false): string|array|object
     {
         $renderer = new render($node, $selectors, $renderType, $dataCommands, $renderInner);
         $this->rendered = true;
         $this->renderer = $renderer;
+        $this->rootNode = $node;
 
+        $hookHtml   = $this->includeHooks();
         $rawContent = $this->getRawContent();
         $zinDebug   = $this->getDebugData();
-        $result     = $renderer->render();
-        $js         = $this->getJS();
-        $css        = $this->getCSS();
+
+        $node->prebuild(true);
+
+        $js     = $this->getJS();
+        $css    = $this->getCSS();
+        $result = $renderer->render();
 
         if(is_object($result)) // renderType = json
         {
@@ -297,11 +329,24 @@ class context extends \zin\utils\dataset
         return $data->output;
     }
 
-    public function handleBeforeBuildNode($node)
+    public function handleBeforeBuildNode(node $node)
     {
         foreach($this->beforeBuildNodeCallbacks as $callback)
         {
             call_user_func($callback, $node);
+        }
+
+        if($this->queries)
+        {
+            foreach($this->queries as $query)
+            {
+                if(!$node->is($query->selectors) || !$query->commands) continue;
+                foreach($query->commands as $command)
+                {
+                    list($method, $args) = $command;
+                    call_user_func("\zin\command::{$method}", $node, $args, $this->rootNode);
+                }
+            }
         }
     }
 

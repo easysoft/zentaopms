@@ -201,4 +201,4 @@ dtable
     set::createLink($canCreate && common::canModify('execution', $execution) ? $createLink : '')
 );
 
-render();
+$query = query('sidebar')->remove();

@@ -68,7 +68,7 @@ class render
 
     public function render(): string|array|object
     {
-        $this->node->prebuild(true);
+        $this->node->prebuild();
 
         if($this->renderType === 'list') return $this->renderList();
         if($this->renderType === 'json') return $this->renderJSON();

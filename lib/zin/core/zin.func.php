@@ -26,6 +26,7 @@ require_once __DIR__ . DS . 'h.func.php';
 require_once __DIR__ . DS . 'item.class.php';
 require_once __DIR__ . DS . 'to.class.php';
 require_once __DIR__ . DS . 'context.func.php';
+require_once __DIR__ . DS . 'query.class.php';
 require_once __DIR__ . DS . 'on.class.php';
 require_once __DIR__ . DS . 'jquery.class.php';
 
@@ -123,19 +124,4 @@ function groupWgInList(node|array $items, string|array $types): array
     foreach($types as $index => $type) $groups[] = $typesMap[$type];
     $groups[] = $restList;
     return $groups;
-}
-
-/**
- * Include hooks files.
- */
-function includeHooks()
-{
-    $hookFiles = context::current()->getHookFiles();
-    ob_start();
-    foreach($hookFiles as $hookFile)
-    {
-        if(!empty($hookFile) && file_exists($hookFile)) include $hookFile;
-    }
-    $hookCode = ob_get_clean();
-    return html($hookCode);
 }
