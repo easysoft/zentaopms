@@ -1,0 +1,6 @@
+.risk-block .status-high, .risk-block .status-active {color: #FB2B2B;}
+.risk-block .status-middle {color: #FF9F46;}
+.risk-block .status-low {color: #313C52;}
+.risk-block .status-hangup {color: #B89664:}
+.risk-block .status-canceled {color: #838A9D:}
+.risk-block .status-closed {color: #9EA3B0:}
