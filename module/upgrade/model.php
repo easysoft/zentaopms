@@ -2035,6 +2035,7 @@ class upgradeModel extends model
             $this->saveLogs($this->dao->get());
         }
 
+        if(version_compare($openVersion, '18_6', '<')) return;
         include('priv.php');
         foreach($orData as $role => $name)
         {
