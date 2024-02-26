@@ -579,9 +579,7 @@ class screenModel extends model
         $isObjectMetric = $metric->scope != 'system';
         $isDateMetric   = $metric->dateType != 'nodate';
 
-        $chartOption = $this->getMetricChartOption($metric, $resultHeader, $resultData, $component);
-        $tableOption = $this->getMetricTableOption($metric, $resultHeader, $resultData, $filterParams);
-        $card        = $this->getMetricCardOption($metric, $resultData, $component);
+        $card = $this->getMetricCardOption($metric, $resultData, $component);
 
         list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
 
@@ -593,8 +591,8 @@ class screenModel extends model
         $latestFilters = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
         $component     = $this->updateMetricFilters($component, $latestFilters);
 
-        $component->option->chartOption          = $chartOption;
-        $component->option->tableOption          = $tableOption;
+        $component->option->chartOption          = $this->getMetricChartOption($metric, $resultHeader, $resultData, $component);
+        $component->option->tableOption          = $this->getMetricTableOption($metric, $resultHeader, $resultData, $filterParams, $component);
         $component->option->card                 = $card;
         $component->option->card->isDateMetric   = $isDateMetric;
         $component->option->card->isObjectMetric = $isObjectMetric;
@@ -2032,6 +2030,7 @@ class screenModel extends model
      * @param  object $metric
      * @param  array  $resultHeader
      * @param  array  $resultData
+     * @param  object $component
      * @access public
      * @return object
      */
@@ -2067,14 +2066,14 @@ class screenModel extends model
     /**
      * Get option of metric table.
      *
-     * @param  object $metric
-     * @param  array $resultHeader
-     * @param  array $resultData
-     * @param  array $filterParams
+     * @param  array  $resultHeader
+     * @param  array  $resultData
+     * @param  array  $filterParams
+     * @param  object $component
      * @access public
      * @return object
      */
-    public function getMetricTableOption($metric, $resultHeader, $resultData, $filterParams = array())
+    public function getMetricTableOption($metric, $resultHeader, $resultData, $filterParams = array(), $component = null)
     {
         $this->loadModel('metric');
 
@@ -2085,7 +2084,7 @@ class screenModel extends model
 
         list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, $metric->dateType, false);
 
-        $tableOption = new stdclass();
+        $tableOption          = $component ? $component->option->tableOption : new stdclass();
         $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType, $filters) : array($groupHeader);
         $tableOption->data    = $this->filterMetricData($groupData, $dateType, $isObjectMetric, $filters);
 
