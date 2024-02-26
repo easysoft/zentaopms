@@ -50,6 +50,11 @@ class command
         $node->add($args);
     }
 
+    public static function remove(node $node, array $args)
+    {
+        $node->remove();
+    }
+
     public static function text(node $node, array $args)
     {
         $node->empty();
