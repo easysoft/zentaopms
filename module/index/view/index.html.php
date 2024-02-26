@@ -156,6 +156,32 @@ js::set('showFeatures',  $showFeatures);
       </div>
     </div>
   </div>
+  <?php if(count(explode(',', $this->app->user->visions)) > 1 && empty($config->global->hideVisionTips)):?>
+  <style>
+  #visionTips {width: 280px; height: 0; position: absolute; bottom: 120px; left: 0; z-index: 200;}
+  #visionTips .inner {width: 270px; height: 58px; position: relative; bottom: 0; left: 0; border-radius: 8px; display: flex; justify-content: space-around; align-items: center;}
+  #visionTips .line {width: 2px; height: 31px; position: absolute; bottom: -31px; left: 64px;}
+  #visionTips .circle {width: 10px; height: 10px; border-radius: 50%; border-width: 3px; border-style: solid; position: relative; left: -4px; top: 31px; background-color: white;}
+  #visionTips .inner > button {border-color: white;}
+  </style>
+  <div id="visionTips">
+    <div class="inner bg-primary">
+      <span><?php echo $lang->visionTips;?></span>
+      <button type="button" class="btn btn-primary" onclick="hideVisionTips()"><?php echo $lang->IKnow;?></button>
+      <div class="line bg-primary pannel-primary">
+        <div class="circle alert-primary-inverse"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+  function hideVisionTips()
+  {
+      $('#visionTips').fadeOut();
+      var link = createLink('custom', 'ajaxSaveCustomFields', 'module=common&section=global&key=hideVisionTips');
+      $.post(link, {fields: 1});
+  }
+  </script>
+  <?php endif;?>
 </div>
 <?php include './chatview.html.php';?>
 <?php js::set('searchAB', $lang->searchAB);?>
