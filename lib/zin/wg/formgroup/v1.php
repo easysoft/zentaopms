@@ -66,7 +66,7 @@ class formGroup extends wg
         }
     }
 
-    protected function buildLabel(): node|directive
+    protected function buildLabel(): node|set
     {
         list($name, $label, $labelFor, $labelClass, $labelProps, $labelHint, $labelHintClass, $labelHintProps, $labelHintIcon, $labelActions, $labelActionsClass, $labelActionsProps, $checkbox, $required, $strong) = $this->prop(array('name', 'label', 'labelFor', 'labelClass', 'labelProps', 'labelHint', 'labelHintClass', 'labelHintProps', 'labelHintIcon', 'labelActions', 'labelActionsClass', 'labelActionsProps', 'checkbox', 'required', 'strong'));
 

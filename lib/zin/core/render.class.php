@@ -81,8 +81,8 @@ class render
         $list = array();
         foreach($this->filteredMap as $name => $nodes)
         {
-            $selector   = $this->selectors[$name];
-            $item       = new stdClass();
+            $selector       = $this->selectors[$name];
+            $item           = new stdClass();
             $item->name     = $name;
             $item->selector = stringifyWgSelectors($selector);
             $item->selector = $selector;
@@ -105,9 +105,9 @@ class render
                             $prop = trim($prop);
                             if(empty($prop)) continue;
 
-                            $parts    = explode('~', $prop, 2);
-                            $name     = $parts[0];
-                            $namePath = count($parts) > 1 ? $parts[1] : $parts[0];
+                            $parts       = explode('~', $prop, 2);
+                            $name        = $parts[0];
+                            $namePath    = count($parts) > 1 ? $parts[1] : $parts[0];
                             $data[$name] = \zin\utils\deepGet($json, $namePath);
                         }
                         $item->data[] = $data;
@@ -208,11 +208,6 @@ class render
             if(isset($selector->command) && !empty($selector->command)) $this->addDataCommands(array($selector->tag => $selector->command));
             else $this->selectors[$selector->name] = $selector;
         }
-    }
-
-    public function replace(string $name, string $value)
-    {
-        $this->replaceMap[$name] = $value;
     }
 
     protected function getDataByCommands()

@@ -98,7 +98,7 @@ class modalDialog extends wg
         );
     }
 
-    protected function setSize(): ?directive
+    protected function setSize(): ?set
     {
         $size = $this->prop('size');
         if(!$size) return null;
