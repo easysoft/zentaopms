@@ -595,9 +595,9 @@ class commonModel extends model
             echo "<div class='dropdown dropup' id='visionSwitcher'>";
             echo    "<ul id='versionMenu' class='dropdown-menu'>";
             echo        "<li class='dropdown-header'>{$lang->switchTo}</li>";
-            foreach($userVisions as $vision)
+            foreach($lang->visionList as $vision => $visionName)
             {
-                if(!isset($lang->visionList[$vision])) continue;
+                if(!in_array($vision, $userVisions)) continue;
 
                 $icon   = zget($icons, $vision, 'target');
                 $active = $currentVision == $vision;
