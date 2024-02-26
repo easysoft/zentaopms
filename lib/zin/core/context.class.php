@@ -325,8 +325,8 @@ class context extends \zin\utils\dataset
 
         foreach($this->onRenderCallbacks as $callback)
         {
-            if($callback instanceof \Closure) $callback($data);
-            else call_user_func($callback, $data);
+            if($callback instanceof \Closure) $callback($data, $node);
+            else call_user_func($callback, $data, $node);
         }
 
         $this->enabledGlobalRender();
@@ -359,8 +359,8 @@ class context extends \zin\utils\dataset
     {
         foreach($this->onBuildNodeCallbacks as $callback)
         {
-            if($callback instanceof \Closure) $callback($node);
-            else call_user_func($callback, $node);
+            if($callback instanceof \Closure) $callback($data, $node);
+            else call_user_func($callback, $data, $node);
         }
 
         if($this->renderer) $this->renderer->handleBuildNode($data, $node);
@@ -370,8 +370,8 @@ class context extends \zin\utils\dataset
     {
         foreach($this->onRenderNodeCallbacks as $callback)
         {
-            if($callback instanceof \Closure) $callback($data);
-            else call_user_func($callback, $data);
+            if($callback instanceof \Closure) $callback($data, $node);
+            else call_user_func($callback, $data, $node);
         }
     }
 
