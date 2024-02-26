@@ -88,7 +88,7 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th id='projectType'><?php echo $lang->project->type;?></th>
+          <th id='projectType'><?php echo $lang->project->projectType;?></th>
           <td colspan='3'><?php echo nl2br(html::radio('hasProduct', $lang->project->projectTypeList, $project->hasProduct, 'disabled'));?></td>
         </tr>
         <tr>

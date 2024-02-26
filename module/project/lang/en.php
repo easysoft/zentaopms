@@ -94,6 +94,7 @@ $lang->project->end                = 'Planned End';
 $lang->project->status             = 'Status';
 $lang->project->subStatus          = 'Sub Status';
 $lang->project->type               = 'Type';
+$lang->project->projectType        = 'Project Type';
 $lang->project->lifetime           = "{$lang->projectCommon} Cycle";
 $lang->project->attribute          = 'Stage Type';
 $lang->project->percent            = 'Workload %';

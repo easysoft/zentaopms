@@ -91,7 +91,7 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th id='projectType'><?php echo $lang->project->type;?></th>
+          <th id='projectType'><?php echo $lang->project->projectType;?></th>
           <td>
             <?php
             echo html::radio('hasProduct', $lang->project->projectTypeList, $hasProduct, $copyProjectID ? 'disabled' : '');
