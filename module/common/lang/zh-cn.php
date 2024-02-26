@@ -446,12 +446,6 @@ $lang->visionList = array();
 $lang->visionList['rnd']  = '综合研发界面';
 $lang->visionList['lite'] = '运营管理界面';
 
-if($config->edition == 'ipd')
-{
-    $lang->visionList['or']   = '需求与市场管理界面';
-    $lang->visionList['rnd']  = 'IPD研发管理界面';
-}
-
 $lang->createObjects['todo']        = '待办';
 $lang->createObjects['effort']      = '日志';
 $lang->createObjects['bug']         = 'Bug';
