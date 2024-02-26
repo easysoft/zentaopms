@@ -228,7 +228,7 @@ class node implements \JsonSerializable
             return;
         }
 
-        if($child instanceof node) $child->parent = $this;
+        if($child instanceof node && !$child->parent) $child->parent = $this;
 
         if($name === 'children' && $child instanceof node)
         {
@@ -251,7 +251,7 @@ class node implements \JsonSerializable
 
     public function directive(iDirective $directive, string $blockName = 'children')
     {
-        $directive->parent = $this;
+        if(!isset($directive->parent) || !$directive->parent) $directive->parent = $this;
         $directive->apply($this, $blockName);
     }
 
