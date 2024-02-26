@@ -256,7 +256,7 @@ class chartModel extends model
             $indicator[] = array('name' => $labelName, 'max' => $max);
         }
 
-        $options = array('series' => $series, 'legend' => $legend, 'radar' => array('indicator' => $indicator), 'tooltip' => array('trigger' => 'item'));
+        $options = array('series' => $series, 'legend' => $legend, 'radar' => array('indicator' => $indicator, 'center' => array('50%', '55%')), 'tooltip' => array('trigger' => 'item'));
         return $options;
     }
 
@@ -334,9 +334,10 @@ class chartModel extends model
         $legend = new stdclass();
         $legend->type = 'scroll';
         $legend->orient = 'horizontal';
-        $legend->right  = 0;
+        $legend->left  = 'center';
+        $legend->top   = 'top';
 
-        $series[] = array('data' => $data, 'type' => 'pie', 'label' => $label);
+        $series[] = array('data' => $data, 'center' => array('50%', '55%'), 'type' => 'pie', 'label' => $label);
         $options = array('series' => $series, 'legend' => $legend, 'tooltip' => array('trigger' => 'item', 'formatter' => "{b}<br/> {c} ({d}%)"));
         return $options;
     }
