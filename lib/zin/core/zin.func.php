@@ -74,7 +74,7 @@ function after(mixed ...$args): directive
 function inherit(node|array $item): array
 {
     if(!($item instanceof node)) $item = new node($item);
-    return array(set($item->props), directive('block', $item->blocks), $item->children());
+    return array(set($item->props->toJSON()), directive('block', $item->blocks), $item->children());
 }
 
 /**
