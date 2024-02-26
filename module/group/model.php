@@ -2519,6 +2519,7 @@ class groupModel extends model
         /* Privs in package. */
         foreach($this->config->group->package as $packageCode => $packageData)
         {
+            if(!isset($packageData->privs)) continue;
             foreach($packageData->privs as $privCode => $priv)
             {
                 list($moduleName, $methodName) = explode('-', $privCode);

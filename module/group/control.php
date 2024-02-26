@@ -362,8 +362,10 @@ class group extends control
         $privs    = array();
 
         /* Subsets in package. */
+        $this->app->loadLang('story');
         foreach($this->config->group->package as $packageCode => $packageData)
         {
+            if(!isset($packageData->privs)) continue;
             foreach($packageData->privs as $privCode => $priv)
             {
                 list($moduleName, $methodName) = explode('-', $privCode);
@@ -423,7 +425,7 @@ class group extends control
         }
 
         if($type == 'byGroup' || $type == 'byPackage') $this->managePrivByGroup($groupID, $nav, $version);
-        if($type == 'byModule') $this->managePrivByModule($groupID, $nav, $version);
+        if($type == 'byModule') $this->managePrivByModule();
 
         $this->display();
     }
