@@ -30,7 +30,7 @@ class datatableModel extends model
         $config = $this->config->$module;
         if(!empty($method) && isset($config->$method) && isset($config->$method->dtable)) $config = $config->$method;
 
-        $fieldList = $config->dtable->fieldList;
+        $fieldList = isset($config->dtable->fieldList) ? $config->dtable->fieldList : array();
 
         /* If doesn't need product, remove 'product' field. */
         if($this->session->hasProduct == 0 && (strpos($this->config->datatable->noProductModule, ",$module,") !== false))
@@ -189,5 +189,63 @@ class datatableModel extends model
     {
         if(!isset($a['order']) or !isset($b['order'])) return 0;
         return $a['order'] - $b['order'];
+    }
+
+    /**
+     * 打印表格标题。
+     * Print table head.
+     *
+     * @param  object $col
+     * @param  string $orderBy
+     * @param  string $vars
+     * @param  bool   $checkBox
+     * @access public
+     * @return void
+     */
+    public function printHead(object $col, string $orderBy, string $vars, bool $checkBox = true)
+    {
+        $id = $col->id;
+        if($col->show)
+        {
+            $fixed = zget($col, 'fixed', 'no') == 'no' ? 'true' : 'false';
+            $width = is_numeric($col->width) ? "{$col->width}px" : $col->width;
+            $title = isset($col->title) ? "title='$col->title'" : '';
+            $title = (isset($col->name) and $col->name) ? "title='$col->name'" : $title;
+            if($id == 'id' and (int)$width < 90) $width = '90px';
+            $align = $id == 'actions' ? 'text-center' : '';
+            $align = in_array($id, array('budget', 'teamCount', 'estimate', 'consume', 'consumed', 'left')) ? 'text-right' : $align;
+
+            $style  = '';
+            $data   = '';
+            $data  .= "data-width='$width'";
+            $style .= "width:$width;";
+            if(isset($col->minWidth))
+            {
+                $data  .= "data-minWidth='{$col->minWidth}px'";
+                $style .= "min-width:{$col->minWidth}px;";
+            }
+            if(isset($col->maxWidth))
+            {
+                $data  .= "data-maxWidth='{$col->maxWidth}px'";
+                $style .= "max-width:{$col->maxWidth}px;";
+            }
+            if(isset($col->pri)) $data .= "data-pri='{$col->pri}'";
+
+            echo "<th data-flex='$fixed' $data style='$style' class='c-$id $align' $title>";
+            if($id == 'actions')
+            {
+                echo $this->lang->actions;
+            }
+            elseif(isset($col->sort) and $col->sort == 'no')
+            {
+                echo $col->title;
+            }
+            else
+            {
+                if($id == 'id' && $checkBox) echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";
+                common::printOrderLink($id, $orderBy, $vars, $col->title);
+            }
+            echo '</th>';
+        }
     }
 }
