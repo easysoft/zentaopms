@@ -8,5 +8,5 @@
 #mainNavbar .nav-item>a {padding-right: 0.5rem}
 #mainNavbar .nav-item>.active {color: unset; font-weight: 700;}
 #mainNavbar .nav-item>a.active:after {position: absolute; content: ''; border-bottom: 2px solid #2e7fff; inset: 0 6px 0 15px;}
-.form-grid .form-label{width: 8rem;}
-.form-grid .form-group{padding-left: 8rem;}
+.form-horz .form-label{width: 8rem;}
+.form-horz .form-group{padding-left: 8rem;}

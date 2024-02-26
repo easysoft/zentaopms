@@ -14,7 +14,7 @@ class form extends formBase
 {
     protected static array $defineProps = array(
         'items?: array',    // 使用一个列定义对象数组来定义表单项。
-        'grid?: bool=true', // 是否启用网格部件，禅道中所有表单都是网格布局，除非有特殊目的，无需设置此项。
+        'horz?: bool=true', // 是否启用水平布局，禅道中所有表单都是网格布局，除非有特殊目的，无需设置此项。
         'labelWidth?: int', // 标签宽度，单位为像素。
         'actionsClass?: string="form-group no-label"', // 操作按钮栏的 CSS 类。
         'submitBtnText?: string' // 提交按钮文本。
@@ -46,7 +46,7 @@ class form extends formBase
             $item = item(set($item));
         }
 
-        if($this->prop('grid')) return new formRow(inherit($item));
+        if($this->prop('horz')) return new formRow(inherit($item));
 
         return new formGroup(inherit($item));
     }
@@ -54,29 +54,29 @@ class form extends formBase
     protected function buildActions(): wg|null
     {
         $actions = parent::buildActions();
-        if($this->prop('grid') && !empty($actions)) $actions = div(setClass('form-row'), $actions);
+        if($this->prop('horz') && !empty($actions)) $actions = div(setClass('form-row'), $actions);
         return $actions;
     }
 
     protected function buildProps(): array
     {
-        list($grid, $labelWidth) = $this->prop(array('grid', 'labelWidth'));
+        list($horz, $labelWidth) = $this->prop(array('horz', 'labelWidth'));
         $props = parent::buildProps();
-        if($grid)               $props[] = setClass('form-grid');
-        if(!empty($labelWidth)) $props[] = setCssVar('form-grid-label-width', $labelWidth);
+        if($horz)               $props[] = setClass('form-horz');
+        if(!empty($labelWidth)) $props[] = setCssVar('form-horz-label-width', $labelWidth);
 
         return $props;
     }
 
     protected function buildContent(): array
     {
-        list($items, $grid) = $this->prop(array('items', 'grid'));
+        list($items, $horz) = $this->prop(array('items', 'horz'));
 
         $list     = is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : array();
         $children = $this->children();
         if(!empty($children)) $list = array_merge($list, $children);
 
-        if($grid)
+        if($horz)
         {
             foreach($list as $key => $item)
             {
