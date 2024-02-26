@@ -84,7 +84,7 @@ class render
             $selector       = $this->selectors[$name];
             $item           = new stdClass();
             $item->name     = $name;
-            $item->selector = stringifyWgSelectors($selector);
+            $item->selector = stringifySelectors($selector);
             $item->selector = $selector;
 
             if(isset($selector->options['json']) && $selector->options['json'])
@@ -202,7 +202,7 @@ class render
     {
         if(!$selectors) return;
 
-        $selectors = parseWgSelectors($selectors);
+        $selectors = parseSelectors($selectors);
         foreach($selectors as $selector)
         {
             if(isset($selector->command) && !empty($selector->command)) $this->addDataCommands(array($selector->tag => $selector->command));

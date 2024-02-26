@@ -112,7 +112,7 @@ class node implements \JsonSerializable
      */
     public function is(string|array|object $selectors): bool
     {
-        $list = parseWgSelectors($selectors);
+        $list = parseSelectors($selectors);
         foreach($list as $selector)
         {
             if(isset($selector->command)) continue;
