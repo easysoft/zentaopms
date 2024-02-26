@@ -459,15 +459,7 @@
                 let hasFatal = false;
                 try
                 {
-                    if(data.includes('RAWJS<'))
-                    {
-                        const func = new Function(`return ${data.split('"RAWJS<').join('').split('>RAWJS"').join('').split('RAWJS_QUOTE').join('"').split('RAWJS_LINE').join('\n')}`);
-                        data = func();
-                    }
-                    else
-                    {
-                        data = JSON.parse(data);
-                    }
+                    data = $.parseRawData(data);
                 }
                 catch(e)
                 {
