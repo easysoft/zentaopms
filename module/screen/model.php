@@ -589,9 +589,6 @@ class screenModel extends model
         $component->chartConfig->sourceID    = $metric->id;
         $component->chartConfig->scope       = $metric->scope;
         $component->chartConfig->dateType    = $metric->dateType;
-        // $component->chartConfig->chartOption = $chartOption;
-        // $component->chartConfig->tableOption = $tableOption;
-        // $component->chartConfig->card        = $card;
 
         $latestFilters = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
         $component     = $this->updateMetricFilters($component, $latestFilters);
@@ -602,6 +599,7 @@ class screenModel extends model
         $component->option->card->isDateMetric   = $isDateMetric;
         $component->option->card->isObjectMetric = $isObjectMetric;
         $component->option->card->cardDateDefault = $component->option->card->filterValue ? $component->option->card->filterValue->dateString : '';
+        $component->option->noDataTip             = $this->metric->getNoDataTip($metric->code);
 
         return $component;
     }
@@ -2041,18 +2039,27 @@ class screenModel extends model
     {
         $chartOption = $this->metric->getEchartsOptions($resultHeader, $resultData);
 
-        if(!isset($chartOption['title'])) $chartOption['title'] = array('text' => $metric->name, 'show' => false, 'titleShow' => true, 'textStyle' => array('color' => '#BFBFBF'));
-        $chartOption['title']['text'] = $metric->name;
-        $chartOption['backgroundColor'] = "#0B1727FF";
-        $chartOption['legend']['textStyle']['color'] = 'white';
-        $chartOption['legend']['inactiveColor'] = 'gray';
-
-        if(!empty($component))
+        if(isset($component) && isset($component->option->chartOption))
         {
             $preChartOption = $component->option->chartOption;
             $preChartOption->series = $chartOption['series'];
             return $preChartOption;
         }
+
+        if(!isset($chartOption['title']))
+        {
+            $chartOption['title'] = array();
+            $chartOption['title']['show']      = false;
+            $chartOption['title']['titleShow'] = true;
+            $chartOption['title']['textStyle'] = array('color' => '#BFBFBF');
+        }
+
+        $chartOption['title']['text']   = $metric->name;
+        $chartOption['backgroundColor'] = "#0B1727FF";
+
+        if(!isset($chartOption['legend'])) $chartOption['legend'] = array();
+        $chartOption['legend']['textStyle']['color'] = 'white';
+        $chartOption['legend']['inactiveColor']      = 'gray';
 
         return $chartOption;
     }
@@ -2083,7 +2090,6 @@ class screenModel extends model
         $tableOption->data    = $this->filterMetricData($groupData, $dateType, $isObjectMetric, $filters);
 
         $tableOption->scope       = $metric->scope;
-        $tableOption->noDataTip   = $this->metric->getNoDataTip($metric->code);
 
         return $tableOption;
     }
