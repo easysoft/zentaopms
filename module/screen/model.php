@@ -2084,7 +2084,7 @@ class screenModel extends model
 
         list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, $metric->dateType, false);
 
-        $tableOption          = $component ? $component->option->tableOption : new stdclass();
+        $tableOption          = (!empty($component) && !empty($component->option->tableOption)) ? $component->option->tableOption : new stdclass();
         $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType, $filters) : array($groupHeader);
         $tableOption->data    = $this->filterMetricData($groupData, $dateType, $isObjectMetric, $filters);
 
