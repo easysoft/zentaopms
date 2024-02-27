@@ -98,18 +98,18 @@ class todoZen extends todo
      * 处理创建待办的请求数据。
      * Processing request data of create.
      *
-     * @param  form      $form
-     * @access protected
+     * @param  form   $form
+     * @access public
      * @return object
      */
-    protected function beforeCreate(form $form): object
+    public function beforeCreate(form $form): object
     {
         $rawData    = $form->data;
         $objectType = $rawData->type;
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
         $objectID = 0;
-        if($hasObject && $objectType) $objectID = $rawData->$objectType ? $rawData->$objectType : $rawData->objectID;
+        if($hasObject && $objectType) $objectID = isset($rawData->$objectType) ? $rawData->$objectType : $rawData->objectID;
         $rawData->date = !empty($rawData->config['date']) ? $rawData->config['date'] : $rawData->date;
 
         return $form->add('account', $this->app->user->account)
@@ -134,11 +134,11 @@ class todoZen extends todo
      * 添加按年循环待办的配置项。
      * Adds a yearly cycle of configuration items.
      *
-     * @param  form      $form
-     * @access protected
+     * @param  form   $form
+     * @access public
      * @return form
      */
-    protected function addCycleYearConfig(form $form): form
+    public function addCycleYearConfig(form $form): form
     {
         /* Only handle cases where you add to the backlog by year. */
         if(empty($form->data->config)) return $form;
@@ -156,10 +156,10 @@ class todoZen extends todo
      * Prepare the creation data.
      *
      * @param  object       $todo
-     * @access protected
+     * @access public
      * @return object|false
      */
-    protected function prepareCreateData(object $todo): object|false
+    public function prepareCreateData(object $todo): object|false
     {
         if(!isset($todo->pri) && in_array($todo->type, $this->config->todo->moduleList) && !in_array($todo->type, array('review', 'feedback')))
         {
@@ -196,7 +196,7 @@ class todoZen extends todo
 
         if($todo->private) $todo->assignedTo = $todo->assignedBy = $this->app->user->account;
 
-        $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $this->post->uid);
+        $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], (string)$this->post->uid);
 
         return $todo;
     }
