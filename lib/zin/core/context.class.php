@@ -300,7 +300,7 @@ class context extends \zin\utils\dataset
             if(!empty($hookFile) && file_exists($hookFile)) include $hookFile;
         }
         $hookCode = ob_get_clean();
-        if(!$hookCode) return $hookCode;
+        if($hookCode) return $hookCode;
         return '';
     }
 
