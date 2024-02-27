@@ -40,6 +40,8 @@ class set extends setting implements iDirective
     public static function __callStatic($prop, $args): set
     {
         $set = new set();
+        if(empty($args)) return $set->set($prop, true);
+
         if($prop === 'class' || strtolower($prop) === 'classname')
         {
             global $config;
