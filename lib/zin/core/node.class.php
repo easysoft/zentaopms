@@ -698,9 +698,6 @@ function prebuild(array $items)
 function parsePropsMap(array $definition, array $parentProps = array(), array $defaultValues = array())
 {
     $props = $parentProps;
-
-    if(isset($parentProps['layout'])) \a(['parsePropsMap', $parentProps['layout'], $defaultValues]);
-
     foreach($parentProps as $parentProp)
     {
         $name = $parentProp['name'];
@@ -710,8 +707,6 @@ function parsePropsMap(array $definition, array $parentProps = array(), array $d
 
     foreach($definition as $name => $value)
     {
-        if(isset($parentProps['layout'])) \a(['parsePropsMap.name', $name]);
-
         $prop = parseProp($value, is_string($name) ? $name : null);
         $name = $prop['name'];
 
@@ -723,8 +718,6 @@ function parsePropsMap(array $definition, array $parentProps = array(), array $d
         {
             $prop['default'] = $parentProps[$name]['default'];
         }
-
-        if(isset($parentProps['layout'])) \a(['parsePropsMap.layout', $name]);
 
         $props[$name] = $prop;
     }
