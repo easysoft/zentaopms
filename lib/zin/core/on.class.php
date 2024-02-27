@@ -191,6 +191,9 @@ class on extends jsCallback
             return;
         }
 
+        $zuiInitCode = $node->prop('zui-init', '');
+        $node->setProp('zui-init', $zuiInitCode . "\n" . $this->toJS());
+
         $node->props->bindEvent($this->event, $this->toJS());
     }
 
