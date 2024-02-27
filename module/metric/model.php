@@ -696,6 +696,28 @@ class metricModel extends model
     }
 
     /**
+     * 根据代号获取计算最新度量项的结果。
+     * Get result of latest calculate metric by code.
+     *
+     * @param  string      $code
+     * @param  array       $options e.g. array('product' => '1,2,3', 'year' => '2023')
+     * @param  string      $type
+     * @param  object|null $pager
+     * @access public
+     * @return array
+     */
+    public function getLatestResultByCode($code, $options = array(), $pager = null, $vision = 'rnd')
+    {
+        $metric     = $this->metricTao->fetchMetricByCode($code);
+        $dataFields = $this->getMetricRecordDateField($code);
+        $options    = $this->setDefaultOptions($options, $dataFields);
+
+        if($metric->scope != 'system') $dataFields[] = $metric->scope;
+
+        return $this->metricTao->fetchLatestMetricRecords($code, $dataFields, $options, $pager);
+    }
+
+    /**
      * 根据代号列表批量获取度量项的结果。
      * Get result of calculate metric by code list.
      *

@@ -78,7 +78,7 @@ class metricTao extends metricModel
         if(is_array($fields)) $fields = implode(',', $fields);
 
         $metric = $this->dao->select($fields)->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
-        return $metric->scope;
+        return $metric;
     }
 
     /**
@@ -191,11 +191,14 @@ class metricTao extends metricModel
      * @access protected
      * @return array|false
      */
-    protected function getObjectsWithPager($code, $scope, $pager)
+    protected function getObjectsWithPager($code, $scope, $pager = null, $extra = array())
     {
         if($scope == 'system') return false;
 
-        $scopeObjects = $this->dao->select($scope)->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetchPairs();
+        $scopeObjects = $this->dao->select($scope)->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->beginIF(!empty($extra))->andWhere($scope)->in($extra)->fi()
+            ->fetchPairs();
         $objects = array();
         if($scope == 'product')
         {
@@ -249,8 +252,73 @@ class metricTao extends metricModel
      */
     protected function fetchMetricRecords(string $code, array $fieldList, array $query = array(), object|null $pager = null): array
     {
-        $metricScope = $this->fetchMetricByID($code, 'scope');
-        $objectList  = $this->getObjectsWithPager($code, $metricScope, $pager);
+        $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
+
+        $dateType = $this->getDateType($dateList);
+        $query['dateType'] = $dateType;
+
+        $scopeValue = $this->processRecordQuery($query, 'scope');
+        $dateBegin  = $this->processRecordQuery($query, 'dateBegin', 'date');
+        $dateEnd    = $this->processRecordQuery($query, 'dateEnd', 'date');
+        list($dateBegin, $dateEnd) = $this->processRecordQuery($query, 'dateLabel', 'date');
+
+        $calcDate  = $this->processRecordQuery($query, 'calcDate', 'date');
+
+        $yearBegin  = empty($dateBegin) ? '' : $dateBegin->year;
+        $yearEnd    = empty($dateEnd)   ? '' : $dateEnd->year;
+        $monthBegin = empty($dateBegin) ? '' : $dateBegin->month;
+        $monthEnd   = empty($dateEnd)   ? '' : $dateEnd->month;
+        $weekBegin  = empty($dateBegin) ? '' : $dateBegin->week;
+        $weekEnd    = empty($dateEnd)   ? '' : $dateEnd->week;
+        $dayBegin   = empty($dateBegin) ? '' : $dateBegin->day;
+        $dayEnd     = empty($dateEnd)   ? '' : $dateEnd->day;
+
+        $metric      = $this->fetchMetricByID($code, 'scope');
+        $scopeKey    = $metric->scope;
+        $objectList  = $this->getObjectsWithPager($code, $scopeKey, $pager, $scopeValue);
+
+        $fieldList = array_merge($fieldList, array('id', 'value', 'date'));
+        $wrapFields = array_map(fn($value) => "`$value`", $fieldList);
+        $dataFieldStr = implode(',', $wrapFields);
+
+        $stmt = $this->dao->select($dataFieldStr)
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->beginIF($scopeKey != 'system')->andWhere($scopeKey)->in($objectList)->fi()
+            ->beginIF(!empty($scopeValue))->andWhere($scopeKey)->in($scopeValue)->fi()
+            ->beginIF(!empty($dateBegin) and $dateType == 'year')->andWhere('`year`')->ge($yearBegin)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'year')->andWhere('`year`')->le($yearEnd)->fi()
+            ->beginIF(!empty($dateBegin) and $dateType == 'month')->andWhere('CONCAT(`year`, `month`)')->ge($monthBegin)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'month')->andWhere('CONCAT(`year`, `month`)')->le($monthEnd)->fi()
+            ->beginIF(!empty($dateBegin) and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->ge($weekBegin)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->le($weekEnd)->fi()
+            ->beginIF(!empty($dateBegin) and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->ge($dayBegin)->fi()
+            ->beginIF(!empty($dateEnd)   and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->le($dayEnd)->fi()
+            ->beginIF(!empty($calcDate))->andWhere('date')->ge($calcDate)->fi()
+            ->beginIF($scopeKey != 'system')->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
+            ->beginIF($scopeKey == 'system')->orderBy("date desc, year desc, month desc, week desc, day desc")->fi();
+
+        if($metricScope == 'system') $stmt = $stmt->page($pager); // beginIF not work with page()
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * 请求最新的度量数据。
+     * Fetch latest metric data.
+     *
+     * @param  string      $code
+     * @param  array       $fieldList
+     * @param  array       $query
+     * @param  object|null $pager
+     * @access protected
+     * @return array
+     */
+    protected function fetchLatestMetricRecords(string $code, array $fieldList, array $query = array(), object|null $pager = null): array
+    {
+        $metric       = $this->fetchMetricByID($code);
+        $metricScope  = $metric->scope;
+        $lastCalcDate = substr($metric->lastCalcTime, 0, 10);
+        $objectList   = $this->getObjectsWithPager($code, $metricScope);
 
         $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
         $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
@@ -263,7 +331,7 @@ class metricTao extends metricModel
         $dateEnd   = $this->processRecordQuery($query, 'dateEnd', 'date');
         list($dateBegin, $dateEnd) = $this->processRecordQuery($query, 'dateLabel', 'date');
 
-        $calcDate  = $this->processRecordQuery($query, 'calcDate', 'date');
+        $calcDate  = $dateType == 'nodate' ? $lastCalcDate : null;
 
         $yearBegin  = empty($dateBegin) ? '' : $dateBegin->year;
         $yearEnd    = empty($dateEnd)   ? '' : $dateEnd->year;
@@ -298,7 +366,7 @@ class metricTao extends metricModel
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi();
 
-        if($metricScope == 'system') $stmt = $stmt->page($pager); // beginIF not work with page()
+        $stmt = $stmt->page($pager); // beginIF not work with page()
         return $stmt->fetchAll();
     }
 

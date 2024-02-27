@@ -572,14 +572,26 @@ class screenModel extends model
     {
         $this->loadModel('metric');
 
-        $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
+        $pagination = $this->getMetricPagination($component);
+        $filters    = $this->processMetricFilter($filterParams, $metric->dateType);
+
+        list($pager, $pagination) = $this->preparePaginationBeforeFetchRecords($pagination);
+        $result = $this->metric->getResultByCode($metric->code, $filters, 'cron', $pager);
+
+        $pagination['total']     = $pager->recTotal;
+        $pagination['pageTotal'] = $pager->pageTotal;
 
         $resultHeader   = $this->metric->getViewTableHeader($metric);
         $resultData     = $this->metric->getViewTableData($metric, $result);
         $isObjectMetric = $metric->scope != 'system';
         $isDateMetric   = $metric->dateType != 'nodate';
 
-        $card = $this->getMetricCardOption($metric, $resultData, $component);
+        $tableOption = $this->getMetricTableOption($metric, $resultHeader, $resultData, $filterParams, $component);
+        $chartOption = $this->getMetricChartOption($metric, $resultHeader, $resultData, $component);
+        $card        = $this->getMetricCardOption($metric, $resultData, $component);
+
+        $tableOption->pagination = $pagination;
+        $card->pagination        = $pagination;
 
         list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
 
@@ -591,15 +603,63 @@ class screenModel extends model
         $latestFilters = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
         $component     = $this->updateMetricFilters($component, $latestFilters);
 
-        $component->option->chartOption          = $this->getMetricChartOption($metric, $resultHeader, $resultData, $component);
-        $component->option->tableOption          = $this->getMetricTableOption($metric, $resultHeader, $resultData, $filterParams, $component);
-        $component->option->card                 = $card;
-        $component->option->card->isDateMetric   = $isDateMetric;
-        $component->option->card->isObjectMetric = $isObjectMetric;
+        $component->option->chartOption           = $chartOption;
+        $component->option->tableOption           = $tableOption;
+        $component->option->card                  = $card;
+        $component->option->card->isDateMetric    = $isDateMetric;
+        $component->option->card->isObjectMetric  = $isObjectMetric;
         $component->option->card->cardDateDefault = $component->option->card->filterValue ? $component->option->card->filterValue->dateString : '';
         $component->option->noDataTip             = $this->metric->getNoDataTip($metric->code);
 
         return $component;
+    }
+
+    public function getMetricPagination($component)
+    {
+        $tablePagination = array('index' => 1, 'size' => 5, 'total' => 0, 'pageTotal' => 1);
+        $cardPagination  = array('index' => 1, 'size' => 2 * 6, 'total' => 0, 'pageTotal' => 1);
+
+        if(empty($component)) return $tablePager;
+
+        $option = $component->option;
+        $displayType = $option->displayType;
+        if(isset($option->card->pagination)) $cardPagination = array_merge($cardPagination, (array)$option->card->pagination);
+        if(isset($option->tableOption->pagination)) $tablePagination = array_merge($tablePagination, (array)$option->tableOption->pagination);
+
+        $tableOption = $option->tableOption;
+        $cardOption  = $option->card;
+
+        if(isset($tableOption->rowNum)) $tablePagination['size'] = $tableOption->rowNum;
+
+        $cardRow = isset($cardOption->countEachRow) ? $cardOption->countEachRow : 2;
+        $cardColumn = isset($cardOption->countEachColumn) ? $cardOption->countEachColumn : 6;
+        $cardPagination['size'] = $cardRow * $cardColumn;
+
+        return $displayType == 'normal' ? $tablePagination : $cardPagination;
+    }
+
+    /**
+     * Prepare pagination before fetch records.
+     *
+     * @param  object    $pagination
+     * @access public
+     * @return array
+     */
+    public function preparePaginationBeforeFetchRecords($pagination)
+    {
+        $defaultPagination = array('index' => 1, 'size' => 2 * 6, 'total' => 0);
+
+        if(is_string($pagination)) $pagination = json_decode($pagination, true);
+        if(empty($pagination)) return $pagination;
+
+        $pagination = array_merge($defaultPagination, (array)$pagination);
+
+        extract($pagination);
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($total, $size, $index);
+
+        return array($pager, $pagination);
     }
 
     /**
@@ -1155,8 +1215,8 @@ class screenModel extends model
                 $beginFilter->value = $beginValue;
                 $endFilter->value   = $endValue;
 
-                $filters['begin'] = $beginFilter;
-                $filters['end']   = $endFilter;
+                $filters['dateBegin'] = $beginFilter->$dateType;
+                $filters['dateEnd']   = $endFilter->$dateType;
             }
             else
             {
@@ -1164,7 +1224,7 @@ class screenModel extends model
                 $scopeFilter->value = $value;
                 $scopeFilter->type  = $field;
 
-                $filters['scope'] = $scopeFilter;
+                $filters['scope'] = implode(',', $value);
             }
         }
 
@@ -2042,6 +2102,8 @@ class screenModel extends model
         {
             $preChartOption = $component->option->chartOption;
             $preChartOption->series = $chartOption['series'];
+            if(!isset($preChartOption->xAxis)) $preChartOption->xAxis = $chartOption['xAxis'];
+            $preChartOption->xAxis->data = $chartOption['xAxis']['data'];
             return $preChartOption;
         }
 
@@ -2080,15 +2142,15 @@ class screenModel extends model
         $isObjectMetric = $this->metric->isObjectMetric($resultHeader);
         $dateType       = $metric->dateType;
 
-        $filters = $this->processMetricFilter($filterParams, $dateType);
-
+        // $filters = $this->processMetricFilter($filterParams, $dateType);
         list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, $metric->dateType, false);
 
-        $tableOption          = (!empty($component) && !empty($component->option->tableOption)) ? $component->option->tableOption : new stdclass();
-        $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType, $filters) : array($groupHeader);
-        $tableOption->data    = $this->filterMetricData($groupData, $dateType, $isObjectMetric, $filters);
+        $tableOption = new stdclass();
+        if(!empty($component) && isset($component->option->tableOption)) $tableOption = $component->option->tableOption;
 
-        $tableOption->scope       = $metric->scope;
+        $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType) : array($groupHeader);
+        $tableOption->data    = $groupData;
+        $tableOption->scope   = $metric->scope;
 
         return $tableOption;
     }
@@ -2196,7 +2258,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getMetricHeaders($resultHeader, $dateType, $filters)
+    public function getMetricHeaders($resultHeader, $dateType)
     {
         $headers = array_fill(0, 2, array());
 
@@ -2231,61 +2293,8 @@ class screenModel extends model
         }
 
         if($dateType == 'year') unset($headers[1]);
-        if(!isset($filters['begin'], $filters['end'])) return $headers;
 
-        $beginFilter = $filters['begin'];
-        $endFilter   = $filters['end'];
-
-        $filteredHeaders = array();
-        if($dateType == 'year')
-        {
-            $filteredHeaders[0] = array_filter($headers[0], function($item) use ($beginFilter, $endFilter)
-            {
-                if($item['name'] == 'scope') return true;
-                if($item['value'] >= $beginFilter->year && $item['value'] <= $endFilter->year) return true;
-                return false;
-            });
-        }
-        if($dateType == 'month')
-        {
-            foreach($headers as $index => $headerRow)
-            {
-                $filteredHeaders[$index] = array_filter($headerRow, function($item) use ($beginFilter, $endFilter)
-                {
-                    if($item['name'] == 'scope') return true;
-                    if($item['type'] == 'year'  && $item['value'] >= $beginFilter->year  && $item['value'] <= $endFilter->year)  return true;
-                    if($item['type'] == 'month' && $item['value'] >= $beginFilter->month && $item['value'] <= $endFilter->month) return true;
-                    return false;
-                });
-            }
-        }
-        if($dateType == 'day')
-        {
-            foreach($headers as $index => $headerRow)
-            {
-                $filteredHeaders[$index] = array_filter($headerRow, function($item) use ($beginFilter, $endFilter)
-                {
-                    if($item['name'] == 'scope') return true;
-                    if($item['type'] == 'year' && $item['value'] >= $beginFilter->year && $item['value'] <= $endFilter->year) return true;
-                    if($item['type'] == 'day'  && $item['value'] >= $beginFilter->day  && $item['value'] <= $endFilter->day)  return true;
-                    return false;
-                });
-            }
-        }
-
-        if($dateType == 'month' || $dateType == 'day')
-        {
-            foreach($filteredHeaders[0] as $colIndex => $headerCol)
-            {
-                $groupName = $headerCol['name'];
-                if($groupName == 'scope') continue;
-
-                $headerGroups = array_filter($filteredHeaders[1], function($item) use ($groupName) { return $item['headerGroup'] == $groupName; });
-                $filteredHeaders[0][$colIndex]['colspan'] = count($headerGroups);
-            }
-        }
-
-        return $filteredHeaders;
+        return $headers;
     }
 
     /**
