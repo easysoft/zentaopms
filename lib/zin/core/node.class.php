@@ -603,7 +603,7 @@ class node implements \JsonSerializable
 
         if(!isset(node::$definedPropsMap[$type]) && $type === get_called_class())
         {
-            node::$definedPropsMap[$type] = static::parsePropsDefinition(static::$defineProps);
+            node::$definedPropsMap[$type] = static::parsePropsDefinition();
         }
         return node::$definedPropsMap[$type];
     }
@@ -630,19 +630,19 @@ class node implements \JsonSerializable
      * $definition = array('name', 'desc:string', 'title?:string|array', 'icon?:string="star"');
      * $definition = array('name' => 'mixed', 'desc' => '?string', 'title' => array('type' => 'string|array', 'optional' => true), 'icon' => array('type' => 'string', 'default' => 'star', 'optional' => true))))
      */
-    protected static function parsePropsDefinition(array $definition): array
+    protected static function parsePropsDefinition(): array
     {
         $parentClass  = get_parent_class(get_called_class());
         $parentProps  = array();
         $defaultProps = static::$defaultProps;
+        $definition   = static::$defineProps;
 
         if($parentClass)
         {
+            if($definition === $parentClass::$defineProps)    $definition = array();
+            if($defaultProps === $parentClass::$defaultProps) $defaultProps = array();
+
             $parentProps = call_user_func("$parentClass::definedPropsList", $parentClass);
-            if($defaultProps === $parentClass::$defaultProps)
-            {
-                $defaultProps = array();
-            }
         }
 
         return parsePropsMap($definition, $parentProps, $defaultProps);
@@ -699,19 +699,32 @@ function parsePropsMap(array $definition, array $parentProps = array(), array $d
 {
     $props = $parentProps;
 
+    if(isset($parentProps['layout'])) \a(['parsePropsMap', $parentProps['layout'], $defaultValues]);
+
+    foreach($parentProps as $parentProp)
+    {
+        $name = $parentProp['name'];
+        if(isset($defaultValues[$name])) $parentProp['default'] = $defaultValues[$name];
+        $props[$name] = $parentProp;
+    }
+
     foreach($definition as $name => $value)
     {
+        if(isset($parentProps['layout'])) \a(['parsePropsMap.name', $name]);
+
         $prop = parseProp($value, is_string($name) ? $name : null);
         $name = $prop['name'];
 
         if(isset($defaultValues[$name]))
         {
-            $prop['default'] = $defaultValues[$prop['name']];
+            $prop['default'] = $defaultValues[$name];
         }
-        elseif(is_null($prop['default']) && isset($parentProps[$prop['name']]))
+        elseif(!isset($prop['default']) && isset($parentProps[$name]) && $parentProps[$name]['default'])
         {
-            $prop['default'] = $parentProps[$prop['name']]['default'];
+            $prop['default'] = $parentProps[$name]['default'];
         }
+
+        if(isset($parentProps['layout'])) \a(['parsePropsMap.layout', $name]);
 
         $props[$name] = $prop;
     }
@@ -724,13 +737,13 @@ function parsePropsMap(array $definition, array $parentProps = array(), array $d
  *
  * @param string|array $definition - The prop definition.
  * @param string|null  $name       - The prop name.
- * @param mixed        $default    - The default value.
  * @return array
  */
-function parseProp(string|array $definition, ?string $name = null, mixed $default = null)
+function parseProp(string|array $definition, ?string $name = null)
 {
     $optional = false;
     $type     = 'mixed';
+    $prop     = array();
 
     if(is_string($definition)) $definition = trim($definition);
 
@@ -758,7 +771,7 @@ function parseProp(string|array $definition, ?string $name = null, mixed $defaul
     if(is_array($definition))
     {
         if(isset($definition['type']))     $type = $definition['type'];
-        if(isset($definition['default']))  $default = $definition['default'];
+        if(isset($definition['default']))  $prop['default'] = $definition['default'];
         if(isset($definition['optional'])) $optional = $definition['optional'];
     }
     else if(is_string($definition))
@@ -766,12 +779,12 @@ function parseProp(string|array $definition, ?string $name = null, mixed $defaul
         if(str_contains($definition, '='))
         {
             list($type, $default) = explode('=', $definition, 2);
+            if(strlen($default)) $prop['default'] = json_decode(trim($default));
         }
         else
         {
             $type = $definition;
         }
-        if(is_string($default)) $default = json_decode(trim($default));
     }
 
     $type = trim($type);
@@ -791,5 +804,8 @@ function parseProp(string|array $definition, ?string $name = null, mixed $defaul
         array_unshift($typeList, 'null');
     }
 
-    return array('name' => $name, 'type' => implode('|', $typeList), 'default' => $default, 'optional' => $default !== null || $optional);
+    $prop['name']     = $name;
+    $prop['type']     = implode('|', $typeList);
+    $prop['optional'] = $optional || (isset($prop['default']) && $prop['default'] !== null);
+    return $prop;
 }
