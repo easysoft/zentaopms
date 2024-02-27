@@ -2,7 +2,7 @@
   "pkg": {
     "xuanxuan": {
       "gitVersion": "f501e962d26241befbe0b18cf770e41e0f49d7e4",
-      "version": "8.0"
+      "version": "8.0.2"
     },
     "zentaoext": {
       "gitVersion": "release-18.11",
@@ -50,4 +50,3 @@
     "groups2": "38a4e39b-df5d-4606-a988-e22673bdc358,6f5bb3f5-f4e3-4f67-963e-0cc9d59ad3c7"
   }
 }
-
