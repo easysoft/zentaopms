@@ -26,7 +26,7 @@ toolbar
         'icon'        => 'export',
         'class'       => 'ghost export',
         'text'        => $lang->export,
-        'url'         => $createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}"),
+        'url'         => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}"),
         'data-toggle' => 'modal'
     ))) : null,
     common::hasPriv('doc', 'createLib') ? item(set(array
