@@ -133,6 +133,7 @@ $config->bug->actionList['toTask']['data-toggle'] = 'modal';
 $config->bug->actionList['toTask']['data-size']   = 'sm';
 
 $config->bug->actionList['createCase']['icon'] = 'sitemap';
+$config->bug->actionList['createCase']['id']   = 'createCase';
 $config->bug->actionList['createCase']['text'] = $lang->bug->createCase;
 $config->bug->actionList['createCase']['hint'] = $lang->bug->createCase;
 $config->bug->actionList['createCase']['url']  = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&moduleID=0&from=bug&bugID={id}');
