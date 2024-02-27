@@ -13,11 +13,13 @@ declare(strict_types=1);
 namespace zin;
 
 /**
- * Parse wg selector
+ * Parse wg selector.
+ *
  * @param string|object $selector
+ * @param bool          $checkParents
  * @return object|null
  */
-function parseSelector(string|object $selector): ?object
+function parseSelector(string|object $selector, bool $checkParents = false): ?object
 {
     if(is_object($selector)) return $selector;
 
@@ -34,7 +36,8 @@ function parseSelector(string|object $selector): ?object
         'name'     => null,
         'first'    => false,
         'selector' => $selector,
-        'options'  => array()
+        'options'  => array(),
+        'parents'  => array()
     );
     if(str_contains($selector, '/'))
     {
@@ -49,6 +52,14 @@ function parseSelector(string|object $selector): ?object
         $result['inner'] = true;
         $selector = substr($selector, 0, strlen($selector) - 2);
         $len      = strlen($selector);
+    }
+
+    if($checkParents && str_contains($selector, ' '))
+    {
+        $parts    = explode(' ', $selector);
+        $selector = array_pop($parts);
+        $len      = strlen($selector);
+        foreach($parts as $part) $result['parents'][] = parseSelector($part);
     }
 
     $type         = 'tag';
@@ -124,17 +135,19 @@ function parseSelector(string|object $selector): ?object
 
 /**
  * Parse wg selectors.
+ *
  * @param object|string|object[]|string[] $selectors
+ * @param bool                            $checkParents
  * @return object[]
  */
-function parseSelectors(object|string|array $selectors): array
+function parseSelectors(object|string|array $selectors, bool $checkParents = false): array
 {
     if(is_object($selectors)) return array($selectors);
     if(is_string($selectors)) $selectors = explode(',', trim($selectors));
     $results = array();
     foreach($selectors as $selector)
     {
-        $selector = parseSelector($selector);
+        $selector = parseSelector($selector, $checkParents);
         if(is_object($selector)) $results[] = $selector;
     }
     return $results;

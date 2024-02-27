@@ -39,7 +39,7 @@ class query
      */
     public function __construct(object|string|array $selectors)
     {
-       $this->selectors = parseSelectors($selectors);
+       $this->selectors = parseSelectors($selectors, true);
        context::current()->addQuery($this);
     }
 

@@ -120,12 +120,28 @@ class node implements \JsonSerializable
         foreach($list as $selector)
         {
             if(isset($selector->command)) continue;
-            if(!empty($selector->id)    && $this->id() !== $selector->id) continue;
-            if(!empty($selector->tag)   && $this->type() !== $selector->tag) continue;
-            if(!empty($selector->class) && !$this->props->class->has($selector->class)) continue;
+            if(!empty($selector->id)      && $this->id() !== $selector->id)               continue;
+            if(!empty($selector->tag)     && $this->type() !== $selector->tag)            continue;
+            if(!empty($selector->class)   && !$this->props->class->has($selector->class)) continue;
+            if(!empty($selector->parents) && !$this->hasParents(...$selector->parents))      continue;
             return true;
         }
         return false;
+    }
+
+    public function hasParents(object|string ...$parentSelectors): bool
+    {
+        $parent = $this->parent;
+        if(!$parent) return false;
+
+        foreach($parentSelectors as $selector)
+        {
+            if(is_string($selector)) $selector = parseSelectors($selector);
+            $parent = $parent->closest($selector);
+            if(!$parent) return false;
+        }
+
+        return true;
     }
 
     public function off(string $event)
@@ -136,7 +152,7 @@ class node implements \JsonSerializable
 
     public function closest(string|array|object $selectors): ?node
     {
-        $list = parseSelectors($selectors);
+        $list = parseSelectors($selectors, true);
         $node = $this;
         while($node)
         {
@@ -148,7 +164,7 @@ class node implements \JsonSerializable
 
     public function find(string|array|object $selectors, bool $first = false, bool $reverse = false): array
     {
-        return findInNode(parseSelectors($selectors), $this, $first, $reverse);
+        return findInNode(parseSelectors($selectors, true), $this, $first, $reverse);
     }
 
     public function findFirst(string|array|object $selectors): ?node
