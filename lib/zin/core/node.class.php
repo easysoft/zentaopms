@@ -119,14 +119,18 @@ class node implements \JsonSerializable
         $list = parseSelectors($selectors);
         foreach($list as $selector)
         {
-            if(isset($selector->command)) continue;
-            if(!empty($selector->id)      && $this->id() !== $selector->id)               continue;
-            if(!empty($selector->tag)     && $this->type() !== $selector->tag)            continue;
-            if(!empty($selector->class)   && !$this->props->class->has($selector->class)) continue;
-            if(!empty($selector->parents) && !$this->hasParents(...$selector->parents))      continue;
-            return true;
+            if($this->isMatch($selector)) return true;
         }
         return false;
+    }
+
+    public function isMatch(object $selector): bool
+    {
+        if(!empty($selector->id)      && $this->id() !== $selector->id)               return false;
+        if(!empty($selector->tag)     && $this->type() !== $selector->tag)            return false;
+        if(!empty($selector->class)   && !$this->props->class->has($selector->class)) return false;
+        if(!empty($selector->parents) && !$this->hasParents(...$selector->parents))   return false;
+        return true;
     }
 
     public function hasParents(object|string ...$parentSelectors): bool
@@ -136,7 +140,6 @@ class node implements \JsonSerializable
 
         foreach($parentSelectors as $selector)
         {
-            if(is_string($selector)) $selector = parseSelectors($selector);
             $parent = $parent->closest($selector);
             if(!$parent) return false;
         }
@@ -423,7 +426,7 @@ class node implements \JsonSerializable
         }
    }
 
-    public function prebuild(bool $force = false, bool $preCallback = false): stdClass
+    public function prebuild(bool $force = false): stdClass
     {
         $firstBuild = ($this->buildData === null || $force);
         if($firstBuild)
@@ -434,25 +437,26 @@ class node implements \JsonSerializable
             $data = new stdClass();
             $data->before   = prebuild($this->buildBefore(), $this);
             $data->children = prebuild($this->children(), $this);
-            $data->content  = prebuild($this->buildContent(), $this);
+            $data->content  = prebuild($this->buildContents(), $this);
             $data->after    = prebuild($this->buildAfter(), $this);
 
             $this->buildData = $data;
 
             $context->handlePreBuildNode($this);
+            $context->handleBuildNode($data, $this);
         }
         else
         {
             if(!isset($this->buildData->before))   $this->buildData->before   = prebuild($this->buildBefore(), $this);
             if(!isset($this->buildData->children)) $this->buildData->children = prebuild($this->children(), $this);
-            if(!isset($this->buildData->content))  $this->buildData->content  = prebuild($this->buildContent(), $this);
+            if(!isset($this->buildData->content))  $this->buildData->content  = prebuild($this->buildContents(), $this);
             if(!isset($this->buildData->after))    $this->buildData->after    = prebuild($this->buildAfter(), $this);
         }
 
         return $this->buildData;
     }
 
-    public function buildContent(): array
+    public function buildContents(): array
     {
         $content = $this->build();
         if(is_null($content) || is_bool($content)) $content = array();
@@ -464,11 +468,7 @@ class node implements \JsonSerializable
     {
         if($this->replacedWith !== null) return $this->replacedWith;
 
-        $context = context();
-        $data    = $this->prebuild();
-
-        $context->handleBuildNode($data, $this);
-
+        $data = $this->prebuild();
         return array_merge($data->before, $data->content, $data->after);
     }
 
