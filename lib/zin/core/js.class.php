@@ -453,6 +453,13 @@ class js implements \JsonSerializable, iDirective
         return $js->toJS();
     }
 
+    public static function defineJSCall(string $func, array $args): string
+    {
+        $js = new js();
+        $js->call($func, ...$args);
+        return $js->toJS();
+    }
+
     /**
      * Create js context object.
      * 创建给定 JS 值的上下文操作辅助对象。

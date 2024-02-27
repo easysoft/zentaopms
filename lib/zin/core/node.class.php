@@ -53,6 +53,8 @@ class node implements \JsonSerializable
 
     public ?stdClass $buildData = null;
 
+    public array $eventBindings = array();
+
     public function __construct(mixed ...$args)
     {
         $this->gid   = 'zin_' . uniqid();
@@ -280,6 +282,52 @@ class node implements \JsonSerializable
         else           $this->blocks = array();
     }
 
+    public function bindEvent(string $event, object|array $info)
+    {
+        if(is_array($info)) $info = (object)$info;
+        if(!isset($this->eventBindings[$event])) $this->eventBindings[$event] = array();
+        $this->eventBindings[$event][] = $info;
+
+        if(!$this->hasProp('id')) $this->setProp('id', $this->gid);
+    }
+
+    public function buildEvents(): ?string
+    {
+        $events = $this->eventBindings;
+        if(empty($events)) return null;
+
+        $id   = $this->id();
+        $code = array($this->type() === 'html' ? 'const ele = document;' : 'const ele = document.getElementById("' . (empty($id) ? $this->gid : $id) . '");if(!ele)return;const $ele = $(ele); const events = new Set(($ele.attr("data-zin-events") || "").split(" ").filter(Boolean));');
+        foreach($events as $event => $bindingList)
+        {
+            $code[]   = "\$ele.on('$event.on.zin', function(e){";
+            foreach($bindingList as $binding)
+            {
+                if(is_string($binding)) $binding = (object)array('handler' => $binding);
+                $selector = isset($binding->selector) ? $binding->selector : null;
+                $handler  = isset($binding->handler) ? trim($binding->handler) : '';
+                $stop     = isset($binding->stop) ? $binding->stop : null;
+                $prevent  = isset($binding->prevent) ? $binding->prevent : null;
+                $self     = isset($binding->self) ? $binding->self : null;
+
+                $code[]   = '(function(){';
+                if($selector) $code[] = "const target = e.target.closest('$selector');if(!target) return;";
+                else          $code[] = "const target = ele;";
+                if($self)     $code[] = "if(ele !== e.target) return;";
+                if($stop)     $code[] = "e.stopPropagation();";
+                if($prevent)  $code[] = "e.preventDefault();";
+
+                if(preg_match('/^[$A-Z_][0-9A-Z_$\[\]."\']*$/i', $handler)) $code[] = "($handler).call(target,e);";
+                else $code[] = $handler;
+
+                $code[] = '})();';
+            }
+            $code[] = "});events.add('$event');";
+        }
+        $code[] = '$ele.attr("data-zin-events", Array.from(events).join(" "));';
+        return js::scope($code);
+    }
+
     public function render(): string
     {
         if($this->removed) return '';
@@ -466,6 +514,7 @@ class node implements \JsonSerializable
     protected function onSetProp(array|string $prop, mixed $value)
     {
         if($prop === 'id' && $value === '$GID') $value = $this->gid;
+
         $this->props->set($prop, $value);
         $this->buildData = null;
     }

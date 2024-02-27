@@ -29,14 +29,14 @@ class command
         $node->props->class->remove(...$args);
     }
 
-    public static function prop(node $node, array $args)
-    {
-        $node->setProp(...$args);
-    }
-
     public static function toggleClass(node $node, array $args)
     {
         $node->props->class->toggle(...$args);
+    }
+
+    public static function prop(node $node, array $args)
+    {
+        $node->setProp(...$args);
     }
 
     public static function html(node $node, array $args)

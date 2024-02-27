@@ -52,6 +52,18 @@ class context extends \zin\utils\dataset
 
     public ?render $renderer = null;
 
+    public array $pageJS = array();
+
+    public array $pageCSS = array();
+
+    public array $jsVars = array();
+
+    public array $jsCalls = array();
+
+    public array $wgRes = array();
+
+    public array $eventBindings = array();
+
     public function __construct(string $name)
     {
         parent::__construct();
@@ -157,76 +169,99 @@ class context extends \zin\utils\dataset
         return $this->getList('import');
     }
 
-    public function addCSS(string ...$cssList)
+    public function addCSS(string|array $css, ?string $name = null)
     {
-        return $this->mergeToList('css', $cssList);
+        if(is_array($css)) $css = implode("\n", $css);
+
+        if($name)
+        {
+            if(isset($this->pageCSS[$name]))
+            {
+                if(isDebug()) triggerError("Page CSS name \"$name\" already exists.");
+                return;
+            }
+            $this->pageCSS[$name] = $css;
+        }
+        else
+        {
+            $this->pageCSS[] = $css;
+        }
     }
 
     public function getCSS(): string
     {
-        return trim(implode("\n", $this->getList('css')));
+        $css   = array();
+        $wgRes = $this->wgRes;
+
+        if($wgRes) foreach ($wgRes as $res) if($res['css']) $css[] = $res['css'];
+
+        if($this->pageCSS) $css = array_merge($css, $this->pageCSS);
+        return trim(implode("\n", $css));
     }
 
-    public function addJS(string ...$jsList)
+    public function addJS(string|array $js, ?string $name = null)
     {
-        return $this->mergeToList('js', $jsList);
+        if(is_array($js)) $js = implode("\n", $js);
+
+        if($name)
+        {
+            if(isset($this->pageJS[$name]))
+            {
+                if(isDebug()) triggerError("Page JS name \"$name\" already exists.");
+                return;
+            }
+            $this->pageJS[$name] = $js;
+        }
+        else
+        {
+            $this->pageJS[] = $js;
+        }
     }
 
     public function addJSVar(string $name, mixed $value)
     {
-        return $this->addToList('jsVar', js::defineVar($name, $value));
+        $this->jsVars[$name] = $value;
     }
 
-    public function addWgWithEvents($wg)
-    {
-        $list = $this->getWgWithEventsList();
-        if(in_array($wg, $list)) return $this;
-        return $this->addToList('wgWithEvents', $wg);
-    }
-
-    public function getWgWithEventsList()
-    {
-        return $this->getList('wgWithEvents');
-    }
 
     public function addJSCall($func, $args)
     {
-        $code = call_user_func('\zin\h::createJsCallCode', $func, $args);
-        return $this->addToList('jsCall', $code);
-    }
-
-    public function getEventsBindings()
-    {
-        $wgs   = $this->getList('wgWithEvents');
-        $codes = array();
-        foreach($wgs as $wg)
-        {
-            if(!method_exists($wg, 'buildEvents')) continue;
-            $code = $wg->buildEvents();
-            if(!empty($code)) $codes[] = $code;
-        }
-        return $codes;
+        $this->jsCalls[] = array($func, $args);
     }
 
     public function getJS()
     {
-        $js = trim(implode("\n", array_merge($this->getList('jsVar'), $this->getList('js'), $this->getEventsBindings(), $this->getList('jsCall'))));
+        $jsVars          = $this->jsVars;
+        $pageJS          = $this->pageJS;
+        $jsCalls         = $this->jsCalls;
+        $wgRes           = $this->wgRes;
+        $eventBindings   = $this->eventBindings;
+        $js              = array();
+
+        if($wgRes)         foreach ($wgRes as $res) if($res['js']) $js[] = js::scope($res['js']);
+        if($jsVars)        foreach($jsVars as $name => $value) $js[] = js::defineVar($name, $value);
+        if($pageJS)        $js = array_merge($js, $pageJS);
+        if($eventBindings) $js = array_merge($js, $eventBindings);
+        if($jsCalls)       foreach($jsCalls as $call) $js[] = js::defineJSCall($call[0], $call[1]);
+
         if(empty($js)) return '';
 
-        if(strpos($js, 'setTimeout') !== false) $js = 'function setTimeout(callback, time){return typeof window.registerTimer === "function" ? window.registerTimer(callback, time) : window.setTimeout(callback, time);}' . $js;
+        $js = trim(implode("\n", $js));
+        if(strpos($js, 'setTimeout') !== false)  $js = 'function setTimeout(callback, time){return typeof window.registerTimer === "function" ? window.registerTimer(callback, time) : window.setTimeout(callback, time);}' . $js;
         if(strpos($js, 'setInterval') !== false) $js = 'function setInterval(callback, time){return typeof window.registerTimer === "function" ? window.registerTimer(callback, time, "interval") : window.setInterval(callback, time);}' . $js;
 
         $methods = array('onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender');
         foreach($methods as $method)
         {
-            if(strpos($js, $method) !== false) $js .= "if(typeof $method === 'function') window.$method = $method;";
+            if(strpos($js, $method) === false) continue;
+            $js .= "if(typeof $method === 'function') window.$method = $method;";
         }
         return $js;
     }
 
     public function getDebugData() : ?array
     {
-        global $app, $config;
+        global $app;
         $zinDebug = null;
         if(isDebug() && (!isAjaxRequest() || isAjaxRequest('zin')))
         {
@@ -269,7 +304,6 @@ class context extends \zin\utils\dataset
         return '';
     }
 
-
     public function render(node $node, null|object|string|array $selectors = null, string $renderType = 'html', null|string|array $dataCommands = null, bool $renderInner = false): string|array|object
     {
         $this->disableGlobalRender();
@@ -306,7 +340,7 @@ class context extends \zin\utils\dataset
                 if(!isset($item->type) || $item->type !== 'html') continue;
 
                 $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '<!-- {{HOOK_CONTENT}} -->' => $hookHtml, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
-                $item->data    = str_replace(array_keys($replace), array_values($replace), $item->data);
+                $item->data = str_replace(array_keys($replace), array_values($replace), $item->data);
             }
 
             $result = json_encode($result, JSON_PARTIAL_OUTPUT_ON_ERROR);
@@ -341,6 +375,18 @@ class context extends \zin\utils\dataset
             else call_user_func($callback, $node);
         }
 
+        if($node instanceof wg)
+        {
+            $class = get_class($node);
+            if(!isset($this->wgRes[$class]))
+            {
+                $res = array();
+                $res['css'] = $class::getPageCSS();
+                $res['js']  = $class::getPageJS();
+                $this->wgRes[$class] = $res;
+            }
+        }
+
         if($this->queries)
         {
             foreach($this->queries as $query)
@@ -364,6 +410,9 @@ class context extends \zin\utils\dataset
         }
 
         if($this->renderer) $this->renderer->handleBuildNode($data, $node);
+
+        $eventBinding = $node->buildEvents();
+        if($eventBinding) $this->eventBindings[] = $eventBinding;
     }
 
     public function handleRenderNode(stdClass &$data, node $node)
@@ -399,12 +448,12 @@ class context extends \zin\utils\dataset
 
     public static function js(string ...$code)
     {
-        static::current()->addJS(...flat($code));
+        static::current()->addJS(flat($code));
     }
 
-    public static function jsCall(string ...$code)
+    public static function jsCall(string $func, mixed ...$args)
     {
-        static::current()->addJSCall(...flat($code));
+        static::current()->addJSCall($func, $args);
     }
 
     public static function jsVar($name, $value)
@@ -414,7 +463,7 @@ class context extends \zin\utils\dataset
 
     public static function css(string ...$code)
     {
-        static::current()->addCSS(...flat($code));
+        static::current()->addCSS(flat($code));
     }
 
     public static function import(string ...$files)

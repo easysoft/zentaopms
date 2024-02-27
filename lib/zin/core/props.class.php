@@ -65,13 +65,12 @@ class props extends \zin\utils\dataset
      */
     protected function setVal(string $prop, mixed $value): props
     {
-        if($prop === 'class' || $prop === '.')     $this->class->set($value);
-        elseif($prop === 'style' || $prop === '~') $this->style->set($value);
+        if($prop === 'class')                      $this->class->set($value);
+        elseif($prop === 'style')                  $this->style->set($value);
         elseif(str_starts_with($prop, '~'))        $this->style->set(substr($prop, 1), $value);
         elseif($prop === '--')                     $this->style->cssVar($value);
         elseif(str_starts_with($prop, '--'))       $this->style->cssVar(substr($prop, 2), $value);
         elseif(str_starts_with($prop, ':'))        $this->set('data-' . substr($prop, 1), $value);
-        elseif($prop === '@')                      $this->bindEvent($value);
         elseif(str_starts_with($prop, '@'))        $this->bindEvent(substr($prop, 1), $value);
         else                                       parent::setVal($prop, $value);
         return $this;
@@ -110,7 +109,7 @@ class props extends \zin\utils\dataset
         if($value) $this->setVal($name, $value);
     }
 
-    public function bindEvent($name, $callback = null)
+    public function bindEvent(string|array $name, string|array $handler = null)
     {
         if(is_array($name))
         {
@@ -119,9 +118,10 @@ class props extends \zin\utils\dataset
         }
 
         $events = parent::getVal("@$name");
-        if(empty($events))      $events   = array();
-        if(is_array($callback)) $events   = array_merge($events, $callback);
-        else                    $events[] = $callback;
+        if(is_null($events)) $events = array();
+
+        if(is_array($handler)) $events   = array_merge($events, $handler);
+        else                   $events[] = $handler;
 
         parent::setVal("@$name", $events);
     }
@@ -172,13 +172,21 @@ class props extends \zin\utils\dataset
         if($this->class->count())     $pairs[] = 'class="' . $this->class->toStr() . '"';
         if($this->style->getCount(true)) $pairs[] = 'style="' . $this->style->toStr() . '"';
 
+        $initCode = array();
+
         foreach($this->storedData as $name => $value)
         {
             /* Handle boolean attributes */
             if(in_array($name, static::$booleanAttrs)) $value = $value ? true : null;
 
             /* Skip any null value or events setting */
-            if($value === null || in_array($name, $skipProps) || $name[0] === '@') continue;
+            if($value === null || in_array($name, $skipProps)) continue;
+
+            if($name === 'zui-init' || str_starts_with($name, '@'))
+            {
+                $initCode[] = $value;
+                continue;
+            }
 
             /* Convert non-string to json */
             if($value === true && !str_starts_with($name, 'data-'))
@@ -189,9 +197,11 @@ class props extends \zin\utils\dataset
             {
                 if(!is_string($value)) $value = json_encode($value);
 
-                $pairs[] = $name . '="' . htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false) . '"';
+                $pairs[] = $name . '="' . static::encodeValue($value) . '"';
             }
         }
+
+        if($initCode) $pairs[] = 'zui-init="' . static::encodeValue(implode(';', $initCode)) . '"';
 
         return implode(' ', $pairs);
     }
@@ -270,5 +280,10 @@ class props extends \zin\utils\dataset
         $props->style = clone $this->style;
         $props->class = clone $this->class;
         return $props;
+    }
+
+    public static function encodeValue(mixed $value): string
+    {
+        return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, null, false);
     }
 }

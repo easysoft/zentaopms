@@ -49,6 +49,8 @@ class on extends jsCallback
      */
     public bool $compatible = false;
 
+    public array $options = array();
+
     /**
      * The constructor.
      * 构造函数。
@@ -61,8 +63,6 @@ class on extends jsCallback
     public function __construct(string $event, ?string $selector = null, ?array $options = array())
     {
         parent::__construct('event', 'args');
-
-        if(is_null($options)) $options = array();
 
         if(str_contains($event, '__'))
         {
@@ -187,12 +187,11 @@ class on extends jsCallback
             $options['selector'] = $this->selector;
             $options['handler']  = parent::buildBody('');
 
-            $node->setProp("@{$this->event}", (object)$options);
+            $node->bindEvent($this->event, $options);
             return;
         }
 
-        $zuiInitCode = $node->prop('zui-init', '');
-        $node->setProp('zui-init', $zuiInitCode . "\n" . $this->toJS());
+        $node->props->bindEvent($this->event, $this->toJS());
     }
 
     /**
@@ -328,7 +327,6 @@ class on extends jsCallback
             $on->appendCode($callback->buildBody());
             $on->args(...$callback->funcArgs);
             $on->name($callback->funcName);
-            $callback->parent = $on;
             return $on;
         }
 
