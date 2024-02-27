@@ -1126,7 +1126,7 @@ function a(): int
     $vars = func_get_args();
     foreach($vars as $var)
     {
-        echo "<pre style='background:#eee;border:1px solid #aaa;padding:0.4em 0.8em;font-size:12px;max-height:500px;overflow:auto;color:#000;margin:12px 0'><code>";
+        echo "<pre style='background:#eee;border:1px solid #aaa;padding:0.4em 0.8em;font-size:12px;overflow:auto;color:#000;margin:12px 0'><code>";
         print_r($var);
         echo "</code></pre>";
     }
