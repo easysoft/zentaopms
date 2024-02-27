@@ -16,8 +16,8 @@ namespace zin;
 
 $inputInject = function()
 {
-    $this->app->loadConfig('ai');
     $this->app->loadLang('ai');
+    $this->app->loadConfig('ai');
     $module = $this->app->getModuleName();
     $method = $this->app->getMethodName();
     if(!isset($this->config->ai->availableForms[$module]) || !in_array($method, $this->config->ai->availableForms[$module])) return;

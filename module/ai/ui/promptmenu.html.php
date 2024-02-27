@@ -20,6 +20,7 @@ $promptMenuInject = function()
     $this->loadModel('ai');
     if(!$this->ai->hasModelsAvailable() || !commonModel::hasPriv('ai', 'promptExecute')) return;
 
+    $this->app->loadLang('ai');
     $this->app->loadConfig('ai');
     $module = $this->app->getModuleName();
     $method = $this->app->getMethodName();
