@@ -169,7 +169,7 @@ class props extends \zin\utils\dataset
 
         $pairs = array();
 
-        if($this->class->count())     $pairs[] = 'class="' . $this->class->toStr() . '"';
+        if($this->class->count())        $pairs[] = 'class="' . $this->class->toStr() . '"';
         if($this->style->getCount(true)) $pairs[] = 'style="' . $this->style->toStr() . '"';
 
         $initCode = array();
@@ -184,7 +184,7 @@ class props extends \zin\utils\dataset
 
             if($name === 'zui-init' || str_starts_with($name, '@'))
             {
-                $initCode[] = $value;
+                $initCode[] = is_array($value) ? implode("\n", $value) : $value;
                 continue;
             }
 
@@ -231,7 +231,7 @@ class props extends \zin\utils\dataset
         $data = $this->toJSON();
         foreach($data as $name => $value)
         {
-            if($value === null || $name[0] === '@' || in_array($name, $skipProps)) unset($data[$name]);
+            if($value === null || in_array($name, $skipProps)) unset($data[$name]);
             if($skipFalse && $value === false) unset($data[$name]);
         }
 
@@ -247,7 +247,6 @@ class props extends \zin\utils\dataset
         $restList   = array();
         foreach($data as $name => $value)
         {
-            if($value === null ||  $name[0] === '@') continue;
             if(in_array($name, $firstListProps)) $firstList[$name] = $value;
             else                                 $restList[$name]  = $value;
         }
