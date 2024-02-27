@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
+
 jsVar('weekend', $config->execution->weekend);
 jsVar('productID', $product->id);
 jsVar('lastLang', $lang->productplan->last);

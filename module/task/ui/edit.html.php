@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 include './taskteam.html.php';
 
 /* ====== Preparing and processing page data ====== */

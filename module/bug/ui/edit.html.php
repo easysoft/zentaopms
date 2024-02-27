@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
+
 jsVar('bug',                  $bug);
 jsVar('confirmChangeProduct', $lang->bug->notice->confirmChangeProduct);
 jsVar('moduleID',             $bug->module);

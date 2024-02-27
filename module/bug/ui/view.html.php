@@ -10,6 +10,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+
 jsVar('bugID',     $bug->id);
 jsVar('productID', $bug->product);
 jsVar('branchID',  $bug->branch);

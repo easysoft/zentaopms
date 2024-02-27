@@ -10,6 +10,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
+
 jsVar('tab', $this->app->tab);
 if($app->tab == 'execution') jsVar('objectID', $executionID);
 if($app->tab == 'project')   jsVar('objectID', $projectID);

@@ -193,9 +193,8 @@ $config->ai->menuPrint = new stdclass();
 $config->ai->menuPrint->locations = array();
 $config->ai->menuPrint->locations['story']['view'] = (object)array(
     'module'          => 'story',
-    'targetContainer' => '#mainContent .main-col .cell:first-of-type .detail:first-of-type .detail-title',
-    'class'           => 'pull-right',
-    'stylesheet'      => '#mainContent .cell:first-of-type .detail:first-of-type .detail-title>button {margin-left: 10px;} #mainContent .cell:first-of-type .detail:first-of-type .detail-content {margin-top: 12px;}'
+    'targetContainer' => '#mainContent .detail-body .section:first-of-type > div:first-of-type',
+    'stylesheet'      => '#mainContent .detail-body .section:first-of-type > div:first-of-type {width: 100%; justify-content: space-between;}'
 );
 $config->ai->menuPrint->locations['task']['view']             = clone $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['task']['view']->module     = 'task';
@@ -206,7 +205,7 @@ $config->ai->menuPrint->locations['bug']['view']->module      = 'bug';
 $config->ai->menuPrint->locations['projectstory']['view']     = clone $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['execution']['storyView']   = $config->ai->menuPrint->locations['story']['view'];
 
-$config->ai->menuPrint->locations['execution']['view'] = (object)array(
+$config->ai->menuPrint->locations['execution']['view'] = (object)array( // TODO: fix this.
     'module'          => 'execution',
     'injectMethod'    => 'prepend',
     'targetContainer' => '#mainContent.main-row > .col-4.side-col .detail:first-child  > .detail-title',
@@ -218,7 +217,7 @@ $config->ai->menuPrint->locations['project']['view']->module = 'project';
 $config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
 $config->ai->menuPrint->locations['project']['view']->module = 'project';
 
-$config->ai->menuPrint->locations['product']['view'] = (object)array(
+$config->ai->menuPrint->locations['product']['view'] = (object)array( // TODO: fix this.
     'module'          => 'product',
     'injectMethod'    => 'append',
     'targetContainer' => '#mainContent.main-row > .col-8.main-col .detail:first-child > .detail-title',
@@ -227,7 +226,8 @@ $config->ai->menuPrint->locations['product']['view'] = (object)array(
 
 $config->ai->menuPrint->locations['productplan']['view'] = (object)array(
     'module'          => 'productplan',
-    'targetContainer' => '#mainMenu>.btn-toolbar.pull-right',
+    'injectMethod'    => 'prepend',
+    'targetContainer' => '#mainContent .toolbar',
     'objectVarName'   => 'plan'
 );
 $config->ai->menuPrint->locations['projectplan']['view']                   = $config->ai->menuPrint->locations['productplan']['view'];
@@ -239,11 +239,10 @@ $config->ai->menuPrint->locations['projectrelease']['view']->objectVarName = nul
 
 $config->ai->menuPrint->locations['doc']['view'] = (object)array(
     'module'          => 'doc',
-    'injectMethod'    => 'prepend',
-    'targetContainer' => '#mainMenu>.btn-toolbar.pull-right',
+    'targetContainer' => '#docPanel > .panel-heading > .panel-actions > .toolbar',
 );
 
-$config->ai->injectAuditButton = new stdclass();
+$config->ai->injectAuditButton = new stdclass(); // TODO: fix this.
 $config->ai->injectAuditButton->locations = array();
 $config->ai->injectAuditButton->locations['task']['edit'] = array(
     'toolbar' => (object)array(
