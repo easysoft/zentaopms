@@ -88,7 +88,7 @@
           </td>
         </tr>
       </table>
-    <?php js::set('i', $i);?>
+    <?php js::set('index', $i);?>
     </form>
   </div>
 </div>
