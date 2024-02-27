@@ -610,8 +610,11 @@ class node implements \JsonSerializable
 
     public static function getDefaultProps(?string $type = null): array
     {
-        $defaultProps = array();
-        foreach(static::definedPropsList($type) as $name => $definition)
+        $type             = $type ? $type : get_called_class();
+        $defaultProps     = array();
+        $definedPropsList = static::definedPropsList($type);
+
+        foreach($definedPropsList as $name => $definition)
         {
             if(!isset($definition['default'])) continue;
             $defaultProps[$name] = $definition['default'];
@@ -701,10 +704,13 @@ function parsePropsMap(array $definition, array $parentProps = array(), array $d
         $prop = parseProp($value, is_string($name) ? $name : null);
         $name = $prop['name'];
 
-        if($prop['default'] === null)
+        if(isset($defaultValues[$name]))
         {
-            if(isset($defaultValues[$prop['name']]))    $prop['default'] = $defaultValues[$prop['name']];
-            else if(isset($parentProps[$prop['name']])) $prop['default'] = $parentProps[$prop['name']]['default'];
+            $prop['default'] = $defaultValues[$prop['name']];
+        }
+        elseif(is_null($prop['default']) && isset($parentProps[$prop['name']]))
+        {
+            $prop['default'] = $parentProps[$prop['name']]['default'];
         }
 
         $props[$name] = $prop;
