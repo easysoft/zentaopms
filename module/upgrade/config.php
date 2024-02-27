@@ -968,6 +968,14 @@ $config->delete['20.0.beta1'][] = 'extension/biz/block/ext/model/calendar.php';
 $config->delete['20.0.beta1'][] = 'extension/max/block/ext/model/calendar.php';
 $config->delete['20.0.beta1'][] = 'extension/max/admin/ext/config/repo.php';
 $config->delete['20.0.beta1'][] = 'extension/biz/admin/ext/config/repo.php';
+$config->delete['20.0.beta1'][] = 'extension/biz/common/view/flowchart.html.php';
+$config->delete['20.0.beta1'][] = 'extension/max/common/view/flowchart.html.php';
+$config->delete['20.0.beta1'][] = 'extension/biz/workflow/css/flowchart.css';
+$config->delete['20.0.beta1'][] = 'extension/max/workflow/css/flowchart.css';
+$config->delete['20.0.beta1'][] = 'extension/biz/workflow/js/flowchart.js';
+$config->delete['20.0.beta1'][] = 'extension/max/workflow/js/flowchart.js';
+$config->delete['20.0.beta1'][] = 'extension/biz/workflow/view/flowchart.html.php';
+$config->delete['20.0.beta1'][] = 'extension/max/workflow/view/flowchart.html.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'ai', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'artifactrepo', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution');
 
