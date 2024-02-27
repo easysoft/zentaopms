@@ -300,6 +300,7 @@ class context extends \zin\utils\dataset
             if(!empty($hookFile) && file_exists($hookFile)) include $hookFile;
         }
         $hookCode = ob_get_clean();
+        ob_end_flush();
         if($hookCode) return $hookCode;
         return '';
     }
@@ -374,28 +375,26 @@ class context extends \zin\utils\dataset
             if($callback instanceof \Closure) $callback($node);
             else call_user_func($callback, $node);
         }
+    }
 
-        if($node instanceof wg)
-        {
-            $class = get_class($node);
-            if(!isset($this->wgRes[$class]))
-            {
-                $res = array();
-                $res['css'] = $class::getPageCSS();
-                $res['js']  = $class::getPageJS();
-                $this->wgRes[$class] = $res;
-            }
-        }
-
+    public function handlePreBuildNode(node $node)
+    {
         if($this->queries)
         {
             foreach($this->queries as $query)
             {
                 if(!$node->is($query->selectors) || !$query->commands) continue;
+                $queryNodes = array($node);
                 foreach($query->commands as $command)
                 {
                     list($method, $args) = $command;
-                    call_user_func("\zin\command::{$method}", $node, $args, $this->rootNode);
+                    foreach($queryNodes as $queryNode)
+                    {
+                        $result = call_user_func("\zin\command::{$method}", $queryNode, $args, $this->rootNode);
+                        if($result instanceof node) $queryNodes = array($result);
+                        else if(is_array($result))  $queryNodes = $result;
+                    }
+                    if(empty($queryNodes)) break;
                 }
             }
         }
@@ -407,6 +406,18 @@ class context extends \zin\utils\dataset
         {
             if($callback instanceof \Closure) $callback($data, $node);
             else call_user_func($callback, $data, $node);
+        }
+
+        if($node instanceof wg)
+        {
+            $class = get_class($node);
+            if(!isset($this->wgRes[$class]))
+            {
+                $res = array();
+                $res['css'] = $class::getPageCSS();
+                $res['js']  = $class::getPageJS();
+                $this->wgRes[$class] = $res;
+            }
         }
 
         if($this->renderer) $this->renderer->handleBuildNode($data, $node);

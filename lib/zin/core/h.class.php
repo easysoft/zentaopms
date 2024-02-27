@@ -58,7 +58,14 @@ class h extends node
     {
         if($this->isSelfClose()) return $this->buildSelfCloseTag();
 
-        return array($this->buildTagBegin(), parent::build(), $this->buildTagEnd());
+        $content = array($this->buildTagBegin());
+        $build   = parent::build();
+
+        if(is_array($build))  $content = array_merge($content, $build);
+        else                  $content[] = $build;
+
+        $content[] = $this->buildTagEnd();
+        return $content;
     }
 
     protected function getPropsStr(): string

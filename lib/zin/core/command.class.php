@@ -22,16 +22,19 @@ class command
     public static function addClass(node $node, array $args)
     {
         $node->props->class->add(...$args);
+        $node->removeBuildData();
     }
 
     public static function removeClass(node $node, array $args)
     {
         $node->props->class->remove(...$args);
+        $node->removeBuildData();
     }
 
     public static function toggleClass(node $node, array $args)
     {
         $node->props->class->toggle(...$args);
+        $node->removeBuildData();
     }
 
     public static function prop(node $node, array $args)
@@ -89,6 +92,34 @@ class command
     public static function on(node $node, array $args)
     {
         $node->add(on(...$args), 'children');
+    }
+
+    public static function off(node $node, array $args)
+    {
+        $node->off(...$args);
+    }
+
+    public static function closest(node $node, array $args)
+    {
+        $node = $node->closest(...$args);
+        return $node ? $node : array();
+    }
+
+    public static function find(node $node, array $args)
+    {
+        return $node->find(...$args);
+    }
+
+    public static function first(node $node, array $args)
+    {
+        $node = $node->findFirst(...$args);
+        return $node ? $node : array();
+    }
+
+    public static function last(node $node, array $args)
+    {
+        $node = $node->findLast(...$args);
+        return $node ? $node : array();
     }
 
     /**

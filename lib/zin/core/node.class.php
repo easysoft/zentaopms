@@ -128,6 +128,41 @@ class node implements \JsonSerializable
         return false;
     }
 
+    public function off(string $event)
+    {
+        unset($this->eventBindings[$event]);
+        $this->props->remove("@$event");
+    }
+
+    public function closest(string|array|object $selectors): ?node
+    {
+        $list = parseSelectors($selectors);
+        $node = $this;
+        while($node)
+        {
+            if($node->is($list)) return $node;
+            $node = $node->parent;
+        }
+        return null;
+    }
+
+    public function find(string|array|object $selectors, bool $first = false, bool $reverse = false): array
+    {
+        return findInNode(parseSelectors($selectors), $this, $first, $reverse);
+    }
+
+    public function findFirst(string|array|object $selectors): ?node
+    {
+        $results = $this->find($selectors, true);
+        return empty($results) ? null : $results[0];
+    }
+
+    public function findLast(string|array|object $selectors): ?node
+    {
+        $results = $this->find($selectors, true, true);
+        return empty($results) ? null : $results[0];
+    }
+
     public function prop(array|string $name, mixed $defaultValue = null): mixed
     {
         if(is_array($name))
@@ -232,7 +267,7 @@ class node implements \JsonSerializable
             return;
         }
 
-        if($child instanceof node && !$child->parent) $child->parent = $this;
+        if($child instanceof node) $child->parent = $this;
 
         if($name === 'children' && $child instanceof node)
         {
@@ -280,6 +315,8 @@ class node implements \JsonSerializable
     {
         if($blockName) unset($this->blocks[$blockName]);
         else           $this->blocks = array();
+
+        $this->removeBuildData('all');
     }
 
     public function bindEvent(string $event, object|array $info)
@@ -347,37 +384,76 @@ class node implements \JsonSerializable
         return renderToHtml(...$this->children());
     }
 
-    public function prebuild(bool $force = false): stdClass
+    public function removeBuildData(string $type = 'children')
     {
-        if($this->buildData === null || $force)
+        if(!$this->buildData) return;
+
+        if($type === 'all')
+        {
+            $this->buildData = null;
+        }
+        elseif($type === 'before')
+        {
+            unset($this->buildData->before);
+        }
+        elseif($type === 'after')
+        {
+            unset($this->buildData->after);
+        }
+        else
+        {
+            unset($this->buildData->content);
+            unset($this->buildData->children);
+        }
+   }
+
+    public function prebuild(bool $force = false, bool $preCallback = false): stdClass
+    {
+        $firstBuild = ($this->buildData === null || $force);
+        if($firstBuild)
         {
             $context = context();
             $context->handleBeforeBuildNode($this);
 
-            $build = $this->build();
-            if(is_null($build) || is_bool($build)) $build = array();
-            elseif(!is_array($build))              $build = array($build);
+            $data = new stdClass();
+            $data->before   = prebuild($this->buildBefore(), $this);
+            $data->children = prebuild($this->children(), $this);
+            $data->content  = prebuild($this->buildContent(), $this);
+            $data->after    = prebuild($this->buildAfter(), $this);
 
-            $cache = new stdClass();
-            $cache->before   = prebuild($this->buildBefore());
-            $cache->children = prebuild($this->children());
-            $cache->build    = prebuild($build);
-            $cache->after    = prebuild($this->buildAfter());
+            $this->buildData = $data;
 
-            $context->handleBuildNode($cache, $this);
-
-            $this->buildData = $cache;
+            $context->handlePreBuildNode($this);
+        }
+        else
+        {
+            if(!isset($this->buildData->before))   $this->buildData->before   = prebuild($this->buildBefore(), $this);
+            if(!isset($this->buildData->children)) $this->buildData->children = prebuild($this->children(), $this);
+            if(!isset($this->buildData->content))  $this->buildData->content  = prebuild($this->buildContent(), $this);
+            if(!isset($this->buildData->after))    $this->buildData->after    = prebuild($this->buildAfter(), $this);
         }
 
         return $this->buildData;
+    }
+
+    public function buildContent(): array
+    {
+        $content = $this->build();
+        if(is_null($content) || is_bool($content)) $content = array();
+        elseif(!is_array($content))                $content = array($content);
+        return $content;
     }
 
     public function buildAll(): array
     {
         if($this->replacedWith !== null) return $this->replacedWith;
 
-        $buildData = $this->prebuild();
-        return array_merge($buildData->before, $buildData->build, $buildData->after);
+        $context = context();
+        $data    = $this->prebuild();
+
+        $context->handleBuildNode($data, $this);
+
+        return array_merge($data->before, $data->content, $data->after);
     }
 
     public function replaceWith(mixed ...$args)
@@ -503,11 +579,13 @@ class node implements \JsonSerializable
 
     protected function onAddChild(mixed $child)
     {
+        $this->removeBuildData();
         return $child;
     }
 
     protected function onAddBlock(mixed $child, string $name)
     {
+        $this->removeBuildData($name);
         return $child;
     }
 
@@ -516,7 +594,7 @@ class node implements \JsonSerializable
         if($prop === 'id' && $value === '$GID') $value = $this->gid;
 
         $this->props->set($prop, $value);
-        $this->buildData = null;
+        $this->removeBuildData();
     }
 
     protected function onGetProp(string $prop, mixed $defaultValue): mixed
@@ -649,6 +727,48 @@ class node implements \JsonSerializable
     }
 }
 
+function findInNode(array $selectors, node|array $list, bool $first = false, bool $reverse = false): array
+{
+    if($list instanceof node)
+    {
+        $data = $list->buildData;
+        if(!$data || !isset($data->content) || empty($data->content)) return array();
+
+        $list = $data->content;
+    }
+    if($reverse) $list = array_reverse($list);
+    $result = array();
+    foreach($list as $child)
+    {
+        if(is_array($child))
+        {
+            $childList = findInNode($selectors, $child, $first, $reverse);
+            if(!empty($childList))
+            {
+                if($first) return $childList;
+                $result = array_merge($result, $childList);
+            }
+            continue;
+        }
+
+        if(!($child instanceof node)) continue;
+
+        if($child->is($selectors))
+        {
+            $result[] = $child;
+            if($first) return $result;
+        }
+
+        $childList = findInNode($selectors, $child, $first, $reverse);
+        if(!empty($childList))
+        {
+            if($first) return $childList;
+            $result = array_merge($result, $childList);
+        }
+    }
+    return $result;
+}
+
 function renderToHtml(mixed ...$items): string
 {
     $html = '';
@@ -677,11 +797,17 @@ function renderToHtml(mixed ...$items): string
     return $html;
 }
 
-function prebuild(array $items)
+function prebuild(array $items, ?node $parent = null)
 {
-    foreach($items as $item)
+    foreach($items as $index => $item)
     {
+        if(is_array($item))
+        {
+            $items[$index] = prebuild($item, $parent);
+            continue;
+        }
         if(!($item instanceof node)) continue;
+        if($parent) $item->parent = $parent;
         $item->prebuild();
     }
     return $items;
