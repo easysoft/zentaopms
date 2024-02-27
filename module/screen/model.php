@@ -2273,6 +2273,18 @@ class screenModel extends model
             }
         }
 
+        if($dateType == 'month' || $dateType == 'day')
+        {
+            foreach($filteredHeaders[0] as $colIndex => $headerCol)
+            {
+                $groupName = $headerCol['name'];
+                if($groupName == 'scope') continue;
+
+                $headerGroups = array_filter($filteredHeaders[1], function($item) use ($groupName) { return $item['headerGroup'] == $groupName; });
+                $filteredHeaders[0][$colIndex]['colspan'] = count($headerGroups);
+            }
+        }
+
         return $filteredHeaders;
     }
 
