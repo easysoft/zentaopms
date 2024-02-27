@@ -61,6 +61,11 @@ class command
         $node->add(text(...$args));
     }
 
+    public static function empty(node $node, array $args)
+    {
+        $node->empty();
+    }
+
     public static function prepend(node $node, array $args)
     {
         $node->add($args, 'children', true);
