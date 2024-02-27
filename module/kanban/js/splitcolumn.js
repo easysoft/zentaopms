@@ -14,11 +14,11 @@ $(document).on('click', "[id^='noLimit']", function()
 
 function addItem(obj)
 {
-    var item = $('#addItem').html().replace(/%i%/g, i);
+    var item = $('#addItem').html().replace(/%i%/g, index);
     $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
-    $('.colorpicker #color' + i).colorPicker();
+    $('.colorpicker #color' + index).colorPicker();
 
-    i ++;
+    index ++;
 }
 
 function deleteItem(obj)
