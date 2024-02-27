@@ -71,6 +71,7 @@ div
     ),
     div
     (
+        setID('pivotContent'),
         setClass('flex col gap-4 w-full'),
         $generateData()
     )
