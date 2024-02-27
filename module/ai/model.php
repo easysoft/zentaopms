@@ -2019,7 +2019,8 @@ class aiModel extends model
         $schema      = $this->getFunctionCallSchema($prompt->targetForm);
         if(empty($schema)) return -5;
 
-        $response = $this->{$this->config->ai->models[$this->modelConfig->type] == 'ernie' ? 'converseTwiceForJSON' : 'converseForJSON'}($prompt->model , array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
+        $this->useLanguageModel($prompt->model);
+        $response = $this->{$this->config->ai->models[$this->modelConfig->type] == 'ernie' ? 'converseTwiceForJSON' : 'converseForJSON'}($prompt->model, array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
         if(empty($response)) return -6;
 
         return current($response);
