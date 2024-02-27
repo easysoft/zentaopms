@@ -58,7 +58,7 @@ class render
             if(!isset($this->filteredMap[$name])) $this->filteredMap[$name] = array();
             $filteredNodes = $this->filteredMap[$name];
 
-            if($selector->first && $filteredNodes) continue;
+            if(($selector->id || $selector->first) && $filteredNodes) continue;
             if(!$node->is($selector)) continue;
 
             $filteredNodes[] = $node;
@@ -85,9 +85,8 @@ class render
             $item           = new stdClass();
             $item->name     = $name;
             $item->selector = stringifySelectors($selector);
-            $item->selector = $selector;
 
-            if(isset($selector->options['json']) && $selector->options['json'])
+            if(isset($selector->options['type']) && $selector->options['type'] === 'json')
             {
                 $item->type  = 'json';
                 $item->data  = array();
