@@ -25,12 +25,12 @@ class bind
     /**
      * Bind event by magic __callStatic, the method name as the event name.
      *
-     * @param  string $name
-     * @param  array  $args
-     * @return directive
+     * @param  string        $name
+     * @param  array         $args
+     * @return directive|set
      * @access public
      */
-    public static function __callStatic(string $name, array $args): directive
+    public static function __callStatic(string $name, array $args): directive|set
     {
         list($callback, $others) = array_merge($args, array(array()));
         return bind($name, $callback, $others);
