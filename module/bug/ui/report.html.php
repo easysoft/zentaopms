@@ -20,8 +20,7 @@ detailHeader
             set::level(1),
             set::text($lang->bug->report->common)
         )
-    ),
-    $this->config->edition == 'biz' ? to::suffix(btn(set(array('type' => 'primary', 'text' => $lang->export, 'url' => createLink('report', 'export', "module=bug"), 'data-toggle' => 'modal')))) : null
+    )
 );
 
 $reports = array();
