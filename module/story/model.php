@@ -6967,7 +6967,7 @@ class storyModel extends model
                 {
                     $link    = helper::createLink('story', 'relation', "storyID=$story->id&storyType=$story->type");
                     $storySR = $this->getStoryRelationCounts($story->id, $story->type);
-                    if($col->name == 'URS' && $story->type == 'story')
+                    if($col->name == 'SRS' && $story->type == 'story')
                     {
                         $data->{$col->name} = 0;
                     }
