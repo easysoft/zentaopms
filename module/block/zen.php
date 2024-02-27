@@ -1303,20 +1303,13 @@ class blockZen extends block
         $projectID     = $this->session->project;
         $projectWeekly = $this->dao->select('*')->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->orderBy('weekStart_asc')->fetchAll('weekStart');
 
-        $charts['PV'] = '[';
-        $charts['EV'] = '[';
-        $charts['AC'] = '[';
+        $charts = array();
         foreach($projectWeekly as $weekStart => $data)
         {
-            $charts['labels'][] = $weekStart;
-            $charts['PV']      .= $data->pv . ',';
-            $charts['EV']      .= $data->ev . ',';
-            $charts['AC']      .= $data->ac . ',';
+            $charts['pv'][$weekStart] = $data->pv;
+            $charts['ev'][$weekStart] = $data->ev;
+            $charts['ac'][$weekStart] = $data->ac;
         }
-
-        $charts['PV'] .= ']';
-        $charts['EV'] .= ']';
-        $charts['AC'] .= ']';
 
         $this->view->charts = $charts;
     }
