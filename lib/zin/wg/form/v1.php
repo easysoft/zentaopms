@@ -310,7 +310,8 @@ class form extends formBase
         {
             foreach($items as $key => $item)
             {
-                if($item instanceof formGroup) $items[$key] = new formRow($item);
+                if(!($item instanceof formGroup)) continue;
+                $items[$key] = new formRow($item);
             }
         }
 
