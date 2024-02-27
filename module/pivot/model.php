@@ -1634,10 +1634,10 @@ class pivotModel extends model
                         $sliceRecord->$sliceField = $count == 0 ? 0 : round($sum / $count, 2);
                         break;
                     case 'max':
-                        $sliceRecord->$sliceField = round(max($sliceStat), 2);
+                        $sliceRecord->$sliceField = $sliceStat ? round(max($sliceStat), 2) : 0;
                         break;
                     case 'min':
-                        $sliceRecord->$sliceField = round(min($sliceStat), 2);
+                        $sliceRecord->$sliceField = $sliceStat ? round(min($sliceStat), 2) : 0;
                         break;
                     case 'count':
                         $sliceRecord->$sliceField = $sliceStat;
@@ -2195,7 +2195,7 @@ class pivotModel extends model
         $col->label = $colLabel;
 
         $slice = zget($column, 'slice', 'noSlice');
-        if($slice != 'noSlice')
+        if($slice != 'noSlice' && !$showOrigin)
         {
             if(!isset($cols[1]))
             {
