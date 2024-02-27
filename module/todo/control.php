@@ -388,12 +388,13 @@ class todo extends control
             $confirmNote = 'confirm' . ucfirst($todo->type);
             $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
 
-            if($todo->type == 'bug')   $app = 'qa';
-            if($todo->type == 'task')  $app = 'execution';
-            if($todo->type == 'story') $app = 'product';
+            $tab = $this->app->tab;
+            if($todo->type == 'bug')   $tab = 'qa';
+            if($todo->type == 'task')  $tab = 'execution';
+            if($todo->type == 'story') $tab = 'product';
 
             $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
-            return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => array('url' => $confirmURL, 'app' => $app), 'canceled' => array('url' => $cancelURL)), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => array('url' => $confirmURL, 'app' => $tab), 'canceled' => array('url' => $cancelURL)), 'closeModal' => true));
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api')
