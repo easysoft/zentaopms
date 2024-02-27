@@ -1167,25 +1167,14 @@ class blockZen extends block
     {
         $this->app->loadLang('programplan');
         $project = $this->loadModel('project')->getByID($this->session->project);
-        $today   = helper::today();
-        $date    = date('Ymd', strtotime('this week Monday'));
-        $begin   = $project->begin;
-        $weeks   = $this->loadModel('weekly')->getWeekPairs($begin);
-        $current = zget($weeks, $date, '');
 
-        $this->weekly->save($this->session->project, $date);
+        /* Get metric data. */
+        $data    = $this->getProjectsStatisticData(array($project->id));
+        $project = $this->buildProjectStatistic($project, $data);
 
-        $pvAndev = $this->weekly->getPVEV($this->session->project, $today);
-        $this->view->pv = (float)$pvAndev['PV'];
-        $this->view->ev = (float)$pvAndev['EV'];
-        $this->view->ac = (float)$this->weekly->getAC($this->session->project, $today);
-        $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
-        $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
+        $this->view->project  = $project;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
 
-        $left     = (float)$this->weekly->getLeft($this->session->project, $today);
-        $progress = (!empty($this->view->ac) || !empty($left)) ? floor($this->view->ac / ($this->view->ac + $left) * 1000) / 1000 * 100 : 0;
-        $this->view->progress = $progress > 100 ? 100 : $progress;
-        $this->view->current  = $current;
     }
 
     /**
@@ -3364,8 +3353,8 @@ class blockZen extends block
             $project->cv = isset($CVGroup[$projectID]['value']) ? (int)$CVGroup[$projectID]['value'] * 100 : 0;
         }
         if($project->end != LONG_TIME) $project->remainingDays = helper::diffDate($project->end, helper::today());
-        $project->risks  = isset($riskCountGroup[$projectID]['value']) ? (int)$riskCountGroup[$projectID]['value'] * 100 : 0;
-        $project->issues = isset($issueCountGroup[$projectID]['value']) ? (int)$issueCountGroup[$projectID]['value'] * 100 : 0;
+        $project->risks  = isset($riskCountGroup[$projectID]['value']) ? (int)$riskCountGroup[$projectID]['value'] : 0;
+        $project->issues = isset($issueCountGroup[$projectID]['value']) ? (int)$issueCountGroup[$projectID]['value'] : 0;
 
         return $project;
     }

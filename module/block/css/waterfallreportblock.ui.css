@@ -1,0 +1,21 @@
+.waterfallreport-block {background: #FCFDFE;}
+.waterfallreport-block .panel-body {padding: 0;}
+.waterfallreport-block .tab-content {width: 78%;}
+.waterfallreport-block.block-sm .tab-content {width: 100%;}
+.waterfallreport-block .bg-secondary-pale {background: #F3F6FA;}
+
+.waterfallreport-block .project-statistic-table table {width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; padding-right: 1rem;}
+.waterfallreport-block .project-statistic-table table tr:first-child {background: url(static/svg/arrow-step1-grey.svg) center no-repeat; background-size: 100%;}
+.waterfallreport-block .project-statistic-table table th {padding-right: 0px; margin-top: 1rem; font-size: 12px;}
+.waterfallreport-block .project-statistic-table table td {padding-left: 0px; margin-top: 1rem;}
+.waterfallreport-block .tab-pane .nav-tabs>.nav-item>a:after {border-bottom: none;}
+.waterfallreport-block .scrum table th, .projectstatistic-block .scrum table td {width: 50%}
+.waterfallreport-block .waterfall table th {width: 100px;}
+.waterfallreport-block .table-data {overflow: hidden;}
+.waterfallreport-block .table-data td {white-space: nowrap;}
+.waterfallreport-block .progress-circle text {font-size: 35px;}
+.waterfallreport-block .progress-circle .progress-text {position: relative;}
+.waterfallreport-block.block-long .progress-circle .progress-text {top: -57px;}
+.waterfallreport-block.block-sm .project-statistic-table table {padding-right: 0.75rem;}
+.waterfallreport-block.block-sm .progress-circle .progress-text {top: -47px;}
+.waterfallreport-block .block-statistic-nav {display:none;}
