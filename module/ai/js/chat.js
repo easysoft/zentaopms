@@ -6,6 +6,7 @@ $(function()
     $('textarea[name=message]').attr('readonly', true).addClass('busy');
     $('#retry').addClass('busy');
     $('#reset').addClass('busy');
+    $('form').addClass('busy');
   }
 
   function reset(e)
@@ -67,6 +68,8 @@ $(function()
     });
     $('form').on('submit', function(e)
     {
+      if($(this).hasClass('busy')) return false;
+
       /* Disable form and add message. */
       markBusy();
       const message = $('textarea[name=message]').val().trim();
