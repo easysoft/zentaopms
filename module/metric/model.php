@@ -2042,7 +2042,17 @@ class metricModel extends model
 
         if($type == 'date')
         {
-            $timestamp = strtotime($query[$key]);
+            $dateStr = $query[$key];
+            if($query['dateType'] == 'year')
+            {
+                $dateStr = "{$dateStr}-01-01";
+            }
+            elseif($query['dateType'] == 'month')
+            {
+                $dateStr = "{$dateStr}-01";
+            }
+
+            $timestamp = strtotime($dateStr);
 
             $year  = date('Y', $timestamp);
             $month = date('m', $timestamp);
