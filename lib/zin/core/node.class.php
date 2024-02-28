@@ -858,7 +858,7 @@ function parsePropsMap(array $definition, array $parentProps = array(), array $d
         {
             $prop['default'] = $defaultValues[$name];
         }
-        elseif(!isset($prop['default']) && isset($parentProps[$name]) && $parentProps[$name]['default'])
+        elseif(!isset($prop['default']) && isset($parentProps[$name]['default']) && $parentProps[$name]['default'])
         {
             $prop['default'] = $parentProps[$name]['default'];
         }
