@@ -68,7 +68,7 @@ class formBatchItem extends wg
             else if(empty($control)) $control = array();
 
             if(!isset($control['required']) && $required !== null) $control['required']    = $required;
-            if(!isset($control['control']))                           $control['control']        = 'text';
+            if(!isset($control['control']))                        $control['control']        = 'text';
             if($name !== null)                                     $control['name']        = $name;
             if($value !== null)                                    $control['value']       = $value;
             if($disabled !== null)                                 $control['disabled']    = $disabled;
