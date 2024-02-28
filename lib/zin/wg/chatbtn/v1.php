@@ -34,6 +34,12 @@ class chatBtn extends wg
                 $('#chat-btn').toggleClass('active');
                 $('#chat-container').toggle();
             }
+            $(document).on('click', e =>
+            {
+                if(!$('#chat-container').isVisible()) return;
+                if($(e.target).closest('#ai-chat-view,#chat-btn').length) return;
+                window.toggleChatContainer();
+            });
         JAVASCRIPT;
     }
 
