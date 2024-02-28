@@ -60,10 +60,11 @@ class on extends jsCallback
      * @param string|null $selector As a delegate event selector.
      * @param array       $options  Event options.
      */
-    public function __construct(string $event, ?string $selector = null, ?array $options = array())
+    public function __construct(string $event, ?string $selector = null, ?array $options = null)
     {
         parent::__construct('event', 'args');
 
+        $options = $options ? $options : array();
         if(str_contains($event, '__'))
         {
             list($event, $flags) = explode('__', $event);
@@ -132,7 +133,7 @@ class on extends jsCallback
 
         $options    = $this->options;
         $bindMethod = (isset($options['once']) && $options['once']) ? 'once' : 'on';
-        $selector   = $this->selector ? (',' . static::json($this->selector)) : '';
+        $selector   = $this->selector ? (',' . json_encode($this->selector)) : '';
 
         $callback = parent::toJS($joiner);
         $events   = array_map(function($event){return $event . '.zin.on';}, explode('_', $this->event));
