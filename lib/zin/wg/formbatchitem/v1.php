@@ -64,11 +64,11 @@ class formBatchItem extends wg
 
         if($control !== false)
         {
-            if(is_string($control))  $control = array('type' => $control, 'name' => $name);
+            if(is_string($control))  $control = array('control' => $control, 'name' => $name);
             else if(empty($control)) $control = array();
 
             if(!isset($control['required']) && $required !== null) $control['required']    = $required;
-            if(!isset($control['type']))                           $control['type']        = 'text';
+            if(!isset($control['control']))                           $control['control']        = 'text';
             if($name !== null)                                     $control['name']        = $name;
             if($value !== null)                                    $control['value']       = $value;
             if($disabled !== null)                                 $control['disabled']    = $disabled;
@@ -78,11 +78,11 @@ class formBatchItem extends wg
             if($readonly !== null)                                 $control['readonly']    = $readonly;
         }
 
-        $asIndex = $control['type'] === 'index';
-        if($asIndex) $control['type'] = 'static';
-        if($control['type'] == 'static') $name .= '_static';
-        if($control['type'] === 'priPicker' || $control == 'severitypicker') $control['required'] = true;
-        if($control['type'] === 'colorInput' && !isset($control['syncColor'])) $control['syncColor'] = '#' . $name . '_{GID}';
+        $asIndex = $control['control'] === 'index';
+        if($asIndex) $control['control'] = 'static';
+        if($control['control'] == 'static') $name .= '_static';
+        if($control['control'] === 'priPicker' || $control == 'severitypicker') $control['required'] = true;
+        if($control['control'] === 'colorInput' && !isset($control['syncColor'])) $control['syncColor'] = '#' . $name . '_{GID}';
 
         return array(
             h::th
@@ -114,8 +114,7 @@ class formBatchItem extends wg
             ),
             h::td
             (
-                setClass('form-batch-control'),
-                $hidden ? setClass('hidden') : null,
+                setClass('form-batch-control', $hidden ? 'hidden' : null),
                 set('data-name', $name),
                 empty($control) ? null : new control(set($control)),
                 $this->children()
