@@ -12,7 +12,9 @@ class modal extends modalDialog
     );
 
     protected static array $defaultProps = array(
-        'modalProps' => array()
+        'modalProps'  => array(),
+        'rawContent'  => false,
+        'hookContent' => false
     );
 
     protected function build()
