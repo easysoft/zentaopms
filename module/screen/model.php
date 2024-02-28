@@ -2142,16 +2142,16 @@ class screenModel extends model
         if(isset($filters['scope'])) 
         {
             $scopeFilter = $filters['scope'];
-            $objectPairs = $this->loadModel('metric')->getPairsByIdList($scopeFilter->type, $scopeFilter->value);
+            $objectPairs = $this->loadModel('metric')->getPairsByIdList($filterParams[0]['field'], $scopeFilter);
 
             $series = array_filter($chartOption['series'], function($item) use($objectPairs) { return in_array($item['name'], $objectPairs); });
             $chartOption['series'] = array_values($series);
         }
 
-        if(isset($filters['begin'], $filters['end']))
+        if(isset($filters['dateBegin'], $filters['dateEnd']))
         {
-            $begin = $filters['begin']->$dateType;
-            $end   = $filters['end']->$dateType;
+            $begin = $filters['dateBegin'];
+            $end   = $filters['dateEnd'];
 
             $xAxisData      = array();
             $includeKeyList = array();
