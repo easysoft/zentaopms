@@ -1957,8 +1957,6 @@ class pivotModel extends model
 
         $showColTotal = zget($settings, 'columnTotal', 'noShow');
 
-        $originColumns = array();
-        $statColumns   = array();
         $mergeRecords  = array();
 
         if(isset($settings['columns']))
@@ -1979,7 +1977,7 @@ class pivotModel extends model
                     $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
 
                     $columnSetting['records']    = $columnRecords;
-                    $originColumns[$columnIndex] = $columnSetting;
+                    $mergeRecords = $this->mergeOriginRecords(array($columnSetting), $mergeRecords);
                 }
                 elseif(!empty($columnStat))
                 {
@@ -1987,12 +1985,9 @@ class pivotModel extends model
                     $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
 
                     $columnSetting['records']  = $columnRecords;
-                    $statColumns[$columnIndex] = $columnSetting;
+                    $mergeRecords = $this->mergeStatRecords(array($columnSetting), $groups, $mergeRecords);
                 }
             }
-
-            $mergeRecords = $this->mergeOriginRecords($originColumns, $mergeRecords);
-            $mergeRecords = $this->mergeStatRecords($statColumns, $groups, $mergeRecords);
         }
 
         $mergeRecords = array_values($mergeRecords);

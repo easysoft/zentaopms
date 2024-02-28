@@ -31,5 +31,7 @@ $schema->fields['realBegan']   = array('type' => 'date',   'name' => $this->lang
 $schema->fields['realEnd']     = array('type' => 'date',   'name' => $this->lang->project->realEnd);
 $schema->fields['closedBy']    = array('type' => 'user',   'name' => $this->lang->project->closedBy);
 $schema->fields['closedDate']  = array('type' => 'date',   'name' => $this->lang->project->closedDate);
+$schema->fields['acl']         = array('type' => 'option', 'name' => $this->lang->project->acl, 'options' => $this->lang->project->acls);
+$schema->fields['lifetime']    = array('type' => 'option', 'name' => $this->lang->project->lifetime, 'options' => $this->lang->execution->lifeTimeList);
 
 $schema->objects = array();
