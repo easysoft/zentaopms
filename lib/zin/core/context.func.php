@@ -44,6 +44,11 @@ function renderInGlobal(node|iDirective $item): bool
     return context::current()->renderInGlobal($item);
 }
 
+function skipRenderInGlobal(mixed $data)
+{
+    return context::current()->skipRenderInGlobal($data);
+}
+
 function onBuildNode(callable $callback)
 {
     return context::current()->onBuildNode($callback);

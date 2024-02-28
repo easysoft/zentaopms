@@ -129,6 +129,21 @@ class context extends \zin\utils\dataset
         return true;
     }
 
+    function skipRenderInGlobal(mixed $data)
+    {
+        if(is_array($data))
+        {
+            foreach($data as $item) skipRenderInGlobal($item);
+            return;
+        }
+
+        if($data instanceof node || $data instanceof iDirective)
+        {
+            if(isset($data->gid)) unset($this->globalRenderList[$data->gid]);
+            $data->notRenderInGlobal = true;
+        }
+    }
+
     public function getGlobalRenderList(bool $clear = true): array
     {
         $globalItems = array();

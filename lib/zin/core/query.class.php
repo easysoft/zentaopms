@@ -53,6 +53,7 @@ class query
      */
     public function __call(string $name, array $args): query
     {
+        skipRenderInGlobal($args);
         $this->commands[] = array($name, $args);
         return $this;
     }
