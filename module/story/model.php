@@ -5792,15 +5792,19 @@ class storyModel extends model
     public function getStoryRelationByIds($storyIdList, $storyType)
     {
         $conditionField = $storyType == 'story' ? 'BID' : 'AID';
-        $storyType      = $storyType == 'story' ? 'BID, GROUP_CONCAT(`AID` SEPARATOR ",")' : 'AID, GROUP_CONCAT(`BID` SEPARATOR ",")';
+        $anotherField   = $storyType == 'story' ? 'AID' : 'BID';
 
-        $relations = $this->dao->select($storyType)->from(TABLE_RELATION)
+        $relations = $this->dao->select('BID,AID')->from(TABLE_RELATION)
             ->where('AType')->eq('requirement')
             ->andWhere('BType')->eq('story')
             ->andWhere('relation')->eq('subdivideinto')
             ->andWhere($conditionField)->in($storyIdList)
-            ->groupBy($conditionField)
-            ->fetchPairs();
+            ->fetchGroup($conditionField, $anotherField);
+
+        foreach($relations as $storyId => $relation)
+        {
+            if($relation) $relations[$storyId] = implode(',', array_keys($relation));
+        }
 
         return $relations;
     }
