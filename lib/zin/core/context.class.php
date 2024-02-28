@@ -328,7 +328,7 @@ class context extends \zin\utils\dataset
         $this->renderer = $renderer;
         $this->rootNode = $node;
 
-        $hookHtml   = $this->includeHooks();
+        $hookCode   = $this->includeHooks();
         $rawContent = $this->getRawContent();
         $zinDebug   = $this->getDebugData();
 
@@ -352,9 +352,14 @@ class context extends \zin\utils\dataset
                     $item->data = $zinDebug;
                     continue;
                 }
+                if($item->name === 'hookCode')
+                {
+                    $item->data = $hookCode;
+                    continue;
+                }
                 if(!isset($item->type) || $item->type !== 'html') continue;
 
-                $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '<!-- {{HOOK_CONTENT}} -->' => $hookHtml, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
+                $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '<!-- {{HOOK_CONTENT}} -->' => $hookCode, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
                 $item->data = str_replace(array_keys($replace), array_values($replace), $item->data);
             }
 
@@ -364,7 +369,7 @@ class context extends \zin\utils\dataset
         {
             if($zinDebug) $js .= js::defineVar('window.zinDebug', $zinDebug);
 
-            $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '<!-- {{HOOK_CONTENT}} -->' => $hookHtml, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
+            $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '<!-- {{HOOK_CONTENT}} -->' => $hookCode, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
             $result  = str_replace(array_keys($replace), array_values($replace), $result);
         }
 

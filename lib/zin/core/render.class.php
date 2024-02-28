@@ -138,7 +138,11 @@ class render
         $dataList = $this->getDataByCommands();
         foreach($dataList as $name => $data)
         {
-            $list[] = array('name' => $name, 'type' => 'data', 'data' => $data);
+            $item = new stdClass();
+            $item->name = $name;
+            $item->type = 'data';
+            $item->data = $data;
+            $list[] = $item;
         }
 
         return $list;

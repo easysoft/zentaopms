@@ -79,6 +79,7 @@
         navbar:        updateNavbar,
         heading:       updateHeading,
         fatal:         showFatalError,
+        hookCode:      updateHookCode,
         zinDebug:      (data, _info, options) => showZinDebugInfo(data, options),
         zinErrors:     (data, _info, options) => showErrors(data, options.id === 'page'),
     };
@@ -140,6 +141,13 @@
         timers.timeout = [];
 
         $('script.zin-page-js').replaceWith(data);
+    }
+
+    function updateHookCode(data)
+    {
+        let $code = $('#zinHookCode');
+        if(!$code.length) $code = $('<div id="zinHookCode" class="hidden"></div>').appendTo('body');
+        $code.html(data);
     }
 
     function updateZinbar(perf, errors, basePath)
@@ -625,7 +633,7 @@
 
     function getLoadSelector(selector)
     {
-        if(!selector) return $('#main').length ? '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS,title>*,#heading>*,#navbar>*,#pageToolbar>*' : 'body>*,title>*,#configJS';
+        if(!selector) return $('#main').length ? '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,hookCode(),#configJS,title>*,#heading>*,#navbar>*,#pageToolbar>*' : 'body>*,title>*,#configJS';
         if(selector[0] === '+') return getLoadSelector() + ',' + selector.substring(1);
         return selector;
     }
@@ -728,7 +736,7 @@
         if(options.selector && options.selector !== 'dtable') selector = options.selector;
         if(!$(target).closest('.modal').length && !options.selector)
         {
-            selector += ',#featureBar>*,pageJS/.zin-page-js';
+            selector += ',#featureBar>*,pageJS/.zin-page-js,hookCode()';
             if($('#moduleMenu').length) selector += ',#moduleMenu,.module-menu-header';
             if($('#docDropmenu').length) selector += ',#docDropmenu,.module-menu';
         }
