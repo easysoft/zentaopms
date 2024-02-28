@@ -1,5 +1,7 @@
 <?php
-$lang->SRCommon = '用户需求';
+$lang->storyCommon = $lang->SRCommon;
+$lang->SRCommon    = '用户需求';
+
 $lang->demandpool = new stdclass();
 $lang->demandpool->common = '需求池';
 

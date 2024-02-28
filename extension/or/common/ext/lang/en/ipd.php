@@ -1,5 +1,7 @@
 <?php
-$lang->SRCommon   = 'Requirement';
+$lang->storyCommon = $lang->SRCommon;
+$lang->SRCommon    = 'Requirement';
+
 $lang->demandpool = new stdclass();
 $lang->demandpool->common = 'RM Hub';
 
