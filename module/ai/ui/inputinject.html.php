@@ -31,12 +31,15 @@ $inputInject = function()
     $this->app->loadLang('ai');
 
     js(<<< JAVASCRIPT
-        window.injectToInputElement = (inputName, data, index) =>
+        window.injectToInputElement = (inputName, data, index, tries = 0) =>
         {
-            if(typeof index !== 'undefined') inputName = inputName + '[' + index + ']';
+            let name = inputName;
+            if(typeof index !== 'undefined') name = name + '[' + index + ']';
 
-            const inputEl = $('[name="' + inputName + '"]');
-            if(!inputEl.length) return;
+            const inputEl = $('[name="' + name + '"]');
+
+            /* Retry if input is not found, sometimes form renders late. */
+            if(!inputEl.length && tries < 5) return setTimeout(() => window.injectToInputElement(inputName, data, index, ++tries), 1000);
 
             const inputType = inputEl.prop('nodeName');
             switch(inputType) // Contains case fallthroughs, on purpose.
@@ -79,7 +82,7 @@ $inputInject = function()
                     /* Textareas might be controlled by KindEditors. */
                     if(typeof KindEditor !== 'undefined' && KindEditor.instances.length)
                     {
-                        const editorInstance = KindEditor.instances.find(e => e.srcElement.attr('name') == inputName);
+                        const editorInstance = KindEditor.instances.find(e => e.srcElement.attr('name') == name);
                         if(editorInstance)
                         {
                             if(data === null) data = '';
