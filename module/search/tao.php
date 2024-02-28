@@ -77,10 +77,10 @@ class searchTao extends searchModel
      * @param  string       $module
      * @param  object|array $fields
      * @param  object|array $fieldParams
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function initSession(string $module, object|array $fields, object|array $fieldParams): array
+    public function initSession(string $module, object|array $fields, object|array $fieldParams): array
     {
         if(is_object($fields)) $fields = get_object_vars($fields);
         $formSessionName = $module . 'Form';
@@ -105,15 +105,15 @@ class searchTao extends searchModel
      * 处理查询表单的相关数据。
      * Process query form datas.
      *
-     * @param  object    $fieldParams
-     * @param  string    $field
-     * @param  string    $andOrName
-     * @param  string    $operatorName
-     * @param  string    $valueName
-     * @access protected
+     * @param  object $fieldParams
+     * @param  string $field
+     * @param  string $andOrName
+     * @param  string $operatorName
+     * @param  string $valueName
+     * @access public
      * @return array
      */
-    protected function processQueryFormDatas(object $fieldParams, string $field, string $andOrName, string $operatorName, string $valueName): array
+    public function processQueryFormDatas(object $fieldParams, string $field, string $andOrName, string $operatorName, string $valueName): array
     {
         /* 设置分组之间的逻辑关系。*/
         /* Set and or. */
@@ -219,15 +219,15 @@ class searchTao extends searchModel
      * 设置 where 查询条件。
      * Set where condition.
      *
-     * @param  string    $where
-     * @param  string    $field
-     * @param  string    $operator
-     * @param  string    $value
-     * @param  string    $andOr
-     * @access protected
+     * @param  string $where
+     * @param  string $field
+     * @param  string $operator
+     * @param  string $value
+     * @param  string $andOr
+     * @access public
      * @return string
      */
-    protected function setWhere(string $where, string $field, string $operator, string $value, string $andOr): string
+    public function setWhere(string $where, string $field, string $operator, string $value, string $andOr): string
     {
         $condition = $this->setCondition($field, $operator, $value);
         if($operator == '=' && preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
@@ -260,10 +260,10 @@ class searchTao extends searchModel
      * Replace dynamic account and date.
      *
      * @param  string $query
-     * @access protected
+     * @access public
      * @return string
      */
-    protected function replaceDynamic(string $query): string
+    public function replaceDynamic(string $query): string
     {
         $this->app->loadClass('date');
         $lastWeek  = date::getLastWeek();
