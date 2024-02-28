@@ -562,6 +562,7 @@ $lang->ai->models->confirmDelete  = '您确认要删除该语言模型吗？';
 $lang->ai->models->confirmDisable = '您确认要禁用该语言模型吗？';
 $lang->ai->models->default        = '默认';
 $lang->ai->models->defaultTip     = '默认语言模型（第一个可用的语言模型）将会用于运行未指定语言模型的提词、小程序，也将会用于聊天。';
+$lang->ai->models->authFailure    = 'API 认证失败';
 
 $lang->ai->models->testConnectionResult = new stdclass();
 $lang->ai->models->testConnectionResult->success    = '连接成功';

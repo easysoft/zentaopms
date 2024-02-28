@@ -432,6 +432,7 @@ class aiModel extends model
                 curl_close($ch);
                 return $response;
             }
+            if(empty($result->access_token)) return (object)array('result' => 'fail', 'message' => $this->lang->ai->models->authFailure);
             $accessToken = $result->access_token;
 
             $url = sprintf($this->config->ai->ernie->api->$modelVendor->format, $accessToken);
