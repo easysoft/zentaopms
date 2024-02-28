@@ -90,7 +90,7 @@ $promptMenuInject = function()
     JAVASCRIPT;
 
     /* Perform injection. */
-    if(isset($menuOptions->stylesheet)) h('style', $menuOptions->stylesheet);
+    if(isset($menuOptions->stylesheet)) css($menuOptions->stylesheet);
     js($script);
 };
 $promptMenuInject();
