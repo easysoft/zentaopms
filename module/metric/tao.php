@@ -298,7 +298,7 @@ class metricTao extends metricModel
             ->beginIF($scopeKey != 'system')->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF($scopeKey == 'system')->orderBy("date desc, year desc, month desc, week desc, day desc")->fi();
 
-        if($metricScope == 'system') $stmt = $stmt->page($pager); // beginIF not work with page()
+        if($scopeKey == 'system') $stmt = $stmt->page($pager); // beginIF not work with page()
         return $stmt->fetchAll();
     }
 
@@ -366,7 +366,7 @@ class metricTao extends metricModel
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi();
 
-        $stmt = $stmt->page($pager); // beginIF not work with page()
+        $stmt = $stmt->page($pager);
         return $stmt->fetchAll();
     }
 
