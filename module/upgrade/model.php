@@ -2012,7 +2012,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function addORPriv()
+    public function addORPriv($openVersion = '')
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
 
