@@ -1142,6 +1142,24 @@ class metricModel extends model
     }
 
     /**
+     * Get object pairs by id list.
+     *
+     * @param  string $scope
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
+    public function getPairsByIdList($scope, $idList)
+    {
+        $field = $scope == 'user' ? 'realname' : 'name';
+        $where = $scope == 'user' ? 'account' : 'id';
+
+        return $this->dao->select("id, $field")->from($this->config->objectTables[$scope])
+            ->where($where)->in($idList)
+            ->fetchPairs();
+    }
+
+    /**
      * 获取度量项的日期字符串。
      * Build date cell.
      *
