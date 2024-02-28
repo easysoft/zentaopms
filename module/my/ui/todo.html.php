@@ -29,6 +29,23 @@ $canBatchCreate = hasPriv('todo', 'batchCreate');
 
 toolbar
 (
+    $config->edition != 'open' && !empty($app->user) && common::hasPriv('todo', 'calendar') ? item(set(array
+    (
+        'type'  => 'btnGroup',
+        'items' => array(array
+        (
+            'icon'  => 'cards-view',
+            'class' => 'btn-icon',
+            'hint'  => $lang->todo->calendar,
+            'url'   => createLink('todo', 'calendar')
+        ), array
+        (
+            'icon'  => 'list',
+            'class' => 'btn-icon text-primary',
+            'hint'  => $lang->todo->list,
+            'url'   => createLink('my', 'todo', "type=all")
+        ))
+    ))) : null,
     hasPriv('todo', 'export') ? item
     (
         set(array(
