@@ -152,12 +152,13 @@ class dataset
      * Set property, an array can be passed to set multiple properties.
      *
      * @access public
-     * @param array|object|string   $prop  Property name or properties list.
-     * @param mixed                 $value Property value.
+     * @param  array|object|string|int $prop  Property name or properties list.
+     * @param  mixed                   $value Property value.
      * @return dataset
      */
-    public function set(array|object|string $prop, mixed $value = null): dataset
+    public function set(array|object|string|int $prop, mixed $value = null): dataset
     {
+        if(is_int($prop)) $prop = (string)$prop;
         if(is_string($prop)) return $this->setVal($prop, $value);
 
         if(is_object($prop)) $prop = get_object_vars($prop);
