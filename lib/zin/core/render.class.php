@@ -58,6 +58,7 @@ class render
 
             if(($selector->id || $selector->first) && $filteredNodes) continue;
             if(!$node->isMatch($selector)) continue;
+            if($node instanceof h && $node->parent && $node->parent instanceof wg && $node->parent->isMatch($selector)) continue;
 
             $filteredNodes[$node->gid] = $node;
             $this->filteredMap[$name] = $filteredNodes;
