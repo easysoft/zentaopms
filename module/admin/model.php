@@ -627,11 +627,13 @@ class adminModel extends model
      * @access public
      * @return bool
      */
-    public function checkInternet()
+    public function checkInternet($url = '')
     {
+        if(empty($url)) $url = $this->config->admin->apiSite;
+
         $timeout = 1;
         $curl    = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $this->config->admin->apiSite);
+        curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
