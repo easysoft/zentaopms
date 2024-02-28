@@ -96,7 +96,6 @@ formPanel
         set::name("name"),
         set::label($lang->user->name),
         set::required(true),
-        set::control("text"),
         set::value($repo->name)
     ),
     formRow
@@ -108,7 +107,6 @@ formPanel
             set::name("path"),
             set::label($lang->repo->path),
             set::required(true),
-            set::control("text"),
             set::placeholder($lang->repo->example->path->git),
             set::value($repo->path)
         )
@@ -120,7 +118,6 @@ formPanel
         set::label($lang->repo->encoding),
         set::required(true),
         set::value($repo->encoding),
-        set::control("text"),
         set::placeholder($lang->repo->encodingsTips)
     ),
     formRow
@@ -132,7 +129,6 @@ formPanel
             set::name("client"),
             set::label($lang->repo->client),
             set::required(true),
-            set::control("text"),
             set::value($repo->client)
         )
     ),
@@ -145,7 +141,6 @@ formPanel
             set::name("account"),
             set::label($lang->user->account),
             set::required(true),
-            set::control("text"),
             set::value($repo->account)
         )
     ),

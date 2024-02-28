@@ -107,7 +107,6 @@ formBatchPanel
     (
         set::name('comment'),
         set::label($lang->comment),
-        set::control('text'),
         set::width('300px')
     )
 );

@@ -127,7 +127,6 @@ formPanel
     (
         set::width('full'),
         set::label($lang->file->fileName),
-        set::control('text'),
         set::name('fileName'),
         set::value(isset($fileName) ? $fileName : $lang->file->untitled),
         on::change('onChangeFileName'),

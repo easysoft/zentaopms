@@ -90,7 +90,6 @@ formPanel
             set::name("client"),
             set::label($lang->repo->client),
             set::required(true),
-            set::control("text"),
             set::placeholder($lang->repo->example->client->git)
         )
     ),
@@ -100,7 +99,6 @@ formPanel
         set::name("name"),
         set::label($lang->user->name),
         set::required(true),
-        set::control("text")
     ),
     formGroup
     (

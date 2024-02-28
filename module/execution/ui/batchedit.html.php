@@ -165,7 +165,6 @@ formBatchPanel
     (
         set::name('team'),
         set::label($lang->execution->teamName),
-        set::control('text'),
         set::width('136px'),
         set::hidden(strpos("{$showFields}", 'team') === false)
     ),
