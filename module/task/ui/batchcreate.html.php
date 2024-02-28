@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
+
 /* ====== Preparing and processing page data ====== */
 jsVar('executionID', $execution->id);
 jsVar('storyTasks', $storyTasks);
