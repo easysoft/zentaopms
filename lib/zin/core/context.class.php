@@ -238,7 +238,6 @@ class context extends \zin\utils\dataset
         $this->jsVars[$name] = $value;
     }
 
-
     public function addJSCall($func, $args)
     {
         $this->jsCalls[] = array($func, $args);
@@ -246,12 +245,12 @@ class context extends \zin\utils\dataset
 
     public function getJS()
     {
-        $jsVars          = $this->jsVars;
-        $pageJS          = $this->pageJS;
-        $jsCalls         = $this->jsCalls;
-        $wgRes           = $this->wgRes;
-        $eventBindings   = $this->eventBindings;
-        $js              = array();
+        $jsVars        = $this->jsVars;
+        $pageJS        = $this->pageJS;
+        $jsCalls       = $this->jsCalls;
+        $wgRes         = $this->wgRes;
+        $eventBindings = $this->eventBindings;
+        $js            = array();
 
         if($wgRes)         foreach ($wgRes as $res) if($res['js']) $js[] = js::scope($res['js']);
         if($jsVars)        foreach($jsVars as $name => $value) $js[] = js::defineVar($name, $value);
