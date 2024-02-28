@@ -1,6 +1,7 @@
 <?php
 $this->app->loadLang('project');
 $this->app->loadLang('product');
+$this->app->loadLang('execution');
 
 $schema = new stdclass();
 

@@ -9,6 +9,7 @@ $config->metric->excludeGlobal = array('program', 'project', 'product', 'executi
 $config->metric->maxSelectNum = 10;
 
 global $lang;
+$this->loadLang('metric');
 $config->metric->actionList = array();
 $config->metric->actionList['edit']['icon'] = 'edit';
 $config->metric->actionList['edit']['text'] = $lang->edit;
