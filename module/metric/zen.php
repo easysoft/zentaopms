@@ -181,7 +181,10 @@ class metricZen extends metric
      */
     protected function prepareMetricRecord($calcList)
     {
-        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => date('j'));
+        $yesterday = strtotime('-1 day', strtotime('today'));
+        $yesterday = date('j', $yesterday);
+        $today     = date('j');
+        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => "$today,$yesterday");
 
         $now        = helper::now();
         $dateValues = $this->metric->generateDateValues($now);
@@ -195,24 +198,27 @@ class metricZen extends metric
             $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope);
 
             $results = $calc->getResult($options);
-            foreach($results as $record)
+            if(is_array($results))
             {
-                $record = (object)$record;
-                if(empty($record->value)) continue;
-
-                $record->metricID   = $calc->id;
-                $record->metricCode = $code;
-                $record->date       = $now;
-                $record->system     = $metric->scope == 'system' ? 1 : 0;
-
-                $uniqueKey = $this->getUniqueKeyByRecord($record);
-                if(!isset($initRecords[$uniqueKey]))
+                foreach($results as $record)
                 {
-                    $initRecords[$uniqueKey] = $record;
-                    continue;
-                }
+                    $record = (object)$record;
+                    if(empty($record->value)) continue;
 
-                $initRecords[$uniqueKey]->value = $record->value;
+                    $record->metricID   = $calc->id;
+                    $record->metricCode = $code;
+                    $record->date       = $now;
+                    $record->system     = $metric->scope == 'system' ? 1 : 0;
+
+                    $uniqueKey = $this->getUniqueKeyByRecord($record);
+                    if(!isset($initRecords[$uniqueKey]))
+                    {
+                        $initRecords[$uniqueKey] = $record;
+                        continue;
+                    }
+
+                    $initRecords[$uniqueKey]->value = $record->value;
+                }
             }
 
             $records[$code] = array_values($initRecords);
@@ -494,6 +500,15 @@ class metricZen extends metric
     public function getPagerExtra($tableWidth)
     {
         return ($tableWidth > 300) ? '' : 'shortPageSize';
+    }
+
+    public function formatException($e)
+    {
+        $message = $e->getMessage();
+        $line    = $e->getLine();
+        $file    = $e->getFile();
+
+        return "Error: $message in $file on line $line";
     }
 
     /**
