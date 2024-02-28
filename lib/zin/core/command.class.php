@@ -127,6 +127,12 @@ class command
         return $node ? $node : array();
     }
 
+    public static function each(node $node, callable|\Collator $callback)
+    {
+        if($callback instanceof \Closure) $callback($node);
+        else call_user_func($callback, $node);
+    }
+
     /**
      * Magic static method for setting property value.
      *
