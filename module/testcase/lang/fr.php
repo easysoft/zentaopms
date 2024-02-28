@@ -50,6 +50,7 @@ $lang->testcase->linkBug          = 'Linked Bugs';
 $lang->testcase->linkBugs         = 'Link Bug';
 $lang->testcase->unlinkBug        = 'Unlink Bugs';
 $lang->testcase->stage            = 'Phase';
+$lang->testcase->script           = 'Auto Script';
 $lang->testcase->scriptedBy       = 'ScriptedBy';
 $lang->testcase->scriptedDate     = 'ScriptedDate';
 $lang->testcase->scriptStatus     = 'Script Status';
