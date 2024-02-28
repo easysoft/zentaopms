@@ -213,6 +213,11 @@ class control extends wg
         return new input(set::type('hidden'), set($this->props->skip('control')));
     }
 
+    protected function buildText(): node
+    {
+        return new input(set::type('text'), set($this->props->skip('control')));
+    }
+
     protected function buildDropdown(): node
     {
         return new dropdown($this->prop('text'), set($this->props->skip('control,text,name,widget')));
