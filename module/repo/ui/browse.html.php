@@ -115,6 +115,7 @@ $downloadWg = div
         p(set::className('repo-downloadCode'), $lang->repo->cloneUrl),
         formRow
         (
+            setClass('flex'),
             formGroup
             (
                 set::width('450px'),
@@ -142,6 +143,7 @@ $downloadWg = div
         p(set::className('repo-downloadCode'), $lang->repo->sshClone),
         formRow
         (
+            setClass('flex'),
             formGroup
             (
                 set::width('450px'),
@@ -170,6 +172,7 @@ $downloadWg = div
         p(set::className('repo-downloadCode'), $lang->repo->httpClone),
         formRow
         (
+            setClass('flex'),
             formGroup
             (
                 set::width('450px'),
