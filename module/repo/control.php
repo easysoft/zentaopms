@@ -426,7 +426,12 @@ class repo extends control
 
         /* Get repo and synchronous commit. */
         $repo = $this->repo->getByID($repoID);
-        if(in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) && !is_dir($repo->path)) return $this->sendError(sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path), $this->repo->createLink('maintain'));
+        if($repo->SCM == 'Git' && !is_dir($repo->path)) return $this->sendError(sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path), $this->repo->createLink('maintain'));
+        if($repo && substr($repo->path, 0, 4) == 'http')
+        {
+            if(!$this->loadModel('admin')->checkInternet($repo->path)) return $this->sendError($this->lang->repo->error->connect, true);
+        }
+
         if(!$repo->synced) return $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
         /* Set branch or tag for git. */
