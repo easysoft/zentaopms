@@ -17,6 +17,8 @@ else
 $scoreNotice = '';
 if($config->vision != 'lite') $scoreNotice = $this->loadModel('score')->getNotice();
 
+$shouldShowAIChat = hasPriv('ai', 'chat') && $this->loadModel('ai')->hasModelsAvailable();
+
 jsVar('scoreNotice', $scoreNotice);
 jsVar('edition',     $config->edition);
 jsVar('vision',      $config->vision);
@@ -99,10 +101,12 @@ div
     toolbar
     (
         setID('appsToolbar'),
+        setClass('space-x-1'),
         hasPriv('search', 'index') ? globalSearch() : null,
+        $shouldShowAIChat ? chatBtn() : null,
         item
         (
-            setClass('ghost btn-zentao'),
+            setClass('ghost btn-zentao px-1'),
             set::icon('zentao text-2xl'),
             set::url($lang->website),
             set::target('_blank'),

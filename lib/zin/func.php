@@ -1906,3 +1906,11 @@ function visionSwitcher(): visionSwitcher
 {
     return createWg('visionSwitcher', func_get_args());
 }
+
+/**
+ * Chat button widget.
+ */
+function chatBtn(): chatBtn
+{
+    return createWg('chatBtn', func_get_args());
+}
