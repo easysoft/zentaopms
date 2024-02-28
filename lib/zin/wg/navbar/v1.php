@@ -56,11 +56,12 @@ class navbar extends wg
         }
 
         return array(
-            'type' => 'dropdown',
-            'items' => $dropItems,
-            'text' => $lang->more,
+            'type'    => 'dropdown',
+            'items'   => $dropItems,
+            'text'    => $lang->more,
             'trigger' => 'hover',
-            'menu' => array('style' => array('max-width' => '300px'))
+            'id'      => 'navbarMoreMenu',
+            'menu'    => array('style' => array('max-width' => '300px'))
         );
     }
 
@@ -299,15 +300,6 @@ class navbar extends wg
             set::id('navbar'),
             new nav
             (
-                on::click(<<<'FUNC'
-                    const $target = $(e.target);
-                    if(!$target.closest('.nav-divider').length && $target.closest('.nav-item').length)
-                    {
-                        const $navbar = $target.closest('#navbar');
-                        $navbar.find('.active').removeClass('active');
-                        $target.closest('.nav-item').find('a').addClass('active');
-                    }
-                FUNC),
                 set::items($this->getItems()),
                 $this->children()
             )
