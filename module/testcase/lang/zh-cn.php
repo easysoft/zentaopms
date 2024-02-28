@@ -51,6 +51,7 @@ $lang->testcase->linkBug          = '相关Bug';
 $lang->testcase->linkBugs         = '关联相关Bug';
 $lang->testcase->unlinkBug        = '移除相关Bug';
 $lang->testcase->stage            = '适用阶段';
+$lang->testcase->script           = '自动化脚本';
 $lang->testcase->scriptedBy       = '脚本由谁创建';
 $lang->testcase->scriptedDate     = '脚本创建日期';
 $lang->testcase->scriptStatus     = '脚本状态';
