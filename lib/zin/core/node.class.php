@@ -332,7 +332,7 @@ class node implements \JsonSerializable
         $this->removed = true;
     }
 
-    public function empty(?string $blockName = null)
+    public function clear(?string $blockName = null)
     {
         if($blockName) unset($this->blocks[$blockName]);
         else           $this->blocks = array();

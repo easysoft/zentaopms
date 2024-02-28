@@ -49,7 +49,7 @@ class command
 
     public static function html(node $node, mixed ...$codes)
     {
-        $node->empty();
+        $node->clear();
         $node->add(html(...$codes));
     }
 
@@ -65,13 +65,13 @@ class command
 
     public static function text(node $node, mixed ...$args)
     {
-        $node->empty();
+        $node->clear();
         $node->add(text(...$args));
     }
 
-    public static function empty(node $node)
+    public static function clear(node $node)
     {
-        $node->empty();
+        $node->clear();
     }
 
     public static function prepend(node $node, mixed ...$args)
