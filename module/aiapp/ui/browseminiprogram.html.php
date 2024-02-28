@@ -30,6 +30,7 @@ if(count($fields) !== 0)
                 set::name("field-{$field->id}"),
                 set::placeholder($field->placeholder),
                 set::disabled($isDeleted),
+                set::className('form-field'),
                 setData('name', $field->name),
                 setData('fid', $field->id)
             );
@@ -63,6 +64,7 @@ if(count($fields) !== 0)
                 set::name("field-{$field->id}"),
                 set::placeholder($field->placeholder),
                 set::disabled($isDeleted),
+                set::className('form-field'),
                 setData('name', $field->name),
                 setData('fid', $field->id)
             );

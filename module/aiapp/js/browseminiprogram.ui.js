@@ -237,8 +237,7 @@ window.aiBrowseMiniProgram.handleRestBtnClick = function()
         {
             $(this).zui('picker').$.clear();
         });
-        $('.form-container .form-group > input[data-name]').val('');
-        $('.form-container .form-group > textarea[data-name]').val('');
+        $('.form-container .form-group .form-field').val('');
     }
     catch (error) {}
 };
