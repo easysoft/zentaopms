@@ -267,7 +267,7 @@ toolbar
     (
         btn
         (
-            setClass('primary btn square btn-default'),
+            setClass('primary btn btn-default'),
             set::icon('plus'),
             $lang->create,
         ),
