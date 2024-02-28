@@ -131,10 +131,10 @@ class h extends node
         return $input;
     }
 
-    public static function formHidden(string $name, string $value, mixed ...$args): h
+    public static function formHidden(string $name, mixed $value, mixed ...$args): h
     {
         $input = static::create('input', ...$args);
-        $input->setDefaultProps(array('type' => 'hidden', 'name' => $name, 'value' => $value));
+        $input->setDefaultProps(array('type' => 'hidden', 'name' => $name, 'value' => strval($value)));
         return $input;
     }
 
