@@ -63,7 +63,7 @@ $lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
-$lang->dividerMenu = ',aiapp,bi,kanban,system,';
+$lang->dividerMenu = ',aiapp,kanban,system,';
 
 $lang->mainNav->menuOrder[5]  = 'my';
 $lang->mainNav->menuOrder[10] = 'program';
