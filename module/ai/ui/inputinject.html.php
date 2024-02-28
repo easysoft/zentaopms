@@ -41,6 +41,40 @@ $inputInject = function()
             const inputType = inputEl.prop('nodeName');
             switch(inputType) // Contains case fallthroughs, on purpose.
             {
+                case 'ZEN-EDITOR':
+                    /* Set Zen Editor content with its exposed method, loop till editor is ready. */
+                    const zenEditorEl = inputEl.get().pop();
+                    const setZenEditorData = () =>
+                    {
+                        try
+                        {
+                            zenEditorEl.setHTML(data).catch(_ => setTimeout(setZenEditorData, 100));
+                        }
+                        catch(_)
+                        {
+                            setTimeout(setZenEditorData, 100);
+                        }
+                    };
+                    setZenEditorData();
+                    break;
+                case 'INPUT':
+                    /* Watch out for zui date pickers. */
+                    if(inputEl.hasClass('pick-value'))
+                    {
+                        if(inputEl.parent().hasClass('date-picker'))
+                        {
+                            if(inputEl.parent().parent().data().hasOwnProperty('zuiDatetimepicker'))
+                            {
+                                inputEl.zui('dateTimePicker').$.setValue(data);
+                                break;
+                            }
+                            if(inputEl.parent().parent().data().hasOwnProperty('zuiDatepicker'))
+                            {
+                                inputEl.zui('datePicker').$.setValue(data);
+                                break;
+                            }
+                        }
+                    }
                 case 'TEXTAREA':
                     /* Textareas might be controlled by KindEditors. */
                     if(typeof KindEditor !== 'undefined' && KindEditor.instances.length)
