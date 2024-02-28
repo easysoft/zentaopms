@@ -2035,17 +2035,19 @@ class upgradeModel extends model
             $this->saveLogs($this->dao->get());
         }
 
-        if(version_compare($openVersion, '18_6', '<')) return;
-        include('priv.php');
-        foreach($orData as $role => $name)
+        if(version_compare($openVersion, '18_6', '<'))
         {
-            $this->dao->insert(TABLE_GROUP)->set('vision')->eq('or')->set('name')->eq($name)->set('role')->eq($role)->set('desc')->eq($name)->exec();
-            $this->saveLogs($this->dao->get());
-            if(dao::isError()) continue;
-            $groupID = $this->dao->lastInsertID();
-            $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
-            $this->dao->exec($sql);
-            $this->saveLogs($sql);
+            include('priv.php');
+            foreach($orData as $role => $name)
+            {
+                $this->dao->insert(TABLE_GROUP)->set('vision')->eq('or')->set('name')->eq($name)->set('role')->eq($role)->set('desc')->eq($name)->exec();
+                $this->saveLogs($this->dao->get());
+                if(dao::isError()) continue;
+                $groupID = $this->dao->lastInsertID();
+                $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
+                $this->dao->exec($sql);
+                $this->saveLogs($sql);
+            }
         }
     }
 
