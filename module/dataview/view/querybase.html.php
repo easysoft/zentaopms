@@ -90,7 +90,7 @@
   <div class="modal-dialog" style="width: 1200px;">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only"><?php echo $lang->common->close;?></span></button>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only"><?php echo $lang->close;?></span></button>
         <h4 class="modal-title"><?php echo $lang->dataview->fieldSettings;?></h4>
       </div>
       <div class="modal-body">
