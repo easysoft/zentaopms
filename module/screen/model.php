@@ -2077,7 +2077,7 @@ class screenModel extends model
         else
         {
             $setting = json_decode($chart->settings, true)[0];
-            $options = $this->loadModel('chart')->genWaterPolo(json_decode($chart->fieldSettings, true), $setting, $chart->sql, $filters);
+            $options = $this->loadModel('chart')->genWaterPolo(json_decode($chart->fields, true), $setting, $chart->sql, $filters);
 
             $component->option->dataset = $options['series'][0]['data'][0];
             return $this->setComponentDefaults($component);
@@ -2956,7 +2956,8 @@ class screenModel extends model
                 ->andWhere('month(t2.closedDate)')->eq($month)
                 ->fetchPairs();
 
-            $deliveredStoryCount = count(array_merge($finishedStoryList, (array)$releasedStoryGroups[$productID]));
+            $releasedStoryList = isset($releasedStoryGroups[$productID]) ? $releasedStoryGroups[$productID] : array();
+            $deliveredStoryCount = count(array_merge($finishedStoryList, (array)$releasedStoryList));
 
             $row = new stdclass();
             $row->id               = $productID;
@@ -3035,7 +3036,8 @@ class screenModel extends model
                 ->andWhere('month(t3.closedDate)')->eq($month)
                 ->fetchPairs();
 
-            $deliveredStoryCount = count(array_merge($finishedStoryList, (array)$releasedStoryGroups[$projectID]));
+            $releasedStoryList = isset($releasedStoryGroups[$projectID]) ? $releasedStoryGroups[$projectID] : array();
+            $deliveredStoryCount = count(array_merge($finishedStoryList, (array)$releasedStoryList));
 
             $row = new stdclass();
             $row->id               = $projectID;

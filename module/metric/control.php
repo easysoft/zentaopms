@@ -194,11 +194,11 @@ class metric extends control
             }
             catch(Exception $e)
             {
-                a($e->getMessage());
+                a($this->metricZen->formatException($e));
             }
             catch(Error $e)
             {
-                a($e->getMessage());
+                a($this->metricZen->formatException($e));
             }
         }
 
