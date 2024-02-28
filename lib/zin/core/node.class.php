@@ -411,7 +411,7 @@ class node implements \JsonSerializable
 
         if($type === 'all')
         {
-            $this->buildData = null;
+            $this->buildData = new stdClass();
         }
         elseif($type === 'before')
         {
