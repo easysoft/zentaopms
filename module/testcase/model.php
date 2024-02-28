@@ -879,7 +879,7 @@ class testcaseModel extends model
         if(!empty($_POST['auto']))
         {
             $_POST['auto'] = 'auto';
-            if($_POST['script']) $_POST['script'] = htmlentities($_POST['script']);
+            if($this->post->script) $_POST['script'] = htmlentities($_POST['script']);
         }
         else
         {
@@ -903,6 +903,7 @@ class testcaseModel extends model
             ->cleanInt('story,product,branch,module')
             ->stripTags($this->config->testcase->editor->edit['id'], $this->config->allowedTags)
             ->remove('comment,steps,expects,files,labels,linkBug,stepType,scriptFile,scriptName')
+            ->removeIF($this->post->auto == 'auto' && !$this->post->script, 'script')
             ->get();
 
         $requiredFields = $this->config->testcase->edit->requiredFields;
