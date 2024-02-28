@@ -298,9 +298,9 @@ class jQuery extends jsContext
      * @access public
      * @return self
      */
-    public function clear(): self
+    public function empty(): self
     {
-        return $this->call('clear');
+        return $this->call('empty');
     }
 
     /**
