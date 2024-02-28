@@ -587,7 +587,7 @@ class screenModel extends model
         $isDateMetric   = $metric->dateType != 'nodate';
 
         $tableOption = $this->getMetricTableOption($metric, $resultHeader, $resultData, $filterParams, $component);
-        $chartOption = $this->getMetricChartOption($metric, $resultHeader, $resultData, $component);
+        $chartOption = $this->getMetricChartOption($metric, $resultHeader, $resultData, $filterParams, $component);
         $card        = $this->getMetricCardOption($metric, $resultData, $component);
 
         $tableOption->pagination = $pagination;
@@ -2094,9 +2094,10 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getMetricChartOption($metric, $resultHeader, $resultData, $component = null)
+    public function getMetricChartOption($metric, $resultHeader, $resultData, $filterParams, $component = null)
     {
         $chartOption = $this->metric->getEchartsOptions($resultHeader, $resultData);
+        $chartOption = $this->filterChartOption($chartOption, $filterParams, $metric->dateType);
 
         if(isset($component) && isset($component->option->chartOption))
         {
@@ -2121,6 +2122,60 @@ class screenModel extends model
         if(!isset($chartOption['legend'])) $chartOption['legend'] = array();
         $chartOption['legend']['textStyle']['color'] = 'white';
         $chartOption['legend']['inactiveColor']      = 'gray';
+
+        return $chartOption;
+    }
+
+    /**
+     * Get chart option when filter.
+     *
+     * @param  object $chartOption
+     * @param  array  $filterParams
+     * @param  string $dateType
+     * @access public
+     * @return array
+     */
+    public function filterChartOption($chartOption, $filterParams, $dateType)
+    {
+        $filters = $this->processMetricFilter($filterParams, $dateType);
+
+        if(isset($filters['scope'])) 
+        {
+            $scopeFilter = $filters['scope'];
+            $objectPairs = $this->loadModel('metric')->getPairsByIdList($scopeFilter->type, $scopeFilter->value);
+
+            $series = array_filter($chartOption['series'], function($item) use($objectPairs) { return in_array($item['name'], $objectPairs); });
+            $chartOption['series'] = array_values($series);
+        }
+
+        if(isset($filters['begin'], $filters['end']))
+        {
+            $begin = $filters['begin']->$dateType;
+            $end   = $filters['end']->$dateType;
+
+            $xAxisData      = array();
+            $includeKeyList = array();
+            $dateList = $chartOption['xAxis']['data'];
+            foreach($dateList as $key => $date)
+            {
+                if($date < $begin || $date > $end) continue;
+
+                $xAxisData[]      = $date;
+                $includeKeyList[] = $key;
+            }
+            $chartOption['xAxis']['data'] = $xAxisData;
+
+            $filteredSeries = array();
+            foreach($chartOption['series'] as $index => $series)
+            {
+                $seriesData = array_filter($series['data'], function($value, $key) use($includeKeyList) {
+                    return in_array($key, $includeKeyList);
+                }, ARRAY_FILTER_USE_BOTH);
+
+                $series['data'] = array_values($seriesData);
+                $chartOption['series'][$index] = $series;
+            }
+        }
 
         return $chartOption;
     }
