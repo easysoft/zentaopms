@@ -551,6 +551,8 @@ $lang->doc->menuOrder[20] = 'project';
 $lang->doc->menuOrder[25] = 'api';
 $lang->doc->menuOrder[30] = 'custom';
 
+$lang->aiapp->menu = new stdclass();
+
 /* BI menu.*/
 $lang->bi->menu         = new stdclass();
 $lang->bi->menu->screen = array('link' => "{$lang->screen->common}|screen|browse");
