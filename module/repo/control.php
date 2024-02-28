@@ -508,6 +508,12 @@ class repo extends control
             $link  = $this->repo->createLink($this->app->tab == 'execution' ? 'create' : 'maintain', "objectID={$objectID}");
             return print(js::error($error) . js::locate($link));
         }
+
+        if($repo && substr($repo->path, 0, 4) == 'http')
+        {
+            if(!$this->loadModel('admin')->checkInternet($repo->path)) return print(js::error($this->lang->repo->error->connect) . js::locate(inLink('maintain')));
+        }
+
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
         /* Set branch or tag for git. */
