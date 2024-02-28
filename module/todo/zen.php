@@ -109,7 +109,7 @@ class todoZen extends todo
         $hasObject  = in_array($objectType, $this->config->todo->moduleList);
 
         $objectID = 0;
-        if($hasObject && $objectType) $objectID = isset($rawData->$objectType) ? $rawData->$objectType : $rawData->objectID;
+        if($hasObject && $objectType) $objectID = !empty($rawData->$objectType) ? $rawData->$objectType : $rawData->objectID;
         $rawData->date = !empty($rawData->config['date']) ? $rawData->config['date'] : $rawData->date;
 
         return $form->add('account', $this->app->user->account)
