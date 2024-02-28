@@ -109,10 +109,11 @@ class navbar extends wg
         $items = $this->prop('items');
         if(!empty($items)) return $items;
 
+        global $app, $lang;
+        if($app->tab == 'admin') $app->control->loadModel('admin')->setMenu();
         commonModel::setMainMenu();
         commonModel::checkMenuVarsReplaced();
 
-        global $app, $lang;
         $isTutorialMode = commonModel::isTutorialMode();
         $currentModule = $app->rawModule;
         $currentMethod = $app->rawMethod;
