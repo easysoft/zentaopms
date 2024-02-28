@@ -142,6 +142,7 @@ function validate(showError = false)
     var pivot        = DataStorage.pivot;
     var formSettings = pivot.settings;
     var isReady      = true;
+    var firstErrDom  = null;
 
     if("summary" in formSettings && formSettings.summary == 'notuse')
     {
@@ -169,6 +170,8 @@ function validate(showError = false)
             var error = '<div id="groupLabel" class="text-danger help-text">' + moreThanOneLang + '</div>';
             tr.find('#group1').addClass('has-error');
             tr.find('#group1').next().after(error);
+
+            firstErrDom = tr.find('#group1').parents('tr');
         }
     }
 
@@ -189,6 +192,8 @@ function validate(showError = false)
                 var error = '<div id="column' + index + 'Label" class="text-danger help-text">' + notemptyLang.replace('%s', pivotLang.step2.columnField) + '</div>';
                 $column.find('#column').addClass('has-error');
                 $column.find('#column').parent().after(error);
+
+                if(!firstErrDom) firstErrDom = $column.find('#column').parents('.column');
             }
         }
 
@@ -200,11 +205,15 @@ function validate(showError = false)
                 var error = '<div id="stat' + index + 'Label" class="text-danger help-text">' + notemptyLang.replace('%s', pivotLang.step2.calcMode) + '</div>';
                 $column.find('#stat').addClass('has-error');
                 $column.find('#stat').next().after(error);
+
+                if(!firstErrDom) firstErrDom = $column.find('#stat').parents('.column');
             }
         }
     });
 
     if(isReady)  $('#datagrid-tip').addClass('hidden');
+
+    if(!isReady && firstErrDom) firstErrDom[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
     return isReady;
 }
 
