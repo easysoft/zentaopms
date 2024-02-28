@@ -333,6 +333,7 @@ class context extends \zin\utils\dataset
         $zinDebug   = $this->getDebugData();
 
         $node->prebuild(true);
+        $this->applyQueries($node);
 
         $js     = $this->getJS();
         $css    = $this->getCSS();
@@ -387,36 +388,37 @@ class context extends \zin\utils\dataset
         return $data->output;
     }
 
+    protected function applyQueries(node $rootNode)
+    {
+        if(!$this->queries) return;
+
+        foreach($this->queries as $query)
+        {
+            $this->applyQuery($rootNode, $query);
+        }
+    }
+
+    protected function applyQuery(node $rootNode, query $query)
+    {
+        $nodes = findInNode($query->selectors, $rootNode, false, false, false);
+        if(!$nodes) return;
+
+        $queryNodes = $nodes;
+        foreach($query->commands as $command)
+        {
+            list($method, $args) = $command;
+            $result = call_user_func("\zin\command::{$method}", $queryNodes, ...$args);
+            if(is_array($result))  $queryNodes = $result;
+            if(empty($queryNodes)) break;
+        }
+    }
+
     public function handleBeforeBuildNode(node $node)
     {
         foreach($this->beforeBuildNodeCallbacks as $callback)
         {
             if($callback instanceof \Closure) $callback($node);
             else call_user_func($callback, $node);
-        }
-    }
-
-    public function handlePreBuildNode(node $node)
-    {
-        if($this->queries)
-        {
-            foreach($this->queries as $query)
-            {
-                if(!$node->is($query->selectors) || !$query->commands) continue;
-                $queryNodes = array($node);
-                foreach($query->commands as $command)
-                {
-                    list($method, $args) = $command;
-                    foreach($queryNodes as $queryNode)
-                    {
-                        $queryNode->rootNode = $this->rootNode;
-                        $result = call_user_func("\zin\command::{$method}", $queryNode, ...$args);
-                        if($result instanceof node) $queryNodes = array($result);
-                        else if(is_array($result))  $queryNodes = $result;
-                    }
-                    if(empty($queryNodes)) break;
-                }
-            }
         }
     }
 

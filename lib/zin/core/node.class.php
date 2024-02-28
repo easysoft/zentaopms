@@ -167,8 +167,9 @@ class node implements \JsonSerializable
         return null;
     }
 
-    public function find(string|array|object $selectors, bool $first = false, bool $reverse = false): array
+    public function find(string|array|object $selectors, bool $first = false, bool $reverse = false, bool $prebuild = true): array
     {
+        if($prebuild) $this->prebuild();
         return findInNode(parseSelectors($selectors, true), $this, $first, $reverse);
     }
 
@@ -444,7 +445,6 @@ class node implements \JsonSerializable
 
             $this->buildData = $data;
 
-            $context->handlePreBuildNode($this);
             $context->handleBuildNode($data, $this);
         }
         else
@@ -745,7 +745,7 @@ class node implements \JsonSerializable
     }
 }
 
-function findInNode(array $selectors, node|array $list, bool $first = false, bool $reverse = false): array
+function findInNode(array $selectors, node|array $list, bool $first = false, bool $reverse = false, bool $onlyContent = true): array
 {
     if($list instanceof node)
     {
@@ -753,6 +753,7 @@ function findInNode(array $selectors, node|array $list, bool $first = false, boo
         if(!$data || !isset($data->content) || empty($data->content)) return array();
 
         $list = $data->content;
+        if(!$onlyContent) $list = array_merge($data->before, $list, $data->after);
     }
     if($reverse) $list = array_reverse($list);
     $result = array();
@@ -760,7 +761,7 @@ function findInNode(array $selectors, node|array $list, bool $first = false, boo
     {
         if(is_array($child))
         {
-            $childList = findInNode($selectors, $child, $first, $reverse);
+            $childList = findInNode($selectors, $child, $first, $reverse, $onlyContent);
             if(!empty($childList))
             {
                 if($first) return $childList;
@@ -773,11 +774,11 @@ function findInNode(array $selectors, node|array $list, bool $first = false, boo
 
         if($child->is($selectors))
         {
-            $result[] = $child;
+            $result[$child->gid] = $child;
             if($first) return $result;
         }
 
-        $childList = findInNode($selectors, $child, $first, $reverse);
+        $childList = findInNode($selectors, $child, $first, $reverse, $onlyContent);
         if(!empty($childList))
         {
             if($first) return $childList;

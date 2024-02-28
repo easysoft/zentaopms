@@ -19,118 +19,187 @@ require_once __DIR__ . DS . 'helper.func.php';
  */
 class command
 {
-    public static function addClass(node $node, null|array|string|object ...$args)
+    public static function addClass(array $nodes, null|array|string|object ...$args)
     {
-        $node->props->class->add(...$args);
-        $node->removeBuildData();
+        foreach($nodes as $node)
+        {
+            $node->props->class->add(...$args);
+            $node->removeBuildData();
+        }
     }
 
-    public static function removeClass(node $node, string|array ...$args)
+    public static function removeClass(array $nodes, string|array ...$args)
     {
-        $node->props->class->remove($args);
-        $node->removeBuildData();
+        foreach($nodes as $node)
+        {
+            $node->props->class->remove($args);
+            $node->removeBuildData();
+        }
     }
 
-    public static function toggleClass(node $node, string $name, ?bool $toggle = null)
+    public static function toggleClass(array $nodes, string $name, ?bool $toggle = null)
     {
-        $node->props->class->toggle($name, $toggle);
-        $node->removeBuildData();
+        foreach($nodes as $node)
+        {
+            $node->props->class->toggle($name, $toggle);
+            $node->removeBuildData();
+        }
     }
 
-    public static function prop(node $node, props|array|string $prop, mixed $value = null)
+    public static function prop(array $nodes, props|array|string $prop, mixed $value = null)
     {
-        $node->setProp($prop, $value);
+        foreach($nodes as $node)
+        {
+            $node->setProp($prop, $value);
+        }
     }
 
-    public static function data(node $node, string|array|object $keyOrData, mixed $value = null)
+    public static function data(array $nodes, string|array|object $keyOrData, mixed $value = null)
     {
-        $node->add(setData($keyOrData, $value));
+        foreach($nodes as $node)
+        {
+            $node->add(setData($keyOrData, $value));
+        }
     }
 
-    public static function html(node $node, mixed ...$codes)
+    public static function html(array $nodes, mixed ...$codes)
     {
-        $node->empty();
-        $node->add(html(...$codes));
+        foreach($nodes as $node)
+        {
+            $node->empty();
+            $node->add(html(...$codes));
+        }
     }
 
-    public static function append(node $node, mixed ...$args)
+    public static function append(array $nodes, mixed ...$args)
     {
-        $node->add($args);
+        foreach($nodes as $node)
+        {
+            $node->add($args);
+        }
     }
 
-    public static function remove(node $node)
+    public static function remove(array $nodes)
     {
-        $node->remove();
+        foreach($nodes as $node)
+        {
+            $node->remove();
+        }
     }
 
-    public static function text(node $node, mixed ...$args)
+    public static function text(array $nodes, mixed ...$args)
     {
-        $node->empty();
-        $node->add(text(...$args));
+        foreach($nodes as $node)
+        {
+            $node->empty();
+            $node->add(text(...$args));
+        }
     }
 
-    public static function empty(node $node)
+    public static function empty(array $nodes)
     {
-        $node->empty();
+        foreach($nodes as $node)
+        {
+            $node->empty();
+        }
     }
 
-    public static function prepend(node $node, mixed ...$args)
+    public static function prepend(array $nodes, mixed ...$args)
     {
-        $node->add($args, 'children', true);
+        foreach($nodes as $node)
+        {
+            $node->add($args, 'children', true);
+        }
     }
 
-    public static function before(node $node, mixed ...$args)
+    public static function before(array $nodes, mixed ...$args)
     {
-        $node->add($args, 'before');
+        foreach($nodes as $node)
+        {
+            $node->add($args, 'before');
+        }
     }
 
-    public static function after(node $node, mixed ...$args)
+    public static function after(array $nodes, mixed ...$args)
     {
-        $node->add($args, 'after');
+        foreach($nodes as $node)
+        {
+            $node->add($args, 'after');
+        }
     }
 
-    public static function replaceWith(node $node, mixed ...$args)
+    public static function replaceWith(array $nodes, mixed ...$args)
     {
-        $node->replaceWith(...$args);
+        foreach($nodes as $node)
+        {
+            $node->replaceWith(...$args);
+        }
     }
 
-    public static function on(node $node, string $event, null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null)
+    public static function on(array $nodes, string $event, null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null)
     {
-        $node->add(static::bind($event, $selectorOrCallback, $handlerOrOptions), 'children');
+        foreach($nodes as $node)
+        {
+            $node->add(on::bind($event, $selectorOrCallback, $handlerOrOptions), 'children');
+        }
     }
 
-    public static function off(node $node, string $event)
+    public static function off(array $nodes, string $event)
     {
-        $node->off($event);
+        foreach($nodes as $node)
+        {
+            $node->off($event);
+        }
     }
 
-    public static function closest(node $node, string|array|object $selectors)
+    public static function closest(array $nodes, string|array|object $selectors)
     {
-        $node = $node->closest($selectors);
-        return $node ? $node : array();
+        foreach($nodes as $node)
+        {
+            $result = $node->closest($selectors);
+            if($result) return array($result);
+        }
+        return array();
     }
 
-    public static function find(node $node, string|array|object $selectors)
+    public static function find(array $nodes, string|array|object $selectors)
     {
-        return $node->find($selectors);
+        $list = array();
+        foreach($nodes as $node)
+        {
+            $result = $node->find($selectors);
+            if($result) $list = array_merge($list, $result);
+        }
+        return $list;
     }
 
-    public static function first(node $node, string|array|object $selectors)
+    public static function first(array $nodes, string|array|object $selectors)
     {
-        $node = $node->findFirst($selectors);
-        return $node ? $node : array();
+        foreach($nodes as $node)
+        {
+            $result = $node->findFirst($selectors);
+            if($result) return array($result);
+        }
+        return array();
     }
 
-    public static function last(node $node, string|array|object $selectors)
+    public static function last(array $nodes, string|array|object $selectors)
     {
-        $node = $node->findLast($selectors);
-        return $node ? $node : array();
+        foreach($nodes as $node)
+        {
+            $result = $node->findLast($selectors);
+            if($result) return array($result);
+        }
+        return array();
     }
 
-    public static function each(node $node, callable|\Collator $callback)
+    public static function each(array $nodes, callable|\Collator $callback)
     {
-        if($callback instanceof \Closure) $callback($node);
-        else call_user_func($callback, $node);
+        foreach($nodes as $node)
+        {
+            if($callback instanceof \Closure) $callback($node);
+            else call_user_func($callback, $node);
+        }
     }
 
     /**
