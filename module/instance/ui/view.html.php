@@ -232,7 +232,12 @@ div
             floatToolbar
             (
                 set::object($instance),
-                isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
+                isAjaxRequest('modal') ? null : to::prefix(backBtn(
+                    set::icon('back'),
+                    set::className('ghost text-white'),
+                    set::url(createLink('space', 'browse')),
+                    $lang->goback
+                )),
                 set::main($actions['mainActions']),
                 set::suffix($actions['suffixActions'])
             ),
