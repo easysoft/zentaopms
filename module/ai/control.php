@@ -73,9 +73,10 @@ class ai extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Adapt order. */
-        if(strpos(strtolower($orderBy), 'usesproxy') !== false) $orderBy = str_ireplace('usesproxy', 'proxy', $orderBy);
+        $actualOrdering = $orderBy;
+        if(strpos(strtolower($actualOrdering), 'usesproxy') !== false) $actualOrdering = str_ireplace('usesproxy', 'proxy', $actualOrdering);
 
-        $models = $this->ai->getLanguageModels('', false, $pager, $orderBy);
+        $models = $this->ai->getLanguageModels('', false, $pager, $actualOrdering);
 
         /* Process model props to displayable format. */
         foreach($models as $model)
