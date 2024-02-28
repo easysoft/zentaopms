@@ -114,7 +114,7 @@
             <?php foreach($prompts as $prompt):?>
               <tr>
                 <td class='c-id'><?php echo $prompt->id;?></td>
-                <td class='c-name'><?php echo html::a(helper::createLink('ai', 'promptview', "id=$prompt->id"), $prompt->name, '_self', "title='$prompt->name'");?></td>
+                <td class='c-name'><?php echo common::hasPriv('ai', 'promptview') ? html::a(helper::createLink('ai', 'promptview', "id=$prompt->id"), $prompt->name, '_self', "title='$prompt->name'") : $prompt->name;?></td>
                 <?php if(empty($status)):?>
                   <td class='c-status'><?php echo $lang->ai->prompts->statuses[$prompt->status];?></td>
                 <?php endif;?>
