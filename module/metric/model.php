@@ -2024,14 +2024,17 @@ class metricModel extends model
 
         if($type == 'date')
         {
-            list($year, $month, $day) = explode('-', $query[$key]);
-
             $timestamp = strtotime($query[$key]);
+
+            $year  = date('Y', $timestamp);
+            $month = date('m', $timestamp);
+            $day   = date('d', $timestamp);
+            $week  = date('oW', $timestamp);
 
             $dateParse = new stdClass();
             $dateParse->year  = $year;
             $dateParse->month = "{$year}{$month}";
-            $dateParse->week  = date('oW', $timestamp);
+            $dateParse->week  = $week;
             $dateParse->day   = "{$year}{$month}{$day}";
 
             return $dateParse;

@@ -137,7 +137,7 @@ class screen extends control
 
             $queryType    = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
             $component    = isset($_POST['component']) ? json_decode($this->post->component) : null;
-            $filterParams = isset($_POST['filters']) ? json_decode($this->post->filters, true) : null;
+            $filterParams = isset($_POST['filters']) ? json_decode($this->post->filters, true) : array();
 
             $type = $this->screen->getChartType($type);
 
