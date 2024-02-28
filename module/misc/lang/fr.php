@@ -117,7 +117,7 @@ $lang->misc->feature->aiMiniProgramStencilImage = 'theme/default/images/main/ai_
 $lang->misc->feature->learnMoreLink             = 'https://www.zentao.net/book/zentaopms/1168.html';
 
 /* Release Date. */
-$lang->misc->releaseDate['18.11']        = '2024-02-20';
+$lang->misc->releaseDate['18.11']       = '2024-02-28';
 $lang->misc->releaseDate['18.10.1']     = '2024-01-17';
 $lang->misc->releaseDate['18.10']       = '2023-12-18';
 $lang->misc->releaseDate['18.9']        = '2023-11-09';
