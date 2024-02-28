@@ -27,8 +27,6 @@ class render
 
     public array $selectors = array();
 
-    public array $dataCommands = array();
-
     public array $filteredMap = array();
 
     /**
@@ -39,14 +37,13 @@ class render
      * @param  array|string|object $selectors
      * @access public
      */
-    public function __construct(node $node, null|object|string|array $selectors = null, string $renderType = 'html', null|string|array $dataCommands = null, bool $renderInner = false)
+    public function __construct(node $node, null|object|string|array $selectors = null, string $renderType = 'html', bool $renderInner = false)
     {
         $this->node         = $node;
         $this->renderType   = $renderType;
         $this->renderInner  = $renderInner;
 
         $this->addSelectors($selectors);
-        $this->addDataCommands($dataCommands);
     }
 
     public function handleBuildNode(stdClass $data, node $node)
@@ -55,6 +52,7 @@ class render
 
         foreach($this->selectors as $name => $selector)
         {
+            if(isset($selector->command)) continue;
             if(!isset($this->filteredMap[$name])) $this->filteredMap[$name] = array();
             $filteredNodes = $this->filteredMap[$name];
 
@@ -79,70 +77,73 @@ class render
     public function renderList(): array
     {
         $list = array();
-        foreach($this->filteredMap as $name => $nodes)
+
+        foreach($this->selectors as $selector)
         {
-            $selector       = $this->selectors[$name];
-            $item           = new stdClass();
-            $item->name     = $name;
-            $item->selector = stringifySelectors($selector);
-            $item->selector = $selector;
-            $item->count    = count($nodes);
-
-            if(isset($selector->options['type']) && $selector->options['type'] === 'json')
+            $name = $selector->name;
+            if(isset($selector->command))
             {
-                $item->type  = 'json';
-                $item->data  = array();
-                $dataGetters = isset($selector->options['data']) ? $selector->options['data'] : null;
-                $dataPorps   = $dataGetters ? explode('|', $dataGetters) : null;
-
-                foreach($nodes as $node)
-                {
-                    $json = $node->toJSON();
-                    if($dataPorps)
-                    {
-                        $data = array();
-                        foreach($dataPorps as $prop)
-                        {
-                            $prop = trim($prop);
-                            if(empty($prop)) continue;
-
-                            $parts       = explode('~', $prop, 2);
-                            $name        = $parts[0];
-                            $namePath    = count($parts) > 1 ? $parts[1] : $parts[0];
-                            $data[$name] = \zin\utils\deepGet($json, $namePath);
-                        }
-                        $item->data[] = $data;
-                    }
-                    else
-                    {
-                        $item->data[] = $json;
-                    }
-                }
-
-                if(count($item->data) === 1) $item->data = $item->data[0];
+                $item = new stdClass();
+                $item->name = $name;
+                $item->type = 'data';
+                $item->data = data($selector->command);
+                $list[] = $item;
             }
             else
             {
-                $html = array();
-                foreach($nodes as $node)
+                $nodes          = $this->filteredMap[$name];
+                $item           = new stdClass();
+                $item->name     = $name;
+                $item->selector = stringifySelectors($selector);
+                $item->selector = $selector;
+                $item->count    = count($nodes);
+
+                if(isset($selector->options['type']) && $selector->options['type'] === 'json')
                 {
-                    $html[] = $selector->inner ? $node->renderInner() : $node->render();
+                    $item->type  = 'json';
+                    $item->data  = array();
+                    $dataGetters = isset($selector->options['data']) ? $selector->options['data'] : null;
+                    $dataPorps   = $dataGetters ? explode('|', $dataGetters) : null;
+
+                    foreach($nodes as $node)
+                    {
+                        $json = $node->toJSON();
+                        if($dataPorps)
+                        {
+                            $data = array();
+                            foreach($dataPorps as $prop)
+                            {
+                                $prop = trim($prop);
+                                if(empty($prop)) continue;
+
+                                $parts       = explode('~', $prop, 2);
+                                $name        = $parts[0];
+                                $namePath    = count($parts) > 1 ? $parts[1] : $parts[0];
+                                $data[$name] = \zin\utils\deepGet($json, $namePath);
+                            }
+                            $item->data[] = $data;
+                        }
+                        else
+                        {
+                            $item->data[] = $json;
+                        }
+                    }
+
+                    if(count($item->data) === 1) $item->data = $item->data[0];
                 }
-                $item->type = 'html';
-                $item->data = implode("\n", $html);
+                else
+                {
+                    $html = array();
+                    foreach($nodes as $node)
+                    {
+                        $html[] = $selector->inner ? $node->renderInner() : $node->render();
+                    }
+                    $item->type = 'html';
+                    $item->data = implode("\n", $html);
+                }
+
+                $list[] = $item;
             }
-
-            $list[] = $item;
-        }
-
-        $dataList = $this->getDataByCommands();
-        foreach($dataList as $name => $data)
-        {
-            $item = new stdClass();
-            $item->name = $name;
-            $item->type = 'data';
-            $item->data = $data;
-            $list[] = $item;
         }
 
         return $list;
@@ -157,11 +158,18 @@ class render
     public function renderJson(): object
     {
         $output = new stdClass();
-        if($this->filteredMap)
+        $output->data = array();
+        foreach($this->selectors as $selector)
         {
-            foreach($this->filteredMap as $name => $nodes)
+            $name = $selector->name;
+            if(isset($selector->command))
             {
-                $list = array();
+                $output->data[$name] = data($selector->command);
+            }
+            else
+            {
+                $nodes = $this->filteredMap[$name];
+                $list  = array();
                 foreach($nodes as $node)
                 {
                     $list[] = $node->toJSON();
@@ -170,7 +178,6 @@ class render
             }
         }
 
-        $output->data = $this->getDataByCommands();
         return $output;
     }
 
@@ -180,29 +187,6 @@ class render
         return $this->node->render();
     }
 
-    public function addDataCommands(null|string|array $commands)
-    {
-        if(empty($commands)) return;
-
-        if(is_string($commands))
-        {
-            $commandList = explode(',', $commands);
-            $commands    = array();
-            foreach($commandList as $command)
-            {
-                $parts = explode(':', $command, 2);
-                $commands[$parts[0]] = count($parts) > 1 ? $parts[1] : $parts[0];
-            }
-        }
-
-        $index = 0;
-        foreach($commands as $key => $command)
-        {
-            $this->dataCommands[$index == $key ? $command : $key] = $command;
-            $index++;
-        }
-    }
-
     public function addSelectors(null|object|string|array $selectors)
     {
         if(!$selectors) return;
@@ -210,19 +194,7 @@ class render
         $selectors = parseSelectors($selectors);
         foreach($selectors as $selector)
         {
-            if(isset($selector->command) && !empty($selector->command)) $this->addDataCommands(array($selector->tag => $selector->command));
-            else $this->selectors[$selector->name] = $selector;
+            $this->selectors[$selector->name] = $selector;
         }
-    }
-
-    protected function getDataByCommands()
-    {
-        $data = array();
-        foreach($this->dataCommands as $name => $command)
-        {
-            $data[$name] = data($command);
-        }
-
-        return $data;
     }
 }

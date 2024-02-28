@@ -319,11 +319,11 @@ class context extends \zin\utils\dataset
         return '';
     }
 
-    public function render(node $node, null|object|string|array $selectors = null, string $renderType = 'html', null|string|array $dataCommands = null, bool $renderInner = false): string|array|object
+    public function render(node $node, null|object|string|array $selectors = null, string $renderType = 'html', bool $renderInner = false): string|array|object
     {
         $this->disableGlobalRender();
 
-        $renderer = new render($node, $selectors, $renderType, $dataCommands, $renderInner);
+        $renderer = new render($node, $selectors, $renderType, $renderInner);
         $this->rendered = true;
         $this->renderer = $renderer;
         $this->rootNode = $node;

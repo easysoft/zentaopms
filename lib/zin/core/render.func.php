@@ -55,7 +55,7 @@ function render(string $wgName = '', array $options = array())
     if(!$isFullPage && $wgName !== 'fragment') $wg = fragment($wg);
 
     /* 渲染并输出 HTML。 Render and display html. */
-    $html = $context->render($wg, zget($options, 'selector', null), zget($options, 'type', 'html'), zget($options, 'data', null));
+    $html = $context->render($wg, zget($options, 'selector', null), zget($options, 'type', 'html'));
     ob_start();
     echo $html;
 }
