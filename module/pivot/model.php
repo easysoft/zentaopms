@@ -2033,8 +2033,9 @@ class pivotModel extends model
         {
             foreach($record as $field => $value)
             {
-                $optionList  = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
-                $record[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
+                $optionList     = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
+                $valueKey       = "$value";
+                $record[$field] = isset($optionList[$valueKey]) ? $optionList[$valueKey] : $value;
             }
 
             $records[$index] = (object)$record;
@@ -2565,7 +2566,7 @@ class pivotModel extends model
                     $options = array();
                     if(is_array($source))
                     {
-                        foreach($source as $row) $options[$row->$field] = $row->$field;
+                        foreach($source as $row) $options["{$row->$field}"] = $row->$field;
                     }
                 }
                 break;
@@ -2775,9 +2776,10 @@ class pivotModel extends model
         foreach($data->cols[0] as $col)
         {
             $colspan = zget($col, 'colspan', 1);
-            $colShowOrigin = array_fill(0, $colspan, $col->showOrigin);
+            $showOrigin = isset($col->showOrigin) ? $col->showOrigin : false;
+            $colShowOrigin = array_fill(0, $colspan, $showOrigin);
             $showOrigins = array_merge($showOrigins, $colShowOrigin);
-            if($col->showOrigin) $hasShowOrigin = true;
+            if($showOrigin) $hasShowOrigin = true;
         }
 
         /* Init table thead. */

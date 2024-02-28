@@ -87,7 +87,7 @@ class Condition extends Component
      */
     public function __construct($expr = null)
     {
-        $this->expr = trim($expr);
+        $this->expr = !empty($expr) ? trim($expr) : $expr;
     }
 
     /**
