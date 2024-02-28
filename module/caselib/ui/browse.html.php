@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('confirmBatchDelete', $lang->testcase->confirmBatchDelete);
+
 $canView              = common::hasPriv('caselib', 'view');
 $canExport            = common::hasPriv('caselib', 'exportTemplate');
 $canImport            = common::hasPriv('caselib', 'import');
@@ -130,7 +132,7 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
     $navActions = array
     (
         $canBatchReview ? array('text' => $lang->testcase->review, 'class' => 'not-hide-menu', 'items' => $reviewItems) : null,
-        $canBatchDelete ? array('text' => $lang->delete, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchDelete', "libID=$libID")) : null,
+        $canBatchDelete ? array('text' => $lang->delete, 'innerClass' => 'batch-btn ajax-btn not-open-url batch-delete-btn', 'data-url' => helper::createLink('testcase', 'batchDelete', "libID=$libID")) : null,
         $canBatchChangeModule ? array('text' => $lang->testcase->module, 'class' => 'not-hide-menu', 'items' => $moduleItems) : null
     );
 }
