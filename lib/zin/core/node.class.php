@@ -43,6 +43,8 @@ class node implements \JsonSerializable
 
     public ?node $parent = null;
 
+    public ?node $rootNode = null;
+
     public props $props;
 
     public array $blocks = array();
@@ -259,7 +261,7 @@ class node implements \JsonSerializable
         return $this->props->pick(array_keys(static::definedPropsList()));
     }
 
-    public function add($item, string $blockName = 'children', bool $prepend = false)
+    public function add(mixed $item, string $blockName = 'children', bool $prepend = false)
     {
         if($item === null || is_bool($item)) return;
 

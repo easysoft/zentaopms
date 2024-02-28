@@ -152,9 +152,12 @@ function setTag(string $id): set
  * @param  mixed        $value
  * @return set
  */
-function setData(null|string|array $name, mixed $value = null): set
+function setData(null|string|array|object $name, mixed $value = null): set
 {
     if($name === null) return set();
+
+    if(is_object($name)) $name = (array)$name;
+
     $map   = is_array($name) ? $name : array($name => $value);
     $attrs = array();
     foreach($map as $key => $value)

@@ -390,7 +390,8 @@ class context extends \zin\utils\dataset
                     list($method, $args) = $command;
                     foreach($queryNodes as $queryNode)
                     {
-                        $result = call_user_func("\zin\command::{$method}", $queryNode, $args, $this->rootNode);
+                        $queryNode->rootNode = $this->rootNode;
+                        $result = call_user_func("\zin\command::{$method}", $queryNode, ...$args);
                         if($result instanceof node) $queryNodes = array($result);
                         else if(is_array($result))  $queryNodes = $result;
                     }

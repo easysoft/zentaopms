@@ -19,106 +19,111 @@ require_once __DIR__ . DS . 'helper.func.php';
  */
 class command
 {
-    public static function addClass(node $node, array $args)
+    public static function addClass(node $node, null|array|string|object ...$args)
     {
         $node->props->class->add(...$args);
         $node->removeBuildData();
     }
 
-    public static function removeClass(node $node, array $args)
+    public static function removeClass(node $node, string|array ...$args)
     {
-        $node->props->class->remove(...$args);
+        $node->props->class->remove($args);
         $node->removeBuildData();
     }
 
-    public static function toggleClass(node $node, array $args)
+    public static function toggleClass(node $node, string $name, ?bool $toggle = null)
     {
-        $node->props->class->toggle(...$args);
+        $node->props->class->toggle($name, $toggle);
         $node->removeBuildData();
     }
 
-    public static function prop(node $node, array $args)
+    public static function prop(node $node, props|array|string $prop, mixed $value = null)
     {
-        $node->setProp(...$args);
+        $node->setProp($prop, $value);
     }
 
-    public static function html(node $node, array $args)
+    public static function data(node $node, string|array|object $keyOrData, mixed $value = null)
+    {
+        $node->add(setData($keyOrData, $value));
+    }
+
+    public static function html(node $node, mixed ...$codes)
     {
         $node->empty();
-        $node->add(html(...$args));
+        $node->add(html(...$codes));
     }
 
-    public static function append(node $node, array $args)
+    public static function append(node $node, mixed ...$args)
     {
         $node->add($args);
     }
 
-    public static function remove(node $node, array $args)
+    public static function remove(node $node)
     {
         $node->remove();
     }
 
-    public static function text(node $node, array $args)
+    public static function text(node $node, mixed ...$args)
     {
         $node->empty();
         $node->add(text(...$args));
     }
 
-    public static function empty(node $node, array $args)
+    public static function empty(node $node)
     {
         $node->empty();
     }
 
-    public static function prepend(node $node, array $args)
+    public static function prepend(node $node, mixed ...$args)
     {
         $node->add($args, 'children', true);
     }
 
-    public static function before(node $node, array $args)
+    public static function before(node $node, mixed ...$args)
     {
         $node->add($args, 'before');
     }
 
-    public static function after(node $node, array $args)
+    public static function after(node $node, mixed ...$args)
     {
         $node->add($args, 'after');
     }
 
-    public static function replaceWith(node $node, array $args)
+    public static function replaceWith(node $node, mixed ...$args)
     {
         $node->replaceWith(...$args);
     }
 
-    public static function on(node $node, array $args)
+    public static function on(node $node, string $event, null|string|jsCallback $selectorOrCallback = null, null|array|string|jsCallback $handlerOrOptions = null)
     {
-        $node->add(on(...$args), 'children');
+        $node->add(static::bind($event, $selectorOrCallback, $handlerOrOptions), 'children');
     }
 
-    public static function off(node $node, array $args)
+    public static function off(node $node, string $event)
     {
-        $node->off(...$args);
+        $node->off($event);
     }
 
-    public static function closest(node $node, array $args)
+    public static function closest(node $node, string|array|object $selectors)
     {
-        $node = $node->closest(...$args);
+        $node = $node->closest($selectors);
         return $node ? $node : array();
     }
 
-    public static function find(node $node, array $args)
+    public static function find(node $node, string|array|object $selectors)
     {
-        return $node->find(...$args);
+        return $node->find($selectors);
     }
 
-    public static function first(node $node, array $args)
+    public static function first(node $node, string|array|object $selectors)
     {
-        $node = $node->findFirst(...$args);
+        $node = $node->findFirst($selectors);
         return $node ? $node : array();
     }
 
-    public static function last(node $node, array $args)
+    public static function last(node $node, string|array|object $selectors)
     {
-        $node = $node->findLast(...$args);
+        $node = $node->findLast($selectors);
         return $node ? $node : array();
     }
 
