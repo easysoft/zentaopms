@@ -66,6 +66,7 @@ $items[] = array
 (
     'name'     => 'title',
     'label'    => $lang->testcase->title,
+    'control'  => 'input',
     'width'    => '240px',
     'required' => true
 );
@@ -89,6 +90,7 @@ $items[] = array
 (
     'name'     => 'precondition',
     'label'    => $lang->testcase->precondition,
+    'control'  => 'input',
     'width'    => '200px',
     'required' => strpos($config->testcase->create->requiredFields, 'precondition') !== false
 );
@@ -98,6 +100,7 @@ $items[] = array
 (
     'name'     => 'keywords',
     'label'    => $lang->testcase->keywords,
+    'control'  => 'input',
     'width'    => '200px',
     'required' => strpos($config->testcase->create->requiredFields, 'keywords') !== false
 );
