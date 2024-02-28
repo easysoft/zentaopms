@@ -177,7 +177,47 @@ class transferModel extends model
             $fieldList['mailto']['values']  = $this->transferConfig->sysDataList['user'];
         }
 
-        if($this->config->edition != 'open') $fieldList = $this->transferZen->initWorkflowFieldList($module, $fieldList);
+        if($this->config->edition != 'open') $fieldList = $this->initWorkflowFieldList($module, $fieldList, $fields);
+        return $fieldList;
+    }
+
+    /**
+     * 初始化工作流字段。
+     * Init workflow fieldList.
+     *
+     * @param  string    $module
+     * @param  array     $fieldList
+     * @param  array     $fields
+     * @access protected
+     * @return array
+     */
+    protected function initWorkflowFieldList(string $module, array $fieldList, array $fields): array
+    {
+        $this->loadModel($module);
+        /* Set workflow fields. */
+        $workflowFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)
+            ->where('module')->eq($module)
+            ->andWhere('buildin')->eq(0)
+            ->fetchAll('id');
+
+        foreach($workflowFields as $field)
+        {
+            if(!in_array($field->control, array('select', 'radio', 'multi-select'))) continue;
+            if(!isset($fields[$field->field]) and !array_search($field->field, $fields)) continue;
+            if(empty($field->options)) continue;
+
+            $field   = $this->loadModel('workflowfield')->processFieldOptions($field);
+            $options = $this->workflowfield->getFieldOptions($field, true);
+            if($options)
+            {
+                $control = $field->control == 'multi-select' ? 'multiple' : 'select';
+                $fieldList[$field->field]['title']   = $field->name;
+                $fieldList[$field->field]['control'] = $control;
+                $fieldList[$field->field]['values']  = $options;
+                $fieldList[$field->field]['from']    = 'workflow';
+                $this->config->$module->listFields .=  ',' . $field->field;
+            }
+        }
         return $fieldList;
     }
 

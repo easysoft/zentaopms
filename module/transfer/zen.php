@@ -24,7 +24,7 @@ class transferZen extends transfer
     {
         return $this->dao->select('t2.*')->from(TABLE_WORKFLOWLAYOUT)->alias('t1')
             ->leftJoin(TABLE_WORKFLOWFIELD)->alias('t2')->on('t1.field=t2.field && t1.module=t2.module')
-            ->where('t1.module')->eq($model)
+            ->where('t1.module')->eq($module)
             ->andWhere('t1.action')->eq('exporttemplate')
             ->andWhere('t2.buildin')->eq(0)
             ->orderBy('t1.order')
@@ -159,7 +159,7 @@ class transferZen extends transfer
      * @access protected
      * @return void
      */
-    protected function initTemplateFields(string $module, string $fields = ''): array
+    protected function initTemplateFields(string $module, string $fields = ''): void
     {
         /* 构造该模块的导出模板字段数据。*/
         /* Construct export template field data. */
@@ -570,44 +570,6 @@ class transferZen extends transfer
         $this->session->set($module . 'TemplateFields',  implode(',', array_keys($fields))); // 将模板字段到SESSION中
 
         return $moduleData;
-    }
-
-    /**
-     * 初始化工作流字段。
-     * Init workflow fieldList.
-     *
-     * @param  string    $module
-     * @param  array     $fieldList
-     * @access protected
-     * @return void
-     */
-    protected function initWorkflowFieldList(string $module, array $fieldList)
-    {
-        $this->loadModel($module);
-        /* Set workflow fields. */
-        $workflowFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)
-            ->where('module')->eq($module)
-            ->andWhere('buildin')->eq(0)
-            ->fetchAll('id');
-
-        foreach($workflowFields as $field)
-        {
-            if(!in_array($field->control, array('select', 'radio', 'multi-select'))) continue;
-            if(!isset($fields[$field->field]) and !array_search($field->field, $fields)) continue;
-            if(empty($field->options)) continue;
-
-            $field   = $this->loadModel('workflowfield')->processFieldOptions($field);
-            $options = $this->workflowfield->getFieldOptions($field, true);
-            if($options)
-            {
-                $control = $field->control == 'multi-select' ? 'multiple' : 'select';
-                $fieldList[$field->field]['title']   = $field->name;
-                $fieldList[$field->field]['control'] = $control;
-                $fieldList[$field->field]['values']  = $options;
-                $fieldList[$field->field]['from']    = 'workflow';
-                $this->config->$module->listFields .=  ',' . $field->field;
-            }
-        }
     }
 
     /**

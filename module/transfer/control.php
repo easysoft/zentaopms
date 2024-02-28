@@ -71,7 +71,7 @@ class transfer extends control
 
             /* 初始化字段列表并拼接下拉菜单数据。*/
             /* Init field list and append dropdown menu data. */
-            $this->transferZen->initTemplateFields($fields);
+            $this->transferZen->initTemplateFields($module, $fields);
 
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
