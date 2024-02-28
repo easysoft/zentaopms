@@ -28,6 +28,7 @@ $config->index->oldPages[] = 'screen-burn';
 $config->index->oldPages[] = 'report-annualdata';
 $config->index->oldPages[] = 'ai-adminindex';
 $config->index->oldPages[] = 'ai-chat';
+$config->index->oldPages[] = 'ai-editminiprogramcategory';
 $config->index->oldPages[] = 'ai-miniprograms';
 $config->index->oldPages[] = 'ai-prompts';
 $config->index->oldPages[] = 'ai-promptview';
