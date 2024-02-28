@@ -125,7 +125,6 @@ class dropdown extends wg
                     $items[$index]['icon'] = 'icon-' . $item['icon'];
                 }
 
-                if(!is_array($menuProps)) $menuProps = array();
                 $menuProps['items'] = $items;
 
                 $menu = zui::dropdown
@@ -138,7 +137,6 @@ class dropdown extends wg
                         'strategy'       => $strategy,
                         'arrow'          => $arrow,
                         'flip'           => $flip,
-                        'id'             => $id,
                         'offset'         => $offset,
                         'target'         => $target,
                         'className'      => $menuClass,
