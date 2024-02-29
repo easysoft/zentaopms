@@ -5,7 +5,7 @@
       "version": "8.0.2"
     },
     "zentaoext": {
-      "gitVersion": "release-18.11",
+      "gitVersion": "18.x",
       "gitRepo": "easycorp/zentaoext"
     },
     "zdoo": {
@@ -15,7 +15,7 @@
       "gitVersion": "master"
     },
     "downgrade": {
-      "gitVersion": "release-18.11",
+      "gitVersion": "18.x",
       "gitRepo": "devops/zentaopms-downgrade"
     }
   },
@@ -45,7 +45,7 @@
      }
   },
   "notice": {
-    "users": "qishiyao,hufangzhou",
+    "users": "qishiyao,hufangzhou,caoyanyi",
     "groups": "38a4e39b-df5d-4606-a988-e22673bdc358",
     "groups2": "38a4e39b-df5d-4606-a988-e22673bdc358,6f5bb3f5-f4e3-4f67-963e-0cc9d59ad3c7"
   }
