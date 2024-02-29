@@ -10,8 +10,11 @@ $metric = new metricTest();
 /**
 
 title=getMetricByCode
+timeout=0
 cid=1
-pid=1
+
+- 测试按产品统计的计划数第0条的value属性 @50
+- 测试按产品统计年度关闭反馈数第0条的value属性 @0
 
 */
 
