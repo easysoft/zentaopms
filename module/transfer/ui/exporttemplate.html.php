@@ -39,7 +39,7 @@ form
 js
 (
     <<<JAVASCRIPT
-    function setDownloading()
+    window.setDownloading = function()
     {
         if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true; // Opera don't support, omit it.
 
