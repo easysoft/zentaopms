@@ -44,7 +44,8 @@ $config->upgrade->maxVersion['max4_7']        = '18_7';
 $config->upgrade->maxVersion['max4_8']        = '18_8';
 $config->upgrade->maxVersion['max4_9']        = '18_9';
 $config->upgrade->maxVersion['max4_10']       = '18_10';
-$config->upgrade->maxVersion['max4_10_1']     = '18_10_1'; // max insert position.
+$config->upgrade->maxVersion['max4_10_1']     = '18_10_1';
+$config->upgrade->maxVersion['max4_11']        = '18_11'; // max insert position.
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']        = '9_5_1';
@@ -127,7 +128,8 @@ $config->upgrade->bizVersion['biz8_7']        = '18_7';
 $config->upgrade->bizVersion['biz8_8']        = '18_8';
 $config->upgrade->bizVersion['biz8_9']        = '18_9';
 $config->upgrade->bizVersion['biz8_10']       = '18_10';
-$config->upgrade->bizVersion['biz8_10_1']     = '18_10_1'; // biz insert position.
+$config->upgrade->bizVersion['biz8_10_1']     = '18_10_1';
+$config->upgrade->bizVersion['biz8_11']        = '18_11'; // biz insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -247,7 +249,8 @@ $config->upgrade->ipdVersion['ipd1_0_2']     = '18_7';
 $config->upgrade->ipdVersion['ipd1_1']       = '18_8';
 $config->upgrade->ipdVersion['ipd1_1_1']     = '18_9';
 $config->upgrade->ipdVersion['ipd1_1_2']     = '18_10';
-$config->upgrade->ipdVersion['ipd1_2']       = '18_10_1'; // ipd insert position.
+$config->upgrade->ipdVersion['ipd1_2']       = '18_10_1';
+$config->upgrade->ipdVersion['ipd1_3']        = '18_11'; // ipd insert position.
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
@@ -669,6 +672,7 @@ $config->delete['18_4_alpha1'][] = 'module/report/view/preview.html.php';
 $config->delete['18_4_alpha1'][] = 'module/report/view/productsummary.html.php';
 $config->delete['18_4_alpha1'][] = 'module/report/view/projectdeviation.html.php';
 $config->delete['18_4_alpha1'][] = 'module/report/view/workload.html.php';
+$config->delete['18_4_alpha1'][] = 'module/report/zen.php';
 
 $config->delete['18_4'][] = 'extension/biz/dataview/config.php';
 $config->delete['18_4'][] = 'extension/biz/dataview/control.php';
@@ -999,7 +1003,7 @@ $config->delete['20.0.beta1'][] = 'extension/max/bug/ext/view/import.html.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'ai', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'artifactrepo', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution');
 
-$config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'attend', 'holiday', 'leave', 'makeup', 'overtime', 'lieu', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');
+$config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'attend', 'holiday', 'leave', 'makeup', 'overtime', 'lieu', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');
 
 global $lang;
 $config->upgrade->defaultActions = array();
@@ -1055,6 +1059,10 @@ $config->upgrade->recoveryActions->testcase->review['open']     = 'normal';
 $config->upgrade->recoveryActions->testcase->review['position'] = 'browseandview';
 
 $config->upgrade->missedFlowFieldVersions = array('max4_4_alpha1', 'max4_4_beta1', 'max4_4', 'max4_5', 'biz8_4_alpha1', 'biz8_4_beta1', 'biz8_4', 'biz8_5');
+
+$config->upgrade->dbFieldLengths['int']      = array('tinyint' => 4, 'smallint' => 6, 'mediumint' => 9, 'int' => 11, 'integer' => 11, 'bigint' => 20);
+$config->upgrade->dbFieldLengths['unsigned'] = array('tinyint' => 3, 'smallint' => 5, 'mediumint' => 8, 'int' => 10, 'integer' => 10, 'bigint' => 20);
+$config->upgrade->dbFieldLengths['text']     = array('tinytext' => 8, 'text' => 16, 'mediumtext' => 24, 'longtext' => 32);
 
 $config->upgrade->editors['doc']         = array('table' => TABLE_DOCCONTENT,  'fields' => 'doc,`content`,`digest`');
 $config->upgrade->editors['project']     = array('table' => TABLE_PROJECT,     'fields' => 'id,`desc`');
