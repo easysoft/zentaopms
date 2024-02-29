@@ -57,6 +57,8 @@ $lang->misc->zentao->others['zdoo']     = "<img src='{$config->webRoot}theme/def
 $lang->misc->zentao->others['ydisk']    = "<img src='{$config->webRoot}theme/default/images/main/ydisk.ico' /> Y Disk";
 $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/default/images/main/meshiot.ico' /> MeshioT";
 
+$lang->misc->mobile      = "Accès Mobile";
+$lang->misc->noGDLib     = "SVP visitez <strong>%s</strong> via le navigateur de votre smartphone.";
 $lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://easysoft.ltd' target='_blank'>Nature Easy Soft</a> Email <a href='mailto:Renee@easysoft.ltd'>Renee@easysoft.ltd</a>";
 $lang->misc->checkTable  = "Vérifiez les Données de la Table";
 $lang->misc->needRepair  = "Réparer la Table";
@@ -111,6 +113,8 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.11']       = '2024-02-28';
+$lang->misc->releaseDate['18.10.1']     = '2024-01-17';
 $lang->misc->releaseDate['20.0.beta1']  = '2024-01-26';
 $lang->misc->releaseDate['20.0.alpha1'] = '2024-01-08';
 $lang->misc->releaseDate['18.10']       = '2023-12-18';
@@ -219,6 +223,8 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.11'][]       = array('title' => "We have successfully implemented AI mini-program functionality, integrating measurement metrics and global filtering capabilities into the large-screen display. Additionally, we have added feedback functionality to the OR interface. Furthermore, we have enabled the inclusion of keywords in the Requirement Management Hub, allowing for the redistribution of requirements in the Requirement Management Hub once a user's requirement has been withdrawn.", 'desc' => '');
+$lang->misc->feature->all['18.10.1'][]     = array('title' => 'The Requirement Management Hub (RM Hub) now includes notification functionality, supports product line features, and allows for distributing a single requirement to multiple products.', 'desc' => '');
 $lang->misc->feature->all['20.0.beta1'][]  = array('title' => 'This release mainly involves a large-scale refactoring of the code and a brand new upgrade to the user interface (UI), bringing better product performance, stronger security, and a more user-friendly experience.', 'desc' => '');
 $lang->misc->feature->all['20.0.alpha1'][] = array('title' => 'Internal release of comprehensive user interface (UI) upgrades for large-scale refactoring and reconstruction.', 'desc' => '');
 $lang->misc->feature->all['18.10'][]       = array('title' => 'The use case library offers the capability to import test cases from other libraries, enables document export with image proportions automatically adjusted to fit Word, includes the addition of cookie records to the history record sorting method, and incorporates optimized logic for modifying logs of other users.When converting feedback or tickets, attachments can now be automatically included. Feedback functionality has been enhanced with the addition of keywords and CC fields. Additionally, a new water drop chart type has been introduced, and improvements have been made to the logic and visual presentation of metric collection.', 'desc' => '');

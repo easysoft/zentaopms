@@ -57,6 +57,8 @@ $lang->misc->zentao->others['xuanxuan'] = "<img src='{$config->webRoot}theme/def
 $lang->misc->zentao->others['ydisk']    = "<img src='{$config->webRoot}theme/default/images/main/ydisk.ico' /> 悦库网盘";
 $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/default/images/main/meshiot.ico' /> 易天物联";
 
+$lang->misc->mobile      = "手机访问";
+$lang->misc->noGDLib     = "请用手机浏览器访问：<strong>%s</strong>";
 $lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://www.easycorp.cn' target='_blank'>禅道软件（青岛）有限公司</a> 电话：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
 $lang->misc->checkTable  = "检查修复数据表";
 $lang->misc->needRepair  = "修复表";
@@ -111,6 +113,8 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.11']       = '2024-02-28';
+$lang->misc->releaseDate['18.10.1']     = '2024-01-17';
 $lang->misc->releaseDate['20.0.beta1']  = '2024-01-26';
 $lang->misc->releaseDate['20.0.alpha1'] = '2024-01-08';
 $lang->misc->releaseDate['18.10']       = '2023-12-18';
@@ -219,6 +223,8 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.11'][]       = array('title' => '实现AI小程序功能，实现大屏引用度量项、全局筛选器功能,OR界面实现反馈功能，需求池需求增加关键词，撤回用户需求后需求池需求可以再次分发。', 'desc' => '');
+$lang->misc->feature->all['18.10.1'][]     = array('title' => '需求池增加通知功能，支持产品线功能，支持一个需求分发到多个产品。', 'desc' => '');
 $lang->misc->feature->all['20.0.beta1'][]  = array('title' => '本次发布主要对代码进行了大规模重构，同时对用户界面(UI)进行了全新升级，带来了更好的产品性能、更强的安全性和更友好的用户体验。', 'desc' => '');
 $lang->misc->feature->all['20.0.alpha1'][] = array('title' => '针对大规模重构重构，全面升级用户界面(UI)的内部发布。', 'desc' => '');
 $lang->misc->feature->all['18.10'][]       = array('title' => '用例库可以从其他用例库导入用例，文档导出可以按Word自适应图片比例，历史记录排序方式增加cookie记录，优化修改他人日志逻辑。反馈、工单转化时可自动带入附件，反馈增加关键词、抄送字段，图表类型新增水球图，优化度量项的采集逻辑和展示样式。', 'desc' => '');
