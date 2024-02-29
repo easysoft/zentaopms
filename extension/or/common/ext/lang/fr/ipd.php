@@ -1,5 +1,7 @@
 <?php
-$lang->SRCommon   = 'Requirement';
+$lang->storyCommon = $lang->SRCommon;
+$lang->SRCommon    = 'Requirement';
+
 $lang->demandpool = new stdclass();
 $lang->demandpool->common = 'RM Hub';
 
@@ -62,7 +64,7 @@ $lang->demandpool->menu = new stdclass();
 $lang->demandpool->menu->browse  = array('link' => "{$lang->demand->common}|demand|browse|poolID=%s", 'alias' => 'create,batchcreate,edit,managetree,view,tostory,showimport,review,change');
 //$lang->demandpool->menu->review  = array('link' => "Review|demand|review|poolID=%s");
 //$lang->demandpool->menu->kanban  = array('link' => "Kanban|demand|kanban|poolID=%s");
-//$lang->demandpool->menu->track   = array('link' => "Track|demand|track|demandID=%s");
+$lang->demandpool->menu->track   = array('link' => "Track|demandpool|track|poolID=%s");
 //$lang->demandpool->menu->insight = array('link' => "Insight|demand|insight|demandID=%s");
 $lang->demandpool->menu->view    = array('link' => "View|demandpool|view|poolID=%s", 'alias' => 'edit');
 

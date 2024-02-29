@@ -1,5 +1,7 @@
 <?php
-$lang->SRCommon = '用户需求';
+$lang->storyCommon = $lang->SRCommon;
+$lang->SRCommon    = '用户需求';
+
 $lang->demandpool = new stdclass();
 $lang->demandpool->common = '需求池';
 
@@ -62,7 +64,7 @@ $lang->demandpool->menu = new stdclass();
 $lang->demandpool->menu->browse  = array('link' => "{$lang->demand->common}|demand|browse|poolID=%s", 'alias' => 'create,batchcreate,edit,managetree,view,tostory,showimport,review,change');
 //$lang->demandpool->menu->review  = array('link' => "评审|demand|review|poolID=%s");
 //$lang->demandpool->menu->kanban  = array('link' => "看板|demand|kanban|poolID=%s");
-//$lang->demandpool->menu->track   = array('link' => "矩阵图|demand|track|demandID=%s");
+$lang->demandpool->menu->track   = array('link' => "矩阵|demandpool|track|poolID=%s");
 //$lang->demandpool->menu->insight = array('link' => "洞察|demand|insight|demandID=%s");
 $lang->demandpool->menu->view    = array('link' => "概况|demandpool|view|poolID=%s", 'alias' => 'edit');
 
