@@ -66,6 +66,15 @@ formPanel
     ),
     formGroup
     (
+        set::label($lang->metric->dateType),
+        set::name('dateType'),
+        set::items($lang->metric->dateTypeList),
+        set::value('nodate'),
+        set::width('1/2'),
+        set::required(true)
+    ),
+    formGroup
+    (
         set::label($lang->metric->name),
         set::name('name'),
         set::value($metric->name),
