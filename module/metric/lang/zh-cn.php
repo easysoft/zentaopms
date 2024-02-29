@@ -5,6 +5,7 @@ $lang->metric->stage         = "阶段";
 $lang->metric->scope         = "范围";
 $lang->metric->object        = "对象";
 $lang->metric->purpose       = "目的";
+$lang->metric->dateType      = "时间属性";
 $lang->metric->unit          = "单位";
 $lang->metric->code          = "代号";
 $lang->metric->desc          = "描述";
@@ -260,6 +261,12 @@ $lang->metric->chartTypeList['line'] = '折线图';
 $lang->metric->chartTypeList['barX'] = '柱形图';
 $lang->metric->chartTypeList['barY'] = '条形图';
 $lang->metric->chartTypeList['pie']  = '饼图';
+
+$lang->metric->dateTypeList['year']   = '按年统计';
+$lang->metric->dateTypeList['month']  = '按月统计';
+$lang->metric->dateTypeList['week']   = '按周统计';
+$lang->metric->dateTypeList['day']    = '按日统计';
+$lang->metric->dateTypeList['nodate'] = '无';
 
 $lang->metric->filter = new stdclass();
 $lang->metric->filter->common  = '筛选';
