@@ -15,6 +15,7 @@ jsVar('upgradeTip', $lang->metric->upgradeTip);
 jsVar('scope', $scope);
 jsVar('metricSql', $lang->metric->oldMetric->sql);
 jsVar('metricTip', $lang->metric->oldMetric->tip);
+jsVar('implementType', $lang->metric->implementType);
 
 $fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
 {

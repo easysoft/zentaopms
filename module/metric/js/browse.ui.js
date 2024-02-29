@@ -29,7 +29,7 @@ window.onRenderCell = function(result, {row, col})
     {
         var metricHtml = '<div class="dtable-name-flex">';
         metricHtml += '<div><a href="' + $.createLink('metric', 'view', 'metricID=' + row.data.id) + '">' + row.data.name + '</a></div>';
-        metricHtml += '<div><span class="label light-pale" data-toggle="tooltip" data-title="SQL" data-placement="bottom" data-type="white" data-class-name="text-gray border border-light">' + metricSql + '</span></div>';
+        metricHtml += '<div><span class="label light-pale" title="' + implementType + '" data-placement="bottom" data-type="white" data-class-name="text-gray border border-light" onmouseover="event.stopPropagation();">' + metricSql + '</span></div>';
         metricHtml += '</div>';
 
         result[0] = {html: metricHtml};
