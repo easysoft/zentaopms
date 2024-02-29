@@ -10,6 +10,7 @@ $config->metric->form->create['code']       = array('required' => true,  'type' 
 $config->metric->form->create['purpose']    = array('required' => true,  'type' => 'string');
 $config->metric->form->create['scope']      = array('required' => true,  'type' => 'string');
 $config->metric->form->create['object']     = array('required' => true,  'type' => 'string');
+$config->metric->form->create['dateType']   = array('required' => true,  'type' => 'string');
 $config->metric->form->create['desc']       = array('required' => false,  'type' => 'string', 'filter' => 'trim');
 $config->metric->form->create['definition'] = array('required' => false,  'type' => 'string', 'filter' => 'trim');
 

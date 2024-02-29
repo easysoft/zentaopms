@@ -5,6 +5,7 @@ $lang->metric->stage         = "Stage";
 $lang->metric->scope         = "Scope";
 $lang->metric->object        = "Object";
 $lang->metric->purpose       = "Purpose";
+$lang->metric->dateType      = "Date Type";
 $lang->metric->unit          = "Unit";
 $lang->metric->code          = "Metric Code";
 $lang->metric->desc          = "Description";
