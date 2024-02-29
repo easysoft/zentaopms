@@ -4,7 +4,7 @@ namespace zin;
 
 class chatBtn extends wg
 {
-    public static function getPageCSS(): string|false
+    public static function getPageCSS(): ?string
     {
         return <<<CSS
         #chat-container {position: fixed; left: 96px; right: 0; height: calc(100% - 40px); display: none;}
@@ -13,7 +13,7 @@ class chatBtn extends wg
         CSS;
     }
 
-    public static function getPageJS(): string|false
+    public static function getPageJS(): ?string
     {
         $aiChatURL = createLink('ai', 'chat');
         $chatContainer = <<<HTML
