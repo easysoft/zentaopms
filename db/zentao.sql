@@ -16134,6 +16134,7 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   `dateType` varchar(50) NOT NULL DEFAULT '',
   `name` varchar(90) NOT NULL DEFAULT '',
   `code` varchar(90) NOT NULL DEFAULT '',
+  `alias` varchar(90) NOT NULL DEFAULT '',
   `unit` varchar(10) NOT NULL DEFAULT '',
   `collector` text,
   `desc` text,
@@ -16183,6 +16184,7 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `metricID` ON `zt_metriclib`(`metricID`);
 CREATE INDEX `metricCode` ON `zt_metriclib`(`metricCode`);
+CREATE INDEX `date` ON zt_metriclib (date) USING BTREE;
 
 INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `type`, `name`, `code`, `unit`, `desc`, `definition`, `when`, `createdBy`, `createdDate`, `builtin`, `deleted`, `dateType`)  VALUES
 ('scale', 'system', 'program', 'released', 'php', '按系统统计的所有层级的项目集总数', 'count_of_program', 'count', '按系统统计的所有层级的项目集总数表示在整个组织范围内的项目集数量。此度量项反映了整个组织所管理的项目集数量。可以作为评估组织规模和复杂度的指标。', '所有项目集的个数求和\r\n过滤已删除的项目集', 'realtime', 'system', '2023-08-22 08:00:00', '1', '0', 'nodate'),
