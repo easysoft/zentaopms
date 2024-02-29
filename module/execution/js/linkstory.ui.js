@@ -33,6 +33,12 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function(e)
  */
 window.onRenderLinkStoryCell = function(result, {row, col})
 {
+    if(col.name == 'title')
+    {
+        if(row.data.parent > 0) html = "<span class='label gray-pale rounded-xl clip'>"+ childrenAB +"</span> ";
+        if(html) result.unshift({html});
+    }
+
     if(col.name !== 'branch')
     {
         return result;

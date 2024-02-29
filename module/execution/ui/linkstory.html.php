@@ -58,6 +58,8 @@ if(!isInModal())
 }
 
 $objectType = $object->type == 'project' ? 'projectstory' : 'execution';
+
+jsVar('childrenAB', $lang->story->childrenAB);
 dtable
 (
     set::groupDivider(true),
