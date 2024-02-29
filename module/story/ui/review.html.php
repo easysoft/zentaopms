@@ -29,8 +29,17 @@ foreach($fields as $field => $attr)
 
     $formItems[$field] = formRow
     (
+        in_array($field, array('assignedTo', 'closedReason', 'pri', 'estimate', 'childStories')) ? setID($field . 'Box') : null,
+        in_array($field, array('closedReason', 'duplicateStory', 'pri', 'estimate', 'childStories', 'status')) ? set::hidden(true) : null,
+
+        $field == 'duplicateStory' ? setID('rejectedReasonBox') : null,
+        $field == 'assignedTo'     ? set::hidden(!$isLastOne) : null,
+        $field == 'result'         ? on::change('switchShow(e.target);') : null,
+        $field == 'closedReason'   ? on::change('setStory(e.target);') : null,
+
         formGroup
         (
+
             set::width($width),
             set::name($fieldName),
             set::label($attr['title']),
@@ -41,15 +50,6 @@ foreach($fields as $field => $attr)
     );
 }
 if($this->config->vision != 'or') $formItems['affected'] = $getAffectedTabs($story, $users);
-
-$formItems['result']->add(on::change('switchShow(e.target);'));
-$formItems['assignedTo']->add(setID('assignedToBox'))->add(set::hidden(!$isLastOne));
-$formItems['closedReason']->add(setID('rejectedReasonBox'))->add(set::hidden(true))->add(on::change('setStory(e.target);'));
-$formItems['duplicateStory']->add(setID('duplicateStoryBox'))->add(set::hidden(true));
-$formItems['pri']->add(setID('priBox'))->add(set::hidden(true));
-$formItems['estimate']->add(setID('estimateBox'))->add(set::hidden(true));
-$formItems['childStories']->add(setID('childStoriesBox'))->add(set::hidden(true));
-$formItems['status']->add(set::hidden(true));
 
 modalHeader();
 panel
