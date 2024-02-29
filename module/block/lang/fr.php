@@ -497,7 +497,7 @@ $lang->block->themes['default']    = 'Default';
 $lang->block->themes['blue']       = 'Young Blue';
 $lang->block->themes['green']      = 'Green';
 $lang->block->themes['red']        = 'Red';
-$lang->block->themes['pink']       = 'Pink';
+$lang->block->themes['purple']     = 'Purple';
 
 $lang->block->visionTitle            = 'The user interface of ZenTao is divided into 【Full feature interface】 and 【Operation Management Interface】.';
 $lang->block->visions['rnd']         = new stdclass();
@@ -524,8 +524,6 @@ $lang->block->welcome->assignToMe = 'AssignToMe';
 
 $lang->block->welcome->reviewList = array();
 $lang->block->welcome->reviewList['story']    = 'Story';
-$lang->block->welcome->reviewList['feedback'] = 'Feedback';
-$lang->block->welcome->reviewList['testcase'] = 'Testcase';
 
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task']        = 'Task';

@@ -58,25 +58,26 @@ $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions<
                                       </ul>
                                       <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue upgrading.</a></strong></p>';
 
-$lang->upgrade->selectVersion  = 'Version auswählen';
-$lang->upgrade->continue       = 'Weiter';
-$lang->upgrade->noteVersion    = "Wählen Sie eine kompatible Version oder es droht Datenverlust.";
-$lang->upgrade->fromVersion    = 'Von Version';
-$lang->upgrade->toVersion      = 'Upgrade nach Version';
-$lang->upgrade->confirm        = 'SQL Bestätigen';
-$lang->upgrade->sureExecute    = 'Ausführen';
-$lang->upgrade->upgradingTips  = 'The upgrade is in progress, please be patient. Do not refresh the page, blackout, or turn off your computer!';
-$lang->upgrade->forbiddenExt   = 'Die Erweiterung ist nicht kompatibel mit der Upgradeversion. Sie wurde deaktiviert:';
-$lang->upgrade->updateFile     = 'Updateinformation wurden hinzugefügt.';
-$lang->upgrade->noticeSQL      = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
-$lang->upgrade->afterDeleted   = 'Please modify the database manually according to the above error information, and refresh after the modification!';
-$lang->upgrade->afterExec      = 'Please manually modify the database according to the above error information, and refresh after modifiy!';
-$lang->upgrade->mergeProgram   = 'Data Merge';
-$lang->upgrade->mergeTips      = 'Data Migration Tips';
-$lang->upgrade->toPMS15Guide   = 'ZenTao open source version 15 upgrade';
-$lang->upgrade->toPRO10Guide   = 'ZenTao profession version 10 upgrade';
-$lang->upgrade->toBIZ5Guide    = 'ZenTao enterprise version 5 upgrade';
-$lang->upgrade->toMAXGuide     = 'ZenTao ultimate version upgrade';
+$lang->upgrade->selectVersion = 'Version auswählen';
+$lang->upgrade->continue      = 'Weiter';
+$lang->upgrade->noteVersion   = "Wählen Sie eine kompatible Version oder es droht Datenverlust.";
+$lang->upgrade->fromVersion   = 'Von Version';
+$lang->upgrade->toVersion     = 'Upgrade nach Version';
+$lang->upgrade->confirm       = 'SQL Bestätigen';
+$lang->upgrade->sureExecute   = 'Ausführen';
+$lang->upgrade->upgradingTips = 'The upgrade is in progress, please be patient. Do not refresh the page, blackout, or turn off your computer!';
+$lang->upgrade->forbiddenExt  = 'Die Erweiterung ist nicht kompatibel mit der Upgradeversion. Sie wurde deaktiviert:';
+$lang->upgrade->updateFile    = 'Updateinformation wurden hinzugefügt.';
+$lang->upgrade->showSQLLog    = 'Your database is inconsistent with the standard and try fix it.';
+$lang->upgrade->noticeErrSQL  = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
+$lang->upgrade->afterDeleted  = 'Please modify the database manually according to the above error information, and refresh after the modification!';
+$lang->upgrade->afterExec     = 'Please manually modify the database according to the above error information, and refresh after modifiy!';
+$lang->upgrade->mergeProgram  = 'Data Merge';
+$lang->upgrade->mergeTips     = 'Data Migration Tips';
+$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';
+$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10 upgrade';
+$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5 upgrade';
+$lang->upgrade->toMAXGuide    = 'ZenTao ultimate version upgrade';
 
 $lang->upgrade->line            = 'Product Line';
 $lang->upgrade->allLines        = "All Product Lines";
@@ -157,8 +158,8 @@ $lang->upgrade->recoveryActions = new stdclass();
 $lang->upgrade->recoveryActions->cancel = 'Cancel';
 $lang->upgrade->recoveryActions->review = 'Review';
 
-$lang->upgrade->remark           = 'Remark';
-$lang->upgrade->remarkDesc       = 'You can also switch the mode in the Admin-System-Mode page of the system.';
+$lang->upgrade->remark     = 'Remark';
+$lang->upgrade->remarkDesc = 'You can also switch the mode in the Admin-System-Mode page of the system.';
 
 $lang->upgrade->upgradingTip = 'The system is being upgraded, please wait patiently...';
 

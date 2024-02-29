@@ -88,6 +88,7 @@ $lang->testtask->realFinishedDate  = 'Actual Finished Date';
 $lang->testtask->desc              = 'Beschreibung';
 $lang->testtask->mailto            = 'Mail an';
 $lang->testtask->status            = 'Status';
+$lang->testtask->statusAB          = 'Status';
 $lang->testtask->subStatus         = 'Sub Status';
 $lang->testtask->testreport        = 'Test Report';
 $lang->testtask->assignedTo        = 'Zugeordnet';

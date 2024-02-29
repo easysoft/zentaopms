@@ -25,6 +25,9 @@ $lang->chart->noChart         = 'No Chart';
 $lang->chart->noChartSelected = 'Please select one chart.';
 $lang->chart->chartMaxChecked = 'You can only select up to %s charts.';
 
+$lang->chart->featureBar = array();
+$lang->chart->featureBar['preview'] = array();
+
 $lang->chart->aggList = array();
 $lang->chart->aggList['count']    = 'Count';
 $lang->chart->aggList['distinct'] = 'Count after distinct';

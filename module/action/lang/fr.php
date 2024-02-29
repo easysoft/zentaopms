@@ -817,6 +817,13 @@ $lang->action->dynamicAction->repo['edited']    = 'Edit Repo';
 $lang->action->dynamicAction->repo['deleted']   = 'Delete Repo';
 $lang->action->dynamicAction->repo['undeleted'] = 'Undelete Repo';
 
+$lang->action->dynamicAction->metric['created']   = 'Create Metric';
+$lang->action->dynamicAction->metric['edited']    = 'Edit Metric';
+$lang->action->dynamicAction->metric['deleted']   = 'Delete Metric';
+$lang->action->dynamicAction->metric['undeleted'] = 'Undelete Metric';
+$lang->action->dynamicAction->metric['delist']    = 'Delist Metric';
+$lang->action->dynamicAction->metric['publish']   = 'Publish Metric';
+
 /* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';

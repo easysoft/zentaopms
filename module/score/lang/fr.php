@@ -65,7 +65,7 @@ $lang->score->methods['todo']['create']              = 'Cr?er Entr?e Agenda';
 $lang->score->methods['story']['create']             = 'Cr?er Story';
 $lang->score->methods['story']['close']              = 'Fermer Story';
 $lang->score->methods['bug']['create']               = 'Signaler un Bug';
-$lang->score->methods['bug']['confirmBug']           = 'Confirmer Bug';
+$lang->score->methods['bug']['confirm']              = 'Confirmer Bug';
 $lang->score->methods['bug']['createFormCase']       = 'Cr?er Formulaire Bug';
 $lang->score->methods['bug']['resolve']              = 'R?soudre Bug';
 $lang->score->methods['bug']['saveTplModal']         = 'Sauver Mod?le';
@@ -83,7 +83,7 @@ $lang->score->methods['search']['saveQueryAdvanced'] = 'Recherche Avanc?e';
 $lang->score->extended['user']['changePassword'] = "Obtenez ##strength,1## points, si le mot de passe est moyen. Obtenez ##strength,2## points, s'il est fort.";
 $lang->score->extended['execution']['close']     = "Apr?s que le projet soit ferm?, le Project Manager obtient ##manager,close## points et les membres de l'?quipe obtiennent ##member,close## points. S'il a ?t? r?alis? dans les temps ou plus vite, le Project Manager obtient ##manager,onTime## points et les membres de l'?quipe obtiennent ##member,onTime## points.";
 $lang->score->extended['bug']['resolve']         = 'Apr?s un bug r?solu, obtenez des extra-points en fonction de sa s?v?rit?. S1, + ##severity,3##; S2 + ##severity,2##, S3 + ##severity,1##.';
-$lang->score->extended['bug']['confirmBug']      = 'Apr?s un bug confirm?, obtenez des extra-points en fonction de sa s?v?rit?. S1, + ##severity,3##; S2 + ##severity,2##, S3 + ##severity,1##.';
+$lang->score->extended['bug']['confirm']         = 'Apr?s un bug confirm?, obtenez des extra-points en fonction de sa s?v?rit?. S1, + ##severity,3##; S2 + ##severity,2##, S3 + ##severity,1##.';
 $lang->score->extended['task']['finish']         = 'Apr?s une t?che accomplie, obtenez des extra-points par arrondi(heures-homme / 10  Estim?s / Co?t) + Points de Priorit? (p1 ##pri,1##, p2 ##pri,2##).';
 $lang->score->extended['story']['close']         = "Apr?s la fermeture d'une Story, son cr?ateur recevra extra ##createID## points.";
 

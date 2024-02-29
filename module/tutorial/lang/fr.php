@@ -41,7 +41,6 @@ $lang->tutorial->tasks->createAccount->targetPageName = 'Add User';
 $lang->tutorial->tasks->createAccount->desc           = "<p>Create a User: </p><ul><li data-target='nav'>Open <span class='task-nav'>Company <i class='icon icon-angle-right'></i> Users<i class='icon icon-angle-right'></i> New;</span></li><li data-target='form'>Fill the form with user information;</li><li data-target='submit'>Save</li></ul>";
 
 $lang->tutorial->tasks->createProgram = new stdclass();
-
 $lang->tutorial->tasks->createProgram->title          = 'Create a program';
 $lang->tutorial->tasks->createProgram->targetPageName = 'Create program';
 $lang->tutorial->tasks->createProgram->desc           = "<p>Create a new program：</p><ul><li data-target='nav'>Open <span class='task-nav'>Program <i class='icon icon-angle-right'></i> Program list <i class='icon icon-angle-right'></i> Create program</span>;</li><li data-target='form'>Fill the form with program information;</li><li data-target='submit'>Save</li></ul>";

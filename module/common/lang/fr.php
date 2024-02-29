@@ -118,9 +118,9 @@ $lang->showMoreInfo    = 'Display more information';
 $lang->hideMoreInfo    = 'Hide more information';
 $lang->saveSuccess     = 'Sauvegardé';
 $lang->importSuccess   = 'Sauvé';
-$lang->deleteSuccess   = 'Supprimé';
 $lang->fail            = 'Echec';
 $lang->addFiles        = 'Fichiers ajoutés ';
+$lang->deleteSuccess   = 'Supprimé';
 $lang->files           = 'Fichiers ';
 $lang->pasteText       = 'Collage Multi-lignes';
 $lang->uploadImages    = 'Upload Multi-images';
@@ -143,9 +143,6 @@ $lang->levelExceeded   = 'The level has exceeded the display range. For more inf
 $lang->noticeOkFile    = 'For security reasons, your Admin account has to be confirmed. \n Please login ZenTao server and create %s File.\n Note:\n 1. File is blank.\n 2. If the file existed, delete it and then create a new one.';
 $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 $lang->allProgress     = 'All Progress';
-
-$lang->fieldDisplaySetting = 'Paramètres d\'affichage des champs';
-$lang->fieldSettingTip     = 'Les champs suivants sont réduits par défaut, cliquez sur le bouton "Afficher plus de champs" pour développer la vue. Si vous souhaitez que certains champs ne soient pas réduits par défaut, vous pouvez les fixer avec une épingle.';
 
 $lang->fieldDisplaySetting = 'Field Display Setting';
 $lang->fieldSettingTip     = 'The following fields are collapsed by default, click on the "Show more fields" button to expand the view, if you want some fields not to be collapsed by default, you can fix it with a pin.';

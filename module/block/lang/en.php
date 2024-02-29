@@ -497,7 +497,7 @@ $lang->block->themes['default']    = 'Default';
 $lang->block->themes['blue']       = 'Young Blue';
 $lang->block->themes['green']      = 'Green';
 $lang->block->themes['red']        = 'Red';
-$lang->block->themes['pink']       = 'Pink';
+$lang->block->themes['purple']     = 'Purple';
 
 $lang->block->visionTitle            = 'The user interface of ZenTao is divided into 【Full feature interface】 and 【Operation Management Interface】.';
 $lang->block->visions['rnd']         = new stdclass();
@@ -524,21 +524,12 @@ $lang->block->welcome->assignToMe = 'AssignToMe';
 
 $lang->block->welcome->reviewList = array();
 $lang->block->welcome->reviewList['story']    = 'Story';
-$lang->block->welcome->reviewList['feedback'] = 'Feedback';
-$lang->block->welcome->reviewList['testcase'] = 'Testcase';
 
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task']        = 'Task';
 $lang->block->welcome->assignList['bug']         = 'Bug';
 $lang->block->welcome->assignList['story']       = 'SRStroy';
 $lang->block->welcome->assignList['testcase']    = 'TestCase';
-$lang->block->welcome->assignList['requirement'] = 'URStory';
-$lang->block->welcome->assignList['testtask']    = 'Test Request';
-$lang->block->welcome->assignList['issue']       = 'Issue';
-$lang->block->welcome->assignList['risk']        = 'Risk';
-$lang->block->welcome->assignList['qa']          = 'QA';
-$lang->block->welcome->assignList['meeting']     = 'Meeting';
-$lang->block->welcome->assignList['feedback']    = 'Feedback';
 
 $lang->block->customModeTip = new stdClass();
 $lang->block->customModeTip->common = 'There are 2 running modes of ZenTao:  Light Mode and ALM Mode.';

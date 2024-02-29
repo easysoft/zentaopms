@@ -654,7 +654,7 @@ $lang->action->dynamicAction->task['confirmed']            = "确认{$lang->SRCo
 $lang->action->dynamicAction->task['started']              = '开始任务';
 $lang->action->dynamicAction->task['finished']             = '完成任务';
 $lang->action->dynamicAction->task['recordworkhour']       = '记录工时';
-$lang->action->dynamicAction->task['recordestimate ']      = '记录工时';
+$lang->action->dynamicAction->task['recordestimate']       = '记录工时';
 $lang->action->dynamicAction->task['editestimate']         = '编辑工时';
 $lang->action->dynamicAction->task['deleteestimate']       = '删除工时';
 $lang->action->dynamicAction->task['paused']               = '暂停任务';
@@ -824,7 +824,6 @@ $lang->action->dynamicAction->metric['undeleted'] = '还原度量';
 $lang->action->dynamicAction->metric['delist']    = '下架度量';
 $lang->action->dynamicAction->metric['publish']   = '发布度量';
 
-
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = "计划|productplan|view|productID=%s";
@@ -938,7 +937,7 @@ $lang->action->search->label['linked2kanban']         = $lang->action->label->li
 $lang->action->search->label['started']               = $lang->action->label->started;
 $lang->action->search->label['restarted']             = $lang->action->label->restarted;
 $lang->action->search->label['recordworkhour']        = $lang->action->label->recordworkhour;
-$lang->action->search->label['recordestimate ']       = $lang->action->label->recordworkhour;
+$lang->action->search->label['recordestimate']        = $lang->action->label->recordworkhour;
 $lang->action->search->label['editestimate']          = $lang->action->label->editestimate;
 $lang->action->search->label['canceled']              = $lang->action->label->canceled;
 $lang->action->search->label['finished']              = $lang->action->label->finished;
