@@ -198,6 +198,7 @@ class groupZen extends group
         $privs    = array();
 
         /* Subsets in package. */
+        $this->app->loadLang('story');
         foreach($this->config->group->package as $packageCode => $packageData)
         {
             if(!isset($packageData->privs)) continue;
