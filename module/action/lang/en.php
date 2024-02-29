@@ -876,6 +876,7 @@ $lang->action->label->service      = 'Service|service|view|id=%s';
 $lang->action->label->artifactrepo = 'Artifact Repo|artifactrepo|browse|';
 $lang->action->label->prompt       = 'Prompt|ai|promptview|id=%s';
 $lang->action->label->miniprogram  = 'Mini Program|aiapp|browseminiprogram|id=%s';
+$lang->action->label->dataset      = 'Data Set';
 
 /* Object type. */
 $lang->action->search = new stdclass();

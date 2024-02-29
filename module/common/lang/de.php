@@ -238,6 +238,7 @@ $lang->contact->common    = 'Contacts';
 $lang->space->common      = 'Service';
 $lang->store->common      = 'Store';
 $lang->instance->common   = 'Instance';
+$lang->dataset->common    = 'Data Set';
 
 $lang->programstakeholder->common = 'Stakeholder';
 $lang->featureswitch->common      = 'Features On/Off';
