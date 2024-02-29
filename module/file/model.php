@@ -184,7 +184,7 @@ class fileModel extends model
     {
         $files = array();
         if(!isset($_FILES[$htmlTagName])) return $files;
-        if(!is_array($_FILES[$htmlTagName]['error']) && $_FILES[$htmlTagName]['error'] != 0) return $files;
+        if(!is_array($_FILES[$htmlTagName]['error']) && $_FILES[$htmlTagName]['error'] != 0) return $_FILES[$htmlTagName];
 
         $this->app->loadClass('purifier', true);
         $config   = HTMLPurifier_Config::createDefault();
