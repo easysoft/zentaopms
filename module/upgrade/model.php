@@ -8100,8 +8100,8 @@ class upgradeModel extends model
         $createRequired = str_replace(',line,', ',', ",$createRequired,");
         $editRequired   = str_replace(',line,', ',', ",$editRequired,");
 
-        $this->setting->setItem('system.product.create.requiredFields', trim($createRequired, ','));
-        $this->setting->setItem('system.product.edit.requiredFields', trim($editRequired, ','));
+        if(!empty(trim($createRequired, ','))) $this->setting->setItem('system.product.create.requiredFields', trim($createRequired, ','));
+        if(!empty(trim($editRequired, ',')))   $this->setting->setItem('system.product.edit.requiredFields', trim($editRequired, ','));
 
         return true;
     }

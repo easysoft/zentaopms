@@ -5,11 +5,12 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->removeProductLineRequired().
+timeout=0
 cid=1
 
 - 检测产品线必填字段是否已经被移除 @1
 
-**/
+*/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/upgrade.class.php';
@@ -31,8 +32,8 @@ function initProductLineRequired()
     if(!in_array('line', $createRequiredList)) $createRequiredList[] = 'line';
     if(!in_array('line', $editRequiredList))   $editRequiredList[] = 'line';
 
-    $tester->setting->setItem('system.product.create.requiredFields', implode(',', $createRequiredList));
-    $tester->setting->setItem('system.product.edit.requiredFields', implode(',', $editRequiredList));
+    if(!empty(trim($createRequired, ','))) $tester->setting->setItem('system.product.create.requiredFields', implode(',', $createRequiredList));
+    if(!empty(trim($editRequired, ','))) $tester->setting->setItem('system.product.edit.requiredFields', implode(',', $editRequiredList));
 }
 
 function getCheckResult()
