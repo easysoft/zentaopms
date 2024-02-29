@@ -16652,6 +16652,13 @@ INSERT INTO `zt_chart`(`id`, `name`, `dimension`, `type`, `group`, `dataset`, `d
 INSERT INTO `zt_chart`(`id`, `name`, `dimension`, `type`, `group`, `dataset`, `desc`, `settings`, `filters`, `step`, `fields`, `langs`, `sql`, `stage`, `builtin`, `objects`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES (20014, '使用数据分析-当前版本', 1, 'card', '58', '0', ' ', '{\"value\": {\"type\": \"value\", \"field\": \"version\", \"agg\": \"value\"}, \"title\": {\"type\": \"text\", \"name\": \"\"}, \"type\": \"value\"}', ' ', 0, ' ', NULL, 'SELECT REPLACE(REPLACE(REPLACE(value, \'max\', \'旗舰版\'), \'biz\', \'企业版\'), \'pro\', \'专业版\') as version FROM zt_config WHERE owner = \'system\' AND module = \'common\' AND section = \'global\' AND `key` = \'version\'', 'published', 1, ' ', 'system', '2023-08-16 15:28:35', 'admin', '2023-08-16 15:28:41', 0);
 INSERT INTO `zt_chart`(`id`, `name`, `dimension`, `type`, `group`, `dataset`, `desc`, `settings`, `filters`, `step`, `fields`, `langs`, `sql`, `stage`, `builtin`, `objects`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES (20015, '使用数据分析-上线时间', 1, 'card', '58', '0', ' ', '{\"value\": {\"type\": \"value\", \"field\": \"date\", \"agg\": \"value\"}, \"title\": {\"type\": \"text\", \"name\": \"\"}, \"type\": \"value\"}', '[]', 0, ' ', NULL, 'select `value` as date from zt_config where `owner` = \'system\' and `key` = \'installedDate\'', 'published', 1, ' ', 'system', '2023-08-16 15:32:10', 'admin', '2023-08-16 15:32:17', 0);
 
+UPDATE `zt_chart` SET `createdBy` = 'system' where `createdBy` = 'admin';
+UPDATE `zt_pivot` SET `createdBy` = 'system' where `createdBy` = 'admin';
+UPDATE `zt_pivot` SET `createdBy` = 'system' where `createdBy` = 'admin';
+UPDATE `zt_chart` SET `editedBy` = 'system' where `editedBy` = 'admin';
+UPDATE `zt_pivot` SET `editedBy` = 'system' where `editedBy` = 'admin';
+UPDATE `zt_pivot` SET `editedBy` = 'system' where `editedBy` = 'admin';
+
 /* Hide OA app. */
 INSERT INTO `zt_config` ( `vision`, `owner`, `module`, `section`, `key`, `value` ) VALUES ('', 'system', 'common', '', 'closedFeatures', 'otherOA');
 
