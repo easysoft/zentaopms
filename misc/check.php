@@ -406,7 +406,7 @@ foreach(array($moduleRoot, '../xuanxuan/module/') as $subModuleRoot)
                         $lineNO = $lineNO + 1;
                         $referLang = $langKey != 'en' ? 'en' : 'zh-cn';
                         echo "module $moduleName need checking, command is:";
-                        echo " vim -O +$lineNO ../module/$moduleName/lang/$referLang.php +$lineNO ../module/$moduleName/lang/$langKey.php \n";
+                        echo " vimdiff -O +$lineNO ../module/$moduleName/lang/$referLang.php ../module/$moduleName/lang/$langKey.php \n";
                         break;
                     }
                 }
@@ -434,7 +434,7 @@ foreach(array($moduleRoot, '../xuanxuan/module/') as $subModuleRoot)
                         $key = trim($key);
                         $lineNO = $lineNO + 1;
                         echo "module $moduleName need checking, command is:";
-                        echo " vim -O +$lineNO ../../module/$moduleName/ext/lang/zh-cn/$extLangFile +$lineNO ../../module/$moduleName/ext/lang/en/$extLangFile \n";
+                        echo " vimdiff -O +$lineNO ../../module/$moduleName/ext/lang/zh-cn/$extLangFile ../../module/$moduleName/ext/lang/en/$extLangFile \n";
                         break;
                     }
                 }
