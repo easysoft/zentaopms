@@ -82,7 +82,7 @@ formBatchPanel
         array('text' => $lang->goback,           'data-back'   => 'APP',    'class' => 'open-url')
     )),
     formHidden('type', $type),
-    formHidden('status')
+    formHidden('status', '')
 );
 
 render();
