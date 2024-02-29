@@ -1565,6 +1565,7 @@ class productModel extends model
             ->beginIF(strpos($status, 'feedback') === false && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(strpos($status, 'nowait') !== false)->andWhere('t1.status')->ne('wait')->fi()
             ->beginIF(!in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
             ->beginIF($status == 'involved')
             ->andWhere('t1.PO', true)->eq($this->app->user->account)
