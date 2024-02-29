@@ -69,7 +69,7 @@ formPanel
         set::label($lang->metric->dateType),
         set::name('dateType'),
         set::items($lang->metric->dateTypeList),
-        set::value('nodate'),
+        set::value($metric->dateType),
         set::width('1/2'),
         set::required(true)
     ),
