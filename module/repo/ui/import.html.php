@@ -15,8 +15,8 @@ $items[] = array('name' => 'no', 'label' => $lang->user->abbr->id, 'control' => 
 $items[] = array('name' => 'serviceProject', 'label' => '', 'hidden' => true);
 $items[] = array('name' => 'name_with_namespace', 'label' => $lang->repo->repo, 'control' => 'static', 'width' => '264px');
 $items[] = array('name' => 'name', 'label' => $lang->repo->importName);
-$items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('type' => 'picker', 'multiple' => true), 'items' => $products);
-$items[] = array('name' => 'projects', 'label' => $lang->repo->projects, 'control' => array('type' => 'picker', 'multiple' => true), 'items' => $projects);
+$items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $products);
+$items[] = array('name' => 'projects', 'label' => $lang->repo->projects, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $projects);
 
 $no = 1;
 foreach($repoList as $repo)

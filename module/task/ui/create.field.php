@@ -7,7 +7,7 @@ $fields = defineFieldList('task.create', 'task');
 /* Set module field. */
 $fields->field('module')
     ->checkbox(array('text' => $lang->task->allModule, 'name' => 'isShowAllModule', 'checked' => data('showAllModule')))
-    ->control(array('type' => 'picker', 'required' => true))
+    ->control(array('control' => 'picker', 'required' => true))
     ->items(data('modulePairs'))
     ->value(data('task.module'));
 
@@ -182,7 +182,7 @@ if(!isAjaxRequest('modal'))
     $fields->field('after')
         ->label($lang->task->afterSubmit)
         ->width('full')
-        ->control(array('type' => 'radioList', 'inline' => true))
+        ->control(array('control' => 'radioList', 'inline' => true))
         ->value(data('task.id') ? 'continueAdding' : 'toTaskList')
         ->items(empty(data('features.story')) ? array('toTaskList' => $lang->task->afterChoices['toTaskList']) : $config->task->afterOptions);
 }
