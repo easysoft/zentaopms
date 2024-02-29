@@ -1405,10 +1405,11 @@ class upgradeModel extends model
      * 为系统管理员添加 or 页面的权限。
      * Add or view priv for adminer.
      *
+     * @param  string $openVersion
      * @access public
      * @return void
      */
-    public function addORPriv(): void
+    public function addORPriv($openVersion = ''): void
     {
         /* Get admin users. */
         $admins = $this->dao->select('admins')->from(TABLE_COMPANY)->where('deleted')->eq(0)->fetchPairs();
@@ -1426,21 +1427,24 @@ class upgradeModel extends model
             }
         }
 
-        include('priv.php');
-        /* Add or groups. */
-        foreach($orData as $role => $name)
+        if(version_compare($openVersion, '18_6', '<'))
         {
-            $group = new stdclass();
-            $group->vision = 'or';
-            $group->name   = $name;
-            $group->role   = $role;
-            $group->desc   = $name;
-            $this->dao->insert(TABLE_GROUP)->data($group)->exec();
-            if(dao::isError()) continue;
+            include('priv.php');
+            /* Add or groups. */
+            foreach($orData as $role => $name)
+            {
+                $group = new stdclass();
+                $group->vision = 'or';
+                $group->name   = $name;
+                $group->role   = $role;
+                $group->desc   = $name;
+                $this->dao->insert(TABLE_GROUP)->data($group)->exec();
+                if(dao::isError()) continue;
 
-            $groupID = (string)$this->dao->lastInsertID();
-            $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
-            $this->dao->exec($sql);
+                $groupID = (string)$this->dao->lastInsertID();
+                $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
+                $this->dao->exec($sql);
+            }
         }
     }
 

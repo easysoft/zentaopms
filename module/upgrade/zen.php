@@ -86,16 +86,17 @@ class upgradeZen extends upgrade
      * Ipd 版本升级后的处理。
      * Set ipd items.
      *
+     * @param  string  $openVersion
      * @access private
      * @return void
      */
-    private function setIpdItems(): void
+    private function setIpdItems($openVersion = ''): void
     {
         $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
         $this->setting->setItem('system.custom.URAndSR', '1');
         $this->setting->setItem('system.common.closedFeatures', '');
         $this->setting->setItem('system.common.disabledFeatures', '');
-        $this->upgrade->addORPriv();
+        $this->upgrade->addORPriv($openVersion);
     }
 
     /**
