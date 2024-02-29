@@ -8531,21 +8531,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Update metric datetype.
-     *
-     * @access public
-     * @return void
-     */
-    public function updateMetricDateType()
-    {
-        $this->loadModel('metric');
-        foreach($this->config->metric->dateType as $code => $dateType)
-        {
-            $this->dao->update(TABLE_METRIC)->set('dateType')->eq($dateType)->where('code')->eq($code)->exec();
-        }
-    }
-
-    /**
      * 检查办公应用是否有数据，没有就隐藏。
      * Check if the office app has data, if not, hide it.
      *
