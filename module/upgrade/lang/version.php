@@ -188,7 +188,7 @@ $lang->upgrade->fromVersions['18_10']       = '18.10';
 $lang->upgrade->fromVersions['18_10_1']     = '18.10.1';
 $lang->upgrade->fromVersions['18_11']       = '18.11';
 $lang->upgrade->fromVersions['20_0_alpha1'] = '20.0.alpha1';
-$lang->upgrade->fromVersions['20_0_stable'] = '20.0.stable'; // pms insert position.
+$lang->upgrade->fromVersions['20_0']        = '20.0'; // pms insert position.
 
 global $config;
 /* Lite. */
