@@ -679,4 +679,201 @@ class transferModel extends model
         }
         return $rows;
     }
+
+    /**
+     * 处理导入分页数据。
+     * Get pagelist for datas.
+     *
+     * @param  array     $datas
+     * @param  int       $pagerID
+     * @access protected
+     * @return object
+     */
+    protected function getPageDatas(array $datas, int $pagerID = 1)
+    {
+        $maxImport = $this->transfer->maxImport; //每页最大导入数
+
+        $result = new stdClass();
+        $result->allCount = count($datas); //所有数据
+        $result->allPager = 1;             //起始页
+        $result->pagerID  = $pagerID;      //当前页
+
+        /* 如果总数大于最大导入数,则分页。*/
+        /* If the total number is greater than the maximum import number, then paging. */
+        if($result->allCount > $this->config->file->maxImport && empty($maxImport))
+        {
+            $result->datas     = $datas;
+            $result->maxImport = $maxImport;
+            return $result;
+        }
+
+        /* 计算总页数。*/
+        /* Calculate total pages. */
+        if($maxImport)
+        {
+            $result->allPager = ceil($result->allCount / $maxImport); //总页数
+            $datas = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true); //获取当前页的数据
+        }
+
+        if(!$maxImport) $this->maxImport = $result->allCount; //设置每页最大导入数
+
+        $result->maxImport = $maxImport;
+        $result->isEndPage = $pagerID >= $result->allPager; //是否是最后一页
+        $result->datas     = $datas;
+
+        $this->session->set('insert', !empty($datas) && isset($datas[0]->id)); //如果存在ID列则在SESSION中标记insert用来判断是否是插入/更新
+
+        if(empty($datas)) return print(js::locate('back'));
+        return $result;
+    }
+
+    /**
+     * 格式化导入导出标准数据格式。
+     * Format standard data format.
+     *
+     * @param  string    $module
+     * @param  string    $filter
+     * @access protected
+     * @return array
+     */
+    protected function format(string $module = '', string $filter = '')
+    {
+        /* Bulid import paris (field => name). */
+        $fields  = $this->transferTao->getImportFields($module);
+
+        /* 检查临时文件是否存在并返回完成路径。 */
+        /* Check tmpfile. */
+        $tmpFile = $this->checkTmpFile();
+
+        /* 如果临时文件存在,则读取临时文件i，否则就创建临时文件。 */
+        /* If tmp file exists, read tmp file, otherwise create tmp file. */
+        if(!$tmpFile)
+        {
+            $rows       = $this->getRowsFromExcel();  // 从Excel中获取数据
+            $moduleData = $this->processRows4Fields($rows, $fields);  // 处理Excel中的数据过滤无效字段
+            $moduleData = $this->parseExcelDropdownValues($module, $moduleData, $filter, $fields); // 解析Excel中下拉字段的数据，转换成具体value
+
+            $this->createTmpFile($moduleData); //将格式化后的数据写入临时文件中
+        }
+        else
+        {
+            $moduleData = unserialize(file_get_contents($file));
+        }
+
+        if(isset($fields['id'])) unset($fields['id']);
+        $this->session->set($module . 'TemplateFields',  implode(',', array_keys($fields))); // 将模板字段到SESSION中
+
+        return $moduleData;
+    }
+
+    /**
+     * 检查临时文件是否存在。
+     * Check tmp file.
+     *
+     * @access protected
+     * @return string|false
+     */
+    protected function checkTmpFile()
+    {
+        /* 从session中获取临时文件。*/
+        /* Get tmp file from session. */
+        $file    = $this->session->fileImportFileName;
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile = $tmpPath . DS . md5(basename($file));
+
+        if($this->maxImport and file_exists($tmpFile)) return $tmpFile;
+        return false;
+    }
+
+    /**
+     * 获取Excel中的数据。
+     * Get rows from excel.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getRowsFromExcel(): array
+    {
+        $rows = $this->file->getRowsFromExcel($this->session->fileImportFileName);
+        if(is_string($rows))
+        {
+            if($this->session->fileImportFileName) unlink($this->session->fileImportFileName);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+            echo js::alert($rows);
+            return print(js::locate('back'));
+        }
+        return $rows;
+    }
+
+    /**
+     * 处理行数据。
+     * Process rows for fields.
+     *
+     * @param  array     $rows
+     * @param  array     $fields
+     * @access protected
+     * @return array
+     */
+    protected function processRows4Fields($rows = array(), $fields = array())
+    {
+        $objectDatas = array();
+        foreach($rows as $currentRow => $row)
+        {
+            $tmpArray = new stdClass();
+            foreach($row as $currentColumn => $cellValue)
+            {
+                /* 第一行是标题字段。*/
+                /* First row is title field. */
+                if($currentRow == 1)
+                {
+                    $field = array_search($cellValue, $fields); //找出要导入的字段
+                    $columnKey[$currentColumn] = $field ? $field : '';
+                    continue;
+                }
+
+                if(empty($columnKey[$currentColumn])) continue;
+                $field = $columnKey[$currentColumn];
+                /* Check empty data. */
+                $tmpArray->$field = empty($cellValue) ? '' : $cellValue;
+
+                $currentColumn ++;
+            }
+
+            if(!empty($tmpArray->title) || !empty($tmpArray->name)) $objectDatas[$currentRow] = $tmpArray;
+            unset($tmpArray);
+        }
+
+        if(empty($objectDatas))
+        {
+            /* 删除临时文件和SESSION记录。*/
+            /* Delete tmp file and session record. */
+            if(file_exists($this->session->fileImportFileName)) unlink($this->session->fileImportFileName);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+            echo js::alert($this->lang->excel->noData);
+            return print(js::locate('back'));
+        }
+
+        return $objectDatas;
+    }
+
+    /**
+     * 创建临时文件。
+     * Create tmpFile.
+     *
+     * @param  array     $objectDatas
+     * @access protected
+     * @return void
+     */
+    protected function createTmpFile(array $objectDatas)
+    {
+        $file    = $this->session->fileImportFileName;
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile = $tmpPath . DS . md5(basename($file));
+
+        if(file_exists($tmpFile)) unlink($tmpFile);
+        file_put_contents($tmpFile, serialize($objectDatas));
+        $this->session->set('tmpFile', $tmpFile);
+    }
 }
