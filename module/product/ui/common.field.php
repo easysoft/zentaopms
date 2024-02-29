@@ -21,7 +21,7 @@ if($config->systemMode != 'light')
 $fields->field('name')->wrapBefore()->required()->control('input');
 
 $fields->field('type')
-    ->control(array('type' => 'picker', 'required' => true))
+    ->control(array('control' => 'picker', 'required' => true))
     ->items(data('fields.type.options'))
     ->value(data('fields.type.default'));
 
@@ -55,4 +55,4 @@ $fields->field('desc')
 
 $fields->field('acl')
     ->width('full')
-    ->control(array('type' => 'aclBox', 'aclItems' => data('fields.acl.options'), 'aclValue' => data('fields.acl.default'),'whitelistLabel' => $lang->product->whitelist, 'aclValue' => data('fields.acl.default'), 'userValue' => data('fields.whitelist.default')));
+    ->control(array('control' => 'aclBox', 'aclItems' => data('fields.acl.options'), 'aclValue' => data('fields.acl.default'),'whitelistLabel' => $lang->product->whitelist, 'aclValue' => data('fields.acl.default'), 'userValue' => data('fields.whitelist.default')));

@@ -19,7 +19,7 @@ foreach($fields as $fieldName => $field)
     $items[$fieldName] = array('name' => $fieldName, 'label' => $field['title'], 'control' => $field['control'], 'width' => $field['width'], 'required' => $field['required'], 'items' => zget($field, 'options', array()));
     if($items[$fieldName]['control'] == 'select') $items[$fieldName]['control'] = 'picker';
 }
-$items['acl']['control'] = array('type' => $items['acl']['control'], 'inline' => true);
+$items['acl']['control'] = array('control' => $items['acl']['control'], 'inline' => true);
 
 $extendFields = $this->product->getFlowExtendFields();
 foreach($extendFields as $extendField)

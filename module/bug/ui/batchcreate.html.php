@@ -83,10 +83,10 @@ $items[] = array('name' => 'steps', 'label' => $lang->bug->steps, 'width' => '24
 $items[] = array('name' => 'type', 'label' => $lang->typeAB, 'control' => 'picker', 'items' => $lang->bug->typeList, 'value' => '', 'width' => '160px', 'required' => isset($requiredFields['type']), 'ditto' => true);
 
 /* Field of pri. */
-$items[] = array('name' => 'pri', 'label' => $lang->bug->pri, 'control' => array('type' => 'priPicker', 'required' => true), 'items' => $lang->bug->priList, 'value' => 3, 'width' => '100px', 'required' => isset($requiredFields['pri']), 'ditto' => true);
+$items[] = array('name' => 'pri', 'label' => $lang->bug->pri, 'control' => array('control' => 'priPicker', 'required' => true), 'items' => $lang->bug->priList, 'value' => 3, 'width' => '100px', 'required' => isset($requiredFields['pri']), 'ditto' => true);
 
 /* Field of severity. */
-$items[] = array('name' => 'severity', 'label' => $lang->bug->severity, 'control' => array('type' => 'severityPicker', 'required' => true), 'items' => $lang->bug->severityList, 'value' => 3, 'width' => '80px', 'required' => isset($requiredFields['severity']));
+$items[] = array('name' => 'severity', 'label' => $lang->bug->severity, 'control' => array('control' => 'severityPicker', 'required' => true), 'items' => $lang->bug->severityList, 'value' => 3, 'width' => '80px', 'required' => isset($requiredFields['severity']));
 
 /* Field of os. */
 $items[] = array('name' => 'os', 'label' => $lang->bug->os, 'control' => 'picker', 'items' => $lang->bug->osList, 'width' => '200px', 'multiple' => true, 'required' => isset($requiredFields['os']));
