@@ -58,9 +58,9 @@ class productsBox extends wg
         return div
         (
             setClass('productsBox'),
-            on::click('.productsBox .addLine', 'addNewLine'),
-            on::click('.productsBox .removeLine', 'removeLine'),
-            on::change('.productsBox [name^=products]', 'loadBranches'),
+            on::click('.productsBox .addLine', 'window.addNewLine'),
+            on::click('.productsBox .removeLine', 'window.removeLine'),
+            on::change('.productsBox [name^=products]', 'window.loadBranches'),
             jsVar('multiBranchProducts', data('multiBranchProducts')),
             jsVar('project', \zget($project, 'id', 0)),
             jsVar('errorSameProducts', $errorSameProducts),
