@@ -181,7 +181,10 @@ class metricZen extends metric
      */
     protected function prepareMetricRecord($calcList)
     {
-        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => date('j'));
+        $yesterday = strtotime('-1 day', strtotime('today'));
+        $yesterday = date('j', $yesterday);
+        $today     = date('j');
+        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => "$today,$yesterday");
 
         $now        = helper::now();
         $dateValues = $this->metric->generateDateValues($now);
@@ -210,7 +213,7 @@ class metricZen extends metric
                     $uniqueKey = $this->getUniqueKeyByRecord($record);
                     if(!isset($initRecords[$uniqueKey]))
                     {
-                        // $initRecords[$uniqueKey] = $record;
+                        $initRecords[$uniqueKey] = $record;
                         continue;
                     }
 
@@ -497,6 +500,15 @@ class metricZen extends metric
     public function getPagerExtra($tableWidth)
     {
         return ($tableWidth > 300) ? '' : 'shortPageSize';
+    }
+
+    public function formatException($e)
+    {
+        $message = $e->getMessage();
+        $line    = $e->getLine();
+        $file    = $e->getFile();
+
+        return "Error: $message in $file on line $line";
     }
 
     /**

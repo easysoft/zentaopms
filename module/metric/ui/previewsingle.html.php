@@ -127,7 +127,7 @@ toolbar
         set::iconClass('icon-18'),
         set::url(helper::createLink('metric', 'preview', "scope=$exchangeScope&viewType=multiple&metricID={$currentID}")),
         $lang->metric->viewType->multiple,
-    ),
+    )
     /*
     common::hasPriv('metric', 'preview') ? btn
     (
@@ -149,7 +149,6 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current, $dateLabels, 
         $formGroups[] = formGroup
         (
             setClass('query-inline picker-nowrap w-40'),
-            set::label($this->lang->metric->query->scope[$current->scope]),
             set::name('scope'),
             set::control(array('type' => 'picker', 'multiple' => true)),
             set::items($objectPairs),
@@ -356,6 +355,7 @@ div
                         set::bordered(true),
                         set::height(jsRaw('window.getTableHeight')),
                         set::rowHeight(32),
+                        set::rowHover(true),
                         set::cols($groupHeader),
                         set::data(array_values($groupData)),
                         set::footPager(usePager('dtablePager', $pagerExtra)),

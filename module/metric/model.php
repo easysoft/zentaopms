@@ -696,6 +696,28 @@ class metricModel extends model
     }
 
     /**
+     * 根据代号获取计算最新度量项的结果。
+     * Get result of latest calculate metric by code.
+     *
+     * @param  string      $code
+     * @param  array       $options e.g. array('product' => '1,2,3', 'year' => '2023')
+     * @param  string      $type
+     * @param  object|null $pager
+     * @access public
+     * @return array
+     */
+    public function getLatestResultByCode($code, $options = array(), $pager = null, $vision = 'rnd')
+    {
+        $metric     = $this->metricTao->fetchMetricByCode($code);
+        $dataFields = $this->getMetricRecordDateField($code);
+        $options    = $this->setDefaultOptions($options, $dataFields);
+
+        if($metric->scope != 'system') $dataFields[] = $metric->scope;
+
+        return $this->metricTao->fetchLatestMetricRecords($code, $dataFields, $options, $pager);
+    }
+
+    /**
      * 根据代号列表批量获取度量项的结果。
      * Get result of calculate metric by code list.
      *
@@ -1057,7 +1079,7 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function getPairsByScope($scope, $withHierarchy = false)
+    public function getPairsByScope($scope, $withHierarchy = false, $vision = 'rnd')
     {
         if(empty($scope) || $scope == 'system') return array();
         if($scope == 'dept'    && $withHierarchy) $scope = 'deptWithHierarchy';
@@ -1088,19 +1110,24 @@ class metricModel extends model
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PRODUCT)
                     ->where('deleted')->eq(0)
                     ->andWhere('shadow')->eq(0)
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
                 break;
             case 'project':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->eq('project')
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
                 break;
             case 'execution':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
-                    ->where('deleted')->eq('0')
-                    ->andWhere('type')->in('sprint,stage,kanban')
-                    ->andWhere('multiple')->eq('1')
+                    ->where('deleted')->eq(0)
+                    ->andWhere('type')->in('sprint,stage')
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
                 break;
             case 'code':
@@ -1112,6 +1139,24 @@ class metricModel extends model
         }
 
         return $objectPairs;
+    }
+
+    /**
+     * Get object pairs by id list.
+     *
+     * @param  string $scope
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
+    public function getPairsByIdList($scope, $idList)
+    {
+        $field = $scope == 'user' ? 'realname' : 'name';
+        $where = $scope == 'user' ? 'account' : 'id';
+
+        return $this->dao->select("id, $field")->from($this->config->objectTables[$scope])
+            ->where($where)->in($idList)
+            ->fetchPairs();
     }
 
     /**
@@ -1997,14 +2042,27 @@ class metricModel extends model
 
         if($type == 'date')
         {
-            list($year, $month, $day) = explode('-', $query[$key]);
+            $dateStr = $query[$key];
+            if($query['dateType'] == 'year')
+            {
+                $dateStr = "{$dateStr}-01-01";
+            }
+            elseif($query['dateType'] == 'month')
+            {
+                $dateStr = "{$dateStr}-01";
+            }
 
-            $timestamp = strtotime($query[$key]);
+            $timestamp = strtotime($dateStr);
+
+            $year  = date('Y', $timestamp);
+            $month = date('m', $timestamp);
+            $day   = date('d', $timestamp);
+            $week  = date('oW', $timestamp);
 
             $dateParse = new stdClass();
             $dateParse->year  = $year;
             $dateParse->month = "{$year}{$month}";
-            $dateParse->week  = date('oW', $timestamp);
+            $dateParse->week  = $week;
             $dateParse->day   = "{$year}{$month}{$day}";
 
             return $dateParse;

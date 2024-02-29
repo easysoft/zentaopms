@@ -9,6 +9,7 @@ $config->metric->excludeGlobal = array('program', 'project', 'product', 'executi
 $config->metric->maxSelectNum = 10;
 
 global $lang;
+$this->loadLang('metric');
 $config->metric->actionList = array();
 $config->metric->actionList['edit']['icon'] = 'edit';
 $config->metric->actionList['edit']['text'] = $lang->edit;
@@ -30,7 +31,7 @@ $config->metric->actionList['delete']['icon']         = 'trash';
 $config->metric->actionList['delete']['hint']         = $lang->delete;
 $config->metric->actionList['delete']['url']          = helper::createLink('metric', 'delete', 'metricID={id}');
 $config->metric->actionList['delete']['class']        = 'ajax-submit';
-$config->metric->actionList['delete']['data-confirm'] = array('message' => $lang->metric->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->metric->actionList['delete']['data-confirm'] = $lang->metric->confirmDelete;
 
 $config->metric->necessaryMethodList = array('getStatement', 'calculate', 'getResult');
 
