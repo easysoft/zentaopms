@@ -103,12 +103,12 @@ div
                         (
                             setID('langs'),
                             setClass('actions btn'),
-                            to('trigger', btn(html($config->langs[$clientLang]))),
-                            to('title', 'Change Language/更换语言/更換語言'),
+                            set::title('Change Language/更换语言/更換語言'),
                             set::items($langItems),
                             set::menuClass('langsDropMenu'),
                             set::staticMenu(true),
-                            set::trigger('hover')
+                            set::trigger('hover'),
+                            html($config->langs[$clientLang])
                         )
                     ),
                     $loginExpired ? p(setClass('text-danger loginExpired'), $lang->user->loginExpired) : null,
