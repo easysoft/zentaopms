@@ -716,7 +716,7 @@ class productModel extends model
         /* Get product data. */
         $product = ($this->app->tab == 'project' && empty($productID)) ? $products : array();
         if(empty($product) && isset($products[$productID])) $product = array($productID => $products[$productID]);
-        $searchConfig['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
+        $searchConfig['params']['product']['values'] = array('' => '') + $product + array('all' => $this->lang->product->allProduct);
 
         /* Get module data. */
         $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
