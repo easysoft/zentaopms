@@ -216,7 +216,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     $canBatchChangePlan   = $canBeChanged && hasPriv('story', 'batchChangePlan') && $storyType == 'story' && (!$isProjectStory || $projectHasProduct || ($isProjectStory && isset($project->model) && $project->model == 'scrum')) && $productID && $product && $product->type == 'normal';
     $canBatchAssignTo     = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
     $canBatchUnlink       = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
-    $canBatchImportToLib  = $canBeChanged && $isProjectStory && isset($this->config->maxVersion) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
+    $canBatchImportToLib  = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
     $canBatchAction       = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch;
 
     /* Remove empty data from data list. */
