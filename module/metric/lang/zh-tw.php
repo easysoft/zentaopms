@@ -25,6 +25,7 @@ $lang->metric->create        = "創建" . $this->lang->metric->common;
 $lang->metric->afterCreate   = "保存後";
 $lang->metric->definition    = "計算規則";
 $lang->metric->customUnit    = "自定義";
+$lang->metric->implementType = '实现方式';
 
 $lang->metric->descTip       = '請輸入度量項含義、目的和作用等';
 $lang->metric->definitionTip = '請輸入度量項的計算規則及過濾條件等';

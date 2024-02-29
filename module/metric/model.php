@@ -1586,7 +1586,8 @@ class metricModel extends model
             foreach($metrics as $metric)
             {
                 $metric->isOldMetric = $this->isOldMetric($metric);
-                if($metric->isOldMetric) $metric->unit = $oldMetricList[$metric->fromID]->unit;
+                $fromID = $metric->fromID;
+                if($metric->isOldMetric && isset($oldMetricList[$fromID])) $metric->unit = $oldMetricList[$fromID]->unit;
 
                 $metricList[] = $metric;
             }

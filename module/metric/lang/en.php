@@ -56,6 +56,7 @@ $lang->metric->month         = 'Month';
 $lang->metric->week          = 'Week';
 $lang->metric->day           = 'Date';
 $lang->metric->nodate        = 'Collection date';
+$lang->metric->implementType = 'Implement Type';
 
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "Please select";
