@@ -23,9 +23,9 @@ $lang->navIconNames['execution'] = 'run';
 $lang->navIconNames['qa']        = 'test';
 $lang->navIconNames['devops']    = 'devops';
 $lang->navIconNames['aiapp']     = 'ai';
+$lang->navIconNames['bi']        = 'statistic';
 $lang->navIconNames['kanban']    = 'kanban';
 $lang->navIconNames['doc']       = 'doc';
-$lang->navIconNames['bi']        = 'statistic';
 $lang->navIconNames['system']    = 'group';
 $lang->navIconNames['admin']     = 'cog-outline';
 
@@ -57,9 +57,9 @@ $lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->c
 $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
 $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|maintain|";
 $lang->mainNav->aiapp     = "{$lang->navIcons['aiapp']} {$lang->aiapp->common}|aiapp|square|";
+$lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
-$lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
@@ -767,6 +767,6 @@ if(!helper::hasFeature('devops'))
 
 if(!helper::hasFeature('kanban'))
 {
-    unset($lang->mainNav->kanban, $lang->mainNav->menuOrder[40]);
+    unset($lang->mainNav->kanban, $lang->mainNav->menuOrder[50]);
     $lang->dividerMenu = str_replace(',kanban,' , ',doc,', $lang->dividerMenu);
 }
