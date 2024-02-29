@@ -343,6 +343,13 @@ class node implements \JsonSerializable
 
     public function bindEvent(string $event, object|array $info)
     {
+        if($info instanceof jsCallback)
+        {
+            $this->props->bindEvent($event, $info->toJS());
+            $this->removeBuildData();
+            return;
+        }
+
         if(is_array($info)) $info = (object)$info;
         if(!isset($this->eventBindings[$event])) $this->eventBindings[$event] = array();
         $this->eventBindings[$event][] = $info;

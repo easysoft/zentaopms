@@ -192,7 +192,7 @@ class on extends jsCallback
             return;
         }
 
-        $node->props->bindEvent($this->event, $this->toJS());
+        $node->bindEvent($this->event, $this);
     }
 
     /**
