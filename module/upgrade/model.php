@@ -8470,6 +8470,23 @@ class upgradeModel extends model
     }
 
     /**
+     * Update metric datetype.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateMetricDateType()
+    {
+        $this->loadModel('metric');
+        foreach($this->config->metric->dateType as $code => $dateType)
+        {
+            $this->dao->update(TABLE_METRIC)->set('dateType')->eq($dateType)->where('code')->eq($code)->exec();
+        }
+
+        $this->dao->update(TABLE_METRIC)->set('dateType')->eq('nodate')->where('dateType')->eq('')->exec();
+    }
+
+    /**
      * Migrate configured AI model (from pre 18.11) into table.
      *
      * @access public
