@@ -183,6 +183,28 @@ foreach($linkCommits as $commit)
     ) : div($revision . ' ' . $commit->comment);
 }
 
+$linkedCases = array();
+$canViewCase = common::hasPriv('testcase', 'view');
+if(!empty($task->cases))
+{
+    foreach($task->cases as $caseID => $case)
+    {
+        $linkedCases[] = $canViewCase ? a
+            (
+                setClass('flex clip'),
+                set::href(createLink('testcase', 'view', "caseID={$caseID}")),
+                setData('toggle', 'modal'),
+                setData('size', 'lg'),
+                set::title($case),
+                "#{$caseID} " . $case
+            ) : div(
+                setClass('flex clip'),
+                set::title($case),
+                "#{$caseID} " . $case
+            );
+    }
+}
+
 detailBody
 (
     sectionList
@@ -251,6 +273,11 @@ detailBody
                     empty($task->storyVerify) ? $lang->noData : html($task->storyVerify)
                 )
             )
+        ) : null,
+        !empty($task->cases) ? section
+        (
+            set::title($lang->task->case),
+            div($linkedCases)
         ) : null,
         $task->children ?
         section
@@ -325,7 +352,7 @@ detailBody
                     item
                     (
                         set::name($lang->task->assignedTo),
-                        $task->assignedToRealName
+                        zget($users, $task->assignedTo, '')
                     ),
                     item
                     (

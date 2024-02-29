@@ -1270,6 +1270,8 @@ class taskModel extends model
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         $task->files = $this->file->getByObject('task', $taskID);
         if($setImgSize && $task->desc) $task->desc = $this->file->setImgSize($task->desc);
+        /* Get related test cases. */
+        if($task->story) $task->cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->andWhere('deleted')->eq('0')->fetchPairs();
 
         /* Process a task, compute its progress and get its related information. */
         return $this->processTask($task);
