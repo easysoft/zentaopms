@@ -13,40 +13,36 @@ namespace zin;
 jsVar('confirmRecord', $lang->task->confirmRecord);
 if(isInModal()) set::id("modal-record-hours-task-{$task->id}");
 
-to::header
+modalHeader
 (
-    $lang->task->addEffort,
-    entityLabel
+    set::title($lang->task->addEffort),
+    set::entityID($task->id),
+    to::suffix
     (
-        set::level(1),
-        set::text($task->name),
-        set::entityID($task->id),
-        set::reverse(true),
-        setClass('clip w-1/2')
-    ),
-    span
-    (
-        setClass('flex gap-x-2 mr-3'),
-        $lang->task->estimate,
         span
         (
-            setClass('label secondary-pale'),
-            $task->estimate . $lang->task->suffixHour
-        )
-    ),
-    span
-    (
-        setClass('flex gap-x-2 pr-4'),
-        $lang->task->consumed,
-        span
-        (
-            setClass('label warning-pale'),
+            setClass('flex gap-x-2 mx-3'),
+            $lang->task->estimate,
             span
             (
-                setID('totalConsumed'),
-                $task->consumed
-            ),
-            $lang->task->suffixHour
+                setClass('label secondary-pale'),
+                $task->estimate . $lang->task->suffixHour
+            )
+        ),
+        span
+        (
+            setClass('flex gap-x-2 pr-4'),
+            $lang->task->consumed,
+            span
+            (
+                setClass('label warning-pale'),
+                span
+                (
+                    setID('totalConsumed'),
+                    $task->consumed
+                ),
+                $lang->task->suffixHour
+            )
         )
     )
 );
