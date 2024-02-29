@@ -9560,6 +9560,8 @@ class upgradeModel extends model
         {
             $this->dao->update(TABLE_METRIC)->set('dateType')->eq($dateType)->where('code')->eq($code)->exec();
         }
+
+        $this->dao->update(TABLE_METRIC)->set('dateType')->eq('nodate')->where('dateType')->eq('')->exec();
     }
 
     /**

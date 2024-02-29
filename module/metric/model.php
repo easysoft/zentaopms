@@ -2128,9 +2128,8 @@ class metricModel extends model
         /* Get dateType from config second. */
         if(isset($this->config->metric->dateType[$code])) return $this->config->metric->dateType[$code];
 
-        /* At last, infer dateType by code. */
-        $dataFields = $this->getMetricRecordDateField($code);
-        return $this->getDateType($dataFields);
+        /* Return nodate if no matches. */
+        return 'nodate';
     }
 
     /**
