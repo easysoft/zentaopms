@@ -227,6 +227,8 @@ h::js
 <<<JAVASCRIPT
 window.setDownloading = function(event)
 {
+    $('[name=encode]').removeAttr('disabled');
+
     /* Doesn't support Opera, omit it. */
     if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true;
 
@@ -274,6 +276,7 @@ window.onChangeFileName = function(event)
         return;
     }
 }
+window.waitDom('[name=fileType]', function(){ $('[name=fileType]').trigger('change');})
 
 window.saveTemplate = function()
 {
