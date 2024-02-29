@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
+
 jsVar('goalTip',         $lang->testreport->goalTip);
 jsVar('foundBugTip',     $lang->testreport->foundBugTip);
 jsVar('legacyBugTip',    $lang->testreport->legacyBugTip);

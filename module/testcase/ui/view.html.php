@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+
 $canCreateCase = hasPriv('testcase', 'create');
 
 jsVar('viewParams', "caseID={$case->id}&version={$version}&from={$from}&taskID={$taskID}&stepsType=");

@@ -178,6 +178,7 @@ $lang->action->objectTypes['service']          = 'Service';
 $lang->action->objectTypes['domain']           = 'Domain';
 $lang->action->objectTypes['artifactrepo']     = 'Artifact Repo';
 $lang->action->objectTypes['prompt']           = 'Prompt';
+$lang->action->objectTypes['miniprogram']      = 'Mini Program';
 $lang->action->objectTypes['metric']           = 'Metric';
 $lang->action->objectTypes['projectbuild']     = 'Build';
 
@@ -867,6 +868,8 @@ $lang->action->label->host         = 'Host|host|view|id=%s';
 $lang->action->label->account      = "Account|account|view|id=%s";
 $lang->action->label->instance     = 'Application|instance|view|id=%s';
 $lang->action->label->artifactrepo = 'Artifact Repo|artifactrepo|browse|';
+$lang->action->label->prompt       = 'Prompt|ai|promptview|id=%s';
+$lang->action->label->miniprogram  = 'Mini Program|aiapp|browseminiprogram|id=%s';
 $lang->action->label->holiday      = 'Holiday|holiday|browse|';
 
 /* Object type. */

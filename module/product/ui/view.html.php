@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+
 /* Flag variable for hiding product code. */
 $hiddenCode    = (!isset($config->setCode) || $config->setCode == 0 || empty($product->code));
 $allStoryCount = array_sum($product->stories);

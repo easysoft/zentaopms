@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+
 featureBar
 (
     li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),

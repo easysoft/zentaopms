@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 include './affected.html.php';
 
 data('activeMenuID', $story->type);

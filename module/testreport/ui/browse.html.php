@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
+
 foreach($reports as $report)
 {
     $taskName = '';
@@ -63,4 +65,3 @@ dtable
 );
 
 render();
-

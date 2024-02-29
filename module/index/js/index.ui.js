@@ -363,7 +363,10 @@ function getAppCode(urlOrModuleName)
     var moduleName        = link.moduleName;
     var methodName        = link.methodName;
     var moduleMethodLower = (moduleName + '-' + methodName).toLowerCase();
-    if (moduleMethodLower === 'index-index') return 'my';
+
+    if(moduleMethodLower === 'index-index') return 'my';
+    if(moduleMethodLower === 'search-buildindex') return 'admin';
+
     if(moduleName === 'tutorial' && methodName === 'wizard')
     {
         moduleName = link.vars[0][1];
@@ -445,7 +448,11 @@ function getAppCode(urlOrModuleName)
             return 'execution';
         }
     }
-    if(['search-buildindex', 'ai-adminindex'].includes(moduleMethodLower)) return 'admin';
+    if(moduleName === 'ai')
+    {
+        /* Match admin ai pages. */
+        if(['adminindex', 'prompts', 'promptview', 'conversations', 'models', 'modelcreate', 'modelview', 'modeledit', 'editmodel', 'promptassignrole', 'promptselectdatasource', 'promptsetpurpose', 'promptsettargetform', 'promptfinalize', 'promptedit', 'miniprograms', 'createminiprogram', 'editminiprogram', 'configuredminiprogram', 'editminiprogramcategory', 'miniprogramview'].includes(methodLowerCase)) return 'admin';
+    }
 
     code = navGroup[moduleName] || moduleName || urlOrModuleName;
     return apps.map[code] ? code : '';

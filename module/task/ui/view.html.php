@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+
 global $lang;
 
 /* Join mailto. */

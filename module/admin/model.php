@@ -177,7 +177,8 @@ class adminModel extends model
             {
                 $menu = $this->setSubMenu($menuKey, $menu);
             }
-            elseif(!empty($menu['link']) && strpos($menu['link'], '|') !== false)
+
+            if(!empty($menu['link']) && strpos($menu['link'], '|') !== false)
             {
                 list($module, $method) = explode('|', $menu['link']);
                 $menu['link'] = helper::createLink($module, $method);

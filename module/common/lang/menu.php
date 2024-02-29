@@ -9,6 +9,7 @@ $lang->navIcons['qa']        = "<i class='icon icon-test'></i>";
 $lang->navIcons['devops']    = "<i class='icon icon-devops'></i>";
 $lang->navIcons['kanban']    = "<i class='icon icon-kanban'></i>";
 $lang->navIcons['doc']       = "<i class='icon icon-doc'></i>";
+$lang->navIcons['aiapp']     = "<i class='icon icon-ai'></i>";
 $lang->navIcons['bi']        = "<i class='icon icon-statistic'></i>";
 $lang->navIcons['system']    = "<i class='icon icon-group'></i>";
 $lang->navIcons['admin']     = "<i class='icon icon-cog-outline'></i>";
@@ -21,6 +22,7 @@ $lang->navIconNames['project']   = 'project';
 $lang->navIconNames['execution'] = 'run';
 $lang->navIconNames['qa']        = 'test';
 $lang->navIconNames['devops']    = 'devops';
+$lang->navIconNames['aiapp']     = 'ai';
 $lang->navIconNames['kanban']    = 'kanban';
 $lang->navIconNames['doc']       = 'doc';
 $lang->navIconNames['bi']        = 'statistic';
@@ -54,13 +56,14 @@ $lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->projectCommon}
 $lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
 $lang->mainNav->qa        = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
 $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|maintain|";
+$lang->mainNav->aiapp     = "{$lang->navIcons['aiapp']} {$lang->aiapp->common}|aiapp|square|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
 $lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
-$lang->dividerMenu = ',bi,kanban,system,';
+$lang->dividerMenu = ',aiapp,kanban,system,';
 
 $lang->mainNav->menuOrder[5]  = 'my';
 $lang->mainNav->menuOrder[10] = 'program';
@@ -69,11 +72,12 @@ $lang->mainNav->menuOrder[20] = 'project';
 $lang->mainNav->menuOrder[25] = 'execution';
 $lang->mainNav->menuOrder[30] = 'qa';
 $lang->mainNav->menuOrder[35] = 'devops';
-$lang->mainNav->menuOrder[40] = 'bi';
-$lang->mainNav->menuOrder[45] = 'kanban';
-$lang->mainNav->menuOrder[50] = 'doc';
-$lang->mainNav->menuOrder[55] = 'system';
-$lang->mainNav->menuOrder[60] = 'admin';
+$lang->mainNav->menuOrder[40] = 'aiapp';
+$lang->mainNav->menuOrder[45] = 'bi';
+$lang->mainNav->menuOrder[50] = 'kanban';
+$lang->mainNav->menuOrder[55] = 'doc';
+$lang->mainNav->menuOrder[60] = 'system';
+$lang->mainNav->menuOrder[65] = 'admin';
 
 if($config->systemMode == 'light') unset($lang->mainNav->program, $lang->mainNav->menuOrder[10]);
 
@@ -737,6 +741,8 @@ $lang->navGroup->host          = 'admin';
 $lang->navGroup->ops           = 'admin';
 $lang->navGroup->service       = 'admin';
 $lang->navGroup->domain        = 'admin';
+
+$lang->navGroup->aiapp = 'aiapp';
 
 $lang->navGroup->index   = 'index';
 $lang->navGroup->misc    = 'misc';

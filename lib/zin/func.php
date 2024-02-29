@@ -161,3 +161,4 @@ function mailto(): mailto {return createWg('mailto', func_get_args());}
 function whitelist(): whitelist {return createWg('whitelist', func_get_args());}
 function modulePicker(): modulePicker {return createWg('modulePicker', func_get_args());}
 function visionSwitcher(): visionSwitcher {return createWg('visionSwitcher', func_get_args());}
+function chatBtn(): chatBtn {return createWg('chatBtn', func_get_args());}

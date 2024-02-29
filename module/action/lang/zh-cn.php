@@ -178,6 +178,7 @@ $lang->action->objectTypes['service']          = '服务';
 $lang->action->objectTypes['domain']           = '域名';
 $lang->action->objectTypes['artifactrepo']     = '制品库';
 $lang->action->objectTypes['prompt']           = '提词';
+$lang->action->objectTypes['miniprogram']      = '小程序';
 $lang->action->objectTypes['metric']           = '度量';
 $lang->action->objectTypes['projectbuild']     = '版本';
 
@@ -868,6 +869,8 @@ $lang->action->label->host         = '主机|host|view|id=%s';
 $lang->action->label->account      = "账号|account|view|id=%s";
 $lang->action->label->instance     = '应用|instance|view|id=%s';
 $lang->action->label->artifactrepo = '制品库|artifactrepo|browse|';
+$lang->action->label->prompt       = '提词|ai|promptview|id=%s';
+$lang->action->label->miniprogram  = '小程序|aiapp|browseminiprogram|id=%s';
 $lang->action->label->holiday      = '节假日|holiday|browse|';
 
 /* Object type. */

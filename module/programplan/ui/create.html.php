@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
+
 $fields = $this->config->programplan->form->create;
 
 /* Generate title that is tailored to specific situation. */

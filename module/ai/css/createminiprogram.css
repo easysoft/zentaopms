@@ -1,0 +1,6 @@
+#ai-edit-icon {position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;}
+#ai-edit-icon #edit-icon {display: none; position: absolute; inset: 0; background-color: rgba(230, 240, 255, 0.7);}
+#ai-edit-icon:hover {border: 1px solid #EDEEF1;}
+#ai-edit-icon:hover #edit-icon {display: flex; justify-content: center; align-items: center;}
+#icon-buttons svg {cursor: pointer;}
+.theme-checked {display: flex; justify-content: center; align-items: center;}

@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+
 $unlinkURL['story'] = helper::createLink('productplan', 'unlinkStory', "storyID=%s&planID={$plan->id}");
 $unlinkURL['bug']   = helper::createLink('productplan', 'unlinkBug',   "bugID=%s&planID={$plan->id}");
 

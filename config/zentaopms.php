@@ -578,8 +578,14 @@ define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');
 define('TABLE_INSTANCE', '`' . $config->db->prefix . 'instance`');
 define('TABLE_SOLUTION', '`' . $config->db->prefix . 'solution`');
 define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
-define('TABLE_PROMPT', '`' . $config->db->prefix . 'prompt`');
-define('TABLE_PROMPTROLE', '`' . $config->db->prefix . 'promptrole`');
+
+define('TABLE_AI_PROMPT',           '`' . $config->db->prefix . 'ai_prompt`');
+define('TABLE_AI_PROMPTROLE',       '`' . $config->db->prefix . 'ai_promptrole`');
+define('TABLE_AI_MINIPROGRAM',      '`' . $config->db->prefix . 'ai_miniprogram`');
+define('TABLE_AI_MINIPROGRAMFIELD', '`' . $config->db->prefix . 'ai_miniprogramfield`');
+define('TABLE_AI_MINIPROGRAMSTAR',  '`' . $config->db->prefix . 'ai_miniprogramstar`');
+define('TABLE_AI_MESSAGE',          '`' . $config->db->prefix . 'ai_message`');
+define('TABLE_AI_MODEL',            '`' . $config->db->prefix . 'ai_model`');
 
 define('TABLE_SQLITE_QUEUE', '`' . $config->db->prefix . 'sqlite_queue`');
 
@@ -659,6 +665,9 @@ $config->objectTables['lang']           = TABLE_LANG;
 $config->objectTables['review']         = TABLE_REVIEW;
 $config->objectTables['effort']         = TABLE_EFFORT;
 $config->objectTables['design']         = TABLE_DESIGN;
+$config->objectTables['prompt']         = TABLE_AI_PROMPT;
+$config->objectTables['aiapp']          = TABLE_AI_MINIPROGRAM;
+$config->objectTables['miniprogram']    = TABLE_AI_MINIPROGRAM;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
