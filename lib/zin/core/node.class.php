@@ -268,7 +268,7 @@ class node implements \JsonSerializable
 
         if(is_array($item))
         {
-            foreach($item as $child) $this->add($child, $blockName);
+            foreach($item as $child) $this->add($child, $blockName, $prepend);
             return;
         }
 
