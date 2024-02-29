@@ -36,7 +36,7 @@ class chatBtn extends wg
         }
         $(document).on('click', e =>
         {
-            if($('#chat-container').prop('style') && $('#chat-container').prop('style').display !== 'block') return;
+            if(!$('#chat-container').length || $('#chat-container').prop('style') && $('#chat-container').prop('style').display !== 'block') return;
             if($(e.target).closest('#ai-chat-view,#chat-btn').length) return;
             window.toggleChatContainer();
         });
