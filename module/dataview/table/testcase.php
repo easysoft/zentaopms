@@ -30,7 +30,7 @@ $schema->fields['pri']          = array('type' => 'option', 'name' => $this->lan
 $schema->fields['type']         = array('type' => 'option', 'name' => $this->lang->testcase->type, 'options' => $this->lang->testcase->typeList);
 $schema->fields['stage']        = array('type' => 'option', 'name' => $this->lang->testcase->stage, 'options' => $this->lang->testcase->stageList);
 $schema->fields['status']       = array('type' => 'option', 'name' => $this->lang->testcase->status, 'options' => $this->lang->testcase->statusList);
-$schema->fields['version']      = array('type' => 'number',    'name' => $this->lang->testcase->version);
+$schema->fields['version']      = array('type' => 'number', 'name' => $this->lang->testcase->version);
 $schema->fields['product']      = array('type' => 'object', 'name' => $this->lang->testcase->product, 'object' => 'product', 'show' => 'product.name');
 $schema->fields['story']        = array('type' => 'object', 'name' => $this->lang->testcase->story, 'object' => 'story', 'show' => 'story.title');
 $schema->fields['casemodule']   = array('type' => 'object', 'name' => $this->lang->testcase->module, 'object' => 'casemodule', 'show' => 'casemodule.name');

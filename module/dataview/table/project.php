@@ -2,6 +2,7 @@
 $this->app->loadLang('project');
 $this->app->loadLang('product');
 $this->app->loadLang('execution');
+$this->app->loadLang('stage');
 
 $schema = new stdclass();
 
@@ -34,5 +35,7 @@ $schema->fields['closedBy']    = array('type' => 'user',   'name' => $this->lang
 $schema->fields['closedDate']  = array('type' => 'date',   'name' => $this->lang->project->closedDate);
 $schema->fields['acl']         = array('type' => 'option', 'name' => $this->lang->project->acl, 'options' => $this->lang->project->acls);
 $schema->fields['lifetime']    = array('type' => 'option', 'name' => $this->lang->project->lifetime, 'options' => $this->lang->execution->lifeTimeList);
+$schema->fields['attribute']   = array('type' => 'option', 'name' => $this->lang->project->attribute, 'options' => $this->lang->stage->typeList);
+$schema->fields['multiple']    = array('type' => 'option', 'name' => $this->lang->project->multiple, 'options' => $this->lang->project->multipleList);
 
 $schema->objects = array();
