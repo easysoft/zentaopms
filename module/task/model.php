@@ -4665,6 +4665,12 @@ class taskModel extends model
         $rows       = array();
         if($showBranch) $showBranch = isset($this->config->execution->task->showBranch) ? $this->config->execution->task->showBranch : 1;
 
+        if($this->config->edition != 'open')
+        {
+            $this->loadModel('flow');
+            $this->loadModel('workflowfield');
+        }
+
         foreach($tasks as $task)
         {
             $task->actions    = '<div class="c-actions">' . $this->buildOperateBrowseMenu($task, $execution) . '</div>';
@@ -4746,6 +4752,15 @@ class taskModel extends model
             {
                 $task->isParent = true;
                 $task->parent   = 0;
+            }
+
+            if($this->config->edition != 'open')
+            {
+                $extendFields = $this->workflowfield->getList('task');
+                foreach($extendFields as $fieldCode => $field)
+                {
+                    if(isset($field->buildin) && $field->buildin == 0) $task->$fieldCode = $this->flow->printFlowCell('task', $task, $fieldCode, true);
+                }
             }
 
             $rows[] = $task;
