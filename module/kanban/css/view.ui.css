@@ -4,9 +4,10 @@
 .cardcolor {width: 36px; height: 14px; float: left; margin-right: 5px; margin-top: 2px; border-radius: 2px; border: 1px solid rgb(176, 176, 176) }
 .card-title {color: var(--color-black-rgb); }
 .card-icon {opacity: 1;}
-.color-b10b0b > .card { background-color: #b10b0b !important; color: #fff !important }
-.color-2a5f29 > .card { background-color: #2a5f29 !important; color: #fff !important }
-.color-cfa227 > .card { background-color: #cfa227 !important; color: #fff !important }
+.color-b10b0b > .card { background-color: #b10b0b !important; color: #fff !important}
+.color-2a5f29 > .card { background-color: #2a5f29 !important; color: #fff !important}
+.color-cfa227 > .card { background-color: #cfa227 !important; color: #fff !important}
+.color-b10b0b > .card a, .color-2a5f29 > .card a, .color-cfa227 > .card a { color: inherit !important }
 .progress {height: 0.5rem !important}
 .kanban-header-title .as-subtitle {font-weight: 700;}
 .kanban-header-title .text-danger {color:rgb(255, 93, 93); opacity: 1;}
