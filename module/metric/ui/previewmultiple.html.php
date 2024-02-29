@@ -131,15 +131,13 @@ toolbar
         set::iconClass('icon-18'),
         set::url(helper::createLink('metric', 'preview', "scope=$exchangeScope&viewType=single&metricID={$current->id}")),
         $lang->metric->viewType->single
-    )
-    /*
+    ),
     common::hasPriv('metric', 'preview') ? btn
     (
         setClass('btn primary'),
         set::url(helper::createLink('metric', 'browse')),
         $lang->metric->manage
     ) : null
-    */
 );
 
 $fnGenerateQueryForm = function() use($metricRecordType, $current, $dateLabels, $defaultDate)
