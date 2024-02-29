@@ -772,8 +772,9 @@ function findInNode(array $selectors, node|array $list, bool $first = false, boo
 
         if(!($child instanceof node)) continue;
 
-        if($child->is($selectors))
+        if($child->is($selectors) && $child->type() !== 'item')
         {
+            if($child->parent && ($child->parent->removed || ($child->parent instanceof wg && $child->parent->type() !== 'item' && $child->parent->is($selectors)))) continue;
             $result[$child->gid] = $child;
             if($first) return $result;
         }
