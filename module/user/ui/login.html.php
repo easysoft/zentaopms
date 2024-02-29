@@ -122,7 +122,7 @@ div
                         (
                             set::width('full'),
                             set::label($lang->user->account),
-                            set::control(array('type' => 'input', 'name' => 'account', 'id' => 'account'))
+                            set::control(array('control' => 'input', 'name' => 'account', 'id' => 'account'))
                         ),
                         formGroup
                         (
@@ -148,7 +148,7 @@ div
                         (
                             setID('loginOptions'),
                             set::width('full'),
-                            set::control(array('type' => 'checkList', 'items' => $lang->user->keepLogin, 'name' => 'keepLogin', 'value' => $keepLogin)),
+                            set::control(array('control' => 'checkList', 'items' => $lang->user->keepLogin, 'name' => 'keepLogin', 'value' => $keepLogin)),
                             a(
                                 set('href', $resetLink),
                                 set('class', 'resetPassword'),

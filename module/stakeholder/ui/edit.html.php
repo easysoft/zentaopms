@@ -67,7 +67,7 @@ formPanel
         setClass('user-info'),
         set::label($lang->stakeholder->company),
         set::name('company'),
-        set::control(array('type' => 'picker', 'items' => $companys)),
+        set::control(array('control' => 'picker', 'items' => $companys)),
         set::value($stakeholder->company)
     ) : null,
     formGroup

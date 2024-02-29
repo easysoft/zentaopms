@@ -169,7 +169,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->group),
-            set::control(array("type" => "picker","multiple" => true)),
+            set::control(array("control" => "picker","multiple" => true)),
             set::name('group[]'),
             set::items($groupList),
             set::placeholder($lang->user->placeholder->group)

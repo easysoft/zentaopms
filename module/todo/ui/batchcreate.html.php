@@ -127,7 +127,7 @@ formBatchPanel
         set::name('type'),
         set::label($lang->todo->type),
         set::width('120px'),
-        set::control(array('type' => 'picker', 'required' => true)),
+        set::control(array('control' => 'picker', 'required' => true)),
         set::value('custom'),
         set::items($lang->todo->typeList)
     ),
@@ -151,7 +151,7 @@ formBatchPanel
         set::value($app->user->account),
         set::ditto(true),
         set::width('140px'),
-        set::control(array('type' => 'picker', 'required' => true)),
+        set::control(array('control' => 'picker', 'required' => true)),
         set::items($users)
     ),
     formBatchItem
@@ -159,7 +159,7 @@ formBatchPanel
         set::name('pri'),
         set::label($lang->todo->pri),
         set::width('80px'),
-        set::control(array('type' => 'priPicker', 'required' => true)),
+        set::control(array('control' => 'priPicker', 'required' => true)),
         set::value('3'),
         set::items($lang->todo->priList)
     ),

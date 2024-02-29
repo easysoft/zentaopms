@@ -31,7 +31,7 @@ formPanel
         set::name("product[]"),
         set::label($lang->story->product),
         set::required(true),
-        set::control(array("type" => "picker","multiple" => true)),
+        set::control(array("control" => "picker","multiple" => true)),
         set::items($products),
         set::value($repo->product)
     ),
@@ -40,7 +40,7 @@ formPanel
         set::width('1/2'),
         set::name("projects[]"),
         set::label($lang->repo->projects),
-        set::control(array("type" => "picker","multiple" => true)),
+        set::control(array("control" => "picker","multiple" => true)),
         set::items($relatedProjects),
         set::value($repo->projects)
     ),

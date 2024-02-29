@@ -67,7 +67,7 @@ elseif($module == 'story' && $field == 'reviewRules')
         set::label($lang->custom->superReviewers),
         set::name('superReviewers'),
         set::value($superReviewers),
-        set::control(array('type' => 'picker', 'multiple' => true)),
+        set::control(array('control' => 'picker', 'multiple' => true)),
         set::items($users)
     );
 }
@@ -125,7 +125,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::name('forceReview'),
                 set::value($forceReview),
                 set::items($users),
-                set::control(array('type' => 'picker', 'multiple' => true))
+                set::control(array('control' => 'picker', 'multiple' => true))
             ),
             formRow
             (
@@ -137,7 +137,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     set::name('forceReviewRoles'),
                     set::value($forceReviewRoles),
                     set::items($lang->user->roleList),
-                    set::control(array('type' => 'picker', 'multiple' => true))
+                    set::control(array('control' => 'picker', 'multiple' => true))
                 )
             ),
             formGroup
@@ -147,7 +147,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::name('forceReviewDepts'),
                 set::value($forceReviewDepts),
                 set::items($depts),
-                set::control(array('type' => 'picker', 'multiple' => true))
+                set::control(array('control' => 'picker', 'multiple' => true))
             )
         );
         $formItems[] = div
@@ -161,7 +161,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::name('forceNotReview'),
                 set::value($forceNotReview),
                 set::items($users),
-                set::control(array('type' => 'picker', 'multiple' => true))
+                set::control(array('control' => 'picker', 'multiple' => true))
             ),
             formRow
             (
@@ -173,7 +173,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     set::name('forceNotReviewRoles'),
                     set::value($forceNotReviewRoles),
                     set::items($lang->user->roleList),
-                    set::control(array('type' => 'picker', 'multiple' => true))
+                    set::control(array('control' => 'picker', 'multiple' => true))
                 )
             ),
             formGroup
@@ -183,7 +183,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::name('forceNotReviewDepts'),
                 set::value($forceNotReviewDepts),
                 set::items($depts),
-                set::control(array('type' => 'picker', 'multiple' => true))
+                set::control(array('control' => 'picker', 'multiple' => true))
             )
         );
     }
@@ -206,7 +206,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     set::name('forceNotReview'),
                     set::value($forceNotReview),
                     set::items($users),
-                    set::control(array('type' => 'picker', 'multiple' => true))
+                    set::control(array('control' => 'picker', 'multiple' => true))
                 ),
                 icon
                 (
@@ -236,7 +236,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     set::name('forceReview'),
                     set::value($forceReview),
                     set::items($users),
-                    set::control(array('type' => 'picker', 'multiple' => true))
+                    set::control(array('control' => 'picker', 'multiple' => true))
                 ),
                 icon
                 (

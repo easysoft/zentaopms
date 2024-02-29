@@ -54,7 +54,7 @@ function printSystemMode()
                             set('class', 'hidden'),
                             set::name('mode'),
                             set::value('light'),
-                            set::control(array('type' => 'input'))
+                            set::control(array('control' => 'input'))
                         ),
                         formGroup
                         (

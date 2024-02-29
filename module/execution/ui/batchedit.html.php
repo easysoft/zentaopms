@@ -64,7 +64,7 @@ formBatchPanel
     (
         set::name('type'),
         set::label($lang->execution->method),
-        set::control(array('type' => 'picker', 'required' => true)),
+        set::control(array('control' => 'picker', 'required' => true)),
         set::items($lang->execution->typeList),
         set::disabled(true),
         set::width('100px')

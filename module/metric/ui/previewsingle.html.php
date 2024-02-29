@@ -150,7 +150,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current, $dateLabels, 
         (
             setClass('query-inline picker-nowrap w-40'),
             set::name('scope'),
-            set::control(array('type' => 'picker', 'multiple' => true)),
+            set::control(array('control' => 'picker', 'multiple' => true)),
             set::items($objectPairs),
             set::placeholder($this->lang->metric->placeholder->{$current->scope})
         );

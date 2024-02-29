@@ -78,13 +78,13 @@ formPanel
     (
         set::label($lang->gitlab->group->permission),
         set::name('request_access_enabled'),
-        set::control(array('type' => 'checkbox', 'value' => '1', 'text' => $lang->gitlab->group->requestAccessEnabledTip, 'checked' => $group->request_access_enabled ? true : false))
+        set::control(array('control' => 'checkbox', 'value' => '1', 'text' => $lang->gitlab->group->requestAccessEnabledTip, 'checked' => $group->request_access_enabled ? true : false))
     ),
     formGroup
     (
         set::label($lang->gitlab->group->lfsEnabled),
         set::name('lfs_enabled'),
-        set::control(array('type' => 'checkbox', 'value' => '1' , 'text' => $lang->gitlab->group->lfsEnabledTip, 'checked' => $group->lfs_enabled ? true : false))
+        set::control(array('control' => 'checkbox', 'value' => '1' , 'text' => $lang->gitlab->group->lfsEnabledTip, 'checked' => $group->lfs_enabled ? true : false))
     ),
     formGroup
     (

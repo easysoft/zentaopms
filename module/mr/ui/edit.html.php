@@ -93,20 +93,20 @@ formPanel
             set::label($lang->mr->submitType),
             set::name('needCI'),
             set::width('270px'),
-            set::control(array('type' => 'checkbox', 'text' => $lang->mr->needCI, 'value' => '1', 'checked' => $MR->needCI == '1')),
+            set::control(array('control' => 'checkbox', 'text' => $lang->mr->needCI, 'value' => '1', 'checked' => $MR->needCI == '1')),
             on::change('onNeedCiChange')
         ),
         formGroup
         (
             set::name('removeSourceBranch'),
             set::width('150px'),
-            set::control(array('type' => 'checkbox', 'text' => $lang->mr->removeSourceBranch, 'value' => '1', 'checked' => $MR->canDeleteBranch && $MR->removeSourceBranch == '1')),
+            set::control(array('control' => 'checkbox', 'text' => $lang->mr->removeSourceBranch, 'value' => '1', 'checked' => $MR->canDeleteBranch && $MR->removeSourceBranch == '1')),
             set::disabled(!$MR->canDeleteBranch)
         ),
         formGroup
         (
             set::name('squash'),
-            set::control(array('type' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1', 'checked' => $MR->squash == '1'))
+            set::control(array('control' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1', 'checked' => $MR->squash == '1'))
         )
     ),
     formRow

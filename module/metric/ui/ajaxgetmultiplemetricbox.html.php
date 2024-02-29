@@ -26,7 +26,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $metric, $metricID, $da
             setClass('query-inline picker-nowrap w-40'),
             set::label($this->lang->metric->query->scope[$metric->scope]),
             set::name('scope_' . $metricID),
-            set::control(array('type' => 'picker', 'multiple' => true)),
+            set::control(array('control' => 'picker', 'multiple' => true)),
             set::items($objectPairs),
             set::placeholder($this->lang->metric->placeholder->{$metric->scope})
         );

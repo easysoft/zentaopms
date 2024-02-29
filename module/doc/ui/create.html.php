@@ -142,7 +142,7 @@ else
                     setClass('flex items-center'),
                     set::label($lang->doc->title),
                     set::name('showTitle'),
-                    set::control(array('type' => 'input', 'className' => 'hidden')),
+                    set::control(array('control' => 'input', 'className' => 'hidden')),
                     span(setClass('showTitle'))
                 ),
                 $projectRow,
