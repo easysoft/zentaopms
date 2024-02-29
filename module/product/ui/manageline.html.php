@@ -64,7 +64,7 @@ foreach($lines as $line)
             formGroup
             (
                 set::width(in_array($this->config->systemMode, array('ALM', 'PLM')) ? '1/2' : 'full'),
-                set::control(array('type' => 'text', 'id' => "modules_id{$line->id}")),
+                set::control(array('control' => 'text', 'id' => "modules_id{$line->id}")),
                 set::name("modules[id$line->id]"),
                 set::value($line->name)
             ),
@@ -72,7 +72,7 @@ foreach($lines as $line)
             (
                 set::width('1/2'),
                 set::className('ml-4'),
-                set::control(array('type' => 'picker', 'id' => "programs_id{$line->id}")),
+                set::control(array('control' => 'picker', 'id' => "programs_id{$line->id}")),
                 set::name("programs[id$line->id]"),
                 set::items($programs),
                 set::value($line->root)
@@ -93,14 +93,14 @@ for($i = 0; $i <= 5; $i ++)
             formGroup
             (
                 set::width(in_array($this->config->systemMode, array('ALM', 'PLM')) ? '1/2' : 'full'),
-                set::control(array('type' => 'text', 'id' => "modules_{$i}")),
+                set::control(array('control' => 'text', 'id' => "modules_{$i}")),
                 set::name("modules[$i]")
             ),
             in_array($this->config->systemMode, array('ALM', 'PLM')) ? formGroup
             (
                 set::width('1/2'),
                 set::className('ml-4'),
-                set::control(array('type' => 'picker', 'id' => "programs_{$i}")),
+                set::control(array('control' => 'picker', 'id' => "programs_{$i}")),
                 set::name("programs[$i]"),
                 set::items($programs)
             ) : null

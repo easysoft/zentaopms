@@ -83,21 +83,21 @@ formPanel
     (
         set::name('can_create_group'),
         set::label($lang->gitlab->user->canCreateGroup),
-        set::control(array('type' => 'checkbox', 'checked' => $user->can_create_group ? true : false)),
+        set::control(array('control' => 'checkbox', 'checked' => $user->can_create_group ? true : false)),
         set::value('1')
     ),
     formGroup
     (
         set::name('external'),
         set::label($lang->gitlab->user->external),
-        set::control(array('type' => 'checkbox', 'text' => $lang->gitlab->user->externalTip, 'checked' => $user->external ? true : false)),
+        set::control(array('control' => 'checkbox', 'text' => $lang->gitlab->user->externalTip, 'checked' => $user->external ? true : false)),
         set::value('1')
     ),
     formGroup
     (
         set::name('avatar'),
         set::label($lang->gitlab->user->avatar),
-        set::control(array('type' => 'file', 'class' => 'hidden', 'id' => 'files')),
+        set::control(array('control' => 'file', 'class' => 'hidden', 'id' => 'files')),
         h::div
         (
             set::id('avatarUpload'),

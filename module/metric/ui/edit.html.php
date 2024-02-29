@@ -18,7 +18,7 @@ $afterEdit = $isDisabled ? '' : formGroup
     set::width('1/2'),
     set::name('afterEdit'),
     set::label($lang->metric->afterCreate),
-    set::control(array('type' => 'radioList', 'inline' => true)),
+    set::control(array('control' => 'radioList', 'inline' => true)),
     set::items($lang->metric->afterCreateList),
     set::value('implement')
 );
@@ -146,7 +146,7 @@ formPanel
     formGroup
     (
         set::label($lang->metric->desc),
-        set::control(array('type' => 'textarea', 'rows' => 3)),
+        set::control(array('control' => 'textarea', 'rows' => 3)),
         set::name('desc'),
         set::value($metric->desc),
         set::placeholder($lang->metric->descTip)
@@ -154,7 +154,7 @@ formPanel
     formGroup
     (
         set::label($lang->metric->definition),
-        set::control(array('type' => 'textarea', 'rows' => 3)),
+        set::control(array('control' => 'textarea', 'rows' => 3)),
         set::name('definition'),
         set::value($metric->definition),
         set::placeholder($lang->metric->definitionTip),

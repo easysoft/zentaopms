@@ -29,7 +29,7 @@ formPanel
         set::name('encode'),
         set::required(true),
         set::value('gbk'),
-        set::control(array('type' => 'picker', 'items' => $config->charsets[$this->cookie->lang]))
+        set::control(array('control' => 'picker', 'items' => $config->charsets[$this->cookie->lang]))
     ),
     set::actions(array('submit')),
     set::submitBtnText($lang->export)

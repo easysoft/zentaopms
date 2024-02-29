@@ -53,7 +53,7 @@ formPanel
     (
         set::label(''),
         set::name('https[]'),
-        set::control(array('type' => 'checkbox', 'text' => $lang->system->domain->uploadCert, 'value' => 'true')),
+        set::control(array('control' => 'checkbox', 'text' => $lang->system->domain->uploadCert, 'value' => 'true')),
         on::change('onHttpsChange')
     ),
     formGroup

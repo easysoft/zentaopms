@@ -27,7 +27,7 @@ formPanel
         set::width('2/3'),
         set::name('products[]'),
         set::label($lang->repo->product),
-        set::control(array('type' => 'picker', 'multiple' => true)),
+        set::control(array('control' => 'picker', 'multiple' => true)),
         set::items($products),
         set::value($artifactRepo->products)
     ),

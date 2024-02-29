@@ -503,7 +503,7 @@ formPanel
     (
         set::width('1/3'),
         set::label($lang->todo->status),
-        set::control(array('type' => 'picker', 'id' => 'status', 'name' => 'status', 'items' => $lang->todo->statusList, 'value' => $todo->status))
+        set::control(array('control' => 'picker', 'id' => 'status', 'name' => 'status', 'items' => $lang->todo->statusList, 'value' => $todo->status))
     ),
     formRow
     (

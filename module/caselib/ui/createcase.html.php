@@ -130,7 +130,7 @@ formPanel
         (
             setClass('grow-0'),
             set::label($lang->testcase->pri),
-            set::control(array('type' => 'priPicker', 'items' => array_filter($lang->testcase->priList), 'required' => true)),
+            set::control(array('control' => 'priPicker', 'items' => array_filter($lang->testcase->priList), 'required' => true)),
             set::name('pri'),
             set::value('3')
         )
@@ -140,7 +140,7 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->precondition),
-            set::control(array('type' => 'textarea', 'rows' => 2)),
+            set::control(array('control' => 'textarea', 'rows' => 2)),
             set::name('precondition'),
             set::value($precondition)
         )

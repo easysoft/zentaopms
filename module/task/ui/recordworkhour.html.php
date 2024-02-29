@@ -182,7 +182,7 @@ else
             set::name('date'),
             set::label($lang->task->date),
             set::width('120px'),
-            set::control(array('type' => 'date', 'id' => '$GID')),
+            set::control(array('control' => 'date', 'id' => '$GID')),
             set::value(helper::today())
         ),
         formBatchItem
