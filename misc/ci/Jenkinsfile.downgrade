@@ -44,7 +44,7 @@ pipeline {
 
               env.GIT_URL = sh(returnStdout: true, script: 'git config --get remote.origin.url').trim()
               env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-              
+
               def j = job.newJob()
 
               env.GIT_HOST = "git.zcorp.cc"
@@ -54,10 +54,10 @@ pipeline {
               zentaopms.setupEnvAfterCheckout()
 
             //   def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
-              env.XIM_USERS = "qishiyao"
+              env.XIM_USERS = "qishiyao,caoyanyi"
             //   env.XIM_GROUPS = "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4"
             }
-            
+
           }
         }
 
