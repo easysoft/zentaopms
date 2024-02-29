@@ -2596,7 +2596,7 @@ class commonModel extends model
         $currentMethod = strtolower($method);
         if(!commonModel::hasPriv($module, $method, $object, $vars) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
 
-        $link = helper::createLink($module, $method, $vars, '', $onlyBody);
+        $link = helper::createLink($module, $method, $vars, '', $onlyBody ? true : false);
 
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
         if(empty($title))
@@ -3448,6 +3448,60 @@ class commonModel extends model
         if(!commonModel::hasPriv($module, $method, $object, $vars) and !in_array("$currentModule.$currentMethod", $config->openMethods)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;
+    }
+
+     /**
+     * Print pre and next link
+     *
+     * @param  string $preAndNext
+     * @param  string $linkTemplate
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printPreAndNext($preAndNext = '', $linkTemplate = '')
+    {
+        global $lang, $app;
+        if(isonlybody()) return false;
+
+        $moduleName = ($app->getModuleName() == 'story' and $app->tab == 'project') ? 'projectstory' : $app->getModuleName();
+        echo "<nav class='container'>";
+        if(isset($preAndNext->pre) and $preAndNext->pre)
+        {
+            $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->pre->case)) ? 'case' : 'id';
+            $title = isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name;
+            $title = '#' . $preAndNext->pre->$id . ' ' . $title . ' ' . $lang->preShortcutKey;
+
+            $params = $moduleName == 'story' ? "&version=0&param=0&storyType={$preAndNext->pre->type}" : '';
+            $link   = $linkTemplate ? sprintf($linkTemplate, $preAndNext->pre->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->pre->$id}" . $params);
+            $link  .= '#app=' . $app->tab;
+            if(isset($preAndNext->pre->objectType) and $preAndNext->pre->objectType == 'doc')
+            {
+                echo html::a('javascript:void(0)', '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}' data-url='{$link}'");
+            }
+            else
+            {
+                echo html::a($link, '<i class="icon-pre icon-chevron-left"></i>', '', "id='prevPage' class='btn' title='{$title}'");
+            }
+        }
+        if(isset($preAndNext->next) and $preAndNext->next)
+        {
+            $id = (isset($_SESSION['testcaseOnlyCondition']) and !$_SESSION['testcaseOnlyCondition'] and $app->getModuleName() == 'testcase' and isset($preAndNext->next->case)) ? 'case' : 'id';
+            $title = isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name;
+            $title = '#' . $preAndNext->next->$id . ' ' . $title . ' ' . $lang->nextShortcutKey;
+            $params = $moduleName == 'story' ? "&version=0&param=0&storyType={$preAndNext->next->type}" : '';
+            $link  = $linkTemplate ? sprintf($linkTemplate, $preAndNext->next->$id) : helper::createLink($moduleName, 'view', "ID={$preAndNext->next->$id}" . $params);
+            $link .= '#app=' . $app->tab;
+            if(isset($preAndNext->next->objectType) and $preAndNext->next->objectType == 'doc')
+            {
+                echo html::a('javascript:void(0)', '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn' title='$title' data-url='{$link}'");
+            }
+            else
+            {
+                echo html::a($link, '<i class="icon-pre icon-chevron-right"></i>', '', "id='nextPage' class='btn' title='$title'");
+            }
+        }
+        echo '</nav>';
     }
 }
 

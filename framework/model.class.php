@@ -126,6 +126,79 @@ class model extends baseModel
         return false;
     }
 
+        /**
+     * Build menu of a module.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $params
+     * @param  object $data
+     * @param  string $type
+     * @param  string $icon
+     * @param  string $target
+     * @param  string $class
+     * @param  bool   $onlyBody
+     * @param  string $misc
+     * @param  string $title
+     * @param  bool   $returnHtml
+     * @access public
+     * @return string
+     */
+
+    public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '', $returnHtml = true)
+    {
+        if(strpos($moduleName, '.') !== false) list($appName, $moduleName) = explode('.', $moduleName);
+
+        if(strpos($methodName, '_') !== false && strpos($methodName, '_') > 0) list($module, $method) = explode('_', $methodName);
+
+        if(empty($module)) $module = $moduleName;
+        if(empty($method)) $method = $methodName;
+
+        static $actions = array();
+        if(isset($this->config->bizVersion))
+        {
+            if(empty($actions[$moduleName]))
+            {
+                $actions[$moduleName] = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
+                    ->where('module')->eq($moduleName)
+                    ->andWhere('buildin')->eq('1')
+                    ->andWhere('status')->eq('enable')
+                    ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+                    ->fetchAll('action');
+            }
+        }
+
+        $enabled = true;
+        if(!empty($actions) and isset($actions[$moduleName][$methodName]))
+        {
+            $action = $actions[$moduleName][$methodName];
+
+            if($action->extensionType == 'override') return $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+
+            $conditions = json_decode($action->conditions);
+            if($conditions and $action->extensionType == 'extend')
+            {
+                if($icon != 'copy' and $methodName != 'create') $title = $action->name;
+                if($conditions) $enabled = $this->loadModel('flow')->checkConditions($conditions, $data);
+            }
+            else
+            {
+                if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
+            }
+        }
+        else
+        {
+            if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
+        }
+
+        if(!$returnHtml) return $enabled;
+
+        $html = '';
+        $type = $type == 'browse' ? 'list' : 'button';
+        $html = common::buildIconButton($module, $method, $params, $data, $type, $icon, $target, $class, $onlyBody, $misc, $title, '', $enabled);
+        return $html;
+    }
+
     /**
      * Build menu of actions created by workflow action.
      *
