@@ -58,25 +58,26 @@ $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions<
                                       </ul>
                                       <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue upgrading.</a></strong></p>';
 
-$lang->upgrade->selectVersion  = 'Version';
-$lang->upgrade->continue       = 'Continue';
-$lang->upgrade->noteVersion    = "Select the compatible version, or it might cause data loss.";
-$lang->upgrade->fromVersion    = 'From';
-$lang->upgrade->toVersion      = 'To';
-$lang->upgrade->confirm        = 'Confirm SQL';
-$lang->upgrade->sureExecute    = 'Execute';
-$lang->upgrade->upgradingTips  = 'The upgrade is in progress, please be patient. Do not refresh the page, blackout, or turn off your computer!';
-$lang->upgrade->forbiddenExt   = 'The extension is incompatible with the version. It has been deactivated:';
-$lang->upgrade->updateFile     = 'File information has to be updated.';
-$lang->upgrade->noticeSQL      = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
-$lang->upgrade->afterDeleted   = 'Please execute commands to delete the files. Please refresh after you delete them.';
-$lang->upgrade->afterExec      = 'Please modify the database manually according to the above error information, and refresh after the modification!';
-$lang->upgrade->mergeProgram   = 'Data Merge';
-$lang->upgrade->mergeTips      = 'Data Migration Tips';
-$lang->upgrade->toPMS15Guide   = 'ZenTao open source version 15 upgrade';
-$lang->upgrade->toPRO10Guide   = 'ZenTao profession version 10 upgrade';
-$lang->upgrade->toBIZ5Guide    = 'ZenTao enterprise version 5 upgrade';
-$lang->upgrade->toMAXGuide     = 'ZenTao ultimate version upgrade';
+$lang->upgrade->selectVersion = 'Version';
+$lang->upgrade->continue      = 'Continue';
+$lang->upgrade->noteVersion   = "Select the compatible version, or it might cause data loss.";
+$lang->upgrade->fromVersion   = 'From';
+$lang->upgrade->toVersion     = 'To';
+$lang->upgrade->confirm       = 'Confirm SQL';
+$lang->upgrade->sureExecute   = 'Execute';
+$lang->upgrade->upgradingTips = 'The upgrade is in progress, please be patient. Do not refresh the page, blackout, or turn off your computer!';
+$lang->upgrade->forbiddenExt  = 'The extension is incompatible with the version. It has been deactivated:';
+$lang->upgrade->updateFile    = 'File information has to be updated.';
+$lang->upgrade->showSQLLog    = 'Your database is inconsistent with the standard and try fix it.';
+$lang->upgrade->noticeErrSQL  = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
+$lang->upgrade->afterDeleted  = 'Please execute commands to delete the files. Please refresh after you delete them.';
+$lang->upgrade->afterExec     = 'Please modify the database manually according to the above error information, and refresh after the modification!';
+$lang->upgrade->mergeProgram  = 'Data Merge';
+$lang->upgrade->mergeTips     = 'Data Migration Tips';
+$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';
+$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10 upgrade';
+$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5 upgrade';
+$lang->upgrade->toMAXGuide    = 'ZenTao ultimate version upgrade';
 
 $lang->upgrade->line            = 'Product Line';
 $lang->upgrade->allLines        = "All Product Lines";

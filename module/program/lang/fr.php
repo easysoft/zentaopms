@@ -190,7 +190,6 @@ $lang->program->featureBar['project']['closed']    = 'Fermées';
 
 $lang->program->featureBar['productview']['all']      = 'All';
 $lang->program->featureBar['productview']['unclosed'] = 'Unclosed';
-$lang->program->featureBar['productview']['end']      = 'End';
 $lang->program->featureBar['productview']['wait']     = 'Waiting';
 $lang->program->featureBar['productview']['doing']    = 'Doing';
 $lang->program->featureBar['productview']['more']     = $lang->more;
@@ -220,7 +219,7 @@ $lang->program->project           = 'Projects';
 $lang->program->totalBugs         = 'Total Bugs';
 $lang->program->latestReleaseDate = 'Latest Release Date';
 $lang->program->latestRelease     = 'Latest Release';
-$lang->program->manageLine        = 'Gérer Ligne Produit';
+$lang->program->manageLine        = 'Manage Product Line';
 $lang->program->checkedProducts   = '<strong>%total%</strong>&nbsp; products selected.';
 
 $lang->program->programBudget   = 'Program Budget';

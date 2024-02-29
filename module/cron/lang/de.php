@@ -56,3 +56,4 @@ $lang->cron->notice->mon  = 'Bereich:1-12';
 $lang->cron->notice->dow  = 'Bereich:0-6';
 $lang->cron->notice->help = 'Hinweis：nach einem Server Neustart oder wenn die geplanten Tasks nicht funktionieren, bedeutet das, dass die Aufgaben nicht ausgeführt werden. Sie können die Aufgaben neustarten indem Sie 【Neustart】 klicken oder diese Seite neu laden. Wenn sich die Zeit der letzen Ausführung ändert, beduetet das, dass die geplanten Tasks funktionieren.';
 $lang->cron->notice->errorRule = '"%s" ist nicht gültig';
+$lang->cron->notice->errorType = 'You cannot create scheduled tasks of operating system command types';

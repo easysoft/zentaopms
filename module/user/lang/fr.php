@@ -82,10 +82,10 @@ $lang->user->resetPwdByAdmin  = 'Reset password via admin';
 $lang->user->resetPwdByMail   = 'Reset password via email';
 
 $lang->user->abbr = new stdclass();
-$lang->user->abbr->id          = 'ID';
-$lang->user->abbr->password2AB = 'Répétez Password';
-$lang->user->abbr->addressAB   = 'Adresse';
-$lang->user->abbr->joinAB      = 'Ajouté le';
+$lang->user->abbr->id        = 'ID';
+$lang->user->abbr->password2 = 'Répétez Password';
+$lang->user->abbr->address   = 'Adresse';
+$lang->user->abbr->join      = 'Ajouté le';
 
 $lang->user->legendBasic        = 'Informations de Base';
 $lang->user->legendContribution = 'Contribution';

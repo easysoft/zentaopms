@@ -43,6 +43,7 @@ $lang->cron->confirmTurnon = '是否关闭计划任务？';
 $lang->cron->introduction  = <<<EOD
 <p>计划任务功能可以定时执行诸如更新燃尽图、备份等操作，免除自己布置计划任务。</p>
 EOD;
+
 $lang->cron->confirmOpen = <<<EOD
 <p>是否开启该功能？<a href="%s"'><strong>打开计划任务</strong></a></p>
 EOD;

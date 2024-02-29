@@ -10,6 +10,7 @@ $lang->account->view   = 'view account';
 $lang->account->editAction   = 'edit account';
 $lang->account->deleteAction = 'delete account';
 
+$lang->account->id            = 'id';
 $lang->account->provider      = 'provider';
 $lang->account->type          = 'type';
 $lang->account->name          = 'name';

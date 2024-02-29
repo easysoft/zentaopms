@@ -74,6 +74,10 @@ $lang->extension->byUpdatedTime = 'Zuletzt bearbeitet';
 $lang->extension->bySearch      = 'Suche';
 $lang->extension->byCategory    = 'Kategorie';
 
+$lang->extension->featureBar['browse']['installed']   = $lang->extension->installed;
+$lang->extension->featureBar['browse']['deactivated'] = $lang->extension->deactivated;
+$lang->extension->featureBar['browse']['available']   = $lang->extension->available;
+
 $lang->extension->installFailed            = '%s fehlgeschlagen. Error:';
 $lang->extension->uninstallFailed          = 'Deinstallation fehlgeschlagen. Error:';
 $lang->extension->confirmUninstall         = 'Deinstallation der Erweiterung führt zur Anpassung der Datenbank. Möchten Sie deinstallieren?';

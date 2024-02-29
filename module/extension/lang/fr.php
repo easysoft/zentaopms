@@ -74,6 +74,10 @@ $lang->extension->byUpdatedTime = 'Dernier Update';
 $lang->extension->bySearch      = 'Rechercher';
 $lang->extension->byCategory    = 'Category';
 
+$lang->extension->featureBar['browse']['installed']   = $lang->extension->installed;
+$lang->extension->featureBar['browse']['deactivated'] = $lang->extension->deactivated;
+$lang->extension->featureBar['browse']['available']   = $lang->extension->available;
+
 $lang->extension->installFailed            = '%s a échoué. Erreur:';
 $lang->extension->uninstallFailed          = 'Echec de désinstallation. Erreur:';
 $lang->extension->confirmUninstall         = 'La désinstallation va supprimer ou changer la base de données. Voulez-vous la désinstaller malgré tout ?';

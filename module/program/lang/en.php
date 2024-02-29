@@ -190,7 +190,6 @@ $lang->program->featureBar['project']['closed']    = 'Closed';
 
 $lang->program->featureBar['productview']['all']      = 'All';
 $lang->program->featureBar['productview']['unclosed'] = 'Unclosed';
-$lang->program->featureBar['productview']['end']      = 'End';
 $lang->program->featureBar['productview']['wait']     = 'Waiting';
 $lang->program->featureBar['productview']['doing']    = 'Doing';
 $lang->program->featureBar['productview']['more']     = $lang->more;

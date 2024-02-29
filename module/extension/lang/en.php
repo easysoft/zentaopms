@@ -74,6 +74,10 @@ $lang->extension->byUpdatedTime = 'Latest Update';
 $lang->extension->bySearch      = 'Search';
 $lang->extension->byCategory    = 'Category';
 
+$lang->extension->featureBar['browse']['installed']   = $lang->extension->installed;
+$lang->extension->featureBar['browse']['deactivated'] = $lang->extension->deactivated;
+$lang->extension->featureBar['browse']['available']   = $lang->extension->available;
+
 $lang->extension->installFailed            = '%s failed. Error:';
 $lang->extension->uninstallFailed          = 'Uninstallation failed. Error:';
 $lang->extension->confirmUninstall         = 'Uninstallation will delete or change related database. Do you want to uninstall it?';

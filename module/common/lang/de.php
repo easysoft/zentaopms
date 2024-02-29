@@ -118,9 +118,9 @@ $lang->showMoreInfo    = 'Display more information';
 $lang->hideMoreInfo    = 'Hide more information';
 $lang->saveSuccess     = 'Gespeichert';
 $lang->importSuccess   = 'Gespeichert';
-$lang->deleteSuccess   = 'Gelöscht';
 $lang->fail            = 'Fehlgeschlagen';
 $lang->addFiles        = 'Hinzufügen ';
+$lang->deleteSuccess   = 'Gelöscht';
 $lang->files           = 'Datei ';
 $lang->pasteText       = 'Einfügen';
 $lang->uploadImages    = 'Hochladen';
@@ -143,9 +143,6 @@ $lang->levelExceeded   = 'The level has exceeded the display range. For more inf
 $lang->noticeOkFile    = 'Aus Sicherheitsgrü nden muss Ihr Adminkonto bestätigt werden. \n Bitte melden Sie sich an und erstellen Sie die Datei %s File.\n Hinweis:\n 1. Die Datei ist leer.\n 2. Wenn die Datei bereits existiert, löschen Sie sie und erstellen Sie eine neue Datei.';
 $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 $lang->allProgress     = 'All Progress';
-
-$lang->fieldDisplaySetting = 'Einstellungen der Feldanzeige';
-$lang->fieldSettingTip     = 'Die folgenden Felder sind standardmäßig eingeklappt, klicken Sie auf die Schaltfläche "Weitere Felder anzeigen", um die Ansicht zu erweitern. Wenn Sie möchten, dass einige Felder nicht standardmäßig eingeklappt sind, können Sie dies mit einem Stift festlegen.';
 
 $lang->fieldDisplaySetting = 'Field Display Setting';
 $lang->fieldSettingTip     = 'The following fields are collapsed by default, click on the "Show more fields" button to expand the view, if you want some fields not to be collapsed by default, you can fix it with a pin.';

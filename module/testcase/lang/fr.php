@@ -203,15 +203,13 @@ $lang->testcase->ditto                 = 'Idem';
 $lang->testcase->dittoNotice           = "This Case is not linked to the {$lang->productCommon} as the last one is!";
 $lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
 
-$lang->testcase->reviewList[0] = 'NON';
-$lang->testcase->reviewList[1] = 'OUI';
-
-$lang->testcase->autoList = array();
 $lang->testcase->autoList['']     = '';
 $lang->testcase->autoList['auto'] = 'Yes';
 $lang->testcase->autoList['no']   = 'No';
 
-$lang->testcase->priList[0] = '';
+$lang->testcase->reviewList[0] = '否';
+$lang->testcase->reviewList[1] = '是';
+
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
 $lang->testcase->priList[2] = 2;
@@ -314,18 +312,19 @@ $lang->testcase->settingCase   = 'Testcase';
 $lang->testcase->settingPri    = 'Priority';
 $lang->testcase->settingGroup  = 'Step Group';
 
-$lang->testcase->caseNotExist = 'The test case in the imported file was not recognized and the import failed';
-$lang->testcase->saveFail     = 'Save failed';
-$lang->testcase->set2Scene    = 'Set as Scene';
-$lang->testcase->set2Testcase = 'Set as Testcase';
-$lang->testcase->clearSetting = 'Clear Settings';
-$lang->testcase->setModule    = 'Set scene module';
-$lang->testcase->pickModule   = 'Please select a module';
-$lang->testcase->clearBefore  = 'Clear previous scenes';
-$lang->testcase->clearAfter   = 'Clear the following scenes';
-$lang->testcase->clearCurrent = 'Clear the current scene';
-$lang->testcase->removeGroup  = 'Remove Group';
-$lang->testcase->set2Group    = 'Set as Group';
+$lang->testcase->jsLng = new stdclass();
+$lang->testcase->jsLng->caseNotExist = 'The test case in the imported file was not recognized and the import failed';
+$lang->testcase->jsLng->saveFail     = 'Save failed';
+$lang->testcase->jsLng->set2Scene    = 'Set as Scene';
+$lang->testcase->jsLng->set2Testcase = 'Set as Testcase';
+$lang->testcase->jsLng->clearSetting = 'Clear Settings';
+$lang->testcase->jsLng->setModule    = 'Set scene module';
+$lang->testcase->jsLng->pickModule   = 'Please select a module';
+$lang->testcase->jsLng->clearBefore  = 'Clear previous scenes';
+$lang->testcase->jsLng->clearAfter   = 'Clear the following scenes';
+$lang->testcase->jsLng->clearCurrent = 'Clear the current scene';
+$lang->testcase->jsLng->removeGroup  = 'Remove Group';
+$lang->testcase->jsLng->set2Group    = 'Set as Group';
 
 $lang->testcase->exportTemplet = 'Export Template';
 

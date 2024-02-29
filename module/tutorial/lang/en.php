@@ -41,25 +41,21 @@ $lang->tutorial->tasks->createAccount->targetPageName = 'Add User';
 $lang->tutorial->tasks->createAccount->desc           = "<p>Create a User: </p><ul><li data-target='nav'>Open <span class='task-nav'>Admin <i class='icon icon-angle-right'></i> Company <i class='icon icon-angle-right'></i> Users<i class='icon icon-angle-right'></i> New;</span></li><li data-target='form'>Fill the form with user information;</li><li data-target='submit'>Save</li></ul>";
 
 $lang->tutorial->tasks->createProgram = new stdClass();
-
 $lang->tutorial->tasks->createProgram->title          = 'Create a program';
 $lang->tutorial->tasks->createProgram->targetPageName = 'Create program';
 $lang->tutorial->tasks->createProgram->desc           = "<p>Create a new program：</p><ul><li data-target='nav'>Open <span class='task-nav'>Program <i class='icon icon-angle-right'></i> Program list <i class='icon icon-angle-right'></i> Create program</span>;</li><li data-target='form'>Fill the form with program information;</li><li data-target='submit'>Save</li></ul>";
 
 $lang->tutorial->tasks->createProduct = new stdClass();
-
 $lang->tutorial->tasks->createProduct->title          = 'Create a product';
 $lang->tutorial->tasks->createProduct->targetPageName = 'Create product';
 $lang->tutorial->tasks->createProduct->desc           = "<p>Create a new product：</p><ul><li data-target='nav'>Open <span class='task-nav'>Product <i class='icon icon-angle-right'></i> Product list <i class='icon icon-angle-right'></i> Create product</span>;</li><li data-target='form'>Fill the form with product information;</li><li data-target='submit'>Save</li></ul>";
 
 $lang->tutorial->tasks->createStory = new stdClass();
-
 $lang->tutorial->tasks->createStory->title          = 'Create a story';
 $lang->tutorial->tasks->createStory->targetPageName = 'Create story';
 $lang->tutorial->tasks->createStory->desc           = "<p>Create a story: </p><ul><li data-target='nav'>Open <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i>Story <i class='icon icon-angle-right'></i>Create;</span></li><li data-target='form'>Fill the form with story information;</li><li data-target='submit'>Save</li></ul>";
 
 $lang->tutorial->tasks->createProject = new stdClass();
-
 $lang->tutorial->tasks->createProject->title          = 'Create a project';
 $lang->tutorial->tasks->createProject->targetPageName = 'Create project';
 $lang->tutorial->tasks->createProject->desc           = "<p>Create a project: </p><ul><li data-target='nav'>Open <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i>Project <i class='icon icon-angle-right'></i>Create;</span></li><li data-target='form'>Fill the form with project information;</li><li data-target='submit'>Save</li></ul>";

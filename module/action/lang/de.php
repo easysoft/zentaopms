@@ -317,7 +317,7 @@ $lang->action->desc->install                 = '$date, installed by <strong>$act
 $lang->action->desc->uninstall               = '$date, uninstalled by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->start                   = '$date, started by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->stop                    = '$date, closed by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->editextra               = '$date, updated from <strong>$oldname</strong> to <strong>$newName</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->editname                = '$date, updated from <strong>$oldname</strong> to <strong>$newName</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->upgrade                 = '$date, upgraded from <strong>$oldVersion</strong> to <strong>$newVersion</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->backup                  = '$date, backuped by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->adjustmemory            = '$date, resized to <strong>$newMemory</strong> of memory by <strong>$actor</strong>.' . "\n";
@@ -816,6 +816,13 @@ $lang->action->dynamicAction->repo['created']   = 'Create Repo';
 $lang->action->dynamicAction->repo['edited']    = 'Edit Repo';
 $lang->action->dynamicAction->repo['deleted']   = 'Delete Repo';
 $lang->action->dynamicAction->repo['undeleted'] = 'Undelete Repo';
+
+$lang->action->dynamicAction->metric['created']   = 'Create Metric';
+$lang->action->dynamicAction->metric['edited']    = 'Edit Metric';
+$lang->action->dynamicAction->metric['deleted']   = 'Delete Metric';
+$lang->action->dynamicAction->metric['undeleted'] = 'Undelete Metric';
+$lang->action->dynamicAction->metric['delist']    = 'Delist Metric';
+$lang->action->dynamicAction->metric['publish']   = 'Publish Metric';
 
 /* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

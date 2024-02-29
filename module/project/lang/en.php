@@ -47,6 +47,7 @@ $lang->project->unbindWhitelist     = "{$lang->projectCommon} Remove Whitelist";
 $lang->project->manageProducts      = "Manage {$lang->productCommon}s";
 $lang->project->manageOtherProducts = "Manage Other {$lang->productCommon}s";
 $lang->project->manageProductPlan   = "Manage {$lang->productCommon}s And Plans";
+$lang->project->managePlans         = 'Manage Plans';
 $lang->project->copyTitle           = "Please select an {$lang->projectCommon} to copy";
 $lang->project->errorSameProducts   = "{$lang->projectCommon} cannot be associated with multiple identical {$lang->productCommon}s.";
 $lang->project->errorSameBranches   = "{$lang->projectCommon} cannot be associated with multiple identical branches.";
@@ -248,14 +249,6 @@ $lang->project->allSummary             = "Total {$lang->projectCommon}s: %s, Wai
 $lang->project->checkedSummary         = 'Seleted: %total%.';
 $lang->project->checkedAllSummary      = 'Seleted: %total%, Wait: %wait%, Doing: %doing%, Suspended: %suspended%, Closed: %closed%.';
 
-$lang->project->tip = new stdclass();
-$lang->project->tip->closed     = 'The project has been closed. Re-close is not available.';
-$lang->project->tip->notSuspend = 'The project has been closed. Suspend is not available.';
-$lang->project->tip->suspended  = 'The project has been suspended. Re-suspend is not available.';
-$lang->project->tip->actived    = 'The project has been activated. Re-activated is not available.';
-$lang->project->tip->group      = "It's a Kanban project. Editing privilege group is not available.";
-$lang->project->tip->whitelist  = "It's a public project with open permissions. No need to edit whitelists.";
-
 $lang->project->error = new stdclass();
 $lang->project->error->existProductName = "{$lang->productCommon} name already exists.";
 $lang->project->error->budgetGe0        = '『Budget』must be greater than or equal to 0.';
@@ -263,6 +256,14 @@ $lang->project->error->budgetNumber     = '『Budget』must be numbers.';
 $lang->project->error->productNotEmpty  = "Please link {$lang->productCommon}s or create {$lang->productCommon}s.";
 $lang->project->error->emptyBranch      = 'Branch can not be empty!';
 $lang->project->error->endLessBegin     = 'The end date must be greater than the start date.';
+
+$lang->project->tip = new stdclass();
+$lang->project->tip->closed     = 'The project has been closed. Re-close is not available.';
+$lang->project->tip->notSuspend = 'The project has been closed. Suspend is not available.';
+$lang->project->tip->suspended  = 'The project has been suspended. Re-suspend is not available.';
+$lang->project->tip->actived    = 'The project has been activated. Re-activated is not available.';
+$lang->project->tip->group      = "It's a Kanban project. Editing privilege group is not available.";
+$lang->project->tip->whitelist  = "It's a public project with open permissions. No need to edit whitelists.";
 
 $lang->project->tenThousand    = 'Ten Thousand';
 $lang->project->hundredMillion = 'Hundred Million';

@@ -56,3 +56,4 @@ $lang->cron->notice->mon  = 'Range:1-12';
 $lang->cron->notice->dow  = 'Range:0-6';
 $lang->cron->notice->help = "Note ： Si le serveur est redémarré ou que le Cron ne fonctionne pas, cela signifie que le Cron s'est arrêté. Vous pouvez le redémarrer en cliquant sur 【Restart】 ou en rafraichissant cette page. Si la dernière heure d'exécution est modifiée, cela signifie que le Cron est en cours d'exécution.";
 $lang->cron->notice->errorRule = '"%s" invalide';
+$lang->cron->notice->errorType = 'You cannot create scheduled tasks of operating system command types';
