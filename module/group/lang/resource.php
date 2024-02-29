@@ -1847,31 +1847,6 @@ $lang->webhook->methodOrder[25] = 'log';
 $lang->webhook->methodOrder[30] = 'bind';
 $lang->webhook->methodOrder[35] = 'chooseDept';
 
-/* Others. */
-$lang->resource->api = new stdclass();
-$lang->resource->api->index         = 'index';
-$lang->resource->api->createLib     = 'createLib';
-$lang->resource->api->editLib       = 'editLib';
-$lang->resource->api->deleteLib     = 'deleteLib';
-$lang->resource->api->createRelease = 'createRelease';
-$lang->resource->api->releases      = 'releases';
-$lang->resource->api->deleteRelease = 'deleteRelease';
-$lang->resource->api->struct        = 'struct';
-$lang->resource->api->createStruct  = 'createStruct';
-$lang->resource->api->editStruct    = 'editStruct';
-$lang->resource->api->deleteStruct  = 'deleteStruct';
-$lang->resource->api->create        = 'create';
-$lang->resource->api->edit          = 'edit';
-$lang->resource->api->delete        = 'delete';
-$lang->resource->api->addCatalog    = 'addCatalog';
-$lang->resource->api->editCatalog   = 'editCatalog';
-$lang->resource->api->sortCatalog   = 'sortCatalog';
-$lang->resource->api->deleteCatalog = 'deleteCatalog';
-
-$lang->resource->api->getModel     = 'getModel';
-$lang->resource->api->debug        = 'debug';
-$lang->resource->api->sql          = 'sql';
-
 /* AI methods. */
 $lang->resource->ai = new stdclass();
 $lang->resource->ai->models                  = 'modelBrowse';
@@ -1906,6 +1881,31 @@ $lang->resource->aiapp->square                  = 'miniProgramSquare';
 $lang->resource->aiapp->view                    = 'view';
 $lang->resource->aiapp->miniProgramChat         = 'miniProgramChat';
 $lang->resource->aiapp->collectMiniProgram      = 'collectMiniProgram';
+
+/* Others. */
+$lang->resource->api = new stdclass();
+$lang->resource->api->index         = 'index';
+$lang->resource->api->createLib     = 'createLib';
+$lang->resource->api->editLib       = 'editLib';
+$lang->resource->api->deleteLib     = 'deleteLib';
+$lang->resource->api->createRelease = 'createRelease';
+$lang->resource->api->releases      = 'releases';
+$lang->resource->api->deleteRelease = 'deleteRelease';
+$lang->resource->api->struct        = 'struct';
+$lang->resource->api->createStruct  = 'createStruct';
+$lang->resource->api->editStruct    = 'editStruct';
+$lang->resource->api->deleteStruct  = 'deleteStruct';
+$lang->resource->api->create        = 'create';
+$lang->resource->api->edit          = 'edit';
+$lang->resource->api->delete        = 'delete';
+$lang->resource->api->addCatalog    = 'addCatalog';
+$lang->resource->api->editCatalog   = 'editCatalog';
+$lang->resource->api->sortCatalog   = 'sortCatalog';
+$lang->resource->api->deleteCatalog = 'deleteCatalog';
+
+$lang->resource->api->getModel     = 'getModel';
+$lang->resource->api->debug        = 'debug';
+$lang->resource->api->sql          = 'sql';
 
 $lang->api->methodOrder[0]   = 'index';
 $lang->api->methodOrder[5]   = 'createLib';
