@@ -56,6 +56,7 @@ $lang->metric->month         = '月份';
 $lang->metric->week          = '周';
 $lang->metric->day           = '日期';
 $lang->metric->nodate        = '采集日期';
+$lang->metric->implementType = '实现方式';
 
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "请选择";
