@@ -61,6 +61,15 @@ class priPicker extends wg
         }
         if(!isset($props['required']) || is_null($props['required'])) $props['required'] = true;
 
+        if(isset($restProps['width']))
+        {
+            $width = $restProps['width'];
+
+            if(is_numeric($width))               $restProps['style']['width'] = "{$width}px";
+            elseif(str_ends_with($width, 'px'))  $restProps['style']['width'] = $width;
+            else                                 $restProps['class'][]        = "w-$width";
+        }
+
         if(!isset($props['items']))
         {
             global $app, $lang;
