@@ -116,7 +116,8 @@ formBatchPanel
         set::name('visions'),
         set::label($lang->user->visions),
         set::items($visions),
-        set::control(array('type' => 'picker', 'multiple' => true)),
+        set::control('picker'),
+        set::multiple(true),
         set::width('240px'),
         set::value($config->vision),
         set::ditto(true),
@@ -135,7 +136,8 @@ formBatchPanel
     (
         set::name('group'),
         set::label($lang->user->group),
-        set::control(array('type' => 'picker', 'multiple' => true)),
+        set::control('picker'),
+        set::multiple(true),
         set::items($groupList),
         set::width('200px'),
         set::ditto(true)
