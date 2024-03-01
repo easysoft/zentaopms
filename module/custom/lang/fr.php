@@ -283,6 +283,7 @@ $lang->custom->features['traincourse']          = 'Academy';
 $lang->custom->features['workflow']             = 'Workflow';
 $lang->custom->features['admin']                = 'Admin';
 $lang->custom->features['vision']               = 'Full Feature Interface, Operation Management Interface';
+$lang->custom->features['ai']                   = 'AI';
 
 $lang->custom->needClosedFunctions['waterfall']     = 'Waterfall';
 $lang->custom->needClosedFunctions['waterfallplus'] = 'Waterfall +';

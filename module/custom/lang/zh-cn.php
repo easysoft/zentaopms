@@ -283,6 +283,7 @@ $lang->custom->features['traincourse']          = '学堂';
 $lang->custom->features['workflow']             = '工作流';
 $lang->custom->features['admin']                = '后台';
 $lang->custom->features['vision']               = '研发综合界面、运营管理界面';
+$lang->custom->features['ai']                   = 'AI';
 
 $lang->custom->needClosedFunctions['waterfall']     = "瀑布{$lang->projectCommon}";
 $lang->custom->needClosedFunctions['waterfallplus'] = "融合瀑布{$lang->projectCommon}";
