@@ -26,8 +26,7 @@ class metricModel extends model
      */
     public function getViewTableHeader($metric)
     {
-        $dataFields = $this->getMetricRecordDateField($metric->code);
-        if($metric->scope != 'system') $dataFields[] = $metric->scope;
+        $dataFields = $this->getMetricRecordDateField($metric);
 
         $dataFieldStr = implode(', ', $dataFields);
         if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
@@ -146,11 +145,10 @@ class metricModel extends model
      */
     public function getTimeTable($data, $dateType = 'day', $withCalcTime = true)
     {
-        $dateField = 'dateString';
-        usort($data, function($a, $b) use ($dateField)
+        usort($data, function($a, $b)
         {
-            $dateA = strtotime($a->$dateField);
-            $dateB = strtotime($b->$dateField);
+            $dateA = strtotime($a->dateString);
+            $dateB = strtotime($b->dateString);
 
             if ($dateA == $dateB) {
                 return 0;
@@ -167,30 +165,8 @@ class metricModel extends model
 
         foreach($data as $dataInfo)
         {
-            $date = '';
-            if($dateType == 'year')
-            {
-                $date = substr($dataInfo->$dateField, 0, 4);
-            }
-            elseif($dateType == 'month')
-            {
-                $year  = substr($dataInfo->$dateField, 0, 4);
-                $month = substr($dataInfo->$dateField, 5, 2);
-                $date  = "{$year}-{$month}";
-            }
-            elseif($dateType == 'week')
-            {
-                $year = substr($dataInfo->$dateField, 0, 4);
-                $week = sprintf($this->lang->metric->weekS, substr($dataInfo->dateString, 5, 2));
-                $date = "{$year}-{$week}";
-            }
-            elseif($dateType == 'day' or $dateType == 'nodate')
-            {
-                $date = substr($dataInfo->$dateField, 0, 10);
-            }
-
             $value       = $withCalcTime ? array($dataInfo->value, $dataInfo->calcTime) : $dataInfo->value;
-            $dataSeries  = array('date' => $date, 'value' => $value);
+            $dataSeries  = array('date' => $dataInfo->date, 'value' => $value);
             $groupData[] = $dataSeries;
         }
 
@@ -247,28 +223,31 @@ class metricModel extends model
         $numberHeaderWidth = 68;
         foreach($times as $time)
         {
-            $year = substr($time, 0, 4) . $this->lang->year;
-
+            $header = array('name' => $time, 'align' => 'center', 'width' => $numberHeaderWidth);
             if($dateType == 'year')
             {
-                $title = $year;
-                $groupHeader[] = array('name' => $time, 'title' => $title, 'align' => 'center', 'width' => $numberHeaderWidth);
+                $header['title'] = sprintf($this->lang->metric->yearFormat, $time);
             }
             elseif($dateType == 'month')
             {
-                $month         = substr($time, 5, 2) . $this->lang->month;
-                $groupHeader[] = array('name' => $time, 'title' => $month, 'headerGroup' => $year, 'align' => 'center', 'width' => $numberHeaderWidth);
+                list($year, $month) = explode('-', $time);
+                $header['title']       = $this->lang->datepicker->monthNames[(int)$month - 1];
+                $header['headerGroup'] = sprintf($this->lang->metric->yearFormat, $year);
             }
             elseif($dateType == 'week')
             {
-                $week          = sprintf($this->lang->metric->week, substr($time, 5, 2));
-                $groupHeader[] = array('name' => $time, 'title' => $week, 'headerGroup' => $year, 'align' => 'center', 'width' => $numberHeaderWidth);
+                list($year, $week) = explode('-', $time);
+                $header['title']       = sprintf($this->lang->metric->weekFormat, $week);
+                $header['headerGroup'] = sprintf($this->lang->metric->yearFormat, $year);
             }
             elseif($dateType == 'day' or $dateType == 'nodate')
             {
-                $day           = substr($time, 5, 5);
-                $groupHeader[] = array('name' => $time, 'title' => $day, 'headerGroup' => $year, 'align' => 'center', 'width' => $numberHeaderWidth);
+                list($year, $month, $day) = explode('-', $time);
+                $header['title']       = sprintf($this->lang->metric->monthDayFormat, $month, $day);
+                $header['headerGroup'] = sprintf($this->lang->metric->yearFormat, $year);
             }
+
+            $groupHeader[] = $header;
         }
 
         foreach($objects as $object => $datas)
@@ -606,26 +585,21 @@ class metricModel extends model
      * 获取度量数据的日期字段。
      * Get date field of metric data.
      *
-     * @param  string $code
+     * @param  object $metric
      * @access protected
      * @return array
      */
-    protected function getMetricRecordDateField(string $code): array
+    protected function getMetricRecordDateField(object $metric): array
     {
-        $record = $this->dao->select("year, month, week, day")
-            ->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->limit(1)
-            ->fetch();
-
-        if(!$record) return array();
-
         $dataFields = array();
-        $recordKeys = array_keys((array)$record);
-        foreach($recordKeys as $recordKey)
-        {
-            if(!empty($record->$recordKey)) $dataFields[] = $recordKey;
-        }
+        $dateType   = $metric->dateType;
+
+        if($dateType != 'nodate') $dataFields[] = 'year';
+        if(in_array($dateType, array('month', 'day'))) $dataFields[] = 'month';
+        if($dateType == 'week') $dataFields[] = 'week';
+        if($dateType == 'day') $dataFields[] = 'day';
+
+        if($metric->scope != 'system') $dataFields[] = $metric->scope;
 
         return $dataFields;
     }
@@ -671,10 +645,8 @@ class metricModel extends model
         if($type == 'cron')
         {
             $metric     = $this->metricTao->fetchMetricByCode($code);
-            $dataFields = $this->getMetricRecordDateField($code);
+            $dataFields = $this->getMetricRecordDateField($metric);
             $options    = $this->setDefaultOptions($options, $dataFields);
-
-            if($metric->scope != 'system') $dataFields[] = $metric->scope;
 
             return $this->metricTao->fetchMetricRecords($code, $dataFields, $options, $pager);
         }
@@ -710,10 +682,8 @@ class metricModel extends model
     public function getLatestResultByCode($code, $options = array(), $pager = null, $vision = 'rnd')
     {
         $metric     = $this->metricTao->fetchMetricByCode($code);
-        $dataFields = $this->getMetricRecordDateField($code);
+        $dataFields = $this->getMetricRecordDateField($metric);
         $options    = $this->setDefaultOptions($options, $dataFields);
-
-        if($metric->scope != 'system') $dataFields[] = $metric->scope;
 
         return $this->metricTao->fetchLatestMetricRecords($code, $dataFields, $options, $pager);
     }
@@ -1194,12 +1164,12 @@ class metricModel extends model
         }
         elseif($dateType == 'month')
         {
-            $date       = $year . $this->lang->year . $month . $this->lang->month;
+            $date       = sprintf($this->lang->metric->yearMonthFormat, $year, $month);
             $dateString = "{$year}-{$month}";
         }
         elseif($dateType == 'year')
         {
-            $date       = $year . $this->lang->year;
+            $date       = sprintf($this->lang->metric->yearFormat, $year);
             $dateString = $year;
         }
 
