@@ -1968,11 +1968,11 @@ class userModel extends model
      * 获取产品的所属团队和干系人。
      * Get product teams and stakeholders.
      *
-     * @param  array   $allProducts
-     * @access private
+     * @param  array     $allProducts
+     * @access protected
      * @return array
      */
-    private function getProductMembers(array $allProducts): array
+    protected function getProductMembers(array $allProducts): array
     {
         /* Get product and project relation. */
         $projectProducts = array();
