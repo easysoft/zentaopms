@@ -367,17 +367,14 @@ class upgradeModel extends model
         }
         catch(PDOException $e)
         {
-            $errorInfo = $e->errorInfo;
-            if($errorInfo)
+            $message = $e->getMessage();
+            if($message)
             {
-                $errorCode = $errorInfo[1];
-
-                /* If table is not extists, try create this table by create sql. */
-                if($errorCode == '1146') return array($sql);
+                if(strpos($message, '1146') !== false) return array($sql);
             }
         }
 
-        $changes = array();
+        if(empty($fields)) return $changes;
         foreach($lines as $line)
         {
             $change = $this->checkFieldConsistency($table, $line, $fields);
