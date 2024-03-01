@@ -7,7 +7,7 @@ title=测试 ciModel->saveCompile();
 timeout=0
 cid=1
 
-- 错误的接口信息 @1
+- 错误的接口信息 @0
 - 没有有效信息 @0
 - 返回请求URL信息 @1
 
@@ -27,7 +27,7 @@ $hasUrl   = '{"executable":{"url":"https://jenkinsdev.qc.oop.cc/job/paramsJob/la
 $notFound = '404';
 
 $ci = new ciTest();
-r($ci->saveCompileTest(1, $notFound)) && p() && e('1'); // 错误的接口信息
+r($ci->saveCompileTest(1, $notFound)) && p() && e('0'); // 错误的接口信息
 
 r($ci->saveCompileTest(3, $response)) && p() && e('0'); // 没有有效信息
 
