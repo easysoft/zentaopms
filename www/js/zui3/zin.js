@@ -1,6 +1,6 @@
 (function()
 {
-    if (config.skipRedirect || window.skipRedirect) return;
+    if(config.skipRedirect || window.skipRedirect) return;
 
     const parent        = window.parent;
     const currentModule = config.currentModule;
@@ -15,7 +15,7 @@
         || selfOpenList.has(currentModule)
         || $('body').hasClass('allow-self-open');
 
-    if (parent === window && !isAllowSelfOpen)
+    if(parent === window && !isAllowSelfOpen)
     {
         const shortUrl = location.pathname + location.search + location.hash;
         location.href = $.createLink('index', 'index', `open=${btoa(shortUrl)}`);
@@ -387,7 +387,7 @@
         if(!options.partial)
         {
             const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
-            if (newState) historyState = newState;
+            if(newState) historyState = newState;
         }
     }
 
@@ -659,12 +659,12 @@
         if(typeof options === 'string') options = {url: options};
         options = options || {};
 
-        if ((options.method || '').toLowerCase() !== 'post' && $.apps.isOldPage(options.url)) return loadOldPage(options.url);
+        if((options.method || '').toLowerCase() !== 'post' && $.apps.isOldPage(options.url)) return loadOldPage(options.url);
         else hideOldPage();
 
         if(typeof selector === 'string')      options.selector = selector;
         else if(typeof selector === 'object') options = $.extend({}, options, selector);
-        if (!options.selector && options.url && options.url.includes(' '))
+        if(!options.selector && options.url && options.url.includes(' '))
         {
             const parts = url.split(' ', 2);
             options.url      = parts[0];
