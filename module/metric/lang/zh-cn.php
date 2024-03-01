@@ -59,6 +59,11 @@ $lang->metric->day           = '日期';
 $lang->metric->nodate        = '采集日期';
 $lang->metric->implementType = '实现方式';
 
+$lang->metric->yearFormat     = '%s年';
+$lang->metric->weekFormat     = '%s周';
+$lang->metric->monthDayFormat = '%s-%s';
+$lang->metric->yearMonthFormat = '%s-%s';
+
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "请选择";
 $lang->metric->placeholder->project   = "全部项目";
