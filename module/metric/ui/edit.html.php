@@ -25,11 +25,27 @@ $afterEdit = $isDisabled ? '' : formGroup
 
 formPanel
 (
-    set::title(''),
-    div
+    detailHeader
     (
-        setClass('text-lg pb-2.5'),
-        $lang->metric->edit
+        to::title
+        (
+            entityLabel
+            (
+                setClass('text-lg'),
+                set::level(1),
+                set::text($lang->metric->edit)
+            ),
+            label
+            (
+                to::before(icon
+                (
+                    setClass('warning500 margin-left8'),
+                    'help',
+                )),
+                set::text($lang->metric->tips->noticeUnchangeable),
+                setClass('label ghost state600')
+            )
+        )
     ),
     formRow
     (
