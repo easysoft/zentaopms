@@ -36,7 +36,7 @@ form
     set::actions(array('submit'))
 );
 
-js
+h::js
 (
     <<<JAVASCRIPT
     window.setDownloading = function()
@@ -49,7 +49,7 @@ js
         {
             if($.cookie.get('downloading') == 1)
             {
-                $('.modal .modal-actions .close')[0].click();
+                $('.modal-dialog .modal-actions .close').trigger('click');
 
                 $.cookie.set('downloading', null, {expires:config.cookieLife, path:config.webRoot});
 
