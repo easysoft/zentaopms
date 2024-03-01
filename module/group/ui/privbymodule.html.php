@@ -11,16 +11,20 @@ declare(strict_types=1);
 namespace zin;
 jsVar('window.selectedPrivIdList', array());
 
-to::header(
-    span
+modalHeader(
+    set::title(''),
+    to::suffix
     (
-        set::className('text-md font-bold2'),
-        $lang->group->managePriv
-    ),
-    span
-    (
-        set::className('text-gray'),
-        $lang->group->byModuleTips
+        span
+        (
+            set::className('text-md font-bold2'),
+            $lang->group->managePriv
+        ),
+        span
+        (
+            set::className('text-gray'),
+            $lang->group->byModuleTips
+        )
     )
 );
 
