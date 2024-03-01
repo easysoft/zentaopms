@@ -40,7 +40,8 @@ class transferTao extends transferModel
             if(!is_string($value)) continue;
             if(strpos($value, '$') === false) continue;
             $params[$param] = isset($getParams[ltrim($value, '$')]) ? $getParams[ltrim($value, '$')] : '';
-            if(is_numeric($params[$param]) && strpos($params[$param], ".") ===false) $params[$param] = (int)$params[$param];
+            if(isset($this->config->transfer->convertInt[$callModule][$method][ltrim($value, '$')])) $params[$param] = (int)$params[$param];
+            if(isset($this->config->transfer->convertInt[$callModule][$method][$param]))             $params[$param] = (int)$params[$param];
         }
 
         /* 调用模块的方法。 */
