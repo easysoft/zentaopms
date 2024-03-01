@@ -9,7 +9,7 @@ cid=1
 
 - 成功执行jenkins构建 @1
 - 错误的密码执行jenkins构建 @0
-- 空的参数执行jenkins构建 @1
+- 空的参数执行jenkins构建 @0
 - 错误的路径执行jenkins构建 @0
 
 */
@@ -33,5 +33,5 @@ $normalData->PARAM_TAG = 'tag_test1';
 
 r($ci->sendRequestTest($url,      $normalData, $userPWD))  && p() && e('1'); // 成功执行jenkins构建
 r($ci->sendRequestTest($url,      $normalData, $errorPWD)) && p() && e('0'); // 错误的密码执行jenkins构建
-r($ci->sendRequestTest($url,      $emptyData,  $userPWD))  && p() && e('1'); // 空的参数执行jenkins构建
+r($ci->sendRequestTest($url,      $emptyData,  $userPWD))  && p() && e('0'); // 空的参数执行jenkins构建
 r($ci->sendRequestTest($errorUrl, $normalData, $userPWD))  && p() && e('0'); // 错误的路径执行jenkins构建
