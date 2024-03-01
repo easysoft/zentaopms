@@ -1340,7 +1340,7 @@
         if(!$link.length || $link.hasClass('ajax-submit') || $link.attr('data-on') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
 
         const href = $link.attr('href');
-        if($link.is('a') && (/^(https?|javascript):/.test(href))) return;
+        if($link.is('a') && (/^(https?|javascript):/.test(href)) && !$link.data('app')) return;
 
         if($link.hasClass('disabled') || $link.prop('disabled'))
         {
@@ -1351,7 +1351,7 @@
         const options = $link.dataset();
         if(options.toggle && options.toggle !== 'tooltip' && !$link.hasClass('open-url')) return;
 
-        const url = options.url || href;
+        const url    = options.url || href;
         const $modal = $link.closest('.modal');
         if(options.loadId)
         {
@@ -1359,7 +1359,7 @@
             delete options.loadId;
         }
 
-        if(url && (/^(https?|javascript):/.test(url) || url.startsWith('#'))) return;
+        if(url && ((/^(https?|javascript):/.test(url) && !options.app) || url.startsWith('#'))) return;
         if(!url && $link.is('a') && !options.back && !options.load) return;
 
         if($modal.length)
