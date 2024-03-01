@@ -39,8 +39,8 @@ require_once __DIR__ . DS . 'jquery.class.php';
  */
 function to(string $blockName, mixed ...$args): directive
 {
-    $node = new node(...$args);
-    return directive('block', array($blockName => $node));
+    skipRenderInGlobal($args);
+    return directive('block', array($blockName => $args));
 }
 
 /**

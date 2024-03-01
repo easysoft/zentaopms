@@ -291,6 +291,12 @@ class node implements \JsonSerializable
 
         if($child instanceof node) $child->parent = $this;
 
+        if($child instanceof node)
+        {
+            if(isset($child->parent)) skipRenderInGlobal($child);
+            $child->parent = $this;
+        }
+
         if($name === 'children' && $child instanceof node)
         {
             $blockName = static::getNameFromBlockMap($child->fullType());
