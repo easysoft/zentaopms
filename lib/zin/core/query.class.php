@@ -72,6 +72,11 @@ class query
             'commands'  => $this->commands
         );
     }
+
+    public function isRoot(): bool
+    {
+        return count($this->selectors) === 1 && $this->selectors[0]->tag === 'root';
+    }
 }
 
 /**
