@@ -128,7 +128,7 @@ class tutorial extends control
         if(!$hasPriv && $module == 'my' && $method == 'index') $hasPriv = true;
         if(!$hasPriv)
         {
-            if(helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('back' => true)));
+            if(helper::isAjaxRequest()) return $this->send(array('result' => 'success', 'message' => $this->lang->error->accessDenied, 'load' => array('alert' => $this->lang->error->accessDenied)));
             return print(js::locate('back'));
         }
 
