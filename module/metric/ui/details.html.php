@@ -50,14 +50,14 @@ panel
     set::bodyClass('relative'),
     div
     (
-        h1
+        div
         (
-            setClass('border-bottom tab-margin'),
+            setClass('border-b border-gray-100 my-2 py-2'),
             span
             (
 
                 $lang->metric->legendBasicInfo,
-                setClass('gray-pale text-md font-bold')
+                setClass('bg-gray-100 text-md font-bold px-2 py-3')
             )
         ),
         div
@@ -67,13 +67,13 @@ panel
                 $buildItems($legendBasic)
             )
         ),
-        h1
+        div
         (
-            setClass('border-bottom tab-margin'),
+            setClass('border-b border-gray-100 my-2 py-2'),
             span
             (
                 $lang->metric->legendCreateInfo,
-                setClass('gray-pale text-md font-bold')
+                setClass('bg-gray-100 text-md font-bold px-2 py-3')
             )
         ),
         div
