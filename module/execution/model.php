@@ -149,13 +149,7 @@ class executionModel extends model
             }
             if(!$showMR) unset($this->lang->execution->menu->devops['subMenu']->mr);
             if(!$repoPairs || !common::hasPriv('repo', 'review')) unset($this->lang->execution->menu->devops['subMenu']->review);
-
-
-            if(empty($this->lang->execution->menu->devops['subMenu']->mr) && empty($this->lang->execution->menu->devops['subMenu']->review))
-            {
-                unset($this->lang->execution->menu->devops['subMenu']);
-                $this->lang->execution->menu->devops['link'] = str_replace($this->lang->devops->common, $this->lang->repo->common, $this->lang->execution->menu->devops['link']);
-            }
+            if(empty($this->lang->execution->menu->devops['subMenu']->mr) && empty($this->lang->execution->menu->devops['subMenu']->review)) unset($this->lang->execution->menu->devops['subMenu']);
         }
 
         /* Set stroy navigation for no-product project. */
