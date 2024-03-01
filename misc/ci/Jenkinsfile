@@ -294,6 +294,7 @@ pipeline {
                     steps {
                       sh 'mkdir ${OUTPUT_PKG_PATH}/${PMS_VERSION}'
                       sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.zip'
+                      sh 'cp ${ZENTAO_RELEASE_PATH}/base.tar.xz ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.tar.xz'
 
                       script {
                         buildPkg.uploadPMS(env.PHPVERSION)
