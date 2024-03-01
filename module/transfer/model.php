@@ -613,7 +613,7 @@ class transferModel extends model
         /* Fetch datas by session condition. */
         if($onlyCondition && $queryCondition)
         {
-            if($module == 'story') $queryCondition = str_replace('story', 'id', $queryCondition);
+            if($module == 'story') $queryCondition = str_replace('`story`', '`id`', $queryCondition);
 
             $table       = zget($this->config->objectTables, $module); //获取对应的表
             $moduleDatas = $this->dao->select('*')->from($table)->alias('t1')
