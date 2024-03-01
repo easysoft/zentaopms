@@ -36,8 +36,9 @@ featureBar
     (
         dropdown
         (
-            to('trigger', btn($lang->testcase->typeList['unit'], setClass('ghost'))),
-            set::items($caseTypeItems)
+            btn($lang->testcase->typeList['unit'], setClass('ghost')),
+            set::items($caseTypeItems),
+            set::trigger('click')
         )
     ) : null,
     set::link(createLink('testtask', 'browseUnits', "productID={$product->id}&browseType={key}"))
