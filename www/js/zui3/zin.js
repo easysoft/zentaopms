@@ -11,6 +11,7 @@
     const isAllowSelfOpen = isIndexPage
         || location.hash === '#_single'
         || /(\?|\&)_single/.test(location.search)
+        || currentMethod.startsWith('ajax')
         || selfOpenList.has(`${currentModule}-${currentMethod}`)
         || selfOpenList.has(currentModule)
         || $('body').hasClass('allow-self-open');
