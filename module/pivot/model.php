@@ -2022,15 +2022,34 @@ class pivotModel extends model
      */
     public function mapRecordValueWithFieldOptions($records, $fields, $sql)
     {
+        $this->app->loadConfig('dataview');
         $records      = json_decode(json_encode($records), true);
         $fieldOptions = $this->getFieldsOptions($fields, $sql);
         foreach($records as $index => $record)
         {
             foreach($record as $field => $value)
             {
-                $optionList     = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
-                $valueKey       = "$value";
-                $record[$field] = isset($optionList[$valueKey]) ? $optionList[$valueKey] : $value;
+                $tableField = !isset($fields[$field]) ? '' : $fields[$field]['object'] . '-' . $fields[$field]['field'];
+                $withComma  = in_array($tableField, $this->config->dataview->multipleMappingFields);
+
+                $optionList = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
+
+                if($withComma)
+                {
+                    $valueArr  = array_filter(explode(',', $value));
+                    $resultArr = array();
+                    foreach($valueArr as $val)
+                    {
+                        $resultArr[] = isset($optionList[$val]) ? $optionList[$val] : $val;
+                    }
+
+                    $record[$field] = implode(',', $resultArr);
+                }
+                else
+                {
+                    $valueKey       = "$value";
+                    $record[$field] = isset($optionList[$valueKey]) ? $optionList[$valueKey] : $value;
+                }
             }
 
             $records[$index] = (object)$record;
