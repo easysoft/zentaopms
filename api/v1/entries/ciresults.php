@@ -25,6 +25,6 @@ class ciresultsEntry extends entry
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
-        return $this->send(201, array());
+        return $this->sendSuccess(200, 'success');
     }
 }
