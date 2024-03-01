@@ -116,8 +116,9 @@ featureBar
     (
         dropdown
         (
-            to('trigger', btn($currentTypeName, setClass('ghost'))),
+            btn($currentTypeName, setClass('ghost')),
             set::items($caseTypeItems),
+            set::trigger('click')
         )
     ) : null,
     $canDisplaySuite && $rawMethod != 'groupcase' ? li
