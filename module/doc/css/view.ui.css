@@ -25,3 +25,4 @@
 .w-144 {width: 36rem;}
 
 #outlineToggle {display: block; position: absolute; top: 5.5rem; right: 3.5rem; z-index: 110;}
+#docPanel .panel-heading > .panel-actions {min-width: 320px;}
