@@ -373,9 +373,9 @@ class transferModel extends model
             {
                 $dataList[$field] = $this->loadModel($field)->getPairs('noclosed|nodeleted|noletter');
                 unset($dataList[$field]['']);
-
-                if(!in_array(strtolower($this->app->methodName), array('ajaxgettbody', 'ajaxgetoptions', 'showimport'))) foreach($dataList[$field] as $key => $value) $dataList[$field][$key] = $value . "(#$key)";
             }
+
+            if(!in_array(strtolower($this->app->methodName), array('ajaxgettbody', 'ajaxgetoptions', 'showimport'))) foreach($dataList[$field] as $key => $value) $dataList[$field][$key] = $value . "(#$key)";
         }
 
         return $dataList;
