@@ -8566,7 +8566,7 @@ class upgradeModel extends model
      */
     public function update1810(): void
     {
-        $fields = $this->dbo->query('DESC ' . TABLE_DEMANDPOOL)->fetchAll();
+        $fields = $this->dao->query('DESC ' . TABLE_DEMANDPOOL)->fetchAll();
         foreach($fields as $field)
         {
             if($field->Field == 'products') return;
@@ -8586,7 +8586,7 @@ class upgradeModel extends model
      */
     public function update18101(): void
     {
-        $fields = $this->dbo->query('DESC ' . TABLE_DEMAND)->fetchAll();
+        $fields = $this->dao->query('DESC ' . TABLE_DEMAND)->fetchAll();
         foreach($fields as $field)
         {
             if($field->Field == 'feedback') return;
