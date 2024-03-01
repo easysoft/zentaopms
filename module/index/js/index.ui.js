@@ -50,8 +50,12 @@ function triggerAppEvent(code, event, args)
     event = event + '.apps';
     if(!Array.isArray(args)) args = [args];
     if(app.$app) app.$app.trigger(event, args);
-    const iframeWindow = app.iframe && app.iframe.contentWindow;
-    if(iframeWindow) return iframeWindow.$(iframeWindow.document).trigger(event, args);
+    try
+    {
+        const iframeWindow = app.iframe && app.iframe.contentWindow;
+        if(iframeWindow) return iframeWindow.$(iframeWindow.document).trigger(event, args);
+    }
+    catch(e){}
 }
 
 function isOldPage(url)
@@ -130,9 +134,13 @@ function openApp(url, code, options)
         });
         iframe.onload = iframe.onreadystatechange = function(e)
         {
-            const finishLoad = () => $iframe.removeClass('loading').addClass('in');
-            iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', finishLoad);
-            setTimeout(finishLoad, 10000);
+            try
+            {
+                const finishLoad = () => $iframe.removeClass('loading').addClass('in');
+                iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', finishLoad);
+                setTimeout(finishLoad, 10000);
+            }
+            catch(e){}
             triggerAppEvent(openedApp.code, 'loadapp', [openedApp, e]);
         };
         return;
@@ -236,7 +244,7 @@ function reloadApp(code, url, options)
 function updateApp(code, url, title, type)
 {
     const app = apps.openedMap[code];
-    if(!app) return;
+    if(!app || app.external) return;
 
     const state     = typeof code === 'object' ? code : {code: code, url: url, title: title, type: type};
     const prevState = window.history.state;
@@ -632,19 +640,15 @@ function refreshMenu()
 /** Init apps menu list. */
 function initAppsMenu(items)
 {
-    const $helpLink = $('#helpLink');
-    if($helpLink.length)
+    apps.map.help =
     {
-        apps.map.help =
-        {
-            code:     'help',
-            icon:     'icon-help',
-            url:      manualUrl || $helpLink.attr('href'),
-            external: true,
-            text:     manualText || $helpLink.text(),
-            appUrl:   config.webRoot + '#app=help'
-        };
-    }
+        code:     'help',
+        icon:     'icon-help',
+        url:      manualUrl || $helpLink.attr('href'),
+        external: true,
+        text:     manualText || $helpLink.text(),
+        appUrl:   config.webRoot + '#app=help'
+    };
 
     const $menuMainNav = $('#menuMainNav').empty();
     (items || appsItems).forEach(function(item)
