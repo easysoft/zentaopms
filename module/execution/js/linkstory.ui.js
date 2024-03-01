@@ -35,8 +35,11 @@ window.onRenderLinkStoryCell = function(result, {row, col})
 {
     if(col.name == 'title')
     {
-        if(row.data.parent > 0) html = "<span class='label gray-pale rounded-xl clip'>"+ childrenAB +"</span> ";
-        if(html) result.unshift({html});
+        if(row.data.parent > 0)
+        {
+            html = "<span class='label gray-pale rounded-xl clip'>"+ childrenAB +"</span> ";
+            result.unshift({html});
+        }
     }
 
     if(col.name !== 'branch')
