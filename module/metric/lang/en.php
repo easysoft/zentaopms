@@ -59,6 +59,11 @@ $lang->metric->day           = 'Date';
 $lang->metric->nodate        = 'Collection date';
 $lang->metric->implementType = 'Implement Type';
 
+$lang->metric->yearFormat      = 'Year %s';
+$lang->metric->weekFormat      = 'Week %s';
+$lang->metric->monthDayFormat  = '%s-%s';
+$lang->metric->yearMonthFormat = '%s-%s';
+
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "Please select";
 $lang->metric->placeholder->project   = "All Projects";

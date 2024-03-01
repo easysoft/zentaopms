@@ -27,6 +27,11 @@ $lang->metric->definition    = "計算規則";
 $lang->metric->customUnit    = "自定義";
 $lang->metric->implementType = '实现方式';
 
+$lang->metric->yearFormat     = '%s年';
+$lang->metric->weekFormat     = '%s周';
+$lang->metric->monthDayFormat = '%s-%s';
+$lang->metric->yearMonthFormat = '%s-%s';
+
 $lang->metric->descTip       = '請輸入度量項含義、目的和作用等';
 $lang->metric->definitionTip = '請輸入度量項的計算規則及過濾條件等';
 
