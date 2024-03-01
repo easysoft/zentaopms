@@ -71,6 +71,7 @@ class company extends control
 
         /* Get users. */
         $users = $this->company->getUsers($browseType, $type, $queryID, $deptID, $sort, $pager);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'user');
 
         $this->view->title      = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
         $this->view->users      = array_map(function($user){unset($user->password);return $user;}, $users);
