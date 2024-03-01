@@ -400,7 +400,7 @@ class context extends \zin\utils\dataset
 
     protected function applyQuery(node $rootNode, query $query)
     {
-        $nodes = findInNode($query->selectors, $rootNode, false, false, false);
+        $nodes = $query->isRoot() ? array($rootNode) : findInNode($query->selectors, $rootNode, false, false, false);
         if(!$nodes) return;
 
         $queryNodes = $nodes;
