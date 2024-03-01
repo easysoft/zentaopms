@@ -4576,13 +4576,14 @@ class executionModel extends model
         {
             $tree = (object)$tree;
             $treeData[$index] = array('className' => 'py-2 cursor-pointer ' . $tree->type);
+            $assigedToHtml    = !empty($tree->assignedTo) ?  ' <span class="user align-bottom"><div class="avatar rounded-full size-xs ml-1 align-' . (strlen(zget($tree, 'avatar')) == 1 ? 'middle primary' : 'sub') . '">' . zget($tree, 'avatar') . '</div> ' . zget($tree, 'avatarAccount') . '</span>' : '';
             switch($tree->type)
             {
                 case 'task':
                     $label = $tree->parent > 0 ? $this->lang->task->children : $this->lang->task->common;
                     $treeData[$index]['url']    = helper::createLink('execution', 'treeTask', "taskID={$tree->id}");
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$label}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 text-primary align-sub' title='{$tree->title}'>" . $tree->title . '</span> <span class="user align-sub"><div class="avatar rounded-full size-xs ml-1 align-' . (strlen(zget($tree, 'avatar')) == 1 ? 'middle primary' : 'sub') . '">' . zget($tree, 'avatar') . '</div> ' . zget($tree, 'avatarAccount') . '</span></div>',
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$label}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 text-primary align-sub' title='{$tree->title}'>" . $tree->title . '</span>'. $assigedToHtml . '</div>',
                     );
                     break;
                 case 'product':
@@ -4594,7 +4595,7 @@ class executionModel extends model
                     $this->app->loadLang('story');
                     $treeData[$index]['url']    = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$this->lang->story->common}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span> <span class='user align-sub'><div class='avatar rounded-full size-xs ml-1 align-" . (strlen(zget($tree, 'avatar')) == 1 ? 'middle primary' : 'sub') . '">' . zget($tree, 'avatar') . '</div> ' . zget($tree, 'avatarAccount') . '</span></div>',
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$this->lang->story->common}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
                     );
                     break;
                 case 'branch':
