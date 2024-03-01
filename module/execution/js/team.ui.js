@@ -26,7 +26,7 @@ window.setTeamStatistics = function()
     let totalHours = 0;
     rows.forEach(function(row)
     {
-        totalHours += row.data.totalHours;
+        totalHours += parseFloat(row.data.totalHours);
     });
 
     return {html: pageSummary.replace('%totalHours%', totalHours)};
