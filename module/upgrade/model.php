@@ -8506,19 +8506,18 @@ class upgradeModel extends model
         $model->createdBy   = 'system';
 
         $credentials = new stdclass();
+        $credentials->key = $aiConfig->key ?: '';
+
         if($model->type == 'baidu-ernie')
         {
             $credentials->secret = $aiConfig->secret ?: '';
         }
-        else
+        elseif($aiConfig->vendor == 'azure')
         {
-            if($aiConfig->vendor == 'azure')
-            {
-                $credentials->resource   = $aiConfig->resource ?: '';
-                $credentials->deployment = $aiConfig->deployment ?: '';
-            }
-            $credentials->key = $aiConfig->key ?: '';
+            $credentials->resource   = $aiConfig->resource ?: '';
+            $credentials->deployment = $aiConfig->deployment ?: '';
         }
+
         $model->credentials = json_encode($credentials);
 
         $model->proxy = $aiConfig->proxyType == 'socks5' ? json_encode((object)array('type' => 'socks5', 'addr' => $aiConfig->proxyAddr)) : null;
