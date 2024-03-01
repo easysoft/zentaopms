@@ -187,7 +187,6 @@ $contentDom = div
             div
             (
                 set::id('editorBox'),
-                setClass('flex'),
                 $editorGroup
             )
         )
