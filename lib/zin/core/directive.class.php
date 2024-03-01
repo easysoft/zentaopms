@@ -98,7 +98,7 @@ class directive implements iDirective
         {
             foreach($data as $blockName => $blockChildren)
             {
-                $node->add($blockChildren, $blockName);
+                $node->addToBlock($blockName, $blockChildren);
             }
         }
     }
