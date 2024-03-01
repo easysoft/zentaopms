@@ -108,11 +108,12 @@ toolbar
         'icon'        => 'export',
         'class'       => 'ghost export',
         'url'         => createLink('task', 'export', "execution={$execution->id}&orderBy={$orderBy}&type={$browseType}"),
-        'data-toggle' => 'modal'
+        'data-toggle' => 'modal',
+        'data-size'   => 'sm'
     ))) : null,
     !empty($importItems) ? dropdown(
         btn(
-            setClass('ghost btn square btn-default'),
+            setClass('btn ghost dropdown-toggle'),
             set::icon('import'),
             set::text($lang->import),
         ),
