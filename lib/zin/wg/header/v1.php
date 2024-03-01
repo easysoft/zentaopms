@@ -69,6 +69,7 @@ class header extends wg
         return h::header
         (
             setID('header'),
+            commonModel::isTutorialMode() ? setStyle('width', 'fit-content') : null,
             h::div
             (
                 setClass('container'),
