@@ -23,4 +23,5 @@ jsVar('productplanLang', $lang->productplan);
 jsVar('privs',           $privs);
 jsVar('rawModule',       $app->rawModule);
 jsVar('currentTab',      $app->tab);
+jsVar('checkedSummary',  $lang->productplan->checkedSummary);
 include("browseby{$viewType}.html.php");

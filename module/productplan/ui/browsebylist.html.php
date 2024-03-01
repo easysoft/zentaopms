@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('checkedSummary', $lang->productplan->checkedSummary);
 jsVar('childrenAB', $lang->productplan->childrenAB);
 jsVar('expiredLang', $lang->productplan->expired);
 jsVar('nextStep', $lang->productplan->nextStep);
