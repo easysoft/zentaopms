@@ -116,7 +116,7 @@ class transferTao extends transferModel
             $linkFieldName = $linkField . 'List';
             $tmpFieldName  = array();
 
-            if(empty($lists[$fieldName]) and empty($lists[$linkFieldName])) continue;
+            if(empty($lists[$fieldName]) || empty($lists[$linkFieldName])) continue;
 
             /* 根据字段名获取表名。*/
             /* Get table name by field name. */
