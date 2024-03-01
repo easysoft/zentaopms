@@ -503,6 +503,11 @@ class user extends control
         if(!empty($_POST))
         {
             $users = form::batchData($this->config->user->form->batchCreate)->get();
+            foreach($users as $user)
+            {
+                $user->password = $user->passwordfield;
+                unset($user->passwordfield);
+            }
 
             $userIdList = $this->user->batchCreate($users, $this->post->verifyPassword);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
