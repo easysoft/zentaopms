@@ -1486,7 +1486,7 @@ class testcaseZen extends testcase
         /* 处理模块。 */
         /* Process modules. */
         $preModule = 0;
-        $modules   = $this->post->module;
+        $modules   = $this->post->module ? $this->post->module : array();
         foreach($modules as $caseID => $module)
         {
             if($module != 'ditto') $preModule = $module;
