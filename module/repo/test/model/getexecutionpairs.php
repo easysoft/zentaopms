@@ -10,12 +10,9 @@ title=测试 repoModel->getExecutionPairs();
 timeout=0
 cid=1
 
-- 获取gitlab类型版本库1的分支
- - 属性master @master
- - 属性branch1 @branch1
-- 获取gitlab类型版本库1的分支加label
- - 属性master @Branch::master
- - 属性branch1 @Branch::branch1
+- 获取执行键值对
+ - 属性4 @项目3
+ - 属性3 @项目2
 
 */
 

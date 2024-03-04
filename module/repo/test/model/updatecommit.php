@@ -10,10 +10,10 @@ title=测试 repoModel->updateCommit();
 timeout=0
 cid=8
 
-- 保存任务和分支的关联关系
- - 属性AID @2
- - 属性BID @1
- - 属性extra @master
+- 更新gitlab代码库 @1
+- 更新svn代码库
+ - 第5条的id属性 @5
+ - 第5条的comment属性 @+ Add secondary file.
 
 */
 
