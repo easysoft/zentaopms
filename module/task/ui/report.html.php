@@ -35,22 +35,27 @@ foreach($lang->task->report->charts as $code => $name)
     $selectCharts[] = $chart;
 }
 
-$echarts = array();
-foreach($charts as $type => $option)
+function getEcharts($tabCharts, $tabDatas)
 {
-    $chartData = $datas[$type];
-    $echarts[] = tableChart
-    (
-        set::type($option->type),
-        set::title($lang->task->report->charts[$type]),
-        set::datas((array)$chartData),
-        set::tableWidth('40%'),
-        set::tableHeaders(array(
-            'item'    => $lang->task->report->$type->item,
-            'value'   => $lang->task->report->value,
-            'percent' => $lang->report->percent
-        ))
-    );
+    global $lang;
+    $echarts = array();
+    foreach($tabCharts as $type => $option)
+    {
+        $chartData = $tabDatas[$type];
+        $echarts[] = tableChart
+            (
+                set::type($option->type),
+                set::title($lang->task->report->charts[$type]),
+                set::datas((array)$chartData),
+                set::tableWidth('40%'),
+                set::tableHeaders(array(
+                    'item'    => $lang->task->report->{$type}->item,
+                    'value'   => $lang->task->report->value,
+                    'percent' => $lang->report->percent
+                ))
+            );
+    }
+    return $echarts;
 }
 
 $chartContents = array();
@@ -70,7 +75,7 @@ foreach($lang->report->typeList as $type => $typeName)
             span(setClass('text-gray'),
             html(str_replace('%tab%', $lang->task->waitTask . $lang->testcase->common, $lang->report->notice->help)))
         ),
-        div($echarts)
+        div(getEcharts($charts, $datas))
     );
 }
 

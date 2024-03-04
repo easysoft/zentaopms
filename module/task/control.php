@@ -1053,6 +1053,7 @@ class task extends control
 
         /* Build chart data. */
         $chartList = array();
+        $this->view->datas = array();
         if(!empty($_POST)) $chartList = $this->taskZen->buildChartData($chartType);
 
         /* If the project is non-execution, the chart of tasks by execution is not shown. */
