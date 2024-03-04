@@ -452,12 +452,11 @@ formPanel
                         'id'      => 'private',
                         'name'    => 'private',
                         'text'    => $lang->todo->private,
-                        'value'   => 1,
-                        'checked' => $todo->private
+                        'checked' => !empty($todo->private)
                     )
                 ),
                 set::disabled($todo->assignedTo != $app->user->account || $todo->assignedTo != $todo->account),
-                on::change('togglePrivate(e.target)')
+                on::change("zui.Picker.query('[name=assignedTo]').render({disabled: e.target.checked})")
             ),
             btn
             (

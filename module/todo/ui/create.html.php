@@ -334,10 +334,11 @@ formPanel
             set::width('1/3'),
             set::label($lang->todo->assignTo),
             set::required(true),
+            set::disabled(true),
             set::items($users),
             set::value($app->user->account),
             set::name('assignedTo'),
-            on::change("$('#private').prop('disabled', e.target.value !== '{$app->user->account}');")
+            on::change('changeAssignedTo()')
         ),
         formGroup
         (
@@ -347,8 +348,8 @@ formPanel
                 setID('private'),
                 set::name('private'),
                 set::text($lang->todo->private),
-                set::value(1),
-                on::change("zui.Picker.query('#assignedTo').render({disabled: e.target.checked})")
+                set::checked(true),
+                on::change("zui.Picker.query('[name=assignedTo]').render({disabled: e.target.checked})")
             ),
             btn
             (
