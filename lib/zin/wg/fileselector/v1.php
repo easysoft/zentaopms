@@ -30,7 +30,7 @@ class fileSelector extends wg
         'renameBtn?: bool|string|array|callback=true', // 重命名按钮。
         'removeBtn?: bool|string|array|callback=true', // 删除按钮。
         'removeConfirm?: string|array',                // 删除确认提示。
-        'maxFileSize?: int|string="100MB";',           // 限制文件大小。
+        'maxFileSize?: int|string',                    // 限制文件大小。
         'maxFileCount?: int=0',                        // 限制文件数目，如果设置为非大于 `0` 的数则不限制。
         'totalFileSize?: int|string',                  // 限制总文件大小，如果设置为非大于 `0` 的数则不限制。
         'allowSameName?: bool;',                       // 是否允许同名文件。
@@ -50,6 +50,14 @@ class fileSelector extends wg
 
     protected function created()
     {
+        if(!$this->hasProp('maxFileSize'))
+        {
+            $maxFileSize  = ini_get('upload_max_filesize');
+            $lastChar     = substr($maxFileSize, -1);
+            $fileSizeUnit = array('K' => 'KB', 'M' => 'MB', 'G' => 'GB', 'T' => 'TB');
+            if(isset($fileSizeUnit[$lastChar])) $maxFileSize = str_replace(array_keys($fileSizeUnit), array_values($fileSizeUnit), $maxFileSize);
+            $this->setProp('maxFileSize', $maxFileSize);
+        }
         if(!$this->hasProp('tip'))
         {
             global $lang;
@@ -60,6 +68,12 @@ class fileSelector extends wg
             global $app, $lang;
             $app->loadLang('file');
             $this->setProp('exceededCountHint', sprintf($lang->file->errorFileCount, '{maxCount}'));
+        }
+        if(!$this->hasProp('exceededSizeTip'))
+        {
+            global $app, $lang;
+            $app->loadLang('file');
+            $this->setProp('exceededSizeTip', $lang->file->errorFileSize);
         }
 
         /* Auto prepend suffix "[]" to multiple mode. */
