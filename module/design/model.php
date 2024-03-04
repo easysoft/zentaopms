@@ -169,8 +169,8 @@ class designModel extends model
                 }
             }
             $this->repo->saveCommit($repoID, array('commits' => $logs), 0);
-            $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('id');
         }
+        $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('id');
 
         $this->designTao->updateLinkedCommits($designID, $repoID, $revisions);
 
