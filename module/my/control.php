@@ -1139,8 +1139,9 @@ class my extends control
             $this->lang->my->realname       = $this->lang->user->realname;
             $this->lang->my->verifyPassword = $this->lang->user->verifyPassword;
 
-            $user = form::data($this->config->user->form->edit)
+            $user = form::data($this->config->my->form->editProfile)
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
+                ->add('group', $this->app->user->groups)
                 ->add('id', $this->app->user->id)
                 ->get();
 
