@@ -16,6 +16,7 @@ class moduleMenu extends wg
         'showDisplay?: bool=true',
         'allText?: string',
         'title?: string',
+        'titleShow?: bool=true',
         'app?: string=""',
         'checkbox?: bool',
         'checkOnClick?: bool|string',
@@ -173,7 +174,7 @@ class moduleMenu extends wg
         (
             setID('moduleMenu'),
             setClass('shadow-sm rounded bg-canvas col rounded-sm'),
-            h::header
+            $this->prop('titleShow') ? h::header
             (
                 setClass('h-10 flex items-center pl-4 flex-none gap-3'),
                 span
@@ -182,7 +183,7 @@ class moduleMenu extends wg
                     $title
                 ),
                 $this->buildCloseBtn()
-            ),
+            ) : null,
             zui::tree
             (
                 set::_tag('menu'),
