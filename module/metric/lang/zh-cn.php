@@ -210,16 +210,16 @@ $lang->metric->purposeList['rate']  = "效率提升";
 $lang->metric->purposeList['other'] = "其他";
 
 $lang->metric->scopeList = array();
-$lang->metric->scopeList['system']    = "系统";
-$lang->metric->scopeList['program']   = "项目集";
-$lang->metric->scopeList['product']   = "产品";
 $lang->metric->scopeList['project']   = "项目";
+$lang->metric->scopeList['product']   = "产品";
 $lang->metric->scopeList['execution'] = "执行";
-$lang->metric->scopeList['dept']      = "团队";
 $lang->metric->scopeList['user']      = "个人";
+$lang->metric->scopeList['system']    = "系统";
+$lang->metric->scopeList['other']     = "其他";
+// $lang->metric->scopeList['program']   = "项目集";
+// $lang->metric->scopeList['dept']      = "团队";
 // $lang->metric->scopeList['code']      = "代码库";
 // $lang->metric->scopeList['pipeline']  = "流水线";
-$lang->metric->scopeList['other']     = "其他";
 
 global $config;
 $lang->metric->objectList = array();

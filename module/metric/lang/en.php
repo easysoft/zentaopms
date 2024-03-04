@@ -210,16 +210,16 @@ $lang->metric->purposeList['rate']  = "Enhanced Efficiency";
 $lang->metric->purposeList['other'] = "Other";
 
 $lang->metric->scopeList = array();
-$lang->metric->scopeList['system']    = "System";
-$lang->metric->scopeList['program']   = "Program Set";
-$lang->metric->scopeList['product']   = "Product";
 $lang->metric->scopeList['project']   = "Project";
+$lang->metric->scopeList['product']   = "Product";
 $lang->metric->scopeList['execution'] = "Execution";
-$lang->metric->scopeList['dept']      = "Team";
 $lang->metric->scopeList['user']      = "Individual";
+$lang->metric->scopeList['system']    = "System";
+$lang->metric->scopeList['other']     = "Other";
+// $lang->metric->scopeList['program']   = "Program";
+// $lang->metric->scopeList['dept']      = "Team";
 // $lang->metric->scopeList['code']      = "Code Repository";
 // $lang->metric->scopeList['pipeline']  = "Pipeline";
-$lang->metric->scopeList['other']     = "Other";
 
 global $config;
 $lang->metric->objectList = array();
