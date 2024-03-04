@@ -521,6 +521,7 @@ class execution extends control
         $project     = $this->loadModel('project')->getByID($execution->project);
         $executionID = $execution->id;
         $products    = $this->product->getProducts($execution->id);
+
         if(count($products) === 1) $productID = current($products)->id;
 
         /* Set the product drop-down and search fields. */
@@ -554,9 +555,20 @@ class execution extends control
         $bugs = $this->bug->processBuildForBugs($bugs);
         $this->executionZen->assignBugVars($execution, $project, $productID, $branch, $products, $orderBy, $type, $param, $build, $bugs, $pager);
 
+        $storyIdList = $taskIdList = array();
+        foreach($bugs as $bug)
+        {
+            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
+            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
+            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
+        }
+
         $this->view->showBranch     = $showBranch;
         $this->view->productOption  = $productOption;
         $this->view->branchOption   = $branchOption;
+        $this->view->plans          = $this->loadModel('productplan')->getForProducts(array_keys($products));
+        $this->view->tasks          = $this->loadModel('task')->getPairsByIdList($taskIdList);
+        $this->view->stories        = $this->loadModel('story')->getPairsByList($storyIdList);
         $this->view->switcherParams = "executionID={$executionID}&productID={$productID}&currentMethod=bug";
         $this->view->switcherText   = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
         if(empty($project->hasProduct)) $this->config->excludeSwitcherList[] = 'execution-bug';
