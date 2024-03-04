@@ -171,13 +171,14 @@ if($canBatchAction)
 }
 
 $cols = $this->loadModel('datatable')->getSetting('bug');
-if(isset($cols['branch']))    $cols['branch']['map']    = $branchTagOption;
-if(isset($cols['project']))   $cols['project']['map']   = $projectPairs;
-if(isset($cols['execution'])) $cols['execution']['map'] = $executions;
-if(isset($cols['plan']))      $cols['plan']['map']      = $plans;
-if(isset($cols['task']))      $cols['task']['map']      = $tasks;
-if(isset($cols['toTask']))    $cols['toTask']['map']    = $tasks;
-if(isset($cols['story']))     $cols['story']['map']     = $stories;
+if(isset($cols['branch']))         $cols['branch']['map']         = array('') + $branchTagOption;
+if(isset($cols['project']))        $cols['project']['map']        = array('') + $projectPairs;
+if(isset($cols['execution']))      $cols['execution']['map']      = array('') + $executions;
+if(isset($cols['plan']))           $cols['plan']['map']           = array('') + $plans;
+if(isset($cols['task']))           $cols['task']['map']           = array('') + $tasks;
+if(isset($cols['toTask']))         $cols['toTask']['map']         = array('') + $tasks;
+if(isset($cols['story']))          $cols['story']['map']          = array('') + $stories;
+if(isset($cols['activatedCount'])) $cols['activatedCount']['map'] = array('');
 if($product->type == 'normal') unset($cols['branch']);
 foreach($cols as $colName => $col)
 {
