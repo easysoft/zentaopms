@@ -12,7 +12,7 @@ cid=1
 - 使用错误的host获取用户信息 @return null
 - 使用正确的host,错误的token获取用户信息属性message @401 Unauthorized
 - 通过host,token获取用户信息属性id @1
-- 通过host,权限不足的token获取用户信息属性error @insufficient_scope
+- 通过host,权限不足的token获取用户信息属性error @invalid_token
 
 */
 
@@ -38,4 +38,4 @@ r($result) && p('id') && e('1'); //通过host,token获取用户信息
 
 $token  = 'glpat-NqAvs1dRxHAvr2tskCZV';
 $result = $gitlab->apiGetCurrentUser($host, $token);
-r($result) && p('error') && e('insufficient_scope'); //通过host,权限不足的token获取用户信息
+r($result) && p('error') && e('invalid_token'); //通过host,权限不足的token获取用户信息
