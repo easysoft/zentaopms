@@ -78,6 +78,12 @@ if(isset($cols['module']))      $cols['module']['map']      = $modulePairs;
 if(isset($cols['branch']))      $cols['branch']['map']      = $branchOption;
 if(isset($cols['project']))     $cols['project']['map']     = $projectPairs;
 if(isset($cols['openedBuild'])) $cols['openedBuild']['map'] = $builds;
+if(isset($cols['plan']))        $cols['plan']['map']        = array('') + $plans;
+if(isset($cols['task']))        $cols['task']['map']        = array('') + $tasks;
+if(isset($cols['toTask']))      $cols['toTask']['map']      = array('') + $tasks;
+if(isset($cols['story']))       $cols['story']['map']       = array('') + $stories;
+
+if(isset($cols['activatedCount'])) $cols['activatedCount']['map'] = array('');
 
 $bugs = initTableData($bugs, $cols, $this->execution);
 
