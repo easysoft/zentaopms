@@ -189,6 +189,7 @@ formPanel
         set::control('input'),
         set::values($fields['keywords']['default'])
     ),
+    formHidden('status', 'active'),
     formHidden('type', $type)
 );
 
