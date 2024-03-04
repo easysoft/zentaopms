@@ -78,7 +78,11 @@ window.renderStoryCell = function(result, info)
     {
         let html = '';
         if(typeof modulePairs[story.moduleID] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.moduleID] + "</span> ";
-        if(story.isChild) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        if(story.parent > 0)
+        {
+            if($.cookie.get('tab') == 'execution') html += story.parentName + ' / ';
+            html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        }
         if(html) result.unshift({html});
     }
     return result;
