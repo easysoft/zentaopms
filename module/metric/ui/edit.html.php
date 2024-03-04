@@ -57,7 +57,7 @@ formPanel
             set::items($lang->metric->scopeList),
             set::value($metric->scope),
             set::required(true),
-            set::disabled($isDisabled)
+            set::disabled(true)
         ),
         formGroup
         (
@@ -67,7 +67,7 @@ formPanel
             set::items($lang->metric->objectList),
             set::value($metric->object),
             set::required(true),
-            set::disabled($isDisabled)
+            set::disabled(true)
         ),
         formGroup
         (
@@ -77,7 +77,7 @@ formPanel
             set::items($lang->metric->purposeList),
             set::value($metric->purpose),
             set::required(true),
-            set::disabled($isDisabled)
+            set::disabled(true)
         )
     ),
     formGroup
@@ -87,7 +87,8 @@ formPanel
         set::items($lang->metric->dateTypeList),
         set::value($metric->dateType),
         set::width('1/2'),
-        set::required(true)
+        set::required(true),
+        set::disabled(true)
     ),
     formGroup
     (
@@ -102,7 +103,7 @@ formPanel
         set::name('code'),
         set::value($metric->code),
         set::required(true),
-        set::disabled($isDisabled)
+        set::disabled(true)
     ),
     formRow
     (
