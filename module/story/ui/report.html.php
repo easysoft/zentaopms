@@ -29,16 +29,21 @@ detailHeader
 $reports = array();
 foreach($lang->story->report->charts as $key => $label) $reports[] = array('text' => $label, 'value' => $key);
 
-$echarts = array();
-foreach($charts as $type => $option)
+function getEcharts($charts, $datas)
 {
-    $chartData = $datas[$type];
-    $echarts[] = tableChart
-    (
-        set::type($option->type),
-        set::title($lang->story->report->charts[$type]),
-        set::datas((array)$chartData),
-    );
+    global $lang;
+    $echarts = array();
+    foreach($charts as $type => $option)
+    {
+        $chartData = $datas[$type];
+        $echarts[] = tableChart
+            (
+                set::type($option->type),
+                set::title($lang->story->report->charts[$type]),
+                set::datas((array)$chartData),
+            );
+    }
+    return $echarts;
 }
 
 $tabItems = array();
@@ -53,7 +58,7 @@ foreach($lang->report->typeList as $type => $typeName)
         set::active($type == $chartType),
         to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
         div(setClass('pb-4 pt-2'), span(setClass('text-gray'), html(str_replace('%tab%', $lang->product->unclosed . $lang->story->common, $lang->report->notice->help)))),
-        div($echarts)
+        div(getEcharts($charts, $datas))
     );
 }
 
