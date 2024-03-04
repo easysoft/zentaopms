@@ -452,6 +452,7 @@ formPanel
                         'id'      => 'private',
                         'name'    => 'private',
                         'text'    => $lang->todo->private,
+                        'value'   => !empty($todo->private) ? 'on' : '0',
                         'checked' => !empty($todo->private)
                     )
                 ),
