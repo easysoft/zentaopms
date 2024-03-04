@@ -10,9 +10,9 @@ title=测试 gitlabModel::editUser();
 timeout=0
 cid=1
 
-- 使用空的userID创建gitlab群组 @0
-- 使用错误gitlabID创建群组 @0
-- 通过gitlabID,用户对象正确更新用户名字属性name @apiUpdatedUser
+- 使用空的account更新gitlab用户第account条的0属性 @禅道用户不能为空
+- 设置了密码的情况下更新gitlab用户 @二次密码不一致！
+- 通过gitlabID,用户对象正确更新用户名字 @1
 
 */
 

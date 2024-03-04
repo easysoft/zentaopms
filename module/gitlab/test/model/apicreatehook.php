@@ -31,4 +31,4 @@ $hook->merge_requests_events = true;
 r($gitlab->apiCreateHook(0, 0, $emptyHook))             && p()          && e('0'); //使用空的gitlabID,projectID,hook对象创建GitLabhook
 r($gitlab->apiCreateHook(0, 0, $hook))                  && p()          && e('0'); //使用空的gitlabID、projectID,正确的hook对象创建GitLabhook
 r($gitlab->apiCreateHook($gitlabID, 0, $hook))          && p('message') && e('404 Project Not Found'); //使用正确的gitlabID、hook信息，错误的projectID创建hook
-r($gitlab->apiCreateHook($gitlabID, $projectID, $hook)) && p('url')     && e('http://unittest.com/api.php/v1/gitlab/webhook?repoID=1');         //通过gitlabID,projectID,hook对象正确创建GitLabhook
+r($gitlab->apiCreateHook($gitlabID, $projectID, $hook)) && p('url')     && e('http://unittest.com/api.php/v1/gitlab/webhook?repoID=1'); // 通过gitlabID,projectID,hook对象正确创建GitLabhook

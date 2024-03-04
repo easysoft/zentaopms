@@ -10,9 +10,8 @@ title=测试 gitlabModel::editProject();
 timeout=0
 cid=1
 
-- 使用空的projectID创建gitlab群组 @0
-- 使用错误gitlabID创建群组 @0
-- 通过gitlabID,用户对象正确更新项目描述属性description @apiUpdatedProject
+- 使用空的projectID创建gitlab群组第name条的0属性 @项目名称不能为空
+- 通过gitlabID,用户对象正确更新项目描述 @1
 
 */
 
