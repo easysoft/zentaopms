@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 pipelineModel->create();
+timeout=0
 cid=1
 
 - 获取添加的type属性type @Jenkins

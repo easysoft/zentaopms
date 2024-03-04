@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 pipelineModel->getPairs();
+timeout=0
 cid=1
 
 - 获取type为空的流水线信息属性1 @gitLab

@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 pipelineModel->getProviderPairsByAccount();
+timeout=0
 cid=1
 
 - 获取providerType为空、account为空的providerID @0

@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 pipelineModel->getByUrl();
+timeout=0
 cid=1
 
 - 获取url为空的流水线ID @0

@@ -70,7 +70,7 @@ class pipelineTest
      */
     public function createTest(string $type, object $object)
     {
-        $object->type = $type;
+        $object->appType = $type;
 
         $pipelineID = $this->objectModel->create($object);
 

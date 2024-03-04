@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 pipelineModel->getOpenIdByAccount();
+timeout=0
 cid=1
 
 - 获取providerID为0、providerType为空、account为空的openID @0

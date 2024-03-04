@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 pipelineModel->deleteByObject();
+timeout=0
 cid=1
 
 - 测试删除id为0的流水线 @0

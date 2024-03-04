@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 pipelineModel->getUserBindedPairs();
+timeout=0
 cid=1
 
 - 获取Id为0、type为空的用户绑定信息 @0
