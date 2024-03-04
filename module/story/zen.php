@@ -1721,7 +1721,7 @@ class storyZen extends story
     protected function getAfterChangeLocation(int $storyID, string $storyType = 'story'): string
     {
         if($this->app->tab == 'execution') return helper::createLink('execution', 'storyView', "storyID=$storyID");
-        if($this->app->tab != 'project') return helper::createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType");
+        if($this->app->tab != 'project') return helper::createLink($storyType, 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType");
 
         if($this->app->tab == 'project')
         {
