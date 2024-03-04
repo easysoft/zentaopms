@@ -3078,4 +3078,19 @@ class executionTest
         }
         return $return;
     }
+
+    /**
+     * 检查用户是否可以访问当前执行。
+     * Check whether access to the current execution is allowed or not.
+     *
+     * @param  int $executionID
+     * @param  array $executions
+     * @access public
+     * @return int
+     */
+    public function checkAccessTest(int $executionID, array $executions)
+    {
+        if(!isset($executions[$executionID])) return (int)key($executions);
+        return $this->executionModel->checkAccess($executionID, $executions);
+    }
 }
