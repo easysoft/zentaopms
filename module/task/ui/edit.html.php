@@ -135,6 +135,13 @@ detailBody
         section
         (
             set::title($lang->files),
+            $task->files ? fileList
+            (
+                set::files($task->files),
+                set::fieldset(false),
+                set::showEdit(true),
+                set::showDelete(true)
+            ) : null,
             fileSelector()
         ),
         formHidden('lastEditedDate', helper::isZeroDate($task->lastEditedDate) ? '' : $task->lastEditedDate)

@@ -100,6 +100,13 @@ detailBody
         section
         (
             set::title($lang->files),
+            $bug->files ? fileList
+            (
+                set::files($bug->files),
+                set::fieldset(false),
+                set::showEdit(true),
+                set::showDelete(true)
+            ) : null,
             fileSelector()
         ),
         section
