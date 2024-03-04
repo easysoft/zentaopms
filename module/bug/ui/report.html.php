@@ -26,17 +26,22 @@ detailHeader
 $reports = array();
 foreach($lang->bug->report->charts as $key => $label) $reports[] = array('text' => $label, 'value' => $key);
 
-$echarts = array();
-foreach($charts as $type => $option)
+function getEcharts($charts, $datas)
 {
-    $chartData = $datas[$type];
-    $echarts[] = tableChart
-    (
-        set::item('chart-' . $type),
-        set::type($option->type),
-        set::title($lang->bug->report->charts[$type]),
-        set::datas((array)$chartData)
-    );
+    global $lang;
+    $echarts = array();
+    foreach($charts as $type => $option)
+    {
+        $chartData = $datas[$type];
+        $echarts[] = tableChart
+            (
+                set::item('chart-' . $type),
+                set::type($option->type),
+                set::title($lang->bug->report->charts[$type]),
+                set::datas((array)$chartData)
+            );
+    }
+    return $echarts;
 }
 
 $tabItems = array();
@@ -51,7 +56,7 @@ foreach($lang->report->typeList as $type => $typeName)
         set::key($type),
         to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
         div(setClass('pb-4 pt-2'), span(setClass('text-gray'), html(str_replace('%tab%', $lang->bug->unclosed . $lang->bug->common, $lang->report->notice->help)))),
-        div($echarts)
+        div(getEcharts($charts, $datas))
     );
 }
 

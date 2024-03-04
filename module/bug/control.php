@@ -662,8 +662,8 @@ class bug extends control
     public function report(int $productID, string $browseType, int $branchID, int $moduleID, string $chartType = 'pie')
     {
         $this->loadModel('report');
-        $this->view->charts = array();
 
+        $charts = $datas = array();
         if(!empty($_POST))
         {
             foreach($this->post->charts as $chart)
@@ -671,8 +671,8 @@ class bug extends control
                 $chartFunc = 'getDataOf' . $chart;
                 $chartData = $this->bug->$chartFunc();
 
-                $this->view->charts[$chart] = $this->bugZen->mergeChartOption($chart, $chartType);
-                $this->view->datas[$chart]  = $this->report->computePercent($chartData);
+                $charts[$chart] = $this->bugZen->mergeChartOption($chart, $chartType);
+                $datas[$chart]  = $this->report->computePercent($chartData);
             }
         }
 
@@ -690,6 +690,8 @@ class bug extends control
         $this->view->moduleID      = $moduleID;
         $this->view->chartType     = $chartType;
         $this->view->checkedCharts = $this->post->charts ? implode(',', $this->post->charts) : '';
+        $this->view->charts        = $charts;
+        $this->view->datas         = $datas;
         $this->display();
     }
 
