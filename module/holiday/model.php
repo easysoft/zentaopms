@@ -421,7 +421,7 @@ class holidayModel extends model
     {
         /* Get holidays by file. */
         $yearFile    = $this->app->wwwRoot . 'static/json/holiday/' . $year . '.json';
-        $defaultFile = $this->app->wwwRoot . 'static/json/holiday/json/default.json';
+        $defaultFile = $this->app->wwwRoot . 'static/json/holiday/default.json';
 
         $data = file_exists($yearFile) ? file_get_contents($yearFile) : file_get_contents($defaultFile);
         $data = json_decode($data);
