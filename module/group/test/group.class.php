@@ -462,14 +462,13 @@ class groupTest
     /**
      * Update project admins.
      *
-     * @param  int    $groupID
      * @param  array  $formData
      * @access public
      * @return void
      */
-    public function updateProjectAdminTest($groupID, $formData)
+    public function updateProjectAdminTest($formData)
     {
-        $this->objectModel->updateProjectAdmin($groupID, $formData);
+        $this->objectModel->updateProjectAdmin($formData);
 
         if(dao::isError()) return dao::getError();
         return $this->getProjectAdminsTest();
