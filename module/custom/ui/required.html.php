@@ -48,7 +48,7 @@ if(common::hasPriv('custom', 'resetRequired'))
     );
 }
 
-if(!in_array($module, array('productplan', 'release', 'testsuite', 'testreport', 'caselib', 'doc')) && $config->vision == 'rnd') include 'sidebar.html.php';
+if(!in_array($module, array('productplan', 'release', 'testsuite', 'testreport', 'caselib', 'doc')) && (!in_array($module, array('project', 'execution')) || (in_array($module, array('project', 'execution')) && $config->vision == 'rnd'))) include 'sidebar.html.php';
 div
 (
     setID('mainContent'),
