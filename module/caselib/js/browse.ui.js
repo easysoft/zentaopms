@@ -41,8 +41,10 @@ window.onRenderCell = function(result, {row, col})
     {
         if(col.name == 'title')
         {
-            const data = row.data;
+            const data   = row.data;
+            const module = this.options.customData.modules[data.module];
             if(data.color) result[0].props.style = 'color: ' + data.color;
+            if(module) result.unshift({html: '<span class="label gray-pale rounded-full">' + module + '</span>'}); // 添加模块标签
         }
     }
 

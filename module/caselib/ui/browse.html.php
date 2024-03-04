@@ -150,6 +150,7 @@ dtable
 (
     set::cols($cols),
     set::data(array_values($tableData)),
+    set::customData(array('modules' => $modulePairs)),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::userMap($users),
     set::checkable($canBatchAction),
