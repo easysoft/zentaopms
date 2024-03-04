@@ -371,7 +371,7 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function getBasicInfo(object $view, string $fields = 'scope,object,purpose,code,unit,stage')
+    protected function getBasicInfo(object $view, string $fields = 'scope,object,purpose,dateType,code,unit,stage')
     {
         extract((array)$view);
 
@@ -382,6 +382,7 @@ class metricZen extends metric
         if(strpos($fields, 'scope') !== false)      $legendBasic['scope']       = array('name' => $this->lang->metric->scope, 'text' => zget($this->lang->metric->scopeList, $metric->scope));
         if(strpos($fields, 'object') !== false)     $legendBasic['object']      = array('name' => $this->lang->metric->object, 'text' => zget($this->lang->metric->objectList, $metric->object));
         if(strpos($fields, 'purpose') !== false)    $legendBasic['purpose']     = array('name' => $this->lang->metric->purpose, 'text' => zget($this->lang->metric->purposeList, $metric->purpose));
+        if(strpos($fields, 'dateType') !== false)   $legendBasic['dateType']    = array('name' => $this->lang->metric->dateType, 'text' => zget($this->lang->metric->dateTypeList, $metric->dateType));
         if(strpos($fields, 'name') !== false)       $legendBasic['name']        = array('name' => $this->lang->metric->name, 'text' => $metric->name);
         if(strpos($fields, 'code') !== false)       $legendBasic['code']        = array('name' => $this->lang->metric->code, 'text' => $metric->code);
         if(strpos($fields, 'unit') !== false)       $legendBasic['unit']        = array('name' => $this->lang->metric->unit, 'text' => $unit);
