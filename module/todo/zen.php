@@ -237,7 +237,11 @@ class todoZen extends todo
         $todos = $form->get();
         foreach($todos as $todo)
         {
-            $todo->date = $this->post->futureDate ? FUTURE_TIME : $this->post->date;
+            $account = $this->app->user->account;
+            $todo->date         = $this->post->futureDate ? FUTURE_TIME : $this->post->date;
+            $todo->account      = $account;
+            $todo->assignedBy   = $account;
+            $todo->assignedDate = helper::now();
             if(!empty($todo->switchTime))
             {
                 $todo->begin = '2400';
