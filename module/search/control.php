@@ -65,6 +65,56 @@ class search extends control
     }
 
     /**
+     * 构建旧页面搜索表单。
+     * Build old search form.
+     *
+     * @param  string $module
+     * @param  string $fields
+     * @param  array  $params
+     * @param  string $actionURL
+     * @param  int    $queryID
+     * @param  string $formName
+     * @access public
+     * @return void
+     */
+    public function buildOldForm(string $module = '', string $fields = '', string $params = '', string $actionURL = '', int $queryID = 0, string $formName = '')
+    {
+        $module       = empty($module) ? $this->session->searchParams['module'] : $module;
+        $searchParams = $module . 'searchParams';
+        $searchForm   = $module . 'Form';
+
+        $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
+        $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
+
+        $_SESSION['searchParams']['module'] = $module;
+        if(empty($_SESSION[$searchForm])) $this->search->initOldSession($module, $fields, $params);
+
+        if(in_array($module, $this->config->search->searchObject) && $this->session->objectName)
+        {
+            $space = common::checkNotCN() ? ' ' : '';
+            $this->lang->search->common = $this->lang->search->common . $space . $this->session->objectName;
+        }
+
+        $this->view->module       = $module;
+        $this->view->groupItems   = $this->config->search->groupItems;
+        $this->view->actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
+        $this->view->searchFields = $fields;
+        $this->view->fields       = $fields;
+        $this->view->fieldParams  = $this->searchZen->setDefaultParams($fields, $params);
+        $this->view->queries      = $this->search->getQueryList($module);
+        $this->view->queryID      = (empty($module) && empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
+        $this->view->style        = !empty($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : 'full';
+        $this->view->onMenuBar    = !empty($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : 'no';
+        $this->view->formSession  = $_SESSION[$module . 'Form'];
+        $this->view->formName     = $formName;
+
+        if($module == 'program') $this->view->options = $this->searchZen->setOptions($fields, $this->view->fieldParams, $this->view->queries);
+
+        $this->app->loadModuleConfig('action');
+        $this->display();
+    }
+
+    /**
      * 构建搜索查询。
      * Build search query.
      *
@@ -103,6 +153,35 @@ class search extends control
     }
 
     /**
+     * Build query
+     *
+     * @access public
+     * @return void
+     */
+    public function buildOldQuery()
+    {
+        $this->search->buildOldQuery();
+
+        $actionURL = $this->post->actionURL;
+        $parsedURL = parse_url($actionURL);
+        if(isset($parsedURL['host'])) return;
+        if($this->config->requestType != 'GET')
+        {
+            $path = $parsedURL['path'];
+            $path = str_replace($this->config->webRoot, '', $path);
+            if(strpos($path, '.') !== false) $path = substr($path, 0, strpos($path, '.'));
+            if(preg_match("/^\w+{$this->config->requestFix}\w+/", $path) == 0) return;
+        }
+        else
+        {
+            $query = $parsedURL['query'];
+            if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) return;
+        }
+
+        echo js::locate($actionURL, 'parent');
+    }
+
+    /**
      * 保存搜索查询。
      * Save search query.
      *
@@ -134,6 +213,32 @@ class search extends control
     }
 
     /**
+     * Save old search query.
+     *
+     * @param  string $module
+     * @param  string $onMenuBar
+     * @access public
+     * @return void
+     */
+    public function saveOldQuery(string $module, string $onMenuBar = 'no')
+    {
+        if($_POST)
+        {
+            $queryID = $this->search->saveQuery();
+            if(!$queryID) return print(js::error(dao::getError()));
+
+            $data     = fixer::input('post')->get();
+            $shortcut = empty($data->onMenuBar) ? 0 : 1;
+
+            return print(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID, $shortcut, '{$data->title}')}"));
+        }
+
+        $this->view->module    = $module;
+        $this->view->onMenuBar = $onMenuBar;
+        $this->display();
+    }
+
+    /**
      * 删除搜索查询。
      * Delete current search query.
      *
@@ -146,6 +251,29 @@ class search extends control
         $this->search->deleteQuery($queryID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'load' => true));
+    }
+
+    /**
+     * Ajax get search query.
+     *
+     * @param  string $module
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetQuery($module = '', $queryID = 0)
+    {
+        $query   = $queryID ? $queryID : '';
+        $module  = empty($module) ? $this->session->searchParams['module'] : $module;
+        $queries = $this->search->getQueryList($module);
+        $html = '';
+        foreach($queries as $query)
+        {
+            if(empty($query->id)) continue;
+
+            $html .= '<li>' . html::a("javascript:executeQuery({$query->id})", $query->title . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$query->id' title='{$query->title}'") . '</li>';
+        }
+        echo $html;
     }
 
     /**

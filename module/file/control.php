@@ -32,6 +32,16 @@ class file extends control
         $this->display();
     }
 
+    /**
+     * Build the old upload form.
+     *
+     * @param  int    $fileCount
+     * @param  float  $percent
+     * @param  string $filesName
+     * @param  string $labelsName
+     * @access public
+     * @return void
+     */
     public function buildOldForm(int $fileCount = 1, float $percent = 0.9, string $filesName = "files", string $labelsName = "labels")
     {
         if(!file_exists($this->file->savePath)) return printf($this->lang->file->errorNotExists, $this->file->savePath);
