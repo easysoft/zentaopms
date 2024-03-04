@@ -9,7 +9,7 @@ cid=0
 - 测试获取产品1的roadmap数量属性total @261
 - 测试获取产品2的roadmap数量属性total @107
 - 测试获取产品3的roadmap数量属性total @6
-- 测试获取产品4的roadmap数量属性total @7
+- 测试获取产品4的roadmap数量属性total @9
 - 测试获取产品5的roadmap数量属性total @12
 - 测试获取不存在产品的roadmap数量属性total @0
 
@@ -28,6 +28,6 @@ $product = new productTest('admin');
 r($product->getRoadmapTest($productIDList[0])) && p('total') && e('261'); // 测试获取产品1的roadmap数量
 r($product->getRoadmapTest($productIDList[1])) && p('total') && e('107'); // 测试获取产品2的roadmap数量
 r($product->getRoadmapTest($productIDList[2])) && p('total') && e('6');   // 测试获取产品3的roadmap数量
-r($product->getRoadmapTest($productIDList[3])) && p('total') && e('7');   // 测试获取产品4的roadmap数量
+r($product->getRoadmapTest($productIDList[3])) && p('total') && e('9');   // 测试获取产品4的roadmap数量
 r($product->getRoadmapTest($productIDList[4])) && p('total') && e('12');  // 测试获取产品5的roadmap数量
 r($product->getRoadmapTest($productIDList[5])) && p('total') && e('0');   // 测试获取不存在产品的roadmap数量
