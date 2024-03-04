@@ -23,3 +23,6 @@ $lang->projectbuild->batchUnlink      = 'Batch Unlink';
 $lang->projectbuild->batchUnlinkStory = "Batch Unlink {$lang->SRCommon}";
 $lang->projectbuild->batchUnlinkBug   = 'Batch Unlink Bug';
 $lang->projectbuild->name             = 'Name';
+$lang->build->scmPath                 = 'SCM Path';
+$lang->build->filePath                = 'File Path';
+$lang->build->desc                    = 'Description';
