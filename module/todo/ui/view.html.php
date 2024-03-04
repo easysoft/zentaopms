@@ -249,7 +249,7 @@ $fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, 
     /* The status is 'done' or 'closed' without more action buttons. */
     if($status == 'done' || $status == 'closed') return $actionList;
 
-    $actionList['main'][] = array('icon' => 'checked', 'url' => createLink('todo', 'finish', "todoID={$todo->id}"), 'text' => $lang->todo->abbr->finish);
+    $actionList['main'][] = array('icon' => 'checked', 'url' => createLink('todo', 'finish', "todoID={$todo->id}"), 'text' => $lang->todo->abbr->finish, 'class' => 'ajax-submit');
 
     $canCreateStory = hasPriv('story', 'create');
     $canCreateTask  = hasPriv('task',  'create');

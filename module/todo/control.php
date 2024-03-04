@@ -402,7 +402,7 @@ class todo extends control
             return $this->send(array('status' => 'success'));
         }
         if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
+        return $this->sendSuccess(array('load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo'), 'closeModal' => true));
     }
 
     /**
