@@ -6,14 +6,14 @@ title=测试 holidayModel->updateProgramPlanDuration();
 cid=1
 
 - 测试插入id为 10 的节假日时迭代 11 项目的planDuration @250
-- 测试插入id为 10 的节假日时迭代 60 项目的planDuration @211
-- 测试插入id为 10 的节假日时迭代 101 项目的planDuration @168
+- 测试插入id为 10 的节假日时迭代 60 项目的planDuration @252
+- 测试插入id为 10 的节假日时迭代 101 项目的planDuration @191
 - 测试插入id为 5 的节假日时迭代 11 项目的planDuration @250
-- 测试插入id为 5 的节假日时迭代 60 项目的planDuration @211
-- 测试插入id为 5 的节假日时迭代 101 项目的planDuration @168
+- 测试插入id为 5 的节假日时迭代 60 项目的planDuration @252
+- 测试插入id为 5 的节假日时迭代 101 项目的planDuration @191
 - 测试插入id为 5 的节假日时迭代 11 项目的planDuration @250
-- 测试插入id为 5 的节假日时迭代 60 项目的planDuration @211
-- 测试插入id为 5 的节假日时迭代 101 项目的planDuration @168
+- 测试插入id为 5 的节假日时迭代 60 项目的planDuration @252
+- 测试插入id为 5 的节假日时迭代 101 项目的planDuration @191
 
 */
 declare(strict_types=1);
@@ -33,13 +33,13 @@ $updateDuration = array(true, false);
 $holiday = new holidayTest();
 
 r($holiday->updateProgramPlanDurationTest($projectIdList[0], $holidayIdList[0], $updateDuration[0])) && p() && e('250'); //测试插入id为 10 的节假日时迭代 11 项目的planDuration
-r($holiday->updateProgramPlanDurationTest($projectIdList[1], $holidayIdList[0], $updateDuration[1])) && p() && e('211'); //测试插入id为 10 的节假日时迭代 60 项目的planDuration
-r($holiday->updateProgramPlanDurationTest($projectIdList[2], $holidayIdList[0], $updateDuration[1])) && p() && e('168'); //测试插入id为 10 的节假日时迭代 101 项目的planDuration
+r($holiday->updateProgramPlanDurationTest($projectIdList[1], $holidayIdList[0], $updateDuration[1])) && p() && e('252'); //测试插入id为 10 的节假日时迭代 60 项目的planDuration
+r($holiday->updateProgramPlanDurationTest($projectIdList[2], $holidayIdList[0], $updateDuration[1])) && p() && e('191'); //测试插入id为 10 的节假日时迭代 101 项目的planDuration
 
 r($holiday->updateProgramPlanDurationTest($projectIdList[0], $holidayIdList[1], $updateDuration[0])) && p() && e('250'); //测试插入id为 5 的节假日时迭代 11 项目的planDuration
-r($holiday->updateProgramPlanDurationTest($projectIdList[1], $holidayIdList[1], $updateDuration[1])) && p() && e('211'); //测试插入id为 5 的节假日时迭代 60 项目的planDuration
-r($holiday->updateProgramPlanDurationTest($projectIdList[2], $holidayIdList[1], $updateDuration[1])) && p() && e('168'); //测试插入id为 5 的节假日时迭代 101 项目的planDuration
+r($holiday->updateProgramPlanDurationTest($projectIdList[1], $holidayIdList[1], $updateDuration[1])) && p() && e('252'); //测试插入id为 5 的节假日时迭代 60 项目的planDuration
+r($holiday->updateProgramPlanDurationTest($projectIdList[2], $holidayIdList[1], $updateDuration[1])) && p() && e('191'); //测试插入id为 5 的节假日时迭代 101 项目的planDuration
 
 r($holiday->updateProgramPlanDurationTest($projectIdList[0], $holidayIdList[2], $updateDuration[0])) && p() && e('250'); //测试插入id为 5 的节假日时迭代 11 项目的planDuration
-r($holiday->updateProgramPlanDurationTest($projectIdList[1], $holidayIdList[2], $updateDuration[1])) && p() && e('211'); //测试插入id为 5 的节假日时迭代 60 项目的planDuration
-r($holiday->updateProgramPlanDurationTest($projectIdList[2], $holidayIdList[2], $updateDuration[1])) && p() && e('168'); //测试插入id为 5 的节假日时迭代 101 项目的planDuration
+r($holiday->updateProgramPlanDurationTest($projectIdList[1], $holidayIdList[2], $updateDuration[1])) && p() && e('252'); //测试插入id为 5 的节假日时迭代 60 项目的planDuration
+r($holiday->updateProgramPlanDurationTest($projectIdList[2], $holidayIdList[2], $updateDuration[1])) && p() && e('191'); //测试插入id为 5 的节假日时迭代 101 项目的planDuration
