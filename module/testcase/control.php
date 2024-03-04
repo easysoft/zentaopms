@@ -96,7 +96,7 @@ class testcase extends control
         $branch     = $this->testcaseZen->getBrowseBranch($branch);
         $browseType = strtolower($browseType);
         $moduleID   = $browseType == 'bymodule' ? $param : 0;
-        $suiteID    = $browseType == 'bysuite'  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
+        $suiteID    = $browseType == 'bysuite'  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? (int)$this->cookie->caseSuite : 0) : 0);
         $queryID    = $browseType == 'bysearch' ? $param : 0;
 
         $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, (string)$param);
