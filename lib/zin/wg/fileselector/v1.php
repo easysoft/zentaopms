@@ -54,8 +54,8 @@ class fileSelector extends wg
         {
             $maxFileSize  = ini_get('upload_max_filesize');
             $lastChar     = substr($maxFileSize, -1);
-            $fileSizeUnit = array('K' => 'KB', 'M' => 'MB', 'G' => 'GB', 'T' => 'TB');
-            if(isset($fileSizeUnit[$lastChar])) $maxFileSize = str_replace(array_keys($fileSizeUnit), array_values($fileSizeUnit), $maxFileSize);
+            $fileSizeUnit = array('K', 'M', 'G', 'T');
+            if(in_array($lastChar, $fileSizeUnit)) $maxFileSize .= 'B';
             $this->setProp('maxFileSize', $maxFileSize);
         }
         if(!$this->hasProp('tip'))
