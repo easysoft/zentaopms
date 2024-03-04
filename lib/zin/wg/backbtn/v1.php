@@ -71,7 +71,7 @@ class backBtn extends btn
             'zanode'         => 'zanode-browse,zanode-view',
             'zahost'         => 'zahost-browse,zahost-view',
             'stakeholder'    => 'stakeholder-browse',
-            'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index'
+            'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution'
         );
 
         $props = parent::getProps();
