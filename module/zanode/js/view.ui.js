@@ -154,7 +154,7 @@ function pwdCopy()
 
 function pwdShow()
 {
-    var pwd     = $('#pwd-copy').text();
+    var pwd     = $('#pwd-copy').val();
     var pwdStar = "******".padEnd(pwd.length, '*')
     var html    = $('.btn-pwd-show').html()
     if(html.indexOf('icon-eye-off') != -1)
