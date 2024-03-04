@@ -83,7 +83,7 @@ formPanel
     formRow
     (
         ($config->inContainer || $config->inQuickon) ? setClass('hidden') : setClass('hide-service'),
-        set::style(array('display' => $server->type == 'gitlab' ? 'none' : 'flex')),
+        set::style(array('display' => $server && $server->type == 'gitlab' ? 'none' : 'flex')),
         formGroup
         (
             set::width('1/2'),

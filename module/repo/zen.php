@@ -421,6 +421,7 @@ class repoZen extends repo
             $serverID   = array_keys($serviceHosts)[0];
             $repoGroups = $this->repo->getGroups($serverID);
             $server     = $this->loadModel('pipeline')->getByID($serverID);
+            $this->view->server = $server;
         }
 
         $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
@@ -432,7 +433,6 @@ class repoZen extends repo
         $this->view->serviceHosts    = $serviceHosts;
         $this->view->repoGroups      = $repoGroups;
         $this->view->objectID        = $objectID;
-        $this->view->server          = $server;
 
         $this->display();
     }
