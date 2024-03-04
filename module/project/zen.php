@@ -1550,6 +1550,7 @@ class projectZen extends project
             $project->model  = zget($this->lang->project->modelList, $project->model);
             $project->budget = $project->budget != 0 ? $projectBudget . zget($this->lang->project->unitList, $project->budgetUnit) : $this->lang->project->future;
             $project->parent = $project->parentName;
+            $project->end    = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
 
             $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
             $project->linkedProducts = implode('，', $linkedProducts);
