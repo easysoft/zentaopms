@@ -49,7 +49,7 @@ class searchTao extends searchModel
                 $value = zget($formField, 'value', '');
 
                 if(empty($field)) continue;
-                if($value) $fieldValues[$formField->field][$value] = $value;
+                if($value) $fieldValues[$field][$value] = $value;
             }
         }
 

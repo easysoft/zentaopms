@@ -49,7 +49,7 @@ class searchModel extends model
     public function buildQuery()
     {
         /* Init vars. */
-        $module       = $this->session->searchParams['module'];
+        $module       = $this->post->module;
         $searchParams = $module . 'searchParams';
         $searchFields = json_decode($_SESSION[$searchParams]['searchFields']);
         $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
@@ -113,7 +113,7 @@ class searchModel extends model
         $where        = '';
         $groupItems   = $this->config->search->groupItems;
         $groupAndOr   = strtoupper($this->post->groupAndOr);
-        $module       = $this->session->searchParams['module'];
+        $module       = $this->post->module;
         $searchParams = $module . 'searchParams';
         $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
         $scoreNum     = 0;
