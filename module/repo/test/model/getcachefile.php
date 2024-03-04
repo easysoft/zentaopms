@@ -10,7 +10,7 @@ title=测试 repoModel->getCacheFile();
 timeout=0
 cid=1
 
-- 执行repo模块的getCacheFileTest方法  @
+- 测试生成缓存文件 @1
 
 */
 
