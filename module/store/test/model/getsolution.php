@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 storeModel->getSolution().
+timeout=0
 cid=1
 
 - 测试查询devops解决方案

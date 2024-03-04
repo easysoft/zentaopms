@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 storeModel->getAppMapByNames().
+timeout=0
 cid=1
 
 - 测试传入查询名称为空 @0

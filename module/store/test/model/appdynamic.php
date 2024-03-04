@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 storeModel->appDynamic().
+timeout=0
 cid=1
 
 - 测试获取应用动态第一页信息 @Success
