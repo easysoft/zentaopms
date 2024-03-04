@@ -23,3 +23,6 @@ $lang->projectbuild->batchUnlink      = '批量移除';
 $lang->projectbuild->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->projectbuild->batchUnlinkBug   = '批量移除Bug';
 $lang->projectbuild->name             = '名称编号';
+$lang->projectbuild->scmPath          = '源代码地址';
+$lang->projectbuild->filePath         = '下载地址';
+$lang->projectbuild->desc             = '描述';
