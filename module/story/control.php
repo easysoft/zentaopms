@@ -1048,7 +1048,15 @@ class story extends control
         if(!empty($_POST['storyIdList'])) $storyIdList = $this->post->storyIdList;
         if(is_string($storyIdList))       $storyIdList = array_filter(explode(',', $storyIdList));
         $storyIdList = array_unique($storyIdList);
-        $plans       = $this->loadModel('productplan')->getPlansByStories($storyIdList);
+
+        foreach($storyIdList as $index => $storyID)
+        {
+            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+            /* Process selected child story ID. */
+            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+        }
+
+        $plans = $this->loadModel('productplan')->getPlansByStories($storyIdList);
         if(empty($confirm))
         {
             $stories             = $this->story->getByList($storyIdList);
