@@ -10,8 +10,7 @@ title=instanceModel->countOldDomain();
 timeout=0
 cid=1
 
-- 查看获取到的所有服务的数量 @1
-- 查看获取到的所有服务的数量 @1
+- 查看获取到的所有服务的数量 @5
 
 */
 
