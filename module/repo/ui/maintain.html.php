@@ -62,7 +62,7 @@ $queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&rec
 
 toolBar
 (
-    hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array
+    hasPriv('repo', 'createRepo') && $gitlabPairs ? item(set($createRepoItem + array
     (
         'icon'  => 'plus',
         'class' => 'btn primary'
