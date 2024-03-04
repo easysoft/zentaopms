@@ -189,7 +189,7 @@ class searchTao extends searchModel
             }
             elseif($field == 'scene')
             {
-                $allScenes = $value === '0' ? array() : ($value === '' ? array(0) : $this->loadModel('testcase')->getAllChildId($value));
+                $allScenes = $value === '0' ? array() : ($value === '' ? array(0) : $this->loadModel('testcase')->getAllChildId((int)$value));
                 if(count($allScenes)) $condition = helper::dbIN($allScenes);
             }
             else
