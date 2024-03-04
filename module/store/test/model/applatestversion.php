@@ -1,13 +1,15 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 storeModel->appLatestVersion().
+timeout=0
 cid=1
 
 - 测试传入ID为0 @0
-- 测试获取禅道开源版的最新版本第2023.12.2801条的app_version属性 @18.10
+- 测试获取禅道开源版的目前最新版本第2023.12.2801条的app_version属性 @18.10
 
 */
 

@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 storeModel->getAppInfo().
+timeout=0
 cid=1
 
 - 测试ID为0 @0
@@ -37,4 +39,3 @@ r($store->getAppInfoTest($appIdList[2], $analysis[1], $name[0], $version[0], $ch
 r($store->getAppInfoTest($appIdList[2], $analysis[0], $name[1], $version[0], $channel[0])) && p('id') && e('70'); //测试传参name为禅道
 r($store->getAppInfoTest($appIdList[2], $analysis[0], $name[0], $version[1], $channel[0])) && p('id') && e('70'); //测试传参version为1
 r($store->getAppInfoTest($appIdList[2], $analysis[0], $name[0], $version[0], $channel[1])) && p('id') && e('70'); //测试传参channel为stable
-
