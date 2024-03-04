@@ -595,6 +595,7 @@ $lang->navGroup->product         = 'product';
 $lang->navGroup->productplan     = 'product';
 $lang->navGroup->release         = 'product';
 $lang->navGroup->branch          = 'product';
+$lang->navGroup->epic            = 'product';
 $lang->navGroup->story           = 'product';
 $lang->navGroup->requirement     = 'product';
 $lang->navGroup->productsettings = 'product';
