@@ -18,6 +18,7 @@ class moduleMenu extends wg
         'showDisplay?: bool=true',
         'allText?: string',
         'title?: string',
+        'titleShow?: bool=true',
         'app?: string=""',
         'checkbox?: bool',
         'checkOnClick?: bool|string',

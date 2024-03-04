@@ -23,7 +23,6 @@ $fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
 
     return dropmenu
     (
-        set::_className('scope-menu btn'),
         set::defaultValue($scope),
         set::text($scopeText),
         set::caret(false),
@@ -35,7 +34,6 @@ $fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
 
 featureBar
 (
-    to::before($fnGenerateScopeMenu($scope, $scopeText, $scopeList)),
     set::current($stage),
     set::linkParams("scope=$scope&status={key}&param=$param&type=$type"),
     li(searchToggle(set::open($type == 'bysearch'), set::module('metric')))
@@ -66,13 +64,15 @@ toolbar
 
 sidebar
 (
-    moduleMenu(set(array
+    moduleMenu
     (
-        'modules'   => $metricTree,
-        'activeKey' => $type == 'byTree' ? $param : 0,
-        'closeLink' => $closeLink,
-        'showDisplay' => false
-    )))
+        to::before(div(setClass('bg-canvas'), $fnGenerateScopeMenu($scope, $scopeText, $scopeList))),
+        set::titleShow(false),
+        set::modules($metricTree),
+        set::activeKey($type == 'byTree' ? $param : 0),
+        set::closeLink($closeLink),
+        set::showDisplay(false)
+    )
 );
 
 $tableData = initTableData($metrics, $this->config->metric->dtable->definition->fieldList, $this->loadModel('metric'));
