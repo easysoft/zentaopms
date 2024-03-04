@@ -371,7 +371,7 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function getBasicInfo(object $view, string $fields = 'scope,object,purpose,dateType,code,unit,stage')
+    protected function getBasicInfo(object $view, string $fields = 'scope,object,purpose,dateType,name,alias,code,unit,stage')
     {
         extract((array)$view);
 
@@ -384,6 +384,7 @@ class metricZen extends metric
         if(strpos($fields, 'purpose') !== false)    $legendBasic['purpose']     = array('name' => $this->lang->metric->purpose, 'text' => zget($this->lang->metric->purposeList, $metric->purpose));
         if(strpos($fields, 'dateType') !== false)   $legendBasic['dateType']    = array('name' => $this->lang->metric->dateType, 'text' => zget($this->lang->metric->dateTypeList, $metric->dateType));
         if(strpos($fields, 'name') !== false)       $legendBasic['name']        = array('name' => $this->lang->metric->name, 'text' => $metric->name);
+        if(strpos($fields, 'alias') !== false)      $legendBasic['alias']       = array('name' => $this->lang->metric->alias, 'text' => $metric->alias);
         if(strpos($fields, 'code') !== false)       $legendBasic['code']        = array('name' => $this->lang->metric->code, 'text' => $metric->code);
         if(strpos($fields, 'unit') !== false)       $legendBasic['unit']        = array('name' => $this->lang->metric->unit, 'text' => $unit);
         if($isOldMetric)

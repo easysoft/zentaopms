@@ -99,6 +99,14 @@ formPanel
     ),
     formGroup
     (
+        set::label($lang->metric->alias),
+        set::name('alias'),
+        set::value($metric->alias),
+        set::required(false),
+        set::placeholder($lang->metric->aliasTip)
+    ),
+    formGroup
+    (
         set::label($lang->metric->code),
         set::name('code'),
         set::value($metric->code),

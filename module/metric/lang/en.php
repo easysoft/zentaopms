@@ -7,6 +7,7 @@ $lang->metric->object        = "Object";
 $lang->metric->purpose       = "Purpose";
 $lang->metric->dateType      = "Date Type";
 $lang->metric->unit          = "Unit";
+$lang->metric->alias         = "Abbreviation";
 $lang->metric->code          = "Metric Code";
 $lang->metric->desc          = "Description";
 $lang->metric->formula       = "Formula";
@@ -114,6 +115,7 @@ $lang->metric->viewType->multiple = 'Multiple view';
 
 $lang->metric->descTip            = 'Enter the meaning, purpose, and impact of the metric';
 $lang->metric->definitionTip      = 'Enter the calculation rules and filtering conditions of the metric';
+$lang->metric->aliasTip           = 'This metric will be displayed with its abbreviation on the metric library';
 $lang->metric->collectConfText    = "%s %s %s";
 $lang->metric->emptyCollect       = 'There are no collect metrics at this time.';
 $lang->metric->moveFailTip        = 'Move metric file failed';
