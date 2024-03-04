@@ -1049,6 +1049,8 @@ class testcase extends control
             /* 获取上传的文件。 */
             /* Get file. */
             $file = $this->loadModel('file')->getUpload('file');
+            if(empty($file[0])) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
+
             $file = $file[0];
 
             /* 移动上传的文件。 */
@@ -1085,7 +1087,7 @@ class testcase extends control
 
             $this->session->set('fileImport', $fileName);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => inlink('showImport', "productID={$productID}&branch={$branch}"), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'load' => inlink('showImport', "productID={$productID}&branch={$branch}"), 'closeModal' => true));
         }
 
         $this->display();
