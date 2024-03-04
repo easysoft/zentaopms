@@ -62,15 +62,15 @@ class admin extends control
             $lastSyncDate = !empty($this->config->zentaoWebsite->lastSyncDate) ? $this->config->zentaoWebsite->lastSyncDate : '';
             $nextWeek     = date('Y-m-d', strtotime('-7 days'));
 
-            if(empty($lastSyncDate) || $lastSyncDate <= $nextWeek)
-            {
-                $this->adminZen->syncExtensions('plugin', 6);
-                $this->adminZen->syncExtensions('patch', 5);
-                $this->adminZen->syncDynamics(3);
-                $this->adminZen->syncPublicClasses(3);
+            $needSync   = empty($lastSyncDate) || $lastSyncDate <= $nextWeek;
+            $zentaoData = $this->adminZen->getZentaoData();
 
-                $this->loadModel('setting')->setItem('system.common.zentaoWebsite.lastSyncDate', date('Y-m-d'));
-            }
+            if($needSync || empty($zentaoData->plugins))  $this->adminZen->syncExtensions('plugin', 6);
+            if($needSync || empty($zentaoData->patches))  $this->adminZen->syncExtensions('patch', 5);
+            if($needSync || empty($zentaoData->dynamics)) $this->adminZen->syncDynamics(3);
+            if($needSync || empty($zentaoData->classes))  $this->adminZen->syncPublicClasses(3);
+
+            if($needSync) $this->loadModel('setting')->setItem('system.common.zentaoWebsite.lastSyncDate', date('Y-m-d'));
         }
 
         return $this->send(array('result' => 'success'));
