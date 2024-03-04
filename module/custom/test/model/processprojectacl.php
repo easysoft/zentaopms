@@ -28,5 +28,5 @@ su('admin');
 $projects = array(11, 60);
 
 $customTester = new customTest();
-r($customTester->processProjectAclTest($projects[0])) && p('id;acl;whitelist', ';') && e('11;private;,admin,user4'); // 处理项目权限为继承项目集的项目权限
-r($customTester->processProjectAclTest($projects[1])) && p('id;acl;whitelist', ';') && e('60;private;,user1,user3'); // 处理项目权限为继承项目集的项目权限
+r($customTester->processProjectAclTest($projects[0])) && p('id;acl;whitelist', ';') && e('11;private;admin,user4'); // 处理项目权限为继承项目集的项目权限
+r($customTester->processProjectAclTest($projects[1])) && p('id;acl;whitelist', ';') && e('60;private;user1,user3'); // 处理项目权限为继承项目集的项目权限
