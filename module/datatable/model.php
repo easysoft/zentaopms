@@ -96,45 +96,56 @@ class datatableModel extends model
         if(!isset($this->config->$module)) $this->loadModel($module);
         if(isset($this->config->datatable->$datatableId->cols)) $setting = json_decode($this->config->datatable->$datatableId->cols, true);
 
-        $fieldList = $this->getFieldList($module, $method);
-        if(empty($setting))
+        $fieldList    = $this->getFieldList($module, $method);
+        $fieldSetting = array();
+        foreach($fieldList as $field => $fieldConfig)
         {
-            $setting = $this->formatFields($module, $fieldList, !$showAll);
+            if(isset($setting[$field]))
+            {
+                $fieldSetting[$field] = $setting[$field];
+                continue;
+            }
+            $fieldSetting[$field] = $fieldConfig;
+        }
+
+        if(empty($fieldSetting))
+        {
+            $fieldSetting = $this->formatFields($module, $fieldList, !$showAll);
         }
         else
         {
-            foreach($setting as $field => $set)
+            foreach($fieldSetting as $field => $set)
             {
                 if(isset($fieldList[$field]))
                 {
                     foreach($fieldList[$field] as $key => $value)
                     {
-                        if(!isset($set[$key])) $setting[$field][$key] = $value;
+                        if(!isset($set[$key])) $fieldSetting[$field][$key] = $value;
                     }
                 }
 
                 if(!$showAll && empty($set['required']) && empty($set['show']))
                 {
-                    unset($setting[$field]);
+                    unset($fieldSetting[$field]);
                     continue;
                 }
 
                 if($this->session->currentProductType === 'normal' && in_array($field, array('branch', 'branchName')))
                 {
-                    unset($setting[$field]);
+                    unset($fieldSetting[$field]);
                     continue;
                 }
 
-                if(!isset($set['name'])) $setting[$field]['name'] = $field;
-                if($module == 'testcase' && $field == 'id') $setting[$field]['name'] = 'caseID';
-                if($field == 'actions' && empty($setting[$field]['width'])) $setting[$field]['width'] = $fieldList[$field]['width'];
-                if(in_array($module, array('product', 'project', 'execution')) and empty($this->config->setCode)) unset($setting['code']);
+                if(!isset($set['name'])) $fieldSetting[$field]['name'] = $field;
+                if($module == 'testcase' && $field == 'id') $fieldSetting[$field]['name'] = 'caseID';
+                if($field == 'actions' && empty($fieldSetting[$field]['width'])) $fieldSetting[$field]['width'] = $fieldList[$field]['width'];
+                if(in_array($module, array('product', 'project', 'execution')) and empty($this->config->setCode)) unset($fieldSetting['code']);
             }
         }
 
-        uasort($setting, array('datatableModel', 'sortCols'));
+        uasort($fieldSetting, array('datatableModel', 'sortCols'));
 
-        return $setting;
+        return $fieldSetting;
     }
 
     /**
