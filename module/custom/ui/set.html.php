@@ -49,7 +49,7 @@ if($module == 'project' && $field == 'unitList')
     );
     $actionWidth = 'w-full';
 }
-elseif(in_array($module, array('story', 'requirement')) && $field == 'reviewRules')
+elseif(in_array($module, array('story', 'requirement', 'epic')) && $field == 'reviewRules')
 {
     $formItems[] = formGroup
     (
@@ -71,7 +71,7 @@ elseif(in_array($module, array('story', 'requirement')) && $field == 'reviewRule
         set::items($users)
     );
 }
-elseif(in_array($module, array('story', 'requirement', 'testcase')) && $field == 'review')
+elseif(in_array($module, array('epic', 'story', 'requirement', 'testcase')) && $field == 'review')
 {
     $formItems[] = formGroup
     (
@@ -84,7 +84,7 @@ elseif(in_array($module, array('story', 'requirement', 'testcase')) && $field ==
         on::change('changeReview')
     );
 
-    if(in_array($module, array('story', 'requirement')))
+    if(in_array($module, array('story', 'requirement', 'epic')))
     {
         $formItems[] = formRow
         (

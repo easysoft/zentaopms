@@ -1,5 +1,6 @@
 <?php
 $config->custom = new stdClass();
+$config->custom->canAdd['epic']        = 'reasonList,sourceList,priList,categoryList';
 $config->custom->canAdd['story']       = 'reasonList,sourceList,priList,categoryList';
 $config->custom->canAdd['requirement'] = 'reasonList,sourceList,priList,categoryList';
 $config->custom->canAdd['task']        = 'priList,typeList,reasonList';
@@ -14,10 +15,11 @@ $config->custom->canAdd['project']     = 'unitList';
 $config->custom->noModuleMenu = array();
 
 $config->custom->requiredModules[5]  = 'product';
-$config->custom->requiredModules[10] = 'requirement';
-$config->custom->requiredModules[15] = 'story';
-$config->custom->requiredModules[20] = 'productplan';
-$config->custom->requiredModules[25] = 'release';
+$config->custom->requiredModules[10] = 'epic';
+$config->custom->requiredModules[15] = 'requirement';
+$config->custom->requiredModules[20] = 'story';
+$config->custom->requiredModules[25] = 'productplan';
+$config->custom->requiredModules[30] = 'release';
 
 $config->custom->requiredModules[30] = 'project';
 $config->custom->requiredModules[35] = 'execution';
@@ -43,6 +45,10 @@ $config->custom->fieldList['project']['create']      = 'budget,PM,desc';
 $config->custom->fieldList['project']['edit']        = 'budget,PM,desc';
 $config->custom->fieldList['product']['create']      = 'PO,QD,RD,type,desc';
 $config->custom->fieldList['product']['edit']        = 'PO,QD,RD,type,desc,status';
+$config->custom->fieldList['epic']['create']         = 'module,source,pri,estimate,keywords,spec,verify';
+$config->custom->fieldList['epic']['change']         = 'comment,spec,verify';
+$config->custom->fieldList['epic']['close']          = 'comment';
+$config->custom->fieldList['epic']['review']         = 'reviewedDate,comment';
 $config->custom->fieldList['story']['create']        = 'module,plan,source,pri,estimate,keywords,spec,verify';
 $config->custom->fieldList['story']['change']        = 'comment,spec,verify';
 $config->custom->fieldList['story']['close']         = 'comment';

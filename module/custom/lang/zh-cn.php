@@ -123,6 +123,7 @@ $lang->custom->story->fields['reviewRules']      = '评审规则';
 $lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['review']           = '评审流程';
 
+$lang->custom->epic        = clone $lang->custom->story;
 $lang->custom->requirement = clone $lang->custom->story;
 unset($lang->custom->requirement->fields['stageList']);
 
