@@ -1387,14 +1387,15 @@ class testcase extends control
      * Ajax get module scenes.
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch
      * @param  int    $moduleID
      * @param  int    $sceneID
      * @access public
      * @return void
      */
-    public function ajaxGetScenes(int $productID, int $branch = 0, int $moduleID = 0, int $sceneID = 0)
+    public function ajaxGetScenes(int $productID, string $branch = 'all', int $moduleID = 0, int $sceneID = 0)
     {
+        if(empty($branch)) $branch = 'all';
         $optionMenu = $this->testcase->getSceneMenu($productID, $moduleID, $branch, 0, $sceneID);
 
         $items = array();
