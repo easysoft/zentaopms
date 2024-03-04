@@ -79,7 +79,7 @@ class context extends \zin\utils\dataset
             'globalRenderList'    => $this->globalRenderList,
             'globalRenderLevel'   => $this->globalRenderLevel,
             'rendered'            => $this->rendered,
-            'rawContentCalled'    => $this->rawContentCalled,
+            'rawContentCalled'    => $this->rawContentCalled
         ), $this->storedData);
     }
 
