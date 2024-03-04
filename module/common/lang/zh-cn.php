@@ -210,6 +210,7 @@ $lang->metric->common       = '度量项';
 $lang->report->common       = '统计';
 $lang->system->common       = '组织';
 $lang->admin->common        = '后台';
+$lang->epic->common         = '业务需求';
 $lang->story->common        = $lang->SRCommon;
 $lang->task->common         = '任务';
 $lang->bug->common          = 'Bug';
