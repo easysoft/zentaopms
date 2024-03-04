@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 pipelineModel->getByID();
+timeout=0
 cid=1
 
 - 获取id为0的流水线信息 @0

@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 pipelineModel->getList();
+timeout=0
 cid=1
 
 - 获取类型为空按照id倒序排序，每页5条，第1页的流水线列表

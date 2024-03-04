@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 pipelineModel->update();
+timeout=0
 cid=1
 
 - 测试id为0时，修改名称 @0
