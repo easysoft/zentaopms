@@ -412,11 +412,13 @@ class holidayTest
      */
     public function getHolidayByAPITest(string $year): int|array
     {
+        global $app;
+        $app->wwwRoot = dirname(__FILE__, 4) . DS . 'www' . DS;
         common::$httpClient = new httpClient();
 
-        if($year == 'this year') $year = date('Y');
-        if($year == 'last year') $year = date('Y', strtotime('-1 year'));
-        if($year == 'next year') $year = date('Y', strtotime('+1 year'));
+        if($year == 'this year') $year = '2023';
+        if($year == 'last year') $year = '2022';
+        if($year == 'next year') $year = '2024';
         $objects = $this->objectModel->getHolidayByAPI($year);
 
         if(dao::isError()) return dao::getError();
