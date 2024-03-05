@@ -685,8 +685,8 @@ class baseControl
         unset($this->view->pager->lang);
 
         $output['status'] = is_object($this->view) ? 'success' : 'fail';
-        $output['data']   = json_encode($this->view);
-        $output['md5']    = md5(json_encode($this->view));
+        $output['data']   = json_encode($this->view) ? json_encode($this->view) : '';
+        $output['md5']    = md5($output['data']);
 
         $this->output = json_encode($output);
     }
