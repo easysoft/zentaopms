@@ -1938,4 +1938,24 @@ class storyZen extends story
         }
         if(!$projectInfo->multiple) $this->view->hiddenPlan = true;
     }
+
+    /**
+     * Convert child ID.
+     *
+     * @param  array    $storyIdList
+     * @access protected
+     * @return array
+     */
+    protected function convertChildID(array $storyIdList)
+    {
+        $storyIdList = array_unique($storyIdList);
+        $storyIdList = array_filter($storyIdList);
+        foreach($storyIdList as $index => $storyID)
+        {
+            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+            /* Process selected child story ID. */
+            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+        }
+        return $storyIdList;
+    }
 }

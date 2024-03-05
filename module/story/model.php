@@ -115,14 +115,6 @@ class storyModel extends model
     {
         if(empty($storyIdList)) return array();
 
-        $storyIdList = array_filter($storyIdList);
-        foreach($storyIdList as $index => $storyID)
-        {
-            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
-            /* Process selected child story ID. */
-            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
-        }
-
         return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
@@ -1113,14 +1105,6 @@ class storyModel extends model
         $this->loadModel('action');
         $this->app->loadLang('product');
 
-        $storyIdList = array_filter($storyIdList);
-        foreach($storyIdList as $index => $storyID)
-        {
-            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
-            /* Process selected child story ID. */
-            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
-        }
-
         $oldStories          = $this->getByList($storyIdList);
         $hasResult           = $this->dao->select('story,version,result')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->andWhere('reviewer')->eq($account)->andWhere('result')->ne('')->orderBy('version')->fetchAll('story');
         $reviewerList        = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
@@ -1470,14 +1454,6 @@ class storyModel extends model
      */
     public function batchChangeModule(array $storyIdList, int $moduleID): array
     {
-        $storyIdList = array_filter($storyIdList);
-        foreach($storyIdList as $index => $storyID)
-        {
-            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
-            /* Process selected child story ID. */
-            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
-        }
-
         $now        = helper::now();
         $allChanges = array();
         $oldStories = $this->getByList($storyIdList);
@@ -1509,14 +1485,6 @@ class storyModel extends model
      */
     public function batchChangePlan(array $storyIdList, int $planID, int $oldPlanID = 0): array
     {
-        $storyIdList = array_filter($storyIdList);
-        foreach($storyIdList as $index => $storyID)
-        {
-            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
-            /* Process selected child story ID. */
-            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
-        }
-
         /* Prepare data. */
         $now            = helper::now();
         $oldStories     = $this->getByList($storyIdList);
@@ -1679,14 +1647,6 @@ class storyModel extends model
      */
     public function batchChangeStage(array $storyIdList, string $stage): string|null
     {
-        $storyIdList = array_filter($storyIdList);
-        foreach($storyIdList as $index => $storyID)
-        {
-            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
-            /* Process selected child story ID. */
-            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
-        }
-
         $now           = helper::now();
         $account       = $this->app->user->account;
         $oldStories    = $this->getByList($storyIdList);
