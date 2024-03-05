@@ -34,4 +34,4 @@
 
 .has-module-menu-header #mainMenu {padding-left: 215px;}
 .has-module-menu-header.is-sidebar-left-collapsed #mainMenu {padding-left: 0;}
-#mainContent .sidebar {min-width: 200px !important;}
+#mainContent > .sidebar:not(.is-collapsed) {min-width: 200px !important;}
