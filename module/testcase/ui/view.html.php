@@ -192,11 +192,17 @@ else
     if($case->story && $case->storyStatus == 'active' && $case->latestStoryVersion > $case->storyVersion)
     {
         $confirmStatusChange = span
-            (
-                setClass('warning'),
-                $lang->story->changed,
-                common::hasPriv('testcase', 'confirmStoryChange', $case) ? a(set::href($this->createLink('testcase', 'confirmStoryChange', "caseID={$case->id}")), setData('app', $app->tab), $lang->confirm) : ''
-            );
+        (
+            '(',
+            $lang->story->changed,
+            common::hasPriv('testcase', 'confirmStoryChange', $case) ? a(
+                set::href($this->createLink('testcase', 'confirmStoryChange', "caseID={$case->id}")),
+                setData('app', $app->tab),
+                setClass('mx-1'),
+                $lang->confirm
+            ) : '',
+            ')'
+        );
     }
     $storyItem = item
     (
