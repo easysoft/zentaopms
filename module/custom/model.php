@@ -193,7 +193,11 @@ class customModel extends model
         ksort($menu, SORT_NUMERIC);
 
         /* Set divider in main && module menu. */
-        if(!isset($lang->{$tab}->menuOrder)) $lang->{$tab}->menuOrder = array();
+        if(!isset($lang->{$tab}->menuOrder))
+        {
+            if(!isset($lang->{$tab})) $lang->{$tab} = new stdclass();
+            $lang->{$tab}->menuOrder = array();
+        }
         ksort($lang->{$tab}->menuOrder, SORT_NUMERIC);
 
         $group         = 0;
