@@ -48,6 +48,7 @@ toolbar
     (
         set::className('ghost'),
         set::icon('export'),
+        setData('toggle', 'modal'),
         set::url($this->createLink('testcase', 'export', "productID=$productID&orderBy=case_desc&taskID=$task->id")),
         $lang->export
     ) : null,
