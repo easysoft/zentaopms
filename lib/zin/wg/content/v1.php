@@ -87,7 +87,7 @@ class content extends wg
             return createWg($controlName, set($this->props->skip('control')), $controlProps ? set($controlProps) : null, 'div');
         }
 
-        if($this->hasProp('children')) $this->prop('children');
+        if($this->hasProp('children')) return $this->prop('children');
 
         return parent::build();
     }
