@@ -117,7 +117,10 @@ class context extends \zin\utils\dataset
 
         if($item instanceof node)
         {
-            if($item->parent || $item->type() === 'wg') return false;
+            if($item->parent) return false;
+
+            $type = $item->type();
+            if($type === 'wg' || $type === 'node') return false;
 
             if(!isset($this->globalRenderList[$item->gid])) $this->globalRenderList[$item->gid] = $item;
             return true;
