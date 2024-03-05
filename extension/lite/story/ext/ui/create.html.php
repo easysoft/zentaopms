@@ -45,6 +45,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->story->module),
+            set::required(strpos($config->story->create->requiredFields, 'module') !== false),
             modulePicker
             (
                 set::required(true),
