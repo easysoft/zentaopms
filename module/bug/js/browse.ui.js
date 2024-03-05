@@ -31,7 +31,7 @@ window.onRenderCell = function(result, {row, col})
 {
     if(result && col.name == 'title')
     {
-        result[0].props.className = 'w-0 flex-1 overflow-hidden';
+        result[0].props.className = 'overflow-hidden';
         if(row.data.color) result[0].props.style = 'color: ' + row.data.color;
         const module = this.options.modules[row.data.module];
         if(module) result.unshift({html: '<span class="label gray-pale rounded-full whitespace-nowrap w-auto">' + module + '</span>'}); // 添加模块标签
