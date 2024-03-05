@@ -40,6 +40,7 @@ formPanel
                 set::name('root'),
                 set::value($module->root),
                 set::items($products),
+                set::required(true),
                 on::change('loadBranches')
             )
         ),
@@ -53,6 +54,7 @@ formPanel
                 set::name('branch'),
                 set::value($module->branch),
                 set::items($branches),
+                set::required(true),
                 on::change('loadModules')
             )
         ) : null
