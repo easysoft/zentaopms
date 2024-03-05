@@ -1,32 +1,33 @@
-window.clickSubmit = function()
+window.clickSubmit = () =>
 {
     const os = $('#os').zui('picker').$.state.value;
     loadPage({url : $.createLink('misc', 'downloadClient', "action=getPackage&os=" + os), selector : '#downloadClient', success: getClient});
-}
+};
 
 function getClient()
 {
     const os = $('#os').val();
-    var link = $.createLink('misc', 'ajaxGetClientPackage', 'os=' + os);
+    const link = $.createLink('misc', 'ajaxGetClientPackage', 'os=' + os);
     progress = setInterval("showPackageSize()", 1000);
-    $.getJSON(link, function(response)
+    $.getJSON(link, res =>
     {
-        if(response.result == 'success')
+        if(res.result == 'success')
         {
             clearInterval(progress);
             $('#downloading').addClass('hidden');
             $('#downloaded').removeClass('hidden');
             $('#setting').removeClass('hidden');
 
-            var link = $.createLink('misc', 'ajaxSetClientConfig', 'os=' + os);
-            $.getJSON(link, function(response)
+            const link = $.createLink('misc', 'ajaxSetClientConfig', 'os=' + os);
+            $.getJSON(link, function(res)
             {
-                if(response.result == 'success')
+                console.log(res);
+                if(res.result == 'success')
                 {
                     $('#setted').removeClass('hidden');
-                    var link = $.createLink('misc', 'downloadClient', "action=downloadPackage" + '&os=' + os);
-                    $.closeModal();
-                    location.href = link;
+                    const link = $.createLink('misc', 'downloadClient', "action=downloadPackage" + '&os=' + os);
+                    zui.Modal.hide();
+                    open(link, '_blank');
                 }
                 else
                 {
@@ -34,7 +35,7 @@ function getClient()
                     $('#configError').removeClass('hidden');
                     $('#hasError').removeClass('hidden');
                     $('#clearTmp').removeClass('hidden');
-                    $('#hasError').text(response.message);
+                    $('#hasError').text(res.message);
                 }
             });
         }
@@ -45,24 +46,24 @@ function getClient()
             $('#downloadError').removeClass('hidden');
             $('#hasError').removeClass('hidden');
             $('#clearTmp').removeClass('hidden');
-            $('#hasError').text(response.message);
+            $('#hasError').text(res.message);
         }
     });
 }
 
-window.showPackageSize = function()
+window.showPackageSize = () =>
 {
     const os = $('#os').val();
-    var link = $.createLink('misc', 'ajaxGetPackageSize', 'os=' + os);
-    $.getJSON(link, function(response)
+    const link = $.createLink('misc', 'ajaxGetPackageSize', 'os=' + os);
+    $.getJSON(link, res =>
     {
-        if(response.result == 'success')
+        if(res.result == 'success')
         {
-            $('#downloading span').text(response.size);
+            $('#downloading span').text(res.size);
         }
         else
         {
             $('#downloading span').text(0);
         }
     });
-}
+};
