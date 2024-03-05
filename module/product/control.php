@@ -1649,4 +1649,17 @@ class product extends control
         $data = fixer::input('post')->get();
         $this->loadModel('setting')->updateItem("{$this->app->user->account}.product.showAllProjects", $data->showAllProjects);
     }
+
+    /**
+     * AJAX: get products by line.
+     *
+     * @param  int    $lineID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductByLine($lineID)
+    {
+        $products = $this->product->getList(0, 'all', 1, $lineID);
+        return print($products ? json_encode($products) : '');
+    }
 }

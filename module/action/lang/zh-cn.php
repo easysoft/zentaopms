@@ -262,6 +262,7 @@ $lang->action->desc->online               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->offline              = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
 $lang->action->desc->linkhost             = '$date, 由 <strong>$actor</strong> 关联主机。' . "\n";
 $lang->action->desc->createrepobranch     = '$date, 由 <strong>$actor</strong> 创建了代码分支 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->changedprogram       = '$date, 由 <strong>$actor</strong> 调整了所属项目集。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -516,6 +517,7 @@ $lang->action->label->unpublished             = '下架了';
 $lang->action->label->prompt                  = '提词';
 $lang->action->label->delist                  = '下架了';
 $lang->action->label->createrepobranch        = '创建了分支从';
+$lang->action->label->changedprogram          = '调整了项目集';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

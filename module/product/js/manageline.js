@@ -26,3 +26,23 @@ function deleteItem(obj)
         });
     }
 }
+
+$('#lineForm').on('change', '.col-programs select', function()
+{
+    isProductLineEmpty(this);
+})
+
+function isProductLineEmpty(obj)
+{
+    var lineInputID = $(obj).closest('.col-programs').siblings('.col-module').find('input').attr('id');
+    var lineID      = lineInputID.replace('modulesid', '');
+
+    $.get(createLink('product', 'ajaxGetProductByLine', 'lineID=' + lineID), function(data)
+    {
+        if(data && !hasPrompted)
+        {
+            hasPrompted = true;
+            alert(changeProgramTip);
+        }
+    })
+}

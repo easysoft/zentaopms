@@ -1012,20 +1012,6 @@ class productModel extends model
         $oldLines = $this->getLines();
         $data     = fixer::input('post')->get();
 
-        /* When there are products under the line, the program cannot be modified  */
-        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
-        {
-            foreach($oldLines as $oldLine)
-            {
-                $oldLineID = 'id' . $oldLine->id;
-                if($data->programs[$oldLineID] != $oldLine->root)
-                {
-                    $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($oldLine->id)->fetch();
-                    if(!empty($product)) return print(js::error($this->lang->product->changeLineError));
-                }
-            }
-        }
-
         $line = new stdClass();
         $line->type   = 'line';
         $line->parent = 0;
@@ -1070,6 +1056,37 @@ class productModel extends model
             {
                 $lineID = str_replace('id', '', $id);
                 $this->dao->update(TABLE_MODULE)->data($line)->where('id')->eq($lineID)->exec();
+            }
+
+            if(!dao::isError()) $this->syncprogram2product($line->root, $lineID);
+        }
+    }
+
+    /**
+     * Sync program to product.
+     *
+     * @param  int    $programID
+     * @param  int    $lineID
+     * @access public
+     * @return void
+     */
+    public function syncprogram2product($programID, $lineID)
+    {
+        $this->loadModel('action');
+        $oldProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($lineID)->fetchAll('id');
+        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('line')->eq($lineID)->exec();
+
+        if(!dao::isError())
+        {
+            $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($lineID)->fetchAll('id');
+            foreach($products as $productID => $product)
+            {
+                if($oldProducts[$productID]->program != $product->program)
+                {
+                    $changes  = common::createChanges($oldProducts[$productID], $product);
+                    $actionID = $this->action->create('product', $productID, 'ChangedProgram');
+                    $this->action->logHistory($actionID, $changes);
+                }
             }
         }
     }
