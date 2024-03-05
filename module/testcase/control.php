@@ -1646,7 +1646,7 @@ class testcase extends control
             $configList = $this->testcaseZen->buildXmindConfig();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $configResult = $this->testcase->saveXmindConfig($configList);
+            $this->testcase->saveXmindConfig($configList);
 
             $imoduleID = $this->post->imodule ? $this->post->imodule : 0;
             $context   = $this->testcaseZen->getXmindExport($productID, (int)$imoduleID, $branch);
@@ -1673,7 +1673,7 @@ class testcase extends control
         $this->view->settings         = $this->testcase->getXmindConfig();
         $this->view->productName      = $product->name;
         $this->view->moduleID         = $moduleID;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' || !isset($branches[$branch])) ? '0' : $branch);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? '0' : $branch);
 
         $this->display();
     }
@@ -1735,7 +1735,7 @@ class testcase extends control
             /* Sav xmind config. */
             $configList = $this->testcaseZen->buildXmindConfig();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $configResult = $this->testcase->saveXmindConfig($configList);
+            $this->testcase->saveXmindConfig($configList);
 
             /* 检查扩展名。*/
             /* Check extension name of file. */
@@ -1795,7 +1795,6 @@ class testcase extends control
         $product  = $this->product->getByID($productID);
         $branches = (isset($product->type) && $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
 
-        $folder = $this->session->xmindImport;
         if($this->session->xmindImportType == 'xml')
         {
             $xmlPath = $this->session->xmindImport . '/content.xml';
@@ -1817,7 +1816,7 @@ class testcase extends control
         $this->view->productID        = $productID;
         $this->view->branch           = $branch;
         $this->view->scenes           = $scenes;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? '0' : $branch);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' or !isset($branches[$branch])) ? '0' : $branch);
 
         $this->display();
     }
