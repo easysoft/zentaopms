@@ -26,7 +26,7 @@ blockPanel
         set::height(318),
         set::bordered(false),
         set::horzScrollbarPos('inside'),
-        set::fixedLeftWidth('50%'),
+        set::fixedLeftWidth('45%'),
         set::cols(array_values($config->block->bug->dtable->fieldList)),
         set::data(array_values($bugs))
     )
