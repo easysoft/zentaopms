@@ -16,6 +16,7 @@ formPanel
     formGroup
     (
         set::name('name'),
+        set::required(true),
         set::label($lang->zanode->snapshotName)
     ),
     formGroup
