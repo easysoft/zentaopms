@@ -316,10 +316,10 @@ class buildModel extends model
         foreach($allBuilds as $id => $build)
         {
             if($build->branch === '') $build->branch = 0;
-            $isDone        = empty($build->releaseID) && strpos($params, 'nodone') !== false && $build->objectStatus === 'done';
+            $isDone        = empty($build->releaseID) && strpos($params, 'nodone') !== false && !empty($build->objectStatus) && $build->objectStatus === 'done';
             $isTerminate   = strpos($params, 'noterminate') !== false && $build->releaseStatus === 'terminate';
             $isDeleted     = strpos($params, 'withexecution') !== false && $build->execution && isset($deletedExecutions[$build->execution]);
-            $isNotInBranch = $branch !== 'all' && strpos(",{$build->branch},", ",{$branch},") === false;
+            $isNotInBranch = $branch !== '' && $branch !== 'all' && strpos(",{$build->branch},", ",{$branch},") === false;
             if(in_array(true, array($isDone, $isTerminate, $isDeleted, $isNotInBranch)))
             {
                 $excludedReleaseIdList[] = $build->releaseID;
