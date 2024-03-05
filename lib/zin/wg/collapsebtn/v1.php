@@ -21,9 +21,9 @@ class collapseBtn extends wg
             setClass('btn-link', 'collapse-btn'),
             set($this->getRestProps()),
             set::icon('angle-down'),
-            on::click
+            on::click()->do
             (
-                <<<FUNC
+                <<<JS
                     const btn = event.target.closest('.collapse-btn');
                     const icon = btn.querySelector('.icon');
                     icon.classList.toggle('icon-angle-down');
@@ -32,7 +32,7 @@ class collapseBtn extends wg
                     const parentElm = btn.closest('$parent');
                     const targetElm = parentElm.querySelector('$target');
                     if(targetElm) targetElm.classList.toggle('hidden');
-                FUNC
+                JS
             )
         );
     }
