@@ -23,3 +23,8 @@ function refreshModules()
     const productID = $('[name=product]').val();
     loadProductModules(productID);
 }
+
+window.renderModulePicker = function()
+{
+    refreshModules();
+}
