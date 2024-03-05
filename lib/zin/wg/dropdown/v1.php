@@ -121,6 +121,11 @@ class dropdown extends wg
                 }
                 foreach($items as $index => $item)
                 {
+                    if($item instanceof setting)
+                    {
+                        $item = $item->toArray();
+                        $items[$index] = $item;
+                    }
                     if(!isset($item['icon']) || empty($item['icon']) || str_starts_with($item['icon'], 'icon-')) continue;
                     $items[$index]['icon'] = 'icon-' . $item['icon'];
                 }
