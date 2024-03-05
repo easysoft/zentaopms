@@ -2041,7 +2041,12 @@ class execution extends control
             if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            return $this->send(array('result' => 'success', 'load' => $execution->type == 'kanban' ? $this->createLink('execution', 'all') : true));
+            $locate = true;
+            if($execution->type == 'kanban')
+            {
+                $locate = $this->config->vision == 'lite' ? $this->createLink('project', 'execution', "status=all&projectID=$execution->project") : $this->createLink('execution', 'all');
+            }
+            return $this->send(array('result' => 'success', 'load' => $locate));
         }
     }
 
