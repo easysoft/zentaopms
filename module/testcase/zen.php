@@ -3117,6 +3117,7 @@ class testcaseZen extends testcase
 
         $this->classFile->removeFile($tmpFile);
 
+        $this->classXmind = $this->app->loadClass('xmind');
         if(file_exists($filePath . '/content.json'))
         {
             $fetchResult = $this->fetchByJSON($filePath, $productID, $branch);
@@ -3146,7 +3147,7 @@ class testcaseZen extends testcase
     {
         $file    = $filePath . '/content.xml';
         $xmlNode = simplexml_load_file($file);
-        $title   = $xmlNode->sheet->topic->title;
+        $title   = (string)$xmlNode->sheet->topic->title;
         if(!is_string($title) || strlen($title) == 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         $pID = $productID;
@@ -3155,7 +3156,7 @@ class testcaseZen extends testcase
             $tmpID = $this->classXmind->getBetween($title, '[', ']');
             if(!empty($tmpID))
             {
-                $product = $this->loadModel('product')->getByID($tmpID);
+                $product = $this->loadModel('product')->getByID((int)$tmpID);
                 if(!$product || $product->deleted) return array('result' => 'fail', 'message' => $this->lang->testcase->errorImportBadProduct);
 
                 $pID = $tmpID;
@@ -3184,7 +3185,6 @@ class testcaseZen extends testcase
         if(strlen($title) == 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         $pID = $productID;
-        $this->classXmind = $this->app->loadClass('xmind');
         if($this->classXmind->endsWith($title, ']'))
         {
             $tmpID = $this->classXmind->getBetween($title, '[', ']');
