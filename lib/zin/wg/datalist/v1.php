@@ -9,8 +9,17 @@ class datalist extends wg
     protected static array $defineProps = array
     (
         'items'      => '?array',
-        'labelWidth' => '?int=76'
+        'labelWidth' => '?int=68'
     );
+
+    public static function getPageCSS(): ?string
+    {
+        return <<<CSS
+        .datalist-item {display: flex; gap: 8px; padding: 6px 0;}
+        .datalist-item-label {width: var(--datalist-label-width); text-align: right; color: var(--color-gray-500)}
+        .datalist-item-content {flex: 1; display: flex; gap: 8px; align-items: center;}
+        CSS;
+    }
 
     public function onBuildItem($item): node|null
     {
@@ -23,26 +32,34 @@ class datalist extends wg
         }
         if($item instanceof node) return $item;
 
-        $label    = isset($item['label']) ? $item['label'] : null;
-        $children = isset($item['children']) ? $item['children'] : null;
-        $content  = null;
+        $class        = isset($item['class']) ? $item['class'] : null;
+        $label        = isset($item['label']) ? $item['label'] : null;
+        $children     = isset($item['children']) ? $item['children'] : null;
+        $content      = isset($item['content']) ? $item['content'] : null;
+        $labelClass   = isset($item['labelClass']) ? $item['labelClass'] : null;
+        $contentClass = isset($item['contentClass']) ? $item['contentClass'] : null;
 
+        unset($item['class']);
         unset($item['label']);
         unset($item['children']);
-        $content = isset($item['control']) ? new content(set($item), $children) : $children;
+        unset($item['content']);
+        unset($item['labelClass']);
+        unset($item['contentClass']);
+        $content = isset($item['control']) ? new content(set($item), $content) : $content;
 
         return div
         (
-            setClass('datalist-item'),
+            setClass('datalist-item', $class),
             div
             (
-                setClass('datalist-item-label'),
+                setClass('datalist-item-label', $labelClass),
                 $label
             ),
             div
             (
-                setClass('datalist-item-content'),
-                $content
+                setClass('datalist-item-content', $contentClass),
+                $content,
+                $children
             )
         );
     }
