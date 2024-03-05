@@ -140,7 +140,6 @@ class zanodemodel extends model
 
         if(!empty($result) && $result->code == 'success')
         {
-            if($snapshot->name == 'defaultSnap') $snapshot->name = $this->lang->zanode->snapshot->defaultSnapName;
             $this->loadModel('action')->create('zanode', $node->id, 'createdSnapshot', '', $snapshot->name);
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq(static::STATUS_CREATING_SNAP)->where('id')->eq($node->id)->exec();
 
