@@ -258,29 +258,29 @@ class userZen extends user
      */
     public function prepareCustomFields(string $method, string $requiredMethod): void
     {
-        $availableField = 'available' . ucfirst($method) . 'Fields';
+        $customFields = 'custom' . ucfirst($method) . 'Fields';
         $showField      = $method . 'Fields';
 
         /* 获取所有的联系方式字段。*/
         /* Get all contact fields. */
         $allContactFields = array_keys($this->lang->user->contactFieldList);
-        /* 获取可用的联系方式字段，转为数组并去空、去重。*/
-        /* Get available contact fields, convert to array and remove empty and duplicate. */
-        $availableContactFields = array_unique(array_filter(explode(',', trim($this->config->user->contactField, ','))));
+        /* 获取自定义的联系方式字段，转为数组并去空、去重。*/
+        /* Get custom contact fields, convert to array and remove empty and duplicate. */
+        $customContactFields = array_unique(array_filter(explode(',', trim($this->config->user->contactField, ','))));
         /* 获取不可用的联系方式字段。*/
         /* Get unavailable contact fields. */
-        $unAvailableContactFields = array_diff($allContactFields, $availableContactFields);
-        /* 从配置文件获取所有可用字段，转为数组并去空、去重。*/
-        /* Get all available fields from config file, convert to array and remove empty and duplicate. */
-        $availableFields = array_unique(array_filter(explode(',', trim($this->config->user->$availableField, ','))));
-        /* 从可用字段中去除不可用的联系方式字段。*/
-        /* Remove unavailable contact fields from available fields. */
-        $availableFields = array_diff($availableFields, $unAvailableContactFields);
+        $unAvailableContactFields = array_diff($allContactFields, $customContactFields);
+        /* 从配置文件获取所有自定义字段，转为数组并去空、去重。*/
+        /* Get all custom fields from config file, convert to array and remove empty and duplicate. */
+        $customFields = array_unique(array_filter(explode(',', trim($this->config->user->list->$customFields, ','))));
+        /* 从自定义字段中去除不可用的联系方式字段。*/
+        /* Remove unavailable contact fields from custom fields. */
+        $customFields = array_diff($customFields, $unAvailableContactFields);
 
         /* 获取可以显示的字段。*/
         /* Get fields that can be displayed. */
         $listFields = array();
-        foreach($availableFields as $field) $listFields[$field] = $this->lang->user->$field;
+        foreach($customFields as $field) $listFields[$field] = $this->lang->user->$field;
 
         /* 从配置文件获取必填项字段，转为数组并去空、去重。*/
         /* Get required fields from config file, convert to array and remove empty and duplicate. */
@@ -299,7 +299,7 @@ class userZen extends user
         $showFields = array_merge($showFields, $requiredFields);
         /* 把应该显示的字段和可用字段取交集。*/
         /* Get the intersection of fields that should be displayed and available fields. */
-        $showFields = array_intersect($showFields, $availableFields);
+        $showFields = array_intersect($showFields, $customFields);
 
         $this->view->listFields = $listFields;
         $this->view->showFields = $showFields;
