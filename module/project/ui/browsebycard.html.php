@@ -336,7 +336,7 @@ div
     !empty($projectStats) ? div
     (
         setID('cardsFooter'),
-        pager()
+        pager(set(usePager()))
     ) : null
 );
 

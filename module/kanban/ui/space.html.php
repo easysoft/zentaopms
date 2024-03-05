@@ -136,6 +136,6 @@ foreach($spaceList as $space)
 }
 
 !empty($spaceList) ? $blocks : div(set::className('dtable'), div(set::className('dtable-empty-tip'), span(set::className('text-gray'),  $lang->kanbanspace->empty)));
-if(!empty($spaceList)) div(set::className('table-footer'), pager(set::className('pull-right')));
+if(!empty($spaceList)) div(set::className('table-footer'), pager(set(usePager()), set::className('pull-right')));
 
 render();

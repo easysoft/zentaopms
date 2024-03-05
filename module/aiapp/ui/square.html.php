@@ -133,7 +133,7 @@ div(
 
 div(
     setClass('pager-container'),
-    pager()
+    pager(set(usePager()))
 );
 
 render();
