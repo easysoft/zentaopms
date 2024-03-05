@@ -1,2 +1,2 @@
-#requiredForm .form-row .form-group {padding-left: 8rem;}
-#requiredForm .form-row .form-label {width: 8rem;}
+#requiredForm .form-group {padding-left: 8rem;}
+#requiredForm .form-group .form-label {width: 8rem;}
