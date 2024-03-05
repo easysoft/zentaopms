@@ -299,7 +299,7 @@ $config->task->dtable->importTask->fieldList['deadline']['type']     = 'date';
 $config->task->dtable->importTask->fieldList['deadline']['sortType'] = true;
 $config->task->dtable->importTask->fieldList['deadline']['group']    = 2;
 
-$config->task->dtable->importTask->fieldList['execution']['title']    = $lang->task->stage;
+$config->task->dtable->importTask->fieldList['execution']['title']    = $lang->task->execution;
 $config->task->dtable->importTask->fieldList['execution']['name']     = 'execution';
 $config->task->dtable->importTask->fieldList['execution']['type']     = 'desc';
 $config->task->dtable->importTask->fieldList['execution']['sortType'] = false;
