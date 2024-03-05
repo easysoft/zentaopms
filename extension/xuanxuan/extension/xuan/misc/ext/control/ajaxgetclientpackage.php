@@ -35,7 +35,7 @@ class myMisc extends misc
         $packageFile = $packageDir . $clientName;
         if(!file_exists($packageFile))
         {
-            $url       = "http://dl.cnezsoft.com/zentaoclient/$version/";
+            $url       = "https://dl.zentao.net/zentaoclient/$version/";
             $xxFile    = $url . $clientName . "?t=" . rand();
             $needCache = true;
         }
