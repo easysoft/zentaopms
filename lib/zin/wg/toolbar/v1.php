@@ -11,12 +11,16 @@ class toolbar extends wg
     protected static array $defineProps = array(
         'items?:array',
         'btnClass?:string',
+        'btnType?: string',
+        'size?: string',
         'btnProps?: array'
     );
 
     public function onBuildItem($item): node|null
     {
         if($item === null) return null;
+
+        if($item === '-') $item = array('type' => 'divider');
 
         if(!($item instanceof item))
         {
@@ -29,11 +33,13 @@ class toolbar extends wg
         if($type === 'btnGroup')                       return new btnGroup(inherit($item));
         if($type == 'dropdown' || $type == 'checkbox') return new actionItem(inherit($item));
 
-        list($btnClass, $btnProps) = $this->prop(array('btnClass', 'btnProps'));
+        list($btnClass, $btnProps, $btnType, $size) = $this->prop(array('btnClass', 'btnProps', 'btnType', 'size'));
         $btn = empty($item->prop('back')) ? '\zin\btn' : '\zin\backBtn';
         return new $btn
         (
             setClass('toolbar-item', $btnClass),
+            set::type($btnType),
+            set::size($size),
             is_array($btnProps) ? set($btnProps) : null,
             inherit($item)
         );
@@ -49,5 +55,11 @@ class toolbar extends wg
             is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : null,
             $this->children()
         );
+    }
+
+    public static function create(array $propsOrItems, mixed ...$children): static
+    {
+        $props = array_is_list($propsOrItems) ? array('items' => $propsOrItems) : $propsOrItems;
+        return new static(set($props), ...$children);
     }
 }
