@@ -109,6 +109,7 @@ function openApp(url, code, options)
         forceReload = false;
         apps.openedMap[code] = openedApp;
 
+        const iframeUrl = app.external ? url : $.createLink('index', 'app');
         const $iframe =
         $([
             '<iframe',
@@ -116,7 +117,7 @@ function openApp(url, code, options)
                 'name="app-' + code + '"',
                 'class="fade"',
                 'allowfullscreen="true"',
-                'src="' + $.createLink('index', 'app') + '"',
+                'src="' + iframeUrl + '"',
                 'frameborder="no"',
                 'allowtransparency="true"',
                 'scrolling="auto"',
@@ -140,10 +141,10 @@ function openApp(url, code, options)
                 iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', finishLoad);
                 setTimeout(finishLoad, 10000);
             }
-            catch(e){}
+            catch(e){finishLoad()}
             triggerAppEvent(openedApp.code, 'loadapp', [openedApp, e]);
         };
-        return;
+        if(!app.external) return;
     }
     if(!url) url = openedApp.currentUrl;
 
