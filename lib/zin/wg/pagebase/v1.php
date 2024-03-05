@@ -94,7 +94,7 @@ class pageBase extends wg
             {
                 $zinDebugData['page']         = $this->toJSON();
                 $zinDebugData['definedProps'] = wg::$definedPropsMap;
-                $zinDebugData['wgBlockMap']   = wg::$wgToBlockMap;
+                $zinDebugData['wgBlockMap']   = wg::$blockMap;
             }
             $js[] = 'window.zin = ' . js::value($zinDebugData) . ';';
             $js[] = 'console.log("[ZIN] ", window.zin);';
