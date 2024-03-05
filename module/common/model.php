@@ -3503,6 +3503,54 @@ class commonModel extends model
         }
         echo '</nav>';
     }
+
+    /**
+     * Print icon of comment.
+     *
+     * @param string $commentFormLink
+     * @param object $object
+     *
+     * @static
+     * @access public
+     * @return mixed
+     */
+    public static function printCommentIcon(string $commentFormLink, object $object = null)
+    {
+        global $lang;
+
+        if(!commonModel::hasPriv('action', 'comment', $object)) return false;
+        echo html::commonButton('<i class="icon icon-chat-line"></i> ' . $lang->action->create, '', 'btn btn-link pull-right btn-comment');
+        echo <<<EOF
+<div class="modal fade modal-comment">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title">{$lang->action->create}</h4>
+      </div>
+      <div class="modal-body">
+        <form class="load-indicator not-watch" action="{$commentFormLink}" target='hiddenwin' method='post'>
+          <div class="form-group">
+            <textarea id='comment' name='comment' class="form-control" rows="8" autofocus="autofocus"></textarea>
+          </div>
+          <div class="form-group form-actions text-center">
+            <button type="submit" class="btn btn-primary btn-wide">{$lang->save}</button>
+            <button type="button" class="btn btn-wide" data-dismiss="modal">{$lang->close}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$(function()
+{
+    \$body = $('body', window.parent.document);
+    if(\$body.hasClass('hide-modal-close')) \$body.removeClass('hide-modal-close');
+});
+</script>
+EOF;
+    }
 }
 
 class common extends commonModel
