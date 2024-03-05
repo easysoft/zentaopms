@@ -1152,7 +1152,7 @@ class execution extends control
             /* If link from no head then reload. */
             if(isInModal())
             {
-                $kanbanLoad = array('selector' => '#header>*');
+                $kanbanLoad = array('selector' => '#main>*');
                 return $this->sendSuccess(array('closeModal' => true, 'callback' => $execution->type == 'kanban' ? 'loadCurrentPage(' . json_encode($kanbanLoad) . ');' : 'loadCurrentPage()'));
             }
 

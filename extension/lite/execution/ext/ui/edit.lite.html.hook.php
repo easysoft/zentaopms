@@ -1,4 +1,5 @@
-<?php include dirname(dirname(__FILE__)) . '/lang/' . $this->app->getClientLang() . '/lite.php';?>
+<?php global $app;?>
+<?php include dirname(dirname(__FILE__)) . '/lang/' . $app->getClientLang() . '/lite.php';?>
 <script>
 window.waitDom('#begin', function(){ $('#begin').closest('div.form-row').hide();})
 window.waitDom('#days', function(){ $('#days').closest('div.form-row').hide();})
