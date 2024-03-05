@@ -1,7 +1,6 @@
 .border-bottom {border-bottom: solid 1px var(--color-gray-300);}
 .border-bottom span {padding: 4px 12px; background-color: var(--color-gray-100);}
 .margin-top24 {margin-top: 24px;}
-.warning500 {color: var(--color-warning-500);}
 .margin-left8 {margin-left: 8px;}
 .detail-header .gap-x-4 {gap: 0 !important;}
 .verify-content {height: 300px; border: solid 1px var(--color-gray-300);}
