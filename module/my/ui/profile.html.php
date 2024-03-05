@@ -80,7 +80,7 @@ div
     (
         set::className('py-2'),
         $getItems(array($lang->user->realname => $user->realname,         $lang->user->gender => zget($lang->user->genderList, $user->gender))),
-        $getItems(array($lang->user->account  => $user->account,          $lang->user->email  => $user->email ? a(set::href("mailto:{$user->email}"), $user->email) : '')),
+        $getItems(array($lang->user->account  => $user->account,          $lang->user->email  => $user->email ? a(set::href("mailto:{$user->email}"), $user->email, set::target('_self')) : '')),
         $getItems(array($lang->user->dept     => html($deptName),         $lang->user->role   => zget($lang->user->roleList, $user->role, ''))),
         $getItems(array($lang->user->abbr->join   => formatTime($user->join), $lang->user->priv   => trim($groupName)))
     ),
