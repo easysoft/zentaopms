@@ -641,8 +641,7 @@ class story extends control
     {
         if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
 
-        $storyIdList = $this->post->storyIdList;
-        $storyIdList = array_unique($storyIdList);
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
         $message = $this->story->batchReview($storyIdList, $result, $reason);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $this->loadModel('score')->create('ajax', 'batchOther');
@@ -861,8 +860,7 @@ class story extends control
     public function batchClose(int $productID = 0, int $executionID = 0, string $storyType = 'story', string $from = '')
     {
         if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
-        $storyIdList = $this->post->storyIdList;
-        $storyIdList = array_unique($storyIdList);
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
 
         $this->story->replaceURLang($storyType);
 
@@ -936,7 +934,7 @@ class story extends control
     {
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
-        $storyIdList = array_unique($this->post->storyIdList);
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
         $allChanges  = $this->story->batchChangeModule($storyIdList, $moduleID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1018,7 +1016,7 @@ class story extends control
     {
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
-        $storyIdList = array_unique($this->post->storyIdList);
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
         $allChanges  = $this->story->batchChangePlan($storyIdList, $planID, $oldPlanID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1047,14 +1045,7 @@ class story extends control
 
         if(!empty($_POST['storyIdList'])) $storyIdList = $this->post->storyIdList;
         if(is_string($storyIdList))       $storyIdList = array_filter(explode(',', $storyIdList));
-        $storyIdList = array_unique($storyIdList);
-
-        foreach($storyIdList as $index => $storyID)
-        {
-            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
-            /* Process selected child story ID. */
-            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
-        }
+        $storyIdList = $this->storyZen->convertChildID($storyIdList);
 
         $plans = $this->loadModel('productplan')->getPlansByStories($storyIdList);
         if(empty($confirm))
@@ -1115,7 +1106,7 @@ class story extends control
     {
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
-        $storyIdList = array_unique($this->post->storyIdList);
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
         $message     = $this->story->batchChangeStage($storyIdList, $stage);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $this->loadModel('score')->create('ajax', 'batchOther');
@@ -1176,17 +1167,9 @@ class story extends control
         if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
 
         if(empty($assignedTo)) $assignedTo = $this->post->assignedTo;
-        $storyIdList = array_unique($this->post->storyIdList);
-        foreach($storyIdList as $index => $storyID)
-        {
-            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
-            /* Process selected child story ID. */
-            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
-        }
-
+        $storyIdList = $this->storyZen->convertChildID($this->post->storyIdList);
         $oldStories  = $this->story->getByList($storyIdList);
-
-        $allChanges = $this->story->batchAssignTo($storyIdList, $assignedTo);
+        $allChanges  = $this->story->batchAssignTo($storyIdList, $assignedTo);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $ignoreStories = array();
