@@ -6,8 +6,16 @@ class content extends wg
 {
     protected static array $defineProps = array
     (
-        'control?: string',          // 内容类型，值可以为：html, text 以及其他部件的类型。
+        'control?: string|array',    // 内容类型，值可以为：html, text 以及其他部件的类型，也可以指定为包含 `control` 键值的控件属性数组。
         'render?: callable|Closure'  // 自定义构建函数。
+    );
+
+    protected static array $controlMap = array
+    (
+        'list'     => 'simpleList',
+        'status'   => 'statusLabel',
+        'pri'      => 'priLabel',
+        'severity' => 'severityLabel',
     );
 
     protected function buildText(): node
@@ -41,11 +49,6 @@ class content extends wg
         );
     }
 
-    protected function buildList(): node
-    {
-        return new simpleList(set($this->props->skip('control')), $this->children());
-    }
-
     protected function buildDivider(): node
     {
         return hr(setClass('divider'));
@@ -60,13 +63,28 @@ class content extends wg
         $control = $this->prop('control');
         if($control)
         {
-            $methodName = "build{$control}";
+            $controlProps = array();
+            $controlName = '';
+            if(is_string($control))
+            {
+                $controlName = $control;
+            }
+            elseif(is_array($control))
+            {
+                $controlName = $control['control'];
+                unset($control['control']);
+                $controlProps = $control;
+            }
+
+            $methodName = "build{$controlName}";
             if(method_exists($this, $methodName)) return $this->$methodName();
 
-            $wgName = "\\zin\\$control";
-            if(class_exists($wgName)) return new $wgName(set($this->props->skip('control')), $this->children());
+            if(isset(static::$controlMap[$controlName])) $controlName = static::$controlMap[$controlName];
 
-            return createWg($control, set($this->props->skip('control')), 'div');
+            $wgName = "\\zin\\$controlName";
+            if(class_exists($wgName)) return new $wgName(set($this->props->skip('controlName')), $controlProps ? set($controlProps) : null, $this->children());
+
+            return createWg($controlName, set($this->props->skip('control')), $controlProps ? set($controlProps) : null, 'div');
         }
 
         if($this->hasProp('children')) $this->prop('children');

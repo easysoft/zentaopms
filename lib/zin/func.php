@@ -33,6 +33,7 @@ function formBatch(): formBatch {return createWg('formBatch', func_get_args());}
 function formBatchItem(): formBatchItem {return createWg('formBatchItem', func_get_args());}
 function formBatchPanel(): formBatchPanel {return createWg('formBatchPanel', func_get_args());}
 function batchActions(): batchActions {return createWg('batchActions', func_get_args());}
+function content(): content {return createWg('content', func_get_args());}
 function listItem(): listItem {return createWg('listitem', func_get_args());}
 function breadcrumb(): breadcrumb {return createWg('breadcrumb', func_get_args());}
 function control(): control {return createWg('control', func_get_args());}
