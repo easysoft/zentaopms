@@ -285,6 +285,10 @@ $config->group->subset->dimension = new stdclass();
 $config->group->subset->dimension->order = 880;
 $config->group->subset->dimension->nav   = 'bi';
 
+$config->group->subset->metriclib = new stdclass();
+$config->group->subset->metriclib->order = 885;
+$config->group->subset->metriclib->nav   = 'bi';
+
 $config->group->subset->metric = new stdclass();
 $config->group->subset->metric->order = 890;
 $config->group->subset->metric->nav   = 'bi';
@@ -3522,7 +3526,6 @@ $config->group->package->browseMetric->privs  = array();
 $config->group->package->browseMetric->privs['metric-preview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 $config->group->package->browseMetric->privs['metric-details'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('metric-preview'), 'recommend' => array());
 
-/*
 $config->group->package->manageMetric = new stdclass();
 $config->group->package->manageMetric->order  = 10;
 $config->group->package->manageMetric->subset = 'metric';
@@ -3534,7 +3537,12 @@ $config->group->package->manageMetric->privs['metric-view'] = array('edition' =>
 $config->group->package->manageMetric->privs['metric-implement'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 $config->group->package->manageMetric->privs['metric-delist'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 $config->group->package->manageMetric->privs['metric-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
- */
+
+$config->group->package->browseMetriclib = new stdclass();
+$config->group->package->browseMetriclib->order  = 5;
+$config->group->package->browseMetriclib->subset = 'metriclib';
+$config->group->package->browseMetriclib->privs  = array();
+$config->group->package->browseMetriclib->privs['metriclib-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;

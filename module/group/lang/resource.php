@@ -47,6 +47,7 @@ $lang->moduleOrder[110] = 'doc';
 $lang->moduleOrder[111] = 'screen';
 $lang->moduleOrder[112] = 'pivot';
 $lang->moduleOrder[113] = 'chart';
+$lang->moduleOrder[116] = 'metriclib';
 $lang->moduleOrder[117] = 'metric';
 $lang->moduleOrder[119] = 'report';
 
