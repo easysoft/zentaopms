@@ -1659,7 +1659,7 @@ class projectZen extends project
             $columnCards = array();
             foreach($region as $laneKey => $laneData)
             {
-                $lanes[] = array('name' => $laneKey, 'title' => zget($programPairs, $laneKey));
+                $lanes[] = array('name' => "lane$laneKey", 'title' => zget($programPairs, $laneKey));
                 $columns = array();
                 foreach(array('wait', 'doing', 'closed') as $columnKey)
                 {
@@ -1674,7 +1674,7 @@ class projectZen extends project
                     foreach($cardList as $card)
                     {
                         $columnKey = $columnKey == 'doing' ? 'doingProjects' : $columnKey;
-                        $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'type' => 'project', 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress);
+                        $items["lane$laneKey"][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'type' => 'project', 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress);
 
                         if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
                         $columnCards[$columnKey] ++;
@@ -1685,7 +1685,7 @@ class projectZen extends project
                             {
                                 $columnKey = 'doingExecutions';
                                 $execution = $latestExecutions[$card->id];
-                                $items[$laneKey][$columnKey][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'type' => 'execution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
+                                $items["lane$laneKey"][$columnKey][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'type' => 'execution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
 
                                 if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
                                 $columnCards[$columnKey] ++;
