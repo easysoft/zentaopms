@@ -48,6 +48,7 @@ $promptMenuInject = function()
 
     /* Assemble injector script. */
     $script = <<< JAVASCRIPT
+    (() => {
         if(window.location.search.includes('onlybody')) return;
         const container = window.frameElement?.closest('.load-indicator');
         if(container && container.dataset.loading)
@@ -87,10 +88,11 @@ $promptMenuInject = function()
                 }
             }, 200);
         });
+    })();
     JAVASCRIPT;
 
     /* Perform injection. */
     if(isset($menuOptions->stylesheet)) css($menuOptions->stylesheet);
-    js($script);
+    h::globalJS($script);
 };
 $promptMenuInject();
