@@ -44,3 +44,9 @@ build/*.gz
 **/test/tao/data/sql/*.sql
 **/metric/test/calc/**/data/*.yaml
 **/metric/test/calc/**/data/sql/*.sql
+
+# ignore xuan files during development
+config/ext/_*.php
+config/ext/xxb*.php
+config/ext/xuan*.php
+framework/xuanxuan.class.php
