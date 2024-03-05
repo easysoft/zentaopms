@@ -41,9 +41,9 @@
 
 ## Demo
 
-- [开源版](https://demo16.zentao.net)
-- [企业版](https://biz.demo16.zentao.net)
-- [旗舰版](http://zentaomax.demo.zentao.net)
+- [开源版](https://www.zentao.net/demo/zentao.html)
+- [企业版](https://www.zentao.net/demo/zentaobiz.html)
+- [旗舰版](https://www.zentao.net/demo/zentaomax.html)
 
 # 安全漏洞
 

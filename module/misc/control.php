@@ -124,7 +124,7 @@ class misc extends control
         $loginInfo->LastLoginTime = time() / 86400 + 25569;
         $loginInfo = json_encode($loginInfo);
 
-        file_put_contents($packageFile, file_get_contents("http://dl.cnezsoft.com/notify/newest/zentaonotify.win_32.zip"));
+        file_put_contents($packageFile, file_get_contents("http://dl.zentao.net/notify/newest/zentaonotify.win_32.zip"));
         file_put_contents($loginFile, $loginInfo);
 
         define('PCLZIP_TEMPORARY_DIR', $notifyDir);
