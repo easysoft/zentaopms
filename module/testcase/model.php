@@ -1852,6 +1852,7 @@ class testcaseModel extends model
         foreach($scenes as $id => $scene)
         {
             $scene = $this->buildSceneBaseOnCase($scene, $fieldTypes, zget($cases, $id, array()));
+            $scene->scene = $scene->parent;
 
             if(isset($scenes[$scene->parent]))
             {
