@@ -2913,7 +2913,7 @@ class execution extends control
         $project = $this->project->getByID($this->session->project);
         if(!empty($project->model) and $project->model == 'waterfall') $this->lang->executionCommon = $this->lang->project->stage;
 
-        $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->execution->common;
+        $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->executionCommon;
         $this->display();
     }
 
