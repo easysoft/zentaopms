@@ -858,7 +858,7 @@ class customModel extends model
     public function updateURAndSR(int $key = 0, string $lang = '', array $data = array()): bool
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
-        if(empty($data['SRName']) || empty($data['URName'])) return false;
+        if(empty($data['SRName']) || empty($data['URName']) || empty($data['ERName'])) return false;
 
         $oldValue = $this->getURSRConcept($key, $lang);
         $oldValue = json_decode($oldValue);
@@ -866,8 +866,10 @@ class customModel extends model
         if(!$oldValue) return false;
 
         $URSRList = new stdclass();
+        $URSRList->defaultERName = zget($oldValue, 'defaultERName', $oldValue->ERName);
         $URSRList->defaultSRName = zget($oldValue, 'defaultSRName', $oldValue->SRName);
         $URSRList->defaultURName = zget($oldValue, 'defaultURName', $oldValue->URName);
+        $URSRList->ERName        = empty($data['ERName']) ? $URSRList->defaultERName : $data['ERName'];
         $URSRList->SRName        = empty($data['SRName']) ? $URSRList->defaultSRName : $data['SRName'];
         $URSRList->URName        = empty($data['URName']) ? $URSRList->defaultURName : $data['URName'];
 

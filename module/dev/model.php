@@ -410,6 +410,7 @@ class devModel extends model
                 $originalLangs['productCommon'] = $this->config->productCommonList[$language][PRODUCT_KEY];
                 $originalLangs['projectCommon'] = $this->config->projectCommonList[$language][PROJECT_KEY];
                 $originalLangs['executionCommon'] = $this->config->executionCommonList[$language][$projectKey];
+                $originalLangs['ERCommon']        = $this->lang->dev->ER;
                 $originalLangs['URCommon']        = $this->lang->dev->UR;
                 $originalLangs['SRCommon']        = $this->lang->dev->SR;
 
@@ -419,6 +420,7 @@ class devModel extends model
                 if($URSRList)
                 {
                     $URSRList = json_decode($URSRList->value);
+                    $originalLangs['ERCommon'] = isset($URSRList->defaultERName) ? $URSRList->defaultERName : $URSRList->ERName;
                     $originalLangs['URCommon'] = isset($URSRList->defaultURName) ? $URSRList->defaultURName : $URSRList->URName;
                     $originalLangs['SRCommon'] = isset($URSRList->defaultSRName) ? $URSRList->defaultSRName : $URSRList->SRName;
                 }
@@ -507,8 +509,10 @@ class devModel extends model
                 if($URSRList)
                 {
                     $URSRList = json_decode($URSRList->value);
+                    $defaultERName = isset($URSRList->defaultERName) ? $URSRList->defaultERName : $URSRList->ERName;
                     $defaultURName = isset($URSRList->defaultURName) ? $URSRList->defaultURName : $URSRList->URName;
                     $defaultSRName = isset($URSRList->defaultSRName) ? $URSRList->defaultSRName : $URSRList->SRName;
+                    $customedLangs['ERCommon'] = $defaultERName == $URSRList->ERName ? '' : $URSRList->ERName;
                     $customedLangs['URCommon'] = $defaultURName == $URSRList->URName ? '' : $URSRList->URName;
                     $customedLangs['SRCommon'] = $defaultSRName == $URSRList->SRName ? '' : $URSRList->SRName;
                 }
@@ -591,6 +595,7 @@ class devModel extends model
         if(empty($langFilesToLoad)) return false;
 
         $lang = $module == 'common' ? new language() : $this->defaultLang;
+        $lang->ERCommon        = '$ERCOMMON';
         $lang->URCommon        = '$URCOMMON';
         $lang->SRCommon        = '$SRCOMMON';
         $lang->productCommon   = '$PRODUCTCOMMON';
@@ -1014,7 +1019,6 @@ class devModel extends model
         $this->loadModel('custom')->deleteItems("lang={$language}&module={$moduleName}&vision={$this->config->vision}{$section}{$key}");
 
         $data = fixer::input('post')->get();
-        if($type == 'common') unset($data->common_SRCommon, $data->common_URCommon);
         foreach($data as $langKey => $customedLang)
         {
             if(strpos($langKey, "{$moduleName}_") !== 0) continue;
@@ -1045,6 +1049,7 @@ class devModel extends model
             $this->config->custom->URSR = $URSRList->key;
             $oldValue = json_decode($URSRList->value);
 
+            $_POST['ERName'] = !empty($post['common_ERCommon']) ? $post['common_ERCommon'] : zget($oldValue, 'defaultERName', $oldValue->ERName);
             $_POST['SRName'] = !empty($post['common_SRCommon']) ? $post['common_SRCommon'] : zget($oldValue, 'defaultSRName', $oldValue->SRName);
             $_POST['URName'] = !empty($post['common_URCommon']) ? $post['common_URCommon'] : zget($oldValue, 'defaultURName', $oldValue->URName);
             $this->custom->updateURAndSR($this->config->custom->URSR, $language);

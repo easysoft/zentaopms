@@ -338,10 +338,10 @@ class router extends baseRouter
                 $SRPairs  = array();
                 foreach($URSRList as $id => $value)
                 {
-                    $URSR = json_decode((string) $value->value);
-                    $ERPairs[$value->key] = $URSR->ERName;
-                    $URPairs[$value->key] = $URSR->URName;
-                    $SRPairs[$value->key] = $URSR->SRName;
+                    $URSRObj = json_decode((string) $value->value);
+                    $ERPairs[$value->key] = $URSRObj->ERName;
+                    $URPairs[$value->key] = $URSRObj->URName;
+                    $SRPairs[$value->key] = $URSRObj->SRName;
                 }
 
                 /* Set default story concept and init UR and SR concept. */
@@ -357,7 +357,12 @@ class router extends baseRouter
                 $customMenus = $this->dbQuery('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
             }
             catch(PDOException){}
-            foreach($customMenus as $menu) if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
+            foreach($customMenus as $menu)
+            {
+                /* Modified the language item of dev story-related navigation, which will only affect users whose personalized value is the same as the story concept default value.*/
+                if(in_array($menu->key, array('ERCommon', 'URCommon', 'SRCommon')) && $URSR != $config->URSR) continue;
+                if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
+            }
         }
     }
 
