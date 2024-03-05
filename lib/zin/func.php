@@ -69,6 +69,7 @@ function divider(): divider {return createWg('divider', func_get_args());}
 function actionItem(): actionItem {return createWg('actionItem', func_get_args());}
 function nav(): nav {return createWg('nav', func_get_args());}
 function label(): label {return createWg('label', func_get_args());}
+function statusLabel(): statusLabel {return createWg('statusLabel', func_get_args());}
 function dtable(): dtable {return createWg('dtable', func_get_args());}
 function menu(): menu {return createWg('menu', func_get_args());}
 function dropdown(): dropdown {return createWg('dropdown', func_get_args());}
