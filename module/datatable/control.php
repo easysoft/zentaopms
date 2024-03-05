@@ -124,7 +124,17 @@ class datatable extends control
         $cols = $this->datatable->getSetting($module, $method, true, $extra);
         if(!$method) $method = $this->app->getMethodName();
 
-        if($module == 'testcase') unset($cols['assignedTo']);
+        if($module == 'testcase')
+        {
+            unset($cols['assignedTo']);
+            unset($cols['product']);
+            unset($cols['module']);
+        }
+        if($module == 'bug')
+        {
+            unset($cols['product']);
+            unset($cols['module']);
+        }
         if(zget($this->config->datatable->moduleAlias, "$module-$method", $module) == 'story')
         {
             unset($cols['product'], $cols['module']);
