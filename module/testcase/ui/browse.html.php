@@ -109,7 +109,7 @@ if(isset($cols['title']))  $cols['title']['nestedToggle'] = $topSceneCount > 0;
 if(isset($cols['branch'])) $cols['branch']['map']         = $branchTagOption;
 if(isset($cols['story']))  $cols['story']['map']          = $stories;
 if(isset($cols['scene']))  $cols['scene']['map']          = $iscenes;
-$cols['status']['statusMap']['changed'] = $lang->story->changed;
+if(isset($cols['status'])) $cols['status']['statusMap']['changed'] = $lang->story->changed;
 
 foreach($cases as $case)
 {
@@ -119,7 +119,7 @@ foreach($cases as $case)
     $cols['actions']['menu'] = $config->$actionType->menu;
     if($actionType == 'testcase' && !$this->config->testcase->needReview) unset($cols['actions']['menu'][1][0]);
     if($actionType == 'scene') $case->bugs = $case->results = $case->stepNumber = $case->version = '';
-    if($case->needconfirm) $case->status = 'changed';
+    if(!empty($case->needconfirm)) $case->status = 'changed';
 
     $case->browseType = $browseType;
     initTableData(array($case), $cols, $this->testcase);
