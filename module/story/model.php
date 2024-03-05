@@ -115,15 +115,6 @@ class storyModel extends model
     {
         if(empty($storyIdList)) return array();
 
-        if(is_string($storyIdList)) $storyIdList = explode(',', $storyIdList);
-        $storyIdList = array_filter($storyIdList);
-        foreach($storyIdList as $index => $storyID)
-        {
-            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
-            /* Process selected child story ID. */
-            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
-        }
-
         return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
