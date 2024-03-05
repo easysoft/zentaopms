@@ -25,6 +25,14 @@ class history extends wg
         'commentBtn?: string|array'     // 是否允许添加备注。
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return <<<CSS
+        .history-panel-action blockquote.original {display:none}
+        .history-panel-action blockquote {padding: 5px 5px 5px 10px; margin: 5px 0 0; background: var(--color-surface)}
+        CSS;
+    }
+
     protected function onCheckErrors(): array | null
     {
         if(empty($this->prop('objectID'))) return array('The property "objectID" of widget "history" is undefined.');
@@ -73,28 +81,27 @@ class history extends wg
         }
     }
 
-    protected function build(): array
+    protected function build()
     {
         list($panel, $objectID, $objectType, $title, $actions, $commentUrl, $editCommentUrl, $commentBtn) = $this->prop(array('panel', 'objectID', 'objectType', 'title', 'actions', 'commentUrl', 'editCommentUrl', 'commentBtn'));
 
         $canComment     = hasPriv('action', 'comment', null);
         $canEditComment = hasPriv('action', 'editComment', null);
-        return array
+
+        $className = $this->props->class->toStr();
+        if($panel && empty($className)) $className = 'canvas py-1 px-2 overflow-visible';
+
+        return zui::historyPanel
         (
-            zui::historyPanel
-            (
-                $panel ? set::className('canvas py-1 px-2 overflow-visible') : null,
-                set::objectID((int)$objectID),
-                set::objectType($objectType),
-                set::actions($actions),
-                set::title($title),
-                $canEditComment ? set::editCommentUrl($editCommentUrl) : null,
-                $canComment ? set::commentUrl($commentUrl) : null,
-                set::commentBtn($canComment ? $commentBtn : false),
-                set($this->getRestProps())
-            ),
-            h::css('.history-panel-action blockquote.original {display:none}'),
-            h::css('.history-panel-action blockquote {padding: 5px 5px 5px 10px; margin: 5px 0 0; background: var(--color-surface)}'),
+            set::className($className),
+            set::objectID((int)$objectID),
+            set::objectType($objectType),
+            set::actions($actions),
+            set::title($title),
+            $canEditComment ? set::editCommentUrl($editCommentUrl) : null,
+            $canComment ? set::commentUrl($commentUrl) : null,
+            set::commentBtn($canComment ? $commentBtn : false),
+            set($this->getRestProps())
         );
     }
 }
