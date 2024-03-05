@@ -16,6 +16,12 @@ formBatchPanel
     set::title($lang->custom->setStoryConcept),
     set::minRows(1),
     set::maxRows(1),
+    formBatchItem
+    (
+        set::width('1/3'),
+        set::label($lang->custom->ERConcept),
+        set::name('ERName')
+    ),
     $config->URAndSR ? formBatchItem
     (
         set::width('1/3'),

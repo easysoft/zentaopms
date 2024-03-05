@@ -314,6 +314,7 @@ class router extends baseRouter
              if($setting->key == 'executionLink') $config->executionLink = $setting->value;
         }
 
+        $lang->ERCommon = '';
         $lang->URCommon = '';
         $lang->SRCommon = '';
         if($this->dbh and !empty($this->config->db->name))
@@ -332,16 +333,19 @@ class router extends baseRouter
                 if(empty($URSRList)) $URSRList = $this->dbQuery('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and `section` = 'URSRList' and `key` = '{$config->URSR}'")->fetchAll();
 
                 /* Get UR pairs and SR pairs. */
+                $ERPairs  = array();
                 $URPairs  = array();
                 $SRPairs  = array();
                 foreach($URSRList as $id => $value)
                 {
                     $URSR = json_decode((string) $value->value);
+                    $ERPairs[$value->key] = $URSR->ERName;
                     $URPairs[$value->key] = $URSR->URName;
                     $SRPairs[$value->key] = $URSR->SRName;
                 }
 
                 /* Set default story concept and init UR and SR concept. */
+                $lang->ERCommon = $ERPairs[$config->URSR] ?? reset($ERPairs);
                 $lang->URCommon = $URPairs[$config->URSR] ?? reset($URPairs);
                 $lang->SRCommon = $SRPairs[$config->URSR] ?? reset($SRPairs);
             }

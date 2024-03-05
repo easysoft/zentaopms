@@ -40,6 +40,7 @@ $lang->custom->setStoryConcept      = "设置需求概念";
 $lang->custom->setDefaultConcept    = "设置默认概念";
 $lang->custom->browseStoryConcept   = "需求概念列表";
 $lang->custom->deleteStoryConcept   = "删除需求概念";
+$lang->custom->ERConcept            = "业需概念";
 $lang->custom->URConcept            = "用需概念";
 $lang->custom->SRConcept            = "软需概念";
 $lang->custom->reviewRule           = "评审规则";

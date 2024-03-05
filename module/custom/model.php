@@ -714,6 +714,7 @@ class customModel extends model
             $value = json_decode($URSRData->value);
             $URSRList[$URSRData->key] = new stdclass();
             $URSRList[$URSRData->key]->key    = $URSRData->key;
+            $URSRList[$URSRData->key]->ERName = $value->ERName;
             $URSRList[$URSRData->key]->SRName = $value->SRName;
             $URSRList[$URSRData->key]->URName = $value->URName;
             $URSRList[$URSRData->key]->system = $URSRData->system;
@@ -825,11 +826,13 @@ class customModel extends model
         /* If has custom UR and SR name. */
         foreach($data['SRName'] as $key => $SRName)
         {
-            if(isset($data['URName']))  $URName = zget($data['URName'], $key, '');
-            if(!isset($data['URName'])) $URName = $this->lang->URCommon;
-            if(!$URName || !$SRName) continue;
+            $URName = zget($data['URName'], $key, $this->lang->URCommon);
+            $ERName = zget($data['ERName'], $key, $this->lang->ERCommon);
+
+            if(!$URName || !$SRName || !$ERName) continue;
 
             $URSRList = new stdclass();
+            $URSRList->ERName = $ERName;
             $URSRList->SRName = $SRName;
             $URSRList->URName = $URName;
 
