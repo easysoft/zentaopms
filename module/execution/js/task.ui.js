@@ -19,6 +19,8 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 }).off('click', '#actionBar .export').on('click', '#actionBar .export', function()
 {
     const dtable = zui.DTable.query($('#table-execution-task'));
+    if(!$('#table-execution-task').length) return;
+
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
