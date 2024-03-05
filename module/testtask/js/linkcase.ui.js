@@ -56,5 +56,6 @@ window.renderCell = function(result, info)
         html += "</select>";
         result[0] = {html};
     }
+    if(info.col.name == 'lastRunDate' && result[0] && result[0].substring(0, 4) == '0000') result.shift();
     return result;
 }
