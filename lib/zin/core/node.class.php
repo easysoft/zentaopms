@@ -266,6 +266,7 @@ class node implements \JsonSerializable
     {
         if($item === null || is_bool($item)) return;
 
+        if($item instanceof \Closure) $item = $item();
         if(is_array($item))
         {
             foreach($item as $child) $this->add($child, $blockName, $prepend);
