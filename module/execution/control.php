@@ -1671,6 +1671,7 @@ class execution extends control
 
         $this->view->title            = $this->lang->kanban->view;
         $this->view->execution        = $execution;
+        $this->view->executionList    = $this->loadModel('project')->getExecutionList(array($execution->project));
         $this->view->executionID      = $executionID;
         $this->view->kanbanList       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $this->view->browseType       = $browseType;
