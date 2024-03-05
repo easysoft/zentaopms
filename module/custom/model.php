@@ -626,7 +626,7 @@ class customModel extends model
         foreach($langData as $content)
         {
             $value = json_decode($content->value);
-            $URSRPairs[$content->key] = $this->config->URAndSR ? $value->URName . '/' . $value->SRName : $value->SRName;
+            $URSRPairs[$content->key] = $this->config->URAndSR ? $value->ERName . '/' . $value->URName . '/' . $value->SRName : $value->SRName;
         }
 
         return $URSRPairs;
