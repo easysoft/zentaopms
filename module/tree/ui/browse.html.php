@@ -55,6 +55,7 @@ foreach($sons as $son)
                     set::items($branches),
                     set::value($son->branch),
                     set::disabled(true),
+                    set::required(true)
                 ),
                 input
                 (
@@ -109,6 +110,7 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                     set::name("branch[$i]"),
                     set::items($branches),
                     set::value($initBranch),
+                    set::required(true)
                 ),
                 input
                 (
