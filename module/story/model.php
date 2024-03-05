@@ -1470,6 +1470,14 @@ class storyModel extends model
      */
     public function batchChangeModule(array $storyIdList, int $moduleID): array
     {
+        $storyIdList = array_filter($storyIdList);
+        foreach($storyIdList as $index => $storyID)
+        {
+            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+            /* Process selected child story ID. */
+            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+        }
+
         $now        = helper::now();
         $allChanges = array();
         $oldStories = $this->getByList($storyIdList);
@@ -1501,6 +1509,14 @@ class storyModel extends model
      */
     public function batchChangePlan(array $storyIdList, int $planID, int $oldPlanID = 0): array
     {
+        $storyIdList = array_filter($storyIdList);
+        foreach($storyIdList as $index => $storyID)
+        {
+            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+            /* Process selected child story ID. */
+            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+        }
+
         /* Prepare data. */
         $now            = helper::now();
         $oldStories     = $this->getByList($storyIdList);
@@ -1663,6 +1679,14 @@ class storyModel extends model
      */
     public function batchChangeStage(array $storyIdList, string $stage): string|null
     {
+        $storyIdList = array_filter($storyIdList);
+        foreach($storyIdList as $index => $storyID)
+        {
+            /* 处理选中的子需求的ID，截取-后的子需求ID。*/
+            /* Process selected child story ID. */
+            if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
+        }
+
         $now           = helper::now();
         $account       = $this->app->user->account;
         $oldStories    = $this->getByList($storyIdList);

@@ -62,12 +62,9 @@ window.renderCell = function(result, info)
     {
         const story = info.row.data;
         let html = '';
+        if(story.parent > 0 && $.cookie.get('tab') == 'project') html += story.parentName + ' / ';
         if(typeof modulePairs[story.rawModule] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.rawModule] + "</span> ";
-        if(story.parent > 0)
-        {
-            if($.cookie.get('tab') == 'project') html += story.parentName + ' / ';
-            html += "<span class='label gray-pale rounded-xl clip'>" + (storyType == 'requirement' ? 'SR' : childrenAB) + "</span> ";
-        }
+        if(story.parent > 0) html += "<span class='label gray-pale rounded-xl clip'>" + (storyType == 'requirement' ? 'SR' : childrenAB) + "</span> ";
         if(story.color) result[0].props.style = 'color: ' + story.color;
         if(html) result.unshift({html});
     }
