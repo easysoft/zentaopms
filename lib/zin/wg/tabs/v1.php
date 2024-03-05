@@ -115,17 +115,19 @@ class tabs extends wg
 
         $this->filterChildren();
 
-        $titleViews   = array();
-        $contentViews = array();
+        $titleViews = array();
+        $tabPanes   = array();
+        $hasActived = false;
         foreach($this->tabPanes as $tabPane)
         {
             $titleViews[] = $this->buildTitleView($tabPane);
+            if($tabPane->prop('divider')) $titleViews[] = div(set::className('divider'));
+            if($tabPane->prop('active'))  $hasActived = true;
 
-            $divider = $tabPane->block('divider');
-            if($divider) $titleViews[] = div(set::className('divider'));
-
-            $contentViews[] = $tabPane;
+            $tabPanes[] = $tabPane;
         }
+
+        if(!$hasActived && !empty($tabPanes)) $tabPanes[0]->setProp('active', true);
 
         return div
         (
@@ -133,7 +135,7 @@ class tabs extends wg
             set($this->getRestProps()),
 
             $this->buildTabHeader($titleViews),
-            $this->buildTabBody($contentViews),
+            $this->buildTabBody($tabPanes),
             $this->children
         );
     }
