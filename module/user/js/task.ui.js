@@ -5,7 +5,7 @@ window.renderCell = function(result, info)
     {
         let html = '';
         if(task.team)   html += "<span class='label gray-pale rounded-xl'>" + multipleAB + "</span>";
-        if(task.parent) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        if(task.parent > 0) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
         if(html) result.unshift({html});
     }
     if(info.col.name == 'deadline' && result[0])
