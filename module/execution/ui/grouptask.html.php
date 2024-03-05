@@ -120,7 +120,7 @@ toolbar
         set::items($importItems),
         set::placement('bottom-end')
     ) : null,
-    $canCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
+    $canCreate && isset($createItem) ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
 );
 
 $groupList = array();
