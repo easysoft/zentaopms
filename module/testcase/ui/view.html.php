@@ -198,7 +198,7 @@ else
             common::hasPriv('testcase', 'confirmStoryChange', $case) ? a(
                 set::href($this->createLink('testcase', 'confirmStoryChange', "caseID={$case->id}")),
                 setData('app', $app->tab),
-                setClass('mx-1'),
+                setClass('mx-1 px-1 primary-pale'),
                 $lang->confirm
             ) : '',
             ')'
