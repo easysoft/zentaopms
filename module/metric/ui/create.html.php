@@ -26,7 +26,7 @@ formPanel
             (
                 to::before(icon
                 (
-                    setClass('warning500 margin-left8'),
+                    setClass('warning-ghost margin-left8'),
                     'help',
                 )),
                 set::text($lang->metric->tips->noticeUnchangeable),
