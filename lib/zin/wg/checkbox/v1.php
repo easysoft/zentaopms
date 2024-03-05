@@ -72,4 +72,18 @@ class checkbox extends wg
             $this->children()
         );
     }
+
+    public static function create(string|array $checkedOrProps, ?array $props = null, mixed ...$children): static
+    {
+        $props = $props ? $props : array();
+        if(is_array($checkedOrProps))
+        {
+            $props = array_merge($checkedOrProps, $props);
+        }
+        else
+        {
+            $props['checked'] = $checkedOrProps;
+        }
+        return new static(set($props), ...$children);
+    }
 }
