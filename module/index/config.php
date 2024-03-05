@@ -32,3 +32,5 @@ $config->index->oldPages[] = 'ai-editminiprogramcategory';
 $config->index->oldPages[] = 'ai-miniprograms';
 $config->index->oldPages[] = 'ai-prompts';
 $config->index->oldPages[] = 'ai-promptview';
+$config->index->oldPages[] = 'api-debug';
+$config->index->oldPages[] = 'misc-downloadclient';
