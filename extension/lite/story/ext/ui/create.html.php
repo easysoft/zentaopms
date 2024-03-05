@@ -86,7 +86,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->story->reviewedBy),
-            set::required($forceReview),
+            set::required(true),
             inputGroup
             (
                 picker
