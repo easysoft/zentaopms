@@ -33,7 +33,7 @@ else
         $src     = empty($screen->cover) ? "static/images/screen_{$screen->status}.png" : $screen->cover;
         $content = div
         (
-            setClass('border border-light'),
+            setClass('border border-strong'),
             div
             (
                 setClass("h-48 {$class}"),
