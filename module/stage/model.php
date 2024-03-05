@@ -41,11 +41,11 @@ class stageModel extends model
             }
         }
 
+        if(!empty($stage->percent)) $stage->percent = (float)$stage->percent;
         $this->dao->insert(TABLE_STAGE)
             ->data($stage)
             ->autoCheck()
             ->batchCheck($this->config->stage->create->requiredFields, 'notempty')
-            ->checkIF($stage->percent != '', 'percent', 'float')
             ->exec();
 
         if(dao::isError()) return false;
@@ -85,9 +85,9 @@ class stageModel extends model
         foreach($stages as $rowID => $stage)
         {
             $stage->projectType = $type;
+            if(!empty($stage->percent)) $stage->percent = (float)$stage->percent;
             $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()
                 ->batchCheck($this->config->stage->create->requiredFields, 'notempty')
-                ->checkIF($stage->percent != '', 'percent', 'float')
                 ->exec();
 
             if(dao::isError())
