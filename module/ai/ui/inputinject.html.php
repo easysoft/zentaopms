@@ -30,7 +30,8 @@ $inputInject = function()
 
     $this->app->loadLang('ai');
 
-    js(<<< JAVASCRIPT
+    h::globalJS(<<< JAVASCRIPT
+    (() => {
         window.injectToInputElement = (inputName, data, index, tries = 0) =>
         {
             let name = inputName;
@@ -178,6 +179,7 @@ $inputInject = function()
                 }
             }
         });
+    })();
     JAVASCRIPT);
 
     /* TODO: handle prompt audit, see original ../view/inputinject.html.php. */
