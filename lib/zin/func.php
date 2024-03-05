@@ -60,7 +60,6 @@ function pageBase(): pageBase {return createWg('pageBase', func_get_args());}
 function page(): page {return createWg('page',    func_get_args());}
 function fragment(): fragment {return createWg('fragment',    func_get_args());}
 function btnGroup(): btnGroup {return createWg('btnGroup', func_get_args());}
-function mainMenu(): mainMenu {return createWg('mainMenu', func_get_args());}
 function row(): row {return createWg('row', func_get_args());}
 function col(): col {return createWg('col', func_get_args());}
 function center(): center {return createWg('center', func_get_args());}
