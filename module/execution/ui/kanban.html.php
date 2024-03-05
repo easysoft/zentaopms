@@ -54,17 +54,17 @@ if($this->execution->isClickable($execution, 'delete'))   $operationMenu[] = arr
 
 $canCreateTask      = common::hasPriv('task', 'create') && common::canModify('execution', $execution);
 $canBatchCreateTask = common::hasPriv('task', 'batchCreate') && common::canModify('execution', $execution);
-$canImportTask      = common::hasPriv('execution', 'importTask') && $execution->multiple && common::canModify('execution', $execution);
+$canImportTask      = common::hasPriv('execution', 'importTask') && $execution->multiple && common::canModify('execution', $execution) && $this->config->vision != 'lite';
 
-$canCreateBug        = $features['qa'] && common::hasPriv('bug', 'create') && common::canModify('execution', $execution) && $productID;
-$canBatchCreateBug   = $features['qa'] && common::hasPriv('bug', 'batchCreate') && $execution->multiple && common::canModify('execution', $execution) && $productID;
-$canImportBug        = $features['qa'] && common::hasPriv('execution', 'importBug') && $execution->multiple && common::canModify('execution', $execution) && $productID;
+$canCreateBug        = $features['qa'] && common::hasPriv('bug', 'create') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$canBatchCreateBug   = $features['qa'] && common::hasPriv('bug', 'batchCreate') && $execution->multiple && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$canImportBug        = $features['qa'] && common::hasPriv('execution', 'importBug') && $execution->multiple && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
 $hasBugButton        = $features['qa'] && ($canCreateBug || $canBatchCreateBug);
 
-$canCreateStory      = $features['story'] && common::hasPriv('story', 'create') && common::canModify('execution', $execution) && $productID;
-$canBatchCreateStory = $features['story'] && common::hasPriv('story', 'batchCreate') && common::canModify('execution', $execution) && $productID;
-$canLinkStory        = $features['story'] && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct) && common::canModify('execution', $execution) && $productID;
-$canLinkStoryByPlan  = $features['story'] && common::hasPriv('execution', 'importplanstories') && !empty($project->hasProduct) && common::canModify('execution', $execution) && $productID;
+$canCreateStory      = $features['story'] && common::hasPriv('story', 'create') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$canBatchCreateStory = $features['story'] && common::hasPriv('story', 'batchCreate') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$canLinkStory        = $features['story'] && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct) && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
+$canLinkStoryByPlan  = $features['story'] && common::hasPriv('execution', 'importplanstories') && !empty($project->hasProduct) && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
 $hasStoryButton      = $features['story'] && ($canCreateStory || $canBatchCreateStory || $canLinkStory || $canLinkStoryByPlan);
 
 $hasTaskButton = $canCreateTask || $canBatchCreateTask || $canImportBug;
@@ -156,9 +156,17 @@ jsVar('priv',
 
 if(!$features['story']) unset($lang->kanban->type['story']);
 if(!$features['qa'])    unset($lang->kanban->type['bug']);
+
+$executionItems = array();
+foreach($executionList as $childExecution) $executionItems[] = array('text' => $childExecution->name, 'url' => createLink('execution', 'kanban', "kanbanID={$childExecution->id}"));
 featureBar
 (
-    ($features['story'] or $features['qa']) ? inputControl
+    $this->config->vision == 'lite' ? dropdown
+    (
+        btn(setClass('dropdown-btn'), $execution->name),
+        set::items($executionItems),
+    ) : null,
+    (($features['story'] or $features['qa']) && $this->config->vision != 'lite') ? inputControl
     (
         setClass('c-type'),
         picker
@@ -171,7 +179,7 @@ featureBar
             set::onchange('changeBrowseType()'),
         )
     ) : null,
-    $browseType != 'all' ? inputControl
+    $browseType != 'all' && $this->config->vision != 'lite' ? inputControl
     (
         setClass('c-group ml-5'),
         picker
