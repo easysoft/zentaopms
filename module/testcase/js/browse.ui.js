@@ -81,6 +81,10 @@ window.onRenderCell = function(result, {row, col})
                 if(module) result.unshift({html: '<span class="label gray-pale rounded-full">' + module + '</span>'}); // 添加模块标签
             }
         }
+        if(col.name == 'pri' && row.data.isScene)
+        {
+            result.shift(); // 移除场景优先级
+        }
     }
 
     if(row.data.lastEditedDate == '0000-00-00 00:00:00') row.data.lastEditedDate = '';
