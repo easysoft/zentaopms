@@ -238,9 +238,9 @@ detailBody
                     set::manageLink(createLink('tree', 'browse', "rootID={$story->product}&view=story&currentModuleID=0&branch={$story->branch}"))
                 )
             ),
-            $story->parent >= 0 && $story->type == 'story' && $app->tab == 'product' ? item
+            $story->parent >= 0 && $story->type == 'story' ? item
             (
-                set::trClass(zget($fields['parent'], 'className', '')),
+                set::trClass($app->tab == 'product' ? zget($fields['parent'], 'className', '') : 'hidden'),
                 set::name($lang->story->parent),
                 picker(setID('parent'), set::name('parent'), set::items($fields['parent']['options']), set::value($fields['parent']['default']))
             ) : null,
