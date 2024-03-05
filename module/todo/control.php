@@ -60,7 +60,7 @@ class todo extends control
             $todo->id = $todoID;
             $this->todoZen->afterCreate($todo, $form);
 
-            if(!empty($todoData->objectID)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            if(!empty($todoData->objectID)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
 
             if($from == 'block')
             {
