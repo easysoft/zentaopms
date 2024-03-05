@@ -35,7 +35,10 @@ $('#lineForm').on('change', '.col-programs select', function()
 function isProductLineEmpty(obj)
 {
     var lineInputID = $(obj).closest('.col-programs').siblings('.col-module').find('input').attr('id');
-    var lineID      = lineInputID.replace('modulesid', '');
+
+    if(lineInputID == 'modules') return true;
+
+    var lineID = lineInputID.replace('modulesid', '');
 
     $.get(createLink('product', 'ajaxGetProductByLine', 'lineID=' + lineID), function(data)
     {
