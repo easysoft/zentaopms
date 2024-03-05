@@ -751,7 +751,8 @@ $lang->navGroup->index   = 'index';
 $lang->navGroup->misc    = 'misc';
 $lang->navGroup->upgrade = 'upgrade';
 
-if(!$config->URAndSR) unset($lang->product->menu->requirement, $lang->product->menuOrder[35]);
+if(!$config->enableER) unset($lang->product->menu->epic, $lang->product->menuOrder[10]);
+if(!$config->URAndSR)  unset($lang->product->menu->requirement, $lang->product->menuOrder[15]);
 if(!helper::hasFeature('product_roadmap')) unset($lang->product->menu->roadmap, $lang->product->menuOrder[30]);
 if(!helper::hasFeature('product_track'))
 {
