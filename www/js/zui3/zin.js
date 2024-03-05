@@ -737,7 +737,7 @@
         if(options.selector && options.selector !== 'dtable') selector = options.selector;
         if(!$(target).closest('.modal').length && !options.selector)
         {
-            selector += ',#featureBar>*,pageJS/.zin-page-js,hookCode()';
+            selector += ',#mainMenu>*,pageJS/.zin-page-js,hookCode()';
             if($('#moduleMenu').length) selector += ',#moduleMenu,.module-menu-header';
             if($('#docDropmenu').length) selector += ',#docDropmenu,.module-menu';
         }
