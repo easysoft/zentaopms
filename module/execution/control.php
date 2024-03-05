@@ -1914,7 +1914,7 @@ class execution extends control
         $this->view->code                = $code;
         $this->view->team                = $team;
         $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
-        $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel("scrum,agileplus,waterfall,waterfallplus,kanban", 0, 'noclosed,multiple');
+        $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel("all", 0, 'noclosed,multiple');
         $this->view->copyProjects        = $copyProjects;
         $this->view->copyExecutions      = array('' => '') + $this->execution->getList($copyProjectID, 'all', 'all', 0, 0, 0, null, false);
         $this->view->executionID         = $executionID;
