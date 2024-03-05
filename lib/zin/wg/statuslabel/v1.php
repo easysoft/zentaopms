@@ -17,7 +17,7 @@ class statusLabel extends label
         list($text, $status) = $this->prop(array('text', 'status'));
         return span
         (
-            setClass('label', $status ? "status-$status" : ''),
+            setClass($status ? "status-$status" : 'status'),
             set($this->getRestProps()),
             $text,
             $this->children()
