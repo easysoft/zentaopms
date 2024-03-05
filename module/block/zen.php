@@ -2305,7 +2305,13 @@ class blockZen extends block
         $this->app->loadClass('pager', true);
         $pager = new pager(0, 6, 1);
 
-        $this->view->docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0, 'collects_desc', $pager);
+        $docList = $this->loadModel('doc')->getDocsByBrowseType('all', 0, 0, 'collects_desc', $pager);
+        foreach($docList as $docID => $doc)
+        {
+            if(empty($doc->collects)) unset($docList[$docID]);
+        }
+
+        $this->view->docList = $docList;
     }
 
     /**
