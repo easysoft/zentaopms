@@ -39,6 +39,27 @@ function isProductLineEmpty(obj)
 
     $.get(createLink('product', 'ajaxGetProductByLine', 'lineID=' + lineID), function(data)
     {
-        if(data) alert(changeProgramTip);
+        if(data)
+        {
+            var confirmResult = confirm(changeProgramTip);
+            if(!confirmResult)
+            {
+                $(obj).val(sessionStorage.getItem($(obj).attr('id'))).trigger('chosen:updated');
+                return false;
+            }
+        }
+
+        sessionStorage.setItem($(obj).attr('id'), $(obj).val());
     })
 }
+
+$(function()
+{
+    $("select[name^=programs]").each(function()
+    {
+        var selectId      = $(this).attr('id');
+        var selectedValue = $(this).val();
+
+        sessionStorage.setItem(selectId, selectedValue);
+    })
+})
