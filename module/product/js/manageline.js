@@ -39,10 +39,6 @@ function isProductLineEmpty(obj)
 
     $.get(createLink('product', 'ajaxGetProductByLine', 'lineID=' + lineID), function(data)
     {
-        if(data && !hasPrompted)
-        {
-            hasPrompted = true;
-            alert(changeProgramTip);
-        }
+        if(data) alert(changeProgramTip);
     })
 }

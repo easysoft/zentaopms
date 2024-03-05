@@ -10,7 +10,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('hasPrompted', false);?>
 <?php js::set('changeProgramTip', $lang->product->lineChangeProgram);?>
 <div id="mainContent" class="main-row fade">
   <div class='side-col col-4'>
