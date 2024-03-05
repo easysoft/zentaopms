@@ -763,10 +763,10 @@ function findInNode(array $selectors, node|array $list, bool $first = false, boo
     if($list instanceof node)
     {
         $data = $list->buildData;
-        if(!$data || !isset($data->content) || empty($data->content)) return array();
+        if(!$data) return array();
 
-        $list = $data->content;
-        if(!$onlyContent) $list = array_merge($data->before, $list, $data->after);
+        $list = $data->content ? $data->content : array();
+        if(!$onlyContent) $list = array_merge($data->before ? $data->before : array(), $list, $data->after ? $data->after : array());
     }
     if($reverse) $list = array_reverse($list);
     $result = array();
