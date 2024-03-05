@@ -201,6 +201,7 @@ class actionModel extends model
             if(in_array($actionName, array('linkstory', 'unlinkstory', 'createchildrenstory', 'linkur', 'unlinkur'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'view');
             if(in_array($actionName, array('linkbug', 'unlinkbug'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'bug', 'view');
             if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
+            if($actionName == 'createdsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $action->extra == 'defaultSnap') $action->actor = $this->lang->action->system;
 
             $action->history = zget($histories, $actionID, array());
             foreach($action->history as $history)
@@ -575,7 +576,7 @@ class actionModel extends model
             }
             else
             {
-                if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->{$objectType}->snapshot->defaultSnapName;
+                if(in_array($actionType, array('restoredsnapshot', 'createdsnapshot')) && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->{$objectType}->snapshot->defaultSnapName;
 
                 $desc = str_replace('$' . $key, (string)$value, $desc);
             }
