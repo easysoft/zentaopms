@@ -35,6 +35,7 @@ function formBatchPanel(): formBatchPanel {return createWg('formBatchPanel', fun
 function batchActions(): batchActions {return createWg('batchActions', func_get_args());}
 function content(): content {return createWg('content', func_get_args());}
 function listItem(): listItem {return createWg('listitem', func_get_args());}
+function simpleList(): simpleList {return createWg('simplelist', func_get_args());}
 function breadcrumb(): breadcrumb {return createWg('breadcrumb', func_get_args());}
 function control(): control {return createWg('control', func_get_args());}
 function select(): select {return createWg('select', func_get_args());}
