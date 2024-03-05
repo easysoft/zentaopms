@@ -195,7 +195,7 @@ class customModel extends model
         /* Set divider in main && module menu. */
         if(!isset($lang->{$tab}->menuOrder))
         {
-            if(!isset($lang->{$tab})) $lang->{$tab} = new stdclass();
+            if(!isset($lang->{$tab})) $tab == 'my';
             $lang->{$tab}->menuOrder = array();
         }
         ksort($lang->{$tab}->menuOrder, SORT_NUMERIC);
