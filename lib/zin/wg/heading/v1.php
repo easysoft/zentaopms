@@ -28,8 +28,11 @@ class heading extends wg
         if(!in_array($tab, array('program', 'product', 'project')))
         {
             $nav = $lang->mainNav->$tab;
-            list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
-            if($tab == 'execution') $currentMethod = 'all';
+            if($nav)
+            {
+                list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
+                if($tab == 'execution') $currentMethod = 'all';
+            }
         }
         else
         {
@@ -37,6 +40,8 @@ class heading extends wg
             if($tab == 'program' or $tab == 'project') $currentMethod = 'browse';
             if($tab == 'product')                      $currentMethod = 'all';
         }
+
+        if(!$currentModule || !$currentMethod) return null;
 
         $url = createLink($currentModule, $currentMethod);
         return item
