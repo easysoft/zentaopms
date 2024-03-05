@@ -1103,7 +1103,7 @@ class bugZen extends bug
 
         if(!empty($bug->allBuilds))
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased', 0, '');
             return $this->updateBug($bug, array('builds' => $builds));
         }
 
