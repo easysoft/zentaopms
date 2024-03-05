@@ -29,6 +29,7 @@ featureBar
 if(!isset($browseType)) $browseType = 'all';
 if(!isset($orderBy))    $orderBy = '';
 
+$canCreateTask  = false;
 $canImportTask  = hasPriv('task', 'importTask');
 $canImportBug   = hasPriv('task', 'importBug');
 if(common::canModify('execution', $execution))
@@ -38,6 +39,7 @@ if(common::canModify('execution', $execution))
     {
         $importBugItem = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"), 'className' => 'importBug');
     }
+    $canCreateTask = hasPriv('task', 'create');
 }
 $importItems = !empty($importTaskItem) && empty($importBugItem) ? array($importTaskItem) : array();
 $importItems = empty($importTaskItem) && !empty($importBugItem) ? array($importBugItem) : $importItems;
@@ -69,7 +71,7 @@ toolbar
         'url'         => createLink('task', 'export', "execution={$executionID}&orderBy={$orderBy}&type=tree"),
         'data-toggle' => 'modal'
     ))) : null,
-    hasPriv('task', 'create') ? item(set(array
+    $canCreateTask ? item(set(array
     (
         'icon' => 'plus',
         'text' => $lang->task->create,
@@ -90,7 +92,7 @@ if(empty($tree))
             setClass('text-gray'),
             $lang->task->noTask
         ),
-        common::hasPriv('task', 'create', $checkObject) ? btn
+        $canCreateTask ? btn
         (
             set::text($lang->task->create),
             set::icon('plus'),
