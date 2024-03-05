@@ -63,6 +63,7 @@ $lang->admin->notice = new stdclass();
 $lang->admin->notice->register = "可%s禅道社区 www.zentao.net，及时获得禅道最新信息。";
 $lang->admin->notice->ignore   = "不再提示";
 $lang->admin->notice->int      = "『%s』应当是正整数。";
+$lang->admin->notice->openUR   = "请先开启{$lang->URCommon}，才能使用{$lang->ERCommon}。";
 
 $lang->admin->registerNotice = new stdclass();
 $lang->admin->registerNotice->common     = '注册新帐号';
@@ -106,6 +107,7 @@ $lang->admin->setModule->meeting        = '会议';
 $lang->admin->setModule->roadmap        = '路线图';
 $lang->admin->setModule->track          = '矩阵';
 $lang->admin->setModule->UR             = $lang->URCommon;
+$lang->admin->setModule->ER             = $lang->ERCommon;
 $lang->admin->setModule->researchplan   = '调研';
 $lang->admin->setModule->gapanalysis    = '培训';
 $lang->admin->setModule->storylib       = '需求库';

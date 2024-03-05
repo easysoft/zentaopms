@@ -261,9 +261,14 @@ class admin extends control
                 }
             }
 
+            $enableER = $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productER', 0);
+            $URAndSR  = $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productUR', 0);
+            if($enableER && !$URAndSR) $this->send(array('result' => 'fail', 'message' => $this->lang->admin->notice->openUR));
+
             $this->setting->setItem('system.common.closedFeatures', implode(',', $closedFeatures));
             $this->setting->setItem('system.common.global.scoreStatus', zget($data->module, 'myScore', 0));
-            $this->setting->setItem('system.custom.URAndSR', $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productUR', 0));
+            $this->setting->setItem('system.custom.enableER', $enableER);
+            $this->setting->setItem('system.custom.URAndSR',  $URAndSR);
             $this->setting->setItem('system.common.setCode', in_array('otherSetCode', $closedFeatures) ? 0 : 1);
             $this->loadModel('custom')->processMeasrecordCron();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => '$.apps.updateAppsMenu(true);loadCurrentPage();'));

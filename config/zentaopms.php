@@ -697,7 +697,7 @@ $config->dtable->colVars = array('width', 'minWidth', 'type', 'flex', 'fixed', '
 
 $config->featureGroup = new stdclass();
 $config->featureGroup->my            = array('score');
-$config->featureGroup->product       = array('roadmap', 'track', 'UR');
+$config->featureGroup->product       = array('roadmap', 'track', 'UR', 'ER');
 $config->featureGroup->scrum         = array();
 $config->featureGroup->waterfall     = array();
 $config->featureGroup->agileplus     = array();

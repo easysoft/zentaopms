@@ -63,6 +63,7 @@ $lang->admin->notice = new stdclass();
 $lang->admin->notice->register = "Note: Vous n'êtes pas enregistré sur le site officiel de ZenTao (www.zentao.pm). %s vous pourrez ensuite obtenir les dernières Mises à Jour de ZenTao et des informations.";
 $lang->admin->notice->ignore   = "Ignorer";
 $lang->admin->notice->int      = "『 %s 』 devrait être un entier positif.";
+$lang->admin->notice->openUR   = "Please enable {$lang->URCommon} first before you can use {$lang->ERCommon}.";
 
 $lang->admin->registerNotice = new stdclass();
 $lang->admin->registerNotice->common     = 'Register Account';
@@ -105,6 +106,7 @@ $lang->admin->setModule->auditplan      = 'QA';
 $lang->admin->setModule->meeting        = 'Meeting';
 $lang->admin->setModule->roadmap        = 'Roadmap';
 $lang->admin->setModule->track          = 'Track';
+$lang->admin->setModule->ER             = $lang->ERCommon;
 $lang->admin->setModule->UR             = $lang->URCommon;
 $lang->admin->setModule->researchplan   = 'Researchplan';
 $lang->admin->setModule->gapanalysis    = 'Gapanalysis';
