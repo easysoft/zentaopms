@@ -20,7 +20,7 @@ class collapseBtn extends wg
         (
             setClass('btn-link', 'collapse-btn'),
             set($this->getRestProps()),
-            set::icon('angle-down'),
+            set::icon('angle-down icon-lg text-gray'),
             on::click()->do
             (
                 <<<JS
