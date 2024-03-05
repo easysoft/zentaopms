@@ -31,7 +31,7 @@ $cols = array_map(function($col){unset($col['sortType']); return $col;}, $cols);
 $data = array();
 foreach($stories2Link as $linkStory) $data[] = $this->story->formatStoryForList($linkStory);
 
-modalHeader(set::title($lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story)));
+modalHeader(set::title($lang->story->link . ($story->type == 'requirement' ? $lang->story->story: $lang->story->requirement)));
 
 searchForm
 (

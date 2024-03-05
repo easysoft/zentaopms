@@ -19,7 +19,9 @@ if($story->type == 'requirement')
     $lang->story->unlinkStory = str_replace($lang->URCommon, $lang->SRCommon, $lang->story->unlinkStory);
 }
 
-$isInModal = isInModal();
+$isInModal     = isInModal();
+$relationTitle = $lang->SRCommon;
+if($story->type == 'epic' || $story->type == 'story') $relationTitle = $lang->story->requirement;
 
 data('branchID', $story->branch);
 data('activeMenuID', $story->type);
@@ -432,13 +434,13 @@ detailBody
             ) : null,
             ($this->config->URAndSR && !$hiddenURS && $config->vision != 'or') ? tabPane
             (
-                set::title($story->type == 'story' ? $lang->story->requirement : $lang->story->story),
+                set::title($relationTitle),
                 set::active(empty($twins)),
                 h::ul
                 (
                     array_values(array_map(function($relation) use($story)
                     {
-                        $relationType = $story->type == 'story' ? 'requirement' : 'story';
+                        $relationType = $story->type == 'requirement' ? 'story' : 'requirement';
                         $canViewStory = common::hasPriv($relationType, 'view', null, "storyType=$relationType");
                         $canLinkStory = common::hasPriv($story->type, 'linkStory');
 
@@ -451,7 +453,7 @@ detailBody
                             $canLinkStory ? a(set('url', helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}&browseType=&queryID=0&storyType=$story->type")), setClass('unlink unlinkStory hidden'), icon('unlink')) : null
                         );
                     }, $relations)),
-                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), setData(array('toggle' => 'modal', 'size' => 'lg')), setID('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story)))
+                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), setData(array('toggle' => 'modal', 'size' => 'lg')), setID('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->link . $relationTitle))
                 )
             ) : null,
             $story->type == 'story' && common::hasPriv('story', 'tasks') ? tabPane

@@ -1901,7 +1901,7 @@ class storyModel extends model
     public function getStories2Link(int $storyID, string $type = 'linkStories', string $browseType = 'bySearch', int $queryID = 0, string $storyType = 'story', object $pager = null, string $excludeStories = ''): array
     {
         $story         = $this->getById($storyID);
-        $tmpStoryType  = $storyType == 'story' ? 'requirement' : 'story';
+        $tmpStoryType  = $storyType == 'requirement' ? 'story' : 'requirement';
         $stories2Link  = array();
         if($type == 'linkRelateSR' or $type == 'linkRelateUR')
         {

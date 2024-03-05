@@ -1337,10 +1337,15 @@ class story extends control
             $this->lang->story->title     = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->title);
             $this->lang->story->linkStory = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->linkStory);
         }
+        elseif($story->type == 'epic')
+        {
+            $this->lang->story->title     = str_replace($this->lang->epic->common, $this->lang->URCommon, $this->lang->story->title);
+            $this->lang->story->linkStory = str_replace($this->lang->epic->common, $this->lang->URCommon, $this->lang->story->linkStory);
+        }
 
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
-        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, $story->type == 'story' ? 'requirement' : 'story', (string)$story->branch);
+        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, $story->type == 'requirement' ? 'story' : 'requirement', (string)$story->branch);
 
         /* Get stories to link. */
         $stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type);

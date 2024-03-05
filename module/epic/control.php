@@ -85,20 +85,41 @@ class epic extends control
     }
 
     /**
-     * 用户需求详情页，关联软件需求，将用户需求关联到软件需求。
-     * Link story and epic.
+     * 关联Epic。
+     * Link related epics.
      *
      * @param  int    $storyID
-     * @param  string $type          linkStories|linkRelateUR|linkRelateSR
-     * @param  int    $linkedStoryID
-     * @param  string $browseType    ''|bySearch
-     * @param  int    $queryID
+     * @param  string $browseType
+     * @param  string $excludeStories
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkStory(int $storyID, string $type = 'linkStories', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0)
+    public function linkEpic(int $storyID, string $browseType = '', string $excludeStories = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        echo $this->fetch('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=$browseType&queryID=$queryID&storyType=epic");
+        echo $this->fetch('story', 'linkStories', "storyID=$storyID&browseType=$browseType&excludeStories=$excludeStories&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
+     * 关联用户需求。
+     * Link related requirements.
+     *
+     * @param  int    $storyID
+     * @param  string $browseType
+     * @param  string $excludeStories
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkRequirements(int $storyID, string $browseType = '', string $excludeStories = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        echo $this->fetch('story', 'linkRequirements', "storyID=$storyID&browseType=$browseType&excludeStories=$excludeStories&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**

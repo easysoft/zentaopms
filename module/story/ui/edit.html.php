@@ -372,7 +372,7 @@ detailBody
             ) : null,
             item
             (
-                set::name($story->type == 'story' ? $lang->requirement->linkStory : $lang->story->linkStory),
+                set::name($lang->{$story->type}->linkStory),
                 ($story->type == 'story' && common::hasPriv('story', 'linkStories')) ? btn
                 (
                     setClass('secondary'),
