@@ -6,7 +6,7 @@ $(function()
 
 $('#runCaseModal').closest('.modal').on('hide.zui.modal', function()
 {
-    loadCurrentPage();
+    if(!$(this).hasClass('not-refresh')) loadCurrentPage();
 });
 
 /**
