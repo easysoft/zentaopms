@@ -10,76 +10,50 @@ declare(strict_types=1);
  */
 namespace zin;
 
+use function zin\utils\flat;
+
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
-$confirmDelete = $this->lang->story->confirmDelete;
-if($story->type == 'requirement')
-{
-    $confirmDelete = str_replace($lang->SRCommon, $lang->URCommon, $confirmDelete);
-    $lang->story->unlinkStory = str_replace($lang->URCommon, $lang->SRCommon, $lang->story->unlinkStory);
-}
+$isInModal     = isInModal();
+$isRequirement = $story->type == 'requirement';
+$isStoryType   = $story->type == 'story';
+$actions       = $isInModal ? null : $this->story->buildOperateMenu($story, 'view', $project ? $project : null);
 
-$isInModal = isInModal();
-
-data('branchID', $story->branch);
-data('activeMenuID', $story->type);
-jsVar('relievedTip', $lang->story->relievedTip);
-jsVar('unlinkStoryTip', $story->type == 'story' ? str_replace($lang->SRCommon, $lang->URCommon, $lang->story->unlinkStory) : $lang->story->unlinkStory);
-jsVar('confirmDeleteTip', $confirmDelete);
-jsVar('storyType', $story->type);
-jsVar('storyID', $story->id);
-jsVar('isInModal', $isInModal);
-
-$otherParam = 'storyID=&projectID=';
-$tab        = 'product';
-if($this->app->rawModule == 'projectstory' or $this->app->tab == 'project')
-{
-    $otherParam = "storyID=&projectID={$this->session->project}";
-    $tab        = 'project';
-}
-if($this->app->rawModule == 'execution') $tab = 'execution';
-$createStoryLink = $this->createLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type");
-
+/* 版本列表。Version list. */
 $versions = array();
-for($i = $story->version; $i >= 1; $i --)
+for($i = $story->version; $i >= 1; $i--)
 {
-    $versionItem = array('text' => "#{$i}", 'url' => inlink('view', "storyID={$story->id}&version=$i&param=0&storyType={$story->type}"));
-    if(isInModal())
+    $versionItem = setting()
+        ->text("#{$i}")
+        ->url(inlink('view', "storyID={$story->id}&version=$i&param=0&storyType={$story->type}"));
+
+    if($isInModal)
     {
-        $versionItem['data-load'] = 'modal';
-        $versionItem['data-target'] = '.modal-content';
+        $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal-content'));
     }
+
+    $versionItem->selected($version == $i);
     $versions[] = $versionItem;
 }
 
-$menus = $this->story->buildOperateMenu($story, 'view', $project ? $project : null);
-foreach($menus['dropMenus'] as $dropMenuKey => $dropItems) menu(setID($dropMenuKey), setClass('menu dropdown-menu'), set::items($dropItems));
-
-/* Get module items. */
-$moduleTitle = '';
+/* 模块列表。Module list. */
 $moduleItems = array();
 if(empty($modulePath))
 {
-    $moduleTitle  .= '/';
-    $moduleItems[] = span('/');
+    $moduleItems[] = '/';
 }
 else
 {
     if($storyModule->branch and isset($branches[$storyModule->branch]))
     {
-        $moduleTitle  .= $branches[$storyModule->branch] . '/';
-        $moduleItems[] = span($branches[$storyModule->branch], icon('angle-right'));
+        $moduleItems[] = $branches[$storyModule->branch];
     }
 
     foreach($modulePath as $key => $module)
     {
-        $moduleTitle  .= $module->name;
-        $moduleItems[] = $product->shadow ? span($module->name) : a(set::href(helper::createLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id")), $module->name);
-        if(isset($modulePath[$key + 1]))
-        {
-            $moduleTitle  .= '/';
-            $moduleItems[] = icon('angle-right');
-        }
+        $moduleItems[] = $product->shadow ? $module->name : array('text' => $module->name, 'url' => createLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id"));
+
+        if(isset($modulePath[$key + 1])) $moduleItems[] = '/';
     }
 }
 
@@ -111,46 +85,40 @@ if(!empty($story->mailto))
 }
 $mailtoList = implode($lang->comma, $mailtoList);
 
-$taskItems = array();
-if($story->type == 'story')
+/* 根据需求类型，设置要激活的导航项。Active navbar item by story type. */
+setPageData('activeMenuID', $story->type);
+
+/* 初始化头部右上方工具栏。Init detail toolbar. */
+$toolbar = array();
+if(!$isInModal && hasPriv('story', 'create'))
 {
-    foreach($story->tasks as $executionTasks)
-    {
-        foreach($executionTasks as $task)
-        {
-            if(!isset($executions[$task->execution])) continue;
-            $execution     = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
-            $executionLink = !empty($execution->multiple) ? $this->createLink('execution', 'view', "executionID=$task->execution") : $this->createLink('project', 'view', "projectID=$task->project");
-            $executionName = $executions[$task->execution];
-            $taskItems[] = h::li
-            (
-                set::title($task->name),
-                (isset($execution->type) && $execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executionName) : a(set::href($executionLink), setClass('muted title'), $executionName),
-                label(setClass('circle size-sm'), $task->id),
-                common::hasPriv('task', 'view') ? a(set::href($this->createLink('task', 'view', "taskID=$task->id")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), $task->name) : span(setClass('title'), $task->name),
-                label(setClass("status-{$task->status} size-sm"), $this->lang->task->statusList[$task->status])
-            );
-        }
-    }
-
-    if(empty($story->tasks))
-    {
-        foreach($story->executions as $executionID => $execution)
-        {
-            if(!$execution->multiple) continue;
-            if(!isset($executions[$executionID])) continue;
-            if(isset($story->tasks[$executionID])) continue;
-
-            $taskItems[] = h::li
-            (
-                set::title($execution->name),
-                ($execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executions[$executionID]) : a(set::href($this->createLink('execution', 'view', "executionID=$executionID")), setClass('muted title'), $executions[$executionID])
-            );
-        }
-    }
+    $toolbar[] = array('icon' => 'plus', 'type' => 'primary', 'text' => $lang->story->create);
 }
 
-if(!empty($story->children))
+/* 初始化主栏内容。Init sections in main column. */
+$sections = array();
+$sections[] = setting()
+    ->title($lang->story->legendSpec)
+    ->control('html')
+    ->content(empty($story->spec) ? $lang->noDesc : $story->spec);
+$sections[] = setting()
+    ->title($lang->story->legendVerify)
+    ->control('html')
+    ->content(empty($story->verify) ? $lang->noDesc : $story->verify);
+if($story->files)
+{
+    $sections[] = array
+    (
+        'title'      => $lang->files,
+        'control'    => 'fileList',
+        'files'      => $story->files,
+        'showDelete' => false,
+        'object'     => $story
+    );
+}
+
+/* 子需求列表。 */
+if($story->children)
 {
     $cols['id']         = $config->story->dtable->fieldList['id'];
     $cols['title']      = $config->story->dtable->fieldList['title'];
@@ -172,463 +140,188 @@ if(!empty($story->children))
 
     $options = array('users' => $users);
     foreach($story->children as $child) $child = $this->story->formatStoryForList($child, $options);
+
+    $sections[] = array
+    (
+        'title'          => $isRequirement ? $lang->story->story : $lang->story->children,
+        'control'        => 'dtable',
+        'cols'           => $cols,
+        'userMap'        => $users,
+        'data'           => array_values($story->children),
+        'fixedLeftWidth' => '0.4'
+    );
 }
 
-detailHeader
+/* 基本信息。Legend basic items. */
+$legendBasicItems = array();
+if(!$product->shadow)
+{
+    $legendBasicItems[$lang->story->product] = common::hasPriv('product', 'view') ? array('control' => 'link', 'url' => createLink('product', 'view', "productID=$story->product"), 'text' => $product->name) : $product->name;
+}
+if($product->type !== 'normal')
+{
+    $legendBasicItems[$lang->story->branch] = common::hasPriv('product', 'browse') ? array('control' => 'link', 'url' => createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), 'text' => $branches[$story->branch]) : $branches[$story->branch];
+}
+$legendBasicItems[$lang->story->module] = array
 (
-    to::title
+    'control' => 'breadcrumb',
+    'items'   => $moduleItems
+);
+if($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan)
+{
+    $planTitleItems = array();
+    if(isset($story->planTitle) && $story->planTitle)
+    {
+        foreach($story->planTitle as $planID => $planTitle)
+        {
+            $planTitleItems[] = hasPriv('productplan', 'view') ? $planTitle : array
+            (
+                'url'     => createLink('plan', 'view', "planID=$planID"),
+                'text'    => $planTitle
+            );
+        }
+    }
+    $legendBasicItems[$lang->story->plan] = array
     (
-        entityLabel
-        (
-            set::entityID($story->id),
-            set::level(1),
-            set::text(''),
-            $story->parent > 0 ? label(setClass('circle child'), $lang->story->childrenAB) : null,
-            $story->parent > 0 && isset($story->parentName) ? span(a(set::href(inlink('view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")), $story->parentName), ' / ') : null,
-            span(setStyle(array('color' => $story->color)), $story->title)
-        ),
-        count($versions) > 1 ? dropdown
-        (
-            btn(setClass('btn-link'), "#{$version}"),
-            set::items($versions)
-        ) : null,
-        $story->deleted ? span(setClass('label danger'), $lang->story->deleted) : null
-    ),
+        'control' => 'list',
+        'items'   => $planTitleItems
+    );
+}
+$legendBasicItems[$lang->story->source] = zget($lang->story->sourceList, $story->source, '');
+$legendBasicItems[$lang->story->sourceNote] = array
+(
+    'control' => 'text',
+    'content' => $story->sourceNote,
+    'id'      => 'sourceNoteBox'
+);
+$legendBasicItems[$lang->story->status] = array
+(
+    'control' => 'status',
+    'class'   => 'status-story',
+    'status'  => $story->URChanged ? 'changed' : $story->status,
+    'text'    => $this->processStatus('story', $story)
+);
+if(!$isRequirement)
+{
+    $legendBasicItems[$lang->story->stage] = array
+    (
+        'class' => 'stage-line',
+        'text'  => zget($lang->story->stageList, $minStage, '')
+    );
+}
+$legendBasicItems[$lang->story->category] = zget($lang->story->categoryList, $story->category);
+$legendBasicItems[$lang->story->pri] = array
+(
+    'control' => 'pri',
+    'pri'     => $story->pri,
+    'text'    => $lang->story->priList
+);
+$legendBasicItems[$lang->story->estimate] = $story->estimate . $config->hourUnit;
+if(in_array($story->source, $config->story->feedbackSource))
+{
+    $legendBasicItems[$lang->story->feedbackBy]  = $story->feedbackBy;
+    $legendBasicItems[$lang->story->notifyEmail] = $story->notifyEmail;
+}
+$legendBasicItems[$lang->story->keywords]      = $story->keywords;
+$legendBasicItems[$lang->story->legendMailto]  = $mailtoList;
 
-    $isInModal ? null : to::suffix
+/* 需求一生。Legend life items. */
+$legendLifeItems = array();
+$legendLifeItems[$lang->story->openedBy] = zget($users, $story->openedBy) . $lang->at . $story->openedDate;
+$legendLifeItems[$lang->story->assignedTo] = $story->assignedTo ? zget($users, $story->assignedTo) . $lang->at . $story->assignedDate : null;
+$legendLifeItems[$lang->story->reviewers] = array
+(
+    'children' => wg(div
     (
-        btn
-        (
-            set::icon('plus'),
-            set::type('primary'),
-            set::text($lang->story->create),
-            common::hasPriv('story', 'create') ? set::url($createStoryLink) : null
-        )
+        setClass('row gap-2 flex-wrap'),
+        array_values(array_map(function($reviewer, $result) use($users)
+        {
+            global $lang;
+            return !empty($result) ? span(setClass('mr-2'), set::title($lang->story->reviewed), set::style(array('color' => '#cbd0db')), zget($users, $reviewer)) : span(setClass('mr-2'), set::title($lang->story->toBeReviewed), zget($users, $reviewer));
+        }, array_keys($reviewers), array_values($reviewers)))
+    ))
+);
+$legendLifeItems[$lang->story->reviewedDate] = $story->reviewedDate;
+$legendLifeItems[$lang->story->closedBy] = $story->closedBy ? zget($users, $story->closedBy) . $lang->at . $story->closedDate : null;
+$legendLifeItems[$lang->story->closedReason] = array
+(
+    'class'    => 'resolution',
+    'children' => wg
+    (
+        $story->closedReason ? zget($lang->story->reasonList, $story->closedReason) : null,
+        isset($story->extraStories[$story->duplicateStory]) ? a(set::href(inlink('view', "storyID=$story->duplicateStory")), set::title($story->extraStories[$story->duplicateStory]), "#{$story->duplicateStory} {$story->extraStories[$story->duplicateStory]}") : null
     )
 );
+$legendLifeItems[$lang->story->lastEditedBy] = zget($users, $story->lastEditedBy) . $lang->at . $story->lastEditedDate;
 
-$statusClass = $story->URChanged ? 'status-changed' : "status-{$story->status}";
-detailBody
+/* 初始化侧边栏标签页。Init tabs in sidebar. */
+$tabs = array();
+$tabs[] = setting()
+    ->group('basic')
+    ->title($lang->story->legendBasicInfo)
+    ->control('datalist')
+    ->items($legendBasicItems);
+$tabs[] = setting()
+    ->group('basic')
+    ->title($lang->story->legendLifeTime)
+    ->control('datalist')
+    ->items($legendLifeItems);
+
+if($twins)
+{
+    $tabs[] = setting()
+        ->group('relatives')
+        ->title($lang->story->twins)
+        ->control('twinsStoryList')
+        ->branches($branches)
+        ->items($twins);
+}
+
+if($this->config->URAndSR && !$hiddenURS && $config->vision != 'or')
+{
+    $tabs[] = setting()
+        ->group('relatives')
+        ->title($isStoryType ? $lang->story->requirement : $lang->story->story)
+        ->control('linkedStoryList')
+        ->items($relations)
+        ->story($story);
+}
+if($isStoryType && common::hasPriv('story', 'tasks'))
+{
+    $tabs[] = setting()
+        ->group('relatives')
+        ->title($lang->story->legendProjectAndTask)
+        ->control('executionTaskList')
+        ->tasks(flat($story->tasks))
+        ->executions($story->executions);
+}
+
+/* 相关信息。 */
+$tabs[] = setting()
+        ->group('relatives')
+        ->title($lang->story->legendRelated)
+        ->control('storyRelatedList');
+
+$versionBtn = count($versions) > 1 ? to::title(dropdown
 (
-    sectionList
-    (
-        section
-        (
-            set::title($lang->story->legendSpec),
-            set::content(empty($story->spec) ? $lang->noDesc : $story->spec),
-            set::useHtml(true)
-        ),
-        section
-        (
-            set::title($lang->story->legendVerify),
-            set::content(empty($story->verify) ? $lang->noDesc : $story->verify),
-            set::useHtml(true)
-        ),
-        $story->files ? fileList
-        (
-            set::files($story->files),
-            set::showDelete(false),
-            set::object($story)
-        ) : null,
-        empty($story->children) ? null : section
-        (
-            set::title($story->type == 'requirement' ? $lang->story->story : $lang->story->children),
-            dtable
-            (
-                set::cols($cols),
-                set::userMap($users),
-                set::data(array_values($story->children)),
-                set::fixedLeftWidth('0.4')
-            )
-        )
-    ),
-    history(set::objectID($story->id)),
-    floatToolbar
-    (
-        set::object($story),
-        $isInModal ? null : to::prefix(backBtn(setClass('btn-default ghost text-white'), set::icon('back'), $lang->goback)),
-        $story->deleted ? null : set::main($menus['mainMenu']),
-        $story->deleted ? null : set::suffix($menus['suffixMenu'])
-    ),
-    detailSide
-    (
-        tabs
-        (
-            set::collapse(true),
-            tabPane
-            (
-                set::title($lang->story->legendBasicInfo),
-                set::active(true),
-                tableData
-                (
-                    $product->shadow ? null : item
-                    (
-                        set::name($lang->story->product),
-                        common::hasPriv('product', 'view') ? a(set::href($this->createLink('product', 'view', "productID=$story->product")), $product->name) : $product->name
-                    ),
-                    $product->type == 'normal' ? null : item
-                    (
-                        set::name($lang->story->branch),
-                        common::hasPriv('product', 'browse') ? a(set::href($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch")), $branches[$story->branch]) : $branches[$story->branch]
-                    ),
-                    item
-                    (
-                        set::name($lang->story->module),
-                        set::title($moduleTitle),
-                        $moduleItems
-                    ),
-                    ($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan) ? item
-                    (
-                        set::trClass('plan-line'),
-                        set::name($lang->story->plan),
-                        empty($story->planTitle) ? null : array_values(array_map(function($planID, $planTitle)
-                        {
-                            $items   = array();
-                            $items[] = common::hasPriv('productplan', 'view') ? a(set::href(helper::createLink('productplan', 'view', "planID={$planID}")), $planTitle) : $planTitle;
-                            $items[] = h::br();
-                            return $items;
-                        }, array_keys($story->planTitle), array_values($story->planTitle)))
-                    ) : null,
-                    item
-                    (
-                        setID('source'),
-                        set::name($lang->story->source),
-                        zget($lang->story->sourceList, $story->source, '')
-                    ),
-                    item
-                    (
-                        setID('sourceNoteBox'),
-                        set::name($lang->story->sourceNote),
-                        $story->sourceNote
-                    ),
-                    item
-                    (
-                        set::name($lang->story->status),
-                        span
-                        (
-                            setClass("status-story $statusClass"),
-                            $story->URChanged ? $lang->story->URChanged : $this->processStatus('story', $story)
-                        )
-                    ),
-                    $story->type == 'requirement' ? null : item
-                    (
-                        set::trClass('stage-line'),
-                        set::name($lang->story->stage),
-                        zget($lang->story->stageList, $minStage, '')
-                    ),
-                    item
-                    (
-                        set::name($lang->story->category),
-                        zget($lang->story->categoryList, $story->category)
-                    ),
-                    item
-                    (
-                        set::name($lang->story->pri),
-                        priLabel($story->pri, set::text($lang->story->priList))
-                    ),
-                    item
-                    (
-                        set::name($lang->story->estimate),
-                        $story->estimate . $config->hourUnit
-                    ),
-                    in_array($story->source, $config->story->feedbackSource) ? item
-                    (
-                        set::name($lang->story->feedbackBy),
-                        $story->feedbackBy
-                    ) : null,
-                    in_array($story->source, $config->story->feedbackSource) ? item
-                    (
-                        set::name($lang->story->notifyEmail),
-                        $story->notifyEmail
-                    ) : null,
-                    item
-                    (
-                        set::name($lang->story->keywords),
-                        $story->keywords
-                    ),
-                    item
-                    (
-                        set::name($lang->story->legendMailto),
-                        $mailtoList
-                    )
-                )
-            ),
-            tabPane
-            (
-                set::title($lang->story->legendLifeTime),
-                tableData
-                (
-                    item
-                    (
-                        set::name($lang->story->openedBy),
-                        zget($users, $story->openedBy) . $lang->at . $story->openedDate
-                    ),
-                    item
-                    (
-                        set::name($lang->story->assignedTo),
-                        $story->assignedTo ? zget($users, $story->assignedTo) . $lang->at . $story->assignedDate : null
-                    ),
-                    item
-                    (
-                        set::name($lang->story->reviewers),
-                        array_values(array_map(function($reviewer, $result) use($users)
-                        {
-                            global $lang;
-                            return !empty($result) ? span(setClass('mr-2'), set::title($lang->story->reviewed), set::style(array('color' => '#cbd0db')), zget($users, $reviewer)) : span(setClass('mr-2'), set::title($lang->story->toBeReviewed), zget($users, $reviewer));
-                        }, array_keys($reviewers), array_values($reviewers))),
-                    ),
-                    item
-                    (
-                        set::name($lang->story->reviewedDate),
-                        $story->reviewedDate
-                    ),
-                    item
-                    (
-                        set::name($lang->story->closedBy),
-                        $story->closedBy ? zget($users, $story->closedBy) . $lang->at . $story->closedDate : null
-                    ),
-                    item
-                    (
-                        set::tdClass('resolution'),
-                        set::name($lang->story->closedReason),
-                        $story->closedReason ? zget($lang->story->reasonList, $story->closedReason) : null,
-                        isset($story->extraStories[$story->duplicateStory]) ? a(set::href(inlink('view', "storyID=$story->duplicateStory")), set::title($story->extraStories[$story->duplicateStory]), "#{$story->duplicateStory} {$story->extraStories[$story->duplicateStory]}") : null
-                    ),
-                    item
-                    (
-                        set::name($lang->story->lastEditedBy),
-                        $story->lastEditedBy ? zget($users, $story->lastEditedBy) . $lang->at . $story->lastEditedDate : null
-                    )
-                )
-            )
-        ),
-        tabs
-        (
-            set::collapse(true),
-            !empty($twins) ? tabPane
-            (
-                set::title($lang->story->twins),
-                set::active(true),
-                h::ul
-                (
-                    array_values(array_map(function($twin) use($story, $branches)
-                    {
-                        global $lang;
-                        $branch     = isset($branches[$twin->branch]) ? $branches[$twin->branch] : '';
-                        $stage      = $lang->story->stageList[$twin->stage];
-                        $labelClass = $story->branch == $twin->branch ? 'primary' : '';
+    btn(set::type('ghost'), setClass('text-link text-base'), "#{$version}"),
+    set::items($versions)
+)) : null;
 
-                        return h::li
-                        (
-                            setClass('twins'),
-                            $branch ? label(setClass($labelClass . ' circle branch size-sm'), set::title($branch), $branch) : null,
-                            label(setClass('circle size-sm'), $twin->id),
-                            common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), setData(array('toggle' => 'modal', 'size' => 'lg')), $twin->title) : span(setClass('title'), $twin->title),
-                            label(setClass('size-sm'), set::title($stage), $stage),
-                            common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), on::click('unlinkTwins'), setData(array('id' => $twin->id)), icon('unlink')) : null
-                        );
-                    }, $twins))
-                )
-            ) : null,
-            ($this->config->URAndSR && !$hiddenURS && $config->vision != 'or') ? tabPane
-            (
-                set::title($story->type == 'story' ? $lang->story->requirement : $lang->story->story),
-                set::active(empty($twins)),
-                h::ul
-                (
-                    array_values(array_map(function($relation) use($story)
-                    {
-                        $relationType = $story->type == 'story' ? 'requirement' : 'story';
-                        $canViewStory = common::hasPriv($relationType, 'view', null, "storyType=$relationType");
-                        $canLinkStory = common::hasPriv($story->type, 'linkStory');
-
-                        return h::li
-                        (
-                            setClass('relateStories'),
-                            set::title($relation->title),
-                            label(setClass('circle size-sm'), $relation->id),
-                            $canViewStory ? a(set::href(helper::createLink('story', 'view', "id={$relation->id}&version=0&param=0&storyType=$relationType")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), $relation->title) : span(setClass('title'), $relation->title),
-                            $canLinkStory ? a(set('url', helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}&browseType=&queryID=0&storyType=$story->type")), setClass('unlink unlinkStory hidden'), icon('unlink')) : null
-                        );
-                    }, $relations)),
-                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), setData(array('toggle' => 'modal', 'size' => 'lg')), setID('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story)))
-                )
-            ) : null,
-            $story->type == 'story' && common::hasPriv('story', 'tasks') ? tabPane
-            (
-                set::title($lang->story->legendProjectAndTask),
-                set::active((!$this->config->URAndSR || $hiddenURS) && empty($twins)),
-                h::ul(setClass('list-unstyled'), $taskItems)
-            ) : null,
-            tabPane
-            (
-                set::title($lang->story->legendRelated),
-                tableData
-                (
-                    set::useTable(false),
-                    $story->type == 'story' && !empty($fromBug) && common::hasPriv('story', 'bugs') ? item
-                    (
-                        set::collapse(true),
-                        set::name($lang->story->legendFromBug),
-                        h::ul
-                        (
-                            h::li
-                            (
-                                set::title($fromBug->title),
-                                label(setClass('circle size-sm'), $fromBug->id),
-                                common::hasPriv('bug', 'view') ? a(set::href($this->createLink('bug', 'view', "bugID=$fromBug->id")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), set::title($fromBug->title), $fromBug->title) : span(setClass('title'), $fromBug->title)
-                            )
-                        )
-                    ) : null,
-                    $story->type == 'story' ? item
-                    (
-                        set::collapse(true),
-                        set::name($lang->story->legendBugs),
-                        empty($bugs) ? null : h::ul
-                        (
-                            array_values(array_map(function($bug) use($lang)
-                            {
-                                return h::li
-                                (
-                                    set::title($bug->title),
-                                    label(setClass('circle size-sm'), $bug->id),
-                                    common::hasPriv('bug', 'view') ? a(set::href(helper::createLink('bug', 'view', "bugID=$bug->id")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), set::title($bug->title), $bug->title) : span(setClass('title'), $bug->title),
-                                    label(setClass("status-{$bug->status} size-sm"), $lang->bug->statusList[$bug->status])
-                                );
-                            }, $bugs))
-                        )
-                    ) : null,
-                    $story->type == 'story' && common::hasPriv('story', 'cases') ? item
-                    (
-                        set::collapse(true),
-                        set::name($lang->story->legendCases),
-                        empty($cases) ? null : h::ul
-                        (
-                            array_values(array_map(function($case)
-                            {
-                                return h::li
-                                (
-                                    set::title($case->title),
-                                    label(setClass('circle size-sm'), $case->id),
-                                    common::hasPriv('testcase', 'view') ? a(set::href(helper::createLink('testcase', 'view', "caseID=$case->id")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), set::title($case->title), $case->title) : span(setClass('title'), $case->title)
-                                );
-                            }, $cases))
-                        )
-                    ) : null,
-                    $story->type == 'story' ? item
-                    (
-                        set::collapse(true),
-                        set::name($lang->story->legendBuilds),
-                        empty($builds) ? null : h::ul
-                        (
-                            array_values(array_map(function($build)
-                            {
-                                global $app;
-                                $tab = $app->tab == 'product' ? 'project' : $app->tab;
-                                if($app->tab == 'system') $tab = 'project';
-                                return h::li
-                                (
-                                    set::title($build->name),
-                                    label(setClass('circle size-sm'), $build->id),
-                                    common::hasPriv('build', 'view') ? a(set::href(helper::createLink('build', 'view', "buildID=$build->id")), setClass('title'), setData(array('app' => $tab)), set::title($build->name), $build->name) : span(setClass('title'), $build->name)
-                                );
-                            }, $builds))
-                        )
-                    ) : null,
-                    $story->type == 'story' ? item
-                    (
-                        set::collapse(true),
-                        set::name($lang->story->legendReleases),
-                        empty($releases) ? null : h::ul
-                        (
-                            array_values(array_map(function($release)
-                            {
-                                global $app;
-                                $tab           = $app->tab == 'execution' ? 'product'        : $app->tab;
-                                $releaseModule = $app->tab == 'project'   ? 'projectrelease' : 'release';
-                                if($app->tab == 'system') $tab = 'product';
-                                return h::li
-                                (
-                                    set::title($release->name),
-                                    label(setClass('circle size-sm'), $release->id),
-                                    common::hasPriv($releaseModule, 'view') ? a(set::href(helper::createLink($releaseModule, 'view', "releaseID=$release->id")), setClass('title'), setData(array('app' => $tab)), set::title($release->name), $release->name) : span(setClass('title'), $release->name)
-                                );
-                            }, $releases))
-                        )
-                    ) : null,
-                    item
-                    (
-                        set::collapse(true),
-                        set::name($lang->story->linkStories),
-                        empty($story->linkStoryTitles) ? null : h::ul
-                        (
-                            array_values(array_map(function($storyID, $storyTitle) use($storyProducts, $story)
-                            {
-                                global $app;
-                                $hasPriv = ($app->user->admin || str_contains(",{$app->user->view->products},", ",{$storyProducts[$storyID]},"));
-                                return h::li
-                                (
-                                    set::title($storyTitle),
-                                    label(setClass('circle size-sm'), $storyID),
-                                    $hasPriv ? a(set::href(helper::createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), set::title($storyTitle), $storyTitle) : span(setClass('title'), $storyTitle)
-                                );
-                            }, array_keys($story->linkStoryTitles), array_values($story->linkStoryTitles)))
-                        )
-                    ),
-                    $story->type == 'story' && helper::hasFeature('devops') ? item
-                    (
-                        set::collapse(true),
-                        set::name($lang->story->linkMR),
-                        empty($linkedMRs) ? null : h::ul
-                        (
-                            array_values(array_map(function($MRID, $linkMRTitle)
-                            {
-                                return h::li
-                                (
-                                    set::title($linkMRTitle),
-                                    label(setClass('circle size-sm'), $MRID),
-                                    common::hasPriv('mr', 'view') ? a
-                                    (
-                                        set::href(helper::createLink('mr', 'view', "MRID=$MRID")),
-                                        setClass('title'),
-                                        set::title($linkMRTitle),
-                                        setData(array('app', 'devops')),
-                                        $linkMRTitle
-                                    ) : span(setClass('title'), $linkMRTitle)
-                                );
-                            }, array_keys($linkedMRs), array_values($linkedMRs)))
-                        )
-                    ) : null,
-                    item
-                    (
-                        set::collapse(true),
-                        set::name($lang->story->linkCommit),
-                        empty($linkedCommits) ? null : h::ul
-                        (
-                            array_values(array_map(function($commit) use($storyProducts)
-                            {
-                                return h::li
-                                (
-                                    set::title($commit->comment),
-                                    label(setClass('circle size-sm'), substr($commit->revision, 0, 10)),
-                                    common::hasPriv('repo', 'revision') ? a
-                                    (
-                                        set::href(helper::createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")),
-                                        setClass('title'),
-                                        set::title($commit->comment),
-                                        setData(array('app' => 'devops')),
-                                        $commit->comment
-                                    ) : span(setClass('title'), $commit->comment)
-                                );
-                            }, $linkedCommits))
-                        )
-                    )
-                )
-            )
-        )
-    )
+detail
+(
+    set::objectType('story'),
+    set::toolbar($toolbar),
+    set::sections($sections),
+    set::tabs($tabs),
+    set::actions($actions),
+    $versionBtn
 );
 
+/**
+ * Notice: 旗舰版和 IPD 版在项目的需求详情页面有导入需求库按钮，需要这个对话框。
+ * 应该将此对话框放置在对应的版本中比较合适。
+ */
 if(isset($libs))
 {
     modal
@@ -662,14 +355,3 @@ if(isset($libs))
         )
     );
 }
-
-if(!isInModal())
-{
-    floatPreNextBtn
-    (
-        !empty($preAndNext->pre)  ? set::preLink(createLink('story', 'view', "id={$preAndNext->pre->id}"))   : null,
-        !empty($preAndNext->next) ? set::nextLink(createLink('story', 'view', "id={$preAndNext->next->id}")) : null
-    );
-}
-
-render();

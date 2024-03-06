@@ -1,9 +1,0 @@
-.entity-label .label.child{background-color: rgba(var(--color-primary-100-rgb), 0.7); color: var(--color-primary-600); margin-right:5px;}
-.detail-side .tab-pane{padding-top:8px;}
-.detail-side .tab-pane ul li{display:flex; position:relative; padding-bottom:5px;}
-.detail-side .tab-pane ul li.twins{padding-right:15px; display: flex; align-items: baseline;}
-.detail-side .tab-pane ul li.relateStories{padding-right:15px;}
-.detail-side .tab-pane ul li .label{margin-right:8px; white-space: nowrap;}
-.detail-side .tab-pane ul li .label.branch{max-width:80px; overflow:hidden}
-.detail-side .tab-pane ul li .title{margin-right:8px; overflow:hidden; white-space:nowrap;}
-.detail-side .tab-pane ul li .unlink{position:absolute; right:0px;}

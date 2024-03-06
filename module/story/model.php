@@ -3185,50 +3185,49 @@ class storyModel extends model
      */
     public function buildOperateMenu(object $story, string $type = 'view', object|null $execution = null, string $storyType = 'story'): array
     {
-        $menu       = '';
-        $mainMenu   = array();
-        $dropMenus  = array();
+        $menu       = array();
         $suffixMenu = array();
         $isInModal  = isInModal();
         $params     = "storyID=$story->id";
 
         if($type == 'view')
         {
-            $mainMenu[] = commonModel::buildActionItem('story', 'change', $params, $story, array('icon' => 'alter', 'text' => $this->lang->story->change, 'data-app' => $this->app->tab));
-            if(str_contains('draft,changing', $story->status)) $mainMenu[] = commonModel::buildActionItem('story', 'submitReview', $params . "&storyType=$story->type", $story, array('icon' => 'confirm', 'text' => $this->lang->story->submitReview, 'data-toggle' => 'modal'));
+            $menu[] = commonModel::buildActionItem('story', 'change', $params, $story, array('icon' => 'alter', 'text' => $this->lang->story->change, 'data-app' => $this->app->tab));
+            if(str_contains('draft,changing', $story->status)) $menu[] = commonModel::buildActionItem('story', 'submitReview', $params . "&storyType=$story->type", $story, array('icon' => 'confirm', 'text' => $this->lang->story->submitReview, 'data-toggle' => 'modal'));
 
             $title = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
-            $mainMenu[] = commonModel::buildActionItem('story', 'recall', $params . "&from=view&confirm=no&storyType={$story->type}", $story, array('icon' => 'undo', 'text' => $title, 'class' => 'ajax-submit', 'data-app' => $this->app->tab));
-            $mainMenu[] = commonModel::buildActionItem('story', 'review', $params . "&from={$this->app->tab}&storyType={$story->type}", $story, array('icon' => 'search', 'text' => $this->lang->story->review, 'data-app' => $this->app->tab));
+            $menu[] = commonModel::buildActionItem('story', 'recall', $params . "&from=view&confirm=no&storyType={$story->type}", $story, array('icon' => 'undo', 'text' => $title, 'class' => 'ajax-submit', 'data-app' => $this->app->tab));
+            $menu[] = commonModel::buildActionItem('story', 'review', $params . "&from={$this->app->tab}&storyType={$story->type}", $story, array('icon' => 'search', 'text' => $this->lang->story->review, 'data-app' => $this->app->tab));
 
             $executionID = empty($execution) ? 0 : $execution->id;
             if(!helper::isAjaxRequest('modal') && $this->config->vision != 'lite')
             {
-                $mainMenu[] = commonModel::buildActionItem('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, array('icon' => 'split', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
+                $menu[] = commonModel::buildActionItem('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0&storyType=story", $story, array('icon' => 'split', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
             }
 
-            $mainMenu[] = commonModel::buildActionItem('story', 'assignTo', $params . "&kanbanGroup=default&from=&storyType=$story->type", $story, array('icon' => 'hand-right', 'text' => $this->lang->story->assignTo, 'data-toggle' => 'modal'));
-            $mainMenu[] = commonModel::buildActionItem('story', 'close',    $params . "&from=&storyType=$story->type", $story, array('icon' => 'off', 'text' => $this->lang->story->close, 'data-toggle' => 'modal'));
-            $mainMenu[] = commonModel::buildActionItem('story', 'activate', $params . "&storyType=$story->type", $story, array('icon' => 'magic', 'text' => $this->lang->story->activate, 'data-toggle' => 'modal'));
+            $menu[] = commonModel::buildActionItem('story', 'assignTo', $params . "&kanbanGroup=default&from=&storyType=$story->type", $story, array('icon' => 'hand-right', 'text' => $this->lang->story->assignTo, 'data-toggle' => 'modal'));
+            $menu[] = commonModel::buildActionItem('story', 'close',    $params . "&from=&storyType=$story->type", $story, array('icon' => 'off', 'text' => $this->lang->story->close, 'data-toggle' => 'modal'));
+            $menu[] = commonModel::buildActionItem('story', 'activate', $params . "&storyType=$story->type", $story, array('icon' => 'magic', 'text' => $this->lang->story->activate, 'data-toggle' => 'modal'));
 
             $disabledFeatures = ",{$this->config->disabledFeatures},";
             if(in_array($this->config->edition, array('max', 'ipd')) && $this->app->tab == 'project' && common::hasPriv('story', 'importToLib') && strpos($disabledFeatures, ',assetlibStorylib,') === false && strpos($disabledFeatures, ',assetlib,') === false)
             {
-                $mainMenu[] = array('url' => '#importToLib', 'icon' => 'assets', 'text' => $this->lang->story->importToLib, 'data-toggle' => 'modal');
+                $menu[] = array('url' => '#importToLib', 'icon' => 'assets', 'text' => $this->lang->story->importToLib, 'data-toggle' => 'modal');
             }
 
             /* Print testcate actions. */
             if($this->config->vision != 'lite' && $story->parent >= 0 && $story->type != 'requirement' && (common::hasPriv('testcase', 'create', $story) || common::hasPriv('testcase', 'batchCreate', $story)))
             {
                 $this->app->loadLang('testcase');
-                $mainMenu[] = array('url' => '#caseActions', 'text' => $this->lang->testcase->common, 'data-toggle' => 'dropdown', 'data-placement' => 'top-end', 'caret' => 'up');
-                $dropMenus['caseActions'][] = commonModel::buildActionItem('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&$params", $story, array('text' => $this->lang->testcase->create, 'data-toggle' => 'modal', 'data-size' => 'lg'));
-                $dropMenus['caseActions'][] = commonModel::buildActionItem('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", null, array('text' => $this->lang->testcase->batchCreate, 'data-toggle' => 'modal', 'data-size' => 'lg'));
+                $dropMenuItems = array();
+                $dropMenuItems[] = commonModel::buildActionItem('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&$params", $story, array('text' => $this->lang->testcase->create, 'data-toggle' => 'modal', 'data-size' => 'lg'));
+                $dropMenuItems[] = commonModel::buildActionItem('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", null, array('text' => $this->lang->testcase->batchCreate, 'data-toggle' => 'modal', 'data-size' => 'lg'));
+                $menu[] = array('type' => 'dropdown', 'text' => $this->lang->testcase->common, 'items' => $dropMenuItems, 'placement' => 'top-end', 'caret' => 'up');
             }
 
             if(($this->app->tab == 'execution' || (!empty($execution) && $execution->multiple == '0')) && $story->status == 'active' && $story->type == 'story')
             {
-                $mainMenu[] = commonModel::buildActionItem('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, array('icon' => 'plus', 'text' => $this->lang->task->create, 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-app' => (!empty($execution) && $execution->multiple == '0') ? 'project' : ''));
+                $menu[] = commonModel::buildActionItem('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, array('icon' => 'plus', 'text' => $this->lang->task->create, 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-app' => (!empty($execution) && $execution->multiple == '0') ? 'project' : ''));
             }
 
             if(!$isInModal) $suffixMenu[] = commonModel::buildActionItem('story', 'edit', $params . "&kanbanGroup=default&storyType=$story->type", $story, array('icon' => 'edit', 'data-app' => $this->app->tab));
@@ -3236,7 +3235,12 @@ class storyModel extends model
             if(common::hasPriv('story', 'delete')) $suffixMenu[] = array('url' => helper::createLink('story', 'delete', $params), 'class' => 'ajax-submit', 'icon' => 'trash');
         }
 
-        return array('mainMenu' => array_values(array_filter($mainMenu)), 'suffixMenu' => array_values(array_filter($suffixMenu)), 'dropMenus' => $dropMenus);
+        if($suffixMenu)
+        {
+            $menu[] = array('type' => 'divider');
+            $menu = array_merge($menu, $suffixMenu);
+        }
+        return array_values(array_filter($menu));
     }
 
     /**
