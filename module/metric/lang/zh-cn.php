@@ -288,7 +288,7 @@ $lang->metric->filter->filterTotal = '筛选结果(%s)';
 
 $lang->metric->implement = new stdclass();
 $lang->metric->implement->common      = "实现";
-$lang->metric->implement->tip         = "请通过PHP实现该该度量项的计算逻辑。";
+$lang->metric->implement->tip         = "请通过PHP实现该度量项的计算逻辑。";
 $lang->metric->implement->instruction = "实现说明";
 $lang->metric->implement->downloadPHP = "下载度量模板";
 
