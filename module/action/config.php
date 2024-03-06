@@ -62,6 +62,7 @@ $config->action->objectNameFields['solution']     = 'name';
 $config->action->objectNameFields['artifactrepo'] = 'name';
 $config->action->objectNameFields['prompt']       = 'name';
 $config->action->objectNameFields['miniprogram']  = 'name';
+$config->action->objectNameFields['metric']       = 'name';
 
 $config->action->commonImgSize = 870;
 
