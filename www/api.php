@@ -33,8 +33,17 @@ $app = router::createApp('pms', dirname(dirname(__FILE__)), 'api');
 /* Run the app. */
 $common = $app->loadCommon();
 
-/* Check entry. */
-$common->checkEntry();
+try
+{
+    /* Check entry. */
+    $common->checkEntry();
+}
+catch (EndResponseException $endResponseException)
+{
+    echo $endResponseException->getContent();
+    return print(helper::removeUTF8Bom(ob_get_clean()));
+}
+
 $common->loadConfigFromDB();
 
 /* Set default params. */
@@ -48,7 +57,5 @@ if(!$app->version) $common->checkPriv();
 
 $app->loadModule();
 
-$output = ob_get_clean();
-
 /* Flush the buffer. */
-echo $app->formatData(helper::removeUTF8Bom($output));
+echo $app->formatData(helper::removeUTF8Bom(ob_get_clean()));
