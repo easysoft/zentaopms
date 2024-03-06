@@ -10,9 +10,16 @@ class linkedStoryList extends storyList
     protected static array $defineProps = array
     (
         'story'          => '?object',      // 被关联的需求。
+        'relationType'   => '?string',      // 关联类型。
         'unlinkBtn'      => '?array|bool',  // 取消关联按钮。
         'unlinkStoryTip' => '?string',      // 取消关联提示信息。
+        'unlinkUrl'      => '?string',      // 取消关联需求链接
         'newLinkBtn'     => '?array|bool'   // 底部新关联按钮。
+    );
+
+    protected static array $defaultProps = array
+    (
+        'name' => 'linked-story-list'
     );
 
     public static function getPageJS(): ?string
@@ -31,31 +38,45 @@ class linkedStoryList extends storyList
 
     protected ?object $story = null;
 
-    protected function created()
+    protected ?string $unlinkUrl = null;
+
+    protected null|array|bool $unlinkBtn = null;
+
+    protected ?string $relationType = null;
+
+    protected function beforeBuild()
     {
         $story = $this->prop('story');
         if(!$story) $story = data('story');
         if(!$story) return;
 
-        $this->story = $story;
+        $relationType = $this->prop('relationType');
+        if(!$relationType) $relationType = $story->type == 'story' ? 'requirement' : 'story';
 
-        $canLinkStory = hasPriv($story->type, 'linkStory');
-        if(!$this->hasProp('unlinkBtn'))  $this->setProp('unlinkBtn', $canLinkStory);
-        if(!$this->hasProp('newLinkBtn')) $this->setProp('newLinkBtn', $canLinkStory);
-        if(!$this->hasProp('storyType'))  $this->setProp('storyType', $story->type == 'story' ? 'requirement' : 'story');
-        if(!$this->hasProp('unlinkStoryTip'))
-        {
-            global $lang;
-            $this->setProp('unlinkStoryTip', $story->type == 'story' ? str_replace($lang->SRCommon, $lang->URCommon, $lang->story->unlinkStory) : $lang->story->unlinkStory);
-        }
+        $viewUrl = $this->prop('viewUrl');
+        if($viewUrl === null) $viewUrl = hasPriv($relationType, 'view', null, "storyType=$relationType");
+        if($viewUrl === true) $viewUrl = createLink('story', 'view', "id={id}&version=0&param=0&storyType=$relationType");
+
+        $unlinkUrl = $this->prop('unlinkUrl');
+        if($unlinkUrl === null) $unlinkUrl = createLink('story', 'linkStory', "storyID={$story->id}&type=remove&linkedID={id}&browseType=&queryID=0&storyType=$story->type");
+
+        $canLink = hasPriv($story->type, 'linkStory');
+        $unlinkBtn = $this->prop('unlinkBtn');
+        if($unlinkBtn === null)  $unlinkBtn = $canLink;
+
+        $this->story        = $story;
+        $this->relationType = $relationType;
+        $this->viewUrl      = $viewUrl;
+        $this->unlinkUrl    = $unlinkUrl;
+        $this->unlinkBtn    = $unlinkBtn;
     }
 
-    protected function getItem(object $story, bool $canView, string $storyType = 'story'): array
+    protected function getItem(object $story): array
     {
         global $lang;
 
-        $item      = parent::getItem($story, $canView, $storyType);
-        $unlinkBtn = $this->prop('unlinkBtn');
+        $item      = parent::getItem($story);
+        $unlinkBtn = $this->unlinkBtn;
 
         if($unlinkBtn)
         {
@@ -66,7 +87,7 @@ class linkedStoryList extends storyList
                 'icon'        => 'unlink',
                 'data-id'     => $story->id,
                 'data-on'     => 'click',
-                'data-url'    => createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$story->id}&browseType=&queryID=0&storyType=$storyType"),
+                'data-url'    => str_replace('{id}', "$story->id", $this->unlinkUrl),
                 'data-params' => 'event',
                 'data-call'   => 'unlinkStory',
                 'hint'        => $lang->story->unlinkStory
@@ -84,13 +105,20 @@ class linkedStoryList extends storyList
     {
         $list = parent::build();
 
-        if($this->prop('unlinkBtn'))
+        if($this->unlinkBtn)
         {
-            $list->add(setClass('linked-story-list group'));
-            $list->add(setData('unlinkStoryTip', $this->prop('unlinkStoryTip')));
+            $unlinkStoryTip = $this->prop('unlinkStoryTip');
+            if($unlinkStoryTip === null && $this->story)
+            {
+                global $lang;
+                $unlinkStoryTip = $this->story->type == 'story' ? str_replace($lang->SRCommon, $lang->URCommon, $lang->story->unlinkStory) : $lang->story->unlinkStory;
+            }
+
+            $list->add(setData('unlinkStoryTip', $unlinkStoryTip));
         }
 
         $newLinkBtn = $this->prop('newLinkBtn');
+        if($newLinkBtn === null) $newLinkBtn = $this->unlinkBtn;
         if($newLinkBtn)
         {
             global $lang;

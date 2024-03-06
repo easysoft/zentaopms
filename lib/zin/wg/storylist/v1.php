@@ -9,12 +9,15 @@ class storyList extends wg
 {
     protected static array $defineProps = array
     (
-        'items'        => 'array',    // 需求对象列表。
-        'storyType'    => '?string',  // 需求类型。
-        'onRenderItem' => '?callable' // 渲染需求对象的回调函数。
+        'name'         => '?string="story-list"',  // 列表名称。
+        'items'        => 'array',                 // 需求对象列表。
+        'viewUrl'      => '?string|bool=true',     // 查看链接模版，使用 `{id}` 代替需求 ID，如果设置为 false 不展示链接，如果设置为 true 则使用默认链接。
+        'onRenderItem' => '?callable'              // 渲染需求对象的回调函数。
     );
 
-    protected function getItem(object $story, bool $canView, string $storyType = 'story'): array
+    protected string $viewUrl = '';
+
+    protected function getItem(object $story): array
     {
         $item = array
         (
@@ -25,14 +28,14 @@ class storyList extends wg
             'textClass'    => 'flex-none',
             'actionsClass' => 'absolute top-0 right-0',
             'hint'         => $story->title,
-            'title'        => span(setClass('text-clip '), $story->title),
+            'title'        => span(setClass('text-clip'), $story->title),
             'leading'      => idLabel::create($story->id)
         );
 
-        if($canView)
+        if($this->viewUrl)
         {
             $item['titleAttrs'] = array('data-toggle' => 'modal', 'data-size' => 'lg');
-            $item['url'] = createLink('story', 'view', "id={$story->id}&version=0&param=0&storyType=$storyType");
+            $item['url']        = str_replace('{id}', "$story->id", $this->viewUrl);
         }
 
         return $item;
@@ -40,27 +43,34 @@ class storyList extends wg
 
     protected function getItems()
     {
-        $stories    = $this->prop('items', array());
-        $storyType  = $this->prop('storyType', 'story');
-        $items      = array();
-        $canView    = hasPriv($storyType, 'view', null, "storyType=$storyType");
+        $stories = $this->prop('items', array());
+        $items   = array();
 
         foreach($stories as $story)
         {
-            $items[] = $this->getItem($story, $canView, $storyType);
+            $items[] = $this->getItem($story);
         }
 
         return $items;
     }
 
+    protected function beforeBuild()
+    {
+        $viewUrl = $this->prop('viewUrl');
+        if($viewUrl === null) $viewUrl = hasPriv('story', 'view');
+        if($viewUrl === true) $viewUrl = createLink('story', 'view', 'id={id}');
+        $this->viewUrl = $viewUrl;
+    }
+
     protected function build()
     {
-        $items = $this->getItems();
+        $this->beforeBuild();
 
         return new simpleList
         (
-            setClass('story-list'),
-            set::items($items),
+            setClass($this->prop('name')),
+            set::items($this->getItems()),
+            set::onRenderItem($this->prop('onRenderItem')),
             set($this->getRestProps()),
             $this->children()
         );
