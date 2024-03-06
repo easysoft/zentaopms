@@ -42,7 +42,7 @@ formPanel
             set::label($lang->metric->scope),
             set::name('scope'),
             set::items($lang->metric->scopeList),
-            set::value('system'),
+            set::value($scope),
             set::required(true)
         ),
         formGroup
@@ -69,7 +69,7 @@ formPanel
         set::label($lang->metric->dateType),
         set::name('dateType'),
         set::items($lang->metric->dateTypeList),
-        set::value('nodate'),
+        set::value($period),
         set::width('1/2'),
         set::required(true)
     ),
