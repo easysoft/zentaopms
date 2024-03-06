@@ -36,55 +36,6 @@ for($i = $story->version; $i >= 1; $i--)
     $versions[] = $versionItem;
 }
 
-/* 模块列表。Module list. */
-$moduleItems = array();
-if(empty($modulePath))
-{
-    $moduleItems[] = '/';
-}
-else
-{
-    if($storyModule->branch and isset($branches[$storyModule->branch]))
-    {
-        $moduleItems[] = $branches[$storyModule->branch];
-    }
-
-    foreach($modulePath as $key => $module)
-    {
-        $moduleItems[] = $product->shadow ? $module->name : array('text' => $module->name, 'url' => createLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id"));
-
-        if(isset($modulePath[$key + 1])) $moduleItems[] = '/';
-    }
-}
-
-/* Get min stage. */
-$minStage    = $story->stage;
-$stageList   = implode(',', array_keys($this->lang->story->stageList));
-$minStagePos = strpos($stageList, $minStage);
-if($story->stages and $branches)
-{
-    foreach($story->stages as $branch => $stage)
-    {
-        if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) > $minStagePos)
-        {
-            $minStage    = $stage;
-            $minStagePos = strpos($stageList, $stage);
-        }
-    }
-}
-
-/* Join mailto. */
-$mailtoList = array();
-if(!empty($story->mailto))
-{
-    foreach(explode(',', $story->mailto) as $account)
-    {
-        if(empty($account)) continue;
-        $mailtoList[] = zget($users, trim($account));
-    }
-}
-$mailtoList = implode($lang->comma, $mailtoList);
-
 /* 根据需求类型，设置要激活的导航项。Active navbar item by story type. */
 setPageData('activeMenuID', $story->type);
 
@@ -92,7 +43,12 @@ setPageData('activeMenuID', $story->type);
 $toolbar = array();
 if(!$isInModal && hasPriv('story', 'create'))
 {
-    $toolbar[] = array('icon' => 'plus', 'type' => 'primary', 'text' => $lang->story->create);
+    $toolbar[] = array
+    (
+        'icon' => 'plus',
+        'type' => 'primary',
+        'text' => $lang->story->create
+    );
 }
 
 /* 初始化主栏内容。Init sections in main column. */
@@ -145,6 +101,7 @@ if($story->children)
     (
         'title'          => $isRequirement ? $lang->story->story : $lang->story->children,
         'control'        => 'dtable',
+        'id'             => 'table-story-children',
         'cols'           => $cols,
         'userMap'        => $users,
         'data'           => array_values($story->children),
@@ -152,120 +109,21 @@ if($story->children)
     );
 }
 
-/* 基本信息。Legend basic items. */
-$legendBasicItems = array();
-if(!$product->shadow)
-{
-    $legendBasicItems[$lang->story->product] = common::hasPriv('product', 'view') ? array('control' => 'link', 'url' => createLink('product', 'view', "productID=$story->product"), 'text' => $product->name) : $product->name;
-}
-if($product->type !== 'normal')
-{
-    $legendBasicItems[$lang->story->branch] = common::hasPriv('product', 'browse') ? array('control' => 'link', 'url' => createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), 'text' => $branches[$story->branch]) : $branches[$story->branch];
-}
-$legendBasicItems[$lang->story->module] = array
-(
-    'control' => 'breadcrumb',
-    'items'   => $moduleItems
-);
-if($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan)
-{
-    $planTitleItems = array();
-    if(isset($story->planTitle) && $story->planTitle)
-    {
-        foreach($story->planTitle as $planID => $planTitle)
-        {
-            $planTitleItems[] = hasPriv('productplan', 'view') ? $planTitle : array
-            (
-                'url'     => createLink('plan', 'view', "planID=$planID"),
-                'text'    => $planTitle
-            );
-        }
-    }
-    $legendBasicItems[$lang->story->plan] = array
-    (
-        'control' => 'list',
-        'items'   => $planTitleItems
-    );
-}
-$legendBasicItems[$lang->story->source] = zget($lang->story->sourceList, $story->source, '');
-$legendBasicItems[$lang->story->sourceNote] = array
-(
-    'control' => 'text',
-    'content' => $story->sourceNote,
-    'id'      => 'sourceNoteBox'
-);
-$legendBasicItems[$lang->story->status] = array
-(
-    'control' => 'status',
-    'class'   => 'status-story',
-    'status'  => $story->URChanged ? 'changed' : $story->status,
-    'text'    => $this->processStatus('story', $story)
-);
-if(!$isRequirement)
-{
-    $legendBasicItems[$lang->story->stage] = array
-    (
-        'class' => 'stage-line',
-        'text'  => zget($lang->story->stageList, $minStage, '')
-    );
-}
-$legendBasicItems[$lang->story->category] = zget($lang->story->categoryList, $story->category);
-$legendBasicItems[$lang->story->pri] = array
-(
-    'control' => 'pri',
-    'pri'     => $story->pri,
-    'text'    => $lang->story->priList
-);
-$legendBasicItems[$lang->story->estimate] = $story->estimate . $config->hourUnit;
-if(in_array($story->source, $config->story->feedbackSource))
-{
-    $legendBasicItems[$lang->story->feedbackBy]  = $story->feedbackBy;
-    $legendBasicItems[$lang->story->notifyEmail] = $story->notifyEmail;
-}
-$legendBasicItems[$lang->story->keywords]      = $story->keywords;
-$legendBasicItems[$lang->story->legendMailto]  = $mailtoList;
-
-/* 需求一生。Legend life items. */
-$legendLifeItems = array();
-$legendLifeItems[$lang->story->openedBy] = zget($users, $story->openedBy) . $lang->at . $story->openedDate;
-$legendLifeItems[$lang->story->assignedTo] = $story->assignedTo ? zget($users, $story->assignedTo) . $lang->at . $story->assignedDate : null;
-$legendLifeItems[$lang->story->reviewers] = array
-(
-    'children' => wg(div
-    (
-        setClass('row gap-2 flex-wrap'),
-        array_values(array_map(function($reviewer, $result) use($users)
-        {
-            global $lang;
-            return !empty($result) ? span(setClass('mr-2'), set::title($lang->story->reviewed), set::style(array('color' => '#cbd0db')), zget($users, $reviewer)) : span(setClass('mr-2'), set::title($lang->story->toBeReviewed), zget($users, $reviewer));
-        }, array_keys($reviewers), array_values($reviewers)))
-    ))
-);
-$legendLifeItems[$lang->story->reviewedDate] = $story->reviewedDate;
-$legendLifeItems[$lang->story->closedBy] = $story->closedBy ? zget($users, $story->closedBy) . $lang->at . $story->closedDate : null;
-$legendLifeItems[$lang->story->closedReason] = array
-(
-    'class'    => 'resolution',
-    'children' => wg
-    (
-        $story->closedReason ? zget($lang->story->reasonList, $story->closedReason) : null,
-        isset($story->extraStories[$story->duplicateStory]) ? a(set::href(inlink('view', "storyID=$story->duplicateStory")), set::title($story->extraStories[$story->duplicateStory]), "#{$story->duplicateStory} {$story->extraStories[$story->duplicateStory]}") : null
-    )
-);
-$legendLifeItems[$lang->story->lastEditedBy] = zget($users, $story->lastEditedBy) . $lang->at . $story->lastEditedDate;
-
 /* 初始化侧边栏标签页。Init tabs in sidebar. */
 $tabs = array();
+
+/* 基本信息。Legend basic items. */
 $tabs[] = setting()
     ->group('basic')
     ->title($lang->story->legendBasicInfo)
-    ->control('datalist')
-    ->items($legendBasicItems);
+    ->control('storyBasicInfo')
+    ->statusText($this->processStatus('story', $story));
+
+/* 需求一生。Legend life items. */
 $tabs[] = setting()
     ->group('basic')
     ->title($lang->story->legendLifeTime)
-    ->control('datalist')
-    ->items($legendLifeItems);
+    ->control('storyLifeInfo');
 
 if($twins)
 {
