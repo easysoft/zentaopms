@@ -6,7 +6,7 @@ $(function()
 
 $('#runCaseModal').closest('.modal').on('hide.zui.modal', function()
 {
-    if(!$(this).hasClass('not-refresh')) loadCurrentPage();
+    if($('#casesResults').length == 0) loadCurrentPage();
 });
 
 /**
