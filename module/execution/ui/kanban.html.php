@@ -301,7 +301,6 @@ modal
 (
     setID('linkStoryByPlan'),
     setData('size', '500px'),
-    setID('linkStoryByPlan'),
     set::modalProps(array('title' => $lang->execution->linkStoryByPlan)),
     div
     (
