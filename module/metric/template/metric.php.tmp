@@ -8,6 +8,7 @@
  * 目的：{{purpose}}
  * 度量名称：{{name}}
  * 单位：{{unit}}
+ * 周期：{{dateType}}
  * 描述：{{desc}}
  * 定义：{{definition}}
  */
