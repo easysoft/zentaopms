@@ -11,6 +11,7 @@
 .scope-menu > .is-caret::after {content: '\e936'; font-family: ZentaoIcon;}
 
 .btn-divider {background-color: var(--color-current); height: 1rem; margin-left: 20px; margin-right: 20px; opacity: .3; width: 1px;}
+#dropmenu {padding-top: 10px; padding-bottom: 10px;}
 #dropmenu button:hover {--skin-ghost-rgb: unset;}
 #dropmenu button {--skin-ghost-rgb: unset; padding-left: 1rem; padding-right: 2rem;}
 #dropmenu button span {font-size: 18px; font-weight: 700;}
