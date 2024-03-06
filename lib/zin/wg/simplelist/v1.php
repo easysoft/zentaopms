@@ -12,8 +12,9 @@ class simpleList extends wg
 
     protected static array $defineProps = array
     (
-        'items'   => '?array',
-        'tagName' => '?string="ul"'
+        'items'        => '?array',
+        'tagName'      => '?string="ul"',
+        'onRenderItem' => '?callable',        // 渲染条目的回调函数。
     );
 
     public bool $isH5List = true;
@@ -52,12 +53,15 @@ class simpleList extends wg
 
     protected function buildItems()
     {
-        $items     = $this->prop('items');
-        $itemsView = array();
+        $items         = $this->prop('items');
+        $onRenderItem  = $this->prop('onRenderItem');
+        $itemsView     = array();
+
         if(is_array($itemsView))
         {
             foreach ($items as $key => $item)
             {
+                if(is_callable($onRenderItem)) $item = $onRenderItem($item, $key);
                 if(is_string($item)) $item = array('title' => $item);
                 if(is_array($item) && is_string($key))  $item['title'] = $key;
 
