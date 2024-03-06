@@ -64,7 +64,7 @@ class content extends wg
         if($control)
         {
             $controlProps = array();
-            $controlName = '';
+            $controlName  = '';
             if(is_string($control))
             {
                 $controlName = $control;
@@ -82,9 +82,9 @@ class content extends wg
             if(isset(static::$controlMap[$controlName])) $controlName = static::$controlMap[$controlName];
 
             $wgName = "\\zin\\$controlName";
-            if(class_exists($wgName)) return new $wgName(set($this->props->skip('controlName')), $controlProps ? set($controlProps) : null, $this->children());
+            if(class_exists($wgName)) return new $wgName(set($this->props->skip('control')), $controlProps ? set($controlProps) : null, $this->prop('children'), $this->children());
 
-            return createWg($controlName, set($this->props->skip('control')), $controlProps ? set($controlProps) : null, 'div');
+            return createWg($controlName, array(set($this->props->skip('control')), $controlProps ? set($controlProps) : null, $this->prop('children'), $this->children()), 'div');
         }
 
         if($this->hasProp('children')) return $this->prop('children');
