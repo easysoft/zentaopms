@@ -9,19 +9,21 @@ class executionTaskList extends wg
 {
     protected static array $defineProps = array
     (
-        'tasks'      => 'array',  // 任务列表。
-        'executions' => 'array'   // 执行列表。
+        'tasks'      => 'array',       // 任务列表。
+        'executions' => 'array',       // 执行列表。
+        'onRenderItem' => '?callable'  // 渲染需求对象的回调函数。
     );
 
-    protected function getListItems()
+    protected function getItems()
     {
         global $lang;
 
-        $tasks       = $this->prop('tasks', array());
-        $executions  = $this->prop('executions', array());
-        $items       = array();
-        $isInModal   = isInModal();
-        $canViewTask = hasPriv('task', 'view');
+        $tasks        = $this->prop('tasks', array());
+        $executions   = $this->prop('executions', array());
+        $onRenderItem = $this->prop('onRenderItem', array());
+        $items        = array();
+        $isInModal    = isInModal();
+        $canViewTask  = hasPriv('task', 'view');
 
         foreach($tasks as $task)
         {
@@ -43,7 +45,7 @@ class executionTaskList extends wg
                 );
             }
 
-            $items[$executionID]['items'][] = array
+            $item = array
             (
                 'title'       => $task->name,
                 'hint'        => $task->name,
@@ -53,6 +55,10 @@ class executionTaskList extends wg
                 'data-toggle' => $canViewTask ? 'modal' : null,
                 'data-size'   => $canViewTask ? 'lg' : null,
             );
+
+            if(is_callable($onRenderItem)) $item = $onRenderItem($item, $task);
+
+            $items[$executionID]['items'][] = $item;
 
             $items[$executionID]['content'] = array('html' => '<span class="label gray-pale rounded-full size-sm">' . count($items[$executionID]['items']) . '</span>');
         }
@@ -78,12 +84,11 @@ class executionTaskList extends wg
 
     protected function build()
     {
-        $items = $this->getListItems();
         return zui::nestedList
         (
             set::className('execution-task-list'),
             set::defaultNestedShow(),
-            set::items($items)
+            set::items($this->getItems())
         );
     }
 }
