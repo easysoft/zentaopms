@@ -200,10 +200,11 @@ class dev extends control
             if($oldValue)
             {
                 $oldValue = json_decode($oldValue);
-                $_POST    = array();
-                $_POST['SRName'] = zget($oldValue, 'defaultSRName', $oldValue->SRName);
-                $_POST['URName'] = zget($oldValue, 'defaultURName', $oldValue->URName);
-                $this->custom->updateURAndSR($this->config->custom->URSR, $language);
+                $setting = array(
+                    'SRName' => zget($oldValue, 'defaultSRName', $oldValue->SRName),
+                    'URName' => zget($oldValue, 'defaultURName', $oldValue->URName)
+                );
+                $this->custom->updateURAndSR($this->config->custom->URSR, $language, $setting);
             }
         }
 
