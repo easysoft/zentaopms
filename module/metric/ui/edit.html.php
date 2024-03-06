@@ -12,8 +12,9 @@ namespace zin;
 
 $isCustomUnit = !isset($this->lang->metric->unitList[$metric->unit]);
 $isDisabled   = $metric->stage == 'wait' && $metric->builtin === '1' && !$this->metric->isOldMetric($metric);
+$hasImplementPriv = hasPriv('metric', 'implement');
 
-$afterEdit = $isDisabled ? '' : formGroup
+$afterEdit = $isDisabled || !$hasImplementPriv ? '' : formGroup
 (
     set::width('1/2'),
     set::name('afterEdit'),
