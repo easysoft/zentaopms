@@ -6,19 +6,19 @@ $config->custom->browseStoryConcept->dtable->fieldList['default']['sortType'] = 
 if($config->enableER)
 {
     $config->custom->browseStoryConcept->dtable->fieldList['ERName']['title']    = $lang->custom->ERConcept;
-    $config->custom->browseStoryConcept->dtable->fieldList['ERName']['type']     = 'title';
+    $config->custom->browseStoryConcept->dtable->fieldList['ERName']['type']     = 'category';
     $config->custom->browseStoryConcept->dtable->fieldList['ERName']['sortType'] = false;
 }
 
 if($config->URAndSR)
 {
     $config->custom->browseStoryConcept->dtable->fieldList['URName']['title']    = $lang->custom->URConcept;
-    $config->custom->browseStoryConcept->dtable->fieldList['URName']['type']     = 'title';
+    $config->custom->browseStoryConcept->dtable->fieldList['URName']['type']     = 'category';
     $config->custom->browseStoryConcept->dtable->fieldList['URName']['sortType'] = false;
 }
 
 $config->custom->browseStoryConcept->dtable->fieldList['SRName']['title']    = $lang->custom->SRConcept;
-$config->custom->browseStoryConcept->dtable->fieldList['SRName']['type']     = 'title';
+$config->custom->browseStoryConcept->dtable->fieldList['SRName']['type']     = 'category';
 $config->custom->browseStoryConcept->dtable->fieldList['SRName']['sortType'] = false;
 
 $config->custom->browseStoryConcept->dtable->fieldList['actions']['type'] = 'actions';

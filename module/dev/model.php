@@ -517,7 +517,8 @@ class devModel extends model
                     $customedLangs['URCommon'] = $defaultURName == $URSRList->URName ? '' : $URSRList->URName;
                     $customedLangs['SRCommon'] = $defaultSRName == $URSRList->SRName ? '' : $URSRList->SRName;
                 }
-                if(!$this->config->URAndSR) unset($customedLangs['URCommon']);
+                if(!$this->config->enableER) unset($customedLangs['ERCommon']);
+                if(!$this->config->URAndSR)  unset($customedLangs['URCommon']);
                 break;
             case 'first':
                 $customeds = $this->loadModel('custom')->getItems("lang={$language}&module=common&section=mainNav&vision={$this->config->vision}");
