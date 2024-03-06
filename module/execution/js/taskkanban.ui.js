@@ -530,3 +530,14 @@ window.refreshKanban = function(url)
 };
 
 waitDom('.c-group .picker-box .picker-single-selection', function(){this.html(kanbanLang.laneGroup + ': ' + this.html());});
+
+$(document).off('click', '#linkStoryByPlan button[type="submit"]').on('click', '#linkStoryByPlan button[type="submit"]', function()
+{
+    const planID = $('[name=plan]').val();
+    if(planID)
+    {
+        var param = "&param=executionID=" + executionID + ",browseType=" + browseType + ",orderBy=id_asc,groupBy=" + groupBy;
+        $.ajaxSubmit({url: $.createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=taskKanban&extra=' + param)});
+    }
+    return false;
+})

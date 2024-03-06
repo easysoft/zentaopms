@@ -232,28 +232,36 @@ div
     )
 );
 
+$linkStoryByPlanTips = $lang->execution->linkNormalStoryByPlanTips;
+$linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
+
 modal
 (
     setID('linkStoryByPlan'),
-    to::header
+    setData('size', '500px'),
+    set::modalProps(array('title' => $lang->execution->linkStoryByPlan)),
+    div
     (
-        h4($lang->execution->linkStoryByPlan),
-        "({$lang->execution->linkStoryByPlanTips})"
+        setClass('flex-auto'),
+        icon('info-sign', setClass('warning-pale rounded-full mr-1')),
+        $linkStoryByPlanTips
     ),
-    inputGroup
+    form
     (
-        setClass('mt-1'),
-        picker
+        setClass('text-center', 'py-4'),
+        set::actions(array('submit')),
+        set::submitBtnText($lang->execution->linkStory),
+        formGroup
         (
-            set::width(200),
-            setID('plan'),
-            set::name('plan'),
-            set::items($allPlans)
-        ),
-        span
-        (
-            setClass('input-group-btn'),
-            btn(setClass('primary'), setID('toStoryButton'), set::onclick('linkPlanStory()'), $lang->execution->linkStory)
+            set::label($lang->execution->selectStoryPlan),
+            set::required(true),
+            setClass('text-left'),
+            picker
+            (
+                set::name('plan'),
+                set::required(true),
+                set::items($allPlans)
+            )
         )
     )
 );
