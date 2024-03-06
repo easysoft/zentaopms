@@ -34,5 +34,5 @@ formPanel
     ) : null,
     formHidden('editor', $editor),
     formHidden('type', $type),
-    formHidden('content')
+    formHidden('content', '')
 );
