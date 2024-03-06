@@ -1017,25 +1017,30 @@ class metricModel extends model
             'suffix' => array()
         );
 
-        if($metric->stage == 'wait')
-        {
-            $this->config->metric->actionList['edit']['icon']        = 'edit';
-            $this->config->metric->actionList['edit']['text']        = $this->lang->edit;
-            $this->config->metric->actionList['edit']['hint']        = $this->lang->edit;
-            $this->config->metric->actionList['edit']['data-toggle'] = 'modal';
-            $this->config->metric->actionList['edit']['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}");
+        $stage = $metric->stage;
 
-            $menuList['suffix'][] = $this->config->metric->actionList['edit'];
-            if($metric->stage == 'wait' && !$this->isOldMetric($metric) && $metric->builtin === '0') $menuList['main'][]   = $this->config->metric->actionList['implement'];
-        }
-        else
+        if($stage == 'wait' and common::haspriv('metric', 'edit'))
         {
-            $menuList['main'][] = $this->config->metric->actionList['delist'];
+            $editAction = $this->config->metric->actionList['edit'];
+            $editAction['data-toggle'] = 'modal';
+            $editAction['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}");
+
+            $menuList['suffix']['edit'] = $editAction;
         }
 
-        if(!$metric->builtin)
+        if($stage == 'wait' and common::haspriv('metric', 'implement') and !$this->isOldMetric($metric) and $metric->builtin === '0')
         {
-            $menuList['suffix'][] = $this->config->metric->actionList['delete'];
+            $menuList['main']['implement'] = $this->config->metric->actionList['implement'];
+        }
+
+        if($stage != 'wait' and common::haspriv('metric', 'delist'))
+        {
+            $menuList['main']['delist'] = $this->config->metric->actionList['delist'];
+        }
+
+        if(!$metric->builtin and common::haspriv('metric', 'delete'))
+        {
+            $menuList['suffix']['delete'] = $this->config->metric->actionList['delete'];
         }
 
         return $menuList;
@@ -1314,7 +1319,7 @@ class metricModel extends model
      * @access public
      * @return array
      */
-    public function initActionBtn(array $metrics): array
+    public function initActionBtn(array $metrics, array $cols): array
     {
         foreach($metrics as $metric)
         {
@@ -1330,7 +1335,10 @@ class metricModel extends model
             }
         }
 
-        return $metrics;
+        $hasAction = !empty($metrics) && !empty($metrics[0]->actions);
+        if(!$hasAction) unset($cols['actions']);
+
+        return array($cols, $metrics);
     }
 
     /**

@@ -76,12 +76,12 @@ sidebar
 );
 
 $tableData = initTableData($metrics, $this->config->metric->dtable->definition->fieldList, $this->loadModel('metric'));
-$tableData = $this->metric->initActionBtn($tableData);
+list($cols, $tableData) = $this->metric->initActionBtn($tableData, $this->config->metric->dtable->definition->fieldList);
 
 dtable
 (
     setID('metricList'),
-    set::cols($this->config->metric->dtable->definition->fieldList),
+    set::cols($cols),
     set::data($tableData),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::footPager(usePager())
