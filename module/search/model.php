@@ -169,6 +169,7 @@ class searchModel extends model
         $querySessionName = $module . 'Query';
         $formSessionName  = $module . 'Form';
 
+        $queryID = (int)$queryID;
         if($queryID)
         {
             $query = $this->getQuery($queryID);
