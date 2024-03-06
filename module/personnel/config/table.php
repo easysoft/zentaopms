@@ -63,6 +63,7 @@ $config->personnel->whitelist->dtable->fieldList['dept']['name']   = 'dept';
 $config->personnel->whitelist->dtable->fieldList['dept']['title']  = $lang->user->dept;
 $config->personnel->whitelist->dtable->fieldList['dept']['type']   = 'category';
 $config->personnel->whitelist->dtable->fieldList['dept']['map']    = array();
+$config->personnel->whitelist->dtable->fieldList['dept']['align']  = 'left';
 
 $config->personnel->whitelist->dtable->fieldList['role']['name']   = 'role';
 $config->personnel->whitelist->dtable->fieldList['role']['title']  = $lang->user->role;
