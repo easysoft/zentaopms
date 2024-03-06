@@ -1158,4 +1158,34 @@ class user extends control
         ob_end_clean();
         echo (string)$rand;
     }
+
+    /**
+     * Ajax print templates.
+     *
+     * @param  string $type
+     * @param  string $link
+     * @access public
+     * @return void
+     */
+    public function ajaxPrintTemplates(string $type, string $link = '')
+    {
+        $this->view->link      = $link;
+        $this->view->type      = $type;
+        $this->view->templates = $this->user->getUserTemplates($type);
+        $this->display();
+    }
+
+    /**
+     * Save current template.
+     *
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function ajaxSaveOldTemplate(string $type)
+    {
+        $this->user->saveOldUserTemplate($type);
+        if(dao::isError()) echo js::error(dao::getError(), $full = false);
+        return print($this->fetch('user', 'ajaxPrintTemplates', "type=$type"));
+    }
 }

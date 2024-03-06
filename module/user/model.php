@@ -2812,6 +2812,27 @@ class userModel extends model
     }
 
     /**
+     * Save old user template.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function saveOldUserTemplate(string $type)
+    {
+        $template = fixer::input('post')
+            ->setDefault('account', $this->app->user->account)
+            ->setDefault('type', $type)
+            ->stripTags('content', $this->config->allowedTags)
+            ->get();
+
+        $condition = "`type`='$type' and account='{$this->app->user->account}'";
+        $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
+        if(!dao::isError()) $this->loadModel('score')->create('bug', 'saveTplModal', $this->dao->lastInsertID());
+    }
+
+
+    /**
      * 获取当前用户可以查看的模板列表。
      * Get user templates.
      *
