@@ -40,15 +40,18 @@ formPanel
                 set::level(1),
                 set::text($lang->metric->create)
             ),
-            label
+            div
             (
-                to::before(icon
+                icon
                 (
                     setClass('warning-ghost margin-left8'),
                     'help',
-                )),
-                set::text($lang->metric->tips->noticeUnchangeable),
-                setClass('label ghost state600')
+                ),
+                label
+                (
+                    set::text($lang->metric->tips->noticeUnchangeable),
+                    setClass('label ghost state600')
+                )
             )
         )
     ),
