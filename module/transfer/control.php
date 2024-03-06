@@ -67,7 +67,7 @@ class transfer extends control
             /* 获取导出模板字段。*/
             /* Get export template fields. */
             $fields = $this->config->$module->templateFields;
-            if($module == 'task' and isset($executionID)) $fields = $this->transferZen->processTaskTemplateFields($executionID, $fields);
+            if($module == 'task' and isset($executionID)) $fields = $this->transferZen->processTaskTemplateFields((int)$executionID, $fields);
 
             /* 初始化字段列表并拼接下拉菜单数据。*/
             /* Init field list and append dropdown menu data. */
