@@ -525,7 +525,7 @@ detailBody
                             {
                                 global $app;
                                 $tab = $app->tab == 'product' ? 'project' : $app->tab;
-                                if($app->tab == 'system') $tab = 'product';
+                                if($app->tab == 'system') $tab = 'project';
                                 return h::li
                                 (
                                     set::title($build->name),
