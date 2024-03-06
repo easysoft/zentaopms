@@ -81,7 +81,6 @@ window.setLane = function(e)
 let formSettingLabelClicked = false;
 $(document).on('click', 'form.form-setting-form .row label.state', function()
 {
-    console.log(formSettingLabelClicked);
     if(formSettingLabelClicked) return;
     formSettingLabelClicked = true;
 

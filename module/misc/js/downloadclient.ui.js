@@ -21,7 +21,6 @@ function getClient()
             const link = $.createLink('misc', 'ajaxSetClientConfig', 'os=' + os);
             $.getJSON(link, function(res)
             {
-                console.log(res);
                 if(res.result == 'success')
                 {
                     $('#setted').removeClass('hidden');
