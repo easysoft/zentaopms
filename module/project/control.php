@@ -315,8 +315,6 @@ class project extends control
         $browseType  = strtolower($browseType);
         if(!in_array($browseType, array('all', 'undone', 'bysearch'))) unset($this->config->project->dtable->fieldList['status']);
 
-        $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
-
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
