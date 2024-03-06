@@ -109,7 +109,7 @@ $(document).ready(function()
             dataType: 'json',
             data: {target: datatableId, name: name, value: value, global: global},
             success:function(e){if(reload) window.location.reload();},
-            url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
+            url: '<?php echo $this->createLink('datatable', 'ajaxOldSave')?>'
         });
     };
 

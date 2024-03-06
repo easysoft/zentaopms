@@ -149,6 +149,121 @@ class datatableModel extends model
     }
 
     /**
+     * Get field list.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getOldFieldList(string $module)
+    {
+        if(!isset($this->config->$module)) $this->loadModel($module);
+        if($this->session->hasProduct == 0 and (strpos($this->config->datatable->noProductModule, ",$module,") !== false))
+        {
+            $productIndex = array_search('product', $this->config->$module->datatable->defaultField);
+            if($productIndex) unset($this->config->$module->datatable->defaultField[$productIndex]);
+            if(isset($this->config->$module->datatable->fieldList['product'])) unset($this->config->$module->datatable->fieldList['product']);
+        }
+        if($this->session->currentProductType === 'normal') unset($this->config->$module->datatable->fieldList['branch']);
+        foreach($this->config->$module->datatable->fieldList as $field => $items)
+        {
+            if($field === 'branch')
+            {
+                if($this->session->currentProductType === 'branch')   $this->config->$module->datatable->fieldList[$field]['title'] = $this->lang->datatable->branch;
+                if($this->session->currentProductType === 'platform') $this->config->$module->datatable->fieldList[$field]['title'] = $this->lang->datatable->platform;
+                continue;
+            }
+            $title = zget($this->lang->$module, $items['title'], zget($this->lang, $items['title'], $items['title']));
+            $this->config->$module->datatable->fieldList[$field]['title'] = $title;
+        }
+
+        if($this->config->edition != 'open')
+        {
+            $fields = $this->loadModel('workflowfield')->getList($module);
+            foreach($fields as $field)
+            {
+                if($field->buildin) continue;
+                $this->config->$module->datatable->fieldList[$field->field]['title']    = $field->name;
+                $this->config->$module->datatable->fieldList[$field->field]['width']    = '120';
+                $this->config->$module->datatable->fieldList[$field->field]['fixed']    = 'no';
+                $this->config->$module->datatable->fieldList[$field->field]['required'] = 'no';
+            }
+        }
+
+        return $this->config->$module->datatable->fieldList;
+    }
+
+    /**
+     * Get save setting field.
+     *
+     * @param  string $module
+     * @access public
+     * @return object
+     */
+    public function getOldSetting(string $module)
+    {
+        $method      = $this->app->getMethodName();
+        $datatableId = $module . ucfirst($method);
+
+        $mode = isset($this->config->datatable->$datatableId->mode) ? $this->config->datatable->$datatableId->mode : 'table';
+        $key  = $mode == 'datatable' ? 'cols' : 'tablecols';
+
+        $module = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
+        if(!isset($this->config->$module)) $this->loadModel($module);
+        if(isset($this->config->datatable->$datatableId->$key)) $setting = json_decode($this->config->datatable->$datatableId->$key);
+
+        $fieldList = $this->getOldFieldList($module);
+        if(empty($setting))
+        {
+            $setting = $this->config->$module->datatable->defaultField;
+            $order   = 1;
+            foreach($setting as $key => $value)
+            {
+                $id  = $value;
+                $set = new stdclass();;
+                $set->order = $order++;
+                $set->id    = $id;
+                $set->show  = true;
+                $set->width = $fieldList[$id]['width'];
+                $set->fixed = $fieldList[$id]['fixed'];
+                $set->title = $fieldList[$id]['title'];
+                $set->sort  = isset($fieldList[$id]['sort']) ? $fieldList[$id]['sort'] : 'yes';
+                $set->name  = isset($fieldList[$id]['name']) ? $fieldList[$id]['name'] : '';
+
+                if(isset($fieldList[$id]['minWidth'])) $set->minWidth = $fieldList[$id]['minWidth'];
+                if(isset($fieldList[$id]['maxWidth'])) $set->maxWidth = $fieldList[$id]['maxWidth'];
+                if(isset($fieldList[$id]['pri']))      $set->pri = $fieldList[$id]['pri'];
+
+                $setting[$key] = $set;
+            }
+        }
+        else
+        {
+            foreach($setting as $key => $set)
+            {
+                if(!isset($fieldList[$set->id]))
+                {
+                    unset($setting[$key]);
+                    continue;
+                }
+                if($this->session->currentProductType === 'normal' and $set->id === 'branch')
+                {
+                    unset($setting[$key]);
+                    continue;
+                }
+
+                if($set->id == 'actions') $set->width = $fieldList[$set->id]['width'];
+                $set->title = $fieldList[$set->id]['title'];
+                $set->sort  = isset($fieldList[$set->id]['sort']) ? $fieldList[$set->id]['sort'] : 'yes';
+            }
+        }
+
+        usort($setting, array('datatableModel', 'sortOldCols'));
+
+        return $setting;
+    }
+
+    /**
      * 获取期望的配置项。
      * Format fields by config.
      *
@@ -200,6 +315,21 @@ class datatableModel extends model
     {
         if(!isset($a['order']) or !isset($b['order'])) return 0;
         return $a['order'] - $b['order'];
+    }
+
+    /**
+     * Sort old cols.
+     *
+     * @param  object $a
+     * @param  object $b
+     * @static
+     * @access public
+     * @return int
+     */
+    public static function sortOldCols(object $a, object $b)
+    {
+        if(!isset($a->order)) return 0;
+        return $a->order - $b->order;
     }
 
     /**
@@ -258,5 +388,37 @@ class datatableModel extends model
             }
             echo '</th>';
         }
+    }
+
+    /**
+     * Set fixed field width
+     *
+     * @param  array  $setting
+     * @param  int    $minLeftWidth
+     * @param  int    $minRightWidth
+     * @access public
+     * @return array
+     */
+    public function setFixedFieldWidth(array $setting, int $minLeftWidth = 550, int $minRightWidth = 140)
+    {
+        $widths['leftWidth']  = 30;
+        $widths['rightWidth'] = 0;
+        $hasLeftAuto  = false;
+        $hasRightAuto = false;
+        foreach($setting as $key => $value)
+        {
+            if($value->fixed != 'no')
+            {
+                if($value->fixed == 'left' and $value->width == 'auto')  $hasLeftAuto  = true;
+                if($value->fixed == 'right' and $value->width == 'auto') $hasRightAuto = true;
+                $widthKey = $value->fixed . 'Width';
+                if(!isset($widths[$widthKey])) $widths[$widthKey] = 0;
+                $widths[$widthKey] += (int)trim($value->width, 'px');
+            }
+        }
+        if($widths['leftWidth'] <= 550 and $hasLeftAuto) $widths['leftWidth']  = 550;
+        if($widths['rightWidth'] <= 0 and $hasRightAuto) $widths['rightWidth'] = 140;
+
+        return $widths;
     }
 }
