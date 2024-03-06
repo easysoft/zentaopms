@@ -1756,7 +1756,7 @@ class storyZen extends story
             return helper::createLink('projectstory', 'view', "storyID={$storyID}&projectID={$this->session->project}");
         }
 
-        if($from != 'execution') return helper::createLink('story', 'view', "storyID={$storyID}&version=0&param=0&storyType={$storyType}");
+        if($from != 'execution') return helper::createLink($storyType, 'view', "storyID={$storyID}&version=0&param=0&storyType={$storyType}");
 
         $execution = $this->execution->getByID($this->session->execution);
 
