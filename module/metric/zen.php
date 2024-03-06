@@ -45,19 +45,19 @@ class metricZen extends metric
      * 成功插入度量数据后，其他的额外操作。
      * Process after create metric.
      *
-     * @param  string    $scope
+     * @param  int       $metricID
+     * @param  string    $afterCreate
+     * @param  string    $fromURL
      * @access protected
      * @return array
      */
-    protected function responseAfterCreate($metricID, $scope, $afterCreate)
+    protected function responseAfterCreate($metricID, $afterCreate, $location)
     {
-        if($afterCreate == 'back')
+        if($afterCreate == 'back' && $location)
         {
-            $location = $this->createLink('metric', 'browse', "scope=$scope");
             return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
         }
 
-        $closeModal = false;
         $location = $this->createLink('metric', 'implement', "metricID=$metricID");
         $callback = array('name' => 'loadImplement', 'params' => $location);
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => $callback);
