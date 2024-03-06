@@ -18,7 +18,7 @@
 #dropmenu button i {font-size: 18px;}
 #dropmenu .icon-angle-right {left: unset; right: 0.5rem;}
 
-.listitem.active {background-color: var(--color-primary-100);}
+#moduleMenu .listitem.active {background-color: var(--color-primary-100);}
 .clear-gap {gap: 0 !important;}
 .dtable-cell-html {width: inherit;}
 .dtable-name-flex {display: flex; justify-content: space-between;}
