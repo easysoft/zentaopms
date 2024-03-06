@@ -1630,7 +1630,7 @@ class commonModel extends model
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
-        if($isFreepasswd) helper::end(js::locate($this->config->webRoot));
+        if($isFreepasswd) header("Location: {$this->config->webRoot}");
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . helper::getRemoteIp()));
@@ -1672,7 +1672,7 @@ class commonModel extends model
             if($result)
             {
                 if($timestamp <= $entry->calledTime) $this->response('CALLED_TIME');
-                $this->loadModel('entry')->updateCalledTime($entry->code, $timestamp);
+                $this->loadModel('entry')->updateCalledTime($entry->code, (int)$timestamp);
                 unset($_GET['time']);
                 return $result;
             }
