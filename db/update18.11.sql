@@ -7,3 +7,5 @@ UPDATE `zt_pivot` SET `createdBy` = 'system' where `createdBy` = 'admin';
 UPDATE `zt_chart` SET `editedBy` = 'system' where `editedBy` = 'admin';
 UPDATE `zt_pivot` SET `editedBy` = 'system' where `editedBy` = 'admin';
 UPDATE `zt_pivot` SET `editedBy` = 'system' where `editedBy` = 'admin';
+
+UPDATE zt_project SET lifetime = 'long' where lifetime = 'waterfall';
