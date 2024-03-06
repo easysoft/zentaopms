@@ -32,17 +32,21 @@ div
         cell
         (
             set::width('50%'),
-            setClass('text-right'),
-            userAvatar(set::user($user))
+            userAvatar(set::user($user), set::size('lg'))
         ),
         cell
         (
+            setClass('row'),
             set::width('50%'),
-            div(setClass('user-name text-md font-bold center'), $user->realname),
-            zget($lang->user->roleList, $user->role, '') == '' ? null : div
+            span
             (
-                setClass('user-role text-gray center'),
-                zget($lang->user->roleList, $user->role)
+                setClass('user-name font-bold center'),
+                $user->realname
+            ),
+            zget($lang->user->roleList, $user->role, '') == '' ? null : span
+            (
+                setClass('user-role text-gray center ml-1'),
+                '(' . zget($lang->user->roleList, $user->role) . ')'
             )
         )
     ),
