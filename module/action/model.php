@@ -649,11 +649,17 @@ class actionModel extends model
                     $action->extra = sprintf($this->lang->execution->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
                 }
             }
-            elseif($objectType == 'demand' && $actionName == 'retracted')
+            elseif($objectType == 'demand' && in_array($actionName, array('retracted', 'restored')))
             {
                 $story = $this->loadModel('story')->getById($action->extra);
-                $action->extra = "#{$action->extra} {$this->lang->story->title} " . html::a(helper::createLink('story', 'view', "storyID=$story->id"), "$story->title");
+                if($story) $action->extra = common::hasPriv('story', 'view') ? "#{$action->extra} {$this->lang->story->title} " . html::a(helper::createLink('story', 'view', "storyID=$story->id"), "$story->title") : "#$action->extra " . $demand->title;
             }
+            elseif($objectType == 'story' && $actionName == 'distributed')
+            {
+                $demand = $this->loadModel('demand')->getById($action->extra);
+                if($demand) $action->extra = common::hasPriv('demand', 'view') ? html::a(helper::createLink('demand', 'view', "demandID=$action->extra"), "#$action->extra " . $demand->title) : "#$action->extra " . $demand->title;
+            }
+
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
 
             $actionName = strtolower($action->action);
