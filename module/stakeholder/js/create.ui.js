@@ -10,7 +10,6 @@ function toggleUser()
     if($(this).val() == 'outside') var link = $.createLink('stakeholder', 'ajaxGetOutsideUser', 'objectID=' + programID ? programID : projectID);
     $.getJSON(link, function(users)
     {
-        console.log(users);
         let $userPicker = $('[name^="user"]').zui('picker');
         $userPicker.render({items: users});
         $userPicker.$.setValue('');

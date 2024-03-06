@@ -252,7 +252,6 @@ let composing = false;
  */
 window.aiBrowseMiniProgram.handleInputEnter = function(event)
 {
-    console.log(composing, 3);
     if(event.code === 'Enter' && !composing)
     {
         event.preventDefault();
@@ -272,13 +271,11 @@ window.aiBrowseMiniProgram.clearInputAndChat = function()
 window.aiBrowseMiniProgram.handleInputCompositionStart = function()
 {
     composing = true;
-    console.log(composing, 1);
 };
 
 window.aiBrowseMiniProgram.handleInputCompositionEnd = function()
 {
     composing = false;
-    console.log(composing, 2);
 };
 
 /**

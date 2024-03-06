@@ -91,7 +91,6 @@ window.clickSubmit = function()
 
     const formUrl  = $('#mergeForm').attr('action');
     const formData = new FormData($("#mergeForm")[0]);
-    console.log(branchNamePairs);
     if(targetBranchName && typeof branchNamePairs[targetBranchName] === 'undefined')
     {
         zui.Modal.confirm(confirmMergeMessage).then((res) => {
