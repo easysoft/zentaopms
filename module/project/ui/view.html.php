@@ -93,15 +93,20 @@ if($project->hasProduct)
         foreach($product->plans as $planIDList)
         {
             $planIDList = explode(',', $planIDList);
+            $planIDList = array_filter($planIDList);
             foreach($planIDList as $planID)
             {
                 if(!isset($planGroup[$productID][$planID])) continue;
 
-                $planClass  = count($plans) > 2 ? 'mt-2' : '';
-                $planClass .= count($plans) % 3 != 0 ? ' pl-4' : '';
+                $class = 'clip';
+                if(count($planIDList) <= 2) $class .= ' flex flex-1 w-0 items-center';
+                if(count($planIDList) > 2)  $class .= ' flex-none w-1/3';
+
+                if(count($plans) > 2)      $class .= ' mt-2';
+                if(count($plans) % 3 != 0) $class .= ' pl-6';
                 $plans[] = div
                     (
-                        setClass("flex-none w-1/3 clip {$planClass}"),
+                        setClass($class),
                         icon('productplan mr-2 '),
                         a
                         (
