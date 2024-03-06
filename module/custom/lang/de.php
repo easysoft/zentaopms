@@ -40,6 +40,7 @@ $lang->custom->setStoryConcept      = "Set Story Concept";
 $lang->custom->setDefaultConcept    = "Set Default Concept";
 $lang->custom->browseStoryConcept   = "List of story concepts";
 $lang->custom->deleteStoryConcept   = "Delete story Concept";
+$lang->custom->ERConcept            = "ER Concept";
 $lang->custom->URConcept            = "UR Concept";
 $lang->custom->SRConcept            = "SR Concept";
 $lang->custom->reviewRule           = 'Review Rules';
