@@ -76,15 +76,17 @@ window.setStatistics = function(element, checkedIDList)
         }
     })
 
-    const summary = checkedIDList.length > 0 ? checkedSummary : pageSummary;
-    return {
-        html: summary.replace('%total%', totalCount)
-            .replace('%wait%', waitCount)
-            .replace('%doing%', doingCount)
-            .replace('%estimate%', totalEstimate.toFixed(1))
-            .replace('%consumed%', totalConsumed.toFixed(1))
-            .replace('%left%', totalLeft.toFixed(1))
-    };
+    let summary = checkedIDList.length > 0 ? checkedSummary : pageSummary;
+    summary =  summary.replace('%total%', totalCount)
+        .replace('%wait%', waitCount)
+        .replace('%doing%', doingCount)
+        .replace('%estimate%', totalEstimate.toFixed(1))
+        .replace('%consumed%', totalConsumed.toFixed(1))
+        .replace('%left%', totalLeft.toFixed(1));
+
+    $('.dtable-check-info').attr('title', summary.replace(/<[^>]+>/g,""));
+
+    return {html: summary};
 }
 
 /**
