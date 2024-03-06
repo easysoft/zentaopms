@@ -36,11 +36,13 @@ class listItem extends wg
         'textClass'     => '?string|array',
         'title'         => '?string',
         'titleClass'    => '?string|array',
+        'titleAttrs'    => '?array',
         'subtitle'      => '?string',
         'subtitleClass' => '?string|array',
         'hint'          => '?string',
         'trailing'      => '?mixed',
         'actions'       => '?array',
+        'actionsClass'  => '?array|string',
         'content'       => '?mixed',
         'contentClass'  => '?string|array',
         'contentAttrs'  => '?array',
@@ -106,11 +108,11 @@ class listItem extends wg
 
     protected function buildTrailing()
     {
-        list($trailing, $trailingClass, $trailingIcon, $actions) = $this->prop(array('trailing', 'trailingClass', 'trailingIcon', 'actions'));
+        list($trailing, $trailingClass, $trailingIcon, $actions, $actionsClass) = $this->prop(array('trailing', 'trailingClass', 'trailingIcon', 'actions', 'actionsClass'));
 
         $views = array();
         if($trailingIcon) $views[] = icon::create($trailingIcon, array('class' => 'item-trailing-icon'));
-        if($actions)      $views[] = toolbar::create($actions, set::size('sm'));
+        if($actions)      $views[] = toolbar::create($actions, set::size('sm'), $actionsClass ? setClass($actionsClass) : null);
         if($trailing)     $views[] = $trailing;
 
         if($this->multiline && $views)
@@ -126,13 +128,16 @@ class listItem extends wg
 
     protected function buildInner()
     {
-        list($innerTag, $innerClass, $innerAttrs, $active, $disabled, $selected, $divider, $checked, $hint, $url, $innerTag, $target) = $this->prop(array('innerTag', 'innerClass', 'innerAttrs', 'active', 'disabled', 'selected', 'divider', 'checked', 'multiline', 'hint', 'url', 'innerTag', 'title', 'subtitle', 'target'));
+        list($innerTag, $innerClass, $innerAttrs, $active, $disabled, $selected, $divider, $checked, $hint, $url, $target) = $this->prop(array('innerTag', 'innerClass', 'innerAttrs', 'active', 'disabled', 'selected', 'divider', 'checked', 'hint', 'url', 'target'));
+
+        $isLink = $this->isLink;
+        if(!$innerTag) $innerTag = $isLink ? 'a' : 'div';
 
         return h::$innerTag
         (
-            setClass('listitem', array('active' => $active, 'disabled' => $disabled, 'selected' => $selected, 'has-divider' => $divider, 'checked' => $checked, 'multiline' => $this->multiline, 'state' => !$this->isLink && !$disabled), $innerClass),
+            setClass('listitem', array('active' => $active, 'disabled' => $disabled, 'selected' => $selected, 'has-divider' => $divider, 'checked' => $checked, 'multiline' => $this->multiline), $innerClass),
             set::title($hint),
-            $this->isLink ? set(array('href' => $url ? $url : 'javascript:;', 'target' => $target)) : null,
+            $isLink ? set(array('href' => $url ? $url : 'javascript:;', 'target' => $target)) : null,
             set($innerAttrs),
             $this->buildLeading(),
             $this->buildContent(),
