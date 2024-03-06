@@ -123,6 +123,7 @@ function sectionCard(): sectionCard {return createWg('sectionCard', func_get_arg
 function sectionList(): sectionList {return createWg('sectionList', func_get_args());}
 function entityLabel(): entityLabel {return createWg('entityLabel',func_get_args());}
 function tableData(): tableData {return createWg('tableData',func_get_args());}
+function detail(): detail {return createWg('detail', func_get_args());}
 function detailHeader(): detailHeader {return createWg('detailHeader', func_get_args());}
 function detailSide(): detailSide {return createWg('detailSide', func_get_args());}
 function detailBody(): detailBody {return createWg('detailBody', func_get_args());}
