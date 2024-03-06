@@ -12,6 +12,7 @@
 $lang->product->index            = $lang->productCommon . ' Home';
 $lang->product->browse           = 'Story List';
 $lang->product->requirement      = 'Requirement List';
+$lang->product->epic             = "{$lang->ERCommon} List";
 $lang->product->dynamic          = 'Dynamics';
 $lang->product->view             = "{$lang->productCommon} Detail";
 $lang->product->edit             = "Edit {$lang->productCommon}";

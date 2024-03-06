@@ -12,6 +12,7 @@
 $lang->product->index            = $lang->productCommon . '主页';
 $lang->product->browse           = "{$lang->SRCommon}列表";
 $lang->product->requirement      = "{$lang->URCommon}列表";
+$lang->product->epic             = "{$lang->ERCommon}列表";
 $lang->product->dynamic          = $lang->productCommon . '动态';
 $lang->product->view             = "{$lang->productCommon}概况";
 $lang->product->edit             = "编辑{$lang->productCommon}";

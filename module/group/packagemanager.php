@@ -45,6 +45,10 @@ $config->group->subset->requirement = new stdclass();
 $config->group->subset->requirement->order = 120;
 $config->group->subset->requirement->nav   = 'product';
 
+$config->group->subset->epic = new stdclass();
+$config->group->subset->epic->order = 125;
+$config->group->subset->epic->nav   = 'product';
+
 $config->group->subset->productplan = new stdclass();
 $config->group->subset->productplan->order = 130;
 $config->group->subset->productplan->nav   = 'product';
@@ -792,6 +796,51 @@ $config->group->package->reviewRequirement->subset = 'requirement';
 $config->group->package->reviewRequirement->privs  = array();
 $config->group->package->reviewRequirement->privs['requirement-review']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 40, 'depend' => array('requirement-view'), 'recommend' => array('requirement-batchReview'));
 $config->group->package->reviewRequirement->privs['requirement-batchReview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 50, 'depend' => array('product-requirement'), 'recommend' => array('requirement-review'));
+
+$config->group->package->browseEpic = new stdclass();
+$config->group->package->browseEpic->order  = 5;
+$config->group->package->browseEpic->subset = 'epic';
+$config->group->package->browseEpic->privs  = array();
+$config->group->package->browseEpic->privs['product-epic'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 15, 'depend' => array('product-browse'), 'recommend' => array('epic-report', 'epic-view'));
+$config->group->package->browseEpic->privs['epic-view']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 30, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseEpic->privs['epic-report']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 85, 'depend' => array('product-epic'), 'recommend' => array());
+
+$config->group->package->manageEpic = new stdclass();
+$config->group->package->manageEpic->order  = 10;
+$config->group->package->manageEpic->subset = 'epic';
+$config->group->package->manageEpic->privs  = array();
+$config->group->package->manageEpic->privs['epic-create']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array(), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-batchCreate', 'epic-change', 'epic-close', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-batchCreate']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array('product-epic'), 'recommend' => array('epic-create'));
+$config->group->package->manageEpic->privs['epic-edit']               = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 15, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-batchEdit', 'epic-change', 'epic-close', 'epic-create', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-delete']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 25, 'depend' => array('epic-view'), 'recommend' => array('epic-create', 'epic-edit'));
+$config->group->package->manageEpic->privs['epic-change']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 35, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-submitReview']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall'));
+$config->group->package->manageEpic->privs['epic-recall']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 55, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-close']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 60, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-batchClose', 'epic-change', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-batchClose']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 65, 'depend' => array('product-epic'), 'recommend' => array('epic-close'));
+$config->group->package->manageEpic->privs['epic-assignTo']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 70, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-batchAssignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-batchAssignTo']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 75, 'depend' => array('product-epic'), 'recommend' => array('epic-assignTo'));
+$config->group->package->manageEpic->privs['epic-activate']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 80, 'depend' => array('epic-view'), 'recommend' => array('epic-assignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-linkStory']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 90, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-batchChangeModule', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-batchChangeBranch']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 95, 'depend' => array('product-epic'), 'recommend' => array('epic-edit'));
+$config->group->package->manageEpic->privs['epic-batchChangeModule']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 100, 'depend' => array('product-epic'), 'recommend' => array('epic-edit'));
+$config->group->package->manageEpic->privs['epic-batchEdit']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 110, 'depend' => array('product-epic'), 'recommend' => array('epic-edit'));
+$config->group->package->manageEpic->privs['epic-batchChangeRoadmap'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 125, 'depend' => array('product-epic'), 'recommend' => array('epic-batchCreate', 'epic-create', 'epic-edit'));
+
+$config->group->package->importEpic = new stdclass();
+$config->group->package->importEpic->order  = 20;
+$config->group->package->importEpic->subset = 'epic';
+$config->group->package->importEpic->privs  = array();
+$config->group->package->importEpic->privs['epic-export']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 20, 'depend' => array('product-epic'), 'recommend' => array());
+$config->group->package->importEpic->privs['epic-import']         = array('edition' => 'max,ipd', 'vision' => 'rnd,or', 'order' => 115, 'depend' => array('product-epic', 'epic-exportTemplate'), 'recommend' => array());
+$config->group->package->importEpic->privs['epic-exportTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd,or', 'order' => 120, 'depend' => array('product-epic'), 'recommend' => array());
+
+$config->group->package->reviewEpic = new stdclass();
+$config->group->package->reviewEpic->order  = 15;
+$config->group->package->reviewEpic->subset = 'epic';
+$config->group->package->reviewEpic->privs  = array();
+$config->group->package->reviewEpic->privs['epic-review']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 40, 'depend' => array('epic-view'), 'recommend' => array('epic-batchReview'));
+$config->group->package->reviewEpic->privs['epic-batchReview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 50, 'depend' => array('product-epic'), 'recommend' => array('epic-review'));
 
 $config->group->package->browseProductPlan = new stdclass();
 $config->group->package->browseProductPlan->order  = 5;

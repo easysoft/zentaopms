@@ -3,9 +3,12 @@ $config->custom->browseStoryConcept->dtable = new stdclass();
 $config->custom->browseStoryConcept->dtable->fieldList['default']['type'] = 'id';
 $config->custom->browseStoryConcept->dtable->fieldList['default']['sortType'] = false;
 
-$config->custom->browseStoryConcept->dtable->fieldList['ERName']['title']    = $lang->custom->ERConcept;
-$config->custom->browseStoryConcept->dtable->fieldList['ERName']['type']     = 'title';
-$config->custom->browseStoryConcept->dtable->fieldList['ERName']['sortType'] = false;
+if($config->enableER)
+{
+    $config->custom->browseStoryConcept->dtable->fieldList['ERName']['title']    = $lang->custom->ERConcept;
+    $config->custom->browseStoryConcept->dtable->fieldList['ERName']['type']     = 'title';
+    $config->custom->browseStoryConcept->dtable->fieldList['ERName']['sortType'] = false;
+}
 
 if($config->URAndSR)
 {

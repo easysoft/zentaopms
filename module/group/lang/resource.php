@@ -431,6 +431,7 @@ $lang->resource->product = new stdclass();
 $lang->resource->product->index           = 'indexAction';
 $lang->resource->product->browse          = 'browse';
 $lang->resource->product->requirement     = 'requirement';
+$lang->resource->product->epic            = 'epic';
 $lang->resource->product->create          = 'create';
 $lang->resource->product->view            = 'view';
 $lang->resource->product->edit            = 'edit';
@@ -455,6 +456,7 @@ $lang->resource->product->unbindWhitelist = 'unbindWhitelist';
 $lang->product->methodOrder[0]   = 'index';
 $lang->product->methodOrder[5]   = 'browse';
 $lang->product->methodOrder[6]   = 'requirement';
+$lang->product->methodOrder[7]   = 'epic';
 $lang->product->methodOrder[10]  = 'create';
 $lang->product->methodOrder[15]  = 'view';
 $lang->product->methodOrder[20]  = 'edit';
@@ -607,6 +609,49 @@ $lang->requirement->methodOrder[85]  = 'linkStory';
 $lang->requirement->methodOrder[90]  = 'batchChangeBranch';
 $lang->requirement->methodOrder[95]  = 'batchChangeModule';
 $lang->requirement->methodOrder[100] = 'linkRequirements';
+
+/* Epic. */
+$lang->resource->epic = new stdclass();
+$lang->resource->epic->create            = 'create';
+$lang->resource->epic->batchCreate       = 'batchCreate';
+$lang->resource->epic->edit              = 'editAction';
+$lang->resource->epic->batchEdit         = 'batchEdit';
+$lang->resource->epic->export            = 'exportAction';
+$lang->resource->epic->delete            = 'deleteAction';
+$lang->resource->epic->view              = 'view';
+$lang->resource->epic->change            = 'changeAction';
+$lang->resource->epic->review            = 'reviewAction';
+$lang->resource->epic->submitReview      = 'submitReview';
+$lang->resource->epic->batchReview       = 'batchReview';
+$lang->resource->epic->recall            = 'recall';
+$lang->resource->epic->assignTo          = 'assignAction';
+$lang->resource->epic->close             = 'closeAction';
+$lang->resource->epic->batchClose        = 'batchClose';
+$lang->resource->epic->activate          = 'activateAction';
+$lang->resource->epic->report            = 'reportAction';
+$lang->resource->epic->batchChangeBranch = 'batchChangeBranch';
+$lang->resource->epic->batchAssignTo     = 'batchAssignTo';
+$lang->resource->epic->batchChangeModule = 'batchChangeModule';
+
+$lang->epic->methodOrder[5]   = 'create';
+$lang->epic->methodOrder[10]  = 'batchCreate';
+$lang->epic->methodOrder[15]  = 'edit';
+$lang->epic->methodOrder[20]  = 'export';
+$lang->epic->methodOrder[25]  = 'delete';
+$lang->epic->methodOrder[30]  = 'view';
+$lang->epic->methodOrder[35]  = 'change';
+$lang->epic->methodOrder[40]  = 'review';
+$lang->epic->methodOrder[44]  = 'submitReview';
+$lang->epic->methodOrder[45]  = 'batchReview';
+$lang->epic->methodOrder[50]  = 'recall';
+$lang->epic->methodOrder[55]  = 'close';
+$lang->epic->methodOrder[60]  = 'batchClose';
+$lang->epic->methodOrder[65]  = 'assignTo';
+$lang->epic->methodOrder[70]  = 'batchAssignTo';
+$lang->epic->methodOrder[75]  = 'activate';
+$lang->epic->methodOrder[80]  = 'report';
+$lang->epic->methodOrder[90]  = 'batchChangeBranch';
+$lang->epic->methodOrder[95]  = 'batchChangeModule';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -2097,6 +2142,11 @@ if(!$inUpgrade)
         unset($lang->resource->product->requirement);
         unset($lang->resource->story->linkStory);
         unset($lang->resource->requirement);
+    }
+    if(!$config->enableER)
+    {
+        unset($lang->resource->product->epic);
+        unset($lang->resource->epic);
     }
     if($config->systemMode == 'light')
     {
