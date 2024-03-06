@@ -56,7 +56,7 @@ toolbar
     ))) : null,
     !empty($importItems) ? dropdown(
         btn(
-            setClass('ghost btn square btn-default'),
+            setClass('ghost btn btn-default'),
             set::icon('import'),
             set::text($lang->import)
         ),
@@ -69,7 +69,8 @@ toolbar
         'text'        => $lang->export,
         'class'       => 'ghost',
         'url'         => createLink('task', 'export', "execution={$executionID}&orderBy={$orderBy}&type=tree"),
-        'data-toggle' => 'modal'
+        'data-toggle' => 'modal',
+        'data-size'   => 'sm'
     ))) : null,
     $canCreateTask ? item(set(array
     (
