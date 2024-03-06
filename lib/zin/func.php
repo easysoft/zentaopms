@@ -171,4 +171,5 @@ function visionSwitcher(): visionSwitcher {return createWg('visionSwitcher', fun
 function chatBtn(): chatBtn {return createWg('chatBtn', func_get_args());}
 function storyList(): storyList {return createWg('storyList', func_get_args());}
 function linkedStoryList(): linkedStoryList {return createWg('linkedStoryList', func_get_args());}
+function twinsStoryList(): twinsStoryList {return createWg('twinsStoryList', func_get_args());}
 function executionTaskList(): executionTaskList {return createWg('executionTaskList', func_get_args());}
