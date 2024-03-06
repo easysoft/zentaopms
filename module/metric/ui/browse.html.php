@@ -23,6 +23,7 @@ $fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
 
     return dropmenu
     (
+        set::_className('py-2.5'),
         set::defaultValue($scope),
         set::text($scopeText),
         set::caret(false),
