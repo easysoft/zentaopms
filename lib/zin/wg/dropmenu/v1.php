@@ -111,6 +111,12 @@ class dropmenu extends wg
                         $branchName = $app->control->branch->getByID((string)$branchID);
                     }
                     if($module == 'testtask' && $method == 'browse') $extra = data('type');
+                    if(($app->moduleName == 'tree' && $app->methodName == 'browse') || ($module == 'tree' || $method == 'browse'))
+                    {
+                        $module = 'tree';
+                        $method = 'browse';
+                        $extra = data('viewType');
+                    }
                     $branchURL  = createLink('branch', 'ajaxGetDropMenu', "objectID=$objectID&branch=$branchID&module=$module&method=$method&extra=$extra");
                     $branchMenu = zui::dropmenu
                     (

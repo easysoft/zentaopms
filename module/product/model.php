@@ -1991,6 +1991,8 @@ class productModel extends model
         if($module == 'testreport' && in_array($method, array('edit', 'browse')))         return helper::createLink($module,    'browse', "objectID=%s");
         if($module == 'feedback'   && $this->config->vision == 'lite')                    return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
 
+        if($module == 'tree' && !empty($extra)) return helper::createLink('tree', $method, "productID=%s&view={$extra}&currentModuleID=0{$branchParam}");
+
         if($module == 'design')      return helper::createLink('design',      'browse', "productID=%s");
         if($module == 'execution')   return helper::createLink('execution',   $method,  "objectID=$extra&productID=%s");
         if($module == 'feedback')    return helper::createLink('feedback',    'admin',  "browseType=byProduct&productID=%s");
