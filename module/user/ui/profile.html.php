@@ -28,11 +28,11 @@ div
     setClass('bg-white m-auto p-5 mb-4'),
     div
     (
-        setClass('flex items-center pb-5'),
+        setClass('flex items-center pb-5 col'),
         cell
         (
             set::width('50%'),
-            setClass('text-right pr-3'),
+            setClass('text-right'),
             userAvatar(set::user($user))
         ),
         cell
