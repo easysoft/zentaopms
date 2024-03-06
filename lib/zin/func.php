@@ -175,3 +175,5 @@ function twinsStoryList(): twinsStoryList {return createWg('twinsStoryList', fun
 function executionTaskList(): executionTaskList {return createWg('executionTaskList', func_get_args());}
 function relatedList(): relatedList {return createWg('relatedList', func_get_args());}
 function storyRelatedList(): storyRelatedList {return createWg('storyRelatedList', func_get_args());}
+function storyBasicInfo(): storyBasicInfo {return createWg('storyBasicInfo', func_get_args());}
+function storyLifeInfo(): storyLifeInfo {return createWg('storyLifeInfo', func_get_args());}

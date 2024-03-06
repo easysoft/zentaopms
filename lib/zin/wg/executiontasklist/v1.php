@@ -9,8 +9,8 @@ class executionTaskList extends wg
 {
     protected static array $defineProps = array
     (
-        'tasks'      => 'array',       // 任务列表。
-        'executions' => 'array',       // 执行列表。
+        'tasks'        => 'array',       // 任务列表。
+        'executions'   => 'array',       // 执行列表。
         'onRenderItem' => '?callable'  // 渲染需求对象的回调函数。
     );
 
