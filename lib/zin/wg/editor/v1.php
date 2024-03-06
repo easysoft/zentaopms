@@ -65,7 +65,7 @@ class editor extends wg
             btn
             (
                 setClass('ghost border-l border-r border-light'),
-                on::click("showSaveModal('$editor', '$type')"),
+                on::click("window.showSaveModal('$editor', '$type')"),
                 $lang->user->saveTemplate
             ),
             dropdown
