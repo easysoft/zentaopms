@@ -169,3 +169,4 @@ function whitelist(): whitelist {return createWg('whitelist', func_get_args());}
 function modulePicker(): modulePicker {return createWg('modulePicker', func_get_args());}
 function visionSwitcher(): visionSwitcher {return createWg('visionSwitcher', func_get_args());}
 function chatBtn(): chatBtn {return createWg('chatBtn', func_get_args());}
+function executionTaskList(): executionTaskList {return createWg('executionTaskList', func_get_args());}
