@@ -38,10 +38,10 @@ div
         cell
         (
             set::width('50%'),
-            div(setClass('user-name text-md font-bold'), $user->realname),
+            div(setClass('user-name text-md font-bold center'), $user->realname),
             zget($lang->user->roleList, $user->role, '') == '' ? null : div
             (
-                setClass('user-role text-gray'),
+                setClass('user-role text-gray center'),
                 zget($lang->user->roleList, $user->role)
             )
         )
