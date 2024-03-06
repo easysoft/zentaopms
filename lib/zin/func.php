@@ -173,3 +173,5 @@ function storyList(): storyList {return createWg('storyList', func_get_args());}
 function linkedStoryList(): linkedStoryList {return createWg('linkedStoryList', func_get_args());}
 function twinsStoryList(): twinsStoryList {return createWg('twinsStoryList', func_get_args());}
 function executionTaskList(): executionTaskList {return createWg('executionTaskList', func_get_args());}
+function relatedList(): relatedList {return createWg('relatedList', func_get_args());}
+function storyRelatedList(): storyRelatedList {return createWg('storyRelatedList', func_get_args());}
