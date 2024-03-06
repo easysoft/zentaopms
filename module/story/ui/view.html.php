@@ -525,7 +525,7 @@ detailBody
                             {
                                 global $app;
                                 $tab = $app->tab == 'product' ? 'project' : $app->tab;
-                                if(!$app->tab == 'system') $tab = 'product';
+                                if($app->tab == 'system') $tab = 'product';
                                 return h::li
                                 (
                                     set::title($build->name),
@@ -546,7 +546,7 @@ detailBody
                                 global $app;
                                 $tab           = $app->tab == 'execution' ? 'product'        : $app->tab;
                                 $releaseModule = $app->tab == 'project'   ? 'projectrelease' : 'release';
-                                if(!$app->tab == 'system') $tab = 'product';
+                                if($app->tab == 'system') $tab = 'product';
                                 return h::li
                                 (
                                     set::title($release->name),
