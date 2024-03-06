@@ -99,7 +99,7 @@ class node implements \JsonSerializable
 
     public function id(): ?string
     {
-        return $this->props->get('id');
+        return strval($this->props->get('id'));
     }
 
     public function displayID(): string
