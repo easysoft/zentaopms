@@ -1118,4 +1118,18 @@ class product extends control
         $link = inlink('manageLine');
         return $this->send(array('result' => 'success', 'callback' => "loadModal(\"$link\", 'manageLineModal');"));
     }
+
+    /**
+     * 根据产品线获取产品。
+     * AJAX: get products by line.
+     *
+     * @param  int    $lineID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductByLine(int $lineID)
+    {
+        $products = $this->product->getList(0, 'all', 1, $lineID);
+        return print($products ? json_encode($products) : '');
+    }
 }

@@ -612,6 +612,38 @@ class productTest
     }
 
     /**
+     * 测试 tao 文件中的 syncProgramToProduct 方法。
+     * Test syncProgramToProduct method of tao file.
+     *
+     * @param  int    $programID
+     * @param  int    $lineID
+     * @param  string $checkType   product|action
+     * @access public
+     * @return array
+     */
+    public function syncProgramToProductTest(int $programID, int $lineID, string $checkType = 'product'): array|object
+    {
+        $this->objectModel->syncProgramToProduct($programID, $lineID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            if($checkType == 'product')
+            {
+                return $this->objectModel->dao->select('id,program')->from(TABLE_PRODUCT)->where('line')->eq($lineID)->orderby('id desc')->fetch();
+            }
+            elseif($checkType == 'action')
+            {
+                $products = $this->objectModel->dao->select('id')->from(TABLE_PRODUCT)->where('line')->eq($lineID)->fetchPairs('id');
+                return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('objectID')->eq(current($products))->orderby('id desc')->fetch();
+            }
+        }
+    }
+
+    /**
      * Test get stories.
      *
      * @param  int    $productID

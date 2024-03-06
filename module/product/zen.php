@@ -675,9 +675,6 @@ class productZen extends product
     {
         $data = $form->get();
 
-        /* When there are products under the line, the program cannot be modified  */
-        if(!$this->canChangeProgram($data)) return false;
-
         /* 拼装产品线列表。列表项目集编号为键，该项目集下的产品线名称列表为值。 */
         /* Build product line list. The program id as key, line name list as value. */
         $lines = array();
@@ -1392,39 +1389,6 @@ class productZen extends product
         $hour->progress      = 0;
 
         return $hour;
-    }
-
-    /**
-     * 如果修改产品线的项目集，检查该产品线下是否有关联产品。如果有关联产品将不能修改项目集。
-     * If the program of a product line changed, check whether there are related products under the product line. If there is an associated product, the program can not be modified.
-     *
-     * @param  object    $lines
-     * @access protected
-     * @return bool
-     */
-    protected function canChangeProgram(object $lines): bool
-    {
-        if(!in_array($this->config->systemMode, array('ALM', 'PLM'))) return true;
-
-        /* 获取修改项目集的产品线。 */
-        /* Get the product lines which program change. */
-        $oldLines = $this->product->getLines();
-        $changedProgramLines = array();
-        foreach($oldLines as $oldLine)
-        {
-            $oldLineID = 'id' . $oldLine->id;
-            if($lines->programs[$oldLineID] != $oldLine->root) $changedProgramLines[$oldLine->id] = $oldLine->name;
-        }
-
-        /* 检查修改项目集的产品线下是否有关联产品。 */
-        /* Check whether there are related products under the product line. */
-        if($changedProgramLines)
-        {
-            $hasProductLines = $this->dao->select('id,line')->from(TABLE_PRODUCT)->where('line')->in(array_keys($changedProgramLines))->fetchPairs('line', 'line');
-            foreach($hasProductLines as $lineID) dao::$errors["id{$lineID}"][] = sprintf($this->lang->product->changeLineError, $changedProgramLines[$lineID]);
-            if(dao::isError()) return false;
-        }
-        return true;
     }
 
     /**

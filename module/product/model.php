@@ -615,6 +615,8 @@ class productModel extends model
                 /* Compute product line path and update it. */
                 $path = ",$lineID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+
+                if(!dao::isError()) $this->productTao->syncProgramToProduct($programID, $lineID);
             }
         }
 

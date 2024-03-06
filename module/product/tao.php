@@ -938,4 +938,34 @@ class productTao extends productModel
 
         return $productBugs;
     }
+
+    /**
+     * 当产品线的项目集发生变化时，更新产品线下产品的项目集。
+     * Sync program to product when line's program changed.
+     *
+     * @param  int        $programID
+     * @param  int        $lineID
+     * @access protected
+     * @return void
+     */
+    protected function syncProgramToProduct(int $programID, int $lineID): void
+    {
+        $this->loadModel('action');
+        $oldProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($lineID)->fetchAll('id');
+        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($programID)->where('line')->eq($lineID)->exec();
+
+        if(!dao::isError())
+        {
+            $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($lineID)->fetchAll('id');
+            foreach($products as $productID => $product)
+            {
+                if($oldProducts[$productID]->program != $product->program)
+                {
+                    $changes  = common::createChanges($oldProducts[$productID], $product);
+                    $actionID = $this->action->create('product', $productID, 'ChangedProgram');
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+        }
+    }
 }

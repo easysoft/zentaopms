@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('changeProgramTip', $lang->product->lineChangeProgram);
+
 $lineMenuList = null;
 $formRowList  = null;
 $formRowList[] = formRow
@@ -75,7 +77,8 @@ foreach($lines as $line)
                 set::control(array('control' => 'picker', 'id' => "programs_id{$line->id}")),
                 set::name("programs[id$line->id]"),
                 set::items($programs),
-                set::value($line->root)
+                set::value($line->root),
+                on::change('isProductLineEmpty')
             ) : null
         ),
         cell(set::width('100px'))

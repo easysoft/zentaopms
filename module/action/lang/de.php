@@ -273,6 +273,7 @@ $lang->action->desc->online               = '$date, set online by <strong>$actor
 $lang->action->desc->offline              = '$date, set offline by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->linkhost             = '$date, the host is linked by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->createrepobranch     = '$date, <strong>$actor</strong> created code branch <strong>$extra</strong>。' . "\n";
+$lang->action->desc->changedprogram       = '$date, <strong>$actor</strong> adjust the program <strong>$extra</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -514,6 +515,7 @@ $lang->action->label->linkhost                = 'link hosts to';
 $lang->action->label->delist                  = 'delist';
 $lang->action->label->createrepobranch        = 'Created branch from';
 $lang->action->label->communicate             = 'Communicate';
+$lang->action->label->changedprogram          = 'Changed program';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
