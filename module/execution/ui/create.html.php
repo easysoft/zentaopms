@@ -58,7 +58,7 @@ $handleBeginEndChange = jsCallback()
     if(!zui.isValidDate(begin) || !zui.isValidDate(end)) return;
     const $days     = $element.find('[name=days]');
     const beginDate = zui.createDate(begin);
-    const endDate   = zui.createDate(end);                                                                 
+    const endDate   = zui.createDate(end);
     const totalDays = 1 + Math.ceil((endDate.getTime() - beginDate.getTime()) / zui.TIME_DAY);
     if(totalDays <= 0) return $days.val(0);
     let workDays  = 0;
@@ -83,7 +83,7 @@ formGridPanel
             set::icon('copy'),
             setClass('primary-ghost size-md'),
             toggle::modal(array('target' => '#copyExecutionModal', 'destoryOnHide' => true)),
-            $lang->execution->copy
+            $lang->execution->copyExec
         ),
         divider(setClass('h-4 mr-4 ml-2 self-center'))
     ),
@@ -126,7 +126,7 @@ modalTrigger
             btn
             (
                 setClass('primary btn-wide hidden confirmBtn'),
-                set::text($lang->execution->copy),
+                set::text($lang->execution->copyExec),
                 on::click('setCopyExecution')
             )
         ),
