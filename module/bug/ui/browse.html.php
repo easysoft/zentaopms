@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('productID',      $product->id);
 jsVar('branch',         $branch);
+jsVar('today',          date('Y-m-d'));
 jsVar('caseCommonLang', $this->lang->testcase->common);
 
 $queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=bySearch&param={queryID}");
