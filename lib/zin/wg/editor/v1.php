@@ -64,12 +64,13 @@ class editor extends wg
             setClass('absolute right-0'),
             btn
             (
+                setClass('ghost border-l border-r border-light'),
                 on::click("showSaveModal('$editor', '$type')"),
                 $lang->user->saveTemplate
             ),
             dropdown
             (
-                btn($lang->user->applyTemplate),
+                btn($lang->user->applyTemplate, setClass('ghost')),
                 set::items(array('url' => createLink('user', 'ajaxGetTemplates', "editor=$editor&type=$type")))
             )
         );
