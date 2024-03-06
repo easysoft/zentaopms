@@ -118,9 +118,13 @@ class dtable extends wg
      */
     public function initCols(string $module)
     {
-        global $app;
-        $colConfigs = $this->prop('cols');
-        $dataPairs  = $this->prop('userMap', array());
+        global $app, $lang;
+
+        $colConfigs      = $this->prop('cols');
+        $dataPairs       = $this->prop('userMap', array());
+        $hasPriCols      = false;
+        $hasSeverityCols = false;
+
         foreach($colConfigs as $field => &$config)
         {
             if(is_object($config)) $config = (array)$config;
@@ -140,9 +144,29 @@ class dtable extends wg
                 $delimiter = is_string($config['delimiter']) ? $config['delimiter'] : ',';
                 $config['map'] = jsRaw("(value) => {return window.setMultipleCell(value, '" . json_encode($dataPairs). "', '{$delimiter}')}");
             }
+
+            if(isset($config['type']) && $config['type'] === 'pri')
+            {
+                $hasPriCols = true;
+            }
+            if(isset($config['type']) && $config['type'] === 'severity')
+            {
+                $hasSeverityCols = true;
+            }
         }
 
         $this->setProp('cols', array_values($colConfigs));
+
+        if($hasPriCols && !$this->prop('priList'))
+        {
+            $moduleName = $app->getModuleName();
+            if(isset($lang->$moduleName->priList)) $this->setProp('priList', $lang->$moduleName->priList);
+        }
+        if($hasSeverityCols && !$this->prop('severityList'))
+        {
+            $moduleName = $app->getModuleName();
+            if(isset($lang->$moduleName->severityList)) $this->setProp('severityList', $lang->$moduleName->severityList);
+        }
     }
 
     /**

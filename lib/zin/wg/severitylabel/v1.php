@@ -6,7 +6,7 @@ class severityLabel extends wg
 {
     protected static array $defineProps = array(
         'level: string|int',     // 严重程度等级。
-        'text?: string|array',   // 标签文本或标签文本映射对象。
+        'text?: string|array',   // 标签文本或标签文本映射对象，如果不指定从 $lang->$moduleName->severityList 中获取。
         'isIcon?: bool=false'    // 是否显示为图标。
     );
 
@@ -33,6 +33,13 @@ class severityLabel extends wg
         $level  = $this->prop('level', 0);
         $text   = $this->prop('text');
         $isIcon = $this->prop('isIcon');
+
+        if(is_null($text))
+        {
+            global $app, $lang;
+            $moduleName = $app->getModuleName();
+            if(isset($lang->$moduleName->severityList)) $text = $lang->$moduleName->severityList;
+        }
 
         if(is_array($text)) $text = isset($text[$level]) ? $text[$level] : null;
 
