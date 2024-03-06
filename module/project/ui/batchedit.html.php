@@ -91,7 +91,7 @@ formBatchPanel
         set::control(array
         (
             'control' => 'date',
-            'format' => jsRaw("(value) => (value === '" . LONG_TIME . "' ? '" . $lang->project->longTime . "' : zui.formatDate(value, 'yyyy-MM-dd'))"),
+            'display' => jsRaw("(value) => (value === '" . LONG_TIME . "' ? '" . $lang->project->longTime . "' : zui.formatDate(value, 'yyyy-MM-dd'))"),
             'actions' => array
             (
                 array('text' => $lang->datepicker->dpText->TEXT_TODAY, 'data-set-date' => helper::today()),
