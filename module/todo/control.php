@@ -521,7 +521,7 @@ class todo extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->view->fileName = $this->app->user->account . ' - ' . $this->lang->todo->common;
+        $this->view->fileName = $this->app->user->account . '-' . $this->lang->todo->common;
         $this->display();
     }
 
