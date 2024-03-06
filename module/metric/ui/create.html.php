@@ -10,6 +10,24 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$fnGenerateAfterCreateRatio = function() use ($lang)
+{
+    $afterCreateList = $lang->metric->afterCreateList;
+    $hasImplementPriv = hasPriv('metric', 'implement');
+    if(!$hasImplementPriv) unset($afterCreateList['implement']);
+    $defaultValue = $hasImplementPriv ? 'implement' : 'back';
+
+    return formGroup
+    (
+        set::width('1/2'),
+        set::name('afterCreate'),
+        set::label($lang->metric->afterCreate),
+        set::control(array('type' => 'radioList', 'inline' => true)),
+        set::items($afterCreateList),
+        set::value($defaultValue)
+    );
+};
+
 formPanel
 (
     detailHeader
@@ -164,14 +182,6 @@ formPanel
         set::name('definition'),
         set::placeholder($lang->metric->definitionTip)
     ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name('afterCreate'),
-        set::label($lang->metric->afterCreate),
-        set::control(array('control' => 'radioList', 'inline' => true)),
-        set::items($lang->metric->afterCreateList),
-        set::value('implement')
-    ),
+    $fnGenerateAfterCreateRatio(),
     set::submitBtnText($lang->save)
 );
