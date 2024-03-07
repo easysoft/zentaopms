@@ -267,7 +267,7 @@ class datatableModel extends model
 
         usort($setting, array('datatableModel', 'sortOldCols'));
 
-        return $fieldSetting;
+        return $setting;
     }
 
     /**
