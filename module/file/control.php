@@ -32,16 +32,6 @@ class file extends control
         $this->display();
     }
 
-    public function buildOldForm(int $fileCount = 1, float $percent = 0.9, string $filesName = "files", string $labelsName = "labels")
-    {
-        if(!file_exists($this->file->savePath)) return printf($this->lang->file->errorNotExists, $this->file->savePath);
-        if(!is_writable($this->file->savePath)) return printf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath);
-
-        $this->view->filesName  = $filesName;
-        $this->view->labelsName = $labelsName;
-        $this->display();
-    }
-
     /**
      * Build the old upload form.
      *
