@@ -32,7 +32,8 @@ searchForm
 (
     set::module('bug'),
     set::simple(true),
-    set::show(true)
+    set::show(true),
+    set::onSearch(jsRaw("window.onSearchLinks.bind(null, 'mr-bug')"))
 );
 
 div

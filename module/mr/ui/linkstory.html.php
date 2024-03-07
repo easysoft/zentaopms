@@ -31,7 +31,8 @@ searchForm
 (
     set::module('story'),
     set::simple(true),
-    set::show(true)
+    set::show(true),
+    set::onSearch(jsRaw("window.onSearchLinks.bind(null, 'mr-story')"))
 );
 
 div
