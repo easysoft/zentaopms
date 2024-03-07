@@ -124,8 +124,7 @@ class metricTao extends metricModel
     protected function fetchMetricByCode(string $code): object|false
     {
         return $this->dao->select('*')->from(TABLE_METRIC)
-            ->where('deleted')->eq('0')
-            ->andWhere('code')->eq($code)
+            ->where('code')->eq($code)
             ->fetch();
     }
 
