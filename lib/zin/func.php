@@ -121,6 +121,7 @@ function blockPanel(): blockPanel {return createWg('blockPanel', func_get_args()
 function section(): section {return createWg('section', func_get_args());}
 function sectionCard(): sectionCard {return createWg('sectionCard', func_get_args());}
 function sectionList(): sectionList {return createWg('sectionList', func_get_args());}
+function entityTitle(): entityTitle {return createWg('entityTitle',func_get_args());}
 function entityLabel(): entityLabel {return createWg('entityLabel',func_get_args());}
 function tableData(): tableData {return createWg('tableData',func_get_args());}
 function detail(): detail {return createWg('detail', func_get_args());}
