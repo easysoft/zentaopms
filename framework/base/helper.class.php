@@ -170,7 +170,7 @@ class baseHelper
 
         $sign = !str_contains($link, '?') ? "?" : "&";
         $appendString = '';
-        if($onlyBody) $appendString = $sign . "onlybody=yes";
+        if($onlyBody or (self::inOnlyBodyMode() && !self::isAjaxRequest('modal'))) $appendString = $sign . "onlybody=yes";
         if(self::isWithTID() and !str_contains($link, 'tid=')) $appendString .= empty($appendString) ? "{$sign}tid={$_GET['tid']}" : "&tid={$_GET['tid']}";
         return $link . $appendString;
     }
