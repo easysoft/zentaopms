@@ -21,7 +21,13 @@ class idLabel extends wg
     protected function build()
     {
         $id = $this->prop('id');
-        return span(setClass('label label-id gray-300-outline size-sm rounded-full'), $id);
+        return span
+        (
+            setClass('label label-id gray-300-outline size-sm rounded-full flex-none'),
+            set($this->getRestProps()),
+            $id,
+            $this->children()
+        );
     }
 
     public static function create(string|int|array $idOrProps, ?array $props = null, mixed ...$children): static
