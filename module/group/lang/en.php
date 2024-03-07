@@ -527,6 +527,7 @@ $lang->group->package->manageDataview        = 'Manage Dataview';
 $lang->group->package->deleteDataview        = 'Delete Dataview';
 $lang->group->package->browseMetric          = 'Browse Metric';
 $lang->group->package->manageMetric          = 'Manage Metric';
+$lang->group->package->browseMetriclib       = 'Browse Metric Library';
 $lang->group->package->browseDoc             = 'Browse Doc';
 $lang->group->package->manageDoc             = 'Manage Doc';
 $lang->group->package->deleteDoc             = 'Delete Doc';
