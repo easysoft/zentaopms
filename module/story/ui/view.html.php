@@ -163,7 +163,7 @@ $tabs[] = setting()
 
 $versionBtn = count($versions) > 1 ? to::title(dropdown
 (
-    btn(set::type('ghost'), setClass('text-link text-base'), "#{$version}"),
+    btn(set::type('ghost'), setClass('text-link font-normal text-base'), "#{$version}"),
     set::items($versions)
 )) : null;
 
