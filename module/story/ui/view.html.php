@@ -47,7 +47,8 @@ if(!$isInModal && hasPriv('story', 'create'))
     (
         'icon' => 'plus',
         'type' => 'primary',
-        'text' => $lang->story->create
+        'text' => $lang->story->create,
+        'url'  => createLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type")
     );
 }
 
