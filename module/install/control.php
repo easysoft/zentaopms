@@ -275,7 +275,7 @@ class install extends control
             session_save_path($sessionSavePath);
             $customSession = true;
 
-            $sessionResult = $this->install->checkSessionSavePath();
+            $sessionResult = $this->installZen->checkSessionSavePath();
             if($sessionResult == 'fail') chmod($sessionSavePath, 0777);
 
             session_start();
