@@ -381,6 +381,7 @@ $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyC
 foreach($stories as $story)
 {
     $story->moduleID = $story->module;
+    $story->from     = 'execution';
     $data[] = $this->story->formatStoryForList($story, $options, $storyType);
     if(!isset($story->children)) continue;
 

@@ -1744,17 +1744,9 @@ class storyZen extends story
 
         if($from != 'execution') return helper::createLink('story', 'view', "storyID={$storyID}&version=0&param=0&storyType={$storyType}");
 
-        $execution = $this->execution->getByID($this->session->execution);
-
-        $module = 'story';
-        $method = 'view';
-        $params = "storyID=$storyID&version=0&param={$this->session->execution}&storyType=$storyType";
-        if($execution->multiple)
-        {
-            $module = 'execution';
-            $method = 'storyView';
-            $params = "storyID=$storyID";
-        }
+        $module = 'execution';
+        $method = 'storyView';
+        $params = "storyID=$storyID";
         return helper::createLink($module, $method, $params);
     }
 

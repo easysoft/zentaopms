@@ -190,6 +190,7 @@ $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyC
 foreach($stories as $story)
 {
     $story->rawModule    = $story->module;
+    $story->from         = $app->tab;
     $options['branches'] = zget($branchOptions, $story->product, array());
     $data[] = $this->story->formatStoryForList($story, $options, $storyType);
     if(!isset($story->children)) continue;
