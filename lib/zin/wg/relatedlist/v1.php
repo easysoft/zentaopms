@@ -26,7 +26,7 @@ class relatedList extends wg
 
         $urlTemplate = isset($group['url']) ? $group['url'] : null;
         if(is_null($urlTemplate)) $urlTemplate = common::hasPriv($type, 'view') ? createLink($type, 'view', "{$type}ID={id}") : null;
-        $url = is_string($urlTemplate) ? str_replace('{id}', $item->id, $urlTemplate) : null;
+        $url = is_string($urlTemplate) ? str_replace('{id}', "$item->id", $urlTemplate) : null;
         if($url) $info['url'] = $url;
 
         if(isset($group['statusList']) && isset($item->status)) $info['content'] = array('html' => wg(statusLabel::create($item->status, $group['statusList'][$item->status]))->render(), 'className' => 'flex-none');
