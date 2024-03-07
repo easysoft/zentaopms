@@ -268,7 +268,7 @@ class install extends control
             /* Restart the session because the session save path is null when start the session last time. */
             session_write_close();
 
-            $tmpRootInfo     = $this->install->getTmpRoot();
+            $tmpRootInfo     = $this->installZen->getTmpRoot();
             $sessionSavePath = $tmpRootInfo['path'] . 'session';
             if(!is_dir($sessionSavePath)) mkdir($sessionSavePath, 0777, true);
 
