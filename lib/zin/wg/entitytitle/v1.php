@@ -8,25 +8,25 @@ class entityTitle extends wg
 {
     protected static array $defineProps = array
     (
-        'id?: string|int',                // 对象 ID。
-        'title?: string',                 // 标题文本。
-        'url?: string|bool',              // 标题链接。
-        'object?: object',                // 对象。
-        'type?: string',                  // 对象类型。
-        'color?: string',                 // 颜色。
-        'titleProps?: array',             // 标题属性。
-        'titleClass?: array|string',      // 标签类名。
-        'joiner?: string="/"',            // 连接符。
-        'joinerClass?: array|string',     // 连接符类名。
-        'parentId?: string|int',          // 父级对象 ID。
-        'parentTitle?: string',           // 父级标题文本。
-        'parentUrl?: string|bool',        // 父级标题链接。
-        'parent?: object',                // 父级对象。
-        'parentType?: string',            // 父级对象类型。
-        'parentColor?: string',           // 父级颜色。
-        'parentClass?: array|string',     // 父级类名。
-        'parentTitleProps?: string',      // 父级标题属性。
-        'parentTitleClass?: array|string' // 父级标签类名。
+        'id?: string|int',                       // 对象 ID。
+        'title?: string',                        // 标题文本。
+        'url?: string|bool',                     // 标题链接。
+        'object?: object',                       // 对象。
+        'type?: string',                         // 对象类型。
+        'color?: string',                        // 颜色。
+        'titleProps?: array',                    // 标题属性。
+        'titleClass?: array|string="font-bold"', // 标签类名。
+        'joiner?: string="/"',                   // 连接符。
+        'joinerClass?: array|string',            // 连接符类名。
+        'parentId?: string|int',                 // 父级对象 ID。
+        'parentTitle?: string',                  // 父级标题文本。
+        'parentUrl?: string|bool',               // 父级标题链接。
+        'parent?: object',                       // 父级对象。
+        'parentType?: string',                   // 父级对象类型。
+        'parentColor?: string',                  // 父级颜色。
+        'parentClass?: array|string',            // 父级类名。
+        'parentTitleProps?: string',             // 父级标题属性。
+        'parentTitleClass?: array|string'        // 父级标签类名。
     );
 
     protected static array $defineBlocks = array
