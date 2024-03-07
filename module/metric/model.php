@@ -1767,8 +1767,10 @@ class metricModel extends model
         }
 
         $xAxis  = array('type' => 'category', 'data' => array_keys($times));
-        $yAxis  = array('type' => 'value');
+        $yAxis  = array('type' => 'value', 'min' => 'dataMin', 'max' => 'dataMax');
         $series = array();
+
+        if($type != 'line') $yAxis = array('type' => 'value');
         foreach($objects as $object => $datas)
         {
             $seriesData = array();
@@ -1821,7 +1823,8 @@ class metricModel extends model
 
         $xTime = array_column($data, $x);
         $xAxis = array('type' => 'category', 'data' => $xTime);
-        $yAxis = array('type' => 'value');
+        $yAxis = array('type' => 'value', 'min' => 'dataMin', 'max' => 'dataMax');
+        if($type != 'line') $yAxis = array('type' => 'value');
 
         $series = array('type' => $type, 'data' => array_column($data, $y));
         $legend = $this->getEchartLegend($series);
