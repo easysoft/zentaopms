@@ -18,7 +18,7 @@ function verify(method)
 
         if(methods.length == 0)
         {
-            var url = $.createLink('metric', 'implement', 'metricID=' + metricId + '&isVerify=true');
+            var url = $.createLink('metric', 'implement', 'metricID=' + metricId + '&from=' + from + '&isVerify=true');
             var modal = $('.verify-content').closest('.modal');
             modalId = modal.attr('id');
             setTimeout(function(){

@@ -47,18 +47,19 @@ class metricZen extends metric
      *
      * @param  int       $metricID
      * @param  string    $afterCreate
-     * @param  string    $fromURL
+     * @param  string    $from   metric|metriclib
+     * @param  string    $location
      * @access protected
      * @return array
      */
-    protected function responseAfterCreate($metricID, $afterCreate, $location)
+    protected function responseAfterCreate($metricID, $afterCreate, $from, $location)
     {
         if($afterCreate == 'back' && $location)
         {
             return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
         }
 
-        $location = $this->createLink('metric', 'implement', "metricID=$metricID");
+        $location = $this->createLink('metric', 'implement', "metricID=$metricID&from=$from");
         $callback = array('name' => 'loadImplement', 'params' => $location);
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => $callback);
     }
