@@ -77,7 +77,7 @@ class product extends control
     public function project(string $status = 'all', int $productID = 0, string $branch = '', string $involved = '0', string $orderBy = 'order_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if(!$involved)     $involved = $this->cookie->involved;
-        if($branch === '') $branch   = 'all';
+        if($branch === '') $branch   = '0';
         $this->productZen->setProjectMenu($productID, $branch, (string)$this->cookie->preBranch);
 
         /* Load pager. */
