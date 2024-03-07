@@ -243,6 +243,7 @@ class detail extends wg
     protected function buildActions()
     {
         $actions      = $this->prop('actions');
+        $objectID     = $this->prop('objectID');
         $actionsBlock = $this->block('actions');
         $isSimple     = $this->prop('layout') === 'simple';
 
@@ -252,6 +253,11 @@ class detail extends wg
         if(!$isSimple)
         {
             array_unshift($toolbarProps['items'], $this->buildBackBtn(array('type' => 'ghost')), array('type' => 'divider'));
+        }
+
+        foreach($toolbarProps['items'] as &$item)
+        {
+            if(is_array($item) && isset($item['url'])) $item['url'] = str_replace('{id}', "$objectID", $item['url']);
         }
 
         return div
@@ -426,7 +432,6 @@ class detail extends wg
             $isSimple ? null : setStyle('height', 'calc(100vh - 61px)'),
             $this->buildHeader(),
             $this->buildBody(),
-
             $this->buildPrevAndNext()
         );
     }

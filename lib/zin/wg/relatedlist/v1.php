@@ -9,8 +9,9 @@ class relatedList extends wg
 {
     protected static array $defineProps = array
     (
-        'data'         => '?array',           // 要显示的类型数据定义。
-        'onRenderItem' => '?callback' // 渲染需求对象的回调函数。
+        'data'         => '?array',     // 要显示的类型数据定义。
+        'showCount'    => '?bool=true', // 是否显示数量。
+        'onRenderItem' => '?callback'   // 渲染需求对象的回调函数。
     );
 
     protected function getCommonItem(string $type, array $group, object $item): array
@@ -28,7 +29,7 @@ class relatedList extends wg
         $url = is_string($urlTemplate) ? str_replace('{id}', $item->id, $urlTemplate) : null;
         if($url) $info['url'] = $url;
 
-        if(isset($group['statusList']) && isset($item->status)) $info['content'] = array('html' => wg(statusLabel::create($item->status, $group['statusList'][$item->status]))->render());
+        if(isset($group['statusList']) && isset($item->status)) $info['content'] = array('html' => wg(statusLabel::create($item->status, $group['statusList'][$item->status]))->render(), 'className' => 'flex-none');
 
         $props = isset($group['props']) ? $group['props'] : array('data-toggle' => 'modal', 'data-size' => 'lg');
         if($props) $info = array_merge($info, $props);
@@ -67,6 +68,7 @@ class relatedList extends wg
         global $lang, $app;
 
         $data       = $this->prop('data', array());
+        $showCount  = $this->prop('showCount');
         $items      = array();
         $moduleName = $app->rawModule;
 
@@ -82,10 +84,13 @@ class relatedList extends wg
                 $title    = isset($lang->$moduleName->$langName) ? $lang->$moduleName->$langName : $type;
             }
 
+            $groupItems = $this->getGroupItems($type, $group);
+
             $items[] = array
             (
-                'title' => $title,
-                'items' => $this->getGroupItems($type, $group)
+                'title'   => $title,
+                'items'   => $groupItems,
+                'content' => $showCount ? array('html' => '<span class="label gray-pale rounded-full size-sm">' . count($groupItems) . '</span>') : null
             );
         }
 
@@ -97,6 +102,7 @@ class relatedList extends wg
         return zui::nestedList
         (
             set::className('story-related-list'),
+            set::itemProps(array('titleClass' => 'text-clip')),
             set::items($this->getItems())
         );
     }

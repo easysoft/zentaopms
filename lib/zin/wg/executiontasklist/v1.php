@@ -50,7 +50,7 @@ class executionTaskList extends wg
                 'title'       => $task->name,
                 'hint'        => $task->name,
                 'leading'     => array('html' => wg(idLabel::create($task->id))->render()),
-                'content'     => array('html' => wg(statusLabel::create($task->status, $lang->task->statusList[$task->status]))->render()),
+                'content'     => array('html' => wg(statusLabel::create($task->status, $lang->task->statusList[$task->status]))->render(), 'className' => 'flex-none'),
                 'url'         => $canViewTask ? createLink('task', 'view', "taskID=$task->id") : null,
                 'data-toggle' => $canViewTask ? 'modal' : null,
                 'data-size'   => $canViewTask ? 'lg' : null,
@@ -88,6 +88,7 @@ class executionTaskList extends wg
         (
             set::className('execution-task-list'),
             set::defaultNestedShow(),
+            set::itemProps(array('titleClass' => 'text-clip')),
             set::items($this->getItems())
         );
     }
