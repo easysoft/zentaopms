@@ -390,6 +390,19 @@ class metricModel extends model
     }
 
     /**
+     * 根据code列表获取度量项列表。
+     * Get metrics by code list.
+     *
+     * @param  array  $codeList
+     * @access public
+     * @return array|false
+     */
+    public function getMetricsByCodeList($codeList)
+    {
+        return $this->metricTao->fetchMetricsByCodeList($codeList);
+    }
+
+    /**
      * 获取旧度量项列表。
      * Get old metric list.
      *
