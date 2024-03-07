@@ -8,6 +8,7 @@ require_once dirname(__DIR__) . DS . 'content' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'history' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'tabs' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'tabpane' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'entitytitle' . DS . 'v1.php';
 
 class detail extends wg
 {
@@ -25,8 +26,26 @@ class detail extends wg
         /* 对象 ID，如果不指定则尝试使用当前页面上的 `${$objectType}->id` 或者 `${$objectType}ID` 的值，例如 `$task->id` 或 `$taskID`。 */
         'objectID'   => '?int',
 
+        /* 对象标题颜色。 */
+        'color'      => '?string',
+
         /* 对象，如果不指定则尝试使用当前页面上的 `${$objectType}` 的值，例如 `$task`。 */
         'object'     => '?object',
+
+        /* 父级对象。 */
+        'parent'     => '?object',
+
+        /* 父级对象类型。 */
+        'parentType' => '?string',
+
+        /* 父级对象 ID。 */
+        'parentID'   => '?int|string',
+
+        /* 父级标题。 */
+        'parentTitle' => '?string',
+
+        /* 父级标题链接。 */
+        'parentUrl'  => '?string',
 
         /* 标题，如果不指定则尝试使用当前页面上的 `${$objectType}->title` 或 `${$objectType}->name` 的值，例如 `$story->title`、`$task->name` 。 */
         'title'      => '?string',
@@ -111,10 +130,25 @@ class detail extends wg
             $this->triggerError('The objectType, objectID or object property of widget "detail" is undefined.');
         }
 
-        if(!$this->prop('objectType'))  $this->setProp('objectType', $objectType);
-        if(!$this->prop('objectID'))    $this->setProp('objectID',   $objectID);
-        if(!$this->prop('object'))      $this->setProp('object',     $object);
-        if(!$this->hasProp('title'))    $this->setProp('title',      isset($object->name) ? $object->name : $object->title);
+        if(!$this->prop('objectType')) $this->setProp('objectType', $objectType);
+        if(!$this->prop('objectID'))   $this->setProp('objectID',   $objectID);
+        if(!$this->prop('object'))     $this->setProp('object',     $object);
+        if(!$this->hasProp('title'))   $this->setProp('title',      isset($object->name) ? $object->name : $object->title);
+
+        if(!$this->hasProp('color') && $object && isset($object->color)) $this->setProp('color',      $object->color);
+
+        $parent = $this->prop('parent');
+        if(!$parent && isset($object->parent) && is_object($object->parent))
+        {
+            $parent = $object->parent;
+            $this->setProp('parent', $parent);
+        }
+        if($parent)
+        {
+            if(!$this->hasProp('parentID'))    $this->setProp('parentID',    $parent->id);
+            if(!$this->hasProp('parentTitle')) $this->setProp('parentTitle', isset($parent->name) ? $parent->name : $parent->title);
+            if(!$this->hasProp('parentUrl'))   $this->setProp('parentUrl',   $parent->url);
+        }
     }
 
     protected function buildBackBtn(?array $props = null)
@@ -138,13 +172,23 @@ class detail extends wg
 
     protected function buildTitle()
     {
-        list($objectID, $title) = $this->prop(array('objectID', 'title'));
+        list($objectID, $title, $color, $objectType, $parent, $parentID, $parentUrl, $parentTitle, $parentType) = $this->prop(array('objectID', 'title', 'color', 'objectType', 'parent', 'parentID', 'parentUrl', 'parentTitle', 'parentType'));
         $titleBlock = $this->block('title');
 
-        return array
+        return new entityTitle
         (
-            $objectID ? idLabel($objectID) : null,
-            ($title || $titleBlock) ? h1(setClass('detail-title text-lg text-clip min-w-0'), $title, $titleBlock) : null
+            setClass('min-w-0'),
+            set::id($objectID),
+            set::title($title),
+            set::titleClass('text-lg text-clip font-bold'),
+            set::type($objectType),
+            set::color($color),
+            set::parent($parent),
+            set::parentID($parentID),
+            set::parentUrl($parentUrl),
+            set::parentTitle($parentTitle),
+            set::parentType($parentType),
+            $titleBlock
         );
     }
 
