@@ -171,8 +171,8 @@ class form extends fixer
     {
         global $app;
 
-        $rowDataList   = array();
-        $baseField = '';
+        $rowDataList = array();
+        $baseField   = '';
 
         foreach($fieldConfigs as $field => $config)
         {
@@ -214,7 +214,7 @@ class form extends fixer
                 if(isset($config['filter'])) $rowData->$field = $this->filter($rowData->$field, $config['filter']);
 
                 /* 检查必填字段。Check required fields. */
-                if(isset($config['required']) && $config['required'] && $this->checkEmpty($rowData->$field))
+                if(isset($config['required']) && $config['required'] && empty($rowData->$field))
                 {
                     $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
                     $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
@@ -227,21 +227,6 @@ class form extends fixer
         }
 
         $this->dataList = $rowDataList;
-    }
-
-    /**
-     * 检查为空。
-     * Empty checking.
-     *
-     * @param  mixed $data
-     * @return bool
-     */
-    public function checkEmpty(mixed $data): bool
-    {
-        if(is_array($data)) return empty($data);
-
-        $data = (string)$data;
-        return empty(strlen($data));
     }
 
     /**
@@ -283,7 +268,7 @@ class form extends fixer
 
         if(isset($config['filter'])) $data = $this->filter($data, $config['filter']);
 
-        if(isset($config['required']) && $config['required'] && isset($data) && $this->checkEmpty($data))
+        if(isset($config['required']) && $config['required'] && empty($data))
         {
             $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[]" : $field;
             $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
