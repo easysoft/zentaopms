@@ -406,7 +406,8 @@ function renderKanbanItem(item, $item)
         }
 
         /* Display avatars of assignedTo. */
-        var assignedTo = item.assignedTo.split(',');
+        var assignedTo = [];
+        if(item.assignedTo) var assignedTo = item.assignedTo.split(',');
         var $user = $info.children('.user');
         var title = [];
         for(i = 0; i < assignedTo.length; i++) title.push(users[assignedTo[i]]);
