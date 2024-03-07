@@ -159,7 +159,7 @@ $config->search->recPerPage = 10;
 $config->search->summaryLength = 120;
 $config->search->maxFileSize   = 1024;
 
-$config->search->oldQuery = array('issue', 'risk');
+$config->search->oldQuery = array('issue', 'risk', 'traincourse');
 
 if($config->vision == 'rnd')
 {
