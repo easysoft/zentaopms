@@ -73,7 +73,7 @@ $lang->testreport->bugStageList['resolved']  = 'Resolved Bugs';
 $lang->testreport->caseSummary     = 'Total <strong>%s</strong> casTests. <strong>%s</strong> casTests joués. <strong>%s</strong> résultats générés. <strong>%s</strong> casTests ont échoué.';
 $lang->testreport->buildSummary    = 'Testé <strong>%s</strong> builds.';
 $lang->testreport->confirmDelete   = 'Voulez-vous supprimer ce rapport ?';
-$lang->testreport->moreNotice      = "Plus de fonctionnalités peuvent être étendues en référence au manuel de l'extension ZenTao, ou vous pouvez nous contacter à renee@easysoft.ltd pour la personnalisation.";
+$lang->testreport->moreNotice      = "Plus de fonctionnalités peuvent être étendues en référence au manuel de l'extension ZenTao, ou vous pouvez nous contacter à support@zentaoalm.com pour la personnalisation.";
 $lang->testreport->exportNotice    = "Exporté par <a href='https://www.zentao.pm' target='_blank' style='color:grey'>ZenTao</a>";
 $lang->testreport->noReport        = "Aucun rapport n'a été généré. Vérifiez plus tard.";
 $lang->testreport->foundBugTip     = "Bugs trouvés dans cette période de build et les build affectés sont dans la période de test.";

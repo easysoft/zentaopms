@@ -72,7 +72,7 @@ $lang->testreport->bugStageList['resolved']  = 'Resolved Bugs';
 $lang->testreport->caseSummary    = 'Tổng <strong>%s</strong> tình huống. <strong>%s</strong> tình huống đang chạy. <strong>%s</strong> kết quả được tạo. <strong>%s</strong> cases thất bại';
 $lang->testreport->buildSummary   = 'Đã test <strong>%s</strong> bản dựng.';
 $lang->testreport->confirmDelete  = 'Bạn có muốn xóa báo cáo này?';
-$lang->testreport->moreNotice     = 'Tính năng bổ sung có thể được mở rộng với tham chiếu đến sổ tay mở rộng ZenTao hoặc bạn có thể liên hệ với chúng tôi tại renee@easysoft.ltd để tùy chỉnh.';
+$lang->testreport->moreNotice     = 'Tính năng bổ sung có thể được mở rộng với tham chiếu đến sổ tay mở rộng ZenTao hoặc bạn có thể liên hệ với chúng tôi tại support@zentaoalm.com để tùy chỉnh.';
 $lang->testreport->exportNotice   = "Xuất bởi <a href='https://www.zentao.net' target='_blank' style='color:grey'>ZenTao</a>";
 $lang->testreport->noReport       = "Không có báo cáo được tạo. Vui lòng kiểm tra sau.";
 $lang->testreport->foundBugTip    = "Lỗi Bug được tìm thấy trong giai đoạn xây dựng này và bản dựng bị ảnh hưởng là trong giai đoạn thử nghiệm này.";
