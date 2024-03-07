@@ -22,7 +22,7 @@ jsVar('endList', $lang->project->endList);
 $fields = useFields('program.edit');
 
 $autoLoad = array();
-$autoLoad['parent'] = 'parent,future,budget,budgetUnit,acl,whitelist';
+$autoLoad['parent'] = 'future,budget,budgetUnit,acl,whitelist';
 
 $handleLongTimeChange = jsCallback()->do(<<<'JS'
     const endPicker = $element.find('[name=end]').zui('datePicker');
