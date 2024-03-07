@@ -592,8 +592,9 @@ class actionModel extends model
         {
             if($objectType == 'story')
             {
-                $moduleName = $this->app->rawModule;
-                $desc['extra'] = $this->lang->{$moduleName}->{$desc['extra']};
+                $story = $this->fetchByID($action->objectID, $objectType);
+                if($story->type != 'story') $this->app->loadLang($story->type);
+                $desc['extra'] = $this->lang->{$story->type}->{$desc['extra']};
             }
             else
             {

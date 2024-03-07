@@ -244,7 +244,7 @@ detailBody
             )
         )
     ),
-    history(set::objectID($story->id)),
+    history(set::objectID($story->id), set::objectType('story')),
     floatToolbar
     (
         set::object($story),
