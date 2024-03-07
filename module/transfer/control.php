@@ -121,7 +121,7 @@ class transfer extends control
             $this->session->set('fileImportFileName', $fileName);
             $this->session->set('fileImportExtension', $extension);
 
-            return $this->send(array('result' => 'success', 'load' => $locate, 'closeModel' => 'true'));
+            return $this->send(array('result' => 'success', 'load' => $locate, 'closeModal' => true));
         }
 
         $this->view->title = $this->lang->transfer->importCase;
