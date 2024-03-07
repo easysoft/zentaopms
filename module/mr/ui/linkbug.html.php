@@ -33,7 +33,7 @@ searchForm
     set::module('bug'),
     set::simple(true),
     set::show(true),
-    set::extraHeight('+144')
+    set::extraHeight('+144'),
     set::onSearch(jsRaw("window.onSearchLinks.bind(null, 'mr-bug')"))
 );
 
