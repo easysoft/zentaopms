@@ -202,7 +202,7 @@ $(function()
     {
         var system = $('#global1').prop('checked') ? 1 : 0;
         var param  = "<?php echo "module=$module&method=$method"?>&system=" + system;
-        hiddenwin.location.href = createLink('datatable', 'ajaxReset', param);
+        hiddenwin.location.href = createLink('datatable', 'ajaxOldReset', param);
     })
 
     $('#global1').change(function()

@@ -344,6 +344,30 @@ class datatable extends control
     }
 
     /**
+     * Ajax reset old cols.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  int    $system
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function ajaxOldReset(string $module, string $method, int $system = 0, string $confirm = 'no')
+    {
+        if($confirm == 'no') return print(js::confirm($this->lang->datatable->confirmReset, inlink('ajaxOldReset', "module=$module&method=$method&system=$system&confirm=yes")));
+
+        $account = $this->app->user->account;
+        $target  = $module . ucfirst($method);
+        $mode    = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
+        $key     = $mode == 'datatable' ? 'cols' : 'tablecols';
+
+        $this->loadModel('setting')->deleteItems("owner=$account&module=datatable&section=$target&key=$key");
+        if($system) $this->setting->deleteItems("owner=system&module=datatable&section=$target&key=$key");
+        return print(js::reload('parent'));
+    }
+
+    /**
      * 应用自定义列配置到全局。
      * Ajax save setting to global.
      *
