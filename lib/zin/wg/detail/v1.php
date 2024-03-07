@@ -459,7 +459,7 @@ class detail extends wg
         if(!$buttons) return null;
         return div
         (
-            setClass('detail-prev-next absolute right-0 left-0'),
+            setClass('detail-prev-next absolute right-0 left-0 z-10'),
             setStyle(array('top' => '50%', 'margin' => '-24px -16px auto')),
             $buttons
         );
