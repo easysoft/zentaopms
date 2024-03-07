@@ -3675,8 +3675,8 @@ class storyModel extends model
         $estimates = array();
         foreach($data->account as $key => $account)
         {
-            if(!empty($data->estimate[$key]) and !is_numeric($data->estimate[$key])) dao::$errors[] = $this->lang->story->estimateMustBeNumber;
-            if(!empty($data->estimate[$key]) and $data->estimate[$key] < 0) dao::$errors[] = $this->lang->story->estimateMustBePlus;
+            if(!empty($data->estimate[$key]) and !is_numeric($data->estimate[$key])) dao::$errors['estimate'] = $this->lang->story->estimateMustBeNumber;
+            if(!empty($data->estimate[$key]) and $data->estimate[$key] < 0) dao::$errors['estimate'] = $this->lang->story->estimateMustBePlus;
             if(dao::isError()) return;
 
             $estimates[$account]['account']  = $account;
