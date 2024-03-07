@@ -80,7 +80,7 @@ class entityTitle extends wg
                     setClass('entity-title-text', $titleClass),
                     set($titleProps),
                     $color ? setStyle('color', $color) : null,
-                    $title, $title, $title ,$title ,$title
+                    $title
                 )
         );
     }
