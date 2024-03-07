@@ -127,7 +127,7 @@ formGridPanel
     (
         array('text' => $lang->save,             'data-status' => 'active', 'class' => 'primary',   'btnType' => 'submit'),
         array('text' => $lang->story->saveDraft, 'data-status' => 'draft',  'class' => 'secondary', 'btnType' => 'submit'),
-        array('text' => $lang->goback,           'data-back'   => 'APP',    'class' => 'open-url')
+        array('text' => $lang->goback,           'back'   => true)
     )),
     set::fields($createFields),
     on::click('#loadURS', "loadURS"),
