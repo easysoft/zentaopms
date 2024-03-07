@@ -835,6 +835,7 @@ $.get($.createLink('index', 'app'), html =>
 $.apps = $.extend(apps,
 {
     openApp:        openApp,
+    open:           openApp, // Compatiable with old version.
     reloadApp:      reloadApp,
     showApp:        showApp,
     updateApp:      updateApp,
