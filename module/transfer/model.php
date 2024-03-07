@@ -527,7 +527,11 @@ class transferModel extends model
             {
                 if(empty($field)) continue;
                 $listName = $field . 'List'; // 下拉字段以字段名 + List命名。
-                if(!empty($_POST[$listName])) continue;
+                if(!empty($_POST[$listName]))
+                {
+                    if(isset($this->config->excel->sysDataField)) $this->config->excel->sysDataField[] = $field;
+                    continue;
+                }
 
                 $lists[$listName] = array();
                 if(!empty($fieldList[$field]))
