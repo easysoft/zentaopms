@@ -38,7 +38,7 @@ formPanel
             set::label($lang->kanban->WIPCount),
             inputGroup
             (
-                input(set::name('limit'), set::disabled($column->limit == -1), set::value($column->limit != -1 ? $column->limit : '')),
+                input(set::name('limit'), set::type('number'), set::min(1), set::disabled($column->limit == -1), set::value($column->limit != -1 ? $column->limit : '')),
                 span
                 (
                     set('class', 'input-group-addon'),

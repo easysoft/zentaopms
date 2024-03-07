@@ -14,7 +14,8 @@ class input extends wg
         'placeholder?: string',
         'autofocus?: bool',
         'autocomplete?: bool=false',
-        'disabled?: bool'
+        'disabled?: bool',
+        'min?: int' /* type为number时设置min */
     );
 
     protected static array $defaultProps = array
