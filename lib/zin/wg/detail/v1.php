@@ -74,10 +74,10 @@ class detail extends wg
         return <<<CSS
         .detail-main > * + * {margin-top: 16px}
         .detail-section.panel {--tw-ring-opacity: 0}
-        .detail-section .panel-heading {padding: 4px 0; margin-bottom: 8px}
-        .detail-section .panel-heading .listitem {padding: 0}
-        .detail-section .panel-body {padding: 4px 1px}
-        .detail-section-title, .detail-section .panel-heading {background: var(--color-canvas); position: sticky; top: -16px; z-index: 1}
+        .detail-section.panel .panel-heading {padding: 4px 0; margin-bottom: 8px}
+        .detail-section.panel .panel-heading .listitem {padding: 0}
+        .detail-section.panel .panel-body {padding: 4px 1px}
+        .detail-section-title, .detail-section.panel .panel-heading {background: var(--color-canvas); position: sticky; top: -16px; z-index: 1}
         .detail-side {scrollbar-gutter: stable;}
         .detail-side > * + * {border-top: 1px solid var(--color-border)}
         .detail-side .tabs {padding: 12px 8px 12px 16px}
