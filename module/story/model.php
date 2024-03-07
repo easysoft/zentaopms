@@ -708,7 +708,7 @@ class storyModel extends model
      * @access public
      * @return array  the changes of the story.
      */
-    public function update(int $storyID, object $story, string $comment = ''): bool
+    public function update(int $storyID, object $story, string|bool $comment = ''): bool
     {
         $oldStory = $this->getByID($storyID);
 
