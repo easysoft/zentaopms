@@ -13,6 +13,7 @@ namespace zin;
 jsVar('metricId',     $metric->id);
 jsVar('code',         $metric->code);
 jsVar('verifyCustomMethods', $verifyCustom);
+jsVar('from',         $from);
 jsVar('isVerify',     $isVerify);
 
 detailHeader
@@ -133,7 +134,7 @@ panel
             'type' => 'secondary',
             'class' => 'btn-verify',
             'text' => $lang->metric->verifyFile,
-            'url' => helper::createLink('metric', 'implement', "metricID={$metric->id}")
+            'url' => helper::createLink('metric', 'implement', "metricID={$metric->id}&from={$from}")
         ],
         [
             'type' => 'primary',
@@ -141,7 +142,7 @@ panel
             'class' => 'ajax-submit',
             'btnType' => 'submit',
             'disabled' => empty($result),
-            'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}")
+            'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}&from={$from}")
         ],
     ])
 );
