@@ -278,3 +278,4 @@ UPDATE `zt_metric` SET `alias` = '完成执行数'                 WHERE `code` 
 
 UPDATE `zt_metric` SET `name` = 'count_of_actual_time_in_project' WHERE `code` = '按项目统计的实际工期';
 UPDATE `zt_metric` SET `name` = 'variance_of_time_in_project'     WHERE `code` = '按项目统计的工期偏差';
+UPDATE `zt_metric` SET `dateType` = 'nodate' WHERE `code` = 'count_of_feedback_in_product';
