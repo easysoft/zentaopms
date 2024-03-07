@@ -21,6 +21,9 @@ class detailCard extends wg
         /* 标题，如果不指定则尝试使用当前页面上的 `${$objectType}->title` 或 `${$objectType}->name` 的值，例如 `$story->title`、`$task->name` 。 */
         'title'      => '?string',
 
+        /* 是否在标题显示 URL。 */
+        'url'        => '?bool|string',
+
         /* 详情卡片的左侧主栏目内容区域，可以通过 `-` 来指定分割线，通过键名指定标题，通过 `html()` 来指定 HTML 内容，或者指定为 `callable` 或 `Closure` 动态生成内容，或者指定为 `content()` 属性。 */
         'sections'   => '?array',
 
@@ -61,14 +64,20 @@ class detailCard extends wg
 
     protected function buildTitle()
     {
-        list($objectID, $title) = $this->prop(array('objectID', 'title'));
+        list($objectID, $title, $url) = $this->prop(array('objectID', 'title', 'url'));
         $titleBlock = $this->block('title');
+        $titleView = $title;
 
         return div
         (
             setClass('detail-card-title panel-title'),
             $objectID ? idLabel($objectID) : null,
-            ($title || $titleBlock) ? h3(setClass('text-md text-clip min-w-0'), $title, $titleBlock) : null
+            ($title || $titleBlock) ? div
+            (
+                setClass('text-md text-clip min-w-0'),
+                $url ? a(set::href($url), $title) : $title,
+                $titleBlock
+            ) : null
         );
     }
 
