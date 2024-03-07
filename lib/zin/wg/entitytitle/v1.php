@@ -63,7 +63,7 @@ class entityTitle extends wg
         list($id, $title, $url, $type, $color, $titleProps, $titleClass) = $this->prop(array('id', 'title', 'url', 'type', 'color', 'titleProps', 'titleClass'));
 
         if($url === true && $type) $url = createLink($type, 'view', $type . 'ID={id}');
-        if(is_string($url) && $id) $url = str_replace('{id}', $id, $url);
+        if(is_string($url) && $id) $url = str_replace('{id}', "$id", $url);
 
         return array
         (
