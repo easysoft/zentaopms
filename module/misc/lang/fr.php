@@ -59,7 +59,7 @@ $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/def
 
 $lang->misc->mobile      = "Accès Mobile";
 $lang->misc->noGDLib     = "SVP visitez <strong>%s</strong> via le navigateur de votre smartphone.";
-$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://easysoft.ltd' target='_blank'>Nature Easy Soft</a> Email <a href='mailto:Renee@easysoft.ltd'>Renee@easysoft.ltd</a>";
+$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://easysoft.ltd' target='_blank'>Nature Easy Soft</a> Email <a href='mailto:support@zentaoalm.com'>support@zentaoalm.com</a>";
 $lang->misc->checkTable  = "Vérifiez les Données de la Table";
 $lang->misc->needRepair  = "Réparer la Table";
 $lang->misc->repairTable = "La Base de Données est peut-être endommagée. Elle a besoin d'être vérifiée et éventuellement réparée !";
