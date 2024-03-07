@@ -8554,26 +8554,6 @@ class upgradeModel extends model
     }
 
     /**
-     * 检查是否添加了18.10版本的需求池字段，如果没有就添加。
-     * Check if the demand pool field of version 18.10 is added, if not, add it.
-     *
-     * @access public
-     * @return void
-     */
-    public function update1810(): void
-    {
-        $fields = $this->dao->query('DESC ' . TABLE_DEMANDPOOL)->fetchAll();
-        foreach($fields as $field)
-        {
-            if($field->Field == 'products') return;
-        }
-
-        /* Execute open edition. */
-        $this->saveLogs('Execute 18_10');
-        $this->execSQL($this->getUpgradeFile('18.10'));
-    }
-
-    /**
      * 检查是否添加了18.10.1版本的 AI 表，如果没有就添加。
      * Check if the AI table of version 18.10.1 is added, if not, add it.
      *
