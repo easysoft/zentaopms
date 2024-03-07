@@ -4,6 +4,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'content' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'panel' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'entitytitle' . DS . 'v1.php';
 
 class detailCard extends wg
 {
@@ -68,16 +69,14 @@ class detailCard extends wg
         $titleBlock = $this->block('title');
         $titleView = $title;
 
-        return div
+        return new entityTitle
         (
-            setClass('detail-card-title panel-title'),
-            $objectID ? idLabel($objectID) : null,
-            ($title || $titleBlock) ? div
-            (
-                setClass('text-md text-clip min-w-0'),
-                $url ? a(set::href($url), $title) : $title,
-                $titleBlock
-            ) : null
+            setClass('panel-title'),
+            set::id($objectID),
+            set::title($title),
+            set::titleClass('text-md text-clip min-w-0'),
+            set::url($url),
+            $titleBlock
         );
     }
 
