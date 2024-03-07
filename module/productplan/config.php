@@ -47,7 +47,7 @@ $config->productplan->actionList['activate']['hint']         = $lang->productpla
 $config->productplan->actionList['activate']['text']         = $lang->productplan->activate;
 $config->productplan->actionList['activate']['url']          = helper::createLink('productplan', 'activate', 'planID={id}');
 $config->productplan->actionList['activate']['data-confirm'] = $lang->productplan->confirmActivate;
-$config->productplan->actionList['activate']['className']    = 'ajax-submit';
+$config->productplan->actionList['activate']['innerClass']   = 'ajax-submit';
 
 $config->productplan->actionList['createExecution']['icon']         = 'plus';
 $config->productplan->actionList['createExecution']['hint']         = $lang->productplan->createExecution;
