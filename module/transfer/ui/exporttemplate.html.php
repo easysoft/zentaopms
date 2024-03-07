@@ -60,5 +60,3 @@ h::js
     }
     JAVASCRIPT
 );
-
-render('modalDialog');
