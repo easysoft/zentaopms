@@ -19,6 +19,5 @@ window.aiSquare.handleStarBtnClick = function(e)
             $btn.children('img').attr('src', 'static/svg/star-empty.svg');
             $btn.attr('data-url', $btn.attr('data-url').replace('true', 'false'));
         }
-        loadCurrentPage({selector : '#mainMenu'});
     }, 'json');
 };
