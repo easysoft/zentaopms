@@ -182,7 +182,7 @@ class mrZen extends mr
     {
         $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'task');
 
-        $this->config->execution->search['actionURL']                     = $this->createLink('mr', 'linkTask', "MRID={$MRID}&product->id={$product->id}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
+        $this->config->execution->search['actionURL']                     = $this->createLink('mr', 'linkTask', "MRID={$MRID}&productID={$product->id}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->execution->search['queryID']                       = $queryID;
         $this->config->execution->search['params']['module']['values']    = $modules;
         $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
