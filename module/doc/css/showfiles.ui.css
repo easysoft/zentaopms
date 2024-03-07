@@ -2,5 +2,6 @@
 .actions-menu .searchBox {width: 120px;}
 .actions-menu .searchBox .input-control-suffix {padding-right: 0;}
 .actions-menu .btn-group .switchBtn {padding: 6px 10px;}
+#table-doc-showfiles [data-type='title'] .dtable-cell-html {display: flex; align-items: center;}
 #table-doc-showfiles [data-type='title'] .dtable-cell-html img {max-height: 36px;}
-#table-doc-showfiles [data-type='title'] .file-name {vertical-align: text-bottom;}
+#table-doc-showfiles [data-type='title'] .file-name {display: flex; justify-content: center; align-items: center;}

@@ -172,7 +172,7 @@ if($canBatchAction)
 }
 
 $cols = $this->loadModel('datatable')->getSetting('bug');
-if(isset($cols['branch']))         $cols['branch']['map']         = array('') + $branchTagOption;
+if(isset($cols['branch']))         $cols['branch']['map']         = array(BRANCH_MAIN => $lang->trunk) + $branchTagOption;
 if(isset($cols['project']))        $cols['project']['map']        = array('') + $projectPairs;
 if(isset($cols['execution']))      $cols['execution']['map']      = array('') + $executions;
 if(isset($cols['plan']))           $cols['plan']['map']           = array('') + $plans;

@@ -28,21 +28,25 @@ div
     setClass('bg-white m-auto p-5 mb-4'),
     div
     (
-        setClass('flex items-center pb-5'),
+        setClass('flex items-center pb-5 col'),
         cell
         (
             set::width('50%'),
-            setClass('text-right pr-3'),
-            userAvatar(set::user($user))
+            userAvatar(set::user($user), set::size('lg'))
         ),
         cell
         (
+            setClass('row'),
             set::width('50%'),
-            div(setClass('user-name text-md font-bold'), $user->realname),
-            zget($lang->user->roleList, $user->role, '') == '' ? null : div
+            span
             (
-                setClass('user-role text-gray'),
-                zget($lang->user->roleList, $user->role)
+                setClass('user-name font-bold center'),
+                $user->realname
+            ),
+            zget($lang->user->roleList, $user->role, '') == '' ? null : span
+            (
+                setClass('user-role text-gray center ml-1'),
+                '(' . zget($lang->user->roleList, $user->role) . ')'
             )
         )
     ),

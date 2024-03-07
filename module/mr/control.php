@@ -550,6 +550,7 @@ class mr extends control
 
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->link;
         $this->view->MR         = $MR;
+        $this->view->repoID     = $MR->repoID;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->stories    = $stories;
         $this->view->bugs       = $bugs;

@@ -31,7 +31,9 @@ searchForm
 (
     set::module('task'),
     set::simple(true),
-    set::show(true)
+    set::show(true),
+    set::extraHeight('+144')
+    set::onSearch(jsRaw("window.onSearchLinks.bind(null, 'mr-task')"))
 );
 
 div

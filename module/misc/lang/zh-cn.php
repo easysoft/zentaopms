@@ -113,7 +113,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
-$lang->misc->releaseDate['20.0']        = '2024-02-29';
+$lang->misc->releaseDate['20.0.beta2']  = '2024-03-07';
 $lang->misc->releaseDate['18.11']       = '2024-02-28';
 $lang->misc->releaseDate['18.10.1']     = '2024-01-17';
 $lang->misc->releaseDate['20.0.beta1']  = '2024-01-26';
@@ -173,7 +173,7 @@ $lang->misc->releaseDate['12.5.3']      = '2021-01-06';
 $lang->misc->releaseDate['12.5.2']      = '2020-12-18';
 $lang->misc->releaseDate['12.5.1']      = '2020-11-30';
 $lang->misc->releaseDate['12.5.stable'] = '2020-11-19';
-$lang->misc->releaseDate['20.0.alpha1'] = '2020-10-30';
+// $lang->misc->releaseDate['20.0.alpha1'] = '2020-10-30';
 $lang->misc->releaseDate['12.4.4']      = '2020-10-30';
 $lang->misc->releaseDate['12.4.3']      = '2020-10-13';
 $lang->misc->releaseDate['12.4.2']      = '2020-09-18';
@@ -224,7 +224,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['20.0'][]        = array('title' => '', 'desc' => '');
+$lang->misc->feature->all['20.0.beta2'][]  = array('title' => '', 'desc' => '');
 $lang->misc->feature->all['18.11'][]       = array('title' => '实现AI小程序功能，实现大屏引用度量项、全局筛选器功能,OR界面实现反馈功能，需求池需求增加关键词，撤回用户需求后需求池需求可以再次分发。', 'desc' => '');
 $lang->misc->feature->all['18.10.1'][]     = array('title' => '需求池增加通知功能，支持产品线功能，支持一个需求分发到多个产品。', 'desc' => '');
 $lang->misc->feature->all['20.0.beta1'][]  = array('title' => '本次发布主要对代码进行了大规模重构，同时对用户界面(UI)进行了全新升级，带来了更好的产品性能、更强的安全性和更友好的用户体验。', 'desc' => '');

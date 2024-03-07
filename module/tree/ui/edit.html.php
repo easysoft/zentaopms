@@ -44,10 +44,10 @@ formPanel
                 on::change('loadBranches')
             )
         ),
-        $product->type != 'normal' ? formGroup
+        formGroup
         (
             set::width('1/3'),
-            setClass('branchBox'),
+            setClass('branchBox', $product->type == 'normal' ? 'hidden' : ''),
             control
             (
                 set::type('picker'),
@@ -57,7 +57,7 @@ formPanel
                 set::required(true),
                 on::change('loadModules')
             )
-        ) : null
+        )
     ) : null,
     $type == 'doc' ? formGroup
     (

@@ -116,15 +116,13 @@ class datatableModel extends model
         {
             foreach($fieldSetting as $field => $set)
             {
-                if(isset($fieldList[$field]))
+                if(!$showAll && empty($set['required']) && empty($set['show']))
                 {
-                    foreach($fieldList[$field] as $key => $value)
-                    {
-                        if(!isset($set[$key])) $fieldSetting[$field][$key] = $value;
-                    }
+                    unset($fieldSetting[$field]);
+                    continue;
                 }
 
-                if(!$showAll && empty($set['required']) && empty($set['show']))
+                if(isset($set['display']) && $set['display'] === false)
                 {
                     unset($fieldSetting[$field]);
                     continue;
@@ -136,11 +134,20 @@ class datatableModel extends model
                     continue;
                 }
 
+                if(isset($fieldList[$field]))
+                {
+                    foreach($fieldList[$field] as $key => $value)
+                    {
+                        if(!isset($set[$key])) $fieldSetting[$field][$key] = $value;
+                    }
+                }
+
                 if(!isset($set['name'])) $fieldSetting[$field]['name'] = $field;
                 if($module == 'testcase' && $field == 'id') $fieldSetting[$field]['name'] = 'caseID';
                 if($field == 'actions' && empty($fieldSetting[$field]['width'])) $fieldSetting[$field]['width'] = $fieldList[$field]['width'];
-                if(in_array($module, array('product', 'project', 'execution')) and empty($this->config->setCode)) unset($fieldSetting['code']);
             }
+
+            if(in_array($module, array('product', 'project', 'execution')) and empty($this->config->setCode)) unset($fieldSetting['code']);
         }
 
         uasort($fieldSetting, array('datatableModel', 'sortCols'));
@@ -260,7 +267,7 @@ class datatableModel extends model
 
         usort($setting, array('datatableModel', 'sortOldCols'));
 
-        return $setting;
+        return $fieldSetting;
     }
 
     /**

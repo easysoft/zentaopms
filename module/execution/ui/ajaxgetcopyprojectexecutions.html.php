@@ -42,7 +42,7 @@ else
                 setClass('text-gray'),
                 $lang->icons[$execution->type]
             ),
-            span($execution->name)
+            span(setClass('text-left'), $execution->name)
         );
     }
 }

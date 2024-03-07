@@ -49,7 +49,7 @@ foreach($tableData as $plan)
         if($plan->status == 'wait') return $action;
         return null;
     }, explode(',', str_replace('other:', '', $plan->actions[1]))));
-    $plan->actions[1] = 'other:' . implode(',', $otherActions);
+    if($otherActions) $plan->actions[1] = 'other:' . implode(',', $otherActions);
 }
 
 $canBatchEdit         = common::hasPriv('productplan', 'batchEdit');
