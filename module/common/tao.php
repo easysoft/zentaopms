@@ -220,7 +220,7 @@ class commonTao extends commonModel
         $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
         if($module == 'my' and $method == 'team') $menu = 'system'; // Fix bug #18642.
         $menu = strtolower($menu);
-        if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
+        if($menu != 'qa' and $menu != 'project' and !isset($lang->$menu->menu)) return true;
         if(($menu == 'my' and $method != 'team') or $menu == 'index' or $module == 'tree') return true;
         if($module == 'company' and $method == 'dynamic') return true;
         if($module == 'action' and $method == 'editcomment') return true;
