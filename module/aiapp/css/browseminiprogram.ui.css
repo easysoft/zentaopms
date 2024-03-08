@@ -227,3 +227,8 @@ pre.message-content {
 .loading-bar {
     background: #E4E4E4;
 }
+
+textarea::placeholder {
+    white-space: nowrap;
+    overflow: hidden;
+}
