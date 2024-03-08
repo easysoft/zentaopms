@@ -27,4 +27,5 @@ function refreshModules()
 window.renderModulePicker = function()
 {
     refreshModules();
+    $('#module').parent().find('.input-group-btn').hide();
 }
