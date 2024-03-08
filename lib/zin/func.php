@@ -180,3 +180,8 @@ function relatedList(): relatedList {return createWg('relatedList', func_get_arg
 function storyRelatedList(): storyRelatedList {return createWg('storyRelatedList', func_get_args());}
 function storyBasicInfo(): storyBasicInfo {return createWg('storyBasicInfo', func_get_args());}
 function storyLifeInfo(): storyLifeInfo {return createWg('storyLifeInfo', func_get_args());}
+function taskTeam(): taskTeam {return createWg('taskTeam', func_get_args());}
+function taskBasicInfo(): taskBasicInfo {return createWg('taskBasicInfo', func_get_args());}
+function taskEffortInfo(): taskEffortInfo {return createWg('taskEffortInfo', func_get_args());}
+function taskLifeInfo(): taskLifeInfo {return createWg('taskLifeInfo', func_get_args());}
+function taskMiscInfo(): taskMiscInfo {return createWg('taskMiscInfo', func_get_args());}
