@@ -874,9 +874,9 @@ class programplanTao extends programplanModel
      * 获取基线数据。
      * Get baseline data.
      *
-     * @param  int     $baselineID
-     * @param  array   $plans
-     * @access private
+     * @param  array     $oldPlans
+     * @param  array     $plans
+     * @access protected
      * @return array
      */
     protected function setPlanBaseline(array $oldPlans, array $plans): array
