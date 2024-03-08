@@ -15,3 +15,10 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 ('zh-tw', 'custom', 'URSRList', '3', '{\"ERName\":\"\\u696d\\u9700\",\"SRName\":\"\\u8edf\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '0', 'rnd'),
 ('zh-tw', 'custom', 'URSRList', '4', '{\"ERName\":\"\\u53f2\\u8a69\",\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u7279\\u6027\"}', '0', 'rnd'),
 ('zh-tw', 'custom', 'URSRList', '5', '{\"ERName\":\"\\u696d\\u52d9\\u9700\\u6c42\",\"SRName\":\"\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6236\\u9700\\u6c42\"}', '0', 'rnd');
+
+CREATE TABLE `zt_storygrade` (
+  `type` enum('story','requirement','epic') NOT NULL,
+  `grade` smallint NOT NULL,
+  `name` char(30) NOT NULL,
+  `status` char(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
