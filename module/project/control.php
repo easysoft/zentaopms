@@ -399,7 +399,7 @@ class project extends control
 
         if($_POST)
         {
-            if($this->post->longTime) $this->config->project->form->create['end']['skipRequired'] = true;
+            if($this->post->longTime || $this->post->LONG_TIME) $this->config->project->form->create['end']['skipRequired'] = true;
 
             $postData = form::data($this->config->project->form->create);
             $project  = $this->projectZen->prepareCreateExtras($postData);
