@@ -117,7 +117,7 @@ class pageBase extends wg
             h::head
             (
                 html($metas),
-                h::title($title),
+                h::title(html(html_entity_decode($title))),
                 $this->block('headBefore'),
                 $headImports,
                 $head
