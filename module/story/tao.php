@@ -884,6 +884,7 @@ class storyTao extends storyModel
      */
     protected function doUpdateLinkStories(int $storyID, object $story, object $oldStory)
     {
+        if($oldStory->type == 'epic') return;
         $linkStoryField = $oldStory->type == 'story' ? 'linkStories' : 'linkRequirements';
         $linkStories    = explode(',', $story->{$linkStoryField});
         $oldLinkStories = explode(',', $oldStory->{$linkStoryField});
