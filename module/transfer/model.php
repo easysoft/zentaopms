@@ -148,12 +148,7 @@ class transferModel extends model
 
             /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
             /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
-            $extractContents = array();
-            $extractContents[] = '[Content_Types].xml';
-            $extractContents[] = 'docProps/';
-            $extractContents[] = '_rels/';
-            $extractContents[] = 'xl/';
-
+            $extractContents = array('[Content_Types].xml', 'docProps/', '_rels/', 'xl/');
             $zip->extract(PCLZIP_OPT_PATH, $tmpPath, PCLZIP_OPT_BY_NAME, $extractContents);
 
             $sheet2Path = $tmpPath . '/xl/worksheets/sheet2.xml';
