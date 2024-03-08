@@ -1281,7 +1281,8 @@ class executionModel extends model
 
         /* Order by status's content whether or not done. */
         $executions = $this->dao->select("*, IF(INSTR('done,closed', status) < 2, 0, 1) AS isDone, INSTR('doing,wait,suspended,closed', status) AS sortStatus")->from(TABLE_EXECUTION)
-            ->where('vision')->eq($this->config->vision)
+            ->where('type')->ne('')
+            ->beginIF($this->config->vision == 'lite')->andWhere('vision')->eq($this->config->vision)->fi()
             ->beginIF((!$this->session->multiple && $this->app->tab == 'execution') || strpos($mode, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
             ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
