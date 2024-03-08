@@ -65,6 +65,20 @@ class index extends control
     }
 
     /**
+     * 通过 iframe 的形式打开对话框。
+     * Open url in iframe modal.
+     *
+     * @param  string $url     base64 encode string.
+     * @access public
+     * @return void
+     */
+    public function iframeModal(string $url = '')
+    {
+        $this->view->url = helper::safe64Decode($url);
+        $this->display();
+    }
+
+    /**
      * Get the log record according to the version.
      *
      * @param  string $version

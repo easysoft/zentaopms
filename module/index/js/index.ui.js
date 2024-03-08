@@ -834,19 +834,21 @@ $.get($.createLink('index', 'app'), html =>
 
 $.apps = $.extend(apps,
 {
-    openApp:        openApp,
-    open:           openApp, // Compatiable with old version.
-    reloadApp:      reloadApp,
-    showApp:        showApp,
-    updateApp:      updateApp,
-    getLastApp:     getLastApp,
-    goBack:         goBack,
-    logout:         logout,
-    isOldPage:      isOldPage,
-    getAppCode:     getAppCode,
-    updateAppsMenu: updateAppsMenu,
-    changeAppsLang: changeAppsLang,
-    changeAppsTheme: changeAppsTheme,
+    openedApps:        apps.openedMap,
+    openApp:           openApp,
+    open:              openApp,
+    reloadApp:         reloadApp,
+    showApp:           showApp,
+    updateApp:         updateApp,
+    updateUrl:         function(appCode, url, title) {return updateApp(appCode, url, title)},
+    getLastApp:        getLastApp,
+    goBack:            goBack,
+    logout:            logout,
+    isOldPage:         isOldPage,
+    getAppCode:        getAppCode,
+    updateAppsMenu:    updateAppsMenu,
+    changeAppsLang:    changeAppsLang,
+    changeAppsTheme:   changeAppsTheme,
     updateUserToolbar: updateUserToolbar
 });
 
