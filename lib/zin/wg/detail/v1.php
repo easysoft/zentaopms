@@ -32,6 +32,9 @@ class detail extends wg
         /* 对象，如果不指定则尝试使用当前页面上的 `${$objectType}` 的值，例如 `$task`。 */
         'object'     => '?object',
 
+        /* 是否已删除。 */
+        'deleted?: bool',
+
         /* 父级对象。 */
         'parent'     => '?object',
 
@@ -90,7 +93,7 @@ class detail extends wg
 
     public static function getPageCSS(): ?string
     {
-        return <<<CSS
+        return <<<'CSS'
         .detail-main > * + * {margin-top: 16px}
         .detail-section.panel {--tw-ring-opacity: 0}
         .detail-section.panel .panel-heading {padding: 4px 0; margin-bottom: 8px}
@@ -133,12 +136,16 @@ class detail extends wg
         if(!$this->prop('objectType')) $this->setProp('objectType', $objectType);
         if(!$this->prop('objectID'))   $this->setProp('objectID',   $objectID);
         if(!$this->prop('object'))     $this->setProp('object',     $object);
-        if(!$this->hasProp('title'))   $this->setProp('title',      isset($object->name) ? $object->name : $object->title);
 
-        if(!$this->hasProp('color') && $object && isset($object->color)) $this->setProp('color',      $object->color);
+        if($object)
+        {
+            if(!$this->hasProp('title')) $this->setProp('title', isset($object->name) ? $object->name : $object->title);
+            if(!$this->hasProp('color') && isset($object->color)) $this->setProp('color', $object->color);
+            if(!$this->hasProp('deleted') && isset($object->deleted)) $this->setProp('deleted', $object->deleted);
+        }
 
         $parent = $this->prop('parent');
-        if(!$parent && isset($object->parent) && is_object($object->parent))
+        if(!$parent && $object && isset($object->parent) && is_object($object->parent))
         {
             $parent = $object->parent;
             $this->setProp('parent', $parent);
@@ -172,13 +179,14 @@ class detail extends wg
 
     protected function buildTitle()
     {
-        list($objectID, $title, $color, $objectType, $parent, $parentID, $parentUrl, $parentTitle, $parentType) = $this->prop(array('objectID', 'title', 'color', 'objectType', 'parent', 'parentID', 'parentUrl', 'parentTitle', 'parentType'));
+        list($object, $objectID, $title, $color, $objectType, $parent, $parentID, $parentUrl, $parentTitle, $parentType) = $this->prop(array('object', 'objectID', 'title', 'color', 'objectType', 'parent', 'parentID', 'parentUrl', 'parentTitle', 'parentType'));
         $titleBlock = $this->block('title');
 
         return new entityTitle
         (
             setClass('min-w-0'),
             set::id($objectID),
+            set::object($object),
             set::title($title),
             set::titleClass('text-lg text-clip font-bold'),
             set::type($objectType),
@@ -291,12 +299,14 @@ class detail extends wg
         $actionsBlock = $this->block('actions');
         $isSimple     = $this->prop('layout') === 'simple';
 
-        if(!$actionsBlock && !$actions) return null;
+        if(!$actionsBlock && !is_array($actions)) return null;
 
         $toolbarProps = array_is_list($actions) ? array('items' => $actions) : $actions;
         if(!$isSimple)
         {
-            array_unshift($toolbarProps['items'], $this->buildBackBtn(array('type' => 'ghost')), array('type' => 'divider'));
+            $backBtn = $this->buildBackBtn(array('type' => 'ghost'));
+            if(empty($toolbarProps['items'])) $toolbarProps['items'] = array($backBtn);
+            else array_unshift($toolbarProps['items'], $backBtn, array('type' => 'divider'));
         }
 
         foreach($toolbarProps['items'] as &$item)
