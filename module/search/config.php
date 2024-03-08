@@ -159,7 +159,7 @@ $config->search->recPerPage = 10;
 $config->search->summaryLength = 120;
 $config->search->maxFileSize   = 1024;
 
-$config->search->oldQuery = array('issue', 'risk', 'traincourse', 'ticket', 'activity');
+$config->search->oldQuery = array('issue', 'risk', 'traincourse', 'ticket', 'activity', 'zoutput', 'trainplan', 'reviewissue', 'researchreport', 'researchplan', 'process', 'opportunity', 'nc', 'meetingroom', 'meeting', 'measurement', 'gapanalysis', 'auditplan', 'auditcl', 'assetlib');
 
 if($config->vision == 'rnd')
 {
