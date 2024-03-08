@@ -3122,7 +3122,7 @@ class testcaseZen extends testcase
         /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
         /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
         $extractFiles = array('content.xml', 'content.json');
-        if($zip->extract(PCLZIP_OPT_PATH, $extractFolder, PCLZIP_OPT_BY_NAME, $extractFiles, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
+        if($zip->extract(PCLZIP_OPT_PATH, $filePath, PCLZIP_OPT_BY_NAME, $extractFiles, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         $this->classFile->removeFile($tmpFile);
 
