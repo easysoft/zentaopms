@@ -53,8 +53,14 @@ class detail extends wg
         /* 标题，如果不指定则尝试使用当前页面上的 `${$objectType}->title` 或 `${$objectType}->name` 的值，例如 `$story->title`、`$task->name` 。 */
         'title'      => '?string',
 
-        /* 底部固定操作按钮的定义，不包括返回按钮，可以通过 `-` 来指定分割线。 */
+        /* 底部固定操作按钮的定义，不包括返回按钮，可以通过 `-` 来指定分割线，如果没有指定 actions 属性，则从 actionList 和 operateList 生成。 */
         'actions'    => '?array',
+
+        /* 对象类型可用操作配置，如果没有指定 actionList 属性，则从 $config->$objectType->actionList 获取。 */
+        'actionList' => '?array',
+
+        /* 对象类型当前操作配置，如果没有指定 operateList 属性，则从 $config->$objectType->$methoedName->actionList 获取。 */
+        'operateList' => '?array',
 
         /* 操作按钮链接格式化参数。 */
         'urlFormatter' => '?array',
