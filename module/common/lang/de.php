@@ -91,6 +91,7 @@ $lang->agilePlusModel     = 'Agile Plus';
 $lang->waterfallPlusModel = 'Waterfall Plus';
 $lang->all                = 'All';
 $lang->viewDetails        = 'View Details';
+$lang->deleted            = 'Deleted';
 
 $lang->actions         = 'Aktionen';
 $lang->restore         = 'Wiederherstellen';
