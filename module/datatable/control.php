@@ -162,6 +162,7 @@ class datatable extends control
         if($module == 'execution' && $method == 'bug')
         {
             unset($cols['execution']);
+            unset($cols['branch']);
             $execution = $this->loadModel('execution')->getByID($this->session->execution);
             $project   = $this->loadModel('project')->getByID($execution->project);
             if(!$project->hasProduct && $project->model != 'scrum') unset($cols['plan']);
