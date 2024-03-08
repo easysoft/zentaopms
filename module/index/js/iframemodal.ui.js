@@ -25,7 +25,7 @@ $(function()
             const resizeOb = new ResizeObserver(resizeModal);
             resizeOb.observe($('.modal-body')[0]);
             resizeModal();
-            $body.removeClass('invisible');
+            $body.zuiInit().removeClass('invisible');
         }
     });
 });
