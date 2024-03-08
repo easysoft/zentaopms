@@ -173,6 +173,7 @@ detail
         set::parentUrl(createLink('task', 'view', "taskID={$task->parent}")),
         to::title(to::leading(label(setClass('gray-pale rounded-full'), $lang->task->childrenAB)))
     ) : null,
+    set::urlFormatter(array('{id}' => $task->id, '{parent}' => $task->parent, '{execution}' => $task->execution)),
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
