@@ -135,9 +135,9 @@ function openApp(url, code, options)
         });
         iframe.onload = iframe.onreadystatechange = function(e)
         {
+            const finishLoad = () => $iframe.removeClass('loading').addClass('in');
             try
             {
-                const finishLoad = () => $iframe.removeClass('loading').addClass('in');
                 iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', finishLoad);
                 setTimeout(finishLoad, 10000);
             }
