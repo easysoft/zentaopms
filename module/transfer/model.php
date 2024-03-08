@@ -548,7 +548,7 @@ class transferModel extends model
 
                     /* 从语言项里赋值。*/
                     /* Set value from lang. */
-                    if(strpos($this->moduleConfig->sysLangFields, $field)) $lists[$listName] = implode(',', $fieldList[$field]['values']);
+                    if(strpos($this->moduleConfig->sysLangFields, $field) !== false && is_array($fieldList[$field]['values'])) $lists[$listName] = implode(',', $fieldList[$field]['values']);
                 }
 
                 /* 将下拉字段赋值给excel->sysDataField。*/
