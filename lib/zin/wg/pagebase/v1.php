@@ -14,7 +14,6 @@ class pageBase extends wg
         'bodyClass?: array|string',
         'zui?: bool',
         'lang?: string',
-        'display?: bool',
         'rawContent?: bool'
     );
 
@@ -26,11 +25,6 @@ class pageBase extends wg
     );
 
     protected static array $defineBlocks = array('head' => array());
-
-    protected function created()
-    {
-        if($this->prop('display')) $this->display();
-    }
 
     protected function buildHead()
     {
