@@ -869,4 +869,28 @@ class programplanTao extends programplanModel
 
         return date('Y-m-d', $timestamp);
     }
+
+    /**
+     * 获取基线数据。
+     * Get baseline data.
+     *
+     * @param  int     $baselineID
+     * @param  array   $plans
+     * @access private
+     * @return array
+     */
+    protected function setPlanBaseline(array $oldPlans, array $plans): array
+    {
+        foreach($oldPlans as $id => $oldPlan)
+        {
+            if(!isset($plans[$id])) continue;
+            $plans[$id]->version   = $oldPlan->version;
+            $plans[$id]->name      = $oldPlan->name;
+            $plans[$id]->milestone = $oldPlan->milestone;
+            $plans[$id]->begin     = $oldPlan->begin;
+            $plans[$id]->end       = $oldPlan->end;
+        }
+
+        return $plans;
+    }
 }
