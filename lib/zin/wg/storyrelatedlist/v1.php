@@ -127,6 +127,7 @@ class storyRelatedList extends relatedList
             'url'      => false,
             'onRender' => function($item, $commit)
             {
+                $item['text'] = $commit->comment;
                 if(hasPriv('repo', 'revision'))
                 {
                     $item['url'] = createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}");
