@@ -24,6 +24,8 @@ $(function()
             resizeOb.observe($('body>.modal-dialog>.modal-content>.modal-body,.modal-body')[0]);
             resizeModal();
             $body.zuiInit().removeClass('invisible');
+
+            if(parent.$('iframe[name="' + window.name + '"]').closest('.modal-dialog').find('.modal-header>.close').length) $('body>.modal-dialog>.modal-content>.modal-actions>[data-dismiss="modal"]').hide();
         }
     });
 
