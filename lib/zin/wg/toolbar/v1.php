@@ -22,8 +22,6 @@ class toolbar extends wg
     {
         if($item === null) return null;
 
-        if($item === '-') $item = array('type' => 'divider');
-
         if(!($item instanceof item))
         {
             if($item instanceof node) return $item;
@@ -31,43 +29,12 @@ class toolbar extends wg
         }
 
         $type = $item->prop('type');
-        if($type === 'divider') return div(setClass('divider toolbar-divider'));
-
-        $urlFormatter = $this->prop('urlFormatter');
-        if($urlFormatter && ($type === 'btnGroup' || $type == 'dropdown'))
-        {
-            $itemChildren = $item->prop('items');
-            if(is_array($itemChildren))
-            {
-                foreach($itemChildren as $key => &$child)
-                {
-                    if(is_array($child) && isset($child['url']))
-                    {
-                        $url = $child['url'];
-                        if($url)
-                        {
-                            $url = str_replace(array_keys($urlFormatter), array_values($urlFormatter), $url);
-                            $itemChildren[$key]['url'] = $url;
-                        }
-                    }
-                }
-                $item->setProp('items', $itemChildren);
-            }
-        }
-
+        if($type === 'divider')                        return div(setClass('divider toolbar-divider'));
         if($type === 'btnGroup')                       return new btnGroup(inherit($item));
         if($type == 'dropdown' || $type == 'checkbox') return new actionItem(inherit($item));
 
         list($btnClass, $btnProps, $btnType, $size) = $this->prop(array('btnClass', 'btnProps', 'btnType', 'size'));
         $btn = empty($item->prop('back')) ? '\zin\btn' : '\zin\backBtn';
-
-
-        $url = $item->prop('url');
-        if($url && $urlFormatter)
-        {
-            $url = str_replace(array_keys($urlFormatter), array_values($urlFormatter), $url);
-            $item->setProp('url', $url);
-        }
 
         return new $btn
         (
@@ -79,14 +46,75 @@ class toolbar extends wg
         );
     }
 
-    protected function build()
+    protected function buildItems()
     {
         $items = $this->prop('items');
+        if(!$items) return null;
+
+        $urlFormatter = $this->prop('urlFormatter');
+        $itemGroups   = array();
+
+        foreach($items as $item)
+        {
+            if($item === '-') $item = array('type' => 'divider');
+            $group = null;
+            if(is_array($item) && isset($item['group']))
+            {
+                $group = $item['group'];
+                unset($item['group']);
+            }
+            if(is_null($group)) $group = count($itemGroups) ? array_keys($itemGroups)[0] : '';
+
+            if($urlFormatter && is_array($item))
+            {
+                $url = isset($item['url']) ? $item['url'] : null;
+                if($url)
+                {
+                    $url = str_replace(array_keys($urlFormatter), array_values($urlFormatter), $url);
+                    $item['url'] = $url;
+                }
+                $itemChildren = isset($item['items']) ? $item['items'] : null;
+                if(is_array($itemChildren))
+                {
+                    foreach($itemChildren as $key => &$child)
+                    {
+                        if(is_array($child) && isset($child['url']))
+                        {
+                            $url = $child['url'];
+                            if($url)
+                            {
+                                $url = str_replace(array_keys($urlFormatter), array_values($urlFormatter), $url);
+                                $itemChildren[$key]['url'] = $url;
+                            }
+                        }
+                    }
+                    $item['items'] = $itemChildren;
+                }
+            }
+
+            if(!isset($itemGroups[$group])) $itemGroups[$group] = array();
+            $itemGroups[$group][] = $item;
+        }
+
+        $list = array();
+        foreach($itemGroups as $group => $items)
+        {
+            if(count($list)) $list[] = div(setClass('divider toolbar-divider'));
+            foreach($items as $item)
+            {
+                $list[] = $this->onBuildItem($item);
+            }
+        }
+        return $list;
+    }
+
+    protected function build()
+    {
         return div
         (
             setClass('toolbar'),
             set($this->getRestProps()),
-            is_array($items) ? array_map(array($this, 'onBuildItem'), $items) : null,
+            $this->buildItems(),
             $this->children()
         );
     }
