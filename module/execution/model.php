@@ -277,7 +277,7 @@ class executionModel extends model
         if(empty($project) || $project->model != 'kanban') $this->loadModel('kanban')->createExecutionLane($executionID);
 
         /* Api create infinites stages. */
-        if(isset($execution->parent) && ($execution->parent != $execution->project) && $execution->type == 'stage')
+        if(isset($execution->parent) && ($execution->parent != $execution->project) && ($execution->type == 'stage' || $project->model == 'ipd'))
         {
             $parent = $this->fetchByID($execution->parent);
             $grade  = $parent->grade + 1;
