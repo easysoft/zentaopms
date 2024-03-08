@@ -12,540 +12,163 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
-global $lang;
+$isInModal     = isInModal();
 
-/* Join mailto. */
-$mailtoList = array();
-if(!empty($task->mailto))
+/* 初始化头部右上方工具栏。Init detail toolbar. */
+$toolbar = array();
+if(!$isInModal && hasPriv('task', 'create', $task))
 {
-    foreach(explode(',', $task->mailto) as $account)
-    {
-        if(empty($account)) continue;
-        $mailtoList[] = zget($users, trim($account));
-    }
-}
-$mailtoList = implode($lang->comma, $mailtoList);
-
-detailHeader
-(
-    to::title
+    $toolbar[] = array
     (
-        $task->team ? span
-        (
-            setClass('label primary-pale'),
-            $lang->task->modeList[$task->mode]
-        ) : null,
-        entityLabel
-        (
-            set
-            (
-                array
-                (
-                    'entityID' => $task->id,
-                    'level' => 1
-                )
-            ),
-            $task->parent > 0 ?
-            span
-            (
-                setClass('text'),
-                set::title($task->name),
-                span(setClass('label gray-pale rounded-xl'), $lang->task->childrenAB),
-                a(set::href(createLink('task', 'view', "taskID={$task->parent}")), $task->parentName),
-                span('/'),
-                span(setStyle(array('color' => $task->color)), $task->name)
-            ) : span(setStyle(array('color' => $task->color)), $task->name)
-        ),
-        $task->deleted ? span(setClass('label danger'), $lang->task->deleted) : null
-    ),
-    !isAjaxRequest('modal') && common::hasPriv('task', 'create', $task) ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), set('data-app', $app->tab), $lang->task->create)) : null
-);
-
-/* Construct suitable actions for the current task. */
-if(common::hasPriv('repo', 'createBranch') && empty($task->linkedBranch)) $hasRepo = $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
-
-$operateMenus = array();
-foreach($config->task->view->operateList['main'] as $operate)
-{
-    if($operate == 'createBranch')
-    {
-        if(empty($hasRepo) || !common::hasPriv('repo', $operate) || !empty($task->linkedBranch) || !common::canModify('execution', $execution)) continue;
-    }
-    else
-    {
-        if(!common::hasPriv('task', $operate, $task)) continue;
-        if(!$this->task->isClickable($task, $operate)) continue;
-
-        if($operate == 'batchCreate') $config->task->actionList['batchCreate']['text'] = $lang->task->children;
-    }
-
-    $operateMenus[] = $config->task->actionList[$operate];
-}
-
-/* Construct common actions for task. */
-$commonActions = array();
-foreach($config->task->view->operateList['common'] as $operate)
-{
-    if(!common::hasPriv('task', $operate, $task)) continue;
-    if($operate == 'view' && $task->parent <= 0) continue;
-
-    $settings = $config->task->actionList[$operate];
-    if($operate != 'view') $settings['text'] = '';
-
-    $commonActions[] = $settings;
-}
-
-if($task->children) $children = initTableData($task->children, $config->task->dtable->children->fieldList, $this->task);
-if($task->team)
-{
-    $teams = array();
-    foreach($task->team as $team)
-    {
-        $teams[] = h::tr
-        (
-            h::td
-            (
-                zget($users, $team->account)
-            ),
-            h::td
-            (
-                (float)$team->estimate
-            ),
-            h::td
-            (
-                (float)$team->consumed
-            ),
-            h::td
-            (
-                (float)$team->left
-            ),
-            h::td
-            (
-                setClass("status-{$team->status}"),
-                zget($lang->task->statusList, $team->status)
-            )
-        );
-    }
-}
-
-/* Set the module name of the task. */
-$moduleTitle = '';
-$moduleItems = array();
-if(empty($modulePath))
-{
-    $moduleTitle .= '/';
-    $moduleItems[] = span('/');
-}
-else
-{
-    if($product)
-    {
-        $moduleTitle   .= $product->name  . '/';
-        $moduleItems[]  = span(a(set::href(createLink('product', 'browse', "productID=$product->id")), $product->name));
-        $moduleItems[]  = icon('angle-right');
-    }
-    foreach($modulePath as $key => $module)
-    {
-        $moduleTitle   .= $module->name;
-        $moduleItems[]  = a(set::href(createLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id")), $module->name) ?? span($module->name);
-        if(isset($modulePath[$key + 1]))
-        {
-            $moduleTitle   .= '/';
-            $moduleItems[]  = icon('angle-right');
-        }
-    }
-}
-
-$canViewMR = common::hasPriv('mr', 'view');
-$linkedMR  = array();
-foreach($linkMRTitles as $MRID => $linkMRTitle)
-{
-    $linkedMR[] = $canViewMR ? a
-    (
-        set::href(createLink('mr', 'view', "MRID=$MRID")),
-        "#$MRID $linkMRTitle",
-        setData('app', 'devops')
-    ) : div("#$MRID $linkMRTitle");
-}
-
-$canViewRevision = common::hasPriv('repo', 'revision');
-$linkedCommits   = array();
-foreach($linkCommits as $commit)
-{
-    if(empty($commit->revision)) continue;
-
-    $revision        = substr($commit->revision, 0, 10);
-    $linkedCommits[] = $canViewRevision ? a
-    (
-        set::href(createLink('repo', 'revision', "repoID={$commit->repo}&objectID={$task->execution}&revision={$commit->revision}")),
-        "#$revision",
-        setData('app', 'devops')
-    ) : div($revision . ' ' . $commit->comment);
-}
-
-$linkedCases = array();
-$canViewCase = common::hasPriv('testcase', 'view');
-if(!empty($task->cases))
-{
-    foreach($task->cases as $caseID => $case)
-    {
-        $linkedCases[] = $canViewCase ? a
-            (
-                setClass('flex clip'),
-                set::href(createLink('testcase', 'view', "caseID={$caseID}")),
-                setData('toggle', 'modal'),
-                setData('size', 'lg'),
-                set::title($case),
-                "#{$caseID} " . $case
-            ) : div(
-                setClass('flex clip'),
-                set::title($case),
-                "#{$caseID} " . $case
-            );
-    }
-}
-
-detailBody
-(
-    sectionList
-    (
-        section
-        (
-            set::title($lang->task->legendDesc),
-            set::content(empty($task->desc) ? $lang->noData : $task->desc),
-            set::useHtml(true)
-        ),
-        $task->fromBug ?
-        section
-        (
-            set::title($lang->task->fromBug),
-            sectionCard
-            (
-                entityLabel
-                (
-                    set::entityID($task->fromBug),
-                    set::text($fromBug->title)
-                ),
-                item
-                (
-                    set::title($lang->bug->steps),
-                    empty($fromBug->steps) ? $lang->noData : html($fromBug->steps)
-                )
-            )
-        ) : null,
-        !$task->fromBug && $task->story ?
-        section
-        (
-            set::title($lang->task->story),
-            sectionCard
-            (
-                entityLabel
-                (
-                    set::entityID($task->storyID),
-                    set::text($task->storyTitle),
-                    set::href(createLink('story', 'view', "storyID=$task->storyID")),
-                    set::textClass('clip'),
-                    $task->needConfirm  ? to::suffix
-                    (
-                        div
-                        (
-                            setClass('flex-1 text-right nowrap'),
-                            span($lang->task->storyChange),
-                            a
-                            (
-                                setClass('mx-2 btn primary size-sm'),
-                                set::href(createLink('task', 'confirmStoryChange', "taskID={$task->id}")),
-                                $lang->confirm
-                            )
-                        )
-                    ) : null
-                ),
-                div
-                (
-                    setClass('p-4'),
-                    span("[{$lang->story->legendSpec}]", setClass('text-gray')),
-                    empty($task->storySpec) && empty($task->storyFiles) ? $lang->noData : html($task->storySpec)
-                ),
-                div
-                (
-                    setClass('p-4'),
-                    span("[{$lang->task->storyVerify}]", setClass('text-gray')),
-                    empty($task->storyVerify) ? $lang->noData : html($task->storyVerify)
-                )
-            )
-        ) : null,
-        !empty($task->cases) ? section
-        (
-            set::title($lang->task->case),
-            div($linkedCases)
-        ) : null,
-        $task->children ?
-        section
-        (
-            set::title($lang->task->children),
-            dtable
-            (
-                set::cols(array_values($config->task->dtable->children->fieldList)),
-                set::userMap($users),
-                set::data($children),
-                set::checkable(false)
-            )
-        ) : null
-    ),
-    $task->files ? fileList
-    (
-        set::files($task->files)
-    ) : null,
-    history(),
-    floatToolbar
-    (
-        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-        $task->deleted == '0' ? set::main($operateMenus) : null,
-        $task->deleted == '0' ? set::suffix($commonActions) : null,
-        set::object($task)
-    ),
-    detailSide
-    (
-        tabs
-        (
-            set::collapse(true),
-            tabPane
-            (
-                set::key('legend-basic'),
-                set::title($lang->task->legendBasic),
-                set::active(true),
-                tableData
-                (
-                    $execution->multiple ? item
-                    (
-                        set::name($lang->task->execution),
-                        a
-                        (
-                            set::href(createLink('execution', 'view', "executionID=$execution->id")),
-                            $execution->name
-                        )
-                    ) : null,
-                    item
-                    (
-                        set::name($lang->task->module),
-                        set::title($moduleTitle),
-                        $moduleItems
-                    ),
-                    item
-                    (
-                        set::name($lang->task->fromBug),
-                        !empty($fromBug) ? a
-                        (
-                            setData
-                            (
-                                array
-                                (
-                                    'toggle' => 'modal',
-                                    'size'   => 'lg'
-                                )
-                            ),
-                            set::href(createLink('bug', 'view', "id={$task->fromBug}")),
-                            set::title($fromBug->title),
-                            $fromBug->title
-                        ) : null
-                    ),
-                    item
-                    (
-                        set::name($lang->task->assignedTo),
-                        zget($users, $task->assignedTo, '')
-                    ),
-                    item
-                    (
-                        set::name($lang->task->type),
-                        zget($this->lang->task->typeList, $task->type, $task->type)
-                    ),
-                    item
-                    (
-                        set::name($lang->task->status),
-                        $this->processStatus('task', $task)
-                    ),
-                    item
-                    (
-                        set::name($lang->task->progress),
-                        $task->progress . ' %'
-                    ),
-                    item
-                    (
-                        set::name($lang->task->pri),
-                        priLabel
-                        (
-                            setClass('align-sub'),
-                            $task->pri,
-                            set::text($lang->task->priList)
-                        )
-                    ),
-                    item
-                    (
-                        set::name($lang->task->keywords),
-                        $task->keywords
-                    ),
-                    item
-                    (
-                        set::name($lang->task->mailto),
-                        $mailtoList
-                    )
-                )
-            ),
-            tabPane
-            (
-                set::key('legend-life'),
-                set::title($lang->task->legendLife),
-                tableData
-                (
-                    item
-                    (
-                        set::name($lang->task->openedBy),
-                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : ''
-                    ),
-                    item
-                    (
-                        set::name($lang->task->finishedBy),
-                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : ''
-                    ),
-                    item
-                    (
-                        set::name($lang->task->canceledBy),
-                        $task->canceledBy ? zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate : ''
-                    ),
-                    item
-                    (
-                        set::name($lang->task->closedBy),
-                        $task->closedBy ? zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate : ''
-                    ),
-                    item
-                    (
-                        set::name($lang->task->closedReason),
-                        $task->closedReason ? $lang->task->reasonList[$task->closedReason] : ''
-                    ),
-                    item
-                    (
-                        set::name($lang->task->lastEdited),
-                        $task->lastEditedBy ? zget($users, $task->lastEditedBy, $task->lastEditedBy) . $lang->at . $task->lastEditedDate : ''
-                    )
-                )
-            ),
-            $task->team ? tabPane
-            (
-                set::key('legend-team'),
-                set::title($lang->task->team),
-                h::table
-                (
-                    setClass('table condensed bordered'),
-                    setID('team'),
-                    h::thead
-                    (
-                        h::tr
-                        (
-                            h::th
-                            (
-                                $lang->task->team,
-                                set::width('80px')
-                            ),
-                            h::th
-                            (
-                                $lang->task->estimateAB,
-                                set::width('60px')
-                            ),
-                            h::th
-                            (
-                                $lang->task->consumedAB,
-                                set::width('60px')
-                            ),
-                            h::th
-                            (
-                                $lang->task->leftAB,
-                                set::width('60px')
-                            ),
-                            h::th
-                            (
-                                $lang->task->statusAB,
-                                set::width('80px')
-                            )
-                        )
-                    ),
-                    h::tbody($teams)
-                )
-            ) : null
-        ),
-        tabs
-        (
-            set::collapse(true),
-            tabPane
-            (
-                set::key('legend-effort'),
-                set::title($lang->task->legendEffort),
-                set::active(true),
-                tableData
-                (
-                    item
-                    (
-                        set::name($lang->task->estimate),
-                        $task->estimate . ' ' . $lang->task->suffixHour
-                    ),
-                    item
-                    (
-                        set::name($lang->task->consumed),
-                        round($task->consumed, 2) . ' ' . $lang->task->suffixHour
-                    ),
-                    item
-                    (
-                        set::name($lang->task->left),
-                        $task->left . ' ' . $lang->task->suffixHour
-                    ),
-                    item
-                    (
-                        set::name($lang->task->estStarted),
-                        helper::isZeroDate($task->estStarted) ? '' : $task->estStarted
-                    ),
-                    item
-                    (
-                        set::name($lang->task->realStarted),
-                        helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 0, 19)
-                    ),
-                    item
-                    (
-                        set::name($lang->task->deadline),
-                        helper::isZeroDate($task->deadline) ? '' : $task->deadline
-                    )
-                )
-            ),
-            tabPane
-            (
-                set::key('legend-misc'),
-                set::title($lang->task->legendMisc),
-                tableData
-                (
-                    empty($task->linkedBranch) ? null : item
-                    (
-                        set::name($lang->task->relatedBranch),
-                        current($task->linkedBranch)
-                    ),
-                    item
-                    (
-                        set::name($lang->task->linkMR),
-                        div($linkedMR)
-                    ),
-                    item
-                    (
-                        set::name($lang->task->linkCommit),
-                        div($linkedCommits)
-                    )
-                )
-            )
-        )
-    )
-);
-
-if(!isInModal())
-{
-    floatPreNextBtn
-    (
-        !empty($preAndNext->pre)  ? set::preLink(createLink('task', 'view', "taskID={$preAndNext->pre->id}"))   : null,
-        !empty($preAndNext->next) ? set::nextLink(createLink('task', 'view', "taskID={$preAndNext->next->id}")) : null
+        'icon' => 'plus',
+        'type' => 'primary',
+        'text' => $lang->task->create,
+        'url'  => createLink('task', 'create', "executionID={$task->execution}")
     );
 }
+
+/* 初始化底部操作栏。Init bottom actions. */
+$actions = array();
+if(!$task->deleted)
+{
+    $hasRepo = common::hasPriv('repo', 'createBranch') && empty($task->linkedBranch) && $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
+    /* Construct suitable actions for the current task. */
+    foreach($config->task->view->operateList['main'] as $operate)
+    {
+        if($operate == 'createBranch')
+        {
+            if(empty($hasRepo) || !common::hasPriv('repo', $operate) || !empty($task->linkedBranch) || !common::canModify('execution', $execution)) continue;
+        }
+        else
+        {
+            if(!common::hasPriv('task', $operate, $task)) continue;
+            if(!$this->task->isClickable($task, $operate)) continue;
+
+            if($operate == 'batchCreate') $config->task->actionList['batchCreate']['text'] = $lang->task->children;
+        }
+
+        $actions[] = $config->task->actionList[$operate];
+    }
+    /* Construct common actions for task. */
+    $commonActions = array();
+    foreach($config->task->view->operateList['common'] as $operate)
+    {
+        if(!common::hasPriv('task', $operate, $task)) continue;
+        if($operate == 'view' && $task->parent <= 0) continue;
+
+        $settings = $config->task->actionList[$operate];
+        if($operate != 'view') $settings['text'] = '';
+
+        $commonActions[] = $settings;
+    }
+    if($commonActions) $actions = array_merge($actions, array(array('type' => 'divider')), $commonActions);
+}
+
+/* 初始化主栏内容。Init sections in main column. */
+$sections = array();
+$sections[] = setting()
+    ->title($lang->task->legendDesc)
+    ->control('html')
+    ->content(empty($task->desc) ? $lang->noDesc : $task->desc);
+if($task->fromBug)
+{
+    $sections[] = setting()
+        ->title($lang->task->fromBug)
+        ->control('detailCard')
+        ->object($fromBug)
+        ->content(setting()->title($lang->bug->steps)->control('html')->content(empty($fromBug->steps) ? $lang->noData : $fromBug->steps));
+}
+if(!$task->fromBug && $task->story)
+{
+    $storyDetailProps = array
+    (
+        'control'  => 'detailCard',
+        'title'    => $task->storyTitle,
+        'url'      => createLink('story', 'view', "storyID=$task->storyID"),
+        'objectID' => $task->storyID,
+        'toolbar'  => !$task->needConfirm ? array
+        (
+            array('text' => $lang->task->storyChange, 'class' => 'ghost pointer-events-none'),
+            array('text' => $lang->confirm, 'type' => 'primary', 'url' => createLink('task', 'confirmStoryChange', "taskID={$task->id}"))
+        ) : null,
+        'sections' => array
+        (
+            setting()->title("[{$lang->story->legendSpec}]")->control('html')->content(empty($task->storySpec) && empty($task->storyFiles) ? $lang->noData : $task->storySpec),
+            setting()->title("[{$lang->task->storyVerify}]")->control('html')->content(empty($task->storyVerify) ? $lang->noData : $task->storyVerify)
+        )
+    );
+    $sections[] = setting()
+    ->title($lang->task->story)
+    ->control($storyDetailProps);
+}
+if(!empty($task->cases))
+{
+    $sections[] = setting()
+        ->title($lang->task->case)
+        ->control('entityList')
+        ->type('testcase')
+        ->items($task->cases);
+}
+if($task->children)
+{
+    $children = initTableData($task->children, $config->task->dtable->children->fieldList, $this->task);
+    $sections[] = setting()
+        ->title($lang->task->children)
+        ->control('dtable')
+        ->className('ring')
+        ->cols(array_values($config->task->dtable->children->fieldList))
+        ->userMap($users)
+        ->data($children)
+        ->checkable(false);
+}
+if($task->files)
+{
+    $sections[] = array
+    (
+        'title'      => $lang->files,
+        'control'    => 'fileList',
+        'files'      => $task->files,
+        'object'     => $task
+    );
+}
+
+/* 初始化侧边栏标签页。Init sidebar tabs. */
+$tabs = array();
+
+/* 基本信息。Legend basic items. */
+$tabs[] = setting()
+    ->group('basic')
+    ->title($lang->task->legendBasic)
+    ->control('taskBasicInfo')
+    ->statusText($this->processStatus('task', $task));
+
+/* 一生信息。Legend life items. */
+$tabs[] = setting()
+    ->group('basic')
+    ->title($lang->task->legendLife)
+    ->control('taskLifeInfo');
+
+if($task->team)
+{
+    $tabs[] = setting()
+        ->group('basic')
+        ->title($lang->task->team)
+        ->control('taskTeam');
+}
+
+$tabs[] = setting()
+    ->group('related')
+    ->title($lang->task->legendEffort)
+    ->control('taskEffortInfo');
+$tabs[] = setting()
+    ->group('related')
+    ->title($lang->task->legendMisc)
+    ->control('taskMiscInfo');
+
+detail
+(
+    set::toolbar($toolbar),
+    set::sections($sections),
+    set::tabs($tabs),
+    set::actions($actions)
+);
