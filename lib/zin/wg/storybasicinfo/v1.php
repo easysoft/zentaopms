@@ -44,23 +44,6 @@ class storyBasicInfo extends wg
         return $moduleItems;
     }
 
-    protected function getMailtoList(object $story): string
-    {
-        global $lang;
-
-        $users      = $this->prop('users', data('users'));
-        $mailtoList = array();
-        if(!empty($story->mailto))
-        {
-            foreach(explode(',', $story->mailto) as $account)
-            {
-                if(empty($account)) continue;
-                $mailtoList[] = zget($users, trim($account));
-            }
-        }
-        return implode($lang->comma, $mailtoList);
-    }
-
     protected function getMinStage(object $story, ?array $branches): string
     {
         global $lang;
@@ -94,6 +77,7 @@ class storyBasicInfo extends wg
         $branches   = $this->prop('branches', data('branches'));
         $hiddenPlan = $this->prop('hiddenPlan', data('hiddenPlan'));
         $statusText = $this->prop('statusText', $story->status);
+        $users      = $this->prop('users', data('users'));
         $items      = array();
 
         if(!$product->shadow)
@@ -165,7 +149,7 @@ class storyBasicInfo extends wg
             $items[$lang->story->notifyEmail] = $story->notifyEmail;
         }
         $items[$lang->story->keywords]      = $story->keywords;
-        $items[$lang->story->legendMailto]  = $this->getMailtoList($story);
+        $items[$lang->story->legendMailto]  = joinMailtoList($story->mailto, $users);
 
         return $items;
     }
