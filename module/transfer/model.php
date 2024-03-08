@@ -763,6 +763,7 @@ class transferModel extends model
         {
             $rows       = $this->getRowsFromExcel();  // 从Excel中获取数据
             $moduleData = $this->processRows4Fields($rows, $fields);  // 处理Excel中的数据过滤无效字段
+            if(dao::isError()) return false;
             $moduleData = $this->parseExcelDropdownValues($module, $moduleData, $filter, $fields); // 解析Excel中下拉字段的数据，转换成具体value
 
             $this->createTmpFile($moduleData); //将格式化后的数据写入临时文件中
@@ -863,8 +864,7 @@ class transferModel extends model
             if(file_exists($this->session->fileImportFileName)) unlink($this->session->fileImportFileName);
             unset($_SESSION['fileImportFileName']);
             unset($_SESSION['fileImportExtension']);
-            echo js::alert($this->lang->excel->noData);
-            return print(js::locate('back'));
+            dao::$errors['message'] = $this->lang->excel->noData;
         }
 
         return $objectDatas;
