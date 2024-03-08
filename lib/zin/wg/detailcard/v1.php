@@ -22,8 +22,14 @@ class detailCard extends wg
         /* 标题，如果不指定则尝试使用当前页面上的 `${$objectType}->title` 或 `${$objectType}->name` 的值，例如 `$story->title`、`$task->name` 。 */
         'title'      => '?string',
 
+        /* 标题颜色。 */
+        'color'      => '?string',
+
         /* 是否在标题显示 URL。 */
         'url'        => '?bool|string',
+
+        /* 工具栏。 */
+        'toolbar'    => '?array',
 
         /* 详情卡片的左侧主栏目内容区域，可以通过 `-` 来指定分割线，通过键名指定标题，通过 `html()` 来指定 HTML 内容，或者指定为 `callable` 或 `Closure` 动态生成内容，或者指定为 `content()` 属性。 */
         'sections'   => '?array',
@@ -36,6 +42,7 @@ class detailCard extends wg
     (
         'header'   => array(),
         'title'    => array(),
+        'toolbar'  => array('map' => 'btnGroup,toolbar'),
         'body'     => array('map' => 'content,section')
     );
 
@@ -57,15 +64,37 @@ class detailCard extends wg
         if(!$object)         $object     = data($objectType);
         if(!$objectID)       $objectID   = $object ? $object->id : data($objectType . 'ID');
 
-        if(!$this->prop('objectType'))  $this->setProp('objectType', $objectType);
-        if(!$this->prop('objectID'))    $this->setProp('objectID',   $objectID);
-        if(!$this->prop('object'))      $this->setProp('object',     $object);
-        if(!$this->hasProp('title'))    $this->setProp('title',      isset($object->name) ? $object->name : $object->title);
+        if(!$this->hasProp('objectType'))  $this->setProp('objectType', $objectType);
+        if(!$this->hasProp('objectID'))    $this->setProp('objectID',   $objectID);
+
+        if($object)
+        {
+            if(!$this->hasProp('object')) $this->setProp('object', $object);
+            if(!$this->hasProp('color') && isset($object->color)) $this->setProp('color', $object->color);
+            if(!$this->hasProp('title')) $this->setProp('title',  isset($object->name) ? $object->name : $object->title);
+        }
+    }
+
+    protected function buildToolbar()
+    {
+        $toolbar      = $this->prop('toolbar');
+        $toolbarBlock = $this->block('toolbar');
+
+        if(!$toolbarBlock && !$toolbar) return null;
+
+        $toolbarProps = array_is_list($toolbar) ? array('items' => $toolbar) : $toolbar;
+
+        return div
+        (
+            setClass('detail-card-toolbar panel-actions'),
+            $toolbarProps ? toolbar(set::size('sm'), set($toolbarProps)) : null,
+            $toolbarBlock
+        );
     }
 
     protected function buildTitle()
     {
-        list($objectID, $title, $url) = $this->prop(array('objectID', 'title', 'url'));
+        list($objectID, $title, $url, $color) = $this->prop(array('objectID', 'title', 'url', 'color'));
         $titleBlock = $this->block('title');
         $titleView = $title;
 
@@ -74,6 +103,8 @@ class detailCard extends wg
             setClass('panel-title'),
             set::id($objectID),
             set::title($title),
+            set::color($color),
+            set::idClass('font-normal'),
             set::titleClass('text-md text-clip min-w-0'),
             set::url($url),
             $titleBlock
@@ -88,7 +119,8 @@ class detailCard extends wg
         (
             setClass('detail-card-header panel-heading row gap-2 items-center flex-none surface'),
             $this->buildTitle(),
-            $this->block('header')
+            $this->block('header'),
+            $this->buildToolbar()
         );
     }
 
