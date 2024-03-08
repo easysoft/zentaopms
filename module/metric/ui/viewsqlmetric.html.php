@@ -260,7 +260,12 @@ detailHeader
             set::entityID($metric->id),
             set::level(1),
             set::text($metric->name)
-        )
+        ),
+        $metric->deleted == '1' ? label
+        (
+            set::text($lang->deleted),
+            setClass('danger')
+        ) : null
     ),
     to::prefix
     (

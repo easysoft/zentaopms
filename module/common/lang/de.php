@@ -99,6 +99,7 @@ $lang->all                = 'All';
 $lang->viewDetails        = 'View Details';
 $lang->childrenAB         = 'C';
 $lang->branchName         = 'Branch/Platform';
+$lang->deleted            = 'Deleted';
 
 $lang->actions         = 'Aktionen';
 $lang->restore         = 'Wiederherstellen';
