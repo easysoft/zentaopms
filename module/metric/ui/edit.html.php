@@ -56,7 +56,7 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::label($lang->metric->scope),
+            set::label($lang->metric->formLabel->scope),
             set::name('scope'),
             set::items($lang->metric->scopeList),
             set::value($metric->scope),
@@ -66,7 +66,7 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::label($lang->metric->object),
+            set::label($lang->metric->formLabel->object),
             set::name('object'),
             set::items($lang->metric->objectList),
             set::value($metric->object),
@@ -76,7 +76,7 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::label($lang->metric->purpose),
+            set::label($lang->metric->formLabel->purpose),
             set::name('purpose'),
             set::items($lang->metric->purposeList),
             set::value($metric->purpose),
@@ -86,7 +86,7 @@ formPanel
     ),
     formGroup
     (
-        set::label($lang->metric->dateType),
+        set::label($lang->metric->formLabel->dateType),
         set::name('dateType'),
         set::items($lang->metric->dateTypeList),
         set::value($metric->dateType),
@@ -96,14 +96,14 @@ formPanel
     ),
     formGroup
     (
-        set::label($lang->metric->name),
+        set::label($lang->metric->formLabel->name),
         set::name('name'),
         set::value($metric->name),
         set::required(true)
     ),
     formGroup
     (
-        set::label($lang->metric->alias),
+        set::label($lang->metric->formLabel->alias),
         set::name('alias'),
         set::value($metric->alias),
         set::required(false),
@@ -111,7 +111,7 @@ formPanel
     ),
     formGroup
     (
-        set::label($lang->metric->code),
+        set::label($lang->metric->formLabel->code),
         set::name('code'),
         set::value($metric->code),
         set::required(true),
@@ -124,7 +124,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->metric->unit),
+            set::label($lang->metric->formLabel->unit),
             inputGroup
             (
                 div
@@ -159,7 +159,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->metric->unit),
+            set::label($lang->metric->formLabel->unit),
             inputGroup
             (
                 div
@@ -183,16 +183,16 @@ formPanel
     on::change('[name=customUnit]', 'addUnit'),
     formGroup
     (
-        set::label($lang->metric->desc),
-        set::control(array('control' => 'textarea', 'rows' => 3)),
+        set::label($lang->metric->formLabel->desc),
+        set::control(array('type' => 'textarea', 'rows' => 3)),
         set::name('desc'),
         set::value($metric->desc),
         set::placeholder($lang->metric->descTip)
     ),
     formGroup
     (
-        set::label($lang->metric->definition),
-        set::control(array('control' => 'textarea', 'rows' => 3)),
+        set::label($lang->metric->formLabel->definition),
+        set::control(array('type' => 'textarea', 'rows' => 3)),
         set::name('definition'),
         set::value($metric->definition),
         set::placeholder($lang->metric->definitionTip),
