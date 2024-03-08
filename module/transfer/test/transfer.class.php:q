@@ -272,8 +272,8 @@ class transferTest
     }
 
     /**
-     * 测试initValues。
-     * initValues.
+     * 测试initItems。
+     * initItems.
      *
      * @param  string $module
      * @param  bool   $withKey
@@ -281,10 +281,10 @@ class transferTest
      * @access public
      * @return array
      */
-    public function initValuesTest(string $module, bool $withKey = false, string $field = '')
+    public function initItemsTest(string $module, bool $withKey = false, string $field = '')
     {
         $fieldList = $this->initFieldListTest($module, $withKey);
-        return $fieldList[$field]['values'];
+        return $fieldList[$field]['items'];
     }
 
     /**

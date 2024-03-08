@@ -53,7 +53,7 @@ class transferModel extends model
     {
         parent::__construct();
 
-        $this->maxImport  = isset($_COOKIE['maxImport']) ? $_COOKIE['maxImport'] : 0;
+        $this->maxImport  = isset($_COOKIE['maxImport']) ? (int)$_COOKIE['maxImport'] : 0;
         $this->transferConfig = $this->config->transfer;
     }
 
@@ -161,11 +161,16 @@ class transferModel extends model
                     {
                         $funcName = 'init' . ucfirst($transferField);
                         $moduleFieldList[$transferField] = $this->$funcName($module, $field);
+                        if($transferField == 'title') $moduleFieldList['label'] = $moduleFieldList[$transferField];
                     }
                 }
             }
 
-            $moduleFieldList['values'] = $this->initValues($module, $field, $moduleFieldList, $withKey);
+            $moduleFieldList['multiple'] = $moduleFieldList['control'] == 'multiple';
+            if($moduleFieldList['control'] == 'select' || $moduleFieldList['control'] == 'multiple') $moduleFieldList['control'] = 'picker';
+            $moduleFieldList['name']  = $field;
+            $moduleFieldList['width'] = isset($this->moduleConfig->dtable->fieldList[$field]['width']) ? $this->moduleConfig->dtable->fieldList[$field]['width'] : '136px';
+            $moduleFieldList['items'] = $this->initItems($module, $field, $moduleFieldList, $withKey);
             $fieldList[$field] = $moduleFieldList;
         }
 
@@ -173,8 +178,9 @@ class transferModel extends model
         /* Copy to default multiple. */
         if(!empty($fieldList['mailto']))
         {
-            $fieldList['mailto']['control'] = 'multiple';
-            $fieldList['mailto']['values']  = $this->transferConfig->sysDataList['user'];
+            $fieldList['mailto']['control']  = 'picker';
+            $fieldList['mailto']['multiple'] = true;
+            $fieldList['mailto']['items']    = $this->transferConfig->sysDataList['user'];
         }
 
         if($this->config->edition != 'open') $fieldList = $this->initWorkflowFieldList($module, $fieldList, $fields);
@@ -211,9 +217,11 @@ class transferModel extends model
             if($options)
             {
                 $control = $field->control == 'multi-select' ? 'multiple' : 'select';
+                $fieldList[$field->field]['name']    = $field->field;
+                $fieldList[$field->field]['label']   = $field->name;
                 $fieldList[$field->field]['title']   = $field->name;
                 $fieldList[$field->field]['control'] = $control;
-                $fieldList[$field->field]['values']  = $options;
+                $fieldList[$field->field]['items']   = $options;
                 $fieldList[$field->field]['from']    = 'workflow';
                 $this->config->$module->listFields .=  ',' . $field->field;
             }
@@ -223,7 +231,7 @@ class transferModel extends model
 
     /**
      * 初始化导出字段下拉列表的数据。
-     * Init field values.
+     * Init field items.
      *
      * @param  string $model
      * @param  string $field
@@ -232,10 +240,10 @@ class transferModel extends model
      * @access public
      * @return array
      */
-    public function initValues(string $model, string $field, array $object, bool $withKey = true)
+    public function initItems(string $model, string $field, array $object, bool $withKey = true)
     {
-        $values = $object['values'];
-        if(!$object['dataSource']) return $values;
+        $items = $object['items'];
+        if(!$object['dataSource']) return $items;
 
         /* 解析dataSource。*/
         /* Parse dataSource. */
@@ -247,30 +255,30 @@ class transferModel extends model
         {
             $params = !empty($params) ? $params : '';
             $pairs  = !empty($pairs)  ? $pairs : '';
-            $values = $this->transferTao->getSourceByModuleMethod($model, $module, $method, $params, $pairs);
+            $items = $this->transferTao->getSourceByModuleMethod($model, $module, $method, $params, $pairs);
         }
         elseif(!empty($lang))
         {
             /* 如果配置了语言字段,返回语言数据。*/
             /* If config the language field, return language data. */
-            $values = isset($this->moduleLang->$lang) ? $this->moduleLang->$lang : '';
+            $items = isset($this->moduleLang->$lang) ? $this->moduleLang->$lang : '';
         }
 
         /* 如果配置了系统字段,返回系统数据。*/
-        /* If empty values put system datas. */
-        if(empty($values))
+        /* If empty items put system datas. */
+        if(empty($items))
         {
             if(strpos($this->moduleConfig->sysLangFields, $field) !== false && !empty($this->moduleLang->{$field.'List'})) return $this->moduleLang->{$field.'List'};
             if(strpos($this->moduleConfig->sysDataFields, $field) !== false && !empty($this->transferConfig->sysDataList[$field])) return $this->transferConfig->sysDataList[$field];
         }
 
-        if(is_array($values) && $withKey)
+        if(is_array($items) && $withKey)
         {
-            unset($values['']);
-            foreach($values as $key => $value) $values[$key] = $value . "(#$key)";
+            unset($items['']);
+            foreach($items as $key => $value) $items[$key] = $value . "(#$key)";
         }
 
-        return $values;
+        return $items;
     }
 
     /**
@@ -335,16 +343,16 @@ class transferModel extends model
      */
     public function initRequired(string $module, string $field)
     {
-        if(!$field) return 'no';
+        if(!$field) return false;
         $this->commonActions($module);
 
         /* 检查必填字段中是否存在该字段，如果存在返回yes，否则返回no。 */
-        /* Check whether the required field contains the field. If yes, return yes. Otherwise, return no. */
-        if(empty($this->moduleConfig->create->requiredFields)) return 'no';
+        /* Check whether the required field contains the field. If yes, return true. Otherwise, return false. */
+        if(empty($this->moduleConfig->create->requiredFields)) return false;
         $requiredFields = "," . $this->moduleConfig->create->requiredFields . ",";
-        if(strpos($requiredFields, $field) !== false) return 'yes';
+        if(strpos($requiredFields, $field) !== false) return true;
 
-        return 'no';
+        return false;
     }
 
     /**
@@ -677,8 +685,8 @@ class transferModel extends model
 
                 /* 如果字段是下拉字段并且在excel里不是下拉框的形式时，根据fieldList->value查找value。*/
                 /* If the field is a dropdown field and the value in excel is not a dropdown box, the value is found by fieldList->value. */
-                if(!in_array($control, array('select', 'multiple'))) continue;
-                $rows[$key]->$field = $this->transferTao->extractElements((string) $cellValue, $field, $fieldList[$field]['values']);
+                if(!in_array($control, array('select', 'multiple', 'picker'))) continue;
+                $rows[$key]->$field = $this->transferTao->extractElements((string) $cellValue, $field, $fieldList[$field]['items']);
             }
         }
         return $rows;
@@ -695,7 +703,7 @@ class transferModel extends model
      */
     protected function getPageDatas(array $datas, int $pagerID = 1)
     {
-        $maxImport = $this->transfer->maxImport; //每页最大导入数
+        $maxImport = $this->maxImport; //每页最大导入数
 
         $result = new stdClass();
         $result->allCount = count($datas); //所有数据
@@ -761,7 +769,7 @@ class transferModel extends model
         }
         else
         {
-            $moduleData = unserialize(file_get_contents($file));
+            $moduleData = unserialize(file_get_contents($tmpFile));
         }
 
         if(isset($fields['id'])) unset($fields['id']);

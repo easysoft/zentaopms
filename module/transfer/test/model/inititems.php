@@ -10,7 +10,7 @@ su('admin');
 
 /**
 
-title=测试 transfer->initValues();
+title=测试 transfer->initItems();
 timeout=0
 cid=1
 
@@ -21,5 +21,5 @@ cid=1
 
 $transfer = new transferTest();
 
-r($transfer->initValuesTest('task', false, 'project')) && p('11') && e('项目11'); // 测试初始化导出任务时所属项目字段
-r($transfer->initValuesTest('task', false, 'pri'))     && p('1')  && e('1');      // 测试初始化导出任务时优先级字段
+r($transfer->initItemsTest('task', false, 'project')) && p('11') && e('项目11'); // 测试初始化导出任务时所属项目字段
+r($transfer->initItemsTest('task', false, 'pri'))     && p('1')  && e('1');      // 测试初始化导出任务时优先级字段
