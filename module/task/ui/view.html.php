@@ -165,20 +165,13 @@ $tabs[] = setting()
     ->title($lang->task->legendMisc)
     ->control('taskMiscInfo');
 
-$parent = null;
-if($task->parent)
-{
-    $parent = new stdClass();
-    $parent->id   = $task->parent;
-    $parent->name = $task->parentName;
-}
-
 detail
 (
     $task->parent ? array
     (
         set::parentTitle($task->parentName),
-        set::parentUrl(createLink('task', 'view', "taskID={$task->parent}"))
+        set::parentUrl(createLink('task', 'view', "taskID={$task->parent}")),
+        to::title(to::leading(label(setClass('gray-pale rounded-full'), $lang->task->childrenAB)))
     ) : null,
     set::toolbar($toolbar),
     set::sections($sections),

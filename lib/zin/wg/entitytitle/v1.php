@@ -36,8 +36,9 @@ class entityTitle extends wg
 
     protected static array $defineBlocks = array
     (
-        'prefix' => array(),
-        'suffix' => array()
+        'prefix'  => array(),
+        'leading' => array(),
+        'suffix'  => array()
     );
 
     protected function created()
@@ -80,6 +81,7 @@ class entityTitle extends wg
                 $id,
                 array('class' => array($this->prop('idClass'), $this->prop('inline') ? 'mr' . $this->prop('gap', 2) : '')),
             ) : null,
+            $this->block('leading'),
             $this->buildParentTitle(),
             is_string($url) ?
                 a(
