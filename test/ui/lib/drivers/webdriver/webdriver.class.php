@@ -21,7 +21,7 @@ require_once('vendor/autoload.php');
  * @version   $Id$
  * @Link      http://www.zentao.net
  */
-class webdriver extends uiTester
+class webdriver
 {
     public $driver;
 
@@ -38,7 +38,6 @@ class webdriver extends uiTester
     public function __construct($driver)
     {
         $this->initBrowser($driver);
-        parent::__construct($driver);
 
         $this->cookieFile = dirname(__FILE__, 4) . '/config/cookie/cookie';
     }
@@ -568,16 +567,16 @@ class webdriver extends uiTester
     {
         if($expect == $this->getText())
         {
-            $this->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            $this->logAsserts("$step : PASS!");
+            result::saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
+            result::setResult("$step : PASS!");
             if($isClose) $this->closeBrowser();
             return true;
         }
         else
         {
-            $this->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
+            result::saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
             $this->capture();
-            $this->logAsserts("$step : FAIL!\n");
+            result::setResult("$step : FAIL!\n");
             if($isClose) $this->closeBrowser();
             throw new Exception("$step : Assert Fail");
         }
@@ -597,15 +596,15 @@ class webdriver extends uiTester
         $isExist = !empty($this->element);
         if($isExist === $expect)
         {
-            $this->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            $this->logAsserts("$step : PASS!");
+            result::saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
+            result::setResult("$step : PASS!");
             return true;
         }
         else
         {
-            $this->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
+            result::saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
             $this->capture();
-            $this->logAsserts("$step : FAIL!\n");
+            result::setResult("$step : FAIL!\n");
             $this->closeBrowser($isDie);
             throw new Exception("$step : Assert Fail");
         }
@@ -627,15 +626,15 @@ class webdriver extends uiTester
 
         if(strpos($this->attr($attribute), $expect) !== false)
         {
-            $this->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            $this->logAsserts("$step : PASS!");
+            result::saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
+            result::setResult("$step : PASS!");
             return true;
         }
         else
         {
-            $this->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
+            result::saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
             $this->capture();
-			$this->logAsserts("$step : FAIL!\n");
+			result::setResult("$step : FAIL!\n");
             $this->closeBrowser($isDie);
             throw new Exception("$step : Assert Fail");
         }
@@ -659,15 +658,15 @@ class webdriver extends uiTester
 
         if($expect == $message)
         {
-            $this->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            $this->logAsserts("$step : PASS!");
+            result::saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
+            result::setResult("$step : PASS!");
             return true;
         }
         else
         {
-            $this->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
+            result::saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
             $this->capture();
-            $this->logAsserts("$step : FAIL!\n");
+            result::setResult("$step : FAIL!\n");
             $this->closeBrowser($isDie);
             throw new Exception("$step : Assert Fail");
         }
@@ -760,7 +759,7 @@ class webdriver extends uiTester
     public function saveImage($src)
     {
         $img = "<img style='max-width:100%;' src='{$src}' />";
-        $this->saveReport($img);
+        result::saveReport($img);
     }
 
     /**
@@ -777,11 +776,11 @@ class webdriver extends uiTester
         $title = $this->getTitle();
         $url   = $this->getUrl();
         $errorTitle = $reportType == 'html' ? "<h2>Errors in: [{$title}]($url)</h2>" : "## Errors in: [{$title}]($url)";
-        $this->saveReport($errorTitle);
+        result::saveReport($errorTitle);
 
-        $reportType == 'html' ? $this->saveReport('<pre>') : $this->saveReport('```');
-        foreach($errors as $error) $this->saveReport($error);
-        $reportType == 'html' ? $this->saveReport('</pre>') : $this->saveReport('```');
+        $reportType == 'html' ? result::saveReport('<pre>') : result::saveReport('```');
+        foreach($errors as $error) result::saveReport($error);
+        $reportType == 'html' ? result::saveReport('</pre>') : result::saveReport('```');
     }
 
     /**
@@ -944,7 +943,7 @@ class webdriver extends uiTester
      */
     public function closeBrowser()
     {
-        if($this->config->reportType == 'html') $this->endReport();
+        if($this->config->reportType == 'html') result::endReport();
         $this->driver->quit();
     }
 
