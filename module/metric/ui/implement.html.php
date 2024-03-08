@@ -141,7 +141,7 @@ panel
             'text' => $lang->metric->publish,
             'class' => 'ajax-submit',
             'btnType' => 'submit',
-            'disabled' => empty($result),
+            'disabled' => !$isVerify,
             'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}&from={$from}")
         ],
     ])
