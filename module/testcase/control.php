@@ -1198,7 +1198,7 @@ class testcase extends control
 
         if($_POST)
         {
-            $cases = $this->testcaseZen->buildCasesForShowImport();
+            $cases = $this->testcaseZen->buildCasesForShowImport($productID);
             $cases = $this->testcaseZen->checkCasesForShowImport($cases);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

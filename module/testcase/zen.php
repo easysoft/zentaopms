@@ -1417,10 +1417,11 @@ class testcaseZen extends testcase
      * 构建导入用例的数据。
      * Build cases for showing imported.
      *
+     * @param  int       $productID
      * @access protected
      * @return array
      */
-    protected function buildCasesForShowImport(): array
+    protected function buildCasesForShowImport(int $productID): array
     {
         /* 初始化变量。 */
         /* Initialize variables. */
@@ -1444,6 +1445,7 @@ class testcaseZen extends testcase
                 $stepChanged = $this->buildUpdateCaseForShowImport($case, $oldCase, zget($oldSteps, $case->rawID, array()), $forceNotReview);
 
                 $case->id             = $case->rawID;
+                $case->product        = $productID;
                 $case->lastEditedBy   = $account;
                 $case->lastEditedDate = $now;
                 if($case->story != $oldCase->story) $case->storyVersion = zget($storyVersionPairs, $case->story, 1);
@@ -1455,6 +1457,7 @@ class testcaseZen extends testcase
             /* Build inserted case. */
             else
             {
+                $case->product        = $productID;
                 $case->version    = 1;
                 $case->openedBy   = $this->app->user->account;
                 $case->openedDate = $now;
@@ -1983,6 +1986,7 @@ class testcaseZen extends testcase
     protected function importCases(array $cases): void
     {
         $this->loadModel('action');
+        $daoErrors = array();
         foreach($cases as $case)
         {
             if(isset($case->id))
@@ -2001,9 +2005,10 @@ class testcaseZen extends testcase
             else
             {
                 $caseID = $this->testcase->create($case);
-                $this->testcase->syncCase2Project($case, $caseID);
+                dao::isError() ? $daoErrors = array_merge($daoErrors, dao::getError()) : $this->testcase->syncCase2Project($case, $caseID);
             }
         }
+        if(!empty($daoErrors)) dao::$errors = $daoErrors;
     }
 
     /**
