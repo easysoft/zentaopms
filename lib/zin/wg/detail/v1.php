@@ -42,7 +42,7 @@ class detail extends wg
         'parentType' => '?string',
 
         /* 父级对象 ID。 */
-        'parentID'   => '?int|string',
+        'parentID'   => '?int|string=false',
 
         /* 父级标题。 */
         'parentTitle' => '?string',
@@ -191,11 +191,13 @@ class detail extends wg
             set::titleClass('text-lg text-clip font-bold'),
             set::type($objectType),
             set::color($color),
+            set::parentTitleClass('text-lg text-clip font-bold'),
             set::parent($parent),
             set::parentID($parentID),
             set::parentUrl($parentUrl),
             set::parentTitle($parentTitle),
             set::parentType($parentType),
+            set::joinerClass('text-lg'),
             $titleBlock
         );
     }

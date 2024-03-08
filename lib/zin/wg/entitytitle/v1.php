@@ -17,6 +17,7 @@ class entityTitle extends wg
         'deleted?: bool',                 // 是否已删除。
         'type?: string',                  // 对象类型。
         'color?: string',                 // 颜色。
+        'gap?: string|int',               // 间隔。
         'linkProps?: array',              // 链接属性。
         'titleProps?: array',             // 标题属性。
         'titleClass?: array|string',      // 标签类名。
@@ -77,8 +78,9 @@ class entityTitle extends wg
             $id ? idLabel::create
             (
                 $id,
-                array('class' => array($this->prop('idClass'), $this->prop('inline') ? 'mr-2' : '')),
+                array('class' => array($this->prop('idClass'), $this->prop('inline') ? 'mr' . $this->prop('gap', 2) : '')),
             ) : null,
+            $this->buildParentTitle(),
             is_string($url) ?
                 a(
                     setClass('entity-title-link', $titleClass),
@@ -127,10 +129,9 @@ class entityTitle extends wg
     {
         return div
         (
-            setClass('entity-title', $this->prop('inline') ? '' : 'row items-center gap-2'),
+            setClass('entity-title', $this->prop('inline') ? '' : 'row items-center gap-' . $this->prop('gap', 2)),
             set($this->getRestProps()),
             $this->block('prefix'),
-            $this->buildParentTitle(),
             $this->buildTitle(),
             $this->children(),
             $this->block('suffix')
