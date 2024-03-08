@@ -50,7 +50,7 @@ formPanel
                 label
                 (
                     set::text($lang->metric->tips->noticeUnchangeable),
-                    setClass('label ghost state600 text-gray-400')
+                    setClass('gray-200-pale')
                 )
             )
         )
