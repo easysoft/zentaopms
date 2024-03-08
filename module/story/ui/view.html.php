@@ -74,7 +74,7 @@ if($story->files)
     );
 }
 
-/* 子需求列表。 */
+/* 子需求列表。 Children list. */
 if($story->children)
 {
     $cols['id']         = $config->story->dtable->fieldList['id'];
@@ -155,7 +155,7 @@ if($isStoryType && common::hasPriv('story', 'tasks'))
         ->executions($story->executions);
 }
 
-/* 相关信息。 */
+/* 相关信息。 Related info. */
 $tabs[] = setting()
         ->group('relatives')
         ->title($lang->story->legendRelated)

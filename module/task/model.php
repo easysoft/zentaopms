@@ -1192,9 +1192,9 @@ class taskModel extends model
      * @access public
      * @return string
      */
-    public function getAssignedTo4Multi(string|array $members, object $task, string $type = 'current'): string
+    public function getAssignedTo4Multi(string|array|bool $members, object $task, string $type = 'current'): string
     {
-        if(empty($task->team) || $task->mode != 'linear') return $task->assignedTo;
+        if(!$members || empty($task->team) || $task->mode != 'linear') return $task->assignedTo;
 
         /* Format task team members. */
         if(!is_array($members)) $members = explode(',', trim($members, ','));
