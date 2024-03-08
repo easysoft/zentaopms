@@ -400,6 +400,13 @@ class projectTao extends projectModel
         $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
         if($product->acl != 'open') $this->loadModel('user')->updateUserView(array($productID), 'product');
 
+        $productSettingList = isset($this->config->global->productSettingList) ? json_decode($this->config->global->productSettingList, true) : array();
+        if($this->config->edition != 'open' && $productSettingList)
+        {
+            $productSettingList[] = $productID;
+            $this->loadModel('setting')->setItem('system.common.global.productSettingList', json_encode($productSettingList));
+        }
+
         /* Link product. */
         $projectProduct = new stdclass();
         $projectProduct->project = $projectID;
