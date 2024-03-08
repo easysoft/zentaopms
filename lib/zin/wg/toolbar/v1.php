@@ -8,12 +8,14 @@ require_once dirname(__DIR__) . DS . 'actionitem' . DS . 'v1.php';
 
 class toolbar extends wg
 {
-    protected static array $defineProps = array(
-        'items?:array',
-        'btnClass?:string',
+    protected static array $defineProps = array
+    (
+        'items?: array',
+        'btnClass?: string',
         'btnType?: string',
         'size?: string',
-        'btnProps?: array'
+        'btnProps?: array',
+        'urlFormatter?: array'
     );
 
     public function onBuildItem($item): node|null
@@ -29,12 +31,44 @@ class toolbar extends wg
         }
 
         $type = $item->prop('type');
-        if($type === 'divider')                        return div(setClass('divider toolbar-divider'));
+        if($type === 'divider') return div(setClass('divider toolbar-divider'));
+
+        $urlFormatter = $this->prop('urlFormatter');
+        if($urlFormatter && ($type === 'btnGroup' || $type == 'dropdown'))
+        {
+            $itemChildren = $item->prop('items');
+            if(is_array($itemChildren))
+            {
+                foreach($itemChildren as $key => &$child)
+                {
+                    if(is_array($child) && isset($child['url']))
+                    {
+                        $url = $child['url'];
+                        if($url)
+                        {
+                            $url = str_replace(array_keys($urlFormatter), array_values($urlFormatter), $url);
+                            $itemChildren[$key]['url'] = $url;
+                        }
+                    }
+                }
+                $item->setProp('items', $itemChildren);
+            }
+        }
+
         if($type === 'btnGroup')                       return new btnGroup(inherit($item));
         if($type == 'dropdown' || $type == 'checkbox') return new actionItem(inherit($item));
 
         list($btnClass, $btnProps, $btnType, $size) = $this->prop(array('btnClass', 'btnProps', 'btnType', 'size'));
         $btn = empty($item->prop('back')) ? '\zin\btn' : '\zin\backBtn';
+
+
+        $url = $item->prop('url');
+        if($url && $urlFormatter)
+        {
+            $url = str_replace(array_keys($urlFormatter), array_values($urlFormatter), $url);
+            $item->setProp('url', $url);
+        }
+
         return new $btn
         (
             setClass('toolbar-item', $btnClass),

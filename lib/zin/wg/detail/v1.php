@@ -56,6 +56,9 @@ class detail extends wg
         /* 底部固定操作按钮的定义，不包括返回按钮，可以通过 `-` 来指定分割线。 */
         'actions'    => '?array',
 
+        /* 操作按钮链接格式化参数。 */
+        'urlFormatter' => '?array',
+
         /* 右上方工具栏的定义。 */
         'toolbar'    => '?array',
 
@@ -156,6 +159,8 @@ class detail extends wg
             if(!$this->hasProp('parentTitle')) $this->setProp('parentTitle', isset($parent->name) ? $parent->name : $parent->title);
             if(!$this->hasProp('parentUrl'))   $this->setProp('parentUrl',   $parent->url);
         }
+
+        if(!$this->hasProp('urlFormatter')) $this->setProp('urlFormatter', array('{id}' => $objectID));
     }
 
     protected function buildBackBtn(?array $props = null)
@@ -214,7 +219,11 @@ class detail extends wg
         return div
         (
             setClass('detail-toolbar'),
-            $toolbarProps ? toolbar(set($toolbarProps)) : null,
+            $toolbarProps ? toolbar
+            (
+                set::urlFormatter($this->prop('urlFormatter')),
+                set($toolbarProps),
+            ) : null,
             $toolbarBlock
         );
     }
@@ -311,11 +320,6 @@ class detail extends wg
             else array_unshift($toolbarProps['items'], $backBtn, array('type' => 'divider'));
         }
 
-        foreach($toolbarProps['items'] as &$item)
-        {
-            if(is_array($item) && isset($item['url'])) $item['url'] = str_replace('{id}', "$objectID", $item['url']);
-        }
-
         return div
         (
             setClass('detail-actions center sticky bottom-0 z-10'),
@@ -324,6 +328,7 @@ class detail extends wg
                 setClass('bg-black text-fore-in-dark backdrop-blur bg-opacity-60 rounded p-1.5'),
                 $toolbarProps ? toolbar
                 (
+                    set::urlFormatter($this->prop('urlFormatter')),
                     set::btnType('ghost'),
                     set($toolbarProps)
                 ) : null,
