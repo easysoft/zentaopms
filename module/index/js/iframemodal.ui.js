@@ -26,4 +26,9 @@ $(function()
             $body.zuiInit().removeClass('invisible');
         }
     });
+
+    $(document).on('click', '[data-dismiss="modal"]', function()
+    {
+        parent.$.closeModal();
+    });
 });
