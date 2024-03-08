@@ -139,18 +139,21 @@ $config->story->form->review['childStories']   = array('type' => 'string', 'cont
 $config->story->form->review['status']         = array('type' => 'string', 'control' => 'hidden',         'required' => false, 'default' => '');
 
 $config->story->form->activate = array();
-$config->story->form->activate['assignedTo']     = array('type' => 'string',   'required' => false, 'default' => '');
-$config->story->form->activate['activatedDate']  = array('type' => 'datetime', 'required' => false, 'default' => $now);
-$config->story->form->activate['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
-$config->story->form->activate['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
-$config->story->form->activate['closedBy']       = array('type' => 'string',   'required' => false, 'default' => '');
-$config->story->form->activate['closedReason']   = array('type' => 'string',   'required' => false, 'default' => '');
-$config->story->form->activate['closedDate']     = array('type' => 'datetime', 'required' => false, 'default' => null);
-$config->story->form->activate['reviewedBy']     = array('type' => 'string',   'required' => false, 'default' => '');
-$config->story->form->activate['reviewedDate']   = array('type' => 'datetime', 'required' => false, 'default' => null);
-$config->story->form->activate['assignedDate']   = array('type' => 'datetime', 'required' => false, 'default' => $now);
-$config->story->form->activate['duplicateStory'] = array('type' => 'int',      'required' => false, 'default' => 0);
-$config->story->form->activate['childStories']   = array('type' => 'string',   'required' => false, 'default' => '');
+$config->story->form->activate['assignedTo']      = array('type' => 'string',   'required' => false, 'default' => '');
+$config->story->form->activate['activatedDate']   = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->story->form->activate['lastEditedDate']  = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->story->form->activate['lastEditedBy']    = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
+$config->story->form->activate['closedBy']        = array('type' => 'string',   'required' => false, 'default' => '');
+$config->story->form->activate['closedReason']    = array('type' => 'string',   'required' => false, 'default' => '');
+$config->story->form->activate['closedDate']      = array('type' => 'datetime', 'required' => false, 'default' => null);
+$config->story->form->activate['reviewedBy']      = array('type' => 'string',   'required' => false, 'default' => '');
+$config->story->form->activate['reviewedDate']    = array('type' => 'datetime', 'required' => false, 'default' => null);
+$config->story->form->activate['assignedDate']    = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->story->form->activate['duplicateStory']  = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->story->form->activate['childStories']    = array('type' => 'string',   'required' => false, 'default' => '');
+$config->story->form->activate['retractedBy']     = array('type' => 'string',   'required' => false, 'default' => '');
+$config->story->form->activate['retractedReason'] = array('type' => 'string',   'required' => false, 'default' => '');
+$config->story->form->activate['retractedDate']   = array('type' => 'datetime', 'required' => false, 'default' => null);
 
 $config->story->form->close = array();
 $config->story->form->close['status']         = array('type' => 'string',   'required' => false, 'default' => 'closed');

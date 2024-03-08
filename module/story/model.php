@@ -1828,6 +1828,12 @@ class storyModel extends model
 
         $changes = common::createChanges($oldStory, $story);
         if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Activated');
+
+        if($this->config->edition == 'ipd' and $oldStory->demand)
+        {
+            $this->loadModel('demand')->changeDemandStatus($oldStory->demand, '0', true);
+            $this->loadModel('action')->create('demand', $oldStory->demand, 'restored', '', $storyID);
+        }
         return $changes;
     }
 
