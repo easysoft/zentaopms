@@ -121,6 +121,7 @@ $lang->importSuccess   = 'Gespeichert';
 $lang->fail            = 'Fehlgeschlagen';
 $lang->addFiles        = 'Hinzufügen ';
 $lang->deleteSuccess   = 'Gelöscht';
+$lang->deleted         = 'Gelöscht';
 $lang->files           = 'Datei ';
 $lang->pasteText       = 'Einfügen';
 $lang->uploadImages    = 'Hochladen';

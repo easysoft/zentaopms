@@ -121,6 +121,7 @@ $lang->importSuccess   = '导入成功';
 $lang->fail            = '失败';
 $lang->addFiles        = '上传了附件 ';
 $lang->deleteSuccess   = '删除成功';
+$lang->deleted         = '已删除';
 $lang->files           = '附件 ';
 $lang->pasteText       = '多项录入';
 $lang->uploadImages    = '多图上传 ';

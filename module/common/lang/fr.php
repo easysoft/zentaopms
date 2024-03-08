@@ -121,6 +121,7 @@ $lang->importSuccess   = 'Sauvé';
 $lang->fail            = 'Echec';
 $lang->addFiles        = 'Fichiers ajoutés ';
 $lang->deleteSuccess   = 'Supprimé';
+$lang->deleted         = 'Supprimé';
 $lang->files           = 'Fichiers ';
 $lang->pasteText       = 'Collage Multi-lignes';
 $lang->uploadImages    = 'Upload Multi-images';

@@ -8,25 +8,29 @@ class entityTitle extends wg
 {
     protected static array $defineProps = array
     (
-        'id?: string|int',                       // 对象 ID。
-        'title?: string',                        // 标题文本。
-        'url?: string|bool',                     // 标题链接。
-        'object?: object',                       // 对象。
-        'type?: string',                         // 对象类型。
-        'color?: string',                        // 颜色。
-        'titleProps?: array',                    // 标题属性。
-        'titleClass?: array|string="font-bold"', // 标签类名。
-        'joiner?: string="/"',                   // 连接符。
-        'joinerClass?: array|string',            // 连接符类名。
-        'parentId?: string|int',                 // 父级对象 ID。
-        'parentTitle?: string',                  // 父级标题文本。
-        'parentUrl?: string|bool',               // 父级标题链接。
-        'parent?: object',                       // 父级对象。
-        'parentType?: string',                   // 父级对象类型。
-        'parentColor?: string',                  // 父级颜色。
-        'parentClass?: array|string',            // 父级类名。
-        'parentTitleProps?: string',             // 父级标题属性。
-        'parentTitleClass?: array|string'        // 父级标签类名。
+        'id?: string|int',                // 对象 ID。
+        'idClass?: array|string',         // ID 类名。
+        'title?: string',                 // 标题文本。
+        'inline?: bool',                  // 是否启用内联样式。
+        'url?: string|bool',              // 标题链接。
+        'object?: object',                // 对象。
+        'deleted?: bool',                 // 是否已删除。
+        'type?: string',                  // 对象类型。
+        'color?: string',                 // 颜色。
+        'linkProps?: array',              // 链接属性。
+        'titleProps?: array',             // 标题属性。
+        'titleClass?: array|string',      // 标签类名。
+        'joiner?: string="/"',            // 连接符。
+        'joinerClass?: array|string',     // 连接符类名。
+        'parentId?: string|int',          // 父级对象 ID。
+        'parentTitle?: string',           // 父级标题文本。
+        'parentUrl?: string|bool',        // 父级标题链接。
+        'parent?: object',                // 父级对象。
+        'parentType?: string',            // 父级对象类型。
+        'parentColor?: string',           // 父级颜色。
+        'parentClass?: array|string',     // 父级类名。
+        'parentTitleProps?: string',      // 父级标题属性。
+        'parentTitleClass?: array|string' // 父级标签类名。
     );
 
     protected static array $defineBlocks = array
@@ -40,12 +44,13 @@ class entityTitle extends wg
         $object = $this->prop('object');
         if($object)
         {
-            if(!$this->hasProp('id'))    $this->setProp('id', $object->id);
-            if(!$this->hasProp('title')) $this->setProp('title', isset($object->title) ? $object->title : $object->name);
-            if(!$this->hasProp('url'))   $this->setProp('url', $object->url);
-            if(!$this->hasProp('color')) $this->setProp('color', $object->color);
+            if(!$this->hasProp('id'))      $this->setProp('id', $object->id);
+            if(!$this->hasProp('title'))   $this->setProp('title', isset($object->title) ? $object->title : $object->name);
+            if(!$this->hasProp('url'))     $this->setProp('url', $object->url);
+            if(!$this->hasProp('color'))   $this->setProp('color', $object->color);
 
-            if(!$this->hasProp('parent') && isset($object->parent)) $this->setProp('parent', $object->parent);
+            if(!$this->hasProp('deleted') && isset($object->deleted)) $this->setProp('deleted', $object->deleted);
+            if(!$this->hasProp('parent') && isset($object->parent))  $this->setProp('parent', $object->parent);
         }
 
         $parent = $this->prop('parent');
@@ -60,19 +65,26 @@ class entityTitle extends wg
 
     protected function buildTitle()
     {
-        list($id, $title, $url, $type, $color, $titleProps, $titleClass) = $this->prop(array('id', 'title', 'url', 'type', 'color', 'titleProps', 'titleClass'));
+        global $lang;
+
+        list($id, $title, $url, $type, $color, $titleProps, $titleClass, $deleted) = $this->prop(array('id', 'title', 'url', 'type', 'color', 'titleProps', 'titleClass', 'deleted'));
 
         if($url === true && $type) $url = createLink($type, 'view', $type . 'ID={id}');
         if(is_string($url) && $id) $url = str_replace('{id}', "$id", $url);
 
         return array
         (
-            $id ? idLabel::create($id) : null,
+            $id ? idLabel::create
+            (
+                $id,
+                array('class' => array($this->prop('idClass'), $this->prop('inline') ? 'mr-2' : '')),
+            ) : null,
             is_string($url) ?
                 a(
                     setClass('entity-title-link', $titleClass),
                     set::href($url),
                     set($titleProps),
+                    set($this->prop('linkProps')),
                     $color ? setStyle('color', $color) : null,
                     $title
                 ) : span
@@ -81,7 +93,8 @@ class entityTitle extends wg
                     set($titleProps),
                     $color ? setStyle('color', $color) : null,
                     $title
-                )
+                ),
+            $deleted ? span(setClass('label danger'), $lang->deleted) : null
         );
     }
 
@@ -114,7 +127,7 @@ class entityTitle extends wg
     {
         return div
         (
-            setClass('entity-title row items-center gap-2'),
+            setClass('entity-title', $this->prop('inline') ? '' : 'row items-center gap-2'),
             set($this->getRestProps()),
             $this->block('prefix'),
             $this->buildParentTitle(),
