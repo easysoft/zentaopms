@@ -93,7 +93,8 @@ $config->upgrade->execFlow['18_7']        = array('functions' => 'processHistory
 $config->upgrade->execFlow['18_8']        = array('functions' => 'upgradeTesttaskMembers,deleteGeneralReportBlock,stopOldCron');
 $config->upgrade->execFlow['18_9']        = array('functions' => 'addDefaultTraincoursePriv,renameBIModule,migrateXuanClientSettings');
 $config->upgrade->execFlow['18_10_1']     = array('functions' => 'migrateAIModelConfig');
-$config->upgrade->execFlow['20_0_alpha1'] = array('functions' => 'revertStoryCustomFields,hideOA,updateMetricDateType,update18101,migrateAIModelConfig');
+$config->upgrade->execFlow['20_0_alpha1'] = array('functions' => 'revertStoryCustomFields');
+$config->upgrade->execFlow['20_0_beta1']  = array('functions' => 'hideOA,updateMetricDateTypeupdate18101,migrateAIModelConfig');
 
 if(!empty($config->isINT))
 {
