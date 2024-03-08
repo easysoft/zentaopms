@@ -1349,11 +1349,17 @@ class treeModel extends model
      * @param  string $type
      * @param  object $module
      * @access public
-     * @return string
+     * @return object
      */
-    public function createTicketLink(string $type, object $module): string
+    public function createTicketLink(string $type, object $module): object
     {
-        return html::a(helper::createLink('ticket', $this->app->methodName, "type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+        $data = new stdclass();
+        $data->id     = $module->id;
+        $data->parent = $module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('ticket', $this->app->methodName, "type=byModule&param={$module->id}");
+
+        return $data;
     }
 
     /**
