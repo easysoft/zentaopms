@@ -141,10 +141,20 @@ class transferModel extends model
     {
         if(file_exists($filePath))
         {
-            $tmpPath = $this->app->getAppRoot() . 'tmp/import/excel' . $this->app->user->account . time();
             $this->app->loadClass('pclzip', true);
-            $zip   = new pclzip($filePath);
-            $zip->extract(PCLZIP_OPT_PATH, $tmpPath);
+            $zip = new pclzip($filePath);
+
+            $tmpPath = $this->app->getAppRoot() . 'tmp/import/excel' . $this->app->user->account . time();
+
+            /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
+            /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
+            $extractContents = array();
+            $extractContents[] = '[Content_Types].xml';
+            $extractContents[] = 'docProps/';
+            $extractContents[] = '_rels/';
+            $extractContents[] = 'xl/';
+
+            $zip->extract(PCLZIP_OPT_PATH, $tmpPath, PCLZIP_OPT_BY_NAME, $extractContents);
 
             $sheet2Path = $tmpPath . '/xl/worksheets/sheet2.xml';
             if(file_exists($sheet2Path))
