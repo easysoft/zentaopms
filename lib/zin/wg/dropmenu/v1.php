@@ -111,7 +111,7 @@ class dropmenu extends wg
                         $branchName = $app->control->branch->getByID((string)$branchID);
                     }
                     if($module == 'testtask' && $method == 'browse') $extra = data('type');
-                    if(($app->moduleName == 'tree' && $app->methodName == 'browse') || ($module == 'tree' || $method == 'browse'))
+                    if($app->moduleName == 'tree' && $app->methodName == 'browse')
                     {
                         $module = 'tree';
                         $method = 'browse';
