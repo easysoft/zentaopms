@@ -14,7 +14,7 @@ $lang->datatable->required           = '必选';
 $lang->datatable->confirmReset       = '恢复默认后，列表的相关设置将被清空，您确定要恢复默认吗？';
 $lang->datatable->setGlobal          = '应用到全局';
 $lang->datatable->resetGlobal        = '全局恢复默认';
-$lang->datatable->confirmSetGlobal   = '应用到全局后，系统内非自定义的列表设置将默认按照改列表规则显示，您确定要应用到全局吗？';
+$lang->datatable->confirmSetGlobal   = '应用到全局后，系统内非自定义的列表设置将默认按照该列表规则显示，您确定要应用到全局吗？';
 $lang->datatable->confirmGlobalReset = '全局恢复默认后，系统内非自定义的列表设置将被清空，您确定要恢复默认吗？';
 
 $lang->datatable->branch   = '分支';
