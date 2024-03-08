@@ -17,12 +17,12 @@ title=测试 transfer->generateExportDatas();
 timeout=0
 cid=1
 
-- 测试导出任务类型第41条的type属性 @开发
+- 测试导出任务类型第41条的type属性 @devel
 - 测试导出任务所属项目第41条的project属性 @项目11(#11)
 
 */
 
 $transfer = new transferTest();
 
-r($transfer->generateExportDatasTest('task')) && p('41:type') && e('开发');           // 测试导出任务类型
+r($transfer->generateExportDatasTest('task')) && p('41:type')    && e('devel');       // 测试导出任务类型
 r($transfer->generateExportDatasTest('task')) && p('41:project') && e('项目11(#11)'); // 测试导出任务所属项目

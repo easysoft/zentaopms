@@ -544,7 +544,7 @@ class transferModel extends model
                 $lists[$listName] = array();
                 if(!empty($fieldList[$field]))
                 {
-                    $lists[$listName] = $fieldList[$field]['values'];
+                    $lists[$listName] = !empty($fieldList[$field]['items']) ? $fieldList[$field]['items'] : $fieldList[$field]['values'];
 
                     /* 从语言项里赋值。*/
                     /* Set value from lang. */
