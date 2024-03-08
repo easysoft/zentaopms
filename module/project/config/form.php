@@ -20,7 +20,7 @@ $config->project->form->create['PM']         = array('type' => 'string', 'requir
 $config->project->form->create['budget']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['budgetUnit'] = array('type' => 'string', 'required' => false, 'default' => 'CNY');
 $config->project->form->create['begin']      = array('type' => 'date',   'required' => true);
-$config->project->form->create['end']        = array('type' => 'date',   'required' => true,  'default' => null);
+$config->project->form->create['end']        = array('type' => 'date',   'required' => false, 'default' => null);
 $config->project->form->create['days']       = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->project->form->create['desc']       = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 $config->project->form->create['acl']        = array('type' => 'string', 'required' => false, 'default' => '');
