@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'label' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'idlabel' . DS . 'v1.php';
 
 class entityLabel extends wg
 {
@@ -48,11 +48,7 @@ class entityLabel extends wg
         $className = $this->prop('idClass');
         if(!isset($entityID)) return null;
 
-        return new label
-        (
-            setClass('justify-center rounded-full px-1.5 h-3.5', $className),
-            $entityID
-        );
+        return idLabel::create($entityID, array('class' => $className));
     }
 
     private function buildEntityName(): node
