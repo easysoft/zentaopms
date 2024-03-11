@@ -9,6 +9,8 @@ use Facebook\WebDriver\WebDriverSelect;
 use Facebook\WebDriver\WebDriverTargetLocator;
 use Facebook\WebDriver\WebDriverDimension;
 
+use function zin\globalSearch;
+
 require_once('vendor/autoload.php');
 
 /**
@@ -33,12 +35,19 @@ class webdriver
 
     public $cookieFile;
 
+    public $results;
+
+    public $errors = array();
+
     protected $exceptions = array();
 
-    public function __construct($driver)
+    public function __construct($config)
     {
-        $this->initBrowser($driver);
+        global $results;
+        $this->results = $results;
+        $this->config  = $config;;
 
+        $this->initBrowser($config);
         $this->cookieFile = dirname(__FILE__, 4) . '/config/cookie/cookie';
     }
 
@@ -312,7 +321,8 @@ class webdriver
      */
     public function capture($image = '', $saveReport = true)
     {
-        if(!$image) $image = $this->getImagePath();
+        $image = $image ? $image : $this->config->captureRoot;
+
         if(empty($this->element))
         {
             $this->driver->takeScreenshot($image);
@@ -321,6 +331,7 @@ class webdriver
         {
             $this->element->takeElementScreenshot($image);
         }
+
         $imageUrl = str_replace($this->config->captureRoot, $this->config->captureWebRoot, $image);
         if($saveReport)
         {
@@ -567,16 +578,16 @@ class webdriver
     {
         if($expect == $this->getText())
         {
-            result::saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            result::setResult("$step : PASS!");
+            $this->results->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
+            $this->results->setResult("$step : PASS!");
             if($isClose) $this->closeBrowser();
             return true;
         }
         else
         {
-            result::saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
+            $this->results->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
             $this->capture();
-            result::setResult("$step : FAIL!\n");
+            $this->results->setResult("$step : FAIL!\n");
             if($isClose) $this->closeBrowser();
             throw new Exception("$step : Assert Fail");
         }
@@ -596,15 +607,15 @@ class webdriver
         $isExist = !empty($this->element);
         if($isExist === $expect)
         {
-            result::saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            result::setResult("$step : PASS!");
+            $this->results->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
+            $this->results->setResult("$step : PASS!");
             return true;
         }
         else
         {
-            result::saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
+            $this->results->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
             $this->capture();
-            result::setResult("$step : FAIL!\n");
+            $this->results->setResult("$step : FAIL!\n");
             $this->closeBrowser($isDie);
             throw new Exception("$step : Assert Fail");
         }
@@ -626,15 +637,15 @@ class webdriver
 
         if(strpos($this->attr($attribute), $expect) !== false)
         {
-            result::saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            result::setResult("$step : PASS!");
+            $this->results->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
+            $this->results->setResult("$step : PASS!");
             return true;
         }
         else
         {
-            result::saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
+            $this->results->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
             $this->capture();
-			result::setResult("$step : FAIL!\n");
+			$this->results->setResult("$step : FAIL!\n");
             $this->closeBrowser($isDie);
             throw new Exception("$step : Assert Fail");
         }
@@ -658,15 +669,15 @@ class webdriver
 
         if($expect == $message)
         {
-            result::saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            result::setResult("$step : PASS!");
+            $this->results->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
+            $this->results->setResult("$step : PASS!");
             return true;
         }
         else
         {
-            result::saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
+            $this->results->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
             $this->capture();
-            result::setResult("$step : FAIL!\n");
+            $this->results->setResult("$step : FAIL!\n");
             $this->closeBrowser($isDie);
             throw new Exception("$step : Assert Fail");
         }
@@ -686,7 +697,7 @@ class webdriver
         foreach($alerts as $alert)
         {
             $alertInput      = $alert->findElement(WebDriverBy::tagName('input'))->getAttribute('value');
-            $this->errors[]  = $alert->getText() . $alertInput;
+            $this->results->errors[]  = $alert->getText() . $alertInput;
         }
         $this->getErrorsInZinBar();
 
@@ -707,7 +718,7 @@ class webdriver
                 foreach($alerts as $alert)
                 {
                     $alertInput      = $alert->findElement(WebDriverBy::tagName('input'))->getAttribute('value');
-                    $this->errors[]  = $alert->getText() . $alertInput;
+                    $this->results->errors[]  = $alert->getText() . $alertInput;
                 }
                 $this->getErrorsInZinBar();
             }
@@ -716,10 +727,10 @@ class webdriver
         $this->driver->switchTo()->defaultContent();
         if(!empty($switchToIframe)) $this->switchTo($switchToIframe);
 
-        if($this->errors == array()) return true;
+        if(empty($this->results->errors)) return true;
 
-        $this->saveErrorsToReport($this->errors);
-        return $this->errors;
+        $this->saveErrorsToReport($this->results->errors);
+        return $this;
     }
 
     /**
@@ -740,7 +751,7 @@ class webdriver
                 $errorInfo = $errorDiv->findElement(WebDriverBy::xpath('div[1]'))->getText();
                 $errorLine = $errorDiv->findElement(WebDriverBy::xpath('div[2]/strong'))->getText();
                 $errorFile = $errorDiv->findElement(WebDriverBy::xpath('div[2]/span'))->getText();
-                $this->errors[] = "Error: $errorInfo\nLine: $errorLine $errorFile";
+                $this->results->errors[] = "Error: $errorInfo\nLine: $errorLine $errorFile";
             }
         }
         catch(Exception $e)
@@ -759,7 +770,7 @@ class webdriver
     public function saveImage($src)
     {
         $img = "<img style='max-width:100%;' src='{$src}' />";
-        result::saveReport($img);
+        $this->results->saveReport($img);
     }
 
     /**
@@ -776,11 +787,11 @@ class webdriver
         $title = $this->getTitle();
         $url   = $this->getUrl();
         $errorTitle = $reportType == 'html' ? "<h2>Errors in: [{$title}]($url)</h2>" : "## Errors in: [{$title}]($url)";
-        result::saveReport($errorTitle);
+        $this->results->saveReport($errorTitle);
 
-        $reportType == 'html' ? result::saveReport('<pre>') : result::saveReport('```');
-        foreach($errors as $error) result::saveReport($error);
-        $reportType == 'html' ? result::saveReport('</pre>') : result::saveReport('```');
+        $reportType == 'html' ? $this->results->saveReport('<pre>') : $this->results->saveReport('```');
+        foreach($errors as $error) $this->results->saveReport($error);
+        $reportType == 'html' ? $this->results->saveReport('</pre>') : $this->results->saveReport('```');
     }
 
     /**
@@ -943,7 +954,7 @@ class webdriver
      */
     public function closeBrowser()
     {
-        if($this->config->reportType == 'html') result::endReport();
+        if($this->config->reportType == 'html') $this->results->endReport();
         $this->driver->quit();
     }
 

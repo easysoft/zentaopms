@@ -116,6 +116,13 @@ class page
         $this->driver->datePicker($this->xpathName, $value);
     }
 
+    /**
+     * Convert incoming page elements to xpath.
+     *
+     * @param  string $name
+     * @access public
+     * @return void
+     */
     public function __get($name)
     {
         $this->xpathName = $name;
@@ -125,11 +132,11 @@ class page
         }
         else
         {
-            $xpath = $this->getXpath($name);
+            $xpath = $this->generateXPath($name);
         }
 
-        $this->driver->waitElement($xpath, $this->timeout)->getElement($xpath);
         $this->xpath = $xpath;
+        $this->driver->waitElement($xpath, $this->timeout)->getElement($xpath);
         return $this;
     }
 
@@ -140,7 +147,7 @@ class page
      * @access public
      * @return void
      */
-    public function getXpath($name)
+    public function generateXPath($name)
     {
         $element = '//*[@name="' . $name . '"]';
 
@@ -172,31 +179,18 @@ class page
         return $element;
     }
 
+    /**
+     * Methods in the public webdriver class.
+     *
+     * @param  string $method
+     * @param  array  $params
+     * @access public
+     * @return void
+     */
     public function __call($method, $params = array())
     {
         if(method_exists($this->driver, $method)) return call_user_func_array(array($this->driver, $method), $params);
 
         return false;
-    }
-
-    /**
-     * Get result of the case.
-     *
-     * @access public
-     * @return void
-     */
-    public function getResult()
-    {
-        $result = json_decode($this->driver->__toString(), true);
-        $this->driver->errors = array();
-
-        if($result['errors'])
-        {
-            foreach($result['errors'] as $error) echo str_replace("\n", '', $error) . PHP_EOL;
-
-            return array();
-        }
-
-        return $result;
     }
 }

@@ -1,12 +1,16 @@
 <?php
+error_reporting(E_ALL);
+
 define('DS', DIRECTORY_SEPARATOR);
 define('CONFIG_ROOT', dirname(dirname(__FILE__)) . '/config/');
 include CONFIG_ROOT . '/config.php';
+
 include dirname(__FILE__) . DS . 'result.class.php';
+$results = new result();
+
 include dirname(__FILE__) . DS . 'drivers' . DS . 'webdriver' . DS . "webdriver.class.php";
 
 /* Set the error reporting. */
-error_reporting(E_ALL);
 
 include 'page.class.php';
 
@@ -49,6 +53,14 @@ function p($keys = '', $delimiter = ',')
     /* Print $_result. */
     if($keys === '' && is_array($_result)) return print_r($_result) . "\n";
     if($keys === '' || !is_array($_result) && !is_object($_result)) return print((string) $_result . "\n");
+    if(isset($_result['driver']) && in_array(explode(':', $key)[1], array('text', 'attr', 'url', 'title')))
+    {
+        list($elementName, $action) = explode(':', $key);
+
+        if($action == 'text')  $_result['driver']->$elementName->getText();
+        if($action == 'url')   $_result['driver']->getUrl();
+        if($action == 'title') $_result['driver']->getTitle();
+    }
 
     $parts  = explode(';', $keys);
     foreach($parts as $part)

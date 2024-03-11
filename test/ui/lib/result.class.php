@@ -7,13 +7,13 @@ class result
     public $caseCode;
     public $reportFile;
     public $reportURL;
+    public $errors = array();
 
 
-    public static function create($caseTitle, $caseCode)
+    public function create($caseTitle, $caseCode)
     {
-        $self = new self;
-        $self->caseTitle = $caseTitle;
-        $self->caseCode  = $caseCode;
+        $this->caseTitle = $caseTitle;
+        $this->caseCode  = $caseCode;
     }
 
     /**
@@ -24,13 +24,14 @@ class result
      */
     public function initReport($caseTitle, $caseCode)
     {
-        $reportType     = $this->config->reportType;
-        $reportTemplate = $this->config->reportTemplate[$reportType];
+        global $config;
+        $reportType     = $config->reportType;
+        $reportTemplate = $config->reportTemplate[$reportType];
 
-        $reportPath = $this->config->reportRoot . DS . $caseCode . DS;
+        $reportPath = $config->reportRoot . DS . $caseCode . DS;
         $suffix     = ($reportType == 'markdown') ? 'md' : $reportType;
         $this->reportFile = $reportPath . date('ymdhis') . '.' . $suffix;
-        $this->reportURL  = str_replace($this->config->reportRoot, $this->config->reportWebRoot, $this->reportFile);
+        $this->reportURL  = str_replace($config->reportRoot, $config->reportWebRoot, $this->reportFile);
 
         if(!is_dir($reportPath)) mkdir($reportPath, 0777, true);
 
@@ -46,7 +47,7 @@ class result
      * @access public
      * @return void
      */
-    public static function saveReport($message)
+    public function saveReport($message)
     {
         $message .= "\n";
         file_put_contents($this->reportFile, $message, FILE_APPEND);
@@ -58,36 +59,41 @@ class result
      * @access public
      * @return void
      */
-    public static function endReport()
+    public function endReport()
     {
         $message = '</div></body></html>';
-        self::saveReport($message);
+        $this->saveReport($message);
     }
 
-    public static function setResult($result)
+    public function setResult($result)
     {
-        $self = new self;
-        $self->result = $result;
+        $this->result = $result;
     }
 
     /**
-     * Get result of the case.
+     * Get results of the case.
      *
      * @access public
      * @return void
      */
     public function get()
     {
-        $result = json_decode($this->driver->__toString(), true);
-        $this->driver->errors = array();
+        global $driver;
+        $results = array();
+        $results['caseTitle']     = $this->caseTitle;
+        $results['caseCode']      = $this->caseCode;
+        $results['reportFile']    = $this->reportFile;
+        $results['reportWebRoot'] = $this->reportURL;
+        $results['errors']        = $this->errors;
+        $results['driver']        = $driver;
 
-        if($result['errors'])
+        if(!empty($results['errors']))
         {
-            foreach($result['errors'] as $error) echo str_replace("\n", '', $error) . PHP_EOL;
+            foreach($results['errors'] as $error) echo str_replace("\n", '', $error) . PHP_EOL;
 
             return array();
         }
 
-        return $result;
+        return $results;
     }
 }
