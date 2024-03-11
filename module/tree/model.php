@@ -1199,6 +1199,32 @@ class treeModel extends model
     }
 
     /**
+     * Create the manage link of a module.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return object
+     */
+    public function createManageLink(string $type, object $module): object
+    {
+        static $users;
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
+        $name = $module->name;
+        if(strpos('bug,case', $type) !== false) $name .= '[' . strtoupper(substr($type, 0, 1)) . ']';
+        if($type == 'bug' && $module->owner)    $name .= '[' . $users[$module->owner] . ']';
+
+        $data = new stdclass();
+        $data->id     = (string)$module->id;
+        $data->parent = (string)$module->parent;
+        $data->name   = $name;
+        $data->url    = helper::createLink('subject', 'browse', "currentModuleID={$module->id}");
+
+        return $data;
+    }
+
+    /**
      * 设置Bug模块树的点击链接。
      * Click link to set Bug module tree.
      *
