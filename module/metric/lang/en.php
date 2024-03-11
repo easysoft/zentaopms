@@ -270,11 +270,11 @@ $lang->metric->chartTypeList['barX'] = 'Bar X';
 $lang->metric->chartTypeList['barY'] = 'Bar Y';
 $lang->metric->chartTypeList['pie']  = 'Pie';
 
+$lang->metric->dateTypeList['nodate'] = 'No Date';
 $lang->metric->dateTypeList['year']   = 'Year';
 $lang->metric->dateTypeList['month']  = 'Month';
 $lang->metric->dateTypeList['week']   = 'Week';
 $lang->metric->dateTypeList['day']    = 'Day';
-$lang->metric->dateTypeList['nodate'] = 'No Date';
 
 $lang->metric->filter = new stdclass();
 $lang->metric->filter->common  = 'Filter';
