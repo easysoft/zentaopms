@@ -254,6 +254,36 @@ class custom extends control
     }
 
     /**
+     * 停用需求等级。
+     * Close story grade.
+     *
+     * @param  string $type
+     * @param  int    $gradeID
+     * @access public
+     * @return void
+     */
+    public function closeGrade(string $type = 'story', int $gradeID = 0)
+    {
+        if($gradeID) $this->dao->update(TABLE_STORYGRADE)->set('status')->eq('disable')->where('grade')->eq($gradeID)->andWhere('type')->eq($type)->exec();
+        return $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * 启用需求等级。
+     * Activate story grade.
+     *
+     * @param  string $type
+     * @param  int    $gradeID
+     * @access public
+     * @return void
+     */
+    public function activateGrade(string $type = 'story', int $gradeID = 0)
+    {
+        if($gradeID) $this->dao->update(TABLE_STORYGRADE)->set('status')->eq('enable')->where('grade')->eq($gradeID)->andWhere('type')->eq($type)->exec();
+        return $this->sendSuccess(array('load' => true));
+    }
+
+    /**
      * 执行关闭设置。
      * Set whether the closed execution is read-only.
      *

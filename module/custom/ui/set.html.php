@@ -497,8 +497,8 @@ if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade'
         $items   = array();
         $hidden  = $grade->grade == 1 ? 'hidden' : '';
         $items[] = array('icon' => 'plus',  'class' => 'btn ghost btn-add-grade');
-        if($grade->status == 'enable')  $items[] = array('icon' => 'off',   'class' => 'btn ghost btn-close ajax-submit', 'url' => inlink('closeGrade', "id={$grade->grade}"));
-        if($grade->status == 'disable') $items[] = array('icon' => 'magic', 'class' => 'btn ghost btn-active ajax-submit', 'url' => inlink('activeGrade', "id={$grade->grade}"));
+        if($grade->status == 'enable')  $items[] = array('icon' => 'off',   'class' => 'btn ghost btn-close ajax-submit', 'url' => inlink('closeGrade', "type={$module}&id={$grade->grade}"));
+        if($grade->status == 'disable') $items[] = array('icon' => 'magic', 'class' => 'btn ghost btn-active ajax-submit', 'url' => inlink('activateGrade', "type={$module}&id={$grade->grade}"));
         $items[] = array('icon' => 'trash', 'class' => "btn ghost btn-delete-grade $hidden");
 
         $tbody[] = h::tr(
