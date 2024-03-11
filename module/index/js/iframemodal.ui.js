@@ -1,6 +1,13 @@
 $.fn.triggerHandler = $.fn.trigger;
 ['registerRender', 'fetchContent', 'loadTable', 'loadPage', 'postAndLoadPage', 'loadCurrentPage', 'parseSelector', 'toggleLoading', 'openUrl', 'openPage', 'goBack', 'registerTimer', 'loadModal', 'loadTarget', 'loadComponent', 'loadPartial', 'reloadPage', 'selectLang', 'selectTheme', 'selectVision', changeAppLang, 'changeAppTheme', 'setImageSize', 'showMoreImage', 'autoLoad', 'loadForm'].forEach(function(name){window[name] = parent.parent[name];});
 
+const zuiHideModal = zui.Modal.hide;
+zui.Modal.hide = function(selector)
+{
+    if(!selector) return parent.$.closeModal();
+    zuiHideModal(selector);
+};
+
 $(function()
 {
     $('.zin-page-css').appendTo('head');
