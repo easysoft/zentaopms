@@ -108,7 +108,7 @@ class detail extends wg
         .detail-section-title, .detail-section.panel .panel-heading {background: var(--color-canvas); position: sticky; top: 0; z-index: 1}
         .detail-main {min-height: calc(100vh - 61px)}
         .detail-side {scrollbar-gutter: stable;}
-        .detail-side > * + * {border-top: 1px solid var(--color-border)}
+        .detail-side > * + * {margin-top: 4px}
         .detail-side .tabs {padding: 12px 8px 12px 16px}
         .detail-side .tabs-header {position: sticky; top: 0; background: var(--color-surface-light);}
         .detail-side .tab-pane {padding: 0}
@@ -377,6 +377,7 @@ class detail extends wg
     {
         $tabsView = new tabs
         (
+            setClass('canvas rounded shadow'),
             setData('group', $group),
             set::collapse(true)
         );
@@ -414,7 +415,7 @@ class detail extends wg
     {
         return div
         (
-            setClass('detail-side flex-none canvas rounded shadow border-l scrollbar-hover scrollbar-thin overflow-auto min-h-0 max-h-screen sticky top-0'),
+            setClass('detail-side flex-none'),
             setStyle('width', $this->prop('sideWidth') . 'px'),
             $this->buildTabsList(),
             $this->block('side')
@@ -425,7 +426,7 @@ class detail extends wg
     {
         return div
         (
-            setClass('detail-body row gap-0.5 items-start'),
+            setClass('detail-body row gap-1 items-start'),
             $this->buildMain(),
             $this->buildSide()
         );
