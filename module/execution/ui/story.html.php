@@ -79,8 +79,8 @@ if(commonModel::isTutorialMode())
 $createItem      = array('text' => $lang->story->create,      'url' => $createLink);
 $batchCreateItem = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
 
-$canLinkStory     = $execution->hasProduct && $canModifyProduct && hasPriv('execution', 'linkStory');
-$canlinkPlanStory = $execution->hasProduct && $canModifyProduct && hasPriv('execution', 'importPlanStories');
+$canLinkStory     = $canModifyProduct && hasPriv('execution', 'linkStory');
+$canlinkPlanStory = $canModifyProduct && hasPriv('execution', 'importPlanStories');
 $linkStoryUrl     = createLink('execution', 'linkStory', "project={$execution->id}");
 
 if(commonModel::isTutorialMode())
