@@ -1,1 +1,1 @@
-.tab-pane .tab-actions {float: right; margin-top: -48px;}
+.tab-pane .tab-actions {float: right; margin-top: -48px; z-index: 10; position: relative;}
