@@ -14,6 +14,7 @@ jsVar('postLink', createLink('aiapp', 'miniProgramChat', "id={$miniProgram->id}"
 jsVar('messages', $messages);
 jsVar('isAppDisabled', $miniProgram->published === '0');
 jsVar('hasModels', $hasModels);
+jsVar('pathname', $miniProgram->name);
 
 $app->loadLang('ai');
 
