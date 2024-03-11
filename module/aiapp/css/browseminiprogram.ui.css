@@ -116,6 +116,7 @@
 
 pre.message-content {
     white-space: pre-wrap;
+    font-family: inherit !important;
 }
 
 .ai-message-content {
