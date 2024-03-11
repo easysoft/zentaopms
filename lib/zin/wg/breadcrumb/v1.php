@@ -7,7 +7,7 @@ class breadcrumb extends wg
     protected static array $defineProps = array
     (
         'items'      => '?array',
-        'divider'    => '?string="U+003e"',
+        'divider'    => '?string',
         'labelWidth' => '?int=76'
     );
 
@@ -34,14 +34,15 @@ class breadcrumb extends wg
         unset($item['children']);
         unset($item['icon']);
 
-        if(is_string($icon))   $icon = icon($icon);
+        if(is_string($icon))    $icon = icon($icon);
         elseif(is_array($icon)) $icon = icon(set($icon));
 
+        $tag = $url ? 'a' : 'span';
         return h::li
         (
             $liProps ? set($liProps) : null,
             $active ? setClass('active') : null,
-            h::a
+            h::$tag
             (
                 set::href($url),
                 set($item),
