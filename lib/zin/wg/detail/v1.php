@@ -106,8 +106,6 @@ class detail extends wg
         .detail-sections > * + * {margin-top: 16px}
         .detail-section.panel {--tw-ring-opacity: 0}
         .detail-section-title, .detail-section.panel .panel-heading {background: var(--color-canvas); position: sticky; top: 0; z-index: 1}
-        .detail-main {min-height: calc(100vh - 61px)}
-        .detail-side {scrollbar-gutter: stable;}
         .detail-side > * + * {margin-top: 4px}
         .detail-side .tabs {padding: 12px 8px 12px 16px}
         .detail-side .tabs-header {position: sticky; top: 0; background: var(--color-surface-light);}
@@ -312,7 +310,6 @@ class detail extends wg
     protected function buildActions()
     {
         $actions      = $this->prop('actions');
-        $objectID     = $this->prop('objectID');
         $actionsBlock = $this->block('actions');
         $isSimple     = $this->prop('layout') === 'simple';
 
