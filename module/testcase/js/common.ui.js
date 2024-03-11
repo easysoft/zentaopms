@@ -19,9 +19,8 @@ window.loadProductStories = function(productID)
 
 window.loadProductBranches = function(productID)
 {
-    var param     = config.currentMethod == 'create' ? 'active' : 'all';
-    var oldBranch = config.currentMethod == 'edit' ? caseBranch : 0;
-    var param     = 'productID=' + productID + '&oldBranch=' + oldBranch + '&param=' + param;
+    const oldBranch = config.currentMethod == 'edit' ? caseBranch : 0;
+    let   param     = 'productID=' + productID + '&oldBranch=' + oldBranch + '&param=' + config.currentMethod == 'create' ? 'active' : 'all';
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += '&projectID=' + objectID;
 
     $.get($.createLink('branch', 'ajaxGetBranches', param), function(data)
@@ -122,7 +121,7 @@ window.loadScenesForBatch = function(productID, moduleID, $currentRow)
     let branchID = $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val();
     if(!branchID) branchID = 0;
 
-    let sceneLink = $.createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID);
+    const sceneLink = $.createLink('testcase', 'ajaxGetScenes', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID);
     $.getJSON(sceneLink, function(scenes)
     {
         let $row = $currentRow;
@@ -149,10 +148,10 @@ window.loadScenesForBatch = function(productID, moduleID, $currentRow)
  */
 window.loadStoriesForBatch = function(productID, moduleID, num, $currentRow = null)
 {
-    const branchID = $currentRow.find('.form-batch-control[data-name="branch"]').length ? $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val() : 0;
+    let branchID = $currentRow.find('.form-batch-control[data-name="branch"]').length ? $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val() : 0;
     if(!branchID) branchID = 0;
 
-    var storyLink  = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&objectID=0&number=' + num);
+    const storyLink  = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&objectID=0&number=' + num);
     $.getJSON(storyLink, function(stories)
     {
         if(!stories) return;
