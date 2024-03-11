@@ -482,7 +482,7 @@ class context extends \zin\utils\dataset
         $this->onRenderCallbacks[] = $callback;
     }
 
-    public function setRenderWgMap(string|array $mapOrName, ?string $wgName)
+    public function setRenderWgMap(string|array $mapOrName, ?string $wgName = null)
     {
         if(is_array($mapOrName))
         {

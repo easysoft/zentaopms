@@ -22,9 +22,14 @@ require_once __DIR__ . DS . 'zin.class.php';
  * @param  string       $target
  * @return void
  */
-function render(string $wgName = '', string $target = 'all')
+function render(string|array $wgName = '', string $target = 'all')
 {
     if(!$wgName) return;
+    if(is_array($wgName))
+    {
+        context()->setRenderWgMap($wgName);
+        return;
+    }
     context()->setRenderWgMap($target, $wgName);
 }
 
