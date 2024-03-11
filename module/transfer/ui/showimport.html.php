@@ -61,7 +61,7 @@ else
 
     formBatchPanel
     (
-        set::title($lang->user->batchEdit),
+        set::title($lang->transfer->import),
         set::mode('edit'),
         set::items($fields),
         set::data(array_values($datas)),
@@ -69,7 +69,7 @@ else
         div
         (
             setClass('toolbar form-actions form-group no-label'),
-            $this->session->insert ? btn(set::btntype('submit'), setClass('primary btn-wide'), $submitText) : btn(set('data-toggle', 'modal'), set('data-target', '#importNoticeModal'), setClass('primary btn-wide'), $submitText),
+            $this->session->insert ? btn(set::btnType('submit'), setClass('primary btn-wide'), $submitText) : btn(set('data-toggle', 'modal'), set('data-target', '#importNoticeModal'), setClass('primary btn-wide'), $submitText),
             btn(set::url($backLink), setClass('btn-back btn-wide'), $lang->goback),
             $this->session->insert && $dataInsert != '' ? formHidden('insert', $dataInsert) : null,
             formHidden('isEndPage', $isEndPage ? 1 : 0),
@@ -104,4 +104,3 @@ else
     JAVASCRIPT);
 }
 
-render();
