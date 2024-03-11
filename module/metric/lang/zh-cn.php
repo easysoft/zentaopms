@@ -282,11 +282,11 @@ $lang->metric->chartTypeList['barX'] = '柱形图';
 $lang->metric->chartTypeList['barY'] = '条形图';
 $lang->metric->chartTypeList['pie']  = '饼图';
 
+$lang->metric->dateTypeList['nodate'] = '无';
 $lang->metric->dateTypeList['year']   = '按年统计';
 $lang->metric->dateTypeList['month']  = '按月统计';
 $lang->metric->dateTypeList['week']   = '按周统计';
 $lang->metric->dateTypeList['day']    = '按日统计';
-$lang->metric->dateTypeList['nodate'] = '无';
 
 $lang->metric->filter = new stdclass();
 $lang->metric->filter->common  = '筛选';
