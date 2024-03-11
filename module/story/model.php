@@ -4534,4 +4534,16 @@ class storyModel extends model
 
         return $storyStatus;
     }
+
+    /**
+     * Get story grade setting.
+     *
+     * @param  string $type story|requirement|epic
+     * @access public
+     * @return array
+     */
+    public function getGradeSetting($type = 'story'): array
+    {
+        return $this->dao->select('*')->from(TABLE_STORYGRADE)->where('type')->eq($type)->orderBy('grade_asc')->fetchAll();
+    }
 }

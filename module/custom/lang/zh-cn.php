@@ -94,6 +94,9 @@ $lang->custom->closedExecution = '已关闭' . $lang->custom->executionCommon;
 $lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
 
+$lang->custom->gradeStatusList['enable']  = '正常';
+$lang->custom->gradeStatusList['disable'] = '停用';
+
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = '关闭的区块';
 
@@ -123,6 +126,7 @@ $lang->custom->story->fields['statusList']       = '状态';
 $lang->custom->story->fields['reviewRules']      = '评审规则';
 $lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['review']           = '评审流程';
+if($config->edition != 'open' || 1) $lang->custom->story->fields['grade'] = '层级设置';
 
 $lang->custom->epic        = clone $lang->custom->story;
 $lang->custom->requirement = clone $lang->custom->story;

@@ -887,6 +887,35 @@ class customModel extends model
     }
 
     /**
+     * 设置需求等级。
+     * Set story grade.
+     *
+     * @param  string $module
+     * @param  object $data
+     * @access public
+     * @return bool
+     */
+    public function setStoryGrade(string $module, array $data): bool
+    {
+        $this->dao->delete()->from(TABLE_STORYGRADE)->where('type')->eq($module)->exec();
+        foreach($data['grade'] as $key => $value)
+        {
+            $name = $data['gradeName'][$key];
+            if(!$value || !$name) continue;
+
+            $grade = new stdclass();
+            $grade->grade  = $value;
+            $grade->name   = $name;
+            $grade->type   = $module;
+            $grade->status = 'enable';
+
+            $this->dao->insert(TABLE_STORYGRADE)->data($grade)->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * 计算启用和不启用的功能。
      * Compute the enabled and disabled features.
      *

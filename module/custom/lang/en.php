@@ -94,6 +94,9 @@ $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedKanban    = 'Closed ' . $lang->custom->kanban;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
+$lang->custom->gradeStatusList['enable']  = 'Normal';
+$lang->custom->gradeStatusList['disable'] = 'Disabled';
+
 $lang->custom->block = new stdclass();
 $lang->custom->block->fields['closed'] = 'Closed Block';
 
@@ -123,6 +126,7 @@ $lang->custom->story->fields['statusList']       = 'Status';
 $lang->custom->story->fields['reviewRules']      = 'Review Rules';
 $lang->custom->story->fields['reviewResultList'] = 'Review Result';
 $lang->custom->story->fields['review']           = 'Need Review';
+if($config->edition != 'open' || 1) $lang->custom->story->fields['grade'] = 'Grade Setting';
 
 $lang->custom->epic        = clone $lang->custom->story;
 $lang->custom->requirement = clone $lang->custom->story;

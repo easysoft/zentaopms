@@ -489,27 +489,94 @@ else
     }
 }
 
-div
-(
-    setID('mainContent'),
-    setClass('row has-sidebar-left'),
-    isset($sidebarMenu) ? $sidebarMenu : null,
-    formPanel
+if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade')
+{
+    $tbody = array();
+    foreach($storyGrades as $grade)
+    {
+        $items   = array();
+        $hidden  = $grade->grade == 1 ? 'hidden' : '';
+        $items[] = array('icon' => 'plus',  'class' => 'btn ghost btn-add-grade');
+        if($grade->status == 'enable')  $items[] = array('icon' => 'off',   'class' => 'btn ghost btn-close ajax-submit', 'url' => inlink('closeGrade', "id={$grade->grade}"));
+        if($grade->status == 'disable') $items[] = array('icon' => 'magic', 'class' => 'btn ghost btn-active ajax-submit', 'url' => inlink('activeGrade', "id={$grade->grade}"));
+        $items[] = array('icon' => 'trash', 'class' => "btn ghost btn-delete-grade $hidden");
+
+        $tbody[] = h::tr(
+            formHidden('grade[]', $grade->grade),
+            h::td($grade->grade, set::width('100px'), setClass('index')),
+            h::td(input(set::name('gradeName[]'), set::value($grade->name))),
+            h::td(zget($lang->custom->gradeStatusList, $grade->status), set::width('80px')),
+            h::td(
+                set::width('100px'),
+                btnGroup
+                (
+                    set::items($items)
+                )
+            )
+        );
+    }
+
+    div
     (
-        set::formID('settingForm'),
-        set::headingClass('justify-start'),
-        to::headingActions($headingTips),
-        setClass('flex-auto'),
-        setClass(!empty($sidebarMenu) ? 'ml-0.5' : null),
-        set::actionsClass($actionWidth),
-        set::actions($formActions),
-        span
+        setID('mainContent'),
+        setClass('row has-sidebar-left'),
+        $sidebarMenu,
+        formPanel(
+            set::title($lang->custom->story->fields['grade']),
+            setClass('ml-0.5'),
+            on::click('.btn-add-grade', 'addGrade'),
+            on::click('.btn-delete-grade', 'deleteGrade'),
+            set::actions(array()),
+            h::table(
+                setID('gradeList'),
+                setClass('table table-form borderless'),
+                h::tr(
+                    h::td($lang->story->grade),
+                    h::td($lang->story->gradeName),
+                    h::td($lang->story->statusAB),
+                    h::td($lang->actions)
+                ),
+                $tbody,
+                h::tfoot(
+                    h::tr(
+                        h::td(),
+                        h::td(
+                            btn(
+                                $lang->save,
+                                setClass('primary btn-wide'),
+                                set::btnType('submit')
+                            )
+                        ),
+                    )
+                )
+            )
+        )
+    );
+}
+else
+{
+    div
+    (
+        setID('mainContent'),
+        setClass('row has-sidebar-left'),
+        isset($sidebarMenu) ? $sidebarMenu : null,
+        formPanel
         (
-            setClass('text-md font-bold'),
-            $lang->custom->$module->fields[$field]
-        ),
-        $formItems
-    )
-);
+            set::formID('settingForm'),
+            set::headingClass('justify-start'),
+            to::headingActions($headingTips),
+            setClass('flex-auto'),
+            setClass(!empty($sidebarMenu) ? 'ml-0.5' : null),
+            set::actionsClass($actionWidth),
+            set::actions($formActions),
+            span
+            (
+                setClass('text-md font-bold'),
+                $lang->custom->$module->fields[$field]
+            ),
+            $formItems
+        )
+    );
+}
 
 render();

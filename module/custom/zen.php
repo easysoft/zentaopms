@@ -88,6 +88,10 @@ class customZen extends custom
             $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted');
             $this->view->superReviewers = zget($this->config->$module, 'superReviewers', '');
         }
+        if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade')
+        {
+            $this->view->storyGrades = $this->loadModel('story')->getGradeSetting($module);
+        }
         if(in_array($module, array('story', 'testcase', 'demand', 'requirement', 'epic')) && $field == 'review')
         {
             $this->app->loadConfig($module);
@@ -146,6 +150,10 @@ class customZen extends custom
         elseif(in_array($module, array('story', 'demand', 'requirement', 'epic')) && $field == 'review')
         {
             $this->setStoryReview($module, $data);
+        }
+        elseif(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade')
+        {
+            $this->custom->setStoryGrade($module, $data);
         }
         elseif(in_array($module, array('story', 'demand', 'requirement', 'epic')) && $field == 'reviewRules')
         {
