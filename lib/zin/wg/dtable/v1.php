@@ -120,10 +120,8 @@ class dtable extends wg
     {
         global $app, $lang;
 
-        $colConfigs      = $this->prop('cols');
-        $dataPairs       = $this->prop('userMap', array());
-        $hasPriCols      = false;
-        $hasSeverityCols = false;
+        $colConfigs = $this->prop('cols');
+        $dataPairs  = $this->prop('userMap', array());
 
         foreach($colConfigs as $field => &$config)
         {
@@ -145,28 +143,26 @@ class dtable extends wg
                 $config['map'] = jsRaw("(value) => {return window.setMultipleCell(value, '" . json_encode($dataPairs). "', '{$delimiter}')}");
             }
 
-            if(isset($config['type']) && $config['type'] === 'pri')
+            if(isset($config['type']))
             {
-                $hasPriCols = true;
-            }
-            if(isset($config['type']) && $config['type'] === 'severity')
-            {
-                $hasSeverityCols = true;
+                if($config['type'] === 'pri' && !isset($config['priList']) && !$this->prop('priList'))
+                {
+                    $moduleName = $app->getModuleName();
+                    if(isset($lang->$moduleName->priList)) $this->setProp('priList', $lang->$moduleName->priList);
+                }
+                if($config['type'] === 'severity' && !isset($config['severityList']) && !$this->prop('severityList'))
+                {
+                    $moduleName = $app->getModuleName();
+                    if(isset($lang->$moduleName->severityList)) $this->setProp('severityList', $lang->$moduleName->severityList);
+                }
+                if($config['type'] === 'assign' && !isset($config['currentUser']) && isset($app->user) && !$this->prop('currentUser'))
+                {
+                    $this->setProp('currentUser', $app->user->account);
+                }
             }
         }
 
         $this->setProp('cols', array_values($colConfigs));
-
-        if($hasPriCols && !$this->prop('priList'))
-        {
-            $moduleName = $app->getModuleName();
-            if(isset($lang->$moduleName->priList)) $this->setProp('priList', $lang->$moduleName->priList);
-        }
-        if($hasSeverityCols && !$this->prop('severityList'))
-        {
-            $moduleName = $app->getModuleName();
-            if(isset($lang->$moduleName->severityList)) $this->setProp('severityList', $lang->$moduleName->severityList);
-        }
     }
 
     /**
