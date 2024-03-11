@@ -11,12 +11,13 @@ class product
      */
     public function createProduct($formData)
     {
-        global $lang, $results;
-        $productPage = new productPage();
-
         loadModel('user')->login();
-        $productPage->go('product', 'mainNav');
 
+        global $lang, $result;
+        $productPage = new productPage();
+        $result->setPage($productPage);
+
+        $productPage->go('product', 'mainNav');
         $productPage->btn($lang->product->addBtn)->click();
         $productPage->wait(1)->getErrors("appIframe-product");
 
@@ -32,8 +33,6 @@ class product
 
         $productPage->btn($lang->product->saveBtn)->click();
         $productPage->wait(1);
-
-        $results->setPage($productPage);
 
         return $productPage;
     }

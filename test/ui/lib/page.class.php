@@ -5,7 +5,7 @@ class page
     public $xpathName;
     public $doms;
     public $xpath;
-    public $timeout = 5;
+    public $timeout = 30;
 
     public function __construct()
     {

@@ -55,7 +55,7 @@ function r($result)
  */
 function p($keys = '', $delimiter = ',')
 {
-    global $_result, $results;
+    global $_result;
 
     if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
 
@@ -64,14 +64,6 @@ function p($keys = '', $delimiter = ',')
     /* Print $_result. */
     if($keys === '' && is_array($_result)) return print_r($_result) . "\n";
     if($keys === '' || !is_array($_result) && !is_object($_result)) return print((string) $_result . "\n");
-    if(in_array(explode(':', $keys)[1], array('text', 'attr', 'url', 'title')))
-    {
-        list($elementName, $action) = explode(':', $keys);
-
-        if($action == 'text')  $results->get()['page']->$elementName->getText();
-        if($action == 'url')   $results->get()['page']->getUrl();
-        if($action == 'title') $results->get()['page']->getTitle();
-    }
 
     $parts  = explode(';', $keys);
     foreach($parts as $part)
@@ -123,7 +115,6 @@ function zget($var, $key, $valueWhenNone = false, $valueWhenExists = false)
  */
 function getValues($value, $keys, $delimiter)
 {
-    $object = '';
     $index  = -1;
     $pos    = strpos($keys, ':');
     if($pos)
@@ -131,38 +122,27 @@ function getValues($value, $keys, $delimiter)
         $arrKey = substr($keys, 0, $pos);
         $keys   = substr($keys, $pos + 1);
 
-        $pos = strpos($arrKey, '[');
-        if($pos)
-        {
-            $object = substr($arrKey, 0, $pos);
-            $index  = trim(substr($arrKey, $pos + 1), ']');
-        }
-        else
-        {
-            $index = $arrKey;
-        }
+        $index = $arrKey;
     }
     $keys = explode($delimiter, $keys);
 
-    if($object !== '')
-    {
-        if(is_array($value))
-        {
-            $value = $value[$object];
-        }
-        else if(is_object($value))
-        {
-            $value = $value->$object;
-        }
-        else
-        {
-            return print("Error: No object name '$object'.\n");
-        }
-    }
-
     if($index != -1)
     {
-        if(is_array($value))
+        if(in_array($arrKey, array('text', 'attr', 'url', 'title')))
+        {
+            global $result;
+            $page   = $result->get('page');
+            $method = 'get' . ucfirst($arrKey);
+            if($arrKey == 'text')
+            {
+                if(count($keys) == 1) $value = $page->{$keys[0]}->$method();
+            }
+            else
+            {
+                $value = $page->$method();
+            }
+        }
+        elseif(is_array($value))
         {
             if(!isset($value[$index])) return print("Error: Cannot get index $index.\n");
             $value = $value[$index];

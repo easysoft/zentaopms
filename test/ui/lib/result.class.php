@@ -66,7 +66,7 @@ class result
         $this->saveReport($message);
     }
 
-    public function setPage($page)
+    public function setPage(&$page)
     {
         $this->pageObject = $page;
     }
@@ -77,25 +77,25 @@ class result
      * @access public
      * @return void
      */
-    public function get()
+    public function get($param = '')
     {
-        $results = array();
-        $results['caseTitle']     = $this->caseTitle;
-        $results['caseCode']      = $this->caseCode;
-        $results['reportFile']    = $this->reportFile;
-        $results['reportWebRoot'] = $this->reportURL;
-        $results['errors']        = $this->errors;
-        $results['page']          = $this->pageObject;
-
-        if(!empty($results['errors']))
+        if(!empty($this->errors))
         {
-            foreach($results['errors'] as $error) echo str_replace("\n", '', $error) . PHP_EOL;
+            foreach($this->errors as $error) echo str_replace("\n", '', $error) . PHP_EOL;
 
-            return array();
+            return $param ? '' : array();
         }
 
-        return $results;
+        $result = array();
+        $result['caseTitle']     = $this->caseTitle;
+        $result['caseCode']      = $this->caseCode;
+        $result['reportFile']    = $this->reportFile;
+        $result['reportWebRoot'] = $this->reportURL;
+        $result['errors']        = $this->errors;
+        $result['page']          = $this->pageObject;
+
+        return $param ? zget($result, $param, '') : $result;
     }
 }
 
-$results = new result();
+$result = new result();
