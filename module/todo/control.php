@@ -389,9 +389,11 @@ class todo extends control
             $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
 
             $tab = $this->app->tab;
-            if($todo->type == 'bug')   $tab = 'qa';
-            if($todo->type == 'task')  $tab = 'execution';
-            if($todo->type == 'story') $tab = 'product';
+            if($todo->type == 'bug')      $tab = 'qa';
+            if($todo->type == 'task')     $tab = 'execution';
+            if($todo->type == 'story')    $tab = 'product';
+            if($todo->type == 'feedback') $tab = 'feedback';
+            if(in_array($todo->type, array('issue', 'risk'))) $tab = 'project';
 
             $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
             return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => array('url' => $confirmURL, 'app' => $tab), 'canceled' => array('url' => $cancelURL)), 'closeModal' => true));
