@@ -9,7 +9,7 @@ use Facebook\WebDriver\WebDriverSelect;
 use Facebook\WebDriver\WebDriverTargetLocator;
 use Facebook\WebDriver\WebDriverDimension;
 
-require_once('vendor/autoload.php');
+require_once('phpwebdriver/autoload.php');
 
 /**
  * Webdriver engine class.
