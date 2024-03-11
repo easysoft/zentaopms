@@ -218,6 +218,8 @@ $lang->custom->notice->readOnlyOfCode      = "代号是一种管理话术，主�
 $lang->custom->notice->readOnlyOfPercent   = "工作量占比用于划分{$lang->projectCommon}中存在多个阶段时的工作量的占比，同一级阶段的百分比之和最高为100%。启用工作量占比后，系统中的瀑布{$lang->projectCommon}和融合瀑布{$lang->projectCommon}模型中设置阶段时需要维护阶段的工作量占比。";
 $lang->custom->notice->closeGrade          = "停用后，该层级无法再创建新需求。";
 $lang->custom->notice->activateGrade       = "启用后，该层级可以创建新需求。";
+$lang->custom->notice->gradeNotEmpty       = '系统内存在该层级的需求，不能删除！';
+$lang->custom->notice->deleteGrade         = '层级删除后无法恢复！';
 
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了{$lang->projectCommon}主页视图，是否默认进入{$lang->projectCommon}主页？";

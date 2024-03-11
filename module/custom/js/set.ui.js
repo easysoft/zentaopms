@@ -102,18 +102,3 @@ window.addGrade = function()
     newRow.find('td.index').text(newIndex);
     $(this).closest('tbody').append(newRow);
 };
-
-window.deleteGrade = function()
-{
-    const tbody = $(this).closest('tbody');
-    $(this).closest('tr').remove();
-
-    /* Sort all. */
-    tbody.find('tr').each(function(index)
-    {
-        if(index == 0) return true;
-
-        $(this).find('input[type=hidden]').val(index);
-        $(this).find('td.index').text(index);
-    });
-};

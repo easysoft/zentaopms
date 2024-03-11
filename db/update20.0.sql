@@ -22,3 +22,5 @@ CREATE TABLE `zt_storygrade` (
   `name` char(30) NOT NULL,
   `status` char(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_story` ADD `grade` smallint(6) NOT NULL AFTER `parent`;
