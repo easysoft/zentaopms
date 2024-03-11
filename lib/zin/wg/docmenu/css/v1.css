@@ -35,3 +35,5 @@
 .has-module-menu-header #mainMenu {padding-left: 215px;}
 .has-module-menu-header.is-sidebar-left-collapsed #mainMenu {padding-left: 0;}
 #mainContent > .sidebar:not(.is-collapsed) {min-width: 200px !important;}
+
+.doc-setting-modal > .modal-dialog > .modal-content > .modal-body {padding: 0 2rem;}
