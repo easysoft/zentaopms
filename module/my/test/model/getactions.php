@@ -24,5 +24,5 @@ su('admin');
 $my = new myTest();
 
 $actions = $my->getActionsTest();
-r(implode(',', $actions)) && p() && e('96,64,32,95,63'); // 正常查询action
+r(implode(',', $actions)) && p() && e('90,30,89,29,88'); // 正常查询action
 r(count($actions))        && p() && e('5');              // 正常查询action统计

@@ -235,7 +235,7 @@ class myModel extends model
     }
 
     /**
-     * 获取我的最新动态。
+     * 获取最新动态。
      * Get latest actions.
      *
      * @access public
@@ -243,21 +243,8 @@ class myModel extends model
      */
     public function getActions(): array
     {
-        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50);
-        $users   = $this->loadModel('user')->getList();
-
-        $simplifyUsers = array();
-        foreach($users as $user)
-        {
-            $simplifyUser = new stdclass();
-            $simplifyUser->id       = $user->id;
-            $simplifyUser->account  = $user->account;
-            $simplifyUser->realname = $user->realname;
-            $simplifyUser->avatar   = $user->avatar;
-            $simplifyUsers[$user->account] = $simplifyUser;
-        }
-
         $maxCount = 5;
+        $actions  = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc,id_desc', 50);
         $actions  = $this->action->processDynamicForAPI($actions);
         $actions  = array_slice($actions, 0, $maxCount);
 
