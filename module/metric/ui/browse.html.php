@@ -56,7 +56,7 @@ toolbar
     (
         setClass('btn primary'),
         set::icon('plus'),
-        set::url(helper::createLink('metric', 'create')),
+        set::url(helper::createLink('metric', 'create', "scope=$scope&period=nodate")),
         set('data-toggle', 'modal'),
         $lang->metric->create
     ) : null
