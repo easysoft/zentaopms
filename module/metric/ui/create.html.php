@@ -39,18 +39,28 @@ formPanel
                 setClass('text-lg'),
                 set::level(1),
                 set::text($lang->metric->create)
-            ),
-            div
+            )
+
+        ),
+        to::suffix
+        (
+            row
             (
-                icon
+                cell
                 (
-                    setClass('warning-ghost margin-left8'),
-                    'help',
+                    icon
+                    (
+                        setClass('warning-ghost margin-left8'),
+                        'help',
+                    )
                 ),
-                label
+                cell
                 (
-                    set::text($lang->metric->tips->noticeUnchangeable),
-                    setClass('gray-200-pale')
+                    label
+                    (
+                        set::text($lang->metric->tips->noticeUnchangeable),
+                        setClass('gray-200-pale')
+                    )
                 )
             )
         )

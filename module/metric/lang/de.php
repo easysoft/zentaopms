@@ -60,6 +60,18 @@ $lang->metric->day           = 'Date';
 $lang->metric->nodate        = 'Collection date';
 $lang->metric->implementType = 'Implement Type';
 
+$lang->metric->formLabel = new stdclass();
+$lang->metric->formLabel->scope      = $lang->metric->common . ' ' .  $lang->metric->scope;
+$lang->metric->formLabel->object     = $lang->metric->common . ' ' . $lang->metric->object;
+$lang->metric->formLabel->purpose    = $lang->metric->common . ' ' . $lang->metric->purpose;
+$lang->metric->formLabel->name       = $lang->metric->common . ' ' . $lang->metric->name;
+$lang->metric->formLabel->code       = $lang->metric->common . ' ' . $lang->metric->code;
+$lang->metric->formLabel->dateType   = $lang->metric->dateType;
+$lang->metric->formLabel->unit       = $lang->metric->common . ' ' . $lang->metric->unit;
+$lang->metric->formLabel->alias      = $lang->metric->common . ' ' . $lang->metric->alias;
+$lang->metric->formLabel->desc       = $lang->metric->common . ' ' . $lang->metric->desc;
+$lang->metric->formLabel->definition = $lang->metric->definition;
+
 $lang->metric->yearFormat     = 'Year %s';
 $lang->metric->weekFormat     = 'Week %s';
 $lang->metric->monthDayFormat = '%s-%s';
