@@ -293,5 +293,3 @@ formBatchPanel
 );
 
 formHidden('verifyRand', $rand);
-
-render();
