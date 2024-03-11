@@ -42,7 +42,19 @@ class mainNavbar extends nav
      */
     public static function getPageCSS(): ?string
     {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+        return <<<'CSS'
+        #mainNavbar {padding-left: 1rem; padding-right: 1rem;}
+        #mainNavbar .main-navbar-left {position: absolute; z-index: 2;}
+        #mainNavbar .main-navbar-left #switcher {position: relative; top: 5px; border: 1px solid rgb(var(--color-primary-500-rgb));}
+        #mainNavbar .main-navbar-left #switcher > .dropmenu-btn {background: #FFF;}
+        #mainNavbar .main-navbar-left #switcher > .dropmenu-btn:before {background: unset;}
+        #mainNavbar .main-navbar-left #switcher:after, #mainNavbar .main-navbar-left #switcher:before {position: absolute; display: block; width: 0; height: 0; content: ' '; border-style: solid; border-width: 17px 0 17px 8px; top: -1px;}
+        #mainNavbar .main-navbar-left #switcher:before {border-color: transparent transparent transparent rgb(var(--color-primary-500-rgb)); right: -8px;}
+        #mainNavbar .main-navbar-left #switcher:after {border-color: transparent transparent transparent #FFF; right: -7px; border-radius: 2px;}
+        #mainNavbar .main-navbar-left #switcher .icon-angle-right {display: none;}
+        #mainNavbar .main-navbar-left #switcher .caret {color: rgb(var(--color-link-hover-rgb));}
+        #mainNavbar .main-navbar-left #switcher .text {color: rgb(var(--color-primary-500-rgb));}
+        CSS;
     }
 
     protected function created()
@@ -58,35 +70,38 @@ class mainNavbar extends nav
         $activeMenu = \commonModel::getActiveMainMenu();
         if(empty($activeMenu)) return false;
 
-        $items = \customModel::getModuleMenu($activeMenu);
-        if($items)
+        $menu = \customModel::getModuleMenu($activeMenu);
+        if($menu)
         {
-            $items = json_decode(json_encode($items), true);
+            $menu  = json_decode(json_encode($menu), true);
+            $items = array();
 
-            foreach($items as $key => $item)
+            foreach($menu as $key => $menuItem)
             {
-                if(empty($item['link']))
+                if(empty($menuItem['link']))
                 {
-                    unset($items[$key]);
+                    unset($menu[$key]);
                     continue;
                 }
-                if(empty($item['alias']))   $item['alias'] = '';
-                if(empty($item['exclude'])) $item['exclude'] = '';
+                if(empty($menuItem['alias']))   $menuItem['alias'] = '';
+                if(empty($menuItem['exclude'])) $menuItem['exclude'] = '';
 
-                $link = $item['link'];
-                $items[$key]['url']      = commonModel::createMenuLink((object)$item, $app->tab);
-                $items[$key]['data-id']  = $item['name'];
-                $items[$key]['data-app'] = $app->tab;
+                $item = array();
+                $link = $menuItem['link'];
+                $item['text']     = $menuItem['text'];
+                $item['url']      = commonModel::createMenuLink((object)$menuItem, $app->tab);
+                $item['data-id']  = $menuItem['name'];
+                $item['data-app'] = $app->tab;
 
                 $active    = '';
-                $subModule = isset($item['subModule']) ? explode(',', $item['subModule']) : array();
+                $subModule = isset($menuItem['subModule']) ? explode(',', $menuItem['subModule']) : array();
                 if($subModule && in_array($currentModule, $subModule)) $active = 'active';
                 if($link['module'] == $currentModule && $link['method'] == $currentMethod) $active = 'active';
-                if($link['module'] == $currentModule && strpos(",{$item['alias']},", ",{$currentMethod},") !== false) $active = 'active';
-                if(strpos(",{$item['exclude']},", ",{$currentModule}-{$currentMethod},") !== false || strpos(",{$item['exclude']},", ",{$currentModule},") !== false) $active = '';
-                $items[$key]['class'] = $active;
+                if($link['module'] == $currentModule && strpos(",{$menuItem['alias']},", ",{$currentMethod},") !== false) $active = 'active';
+                if(strpos(",{$menuItem['exclude']},", ",{$currentModule}-{$currentMethod},") !== false || strpos(",{$menuItem['exclude']},", ",{$currentModule},") !== false) $active = '';
+                $item['class'] = $active;
 
-                unset($items[$key]['name']);
+                $items[] = $item;
             }
 
             $this->setProp('items', $items);
