@@ -103,18 +103,15 @@ class detail extends wg
     public static function getPageCSS(): ?string
     {
         return <<<'CSS'
-        .detail-main > * + * {margin-top: 16px}
+        .detail-sections > * + * {margin-top: 16px}
         .detail-section.panel {--tw-ring-opacity: 0}
-        .detail-section.panel .panel-heading {padding: 4px 0; margin-bottom: 8px}
-        .detail-section.panel .panel-heading .listitem {padding: 0}
-        .detail-section.panel .panel-body {padding: 4px 1px}
-        .detail-section-title, .detail-section.panel .panel-heading {background: var(--color-canvas); position: sticky; top: -16px; z-index: 1}
+        .detail-section-title, .detail-section.panel .panel-heading {background: var(--color-canvas); position: sticky; top: 0; z-index: 1}
+        .detail-main {min-height: calc(100vh - 61px)}
         .detail-side {scrollbar-gutter: stable;}
         .detail-side > * + * {border-top: 1px solid var(--color-border)}
         .detail-side .tabs {padding: 12px 8px 12px 16px}
         .detail-side .tabs-header {position: sticky; top: 0; background: var(--color-surface-light);}
         .detail-side .tab-pane {padding: 0}
-        .detail-side .tabs .nav-tabs {width: fit-content; border-bottom: 1px solid var(--color-border)}
         CSS;
     }
 
@@ -299,13 +296,16 @@ class detail extends wg
 
         if(!is_array($history)) $history = array();
 
-        return new history
+        return div
         (
-            set::class('detail-section overflow-visible'),
-            set::panel(false),
-            set::objectType($this->prop('objectType')),
-            set::objectID($this->prop('objectID')),
-            set($history)
+            setClass('detail-sections canvas shadow rounded'),
+            new history
+            (
+                set::class('detail-section overflow-visible'),
+                set::objectType($this->prop('objectType')),
+                set::objectID($this->prop('objectID')),
+                set($history)
+            )
         );
     }
 
@@ -328,7 +328,7 @@ class detail extends wg
 
         return div
         (
-            setClass('detail-actions center sticky bottom-0 z-10'),
+            setClass('detail-actions center sticky bottom-4 z-10'),
             div
             (
                 setClass('bg-black text-fore-in-dark backdrop-blur bg-opacity-60 rounded p-1.5'),
@@ -349,9 +349,13 @@ class detail extends wg
 
         return div
         (
-            setClass('detail-main flex-auto w-full scrollbar-hover scrollbar-thin overflow-auto px-6 py-4'),
-            $this->buildMainSections(),
-            $this->block('main'),
+            setClass('detail-main flex-auto col gap-1'),
+            div
+            (
+                setClass('detail-sections canvas shadow rounded px-6 py-4'),
+                $this->buildMainSections(),
+                $this->block('main')
+            ),
             $this->buildHistory(),
             $isSimple ? null : $this->buildActions()
         );
@@ -410,7 +414,7 @@ class detail extends wg
     {
         return div
         (
-            setClass('detail-side flex-none surface-light border-l scrollbar-hover scrollbar-thin overflow-auto min-h-0'),
+            setClass('detail-side flex-none canvas rounded shadow border-l scrollbar-hover scrollbar-thin overflow-auto min-h-0 max-h-screen sticky top-0'),
             setStyle('width', $this->prop('sideWidth') . 'px'),
             $this->buildTabsList(),
             $this->block('side')
@@ -421,7 +425,7 @@ class detail extends wg
     {
         return div
         (
-            setClass('detail-body rounded shadow row items-stretch flex-auto canvas min-h-0'),
+            setClass('detail-body row gap-0.5 items-start'),
             $this->buildMain(),
             $this->buildSide()
         );
@@ -482,21 +486,23 @@ class detail extends wg
         if(!$buttons) return null;
         return div
         (
-            setClass('detail-prev-next absolute right-0 left-0 z-10'),
-            setStyle(array('top' => '50%', 'margin' => '-24px -16px auto')),
-            $buttons
+            setClass('detail-prev-next fixed top-0 left-0 bottom-0 right-0 z-10 pointer-events-none'),
+            div
+            (
+                setClass('container relative pointer-events-auto'),
+                setStyle(array('top' => '50%', 'margin' => '-24px auto auto')),
+                $buttons
+            )
         );
     }
 
     protected function build()
     {
         list($objectType, $objectID) = $this->prop(array('objectType', 'objectID'));
-        $isSimple = $this->prop('layout') === 'simple';
 
         return div
         (
             setClass('detail-view col relative gap-2.5', "detail-$objectType-$objectID"),
-            $isSimple ? null : setStyle('height', 'calc(100vh - 61px)'),
             $this->buildHeader(),
             $this->buildBody(),
             $this->buildPrevAndNext()
