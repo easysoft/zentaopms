@@ -20,28 +20,23 @@ class storyBasicInfo extends wg
 
     protected function getModuleItems(object $story, object $product): array
     {
-        $modulePath = $this->prop('modulePath', data('modulePath'));
+        $modulePath  = $this->prop('modulePath', data('modulePath'));
         $storyModule = $this->prop('storyModule', data('storyModule'));
-        $moduleItems = array();
-        if(empty($modulePath))
-        {
-            $moduleItems[] = '/';
-        }
-        else
+        $items       = array();
+        if($modulePath)
         {
             if($storyModule->branch and isset($branches[$storyModule->branch]))
             {
-                $moduleItems[] = $branches[$storyModule->branch];
+                $items[] = $branches[$storyModule->branch];
             }
 
-            foreach($modulePath as $key => $module)
+            foreach($modulePath as $module)
             {
-                $moduleItems[] = $product->shadow ? $module->name : array('text' => $module->name, 'url' => createLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id"));
-
-                if(isset($modulePath[$key + 1])) $moduleItems[] = '/';
+                $items[] = $product->shadow ? $module->name : array('text' => $module->name, 'url' => createLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id"));
             }
         }
-        return $moduleItems;
+        if(!$items) $items = array('/');
+        return $items;
     }
 
     protected function getMinStage(object $story, ?array $branches): string

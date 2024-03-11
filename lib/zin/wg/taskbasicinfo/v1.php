@@ -22,11 +22,7 @@ class taskBasicInfo extends wg
     {
         $modulePath = $this->prop('modulePath', data('modulePath'));
         $items      = array();
-        if(empty($modulePath))
-        {
-            $items[] = '/';
-        }
-        else
+        if($modulePath)
         {
             if($product)
             {
@@ -35,10 +31,9 @@ class taskBasicInfo extends wg
             foreach($modulePath as $key => $module)
             {
                 $items[] = array('text' => $module->name, 'url' => createLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id"));
-
-                if(isset($modulePath[$key + 1])) $items[] = '/';
             }
         }
+        if(!$items) $items = array('/');
         return $items;
     }
 
