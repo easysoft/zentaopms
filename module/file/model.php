@@ -936,7 +936,7 @@ class fileModel extends model
         /* Judge the content type. */
         $mimes       = $this->config->file->mimes;
         $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
-        $fileName    = urlencode($fileName);
+        $fileName    = str_replace('+', ' ', urlencode($fileName));
 
         helper::header('Content-type', $contentType);
         helper::header('Content-Disposition', "attachment; filename=\"$fileName\"");
