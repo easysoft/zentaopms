@@ -65,6 +65,7 @@ foreach($charts as $chartType => $chartOption)
                 div(set::className('center text-base font-bold py-2'), $lang->testtask->report->charts[$chartType]),
                 echarts
                 (
+                    set::_id('chart-' . $chartType),
                     set::color($colorList),
                     set::series
                     (
