@@ -45,7 +45,7 @@ if(empty($libTree))
             )
         )
     );
-    render();
+    renderPage();
     return;
 }
 

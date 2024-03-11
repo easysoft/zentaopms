@@ -64,6 +64,8 @@ class context extends \zin\utils\dataset
 
     public array $eventBindings = array();
 
+    public array $renderWgMap = array('page' => 'page', 'modal' => 'modalDialog', 'fragment' => 'fragment');
+
     public function __construct(string $name)
     {
         parent::__construct();
@@ -478,6 +480,26 @@ class context extends \zin\utils\dataset
     public function onRender(callable|\Closure $callback)
     {
         $this->onRenderCallbacks[] = $callback;
+    }
+
+    public function setRenderWgMap(string|array $mapOrName, ?string $wgName)
+    {
+        if(is_array($mapOrName))
+        {
+            $this->renderWgMap = array_merge($this->renderWgMap, $mapOrName);
+        }
+        else
+        {
+            $this->renderWgMap[$mapOrName] = $wgName;
+        }
+    }
+
+    public function getRenderWgName()
+    {
+        if(isset($this->renderWgMap['all']))         return $this->renderWgMap['all'];
+        if(isAjaxRequest('modal'))                   return $this->renderWgMap['modal'];
+        if(isAjaxRequest() && !isAjaxRequest('zin')) return $this->renderWgMap['fragment'];
+        return 'page';
     }
 
     public static array $stack = array();

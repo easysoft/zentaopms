@@ -1032,7 +1032,7 @@ class baseControl
         ob_start();
         include $viewFile;
 
-        if(!$context->rendered) \zin\render();
+        if(!$context->rendered) \zin\renderPage();
         $content = ob_get_clean();
 
         ob_start();

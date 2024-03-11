@@ -15,27 +15,33 @@ namespace zin;
 require_once __DIR__ . DS . 'zin.class.php';
 
 /**
+ * 设置渲染目标所使用的部件名称。
+ * Set render widget name for target.
+ *
+ * @param  string       $wgName
+ * @param  string       $target
+ * @return void
+ */
+function render(string $wgName = '', string $target = 'all')
+{
+    if(!$wgName) return;
+    context()->setRenderWgMap($target, $wgName);
+}
+
+/**
  * 将视图页面声明的所有内容通过一个部件进行渲染，并输出 HTML。
  * Render page content with a widget to HTML.
  *
  * @access public
- * @param  string       $wgName
  * @param  array $options
  * @return void
  */
-function render(string $wgName = '', array $options = array())
+function renderPage(array $options = array())
 {
     /* 获取全局渲染部件实例和指令。 Get global render widgets and directives. */
-    $context = context();
+    $context     = context();
     $globalItems = $context->getGlobalRenderList();
-
-    /* 决定部件名称，如果是 Ajax 请求则进行特殊处理。 Decide widget name, if is ajax request, then do special process. */
-    if(empty($wgName))
-    {
-        $wgName = 'page';
-        if(isAjaxRequest('modal')) $wgName = 'modalDialog';
-        else if(isAjaxRequest() && !isAjaxRequest('zin')) $wgName = 'fragment';
-    }
+    $wgName     = $context->getRenderWgName();
 
     /* 判断是否渲染为完整页面。 Check if render in full page. */
     $isFullPage = str_starts_with($wgName, 'page');
