@@ -328,7 +328,7 @@ class detail extends wg
 
         return div
         (
-            setClass('detail-actions center sticky bottom-4 z-10'),
+            setClass('detail-actions center sticky mt-4 bottom-4 z-10'),
             div
             (
                 setClass('bg-black text-fore-in-dark backdrop-blur bg-opacity-60 rounded p-1.5'),
