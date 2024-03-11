@@ -506,12 +506,12 @@ class todo extends control
             $assemble->testTasks = $testTasks;
             if(in_array($this->config->edition, array('max', 'ipd')))
             {
-                $iroData = $this->todoZen->exportInfo((string)$this->config->edition, (string)$user->account);
+                $iroData = $this->todoZen->exportAssociated((string)$this->config->edition, (string)$user->account);
                 $assemble->issues        = $iroData[0];
                 $assemble->risks         = $iroData[1];
                 $assemble->opportunities = $iroData[2];
             }
-            if(isset($this->config->qcVersion)) $assemble->reviews = $this->todoZen->exportInfo('qcVersion', (string)$user->account);
+            if(isset($this->config->qcVersion)) $assemble->reviews = $this->todoZen->exportAssociated('qcVersion', (string)$user->account);
 
             $todos = $this->todoZen->assembleExportData((array)$todos, $assemble, $todoLang, (array)$times);
 
