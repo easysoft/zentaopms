@@ -10,7 +10,9 @@ zdTable('kanbangroup')->config('rdkanbangroup')->gen(20);
 zdTable('kanbancolumn')->gen(20);
 zdTable('kanbanlane')->config('rdkanbanlane')->gen(10);
 zdTable('kanbancell')->config('rdkanbancell')->gen(20);
+zdTable('story')->gen(0);
 zdTable('task')->config('rdkanbantask')->gen(20);
+zdTable('bug')->gen(0);
 
 /**
 
