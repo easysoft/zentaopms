@@ -75,7 +75,7 @@ $lang->metric->placeholder->user      = "All Users";
 $lang->metric->placeholder->program   = "All Program Sets";
 
 $lang->metric->query = new stdclass();
-$lang->metric->query->action = 'query';
+$lang->metric->query->action = 'Query';
 
 $lang->metric->query->scope = array();
 $lang->metric->query->scope['project']   = 'Project';
