@@ -11,7 +11,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if($isOldMetric) 
+jsVar('confirmDelist', $lang->metric->confirmDelist);
+
+if($isOldMetric)
 {
     include 'viewsqlmetric.html.php';
 }
