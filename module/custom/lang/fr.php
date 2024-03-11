@@ -66,6 +66,7 @@ $lang->custom->beginAndEndDateRange = 'The Range Of Begin & End';
 $lang->custom->limitTaskDateAction  = 'Set start and end date required';
 $lang->custom->closeGrade           = 'Close Story Grade';
 $lang->custom->activateGrade        = 'Activate Story Grade';
+$lang->custom->deleteGrade          = 'Delete Story Grade';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -218,6 +219,8 @@ $lang->custom->notice->readOnlyOfCode      = "A code is a management term that e
 $lang->custom->notice->readOnlyOfPercent   = "The \"Workload Ratio\" is used to divide the workload of a {$lang->projectCommon} into different stages. The sum of the percentages of the same level stages cannot exceed 100%. After enabling the \"Workload Ratio\", users have to fill in the ratio fields when setting up the stages in the Waterfall {$lang->projectCommon} and Waterfall Plus {$lang->projectCommon} management models.";
 $lang->custom->notice->closeGrade          = "After closing, the grade cannot be used to create new stories.";
 $lang->custom->notice->activateGrade       = "After activating, the grade can be used to create new stories.";
+$lang->custom->notice->gradeNotEmpty       = 'There are stories in this grade, and it cannot be deleted!';
+$lang->custom->notice->deleteGrade         = 'Are you sure you want to delete this grade?';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has {$lang->projectCommon} Home. Do you want to go to {$lang->projectCommon} Home?";

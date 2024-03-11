@@ -497,9 +497,9 @@ if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade'
         $items   = array();
         $hidden  = $grade->grade == 1 ? 'hidden' : '';
         $items[] = array('icon' => 'plus',  'class' => 'btn ghost btn-add-grade');
-        if($grade->status == 'enable')  $items[] = array('icon' => 'off',   'class' => 'btn ghost btn-close ajax-submit', 'url' => inlink('closeGrade', "type={$module}&id={$grade->grade}"), 'data-confirm' => $lang->custom->notice->closeGrade);
-        if($grade->status == 'disable') $items[] = array('icon' => 'magic', 'class' => 'btn ghost btn-active ajax-submit', 'url' => inlink('activateGrade', "type={$module}&id={$grade->grade}"), 'data-confirm' => $lang->custom->notice->activateGrade);
-        $items[] = array('icon' => 'trash', 'class' => "btn ghost btn-delete-grade ajax-submit $hidden", 'url' => inlink('deleteGrade', "type={$module}&id={$grade->grade}"));
+        if($grade->status == 'enable' && common::hasPriv('custom', 'closeGrade'))     $items[] = array('icon' => 'off',   'class' => 'btn ghost btn-close ajax-submit', 'url' => inlink('closeGrade', "type={$module}&id={$grade->grade}"), 'data-confirm' => $lang->custom->notice->closeGrade);
+        if($grade->status == 'disable' && common::hasPriv('custom', 'activateGrade')) $items[] = array('icon' => 'magic', 'class' => 'btn ghost btn-active ajax-submit', 'url' => inlink('activateGrade', "type={$module}&id={$grade->grade}"), 'data-confirm' => $lang->custom->notice->activateGrade);
+        if(common::hasPriv('custom', 'deleteGrade')) $items[] = array('icon' => 'trash', 'class' => "btn ghost btn-delete-grade ajax-submit $hidden", 'url' => inlink('deleteGrade', "type={$module}&id={$grade->grade}"));
 
         $tbody[] = h::tr(
             formHidden('grade[]', $grade->grade),

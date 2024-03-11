@@ -3059,6 +3059,7 @@ $config->group->package->custom->privs['custom-setStoryConcept']    = array('edi
 $config->group->package->custom->privs['custom-limitTaskDate']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('custom-execution'), 'recommend' => array());
 $config->group->package->custom->privs['custom-closeGrade']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 12, 'depend' => array('custom-set'), 'recommend' => array());
 $config->group->package->custom->privs['custom-activateGrade']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 13, 'depend' => array('custom-set'), 'recommend' => array());
+$config->group->package->custom->privs['custom-deleteGrade']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 14, 'depend' => array('custom-set'), 'recommend' => array());
 
 $config->group->package->approvalflow = new stdclass();
 $config->group->package->approvalflow->order  = 10;
