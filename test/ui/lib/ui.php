@@ -3,21 +3,32 @@ error_reporting(E_ALL);
 
 define('DS', DIRECTORY_SEPARATOR);
 define('CONFIG_ROOT', dirname(dirname(__FILE__)) . '/config/');
+define('MODULE_ROOT', dirname(dirname(__FILE__)) . '/case/');
 include CONFIG_ROOT . '/config.php';
 
 include dirname(__FILE__) . DS . 'result.class.php';
-$results = new result();
-
 include dirname(__FILE__) . DS . 'drivers' . DS . 'webdriver' . DS . "webdriver.class.php";
+$driver = new webdriver($config);
 
 /* Set the error reporting. */
-
 include 'page.class.php';
 
 $includeFiles = get_included_files();
 if($includeFiles)
 {
     foreach(glob(dirname($includeFiles[0]) . '/page/*') as $file) include $file;
+}
+
+function loadModel($module)
+{
+    $classPath = MODULE_ROOT . "{$module}/{$module}.class.php";
+    if(file_exists($classPath) && class_exists($module))
+    {
+        include $classPath;
+        return new $module();
+    }
+
+    return false;
 }
 
 /**

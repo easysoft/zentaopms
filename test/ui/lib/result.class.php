@@ -97,3 +97,5 @@ class result
         return $results;
     }
 }
+
+$results = new result();

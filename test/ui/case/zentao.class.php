@@ -1,7 +1,6 @@
 <?php
-include dirname(__FILE__, 3) . '/lib/init.class.php';
-$driver = uiTester::factory('zentaopms', 'webdriver', $config->chrome);
-$lang   = new stdclass();
+include dirname(__FILE__, 2) . '/lib/ui.php';
+$lang = new stdclass();
 
 class zentao
 {

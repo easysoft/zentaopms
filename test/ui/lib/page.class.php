@@ -7,8 +7,9 @@ class page
     public $xpath;
     public $timeout = 5;
 
-    public function __construct($driver)
+    public function __construct()
     {
+        global $driver;
         $this->driver = $driver;
         $this->doms   = array(
             'menuMoreNav' => '//*[@id="menuMoreNav"]/li[2]/a'
@@ -192,5 +193,35 @@ class page
         if(method_exists($this->driver, $method)) return call_user_func_array(array($this->driver, $method), $params);
 
         return false;
+    }
+
+    /**
+     * open a mainMenu, navBar or URl.
+     *
+     * @param  string $value
+     * @param  string $type mainNav|navBar|switchToUrl
+     * @access public
+     * @return void
+     */
+    public function go($value, $type = 'switchToUrl')
+    {
+        if(in_array($type, array('mainNav', 'navBar')))
+        {
+            try
+            {
+                $this->$type($value)->click();
+            }
+            catch(Exception $e)
+            {
+                $this->menuMoreNav->click();
+                $this->mainNav($value)->click();
+            }
+
+            $this->wait(1)->switchTo('appIframe-' . $value);
+        }
+
+        if($type == 'switchToUrl') $this->$type($value, true);
+
+        return $this;
     }
 }

@@ -7,9 +7,10 @@ pid=79
 >>  登录测试 : PASS!
 **/
 
+include dirname(__FILE__, 4) . '/lib/ui.php';
 include dirname(__FILE__) . '/product.class.php';
 
-$tester = new product('创建产品', 'createproduct');
+$tester = new product();
 
 $product = array();
 $result = $tester->createProductTest($product);

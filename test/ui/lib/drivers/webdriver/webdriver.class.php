@@ -9,8 +9,6 @@ use Facebook\WebDriver\WebDriverSelect;
 use Facebook\WebDriver\WebDriverTargetLocator;
 use Facebook\WebDriver\WebDriverDimension;
 
-use function zin\globalSearch;
-
 require_once('vendor/autoload.php');
 
 /**
@@ -120,7 +118,7 @@ class webdriver
             $langName = 'en';
         }
 
-        $langFile = "{$this->config->baseRoot}/project/{$this->config->project}/lang/{$langName}.php";
+        $langFile = dirname(__FILE__, 4) . "/lang/{$langName}.php";
 
         if(file_exists($langFile)) include $langFile;
 

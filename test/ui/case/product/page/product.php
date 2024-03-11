@@ -1,9 +1,9 @@
 <?php
 class productPage extends Page
 {
-    public function __construct($driver)
+    public function __construct()
     {
-        parent::__construct($driver);
+        parent::__construct();
 
         $doms = array(
             'settings'       => "//*[@id='navbar']//a[@data-id='settings']/span",
