@@ -22,7 +22,7 @@ if($includeFiles)
 function loadModel($module)
 {
     $classPath = MODULE_ROOT . "{$module}/{$module}.class.php";
-    if(file_exists($classPath) && class_exists($module))
+    if(file_exists($classPath))
     {
         include $classPath;
         return new $module();
@@ -55,7 +55,7 @@ function r($result)
  */
 function p($keys = '', $delimiter = ',')
 {
-    global $_result;
+    global $_result, $results;
 
     if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
 
@@ -64,13 +64,13 @@ function p($keys = '', $delimiter = ',')
     /* Print $_result. */
     if($keys === '' && is_array($_result)) return print_r($_result) . "\n";
     if($keys === '' || !is_array($_result) && !is_object($_result)) return print((string) $_result . "\n");
-    if(isset($_result['driver']) && in_array(explode(':', $key)[1], array('text', 'attr', 'url', 'title')))
+    if(in_array(explode(':', $keys)[1], array('text', 'attr', 'url', 'title')))
     {
-        list($elementName, $action) = explode(':', $key);
+        list($elementName, $action) = explode(':', $keys);
 
-        if($action == 'text')  $_result['driver']->$elementName->getText();
-        if($action == 'url')   $_result['driver']->getUrl();
-        if($action == 'title') $_result['driver']->getTitle();
+        if($action == 'text')  $results->get()['page']->$elementName->getText();
+        if($action == 'url')   $results->get()['page']->getUrl();
+        if($action == 'title') $results->get()['page']->getTitle();
     }
 
     $parts  = explode(';', $keys);

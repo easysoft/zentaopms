@@ -45,7 +45,7 @@ class webdriver
         $this->results = $results;
         $this->config  = $config;;
 
-        $this->initBrowser($config);
+        $this->initBrowser($config->chrome);
         $this->cookieFile = dirname(__FILE__, 4) . '/config/cookie/cookie';
     }
 

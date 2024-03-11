@@ -7,6 +7,7 @@ class result
     public $caseCode;
     public $reportFile;
     public $reportURL;
+    public $pageObject;
     public $errors = array();
 
 
@@ -65,9 +66,9 @@ class result
         $this->saveReport($message);
     }
 
-    public function setResult($result)
+    public function setPage($page)
     {
-        $this->result = $result;
+        $this->pageObject = $page;
     }
 
     /**
@@ -78,14 +79,13 @@ class result
      */
     public function get()
     {
-        global $driver;
         $results = array();
         $results['caseTitle']     = $this->caseTitle;
         $results['caseCode']      = $this->caseCode;
         $results['reportFile']    = $this->reportFile;
         $results['reportWebRoot'] = $this->reportURL;
         $results['errors']        = $this->errors;
-        $results['driver']        = $driver;
+        $results['page']          = $this->pageObject;
 
         if(!empty($results['errors']))
         {
