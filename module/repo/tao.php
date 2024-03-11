@@ -79,5 +79,34 @@ class repoTao extends repoModel
         $pattern = "/^[a-zA-Z0-9_\-\.]+$/";
         return preg_match($pattern, $repo->name);
     }
+
+    /**
+     * Copy svn dir.
+     *
+     * @param  int       $repoID
+     * @param  string    $copyfromPath
+     * @param  string    $copyfromRev
+     * @param  string    $dirPath
+     * @access protected
+     * @return viod
+     */
+    protected function copySvnDir(int $repoID, string $copyfromPath, string $copyfromRev, string $dirPath)
+    {
+        $copyFiles = $this->dao->select('t1.*')->from(TABLE_REPOFILES)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision = t2.id')
+            ->where('t1.repo')->eq($repoID)
+            ->andWhere('t2.revision+0')->le($copyfromRev)
+            ->andWhere('t1.path')->like("{$copyfromPath}%")
+            ->fetchAll();
+        foreach($copyFiles as $copyFile)
+        {
+            unset($copyFile->id);
+            $copyFile->path   = substr_replace($copyFile->path, $dirPath, 0, strlen($copyfromPath));
+            $copyFile->parent = substr_replace($copyFile->parent, $dirPath, 0, strlen($copyfromPath));
+
+            if($copyFile->path == $dirPath) continue;
+            $this->dao->insert(TABLE_REPOFILES)->data($copyFile)->exec();
+        }
+    }
 }
 

@@ -422,7 +422,7 @@ class repoModel extends model
             $this->updateCommitDate($repo->id);
         }
 
-        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $repo->path != $data->path)
+        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject || $data->SCM == 'Subversion') && $repo->path != $data->path)
         {
             $this->repoTao->deleteInfoByID($repo->id);
             return false;
@@ -1153,6 +1153,11 @@ class repoModel extends model
                     {
                         $parentPath = dirname($file->path);
 
+                        $copyfromPath = !empty($file->copyfromPath) ? $file->copyfromPath : '';
+                        $copyfromRev  = !empty($file->copyfromRev) ? $file->copyfromRev : '';
+                        unset($file->copyfromPath);
+                        unset($file->copyfromRev);
+
                         $file->parent   = $parentPath == '\\' ? '/' : $parentPath;
                         $file->revision = $commitID;
                         $file->repo     = $repoID;
@@ -1166,6 +1171,8 @@ class repoModel extends model
                             $file->action  = 'D';
                             $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
                         }
+
+                        if(!empty($copyfromPath) && !empty($copyfromRev)) $this->repoTao->copySvnDir($repoID, $copyfromPath, $copyfromRev, $file->path);
                     }
                 }
                 $revisionPairs[$commit->revision] = $commit->revision;
@@ -1215,6 +1222,9 @@ class repoModel extends model
             {
                 $parentPath = dirname($file);
 
+                $copyfromPath = !empty($info['copyfrom-path']) ? $info['copyfrom-path'] : '';
+                $copyfromRev  = !empty($info['copyfrom-rev']) ? $info['copyfrom-rev']: '';
+
                 $repoFile = new stdclass();
                 $repoFile->repo     = $repoID;
                 $repoFile->revision = $commitID;
@@ -1236,6 +1246,8 @@ class repoModel extends model
                     $repoFile->oldPath = '';
                     $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
                 }
+
+                if(!empty($copyfromPath) && !empty($copyfromRev)) $this->repoTao->copySvnDir($repoID, $copyfromPath, $copyfromRev, $repoFile->path);
             }
             $version++;
         }

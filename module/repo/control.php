@@ -1293,6 +1293,8 @@ class repo extends control
     public function ajaxSyncCommit($repoID = 0, $type = 'batch')
     {
         set_time_limit(0);
+        ini_set('memory_limit', '1024M');
+
         $repo = $this->repo->getByID($repoID);
         if(empty($repo)) return;
         if($repo->synced) return print($this->config->repo->repoSyncLog->finish);
@@ -1374,17 +1376,27 @@ class repo extends control
         $version = 1;
         if($repo->SCM != 'Gitlab')
         {
-            $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
+            $orderBy = $repo->SCM == 'Subversion' ? 'svnRevision desc' : 't1.time';
+            $latestInDB = $this->dao->select('t1.*,t1.revision*1 as svnRevision')->from(TABLE_REPOHISTORY)->alias('t1')
                 ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
                 ->where('t1.repo')->eq($repoID)
                 ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
                 ->beginIF($repo->SCM == 'Gitlab' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-                ->orderBy('t1.time')
+                ->beginIF($repo->SCM == 'Subversion')->andWhere('t1.time')->ne('1970-01-01 08:00:00')->fi()
+                ->orderBy($orderBy)
                 ->limit(1)
                 ->fetch();
-
             $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
-            $revision = $version == 1 ? 'HEAD' : (in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) ? $latestInDB->commit : $latestInDB->revision);
+
+            if(in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')))
+            {
+                $revision = $version == 1 ? 'HEAD' : $latestInDB->commit;
+            }
+            else
+            {
+                $revision = $version == 1 ? '0' : $latestInDB->revision;
+            }
+
             if($type == 'batch')
             {
                 $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branchID);
