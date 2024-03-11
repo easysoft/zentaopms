@@ -1,0 +1,20 @@
+---
+title: zt_bug
+author: Gang Liu
+version: "1.0"
+fields:
+  - field: resolvedDate
+    range: "(+1w)-(-1w):-1w"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD"
+  - field: deadline
+    range: "(+0w)-(-2w):-1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD"
+...
