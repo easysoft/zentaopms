@@ -1007,14 +1007,12 @@ class projectTao extends projectModel
         {
             unset($lang->project->menu->projectplan);
             unset($lang->project->menu->settings['subMenu']->module);
-            if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
-            return true;
         }
 
         $projectProduct = (int)$this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
         if(isset($lang->project->menu->settings['subMenu']->module['link'])) $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
-        if(in_array($model, $this->config->project->scrumList)) $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
+        if(!$hasProduct && in_array($model, $this->config->project->scrumList)) $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
 
         /* Init story dropdown for project secondary meun. */
         if($model !== 'kanban' && !empty($this->config->URAndSR) && isset($lang->project->menu->storyGroup))
