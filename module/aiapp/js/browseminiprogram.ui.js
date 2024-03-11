@@ -272,13 +272,11 @@ window.aiBrowseMiniProgram.clearInputAndChat = function()
 window.aiBrowseMiniProgram.handleInputCompositionStart = function()
 {
     composing = true;
-    console.log(composing, 1);
 };
 
 window.aiBrowseMiniProgram.handleInputCompositionEnd = function()
 {
     composing = false;
-    console.log(composing, 2);
 };
 
 /**
@@ -466,5 +464,13 @@ $(function()
             .on('compositionend', window.aiBrowseMiniProgram.handleInputCompositionEnd);
 
         $inputBox.attr('data-bind', 'true');
+    }
+
+    if(!hasModels)
+    {
+        $('.chat').addClass('hidden');
+        $('.chat-nomodel').removeClass('hidden');
+        $('form .footer .btn.primary').attr('disabled', 'disabled');
+        $('.generate-btn').attr('disabled', 'disabled');
     }
 });

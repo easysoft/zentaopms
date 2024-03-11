@@ -13,6 +13,7 @@ jsVar('prompt', $miniProgram->prompt);
 jsVar('postLink', createLink('aiapp', 'miniProgramChat', "id={$miniProgram->id}"));
 jsVar('messages', $messages);
 jsVar('isAppDisabled', $miniProgram->published === '0');
+jsVar('hasModels', $hasModels);
 
 $app->loadLang('ai');
 
@@ -29,7 +30,7 @@ if(count($fields) !== 0)
                 set::rows(1),
                 set::name("field-{$field->id}"),
                 set::placeholder($field->placeholder),
-                set::disabled($isDeleted),
+                set::disabled($isDeleted || !$hasModels),
                 setData('name', $field->name),
                 setData('fid', $field->id)
             );
@@ -40,7 +41,7 @@ if(count($fields) !== 0)
             $control = picker(
                 set::name("field-{$field->id}"),
                 set::items(array_combine($options, $options)),
-                set::disabled($isDeleted),
+                set::disabled($isDeleted || !$hasModels),
                 setData('name', $field->name),
                 setData('fid', $field->id)
             );
@@ -52,7 +53,7 @@ if(count($fields) !== 0)
                 set::name("field-{$field->id}"),
                 set::items(array_combine($options, $options)),
                 set::multiple(true),
-                set::disabled($isDeleted),
+                set::disabled($isDeleted || !$hasModels),
                 setData('name', $field->name),
                 setData('fid', $field->id)
             );
@@ -62,7 +63,7 @@ if(count($fields) !== 0)
             $control = input(
                 set::name("field-{$field->id}"),
                 set::placeholder($field->placeholder),
-                set::disabled($isDeleted),
+                set::disabled($isDeleted || !$hasModels),
                 setData('name', $field->name),
                 setData('fid', $field->id)
             );
