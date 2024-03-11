@@ -27,6 +27,18 @@ $lang->metric->definition    = "計算規則";
 $lang->metric->customUnit    = "自定義";
 $lang->metric->implementType = '实现方式';
 
+$lang->metric->formLabel = new stdclass();
+$lang->metric->formLabel->scope      = $lang->metric->common . $lang->metric->scope;
+$lang->metric->formLabel->object     = $lang->metric->common . $lang->metric->object;
+$lang->metric->formLabel->purpose    = $lang->metric->common . $lang->metric->purpose;
+$lang->metric->formLabel->name       = $lang->metric->common . $lang->metric->name;
+$lang->metric->formLabel->code       = $lang->metric->common . $lang->metric->code;
+$lang->metric->formLabel->dateType   = $lang->metric->dateType;
+$lang->metric->formLabel->unit       = $lang->metric->common . $lang->metric->unit;
+$lang->metric->formLabel->alias      = $lang->metric->common . $lang->metric->alias;
+$lang->metric->formLabel->desc       = $lang->metric->common . $lang->metric->desc;
+$lang->metric->formLabel->definition = $lang->metric->definition;
+
 $lang->metric->yearFormat     = '%s年';
 $lang->metric->weekFormat     = '%s周';
 $lang->metric->monthDayFormat = '%s-%s';
