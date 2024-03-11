@@ -38,6 +38,7 @@ class formPanel extends panel
         'formID?: string="$GID"',                      // 表单 ID，如果指定为 '$AUTO'，则自动生成 form-$moduleName-$methodName。
         'formClass?: string',                          // 表单样式。
         'method?: "get"|"post"="post"',                // 表单提交方式。
+        'enctype?: string',                            // 表单提交类型。
         'url?: string',                                // 表单提交地址。
         'actions?: array',                             // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
         'actionsClass?: string="form-group no-label"', // 表单操作按钮栏类名。
