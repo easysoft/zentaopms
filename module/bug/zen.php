@@ -2197,9 +2197,9 @@ class bugZen extends bug
      * @param  array     $params
      * @param  string    $message
      * @access protected
-     * @return bool
+     * @return bool|int
      */
-    protected function responseAfterCreate(object $bug, array $params, string $message = ''): bool
+    protected function responseAfterCreate(object $bug, array $params, string $message = ''): bool|int
     {
         $executionID = $bug->execution ? $bug->execution : (int)zget($params, 'executionID', $this->session->execution);
 

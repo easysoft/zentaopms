@@ -105,7 +105,7 @@ class task extends control
             $taskData->id = current($taskIdList);
             $this->task->afterCreate($taskData, $taskIdList, $bugID, $todoID);
             $this->task->updateKanbanData($taskData->execution, $taskIdList, (int)$this->post->lane, $columnID);
-            setCookie("lastTaskModule", $this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            setCookie("lastTaskModule", (string)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             /* Get the information returned after a task is created. */
             $response = $this->taskZen->responseAfterCreate($taskData, $execution, $this->post->after ? $this->post->after : '');
@@ -457,7 +457,7 @@ class task extends control
             /* Get the information returned after a task is started. */
             $from     = zget($output, 'from');
             $response = $this->taskZen->responseAfterChangeStatus($task, $from);
-            $this->send($response);
+            return $this->send($response);
         }
 
         /* Shows the variables needed to start the task page. */
@@ -716,7 +716,7 @@ class task extends control
 
             $this->executeHooks($taskID);
             $response = $this->taskZen->responseAfterChangeStatus($task, $from);
-            $this->send($response);
+            return $this->send($response);
         }
 
         $this->view->title           = $this->view->execution->name . $this->lang->colon .$this->lang->task->restart;

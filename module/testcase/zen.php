@@ -2205,9 +2205,9 @@ class testcaseZen extends testcase
      *
      * @param  int       $caseID
      * @access protected
-     * @return array
+     * @return array|int
      */
-    protected function responseAfterCreate(int $caseID): array
+    protected function responseAfterCreate(int $caseID): array|int
     {
         $message = $this->executeHooks($caseID);
         if(!$message) $message = $this->lang->saveSuccess;

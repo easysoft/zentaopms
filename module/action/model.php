@@ -1541,14 +1541,18 @@ class actionModel extends model
      * 处理操作记录用于API。
      * Process action for API.
      *
-     * @param  array  $actions
-     * @param  array  $users
-     * @param  array  $objectLang
+     * @param  array|object $actions
+     * @param  array|object $users
+     * @param  array|object $objectLang
      * @access public
      * @return array
      */
-    public function processActionForAPI(array $actions, array $users = array(), array $objectLang = array()): array
+    public function processActionForAPI(array|object $actions, array|object $users = array(), array|object $objectLang = array()): array
     {
+        if(is_object($actions))    $actions    = (array)$actions;
+        if(is_object($users))      $users      = (array)$users;
+        if(is_object($objectLang)) $objectLang = (array)$objectLang;
+
         foreach($actions as $action)
         {
             $action->actor = zget($users, $action->actor);

@@ -219,11 +219,11 @@ class baseEntry
      * Send error response
      *
      * @param  int    $code
-     * @param  string $msg
+     * @param  string|object $msg
      * @access public
      * @return string
      */
-    public function sendError(int $code, string $msg)
+    public function sendError(int $code, string|object $msg)
     {
         $response = new stdclass();
         $response->error = $msg;
@@ -495,7 +495,10 @@ class baseEntry
         {
             foreach($data as $object) $this->formatFields($object, $fields);
         }
-        $this->formatFields($data, $fields);
+        else
+        {
+            $this->formatFields($data, $fields);
+        }
 
         return $data;
     }

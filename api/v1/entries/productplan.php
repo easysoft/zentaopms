@@ -52,6 +52,8 @@ class productplanEntry extends entry
         /* Set $_POST variables. */
         $fields = 'title,begin,end,desc';
         $this->batchSetPost($fields, $oldPlan);
+        $this->setPost('product', $oldPlan->product);
+        $this->setPost('status',  $oldPlan->status);
 
         $control = $this->loadController('productplan', 'edit');
         $control->edit($planID);
@@ -67,10 +69,7 @@ class productplanEntry extends entry
         if(!$data or !isset($data->status)) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $plan = $data->data->plan;
-        $plan->stories = $data->data->planStories;
-        $plan->bugs    = $data->data->planBugs;
-
+        $plan = $this->productplan->getByID($planID);
         return $this->send(200, $this->format($plan, 'begin:date,end:date,deleted:bool,stories:array,bugs:array'));
     }
 

@@ -684,11 +684,14 @@ class fileModel extends model
      *
      * @param  object       $data
      * @param  string|array $editorList
+     * @param  mixed        $uid
      * @access public
      * @return object
      */
-    public function processImgURL(object $data, string|array $editorList, string $uid = ''): object
+    public function processImgURL(object $data, string|array $editorList, mixed $uid = ''): object
     {
+        if(!is_string($uid)) return $data;
+
         if(is_string($editorList)) $editorList = explode(',', str_replace(' ', '', $editorList));
         if(empty($editorList)) return $data;
 

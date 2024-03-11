@@ -392,8 +392,12 @@ class productplan extends control
         $this->view->orderBy      = $orderBy;
         $this->view->link         = $link;
         $this->view->param        = $param;
-        $this->view->storyPager   = $storyPager;
-        $this->view->bugPager     = $bugPager;
+
+        if($this->viewType != 'json')
+        {
+            $this->view->storyPager   = $storyPager;
+            $this->view->bugPager     = $bugPager;
+        }
         $this->display();
     }
 

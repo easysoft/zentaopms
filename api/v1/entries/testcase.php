@@ -29,7 +29,7 @@ class testcaseEntry extends entry
         if(!isset($data->case)) $this->sendError(400, 'error');
 
         $case = $data->case;
-        $case->steps = (isset($case->steps) and !empty($case->steps)) ? array_values(get_object_vars($case->steps)) : array();
+        $case->steps = (isset($case->steps) and !empty($case->steps)) ? array_values(get_object_vars((object)$case->steps)) : array();
 
         return $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,steps:array,deleted:bool'));
     }

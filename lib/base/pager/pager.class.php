@@ -176,9 +176,13 @@ class basePager
     public function setRecPerPage($recPerPage)
     {
         /* Set the cookie name. */
-        $this->pageCookie = 'pager' . ucfirst($this->app->getModuleName()) . ucfirst($this->app->getMethodName());
+        if(!(defined('RUN_MODE') and RUN_MODE == 'api'))
+        {
+            $this->pageCookie = 'pager' . ucfirst($this->app->getModuleName()) . ucfirst($this->app->getMethodName());
 
-        if(isset($_COOKIE[$this->pageCookie])) $recPerPage = $_COOKIE[$this->pageCookie];
+            if(isset($_COOKIE[$this->pageCookie])) $recPerPage = $_COOKIE[$this->pageCookie];
+        }
+
         $this->recPerPage = ($recPerPage > 0) ? (int)$recPerPage : PAGER::DEFAULT_REC_PER_PAGE;
     }
 

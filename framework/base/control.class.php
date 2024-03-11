@@ -1085,7 +1085,7 @@ class baseControl
             {
                 print(urldecode(json_encode($data)));
                 $response = helper::removeUTF8Bom(ob_get_clean());
-                return helper::end($response);
+                return print($response);
             }
 
             /* Zand will use ob_get_clean() to print, so cannot clean so early. */

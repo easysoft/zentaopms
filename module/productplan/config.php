@@ -60,22 +60,22 @@ $config->productplan->actionList['createExecution']['notLoadModel'] = true;
 $config->productplan->actionList['linkStory']['icon'] = 'link';
 $config->productplan->actionList['linkStory']['hint'] = $lang->productplan->linkStory;
 $config->productplan->actionList['linkStory']['text'] = $lang->productplan->linkStory;
-$config->productplan->actionList['linkStory']['url']  = helper::createLink($app->rawModule, 'view', 'planID={id}&type=story&orderBy=id_desc&link=true');
+if($app->rawModule) $config->productplan->actionList['linkStory']['url']  = helper::createLink($app->rawModule, 'view', 'planID={id}&type=story&orderBy=id_desc&link=true');
 
 $config->productplan->actionList['linkBug']['icon'] = 'bug';
 $config->productplan->actionList['linkBug']['hint'] = $lang->productplan->linkBug;
 $config->productplan->actionList['linkBug']['text'] = $lang->productplan->linkBug;
-$config->productplan->actionList['linkBug']['url']  = helper::createLink($app->rawModule, 'view', 'planID={id}&type=bug&orderBy=id_desc&link=true');
+if($app->rawModule) $config->productplan->actionList['linkBug']['url']  = helper::createLink($app->rawModule, 'view', 'planID={id}&type=bug&orderBy=id_desc&link=true');
 
 $config->productplan->actionList['edit']['icon'] = 'edit';
 $config->productplan->actionList['edit']['hint'] = $lang->productplan->edit;
 $config->productplan->actionList['edit']['text'] = $lang->productplan->edit;
-$config->productplan->actionList['edit']['url']  = helper::createLink($app->rawModule, 'edit', 'planID={id}');
+if($app->rawModule) $config->productplan->actionList['edit']['url']  = helper::createLink($app->rawModule, 'edit', 'planID={id}');
 
 $config->productplan->actionList['create']['icon'] = 'split';
 $config->productplan->actionList['create']['hint'] = $lang->productplan->createChildren;
 $config->productplan->actionList['create']['text'] = $lang->productplan->createChildren;
-$config->productplan->actionList['create']['url']  = helper::createLink($app->rawModule, 'create', 'product={product}&branch={branch}&parent={id}');
+if($app->rawModule) $config->productplan->actionList['create']['url']  = helper::createLink($app->rawModule, 'create', 'product={product}&branch={branch}&parent={id}');
 
 $config->productplan->actionList['delete']['icon']         = 'trash';
 $config->productplan->actionList['delete']['hint']         = $lang->productplan->delete;
