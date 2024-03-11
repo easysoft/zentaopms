@@ -140,6 +140,7 @@ $lang->metric->monthText          = "%s day";
 $lang->metric->errorDateRange     = "The start date cannot be longer than the end date";
 $lang->metric->errorCalcTimeRange = "The start time of collection cannot be later than the end time of collection";
 $lang->metric->updateTimeTip      = "Update snapshot time：%s";
+$lang->metric->builtinMetric      = "Built-in Metric, can not delist";
 
 $lang->metric->noDesc    = "No description available";
 $lang->metric->noFormula = "No calculation rules available";

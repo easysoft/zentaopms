@@ -1342,7 +1342,11 @@ class metricModel extends model
 
                 if($action['name'] == 'edit')      $isClick = $metric->canEdit;
                 if($action['name'] == 'implement') $isClick = $metric->canImplement;
-                if($action['name'] == 'delist')    $isClick = $metric->canDelist;
+                if($action['name'] == 'delist')
+                {
+                    $isClick = $metric->canDelist;
+                    if(!$isClick and $metric->builtin == '1') $metric->actions[$key]['hint'] = $this->lang->metric->builtinMetric;
+                }
 
                 $metric->actions[$key]['disabled'] = !$isClick;
             }
