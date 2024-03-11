@@ -197,11 +197,12 @@ $lang->metric->oldMetric->dayNames = array(1 => '星期一', 2 => '星期二', 3
 $lang->metric->moreSelects = array();
 
 $lang->metric->unitList = array();
-$lang->metric->unitList['count']   = '个';
-$lang->metric->unitList['measure'] = '工时';
-$lang->metric->unitList['hour']    = '小时';
-$lang->metric->unitList['day']     = '天';
-$lang->metric->unitList['manday']  = '人天';
+$lang->metric->unitList['count']      = '个';
+$lang->metric->unitList['measure']    = '工时';
+$lang->metric->unitList['hour']       = '小时';
+$lang->metric->unitList['day']        = '天';
+$lang->metric->unitList['manday']     = '人天';
+$lang->metric->unitList['percentage'] = '百分比';
 
 $lang->metric->afterCreateList = array();
 $lang->metric->afterCreateList['back']      = '返回列表页';

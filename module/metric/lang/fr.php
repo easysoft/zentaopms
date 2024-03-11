@@ -184,11 +184,12 @@ $lang->metric->oldMetric->dayNames = array(1 => 'Monday', 2 => 'Tuesday', 3 => '
 $lang->metric->moreSelects = array();
 
 $lang->metric->unitList = array();
-$lang->metric->unitList['count']   = 'Count';
-$lang->metric->unitList['measure'] = 'Man-hour';
-$lang->metric->unitList['hour']    = 'Hour';
-$lang->metric->unitList['day']     = 'Day';
-$lang->metric->unitList['manday']  = 'Man-day';
+$lang->metric->unitList['count']      = 'Count';
+$lang->metric->unitList['measure']    = 'Man-hour';
+$lang->metric->unitList['hour']       = 'Hour';
+$lang->metric->unitList['day']        = 'Day';
+$lang->metric->unitList['manday']     = 'Man-day';
+$lang->metric->unitList['percentage'] = 'Percentage';
 
 $lang->metric->afterCreateList = array();
 $lang->metric->afterCreateList['back']      = 'Back to List Page';
