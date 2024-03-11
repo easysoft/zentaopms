@@ -15,7 +15,7 @@ jsVar('legacyBugTip',    $lang->testreport->legacyBugTip);
 jsVar('activatedBugTip', $lang->testreport->activatedBugTip);
 jsVar('fromCaseBugTip',  $lang->testreport->fromCaseBugTip);
 
-detailHeader
+$this->session->notHead ? null : detailHeader
 (
     to::title
     (
@@ -391,7 +391,7 @@ detailBody
                         )
                     ) : null
                 ),
-                history(set::objectID($report->id))
+                $this->session->notHead ? null : history(set::objectID($report->id))
             ),
             tabPane
             (
@@ -473,7 +473,7 @@ detailBody
                 $bugHandleChart,
                 $bugCharts
             ),
-            tabPane
+            $this->session->notHead ? null : tabPane
             (
                 set::key('legendMore'),
                 set::title($lang->testreport->legendMore),
@@ -484,7 +484,7 @@ detailBody
             )
         )
     ),
-    floatToolbar
+    $this->session->notHead ? null : floatToolbar
     (
         set::object($report),
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), setClass('ghost text-white'), $lang->goback)),
