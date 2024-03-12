@@ -510,7 +510,6 @@ $lang->printKanban->taskStatus = 'Statut';
 $lang->printKanban->typeList['all']       = 'Tout';
 $lang->printKanban->typeList['increment'] = 'Incrément';
 
-$lang->execution->typeList['']       = '';
 $lang->execution->typeList['stage']  = 'Stage';
 $lang->execution->typeList['sprint'] = $lang->executionCommon;
 $lang->execution->typeList['kanban'] = 'Kanban';
