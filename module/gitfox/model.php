@@ -73,21 +73,5 @@ class gitfoxModel extends model
 
         return $users;
     }
-
-    /**
-     * 获取gitfox api 基础url 根据gitfox id。
-     * Get gitfox api base url by gitfox id.
-     *
-     * @param  int    $gitfoxID
-     * @access public
-     * @return string
-     */
-    public function getApiRoot(int $gitfoxID): string
-    {
-        $gitfox = $this->getByID($gitfoxID);
-        if(!$gitfox || $gitfox->type != 'gitfox') return '';
-
-        return rtrim($gitfox->url, '/') . '/api/v1%s';
-    }
 }
 
