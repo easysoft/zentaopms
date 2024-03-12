@@ -29,6 +29,8 @@ searchForm
 $cols = $config->execution->linkStory->dtable->fieldList;
 $cols['module']['map']  = $modules;
 $cols['product']['map'] = $productPairs;
+
+if($storyType == 'requirement') $cols['title']['title'] = str_replace($lang->SRCommon, $lang->URCommon, $lang->story->title);
 if($productType != 'normal')
 {
     $cols['branch']['title'] = $lang->product->branchName[$productType];
@@ -44,7 +46,7 @@ jsVar('branchGroups', $branchGroups);
 $footToolbar['items'][] = array(
     'text'      => $lang->save,
     'className' => 'btn secondary batch-btn ajax-btn import-story-btn size-sm',
-    'data-url'  => createLink('execution', 'linkStory', "objectID=$object->id")
+    'data-url'  => createLink('execution', 'linkStory', "projectID=$object->id&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&extra=&storyType=$storyType")
 );
 if(!isInModal())
 {

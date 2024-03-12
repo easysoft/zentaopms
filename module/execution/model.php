@@ -2790,10 +2790,11 @@ class executionModel extends model
      * @param  array  $stories
      * @param  string $extra
      * @param  array  $lanes
+     * @param  string $storyType
      * @access public
      * @return bool
      */
-    public function linkStory(int $executionID, array $stories = array(), string $extra = '', array $lanes = array()): bool
+    public function linkStory(int $executionID, array $stories = array(), string $extra = '', array $lanes = array(), $storyType = 'story'): bool
     {
         if(empty($executionID) || empty($stories)) return false;
 
@@ -2839,6 +2840,7 @@ class executionModel extends model
             $action = $execution->type == 'project' ? 'linked2project' : 'linked2execution';
             if($action == 'linked2execution' and $execution->type == 'kanban') $action = 'linked2kanban';
             if($execution->multiple or $execution->type == 'project') $this->action->create('story', $storyID, $action, '', $executionID);
+            if($storyType == 'requirement' and $execution->model == 'ipd') $this->dao->update(TABLE_STORY)->set('status')->eq('developing')->where('id')->eq($storyID)->exec();
         }
 
         if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
@@ -2935,6 +2937,7 @@ class executionModel extends model
     public function unlinkStory(int $executionID, int $storyID, int $laneID = 0, int $columnID = 0): array|bool
     {
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+        $storyType = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('type');
         if($execution->type == 'project')
         {
             $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->fetchAll('id');
@@ -2942,6 +2945,9 @@ class executionModel extends model
             if(!empty($executionStories)) return dao::$errors[] = $this->lang->execution->notAllowedUnlinkStory;
         }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
+
+        /* In ipd project, unlink stories change it's status to launched. */
+        if($execution->model == 'ipd' and $storyType == 'requirement') $this->dao->update(TABLE_STORY)->set('status')->eq('launched')->where('id')->eq($storyID)->exec();
 
         /* Resolve TABLE_KANBANCELL's field cards. */
         if($execution->type == 'kanban')

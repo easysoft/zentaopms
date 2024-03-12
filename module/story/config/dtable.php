@@ -338,7 +338,7 @@ $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['dat
 $config->story->dtable->fieldList['actions']['actionsMap']['storyEstimate']['data-id']     = 'storyEstimateModal';
 
 $config->story->dtable->fieldList['actions']['actionsMap']['unlink']['icon'] = 'unlink';
-$config->story->dtable->fieldList['actions']['actionsMap']['unlink']['hint'] = $lang->execution->unlinkStory;
+$config->story->dtable->fieldList['actions']['actionsMap']['unlink']['hint'] = $lang->story->unlink;
 
 $config->story->taskTable = new stdclass();
 $config->story->taskTable->fieldList['id']['name']     = 'id';
