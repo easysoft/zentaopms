@@ -49,7 +49,7 @@ foreach($fields as $field => $attr)
         )
     );
 }
-if($this->config->vision != 'or') $formItems['affected'] = $getAffectedTabs($story, $users);
+if(strpos('or,lite', $this->config->vision) === false) $formItems['affected'] = $getAffectedTabs($story, $users);
 
 modalHeader();
 panel
