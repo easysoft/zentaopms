@@ -415,6 +415,7 @@ class context extends \zin\utils\dataset
             $result = call_user_func("\zin\command::{$method}", $queryNodes, ...$args);
             if(is_array($result))  $queryNodes = $result;
             if(empty($queryNodes)) break;
+            prebuild($queryNodes);
         }
     }
 
