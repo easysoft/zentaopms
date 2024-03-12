@@ -57,7 +57,7 @@ class gitfox extends control
         $user = $this->gitfox->checkTokenAccess($gitfox->url, $gitfox->token);
 
         if(is_bool($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitfox->hostError, $this->config->gitfox->minCompatibleVersion)))));
-        if(!isset($user->id)) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitfox->tokenError))));
+        if(!isset($user[0]->uid)) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitfox->tokenError))));
     }
 }
 

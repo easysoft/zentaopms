@@ -12,6 +12,47 @@ declare(strict_types=1);
 class gitfoxModel extends model
 {
     /**
+     * 获取gitfox根据id。
+     * Get a gitfox by id.
+     *
+     * @param  int $id
+     * @access public
+     * @return object|false
+     */
+    public function getByID(int $id): object|false
+    {
+        return $this->loadModel('pipeline')->getByID($id);
+    }
+
+    /**
+     * 获取gitfox列表。
+     * Get gitfox list.
+     *
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getList(string $orderBy = 'id_desc', object $pager = null): array
+    {
+        $gitfoxList = $this->loadModel('pipeline')->getList('gitfox', $orderBy, $pager);
+
+        return $gitfoxList;
+    }
+
+    /**
+     * 获取gitfox id name 键值对。
+     * Get gitfox pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPairs(): array
+    {
+        return $this->loadModel('pipeline')->getPairs('gitfox');
+    }
+
+    /**
      * 检查token。
      * Check token access.
      *
@@ -22,15 +63,31 @@ class gitfoxModel extends model
      */
     public function checkTokenAccess(string $url = '', string $token = ''): object|array|null|false
     {
-        $apiRoot  = rtrim($url, '/') . '/api/v4%s' . "?private_token={$token}";
-        $url      = sprintf($apiRoot, "/users") . "&per_page=5&active=true";
-        $response = commonModel::http($url);
+        $url      = rtrim($url, '/') . '/api/v1/admin/users';
+        $header   = array('Authorization: Bearer ' . $token);
+        $response = commonModel::http($url, null, array(), $header);
+
         $users    = json_decode($response);
         if(empty($users)) return false;
         if(isset($users->message) or isset($users->error)) return null;
 
-        $apiRoot .= '&sudo=' . $users[0]->id;
-        return $this->apiGet($apiRoot, '/user');
+        return $users;
+    }
+
+    /**
+     * 获取gitfox api 基础url 根据gitfox id。
+     * Get gitfox api base url by gitfox id.
+     *
+     * @param  int    $gitfoxID
+     * @access public
+     * @return string
+     */
+    public function getApiRoot(int $gitfoxID): string
+    {
+        $gitfox = $this->getByID($gitfoxID);
+        if(!$gitfox || $gitfox->type != 'gitfox') return '';
+
+        return rtrim($gitfox->url, '/') . '/api/v1%s';
     }
 }
 

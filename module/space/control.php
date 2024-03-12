@@ -73,6 +73,7 @@ class space extends control
 
         $this->app->loadLang('sonarqube');
         $this->app->loadLang('jenkins');
+        $this->app->loadLang('gitfox');
 
         $apps       = array();
         $defaultApp = '';

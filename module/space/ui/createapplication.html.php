@@ -18,6 +18,8 @@ $colWidth = isInModal() ? 'full' : '2/3';
 
 jsVar('gitlabUrlTips', $lang->gitlab->placeholder->url);
 jsVar('gitlabTokenTips', $lang->gitlab->placeholder->token);
+jsVar('gitfoxUrlTips', $lang->gitfox->placeholder->url);
+jsVar('gitfoxTokenTips', $lang->gitfox->placeholder->token);
 jsVar('sonarqubeUrlTips', $lang->sonarqube->placeholder->url);
 jsVar('jenkinsTokenTips', $lang->jenkins->tokenFirst);
 jsVar('jenkinsPasswordTips', $lang->jenkins->tips);
