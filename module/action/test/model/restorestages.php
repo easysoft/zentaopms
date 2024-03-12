@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/action.class.php';
 zdTable('user')->gen(5);
 su('admin');
 
+zdTable('stage')->gen(5);
 zdTable('project')->config('project')->gen(5);
 zdTable('action')->config('action')->gen(4);
 

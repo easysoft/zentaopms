@@ -18,9 +18,7 @@ fields:
       range: "20201101 000000:1D"
       type: timestamp
       format: "YYYY-MM-DD hh::mm:ss"
-      postfix: "\t"
     - field: lastEditedDate
       range: "20220101 000000:1D"
       type: timestamp
       format: "YYYY-MM-DD"
-      postfix: "\t"
