@@ -734,7 +734,7 @@ class transferModel extends model
         $result->isEndPage = $pagerID >= $result->allPager; //是否是最后一页
         $result->datas     = $datas;
 
-        $this->session->set('insert', !empty($datas) && !isset($datas[0]->id)); //如果存在ID列则在SESSION中标记insert用来判断是否是插入/更新
+        $this->session->set('insert', !empty($datas) && !isset(reset($datas)->id)); //如果存在ID列则在SESSION中标记insert用来判断是否是插入/更新
 
         if(empty($datas)) return print(js::locate('back'));
         return $result;
