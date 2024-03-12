@@ -21,16 +21,17 @@ pid=1
 
 $story  = new storyTest();
 $story1 = $tester->loadModel('story')->fetchByID(2);
-$story1->parent       = 2;
-$story1->pri          = 4;
-$story1->plan         = '0';
-$story1->estimate     = 1;
-$story1->sourceNote   = '测试来源备注1';
-$story1->product      = 2;
-$story1->linkStories  = '';
-$story1->spec         = '';
-$story1->verify       = '';
-$story1->deleteFiles  = array();
+$story1->parent        = 2;
+$story1->pri           = 4;
+$story1->plan          = '0';
+$story1->estimate      = 1;
+$story1->sourceNote    = '测试来源备注1';
+$story1->product       = 2;
+$story1->linkStories   = '';
+$story1->spec          = '';
+$story1->verify        = '';
+$story1->retractedDate = NULL;
+$story1->deleteFiles   = array();
 unset($story1->approvedDate);
 unset($story1->lastEditedDate);
 unset($story1->changedDate);
