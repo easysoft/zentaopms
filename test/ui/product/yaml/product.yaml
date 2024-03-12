@@ -1,0 +1,7 @@
+title: product
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: name
+    range: 1-10
+
