@@ -1179,7 +1179,7 @@ class bugZen extends bug
      * @access protected
      * @return void
      */
-    protected function buildCreateForm(object $bug, array $param, string $from): void
+    public function buildCreateForm(object $bug, array $param, string $from): void
     {
         extract($param);
 
@@ -2006,7 +2006,7 @@ class bugZen extends bug
      * @access private
      * @return object
      */
-    private function updateBug(object $bug, array $fields): object
+    public function updateBug(object $bug, array $fields): object
     {
         foreach($fields as $field => $value) $bug->$field = $value;
 
@@ -2199,7 +2199,7 @@ class bugZen extends bug
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterCreate(object $bug, array $params, string $message = ''): bool|int
+    public function responseAfterCreate(object $bug, array $params, string $message = ''): bool|int
     {
         $executionID = $bug->execution ? $bug->execution : (int)zget($params, 'executionID', $this->session->execution);
 
