@@ -398,7 +398,7 @@ class repoModel extends model
             $this->updateCommitDate($repo->id);
         }
 
-        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $repo->path != $data->path)
+        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject || $repo->scm == 'Subversion') && $repo->path != $data->path)
         {
             $this->repoTao->deleteInfoByID($repo->id);
             return false;
@@ -894,12 +894,15 @@ class repoModel extends model
     public function getLatestCommit(int $repoID, bool $checkCount = true): object|false
     {
         $repo        = $this->fetchByID($repoID);
+
+        $orderBy     = $repo->SCM == 'Subversion' ? 'svnRevision desc' : 't1.time desc';
         $branchID    = (string)$this->cookie->repoBranch;
-        $lastComment = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
+        $lastComment = $this->dao->select('t1.*,t1.revision*1 as svnRevision')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
             ->beginIF($repo->SCM != 'Subversion' && $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
-            ->orderBy('t1.time desc')
+            ->beginIF($repo->SCM == 'Subversion')->andWhere('t1.time')->ne('1970-01-01 08:00:00')->fi()
+            ->orderBy($orderBy)
             ->fetch();
         if(empty($lastComment)) return false;
         if(!$checkCount) return $lastComment;
@@ -1061,6 +1064,11 @@ class repoModel extends model
                     {
                         $parentPath = dirname($file->path);
 
+                        $copyfromPath = !empty($file->copyfromPath) ? $file->copyfromPath : '';
+                        $copyfromRev  = !empty($file->copyfromRev) ? $file->copyfromRev : '';
+                        unset($file->copyfromPath);
+                        unset($file->copyfromRev);
+
                         $file->parent   = $parentPath == '\\' ? '/' : $parentPath;
                         $file->revision = $commitID;
                         $file->repo     = $repoID;
@@ -1074,6 +1082,8 @@ class repoModel extends model
                             $file->action  = 'D';
                             $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
                         }
+
+                        if(!empty($copyfromPath) && !empty($copyfromRev)) $this->repoTao->copySvnDir($repoID, $copyfromPath, $copyfromRev, $file->path);
                     }
                 }
                 $revisionPairs[$commit->revision] = $commit->revision;
@@ -1122,6 +1132,9 @@ class repoModel extends model
             {
                 $parentPath = dirname($file);
 
+                $copyfromPath = !empty($info['copyfrom-path']) ? $info['copyfrom-path'] : '';
+                $copyfromRev  = !empty($info['copyfrom-rev']) ? $info['copyfrom-rev']: '';
+
                 $repoFile = new stdclass();
                 $repoFile->repo     = $repoID;
                 $repoFile->revision = $commitID;
@@ -1143,6 +1156,8 @@ class repoModel extends model
                     $repoFile->oldPath = '';
                     $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
                 }
+
+                if(!empty($copyfromPath) && !empty($copyfromRev)) $this->repoTao->copySvnDir($repoID, $copyfromPath, $copyfromRev, $repoFile->path);
             }
 
             $version ++;

@@ -603,12 +603,12 @@ class Subversion
         $path  = '"' . $this->root . '"';
         if(stripos($this->root, 'https') === 0 or stripos($this->root, 'svn') === 0)
         {
-            $comments = str_replace("\\", "/", "$this->client log $count -v -r $version:0 --non-interactive --trust-server-cert-failures=cn-mismatch --trust-server-cert --no-auth-cache --xml $path");
+            $comments = str_replace("\\", "/", "$this->client log $count -v -r $version:HEAD --non-interactive --trust-server-cert-failures=cn-mismatch --trust-server-cert --no-auth-cache --xml $path");
             if($this->svnVersion and version_compare($this->svnVersion, '1.9', '<')) $comments = str_replace("\\", "/", "$this->client log $count -v -r $version:0 --non-interactive --trust-server-cert --no-auth-cache --xml $path");
         }
         else
         {
-            $comments = str_replace("\\", "/", "$this->client log $count -v -r $version:0 --no-auth-cache --xml $path");
+            $comments = str_replace("\\", "/", "$this->client log $count -v -r $version:HEAD --no-auth-cache --xml $path");
         }
         $comments = $this->replaceAuth(escapeCmd($comments));
         $comments = execCmd($comments, 'string', $result);
@@ -639,6 +639,9 @@ class Subversion
                     $parsedFile->path     = (string)$file;
                     $parsedFile->type     = (string)$file['kind'];
                     $parsedFile->action   = (string)$file['action'];
+                    if(isset($file['copyfrom-path'])) $parsedFile->copyfromPath = (string)$file['copyfrom-path'];
+                    if(isset($file['copyfrom-rev']))  $parsedFile->copyfromRev = (string)$file['copyfrom-rev'];
+
                     $logs['files'][$parsedLog->revision][]  = $parsedFile;
                 }
             }
