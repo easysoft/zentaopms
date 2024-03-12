@@ -65,5 +65,5 @@
  #visionTips {width: 280px; height: 0; position: absolute; bottom: 120px; left: 0; z-index: 200; color: #ffffff;}
  #visionTips .inner {width: 270px; height: 58px; position: relative; bottom: 0; left: 0; border-radius: 8px; display: flex; justify-content: space-around; align-items: center;}
  #visionTips .line {width: 2px; height: 31px; position: absolute; bottom: -31px; left: 64px;}
- #visionTips .circle {width: 10px; height: 10px; border-radius: 50%; border-width: 3px; border-style: solid; position: relative; left: -4px; top: 31px; background-color: white;color: #fff; border-color: #2e7fff;}
- #visionTips .inner > button {border-color: white; background: #2e7fff;}
+ #visionTips .circle {width: 10px; height: 10px; border-radius: 50%; border-width: 3px; border-style: solid; position: relative; left: -4px; top: 31px; background-color: white;color: #fff; border-color: var(--color-primary-500);}
+ #visionTips .inner > button {border-color: white; background: var(--skin-text);}
