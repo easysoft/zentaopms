@@ -1722,12 +1722,15 @@ class execution extends control
 
             $lang->execution->typeList['sprint'] = $executionCommonLang;
         }
-        elseif(!empty($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus'))
+        elseif(!empty($project) and (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))))
         {
             global $lang;
-            $lang->executionCommon = $lang->execution->stage;
+            if($type == 'stage')
+            {
+                $lang->executionCommon   = $lang->execution->stage;
+                $lang->execution->common = $lang->execution->stage;
+            }
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
-
             $this->config->execution->create->requiredFields .= ',products0';
         }
 
