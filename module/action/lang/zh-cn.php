@@ -140,6 +140,7 @@ $lang->action->objectTypes['team']             = '团队';
 $lang->action->objectTypes['whitelist']        = '白名单';
 $lang->action->objectTypes['pipeline']         = 'GitLab服务器';
 $lang->action->objectTypes['gitlab']           = 'GitLab服务器';
+$lang->action->objectTypes['gitfox']           = 'GitFox服务器';
 $lang->action->objectTypes['gitea']            = 'Gitea服务器';
 $lang->action->objectTypes['gogs']             = 'Gogs服务器';
 $lang->action->objectTypes['jenkins']          = 'Jenkins服务器';
@@ -798,6 +799,11 @@ $lang->action->dynamicAction->gitlab['created']   = '创建GitLab服务器';
 $lang->action->dynamicAction->gitlab['edited']    = '编辑GitLab服务器';
 $lang->action->dynamicAction->gitlab['deleted']   = '删除GitLab服务器';
 $lang->action->dynamicAction->gitlab['undeleted'] = '还原GitLab服务器';
+
+$lang->action->dynamicAction->gitfox['created']   = '创建GitLab服务器';
+$lang->action->dynamicAction->gitfox['edited']    = '编辑GitLab服务器';
+$lang->action->dynamicAction->gitfox['deleted']   = '删除GitLab服务器';
+$lang->action->dynamicAction->gitfox['undeleted'] = '还原GitLab服务器';
 
 $lang->action->dynamicAction->gitea['created']   = '创建Gitea服务器';
 $lang->action->dynamicAction->gitea['edited']    = '编辑Gitea服务器';

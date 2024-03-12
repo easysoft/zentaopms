@@ -140,6 +140,7 @@ $lang->action->objectTypes['team']             = 'Team';
 $lang->action->objectTypes['whitelist']        = 'Whitelist';
 $lang->action->objectTypes['pipeline']         = 'GitLab Server';
 $lang->action->objectTypes['gitlab']           = 'GitLab Server';
+$lang->action->objectTypes['gitfox']           = 'GitFox Server';
 $lang->action->objectTypes['gitea']            = 'Gitea Server';
 $lang->action->objectTypes['gogs']             = 'Gogs Server';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
@@ -798,6 +799,11 @@ $lang->action->dynamicAction->gitlab['created']   = 'Create GitLab Server';
 $lang->action->dynamicAction->gitlab['edited']    = 'Edit GitLab Server';
 $lang->action->dynamicAction->gitlab['deleted']   = 'Delete GitLab Server';
 $lang->action->dynamicAction->gitlab['undeleted'] = 'Undelete GitLab Server';
+
+$lang->action->dynamicAction->gitfox['created']   = 'Create GitFox Server';
+$lang->action->dynamicAction->gitfox['edited']    = 'Edit GitFox Server';
+$lang->action->dynamicAction->gitfox['deleted']   = 'Delete GitFox Server';
+$lang->action->dynamicAction->gitfox['undeleted'] = 'Undelete GitFox Server';
 
 $lang->action->dynamicAction->gitea['created']   = 'Create Gitea Server';
 $lang->action->dynamicAction->gitea['edited']    = 'Edit Gitea Server';

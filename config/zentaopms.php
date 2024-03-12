@@ -641,6 +641,7 @@ $config->objectTables['sonarqube']      = TABLE_PIPELINE;
 $config->objectTables['gitea']          = TABLE_PIPELINE;
 $config->objectTables['gogs']           = TABLE_PIPELINE;
 $config->objectTables['gitlab']         = TABLE_PIPELINE;
+$config->objectTables['gitfox']         = TABLE_PIPELINE;
 $config->objectTables['jenkins']        = TABLE_PIPELINE;
 $config->objectTables['nexus']          = TABLE_PIPELINE;
 $config->objectTables['stage']          = TABLE_STAGE;

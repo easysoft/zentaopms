@@ -43,6 +43,7 @@ $config->action->objectNameFields['kanban']       = 'name';
 $config->action->objectNameFields['kanbancard']   = 'name';
 $config->action->objectNameFields['sonarqube']    = 'name';
 $config->action->objectNameFields['gitlab']       = 'name';
+$config->action->objectNameFields['gitfox']       = 'name';
 $config->action->objectNameFields['gitea']        = 'name';
 $config->action->objectNameFields['gogs']         = 'name';
 $config->action->objectNameFields['jenkins']      = 'name';
