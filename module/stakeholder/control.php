@@ -54,9 +54,8 @@ class stakeholder extends control
         if($_POST)
         {
             if($this->post->from != 'outside') $this->config->stakeholder->create->requiredFields .= ',user';
-            $stakeholderData = form::data()
-                ->setDefault('objectID', $objectID)
-                ->get();
+            if($this->post->from == 'outside' && $this->post->newUser) $this->config->stakeholder->create->requiredFields .= ',company';
+            $stakeholderData = form::data()->setDefault('objectID', $objectID)->get();
 
             $stakeholderID = $this->stakeholder->create($stakeholderData);
 
@@ -65,8 +64,8 @@ class stakeholder extends control
             $this->loadModel('action')->create('stakeholder', $stakeholderID, 'added');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $stakeholderID));
 
-            $moduleName = $this->app->tab == 'program' ? 'program'              : $this->moduleName;
-            $methodName = $this->app->tab == 'program' ? 'stakeholder'          : 'browse';
+            $moduleName = $this->app->tab == 'program' ? 'program'             : $this->moduleName;
+            $methodName = $this->app->tab == 'program' ? 'stakeholder'         : 'browse';
             $param      = $this->app->tab == 'program' ? "programID=$objectID" : "projectID=$objectID";
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($moduleName, $methodName, $param)));
         }

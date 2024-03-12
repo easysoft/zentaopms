@@ -1,6 +1,6 @@
 <?php
 $config->stakeholder->create = new stdclass();
-$config->stakeholder->create->requiredFields = 'name,company';
+$config->stakeholder->create->requiredFields = 'name';
 $config->stakeholder->expect = new stdclass();
 $config->stakeholder->expect->requiredFields = 'expect,progress';
 
