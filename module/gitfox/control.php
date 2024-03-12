@@ -38,6 +38,68 @@ class gitfox extends control
     }
 
     /**
+     * 编辑gitfox。
+     * Edit a gitfox.
+     *
+     * @param  int    $gitfoxID
+     * @access public
+     * @return void
+     */
+    public function edit(int $gitfoxID)
+    {
+        $oldGitFox = $this->gitfox->getByID($gitfoxID);
+
+        if($_POST)
+        {
+            $gitfox = form::data($this->config->gitfox->form->edit)->get();
+            $this->checkToken($gitfox, $gitfoxID);
+            $this->loadModel('pipeline')->update($gitfoxID, $gitfox);
+            $gitFox = $this->gitfox->getByID($gitfoxID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('action');
+            $actionID = $this->action->create('gitfox', $gitfoxID, 'edited');
+            $changes  = common::createChanges($oldGitFox, $gitFox);
+            $this->action->logHistory($actionID, $changes);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+        }
+
+        $this->view->title  = $this->lang->gitfox->common . $this->lang->colon . $this->lang->gitfox->edit;
+        $this->view->gitfox = $oldGitFox;
+
+        $this->display();
+    }
+
+    /**
+     * 删除一条gitfox记录。
+     * Delete a gitfox.
+     *
+     * @param  int    $gitfoxID
+     * @access public
+     * @return void
+     */
+    public function delete(int $gitfoxID)
+    {
+        $oldGitFox = $this->loadModel('pipeline')->getByID($gitfoxID);
+        $actionID  = $this->pipeline->deleteByObject($gitfoxID, 'gitfox');
+        if(!$actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
+
+            return $this->send($response);
+        }
+
+        $gitFox   = $this->gitfox->getByID($gitfoxID);
+        $changes  = common::createChanges($oldGitFox, $gitFox);
+        $this->loadModel('action')->logHistory($actionID, $changes);
+
+        $response['load']   = $this->createLink('space', 'browse');
+        $response['result'] = 'success';
+        return $this->send($response);
+    }
+
+    /**
      * 检查post的token是否有管理员权限。
      * Check post token has admin permissions.
      *

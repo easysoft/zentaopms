@@ -163,7 +163,7 @@ class pipelineModel extends model
      */
     public function deleteByObject(int $id, string $type = 'gitlab'): int|bool
     {
-        if(in_array($type, array('gitlab', 'gitea', 'gogs')))
+        if(in_array($type, array('gitlab', 'gitea', 'gogs', 'gitfox')))
         {
             $repo = $this->dao->select('*')->from(TABLE_REPO)
                 ->where('deleted')->eq('0')
@@ -184,7 +184,7 @@ class pipelineModel extends model
 
         $this->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
 
-        $this->loadModel('action')->create($type, $id, 'deleted', '');
+        $this->loadModel('action')->create($type, $id, 'deleted', '', 1);
         return $this->dao->lastInsertID();
     }
 
