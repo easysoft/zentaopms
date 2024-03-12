@@ -9,7 +9,28 @@ declare(strict_types=1);
  * @package     gitfox
  * @link        https://www.zentao.net
  */
-class xxxModel extends model
+class gitfoxModel extends model
 {
+    /**
+     * 检查token。
+     * Check token access.
+     *
+     * @param  string $url
+     * @param  string $token
+     * @access public
+     * @return object|array|null|false
+     */
+    public function checkTokenAccess(string $url = '', string $token = ''): object|array|null|false
+    {
+        $apiRoot  = rtrim($url, '/') . '/api/v4%s' . "?private_token={$token}";
+        $url      = sprintf($apiRoot, "/users") . "&per_page=5&active=true";
+        $response = commonModel::http($url);
+        $users    = json_decode($response);
+        if(empty($users)) return false;
+        if(isset($users->message) or isset($users->error)) return null;
+
+        $apiRoot .= '&sudo=' . $users[0]->id;
+        return $this->apiGet($apiRoot, '/user');
+    }
 }
 
