@@ -170,6 +170,7 @@ class transferModel extends model
             if($moduleFieldList['control'] == 'select' || $moduleFieldList['control'] == 'multiple') $moduleFieldList['control'] = 'picker';
             $moduleFieldList['name']  = $field;
             $moduleFieldList['width'] = isset($this->moduleConfig->dtable->fieldList[$field]['width']) ? $this->moduleConfig->dtable->fieldList[$field]['width'] : '136px';
+            if(is_numeric($moduleFieldList['width'])) $moduleFieldList['width'] .= 'px';
             $moduleFieldList['items'] = $this->initItems($module, $field, $moduleFieldList, $withKey);
             $fieldList[$field] = $moduleFieldList;
         }
