@@ -5,3 +5,4 @@
 .lang-row .form-group > .form-label {width: var(--form-horz-label-width);}
 .unit-box .checkbox-primary {flex: 0 1 15%;}
 #gradeList {width: 50%}
+.gradeRuleNotice {margin-left: 4.25rem}

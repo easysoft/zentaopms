@@ -88,6 +88,11 @@ class customZen extends custom
             $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted');
             $this->view->superReviewers = zget($this->config->$module, 'superReviewers', '');
         }
+        if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'gradeRule')
+        {
+            $this->app->loadConfig($module);
+            $this->view->gradeRule = zget($this->config->$module, 'gradeRule', '');
+        }
         if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade')
         {
             $this->view->storyGrades = $this->loadModel('story')->getGradeSetting($module);
@@ -150,6 +155,10 @@ class customZen extends custom
         elseif(in_array($module, array('story', 'demand', 'requirement', 'epic')) && $field == 'review')
         {
             $this->setStoryReview($module, $data);
+        }
+        elseif(in_array($module, array('story', 'requirement', 'epic')) && $field == 'gradeRule')
+        {
+            $this->setGradeRule($module, $data);
         }
         elseif(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade')
         {
@@ -337,6 +346,21 @@ class customZen extends custom
 
         $this->loadModel('setting')->setItems("system.{$module}@{$this->config->vision}", $data);
 
+        return !dao::isError();
+    }
+
+    /**
+     * 设置需求细分流程。
+     * Set the rule of story grade.
+     *
+     * @param  string    $module
+     * @param  array     $data
+     * @access protected
+     * @return bool
+     */
+    public function setGradeRule(string $module, array $data): bool
+    {
+        $this->loadModel('setting')->setItems("system.{$module}@{$this->config->vision}", $data);
         return !dao::isError();
     }
 

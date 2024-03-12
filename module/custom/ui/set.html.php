@@ -71,6 +71,24 @@ elseif(in_array($module, array('story', 'requirement', 'epic')) && $field == 're
         set::items($users)
     );
 }
+elseif(in_array($module, array('story', 'requirement', 'epic')) && $field == 'gradeRule')
+{
+    $formItems[] = formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->custom->story->fields['gradeRule']),
+        set::name('gradeRule'),
+        set::value($gradeRule),
+        set::control('radioListInline'),
+        set::items($lang->custom->gradeRuleList)
+    );
+    $formItems[] = div
+    (
+        setClass('gradeRuleNotice'),
+        div($lang->custom->notice->cross),
+        div($lang->custom->notice->stepwise)
+    );
+}
 elseif(in_array($module, array('epic', 'story', 'requirement', 'testcase')) && $field == 'review')
 {
     $formItems[] = formGroup

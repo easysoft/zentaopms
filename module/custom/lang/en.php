@@ -68,6 +68,9 @@ $lang->custom->closeGrade           = 'Close Story Grade';
 $lang->custom->activateGrade        = 'Activate Story Grade';
 $lang->custom->deleteGrade          = 'Delete Story Grade';
 
+$lang->custom->gradeRuleList['cross']     = 'Allow cross-level segmentation';
+$lang->custom->gradeRuleList['stepwise']  = 'Restriction level-by-level subdivision';
+
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
 $lang->custom->unitList['cost']       = 'USD/Hour';
@@ -129,7 +132,8 @@ $lang->custom->story->fields['statusList']       = 'Status';
 $lang->custom->story->fields['reviewRules']      = 'Review Rules';
 $lang->custom->story->fields['reviewResultList'] = 'Review Result';
 $lang->custom->story->fields['review']           = 'Need Review';
-if($config->edition != 'open' || 1) $lang->custom->story->fields['grade'] = 'Grade Setting';
+$lang->custom->story->fields['grade']            = 'Grade Setting';
+$lang->custom->story->fields['gradeRule']        = 'Grade Rule';
 
 $lang->custom->epic        = clone $lang->custom->story;
 $lang->custom->requirement = clone $lang->custom->story;
@@ -221,6 +225,8 @@ $lang->custom->notice->closeGrade          = "After closing, the grade cannot be
 $lang->custom->notice->activateGrade       = "After activating, the grade can be used to create new stories.";
 $lang->custom->notice->gradeNotEmpty       = 'There are stories in this grade, and it cannot be deleted!';
 $lang->custom->notice->deleteGrade         = 'Are you sure you want to delete this grade?';
+$lang->custom->notice->stepwise            = 'Level-by-level subdivision: It needs to be created starting from the top requirement level and subdivided layer by layer to the last requirement level.';
+$lang->custom->notice->cross               = 'Cross-level segmentation: Requirements can be created from any requirement level and support cross-level association of parent-child relationships.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has {$lang->projectCommon} Home. Do you want to go to {$lang->projectCommon} Home?";
