@@ -149,7 +149,7 @@ $config->search->fields->aiapp = new stdclass();
 $config->search->fields->aiapp->id         = 'id';
 $config->search->fields->aiapp->title      = 'name';
 $config->search->fields->aiapp->content    = 'desc';
-$config->search->fields->aiapp->addedDate  = 'createdBy';
+$config->search->fields->aiapp->addedDate  = 'createdDate';
 $config->search->fields->aiapp->editedDate = 'editedDate';
 
 /* Set the recPerPage of search. */
