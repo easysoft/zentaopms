@@ -360,7 +360,7 @@ class customZen extends custom
      */
     public function setGradeRule(string $module, array $data): bool
     {
-        $this->loadModel('setting')->setItems("system.{$module}@{$this->config->vision}", $data);
+        $this->loadModel('setting')->setItems("system.{$module}", $data);
         return !dao::isError();
     }
 
