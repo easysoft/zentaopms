@@ -7,7 +7,7 @@ title=count_of_daily_review_feedback_in_user
 timeout=0
 cid=1
 
-- 测试分组数。 @224
+- 测试分组数。 @244
 - 测试用户admin @10
 - 测试用户user @42
 - 测试用户dev @64
@@ -24,7 +24,7 @@ zdTable('feedback')->config('feedback', true, 4)->gen(1000);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r(count($calc->getResult())) && p('') && e('224'); // 测试分组数。
+r(count($calc->getResult())) && p('') && e('244'); // 测试分组数。
 
 r(count($calc->getResult(array('user' => 'admin')))) && p('') && e('10');  // 测试用户admin
 r(count($calc->getResult(array('user' => 'user'))))  && p('') && e('42'); // 测试用户user
