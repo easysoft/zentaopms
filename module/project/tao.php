@@ -1025,7 +1025,7 @@ class projectTao extends projectModel
             if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'requirement') $lang->project->menu->story['dropMenu']->requirement['subModule'] .= ',projectstory,story';
         }
 
-        unset($lang->project->menu->settings['subMenu']->products);
+        if(!$hasProduct) unset($lang->project->menu->settings['subMenu']->products);
         if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
         if(!in_array($model, $this->config->project->scrumList)) unset($lang->project->menu->projectplan);
         return true;
