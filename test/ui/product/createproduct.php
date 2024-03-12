@@ -10,7 +10,7 @@ pid=79
 include dirname(__FILE__, 3) . '/lib/ui.php';
 include dirname(__FILE__) . '/product.class.php';
 
-zdTable('product')->config('product')->gen(10);
+zdTable('product')->config('product', false, 1)->gen(10);
 $tester = new product();
 
 $product = array();
