@@ -144,7 +144,7 @@ function openApp(url, code, options)
             catch(e){finishLoad()}
             triggerAppEvent(openedApp.code, 'loadapp', [openedApp, e]);
         };
-        if(!app.external) return;
+        if(!app.external) return openedApp;
     }
     if(!url) url = openedApp.currentUrl;
 
