@@ -9,4 +9,4 @@ fields:
   - field: type
     range: project{100}
   - field: hasProduct
-    range: 0{5},{1}
+    range: 0{5},1{1}

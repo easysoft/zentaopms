@@ -13,7 +13,7 @@ fields:
     - field: name2
       range: 1-10000
   - field: project
-    range: "0{90},[11{5},60{12},61{6},100{5}]"
+    range: 0{90},11{5},60{12},61{6},100{5}
   - field: model
     range: scrum{30},[waterfall{30},kanban{30},[]{28}]{100}
   - field: attribute

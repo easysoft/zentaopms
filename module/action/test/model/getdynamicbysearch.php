@@ -38,8 +38,14 @@ cid=1
 zdTable('action')->config('action')->gen(90);
 zdTable('doclib')->gen(1);
 zdTable('doc')->gen(1);
+zdTable('lang')->gen(0);
 zdTable('product')->gen(1);
 zdTable('userquery')->config('userquery')->gen(1);
+
+global $lang, $app;
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+$app->loadLang('action');
 
 su('admin');
 

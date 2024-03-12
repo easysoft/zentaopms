@@ -36,6 +36,12 @@ cid=1
 
 */
 
+global $lang, $app;
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+$app::$loadedLangs = array();
+$app->loadLang('action');
+
 $objectType   = array('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'bug', 'testcase', 'case', 'testtask', 'user', 'doc', 'doclib', 'todo', 'branch', 'module', 'testsuite', 'caselib', 'testreport', 'entry', 'webhook', 'review');
 $objectId     = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,25);
 $actionType   = array('common', 'extra', 'opened', 'created', 'changed', 'edited', 'assigned', 'closed', 'deleted', 'deletedfile', 'editfile', 'erased', 'undeleted', 'hidden', 'commented', 'activated', 'blocked', 'moved', 'confirmed', 'caseconfirmed', 'bugconfirmed', 'frombug', 'started', 'delayed');

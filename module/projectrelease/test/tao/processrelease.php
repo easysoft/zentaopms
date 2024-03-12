@@ -5,6 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/projectrelease.class.php';
 
 zdTable('release')->gen(20);
+zdTable('build')->gen(20);
 zdTable('product')->gen(20);
 zdTable('user')->gen(1);
 
@@ -22,7 +23,7 @@ $releaseID = array(1, 3, 7, 8);
 
 $projectrelease = new projectreleaseTest();
 
-r($projectrelease->processReleaseTest($releaseID[0])) && p() && e('project:131 branch:0 build:1 branchName: buildInfos:版本1');            // 测试计算发布信息 1
-r($projectrelease->processReleaseTest($releaseID[1])) && p() && e('project:131 branch:0 build:3 branchName: buildInfos:版本3');            // 测试计算发布信息 3
-r($projectrelease->processReleaseTest($releaseID[2])) && p() && e('project:132 branch:2 build:7 branchName: buildInfos:新增项目版本发布'); // 测试计算发布信息 7
-r($projectrelease->processReleaseTest($releaseID[3])) && p() && e('project:0 branch:0 build:8 branchName: buildInfos:新增里程碑发布');     // 测试计算发布信息 8
+r($projectrelease->processReleaseTest($releaseID[0])) && p() && e('project:131 branch:0 build:1 branchName: buildInfos:项目11版本1'); // 测试计算发布信息 1
+r($projectrelease->processReleaseTest($releaseID[1])) && p() && e('project:131 branch:0 build:3 branchName: buildInfos:项目13版本3'); // 测试计算发布信息 3
+r($projectrelease->processReleaseTest($releaseID[2])) && p() && e('project:132 branch:2 build:7 branchName: buildInfos:项目17版本7'); // 测试计算发布信息 7
+r($projectrelease->processReleaseTest($releaseID[3])) && p() && e('project:0 branch:0 build:8 branchName: buildInfos:项目18版本8');   // 测试计算发布信息 8

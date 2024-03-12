@@ -243,7 +243,7 @@ class myModel extends model
      */
     public function getActions(): array
     {
-        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50);
+        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc,id_desc', 50);
         $users   = $this->loadModel('user')->getList();
 
         $simplifyUsers = array();
