@@ -126,9 +126,11 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 };
 
 /* Build link story button. */
-$fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProduct, $project)
+$fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProduct, $project, $storyType)
 {
     if(!common::canModify('product', $product)) return null;
+
+    if($storyType == 'requirement') return null;
 
     if(!$projectHasProduct) return null;
 
