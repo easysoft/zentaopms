@@ -398,7 +398,7 @@ class repoModel extends model
             $this->updateCommitDate($repo->id);
         }
 
-        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject || $repo->scm == 'Subversion') && $repo->path != $data->path)
+        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject || $repo->SCM == 'Subversion') && $repo->path != $data->path)
         {
             $this->repoTao->deleteInfoByID($repo->id);
             return false;
