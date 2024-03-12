@@ -18,17 +18,28 @@ class myIm extends im
         $chat = $this->im->chat->getByGid($chatGid, false, false);
         if(!$chat) return false;
 
-        $messages = $this->loadModel('ai')->converse($modelId, array(
+        $aiModel = $this->loadModel('ai')->getLanguageModel($modelId);
+        if(!$aiModel || $aiModel->enabled == 0) return false;
+
+        $messages = $this->ai->converse($modelId, array(
             (object)array('role' => 'user', 'content' => $text),
         ));
 
         $replyMessage = new stdclass();
         $replyMessage->gid         = imModel::createGID();
         $replyMessage->cgid        = $chatGid;
-        $replyMessage->user        = "ai-$modelId";
+        $replyMessage->user        = "ai-{$modelId}";
         $replyMessage->content     = current($messages);
         $replyMessage->type        = 'normal';
         $replyMessage->contentType = 'text';
+
+        $sender = new stdclass();
+        $sender->id          = 0;
+        $sender->displayName = $aiModel->name;
+
+        $replyMessage->data = new stdclass();
+        $replyMessage->data->sender = $sender;
+        $replyMessage->data         = json_encode($replyMessage->data);
 
         $chatMessages = $this->im->messageCreate(array($replyMessage), $userID);
 
