@@ -56,7 +56,7 @@ $config->story->excludeCheckFileds = ',uploadImage,category,reviewer,reviewDitto
 global $lang, $app;
 $config->story->datatable = new stdclass();
 
-$config->story->datatable->defaultField = array('id', 'title', 'pri', 'plan', 'status', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'openedBy', 'openedDate', 'actions');
+$config->story->datatable->defaultField = array('id', 'title', 'pri', 'plan', 'roadmap', 'status', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'openedBy', 'openedDate', 'actions');
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
@@ -101,6 +101,13 @@ $config->story->datatable->fieldList['plan']['sortType']   = true;
 $config->story->datatable->fieldList['plan']['required']   = 'no';
 $config->story->datatable->fieldList['plan']['control']    = 'select';
 $config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
+
+$config->story->datatable->fieldList['roadmap']['title']    = 'roadmap';
+$config->story->datatable->fieldList['roadmap']['fixed']    = 'no';
+$config->story->datatable->fieldList['roadmap']['required'] = 'no';
+$config->story->datatable->fieldList['roadmap']['type']     = 'html';
+$config->story->datatable->fieldList['roadmap']['display']  = 'yes';
+$config->story->datatable->fieldList['roadmap']['sortType'] = true;
 
 $config->story->datatable->fieldList['status']['title']    = 'statusAB';
 $config->story->datatable->fieldList['status']['fixed']    = 'no';

@@ -130,6 +130,8 @@ class datatable extends control
         }
         if($extra == 'unsetStory' and isset($cols['story'])) unset($cols['story']);
 
+        if($moduleName == 'product' and $method == 'browse' and $extra != 'requirement') unset($cols['roadmap']);
+
         $this->view->cols    = $cols;
         $this->view->setting = $setting;
         $this->view->extra   = $extra;

@@ -6791,6 +6791,7 @@ class storyModel extends model
         foreach($setting as $key => $set)
         {
             if($storyType == 'requirement' and in_array($set->id, array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount'))) $set->show = false;
+            if($storyType == 'story' and in_array($set->id, array('roadmap'))) $set->show = false;
             if($viewType == 'xhtml' and !in_array($set->id, array('title', 'id', 'pri', 'status'))) $set->show = false;
             if(empty($set->show)) continue;
 
@@ -6857,6 +6858,7 @@ class storyModel extends model
         $canView     = common::hasPriv($storyType, 'view', null, "storyType=$storyType");
         $tab         = $this->app->tab;
         $rows        = array();
+        $roadmaps    = $this->config->edition == 'ipd' ? $this->loadModel('roadmap')->getPairs() : array();
 
         if($this->config->edition != 'open')
         {
@@ -6904,6 +6906,7 @@ class storyModel extends model
                 if($col->name == 'bugCount')     $data->bugCount     = $storyBugs[$story->id]  > 0 ? html::a(helper::createLink('story', 'bugs', "storyID=$story->id"),  $storyBugs[$story->id],  '', 'class="iframe" data-toggle="modal"') : '0';
                 if($col->name == 'caseCount')    $data->caseCount    = $storyCases[$story->id] > 0 ? html::a(helper::createLink('story', 'cases', "storyID=$story->id"),  $storyCases[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
                 if($col->name == 'estimate')     $data->estimate     = (float)$story->estimate . $this->config->hourUnit;
+                if($col->name == 'roadmap')      $data->roadmap      = "<span title='" . zget($roadmaps, $story->roadmap, '') . "'>" . zget($roadmaps, $story->roadmap, '') . '</span>';
                 if($col->name == 'reviewedBy')
                 {
                     $reviewers = array_unique(array_filter(explode(',', $story->reviewedBy)));

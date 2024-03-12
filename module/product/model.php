@@ -1193,6 +1193,8 @@ class productModel extends model
 
         $this->config->product->search['params']['stage']['values'] = array('' => '') + $this->lang->story->stageList;
 
+        if($this->config->edition == 'ipd') $this->config->product->search['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs();
+
         /* Get modules. */
         $this->loadModel('tree');
         if($this->app->tab == 'project')
