@@ -508,6 +508,7 @@ class storyZen extends story
             if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
             if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
             if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->story, $field);
+            if(strpos(",{$this->config->story->create->requiredFields},", ",$field,") !== false) $fields[$field]['required'] = true;
         }
 
         /* 设置下拉菜单内容。 */
