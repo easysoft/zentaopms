@@ -95,6 +95,22 @@ $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#li
 
 $product ? toolbar
 (
+    common::hasPriv('execution', 'storykanban') && $storyType == 'story' ? btnGroup
+    (
+        btn
+        (
+            setClass('text-primary font-bold shadow-inner bg-canvas'),
+            set::icon('format-list-bulleted'),
+            set::hint($lang->execution->list),
+            set::url(inlink('story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&type=all"))
+        ),
+        btn
+        (
+            set::icon('kanban'),
+            set::hint($lang->execution->kanban),
+            set::url($this->createLink('execution', 'storykanban', "executionID={$execution->id}"))
+        ),
+    ) : null,
     hasPriv('story', 'report') ? item(set(array
     (
         'text'  => $lang->story->report->common,

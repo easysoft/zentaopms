@@ -35,9 +35,11 @@ $canLinkStory = $execution->hasProduct or $execution->multiple;
       <?php echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->execution->kanban}' data-type='bykanban'");?>
     </div>
     <?php endif;?>
+    <!--
     <div class='btn-group'>
       <?php common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export', '', "data-group='execution'");?>
     </div>
+    -->
     <?php if($canBeChanged and $productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&execution=$execution->id", "<i class='icon icon-plus'></i> " . $lang->execution->createStory, '', "class='btn btn-secondary' class='btn btn-link export' data-group='execution'");?>
     <?php
     if($canBeChanged)
