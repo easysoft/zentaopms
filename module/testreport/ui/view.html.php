@@ -135,6 +135,7 @@ $bugStageChart = div
             div(set::className('center text-base font-bold py-2'), $lang->testreport->bugStageGroups),
             echarts
             (
+                set::_id('chart-bugStageGroups'),
                 set::color($colorList),
                 set::xAxis
                 (
@@ -212,6 +213,7 @@ $bugHandleChart = div
             div(set::className('center text-base font-bold py-2'), $lang->testreport->bugHandleGroups),
             echarts
             (
+                set::_id('chart-bugHandleGroups'),
                 set::color(array('#FF9800', '#2098EE', '#009688')),
                 set::xAxis
                 (
@@ -293,6 +295,7 @@ foreach($bugInfo as $infoKey => $infoValue)
                 div(set::className('center text-base font-bold py-2'), $lang->testreport->{$infoKey}),
                 echarts
                 (
+                    set::_id('chart-' . $infoKey),
                     set::color($colorList),
                     set::series
                     (
