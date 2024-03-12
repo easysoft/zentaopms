@@ -8560,6 +8560,29 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
+    public function update1810(): void
+    {
+        if(!defined('TABLE_DEMANDPOOL')) return;
+
+        $fields = $this->dao->query('DESC ' . TABLE_DEMANDPOOL)->fetchAll();
+        foreach($fields as $field)
+        {
+            if($field->Field == 'products') return;
+        }
+
+        /* Execute open edition. */
+        $this->saveLogs('Execute 18_10');
+        $this->execSQL($this->getUpgradeFile('18.10'));
+    }
+
+    /**
+     * 检查是否添加了18.10.1版本的需求反馈字段，如果没有就添加。
+     * Check if the demand feedback field of version 18.10.1 is added, if not, add it.
+>>>>>>> * Fix bug for upgrade.
+     *
+     * @access public
+     * @return void
+     */
     public function update18101(): void
     {
         $count = $this->dao->select('COUNT(*) AS count')->from('information_schema.TABLES')->where('TABLE_SCHEMA')->eq($this->config->db->name)->andWhere('TABLE_NAME')->eq(str_replace('`', '', TABLE_AI_MODEL))->fetch('count');
