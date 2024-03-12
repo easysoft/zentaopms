@@ -105,6 +105,45 @@ function zget($var, $key, $valueWhenNone = false, $valueWhenExists = false)
 }
 
 /**
+ * Get webdriver page attr.
+ *
+ * @param  string $arrKey
+ * @param  array  $keys
+ * @access public
+ * @return object
+ */
+function getPageAttr($arrKey, $keys)
+{
+    global $result;
+    $value  = new stdclass();
+    $page   = $result->get('page');
+    $method = 'get' . ucfirst($arrKey);
+    foreach($keys as $key)
+    {
+        if(in_array($arrKey, array('text', 'attr', 'value')))
+        {
+            if(strpos($key, '-') === false)
+            {
+                $value->$key = $page->{$key}->$method();
+            }
+            else
+            {
+                $pos     = strpos($key, '-');
+                $element = substr($key, 0, $pos);
+                $attr    = substr($key, $pos + 1);
+                $value->$key = $page->{$element}->$method($attr);
+            }
+        }
+        else
+        {
+            $value->$key = $page->$method();
+        }
+    }
+
+    return $value;
+}
+
+/**
  * Get values
  *
  * @param mixed  $value
@@ -124,23 +163,13 @@ function getValues($value, $keys, $delimiter)
 
         $index = $arrKey;
     }
-    $keys = explode($delimiter, $keys);
 
+    $keys = explode($delimiter, $keys);
     if($index != -1)
     {
-        if(in_array($arrKey, array('text', 'attr', 'url', 'title')))
+        if(in_array($arrKey, array('text', 'attr', 'url', 'title', 'value')))
         {
-            global $result;
-            $page   = $result->get('page');
-            $method = 'get' . ucfirst($arrKey);
-            if($arrKey == 'text')
-            {
-                if(count($keys) == 1) $value = $page->{$keys[0]}->$method();
-            }
-            else
-            {
-                $value = $page->$method();
-            }
+            $value = getPageAttr($arrKey, $keys);
         }
         elseif(is_array($value))
         {

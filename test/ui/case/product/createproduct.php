@@ -13,7 +13,7 @@ include dirname(__FILE__) . '/product.class.php';
 $tester = new product();
 
 $product = array();
-r($tester->createProduct($product)) && p('text:nameTip') && e('『产品名称』不能为空。'); // 判断名称是否必输
+r($tester->createProduct($product)) && p('text:nameTip;value:PO,code') && e('『产品名称』不能为空。'); // 判断名称是否必输
 die;
 $product['name'] = array('setValue' => '产品' . time());
 $result = $tester->createProductTest($product);
