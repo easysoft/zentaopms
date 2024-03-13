@@ -113,12 +113,12 @@ class gitfox extends control
         $this->dao->update('gitfox')->data($gitfox)->batchCheck($gitfoxID ? $this->config->gitfox->edit->requiredFields : $this->config->gitfox->create->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        if(strpos($gitfox->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitfox->hostError, $this->config->gitfox->minCompatibleVersion)))));
+        if(strpos($gitfox->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitfox->serverFail))));
         if(!$gitfox->token) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitfox->tokenError))));
 
         $user = $this->gitfox->checkTokenAccess($gitfox->url, $gitfox->token);
 
-        if(is_bool($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitfox->hostError, $this->config->gitfox->minCompatibleVersion)))));
+        if(is_bool($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitfox->serverFail))));
         if(!isset($user[0]->uid)) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitfox->tokenError))));
     }
 }
