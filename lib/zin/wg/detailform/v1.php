@@ -48,6 +48,9 @@ class detailForm extends wg
         /* 表单提交地址。 */
         'url'        => '?string',
 
+        /* Ajax 表单选项。 */
+        'ajax'       => '?array',
+
         /* 表单项标签默认数据。 */
         'labelData'  => 'null|array|object',
 
@@ -86,12 +89,13 @@ class detailForm extends wg
     public static function getPageCSS(): ?string
     {
         return <<<'CSS'
-        .detail-form-main .form-label {font-size: 14px; font-weight: bold; margin-bottom: 4px; position: sticky; top: 0; background: var(--color-canvas); z-index: 1}
+        .detail-form-main .form-label {position: sticky; top: 0; background: var(--color-canvas); z-index: 1; margin-bottom: 4px}
+        .detail-form-main .form-label .text {font-size: 14px; font-weight: bold;}
         .detail-form-main {border-right: 1px solid var(--color-border)}
         .detail-form-main .form-grid .form-label.required:after {order: 1}
         .detail-form-side {border-left: 1px solid var(--color-border); margin-left: -1px}
         .detail-form-main .form-grid {padding: 12px 16px}
-        .detail-form-history {padding: 12px 16px}
+        .detail-form-history {padding: 12px}
         .detail-form-side .form-row {padding: 8px 0}
         .detail-form-side .form-group {align-items: center; min-height: 20px}
         .detail-form-side .form-label {height: 20px; top: auto}
@@ -401,9 +405,10 @@ class detailForm extends wg
 
         return div
         (
-            setClass('detail-form col gap-4'),
+            setClass('detail-form col gap-3'),
             setData('id', $objectID),
             setData('type', $objectType),
+            set($this->getRestProps()),
             $this->buildHeader(),
             new formBase
             (
@@ -412,6 +417,7 @@ class detailForm extends wg
                 set($backProps),
                 set::actionsClass('py-4 sticky border-t bottom-0 canvas z-5', isset($formProps['actionsClass']) ? $formProps['actionsClass'] : null),
                 $this->buildBody(),
+                $this->children()
             )
         );
     }
