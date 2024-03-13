@@ -386,6 +386,7 @@ $lang->metric->tips->click2SetParams    = 'Please click on the red variable bloc
 $lang->metric->tips->view               = 'View';
 $lang->metric->tips->click2InsertData   = "Click <span class='ke-icon-holder'></span> to insert a metric or report";
 $lang->metric->tips->noticeUnchangeable = "[Scope], [Object], [Purpose], [Date Type], and [Code] will affect the acquisition of measurement values, cannot be changed after creation.";
+$lang->metric->tips->noticeCode         = "The code must be a combination of English letters, numbers or underscores.";
 
 $lang->metric->param = new stdclass();
 $lang->metric->param->varName      = 'Variable Name';
