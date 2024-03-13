@@ -1517,15 +1517,7 @@ class bugZen extends bug
 
         /* Set display fields. */
         $showFields = $this->config->bug->custom->batchCreateFields;
-        if($product->type != 'normal')
-        {
-            $showFields = sprintf($showFields, 'branch');
-            $showFields = trim($showFields, ',');
-        }
-        else
-        {
-            $showFields = trim(sprintf($showFields, ''), ',');
-        }
+        $showFields = trim(sprintf($showFields, ''), ',');
 
         /* Get titles from uploaded images. */
         if(!empty($bugImagesFile))
