@@ -558,8 +558,7 @@ class repo extends control
         $repo = $this->repo->getByID($repoID);
 
         $this->scm->setEngine($repo);
-        $log = $this->scm->log('', $revision, $revision);
-
+        $log      = $this->scm->log('', $revision, $revision);
         $revision = !empty($log[0]) ? $this->repo->getHistoryRevision($repoID, (string)$log[0]->revision) : '';
         if($revision)
         {

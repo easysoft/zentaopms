@@ -225,11 +225,6 @@ class gitfox
         $count = $count == 0 ? '' : "-n $count";
 
         $list = $this->getCommitsByPath($path, $fromRevision, $toRevision);
-        foreach($list as $commit)
-        {
-            if(isset($commit->id)) $commit->diffs = $this->getFilesByCommit($commit->id);
-        }
-
         return $this->parseLog($list);
     }
 
@@ -303,7 +298,7 @@ class gitfox
 
         $api   = $sameVersion ? "commits/$toRevision/diff" : "diff/{$fromRevision}...{$toRevision}";
         $diffs = $this->fetch($api);
-        if(!$diffs) return array();
+        if(!$diffs || isset($diffs->message)) return array();
 
         return explode("\n", $diffs);
     }
@@ -385,6 +380,7 @@ class gitfox
     public function parseDiff($lines)
     {
         if(empty($lines)) return array();
+
         $diffs   = array();
         $num     = count($lines);
         $endLine = end($lines);
@@ -652,8 +648,8 @@ class gitfox
         {
             $since = $fromDate;
         }
-        if($since) $param->since = $since;
-        if($until) $param->until = $until;
+        if($since) $param->since = strtotime($since);
+        if($until) $param->until = strtotime($until);
 
         if($perPage) $param->limit = $perPage;
         if($page)    $param->page  = $page;
@@ -715,12 +711,14 @@ class gitfox
     public function fetch($api = '', $params = array(), $needToLoop = false)
     {
         $params = (array) $params;
-        $params['private_token'] = $this->token;
-        $params['per_page']      = isset($params['per_page']) ? $params['per_page'] : 100;
+        $params['limit'] = isset($params['limit']) ? $params['limit'] : 100;
 
         $api = ltrim($api, '/');
         $api = $this->root . $api . '?' . http_build_query($params);
-        $header = array("Authorization: Bearer {$this->token}");
+        $header = array(
+            "Authorization: Bearer {$this->token}",
+            "Accept: text/plain"
+        );
         if($needToLoop)
         {
             $allResults = array();
@@ -743,7 +741,6 @@ class gitfox
                 return array();
             }
 
-            if(in_array($response[1], array(500, 404, 401, 400, 403))) return array();
             $result = json_decode($response);
             return $result ? $result : $response;
         }
@@ -777,11 +774,12 @@ class gitfox
         $parsedLogs = array();
         foreach($logs as $commit)
         {
-            if(!isset($commit->id)) continue;
+            if(!isset($commit->sha)) continue;
+
             $parsedLog = new stdclass();
-            $parsedLog->revision  = $commit->id;
-            $parsedLog->committer = $commit->committer_name;
-            $parsedLog->time      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+            $parsedLog->revision  = $commit->sha;
+            $parsedLog->committer = $commit->author->identity->name;
+            $parsedLog->time      = date('Y-m-d H:i:s', strtotime($commit->author->when));
             $parsedLog->comment   = $commit->message;
             $parsedLog->change    = array();
             if(!empty($commit->diffs))
