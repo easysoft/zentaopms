@@ -9,7 +9,7 @@
  * @version     1
  * @link        https://www.zentao.net
  */
-class gitlabWebhookEntry extends baseEntry
+class gitfoxWebhookEntry extends baseEntry
 {
 
     /**
@@ -21,7 +21,7 @@ class gitlabWebhookEntry extends baseEntry
     public function post()
     {
         $headers = getallheaders(); /* Fetch all HTTP request headers. */
-        $event   = isset($headers['X-Gitlab-Event']) ? $headers['X-Gitlab-Event'] : '';
+        $event   = isset($headers['X-Gitness-Trigger']) ? $headers['X-Gitness-Trigger'] : '';
         if(empty($event)) return;
 
         $repoID = $this->param('repoID');
