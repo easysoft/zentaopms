@@ -841,7 +841,7 @@ class programplanModel extends model
             $plan->acl        = empty($parentID) ? $acl[$key] : $parentACL;
             $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
             $plan->desc       = empty($desc[$key]) ? '' : $desc[$key];
-            $plan->milestone  = empty($milestone[$key]) ? 0 : 1;
+            $plan->milestone  = empty($milestone[$key]) ? '0' : '1';
             $plan->hasProduct = $project->hasProduct;
             $plan->vision     = $this->config->vision;
             $plan->market     = $project->market;

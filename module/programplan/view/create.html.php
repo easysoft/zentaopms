@@ -173,8 +173,8 @@
                 <?php
                 if($enableOptionalAttr)
                 {
-                    $disabled = $project->model == 'ipd' ? 'disabled' : '';
-                    echo html::select("attributes[$i]", $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, $plan->attribute, "class='form-control' $disabled");
+                    $attrDisabled = $project->model == 'ipd' ? 'disabled' : '';
+                    echo html::select("attributes[$i]", $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, $plan->attribute, "class='form-control' $attrDisabled");
                     if($project->model == 'ipd') echo html::hidden("attributes[$i]", $plan->attribute);
                 }
                 else
