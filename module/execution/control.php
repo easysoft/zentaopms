@@ -2180,7 +2180,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function linkStory(int $objectID = 0, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', int $recPerPage = 50, int $pageID = 1, string $extra = '', $storyType = 'story')
+    public function linkStory(int $objectID = 0, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', int $recPerPage = 50, int $pageID = 1, string $extra = '', string $storyType = 'story')
     {
         $this->loadModel('story');
         $this->loadModel('product');

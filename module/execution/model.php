@@ -2794,7 +2794,7 @@ class executionModel extends model
      * @access public
      * @return bool
      */
-    public function linkStory(int $executionID, array $stories = array(), string $extra = '', array $lanes = array(), $storyType = 'story'): bool
+    public function linkStory(int $executionID, array $stories = array(), string $extra = '', array $lanes = array(), string $storyType = 'story'): bool
     {
         if(empty($executionID) || empty($stories)) return false;
 
