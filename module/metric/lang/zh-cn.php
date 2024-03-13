@@ -386,6 +386,7 @@ $lang->metric->tips->click2SetParams    = '请先点击红色变量块设置参�
 $lang->metric->tips->view               = '预览';
 $lang->metric->tips->click2InsertData   = "点击 <span class='ke-icon-holder'></span> 来插入度量指标或报表";
 $lang->metric->tips->noticeUnchangeable = '[范围]、[对象]、[目的]、[时间属性]、[代号]会影响度量值的获取，创建后不可变更。';
+$lang->metric->tips->noticeCode         = "代号必须是英文字母、数字或下划线的组合。";
 
 $lang->metric->param = new stdclass();
 $lang->metric->param->varName      = '变量名';
