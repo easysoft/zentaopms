@@ -55,6 +55,11 @@ class field extends setting
         return $this->setVal('type', $type);
     }
 
+    function group(?string $group): field
+    {
+        return $this->setVal('group', $group);
+    }
+
     function id(?string $id): field
     {
         return $this->setVal('id', $id);
