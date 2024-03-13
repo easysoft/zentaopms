@@ -126,12 +126,12 @@ class execution extends control
         $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
         /* Set browse type. */
-        $browseType = strtolower($status);
-        $execution  = $this->commonAction($executionID, $status);
+        $browseType  = strtolower($status);
+        $execution   = $this->commonAction($executionID, $status);
+        $executionID = $execution->id;
         if($execution->type == 'kanban' && $this->config->vision != 'lite' && $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
         /* Save the recently five executions visited in the cookie. */
-        $executionID = $execution->id;
         $this->executionZen->setRecentExecutions($executionID);
 
         /* Append id for second sort and process the order by field. */
