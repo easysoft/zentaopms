@@ -73,10 +73,15 @@ window.initTime = function(e)
         let endValue = '';
         items.forEach(function(item, timeIndex)
         {
+            if(!value)
+            {
+                endValue = items[0].value;
+                return false;
+            }
             if(item.value == value)
             {
                 endIndex = timeIndex + 3;
-                endValue = items.length <= endIndex ? value : items[endIndex].value;
+                endValue = items.length <= endIndex ? '' : items[endIndex].value;
                 return;
             }
         });
