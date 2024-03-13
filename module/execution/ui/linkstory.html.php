@@ -48,7 +48,7 @@ jsVar('branchGroups', $branchGroups);
 $footToolbar['items'][] = array(
     'text'      => $lang->save,
     'className' => 'btn secondary batch-btn ajax-btn import-story-btn size-sm',
-    'data-url'  => createLink('execution', 'linkStory', "projectID=$object->id&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&extra=&storyType=$storyType")
+    'data-url'  => createLink('execution', 'linkStory', "projectID=$object->id&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&extra=&storyType=$storyType")
 );
 if(!isInModal())
 {

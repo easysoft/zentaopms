@@ -363,7 +363,8 @@ modal(set::id('#batchUnlinkStoryBox'));
 $linkStoryByPlanTips = $lang->execution->linkNormalStoryByPlanTips;
 if($product && $product->type != 'normal') $linkStoryByPlanTips = sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->product->branchName[$product->type]);
 if($isProjectStory) $linkStoryByPlanTips = str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
-$planList = $app->tab == 'project' ? $this->productplan->getPairs($productID, array(BRANCH_MAIN) + $projectProducts[$productID]->branches, 'unexpired,noclosed', true) : $plans;
+$branches = isset($projectProducts[$productID]->branches) ? $projectProducts[$productID]->branches : array();
+$planList = $app->tab == 'project' ? $this->productplan->getPairs($productID, array(BRANCH_MAIN) + $branches, 'unexpired,noclosed', true) : $plans;
 
 modal
 (
