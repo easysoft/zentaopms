@@ -289,7 +289,7 @@ dtable
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$pageSummary}');}")),
     set::emptyTip($lang->program->noProgram),
     set::createTip($lang->program->create),
-    set::createLink(hasPriv('product', 'create') ? createLink('product', 'create') : null)
+    set::createLink(hasPriv('program', 'create') ? createLink('program', 'create') : null)
 );
 
 render();
