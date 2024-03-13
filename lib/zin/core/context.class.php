@@ -32,6 +32,8 @@ class context extends \zin\utils\dataset
 
     public array $data = array();
 
+    public ?\control $control = null;
+
     public bool $rendered = false;
 
     public bool $rawContentCalled = false;

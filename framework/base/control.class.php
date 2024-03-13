@@ -1006,7 +1006,8 @@ class baseControl
          * 设置 zin 渲染上下文数据。
          */
         $context = \zin\context();
-        $context->data = (array)$this->view;
+        $context->control = $this;
+        $context->data    = (array)$this->view;
         $context->data['zinDebug'] = array();
 
         if($this->config->debug && $this->config->debug >= 2 && $this->config->installed)
