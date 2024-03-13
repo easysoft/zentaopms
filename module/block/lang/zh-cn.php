@@ -558,7 +558,7 @@ $lang->block->projectoverview->thisYear      = '今年完成';
 $lang->block->projectoverview->lastThreeYear = '近三年完成的项目数量分布';
 
 $lang->block->projectstatistic = new stdclass();
-$lang->block->projectstatistic->story            = '需求';
+$lang->block->projectstatistic->story            = $lang->SRCommon;
 $lang->block->projectstatistic->cost             = '投入';
 $lang->block->projectstatistic->task             = '任务';
 $lang->block->projectstatistic->bug              = 'Bug';
