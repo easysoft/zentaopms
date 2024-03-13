@@ -3543,6 +3543,7 @@ $config->group->package->browseMetriclib->order  = 5;
 $config->group->package->browseMetriclib->subset = 'metriclib';
 $config->group->package->browseMetriclib->privs  = array();
 $config->group->package->browseMetriclib->privs['metriclib-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseMetriclib->privs['metriclib-details'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;
