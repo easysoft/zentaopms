@@ -522,6 +522,7 @@ class storyZen extends story
         $fields['plan']['options']     = $plans;
         $fields['plans']['options']    = $plans;
         $fields['grade']['options']    = $grades;
+        $fields['grade']['default']    = current($grades);
         $fields['reviewer']['options'] = $reviewers;
         $fields['parent']['options']   = array_filter($stories);
 
@@ -666,6 +667,7 @@ class storyZen extends story
         $reviewers = $this->story->getProductReviewers($productID);
         $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $stories   = $this->story->getParentStoryPairs($productID);
+        $grades    = $this->story->getGradePairs($storyType, 'grade', 'grade');
 
         $storyTypes = strpos($product->vision, 'or') !== false ? 'launched' : 'active';
         $URS        = $storyType != 'story' ? array() : $this->story->getProductStoryPairs($productID, $branch, 0, $storyTypes, 'id_desc', 0, '', 'requirement');
@@ -698,8 +700,11 @@ class storyZen extends story
                 $fields = array_merge($fieldPlatform, $fields);
                 break;
         }
+
+        $fields['grade']['default']      = current($grades);
         $fields['module']['options']     = $modules;
         $fields['plan']['options']       = $plans;
+        $fields['grade']['options']      = $grades;
         $fields['reviewer']['options']   = $reviewers;
         $fields['assignedTo']['options'] = $users;
         $fields['mailto']['options']     = $users;
@@ -715,7 +720,9 @@ class storyZen extends story
             unset($fields['URS']);
         }
 
-        $this->view->branchID = $branch;
+        $this->view->branchID    = $branch;
+        $this->view->gradeRule   = $this->config->{$storyType}->gradeRule;
+        $this->view->hiddenGrade = $storyType == 'story' ? count($grades) <= 2 : count($grades) <= 1;
         return $fields;
     }
 
@@ -1044,7 +1051,7 @@ class storyZen extends story
             $fields['assignedTo']['options'] = $teamUsers;
         }
 
-        $grades = $this->story->getGradeList($storyType);
+        $grades = $this->story->getGradePairs($storyType);
         $this->view->hiddenParent = $hiddenParent;
         $this->view->hiddenGrade  = $storyType == 'story' ? count($grades) <= 2 : count($grades) <= 1;
         return $fields;

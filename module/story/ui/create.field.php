@@ -5,6 +5,7 @@ global $lang, $config;
 $fields       = defineFieldList('story.create');
 $createFields = data('fields');
 $type         = data('type');
+$gradeRule    = data('gradeRule');
 $isSR         = $type == 'story';
 $isBranchUR   = isset($createFields['branch']) && $type != 'story';
 $isKanban     = data('executionType') == 'kanban';
@@ -49,8 +50,9 @@ $fields->field('parent')
 
 $fields->field('grade')
     ->hidden(data('hiddenGrade'))
+    ->disabled($gradeRule == 'stepwise')
     ->items($createFields['grade']['options'])
-    ->value(1);
+    ->value($createFields['grade']['default']);
 
 $fields->field('reviewer')
     ->width('full')

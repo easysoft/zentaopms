@@ -88,8 +88,9 @@ window.loadGrade = function(e)
     $.get(link, function(data)
     {
         const $grade = $('[name=grade]').zui('picker');
-        $grade.$.setValue(data);
-        if(gradeRule == 'stepwise') $grade.render({disabled: true});
+        data = JSON.parse(data);
+        $grade.render({items: data.items});
+        $grade.$.setValue(data.default);
     })
 }
 

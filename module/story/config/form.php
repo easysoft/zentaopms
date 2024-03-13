@@ -70,10 +70,12 @@ $config->story->form->batchCreate = common::formConfig('story', 'batchCreate');
 $config->story->form->batchCreate['branch']     = array('ditto' => true,  'type' => 'int',    'control' => 'select', 'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
 $config->story->form->batchCreate['module']     = array('ditto' => true,  'type' => 'int',    'control' => 'select', 'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
 $config->story->form->batchCreate['plan']       = array('ditto' => true,  'type' => 'int',    'control' => 'select', 'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
-$config->story->form->batchCreate['assignedTo'] = array('ditto' => false, 'type' => 'string', 'control' => 'select', 'required' => false, 'width' => '136px', 'default' => '', 'options' => 'users');
+$config->story->form->batchCreate['parent']     = array('ditto' => true,  'type' => 'int',    'control' => 'select', 'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
+$config->story->form->batchCreate['grade']      = array('ditto' => true,  'type' => 'int',    'control' => 'select', 'required' => false, 'width' => '136px', 'default' => 0,  'options' => array());
 $config->story->form->batchCreate['region']     = array('ditto' => false, 'type' => 'int',    'control' => 'select', 'required' => false, 'width' => '136px', 'default' => 0,  'options' => array());
 $config->story->form->batchCreate['lane']       = array('ditto' => false, 'type' => 'int',    'control' => 'select', 'required' => false, 'width' => '136px', 'default' => 0,  'options' => array());
 $config->story->form->batchCreate['title']      = array('ditto' => false, 'type' => 'string', 'control' => 'text',   'required' => true,  'width' => '240px', 'default' => '', 'filter'  => 'trim', 'base' => true);
+$config->story->form->batchCreate['assignedTo'] = array('ditto' => false, 'type' => 'string', 'control' => 'select', 'required' => false, 'width' => '136px', 'default' => '', 'options' => 'users');
 $config->story->form->batchCreate['color']      = array('ditto' => false, 'type' => 'string', 'control' => 'text',   'required' => false,                     'default' => '', 'filter'  => 'trim');
 $config->story->form->batchCreate['spec']       = array('ditto' => false, 'type' => 'string', 'control' => 'text',   'required' => false, 'width' => '240px', 'default' => '');
 $config->story->form->batchCreate['source']     = array('ditto' => true,  'type' => 'string', 'control' => 'select', 'required' => false, 'width' => '200px', 'default' => '', 'options' => $lang->story->sourceList);
@@ -84,7 +86,6 @@ $config->story->form->batchCreate['pri']        = array('ditto' => false, 'type'
 $config->story->form->batchCreate['estimate']   = array('ditto' => false, 'type' => 'float',  'control' => 'text',   'required' => false, 'width' => '76px',  'default' => 0);
 $config->story->form->batchCreate['reviewer']   = array('ditto' => true,  'type' => 'array',  'control' => 'select', 'required' => false, 'width' => '136px', 'default' => '', 'multiple' => true, 'options' => array());
 $config->story->form->batchCreate['URS']        = array('ditto' => false, 'type' => 'array',  'control' => 'select', 'required' => false, 'width' => '200px', 'default' => '', 'multiple' => true);
-$config->story->form->batchCreate['parent']     = array('ditto' => false, 'type' => 'int',    'control' => 'select', 'required' => false, 'width' => '200px', 'default' => '');
 $config->story->form->batchCreate['keywords']   = array('ditto' => false, 'type' => 'string', 'control' => 'text',   'required' => false, 'width' => '200px', 'default' => '');
 $config->story->form->batchCreate['mailto']     = array('ditto' => false, 'type' => 'array',  'control' => 'select', 'required' => false, 'width' => '200px', 'default' => array(''), 'multiple' => true, 'options' => 'users', 'filter' => 'join');
 

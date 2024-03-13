@@ -36,3 +36,19 @@ window.setModuleAndPlanByBranch = function(e)
         if(!$rows.find('td[data-name="plan"][data-ditto="on"]').length) break;
     }
 }
+
+window.setGrade = function(e)
+{
+    const parent = e.target.value;
+    const link   = $.createLink('story', 'ajaxGetGrade', 'parent=' + parent + '&type=' + storyType);
+    $.get(link, function(data)
+    {
+        data = JSON.parse(data);
+        $(e.target).closest('.table').find('[name^=grade]').each(function()
+        {
+            let $grade = $(this).zui('picker');
+            $grade.render({items: data.items});
+            $grade.$.setValue(data.default);
+        })
+    })
+}

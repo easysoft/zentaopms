@@ -18,6 +18,7 @@ data('activeMenuID', $type);
 data('storyType', $type);
 jsVar('storyType', $type);
 jsVar('productID', $productID);
+data('gradeRule', $gradeRule);
 
 !isAjaxRequest() && dropmenu();
 
@@ -27,7 +28,7 @@ foreach(explode(',', $this->config->story->create->requiredFields) as $requiredF
 }
 
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $customFields, $showFields)
+$fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $customFields, $showFields, $gradeRule, $hiddenGrade)
 {
     global $config;
 
@@ -58,10 +59,12 @@ $fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $cust
         if(str_contains(",{$config->{$app->rawModule}->create->requiredFields},", ",{$colName},")) $cols[$index]['required'] = true;
         if(isset($customFields[$colName]) && strpos(",$showFields,", ",$colName,") === false) $cols[$index]['hidden'] = true;
         if($colName == 'sourceNote' && strpos(",$showFields,", ",source,") === false) $cols[$index]['hidden'] = true;
+        if($colName == 'grade' && $gradeRule == 'stepwise') $cols[$index]['disabled'] = true;
+        if($colName == 'grade' && $hiddenGrade) $cols[$index]['hidden'] = true;
         if($colName == 'spec') unset($cols[$index]['control']);
-        if($colName == 'source')   $cols[$index]['items'] = $lang->{$type}->sourceList;
-        if($colName == 'category') $cols[$index]['items'] = $lang->{$type}->categoryList;
-        if($colName == 'pri')      $cols[$index]['items'] = $lang->{$type}->priList;
+        if($colName == 'source')   $cols[$index]['items']    = $lang->{$type}->sourceList;
+        if($colName == 'category') $cols[$index]['items']    = $lang->{$type}->categoryList;
+        if($colName == 'pri')      $cols[$index]['items']    = $lang->{$type}->priList;
     }
 
     return $cols;
@@ -71,6 +74,7 @@ formBatchPanel
 (
     setID('dataform'),
     on::change('[data-name="branch"]', 'setModuleAndPlanByBranch'),
+    on::change('[data-name="parent"]', 'setGrade'),
     $stories ? set::data($stories) : null,
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::title($storyID ? $storyTitle . $lang->colon . $this->lang->story->subdivide : $this->lang->story->batchCreate),

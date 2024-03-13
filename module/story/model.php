@@ -570,14 +570,10 @@ class storyModel extends model
      * Batch create stories.
      *
      * @param  array  $stories
-     * @param  int    $productID
-     * @param  string $branch
-     * @param  string $type
-     * @param  int    $URID
      * @access public
      * @return array
      */
-    public function batchCreate(array $stories, int $productID = 0, string $branch = '', string $type = 'story', int $URID = 0): array
+    public function batchCreate(array $stories): array
     {
         $this->loadModel('action');
         $storyIdList = array();
@@ -588,6 +584,7 @@ class storyModel extends model
             if(!$storyID) return array();
 
             $this->storyTao->doCreateSpec($storyID, $story);
+            if($story->parent > 0) $this->subdivide($story->parent, array($storyID));
 
             /* Update product plan stories order. */
             if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer);
@@ -619,8 +616,6 @@ class storyModel extends model
 
             $this->loadModel('score')->create('story', 'create',$storyID);
             $this->score->create('ajax', 'batchCreate');
-
-            if($URID && $storyIdList) $this->subdivide($URID, $storyIdList);
             foreach($link2Plans as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
         }
 
@@ -2411,7 +2406,7 @@ class storyModel extends model
     {
         if($storyType == 'story')
         {
-            $lastGrade    = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->orderBy('grade_desc')->limit(1)->fetch('grade');
+            $lastGrade    = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->andWhere('status')->eq('enable')->orderBy('grade_desc')->limit(1)->fetch('grade');
             $SRGradePairs = $this->getGradePairs('story');
             $URGradePairs = $this->getGradePairs('requirement');
             $requirements = $this->dao->select('id, parent, grade, title')->from(TABLE_STORY)
@@ -2419,6 +2414,7 @@ class storyModel extends model
                 ->andWhere('product')->eq($productID)
                 ->andWhere('type')->eq('requirement')
                 ->andWhere('status')->eq('active')
+                ->andWhere('grade')->in(array_keys($URGradePairs))
                 ->fetchAll('id');
 
             $parents = array();
@@ -2442,6 +2438,7 @@ class storyModel extends model
                 ->andWhere('type')->eq('story')
                 ->andWhere('status')->eq('active')
                 ->andWhere('grade')->ne($lastGrade)
+                ->andWhere('grade')->in(array_keys($SRGradePairs))
                 ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
                 ->fetchAll();
 
@@ -4587,8 +4584,44 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getGradePairs($type = 'story', $field1 = 'grade', $field2 = 'name'): array
+    public function getGradePairs($type = 'story', $field1 = 'grade', $field2 = 'name', $status = 'enable'): array
     {
-        return $this->dao->select("$field1, $field2")->from(TABLE_STORYGRADE)->where('type')->eq($type)->orderBy('grade_asc')->fetchPairs();
+        return $this->dao->select("$field1, $field2")->from(TABLE_STORYGRADE)
+            ->where('type')->eq($type)
+            ->beginIF($status == 'enable')->andWhere('status')->eq('enable')->fi()
+            ->orderBy('grade_asc')
+            ->fetchPairs();
+    }
+
+    /**
+     * 获取需求层级下拉列表。
+     * Get grade options.
+     *
+     * @param  object $story
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getGradeOptions(object $story, string $storyType): array
+    {
+        $gradeOptions = array();
+        if($storyType == 'story')
+        {
+            if($story->type == 'requirement')
+            {
+                $gradeOptions = $this->getGradePairs($storyType, 'grade', 'grade');
+            }
+            else
+            {
+                $gradeOptions = $this->dao->select('grade')->from(TABLE_STORYGRADE)
+                    ->where('type')->eq($storyType)
+                    ->andWhere('grade')->gt($story->grade)
+                    ->andWhere('status')->eq('enable')
+                    ->orderBy('grade_asc')
+                    ->fetchPairs();
+            }
+        }
+
+        return $gradeOptions;
     }
 }

@@ -143,7 +143,7 @@ class story extends control
             if(empty($stories)) return $this->sendError($this->lang->error->noData, true);
             if(dao::isError())  return $this->sendError(dao::getError(), true);
 
-            $storyIdList = $this->story->batchCreate($stories, $productID, $branch, $storyType, $storyID);
+            $storyIdList = $this->story->batchCreate($stories);
             if(dao::isError()) return $this->sendError(dao::getError(), true);
 
             /* Project or execution linked stories. */
@@ -175,13 +175,6 @@ class story extends control
         $product = $this->product->getByID($productID);
         if($product) $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
-        if($storyID)
-        {
-            $story = $this->story->getByID($storyID);
-            $this->view->storyTitle = isset($story->title) ? $story->title : '';
-            if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->errorNotSubdivide)));
-        }
-
         /* The 'batchCreateFields' of global variable $config will be changed and used by the following business logic. */
         $customFields = $this->storyZen->getCustomFields($this->config, $storyType, $this->view->hiddenPlan, $product);
         $showFields   = $this->storyZen->getShowFields($this->config->story->custom->batchCreateFields, $storyType, $product);
@@ -192,7 +185,13 @@ class story extends control
         if($storyID)
         {
             $story = $this->story->getByID($storyID);
-            if($story) unset($customFields['parent'], $fields['parent']);
+            if($story)
+            {
+                $fields['parent']['default'] = $storyID;
+                $gradeOptions = $this->story->getGradeOptions($story, $storyType);
+                $fields['grade']['options'] = $gradeOptions;
+                $fields['grade']['default'] = current($gradeOptions);
+            }
             $this->view->storyTitle = isset($story->title) ? $story->title : '';
 
             /* Check can subdivide or not. */
@@ -1610,14 +1609,23 @@ class story extends control
         $this->display();
     }
 
+    /**
+     * 获取需求层级下拉列表及默认值。
+     * AJAX: get the grade of a story.
+     *
+     * @param  int    $storyID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
     public function ajaxGetGrade(int $storyID, string $type = 'story')
     {
-        if($type == 'story')
-        {
-            $story = $this->story->fetchByID($storyID);
-            if($story->type == 'requirement') return print(1);
-            return print($story->grade + 1);
-        }
+        $story = $this->story->fetchByID($storyID);
+        $gradeOptions = $this->story->getGradeOptions($story, $type);
+
+        $items = array_map(function($grade){return array('text' => $grade, 'value' => $grade);}, $gradeOptions);
+
+        return $this->send(array('items' => array_values($items), 'default' => current($gradeOptions)));
     }
 
     /**
