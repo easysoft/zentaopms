@@ -331,7 +331,7 @@ detailBody
                         set::title($moduleTitle),
                         $moduleItems
                     ),
-                    item
+                    $config->vision != 'lite' ? item
                     (
                         set::name($lang->task->fromBug),
                         !empty($fromBug) ? a
@@ -348,7 +348,7 @@ detailBody
                             set::title($fromBug->title),
                             $fromBug->title
                         ) : null
-                    ),
+                    ) : null,
                     item
                     (
                         set::name($lang->task->assignedTo),
