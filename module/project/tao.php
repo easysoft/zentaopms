@@ -1045,7 +1045,7 @@ class projectTao extends projectModel
     {
         global $lang;
         /* Single execution and has no product project menu. */
-        if(!$project->hasProduct && !$project->multiple && !empty($this->config->URAndSR) && isset($lang->$navGroup->menu->storyGroup))
+        if(!$project->multiple && !empty($this->config->URAndSR) && isset($lang->$navGroup->menu->storyGroup))
         {
             $lang->$navGroup->menu->story = $lang->$navGroup->menu->storyGroup;
             $lang->$navGroup->menu->story['link'] = sprintf($lang->$navGroup->menu->storyGroup['link'], '%s', $project->id);
