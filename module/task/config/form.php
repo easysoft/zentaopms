@@ -169,6 +169,7 @@ $config->task->form->finish['lastEditedDate']  = array('type' => 'datetime', 're
 $config->task->form->finish['assignedDate']    = array('type' => 'string',   'required' => false, 'default' => $now);
 $config->task->form->finish['finishedBy']      = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->task->form->finish['lastEditedBy']    = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
+$config->task->form->finish['lastEditedDate']  = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
 $config->task->form->close = array();
 $config->task->form->close['status']         = array('type' => 'string',   'required' => false, 'default' => 'closed');
