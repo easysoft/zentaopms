@@ -771,7 +771,16 @@ class executionZen extends execution
         {
             $this->config->bug->search['params']['product']['values'] = array(''=>'');
         }
-        $this->config->bug->search['params']['execution']['values'] = array(''=>'') + $executions + array('all'=>$this->lang->execution->aboveAllExecution);
+
+        if(!$execution->multiple)
+        {
+            unset($this->config->bug->search['fields']['execution'], $this->config->bug->search['params']['execution']);
+        }
+        else
+        {
+            $this->config->bug->search['params']['execution']['values'] = array(''=>'') + $executions + array('all'=>$this->lang->execution->aboveAllExecution);
+        }
+
         $this->config->bug->search['params']['plan']['values']      = $this->loadModel('productplan')->getPairs(array_keys($products));
         $this->config->bug->search['module'] = 'importBug';
         $this->config->bug->search['params']['confirmed']['values'] = $this->lang->bug->confirmedList;
