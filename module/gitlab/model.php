@@ -284,11 +284,14 @@ class gitlabModel extends model
         $commitIds   = array();
         foreach($comments as $comment)
         {
+            $commitDate = isset($comment->author->when) ? $comment->author->when : $comment->committed_date;
+            if(!isset($comment->id)) $comment->id = $comment->sha;
+
             $comment->revision        = $comment->id;
             $comment->originalComment = $comment->title;
             $comment->comment         = $this->loadModel('repo')->replaceCommentLink($comment->title);
-            $comment->committer       = $comment->committer_name;
-            $comment->time            = date("Y-m-d H:i:s", strtotime($comment->committed_date));
+            $comment->committer       = isset($comment->author->identity->name) ? $comment->author->identity->name : $comment->committer_name;
+            $comment->time            = date("Y-m-d H:i:s", strtotime($commitDate));
             $comment->designName      = zget($designNames, $comment->revision, '');
             $comment->designID        = zget($designIds, $comment->revision, '');
             $commitIds[]              = $comment->id;
