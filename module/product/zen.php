@@ -1455,8 +1455,6 @@ class productZen extends product
         $showModule = empty($this->config->product->browse->showModule) ? 0 : $this->config->product->browse->showModule;
         if($isProjectStory) $showModule = empty($this->config->projectstory->story->showModule) ? 0 : $this->config->projectstory->story->showModule;
 
-        if($projectID) $this->view->products = $this->loadModel('product')->getProducts($projectID);
-
         $this->view->title           = $productName . $this->lang->colon . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
         $this->view->productID       = $productID;
         $this->view->product         = $product;
