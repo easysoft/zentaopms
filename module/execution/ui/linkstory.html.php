@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+data('activeMenuID', $storyType);
+
 featureBar(li
 (
     setClass('nav-item'),
