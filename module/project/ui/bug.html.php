@@ -75,7 +75,10 @@ $footToolbar = array();
 if($canBatchAssignTo)
 {
     $assignedToItems = array();
-    foreach ($memberPairs as $key => $value) $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&projectID={$project->id}&type=project"));
+    foreach ($memberPairs as $key => $value)
+    {
+        if(!empty($key)) $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&projectID={$project->id}&type=project"));
+    }
 
     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => 'btn btn-caret size-sm secondary', 'items' => $assignedToItems, 'type' => 'dropdown', 'data-placement' => 'top');
 }
