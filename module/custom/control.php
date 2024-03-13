@@ -296,7 +296,7 @@ class custom extends control
     public function deleteGrade(string $type = 'story', int $gradeID = 0, string $confirm = 'no')
     {
         $story = $this->dao->select('id')->from(TABLE_STORY)->where('grade')->eq($gradeID)->andWhere('type')->eq($type)->limit(1)->fetch('id');
-        if($story) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->custom->notice->gradeNotEmpty)));
+        if($story) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->custom->notice->gradeNotEmpty}');"));
 
         if($confirm == 'no')
         {

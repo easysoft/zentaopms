@@ -41,7 +41,7 @@ $data['gradeName'] = array(
 
 global $tester;
 $tester->loadModel('custom')->setStoryGrade('story', $data);
-$gradeSetting = $tester->loadModel('story')->getGradeSetting();
+$gradeSetting = $tester->loadModel('story')->getGradeList();
 
 r(count($gradeSetting)) && p()                      && e('5');              // 查看插入的等级数量
 r($gradeSetting)        && p('0:grade,name,status') && e('1,一级,enable');  // 查看插入的等级1详情

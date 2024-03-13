@@ -95,7 +95,7 @@ class customZen extends custom
         }
         if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade')
         {
-            $this->view->storyGrades = $this->loadModel('story')->getGradeSetting($module);
+            $this->view->storyGrades = $this->loadModel('story')->getGradeList($module);
         }
         if(in_array($module, array('story', 'testcase', 'demand', 'requirement', 'epic')) && $field == 'review')
         {
