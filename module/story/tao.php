@@ -300,6 +300,15 @@ class storyTao extends storyModel
         $relationGroups = $this->batchGetRelations(array_keys($stories), 'requirement', array('*'));
         if(empty($stories));
 
+        if($this->app->rawModule == 'projectstory')
+        {
+            $projectID = $this->session->project;
+            /* For story children. */
+            $relationIDList = array();
+            foreach($relationGroups as $relationGroup) $relationIDList = array_merge($relationIDList, array_keys($relationGroup));
+            $projectIDList = $this->dao->select('story,project')->from(TABLE_PROJECTSTORY)->where('story')->in($relationIDList)->andWhere('project')->eq($projectID)->fetchPairs('story', 'project');
+        }
+
         foreach($stories as $story)
         {
             /* Merge subdivided stories for requirement. */
@@ -311,7 +320,8 @@ class storyTao extends storyModel
                 if(empty($SRStory)) continue;
 
                 $children = clone $SRStory;
-                $children->parent = $story->id;
+                $children->parent  = $story->id;
+                $children->project = isset($projectIDList[$SRID]) ? $projectIDList[$SRID] : 0;
                 $story->children[$SRID] = $children;
             }
             $story->linkStories = implode(',', array_column($story->children, 'title'));

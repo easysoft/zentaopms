@@ -201,6 +201,7 @@ foreach($stories as $story)
     /* Children. */
     foreach($story->children as $key => $child)
     {
+        if($app->rawModule == 'projectstory' && $child->project != $story->project) continue;
         $child->rawModule = $child->module;
         $data[] = $this->story->formatStoryForList($child, $options, $storyType);
     }
