@@ -241,7 +241,7 @@ class repoModel extends model
             $repo->serviceProject = $response->serviceProject;
             $repo->extra          = $response->extra;
 
-            if(in_array($repo->SCM, array('Gitea', 'Gogs')))
+            if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
             {
                 $path = $this->checkGiteaConnection($repo->SCM, $repo->name, $repo->serviceHost, $repo->serviceProject);
 
@@ -833,7 +833,7 @@ class repoModel extends model
     public function getCommits(object $repo, string $entry, string $revision = 'HEAD', string $type = 'dir', object|null $pager = null, string $begin = '', string $end = ''): array
     {
         if(!isset($repo->id)) return array();
-        if($repo->SCM == 'Gitlab') return $this->loadModel('gitlab')->getCommits($repo, $entry, $pager, $begin, $end);
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->loadModel('gitlab')->getCommits($repo, $entry, $pager, $begin, $end);
 
         $entry         = ltrim($entry, '/');
         $entry         = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
@@ -1760,11 +1760,12 @@ class repoModel extends model
         $service = $this->loadModel('pipeline')->getByID((int)$repo->serviceHost);
         if(!$service) return $repo;
 
-        if($repo->SCM == 'Gitlab')
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
         {
             if($getCodePath)
             {
-                $project = $this->loadModel('gitlab')->apiGetSingleProject((int)$repo->serviceHost, (int)$repo->serviceProject);
+                if($repo->SCM == 'Gitlab') $repo->serviceProject = (int)$repo->serviceProject;
+                $project = $this->loadModel($repo->SCM)->apiGetSingleProject((int)$repo->serviceHost, $repo->serviceProject);
                 if(isset($project->web_url) && $repo->path != $project->web_url)
                 {
                     $repo->path = $project->web_url;
@@ -1778,7 +1779,7 @@ class repoModel extends model
             $repo->password = $service ? $service->token : '';
             $repo->codePath = isset($project->web_url) ? $project->web_url : $repo->path;
         }
-        elseif(in_array($repo->SCM, array('Gitea', 'Gogs')))
+        elseif(in_array($repo->SCM, $this->config->repo->notSyncSCM))
         {
             if(!is_dir($repo->path) && !is_writable(dirname($repo->path)))
             {
@@ -1802,18 +1803,18 @@ class repoModel extends model
      *
      * @param  string $event
      * @param  object $data
-     * @param  object $repo
+     * @param  object $repotime
      * @access public
      * @return bool
      */
     public function handleWebhook(string $event, object $data, object $repo): bool
     {
-        if($event != 'Push Hook' && $event != 'Merge Request Hook') return false;
+        if(!in_array($event, array('Push Hook', 'Merge Request Hook', 'branch_updated'))) return false;
         if(empty($data->commits)) return false;
 
         /* Update code commit history. */
         $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-        if($repo->SCM != 'Gitlab') return $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -1827,17 +1828,29 @@ class repoModel extends model
 
         foreach($data->commits as $commit)
         {
+            $time = zget($commit, 'timestamp', '');
+            if(isset($commit->author->when)) $time = $commit->author->when;
+
             $log = new stdclass();
-            $log->revision = $commit->id;
+            $log->revision = isset($commit->id) ? $commit->id : $commit->sha;
             $log->msg      = $commit->message;
-            $log->author   = $commit->author->name;
-            $log->date     = date("Y-m-d H:i:s", strtotime($commit->timestamp));
+            $log->author   = isset($commit->author->identity->name) ? $commit->author->identity->name : $commit->author->name;
+            $log->date     = date("Y-m-d H:i:s", strtotime($time));
             $log->files    = array();
 
-            $diffs = $scm->engine->getFilesByCommit($log->revision);
-            if(!empty($diffs))
+            if(!isset($commit->added))
             {
-                foreach($diffs as $diff) $log->files[$diff->action][] = $diff->path;
+                $diffs = $scm->engine->getFilesByCommit($log->revision);
+                if(!empty($diffs))
+                {
+                    foreach($diffs as $diff) $log->files[$diff->action][] = $diff->path;
+                }
+            }
+            else
+            {
+                foreach($commit->added as $file)    $log->files['A'][] = $file;
+                foreach($commit->removed as $file)  $log->files['D'][] = $file;
+                foreach($commit->modified as $file) $log->files['M'][] = $file;
             }
 
             $objects = $this->parseComment($log->msg);
