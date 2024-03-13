@@ -26,7 +26,7 @@ $config->kanban->form->closeSpace['lastEditedBy']   = array('type' => 'string', 
 $config->kanban->form->closeSpace['lastEditedDate'] = array('type' => 'datetime', 'required' => true,  'default' => $now);
 
 $config->kanban->form->create['name']        = array('type' => 'string',   'required' => true,  'default' => '');
-$config->kanban->form->create['showWIP']     = array('type' => 'string',   'required' => true,  'default' => '');
+$config->kanban->form->create['showWIP']     = array('type' => 'string',   'required' => false, 'default' => '');
 $config->kanban->form->create['space']       = array('type' => 'int',      'required' => true,  'default' => '');
 $config->kanban->form->create['owner']       = array('type' => 'string',   'required' => false, 'default' => '');
 $config->kanban->form->create['team']        = array('type' => 'array',    'required' => false, 'default' => '', 'filter'  => 'join');
