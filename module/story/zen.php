@@ -722,7 +722,7 @@ class storyZen extends story
 
         $this->view->branchID    = $branch;
         $this->view->gradeRule   = $this->config->{$storyType}->gradeRule;
-        $this->view->hiddenGrade = $storyType == 'story' ? count($grades) <= 2 : count($grades) <= 1;
+        $this->view->hiddenGrade = !$this->story->showGrade($storyType);
         return $fields;
     }
 
@@ -1051,9 +1051,8 @@ class storyZen extends story
             $fields['assignedTo']['options'] = $teamUsers;
         }
 
-        $grades = $this->story->getGradePairs($storyType);
         $this->view->hiddenParent = $hiddenParent;
-        $this->view->hiddenGrade  = $storyType == 'story' ? count($grades) <= 2 : count($grades) <= 1;
+        $this->view->hiddenGrade  = !$this->story->showGrade($storyType);
         return $fields;
     }
 

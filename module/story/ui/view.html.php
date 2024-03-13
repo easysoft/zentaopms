@@ -279,6 +279,16 @@ detailBody
                         set::title($moduleTitle),
                         $moduleItems
                     ),
+                    $story->parentName ? item
+                    (
+                        set::name($lang->story->parent),
+                        $story->parentName
+                    ) : null,
+                    $showGrade ? item
+                    (
+                        set::name($lang->story->grade),
+                        $story->grade
+                    ) : null,
                     ($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan) ? item
                     (
                         set::trClass('plan-line'),

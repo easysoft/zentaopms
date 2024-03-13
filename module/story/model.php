@@ -4624,4 +4624,19 @@ class storyModel extends model
 
         return $gradeOptions;
     }
+
+    /**
+     * 检查是否展示需求层级。
+     * Check if show grade.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return bool
+     */
+    public function showGrade(string $storyType = 'story'): bool
+    {
+        $grades = $this->getGradePairs($storyType);
+
+        return $storyType == 'story' ? count($grades) > 2 : count($grades) > 1;
+    }
 }
