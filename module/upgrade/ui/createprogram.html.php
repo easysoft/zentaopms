@@ -25,7 +25,7 @@ $createProgram = function($data)
             div(setClass('createProjectTip text-gray ' . ($data->projectType == 'project' ? '' : 'hidden')), html($lang->upgrade->createProjectTip)),
             div(setClass('createExecutionTip text-gray ' . ($data->projectType == 'execution' ? '' : 'hidden')), html($lang->upgrade->createExecutionTip))
         ),
-        formRowGroup(set::class('formTitle'), set::title($data->systemMode == 'light' ? $lang->upgrade->setProject : $lang->upgrade->setProgram), set::items(array())),
+        formRowGroup(setClass('formTitle'), set::title($data->systemMode == 'light' ? $lang->upgrade->setProject : $lang->upgrade->setProgram), set::items(array())),
         div
         (
             setClass('programForm mt-4 form-horz'),
