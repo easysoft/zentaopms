@@ -3103,7 +3103,7 @@ class kanbanModel extends model
             $parent = $this->getColumnByID($column->parent);
 
             /* If the parent column is normal now, put its card into child column. */
-            if($parent->parent != -1)
+            if($parent && $parent->parent != -1)
             {
                 $parentCells = $this->dao->select('*')->from(TABLE_KANBANCELL)
                     ->where('`column`')->eq($column->parent)
