@@ -1165,7 +1165,7 @@ class storyZen extends story
         if($storyData->status != 'draft' and $this->story->checkForceReview() and !$this->post->needNotReview) $storyData->status = 'reviewing';
 
         /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $story->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
+        if($this->config->systemMode == 'PLM' and $storyData->type == 'requirement' and $storyData->status == 'active' and $this->config->vision == 'rnd') $storyData->status = 'launched';
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
