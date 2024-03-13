@@ -1512,15 +1512,14 @@ class bugZen extends bug
         {
             $customFields[$field] = $this->lang->bug->$field;
         }
-        if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+        if($product->type != 'normal') $customFields['branch'] = $this->lang->product->branchName[$product->type];
         if(isset($project->model) && $project->model == 'kanban') $customFields['execution'] = $this->lang->bug->kanban;
 
         /* Set display fields. */
         $showFields = $this->config->bug->custom->batchCreateFields;
         if($product->type != 'normal')
         {
-            $showFields = sprintf($showFields, $product->type);
-            $showFields = str_replace(array(",branch,", ",platform,"), '', ",$showFields,");
+            $showFields = sprintf($showFields, 'branch');
             $showFields = trim($showFields, ',');
         }
         else
