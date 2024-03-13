@@ -1298,22 +1298,22 @@ class storyModel extends model
     {
         $now      = helper::now();
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
-        /* 如果该需求是用户需求，则为细分操作，记录用户需求和软件需求的关联关系。 */
-        if($oldStory->type == 'requirement')
-        {
-            foreach($SRList as $SRID) $this->storyTao->doCreateURRelations($SRID, array($storyID));
-            return;
-        }
 
-        /* 如果该需求是软件需求，则为分解子需求操作。 */
         /* Set parent to child story. */
-        $this->dao->update(TABLE_STORY)->set('parent')->eq($storyID)->where('id')->in($SRList)->exec();
+        foreach($SRList as $childStoryID)
+        {
+            $path = rtrim($oldStory->path, ',') . ",$childStoryID,";
+            $this->dao->update(TABLE_STORY)
+                 ->set('parent')->eq($storyID)
+                 ->set('path')->eq($path)
+                 ->where('id')->eq($childStoryID)
+                 ->exec();
+        }
         $this->computeEstimate($storyID);
 
         /* Set childStories. */
         $childStories = implode(',', $SRList);
         $newStory     = new stdClass();
-        $newStory->parent         = '-1';
         $newStory->plan           = '';
         $newStory->lastEditedBy   = $this->app->user->account;
         $newStory->lastEditedDate = $now;
@@ -2403,23 +2403,55 @@ class storyModel extends model
      *
      * @param  int        $productID
      * @param  string|int $appendedStories
+     * @param  string     $storyType
      * @access public
      * @return array
      */
-    public function getParentStoryPairs(int $productID, string|int $appendedStories = ''): array
+    public function getParentStoryPairs(int $productID, string|int $appendedStories = '', string $storyType = 'story'): array
     {
-        $stories = $this->dao->select('id, title')->from(TABLE_STORY)
-            ->where('deleted')->eq('0')
-            ->andWhere('product')->eq($productID)
-            ->andWhere('parent')->le(0)
-            ->andWhere('type')->eq('story')
-            ->andWhere('stage')->eq('wait')
-            ->andWhere('status')->eq('active')
-            ->andWhere('plan')->in('0,')
-            ->andWhere('twins')->eq('')
-            ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
-            ->fetchPairs();
-        return array(0 => '') + $stories;
+        if($storyType == 'story')
+        {
+            $lastGrade    = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->orderBy('grade_desc')->limit(1)->fetch('grade');
+            $SRGradePairs = $this->getGradePairs('story');
+            $URGradePairs = $this->getGradePairs('requirement');
+            $requirements = $this->dao->select('id, parent, grade, title')->from(TABLE_STORY)
+                ->where('deleted')->eq('0')
+                ->andWhere('product')->eq($productID)
+                ->andWhere('type')->eq('requirement')
+                ->andWhere('status')->eq('active')
+                ->fetchAll('id');
+
+            $parents = array();
+            foreach($requirements as $requirement) $parents[$requirement->parent] = $requirement->parent;
+
+            $requirementPairs = array();
+            foreach($requirements as $id => $requirement)
+            {
+                if(isset($parents[$requirement->id]))
+                {
+                    unset($requirement[$id]);
+                    continue;
+                }
+
+                $requirementPairs[$requirement->id] = isset($URGradePairs[$requirement->grade]) ? '(' . $URGradePairs[$requirement->grade] . ') ' . $requirement->title : $requirement->title;
+            }
+
+            $stories = $this->dao->select('id, grade, title')->from(TABLE_STORY)
+                ->where('deleted')->eq('0')
+                ->andWhere('product')->eq($productID)
+                ->andWhere('type')->eq('story')
+                ->andWhere('status')->eq('active')
+                ->andWhere('grade')->ne($lastGrade)
+                ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
+                ->fetchAll();
+
+            $storyPairs = array();
+            foreach($stories as $story) $storyPairs[$story->id] = isset($SRGradePairs[$story->grade]) ? '(' . $SRGradePairs[$story->grade] . ') ' . $story->title : $story->title;
+
+            return array(0 => '') + $requirementPairs + $storyPairs;
+        }
+
+        return array(0 => '');
     }
 
     /**
@@ -4425,7 +4457,6 @@ class storyModel extends model
         $story->uniqueID = $story->parent > 0 ? $story->parent . '-' . $story->id : $story->id;
 
         if($story->parent < 0) $story->parent = 0;
-        if(empty($options['execution'])) $story->isParent = isset($story->children);
 
         /* Format user list. */
         foreach(array('mailto', 'reviewer') as $fieldName)
@@ -4536,14 +4567,28 @@ class storyModel extends model
     }
 
     /**
-     * Get story grade setting.
+     * Get story grade list.
      *
      * @param  string $type story|requirement|epic
      * @access public
      * @return array
      */
-    public function getGradeSetting($type = 'story'): array
+    public function getGradeList($type = 'story'): array
     {
         return $this->dao->select('*')->from(TABLE_STORYGRADE)->where('type')->eq($type)->orderBy('grade_asc')->fetchAll();
+    }
+
+    /**
+     * Get story grade pairs.
+     *
+     * @param  string $type story|requirement|epic
+     * @param  string $field1
+     * @param  string $field2
+     * @access public
+     * @return array
+     */
+    public function getGradePairs($type = 'story', $field1 = 'grade', $field2 = 'name'): array
+    {
+        return $this->dao->select("$field1, $field2")->from(TABLE_STORYGRADE)->where('type')->eq($type)->orderBy('grade_asc')->fetchPairs();
     }
 }

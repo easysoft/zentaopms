@@ -104,7 +104,7 @@ class story extends control
 
         /* Get form fields. */
         $this->storyZen->setViewVarsForKanban($objectID, $this->story->parseExtra($extra));
-        $fields = $this->storyZen->getFormFieldsForCreate($productID, $branch, $objectID, $initStory);
+        $fields = $this->storyZen->getFormFieldsForCreate($productID, $branch, $objectID, $initStory, $storyType);
         $fields = $this->storyZen->setModuleField($fields, $moduleID);
         $fields = $this->storyZen->removeFormFieldsForCreate($fields, $storyType);
 
@@ -1608,6 +1608,16 @@ class story extends control
         $this->view->actions = $this->action->getList('story', $storyID);
         $this->view->story   = $this->story->getByID($storyID);
         $this->display();
+    }
+
+    public function ajaxGetGrade(int $storyID, string $type = 'story')
+    {
+        if($type == 'story')
+        {
+            $story = $this->story->fetchByID($storyID);
+            if($story->type == 'requirement') return print(1);
+            return print($story->grade + 1);
+        }
     }
 
     /**

@@ -476,10 +476,11 @@ class storyZen extends story
      * @param  string    $branch
      * @param  int       $objectID
      * @param  object    $initStory
+     * @param  string    $storyType
      * @access protected
      * @return array
      */
-    protected function getFormFieldsForCreate(int $productID, string $branch, int $objectID, object $initStory): array
+    protected function getFormFieldsForCreate(int $productID, string $branch, int $objectID, object $initStory, string $storyType = 'story'): array
     {
         $account = $this->app->user->account;
         $fields  = $this->config->story->form->create;
@@ -496,7 +497,8 @@ class storyZen extends story
         $moduleName     = $this->app->rawModule;
         $product        = $this->product->getByID($productID);
         $users          = $this->user->getPairs('pdfirst|noclosed|nodeleted');
-        $stories        = $this->story->getParentStoryPairs($productID);
+        $stories        = $this->story->getParentStoryPairs($productID, '', $storyType);
+        $grades         = $this->story->getGradePairs($storyType, 'grade', 'grade');
         $plans          = $this->loadModel('productplan')->getPairs($productID, $branch == 0 ? '' : $branch, 'unexpired|noclosed', true);
         $plans          = array_map(function($planName){return str_replace(FUTURE_TIME, $this->lang->story->undetermined, $planName);}, $plans);
         $forceReview    = $this->story->checkForceReview();
@@ -519,6 +521,7 @@ class storyZen extends story
         $fields['branches']['options'] = $branches;
         $fields['plan']['options']     = $plans;
         $fields['plans']['options']    = $plans;
+        $fields['grade']['options']    = $grades;
         $fields['reviewer']['options'] = $reviewers;
         $fields['parent']['options']   = array_filter($stories);
 
@@ -545,6 +548,7 @@ class storyZen extends story
         $this->view->objectID    = $objectID;
         $this->view->forceReview = $forceReview;
         $this->view->needReview  = $needReview;
+        $this->view->gradeRule   = $this->config->{$storyType}->gradeRule;
 
         return $fields;
     }
@@ -1006,7 +1010,7 @@ class storyZen extends story
         $objectID  = $this->view->objectID;
 
         /* Hidden some fields of projects without products. */
-        $hiddenProduct = $hiddenParent = $hiddenPlan = $hiddenURS = false;
+        $hiddenProduct = $hiddenParent = $hiddenPlan = false;
         $teamUsers     = $URS = array();
 
         if($storyType == 'story')
@@ -1029,11 +1033,9 @@ class storyZen extends story
                 $hiddenProduct = true;
 
                 if($project->model !== 'scrum' or !$project->multiple) $hiddenPlan = true;
-                if($project->model === 'kanban') $hiddenURS  = true;
             }
         }
         if($storyType != 'story') unset($fields['region'], $fields['lane'], $fields['branches'], $fields['modules'], $fields['plans']);
-        if($storyType != 'story' || !$this->config->URAndSR || $hiddenURS) unset($fields['URS']);
         if($hiddenPlan) unset($fields['plan']);
         if($hiddenProduct)
         {
@@ -1042,7 +1044,9 @@ class storyZen extends story
             $fields['assignedTo']['options'] = $teamUsers;
         }
 
+        $grades = $this->story->getGradeList($storyType);
         $this->view->hiddenParent = $hiddenParent;
+        $this->view->hiddenGrade  = $storyType == 'story' ? count($grades) <= 2 : count($grades) <= 1;
         return $fields;
     }
 

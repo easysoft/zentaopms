@@ -81,6 +81,18 @@ window.loadURS = function(e)
     })
 };
 
+window.loadGrade = function(e)
+{
+    const parent = e.target.value;
+    const link   = $.createLink('story', 'ajaxGetGrade', 'parent=' + parent + '&type=' + storyType);
+    $.get(link, function(data)
+    {
+        const $grade = $('[name=grade]').zui('picker');
+        $grade.$.setValue(data);
+        if(gradeRule == 'stepwise') $grade.render({disabled: true});
+    })
+}
+
 window.loadBranchModule = function(productID)
 {
     const branch   = $('[name=branch]').val();

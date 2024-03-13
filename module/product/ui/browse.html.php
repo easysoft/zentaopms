@@ -336,7 +336,6 @@ if($this->app->rawModule == 'projectstory') $sortLink = createLink('projectstory
 dtable
 (
     set::id('stories'),
-    set::rowKey('uniqueID'),
     set::userMap($users),
     set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
     set::checkable(!empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).

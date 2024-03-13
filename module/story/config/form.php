@@ -15,8 +15,8 @@ $config->story->form->create['sourceNote']  = array('type' => 'string',  'contro
 $config->story->form->create['feedbackBy']  = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->story->form->create['notifyEmail'] = array('type' => 'string',  'control' => 'text',         'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->story->form->create['reviewer']    = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '', 'options' => 'users');
-$config->story->form->create['URS']         = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '', 'options' => array());
 $config->story->form->create['parent']      = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
+$config->story->form->create['grade']       = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
 $config->story->form->create['region']      = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
 $config->story->form->create['lane']        = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
 $config->story->form->create['title']       = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');

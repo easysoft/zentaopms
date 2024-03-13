@@ -42,19 +42,15 @@ if(isset($createFields['branch']) && $type == 'story')
         ));
 }
 
-if(isset($createFields['URS']))
-{
-    $fields->field('URS')
-        ->label($lang->story->requirement)
-        ->control('inputGroup')
-        ->items(false)
-        ->checkbox(array('text' => $lang->story->loadAllStories, 'id' => 'loadURS'))
-        ->itemBegin('URS[]')->control('picker')->id('URS')->items($createFields['URS']['options'])->value($createFields['URS']['default'])->multiple()->itemEnd();
-    $fields->field('parent')
-        ->hidden(data('hiddenParent'))
-        ->items($createFields['parent']['options'])
-        ->value($createFields['parent']['default']);
-}
+$fields->field('parent')
+    ->hidden(data('hiddenParent'))
+    ->items($createFields['parent']['options'])
+    ->value($createFields['parent']['default']);
+
+$fields->field('grade')
+    ->hidden(data('hiddenGrade'))
+    ->items($createFields['grade']['options'])
+    ->value(1);
 
 $fields->field('reviewer')
     ->width('full')

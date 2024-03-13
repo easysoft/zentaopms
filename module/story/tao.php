@@ -341,11 +341,7 @@ class storyTao extends storyModel
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->beginIF($productID)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
 
         $parents = $this->extractParents($stories);
-        if($parents)
-        {
-            $children = $this->dao->select('id,parent,title')->from(TABLE_STORY)->where('parent')->in($parents)->andWhere('deleted')->eq(0)->fetchGroup('parent', 'id');
-            $parents  = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
-        }
+        if($parents) $parents = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
 
         $mainID  = $type == 'story' ? 'BID' : 'AID';
         $countID = $type == 'story' ? 'AID' : 'BID';
@@ -360,9 +356,6 @@ class storyTao extends storyModel
         if($type == 'requirement') $stories = $this->appendSRToChildren($stories);
         foreach($stories as $story)
         {
-            /* Export story linkstories. */
-            if(isset($children[$story->id])) $story->linkStories = implode(',', array_column($children[$story->id], 'title'));
-
             /* Merge parent story title. */
             if($story->parent > 0 and isset($parents[$story->parent])) $story->parentName = $parents[$story->parent]->title;
 
@@ -395,8 +388,7 @@ class storyTao extends storyModel
     {
         $parent = array_map(function($story)
         {
-            if($story->parent == '-1') return $story->id;
-            if($story->parent > '0')   return $story->parent;
+            if($story->parent > '0') return $story->parent;
             return false;
         }, $stories);
         return array_values(array_unique(array_filter($parent)));
