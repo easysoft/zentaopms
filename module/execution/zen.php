@@ -2004,8 +2004,9 @@ class executionZen extends execution
                 array_map(function($executionProduct) use(&$multiBranchProduct){if($executionProduct->type != 'normal') $multiBranchProduct = true;}, $executionProductList);
 
                 $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->importBranchPlanStory : $this->lang->execution->importPlanStory;
-                $confirmURL          = inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes");
-                $cancelURL           = inlink('create', "projectID=$projectID&executionID=$executionID");
+                if($execution->type == 'stage') $importPlanStoryTips = str_replace($this->lang->executionCommon, $this->lang->execution->stage, $importPlanStoryTips);
+                $confirmURL = inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes");
+                $cancelURL  = inlink('create', "projectID=$projectID&executionID=$executionID");
                 return $this->send(array('result' => 'success', 'load' => array('confirm' => $importPlanStoryTips, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
             }
         }
