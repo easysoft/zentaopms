@@ -91,6 +91,8 @@ dtable
     set::cols($cols),
     set::data(array_values($bugs)),
     set::userMap($users),
+    set::priList($lang->bug->priList),
+    set::severityList($lang->bug->severityList),
     set::customCols(true),
     set::checkable($canBatchAssignTo),
     set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),

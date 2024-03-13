@@ -93,6 +93,8 @@ dtable
 (
     set::cols($cols),
     set::data(array_values($bugs)),
+    set::priList($lang->bug->priList),
+    set::severityList($lang->bug->severityList),
     set::userMap($users),
     set::fixedLeftWidth('44%'),
     set::onRenderCell(jsRaw('window.onRenderBugNameCell')),
