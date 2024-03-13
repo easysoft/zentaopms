@@ -844,7 +844,7 @@ class productModel extends model
             ->setDefault('line', 0)
             ->setDefault('whitelist', '')
             ->setDefault('reviewer', '')
-            ->setDefault('PMT', '')
+            ->setIF(!isset($_POST['PMT']), 'PMT', $oldProduct->PMT)
             ->cleanINT('program,line')
             ->join('whitelist', ',')
             ->join('reviewer', ',')
