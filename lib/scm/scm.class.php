@@ -15,7 +15,7 @@ class scm
         $className = $repo->SCM;
         if($className == 'Git') $className = 'GitRepo';
         if(!class_exists($className)) require(strtolower($className) . '.class.php');
-        $this->engine = new $className($repo->client, $className == 'Gitlab' ? $repo->apiPath : $repo->path, $repo->account, $repo->password, $repo->encoding, $repo);
+        $this->engine = new $className($repo->client, in_array($className, array('Gitlab', 'GitFox')) ? $repo->apiPath : $repo->path, $repo->account, $repo->password, $repo->encoding, $repo);
     }
 
     /**
