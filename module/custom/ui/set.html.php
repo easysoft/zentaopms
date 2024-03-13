@@ -85,8 +85,8 @@ elseif(in_array($module, array('story', 'requirement', 'epic')) && $field == 'gr
     $formItems[] = div
     (
         setClass('gradeRuleNotice'),
-        div($lang->custom->notice->cross),
-        div($lang->custom->notice->stepwise)
+        div($lang->custom->notice->stepwise),
+        div($lang->custom->notice->cross)
     );
 }
 elseif(in_array($module, array('epic', 'story', 'requirement', 'testcase')) && $field == 'review')

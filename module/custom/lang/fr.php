@@ -68,8 +68,8 @@ $lang->custom->closeGrade           = 'Close Story Grade';
 $lang->custom->activateGrade        = 'Activate Story Grade';
 $lang->custom->deleteGrade          = 'Delete Story Grade';
 
-$lang->custom->gradeRuleList['cross']     = 'Allow cross-level segmentation';
-$lang->custom->gradeRuleList['stepwise']  = 'Restriction level-by-level subdivision';
+$lang->custom->gradeRuleList['stepwise'] = 'Restriction level-by-level subdivision';
+$lang->custom->gradeRuleList['cross']    = 'Allow cross-level segmentation';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';

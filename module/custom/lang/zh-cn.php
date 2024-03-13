@@ -68,8 +68,8 @@ $lang->custom->closeGrade           = '停用需求层级';
 $lang->custom->activateGrade        = '启用需求层级';
 $lang->custom->deleteGrade          = '删除需求层级';
 
-$lang->custom->gradeRuleList['cross']     = '允许跨层级细分';
-$lang->custom->gradeRuleList['stepwise']  = '限制逐层级细分';
+$lang->custom->gradeRuleList['stepwise'] = '限制逐层级细分';
+$lang->custom->gradeRuleList['cross']    = '允许跨层级细分';
 
 $lang->custom->unitList['efficiency'] = '工时/';
 $lang->custom->unitList['manhour']    = '人时/';
