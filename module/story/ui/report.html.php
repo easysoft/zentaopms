@@ -38,6 +38,7 @@ function getEcharts($charts, $datas)
         $chartData = $datas[$type];
         $echarts[] = tableChart
             (
+                set::item('chart-' . $type),
                 set::type($option->type),
                 set::title($lang->story->report->charts[$type]),
                 set::datas((array)$chartData),

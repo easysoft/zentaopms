@@ -14,8 +14,24 @@ class simpleList extends wg
     (
         'items'        => '?array',
         'tagName'      => '?string="ul"',
-        'onRenderItem' => '?callable',        // 渲染条目的回调函数。
+        'divider'      => '?bool',        // 是否显示分割线。
+        'border'       => '?bool',        // 是否显示边框。
+        'hover'        => '?bool=true',   // 是否有鼠标悬停效果。
+        'compact'      => '?bool=true',   // 是否显示为紧凑模式。
+        'onRenderItem' => '?callable',    // 渲染条目的回调函数。
     );
+
+    public static function getPageCSS(): ?string
+    {
+        return <<<'CSS'
+        .simple-list.has-border {border: 1px solid var(--color-border);}
+        .simple-list.has-border .list-item {padding-left: 8px; padding-right: 8px;}
+        .simple-list.has-divider * + .list-item {border-top: 1px solid var(--color-border);}
+        .simple-list.has-hover .list-item {transition: .2s background-color;}
+        .simple-list.has-hover .list-item:hover {background-color: var(--state-color);}
+        .simple-list.is-loose .list-item {padding-top: 2px; padding-bottom: 2px;}
+        CSS;
+    }
 
     public bool $isH5List = true;
 
@@ -75,13 +91,15 @@ class simpleList extends wg
     protected function build()
     {
         $tagName = $this->prop('tagName');
+        $divider = $this->prop('divider');
+        $border  = $this->prop('border');
         $this->isH5List = $tagName === 'ul' || $tagName === 'ol';
 
         $items = $this->buildItems();
 
         return h::$tagName
         (
-            setClass('list', $this->hasIcons ? 'has-icons' : '', $this->hasCheckbox ? 'has-checkbox' : ''),
+            setClass('list simple-list', array('has-icons' => $this->hasIcons, 'has-checkbox' => $this->hasCheckbox, 'has-divider' => $divider, 'has-border' => $border, 'has-hover' => $this->prop('hover')), $this->prop('compact') ? 'is-compact' : 'is-loose'),
             set($this->getRestProps()),
             $items,
             $this->children()

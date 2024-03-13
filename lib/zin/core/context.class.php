@@ -32,6 +32,8 @@ class context extends \zin\utils\dataset
 
     public array $data = array();
 
+    public ?\control $control = null;
+
     public bool $rendered = false;
 
     public bool $rawContentCalled = false;
@@ -415,6 +417,7 @@ class context extends \zin\utils\dataset
             $result = call_user_func("\zin\command::{$method}", $queryNodes, ...$args);
             if(is_array($result))  $queryNodes = $result;
             if(empty($queryNodes)) break;
+            prebuild($queryNodes);
         }
     }
 

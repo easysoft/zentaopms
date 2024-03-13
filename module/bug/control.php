@@ -209,7 +209,6 @@ class bug extends control
      */
     public function create(int $productID, string $branch = '', string $extras = '')
     {
-        $originExtras = $extras;
         $extras       = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extras);
         parse_str($extras, $params);
 

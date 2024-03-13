@@ -130,6 +130,7 @@ function detailCard(): detailCard {return createWg('detailCard', func_get_args()
 function detailHeader(): detailHeader {return createWg('detailHeader', func_get_args());}
 function detailSide(): detailSide {return createWg('detailSide', func_get_args());}
 function detailBody(): detailBody {return createWg('detailBody', func_get_args());}
+function detailForm(): detailForm {return createWg('detailForm', func_get_args());}
 function echarts(): echarts {return createWg('echarts', func_get_args());}
 function popovers(): popovers {return createWg('popovers', func_get_args());}
 function backBtn(): backBtn {return createWg('backBtn', func_get_args());}

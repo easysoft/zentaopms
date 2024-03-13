@@ -247,6 +247,7 @@ class pivotTao extends pivotModel
             ->andWhere('t1.assignedTo')->ne('')
             ->beginIF($deptUsers)->andWhere('t1.assignedTo')->in($deptUsers)->fi()
             ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.vision')->like('rnd')
             ->andWhere('t2.status')->in('wait,suspended,doing')
             ->fetchAll();
     }

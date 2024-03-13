@@ -78,16 +78,20 @@ class twinsStoryList extends storyList
         $stage       = $lang->story->stageList[$story->stage];
         $labelClass  = $this->story->branch == $story->branch ? 'primary' : '';
 
-        if(!isset($item['leading'])) $item['leading'] = array();
-        if($branch) array_unshift($item['leading'], new label(setClass($labelClass, 'circle branch size-sm'), set::title($branch), $branch));
+        if(!isset($item['leading']))    $item['leading'] = array();
+        if($branch)
+        {
+            if(!is_array($item['leading'])) $item['leading'] = array($item['leading']);
+            $item['leading'] = array_merge(array(new label(setClass($labelClass, 'circle branch size-sm'), set::title($branch), $branch), $item['leading']));
+        }
 
-        $item['text'] = statusLabel::create($story->stage, $stage, setClass('label outline ring rounded flex-none'));
+        $item['text'] = statusLabel::create($story->stage, $stage, setClass('flex-none'));
 
         if($relievedBtn)
         {
             $btn = array
             (
-                'class'       => 'relievedTwins unlink opacity-0 group-hover:opacity-100 primary',
+                'class'       => ($this->compact ? 'primary opacity-0 group-hover:opacity-100' : 'primary-pale'),
                 'icon'        => 'unlink',
                 'data-id'     => $story->id,
                 'data-on'     => 'click',

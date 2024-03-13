@@ -90,8 +90,8 @@ else
             ),
             to::footer
             (
-                btn(setClass('danger btn-wide'), set('onclick', 'submitForm("cover")'), $lang->importAndCover),
-                btn(setClass('primary btn-wide'), set('onclick', 'submitForm("insert")'), $lang->importAndInsert)
+                btn(setClass('danger btn-wide'), set('onclick', 'submitForm("cover")'), $lang->importAndCover, set::btnType('submit')),
+                btn(setClass('primary btn-wide'), set('onclick', 'submitForm("insert")'), $lang->importAndInsert, set::btnType('submit'))
             )
         )
     );
@@ -99,7 +99,6 @@ else
     window.submitForm = function(type)
     {
         $('#importNoticeModal [name=insert]').val(type == 'insert' ? 1 : 0);
-        $("button[data-target='#importNoticeModal']").closest('form')[0].submit();
     };
     JAVASCRIPT);
 }

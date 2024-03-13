@@ -32,6 +32,7 @@ foreach($charts as $type => $option)
     $chartData = $datas[$type];
     $echarts[] = tableChart
     (
+        set::item('chart-' . $type),
         set::type($option->type),
         set::title($lang->testtask->report->charts[$type]),
         set::datas((array)$chartData)

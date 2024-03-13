@@ -4,6 +4,9 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'idlabel' . DS . 'v1.php';
 
+/**
+ * @deprecated Use entityTitle instead.
+ */
 class entityLabel extends wg
 {
     protected static array $defineProps = array(

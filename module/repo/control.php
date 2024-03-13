@@ -1155,7 +1155,14 @@ class repo extends control
             $latestInDB = $this->repo->getLatestCommit($repoID, false);
 
             $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
-            $revision = $version == 1 ? 'HEAD' : (in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) ? $latestInDB->commit : $latestInDB->revision);
+            if(in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')))
+            {
+                $revision = $version == 1 ? 'HEAD' : $latestInDB->commit;
+            }
+            else
+            {
+                $revision = $version == 1 ? '0' : $latestInDB->revision;
+            }
             $batchNum = $type == 'batch' ? $this->config->repo->batchNum : 0;
             $logs     = $this->scm->getCommits($revision, $batchNum, $branchID);
         }

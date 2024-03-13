@@ -500,7 +500,9 @@ class detail extends wg
 
         return div
         (
-            setClass('detail-view col relative gap-2.5', "detail-$objectType-$objectID"),
+            setClass('detail-view col relative gap-2.5'),
+            setData('id', $objectID),
+            setData('type', $objectType),
             $this->buildHeader(),
             $this->buildBody(),
             $this->buildPrevAndNext()

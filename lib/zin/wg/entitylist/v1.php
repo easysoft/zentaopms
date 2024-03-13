@@ -13,10 +13,16 @@ class entityList extends wg
         'items'        => 'array',             // 对象对象列表。
         'type'         => '?string',           // 对象类型。
         'viewUrl'      => '?string|bool=true', // 查看链接模版，使用 `{id}` 代替对象 ID，如果设置为 false 不展示链接，如果设置为 true 则使用默认链接。
-        'onRenderItem' => '?callable'         // 渲染对象对象的回调函数。
+        'divider'      => '?bool',             // 是否显示分割线。
+        'border'       => '?bool',             // 是否显示边框。
+        'hover'        => '?bool=true',        // 是否有鼠标悬停效果。
+        'compact'      => '?bool=true',        // 是否显示为紧凑模式。
+        'onRenderItem' => '?callable'          // 渲染对象对象的回调函数。
     );
 
     protected string $viewUrl = '';
+
+    protected bool $compact = true;
 
     protected function created()
     {
@@ -36,7 +42,7 @@ class entityList extends wg
             'innerTag'     => 'div',
             'titleClass'   => 'flex gap-2 items-center flex-auto min-w-0',
             'textClass'    => 'flex-none',
-            'actionsClass' => 'absolute top-0 right-0',
+            'actionsClass' => $this->compact ? 'absolute top-0.5 right-0' : null,
             'hint'         => $entity->title,
             'title'        => span(setClass('text-clip'), $entity->title),
             'leading'      => idLabel::create($entity->id)
@@ -75,6 +81,7 @@ class entityList extends wg
             if($viewUrl === true) $viewUrl = createLink($type, 'view', 'id={id}');
         }
         $this->viewUrl = $viewUrl;
+        $this->compact = $this->prop('compact');
     }
 
     protected function build()
@@ -85,6 +92,10 @@ class entityList extends wg
         (
             setClass($this->prop('name')),
             set::items($this->getItems()),
+            set::divider($this->prop('divider')),
+            set::border($this->prop('border')),
+            set::hover($this->prop('hover')),
+            set::compact($this->compact),
             set::onRenderItem($this->prop('onRenderItem')),
             set($this->getRestProps()),
             $this->children()

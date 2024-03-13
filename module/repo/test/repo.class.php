@@ -289,7 +289,7 @@ class repoTest
 
         $scm = $this->objectModel->app->loadClass('scm');
         $scm->setEngine($repo);
-        $logs = $scm->getCommits('HEAD', 0);
+        $logs = $scm->getCommits($repo->SCM != 'Subversion' ? 'HEAD' : '0', 0);
 
         $objects = $this->objectModel->saveCommit($repoID, $logs, $version, $branch = '');
 
