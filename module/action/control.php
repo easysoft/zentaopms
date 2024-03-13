@@ -170,15 +170,15 @@ class action extends control
 
         if($oldAction->objectType == 'module' && $confirmChange == 'no')
         {
-            $module          = $this->loadModel('tree')->getById($oldAction->objectID);
-            $repeatName      = $this->tree->checkUnique($module);
-
-            if($module->type == 'doc' && $module->parent && !$repeatName)
+            $module     = $this->loadModel('tree')->getById($oldAction->objectID);
+            $repeatName = $this->tree->checkUnique($module);
+            if($module->type == 'doc' && $module->parent  > 0 && !$repeatName)
             {
-                $parents         = $this->tree->getParents($oldAction->objectID);
+                $parents         = $this->tree->getParents($oldAction->objectID, true);
                 $isDeletedParent = false;
                 foreach($parents as $parent)
                 {
+                    if($parent->id == $oldAction->objectID) continue;
                     if($parent->deleted)
                     {
                         $isDeletedParent = true;
