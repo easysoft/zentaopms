@@ -15,6 +15,8 @@ public function getPairs($mode = '', $programID = 0, $append = '', $shadow = 0)
     $projects        = $this->loadModel('project')->getPairsByProgram();
     $projectIdList   = array_keys($projects);
 
+    if($this->app->rawModule == 'feedback' && $this->app->rawMethod == 'productsetting') return parent::getPairs($mode, $programID, $append, $shadow);
+
     $projectProducts = $this->dao->select('t1.branch, t1.plan, t2.*')
         ->from(TABLE_PROJECTPRODUCT)->alias('t1')
         ->leftJoin(TABLE_PRODUCT)->alias('t2')
