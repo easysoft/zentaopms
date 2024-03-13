@@ -73,7 +73,7 @@ $canImportTask = hasPriv('task', 'importTask');
 $canImportBug  = hasPriv('task', 'importBug');
 if(common::canModify('execution', $execution))
 {
-    $createLink = $this->createLink('task', 'create', "executionID={$execution->id}" . ($app->tab == 'project' ? '#app=project' : ''));
+    $createLink = $this->createLink('task', 'create', "executionID={$execution->id}") . ($app->tab == 'project' ? '#app=project' : '');
     if(commonModel::isTutorialMode())
     {
         $wizardParams   = helper::safe64Encode("executionID={$execution->id}");
@@ -511,7 +511,7 @@ else
             (
                 set::text($lang->task->create),
                 set::icon('plus'),
-                set::url(createLink('task', 'create', "execution={$executionID}" . (isset($moduleID) ? "&storyID=&moduleID={$moduleID}" : '' . ($app->tab == 'project' ? '#app=project' : '')))),
+                set::url(createLink('task', 'create', "execution={$executionID}" . (isset($moduleID) ? "&storyID=&moduleID={$moduleID}" : '')) . ($app->tab == 'project' ? '#app=project' : '')),
                 setClass('btn primary-pale border-primary ml-2')
             ) : null
         )
