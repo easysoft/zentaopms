@@ -1678,10 +1678,12 @@ class story extends control
             {
                 $this->loadModel('project')->setMenu($projectID);
                 if($project and $project->model == 'waterfall') unset($this->lang->story->report->charts['storiesPerPlan']);
+                $this->view->projectID = $projectID;
             }
             else
             {
                 $this->loadModel('execution')->setMenu($projectID);
+                $this->view->executionID = $projectID;
             }
 
             if(!$project->hasProduct)
