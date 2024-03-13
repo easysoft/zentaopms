@@ -348,7 +348,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $type = 'full', string $status = 'all', $storyType = 'story'): array
+    public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $type = 'full', string $status = 'all', string $storyType = 'story'): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStoryPairs();
 
