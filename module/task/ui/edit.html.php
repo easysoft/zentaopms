@@ -213,7 +213,7 @@ detailBody
                     set::value($task->parent),
                     set::items($tasks)
                 )
-            ) : null,
+            ) : formHidden('parent', $task->parent),
             empty($modeText) ? item
             (
                 set::name($lang->task->mode),
