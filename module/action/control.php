@@ -170,12 +170,26 @@ class action extends control
 
         if($oldAction->objectType == 'module' && $confirmChange == 'no')
         {
-            $module     = $this->loadModel('tree')->getById($oldAction->objectID);
-            $repeatName = $this->loadModel('tree')->checkUnique($module);
-            if($module->type == 'doc' && $module->parent > 0 && !$repeatName)
+            $module          = $this->loadModel('tree')->getById($oldAction->objectID);
+            $repeatName      = $this->tree->checkUnique($module);
+
+            if($module->type == 'doc' && $module->parent && !$repeatName)
             {
-                $url = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
-                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({message: '{$this->lang->action->undeleteModuleTip}'}); $.ajaxSubmit({url: '{$url}'});"));
+                $parents         = $this->tree->getParents($oldAction->objectID);
+                $isDeletedParent = false;
+                foreach($parents as $parent)
+                {
+                    if($parent->deleted)
+                    {
+                        $isDeletedParent = true;
+                        break;
+                    }
+                }
+                if($isDeletedParent)
+                {
+                    $url = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
+                    return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->action->undeleteModuleTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});});"));
+                }
             }
         }
         elseif($oldAction->objectType == 'task' && $confirmChange == 'no')
