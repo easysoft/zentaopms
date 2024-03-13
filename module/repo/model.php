@@ -181,7 +181,7 @@ class repoModel extends model
     {
         $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
-            ->batchCheckIF($repo->SCM != 'Gitlab', 'path,client', 'notempty')
+            ->batchCheckIF(!in_array($repo->SCM, $this->config->repo->notSyncSCM), 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($repo->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM))
@@ -2290,8 +2290,7 @@ class repoModel extends model
      */
     public function getGitlabProjects(int $gitlabID, string $projectFilter = ''): array
     {
-        $showAll = ($projectFilter == 'ALL' and common::hasPriv('repo', 'create')) ? true : false;
-        if($this->app->user->admin or $showAll)
+        if($this->app->user->admin || ($projectFilter == 'ALL' && common::hasPriv('repo', 'create')))
         {
             $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, 'true', 0, 0, false);
         }
@@ -2312,6 +2311,21 @@ class repoModel extends model
                 }
             }
         }
+
+        return $projects;
+    }
+
+    /**
+     * 获取gitfox项目列表。
+     * Get gitfox projects.
+     *
+     * @param  int    $gitfoxID
+     * @access public
+     * @return array
+     */
+    public function getGitfoxProjects(int $gitfoxID): array
+    {
+        $projects = $this->loadModel('gitfox')->apiGetRepos($gitfoxID);
 
         return $projects;
     }
@@ -2393,15 +2407,15 @@ class repoModel extends model
         $repo = $this->getByID($repoID);
         if(empty($repo->id)) return;
 
-        if($repo->SCM == 'Gitlab')
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
         {
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($repo);
             $commits = $scm->engine->getCommitsByPath('', '', '', 1, 1);
-            if($commits && !empty($commits[0]->committed_date))
+            $commitDate = $repo->SCM == 'GitLab' ? $commits[0]->committed_date : $commits[0]->author->when;
+            if($commits && !empty($commitDate))
             {
-                $commit  = $commits[0];
-                $lastCommitDate = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+                $lastCommitDate = date('Y-m-d H:i:s', strtotime($commitDate));
                 $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repoID)->exec();
             }
         }

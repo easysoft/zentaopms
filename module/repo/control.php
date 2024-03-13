@@ -151,18 +151,18 @@ class repo extends control
             if($repo) $repoID = $this->repo->create($repo, $isPipelineServer);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->post->SCM == 'Gitlab')
+            if(in_array($this->post->SCM, $this->config->repo->notSyncSCM))
             {
                 /* Add webhook. */
                 $repo = $this->repo->getByID($repoID);
-                $this->loadModel('gitlab')->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->loadModel($this->post->SCM)->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
                 $this->repo->updateCommitDate($repoID);
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
-            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false) . '#app=' . $this->app->tab;
+            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
@@ -1417,6 +1417,32 @@ class repo extends control
         {
             if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
             $options[] = array('text' => $project->name_with_namespace, 'value' => $project->id);
+        }
+        return print(json_encode($options));
+    }
+
+    /**
+     * 获取Gitfox项目。
+     * Ajax get gitfox projects.
+     *
+     * @param  string $gitfoxID
+     * @param  array $projectIdList
+     * @access public
+     * @return void
+     */
+    public function ajaxGetGitfoxProjects(int $gitfoxID, string $projectIdList = '')
+    {
+        $projects = $this->repo->getGitfoxProjects($gitfoxID);
+
+        if(!$projects) return print('[]');
+        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
+
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
+        foreach($projects as $project)
+        {
+            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
+            $options[] = array('text' => $project->path, 'value' => $project->id);
         }
         return print(json_encode($options));
     }
