@@ -1442,14 +1442,15 @@ class storyTao extends storyModel
         $this->app->loadLang('task');
         $this->config->story->affect = new stdclass();
         $this->config->story->affect->projects = new stdclass();
-        $this->config->story->affect->projects->fields[] = array('name' => 'id',         'title' => $this->lang->task->id);
-        $this->config->story->affect->projects->fields[] = array('name' => 'name',       'title' => $this->lang->task->name, 'link' => helper::createLink('task', 'view', 'id={id}'));
-        $this->config->story->affect->projects->fields[] = array('name' => 'assignedTo', 'title' => $this->lang->task->assignedTo);
-        $this->config->story->affect->projects->fields[] = array('name' => 'consumed',   'title' => $this->lang->task->consumed);
-        $this->config->story->affect->projects->fields[] = array('name' => 'left',       'title' => $this->lang->task->left);
+        $this->config->story->affect->projects->fields['id']         = array('name' => 'id',         'title' => $this->lang->task->id);
+        $this->config->story->affect->projects->fields['name']       = array('name' => 'name',       'title' => $this->lang->task->name, 'link' => helper::createLink('task', 'view', 'id={id}'));
+        $this->config->story->affect->projects->fields['assignedTo'] = array('name' => 'assignedTo', 'title' => $this->lang->task->assignedTo);
+        $this->config->story->affect->projects->fields['consumed']   = array('name' => 'consumed',   'title' => $this->lang->task->consumed);
+        $this->config->story->affect->projects->fields['left']       = array('name' => 'left',       'title' => $this->lang->task->left);
 
         if(empty($story->executions)) return $story;
-        foreach($story->executions as $executionID => $execution) if($execution->status == 'done') unset($story->executions[$executionID]);
+        $storyExecutions = $story->executions;
+        foreach($storyExecutions as $executionID => $execution) if($execution->status == 'done') unset($story->executions[$executionID]);
         $story->teams = $this->dao->select('account, root')->from(TABLE_TEAM)->where('root')->in(array_keys($story->executions))->andWhere('type')->eq('execution')->fetchGroup('root');
 
         foreach($story->tasks as $executionTasks)
@@ -1458,6 +1459,11 @@ class storyTao extends storyModel
             {
                 $task->status     = $this->processStatus('task', $task);
                 $task->assignedTo = zget($users, $task->assignedTo);
+                if(isset($storyExecutions[$task->execution]))
+                {
+                    $taskExecution = $storyExecutions[$task->execution];
+                    if(!$taskExecution->multiple) $this->config->story->affect->projects->fields['name']['link'] .= '#app=project';
+                }
             }
         }
         return $story;
