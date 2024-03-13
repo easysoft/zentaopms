@@ -167,9 +167,7 @@ class gitfox
             if(count($branchList) < $params['limit']) break;
         }
 
-        if(empty($branches)) $branches['master'] = 'master';
         asort($branches);
-
         return $branches;
     }
 
