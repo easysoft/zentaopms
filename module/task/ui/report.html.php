@@ -44,6 +44,7 @@ function getEcharts($tabCharts, $tabDatas)
         $chartData = $tabDatas[$type];
         $echarts[] = tableChart
             (
+                set::item('chart-' . $type),
                 set::type($option->type),
                 set::title($lang->task->report->charts[$type]),
                 set::datas((array)$chartData),
