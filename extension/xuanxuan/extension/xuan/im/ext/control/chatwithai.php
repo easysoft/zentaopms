@@ -25,6 +25,17 @@ class myIm extends im
             (object)array('role' => 'user', 'content' => $text),
         ));
 
+        if(!$messages)
+        {
+            $statusOutput = new stdclass();
+            $statusOutput->result = 'success';
+            $statusOutput->method = 'chatwithai';
+            $statusOutput->users  = array($userID);
+            $statusOutput->data   = (object)array('status' => 'error', 'modelId' => $modelId);
+
+            return $this->im->sendOutputGroup(array($statusOutput));
+        }
+
         $replyMessage = new stdclass();
         $replyMessage->gid         = imModel::createGID();
         $replyMessage->cgid        = $chatGid;
@@ -43,12 +54,18 @@ class myIm extends im
 
         $chatMessages = $this->im->messageCreate(array($replyMessage), $userID);
 
-        $output = new stdclass();
-        $output->result = 'success';
-        $output->method = 'messagesend';
-        $output->users  = array($userID);;
-        $output->data   = $chatMessages;
+        $chatOutput = new stdclass();
+        $chatOutput->result = 'success';
+        $chatOutput->method = 'messagesend';
+        $chatOutput->users  = array($userID);
+        $chatOutput->data   = $chatMessages;
 
-        return $this->im->sendOutput($output, 'messagesendResponse');
+        $statusOutput = new stdclass();
+        $statusOutput->result = 'success';
+        $statusOutput->method = 'chatwithai';
+        $statusOutput->users  = array($userID);
+        $statusOutput->data   = (object)array('status' => 'success', 'modelId' => $modelId);
+
+        return $this->im->sendOutputGroup(array($statusOutput, $chatOutput));
     }
 }
