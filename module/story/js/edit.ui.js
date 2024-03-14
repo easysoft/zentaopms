@@ -29,11 +29,11 @@ window.loadProduct = function()
 
     if(storyType == 'story')
     {
-        var storyLink = $.createLink('story', 'ajaxGetParentStory', 'productID=' + productID + '&labelName=parent');
+        var storyLink = $.createLink('story', 'ajaxGetParentStory', 'productID=' + productID);
         var $parent   = $('#parent').zui('picker');
         $.get(storyLink, function(data)
         {
-            $parent.render(JSON.parse(data));
+            $parent.render({items: JSON.parse(data)});
         });
     }
 }

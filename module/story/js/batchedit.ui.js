@@ -55,6 +55,32 @@ window.renderRowData = function($row, index, story)
     var $module = $row.find('.form-batch-control[data-name="module"]');
     var $plan   = $row.find('.form-batch-control[data-name="plan"]');
     var $branch = $row.find('.form-batch-control[data-name="branch"]');
+    var $parent = $row.find('.form-batch-control[data-name="parent"]');
+    var $grade  = $row.find('.form-batch-control[data-name="grade"]');
+
+    if($parent.length > 0)
+    {
+        const link = $.createLink('story', 'ajaxGetParentStory', 'productID=' + story.product + '&id=' + story.id);
+        $.get(link, function(data)
+        {
+            let $parentPicker = $parent.find('[name^=parent]').zui('picker');
+            data = JSON.parse(data);
+            $parentPicker.render({items: data});
+            $parentPicker.$.setValue(story.parent);
+        })
+    }
+
+    if($grade.length > 0)
+    {
+        const link = $.createLink('story', 'ajaxGetGrade', 'parent=' + story.parent + '&type=' + story.type);
+        $.get(link, function(data)
+        {
+            let $gradePicker = $grade.find('[name^=grade]').zui('picker');
+            data = JSON.parse(data);
+            $gradePicker.render({items: data.items});
+            $gradePicker.$.setValue(story.grade);
+        })
+    }
 
     $title.attr('disabled', 'disabled').attr('title', story.title).after("<input type='hidden' name='title[" + story.id + "]' value='" + story.title + "' />");
     $row.find('.form-control-static[data-name="status"]').addClass('status-' + story.rawStatus);
@@ -119,6 +145,8 @@ window.renderRowData = function($row, index, story)
 
             $picker.render(options);
         });
+
+        $row.attr('type', story.type);
     }
 
     if(story.source == 'meeting' || story.source == 'researchreport')
@@ -181,3 +209,17 @@ window.setDuplicateAndChild = function(resolution, storyID)
         $('#childStoryBox' + storyID).addClass('hidden');
     }
 };
+
+window.setGrade = function(e)
+{
+    const parent = e.target.value;
+    const type   = $(e.target).closest('tr').attr('type');
+    const link   = $.createLink('story', 'ajaxGetGrade', 'parent=' + parent + '&type=' + type);
+    $.get(link, function(data)
+    {
+        data = JSON.parse(data);
+        const $grade = $(e.target).closest('tr').find('[name^=grade]').zui('picker');
+        $grade.render({items: data.items});
+        $grade.$.setValue(data.default);
+    })
+}

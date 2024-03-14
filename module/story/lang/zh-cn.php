@@ -342,6 +342,7 @@ $lang->story->confirmRecallReview   = "您确定要撤回评审吗？";
 $lang->story->noStoryToTask         = "只有激活的{$lang->SRCommon}才能转为任务！";
 $lang->story->ignoreClosedStory     = "{$lang->SRCommon} %s 状态为已关闭，本次操作已被过滤。";
 $lang->story->gradeOverflow         = "系统检测该需求下子需求的最大层级为%s，同步修改后为%s，超出系统设置的层级范围，无法修改。";
+$lang->story->batchGradeOverflow    = "%s需求的子需求同步修改后，超出系统设置的层级范围，无法修改。";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "该{$lang->SRCommon}所属范围";

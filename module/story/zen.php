@@ -1247,6 +1247,7 @@ class storyZen extends story
             ->setIF($this->post->closedBy     || $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason && $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
             ->setIF($this->post->stage == 'released', 'releasedDate', $now)
+            ->setIF(!$this->post->grade, 'grade', $oldStory->grade)
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')

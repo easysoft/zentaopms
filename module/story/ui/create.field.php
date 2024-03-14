@@ -51,6 +51,7 @@ $fields->field('parent')
 $fields->field('grade')
     ->hidden(data('hiddenGrade'))
     ->disabled($gradeRule == 'stepwise')
+    ->required()
     ->items($createFields['grade']['options'])
     ->value($createFields['grade']['default']);
 

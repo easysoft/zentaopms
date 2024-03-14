@@ -370,6 +370,7 @@ class story extends control
         $this->view->stories     = $stories;
         $this->view->executionID = $executionID;
         $this->view->from        = $from;
+        $this->view->showGrade   = $this->story->showGrade($storyType);
         $this->display();
     }
 
@@ -1660,13 +1661,21 @@ class story extends control
      * AJAX: get the parent story.
      *
      * @param  int    $productID
-     * @param  string $labelName
+     * @param  int    $storyID
      * @access public
      * @return string
      */
-    public function ajaxGetParentStory(int $productID, string $labelName = '')
+    public function ajaxGetParentStory(int $productID, int $storyID = 0)
     {
-        $stories = $this->story->getParentStoryPairs($productID);
+        if($storyID)
+        {
+            $story = $this->story->fetchByID($storyID);
+            $stories = $this->story->getParentStoryPairs($story->product, $story->parent, $story->type, $storyID);
+        }
+        else
+        {
+            $stories = $this->story->getParentStoryPairs($productID);
+        }
 
         $items = array();
         foreach($stories as $storyID => $storyTitle)
@@ -1675,7 +1684,7 @@ class story extends control
             $items[] = array('text' => $storyTitle, 'value' => $storyID);
         }
 
-        return print(json_encode(array('items' => $items, 'name' => $labelName)));
+        return $this->send($items);
     }
 
     /**

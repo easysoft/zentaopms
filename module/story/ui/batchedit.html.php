@@ -21,11 +21,10 @@ jsVar('storyType', $storyType);
 
 if(!empty($twinsTip)) pageJS("zui.Modal.alert({message: '{$twinsTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 
-$fields = $config->story->form->batchEdit;
-
 $items = array();
 $items['storyIdList'] = array('name' => 'storyIdList', 'label' => '', 'control' => 'hidden', 'hidden' => true);
 $items['id']          = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '60px');
+$fields = $config->story->form->batchEdit;
 foreach($fields as $fieldName => $field)
 {
     if($fieldName == 'color') continue;
@@ -41,6 +40,9 @@ $items['title']['inputClass']        = 'filter-none';
 $items['assignedTo']['ditto']        = true;
 $items['source']['ditto']            = true;
 $items['stage']['ditto']             = true;
+$items['grade']['required']          = true;
+$items['grade']['disabled']          = true;
+$items['grade']['hidden']            = !$showGrade;
 $items['assignedTo']['defaultDitto'] = 'off';
 $items['source']['defaultDitto']     = 'off';
 $items['stage']['defaultDitto']      = 'off';
@@ -73,6 +75,7 @@ foreach($stories as $storyID => $story)
 
 formBatchPanel
 (
+    on::change('[data-name="parent"]', 'setGrade'),
     set::title($lang->story->batchEdit),
     set::mode('edit'),
     set::items($items),

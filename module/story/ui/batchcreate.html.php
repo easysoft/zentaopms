@@ -65,6 +65,7 @@ $fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $cust
         if($colName == 'source')   $cols[$index]['items']    = $lang->{$type}->sourceList;
         if($colName == 'category') $cols[$index]['items']    = $lang->{$type}->categoryList;
         if($colName == 'pri')      $cols[$index]['items']    = $lang->{$type}->priList;
+        if($colName == 'grade')    $cols[$index]['required'] = true;
     }
 
     return $cols;
