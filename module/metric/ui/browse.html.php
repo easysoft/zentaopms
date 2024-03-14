@@ -81,6 +81,7 @@ list($cols, $tableData) = $this->metric->initActionBtn($tableData, $this->config
 dtable
 (
     setID('metricList'),
+    set::userMap($users),
     set::cols($cols),
     set::data($tableData),
     set::onRenderCell(jsRaw('window.onRenderCell')),
