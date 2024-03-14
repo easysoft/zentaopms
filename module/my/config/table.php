@@ -339,10 +339,11 @@ $config->my->requirement->actionList['review']['hint']        = $lang->story->re
 $config->my->requirement->actionList['review']['url']         = array('module' => 'story', 'method' => 'review', 'params' => 'storyID={id}&from=product&storyType=requirement');
 $config->my->requirement->actionList['review']['data-toggle'] = 'modal';
 
-$config->my->requirement->actionList['recall']['icon'] = 'undo';
-$config->my->requirement->actionList['recall']['text'] = $lang->story->recall;
-$config->my->requirement->actionList['recall']['hint'] = $lang->story->recall;
-$config->my->requirement->actionList['recall']['url']  = array('module' => 'story', 'method' => 'recall', 'params' => 'storyID={id}&from=list&confirm=no&storyType=requirement');
+$config->my->requirement->actionList['recall']['icon']      = 'undo';
+$config->my->requirement->actionList['recall']['text']      = $lang->story->recall;
+$config->my->requirement->actionList['recall']['hint']      = $lang->story->recall;
+$config->my->requirement->actionList['recall']['url']       = array('module' => 'story', 'method' => 'recall', 'params' => 'storyID={id}&from=list&confirm=no&storyType=requirement');
+$config->my->requirement->actionList['recall']['className'] = 'ajax-submit';
 
 $config->my->requirement->actionList['edit']['icon']        = 'edit';
 $config->my->requirement->actionList['edit']['text']        = $lang->story->edit;
@@ -427,10 +428,11 @@ $config->my->story->actionList['review']['hint']        = $lang->story->review;
 $config->my->story->actionList['review']['url']         = array('module' => 'story', 'method' => 'review', 'params' => 'storyID={id}');
 $config->my->story->actionList['review']['data-toggle'] = 'modal';
 
-$config->my->story->actionList['recall']['icon'] = 'undo';
-$config->my->story->actionList['recall']['text'] = $lang->story->recall;
-$config->my->story->actionList['recall']['hint'] = $lang->story->recall;
-$config->my->story->actionList['recall']['url']  = array('module' => 'story', 'method' => 'recall', 'params' => 'storyID={id}');
+$config->my->story->actionList['recall']['icon']      = 'undo';
+$config->my->story->actionList['recall']['text']      = $lang->story->recall;
+$config->my->story->actionList['recall']['hint']      = $lang->story->recall;
+$config->my->story->actionList['recall']['url']       = array('module' => 'story', 'method' => 'recall', 'params' => 'storyID={id}');
+$config->my->story->actionList['recall']['className'] = 'ajax-submit';
 
 $config->my->story->actionList['edit']['icon']        = 'edit';
 $config->my->story->actionList['edit']['text']        = $lang->story->edit;
