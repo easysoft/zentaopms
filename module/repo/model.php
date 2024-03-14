@@ -429,7 +429,7 @@ class repoModel extends model
         if(empty($revisionInfo))
         {
             $repo = $this->getByID($repoID);
-            if($repo->SCM == 'Gitlab')
+            if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
             {
                 $scm = $this->app->loadClass('scm');
                 $scm->setEngine($repo);

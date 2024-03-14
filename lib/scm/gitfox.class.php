@@ -529,15 +529,12 @@ class gitfox
         $files   = array();
 
         if(empty($count)) $count = 10;
-
         if(!empty($version) and $count == 1)
         {
             $api .= '/' . $version;
-            $result = $this->fetch($api, array('limit' => 1));
-            if($result && !empty($result->total_commits))
+            $commit = $this->fetch($api, array('limit' => 1));
+            if($commit && !empty($commit->sha))
             {
-                $commit = $result->commits[0];
-
                 $log = new stdclass;
                 $log->committer = $commit->author->identity->name;
                 $log->revision  = $commit->sha;
@@ -577,8 +574,7 @@ class gitfox
             }
         }
 
-        $list = $this->fetch($api, $params);
-
+        $list = $this->fetch($api, $params, true);
         foreach($list as $commit)
         {
             if(!is_object($commit)) continue;
