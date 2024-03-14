@@ -155,7 +155,7 @@ class repo extends control
             {
                 /* Add webhook. */
                 $repo = $this->repo->getByID($repoID);
-                $this->loadModel($this->post->SCM)->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->loadModel($this->post->SCM)->updateCodePath($repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
                 $this->repo->updateCommitDate($repoID);
             }
 

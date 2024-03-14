@@ -193,10 +193,10 @@ class repoModel extends model
         $repoID = $this->dao->lastInsertID();
 
         $repo = $this->getByID($repoID);
-        if($repo->SCM == 'Gitlab')
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
         {
             $token = uniqid();
-            $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
+            $res   = $this->loadModel($repo->SCM)->addPushWebhook($repo, $token);
             if($res !== true)
             {
                 $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
@@ -2411,8 +2411,8 @@ class repoModel extends model
         {
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($repo);
-            $commits = $scm->engine->getCommitsByPath('', '', '', 1, 1);
-            $commitDate = $repo->SCM == 'GitLab' ? $commits[0]->committed_date : $commits[0]->author->when;
+            $commits = $scm->engine->getCommitsByPath('', '', 'HEAD', 1, 1);
+            $commitDate = $repo->SCM == 'Gitlab' ? $commits[0]->committed_date : $commits[0]->author->when;
             if($commits && !empty($commitDate))
             {
                 $lastCommitDate = date('Y-m-d H:i:s', strtotime($commitDate));

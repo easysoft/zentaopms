@@ -631,7 +631,7 @@ class gitfox
 
         $param = new stdclass();
         $param->path    = urldecode($path);
-        $param->git_ref = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
+        $param->git_ref = $toRevision ? $toRevision : $this->branch;
 
         $fromDate = $beginDate ? $beginDate : $this->getCommittedDate($fromRevision);
         $toDate   = $endDate ? $endDate : $this->getCommittedDate($toRevision);

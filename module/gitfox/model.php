@@ -204,33 +204,14 @@ class gitfoxModel extends model
         if(!isset($hook->url)) return false;
 
         $newHook = new stdclass;
-        $newHook->insecure = "false"; /* Disable ssl verification for every hook. */
+        $newHook->insecure = true; /* Disable ssl verification for every hook. */
 
         foreach($hook as $index => $item) $newHook->$index= $item;
 
         $apiRoot = $this->getApiRoot($gitfoxID);
         $url     = sprintf($apiRoot->url, "/repos/{$repoID}/webhooks");
 
-        return json_decode(commonModel::http($url, $newHook, array(), $apiRoot->header));
-    }
-
-    /**
-     * 通过api删除hook。
-     * Delete hook by api.
-     *
-     * @param  int    $gitfoxID
-     * @param  int    $repoID
-     * @param  int    $hookID
-     * @access public
-     * @link   https://docs.gitfox.com/ee/api/projects.html#delete-project-hook
-     * @return object|array|null
-     */
-    public function apiDeleteHook(int $gitfoxID, int $repoID, int $hookID): object|array|null
-    {
-        $apiRoot = $this->getApiRoot($gitfoxID, false);
-        $url     = sprintf($apiRoot->url, "/repos/{$repoID}/hooks/{$hookID}");
-
-        return json_decode(commonModel::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $apiRoot->header));
+        return json_decode(commonModel::http($url, $newHook, array(), $apiRoot->header, 'json'));
     }
 
     /**
@@ -281,32 +262,4 @@ class gitfoxModel extends model
         }
         return false;
     }
-
-    /**
-     * 通过api更新hook。
-     * Update hook by api.
-     *
-     * @param  int    $gitfoxID
-     * @param  int    $projectID
-     * @param  int    $hookID
-     * @param  object $hook
-     * @access public
-     * @link   https://docs.gitfox.com/ee/api/projects.html#edit-project-hook
-     * @return string|false
-     */
-    public function apiUpdateHook(int $gitfoxID, int $projectID, int $hookID, object $hook): string|false
-    {
-        $apiRoot = $this->getApiRoot($gitfoxID, false);
-
-        if(!isset($hook->url)) return false;
-
-        $newHook = new stdclass;
-        $newHook->enable_ssl_verification = "false"; /* Disable ssl verification for every hook. */
-
-        foreach($hook as $index => $item) $newHook->$index= $item;
-
-        $url = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
-        return commonModel::http($url, $newHook, array(CURLOPT_CUSTOMREQUEST => 'PUT'));
-    }
 }
-
