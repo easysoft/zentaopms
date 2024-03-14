@@ -13,6 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../ai/view/promptmenu.html.php';?>
+<?php if(isonlybody()):?>
+<style>#childrenTable .c-name{width: 150px;}</style>
+<?php endif;?>
 <?php $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('execution', 'browse', "executionID=$task->execution");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
@@ -104,7 +107,7 @@
               <tr class='text-center'>
                 <th class='c-id'> <?php echo $lang->task->id;?></th>
                 <th class='c-lblPri'> <?php echo $lang->task->lblPri;?></th>
-                <th>                <?php echo $lang->task->name;?></th>
+                <th class='c-name'><?php echo $lang->task->name;?></th>
                 <th class='c-deadline'><?php echo $lang->task->deadline;?></th>
                 <th class='c-assignedTo'> <?php echo $lang->task->assignedTo;?></th>
                 <th class='c-status'> <?php echo $lang->task->status;?></th>
