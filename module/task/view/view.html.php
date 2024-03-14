@@ -129,12 +129,12 @@
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('task', 'close', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe showinonlybody', true);
-                  common::printIcon('task', 'edit', "taskID=$child->id", $child, 'list');
-                  common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  echo $this->task->buildMenu('task', 'start', "taskID=$child->id", $child, 'browse', '', '', 'iframe showinonlybody', true);
+                  echo $this->task->buildMenu('task', 'finish', "taskID=$child->id", $child, 'browse', '', '', 'iframe showinonlybody', true);
+                  echo $this->task->buildMenu('task', 'close', "taskID=$child->id", $child, 'browse', '', '', 'iframe showinonlybody', true);
+                  echo $this->task->buildMenu('task', 'recordEstimate', "taskID=$child->id", $child, 'browse', 'time', '', 'iframe showinonlybody', true);
+                  echo $this->task->buildMenu('task', 'edit', "taskID=$child->id", $child, 'browse');
+                  echo $this->task->buildMenu('task', 'activate', "taskID=$child->id", $child, 'browse', '', '', 'iframe showinonlybody', true);
                   ?>
                 </td>
               </tr>
