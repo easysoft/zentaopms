@@ -37,6 +37,7 @@ window.renderCell = function(result, info)
             let html = "<span class='label gray-pale rounded-xl' title='" + children + "'>" + childrenAB + "</span>";
             result.unshift({html});
         }
+        if(story.shadow) result[0].props.href += '#app=project';
     }
     return result;
 }
