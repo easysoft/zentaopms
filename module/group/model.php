@@ -538,6 +538,7 @@ class groupModel extends model
             }
         }
 
+        $actions['views'] = isset($actions['views']) ? $actions['views'] : array('' => '');
         if(isset($_POST['allchecker']))$actions['views']   = array();
         if(!isset($actions['actions']))$actions['actions'] = array();
 
@@ -561,6 +562,7 @@ class groupModel extends model
         $actions['actions'] = $dynamic;
 
         $actions = empty($actions) ? '' : json_encode($actions);
+
         $this->dao->update(TABLE_GROUP)->set('acl')->eq($actions)->where('id')->eq($groupID)->exec();
         return dao::isError() ? false : true;
     }
