@@ -1,5 +1,5 @@
 <?php
-class productPage extends Page
+class createPage extends Page
 {
     public function __construct()
     {
@@ -7,9 +7,15 @@ class productPage extends Page
 
         $doms = array(
             'settings'       => "//*[@id='navbar']//a[@data-id='settings']/span",
-            'reviewer'       => "//*[@name='reviewer[]']",
-            'branchdropmenu' => "//*[@id='pick-branch-dropmenu']/span",
         );
         $this->doms = array_merge($this->doms, $doms);
+    }
+
+    public function submit()
+    {
+        global $lang;
+        $this->btn($lang->product->addBtn)->click();
+
+        return $this;
     }
 }

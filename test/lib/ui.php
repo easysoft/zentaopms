@@ -18,24 +18,6 @@ include dirname(__FILE__, 3) . '/lib/dao/dao.class.php';
 $dao = new dao();
 include 'yaml.class.php';
 
-$includeFiles = get_included_files();
-if($includeFiles)
-{
-    foreach(glob(dirname($includeFiles[0]) . '/page/*') as $file) include $file;
-}
-
-function loadModel($module)
-{
-    $classPath = MODULE_ROOT . "{$module}/{$module}.class.php";
-    if(file_exists($classPath))
-    {
-        include $classPath;
-        return new $module();
-    }
-
-    return false;
-}
-
 /**
  * Save variable to $_result.
  *
@@ -112,6 +94,10 @@ function getPageAttr($arrKey, $keys)
                 $value->$key = $page->{$element}->$method($attr);
             }
         }
+        elseif($arrKey == 'url')
+        {
+            print($result->get('url') . PHP_EOL);
+        }
         else
         {
             $value->$key = $page->$method();
@@ -180,4 +166,94 @@ function getValues($value, $keys, $delimiter)
  */
 function e($expect)
 {
+}
+
+function success($status = '')
+{
+    global $result;
+    $result->status= $status;
+
+    return $result->get();
+}
+
+function failed($status)
+{
+    global $result;
+    $result->status= $status;
+
+    return $result->get('status');
+}
+
+class tester
+{
+    public $page;
+    public $config;
+    public $result;
+
+    public function __construct()
+    {
+        global $config, $result;
+        $this->config = $config;
+        $this->page   = new Page();
+        $this->result = $result;
+    }
+
+    /**
+     * Login to the test URL.
+     *
+     * @param  string $account
+     * @param  string $password
+     * @access public
+     * @return void
+     */
+    public function login($account = '', $password = '')
+    {
+        if(!$account)  $account  = $this->config->defaultAccount;
+        if(!$password) $password = $this->config->defaultPassword;
+
+        $this->page->deleteCookie();
+
+        $this->page->get('');
+        $this->page->getErrors();
+        $this->page->account->setValue($account);
+        $this->page->password->setValue($password);
+        $this->page->submit->click();
+
+        $this->page->getCookie();
+
+        return $this->page;
+    }
+
+    public function loadPage($module, $method, $params = array(), $iframeID = '')
+    {
+        if($this->config->requestType == 'GET')
+        {
+            $url = "/index.php?m=$module&f=$method";
+            if(!empty($params)) foreach($params as $key => $value) $url .= "&$key=$value";
+        }
+        else
+        {
+            $url = "/$module-$method";
+            if(!empty($params)) foreach($params as $value) $url .= "-$value";
+            $url .= ".html";
+        }
+
+        $this->page->go($url); // 跳转到地址
+        $appIframeID = $iframeID ? $iframeID : "appIframe-{$module}";
+        $this->page->getErrors($appIframeID);
+
+        return $this->setPage($module, $method);
+    }
+
+    public function setPage($module, $method)
+    {
+        global $result;
+
+        include dirname(__FILE__, 2). "/ui/$module/page/$method.php";
+        $pageClass = "{$method}Page";
+
+        $methodPage = new $pageClass();
+        $result->setPage($methodPage);
+        return $methodPage;
+    }
 }

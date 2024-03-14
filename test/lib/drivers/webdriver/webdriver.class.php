@@ -29,11 +29,9 @@ class webdriver
 
     public $config;
 
-    public $stepNO = 1;
-
     public $cookieFile;
 
-    public $results;
+    public $result;
 
     public $errors = array();
 
@@ -41,8 +39,8 @@ class webdriver
 
     public function __construct($config)
     {
-        global $results;
-        $this->results = $results;
+        global $result;
+        $this->result = $result;
         $this->config  = $config;;
 
         $this->initBrowser($config->chrome);
@@ -317,7 +315,7 @@ class webdriver
      * @access public
      * @return void
      */
-    public function capture($image = '', $saveReport = true)
+    public function capture($image = '')
     {
         $image = $image ? $image : $this->config->captureRoot;
 
@@ -328,16 +326,6 @@ class webdriver
         else
         {
             $this->element->takeElementScreenshot($image);
-        }
-
-        $imageUrl = str_replace($this->config->captureRoot, $this->config->captureWebRoot, $image);
-        if($saveReport)
-        {
-            $this->saveImage($imageUrl);
-        }
-        else
-        {
-            return $imageUrl;
         }
     }
 
@@ -548,140 +536,6 @@ class webdriver
     }
 
     /**
-     * Assert function.
-     *
-     * @param  string    $mode
-     * @param  mixed     $expect
-     * @param  string    $step
-     * @access public
-     * @return void
-     */
-    public function assert($mode, $expect, $step = '', $isClose = false)
-    {
-        if($step == '') $step = "Step " . $this->stepNO;
-        $this->stepNO ++;
-        if($mode == 'text')  return $this->assertText($expect, $step, $isClose);
-        if($mode == 'exist') return $this->assertExist($expect, $step, $isClose);
-    }
-
-    /**
-     * assert by text of one selector.
-     *
-     * @param  string    $expect
-     * @param  string    $step
-     * @access public
-     * @return mixed
-     */
-    public function assertText($expect, $step, $isClose = false)
-    {
-        if($expect == $this->getText())
-        {
-            $this->results->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            $this->results->setResult("$step : PASS!");
-            if($isClose) $this->closeBrowser();
-            return true;
-        }
-        else
-        {
-            $this->results->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
-            $this->capture();
-            $this->results->setResult("$step : FAIL!\n");
-            if($isClose) $this->closeBrowser();
-            throw new Exception("$step : Assert Fail");
-        }
-
-    }
-
-    /**
-     * Assert exist of selector.
-     *
-     * @param  bool    $expect
-     * @param  string  $step
-     * @access public
-     * @return mixed
-     */
-    public function assertExist($expect, $step, $isDie = false)
-    {
-        $isExist = !empty($this->element);
-        if($isExist === $expect)
-        {
-            $this->results->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            $this->results->setResult("$step : PASS!");
-            return true;
-        }
-        else
-        {
-            $this->results->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
-            $this->capture();
-            $this->results->setResult("$step : FAIL!\n");
-            $this->closeBrowser($isDie);
-            throw new Exception("$step : Assert Fail");
-        }
-    }
-
-    /**
-     * Assert attribute's value of selector.
-     *
-     * @param  string  $attribute
-     * @param  string  $expect
-     * @param  string  $step
-     * @access public
-     * @return void|true
-     */
-    public function assertAttr($attribute, $expect, $step, $isDie = false)
-    {
-        if($step == '') $step = "Step " . $this->stepNO;
-        $this->stepNO ++;
-
-        if(strpos($this->attr($attribute), $expect) !== false)
-        {
-            $this->results->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            $this->results->setResult("$step : PASS!");
-            return true;
-        }
-        else
-        {
-            $this->results->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
-            $this->capture();
-			$this->results->setResult("$step : FAIL!\n");
-            $this->closeBrowser($isDie);
-            throw new Exception("$step : Assert Fail");
-        }
-    }
-
-    /**
-     * Assert modal text.
-     *
-     * @param  string $expect
-     * @param  string $step
-     * @param  int    $isDie
-     * @access public
-     * @return void
-     */
-    public function assertModal($expect, $step = '', $isDie = false)
-    {
-        if($step == '') $step = "Step " . $this->stepNO;
-        $this->stepNO ++;
-
-        $message = $this->modal('text');
-
-        if($expect == $message)
-        {
-            $this->results->saveReport("<h4>$step . ' : ' . 'PASS'</h4>");
-            $this->results->setResult("$step : PASS!");
-            return true;
-        }
-        else
-        {
-            $this->results->saveReport("<h4>$step . ' : ' . 'FAIL'</h4>");
-            $this->capture();
-            $this->results->setResult("$step : FAIL!\n");
-            $this->closeBrowser($isDie);
-            throw new Exception("$step : Assert Fail");
-        }
-    }
-
-    /**
      * Print Errors of current page.
      *
      * @param  mixed  $switchToIframe  If pass this param, driver will skip to specified iframe.
@@ -695,7 +549,7 @@ class webdriver
         foreach($alerts as $alert)
         {
             $alertInput      = $alert->findElement(WebDriverBy::tagName('input'))->getAttribute('value');
-            $this->results->errors[]  = $alert->getText() . $alertInput;
+            $this->result->errors[]  = $alert->getText() . $alertInput;
         }
         $this->getErrorsInZinBar();
 
@@ -716,7 +570,7 @@ class webdriver
                 foreach($alerts as $alert)
                 {
                     $alertInput      = $alert->findElement(WebDriverBy::tagName('input'))->getAttribute('value');
-                    $this->results->errors[]  = $alert->getText() . $alertInput;
+                    $this->result->errors[]  = $alert->getText() . $alertInput;
                 }
                 $this->getErrorsInZinBar();
             }
@@ -725,9 +579,8 @@ class webdriver
         $this->driver->switchTo()->defaultContent();
         if(!empty($switchToIframe)) $this->switchTo($switchToIframe);
 
-        if(empty($this->results->errors)) return true;
+        if(empty($this->result->errors)) return true;
 
-        $this->saveErrorsToReport($this->results->errors);
         return $this;
     }
 
@@ -768,28 +621,6 @@ class webdriver
     public function saveImage($src)
     {
         $img = "<img style='max-width:100%;' src='{$src}' />";
-        $this->results->saveReport($img);
-    }
-
-    /**
-     * Print errors to report.
-     *
-     * @param  array  $errors
-     * @access public
-     * @return void
-     */
-    public function saveErrorsToReport($errors)
-    {
-        $reportType = $this->config->reportType;
-
-        $title = $this->getTitle();
-        $url   = $this->getUrl();
-        $errorTitle = $reportType == 'html' ? "<h2>Errors in: [{$title}]($url)</h2>" : "## Errors in: [{$title}]($url)";
-        $this->results->saveReport($errorTitle);
-
-        $reportType == 'html' ? $this->results->saveReport('<pre>') : $this->results->saveReport('```');
-        foreach($errors as $error) $this->results->saveReport($error);
-        $reportType == 'html' ? $this->results->saveReport('</pre>') : $this->results->saveReport('```');
     }
 
     /**
