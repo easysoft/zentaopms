@@ -376,7 +376,7 @@ class transferModel extends model
             $dataList[$field] = $this->loadModel($field)->getPairs();
             if(!isset($dataList[$field][0])) $dataList[$field][0] = '';
 
-            sort($dataList[$field]);
+            ksort($dataList[$field]);
 
             if($field == 'user')
             {
