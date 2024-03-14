@@ -253,7 +253,7 @@ detailBody
                             span($lang->task->storyChange),
                             a
                             (
-                                setClass('mx-2 btn primary size-sm'),
+                                setClass('mx-2 btn primary size-sm ajax-submit'),
                                 set::href(createLink('task', 'confirmStoryChange', "taskID={$task->id}")),
                                 $lang->confirm
                             )
