@@ -366,12 +366,19 @@ modalTrigger
                 setClass('ml-2.5 mr-2'),
                 $lang->kanban->copyContent,
             ),
-            checkList
+            checkBox
             (
-                set::name('copyContent[]'),
-                set::items($lang->kanban->copyContentList),
+                set::text($lang->kanban->copyContentList['basicInfo']),
                 set::inline(true),
-                set::value('basicInfo')
+                set::checked(true),
+                set::disabled(true)
+            ),
+            checkBox
+            (
+                set::name('copyRegionInfo'),
+                set::rootClass('ml-2'),
+                set::text($lang->kanban->copyContentList['region']),
+                set::inline(true)
             )
         ),
         div
