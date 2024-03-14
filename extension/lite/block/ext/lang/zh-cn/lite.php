@@ -18,6 +18,7 @@ $lang->block->finishedTasks = '完成的任务数';
 $lang->block->story = '目标';
 
 $lang->block->storyCount = '目标数';
+$lang->block->projectstatistic->storyPoints = '总目标';
 
 $lang->block->default['full']['my'][] = array('title' => '看板列表', 'module' => 'execution', 'code' => 'scrumlist', 'width' => '2', 'height' => '6', 'left' => '0', 'top' => '45', 'params' => array('type' => 'doing', 'orderBy' => 'id_desc', 'count' => '15'));
 

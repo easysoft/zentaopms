@@ -142,7 +142,7 @@ if($project)
                     span
                     (
                         setClass('text-gray'),
-                        $field == 'storyPoints' ? $config->block->storyUnitList[$config->custom->hourPoint] : $lang->block->projectstatistic->{$unit}
+                        $field == 'storyPoints' ? $config->block->storyUnitList[$config->custom->hourPoint] : zget($lang->block->projectstatistic, $unit, '')
                     )
                 );
             }
