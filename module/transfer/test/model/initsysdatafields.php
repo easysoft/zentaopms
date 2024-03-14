@@ -24,7 +24,7 @@ global $tester, $app;
 $app->methodName = 'ajaxgettbody';
 $transfer = $tester->loadModel('transfer');
 
-r($transfer->initSysDataFields()) && p('project:1') && e('项目11'); // 测试通过project模块的getpairs方法获取数据
+r($transfer->initSysDataFields()) && p('project:11') && e('项目11'); // 测试通过project模块的getpairs方法获取数据
 r($transfer->initSysDataFields()) && p('user:admin') && e('admin'); // 测试通过user模块的getpairs方法获取数据
 
 $app->methodName = 'browse';
