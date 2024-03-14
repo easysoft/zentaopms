@@ -64,6 +64,7 @@
       <?php $sql = $this->loadModel('chart')->parseSqlVars($pivot->sql, $pivot->filters);?>
       <?php $this->pivot->buildPivotTable($data, $configs, 1);?>
     </div>
+    <div id='allData'></div>
   </div>
   <?php endif;?>
 </div>

@@ -21,6 +21,11 @@ $lang->pivot->export       = 'Export pivot table';
 $lang->pivot->query        = 'Query';
 $lang->pivot->browseAction = 'Design in Pivot Table';
 $lang->pivot->designAB     = 'Design';
+$lang->pivot->exportType   = 'Export Type';
+$lang->pivot->exportRange  = 'Export Range';
+
+$lang->pivot->rangeList['current'] = 'Current Page';
+$lang->pivot->rangeList['all']     = 'All Data';
 
 $lang->pivot->id          = 'ID';
 $lang->pivot->name        = 'Name';

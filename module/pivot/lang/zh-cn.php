@@ -21,6 +21,11 @@ $lang->pivot->export       = '导出透视表';
 $lang->pivot->query        = '查询';
 $lang->pivot->browseAction = '进入透视表设计';
 $lang->pivot->designAB     = '设计';
+$lang->pivot->exportType   = '导出格式';
+$lang->pivot->exportRange  = '导出范围';
+
+$lang->pivot->rangeList['current'] = '当前页';
+$lang->pivot->rangeList['all']     = '全部';
 
 $lang->pivot->id          = 'ID';
 $lang->pivot->name        = '名称';

@@ -22,7 +22,8 @@ $('#subNavbar li').not('[data-id=<?php echo $groupID;?>]').removeClass('active')
   <?php endif;?>
 </div>
 <?php if($this->config->edition != 'open'):?>
-<?php $pivotPath = $this->app->getModuleExtPath('pivot', 'view');?>
+<?php $pivotPath  = $this->app->getModuleExtPath('pivot', 'view');?>
+<?php $exportMode = 'preview';?>
 <?php include $pivotPath['common'] . 'exportdata.html.php';?>
 <?php endif;?>
 

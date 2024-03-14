@@ -318,8 +318,29 @@ function initResultControl(container, filter, object, field)
 
 function exportData()
 {
-    const $domObj = $(".table-condensed")[0];
-    exportFile($domObj);
+    var pivotInfo = getQueryInfo();
+    var exportRange  = $('#range').val();
+    if(exportRange == 'current')
+    {
+        const $domObj = $('#datagirdInfo').find(".table-condensed")[0];
+        exportFile($domObj);
+    }
+    else
+    {
+        var pivotInfo  = getQueryInfo();
+        pivotInfo.page = 0;
+        if($('#origin-query').hasClass('hidden')) pivotInfo.settings['summary'] = 'notuse';
+
+        $.post(createLink('pivot', 'ajaxGetPivot'), pivotInfo,function(resp)
+        {
+            var allData = $('#allData');
+            allData.empty();
+            allData.append(resp);
+
+            const $domObj = allData.find('.table-condensed')[0];
+            exportFile($domObj);
+        });
+    }
 }
 
 function isQueryFilter(filters)
