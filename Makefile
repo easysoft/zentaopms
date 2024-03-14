@@ -97,10 +97,10 @@ zentaoxx:
 	cp -r extension/xuanxuan/config/* zentaoxx/config/
 	cp -r extension/xuanxuan/extension/xuan/* zentaoxx/extension/xuan/
 	cp -r extension/xuanxuan/www/* zentaoxx/www/
-	cp -r $(XUAN_WEB_PATH) zentaoxx/www/data/xuanxuan/
-	rm -rf zentaoxx/www/data/xuanxuan/web/node_modules zentaoxx/www/data/xuanxuan/web/*.json zentaoxx/www/data/xuanxuan/web/resources zentaoxx/www/data/xuanxuan/web/media/img zentaoxx/www/data/xuanxuan/web/assets/draft.dev.js
-	find zentaoxx/www/data/xuanxuan/web/media/sound -not -name 'message.mp3' -type f -delete
-	find zentaoxx/www/data/xuanxuan/web/lang -not -name 'zh-*.json' -not -name 'en.json' -type f -delete
+	#cp -r $(XUAN_WEB_PATH) zentaoxx/www/data/xuanxuan/
+	#rm -rf zentaoxx/www/data/xuanxuan/web/node_modules zentaoxx/www/data/xuanxuan/web/*.json zentaoxx/www/data/xuanxuan/web/resources zentaoxx/www/data/xuanxuan/web/media/img zentaoxx/www/data/xuanxuan/web/assets/draft.dev.js
+	#find zentaoxx/www/data/xuanxuan/web/media/sound -not -name 'message.mp3' -type f -delete
+	#find zentaoxx/www/data/xuanxuan/web/lang -not -name 'zh-*.json' -not -name 'en.json' -type f -delete
 	mv zentaoxx/db/ zentaoxx/db_bak
 	mkdir zentaoxx/db/
 	sed -i "s/datetime NOT NULL DEFAULT '0000-00-00 00:00:00'/datetime NULL/" zentaoxx/db_bak/*.sql
@@ -175,6 +175,8 @@ zentaoxx:
 	sed -i "/.*->getAllDepts();/d" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	sed -i "s/lang->user->status/lang->user->clientStatus/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	sed -i "s/.*->getRoleList();/\$$depts = \$$this->im->loadModel('dept')->getDeptPairs();\n\$$deptList = array_map(function(\$$k, \$$v) {return (object)array('id' => \$$k, 'name' => \$$v);}, array_keys(\$$depts), \$$depts);\n\$$roleList = \$$this->im->lang->user->roleList;/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
+	echo "\$$config->xuanxuan->enabledMethods['im']['getaipermission'] = 'getAiPermission';" >> zentaoxx/config/ext/_0_xuanxuan.php
+	echo "\$$config->xuanxuan->enabledMethods['im']['chatwithai'] = 'chatWithAi';" >> zentaoxx/config/ext/_0_xuanxuan.php
 	find zentaoxx/extension/xuan/ -name '*.php' -exec sed -i -r 's|->ne(["'\'']0000-00-00 00:00:00["'\''])|->notZeroDatetime()|g; s|["'\'']\)->eq\(["'\'']0000-00-00( 00:00:00)?| is null|g; s|([=!]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|([^!=]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|(["'\''])(,.*)\)->eq\(["'\'']0000-00-00( 00:00:00)?["'\'']| is null\1\2|g; s|["'\'']0000-00-00 00:00:00["'\'']|null|g' {} +
 	mkdir zentaoxx/misc; cp misc/cn2tw.php zentaoxx/misc; cd zentaoxx/misc; php cn2tw.php
 	cp misc/en2other.php zentaoxx/misc; cd zentaoxx/misc; php en2other.php ../
@@ -200,11 +202,11 @@ package:
 pms:
 	make common
 	make zentaoxx
-	unzip zentaoxx.*.zip
+	#unzip zentaoxx.*.zip
 	cp zentaoxx/* zentaopms/ -r
-	make package
-	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
-	rm -fr zentaopms zentaoxx zentaoxx.*.zip
+#	make package
+#	zip -rq -9 Z#enTaoPMS.$(VERSION).zip zentaopms
+#	rm -fr zentao#pms zentaoxx zentaoxx.*.zip
 deb:
 	mkdir buildroot
 	cp -r build/debian/DEBIAN buildroot
