@@ -70,7 +70,9 @@
           <th><?php echo $lang->execution->method;?></th>
           <td class="col-main"><?php echo html::select("type", $lang->execution->typeList, $type, "class='form-control chosen' required onchange='setType(this.value)'");?></td>
           <td class='methodTip'>
+            <?php if($project->model == 'agileplus' ):?>
             <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->agileplusMethodTip;?>"></icon>
+            <?php endif;?>
           </td>
           <td></td>
         </tr>
