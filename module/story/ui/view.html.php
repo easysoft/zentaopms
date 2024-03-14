@@ -38,7 +38,7 @@ if($this->app->rawModule == 'projectstory' or $this->app->tab == 'project')
     $tab        = 'project';
 }
 if($this->app->rawModule == 'execution') $tab = 'execution';
-$createStoryLink = $this->createLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type");
+$createStoryLink = $this->createLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type") . "#app={$this->app->tab}";
 
 $versions = array();
 for($i = $story->version; $i >= 1; $i --)
