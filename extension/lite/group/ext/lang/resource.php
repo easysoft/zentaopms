@@ -990,15 +990,18 @@ if($config->edition != 'open')
 
     /* Feedback. */
     $lang->resource->feedback = new stdclass();
-    $lang->resource->feedback->create     = 'create';
-    $lang->resource->feedback->edit       = 'edit';
-    $lang->resource->feedback->browse     = 'browse';
-    $lang->resource->feedback->view       = 'view';
-    $lang->resource->feedback->comment    = 'comment';
-    $lang->resource->feedback->delete     = 'delete';
-    $lang->resource->feedback->close      = 'closeAction';
-    $lang->resource->feedback->export     = 'exportAction';
-    $lang->resource->feedback->assignTo   = 'assignAction';
+    $lang->resource->feedback->create         = 'create';
+    $lang->resource->feedback->edit           = 'edit';
+    $lang->resource->feedback->browse         = 'browse';
+    $lang->resource->feedback->view           = 'view';
+    $lang->resource->feedback->comment        = 'comment';
+    $lang->resource->feedback->delete         = 'delete';
+    $lang->resource->feedback->close          = 'closeAction';
+    $lang->resource->feedback->export         = 'exportAction';
+    $lang->resource->feedback->assignTo       = 'assignAction';
+    $lang->resource->feedback->products       = 'products';
+    $lang->resource->feedback->manageProduct  = 'manageProduct';
+    $lang->resource->feedback->productSetting = 'productSetting';
 
     if($config->visions == ',lite,') unset($lang->resource->feedback);
 
