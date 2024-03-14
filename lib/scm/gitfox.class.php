@@ -40,29 +40,40 @@ class gitfox
     public function ls($path, $revision = 'HEAD')
     {
         if(!scm::checkRevision($revision)) return array();
-        $api = "path-details";
-
+        $path  = ltrim($path, '/');
+        $api   = rtrim("content/{$path}", '/');
         $param = new stdclass();
-        $param->repo_ref = ltrim($path, '/');
-        $param->git_ref  = $revision;
+        $param->include_commit = 'true';
+        $param->git_ref        = $revision;
         if(!empty($this->branch)) $param->git_ref = $this->branch;
 
-        $list = $this->fetch($api, $param, true);
+        $list = $this->fetch($api, $param, true, array(), 'entries');
         if(empty($list)) return array();
+
+        $files   = $this->fetch('path-details', array('git_ref' => $param->git_ref), false, array('paths' => array_column($list, 'path')));
+        $commits = array();
+        foreach($files->details as $file) $commits[$file->path] = $file->last_commit;
 
         $infos = array();
         foreach($list as $file)
         {
             if(!isset($file->type)) continue;
 
+            $base64Name = helper::safe64Encode(urlencode($file->path));
+
             $info = new stdClass();
-            $info->name     = $file->path;
-            $info->kind     = $file->type == 'blob' ? 'file' : 'dir';
-            $info->revision = zget($file->last_commit, 'sha', '');
-            $info->comment  = zget($file->last_commit, 'title', '');
-            $info->account  = zget($file->last_commit->author->identity, 'name', '');
-            $info->date     = date('Y-m-d H:i:s', strtotime($file->last_commit->author->when));
+            $info->id       = $base64Name;
+            $info->name     = $file->name;
+            $info->text     = $file->name;
+            $info->path     = $file->path;
+            $info->kind     = $file->type;
+            $info->key      = $base64Name;
+            $info->revision = zget($commits[$file->path], 'sha', '');
+            $info->comment  = zget($commits[$file->path], 'title', '');
+            $info->account  = zget($commits[$file->path]->author->identity, 'name', '');
+            $info->date     = date('Y-m-d H:i:s', strtotime($commits[$file->path]->author->when));
             $info->size     = 0;
+            $info->items    = array('url' => helper::createLink('repo', 'ajaxGetFiles', "repoID={$this->repo->id}&branch={$param->git_ref}&path={$info->path}"));
 
             $infos[] = $info;
             unset($info);
@@ -703,36 +714,42 @@ class gitfox
      * @param  string    $api
      * @param  array     $params
      * @param  bool      $needToLoop
+     * @param  array     $data
+     * @param  string    $field
      * @access public
      * @return mixed
      */
-    public function fetch($api = '', $params = array(), $needToLoop = false)
+    public function fetch($api = '', $params = array(), $needToLoop = false, $data = array(), $field = 'details')
     {
         $params = (array) $params;
-        $params['limit'] = isset($params['limit']) ? $params['limit'] : 100;
+        if(empty($data)) $params['limit'] = isset($params['limit']) ? $params['limit'] : 100;
 
-        $api = ltrim($api, '/');
-        $api = $this->root . $api . '?' . http_build_query($params);
         $header = array(
             "Authorization: Bearer {$this->token}",
             "Accept: text/plain"
         );
+        if(!empty($data)) $header[1] = 'Accept: */*';
+
+        $api = ltrim($api, '/');
+        $api = "{$this->root}{$api}?" . http_build_query($params);
+
         if($needToLoop)
         {
             $allResults = array();
             for($page = 1; true; $page++)
             {
-                $results = json_decode(commonModel::http($api . "&page={$page}", null, array(), $header));
-                if(!is_array($results->details)) break;
-                if(!empty($results->details)) $allResults = array_merge($allResults, $results->details);
-                if(count($results->details) < 100) break;
+                $results = json_decode(commonModel::http($api . "&page={$page}", $data, array(), $header));
+                if(isset($results->content)) $results = $results->content;
+                if(empty($results->$field) || !is_array($results->$field)) break;
+                if(!empty($results->$field)) $allResults = array_merge($allResults, $results->$field);
+                if(count($results->$field) < 100) break;
             }
 
             return $allResults;
         }
         else
         {
-            $response = commonModel::http($api, null, array(), $header);
+            $response = commonModel::http($api, $data, array(), $header, 'json');
             if(!empty(commonModel::$requestErrors))
             {
                 commonModel::$requestErrors = array();
@@ -740,6 +757,7 @@ class gitfox
             }
 
             $result = json_decode($response);
+            if(isset($result->content)) $result = $result->content;
             return $result ? $result : $response;
         }
     }

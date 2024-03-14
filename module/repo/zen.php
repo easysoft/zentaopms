@@ -553,6 +553,8 @@ class repoZen extends repo
      */
     protected function getFilesInfo(object $repo, string $path, string $branchID, string $base64BranchID, int $objectID): array
     {
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
         if($repo->SCM == 'Gitlab')
         {
             $_COOKIE['repoBranch'] = $branchID ? $branchID : $this->cookie->repoBranch;
@@ -565,6 +567,10 @@ class repoZen extends repo
                 $file->date     = '';
             }
         }
+        elseif($repo->SCM == 'GitFox')
+        {
+            $infos = $scm->ls($path);
+        }
         else
         {
             $infos = $this->repo->getFileCommits($repo, $branchID, $path);
@@ -573,8 +579,6 @@ class repoZen extends repo
         $filePath = $path;
         if($repo->SCM == 'Subversion')
         {
-            $scm = $this->app->loadClass('scm');
-            $scm->setEngine($repo);
             $info = $scm->info('');
             if(!empty($info->root))
             {
