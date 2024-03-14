@@ -17,6 +17,7 @@ jsVar('copied',         $lang->instance->copied);
 jsVar('instanceID',     $instance->id);
 jsVar('instanceStatus', $instance->status);
 jsVar('instanceType',   $type);
+jsVar('inQuickon',      $config->inQuickon);
 
 $instance->appName = strtolower($instance->appName);
 $cpuInfo    = $this->instance->printCpuUsage($instance, (object)$instanceMetric->cpu);
