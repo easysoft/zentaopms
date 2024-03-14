@@ -13,6 +13,18 @@ $(document).off('locate.zt').on('locate.zt', function(e, data)
     parent.parent.$(parent.parent.document).trigger('locate.zt', data);
 });
 
+$(document).on('shown', '.modal', function()
+{
+    if($(this).find('.modal-actions>[data-dismiss="modal"]').length) parent.$('iframe[name="' + window.name + '"]').closest('.modal-dialog').find('.modal-header>.close').hide();
+}).on('hidden', '.modal', function()
+{
+    setTimeout(function()
+    {
+        if(!$(this).find('.modal-actions>[data-dismiss="modal"]').length) parent.$('iframe[name="' + window.name + '"]').closest('.modal-dialog').find('.modal-header>.close').show();
+    }, 500);
+});
+$('body').on('click', '[data-dismiss="modal"]', function(e){e.stopPropagation();});
+
 $(function()
 {
     $('.zin-page-css').appendTo('head');
