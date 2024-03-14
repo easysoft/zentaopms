@@ -279,7 +279,7 @@ detailBody
                         set::title($moduleTitle),
                         $moduleItems
                     ),
-                    $story->parentName ? item
+                    isset($story->parentName) ? item
                     (
                         set::name($lang->story->parent),
                         $story->parentName

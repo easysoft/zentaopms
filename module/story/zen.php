@@ -568,9 +568,11 @@ class storyZen extends story
 
         /* 准备数据。*/
         $story        = $this->view->story;
+        $parent       = $this->story->fetchByID($story->parent);
+        $grades       = $this->story->getGradeOptions($parent, $story->type);
         $product      = $this->view->product;
         $users        = $this->loadModel('user')->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
-        $stories      = $this->story->getParentStoryPairs($story->product, $story->parent);
+        $stories      = $this->story->getParentStoryPairs($story->product, $story->parent, $story->type, $storyID);
         $plans        = $this->loadModel('productplan')->getPairs($story->product, $story->branch == 0 ? 'all' : $story->branch, '', true);
         $reviewerList = $this->story->getReviewerPairs($story->id, $story->version);
 
@@ -614,6 +616,7 @@ class storyZen extends story
         $fields['plan']['options']           = $plans;
         $fields['reviewer']['options']       = $reviewers;
         $fields['parent']['options']         = array_filter($stories);
+        $fields['grade']['options']          = $grades;
         $fields['duplicateStory']['options'] = $productStories;
         $fields['assignedTo']['options']    += array('closed' => 'Closed');
 
@@ -622,6 +625,7 @@ class storyZen extends story
 
         $this->view->users          = $users;
         $this->view->storyReviewers = array_keys($reviewerList);
+        $this->view->gradeRule      = $this->config->{$story->type}->gradeRule;
 
         return $fields;
     }

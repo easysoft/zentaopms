@@ -71,6 +71,7 @@ detailBody
     setID('dataform'),
     set::isForm(true),
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
+    on::change('[name=parent]', 'loadGrade'),
     $canEditContent ? set::actions(array
     (
         array('btnType' => 'submit', 'class' => 'primary',   'data-status' => 'active', 'text' => $lang->save),
@@ -238,12 +239,17 @@ detailBody
                     set::manageLink(createLink('tree', 'browse', "rootID={$story->product}&view=story&currentModuleID=0&branch={$story->branch}"))
                 )
             ),
-            $story->parent >= 0 && $story->type == 'story' && $app->tab == 'product' ? item
+            $story->parent >= 0 && $app->tab == 'product' ? item
             (
                 set::trClass(zget($fields['parent'], 'className', '')),
                 set::name($lang->story->parent),
                 picker(setID('parent'), set::name('parent'), set::items($fields['parent']['options']), set::value($fields['parent']['default']))
             ) : null,
+            $showGrade ? item
+            (
+                set::name($lang->story->grade),
+                picker(setID('grade'), set::name('grade'), set::items($fields['grade']['options']), set::value($story->grade), set::disabled($gradeRule == 'stepwise'))
+            ) : picker(setID('grade'), set::name('grade'), set::items($fields['grade']['options']), set::value($story->grade), set::hidden(true)),
             $story->type == 'story' ? item
             (
                 set::trClass(zget($fields['plan'], 'className', '')),

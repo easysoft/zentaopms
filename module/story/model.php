@@ -447,6 +447,8 @@ class storyModel extends model
         $storyID = $this->storyTao->doCreateStory($story);
         if(!$storyID) return false;
 
+        $this->dao->update(TABLE_STORY)->set('path')->eq(",{$storyID},")->where('id')->eq($storyID)->exec();
+
         /* Upload files. */
         $this->loadModel('action');
         $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, $story->type);
@@ -715,6 +717,11 @@ class storyModel extends model
             $oldStory->twins = '';
         }
 
+        if($story->grade > $oldStory->grade)
+        {
+            if(!$this->checkGrade($story, $oldStory)) return false;
+        }
+
         $moduleName = $this->app->rawModule;
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,finalResult')
             ->autoCheck()
@@ -733,14 +740,20 @@ class storyModel extends model
         $this->storyTao->doUpdateSpec($storyID, $story, $oldStory, $addedFiles);
         $this->storyTao->doUpdateLinkStories($storyID, $story, $oldStory);
 
-        $changed = $story->parent != $oldStory->parent;
-        if($changed) $this->doChangeParent($storyID, $story, $oldStory->parent);
-        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, !$changed);
-        if($story->parent > 0)
+        if($story->product != $oldStory->product)
         {
-            $this->dao->update(TABLE_STORY)->set('parent')->eq('-1')->where('id')->eq($story->parent)->exec();
-            $this->updateParentStatus($storyID, $story->parent, !$changed);
+            $childStories = $this->getAllChildId($storyID);
+            foreach($childStories as $childStoryID) $this->updateStoryProduct($childStoryID, $story->product);
         }
+        if($story->grade != $oldStory->grade)
+        {
+            $gradeDiff = (int)$story->grade - (int)$oldStory->grade;
+            $this->dao->update(TABLE_STORY)->set("grade = grade + $gradeDiff")->where('path')->like($oldStory->path . '%')->andWhere('id')->ne($storyID)->exec();
+        }
+        $parentChanged = $story->parent != $oldStory->parent;
+        if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory->parent, $oldStory->path);
+        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, !$parentChanged);
+        if($story->parent > 0) $this->updateParentStatus($storyID, $story->parent, !$parentChanged);
 
         /* Set new stage and update story sort of plan when story plan has changed. */
         if($oldStory->plan != $story->plan)
@@ -821,11 +834,7 @@ class storyModel extends model
         if($parentID <= 0) return true;
 
         $childrenStatus = $this->dao->select('id,status')->from(TABLE_STORY)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
-        if(empty($childrenStatus))
-        {
-            $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
-            return true;
-        }
+        if(empty($childrenStatus)) return true;
 
         $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
         if(empty($oldParentStory))
@@ -833,7 +842,6 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($storyID)->exec();
             return true;
         }
-        if($oldParentStory->parent != '-1') $this->dao->update(TABLE_STORY)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
         $this->computeEstimate($parentID);
 
         $status = $oldParentStory->status;
@@ -2003,6 +2011,30 @@ class storyModel extends model
     }
 
     /**
+     * 获取需求的所有子需求ID。
+     *
+     * @param  int    $storyID
+     * @param  bool   $includeSelf
+     * @access public
+     * @return array
+     */
+    public function getAllChildId(int $storyID, bool $includeSelf = true): array
+    {
+        if($storyID == 0) return array();
+
+        $story = $this->fetchByID($storyID);
+        if(empty($story)) return array();
+
+        $children = $this->dao->select('id')->from(TABLE_STORY)
+            ->where('path')->like($story->path . '%')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$includeSelf)->andWhere('id')->ne($storyID)->fi()
+            ->fetchPairs();
+
+        return array_keys($children);
+    }
+
+    /**
      * Get stories by assignedTo.
      *
      * @param  int    $productID
@@ -2399,10 +2431,11 @@ class storyModel extends model
      * @param  int        $productID
      * @param  string|int $appendedStories
      * @param  string     $storyType
+     * @param  int        $storyID
      * @access public
      * @return array
      */
-    public function getParentStoryPairs(int $productID, string|int $appendedStories = '', string $storyType = 'story'): array
+    public function getParentStoryPairs(int $productID, string|int $appendedStories = '', string $storyType = 'story', int $storyID = 0): array
     {
         if($storyType == 'story')
         {
@@ -2432,6 +2465,7 @@ class storyModel extends model
                 $requirementPairs[$requirement->id] = isset($URGradePairs[$requirement->grade]) ? '(' . $URGradePairs[$requirement->grade] . ') ' . $requirement->title : $requirement->title;
             }
 
+            $childIdList = $this->getAllChildId($storyID);
             $stories = $this->dao->select('id, grade, title')->from(TABLE_STORY)
                 ->where('deleted')->eq('0')
                 ->andWhere('product')->eq($productID)
@@ -2439,6 +2473,7 @@ class storyModel extends model
                 ->andWhere('status')->eq('active')
                 ->andWhere('grade')->ne($lastGrade)
                 ->andWhere('grade')->in(array_keys($SRGradePairs))
+                ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
                 ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
                 ->fetchAll();
 
@@ -4597,13 +4632,15 @@ class storyModel extends model
      * 获取需求层级下拉列表。
      * Get grade options.
      *
-     * @param  object $story
-     * @param  string $storyType
+     * @param  object|bool $story
+     * @param  string      $storyType
      * @access public
      * @return array
      */
-    public function getGradeOptions(object $story, string $storyType): array
+    public function getGradeOptions(object|bool $story, string $storyType): array
     {
+        if(!$story) return $this->getGradePairs($storyType, 'grade', 'grade');
+
         $gradeOptions = array();
         if($storyType == 'story')
         {
@@ -4638,5 +4675,35 @@ class storyModel extends model
         $grades = $this->getGradePairs($storyType);
 
         return $storyType == 'story' ? count($grades) > 2 : count($grades) > 1;
+    }
+
+    /**
+     * 检查需求层级是否合法。
+     * Check if the grade is valid.
+     *
+     * @param  object $story
+     * @param  object $oldStory
+     * @access public
+     * @return bool
+     */
+    public function checkGrade(object $story, object $oldStory)
+    {
+        $maxGrade = $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORY)
+             ->where('path')->like("{$oldStory->path}%")
+             ->andWhere('deleted')->eq('0')
+             ->fetch('maxGrade');
+
+        $systemMaxGrade = $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORYGRADE)
+            ->where('type')->eq($oldStory->type)
+            ->andWhere('status')->eq('enable')
+            ->fetch('maxGrade');
+
+        $newMaxGrade = (int)$maxGrade + (int)$story->grade - (int)$oldStory->grade;
+        if($newMaxGrade > $systemMaxGrade)
+        {
+            dao::$errors['grade'] = sprintf($this->lang->story->gradeOverflow, $newMaxGrade, $systemMaxGrade);
+        }
+
+        return !dao::isError();
     }
 }

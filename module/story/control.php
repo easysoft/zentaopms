@@ -306,6 +306,7 @@ class story extends control
 
         $this->view->title        = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->story        = $story;
+        $this->view->showGrade    = $this->story->showGrade($story->type);
         $this->view->twins        = empty($story->twins) ? array() : $this->story->getByList($story->twins);
         $this->view->fields       = $fields;
         $this->view->branches     = $this->view->product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);

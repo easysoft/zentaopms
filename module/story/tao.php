@@ -817,28 +817,21 @@ class storyTao extends storyModel
      * @param  int       $storyID
      * @param  object    $story
      * @param  int       $oldStoryParent
+     * @param  string    $oldStoryPath
      * @access protected
      * @return void
      */
-    protected function doChangeParent(int $storyID, object $story, int $oldStoryParent)
+    protected function doChangeParent(int $storyID, object $story, int $oldStoryParent, string $oldStoryPath)
     {
-        if($story->product == $oldStoryParent) return;
+        if($story->parent == $oldStoryParent) return;
 
         $this->loadModel('action');
-        $this->updateStoryProduct($storyID, $story->product);
-        if($oldStoryParent == '-1')
-        {
-            $childStories = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchPairs('id');
-            foreach($childStories as $childStoryID) $this->updateStoryProduct($childStoryID, $story->product);
-        }
-
         if($oldStoryParent > 0)
         {
             $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
             $oldChildren    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($oldStoryParent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
-            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
-            if(empty($oldChildren)) $this->dao->update(TABLE_STORY)->set('parent')->eq(0)->where('id')->eq($oldStoryParent)->exec();
             $this->dao->update(TABLE_STORY)->set('childStories')->eq(implode(',', $oldChildren))->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldStoryParent)->exec();
+            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
 
             $this->action->create('story', $storyID, 'unlinkParentStory', '', $oldStoryParent, '', false);
             $actionID = $this->action->create('story', $oldStoryParent, 'unLinkChildrenStory', '', $storyID, '', false);
@@ -849,19 +842,32 @@ class storyTao extends storyModel
         if($story->parent > 0)
         {
             $parentStory    = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
+            $story->path    = rtrim($parentStory->path, ',') . ',' . $storyID . ',';
             $children       = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
-            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
-            $this->dao->update(TABLE_STORY)->set('parent')->eq('-1')
+            $this->dao->update(TABLE_STORY)
                 ->set('childStories')->eq(implode(',', $children))
                 ->set('lastEditedBy')->eq($this->app->user->account)
                 ->set('lastEditedDate')->eq(helper::now())
                 ->where('id')->eq($story->parent)
                 ->exec();
+            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
 
             $this->action->create('story', $storyID, 'linkParentStory', '', $story->parent, '', false);
             $actionID = $this->action->create('story', $story->parent, 'linkChildStory', '', $storyID, '', false);
             $changes  = common::createChanges($parentStory, $newParentStory);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+        }
+        else
+        {
+            $story->path = ",$storyID,";
+        }
+
+        $childStories = $this->getAllChildId($storyID);
+        foreach($childStories as $childStoryID)
+        {
+            $oldChildPath = $this->dao->select('path')->from(TABLE_STORY)->where('id')->eq($childStoryID)->fetch('path');
+            $newChildPath = str_replace($oldStoryPath, $story->path, $oldChildPath);
+            $this->dao->update(TABLE_STORY)->set('path')->eq($newChildPath)->where('id')->eq($childStoryID)->exec();
         }
     }
 
@@ -1820,7 +1826,6 @@ class storyTao extends storyModel
 
         $story->lastEditedBy   = $this->app->user->account;
         $story->lastEditedDate = $now;
-        $story->parent         = '-1';
         $this->dao->update(TABLE_STORY)->data($story)->where('id')->eq($parentID)->exec();
 
         return $story;

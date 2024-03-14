@@ -116,6 +116,7 @@ $lang->story->batchEditTip        = "{$lang->SRCommon} %s为孪生需求，本�
 $lang->story->id               = '编号';
 $lang->story->parent           = '父需求';
 $lang->story->grade            = '需求层级';
+$lang->story->path             = '路径';
 $lang->story->product          = "所属{$lang->productCommon}";
 $lang->story->project          = "所属{$lang->projectCommon}";
 $lang->story->branch           = "平台/分支";
@@ -340,6 +341,7 @@ $lang->story->confirmRecallChange   = "撤销变更后，需求内容会回退�
 $lang->story->confirmRecallReview   = "您确定要撤回评审吗？";
 $lang->story->noStoryToTask         = "只有激活的{$lang->SRCommon}才能转为任务！";
 $lang->story->ignoreClosedStory     = "{$lang->SRCommon} %s 状态为已关闭，本次操作已被过滤。";
+$lang->story->gradeOverflow         = "系统检测该需求下子需求的最大层级为%s，同步修改后为%s，超出系统设置的层级范围，无法修改。";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "该{$lang->SRCommon}所属范围";

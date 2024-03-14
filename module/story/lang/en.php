@@ -115,6 +115,8 @@ $lang->story->batchEditTip        = "{$lang->SRCommon} %sis twin stories, and th
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';
+$lang->story->grade            = 'Grade';
+$lang->story->path             = 'Path';
 $lang->story->product          = $lang->productCommon;
 $lang->story->project          = $lang->projectCommon;
 $lang->story->branch           = "Branch/Platform";
@@ -337,6 +339,7 @@ $lang->story->confirmRecallChange  = "After undo the change, the story content w
 $lang->story->confirmRecallReview  = "Are you sure you want to withdraw the review?";
 $lang->story->noStoryToTask        = "Only the activated {$lang->SRCommon} can be converted into a task!";
 $lang->story->ignoreClosedStory    = "{$lang->SRCommon} %s status is closed, and the operation has been filtered.";
+$lang->story->gradeOverflow        = "The system detects that the maximum level of sub-requirements under this requirement is %s. After synchronization modification, it is %s. It exceeds the level range set by the system and cannot be modified.";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Scope';
