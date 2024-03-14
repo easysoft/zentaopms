@@ -196,8 +196,7 @@ $downloadWg = div
             )
         )
     ) : null,
-
-    div
+    $repo->SCM == 'GitFox' ? null : div
     (
         setStyle(array('margin-top' => '20px')),
         btn

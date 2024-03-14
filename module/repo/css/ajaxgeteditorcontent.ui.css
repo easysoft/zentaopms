@@ -23,7 +23,6 @@
 #relationTabs .nav-tabs > li > .unlinks:hover {text-decoration: underline;color: #C61A1A;}
 #relationTabs .nav-tabs > li > .unlinks > i {background: none;padding: 0;}
 #relationTabs .nav-tabs>.nav-item>a.active:after{border: none;}
-#relationTabs .tab-content{margin-top: 30px;}
 #related .content, #related .btn {background-color: #F4F5F7; border: none;}
 #related .btn.pull-right {margin-right: 0;z-index: 1;}
 #related .btn.pull-left {z-index: 1;}
