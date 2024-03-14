@@ -594,6 +594,7 @@ class commonModel extends model
         foreach($menuOrder as $key => $group)
         {
             if($group != 'my' && !empty($app->user->rights['acls']['views']) && !isset($app->user->rights['acls']['views'][$group])) continue; // 后台权限分组中没有给导航视图
+            if(!isset($lang->mainNav->$group)) continue;
 
             $nav = $lang->mainNav->$group;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);

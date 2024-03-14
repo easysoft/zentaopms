@@ -271,10 +271,11 @@ class programTao extends programModel
         $summary = $this->setNoTaskExecution($projectIdList);
         /* 2. Get summary of executions to be refreshed. */
         $tasks = $this->dao->select('t1.id, execution, t1.estimate, t1.consumed, t1.`left`, t1.status')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->ge(0) // Ignore parent task.
-            ->beginIF(!empty($projectIdList))->andWhere('t1.project')->in($projectIdList)->fi()
+            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF(!empty($projectIdList))->andWhere('t2.project')->in($projectIdList)->fi()
             ->fetchAll('id');
 
         foreach($tasks as $task)

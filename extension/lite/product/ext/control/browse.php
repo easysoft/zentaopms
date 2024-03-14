@@ -81,7 +81,6 @@ class product extends control
         $project = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
 
         /* Get stories. */
-        if(in_array($browseType, array('reviewing', 'draft', 'changing'))) $browseType .= 'story';
         $stories = $this->productZen->getStories($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
