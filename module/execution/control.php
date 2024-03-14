@@ -1271,7 +1271,12 @@ class execution extends control
         list($pmUsers, $poUsers, $qdUsers, $rdUsers) = $this->executionZen->setUserMoreLink($executions);
 
         /* Set custom fields. */
-        foreach(explode(',', $this->config->execution->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->execution->$field;
+        foreach(explode(',', $this->config->execution->list->customBatchEditFields) as $field)
+        {
+            $fieldTitle = $this->app->tab == 'execution' ? str_replace($this->lang->executionCommon, $this->lang->execution->common, $this->lang->execution->$field) : $this->lang->execution->$field;
+            if($field == 'lifetime') $fieldTitle = $this->app->tab == 'execution' ? $this->lang->execution->execType : $this->lang->execution->type;
+            $customFields[$field] = $fieldTitle;
+        }
 
         $parentIdList = array();
         foreach($executions as $execution)
