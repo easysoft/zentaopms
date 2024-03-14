@@ -69,7 +69,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('1/2'),
             set::label($lang->metric->formLabel->scope),
             set::name('scope'),
             set::items($lang->metric->scopeList),
@@ -78,56 +78,65 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('1/2'),
             set::label($lang->metric->formLabel->object),
             set::name('object'),
             set::items($lang->metric->objectList),
             set::value('program'),
             set::required(true)
-        ),
+        )
+    ),
+    formRow
+    (
         formGroup
         (
-            set::width('1/3'),
+            set::width('1/2'),
             set::label($lang->metric->formLabel->purpose),
             set::name('purpose'),
             set::items($lang->metric->purposeList),
             set::value('scale'),
             set::required(true)
+        ),
+        formGroup
+        (
+            set::label($lang->metric->formLabel->dateType),
+            set::name('dateType'),
+            set::items($lang->metric->dateTypeList),
+            set::value($period),
+            set::width('1/2'),
+            set::required(true)
         )
-    ),
-    formGroup
-    (
-        set::label($lang->metric->formLabel->dateType),
-        set::name('dateType'),
-        set::items($lang->metric->dateTypeList),
-        set::value($period),
-        set::width('1/2'),
-        set::required(true)
-    ),
-    formGroup
-    (
-        set::label($lang->metric->formLabel->name),
-        set::name('name'),
-        set::required(true)
-    ),
-    formGroup
-    (
-        set::label($lang->metric->formLabel->alias),
-        set::name('alias'),
-        set::required(false),
-        set::placeholder($lang->metric->aliasTip)
-    ),
-    formGroup
-    (
-        set::label($lang->metric->formLabel->code),
-        set::name('code'),
-        set::required(true)
     ),
     formRow
     (
-        set::id('unitBox'),
         formGroup
         (
+            set::label($lang->metric->formLabel->name),
+            set::name('name'),
+            set::width('1/2'),
+            set::required(true)
+        ),
+        formGroup
+        (
+            set::label($lang->metric->formLabel->alias),
+            set::name('alias'),
+            set::required(false),
+            set::width('1/2'),
+            set::placeholder($lang->metric->aliasTip)
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
+            set::label($lang->metric->formLabel->code),
+            set::name('code'),
+            set::width('1/2'),
+            set::required(true)
+        ),
+        formGroup
+        (
+            set::id('unitBox'),
             set::width('1/2'),
             set::label($lang->metric->formLabel->unit),
             inputGroup
@@ -151,14 +160,11 @@ formPanel
                     )
                 )
             )
-        )
-    ),
-    formRow
-    (
-        set::id('addUnitBox'),
-        setClass('hidden'),
+        ),
         formGroup
         (
+            set::id('addUnitBox'),
+            setClass('hidden'),
             set::width('1/2'),
             set::label($lang->metric->formLabel->unit),
             inputGroup
