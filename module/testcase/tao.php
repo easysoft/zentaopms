@@ -393,7 +393,7 @@ class testcaseTao extends testcaseModel
     protected function updateCase2Project(object $oldCase, object $case): bool
     {
         $productChanged = $oldCase->product != $case->product;
-        $storyChanged   = $oldCase->story   != $case->story;
+        $storyChanged   = $oldCase->story   != zget($case, 'story', $oldCase->story);
 
         if(!$productChanged && !$storyChanged) return true;
 
@@ -620,7 +620,7 @@ class testcaseTao extends testcaseModel
             $this->dao->insert(TABLE_SCENE)->data($scene)->autoCheck()->exec();
             $sceneID = $this->dao->lastInsertID();
 
-            $this->dao->update(TABLE_SCENE)->set('`order`')->eq($sceneID)->where('id')->eq($sceneID)->exec();
+            $this->dao->update(TABLE_SCENE)->set('sort')->eq($sceneID)->where('id')->eq($sceneID)->exec();
         }
         else
         {
