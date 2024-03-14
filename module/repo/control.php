@@ -560,7 +560,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $log      = $this->scm->log('', $revision, $revision);
         $revision = !empty($log[0]) ? $this->repo->getHistoryRevision($repoID, (string)$log[0]->revision) : '';
-        if($revision)
+        if($revision && $repo->SCM != 'GitFox')
         {
             if(in_array($repo->SCM, $this->config->repo->gitTypeList))
             {
