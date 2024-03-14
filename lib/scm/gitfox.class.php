@@ -54,35 +54,29 @@ class gitfox
         $commits = array();
         foreach($files->details as $file) $commits[$file->path] = $file->last_commit;
 
-        $infos = array();
+        $fileList = array();
         foreach($list as $file)
         {
             if(!isset($file->type)) continue;
 
-            $base64Name = helper::safe64Encode(urlencode($file->path));
-
             $info = new stdClass();
-            $info->id       = $base64Name;
             $info->name     = $file->name;
-            $info->text     = $file->name;
             $info->path     = $file->path;
             $info->kind     = $file->type;
-            $info->key      = $base64Name;
             $info->revision = zget($commits[$file->path], 'sha', '');
             $info->comment  = zget($commits[$file->path], 'title', '');
             $info->account  = zget($commits[$file->path]->author->identity, 'name', '');
             $info->date     = date('Y-m-d H:i:s', strtotime($commits[$file->path]->author->when));
             $info->size     = 0;
-            $info->items    = array('url' => helper::createLink('repo', 'ajaxGetFiles', "repoID={$this->repo->id}&branch={$param->git_ref}&path={$info->path}"));
 
-            $infos[] = $info;
+            $fileList[] = $info;
             unset($info);
         }
 
         /* Sort by kind */
-        foreach($infos as $key => $info) $kinds[$key] = $info->kind;
-        if($infos) array_multisort($kinds, SORT_ASC, $infos);
-        return $infos;
+        foreach($fileList as $key => $info) $kinds[$key] = $info->kind;
+        if($fileList) array_multisort($kinds, SORT_ASC, $fileList);
+        return $fileList;
     }
 
     /**
@@ -99,11 +93,11 @@ class gitfox
      */
     public function files($path, $ref = 'master')
     {
-        $path = urlencode($path);
+        $path = urldecode($path);
         $api  = "content/$path";
         $param = new stdclass();
         $param->git_ref        = $ref;
-        $param->include_commit = true;
+        $param->include_commit = 'true';
         $file = $this->fetch($api, $param);
         if(!isset($file->name)) return false;
 
@@ -250,7 +244,7 @@ class gitfox
         if(!scm::checkRevision($revision)) return array();
 
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
-        $path  = urlencode($path);
+        $path  = urldecode($path);
         $api   = "blame/$path";
         $param = new stdclass;
         $param->git_ref = ($revision and $revision != 'HEAD') ? $revision : $this->branch;
@@ -326,7 +320,7 @@ class gitfox
 
         if($revision == 'HEAD' and $this->branch) $revision = $this->branch;
         $file = $this->files($entry, $revision);
-        return isset($file->content) ? $file->content : '';
+        return isset($file->content->data) ? base64_decode($file->content->data) : '';
     }
 
     /**
@@ -757,7 +751,6 @@ class gitfox
             }
 
             $result = json_decode($response);
-            if(isset($result->content)) $result = $result->content;
             return $result ? $result : $response;
         }
     }

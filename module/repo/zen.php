@@ -1564,7 +1564,7 @@ class repoZen extends repo
     {
         if($repo->SCM == 'Gitlab') return $this->repo->getGitlabFilesByPath($repo, '', (string)$this->cookie->repoBranch);
 
-        if($repo->SCM != 'Subversion') return $this->repo->getFileTree($repo);
+        if($repo->SCM != 'Subversion' && $repo->SCM != 'GitFox') return $this->repo->getFileTree($repo);
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
