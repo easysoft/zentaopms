@@ -8,6 +8,11 @@ zui.Modal.hide = function(selector)
     zuiHideModal(selector);
 };
 
+$(document).off('locate.zt').on('locate.zt', function(e, data)
+{
+    parent.parent.$(parent.parent.document).trigger('locate.zt', data);
+});
+
 $(function()
 {
     $('.zin-page-css').appendTo('head');
