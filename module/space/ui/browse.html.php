@@ -12,6 +12,7 @@ namespace zin;
 
 $statusMap  = array();
 $canInstall = hasPriv('instance', 'manage');
+if(!$canInstall) $config->space->dtable->fieldList['actions']['menu'] = array('visit');
 
 foreach($instances as $instance) if('store' === $instance->type) $statusMap[$instance->id] = $instance->status;
 jsVar('statusMap', $statusMap);

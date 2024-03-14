@@ -960,7 +960,10 @@ class instanceModel extends model
 
         if($instance->type !== 'store')
         {
-            if($action === 'edit' || $action === 'visit') return true;
+            if($action == 'visit') return true;
+            if(!common::hasPriv('instance', 'manage')) return false;
+
+            if($action === 'edit') return true;
             if($action == 'bindUser')  return in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'));
             if($action == 'ajaxUninstall') return true;
             return false;
