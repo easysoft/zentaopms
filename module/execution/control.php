@@ -1275,6 +1275,7 @@ class execution extends control
         {
             $fieldTitle = $this->app->tab == 'execution' ? str_replace($this->lang->executionCommon, $this->lang->execution->common, $this->lang->execution->$field) : $this->lang->execution->$field;
             if($field == 'lifetime') $fieldTitle = $this->app->tab == 'execution' ? $this->lang->execution->execType : $this->lang->execution->type;
+            if($field == 'team') $fieldTitle = $this->lang->execution->teamName;
             $customFields[$field] = $fieldTitle;
         }
 
