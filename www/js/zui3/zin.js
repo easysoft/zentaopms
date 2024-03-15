@@ -38,8 +38,6 @@
     let currentAppUrl = isInAppTab ? '' : location.href;
     let zinbar        = null;
     let historyState  = parent.window.history.state;
-    const loadRules   = {};
-    let pageLoadRules = {};
 
     $.apps = $.extend(
     {

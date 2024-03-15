@@ -1,31 +1,3 @@
-/**
- * @typedef {Object} ZentaoApp
- * @property {string} code
- * @property {string} icon
- * @property {string} url
- * @property {string} text
- * @property {string} title
- * @property {boolean} active
- * @property {string} group
- * @property {string} moduleName
- * @property {string} methodName
- * @property {string} vars
- * @property {boolean} [external]
- * @property {boolean} [opened]
- * @typedef {Object} ZentaoOpenedProps
- * @property {true} opened
- * @property {HTMLIFrameElement} iframe
- * @property {number} zIndex
- * @property {string} currentTitle
- * @property {string} currentUrl
- * @property {number} [zIndex]
- * @property {HTMLIframe} iframe
- * @property {jQuery<HTMLDivElement>} $app
- * @property {jQuery<HTMLLIElement>} $bar
- * @typedef {ZentaoApp & ZentaoOpenedProps} ZentaoOpenedApp
- */
-
-
 /* Init variables */
 const apps =
 {
@@ -144,7 +116,7 @@ function openApp(url, code, options)
             catch(e){finishLoad()}
             triggerAppEvent(openedApp.code, 'loadapp', [openedApp, e]);
         };
-        if(!app.external) return;
+        if(!app.external) return openedApp;
     }
     if(!url) url = openedApp.currentUrl;
 
@@ -834,18 +806,21 @@ $.get($.createLink('index', 'app'), html =>
 
 $.apps = $.extend(apps,
 {
-    openApp:        openApp,
-    reloadApp:      reloadApp,
-    showApp:        showApp,
-    updateApp:      updateApp,
-    getLastApp:     getLastApp,
-    goBack:         goBack,
-    logout:         logout,
-    isOldPage:      isOldPage,
-    getAppCode:     getAppCode,
-    updateAppsMenu: updateAppsMenu,
-    changeAppsLang: changeAppsLang,
-    changeAppsTheme: changeAppsTheme,
+    openedApps:        apps.openedMap,
+    openApp:           openApp,
+    open:              openApp,
+    reloadApp:         reloadApp,
+    showApp:           showApp,
+    updateApp:         updateApp,
+    updateUrl:         function(appCode, url, title) {return updateApp(appCode, url, title)},
+    getLastApp:        getLastApp,
+    goBack:            goBack,
+    logout:            logout,
+    isOldPage:         isOldPage,
+    getAppCode:        getAppCode,
+    updateAppsMenu:    updateAppsMenu,
+    changeAppsLang:    changeAppsLang,
+    changeAppsTheme:   changeAppsTheme,
     updateUserToolbar: updateUserToolbar
 });
 
@@ -930,10 +905,3 @@ window.startCron = function(restart)
 turnon ? browserNotify() : ping();
 if(runnable) startCron();
 if(scoreNotice) zui.Messager.show({ content: {html: scoreNotice}, placement: 'bottom-right', time: 0, icon: 'diamond', className: 'text-primary bg-primary-100 bg-opacity-90' });
-
-function hideVisionTips()
-{
-  $('#visionTips').remove();
-  var link = $.createLink('my', 'ajaxSaveVisionTips');
-  $.post(link, {fields: 1});
-}
