@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 zanodeModel->updateImageStatus().
+timeout=0
 cid=1
 
 - 测试修改镜像的状态和路径

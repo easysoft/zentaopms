@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 zanodeModel->createDefaultSnapshot().
+timeout=0
 cid=1
 
 - 测试不是运行中的执行节点创建默认快照属性name @请检查执行节点状态

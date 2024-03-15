@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 zanodeModel->createSnapshot().
+timeout=0
 cid=1
 
 - 测试执行节点连接失败时创建快照 @失败
