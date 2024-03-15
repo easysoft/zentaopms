@@ -620,6 +620,7 @@
         const $iframe = $page.find('iframe').removeClass('in');
         if($iframe.attr('src') === url) $iframe[0].contentWindow.location.reload();
         else $iframe.attr('src', url);
+        currentAppUrl = url;
     }
 
     /** Hide old page content. */
@@ -1395,7 +1396,7 @@
     $(document).on('click', handleGlobalClick).on('locate.zt', (_e, data) =>
     {
         if(!data) return;
-        if(data === true) return loadCurrentPage();
+        if(data === true) return reloadPage();
         if(typeof data === 'string')
         {
             if(data === 'table') return loadTable();
