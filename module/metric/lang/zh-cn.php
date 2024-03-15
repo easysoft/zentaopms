@@ -1,16 +1,16 @@
 <?php
 $lang->metric->common        = "度量项";
 $lang->metric->metric        = "度量";
-$lang->metric->name          = "名称";
+$lang->metric->name          = $lang->metric->common . "名称";
 $lang->metric->stage         = "阶段";
-$lang->metric->scope         = "范围";
-$lang->metric->object        = "对象";
-$lang->metric->purpose       = "目的";
+$lang->metric->scope         = $lang->metric->common . "范围";
+$lang->metric->object        = $lang->metric->common . "对象";
+$lang->metric->purpose       = $lang->metric->common . "目的";
 $lang->metric->dateType      = "时间属性";
-$lang->metric->unit          = "单位";
-$lang->metric->alias         = "简称";
-$lang->metric->code          = "代号";
-$lang->metric->desc          = "描述";
+$lang->metric->unit          = $lang->metric->common . "单位";
+$lang->metric->alias         = $lang->metric->common . "简称";
+$lang->metric->code          = $lang->metric->common . "代号";
+$lang->metric->desc          = $lang->metric->common . "描述";
 $lang->metric->formula       = "计算规则";
 $lang->metric->when          = "收集方式";
 $lang->metric->createdBy     = "创建者";
@@ -60,18 +60,6 @@ $lang->metric->week          = '周';
 $lang->metric->day           = '日期';
 $lang->metric->nodate        = '采集日期';
 $lang->metric->implementType = '实现方式';
-
-$lang->metric->formLabel = new stdclass();
-$lang->metric->formLabel->scope      = $lang->metric->metric . $lang->metric->scope;
-$lang->metric->formLabel->object     = $lang->metric->metric . $lang->metric->object;
-$lang->metric->formLabel->purpose    = $lang->metric->metric . $lang->metric->purpose;
-$lang->metric->formLabel->name       = $lang->metric->common . $lang->metric->name;
-$lang->metric->formLabel->code       = $lang->metric->common . $lang->metric->code;
-$lang->metric->formLabel->dateType   = $lang->metric->dateType;
-$lang->metric->formLabel->unit       = $lang->metric->metric . $lang->metric->unit;
-$lang->metric->formLabel->alias      = $lang->metric->common . $lang->metric->alias;
-$lang->metric->formLabel->desc       = $lang->metric->common . $lang->metric->desc;
-$lang->metric->formLabel->definition = $lang->metric->definition;
 
 $lang->metric->yearFormat     = '%s年';
 $lang->metric->weekFormat     = '%s周';
