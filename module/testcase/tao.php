@@ -325,7 +325,7 @@ class testcaseTao extends testcaseModel
             ->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_CASESTEP)->alias('t2')->on('t1.version = t2.version')
             ->where('t1.id')->in($caseIdList)
-            ->orderBy('t2.version,t2.desc,t2.id')
+            ->orderBy('t2.id')
             ->fetchGroup('case', 'id');
     }
 
