@@ -75,6 +75,25 @@ class gitfoxModel extends model
     }
 
     /**
+     * 通过api创建一个gitfox用户。
+     * Create a gitab user by api.
+     *
+     * @param  int    $gitfoxID
+     * @param  int    $projectID
+     * @param  object $branch
+     * @access public
+     * @return object|null|false
+     */
+    public function apiCreateBranch(int $gitfoxID, int $projectID, object $branch): object|null|false
+    {
+        if(empty($branch->name) || empty($branch->target)) return false;
+
+        $apiRoot = $this->getApiRoot($gitfoxID);
+        $url     = sprintf($apiRoot->url, "/repos/{$projectID}/branches");
+        return json_decode(commonModel::http($url, $branch, array(), $apiRoot->header, 'json'));
+    }
+
+    /**
      * 通过api获取一个代码库信息。
      * Get single repo by API.
      *
