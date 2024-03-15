@@ -36,7 +36,7 @@ formPanel
         (
             entityLabel
             (
-                setClass('text-lg'),
+                setClass('text-xl font-black'),
                 set::level(1),
                 set::text($lang->metric->create)
             )
