@@ -2,7 +2,7 @@ window.handleRenderRow = function($row, index, row)
 {
     if(!row) return false;
 
-    row.id = index + 1;
+    if(row.rawID == '') row.rawID = index + 1;
     let stepDesc   = "<input class='hidden' type='text' name='product[" + row.rawID + "]' value='" + productID + "'/>";
     let stepExpect = '';
 
