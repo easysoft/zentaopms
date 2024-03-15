@@ -1,5 +1,6 @@
 <?php
 $lang->metric->common        = "度量项";
+$lang->metric->metric        = "度量";
 $lang->metric->name          = "名称";
 $lang->metric->stage         = "阶段";
 $lang->metric->scope         = "范围";
@@ -61,13 +62,13 @@ $lang->metric->nodate        = '采集日期';
 $lang->metric->implementType = '实现方式';
 
 $lang->metric->formLabel = new stdclass();
-$lang->metric->formLabel->scope      = $lang->metric->common . $lang->metric->scope;
-$lang->metric->formLabel->object     = $lang->metric->common . $lang->metric->object;
-$lang->metric->formLabel->purpose    = $lang->metric->common . $lang->metric->purpose;
+$lang->metric->formLabel->scope      = $lang->metric->metric . $lang->metric->scope;
+$lang->metric->formLabel->object     = $lang->metric->metric . $lang->metric->object;
+$lang->metric->formLabel->purpose    = $lang->metric->metric . $lang->metric->purpose;
 $lang->metric->formLabel->name       = $lang->metric->common . $lang->metric->name;
 $lang->metric->formLabel->code       = $lang->metric->common . $lang->metric->code;
 $lang->metric->formLabel->dateType   = $lang->metric->dateType;
-$lang->metric->formLabel->unit       = $lang->metric->common . $lang->metric->unit;
+$lang->metric->formLabel->unit       = $lang->metric->metric . $lang->metric->unit;
 $lang->metric->formLabel->alias      = $lang->metric->common . $lang->metric->alias;
 $lang->metric->formLabel->desc       = $lang->metric->common . $lang->metric->desc;
 $lang->metric->formLabel->definition = $lang->metric->definition;
