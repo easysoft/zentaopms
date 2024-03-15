@@ -106,7 +106,7 @@ dtable
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::emptyTip($lang->bug->notice->noBug),
-    set::customData($type == 'resolvedBy' ? array('pageSummary' => $summary) : null)
+    set::customData($type == 'resolvedBy' ? array('pageSummary' => $summary) : array())
 );
 
 render();
