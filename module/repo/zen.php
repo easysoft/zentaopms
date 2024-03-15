@@ -413,7 +413,10 @@ class repoZen extends repo
             $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         }
 
-        $serviceHosts = $this->loadModel('gitlab')->getPairs();
+        $gitlabHosts  = $this->loadModel('gitlab')->getPairs();
+        $gitfoxHosts  = $this->loadModel('gitfox')->getPairs();
+        $serviceHosts = array_merge($gitlabHosts, $gitfoxHosts);
+
         $repoGroups   = array();
 
         if(!empty($serviceHosts))
@@ -455,11 +458,20 @@ class repoZen extends repo
         if(in_array($scm, $this->config->repo->gitServiceList))
         {
             $serviceID = isset($repo->gitService) ? $repo->gitService : 0;
-            $projects  = $this->loadModel($scm)->apiGetProjects($serviceID);
+            if($scm == 'gitfox')
+            {
+                $projects  = $this->loadModel($scm)->apiGetRepos($serviceID);
+            }
+            else
+            {
+                $projects  = $this->loadModel($scm)->apiGetProjects($serviceID);
+            }
+
             $options   = array();
             foreach($projects as $project)
             {
                 if($scm == 'gitlab') $options[$project->id] = $project->name_with_namespace;
+                if($scm == 'gitfox') $options[$project->id] = $project->path;
                 if($scm == 'gitea')  $options[$project->full_name] = $project->full_name;
                 if($scm == 'gogs')   $options[$project->full_name] = $project->full_name;
             }
