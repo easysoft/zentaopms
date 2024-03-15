@@ -2778,28 +2778,39 @@ class testcaseZen extends testcase
 
         if(isset($relatedSteps[$case->id]))
         {
-            $i = $childID = 0;
+            $preGrade      = 1;
+            $parentSteps   = array();
+            $key           = array(0, 0, 0);
             foreach($relatedSteps[$case->id] as $step)
             {
-                $stepID = 0;
-                if($step->type == 'group' || $step->type == 'step')
+                $grade = 1;
+                $parentSteps[$step->id] = $step->parent;
+                if(isset($parentSteps[$step->parent])) $grade = isset($parentSteps[$parentSteps[$step->parent]]) ? 3 : 2;
+
+                if($grade > $preGrade)
                 {
-                    $i ++;
-                    $childID = 0;
-                    $stepID  = $i;
+                    $key[$grade - 1] = 1;
                 }
                 else
                 {
-                    $stepID = $i . '.' . $childID;
+                    if($grade < $preGrade)
+                    {
+                        if($grade < 2) $key[1] = 0;
+                        if($grade < 3) $key[2] = 0;
+                    }
+                    $key[$grade - 1] ++;
                 }
 
-                if($step->version != $case->version) continue;
+                $stepID = implode('.', $key);
+                $stepID = str_replace('.0', '', $stepID);
+                $stepID = str_replace('.0', '', $stepID);
 
                 $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
                 $case->stepDesc   .= $stepID . ". " . htmlspecialchars_decode($step->desc) . $sign;
                 $case->stepExpect .= $stepID . ". " . htmlspecialchars_decode($step->expect) . $sign;
                 $case->real       .= $stepID . ". " . (isset($result[$step->id]) ? $result[$step->id]['real'] : '') . $sign;
-                $childID ++;
+
+                $preGrade = $grade;
             }
         }
         $case->stepDesc   = trim($case->stepDesc);
