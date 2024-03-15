@@ -22,6 +22,7 @@ detailHeader
     (
         entityLabel
         (
+            setClass('text-xl font-black'),
             set::level(1),
             set::text($lang->metric->implement->common)
         ),
