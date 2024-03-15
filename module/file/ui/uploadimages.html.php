@@ -29,14 +29,16 @@ imageSelector
     set::_id($selectorID),
     set::className('surface'),
     set::name('uploader'),
-    set::tip(false)
+    set::tip(false),
+    set::onChange(jsCallback('event')->do('$(event.target).closest(".modal-dialog").find(".btn-upload").toggleClass("disabled", !event.target.files.length)')),
 );
 
 toolbar
 (
     btn
     (
-        setClass('primary uploadBtn'),
+        setClass('primary btn-upload'),
+        set::disabled(true),
         on::click()->call('uploadImages', "#$selectorID", $uploadOptions, jsRaw('$this')),
         $lang->file->beginUpload,
         span(setClass('as-progress'))
