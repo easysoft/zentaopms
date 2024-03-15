@@ -21,6 +21,11 @@ zdTable('user')->gen('1');
 
 su('admin');
 
+global $lang, $app;
+$lang->SRCommon = '研发需求';
+$lang->URCommon = '用户需求';
+$app->loadLang('action');
+
 $my = new myTest();
 
 $actions = $my->getActionsTest();

@@ -244,10 +244,21 @@ class story extends control
             $this->product->setMenu($story->product, $story->branch);
         }
 
+        $product = $this->product->getByID($story->product);
+
+        if($product->shadow)
+        {
+            $products = $this->product->getPairs('', 0, '', 'all');
+        }
+        else
+        {
+            $products = $this->product->getPairs();
+        }
+
         /* Assign. */
-        $this->view->product          = $this->product->getByID($story->product);
+        $this->view->product          = $product;
         $this->view->productID        = $this->view->product->id;
-        $this->view->products         = $this->product->getPairs();
+        $this->view->products         = $products;
         $this->view->story            = $story;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($story->product, 'story', 0, (string)$story->branch);
         $this->view->plans            = $this->loadModel('productplan')->getPairs($story->product, 0, '', true);
@@ -1678,10 +1689,12 @@ class story extends control
             {
                 $this->loadModel('project')->setMenu($projectID);
                 if($project and $project->model == 'waterfall') unset($this->lang->story->report->charts['storiesPerPlan']);
+                $this->view->projectID = $projectID;
             }
             else
             {
                 $this->loadModel('execution')->setMenu($projectID);
+                $this->view->executionID = $projectID;
             }
 
             if(!$project->hasProduct)

@@ -118,6 +118,7 @@ $buildStoryBox = function($props)
                     set::href(createLink('execution', 'linkStory', "executionID={$executionID}")),
                     setClass('text-primary'),
                     isInModal() ? setData('toggle', 'modal') : null,
+                    isInModal() ? setData('size', 'lg') : null,
                     data('lang.execution.linkStory')
                 )
             );

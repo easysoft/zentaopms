@@ -140,8 +140,6 @@ class aiapp extends control
         else if($category === 'latest')    $miniPrograms = $this->aiapp->getLatestMiniPrograms($pager);
         else                               $miniPrograms = $this->ai->getMiniPrograms($category, 'active', 'createdDate_desc', $pager);
 
-        if(empty($miniPrograms)) return $this->locate($this->createLink('aiapp', 'square', array('category' => 'discovery')));
-
         $squareCategoryArray = $this->aiapp->getSquareCategoryArray();
         $usedCategoryArray   = $this->aiapp->getUsedCategoryArray();
 

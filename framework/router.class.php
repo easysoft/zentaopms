@@ -344,16 +344,16 @@ class router extends baseRouter
                 /* Set default story concept and init UR and SR concept. */
                 $lang->URCommon = $URPairs[$config->URSR] ?? reset($URPairs);
                 $lang->SRCommon = $SRPairs[$config->URSR] ?? reset($SRPairs);
-            }
 
-            /* Replace common lang. */
-            $customMenus = array();
-            try
-            {
-                $customMenus = $this->dbQuery('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
+                /* Replace common lang. */
+                $customMenus = array();
+                try
+                {
+                    $customMenus = $this->dbQuery('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
+                }
+                catch(PDOException){}
+                foreach($customMenus as $menu) if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
             }
-            catch(PDOException){}
-            foreach($customMenus as $menu) if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
         }
     }
 

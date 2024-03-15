@@ -147,6 +147,7 @@ $lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCom
 $lang->block->default['scrumproject'][] = array('title' => 'Dynamic',                           'module' => 'scrumproject', 'code' => 'projectdynamic', 'width' => '1');
 
 $lang->block->default['kanbanproject']    = $lang->block->default['scrumproject'];
+unset($lang->block->default['kanbanproject'][2]);
 $lang->block->default['agileplusproject'] = $lang->block->default['scrumproject'];
 
 $lang->block->default['waterfallproject'][] = array('title' => "{$lang->projectCommon}Plan", 'module' => 'waterfallproject', 'code' => 'waterfallgantt', 'width' => '2');

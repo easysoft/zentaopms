@@ -649,4 +649,25 @@ class Project
 
         return $this->project->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
     }
+
+    /**
+     * 更新此项目下或影子产品下的白名单列表。
+     * Update whitelist by project.
+     *
+     * @param  int    $projectID
+     * @param  string $whitelist
+     * @access public
+     * @return string
+     */
+    public function updateWhitelistTest(int $projectID, string $whitelist): string
+    {
+        $project = new stdclass();
+        $project->whitelist = $whitelist;
+
+        $oldProject = $this->project->getByID($projectID);
+        $this->project->updateWhitelist($project, $oldProject);
+        if(dao::isError()) return '';
+        $whitelist = $this->project->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('whitelist');
+        return str_replace(',', '|', $whitelist);
+    }
 }

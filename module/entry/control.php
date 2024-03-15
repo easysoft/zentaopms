@@ -46,9 +46,9 @@ class entry extends control
     {
         if($_POST)
         {
+            if($this->post->freePasswd) unset($this->config->entry->form->create['account']);
             $entry = form::data($this->config->entry->form->create)
                 ->setIF($this->post->allIP === 'on', 'ip', '*')
-                ->setIF($this->post->freePasswd == '1', 'account', '')
                 ->add('createdBy', $this->app->user->account)
                 ->add('createdDate', helper::now())
                 ->remove('allIP')
@@ -79,9 +79,9 @@ class entry extends control
     {
         if($_POST)
         {
+            if($this->post->freePasswd) unset($this->config->entry->form->edit['account']);
             $entry = form::data($this->config->entry->form->edit)
                 ->setIF($this->post->allIP === 'on', 'ip', '*')
-                ->setIF($this->post->freePasswd == '1', 'account', '')
                 ->add('editedBy', $this->app->user->account)
                 ->add('editedDate', helper::now())
                 ->remove('allIP')

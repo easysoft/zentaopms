@@ -23,6 +23,7 @@ zdTable('job')->config('job')->gen(10);
 zdTable('compile')->config('compile')->gen(10);
 su('admin');
 
+libxml_use_internal_errors(true);
 $ci = new ciTest();
 
 r($ci->syncCompileStatusTest(1)) && p('status') && e('created'); // 同步jenkins构建结果

@@ -1029,7 +1029,8 @@ class projectZen extends project
         if(!$project->hasProduct)
         {
             $productID = $this->loadModel('product')->getProductIDByProject($project->id);
-            $this->project->deleteByTableName('zt_product', $productID);
+            $product   = $this->product->getById($productID);
+            if($product->shadow) $this->project->deleteByTableName('zt_product', $productID);
         }
     }
 

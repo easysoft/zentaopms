@@ -186,6 +186,7 @@ class testreportTest
 
         if(dao::isError()) return dao::getError();
 
+        krsort($objects);
         $return = '';
         foreach($objects as $object) $return .= "{$object->name}:{$object->value},";
         return trim($return, ',');
@@ -209,6 +210,7 @@ class testreportTest
         if(dao::isError()) return dao::getError();
 
         $return = '';
+        ksort($objects);
         foreach($objects as $object) $return .= "{$object->name}:{$object->value},";
         return trim($return, ',');
     }

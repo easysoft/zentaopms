@@ -41,15 +41,25 @@ $cols      = $this->loadModel('datatable')->getSetting('productplan');
 $tableData = initTableData($plans, $cols, $this->productplan);
 foreach($tableData as $plan)
 {
+    $otherActions = array();
+    foreach($plan->actions as $i => $action)
+    {
+        if(is_string($action) && strpos($action, 'other:') !== false)
+        {
+            $otherActions = explode(',', str_replace('other:', '', $action));
+            break;
+        }
+    }
+
     $otherActions = array_filter(array_map(function($action) use($plan)
     {
-        if($plan->status == 'doing' && (str_contains($action, 'close') || str_contains($action, 'activate'))) return $action;
-        if($plan->status == 'done' && str_contains($action, 'activate')) return $action;
-        if($plan->status == 'closed' && str_contains($action, 'close')) return $action;
+        if($plan->status == 'doing' && (strpos($action, 'close') !== false || strpos($action, 'activate') !== false)) return $action;
+        if($plan->status == 'done' && strpos($action, 'activate') !== false) return $action;
+        if($plan->status == 'closed' && strpos($action, 'close') !== false) return $action;
         if($plan->status == 'wait') return $action;
         return null;
-    }, explode(',', str_replace('other:', '', $plan->actions[1]))));
-    if($otherActions) $plan->actions[1] = 'other:' . implode(',', $otherActions);
+    }, $otherActions));
+    if($otherActions) $plan->actions[$i] = 'other:' . implode(',', $otherActions);
 }
 
 $canBatchEdit         = common::hasPriv('productplan', 'batchEdit');

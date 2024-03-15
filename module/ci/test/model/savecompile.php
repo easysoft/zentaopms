@@ -26,9 +26,8 @@ $response = '{"_class":"hudson.model.Queue$LeftItem","actions":[{"_class":"hudso
 $hasUrl   = '{"executable":{"url":"https://jenkinsdev.qc.oop.cc/job/paramsJob/lastBuild/"}}';
 $notFound = '404';
 
+libxml_use_internal_errors(true);
 $ci = new ciTest();
 r($ci->saveCompileTest(1, $notFound)) && p() && e('0'); // 错误的接口信息
-
 r($ci->saveCompileTest(3, $response)) && p() && e('0'); // 没有有效信息
-
 r($ci->saveCompileTest(5, $hasUrl))   && p() && e('1'); // 返回请求URL信息

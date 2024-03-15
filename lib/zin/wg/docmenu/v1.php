@@ -395,33 +395,27 @@ class docMenu extends wg
 
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
-        $currentModule = $app->rawModule;
-        $currentMethod = $app->rawMethod;
-
         if(!$settingText) $settingText = $lang->moduleSetting;
-
-        $datatableId = $app->moduleName . ucfirst($app->methodName);
 
         return div
         (
             setClass('col gap-2 py-3 px-7'),
-            $settingLink
-                ? a
+            $settingLink ? a
+            (
+                setClass('btn'),
+                setStyle('background', 'rgb(var(--color-primary-50-rgb))'),
+                setStyle('box-shadow', 'none'),
+                set('data-app', $app->tab),
+                set('data-size', array('width' => '600px', 'height' => '200px')),
+                set('data-toggle', 'modal'),
+                set('data-class-name', 'doc-setting-modal'),
+                set::href($settingLink),
+                span
                 (
-                    setClass('btn'),
-                    setStyle('background', 'rgb(var(--color-primary-50-rgb))'),
-                    setStyle('box-shadow', 'none'),
-                    set('data-app', $app->tab),
-                    set('data-size', array('width' => '600px', 'height' => '200px')),
-                    set('data-toggle', 'modal'),
-                    set::href($settingLink),
-                    span
-                    (
-                        setClass('text-primary'),
-                        $settingText
-                    )
+                    setClass('text-primary'),
+                    $settingText
                 )
-                : null
+            ) : null
         );
     }
 

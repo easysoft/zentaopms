@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 
 namespace zin;
+data('activeMenuID', $storyType);
 jsVar('params', "productID={$productID}&branchID={$branchID}&storyType={$storyType}&browseType={$browseType}&moduleID={$moduleID}");
 jsVar('projectID', $projectID);
 jsVar('storyType', $storyType);

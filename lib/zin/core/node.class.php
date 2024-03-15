@@ -570,9 +570,9 @@ class node implements \JsonSerializable
      * Serialized to JSON string.
      *
      * @access public
-     * @return string
+     * @return mixed
      */
-    public function jsonSerialize(): string
+    public function jsonSerialize(): mixed
     {
         return json_encode($this->toJSON());
     }

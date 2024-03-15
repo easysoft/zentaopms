@@ -1402,6 +1402,19 @@ class treeModel extends model
     }
 
     /**
+     * Create link of practice.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createPracticeLink(string $type, object $module): string
+    {
+        return html::a(helper::createLink('traincourse', 'practicebrowse', "moduleID={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+    }
+
+    /**
      * 生成培训技能的链接。
      * Create link of trainskill.
      *
@@ -1610,16 +1623,21 @@ class treeModel extends model
      * Get parents of a module.
      *
      * @param  int    $moduleID
+     * @param  bool   $queryAll
      * @access public
      * @return array
      */
-    public function getParents(int $moduleID): array
+    public function getParents(int $moduleID, bool $queryAll = false): array
     {
         if($moduleID == 0) return array();
         $path = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq((int)$moduleID)->fetch('path');
         $path = trim($path, ',');
         if(!$path) return array();
-        return $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($path)->andWhere('deleted')->eq(0)->orderBy('grade')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('id')->in($path)
+            ->beginIF(!$queryAll)->andWhere('deleted')->eq(0)->fi()
+            ->orderBy('grade')
+            ->fetchAll();
     }
 
     /**

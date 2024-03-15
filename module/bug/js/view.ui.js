@@ -34,7 +34,7 @@ $(document).on('click', '#toTaskButton', function()
 
 function changeTaskProjects(event)
 {
-    const projectID = event != undefined ?  $(event.target).val() : $('[name="project"]').val();
+    const projectID = event != undefined ?  $(event.target).val() : $('[name="taskProjects"]').val();
     const link      = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID +'&branch=' + branchID + '&number=&executionID=0&from=bugToTask');
     $.get(link, function(data)
     {

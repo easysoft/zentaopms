@@ -4,6 +4,7 @@ declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/message.class.php';
 
+zdTable('lang')->gen(0);
 zdTable('user')->gen(1);
 
 su('admin');
@@ -16,8 +17,12 @@ pid=1
 
 */
 
-$message = new messageTest();
+global $lang, $app, $conifg;
+$lang->SRCommon = '研发需求';
+$app::$loadedLangs = array();
+$app->loadLang('message');
 
+$message = new messageTest();
 $objectActions = $message->getObjectActionsTest();
 
 r($objectActions) && p('product:opened')     && e('创建');       //查询objectType为product的action是opened的lab标签

@@ -18,14 +18,15 @@ $lang->block->finishedTasks = '完成的任务数';
 $lang->block->story = '目标';
 
 $lang->block->storyCount = '目标数';
+$lang->block->projectstatistic->storyPoints = '总目标';
 
 $lang->block->default['full']['my'][] = array('title' => '看板列表', 'module' => 'execution', 'code' => 'scrumlist', 'width' => '2', 'height' => '6', 'left' => '0', 'top' => '45', 'params' => array('type' => 'doing', 'orderBy' => 'id_desc', 'count' => '15'));
 
-$lang->block->modules['kanban'] = new stdclass();
-$lang->block->modules['kanban']->availableBlocks['scrumoverview']  = "{$lang->projectCommon}概况";
-$lang->block->modules['kanban']->availableBlocks['scrumlist']      = $lang->executionCommon . '列表';
-$lang->block->modules['kanban']->availableBlocks['sprint']         = $lang->executionCommon . '总览';
-$lang->block->modules['kanban']->availableBlocks['projectdynamic'] = '最新动态';
+$lang->block->modules['kanbanproject'] = new stdclass();
+$lang->block->modules['kanbanproject']->availableBlocks['scrumoverview']  = "{$lang->projectCommon}概况";
+$lang->block->modules['kanbanproject']->availableBlocks['scrumlist']      = $lang->executionCommon . '列表';
+$lang->block->modules['kanbanproject']->availableBlocks['sprint']         = $lang->executionCommon . '总览';
+$lang->block->modules['kanbanproject']->availableBlocks['projectdynamic'] = '最新动态';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks['project'] = "{$lang->projectCommon}列表";

@@ -161,12 +161,13 @@ class metricModel extends model
 
         $groupHeader = array();
 
-        $groupHeader[] = array('name' => 'date', 'title' => $this->lang->metric->$dateType, 'align' => 'center', 'width' => 96);
+        $groupHeader[] = array('name' => 'date', 'title' => zget($this->lang->metric, $dateType, ''), 'align' => 'center', 'width' => 96);
         $groupHeader[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'align' => 'center', 'width' => 68);
         $groupData   = array();
 
         foreach($data as $dataInfo)
         {
+            $date = '';
             if($dateType == 'year')
             {
                 $date = substr($dataInfo->$dateField, 0, 4);

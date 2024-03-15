@@ -184,7 +184,7 @@ class pipelineModel extends model
 
         $this->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
 
-        $this->loadModel('action')->create($type, $id, 'deleted', '');
+        $this->loadModel('action')->create($type, $id, 'deleted', '', 1);
         return $this->dao->lastInsertID();
     }
 

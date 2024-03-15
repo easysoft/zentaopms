@@ -119,6 +119,8 @@ foreach($hasViewPriv as $type => $bool)
             set::onRenderCell(jsRaw('window.renderCell')),
             set::cols(array_values($config->block->{$configType}->dtable->fieldList)),
             set::data(array_values($data)),
+            $type == 'bug' ? set::priList($lang->{$type}->priList) : null,
+            $type == 'bug' ? set::severityList($lang->{$type}->severityList) : null,
             set::userMap($users)
         )
     );

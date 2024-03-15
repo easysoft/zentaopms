@@ -1417,10 +1417,11 @@ class testcaseZen extends testcase
      * 构建导入用例的数据。
      * Build cases for showing imported.
      *
+     * @param  int       $productID
      * @access protected
      * @return array
      */
-    protected function buildCasesForShowImport(): array
+    protected function buildCasesForShowImport(int $productID): array
     {
         /* 初始化变量。 */
         /* Initialize variables. */
@@ -1444,6 +1445,7 @@ class testcaseZen extends testcase
                 $stepChanged = $this->buildUpdateCaseForShowImport($case, $oldCase, zget($oldSteps, $case->rawID, array()), $forceNotReview);
 
                 $case->id             = $case->rawID;
+                $case->product        = $productID;
                 $case->lastEditedBy   = $account;
                 $case->lastEditedDate = $now;
                 if($case->story != $oldCase->story) $case->storyVersion = zget($storyVersionPairs, $case->story, 1);
@@ -1455,6 +1457,7 @@ class testcaseZen extends testcase
             /* Build inserted case. */
             else
             {
+                $case->product        = $productID;
                 $case->version    = 1;
                 $case->openedBy   = $this->app->user->account;
                 $case->openedDate = $now;
@@ -1983,6 +1986,7 @@ class testcaseZen extends testcase
     protected function importCases(array $cases): void
     {
         $this->loadModel('action');
+        $daoErrors = array();
         foreach($cases as $case)
         {
             if(isset($case->id))
@@ -2001,9 +2005,10 @@ class testcaseZen extends testcase
             else
             {
                 $caseID = $this->testcase->create($case);
-                $this->testcase->syncCase2Project($case, $caseID);
+                dao::isError() ? $daoErrors = array_merge($daoErrors, dao::getError()) : $this->testcase->syncCase2Project($case, $caseID);
             }
         }
+        if(!empty($daoErrors)) dao::$errors = $daoErrors;
     }
 
     /**
@@ -2773,28 +2778,39 @@ class testcaseZen extends testcase
 
         if(isset($relatedSteps[$case->id]))
         {
-            $i = $childID = 0;
+            $preGrade      = 1;
+            $parentSteps   = array();
+            $key           = array(0, 0, 0);
             foreach($relatedSteps[$case->id] as $step)
             {
-                $stepID = 0;
-                if($step->type == 'group' || $step->type == 'step')
+                $grade = 1;
+                $parentSteps[$step->id] = $step->parent;
+                if(isset($parentSteps[$step->parent])) $grade = isset($parentSteps[$parentSteps[$step->parent]]) ? 3 : 2;
+
+                if($grade > $preGrade)
                 {
-                    $i ++;
-                    $childID = 0;
-                    $stepID  = $i;
+                    $key[$grade - 1] = 1;
                 }
                 else
                 {
-                    $stepID = $i . '.' . $childID;
+                    if($grade < $preGrade)
+                    {
+                        if($grade < 2) $key[1] = 0;
+                        if($grade < 3) $key[2] = 0;
+                    }
+                    $key[$grade - 1] ++;
                 }
 
-                if($step->version != $case->version) continue;
+                $stepID = implode('.', $key);
+                $stepID = str_replace('.0', '', $stepID);
+                $stepID = str_replace('.0', '', $stepID);
 
                 $sign = (in_array($this->post->fileType, array('html', 'xml'))) ? '<br />' : "\n";
                 $case->stepDesc   .= $stepID . ". " . htmlspecialchars_decode($step->desc) . $sign;
                 $case->stepExpect .= $stepID . ". " . htmlspecialchars_decode($step->expect) . $sign;
                 $case->real       .= $stepID . ". " . (isset($result[$step->id]) ? $result[$step->id]['real'] : '') . $sign;
-                $childID ++;
+
+                $preGrade = $grade;
             }
         }
         $case->stepDesc   = trim($case->stepDesc);
@@ -3113,7 +3129,11 @@ class testcaseZen extends testcase
         /* Get the content list from the zip file. */
         $files      = $zip->listContent();
         $removePath = $files[0]['filename'];
-        if($zip->extract(PCLZIP_OPT_PATH, $filePath, PCLZIP_OPT_REMOVE_PATH, $removePath) === 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
+
+        /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
+        /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
+        $extractFiles = array('content.xml', 'content.json');
+        if($zip->extract(PCLZIP_OPT_PATH, $filePath, PCLZIP_OPT_BY_NAME, $extractFiles, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         $this->classFile->removeFile($tmpFile);
 

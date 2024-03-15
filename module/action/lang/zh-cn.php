@@ -68,7 +68,7 @@ $lang->action->hasCreatedTask     = '该父阶段已创建任务，无法恢复�
 $lang->action->hasDeletedParent   = '恢复该阶段需要同时恢复已删除的父阶段%s，';
 $lang->action->hasChangedAttr     = '恢复后阶段类型将根据父阶段类型均调整为“%s”，';
 $lang->action->whetherToRestore   = '是否恢复？';
-$lang->action->undeleteModuleTip  = '子目录恢复后，会同步恢复他的上级目录。';
+$lang->action->undeleteModuleTip  = '子目录恢复后，会同步恢复他的上级目录，确认要恢复吗？';
 $lang->action->undeleteTaskTip    = '该任务所属执行已删除，还原后不能看到该任务，是否继续还原任务？';
 
 $lang->action->hasOtherType = array();

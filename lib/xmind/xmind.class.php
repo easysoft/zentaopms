@@ -125,12 +125,21 @@ class xmind
         {
             if(empty($case->testcaseID)) continue;
 
-            if(isset($sceneNodes[$case->sceneID])) $parentNode = $sceneNodes[$case->sceneID];
-
-            if(!isset($parentNode)) $parentNode = $moduleNodes[$case->moduleID];
-            if(!isset($parentNode)) $parentNode = $productNode;
-
-            $this->createOneTestcaseNode($case, $xmlDoc, $context, $parentNode);
+            if($case->sceneID && isset($sceneNodes[$case->sceneID]))
+            {
+                $this->createOneTestcaseNode($case, $xmlDoc, $context, $sceneNodes[$case->sceneID]);
+            }
+            else
+            {
+                if($case->moduleID && isset($moduleNodes[$case->moduleID]))
+                {
+                    $this->createOneTestcaseNode($case, $xmlDoc, $context, $moduleNodes[$case->moduleID]);
+                }
+                else
+                {
+                    $this->createOneTestcaseNode($case, $xmlDoc, $context, $productNode);
+                }
+            }
         }
     }
 

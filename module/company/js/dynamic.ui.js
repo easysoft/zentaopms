@@ -21,3 +21,8 @@ function toggleCollapse()
 {
     $(this).parent().toggleClass('collapsed');
 }
+
+if(browseType == 'bysearch')
+{
+    window.waitDom('.search-form-toggle', function(){ this[0].click(); });
+}

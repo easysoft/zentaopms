@@ -71,15 +71,22 @@ window.initTime = function(e)
     if(isBegin)
     {
         let endValue = '';
-        items.forEach(function(item, timeIndex)
+        if(!value)
         {
-            if(item.value == value)
+            endValue = items[0].value;
+        }
+        else
+        {
+            items.forEach(function(item, timeIndex)
             {
-                endIndex = timeIndex + 3;
-                endValue = items.length <= endIndex ? value : items[endIndex].value;
-                return;
-            }
-        });
+                if(item.value == value)
+                {
+                    endIndex = timeIndex + 3;
+                    endValue = items.length <= endIndex ? '' : items[endIndex].value;
+                    return;
+                }
+            });
+        }
         $end.zui('picker').$.setValue(endValue);
         if(typeof endIndex != 'undefined') value = endIndex;
     }

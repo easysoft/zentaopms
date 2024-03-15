@@ -597,8 +597,8 @@ class gitlabModel extends model
         $result  = commonModel::http($url . "&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true", null, array(), array(), 'data', 'GET', 30, true, false);
 
         $header     = $result['header'];
-        $recTotal   = $header['X-Total'];
-        $recPerPage = $header['X-Per-Page'];
+        $recTotal   = zget($header, 'X-Total', $header['x-total']);
+        $recPerPage = zget($header, 'X-Per-Page', $header['x-per-page']);
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pager->pageID);

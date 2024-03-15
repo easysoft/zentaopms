@@ -1014,14 +1014,12 @@ class projectTao extends projectModel
         {
             unset($lang->project->menu->projectplan);
             unset($lang->project->menu->settings['subMenu']->module);
-            if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
-            return true;
         }
 
         $projectProduct = (int)$this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
         if(isset($lang->project->menu->settings['subMenu']->module['link'])) $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
-        if(in_array($model, $this->config->project->scrumList)) $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
+        if(!$hasProduct && in_array($model, $this->config->project->scrumList)) $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
 
         /* Init story dropdown for project secondary meun. */
         if($model !== 'kanban' && !empty($this->config->URAndSR) && isset($lang->project->menu->storyGroup))
@@ -1034,7 +1032,7 @@ class projectTao extends projectModel
             if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'requirement') $lang->project->menu->story['dropMenu']->requirement['subModule'] .= ',projectstory,story';
         }
 
-        unset($lang->project->menu->settings['subMenu']->products);
+        if(!$hasProduct) unset($lang->project->menu->settings['subMenu']->products);
         if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
         if(!in_array($model, $this->config->project->scrumList)) unset($lang->project->menu->projectplan);
         return true;
@@ -1054,7 +1052,7 @@ class projectTao extends projectModel
     {
         global $lang;
         /* Single execution and has no product project menu. */
-        if(!$project->hasProduct && !$project->multiple && !empty($this->config->URAndSR) && isset($lang->$navGroup->menu->storyGroup))
+        if(!$project->multiple && !empty($this->config->URAndSR) && isset($lang->$navGroup->menu->storyGroup))
         {
             $lang->$navGroup->menu->story = $lang->$navGroup->menu->storyGroup;
             $lang->$navGroup->menu->story['link'] = sprintf($lang->$navGroup->menu->storyGroup['link'], '%s', $project->id);

@@ -25,7 +25,7 @@ $action->objectType->range('bug');
 $action->objectID->range('1,2');
 $action->actor->range('admin');
 $action->action->range('opened');
-$action->date->range('20230102 000000:0')->type('timestamp')->format('YYYY-MM-DD hh::mm::ss');
+$action->date->range('20230102 000000:0')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
 $action->comment->prefix('创建bug')->range('1,2');
 $action->gen(2);
 

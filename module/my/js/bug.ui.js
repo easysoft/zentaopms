@@ -41,5 +41,5 @@ window.setStatistics = function(element, checks)
 {
     if(checks.length) return checkedSummary.replace('{checked}', checks.length);
 
-    return element.options.customData.pageSummary;
+    return element.options.customData ? element.options.customData.pageSummary : null;
 }

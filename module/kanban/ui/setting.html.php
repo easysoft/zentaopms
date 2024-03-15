@@ -91,7 +91,7 @@ formPanel
     ),
     formRow
     (
-        set::style(array('margin-top' => '0px')),
+        set::style(array('margin-top' => '0px', 'display' => $enableImport == 'off' ? 'none' : 'block')),
         setID('objectBox'),
         formGroup
         (

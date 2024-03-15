@@ -334,7 +334,7 @@ class testcase extends control
         $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->batchCreate;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : $branch);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' ? '0' : $branch);
         $this->view->currentSceneID   = 0;
         $this->view->branch           = $branch;
         $this->view->needReview       = $this->testcase->forceNotReview() == true ? 0 : 1;
@@ -1198,7 +1198,7 @@ class testcase extends control
 
         if($_POST)
         {
-            $cases = $this->testcaseZen->buildCasesForShowImport();
+            $cases = $this->testcaseZen->buildCasesForShowImport($productID);
             $cases = $this->testcaseZen->checkCasesForShowImport($cases);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

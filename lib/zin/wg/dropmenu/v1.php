@@ -111,7 +111,7 @@ class dropmenu extends wg
                         $branchName = $app->control->branch->getByID((string)$branchID);
                     }
                     if($module == 'testtask' && $method == 'browse') $extra = data('type');
-                    if(($app->moduleName == 'tree' && $app->methodName == 'browse') || ($module == 'tree' || $method == 'browse'))
+                    if($app->moduleName == 'tree' && $app->methodName == 'browse')
                     {
                         $module = 'tree';
                         $method = 'browse';
@@ -162,6 +162,11 @@ class dropmenu extends wg
         {
             $object = $app->control->loadModel($tab)->getByID((int)$objectID);
             $text   = $object ? $object->name : '';
+            if($tab == 'execution' && !$object->hasProduct)
+            {
+                $project = $app->control->loadModel('project')->getByID((int)$object->project);
+                $text = $project->name . ' / ' . $text;
+            }
         }
 
         /* 如果是产品的 1.5 级导航，把当前产品的类型存入 session 以供后面使用。*/

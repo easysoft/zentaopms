@@ -15,6 +15,7 @@ namespace zin;
 data('storyType', $storyType);
 data('activeMenuID', $storyType);
 jsVar('URChanged', $this->lang->story->URChanged);
+jsVar('vision', $config->vision);
 
 $storyCommon       = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;
 $isProjectStory    = $this->app->rawModule == 'projectstory';
@@ -126,7 +127,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 };
 
 /* Build link story button. */
-$fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProduct, $project)
+$fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProduct, $project, $storyType)
 {
     if(!common::canModify('product', $product)) return null;
 
@@ -144,9 +145,11 @@ $fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProdu
         )));
     }
 
+    if($storyType == 'requirement') $lang->execution->linkStory = str_replace($lang->SRCommon, $lang->URCommon, $lang->execution->linkStory);
+
     $canLinkStory     = common::hasPriv('projectstory', 'linkStory');
-    $canlinkPlanStory = !empty($product) && common::hasPriv('projectstory', 'importPlanStories');
-    $linkStoryUrl     = $this->createLink('projectstory', 'linkStory', "project=$project->id");
+    $canlinkPlanStory = !empty($product) && common::hasPriv('projectstory', 'importPlanStories') && $storyType == 'story';
+    $linkStoryUrl     = $this->createLink('projectstory', 'linkStory', "project=$project->id&browseType=&param=0&recTotal=0&recPerPage=50&pageID=1&storyType=$storyType");
     $linkItem         = array('text' => $lang->execution->linkStory, 'url' => $linkStoryUrl);
     $linkPlanItem     = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
     if($canLinkStory && $canlinkPlanStory)
@@ -190,6 +193,7 @@ $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyC
 foreach($stories as $story)
 {
     $story->rawModule    = $story->module;
+    $story->from         = $app->tab;
     $options['branches'] = zget($branchOptions, $story->product, array());
     $data[] = $this->story->formatStoryForList($story, $options, $storyType);
     if(!isset($story->children)) continue;
@@ -197,6 +201,7 @@ foreach($stories as $story)
     /* Children. */
     foreach($story->children as $key => $child)
     {
+        if($app->rawModule == 'projectstory' && $child->project != $story->project) continue;
         $child->rawModule = $child->module;
         $data[] = $this->story->formatStoryForList($child, $options, $storyType);
     }
@@ -322,7 +327,7 @@ featureBar
 
 toolbar
 (
-    (!hasPriv('story', 'report') || !$productID) ? null : item(set(array('id' => 'reportBtn', 'text' => $lang->story->report->common, 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => helper::createLink('story', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID" . ($app->tab == 'project' ? '#app=project' : ''))))),
+    (!hasPriv('story', 'report') || !$productID) ? null : item(set(array('id' => 'reportBtn', 'text' => $lang->story->report->common, 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => helper::createLink('story', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID") . ($app->tab == 'project' ? '#app=project' : '')))),
     !hasPriv('story', 'export') ? null : item(set(array('id' => 'exportBtn', 'text' => $lang->export, 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType"), 'data-toggle' => 'modal'))),
     $fnBuildCreateStoryButton(),
     $fnBuildLinkStoryButton()
@@ -358,25 +363,6 @@ modal(set::id('#batchUnlinkStoryBox'));
 $linkStoryByPlanTips = $lang->execution->linkNormalStoryByPlanTips;
 if($product && $product->type != 'normal') $linkStoryByPlanTips = sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->product->branchName[$product->type]);
 if($isProjectStory) $linkStoryByPlanTips = str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
-
-if($app->tab == 'project')
-{
-    $projectPlans = array();
-    foreach($products as $product)
-    {
-        if(empty($product->plans)) continue;
-
-        foreach($product->plans as $planIDList)
-        {
-            $planIDList = explode(',', $planIDList);
-            foreach($planIDList as $plan)
-            {
-                if(in_array($plan, array_keys($plans))) $projectPlans[$plan] = $plans[$plan];
-            }
-        }
-    }
-    $plans = $projectPlans;
-}
 
 modal
 (
