@@ -9,6 +9,7 @@ class result
     public function setPage(&$page)
     {
         $this->pageObject = $page;
+        $this->getPageInfo();
     }
 
     public function getPageInfo()
@@ -30,9 +31,10 @@ class result
         else
         {
             $path = $parseURL['path'];
-            $pathParts = explode('/', trim($path, '/'));
-            $module = $pathParts[0];
-            $method = $pathParts[1];
+            $pathParts = explode('-', trim($path, '/'));
+
+            $module = str_replace('.html', '', $pathParts[0]);
+            $method = str_replace('.html', '', $pathParts[1]);
         }
 
         $this->pageInfo['url']    = $url;
@@ -61,7 +63,7 @@ class result
         $result = array();
         $result['errors'] = $this->errors;
         $result['page']   = $this->pageObject;
-        $result['url']    = $this->pageInfo['module'] . '-' . $this->pageInfo['method'];
+        $result['url']    = isset($this->pageInfo['module']) && isset($this->pageInfo['method']) ? $this->pageInfo['module'] . '-' . $this->pageInfo['method'] : '';
         $result['status'] = $this->status;
 
         return $param ? zget($result, $param, '') : $result;

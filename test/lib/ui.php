@@ -27,8 +27,8 @@ include 'yaml.class.php';
  */
 function r($result)
 {
-    global $_result;
-    $_result = $result;
+    global $_result, $result;
+    $_result = $result->get();
     return true;
 }
 
@@ -42,9 +42,10 @@ function r($result)
  */
 function p($keys = '', $delimiter = ',')
 {
-    global $_result;
+    global $_result, $result;
 
     if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
+    if($keys == 'url')  return print($result->get('url') . PHP_EOL);
 
     if(is_array($_result) && isset($_result['code']) && $_result['code'] == 'fail') return print((string) $_result['message'] . "\n");
 
@@ -228,18 +229,19 @@ class tester
     {
         if($this->config->requestType == 'GET')
         {
-            $url = "/index.php?m=$module&f=$method";
+            $url = "index.php?m=$module&f=$method";
             if(!empty($params)) foreach($params as $key => $value) $url .= "&$key=$value";
         }
         else
         {
-            $url = "/$module-$method";
+            $url = "$module-$method";
             if(!empty($params)) foreach($params as $value) $url .= "-$value";
             $url .= ".html";
         }
 
         $this->page->go($url); // 跳转到地址
         $appIframeID = $iframeID ? $iframeID : "appIframe-{$module}";
+        $this->page->wait(1);
         $this->page->getErrors($appIframeID);
 
         return $this->setPage($module, $method);
@@ -249,8 +251,8 @@ class tester
     {
         global $result;
 
-        include dirname(__FILE__, 2). "/ui/$module/page/$method.php";
         $pageClass = "{$method}Page";
+        if(!class_exists($pageClass))include dirname(__FILE__, 2). "/ui/$module/page/$method.php";
 
         $methodPage = new $pageClass();
         $result->setPage($methodPage);
