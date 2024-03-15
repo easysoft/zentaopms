@@ -1059,10 +1059,10 @@ class productModel extends model
 
         $stats = $this->getStatsProducts($productIdList, $programID == 0, $orderBy, $pager);
 
-        $latestReleases       = $this->productTao->getStatisticByType($productIdList, 'latestReleases');
-        $projectCountPairs    = $this->productTao->getProjectCountPairs($productIdList);
-        $executionCountPairs  = $this->productTao->getExecutionCountPairs($productIdList);
-        $coveragePairs        = $this->getCaseCoveragePairs($productIdList);
+        $latestReleases      = $this->productTao->getStatisticByType($productIdList, 'latestReleases');
+        $projectCountPairs   = $this->productTao->getProjectCountPairs($productIdList);
+        $executionCountPairs = $this->productTao->getExecutionCountPairs($productIdList);
+        $coveragePairs       = $this->getCaseCoveragePairs($productIdList);
 
         foreach($stats as $product)
         {
@@ -1568,7 +1568,7 @@ class productModel extends model
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(strpos($status, 'nowait') !== false)->andWhere('t1.status')->ne('wait')->fi()
-            ->beginIF(!in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
+            ->beginIF(strpos($status, '|') === false && !in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
             ->beginIF($status == 'involved')
             ->andWhere('t1.PO', true)->eq($this->app->user->account)
             ->orWhere('t1.QD')->eq($this->app->user->account)
