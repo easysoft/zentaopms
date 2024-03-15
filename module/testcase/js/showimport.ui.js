@@ -1,33 +1,32 @@
-window.handleRenderRow = function($row, index, row)
+window.renderRowCol = function($result, col, row)
 {
-    if(!row) return false;
-
-    if(row.rawID == '') row.rawID = index + 1;
-    let stepDesc   = "<input class='hidden' type='text' name='product[" + row.rawID + "]' value='" + productID + "'/>";
-    let stepExpect = '';
-
-    if(!stepData[index]) return false;
-
-    const descs  = stepData[index]['desc'];
-    const expect = stepData[index]['expect'];
-    if(descs.length)
+    if(col.name == 'steps')
     {
-        $.each(descs, function(id, desc)
-        {
-            if(!desc.content) return;
-            stepDesc   += "<div class='flex col'><div class='cell flex border p-2'><div class='cell center'><input class='hidden' type='text' name='stepType[" + row.rawID + "][" + desc.number + "]' value='" + desc.type + "' /><span>" + desc.number + "、</span></div><div class='cell center flex-1'><textarea class='form-control form-batch-input' rows='10' name='desc[" + row.rawID + "][" + desc.number + "]' style='min-height: 32px; height:2rem;'>" + desc.content + "</textarea></div></div></div>";
-            stepExpect += "<div class='flex col'><div class='cell flex border p-2'><textarea class='form-control form-batch-input " + (desc.type != 'group' ? '' : 'disabled') + "'" + (desc.type != 'group' ? '' : 'readonly=readonly') + "' rows='10' name='expect[" + row.rawID + "][" + desc.number + "]' style='min-height: 32px; height:2rem;'>" + (expect[id]['content'] ? expect[id]['content'] : '') + "</textarea></div></div></div>";
-        })
-    }
-    else
-    {
-        stepDesc   += "<div class='flex col'><div class='cell flex border p-2'><div class='cell center'><input class='hidden' type='text' name='stepType[" + row.rawID + "][1]' value='step' /><span>1、</span></div><div class='cell center flex-1'><textarea class='form-control form-batch-input' rows='10' name='desc[" + row.rawID + "][1]' style='min-height: 32px; height:2rem;'></textarea></div></div></div>";
-        stepExpect += "<div class='flex col'><div class='cell flex border p-2'><textarea class='form-control form-batch-input' rows='10' name='expect[" + row.rawID + "][1]'  style='min-height: 32px; height:2rem;'></textarea></div></div>";
-    }
+        $result.empty();
+        const index = $result.closest('tr').attr('data-index');
+        $.each(stepData[index]['desc'], function(i, desc){
+            const stepIndex = desc.number;
+            $result.append('<div class="input-group step-box mb-2 gap-x-2"><span class="w-8 flex-none">' + stepIndex + '</span></div>');
+            $result.find('.step-box').last().append('<input type="hidden" name="stepType[' + (parseInt(index) + 1) + '][' + stepIndex + ']" id="stepType' + index + stepIndex + '" value="' + desc.type + '"></input>');
+            $result.find('.step-box').last().append('<div class="input-group mb-2 gap-x-2 w-full"></div>');
 
+            const $currentInputGroup = $result.find('.step-box').last().find('.input-group');
 
-    $row.find('td[data-name=stepDesc]').html(stepDesc);
-    $row.find('td[data-name=stepExpect]').html(stepExpect);
+            $currentInputGroup.last().append('<textarea name="desc[' + (parseInt(index) + 1) + '][' + stepIndex + ']" id="desc' + index + stepIndex + '" class="form-control w-1/2"></textarea>');
+            $currentInputGroup.last().find('textarea').val(desc.content);
+
+            const expect = stepData[index]['expect'][i];
+            if(expect.type != 'group')
+            {
+                $currentInputGroup.append('<textarea name="expect[' + (parseInt(index) + 1) + '][' + stepIndex + ']" id="expect' + index + stepIndex + '" class="form-control w-1/2"></textarea>');
+                $currentInputGroup.find('textarea[name^=expect]').val(expect.content);
+            }
+            else
+            {
+                $currentInputGroup.append('<div class="w-1/2"></div>');
+            }
+        });
+    }
 }
 
 function computeImportTimes()

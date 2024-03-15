@@ -1776,7 +1776,7 @@ class testcaseZen extends testcase
     {
         if($this->config->edition != 'open')
         {
-            $extendFields = $this->getFlowExtendFields();
+            $extendFields = $this->testcase->getFlowExtendFields();
             $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
 
             foreach($extendFields as $extendField)
@@ -2270,8 +2270,8 @@ class testcaseZen extends testcase
 
         if($this->post->isEndPage)
         {
-            if(file_exists($_SESSION['fileImport'])) unlink($tmpFile);
-            unset($_SESSION['fileImport']);
+            if(!empty($_SESSION['fileImport']) && file_exists($_SESSION['fileImport'])) unlink($tmpFile);
+            if(!empty($_SESSION['fileImport'])) unset($_SESSION['fileImport']);
             $locateLink = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}&productID={$productID}") : inlink('browse', "productID={$productID}");
         }
         else

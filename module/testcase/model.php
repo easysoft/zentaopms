@@ -1467,11 +1467,8 @@ class testcaseModel extends model
     public function processDatas($datas)
     {
         if(isset($datas->datas)) $datas = $datas->datas;
-        $columnKey  = array();
-        $caseData   = array();
         $stepData   = array();
         $stepVars   = 0;
-
         foreach($datas as $row => $cellValue)
         {
             foreach($cellValue as $field => $value)
@@ -1537,6 +1534,7 @@ class testcaseModel extends model
                                 $num = key($stepData[$row]['desc']); $caseStep[$num]['content'] = $step;
                             }
                         }
+                        $caseStep[$num]['number'] = $num;
                     }
 
                     unset($num);
