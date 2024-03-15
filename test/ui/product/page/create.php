@@ -13,8 +13,10 @@ class createPage extends Page
 
     public function submit()
     {
-        global $lang;
-        $this->btn($lang->product->addBtn)->click();
+        global $lang, $result;
+        $this->btn($lang->product->saveBtn)->click();
+        sleep(1);
+        $result->getPageInfo();
 
         return $this;
     }
