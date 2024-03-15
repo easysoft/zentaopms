@@ -82,6 +82,8 @@ dtable
 (
     setID('metricList'),
     set::userMap($users),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('metric', 'browse', "scope={$scope}&stage={$stage}&param={$param}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::cols($cols),
     set::data($tableData),
     set::onRenderCell(jsRaw('window.onRenderCell')),
