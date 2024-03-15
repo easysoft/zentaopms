@@ -72,7 +72,7 @@ class index extends control
      * @access public
      * @return void
      */
-    public function iframeModal(string $url = '')
+    public function ajaxIframeModal(string $url = '')
     {
         $this->view->url = helper::safe64Decode($url);
         $this->display();
