@@ -42,7 +42,7 @@ $tableData = initTableData($plans, $cols, $this->productplan);
 foreach($tableData as $plan)
 {
     $otherActions = array();
-    foreach($plan->actions as $action)
+    foreach($plan->actions as $i => $action)
     {
         if(is_string($action) && strpos($action, 'other:') !== false)
         {
@@ -59,7 +59,7 @@ foreach($tableData as $plan)
         if($plan->status == 'wait') return $action;
         return null;
     }, $otherActions));
-    if($otherActions) $plan->actions[1] = 'other:' . implode(',', $otherActions);
+    if($otherActions) $plan->actions[$i] = 'other:' . implode(',', $otherActions);
 }
 
 $canBatchEdit         = common::hasPriv('productplan', 'batchEdit');
