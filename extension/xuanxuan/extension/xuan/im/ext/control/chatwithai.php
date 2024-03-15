@@ -3,7 +3,7 @@ helper::import('../../control.php');
 
 class myIm extends im
 {
-    public function chatWithAi($modelId, $text, $userID = 0, $version = '', $device = 'desktop')
+    public function chatWithAi($modelId, $userID = 0, $version = '', $device = 'desktop')
     {
         $user = $this->im->user->getByID($userID);
 
@@ -21,9 +21,16 @@ class myIm extends im
         $aiModel = $this->loadModel('ai')->getLanguageModel($modelId);
         if(!$aiModel || $aiModel->enabled == 0) return false;
 
-        $messages = $this->ai->converse($modelId, array(
-            (object)array('role' => 'user', 'content' => $text),
-        ));
+        $context = $this->im->getAiChatLatestContext($modelId, $userID);
+
+        $context = array_map(function($message) use ($userID) {
+            return (object)array(
+                'role'    => $message->user == $userID ? 'user' : 'assistant',
+                'content' => $message->content,
+            );
+        }, $context);
+
+        $messages = $this->ai->converse($modelId, $context);
 
         if(!$messages)
         {
@@ -40,7 +47,7 @@ class myIm extends im
         $replyMessage->gid         = imModel::createGID();
         $replyMessage->cgid        = $chatGid;
         $replyMessage->user        = "ai-{$modelId}";
-        $replyMessage->content     = current($messages);
+        $replyMessage->content     = end($messages);
         $replyMessage->type        = 'normal';
         $replyMessage->contentType = 'text';
 

@@ -281,4 +281,28 @@ class xuanxuanIm extends imModel
 
         return $notificationData;
     }
+
+    public function getAiChatLatestContext($moduleId, $userId)
+    {
+        // use the last broadcast message as the divider
+        $lastDivider = $this->dao->select('*')->from(TABLE_IM_MESSAGE)
+            ->where('cgid')->eq("$userId&ai-{$moduleId}")
+            ->andWhere('type')->eq('broadcast')
+            ->orderBy('id desc')
+            ->limit(1)
+            ->fetch();
+        if($lastDivider)
+        {
+            $messages = $this->dao->select('*')->from(TABLE_IM_MESSAGE)
+                ->where('cgid')->eq("$userId&ai-{$moduleId}")
+                ->andWhere('id')->gt($lastDivider->id)
+                ->orderBy('id asc')
+                ->fetchAll();
+        } else {
+            $messages = $this->dao->select('*')->from(TABLE_IM_MESSAGE)
+                ->where('cgid')->eq("$userId&ai-{$moduleId}")
+                ->fetchAll();
+        }
+        return $messages;
+    }
 }
