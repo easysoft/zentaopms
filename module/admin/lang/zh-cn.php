@@ -121,6 +121,7 @@ $lang->admin->setModule->OA             = '办公';
 $lang->admin->setModule->deploy         = '运维';
 $lang->admin->setModule->traincourse    = '学堂';
 $lang->admin->setModule->setCode        = '代号';
+$lang->admin->setModule->measrecord     = '度量';
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common                   = '安全策略';
