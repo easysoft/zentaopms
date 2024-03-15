@@ -333,7 +333,7 @@ class product extends control
             unset($this->config->product->search['fields']['stage']);
         }
 
-        if($storyType == 'story') unset($this->config->product->search['fields']['roadmap']);
+        if($this->config->edition != 'ipd' || $storyType == 'story') unset($this->config->product->search['fields']['roadmap']);
 
         $project = $this->loadModel('project')->getByID($projectID);
         if(isset($project->hasProduct) && empty($project->hasProduct))
