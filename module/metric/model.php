@@ -1030,6 +1030,8 @@ class metricModel extends model
             'suffix' => array()
         );
 
+        if($metric->builtin === '1') return $menuList;
+
         $stage = $metric->stage;
 
         if($stage == 'wait' and common::haspriv('metric', 'edit'))
@@ -1041,7 +1043,7 @@ class metricModel extends model
             $menuList['suffix']['edit'] = $editAction;
         }
 
-        if($stage == 'wait' and common::haspriv('metric', 'implement') and !$this->isOldMetric($metric) and $metric->builtin === '0')
+        if($stage == 'wait' and common::haspriv('metric', 'implement') and !$this->isOldMetric($metric))
         {
             $menuList['main']['implement'] = $this->config->metric->actionList['implement'];
         }
@@ -1051,7 +1053,7 @@ class metricModel extends model
             $menuList['main']['delist'] = $this->config->metric->actionList['delist'];
         }
 
-        if(!$metric->builtin and common::haspriv('metric', 'delete'))
+        if(common::haspriv('metric', 'delete'))
         {
             $menuList['suffix']['delete'] = $this->config->metric->actionList['delete'];
         }
