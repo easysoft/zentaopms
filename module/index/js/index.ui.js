@@ -1,31 +1,3 @@
-/**
- * @typedef {Object} ZentaoApp
- * @property {string} code
- * @property {string} icon
- * @property {string} url
- * @property {string} text
- * @property {string} title
- * @property {boolean} active
- * @property {string} group
- * @property {string} moduleName
- * @property {string} methodName
- * @property {string} vars
- * @property {boolean} [external]
- * @property {boolean} [opened]
- * @typedef {Object} ZentaoOpenedProps
- * @property {true} opened
- * @property {HTMLIFrameElement} iframe
- * @property {number} zIndex
- * @property {string} currentTitle
- * @property {string} currentUrl
- * @property {number} [zIndex]
- * @property {HTMLIframe} iframe
- * @property {jQuery<HTMLDivElement>} $app
- * @property {jQuery<HTMLLIElement>} $bar
- * @typedef {ZentaoApp & ZentaoOpenedProps} ZentaoOpenedApp
- */
-
-
 /* Init variables */
 const apps =
 {
