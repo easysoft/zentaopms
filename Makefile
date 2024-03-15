@@ -177,6 +177,7 @@ zentaoxx:
 	sed -i "s/.*->getRoleList();/\$$depts = \$$this->im->loadModel('dept')->getDeptPairs();\n\$$deptList = array_map(function(\$$k, \$$v) {return (object)array('id' => \$$k, 'name' => \$$v);}, array_keys(\$$depts), \$$depts);\n\$$roleList = \$$this->im->lang->user->roleList;/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	echo "\$$config->xuanxuan->enabledMethods['im']['getaipermission'] = 'getAiPermission';" >> zentaoxx/config/ext/_0_xuanxuan.php
 	echo "\$$config->xuanxuan->enabledMethods['im']['chatwithai'] = 'chatWithAi';" >> zentaoxx/config/ext/_0_xuanxuan.php
+	echo "\$$config->xuanxuan->enabledMethods['im']['clearaichatcontext'] = 'clearAiChatContext';" >> zentaoxx/config/ext/_0_xuanxuan.php
 	find zentaoxx/extension/xuan/ -name '*.php' -exec sed -i -r 's|->ne(["'\'']0000-00-00 00:00:00["'\''])|->notZeroDatetime()|g; s|["'\'']\)->eq\(["'\'']0000-00-00( 00:00:00)?| is null|g; s|([=!]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|([^!=]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|(["'\''])(,.*)\)->eq\(["'\'']0000-00-00( 00:00:00)?["'\'']| is null\1\2|g; s|["'\'']0000-00-00 00:00:00["'\'']|null|g' {} +
 	mkdir zentaoxx/misc; cp misc/cn2tw.php zentaoxx/misc; cd zentaoxx/misc; php cn2tw.php
 	cp misc/en2other.php zentaoxx/misc; cd zentaoxx/misc; php en2other.php ../
