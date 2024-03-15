@@ -23,7 +23,7 @@ $(document).on('shown', '.modal', function()
         if(!$(this).find('.modal-actions>[data-dismiss="modal"]').length) parent.$('iframe[name="' + window.name + '"]').closest('.modal-dialog').find('.modal-header>.close').show();
     }, 500);
 });
-$('body').on('click', '[data-dismiss="modal"]', function(e){e.stopPropagation();});
+$('body').on('click', '.modal [data-dismiss="modal"]', function(e){e.stopPropagation();});
 
 $(function()
 {
