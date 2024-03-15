@@ -1402,6 +1402,19 @@ class treeModel extends model
     }
 
     /**
+     * Create link of practice.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createPracticeLink(string $type, object $module): string
+    {
+        return html::a(helper::createLink('traincourse', 'practicebrowse', "moduleID={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+    }
+
+    /**
      * 生成培训技能的链接。
      * Create link of trainskill.
      *
