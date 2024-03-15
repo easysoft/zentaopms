@@ -551,12 +551,13 @@ class treeTest
      * Test get parents of a module.
      *
      * @param  int    $moduleID
+     * @param  bool   $queryAll
      * @access public
      * @return string
      */
-    public function getParentsTest($moduleID)
+    public function getParentsTest($moduleID, $queryAll = false)
     {
-        $objects = $this->objectModel->getParents($moduleID);
+        $objects = $this->objectModel->getParents($moduleID, $queryAll);
 
         if(dao::isError()) return dao::getError();
 

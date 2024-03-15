@@ -151,11 +151,13 @@ $fields->field('sourceNote')
 $fields->field('feedbackBy')
     ->foldable()
     ->className('feedbackBox')
+    ->id('feedbackBy')
     ->value($createFields['feedbackBy']['default']);
 
 $fields->field('notifyEmail')
     ->foldable()
     ->className('feedbackBox')
+    ->id('notifyEmail')
     ->value($createFields['notifyEmail']['default']);
 
 $fields->field('mailto')

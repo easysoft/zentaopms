@@ -28,7 +28,7 @@ $pivot = new pivotTest();
 $result = $pivot->getBugAssign();
 r($result) && p('0:product,assignedTo,total;9:product,assignedTo,total') && e('1,admin,10;10,admin,10');    //判断已分配的bug数据获取是否正确。
 
-foreach($result as $row) 
+foreach($result as $row)
 {
     $productName = $row->productName;
     $row->isProductNameHtml = false;
@@ -45,7 +45,7 @@ r($condition1 && $condition2) && p('') && e('1');  //1.用户有此产品的权�
 su('user1');
 
 $result = $pivot->getBugAssign();
-foreach($result as $row) 
+foreach($result as $row)
 {
     $productName = $row->productName;
     $row->isProductNameHtml = false;

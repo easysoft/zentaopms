@@ -7,7 +7,7 @@ class severityLabel extends wg
     protected static array $defineProps = array(
         'level: string|int',     // 严重程度等级。
         'text?: string|array',   // 标签文本或标签文本映射对象，如果不指定从 $lang->$moduleName->severityList 中获取。
-        'isIcon?: bool=false'    // 是否显示为图标。
+        'isIcon?: bool'          // 是否显示为图标。
     );
 
     protected function onAddChild(mixed $child)

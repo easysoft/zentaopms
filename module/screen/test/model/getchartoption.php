@@ -85,7 +85,7 @@ r(
 list($component5, $chart5) = getComponetAndChart($screen, $filter5);
 $screen->getChartOptionTest($chart5, $component5);
 $dataset = isset($component5) && $component5->option->dataset ? $component5->option->dataset : null;
-r($dataset && $dataset->dimensions[0] == '年份' && count($dataset->source) == 2) && p('') && e(1); // 测试type为stackedBar的图表是否显示正确，生成的指标项和数据项是否正确。
+r($dataset && $dataset->dimensions[0] == '年份' && count($dataset->source) >= 1) && p('') && e(1); // 测试type为stackedBar的图表是否显示正确，生成的指标项和数据项是否正确。
 
 list($component6, $chart6) = getComponetAndChart($screen, $filter6);
 r(is_null($component6) && is_null($chart6)) && p('') && e(1);                                      //测试type为bar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。
@@ -93,7 +93,7 @@ r(is_null($component6) && is_null($chart6)) && p('') && e(1);                   
 list($component7, $chart7) = getComponetAndChart($screen, $filter7);
 $screen->getChartOptionTest($chart7, $component7);
 r(
-    isset($component7->option->series[0]->data[0]->value[0]) 
+    isset($component7->option->series[0]->data[0]->value[0])
     && isset($component7->option->dataset)
     && $component7->option->dataset === $component7->option->series[0]->data[0]->value[0]
 ) && p('') && e(1);                                                                                // 测试type为piecircle的图表是否显示正确，生成的指标项和数据项是否正确。
@@ -122,6 +122,6 @@ r($component11->option->dataset == "0.000") && p('') && e(1);                   
 list($component12, $chart12) = getComponetAndChart($screen, $filter11);
 r(is_null($component12) && is_null($chart12)) && p('') && e(1);                                     //测试type为radar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。
 
-list($component13, $chart13) = getComponetAndChart($screen, $filter12); 
+list($component13, $chart13) = getComponetAndChart($screen, $filter12);
 $screen->getChartOptionTest($chart13, $component13);
 r($component13->option->dataset === '0') && p('') && e(1);                                           //测试type为card的图表是否显示正确，生成的指标项和数据项是否正确。

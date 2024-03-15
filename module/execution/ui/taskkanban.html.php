@@ -183,7 +183,7 @@ row
             btn(set::type('link'), set::icon('import'), $lang->import),
             set::items(array
             (
-                common::hasPriv('execution', 'importTask') ? array('text' => $lang->execution->importTask, 'url' => createLink('execution', 'importTask', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
+                common::hasPriv('execution', 'importTask') && $execution->multiple ? array('text' => $lang->execution->importTask, 'url' => createLink('execution', 'importTask', "execution=$execution->id")) : null,
                 ($features['qa'] && common::hasPriv('execution', 'importBug')) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null
             ))
         ) : null,

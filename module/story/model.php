@@ -344,10 +344,11 @@ class storyModel extends model
      * @param  array|string|int $moduleIdList
      * @param  string           $type         full|short
      * @param  string           $status       all|noclosed|changing|active|draft|closed|reviewing
+     * @param  string           $storyType    story|requirement
      * @access public
      * @return array
      */
-    public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $type = 'full', string $status = 'all'): array
+    public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $type = 'full', string $status = 'all', string $storyType = 'story'): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStoryPairs();
 
@@ -357,7 +358,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq($executionID)
             ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t2.type')->eq('story')
+            ->andWhere('t2.type')->eq($storyType)
             ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($branch !== 'all')->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
@@ -456,9 +457,13 @@ class storyModel extends model
         /* Add story spec verify. */
         $this->storyTao->doCreateSpec($storyID, $story, $files);
 
+        $extraList   = $this->storyTao->parseExtra($extra);
+        $storyFrom   = isset($extraList['fromType']) ? $extraList['fromType'] : '';
+        $storyFromID = isset($extraList['fromID']) ? $extraList['fromID'] : '';
+
         /* Create actions. */
-        $action = $bugID == 0 ? 'Opened' : 'Frombug';
-        $extra  = $bugID == 0 ? '' : $bugID;
+        $action = $bugID == 0 ? (empty($storyFrom) ? 'Opened' : 'From' . ucfirst($storyFrom)) : 'Frombug';
+        $extra  = $bugID == 0 ? $storyFromID : $bugID;
         $this->action->create('story', $storyID, $action, '', $extra);
 
         if($executionID) $this->storyTao->linkToExecutionForCreate($executionID, $storyID, $story, $extra);
@@ -489,7 +494,6 @@ class storyModel extends model
                 if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
             }
         }
-
 
         return $storyID;
     }

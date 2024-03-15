@@ -672,7 +672,6 @@ $config->delete['18_4_alpha1'][] = 'module/report/view/preview.html.php';
 $config->delete['18_4_alpha1'][] = 'module/report/view/productsummary.html.php';
 $config->delete['18_4_alpha1'][] = 'module/report/view/projectdeviation.html.php';
 $config->delete['18_4_alpha1'][] = 'module/report/view/workload.html.php';
-$config->delete['18_4_alpha1'][] = 'module/report/zen.php';
 
 $config->delete['18_4'][] = 'extension/biz/dataview/config.php';
 $config->delete['18_4'][] = 'extension/biz/dataview/control.php';
@@ -1022,6 +1021,7 @@ $config->delete['20_0_beta1'][] = 'extension/biz/bug/ext/view/import.html.php';
 $config->delete['20_0_beta1'][] = 'extension/max/bug/ext/view/import.html.php';
 $config->delete['20_0_beta1'][] = 'extension/biz/testcase/ext/browse.excel.html.hook.php';
 $config->delete['20_0_beta1'][] = 'extension/max/testcase/ext/browse.excel.html.hook.php';
+$config->delete['20_0_beta1'][] = 'extension/biz/custom/ext/view/set.feedback.html.hook.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'ai', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'artifactrepo', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution');
 

@@ -357,6 +357,57 @@ elseif($module == 'user' && $field == 'deleted')
         set::items($lang->custom->deletedList)
     );
 }
+elseif($module == 'feedback' && $field == 'review')
+{
+    $formItems[] = formGroup
+    (
+        set::width('1/2'),
+        set::labelWidth('100px'),
+        set::label($lang->custom->feedback->fields['review']),
+        set::name('needReview'),
+        set::value($needReview),
+        set::control('radioListInline'),
+        set::items($lang->custom->reviewList),
+        on::change('changeNeedReview')
+    );
+    $formItems[] = formGroup
+    (
+        set::width('1/2'),
+        set::labelWidth('100px'),
+        set::hidden($needReview),
+        set::label($lang->custom->forceReview),
+        set::name('forceReview[]'),
+        set::value($forceReview),
+        set::control('picker'),
+        set::items($users),
+        set::multiple(true),
+        set::tip(sprintf($lang->custom->notice->forceReview, $lang->feedback->common)),
+    );
+    $formItems[] = formGroup
+    (
+        set::width('1/2'),
+        set::labelWidth('100px'),
+        set::hidden(!$needReview),
+        set::label($lang->custom->forceNotReview),
+        set::name('forceNotReview[]'),
+        set::value($forceNotReview),
+        set::control('picker'),
+        set::items($users),
+        set::multiple(true),
+        set::tip(sprintf($lang->custom->notice->forceNotReview, $lang->feedback->common)),
+    );
+    $users[''] = $lang->feedback->deptManager;
+    $formItems[] = formGroup
+    (
+        set::width('1/2'),
+        set::labelWidth('100px'),
+        set::label($lang->feedback->reviewedByAB),
+        set::name('reviewer'),
+        set::value($reviewer),
+        set::control('picker'),
+        set::items($users)
+    );
+}
 else
 {
     if(!empty($fieldList) && is_array($fieldList))

@@ -48,7 +48,6 @@ unset($lang->project->endList[999]);
 $isLongTime = data('project.end') == LONG_TIME;
 $fields->field('begin')
     ->label($lang->project->planDate)
-    ->checkbox(array('text' => $lang->project->longTime, 'name' => 'longTime', 'checked' => $isLongTime))
     ->required()
     ->controlBegin('dateRangePicker')
     ->beginName('begin')

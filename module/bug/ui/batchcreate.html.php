@@ -39,7 +39,7 @@ $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', '
 if($bugs) $items[] = array('name' => 'uploadImage', 'label' => '', 'control' => 'hidden', 'hidden' => true);
 
 /* Field of branch. */
-if($product->type != 'normal') $items[] = array('name' => 'branch', 'label' => $lang->product->branchName[$product->type], 'control' => 'picker', 'items' => $branches, 'value' => $branch, 'width' => '200px', 'ditto' => true);
+if($product->type != 'normal') $items[] = array('name' => 'branch', 'label' => $lang->product->branchName[$product->type], 'control' => 'picker', 'items' => $branches, 'value' => $branch, 'width' => '200px', 'ditto' => true, 'hidden' => strpos(",{$showFields},", ',branch,') === false);
 
 /* Field of module. */
 $items[] = array('name' => 'module', 'label' => $lang->bug->module, 'control' => 'picker', 'items' => $moduleOptionMenu, 'value' => $moduleID, 'width' => '200px', 'required' => isset($requiredFields['module']), 'ditto' => true);

@@ -1,5 +1,0 @@
-body {--zt-page-bg: var(--color-canvas)}
-.modal-dialog {box-shadow: none!important; width: auto!important}
-.modal-content, .modal-dialog {height: auto!important; max-height: none!important}
-.modal-body {overflow: visible!important;}
-body > .modal-dialog > .modal-content > .modal-body > .detail-body {height: auto}

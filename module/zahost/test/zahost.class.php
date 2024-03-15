@@ -35,7 +35,7 @@ class zahostTest
      * @access public
      * @return array|object
      */
-    public function getByIDTest(int $zahostID): array|object
+    public function getByIDTest(int $zahostID): array|object|bool
     {
         $zahost = $this->objectModel->getByID($zahostID);
         if(dao::isError()) return dao::getError();

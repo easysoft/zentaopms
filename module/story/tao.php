@@ -300,6 +300,15 @@ class storyTao extends storyModel
         $relationGroups = $this->batchGetRelations(array_keys($stories), 'requirement', array('*'));
         if(empty($stories));
 
+        if($this->app->rawModule == 'projectstory')
+        {
+            $projectID = $this->session->project;
+            /* For story children. */
+            $relationIDList = array();
+            foreach($relationGroups as $relationGroup) $relationIDList = array_merge($relationIDList, array_keys($relationGroup));
+            $projectIDList = $this->dao->select('story,project')->from(TABLE_PROJECTSTORY)->where('story')->in($relationIDList)->andWhere('project')->eq($projectID)->fetchPairs('story', 'project');
+        }
+
         foreach($stories as $story)
         {
             /* Merge subdivided stories for requirement. */
@@ -311,7 +320,8 @@ class storyTao extends storyModel
                 if(empty($SRStory)) continue;
 
                 $children = clone $SRStory;
-                $children->parent = $story->id;
+                $children->parent  = $story->id;
+                $children->project = isset($projectIDList[$SRID]) ? $projectIDList[$SRID] : 0;
                 $story->children[$SRID] = $children;
             }
             $story->linkStories = implode(',', array_column($story->children, 'title'));
@@ -1115,10 +1125,10 @@ class storyTao extends storyModel
     {
         if($this->config->vision == 'lite') return true;
 
-        if(!in_array($story->status, array('launched', 'developing', 'active'))) return false;
-        if(!$isShadowProduct && $story->stage != 'wait')                         return false;
-        if($isShadowProduct && $story->stage != 'projected')                     return false;
-        if($story->parent > 0)                                                   return false;
+        if(in_array($story->status, array('launched', 'developing', 'active')))     return true;
+        if(!$isShadowProduct && $story->type == 'story' && $story->stage != 'wait') return false;
+        if($isShadowProduct && $story->stage != 'projected')                        return false;
+        if($story->parent > 0)                                                      return false;
 
         return true;
     }
@@ -1442,14 +1452,15 @@ class storyTao extends storyModel
         $this->app->loadLang('task');
         $this->config->story->affect = new stdclass();
         $this->config->story->affect->projects = new stdclass();
-        $this->config->story->affect->projects->fields[] = array('name' => 'id',         'title' => $this->lang->task->id);
-        $this->config->story->affect->projects->fields[] = array('name' => 'name',       'title' => $this->lang->task->name, 'link' => helper::createLink('task', 'view', 'id={id}'));
-        $this->config->story->affect->projects->fields[] = array('name' => 'assignedTo', 'title' => $this->lang->task->assignedTo);
-        $this->config->story->affect->projects->fields[] = array('name' => 'consumed',   'title' => $this->lang->task->consumed);
-        $this->config->story->affect->projects->fields[] = array('name' => 'left',       'title' => $this->lang->task->left);
+        $this->config->story->affect->projects->fields['id']         = array('name' => 'id',         'title' => $this->lang->task->id);
+        $this->config->story->affect->projects->fields['name']       = array('name' => 'name',       'title' => $this->lang->task->name, 'link' => helper::createLink('task', 'view', 'id={id}'));
+        $this->config->story->affect->projects->fields['assignedTo'] = array('name' => 'assignedTo', 'title' => $this->lang->task->assignedTo);
+        $this->config->story->affect->projects->fields['consumed']   = array('name' => 'consumed',   'title' => $this->lang->task->consumed);
+        $this->config->story->affect->projects->fields['left']       = array('name' => 'left',       'title' => $this->lang->task->left);
 
         if(empty($story->executions)) return $story;
-        foreach($story->executions as $executionID => $execution) if($execution->status == 'done') unset($story->executions[$executionID]);
+        $storyExecutions = $story->executions;
+        foreach($storyExecutions as $executionID => $execution) if($execution->status == 'done') unset($story->executions[$executionID]);
         $story->teams = $this->dao->select('account, root')->from(TABLE_TEAM)->where('root')->in(array_keys($story->executions))->andWhere('type')->eq('execution')->fetchGroup('root');
 
         foreach($story->tasks as $executionTasks)
@@ -1458,6 +1469,11 @@ class storyTao extends storyModel
             {
                 $task->status     = $this->processStatus('task', $task);
                 $task->assignedTo = zget($users, $task->assignedTo);
+                if(isset($storyExecutions[$task->execution]))
+                {
+                    $taskExecution = $storyExecutions[$task->execution];
+                    if(!$taskExecution->multiple) $this->config->story->affect->projects->fields['name']['link'] .= '#app=project';
+                }
             }
         }
         return $story;

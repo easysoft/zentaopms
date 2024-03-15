@@ -81,10 +81,6 @@ fields:
     loop: 0
     format: ""
   - field: lastTime
-    note: "最后执行时间"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"

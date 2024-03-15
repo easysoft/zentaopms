@@ -147,6 +147,7 @@ $lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCom
 $lang->block->default['scrumproject'][] = array('title' => '最新动态',                     'module' => 'scrumproject', 'code' => 'projectdynamic', 'width' => '1');
 
 $lang->block->default['kanbanproject']    = $lang->block->default['scrumproject'];
+unset($lang->block->default['kanbanproject'][2]);
 $lang->block->default['agileplusproject'] = $lang->block->default['scrumproject'];
 
 $lang->block->default['waterfallproject'][] = array('title' => "{$lang->projectCommon}计划", 'module' => 'waterfallproject', 'code' => 'waterfallgantt', 'width' => '2');
@@ -557,7 +558,7 @@ $lang->block->projectoverview->thisYear      = '今年完成';
 $lang->block->projectoverview->lastThreeYear = '近三年完成的项目数量分布';
 
 $lang->block->projectstatistic = new stdclass();
-$lang->block->projectstatistic->story            = '需求';
+$lang->block->projectstatistic->story            = $lang->SRCommon;
 $lang->block->projectstatistic->cost             = '投入';
 $lang->block->projectstatistic->task             = '任务';
 $lang->block->projectstatistic->bug              = 'Bug';

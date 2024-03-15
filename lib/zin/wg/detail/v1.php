@@ -346,7 +346,7 @@ class detail extends wg
 
         return div
         (
-            setClass('detail-main flex-auto col gap-1'),
+            setClass('detail-main flex-auto col gap-1 min-w-0'),
             div
             (
                 setClass('detail-sections canvas shadow rounded px-6 py-4'),

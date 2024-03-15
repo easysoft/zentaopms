@@ -43,6 +43,8 @@ setPageData('activeMenuID', $story->type);
 $toolbar = array();
 if(!$isInModal && hasPriv('story', 'create'))
 {
+    $otherParam = 'storyID=&projectID=';
+    if($app->rawModule == 'projectstory' || $app->tab == 'project') $otherParam = "storyID=&projectID={$this->session->project}";
     $toolbar[] = array
     (
         'icon' => 'plus',

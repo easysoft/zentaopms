@@ -715,10 +715,10 @@ $config->bi = new stdclass();
 $config->bi->pickerHeight = 150;
 
 $config->db->sqliteBlacklist  = array('sqlite_queue', 'cron');
-$config->hasDropmenuApps      = array('program', 'project', 'product', 'execution', 'qa', 'admin', 'bi');
+$config->hasDropmenuApps      = array('program', 'project', 'product', 'execution', 'qa', 'admin', 'bi', 'feedback');
 $config->hasBranchMenuModules = array('product', 'story', 'release', 'bug', 'testcase', 'testtask', 'branch', 'tree');
 $config->excludeBranchMenu    = array('product-dashboard', 'product-view');
-$config->excludeDropmenuList  = array('program-browse', 'program-productview', 'program-kanban', 'product-all', 'product-index', 'product-kanban', 'project-kanban', 'execution-all', 'execution-executionkanban', 'project-browse', 'project-batchedit', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit', 'metric-preview', 'qa-index', 'caselib-create');
+$config->excludeDropmenuList  = array('program-browse', 'program-productview', 'program-kanban', 'product-all', 'product-index', 'product-kanban', 'project-kanban', 'execution-all', 'execution-executionkanban', 'project-browse', 'project-batchedit', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit', 'metric-preview', 'qa-index', 'caselib-create', 'feedback-batchedit', 'feedback-batchclose');
 $config->hasSwitcherModules   = array('design');
 $config->hasSwitcherMethods   = array('project-bug', 'project-testcase', 'execution-bug', 'execution-testcase', 'testtask-cases', 'testtask-view', 'testtask-report', 'testtask-groupcase', 'testtask-linkcase');
 $config->excludeSwitcherList  = array();

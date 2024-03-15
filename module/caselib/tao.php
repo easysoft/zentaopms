@@ -81,12 +81,12 @@ class caselibTao extends caselibModel
                 if(empty($desc)) continue;
 
                 $stepData = new stdclass();
-                $stepData->type    = ($data->stepType[$key][$id] == 'item' || $parentStepID == 0) ? 'step' : $data->stepType[$key][$id];
-                $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
+                $stepData->type    = $data->stepType[$key][$id] == 'item' && $parentStepID == 0 ? 'step' : $data->stepType[$key][$id];
+                $stepData->parent  = $stepData->type == 'item' ? $parentStepID : 0;
                 $stepData->case    = $caseID;
                 $stepData->version = 1;
                 $stepData->desc    = htmlSpecialString($desc);
-                $stepData->expect  = htmlSpecialString(trim($data->expect[$key][$id]));
+                $stepData->expect  = htmlSpecialString(!empty($data->expect[$key][$id]) ? trim($data->expect[$key][$id]) : '');
                 $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
 
                 if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();

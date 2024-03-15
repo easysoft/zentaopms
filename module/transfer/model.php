@@ -763,7 +763,8 @@ class transferModel extends model
         /* If tmp file exists, read tmp file, otherwise create tmp file. */
         if(!$tmpFile)
         {
-            $rows       = $this->getRowsFromExcel();  // 从Excel中获取数据
+            $rows = $this->getRowsFromExcel();  // 从Excel中获取数据
+            if(dao::isError()) return false;
             $moduleData = $this->processRows4Fields($rows, $fields);  // 处理Excel中的数据过滤无效字段
             if(dao::isError()) return false;
             $moduleData = $this->parseExcelDropdownValues($module, $moduleData, $filter, $fields); // 解析Excel中下拉字段的数据，转换成具体value
@@ -805,9 +806,9 @@ class transferModel extends model
      * Get rows from excel.
      *
      * @access protected
-     * @return array
+     * @return array|bool
      */
-    protected function getRowsFromExcel(): array
+    protected function getRowsFromExcel(): array|bool
     {
         $rows = $this->file->getRowsFromExcel($this->session->fileImportFileName);
         if(is_string($rows))
@@ -815,8 +816,8 @@ class transferModel extends model
             if($this->session->fileImportFileName) unlink($this->session->fileImportFileName);
             unset($_SESSION['fileImportFileName']);
             unset($_SESSION['fileImportExtension']);
-            echo js::alert($rows);
-            return print(js::locate('back'));
+            dao::$errors['message'] = $rows;
+            return false;
         }
         return $rows;
     }

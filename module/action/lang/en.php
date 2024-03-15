@@ -68,7 +68,7 @@ $lang->action->hasCreatedTask     = 'Tasks have been created in this parent phas
 $lang->action->hasDeletedParent   = 'Restoring this phase requires restoring the deleted parent phase %s at the same time.';
 $lang->action->hasChangedAttr     = "After recovery, the phase type will be adjusted to '%s' according to the parent phase type.";
 $lang->action->whetherToRestore   = 'Confirm to restore?';
-$lang->action->undeleteModuleTip  = 'Once the subdirectory has been restored, its parent directory will also be automatically recovered and synchronized.';
+$lang->action->undeleteModuleTip  = 'Once the subdirectory has been restored, its parent directory will also be automatically recovered and synchronized, would you like to proceed with restoring the directory?';
 $lang->action->undeleteTaskTip    = 'The execution associated with this task has been removed. If you choose to restore it, the task will no longer be visible. Would you like to proceed with restoring the task?';
 
 $lang->action->hasOtherType = array();

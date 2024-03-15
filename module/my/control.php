@@ -1453,12 +1453,27 @@ class my extends control
     {
         $_SESSION['vision'] = $vision;
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.vision", $vision);
+        if(empty($this->config->hideVisionTips)) $this->setting->setItem("{$this->app->user->account}.common.global.hideVisionTips", 1);
         $this->config->vision = $vision;
 
         $_SESSION['user']->rights = $this->user->authorize($this->app->user->account);
 
         setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
 
+        return $this->send(array('result' => 'success', 'load' => helper::createLink('index', 'index')));
+    }
+
+    /**
+     * Ajax: 保存界面切换引导.
+     * Save hideVisionTips by ajax.
+     *
+     * @param  string $vision
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveVisionTips()
+    {
+        $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.hideVisionTips", 1);
         return $this->send(array('result' => 'success', 'load' => helper::createLink('index', 'index')));
     }
 }

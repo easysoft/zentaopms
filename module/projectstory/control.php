@@ -123,12 +123,13 @@ class projectStory extends control
      * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $storyType
      * @access public
      * @return void
      */
-    public function linkStory($projectID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recPerPage = 50, $pageID = 1)
+    public function linkStory($projectID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recPerPage = 50, $pageID = 1, $storyType = 'story')
     {
-        echo $this->fetch('execution', 'linkStory', "projectID={$projectID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}");
+        echo $this->fetch('execution', 'linkStory', "projectID={$projectID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&extra=&storyType=$storyType");
     }
 
     /**

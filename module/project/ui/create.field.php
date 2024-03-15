@@ -23,6 +23,7 @@ $fields->field('name')
     ->className($copyProject ? 'has-warning' : '')
     ->tip($copyProject ? $lang->project->copyProject->nameTips : null)
     ->value($copyProject ? data('copyProject.name') : '');
+if(!!$copyProject) $fields->field('multiple')->hidden(true)->value(data('copyProject.multiple'));
 
 if($hasCode)
 {
@@ -36,6 +37,7 @@ if($hasCode)
 $fields->field('begin')
     ->tip($copyProject ? $lang->project->copyProject->endTips : null)
     ->tipClass('text-warning');
+if(!$copyProject || data('copyProject.multiple') != '0') $fields->field('begin')->checkbox(array('text' => $lang->project->longTime, 'name' => 'longTime', 'checked' => false));
 
 $fields->field('days')
     ->control('input', array('className' => $copyProject ? 'has-warning' : ''))
@@ -43,6 +45,7 @@ $fields->field('days')
     ->tip($copyProject ? $lang->project->copyProject->daysTips : null);
 
 $fields->field('productsBox')->hidden(data('copyProject') && data('copyProject.hasProduct') == 0);
+
 
 $fields->field('budget')->foldable();
 

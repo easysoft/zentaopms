@@ -107,6 +107,7 @@ dtable
     set::cols($cols),
     set::data($data),
     set::userMap($users),
+    set::priList($lang->todo->priList),
     set::fixedLeftWidth('44%'),
     set::checkable(true),
     set::defaultSummary(array('html' => $defaultSummary)),

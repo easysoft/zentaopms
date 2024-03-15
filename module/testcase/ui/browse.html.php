@@ -91,7 +91,7 @@ $footToolbar = $canBatchAction ? array('items' => array
     $canImportToLib ? array('text' => $lang->testcase->importToLib, 'data-toggle' => 'modal', 'data-target' => '#importToLib', 'data-size' => 'sm') : null,
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
-$footToolbar['items'] = array_values(array_filter($footToolbar['items']));
+$footToolbar['items'] = $canBatchAction ? array_values(array_filter($footToolbar['items'])) : array();
 
 $cols = $isOnlyScene ? $this->config->scene->dtable->fieldList : $this->loadModel('datatable')->getSetting('testcase');
 if(!empty($cols['actions']['list']))

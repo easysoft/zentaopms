@@ -121,6 +121,7 @@ $lang->admin->setModule->OA             = 'OA';
 $lang->admin->setModule->deploy         = 'Deploy';
 $lang->admin->setModule->traincourse    = 'Traincourse';
 $lang->admin->setModule->setCode        = 'Code';
+$lang->admin->setModule->measrecord     = 'Measrecord';
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common                   = 'Sicherheits-Regeln';

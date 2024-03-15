@@ -5,28 +5,29 @@ declare(strict_types=1);
 /**
 
 title=测试 zanodemodel->getImageByID().
+timeout=0
 cid=1
 
-- 测试获取 node id 1的快照
+- 测试获取 node id 1 的快照
  - 属性id @1
  - 属性name @defaultSnap
  - 属性from @snapshot
  - 属性status @creating
  - 属性createdBy @system
-- 测试获取 node id 2的快照
+- 测试获取 node id 2 的快照
  - 属性id @2
  - 属性name @defaultSnap
  - 属性from @snapshot
  - 属性status @creating
  - 属性createdBy @admin
-- 测试获取 node id 5的快照
+- 测试获取 node id 5 的快照
  - 属性id @5
  - 属性name @defaultSnap
  - 属性from @snapshot
  - 属性status @wait
  - 属性createdBy @system
-- 测试获取 空的 node id 0的快照 @0
-- 测试获取 不存在的 node id 1000的快照 @0
+- 测试获取 空的 node id 0 的快照 @0
+- 测试获取 不存在的 node id 1000 的快照 @0
 
 */
 

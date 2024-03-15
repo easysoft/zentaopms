@@ -16,7 +16,7 @@ jsVar('lastReviewer', $reviewers);
 jsVar('storyType', $story->type);
 
 $needNotReviewBox = null;
-if(!$this->story->checkForceReview())
+if($needReview)
 {
     $needNotReviewBox = span
     (

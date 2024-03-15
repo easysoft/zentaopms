@@ -1239,10 +1239,7 @@ class projectModel extends model
                     ->fetchPairs();
                 $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', current($linkedProducts));
             }
-            else
-            {
-                $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
-            }
+            $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
         }
 
         return !dao::isError();

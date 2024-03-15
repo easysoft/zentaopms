@@ -25,7 +25,8 @@ class content extends wg
             setClass('text'),
             set($this->getRestProps()),
             $this->prop('text'),
-            $this->prop('content')
+            $this->prop('content'),
+            $this->children()
         );
     }
 
@@ -35,7 +36,8 @@ class content extends wg
         (
             set::href($this->prop('url')),
             set($this->getRestProps()),
-            $this->prop('text')
+            $this->prop('text'),
+            $this->children()
         );
     }
 
@@ -45,7 +47,8 @@ class content extends wg
         (
             setClass('article'),
             set($this->getRestProps()),
-            html($this->prop('content'))
+            html($this->prop('content')),
+            $this->children()
         );
     }
 

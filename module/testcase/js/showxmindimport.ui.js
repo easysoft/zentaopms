@@ -37,7 +37,7 @@ $(document).ready(function()
         var data = mindmapMgr.toJson();
         if(data.testcaseList.length == 0)
         {
-            alert(jsLng.caseNotExist);
+            zui.Modal.alert(jsLng.caseNotExist);
             return;
         }
 
@@ -48,7 +48,7 @@ $(document).ready(function()
         form.append("sceneList", sceneList);
         form.append("testcaseList", testcaseList);
 
-        postAndLoadPage($.createLink('testcase', 'saveXmindImport'), form);
+        $.ajaxSubmit({url: $.createLink('testcase', 'saveXmindImport'), data: form});
     })
 });
 

@@ -1592,4 +1592,23 @@ class repoZen extends repo
 
         return $tree;
     }
+
+    /**
+     * 检查代码库是否能正常访问。
+     * Check repo connected.
+     *
+     * @param  object    $repo
+     * @access protected
+     * @return bool
+     */
+    protected function checkRepoInternet(object $repo): bool
+    {
+        if(!$repo) return false;
+
+        $repoUrl = '';
+        if(empty($repoUrl) && isset($repo->path)    && substr($repo->path, 0, 4) == 'http')    $repoUrl = $repo->path;
+        if(empty($repoUrl) && isset($repo->client)  && substr($repo->client, 0, 4) == 'http')  $repoUrl = $repo->client;
+        if(empty($repoUrl) && isset($repo->apiPath) && substr($repo->apiPath, 0, 4) == 'http') $repoUrl = $repo->apiPath;
+        return $repoUrl && !$this->loadModel('admin')->checkInternet($repoUrl);
+    }
 }

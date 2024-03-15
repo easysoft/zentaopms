@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 zanodeTao->checkFields4Create().
+timeout=0
 cid=1
 
 - 测试添加物理机节点时必填项

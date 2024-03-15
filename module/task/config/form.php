@@ -169,6 +169,7 @@ $config->task->form->finish['lastEditedDate']  = array('type' => 'datetime', 're
 $config->task->form->finish['assignedDate']    = array('type' => 'string',   'required' => false, 'default' => $now);
 $config->task->form->finish['finishedBy']      = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->task->form->finish['lastEditedBy']    = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
+$config->task->form->finish['lastEditedDate']  = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
 $config->task->form->close = array();
 $config->task->form->close['status']         = array('type' => 'string',   'required' => false, 'default' => 'closed');
@@ -200,4 +201,4 @@ $config->task->form->editEffort = array();
 $config->task->form->editEffort['date']     = array('type' => 'date',   'required' => true,  'default' => '');
 $config->task->form->editEffort['work']     = array('type' => 'string', 'required' => false, 'default' => '');
 $config->task->form->editEffort['consumed'] = array('type' => 'float',  'required' => true,  'default' => '');
-$config->task->form->editEffort['left']     = array('type' => 'float',  'required' => true,  'default' => '');
+$config->task->form->editEffort['left']     = array('type' => 'float',  'required' => false, 'default' => '');

@@ -189,9 +189,16 @@ detailBody
                 (
                     setClass('tab-actions absolute right-0 gap-2'),
                     setStyle('top', '-8px'),
-                    dropdown
+                    empty($createStoryLink) && empty($batchCreateStoryLink) ? null : dropdown
                     (
-                        btn(set::text($lang->story->create), set::target('_parent'), setClass('secondary' . (empty($createStoryLink) ? ' disabled' : '')), set::icon('plus'), set::caret(true), set::url($createStoryLink)),
+                        btn
+                        (
+                            set::text($lang->story->create),
+                            setClass('open-url secondary' . (empty($createStoryLink) ? ' disabled' : '')),
+                            set::icon('plus'),
+                            set::caret(true),
+                            set::url($createStoryLink)
+                        ),
                         set::items(array(array('text' => $lang->story->batchCreate, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''))),
                         set::trigger('hover'),
                         set::placement('bottom-end')

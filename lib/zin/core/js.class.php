@@ -384,9 +384,9 @@ class js implements \JsonSerializable, iDirective
      * 序列化为 JSON。
      *
      * @access public
-     * @return string
+     * @return mixed
      */
-    public function jsonSerialize(): string
+    public function jsonSerialize(): mixed
     {
         $js = trim($this->toJS());
         if(str_ends_with(';', $js)) $js = substr($js, 0, -1);

@@ -597,7 +597,7 @@ class testcaseModel extends model
 
         $this->testcaseTao->updateCase2Project($oldCase, $case);
 
-        if($case->stepChanged) $this->testcaseTao->updateStep($case, $oldCase);
+        if(!empty($case->stepChanged)) $this->testcaseTao->updateStep($case, $oldCase);
 
         if($oldCase->lib && empty($oldCase->product))
         {
@@ -613,7 +613,7 @@ class testcaseModel extends model
         $this->loadModel('file')->processFile4Object('testcase', $oldCase, $case);
 
         /* Join the steps to diff. */
-        if($case->stepChanged && $case->steps)
+        if(!empty($case->stepChanged) && $case->steps)
         {
             $oldCase->steps = $this->joinStep($oldCase->steps);
             $case->steps    = $this->joinStep($this->getByID($oldCase->id, $case->version)->steps);
@@ -1467,11 +1467,8 @@ class testcaseModel extends model
     public function processDatas($datas)
     {
         if(isset($datas->datas)) $datas = $datas->datas;
-        $columnKey  = array();
-        $caseData   = array();
         $stepData   = array();
         $stepVars   = 0;
-
         foreach($datas as $row => $cellValue)
         {
             foreach($cellValue as $field => $value)
@@ -1537,6 +1534,7 @@ class testcaseModel extends model
                                 $num = key($stepData[$row]['desc']); $caseStep[$num]['content'] = $step;
                             }
                         }
+                        $caseStep[$num]['number'] = $num;
                     }
 
                     unset($num);

@@ -301,10 +301,11 @@ class storyZen extends story
      * @param  int       $storyID
      * @param  int       $bugID
      * @param  int       $todoID
-     * @access protected
+     * @param  string    $extra feedback扩展使用
+     * @access public
      * @return object
      */
-    protected function initStoryForCreate(int $planID, int $storyID, int $bugID, int $todoID): object
+    public function initStoryForCreate(int $planID, int $storyID, int $bugID, int $todoID, string $extra = ''): object
     {
         $initStory = new stdclass();
         $initStory->source     = '';
@@ -508,6 +509,7 @@ class storyZen extends story
             if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
             if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
             if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->story, $field);
+            if(strpos(",{$this->config->story->create->requiredFields},", ",$field,") !== false) $fields[$field]['required'] = true;
         }
 
         /* 设置下拉菜单内容。 */
@@ -1643,10 +1645,11 @@ class storyZen extends story
      * @param  int       $objectID
      * @param  int       $storyID
      * @param  string    $storyType
-     * @access protected
+     * @param  string    $extra feedback扩展使用
+     * @access public
      * @return string
      */
-    protected function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, string $storyType): string
+    public function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, string $storyType, string $extra = ''): string
     {
         if($this->app->getViewType() == 'xhtml') return $this->createLink('story', 'view', "storyID=$storyID", 'html');
 
@@ -1744,17 +1747,9 @@ class storyZen extends story
 
         if($from != 'execution') return helper::createLink('story', 'view', "storyID={$storyID}&version=0&param=0&storyType={$storyType}");
 
-        $execution = $this->execution->getByID($this->session->execution);
-
-        $module = 'story';
-        $method = 'view';
-        $params = "storyID=$storyID&version=0&param={$this->session->execution}&storyType=$storyType";
-        if($execution->multiple)
-        {
-            $module = 'execution';
-            $method = 'storyView';
-            $params = "storyID=$storyID";
-        }
+        $module = 'execution';
+        $method = 'storyView';
+        $params = "storyID=$storyID";
         return helper::createLink($module, $method, $params);
     }
 

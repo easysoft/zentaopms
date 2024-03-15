@@ -417,7 +417,7 @@ class repo extends control
             $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
             $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
 
-            $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($path) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
+            return $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($path) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
         }
 
         /* Set menu and session. */
@@ -427,11 +427,7 @@ class repo extends control
         /* Get repo and synchronous commit. */
         $repo = $this->repo->getByID($repoID);
         if($repo->SCM == 'Git' && !is_dir($repo->path)) return $this->sendError(sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path), $this->repo->createLink('maintain'));
-        if($repo && substr($repo->path, 0, 4) == 'http')
-        {
-            if(!$this->loadModel('admin')->checkInternet($repo->path)) return $this->sendError($this->lang->repo->error->connect, true);
-        }
-
+        if($this->repoZen->checkRepoInternet($repo)) return $this->sendError($this->lang->repo->error->connect, true);
         if(!$repo->synced) return $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
         /* Set branch or tag for git. */
@@ -479,7 +475,6 @@ class repo extends control
         $this->view->cloneUrl     = $this->repo->getCloneUrl($repo);
         $this->view->repoPairs    = $this->repo->getRepoPairs($this->app->tab, $objectID);
         $this->view->branchOrTag  = $branchOrTag;
-
         $this->display();
     }
 

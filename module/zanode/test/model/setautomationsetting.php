@@ -5,6 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 zanodemodel->setAutomationSetting().
+timeout=0
 cid=1
 
 - 测试自动化设置 node1 新增
@@ -31,7 +32,7 @@ cid=1
  - 第node条的0属性 @『执行节点』不能为空。
  - 第scriptPath条的0属性 @『脚本目录』不能为空。
 
- */
+*/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/zanode.class.php';

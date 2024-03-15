@@ -22,7 +22,7 @@ class kanbanTao extends kanbanModel
      */
     protected function createKanban($kanban)
     {
-        $this->dao->insert(TABLE_KANBAN)->data($kanban)
+        $this->dao->insert(TABLE_KANBAN)->data($kanban, 'copyRegion,copyKanbanID')
              ->autoCheck()
              ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
              ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', $this->config->minColWidth)

@@ -1,9 +1,11 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=测试 zanodeModel->create().
+timeout=0
 cid=1
 
 - 测试创建一个执行节点

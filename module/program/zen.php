@@ -37,6 +37,8 @@ class programZen extends program
     protected function buildProgramForCreate(): object
     {
         $fields = $this->config->program->form->create;
+        if($this->post->longTime) $fields['end']['skipRequired'] = true;
+
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->program->create->requiredFields, ',')) as $field)
         {
@@ -68,8 +70,10 @@ class programZen extends program
      */
     protected function buildProgramForEdit(int $programID): object
     {
-        $oldProgram   = $this->program->fetchByID($programID);
-        $fields       = $this->config->program->form->edit;
+        $oldProgram = $this->program->fetchByID($programID);
+        $fields     = $this->config->program->form->edit;
+        if($this->post->longTime) $fields['end']['skipRequired'] = true;
+
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->program->edit->requiredFields, ',')) as $field)
         {

@@ -1,31 +1,3 @@
-/**
- * @typedef {Object} ZentaoApp
- * @property {string} code
- * @property {string} icon
- * @property {string} url
- * @property {string} text
- * @property {string} title
- * @property {boolean} active
- * @property {string} group
- * @property {string} moduleName
- * @property {string} methodName
- * @property {string} vars
- * @property {boolean} [external]
- * @property {boolean} [opened]
- * @typedef {Object} ZentaoOpenedProps
- * @property {true} opened
- * @property {HTMLIFrameElement} iframe
- * @property {number} zIndex
- * @property {string} currentTitle
- * @property {string} currentUrl
- * @property {number} [zIndex]
- * @property {HTMLIframe} iframe
- * @property {jQuery<HTMLDivElement>} $app
- * @property {jQuery<HTMLLIElement>} $bar
- * @typedef {ZentaoApp & ZentaoOpenedProps} ZentaoOpenedApp
- */
-
-
 /* Init variables */
 const apps =
 {
@@ -933,3 +905,10 @@ window.startCron = function(restart)
 turnon ? browserNotify() : ping();
 if(runnable) startCron();
 if(scoreNotice) zui.Messager.show({ content: {html: scoreNotice}, placement: 'bottom-right', time: 0, icon: 'diamond', className: 'text-primary bg-primary-100 bg-opacity-90' });
+
+function hideVisionTips()
+{
+  $('#visionTips').remove();
+  var link = $.createLink('my', 'ajaxSaveVisionTips');
+  $.post(link, {fields: 1});
+}

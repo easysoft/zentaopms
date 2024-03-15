@@ -173,15 +173,23 @@ class h extends node
     public static function importJs(string $src, mixed ...$args): h
     {
         $script = static::create('script', ...$args);
-        $script->setDefaultProps('src', $src);
+        $script->setDefaultProps('src', static::formatResourceUrl($src));
         return $script;
     }
 
     public static function importCss(string $href, mixed ...$args): h
     {
         $link = static::create('link', ...$args);
-        $link->setDefaultProps(array('rel' => 'stylesheet', 'href' => $href));
+        $link->setDefaultProps(array('rel' => 'stylesheet', 'href' => static::formatResourceUrl($href)));
         return $link;
+    }
+
+    public static function formatResourceUrl(string $url): string
+    {
+        global $config;
+        $pathInfo = parse_url($url);
+        $mark  = !empty($pathInfo['query']) ? '&' : '?';
+        return "$url{$mark}v={$config->version}";
     }
 
     public static function import(string|array $file, ?string $type = null, mixed ...$args): ?h

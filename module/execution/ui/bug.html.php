@@ -92,6 +92,8 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data(array_values($bugs)),
+    set::priList($lang->bug->priList),
+    set::severityList($lang->bug->severityList),
     set::checkable($canBatchAssignTo),
     set::orderBy($orderBy),
     set::sortLink(createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={name}_{sortType}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),

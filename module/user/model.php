@@ -637,6 +637,7 @@ class userModel extends model
 
         $this->dao->begin();
 
+        if(!isset($user->type)) $user->type = $oldUser->type;
         if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
 
         /* 获取所有的联系方式字段。*/
@@ -689,7 +690,7 @@ class userModel extends model
         {
             if(!empty($user->password)) $this->app->user->password = $user->password;
             $this->app->user->realname = $user->realname;
-            $this->app->user->role     = $user->role;
+            $this->app->user->role     = isset($user->role) ? $user->role : $oldUser->role;
         }
 
         return true;

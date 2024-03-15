@@ -93,6 +93,8 @@ dtable
 (
     set::cols($cols),
     set::data(array_values($bugs)),
+    set::priList($lang->bug->priList),
+    set::severityList($lang->bug->severityList),
     set::userMap($users),
     set::fixedLeftWidth('44%'),
     set::onRenderCell(jsRaw('window.onRenderBugNameCell')),
@@ -104,7 +106,7 @@ dtable
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::emptyTip($lang->bug->notice->noBug),
-    set::customData($type == 'resolvedBy' ? array('pageSummary' => $summary) : null)
+    set::customData($type == 'resolvedBy' ? array('pageSummary' => $summary) : array())
 );
 
 render();

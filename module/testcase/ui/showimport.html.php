@@ -13,7 +13,7 @@ jsVar('stepData', $stepData);
 jsVar('productID', $productID);
 jsVar('branch', $branch);
 
-if(isset($suhosinInfo))
+if(!empty($suhosinInfo))
 {
     div
     (
@@ -73,7 +73,7 @@ else
         'required' => strpos(",$requiredFields,", ',title,') !== false
     );
 
-    $caseModules = ($branch and isset($modules[$branch])) ? $modules[BRANCH_MAIN] + $modules[$branch] : $modules[BRANCH_MAIN];
+    $caseModules = $branch && isset($modules[$branch]) ? $modules[BRANCH_MAIN] + $modules[$branch] : $modules[BRANCH_MAIN];
     $items[] = array
     (
         'name'    => 'module',
@@ -144,16 +144,9 @@ else
 
     $items[] = array
     (
-        'name'  => 'stepDesc',
-        'label' => $lang->testcase->stepDesc,
-        'width' => '320px'
-    );
-
-    $items[] = array
-    (
-        'name'  => 'stepExpect',
-        'label' => $lang->testcase->stepExpect,
-        'width' => '320px'
+        'name'  => 'steps',
+        'label' => $lang->testcase->steps,
+        'width' => '640px'
     );
 
     $insert = true;
@@ -187,7 +180,7 @@ else
         set::items($items),
         set::data($caseData),
         set::actionsText(false),
-        set::onRenderRow(jsRaw('handleRenderRow')),
+        set::onRenderRowCol(jsRaw('renderRowCol')),
         input(set::className('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),
         input(set::className('hidden'), set::name('pagerID'), set::value($pagerID)),
         input(set::className('hidden'), set::name('insert'), set::value($dataInsert)),

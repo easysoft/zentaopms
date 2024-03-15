@@ -1313,6 +1313,11 @@ class bugZen extends bug
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
+        if(!isset($openedBuilds[$bug->openedBuild]))
+        {
+            $build = $this->build->getByID((int)$bug->openedBuild);
+            if($build) $openedBuilds[$bug->openedBuild] = $build->name;
+        }
 
         if($bug->assignedTo && !isset($assignedToList[$bug->assignedTo]) && $bug->assignedTo != 'closed')
         {
@@ -1512,21 +1517,13 @@ class bugZen extends bug
         {
             $customFields[$field] = $this->lang->bug->$field;
         }
-        if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
+        if($product->type != 'normal') $customFields['branch'] = $this->lang->product->branchName[$product->type];
         if(isset($project->model) && $project->model == 'kanban') $customFields['execution'] = $this->lang->bug->kanban;
 
         /* Set display fields. */
         $showFields = $this->config->bug->custom->batchCreateFields;
-        if($product->type != 'normal')
-        {
-            $showFields = sprintf($showFields, $product->type);
-            $showFields = str_replace(array(",branch,", ",platform,"), '', ",$showFields,");
-            $showFields = trim($showFields, ',');
-        }
-        else
-        {
-            $showFields = trim(sprintf($showFields, ''), ',');
-        }
+        $showFields = sprintf($showFields, $product->type != 'normal' ? 'branch' : '');
+        $showFields = trim($showFields, ',');
 
         /* Get titles from uploaded images. */
         if(!empty($bugImagesFile))

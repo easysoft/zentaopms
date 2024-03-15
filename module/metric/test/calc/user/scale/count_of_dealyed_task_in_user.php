@@ -17,10 +17,10 @@ timeout=0
 cid=1
 
 - 测试分组数。 @8
-- 测试用户dev。第0条的value属性 @27
+- 测试用户dev。第0条的value属性 @25
 
 */
 
 r(count($calc->getResult())) && p('') && e('8'); // 测试分组数。
 
-r($calc->getResult(array('user' => 'dev'))) && p('0:value') && e('27'); // 测试用户dev。
+r($calc->getResult(array('user' => 'dev'))) && p('0:value') && e('25'); // 测试用户dev。

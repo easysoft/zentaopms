@@ -6,7 +6,8 @@ window.clickCopyCard = function(event)
 
 window.setCopyKanban = function(kanbanID)
 {
-    const url = $.createLink('kanban', 'create', 'spaceID=' + spaceID + '&type=' + spaceType + '&copyKanbanID=' + kanbanID);
+    copyRegion = $('[name=copyRegionInfo]').prop('checked');
+    const url = $.createLink('kanban', 'create', 'spaceID=' + spaceID + '&type=' + spaceType + '&copyKanbanID=' + kanbanID + '&exyra=copyRegion=' + (copyRegion ? '1' : '0'));
     loadPartial(url, '#WIPCountBox, #spaceBox, #nameBox, #ownerBox, #teamBox, #fixedColBox, #autoColBox, #archiveBox, #manageProgressBox, #alignmentBox, #descBox, #whitelistBox');
 }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 zanodemodel->isClickable().
+timeout=0
 cid=1
 
 - 测试对象node状态 suspend hostType physics 的 resume 按钮是否可点击 @0
@@ -47,7 +48,7 @@ cid=1
 - 测试对象node状态 creating_img hostType 空 的 reboot 按钮是否可点击 @0
 - 测试对象node状态 creating_snap hostType physics 的 reboot 按钮是否可点击 @0
 - 测试对象node状态 creating_snap hostType 空 的 reboot 按钮是否可点击 @0
-- 测试对象node状态 restoring hostType physics 的 reboot 按钮是否可点击 @0
+- 测试对象node状态 restoring hostType physics 的 reboot 按钮是否可点击 @0
 - 测试对象node状态 restoring hostType 空 的 reboot 按钮是否可点击 @0
 - 测试对象node状态 suspend hostType physics 的 suspend 按钮是否可点击 @0
 - 测试对象node状态 suspend hostType 空 的 suspend 按钮是否可点击 @0

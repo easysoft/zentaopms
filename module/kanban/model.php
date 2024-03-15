@@ -2133,20 +2133,20 @@ class kanbanModel extends model
 
         if(dao::isError()) return false;
 
-        $kanbanID = $this->dao->lastInsertID();
-        $kanban   = $this->getByID($kanbanID);
+        $kanbanID   = $this->dao->lastInsertID();
+        $kanbanInfo = $this->getByID($kanbanID);
 
         $this->loadModel('action')->create('kanban', $kanbanID, 'created');
         $this->loadModel('file')->saveUpload('kanban', $kanbanID);
         $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
-        $this->post->copyRegion ? $this->copyRegions($kanban, $this->post->copyKanbanID): $this->createDefaultRegion($kanban);
+        $kanban->copyRegion ? $this->copyRegions($kanbanInfo, $kanban->copyKanbanID): $this->createDefaultRegion($kanbanInfo);
 
-        if(!empty($kanban->team) || !empty($kanban->whitelist))
+        if(!empty($kanbanInfo->team) || !empty($kanbanInfo->whitelist))
         {
-            $type = !empty($kanban->team) ? 'team' : 'whitelist';
-            $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type});
-            $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
+            $type = !empty($kanbanInfo->team) ? 'team' : 'whitelist';
+            $kanbanMembers = empty($kanbanInfo->{$type}) ? array() : explode(',', $kanbanInfo->{$type});
+            $this->addSpaceMembers($kanbanInfo->space, $type, $kanbanMembers);
         }
 
         return $kanbanID;
@@ -3103,7 +3103,7 @@ class kanbanModel extends model
             $parent = $this->getColumnByID($column->parent);
 
             /* If the parent column is normal now, put its card into child column. */
-            if($parent->parent != -1)
+            if($parent && $parent->parent != -1)
             {
                 $parentCells = $this->dao->select('*')->from(TABLE_KANBANCELL)
                     ->where('`column`')->eq($column->parent)

@@ -48,23 +48,6 @@ class solutionTest
     }
 
     /**
-     * Test saveLog method.
-     *
-     * @param  string $message
-     * @access public
-     * @return int
-     */
-    public function saveLogTest(string $message): int
-    {
-        global $app;
-        $errorFile = $app->logRoot . 'php.' . date('Ymd') . '.log.php';
-        file_put_contents($errorFile, '');
-
-        $file = $this->objectModel->saveLog($message);
-        return strlen(file_get_contents($file));
-    }
-
-    /**
      * Test saveStatus method.
      *
      * @param  int    $solutionID

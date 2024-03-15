@@ -69,9 +69,9 @@ class todo extends control
                 return $this->send(array('result' => 'success', 'id' => $todoID, 'name' => $todo->name, 'pri' => $todo->pri, 'priName' => $this->lang->todo->priList[$todo->pri], 'time' => date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin));
             }
 
+            if(isInModal() || isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $todoID));
             if($this->viewType == 'xhtml') return print(js::locate($this->createLink('todo', 'view', "todoID=$todoID", 'html'), 'parent'));
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('my', 'todo', 'type=all&userID=&status=all&orderBy=id_desc')));
         }
 
@@ -104,8 +104,8 @@ class todo extends control
             if($this->post->futureDate) $date = 'future';
             if($date == date('Ymd'))    $date = 'today';
 
+            if(isInModal() || isonlybody()) return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIdList));
-            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
             return $this->sendSuccess(array('closeModal' => true, 'load' => $this->createLink('my', 'todo', "type={$date}")));
         }
 
