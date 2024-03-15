@@ -6609,9 +6609,9 @@ class storyModel extends model
     public function getActivateStatus($storyID, $hasTwins = true)
     {
         $status     = 'active';
-        $action     = 'closed,reviewrejected,closedbysystem';
+        $action     = 'closed,reviewrejected,closedbysystem,retractclosed';
         $action     = $hasTwins ? $action . ',synctwins' : $action;
-        $lastRecord = $this->dao->select('action,extra')->from(TABLE_ACTION)
+        $lastRecord = $this->dao->select('id,action,extra')->from(TABLE_ACTION)
             ->where('objectType')->eq('story')
             ->andWhere('objectID')->eq($storyID)
             ->andWhere('action')->in($action)
@@ -6621,6 +6621,14 @@ class storyModel extends model
         $lastAction = $lastRecord->action;
         if($lastAction == 'reviewrejected') $status = $lastRecord->extra;
         if($lastAction == 'closed') $status = strpos($lastRecord->extra, '|') !== false ? substr($lastRecord->extra, strpos($lastRecord->extra, '|') + 1) : 'active';
+        if($lastAction == 'retractclosed')
+        {
+            $oldStatus = $this->dao->select()->from(TABLE_HISTORY)
+                ->where('action')->eq($lastRecord->id)
+                ->andWhere('field')->eq('status')
+                ->fetch('old');
+            if($oldStatus) $status = $oldStatus;
+        }
 
         /* Activate parent story. */
         if($lastAction == 'closedbysystem')
