@@ -301,10 +301,11 @@ class storyZen extends story
      * @param  int       $storyID
      * @param  int       $bugID
      * @param  int       $todoID
-     * @access protected
+     * @param  string    $extra feedback扩展使用
+     * @access public
      * @return object
      */
-    protected function initStoryForCreate(int $planID, int $storyID, int $bugID, int $todoID): object
+    public function initStoryForCreate(int $planID, int $storyID, int $bugID, int $todoID, string $extra = ''): object
     {
         $initStory = new stdclass();
         $initStory->source     = '';
@@ -1644,10 +1645,11 @@ class storyZen extends story
      * @param  int       $objectID
      * @param  int       $storyID
      * @param  string    $storyType
-     * @access protected
+     * @param  string    $extra feedback扩展使用
+     * @access public
      * @return string
      */
-    protected function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, string $storyType): string
+    public function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, string $storyType, string $extra = ''): string
     {
         if($this->app->getViewType() == 'xhtml') return $this->createLink('story', 'view', "storyID=$storyID", 'html');
 

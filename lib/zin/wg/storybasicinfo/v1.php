@@ -108,7 +108,12 @@ class storyBasicInfo extends wg
                 'items'   => $planTitleItems
             );
         }
-        $items[$lang->story->source] = zget($lang->story->sourceList, $story->source, '');
+        $items[$lang->story->source] = array
+        (
+            'control' => 'text',
+            'content' => zget($lang->story->sourceList, $story->source, ''),
+            'id'      => 'sourceBox'
+        );
         $items[$lang->story->sourceNote] = array
         (
             'control' => 'text',

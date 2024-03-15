@@ -457,9 +457,13 @@ class storyModel extends model
         /* Add story spec verify. */
         $this->storyTao->doCreateSpec($storyID, $story, $files);
 
+        $extraList   = $this->storyTao->parseExtra($extra);
+        $storyFrom   = isset($extraList['fromType']) ? $extraList['fromType'] : '';
+        $storyFromID = isset($extraList['fromID']) ? $extraList['fromID'] : '';
+
         /* Create actions. */
-        $action = $bugID == 0 ? 'Opened' : 'Frombug';
-        $extra  = $bugID == 0 ? '' : $bugID;
+        $action = $bugID == 0 ? (empty($storyFrom) ? 'Opened' : 'From' . ucfirst($storyFrom)) : 'Frombug';
+        $extra  = $bugID == 0 ? $storyFromID : $bugID;
         $this->action->create('story', $storyID, $action, '', $extra);
 
         if($executionID) $this->storyTao->linkToExecutionForCreate($executionID, $storyID, $story, $extra);
@@ -490,7 +494,6 @@ class storyModel extends model
                 if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
             }
         }
-
 
         return $storyID;
     }

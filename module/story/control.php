@@ -93,12 +93,12 @@ class story extends control
                 return $this->send($response);
             }
 
-            $response['load'] = $this->storyZen->getAfterCreateLocation((int)$productID, $branch, $objectID, $storyID, $storyType);
+            $response['load'] = $this->storyZen->getAfterCreateLocation((int)$productID, $branch, $objectID, $storyID, $storyType, $extra);
             return $this->send($response);
         }
 
         /* Init vars. */
-        $initStory = $this->storyZen->initStoryForCreate($planID, $copyStoryID, $bugID, $todoID);
+        $initStory = $this->storyZen->initStoryForCreate($planID, $copyStoryID, $bugID, $todoID, $extra);
 
         /* Get form fields. */
         $this->storyZen->setViewVarsForKanban($objectID, $this->story->parseExtra($extra));
