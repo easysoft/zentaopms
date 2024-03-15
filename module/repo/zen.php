@@ -415,7 +415,7 @@ class repoZen extends repo
 
         $gitlabHosts  = $this->loadModel('gitlab')->getPairs();
         $gitfoxHosts  = $this->loadModel('gitfox')->getPairs();
-        $serviceHosts = array_merge($gitlabHosts, $gitfoxHosts);
+        $serviceHosts = $gitlabHosts + $gitfoxHosts;
 
         $repoGroups   = array();
 
@@ -423,8 +423,6 @@ class repoZen extends repo
         {
             $serverID   = array_keys($serviceHosts)[0];
             $repoGroups = $this->repo->getGroups($serverID);
-            $server     = $this->loadModel('pipeline')->getByID($serverID);
-            $this->view->server = $server;
         }
 
         $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;

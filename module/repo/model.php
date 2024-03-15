@@ -230,36 +230,32 @@ class repoModel extends model
             return false;
         }
 
-        $response = $this->createGitlabRepo($repo, $repo->namespace);
+        $server = $this->loadModel('pipeline')->getByID($repo->serviceHost);
 
-        $this->loadModel($repo->SCM);
+        $method   = $server->type == 'gitlab' ? 'createGitlabRepo' : 'createGitFoxRepo';
+        $response = $this->$method($repo, $repo->namespace);
+
+        $this->loadModel($server->type);
 
         if(!empty($response->id))
         {
-            // $this->loadModel('action')->create($repo->SCM . 'project', $response->id, 'created', '', $repo->name);
             $repo->path           = $response->path;
             $repo->serviceProject = $response->serviceProject;
             $repo->extra          = $response->extra;
-
-            if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
-            {
-                $path = $this->checkGiteaConnection($repo->SCM, $repo->name, $repo->serviceHost, $repo->serviceProject);
-
-                if($path === false) return false;
-                $repo->path = $path;
-            }
+            $repo->SCM            = $server->type == 'gitlab' ? 'Gitlab' : 'GitFox';
 
             unset($repo->namespace);
             $repoID = $this->create($repo, false);
             if(dao::isError())
             {
-                $this->{$repo->SCM}->apiDeleteProject($repo->serviceHost, $response->id);
+                $deleteMethod = $server->type == 'gitlab' ? 'apiDeleteProject' : 'apiDeleteRepo';
+                $this->{$server->type}->$deleteMethod($repo->serviceHost, $response->id);
                 return false;
             }
             return $repoID;
         }
 
-        return $this->{$repo->SCM}->apiErrorHandling($response);
+        return $this->{$server->type}->apiErrorHandling($response);
     }
 
     /**
@@ -271,13 +267,13 @@ class repoModel extends model
      * @access public
      * @return object|false
      */
-    public function createGitlabRepo(object $repo, int $namespace): object|false
+    public function createGitlabRepo(object $repo, string $namespace): object|false
     {
         $project = new stdclass();
         $project->name                   = $repo->name;
         $project->path                   = $repo->name;
         $project->description            = $repo->desc;
-        $project->namespace_id           = $namespace;
+        $project->namespace_id           = (int)$namespace;
         $project->initialize_with_readme = true;
 
         $response = $this->loadModel('gitlab')->apiCreateProject($repo->serviceHost, $project);
@@ -287,6 +283,36 @@ class repoModel extends model
         $result = new stdclass();
         $result->id             = $response->id;
         $result->path           = $response->web_url;
+        $result->serviceProject = $response->id;
+        $result->extra          = $response->id;
+
+        return $result;
+    }
+
+    /**
+     * 创建gitfox远程版本库。
+     * Create gitfox repo.
+     *
+     * @param  object $repo
+     * @param  int    $namespace
+     * @access public
+     * @return object|false
+     */
+    public function createGitFoxRepo(object $repo, string $namespace): object|false
+    {
+        $project = new stdclass();
+        $project->identifier  = $repo->name;
+        $project->description = $repo->desc;
+        $project->parent_ref  = (string)$namespace;
+        $project->readme      = true;
+
+        $response = $this->loadModel('gitfox')->apiCreateRepo($repo->serviceHost, $project);
+
+        if(empty($response->id)) return $response;
+
+        $result = new stdclass();
+        $result->id             = $response->id;
+        $result->path           = $response->git_url;
         $result->serviceProject = $response->id;
         $result->extra          = $response->id;
 
@@ -2372,6 +2398,24 @@ class repoModel extends model
         foreach($groups as $group)
         {
             $options[] = array('text' => $group->name, 'value' => $group->id);
+        }
+        return $options;
+    }
+
+    /**
+     * Get gitfox groups.
+     *
+     * @param  int    $gitfoxID
+     * @access public
+     * @return void
+     */
+    public function getGitFoxGroups(int $gitfoxID): array
+    {
+        $groups = $this->loadModel('gitfox')->apiGetGroups($gitfoxID, 'identifier_asc');
+        $options = array();
+        foreach($groups as $group)
+        {
+            $options[] = array('text' => $group->identifier, 'value' => $group->id);
         }
         return $options;
     }

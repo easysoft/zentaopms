@@ -190,11 +190,11 @@ class repo extends control
             if($repo) $repoID = $this->repo->createRepo($repo);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($formData->SCM == 'Gitlab')
+            if(in_array($formData->SCM, $this->config->repo->notSyncSCM))
             {
                 /* Add webhook. */
                 $repo = $this->repo->getByID($repoID);
-                $this->loadModel('gitlab')->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->loadModel($formData->SCM)->updateCodePath($repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
                 $this->repo->updateCommitDate($repoID);
             }
 
@@ -1150,7 +1150,7 @@ class repo extends control
 
         $logs    = array();
         $version = 1;
-        if($repo->SCM != 'Gitlab')
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
         {
             $latestInDB = $this->repo->getLatestCommit($repoID, false);
 

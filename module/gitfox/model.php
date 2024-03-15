@@ -152,12 +152,12 @@ class gitfoxModel extends model
         $apiRoot = $this->getApiRoot($gitfoxID);
         if(!$apiRoot) return array();
 
-        $url = sprintf($apiRoot->url, "/repos?listAllRepos");
+        $url = sprintf($apiRoot->url, "/repos");
 
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($url . "&query={$query}&page={$page}&limit=100"));
+            $results = json_decode(commonModel::http($url . "?query={$query}&page={$page}&limit=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results) < 100) break;
@@ -279,6 +279,133 @@ class gitfoxModel extends model
             if(empty($hook->url)) continue;
             if($hook->url == $url) return true;
         }
+
+        return false;
+    }
+
+    /**
+     * 通过api创建gitfox项目。
+     * Create a gitfox repo by api.
+     *
+     * @param  int    $gitfoxID
+     * @param  object $repo
+     * @access public
+     * @return object|array|null|false
+     */
+    public function apiCreateRepo(int $gitfoxID, object $repo): object|array|null|false
+    {
+        if(empty($repo->identifier)) return false;
+
+        $apiRoot = $this->getApiRoot($gitfoxID);
+        $url     = sprintf($apiRoot->url, "/repos");
+
+        $repo->default_branch = 'main';
+        $repo->is_public      = true;
+        $repo->readme         = true;
+        $repo->git_ignore     = '';
+
+        return json_decode(commonModel::http($url, $repo, array(), $apiRoot->header, 'json'));
+    }
+
+    /**
+     * 获取gitfox的群组列表。
+     * Get groups of one gitfox.
+     *
+     * @param  int     $gitfoxID
+     * @param  string  $orderBy
+     * @param  string  $minRole
+     * @param  string  $keyword
+     * @access public
+     * @return array
+     */
+    public function apiGetGroups(int $gitfoxID, string $orderBy = 'id_desc', string $keyword = ''): array
+    {
+        $apiRoot = $this->getApiRoot($gitfoxID);
+        $url     = sprintf($apiRoot->url, "/spaces");
+
+        if($keyword) $url .= '&query=' . urlencode($keyword);
+
+        $order = 'desc';
+        $sort  = 'id';
+        if(strpos($orderBy, '_') !== false) list($sort, $order) = explode('_', $orderBy);
+
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $pageUrl = $url . "?order={$order}&sort={$sort}&page={$page}&limit=100";
+            $results = json_decode(commonModel::http($pageUrl, null, array(), $apiRoot->header));
+            if(!is_array($results)) break;
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results) < 100) break;
+        }
+
+        return $allResults;
+    }
+
+    /**
+     * 通过api删除一个gitfox代码库。
+     * Delete a gitfox project by api.
+     *
+     * @param  int    $gitfoxID
+     * @param  int    $repoID
+     * @access public
+     * @return object|array|null|false
+     */
+    public function apiDeleteRepo(int $gitfoxID, int $repoID): object|array|null|false
+    {
+        if(empty($repoID)) return false;
+
+        $apiRoot = $this->getApiRoot($gitfoxID);
+        $url     = sprintf($apiRoot->url, "/repos/{$repoID}");
+        return json_decode(commonModel::http($url, array(),  array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $apiRoot->header));
+    }
+
+    /**
+     * 错误处理。
+     * Api error handling.
+     *
+     * @param  object $response
+     * @access public
+     * @return bool
+     */
+    public function apiErrorHandling(object $response): bool
+    {
+        if(!empty($response->error))
+        {
+            dao::$errors[] = $response->error;
+            return false;
+        }
+        if(!empty($response->message))
+        {
+            if(is_string($response->message))
+            {
+                $errorKey = array_search($response->message, $this->lang->gitfox->apiError);
+                dao::$errors[] = $errorKey === false ? $response->message : zget($this->lang->gitfox->errorLang, $errorKey);
+            }
+            else
+            {
+                foreach($response->message as $field => $fieldErrors)
+                {
+                    if(empty($fieldErrors)) continue;
+
+                    if(is_string($fieldErrors))
+                    {
+                        $errorKey = array_search($fieldErrors, $this->lang->gitfox->apiError);
+                        if($fieldErrors) dao::$errors[$field][] = $errorKey === false ? $fieldErrors : zget($this->lang->gitfox->errorLang, $errorKey);
+                    }
+                    else
+                    {
+                        foreach($fieldErrors as $error)
+                        {
+                            $errorKey = array_search($error, $this->lang->gitfox->apiError);
+                            if($error) dao::$errors[$field][] = $errorKey === false ? $error : zget($this->lang->gitfox->errorLang, $errorKey);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!$response) dao::$errors[] = false;
         return false;
     }
 }
