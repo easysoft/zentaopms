@@ -382,7 +382,11 @@
             renderPartial(item, options);
             if(item.name === 'html' || item.name === 'body') hasUpdatePage = true;
         });
-        if(hasUpdatePage) updatePageLayout();
+        if(hasUpdatePage)
+        {
+            updatePageLayout();
+            $('html').enableScroll();
+        }
         if(!options.partial)
         {
             const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
