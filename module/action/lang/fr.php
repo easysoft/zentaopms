@@ -515,6 +515,7 @@ $lang->action->label->linkhost                = 'link hosts to';
 $lang->action->label->published               = 'Published';
 $lang->action->label->unpublished             = 'Unpublished';
 $lang->action->label->prompt                  = 'Prompt';
+$lang->action->label->publish                 = 'publish';
 $lang->action->label->delist                  = 'delist';
 $lang->action->label->createrepobranch        = 'Created branch from';
 $lang->action->label->changedprogram          = 'Changed program';

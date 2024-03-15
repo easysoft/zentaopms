@@ -515,6 +515,7 @@ $lang->action->label->linkhost                = '主机关联到';
 $lang->action->label->published               = '发布了';
 $lang->action->label->unpublished             = '下架了';
 $lang->action->label->prompt                  = '提词';
+$lang->action->label->publish                 = '发布了';
 $lang->action->label->delist                  = '下架了';
 $lang->action->label->createrepobranch        = '创建了分支从';
 $lang->action->label->changedprogram          = '调整了项目集';
