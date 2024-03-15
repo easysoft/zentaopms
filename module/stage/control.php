@@ -183,7 +183,7 @@ class stage extends control
             if($data->lang == 'all') $this->custom->deleteItems("lang={$currentLang}&module=stage&section=typeList");
             foreach($data->keys as $index => $key)
             {
-                $value = $data->values[$index];
+                $value = empty($data->values[$index]) ? '' : $data->values[$index];
                 if(!$value || !$key) continue;
                 $this->custom->setItem("{$data->lang}.stage.typeList.{$key}", $value);
             }
