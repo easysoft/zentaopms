@@ -30,7 +30,6 @@ class myIm extends im {
         }
 
         $output = new stdclass();
-        $output->module = 'im';
         $output->method = 'getaipermission';
         $output->result = 'success';
 
