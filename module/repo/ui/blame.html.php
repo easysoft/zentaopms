@@ -61,6 +61,7 @@ foreach($blames as $key => $blame)
     $blames[$key] = (object)$blame;
 }
 
+if(in_array($repo->SCM, $config->repo->notSyncSCM)) unset($config->repo->blameDtable->fieldList['commit']);
 $blames = initTableData($blames, $config->repo->blameDtable->fieldList, $this->repo);
 
 $encodePath = $this->repo->encodePath($entry);
