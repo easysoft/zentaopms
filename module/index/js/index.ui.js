@@ -905,3 +905,10 @@ window.startCron = function(restart)
 turnon ? browserNotify() : ping();
 if(runnable) startCron();
 if(scoreNotice) zui.Messager.show({ content: {html: scoreNotice}, placement: 'bottom-right', time: 0, icon: 'diamond', className: 'text-primary bg-primary-100 bg-opacity-90' });
+
+function hideVisionTips()
+{
+  $('#visionTips').remove();
+  var link = $.createLink('my', 'ajaxSaveVisionTips');
+  $.post(link, {fields: 1});
+}
