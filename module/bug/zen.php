@@ -1313,6 +1313,11 @@ class bugZen extends bug
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
+        if(!isset($openedBuilds[$bug->openedBuild]))
+        {
+            $build = $this->build->getByID((int)$bug->openedBuild);
+            if($build) $openedBuilds[$bug->openedBuild] = $build->name;
+        }
 
         if($bug->assignedTo && !isset($assignedToList[$bug->assignedTo]) && $bug->assignedTo != 'closed')
         {
