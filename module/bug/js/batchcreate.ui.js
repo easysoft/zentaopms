@@ -5,7 +5,7 @@ function loadExecutionBuilds(event)
     const $currentRow = $target.closest('tr');
     const executionID = $target.val();
     const projectID   = $currentRow.find('.form-batch-control[data-name="project"] .picker').zui('picker').$.value || '0';
-    const branch      = $currentRow.find('.form-batch-input[data-name="branch"]').val() || '0'; // Branch ID (from same row).
+    const branch      = $currentRow.find('.form-batch-control[data-name="branch"] input').val() || '0'; // Branch ID (from same row).
     const productID = $('[name="product"]').val();
 
     if(executionID != 0)
