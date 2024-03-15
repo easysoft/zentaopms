@@ -17,7 +17,7 @@ fields:
     - field: createdDate
       range: "20201101 000000:1D"
       type: timestamp
-      format: "YYYY-MM-DD hh::mm:ss"
+      format: "YYYY-MM-DD hh:mm:ss"
     - field: lastEditedDate
       range: "20220101 000000:1D"
       type: timestamp
