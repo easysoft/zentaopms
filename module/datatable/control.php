@@ -188,6 +188,8 @@ class datatable extends control
 
         if($extra == 'unsetStory' && isset($cols['story'])) unset($cols['story']);
 
+        if($this->config->edition != 'ipd' || ($this->config->edition == 'ipd' && $module == 'product' && $method == 'browse' && $extra != 'requirement')) unset($cols['roadmap']);
+
         $this->view->module = $module;
         $this->view->method = $method;
         $this->view->cols   = $cols;

@@ -1177,6 +1177,8 @@ class productZen extends product
     {
         if($isProjectStory && !$productID && !empty($this->products)) $productID = (int)key($this->products); // If toggle a project by the #swapper component on the story page of the projectstory module, the $productID may be empty. Make sure it has value.
 
+        if($this->config->edition != 'ipd' || ($this->config->edition == 'ipd' && $storyType == 'story')) unset($this->config->product->search['fields']['roadmap']);
+
         if(isset($project->hasProduct) && empty($project->hasProduct))
         {
             /* The none-product project don't need display the product in the search form. */
@@ -1442,6 +1444,7 @@ class productZen extends product
         $this->view->storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
         $this->view->storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $this->view->storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+        $this->view->roadmaps   = ($this->config->edition == 'ipd' && $storyType == 'requirement') ? $this->loadModel('roadmap')->getPairs($product->id) : array();
 
         $this->display();
     }

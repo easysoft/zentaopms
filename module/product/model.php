@@ -734,6 +734,8 @@ class productModel extends model
             unset($searchConfig['params']['plan']);
             unset($searchConfig['fields']['stage']);
             unset($searchConfig['params']['stage']);
+
+            if($this->config->edition == 'ipd') $searchConfig['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
         }
         else
         {

@@ -120,6 +120,7 @@ $lang->story->project          = "所属{$lang->projectCommon}";
 $lang->story->branch           = "平台/分支";
 $lang->story->module           = '所属模块';
 $lang->story->moduleAB         = '模块';
+$lang->story->roadmap          = '所属路标';
 $lang->story->source           = "来源";
 $lang->story->sourceNote       = '来源备注';
 $lang->story->fromBug          = '来源Bug';

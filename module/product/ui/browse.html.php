@@ -183,13 +183,14 @@ if($app->rawModule == 'projectstory') $config->story->dtable->fieldList['title']
 
 $setting = $this->loadModel('datatable')->getSetting('product', 'browse', false, $storyType);
 if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
+if($storyType == 'story' || ($config->edition != 'ipd' && $storyType == 'requirement')) unset($setting['roadmap']);
 $cols = array_values($setting);
 
 /* DataTable data. */
 $this->loadModel('story');
 
 $data    = array();
-$options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules, 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $project);
+$options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules, 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $project, 'roadmaps' => $roadmaps);
 foreach($stories as $story)
 {
     $story->rawModule    = $story->module;
