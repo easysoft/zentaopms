@@ -1,18 +1,28 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->doCreateReviewer();
+cid=0
+
+- 不传入任何数据。 @0
+- 只传入评审人列表。 @0
+- 只传入软件需求 ID。 @0
+- 传入软件需求 ID 和 评审人列表，查看storyreview表记录的数量。 @2
+- 传入软件需求 ID 和 评审人列表，查看storyreview表记录的关系。
+ - 属性story @1
+ - 属性reviewer @admin
+- 传入软件需求 ID 和 评审人列表，查看storyreview表记录的关系。
+ - 属性story @1
+ - 属性reviewer @test1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
 zdTable('storyreview')->gen(1);
-
-/**
-
-title=测试 storyModel->doCreateReviewer();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

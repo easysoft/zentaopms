@@ -1,5 +1,18 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getTrackByID();
+cid=0
+
+- 获取用户需求1下面的所有任务数量 @8
+- 获取用户需求1下面的所有用例数量 @5
+- 获取用户需求1下面的所有Bug数量 @5
+- 获取用户需求1下面的任务8的名字属性name @开发任务18
+- 获取用户需求的信息属性title @用户需求11
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -44,19 +57,6 @@ $relation->relation->range('subdivideinto,subdividedfrom,completedin');
 $relation->gen(24);
 
 zdTable('repohistory')->gen(10);
-
-/**
-
-title=测试 storyModel->getTrackByID();
-cid=1
-pid=1
-
-获取用户需求1下面的所有任务数量 >> 6
-获取用户需求1下面的任务601的名字 >> 开发任务511
-获取用户需求1下面的任务501的名字 >> 开发任务411
-获取用户需求的信息 >> 软件需求版本一551,requirement,active
-
-*/
 
 global $tester;
 $story1Tracks = $tester->loadModel('story')->getTrackByID(1);

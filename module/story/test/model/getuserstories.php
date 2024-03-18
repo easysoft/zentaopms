@@ -1,5 +1,43 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getUserStories();
+cid=0
+
+- 获取指派给User2的所有需求数量 @103
+- 获取指派给User2的ID为6的需求详情
+ - 第6条的title属性 @软件需求6
+ - 第6条的type属性 @story
+ - 第6条的assignedTo属性 @user2
+ - 第6条的stage属性 @projected
+- 获取由User2创建的需求数量，每页10条 @10
+- 获取由User2创建的ID为38的需求详情
+ - 第38条的title属性 @软件需求38
+ - 第38条的type属性 @story
+ - 第38条的openedBy属性 @user2
+ - 第38条的stage属性 @released
+- 获取由Test3关闭的所有需求数量 @41
+- 获取由Test3关闭的ID为203的需求详情
+ - 第203条的title属性 @用户需求203
+ - 第203条的type属性 @requirement
+ - 第203条的closedBy属性 @test3
+ - 第203条的stage属性 @~~
+- 获取无评审人的需求数量 @6
+- 获取无评审人的ID为402的需求详情
+ - 第402条的title属性 @软件需求402
+ - 第402条的type属性 @story
+ - 第402条的reviewedBy属性 @~~
+ - 第402条的stage属性 @wait
+- 获取admin评审人的需求数量 @12
+- 获取admin评审人的ID为2的需求详情
+ - 第4条的title属性 @软件需求4
+ - 第4条的type属性 @story
+ - 第4条的reviewedBy属性 @admin
+ - 第4条的stage属性 @planned
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -10,23 +48,6 @@ zdTable('product')->gen(100);
 $storyreview = zdTable('storyreview');
 $storyreview->story->range('1-1000');
 $storyreview->gen(100);
-
-/**
-
-title=测试 storyModel->getUserStories();
-cid=1
-pid=1
-
-获取指派给User2的所有需求数量 >> 100
-获取指派给User2的ID为6的需求详情 >> 软件需求6,story,user2,projected
-获取由User2创建的需求数量，每页10条 >> 10
-获取由User2创建的ID为38的需求详情 >> 软件需求38,story,user2,released
-获取由Test3关闭的所有需求数量 >> 14
-获取由Test3关闭的ID为203的需求详情 >> 用户需求203,requirement,test3,
-获取无评审人的需求数量 >> 25
-获取无评审人的ID为402的需求详情 >> 软件子需求2,story,,planned
-
-*/
 
 global $tester, $app;
 $tester->loadModel('story');

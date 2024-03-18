@@ -1,5 +1,23 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getStoryRelation();
+cid=0
+
+- 获取用户需求1关联的软件需求数量 @1
+- 获取软件需求11关联的用户需求数量 @1
+- 获取用户需求1关联的软件需求详情
+ - 属性title @用户需求11
+ - 属性type @story
+ - 属性status @closed
+- 获取软件需求11关联的用户需求详情
+ - 属性title @用户需求1
+ - 属性type @requirement
+ - 属性status @draft
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -18,19 +36,6 @@ $relation->AType->range('requirement,story,design');
 $relation->BType->range('story,requirement,commit');
 $relation->relation->range('subdivideinto,subdividedfrom,completedin');
 $relation->gen(24);
-
-/**
-
-title=测试 storyModel->getStoryRelation();
-cid=1
-pid=1
-
-获取用户需求25关联的软件需求数量 >> 1
-获取软件需求26关联的用户需求数量 >> 1
-获取用户需求25关联的软件需求详情 >> 软件需求26,story,active
-获取软件需求26关联的用户需求详情 >> 用户需求25,requirement,draft
-
-*/
 
 global $tester;
 $relations1 = $tester->loadModel('story')->getStoryRelation(1, 'requirement');

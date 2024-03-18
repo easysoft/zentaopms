@@ -1,17 +1,20 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-
-zdTable('story')->gen(10);
 
 /**
 
 title=测试 storyModel->updateStoryReleasedDate();
-cid=1
-pid=1
+cid=0
+
+- 判断更新需求1发布日期后是否正确。属性releasedDate @2022-02-02 00:00:00
+- 判断更新需求2发布日期后是否正确。属性releasedDate @2022-02-02 00:00:00
+- 判断更新需求3发布日期后是否正确。属性releasedDate @2022-02-02 00:00:00
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/story.class.php';
+
+zdTable('story')->gen(10);
 
 global $tester;
 

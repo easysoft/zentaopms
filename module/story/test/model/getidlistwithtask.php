@@ -1,22 +1,21 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-zdTable('task')->gen(10);
 
 /**
 
 title=测试 storyModel->getIdListWithTask();
-cid=1
-pid=1
+cid=0
 
-获取执行101下的有关联需求的任务ID列表数量 >> 1
-获取执行1下的有关联需求的任务ID列表数量 >> 0
-获取执行null下的有关联需求的任务ID列表数量 >> 0
-获取执行110下的有关联需求的任务ID列表数量 >> 1
+- 获取执行101下的有关联需求的任务ID列表数量 @1
+- 获取执行1下的有关联需求的任务ID列表数量 @0
+- 获取执行null下的有关联需求的任务ID列表数量 @0
+- 获取执行110下的有关联需求的任务ID列表数量 @1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+su('admin');
+
+zdTable('task')->gen(10);
 
 global $tester;
 $tester->loadModel('story');

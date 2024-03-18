@@ -1,5 +1,21 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->sortStoriesOfPlan();
+cid=0
+
+- 获取更新排序之前的需求在计划下的排序第1条的order属性 @5
+- 获取更新排序之前的需求在计划下的排序第2条的order属性 @10
+- 获取更新排序之前的需求在计划下的排序第3条的order属性 @15
+- 获取更新排序之前的需求在计划下的排序第4条的order属性 @20
+- 获取更新排序之后的需求在计划下的排序第1条的order属性 @2
+- 获取更新排序之后的需求在计划下的排序第2条的order属性 @4
+- 获取更新排序之后的需求在计划下的排序第3条的order属性 @1
+- 获取更新排序之后的需求在计划下的排序第4条的order属性 @3
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -22,14 +38,6 @@ $planstory->gen(50);
 $project = zdTable('project');
 $project->type->range('project{25},sprint{25}');
 $project->gen(50);
-
-/**
-
-title=测试 storyModel->sortStoriesOfPlan();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

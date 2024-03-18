@@ -6,6 +6,22 @@
 title=测试 storyModel->batchReview();
 cid=0
 
+- 执行$review1[1]属性status @active
+- 执行$twin属性status @active
+- 执行$review2[2]属性status @closed
+- 执行$reviewList[1]
+ - 属性reviewer @admin
+ - 属性result @pass
+- 执行$reviewList[2]
+ - 属性reviewer @admin
+ - 属性result @reject
+- 执行$reviewList[28]
+ - 属性reviewer @admin
+ - 属性result @pass
+- 执行$reviewList[30]
+ - 属性reviewer @admin
+ - 属性result @pass
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';

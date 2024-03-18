@@ -1,5 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getAffectedScope();
+cid=0
+
+- 获取需求2团队成员的数量 @22|30|37
+- 获取需求2影响任务的数量 @26|21
+- 获取需求2影响任务的指派给属性assignedTo @A:admin
+- 获取需求2关联bug数 @3
+- 获取需求28关联bug数，包含孪生需求 @4
+- 获取需求2关联用例数 @3
+- 获取需求28关联用例数，包含孪生需求 @4
+- 检查需求2孪生需求 @1
+- 检查需求28孪生需求 @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -58,24 +75,6 @@ $case->gen(40);
 zdTable('storystage')->gen(30);
 zdTable('productplan')->gen(1);
 zdTable('branch')->gen(5);
-
-/**
-
-title=测试 storyModel->getAffectedScope();
-timeout=0
-cid=1
-
-- 获取需求2团队成员的数量 @22|30|37
-- 获取需求2影响任务的数量 @26|21
-- 获取需求2影响任务的指派给属性assignedTo @A:admin
-- 获取需求2关联bug数 @3
-- 获取需求28关联bug数，包含孪生需求 @4
-- 获取需求2关联用例数 @3
-- 获取需求28关联用例数，包含孪生需求 @4
-- 检查需求2孪生需求 @1
-- 检查需求28孪生需求 @1
-
-*/
 
 $story = new storyTest();
 $affectedStory2  = $story->getAffectedScopeTest(2);

@@ -1,5 +1,41 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->doUpdateSpec();
+cid=0
+
+- 执行storyTest模块的doUpdateSpecTest方法，参数是1, $data, $oldData
+ - 属性title @teststory
+ - 属性spec @testspec
+ - 属性verify @testverify
+- 执行storyTest模块的doUpdateSpecTest方法，参数是1, $data, $oldData
+ - 属性title @teststory1
+ - 属性spec @testspec1
+ - 属性verify @testverify1
+- 执行storyTest模块的doUpdateSpecTest方法，参数是2, $data, $oldData
+ - 属性title @teststory1
+ - 属性spec @testspec1
+ - 属性verify @testverify1
+ - 属性files @~~
+- 执行storyTest模块的doUpdateSpecTest方法，参数是3, $data, $oldData, $addedFiles
+ - 属性title @teststory1
+ - 属性spec @testspec1
+ - 属性verify @testverify1
+ - 属性files @8,9,2
+- 执行storyTest模块的doUpdateSpecTest方法，参数是4, $data, $oldData, $addedFiles
+ - 属性title @teststory1
+ - 属性spec @testspec1
+ - 属性verify @testverify1
+ - 属性files @8,9
+- 执行$storySpec
+ - 属性title @teststory1
+ - 属性spec @testspec1
+ - 属性verify @testverify1
+ - 属性files @8,9
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -20,14 +56,6 @@ $storySpec->verify->range('testverify');
 $storySpec->files->range('``,1-10');
 $storySpec->version->range('1');
 $storySpec->gen(5);
-
-/**
-
-title=测试 storyModel->doUpdateSpec();
-cid=1
-pid=1
-
-*/
 
 $storyTest = new storyTest();
 

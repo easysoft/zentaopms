@@ -1,5 +1,18 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getDataOfStoriesPerModule();
+cid=0
+
+- 按照模块分组，获取分组后的需求数量 @6
+- 按照模块分组，获取各个模块下的需求数量，查看模块2150下的数据
+ - 第1条的name属性 @/这是一个模块1
+ - 第1条的value属性 @4
+ - 第1条的product属性 @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 
@@ -13,14 +26,6 @@ $module->gen(20);
 zdTable('product')->gen(1);
 
 su('admin');
-
-/**
-
-title=测试 storyModel->getDataOfStoriesPerModule();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

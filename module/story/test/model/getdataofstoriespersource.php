@@ -1,5 +1,20 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getDataOfStoriesPerSource();
+cid=0
+
+- 按照需求来源分组，获取分组后的需求数量 @14
+- 按照需求来源分组，获取各个需求来源的需求数量，查看support下的数据
+ - 第support条的name属性 @技术支持
+ - 第support条的value属性 @1
+- 按照需求来源分组，获取各个需求来源的需求数量，查看market下的数据
+ - 第market条的name属性 @市场
+ - 第market条的value属性 @2
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 
@@ -8,14 +23,6 @@ $story->version->range('1-4');
 $story->gen(20);
 
 su('admin');
-
-/**
-
-title=测试 storyModel->getDataOfStoriesPerSource();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

@@ -1,5 +1,14 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->superReview();
+cid=0
+
+- 执行$reviewers第0条的reviewer属性 @user1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -8,14 +17,6 @@ $storyView->story->range(1);
 $storyView->reviewer->range('admin,user1');
 $storyView->result->range('``,pass');
 $storyView->gen(2);
-
-/**
-
-title=测试 storyModel->superReview();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

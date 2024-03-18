@@ -1,17 +1,21 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-zdTable('story')->gen(10);
 
 /**
 
 title=测试 storyModel->extractAccountsFromSingle();
-cid=1
-pid=1
+cid=0
+
+- 根据需求2获取的accounts数量 @2
+- 根据需求4获取的accounts数量 @1
+- 根据需求2获取的account详情 @user2
+- 根据需求4获取的account详情 @dev4
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+su('admin');
+
+zdTable('story')->gen(10);
 
 global $tester;
 $tester->loadModel('story');

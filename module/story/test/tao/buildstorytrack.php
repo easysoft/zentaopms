@@ -1,5 +1,34 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->buildStoryTrack();
+cid=0
+
+- 执行$track @0
+- 执行$track->cases @5
+- 执行$track->bugs @5
+- 执行$track->tasks @5
+- 执行$track->designs @0
+- 执行$track->revisions @0
+- 执行$track->cases @5
+- 执行$track->bugs @5
+- 执行$track->tasks @1
+- 执行$track->designs @0
+- 执行$track->revisions @0
+- 执行$track->cases @5
+- 执行$track->bugs @5
+- 执行$track->tasks @5
+- 执行$track->designs @5
+- 执行$track->revisions @5
+- 执行$track->cases @5
+- 执行$track->bugs @5
+- 执行$track->tasks @1
+- 执行$track->designs @5
+- 执行$track->revisions @5
+
+*/
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 
 $case = zdTable('case');
@@ -26,14 +55,6 @@ $relation->BType->range('commit');
 $relation->gen(5);
 
 zdTable('repohistory')->gen(5);
-
-/**
-
-title=测试 storyModel->buildStoryTrack();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

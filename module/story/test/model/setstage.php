@@ -1,5 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->setStage();
+cid=0
+
+- 不传入需求; @0
+- 传入已经分解任务的需求，检查需求阶段。属性stage @testing
+- 传入已关闭的需求，检查需求阶段。属性stage @closed
+- 传入只关联的计划的需求，检查需求阶段。属性stage @planned
+- 传入只关联的项目的需求，检查需求阶段。属性stage @projected
+- 传入关联多分支，并分解成任务的需求，检查需求阶段。属性stage @testing
+- 传入关联多分支，并分解成任务的需求，检查分支 0 的需求阶段。属性stage @testing
+- 传入关联多分支，并分解成任务的需求，检查分支 1 的需求阶段。属性stage @tested
+- 传入关联多分支，并分解成任务的需求，检查分支 2 的需求阶段。属性stage @released
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -48,14 +65,6 @@ $release = zdTable('release');
 $release->stories->range('2');
 $release->branch->range('3');
 $release->gen(3);
-
-/**
-
-title=测试 storyModel->setStage();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

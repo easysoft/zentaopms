@@ -1,5 +1,29 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getById();
+cid=0
+
+- 获取ID为1、版本号为1的需求关联的用户需求。 @用户需求3
+- 获取ID为1、版本号为1的需求的名称。属性title @用户需求版本一1
+- 获取ID为1、版本号为2的需求的名称。
+ - 属性title @用户需求版本一2
+ - 属性spec @这是一个软件需求描述2
+- 获取ID为2、版本号为3的需求关联的执行。 @22|30|37
+- 获取ID为2、版本号为3的需求关联的需求。 @4|6|8
+- 获取ID为2、版本号为3的需求，执行ID为21的创建任务数。 @2
+- 获取ID为2、版本号为3的需求，执行ID为26的创建任务数。 @2
+- 获取ID为2、版本号为3的需求关联的计划。 @1.0
+- 获取ID为2、版本号为3的需求关联需求的标题。 @软件需求6
+- 获取ID为2、版本号为3的需求的名称。属性title @用户需求版本一6
+- 获取ID为10、版本号为3的需求转化Bug的名称。属性toBugTitle @BUG1
+- 获取ID为18、版本号为3的需求子需求的标题。属性title @软件需求20
+- 获取ID为20、版本号为3的需求父需求的标题。属性parentName @软件需求18
+- 获取ID为20、版本号为3的需求孪生需求关联执行中的任务数。 @2
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -43,14 +67,6 @@ $task->gen(60);
 zdTable('storystage')->gen(30);
 zdTable('bug')->gen(1);
 zdTable('productplan')->gen(1);
-
-/**
-
-title=测试 storyModel->getById();
-cid=1
-pid=1
-
-*/
 
 $story = new storyTest();
 $story1Version1  = $story->getByIdTest(1, 1);

@@ -1,5 +1,18 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->updateLinkedLane();
+cid=0
+
+- 不传入任何数据。 @0
+- 只传入需求 ID。 @0
+- 只传入关联的执行。 @0
+- 传入需求 ID，传入关联的执行不是看板。 @0
+- 传入需求 ID，传入关联的执行中有看板。 @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -7,14 +20,6 @@ su('admin');
 $project = zdTable('project');
 $project->id->range('1-5');
 $project->gen(5);
-
-/**
-
-title=测试 storyModel->updateLinkedLane();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

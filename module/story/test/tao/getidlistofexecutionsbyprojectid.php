@@ -6,6 +6,15 @@
 title=测试 storyModel->getIdListOfExecutionsByProjectID();
 cid=0
 
+- 请求类型是 unclosed，不传入项目。 @0
+- 请求类型是 unclosed，项目下有执行。 @0
+- 请求类型是 linkedexecution，不传入项目。 @50
+- 请求类型是 linkedexecution，项目下有执行。 @50
+- 请求类型是 linkedexecution，项目下无执行。 @0
+- 请求类型是 unlinkedexecution，不传入项目。 @50
+- 请求类型是 unlinkedexecution，项目下有执行。 @50
+- 请求类型是 unlinkedexecution，项目下无执行。 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';

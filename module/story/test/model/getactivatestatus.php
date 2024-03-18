@@ -1,5 +1,21 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getActivateStatus();
+cid=0
+
+- 执行storyModel模块的getActivateStatus方法，参数是1  @active
+- 执行storyModel模块的getActivateStatus方法，参数是2  @active
+- 执行storyModel模块的getActivateStatus方法，参数是3  @active
+- 执行storyModel模块的getActivateStatus方法，参数是4  @changing
+- 执行storyModel模块的getActivateStatus方法，参数是5  @active
+- 执行storyModel模块的getActivateStatus方法，参数是6  @active
+- 执行storyModel模块的getActivateStatus方法，参数是100  @active
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -14,15 +30,6 @@ zdTable('story')->gen(50);
 $storyreview = zdTable('storyreview');
 $storyreview->story->range('1-1000');
 $storyreview->gen(100);
-
-
-/**
-
-title=测试 storyModel->activate();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

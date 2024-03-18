@@ -1,5 +1,21 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->batchGetExecutionStories();
+cid=0
+
+- 不传入数据。 @0
+- 传入有关联需求的项目数据，不传入产品数据。 @25
+- 传入有关联需求的项目数据，传入有需求的产品数据。 @25
+- 传入有关联需求的项目数据，传入无需求的产品数据。 @0
+- 传入有关联需求的项目数据，不传入产品数据。 @25
+- 传入有关联需求的项目数据，传入有需求的产品数据。 @25
+- 传入有关联需求的项目数据，传入无需求的产品数据。 @25
+- 传入分页。 @5
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 
@@ -17,14 +33,6 @@ $story->gen(50);
 $project = zdTable('project');
 $project->type->range('project{25},sprint{25}');
 $project->gen(50);
-
-/**
-
-title=测试 storyModel->batchGetExecutionStories();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

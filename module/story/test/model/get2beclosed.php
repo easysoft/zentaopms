@@ -1,17 +1,22 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-zdTable('story')->gen(20);
 
 /**
 
 title=测试 storyModel->get2BeClosed();
-cid=1
-pid=1
+cid=0
+
+- 获取产品3下需要关闭的软件需求数量 @1
+- 获取产品3下需要关闭的软件需求详情
+ - 第10条的title属性 @软件需求10
+ - 第10条的type属性 @story
+ - 第10条的stage属性 @developed
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+su('admin');
+
+zdTable('story')->gen(20);
 
 global $tester;
 $tester->loadModel('story');

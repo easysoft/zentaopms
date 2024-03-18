@@ -1,16 +1,20 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
 
 /**
 
 title=测试 storyModel->doUpdateLinkStories();
-cid=1
-pid=1
+cid=0
+
+- 执行$storyModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq(2)->fetch()属性linkStories @1
+- 执行$storyModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq(4)->fetch()属性linkStories @~~
+- 执行$storyModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq(2)->fetch()属性linkRequirements @1
+- 执行$storyModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq(4)->fetch()属性linkRequirements @~~
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/story.class.php';
+su('admin');
 
 $story = zdTable('story');
 $story->product->range('1');

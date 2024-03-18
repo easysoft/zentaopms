@@ -1,16 +1,18 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
 
 /**
 
 title=测试 storyModel->isSuperReviewer();
-cid=1
-pid=1
+cid=0
+
+- superReviewers变量中无该账号。 @0
+- superReviewers变量中有该账号。 @1
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/story.class.php';
+su('admin');
 
 global $tester;
 $storyModel = $tester->loadModel('story');

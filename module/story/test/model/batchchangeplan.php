@@ -1,5 +1,27 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->batchChangePlan();
+cid=0
+
+- 批量修改6个需求的计划，查看被修改计划的需求数量 @4
+- 批量修改6个需求的计划，查看被修改计划的需求数量 @4
+- 批量修改6个需求的计划，查看需求1修改后的计划ID第1条的plan属性 @10
+- 批量修改6个需求的计划，查看需求2修改后的计划ID第2条的plan属性 @10
+- 批量修改6个需求的计划，查看需求4修改后的计划ID第4条的plan属性 @2,10
+- 批量修改6个需求的计划，查看需求5修改后的计划ID第5条的plan属性 @10
+- 批量修改6个需求的计划，查看需求1修改后的计划ID第1条的plan属性 @9
+- 批量修改6个需求的计划，查看需求2修改后的计划ID第2条的plan属性 @9
+- 批量修改6个需求的计划，查看需求4修改后的计划ID第4条的plan属性 @9
+- 批量修改6个需求的计划，查看需求5修改后的计划ID第5条的plan属性 @9
+- 批量修改6个需求的计划，查看需求1修改后的计划ID第1条的plan属性 @5
+- 批量修改6个需求的计划，查看需求2修改后的计划ID第2条的plan属性 @5
+- 批量修改6个需求的计划，查看需求4修改后的计划ID第4条的plan属性 @5
+- 批量修改6个需求的计划，查看需求5修改后的计划ID第5条的plan属性 @5
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -19,14 +41,6 @@ $story->status->range('draft,active,closed');
 $story->version->range('1');
 $story->gen(6);
 zdTable('storyspec')->gen(10);
-
-/**
-
-title=测试 storyModel->batchChangePlan();
-cid=1
-pid=1
-
-*/
 
 $storyIdList = array(1, 2, 3, 4, 5, 6);
 $story       = new storyTest();

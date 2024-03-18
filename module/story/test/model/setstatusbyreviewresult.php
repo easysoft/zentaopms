@@ -1,27 +1,40 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-zdTable('story')->gen(20);
-su('admin');
 
 /**
 
 title=测试 storyModel->activate();
-cid=1
-pid=1
+cid=0
 
-查看激活之前的需求状态 >> draft
-查看激活之前的需求状态 >> active
-查看激活之前的需求状态 >> closed
-查看激活之前的需求状态 >> changing
-
-查看激活之后的需求状态 >> active
-查看激活之后的需求状态 >> active
-查看激活之后的需求状态 >> active
-查看激活之后的需求状态 >> active
+- 执行storyModel模块的setStatusByReviewResult方法，参数是$story, $oldStory, 'pass'
+ - 属性status @active
+ - 属性finalResult @pass
+- 执行storyModel模块的setStatusByReviewResult方法，参数是$story, $oldStory, 'clarify'
+ - 属性status @changing
+ - 属性finalResult @clarify
+- 执行storyModel模块的setStatusByReviewResult方法，参数是$story, $oldStory, 'clarify'
+ - 属性status @draft
+ - 属性finalResult @clarify
+- 执行storyModel模块的setStatusByReviewResult方法，参数是$story, $oldStory, 'revert'
+ - 属性status @active
+ - 属性version @2
+ - 属性finalResult @revert
+- 执行storyModel模块的setStatusByReviewResult方法，参数是$story, $oldStory, 'reject', 'done'
+ - 属性status @closed
+ - 属性stage @released
+ - 属性finalResult @reject
+- 执行storyModel模块的setStatusByReviewResult方法，参数是$story, $oldStory, 'reject', 'cancel'
+ - 属性status @closed
+ - 属性stage @released
+- 执行storyModel模块的setStatusByReviewResult方法，参数是$story, $oldStory, 'reject', 'cancel'
+ - 属性status @closed
+ - 属性stage @closed
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+
+zdTable('story')->gen(20);
+su('admin');
 
 global $tester;
 $storyModel = $tester->loadModel('story');

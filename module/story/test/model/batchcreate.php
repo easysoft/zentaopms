@@ -4,7 +4,6 @@
 /**
 
 title=测试 storyModel->batchCreate();
-timeout=0
 cid=0
 
 - 插入两条软件需求，判断返回的需求总量 @3

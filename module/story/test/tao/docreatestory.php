@@ -1,18 +1,23 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->doCreateStory();
+cid=0
+
+- 检查保存后的数据。
+ - 属性product @1
+ - 属性title @test story
+ - 属性status @active
+- 检查报错信息。 @『通知邮箱』应当为合法的EMAIL。
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
 zdTable('story')->gen(0);
-
-/**
-
-title=测试 storyModel->doCreateStory();
-cid=1
-pid=1
-
-*/
 
 $data  = new stdclass();
 $data->product     = 1;

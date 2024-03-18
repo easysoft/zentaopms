@@ -1,5 +1,18 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getExecutionStoryPairs();
+cid=0
+
+- 获取执行11下的需求数量 @50
+- 获取执行11下的需求详情属性8 @8:软件需求8 (优先级:2,预计工时:1)
+- 获取执行11、产品91下的需求数量 @0
+- 获取执行11、产品1下的需求数量 @25
+- 获取执行11、产品1下的需求详情属性3 @3:用户需求3 (优先级:2,预计工时:3)
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -21,14 +34,6 @@ $story->gen(50);
 $project = zdTable('project');
 $project->type->range('project{25},sprint{25}');
 $project->gen(50);
-
-/**
-
-title=测试 storyModel->getExecutionStoryPairs();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

@@ -1,5 +1,15 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->fixBranchStoryStage();
+cid=0
+
+- 不传入任何项目。 @0
+- 传入需求，检查结果。 @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 
@@ -31,14 +41,6 @@ $story->type->range('story');
 $story->stage->range('wait,planned,projected,developing,developed,testing,tested,verified,released,closed');
 $story->branch->range('0{25},1{25}');
 $story->gen(50);
-
-/**
-
-title=测试 storyModel->fixBranchStoryStage();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

@@ -1,5 +1,18 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->create();
+cid=0
+
+- 检查创建后的数据。
+ - 属性id @5
+ - 属性title @test story
+- 如果传入执行，检查需求是否已经关联到执行了。 @1
+- 如果传入Bug，检查Bug是否已经关闭了。 @closed
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -21,14 +34,6 @@ $story->gen(4);
 $storySpec = zdTable('storyspec');
 $storySpec->story->range('1-6');
 $storySpec->gen(4);
-
-/**
-
-title=测试 storyModel->create();
-cid=1
-pid=1
-
-*/
 
 $data  = new stdclass();
 $data->product     = 1;

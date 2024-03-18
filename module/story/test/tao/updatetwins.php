@@ -1,9 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 storyModel->updateTwins();
-cid=1
+cid=0
 
 - 不传入需求，也不传入产品。 @0
 - 传入需求列表，检查twins字段。

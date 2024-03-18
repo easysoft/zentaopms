@@ -1,5 +1,28 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getLinkedTaskStat();
+cid=0
+
+- 不传入任何数据。 @0
+- 只传入需求 ID。 @0
+- 只传入关联的执行。 @0
+- 传入需求 ID, 只关联分支 0，检查是否有未关联的分支出现。 @1
+- 传入需求 ID, 只关联分支 0，检查开发任务未开始的任务数。 @8
+- 传入需求 ID, 只关联分支 0，检查开发任务数和统计是否一致。 @1
+- 传入需求 ID, 只关联分支 0，检查测试任务数和统计是否一致。 @1
+- 传入需求 ID, 只关联分支 1，检查是否有未关联的分支出现。 @1
+- 传入需求 ID, 只关联分支 1，检查开发任务未开始的任务数。 @8
+- 传入需求 ID, 只关联分支 1，检查开发任务数和统计是否一致。 @1
+- 传入需求 ID, 只关联分支 1，检查测试任务数和统计是否一致。 @1
+- 传入需求 ID, 关联分支 0,1,2，检查开发任务未开始的任务数。 @8
+- 传入需求 ID, 关联分支 0,1,2，检查开发任务数和统计是否一致。 @1
+- 传入需求 ID, 关联分支 0,1,2，检查测试任务数和统计是否一致。 @1
+- 传入需求 ID, 传入未关联的项目，检查是否有数据。 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -10,14 +33,6 @@ $task->execution->range('1{2},2{2},3{2}');
 $task->type->range('devel{6},test{6}');
 $task->deleted->range('0{24},1');
 $task->gen(100);
-
-/**
-
-title=测试 storyModel->getLinkedTaskStat();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

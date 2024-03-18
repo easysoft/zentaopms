@@ -6,6 +6,51 @@
 title=测试 storyModel->buildOperateMenu();
 cid=0
 
+- 查看用户需求详情操作菜单的第一个链接
+ - 第0条的icon属性 @confirm
+ - 第0条的data-toggle属性 @modal
+ - 第0条的url属性 @/story-submitReview-1-requirement.html
+- 查看用户需求详情操作菜单的第二个链接
+ - 第1条的icon属性 @hand-right
+ - 第1条的data-toggle属性 @modal
+ - 第1条的url属性 @/story-assignTo-1-default--requirement.html
+- 查看用户需求详情操作菜单的第三个链接
+ - 第2条的icon属性 @off
+ - 第2条的data-toggle属性 @modal
+ - 第2条的url属性 @/story-close-1--requirement.html
+- 查看用户需求详情操作菜单的第一个链接
+ - 第0条的icon属性 @confirm
+ - 第0条的url属性 @/story-submitReview-1-requirement.html
+- 查看用户需求详情操作菜单的第二个链接
+ - 第1条的icon属性 @hand-right
+ - 第1条的url属性 @/story-assignTo-1-default--requirement.html
+- 查看用户需求详情操作菜单的第三个链接
+ - 第2条的icon属性 @off
+ - 第2条的url属性 @/story-close-1--requirement.html
+- 查看用户需求详情操作菜单的第一个链接
+ - 第0条的icon属性 @alter
+ - 第0条的url属性 @/story-change-2.html
+- 查看软件需求详情操作菜单的第二个链接
+ - 第1条的icon属性 @hand-right
+ - 第1条的data-toggle属性 @modal
+ - 第1条的url属性 @/story-assignTo-2-default--story.html
+- 查看软件需求详情操作菜单的第三个链接
+ - 第2条的icon属性 @off
+ - 第2条的data-toggle属性 @modal
+ - 第2条的url属性 @/story-close-2--story.html
+- 查看软件需求详情操作菜单的第一个链接
+ - 第0条的icon属性 @alter
+ - 第0条的url属性 @/story-change-2.html
+- 查看软件需求详情操作菜单的第二个链接
+ - 第1条的icon属性 @hand-right
+ - 第1条的url属性 @/story-assignTo-2-default--story.html
+- 查看软件需求详情操作菜单的第三个链接
+ - 第2条的icon属性 @off
+ - 第2条的url属性 @/story-close-2--story.html
+- 查看软件需求详情操作菜单的第一个链接
+ - 第0条的icon属性 @alter
+ - 第0条的url属性 @/story-change-2.html
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');

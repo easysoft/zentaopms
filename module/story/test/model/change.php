@@ -1,19 +1,24 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->change();
+cid=0
+
+- 查看变更后需求数据。
+ - 属性title @测试需求1变更标题
+ - 属性spec @测试需求1的变更描述
+ - 属性version @4
+- 变更时不填写需求名称，给出提示 @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
 zdTable('story')->gen(30);
 zdTable('storyspec')->gen(90);
-
-/**
-
-title=测试 storyModel->change();
-cid=1
-pid=1
-
-*/
 
 $story  = new storyTest();
 $story1 = new stdclass();

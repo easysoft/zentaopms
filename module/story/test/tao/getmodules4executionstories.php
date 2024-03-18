@@ -1,18 +1,27 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getModules4ExecutionStories();
+cid=0
+
+- 不传入数据。 @0
+- 传入 type=byproduct，不传入 param 参数。 @0
+- 传入 type=byproduct 和 param 参数。 @0
+- 传入 type=bymodule，不传入 param 参数。 @0
+- 传入 type=bymodule 和 param 参数。属性1 @1
+- 设置COOKIE，传入 type=byproduct，不传入 param 参数。属性2 @2
+- 设置COOKIE，传入 type=byproduct 和 param 参数。属性2 @2
+- 设置COOKIE，传入 type，不传入 param 参数。属性2 @2
+- 设置COOKIE，传入 type=bymodule 和 param 参数。属性1 @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 $module = zdTable('module');
 $module->type->range('story');
 $module->gen(50);
-
-/**
-
-title=测试 storyModel->getModules4ExecutionStories();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

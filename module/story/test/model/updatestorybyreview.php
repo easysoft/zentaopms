@@ -1,16 +1,19 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
 
 /**
 
-title=测试 storyModel->getReviewerPairs();
-cid=1
-pid=1
+title=测试 storyModel->updateStoryByReview();
+cid=0
+
+- 执行storyModel模块的updateStoryByReview方法，参数是1, $oldStory, $story 属性status @draft
+- 执行storyModel模块的updateStoryByReview方法，参数是1, $oldStory, $story 属性status @draft
+- 执行storyModel模块的updateStoryByReview方法，参数是1, $oldStory, $story 属性status @active
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/story.class.php';
+su('admin');
 
 zdTable('story')->gen(1);
 $storyView = zdTable('storyreview');

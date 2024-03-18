@@ -1,5 +1,16 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getPlanStories();
+cid=0
+
+- 获取计划1下的需求数量，每页10条 @10
+- 获取计划1下的需求数量，不分页 @20
+- 获取计划1下，按照模块排序的需求数量，不分页 @20
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -21,14 +32,6 @@ $planstory->gen(50);
 $project = zdTable('project');
 $project->type->range('project{25},sprint{25}');
 $project->gen(50);
-
-/**
-
-title=测试 storyModel->getPlanStories();
-cid=1
-pid=1
-
-*/
 
 global $tester, $app;
 $app->methodName = 'getPlanStories';

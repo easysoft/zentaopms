@@ -1,18 +1,20 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->checkNeedConfirm();
+cid=0
+
+- 执行$tester->story->checkNeedConfirm($data)->needconfirm @1
+- 执行$tester->story->checkNeedConfirm(array(1 => $data))[1]->needconfirm @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
 zdTable('story')->gen(10);
-
-/**
-
-title=测试 storyModel->checkNeedConfirm();
-cid=1
-pid=1
-
-*/
 
 $data = new stdclass();
 $data->id    = 1;

@@ -1,16 +1,24 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
-
-zdTable('product')->gen(50);
 
 /**
 
 title=测试 storyModel->buildProductsCondition();
-cid=1
-pid=1
+cid=0
+
+- 不传入数据 @1
+- 不传入数据 @1
+- 传入正常产品 ID。 @1
+- 传入正常产品 ID 和传入分支。 @1
+- 传入正常产品和分支产品。 @1
+- 传入分支产品。 @1
+- 传入分成产品和分支。 @1
+- 传入正常产品和分支产品和分支。 @1
 
 */
+include dirname(__FILE__, 5) . "/test/lib/init.php";
+
+zdTable('product')->gen(50);
 
 global $tester;
 $storyModel = $tester->loadModel('story');

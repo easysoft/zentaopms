@@ -1,5 +1,26 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->fetchProjectStories();
+cid=0
+
+- 不传入项目，也不传入产品。 @0
+- 传入项目，不传入产品。 @50
+- 传入产品，不传入项目。 @0
+- 传入产品，传入项目。 @25
+- 获取草稿类型的需求。 @13
+- 获取非关闭的需求。 @13
+- 获取所有分支的需求。 @25
+- 获取分支 ID 为 1 的需求。 @20
+- 不传入项目，获取关联执行的需求。 @0
+- 不传入项目，获取未关联执行的需求。 @0
+- 传入项目，获取关联执行的需求。 @1
+- 传入项目，获取未关联执行的需求。 @24
+- 分页获取需求。 @5
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 
@@ -18,14 +39,6 @@ $story->product->range('1-2');
 $story->type->range('story');
 $story->branch->range('0{30},1{10},2{10}');
 $story->gen(50);
-
-/**
-
-title=测试 storyModel->fetchProjectStoriesTest();
-cid=1
-pid=1
-
-*/
 
 $storyTest = new storyTest();
 

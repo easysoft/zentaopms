@@ -1,5 +1,15 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->review();
+cid=0
+
+- 评审一个草稿的需求，传入评审意见为通过，状态变为激活属性status @active
+- 评审一个草稿的需求，传入评审意见为通过，状态变为激活属性status @closed
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -22,14 +32,6 @@ $storyReview->story->range('1-30');
 $storyReview->reviewer->range('admin');
 $storyReview->version->range('1');
 $storyReview->gen(20);
-
-/**
-
-title=测试 storyModel->review();
-cid=1
-pid=1
-
-*/
 
 $story = new storyTest();
 

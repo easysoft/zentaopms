@@ -1,5 +1,14 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->setStageToPlanned();
+cid=0
+
+- 不传入任何数据。 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -9,14 +18,6 @@ $story = zdTable('story');
 $story->plan->range('0,``,1,`2,3`');
 $story->branch->range('0');
 $story->gen(5);
-
-/**
-
-title=测试 storyModel->setStageToPlanned();
-cid=1
-pid=1
-
-*/
 global $tester;
 $storyModel = $tester->loadModel('story');
 r($storyModel->setStageToPlanned(0)) && p() && e('0'); //不传入任何数据。

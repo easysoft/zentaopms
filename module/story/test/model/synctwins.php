@@ -1,5 +1,21 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->syncTwins();
+cid=0
+
+- 执行$twins[0]
+ - 属性id @6
+ - 属性pri @5
+ - 属性estimate @100
+- 执行$twins[1]
+ - 属性id @7
+ - 属性pri @5
+ - 属性estimate @100
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -22,14 +38,6 @@ $relation->AVersion->range('1');
 $relation->BID->range('10,1,11,2,12,3,13,4,14,5,15,6,16,7,17,8');
 $relation->BVersion->range('1');
 $relation->gen(16);
-
-/**
-
-title=测试 storyModel->updateStoryVersion();
-cid=1
-pid=1
-
-*/
 
 $changes = array();
 $changes[] = array('field' => 'pri', 'old' => '3', 'new' => '5', 'diff' => '');
