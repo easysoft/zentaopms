@@ -173,7 +173,7 @@ class transferTao extends transferModel
                 /* 如果value在values中存在则在values中查找（一般为语言项）。*/
                 /* If value exists in values, find it in values (usually as a language item). */
                 $valueKey = array_search($value, $values);
-                $value    = $valueKey ? $valueKey : $value;
+                $value    = $valueKey !== false ? $valueKey : $value;
             }
         }
 
