@@ -817,7 +817,11 @@ class baseRouter
         {
             $account = $sql->quote($account);
 
-            if(!empty($_COOKIE['vision']))
+            if($this->config->tabSession && !empty($_SESSION['vision']))
+            {
+                $vision = $_SESSION['vision'];
+            }
+            elseif(!empty($_COOKIE['vision']))
             {
                 $vision = $_COOKIE['vision'];
             }
@@ -842,7 +846,8 @@ class baseRouter
         if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
 
         $vision = $vision ? $vision : $defaultVision;
-        if(empty($_COOKIE['vision'])) setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+        if($this->config->tabSession && empty($_SESSION['vision'])) $this->session->set('vision', $vision);
+        setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
 
         $this->config->vision = $vision;
     }
