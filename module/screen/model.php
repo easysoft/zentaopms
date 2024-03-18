@@ -390,7 +390,7 @@ class screenModel extends model
                 $this->buildCardChart($component, $chart);
                 break;
             case 'waterpolo':
-                $this->buildWaterPolo($component, $chart);
+                $this->getWaterPoloOption($component, $chart);
                 break;
             default:
                 break;
@@ -1533,6 +1533,37 @@ class screenModel extends model
             return $this->setComponentDefaults($component);
         }
     }
+
+    /**
+     * Get waterpolo option.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function getWaterPoloOption($component, $chart)
+    {
+        if(!$chart->settings)
+        {
+            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
+            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
+            $component->key         = "PieCircle";
+            $component->chartConfig = json_decode('{"key":"WaterPolo","chartKey":"VWaterPolo","conKey":"VCWaterPolo","title":"水球图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"common","image":"water_WaterPolo.png"}');
+            $component->option      = json_decode('{"type":"nomal","series":[{"type":"liquidFill","radius":"90%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
+
+            return $this->setComponentDefaults($component);
+        }
+        else
+        {
+            $setting = (array)(json_decode($chart->settings)[0]);
+            $options = $this->loadModel('chart')->genWaterPolo(json_decode($chart->fields), $setting, $chart->sql, json_decode($chart->filters));
+
+            $component->option->dataset = $options['series'][0]['data'][0];
+            return $this->setComponentDefaults($component);
+        }
+    }
+
 
     /**
      * 构建雷达图。
