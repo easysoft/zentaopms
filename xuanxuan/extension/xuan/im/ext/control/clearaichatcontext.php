@@ -22,7 +22,7 @@ class myIm extends im
         $broadcast->gid         = imModel::createGID();
         $broadcast->cgid        = $chatGid;
         $broadcast->user        = "ai-{$modelId}";
-        $broadcast->content     = 'AI 上下文已清空';
+        $broadcast->content     = $this->lang->ai->miniPrograms->clearContext;
         $broadcast->type        = 'broadcast';
         $broadcast->contentType = 'text';
 
