@@ -78,8 +78,8 @@ $lang->productplan->projectNotEmpty    = $lang->projectCommon . ' cannot be empt
 $lang->productplan->nextStep           = "Next step";
 $lang->productplan->summary            = "Total: <strong>%s</strong>, Parents: <strong>%s</strong>, Children: <strong>%s</strong>，Independent: <strong>%s</strong>.";
 $lang->productplan->checkedSummary     = "Seleted: <strong>%total%</strong>, Parents: <strong>%parent%</strong>, Children: <strong>%child%</strong>, Independent: <strong>%independent%</strong>.";
-$lang->productplan->confirmChangePlan  = "After the branch of『%s』is unlinked, %s {$lang->SRCommon} and %s bugs under the branch will be removed from the plan at the same time, so still want to unassociate?";
-$lang->productplan->confirmRemoveStory = "After the branch of『%s』is unlinked, %s {$lang->SRCommon} under the branch will be removed from the plan at the same time, so still want to unassociate?";
+$lang->productplan->confirmChangePlan  = "After the branch of『%s』is unlinked, %s story and %s bugs under the branch will be removed from the plan at the same time, so still want to unassociate?";
+$lang->productplan->confirmRemoveStory = "After the branch of『%s』is unlinked, %s story under the branch will be removed from the plan at the same time, so still want to unassociate?";
 $lang->productplan->confirmRemoveBug   = "After the branch of『%s』is unlinked, %s bugs under the branch will be removed from the plan at the same time, so still want to unassociate?";
 
 $lang->productplan->id         = 'ID';
@@ -104,6 +104,7 @@ $lang->productplan->order      = "Order";
 $lang->productplan->deleted    = "Deleted";
 $lang->productplan->mailto     = "Mailto";
 $lang->productplan->planStatus = "Status";
+$lang->productplan->storyTitle = "Title";
 
 $lang->productplan->statusList['wait']   = 'Wait';
 $lang->productplan->statusList['doing']  = 'Doing';

@@ -349,6 +349,8 @@ class productplan extends control
      */
     public function view(int $planID = 0, string $type = 'story', string $orderBy = 'order_desc', string $link = 'false', string $param = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
+        $this->app->loadLang('requirement');
+        $this->app->loadLang('epic');
         $plan = $this->productplan->getByID($planID, true);
         if(!$plan)
         {
@@ -567,11 +569,11 @@ class productplan extends control
         $planStories = $this->loadModel('story')->getPlanStories($planID);
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($plan->product, "0,{$plan->branch}", (int)$param, 'id', 0, 'story', array_keys($planStories), '', $pager);
+            $allStories = $this->story->getBySearch($plan->product, "0,{$plan->branch}", (int)$param, 'id', 0, 'all', array_keys($planStories), '', $pager);
         }
         else
         {
-            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, '0', 'draft,reviewing,active,changing', 'story', 'id_desc', $hasParent = false, array_keys($planStories), $pager);
+            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, '0', 'draft,reviewing,active,changing', 'all', 'id_desc', $hasParent = false, array_keys($planStories), $pager);
         }
 
         $modules = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');

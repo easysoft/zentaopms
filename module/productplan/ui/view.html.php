@@ -32,6 +32,7 @@ jsVar('planID',      $plan->id);
 jsVar('confirmLang', $confirmLang);
 jsVar('unlinkURL',   $unlinkURL);
 jsVar('childrenAB',  $lang->story->childrenAB);
+jsVar('gradeGroup',  $gradeGroup);
 
 $bugCols     = array();
 $storyCols   = array();
@@ -39,7 +40,7 @@ foreach($config->productplan->defaultFields['story'] as $field) $storyCols[$fiel
 foreach($config->productplan->defaultFields['bug'] as $field)   $bugCols[$field]   = zget($config->bug->dtable->fieldList, $field, array());
 
 $storyCols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
-$storyCols['title']['nestedToggle'] = false;
+$storyCols['title']['title']        = $lang->productplan->storyTitle;
 $storyCols['assignedTo']['type']    = 'user';
 $storyCols['actions']['width']      = 50;
 $bugCols['assignedTo']['type']      = 'user';
@@ -136,8 +137,12 @@ $planStories = initTableData($planStories, $storyCols, $this->productplan);
 $planBugs    = initTableData($planBugs,    $bugCols,   $this->productplan);
 foreach($planStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
 
-$createStoryLink      = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
-$batchCreateStoryLink = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
+$createStoryLink            = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
+$batchCreateStoryLink       = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
+$createRequirementLink      = common::hasPriv('requirement', 'create') ? $this->createLink('requirement', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
+$batchCreateRequirementLink = common::hasPriv('requirement', 'batchCreate') ? $this->createLink('requirement', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
+$createEpicLink             = common::hasPriv('epic', 'create') ? $this->createLink('epic', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
+$batchCreateEpicLink        = common::hasPriv('epic', 'batchCreate')  ? $this->createLink('epic', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
 
 $branchNames = '';
 if($product->type != 'normal')
@@ -192,7 +197,13 @@ detailBody
                     dropdown
                     (
                         btn(set::text($lang->story->create), set::target('_parent'), setClass('secondary' . (empty($createStoryLink) ? ' disabled' : '')), set::icon('plus'), set::caret(true), set::url($createStoryLink)),
-                        set::items(array(array('text' => $lang->story->batchCreate, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''))),
+                        set::items(array(
+                            array('text' => $lang->story->batchCreate . $lang->SRCommon, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''),
+                            array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'class' => empty($createRequirementLink) ? 'disabled' : ''),
+                            array('text' => $lang->requirement->batchCreate . $lang->URCommon, 'url' => $batchCreateRequirementLink, 'class' => empty($batchCreateRequirementLink) ? 'disabled' : ''),
+                            array('text' => $lang->epic->create, 'url' => $createEpicLink, 'class' => empty($createEpicLink) ? 'disabled' : ''),
+                            array('text' => $lang->epic->batchCreate . $lang->ERCommon, 'url' => $batchCreateEpicLink, 'class' => empty($batchCreateEpicLink) ? 'disabled' : ''),
+                        )),
                         set::trigger('hover'),
                         set::placement('bottom-end')
                     ),

@@ -12,7 +12,8 @@ window.renderStoryCell = function(result, info)
     if(info.col.name == 'title' && result)
     {
         let html = '';
-        if(story.parent > 0) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        let gradeLabel = gradeGroup[story.type][story.grade];
+        if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
         if(html) result.unshift({html});
     }
     return result;

@@ -717,7 +717,7 @@ class storyZen extends story
 
         if($this->story->checkForceReview()) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);
-        if($this->view->hiddenPlan || $storyType == 'requirement') unset($fields['plan']);
+        if($this->view->hiddenPlan) unset($fields['plan']);
         if($storyType == 'requirement')
         {
             unset($fields['parent']);
@@ -1205,12 +1205,12 @@ class storyZen extends story
         if(!empty($_POST['lastEditedDate']) and $oldStory->lastEditedDate != $this->post->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
         if(strpos('draft,changing', $oldStory->status) !== false and $this->story->checkForceReview() and empty($_POST['reviewer'])) dao::$errors[] = $this->lang->story->notice->reviewerNotEmpty;
         if(!empty($_POST['plan'])) $storyPlan = is_array($_POST['plan']) ? array_filter($_POST['plan']) : array($_POST['plan']);
-        if(count($storyPlan) > 1)
+        if(count($storyPlan) > 1 && $oldStory->type == 'story')
         {
             $oldStoryPlan  = !empty($oldStory->plan) ? array_filter(explode(',', $oldStory->plan)) : array();
             $oldPlanDiff   = array_diff($storyPlan, $oldStoryPlan);
             $storyPlanDiff = array_diff($oldStoryPlan, $storyPlan);
-            if(!empty($oldPlanDiff) or !empty($storyPlanDiff)) dao::$errors[] = $this->lang->story->notice->changePlan;
+            if(!empty($oldPlanDiff) or !empty($storyPlanDiff)) dao::$errors['plan'] = $this->lang->story->notice->changePlan;
         }
         if(strpos(',draft,changing,', $oldStory->status) !== false)
         {

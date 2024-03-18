@@ -14,7 +14,7 @@ $cols = array();
 foreach($config->productplan->defaultFields['linkStory'] as $field) $cols[$field] = zget($config->story->dtable->fieldList, $field, array());
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
-$cols['title']['nestedToggle'] = false;
+$cols['title']['title']        = $lang->productplan->storyTitle;
 $cols['plan']['name']          = 'planTitle';
 $cols['assignedTo']['type']    = 'user';
 $cols['module']['type']        = 'text';
@@ -22,6 +22,7 @@ $cols['module']['map']         = $modules;
 
 foreach($allStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
 
+$config->product->search['fields']['title'] = $lang->productplan->storyTitle;
 searchForm
 (
     set::module('story'),

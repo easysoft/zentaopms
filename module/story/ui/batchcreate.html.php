@@ -59,6 +59,7 @@ $fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $cust
         if(str_contains(",{$config->{$app->rawModule}->create->requiredFields},", ",{$colName},")) $cols[$index]['required'] = true;
         if(isset($customFields[$colName]) && strpos(",$showFields,", ",$colName,") === false) $cols[$index]['hidden'] = true;
         if($colName == 'sourceNote' && strpos(",$showFields,", ",source,") === false) $cols[$index]['hidden'] = true;
+        if($colName == 'plan' && $type != 'story') $cols[$index]['multiple'] = true;
         if($colName == 'grade' && $gradeRule == 'stepwise') $cols[$index]['disabled'] = true;
         if($colName == 'grade' && $hiddenGrade) $cols[$index]['hidden'] = true;
         if($colName == 'spec') unset($cols[$index]['control']);

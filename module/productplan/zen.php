@@ -233,7 +233,12 @@ class productplanZen extends productplan
         if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
         if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
 
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $gradeGroup = array();
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         $this->view->plan         = $plan;
+        $this->view->gradeGroup   = $gradeGroup;
         $this->view->actions      = $this->loadModel('action')->getList('productplan', $plan->id);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->plans        = $this->productplan->getPairs($plan->product, $plan->branch, '', true);
@@ -265,6 +270,7 @@ class productplanZen extends productplan
         $this->config->product->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$plan->id&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
+        $this->config->product->search['fields']['title']             = $this->lang->productplan->storyTitle;
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['plan']['values']    = $this->productplan->getPairs($plan->product, $plan->branch, 'withMainPlan', true);
         $this->config->product->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');

@@ -289,7 +289,7 @@ detailBody
                         set::name($lang->story->grade),
                         $story->grade
                     ) : null,
-                    ($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan) ? item
+                    ($story->parent != -1 and !$hiddenPlan) ? item
                     (
                         set::trClass('plan-line'),
                         set::name($lang->story->plan),

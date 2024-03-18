@@ -49,7 +49,6 @@ $items['stage']['defaultDitto']      = 'off';
 
 if($storyType == 'requirement')
 {
-    unset($items['plan']);
     unset($items['stage']);
 }
 

@@ -855,10 +855,12 @@ class productplanModel extends model
             if(strpos(",$story->plan,", ",{$planID},") !== false) continue;
 
             /* Update the plan linked with the story and the order of the story in the plan. */
-            $storyID = (int)$storyID;
-            $this->dao->update(TABLE_STORY)->set('plan')->eq($planID)->where('id')->eq($storyID)->exec();
+            $storyID   = (int)$storyID;
+            $newPlanID = $story->type == 'story' ? $planID : trim($story->plan, ',') . ',' . $planID;
+            $this->dao->update(TABLE_STORY)->set('plan')->eq($newPlanID)->where('id')->eq($storyID)->exec();
 
-            $this->story->updateStoryOrderOfPlan($storyID, (string)$planID, $story->plan);
+            $oldPlanID = $story->type == 'story' ? $story->plan : '';
+            $this->story->updateStoryOrderOfPlan($storyID, (string)$planID, $oldPlanID);
 
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);

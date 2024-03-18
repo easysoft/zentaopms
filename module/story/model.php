@@ -475,7 +475,11 @@ class storyModel extends model
         if(!empty($story->plan))
         {
             $this->updateStoryOrderOfPlan($storyID, (string)$story->plan); // Set story order in this plan.
-            $this->action->create('productplan', (int)$story->plan, 'linkstory', '', $storyID);
+            foreach(explode(',', $story->plan) as $planID)
+            {
+                if(!$planID) continue;
+                $this->action->create('productplan', (int)$planID, 'linkstory', '', $storyID);
+            }
         }
 
         $this->setStage($storyID);
@@ -605,7 +609,11 @@ class storyModel extends model
             if($story->plan)
             {
                 $this->updateStoryOrderOfPlan($storyID, (string)$story->plan);
-                $link2Plans[$story->plan] = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
+                foreach(explode(',', (string)$story->plan) as $planID)
+                {
+                    if(!$planID) continue;
+                    $link2Plans[$planID] = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";
+                }
             }
 
             if(!empty($story->URS)) $this->storyTao->doCreateURRelations($storyID, $story->URS);
@@ -1004,8 +1012,22 @@ class storyModel extends model
             $oldStory = $oldStories[$storyID];
             if($story->plan != $oldStory->plan)
             {
-                if(!empty($oldStory->plan)) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},{$storyID}";
-                if(!empty($story->plan))    $link2Plans[$story->plan]     = empty($link2Plans[$story->plan])     ? $storyID : "{$link2Plans[$story->plan]},{$storyID}";
+                if(!empty($oldStory->plan))
+                {
+                    foreach(explode(',', (string)$oldStory->plan) as $planID)
+                    {
+                        if(!$planID) continue;
+                        $unlinkPlans[$planID] = empty($unlinkPlans[$planID]) ? $storyID : "{$unlinkPlans[$planID]},$storyID";
+                    }
+                }
+                if(!empty($story->plan))
+                {
+                    foreach(explode(',', (string)$story->plan) as $planID)
+                    {
+                        if(!$planID) continue;
+                        $link2Plans[$planID] = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";
+                    }
+                }
             }
 
             if($story->grade > $oldStory->grade)
@@ -1035,7 +1057,6 @@ class storyModel extends model
 
             if(dao::isError()) return false;
 
-            /* Update story sort of plan when story plan has changed. */
             if($story->grade != $oldStory->grade)
             {
                 $gradeDiff = (int)$story->grade - (int)$oldStory->grade;
@@ -1047,6 +1068,7 @@ class storyModel extends model
                      ->exec();
                 $this->dao->update(TABLE_STORY)->set('grade')->eq($story->grade)->where('id')->eq($storyID)->exec();
             }
+            /* Update story sort of plan when story plan has changed. */
             if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, (string)$story->plan, $oldStory->plan);
             $parentChanged = $story->parent != $oldStory->parent;
             if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory->parent);
@@ -1072,8 +1094,8 @@ class storyModel extends model
         }
 
         $this->loadModel('score')->create('ajax', 'batchEdit');
-        foreach($unlinkPlans as $planID => $stories) $this->action->create('productplan', $planID, 'unlinkstory', '', $stories);
-        foreach($link2Plans as $planID => $stories)  $this->action->create('productplan', $planID, 'linkstory', '', $stories);
+        foreach($unlinkPlans as $planID => $stories) $this->action->create('productplan', (int)$planID, 'unlinkstory', '', $stories);
+        foreach($link2Plans as $planID => $stories)  $this->action->create('productplan', (int)$planID, 'linkstory', '', $stories);
 
         return true;
     }
@@ -1567,7 +1589,7 @@ class storyModel extends model
             if(empty($oldStory)) continue;
             if($oldStory->branch != BRANCH_MAIN and $plan->branch != BRANCH_MAIN and !in_array($oldStory->branch, explode(',', $plan->branch))) continue;
 
-            /* Ignore parent story, closed story and story linked to this plan already. */
+            /* Ignore closed story and story linked to this plan already. */
             if($oldStory->parent < 0) continue;
             if($oldStory->status == 'closed') continue;
             if(strpos(",{$oldStory->plan},", ",$planID,") !== false) continue;
@@ -1581,7 +1603,8 @@ class storyModel extends model
             if($oldPlanID) $story->plan = trim(str_replace(",$oldPlanID,", ',', ",$oldStory->plan,"), ',');
 
             /* Update the order of the story in the plan. */
-            $this->updateStoryOrderOfPlan((int)$storyID, (string)$planID, $oldStory->plan);
+            $oldStoryPlan = $oldStory->type == 'story' ? $oldStory->plan : '';
+            $this->updateStoryOrderOfPlan((int)$storyID, (string)$planID, $oldStoryPlan);
 
             /* Replace plan field if product is normal or not linked to plan or story linked to a branch. */
             $productType = $products[$oldStory->product]->type;
@@ -1617,16 +1640,30 @@ class storyModel extends model
             if(!dao::isError())
             {
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
-                if($story->plan != $oldStory->plan and !empty($oldStory->plan) and strpos((string)$oldStory->plan, ',') === false) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},$storyID";
-                if($story->plan != $oldStory->plan and !empty($story->plan)    and strpos((string)$story->plan, ',') === false)    $link2Plans[$story->plan]     = empty($link2Plans[$story->plan])     ? $storyID : "{$link2Plans[$story->plan]},$storyID";
+                if($story->plan != $oldStory->plan and !empty($oldStory->plan) and $oldStory->type == 'story')
+                {
+                    foreach(explode(',', (string)$oldStory->plan) as $planID)
+                    {
+                        if(!$planID) continue;
+                        $unlinkPlans[$planID] = empty($unlinkPlans[$planID]) ? $storyID : "{$unlinkPlans[$planID]},$storyID";
+                    }
+                }
+                if($story->plan != $oldStory->plan and !empty($story->plan))
+                {
+                    foreach(explode(',', (string)$story->plan) as $planID)
+                    {
+                        if(!$planID) continue;
+                        $link2Plans[$planID] = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";
+                    }
+                }
             }
         }
 
         if(!dao::isError())
         {
             $this->loadModel('action');
-            foreach($unlinkPlans as $planID => $stories) $this->action->create('productplan', $planID, 'unlinkstory', '', $stories);
-            foreach($link2Plans  as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
+            foreach($unlinkPlans as $planID => $stories) $this->action->create('productplan', (int)$planID, 'unlinkstory', '', $stories);
+            foreach($link2Plans  as $planID => $stories) $this->action->create('productplan', (int)$planID, 'linkstory', '', $stories);
         }
 
         return $allChanges;
@@ -2011,7 +2048,7 @@ class storyModel extends model
             ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
-            ->andWhere('type')->eq($type)
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -2448,7 +2485,7 @@ class storyModel extends model
             ->beginIF($productID != 'all' && $productID != '' && $productID != 0)->andWhere('t1.`product`')->eq((int)$productID)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
-            ->andWhere('t1.type')->eq($type)
+            ->beginIF($type != 'all')->andWhere('t1.type')->eq($type)->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');

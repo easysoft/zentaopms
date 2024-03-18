@@ -130,7 +130,7 @@ if(!isset($createFields['branch']) && isset($createFields['plan']))
         ->required($createFields['plan']['required'])
         ->control('inputGroup')
         ->items(false)
-        ->itemBegin('plan')->control('picker')->id('planIdBox')->items($createFields['plan']['options'])->value($createFields['plan']['default'])->itemEnd()
+        ->itemBegin('plan')->control('picker')->id('planIdBox')->items($createFields['plan']['options'])->value($createFields['plan']['default'])->multiple($type != 'story')->itemEnd()
         ->item(empty($createFields['plan']['options']) ? field()->control('btn')->icon('plus')->url(createLink('productplan', 'create', 'productID=' . data('productID') . '&branch=' . data('branch')))->set(array('data-toggle' => 'modal', 'data-size' => 'lg'))->set('title', $lang->productplan->create) : null)
         ->item(empty($createFields['plan']['options']) ? field()->control('btn')->icon('refresh')->id("loadProductPlans")->set('title', $lang->refresh) : null);
 }

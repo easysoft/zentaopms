@@ -1195,10 +1195,17 @@ class productModel extends model
         $rateCount = 0;
         $allCount  = 0;
         $SRTotal   = 0;
+        $parents   = array();
+        foreach($stories as $story)
+        {
+            if($story->parent > 0) $parents[$story->parent] = $story->parent;
+        }
+
         foreach($stories as $story)
         {
             if($storyType == 'requirement' && $story->type == 'story') $SRTotal += 1;
             if(!empty($story->type) && $story->type != $storyType) continue;
+            if(isset($parents[$story->id])) continue;
 
             $totalEstimate += $story->estimate;
             $allCount ++;

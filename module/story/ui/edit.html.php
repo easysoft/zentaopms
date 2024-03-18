@@ -16,7 +16,7 @@ $forceReview    = $this->story->checkForceReview();
 $assignedToList = $story->status == 'closed' ? array('closed' => 'Closed') : $users;
 
 $planCount    = !empty($story->planTitle) ? count($story->planTitle) : 0;
-$multiplePlan = ($product->type != 'normal' && empty($story->branch) && $planCount > 1);
+$multiplePlan = ($product->type != 'normal' && empty($story->branch) && $planCount > 1) || ($story->type != 'story');
 
 $minStage    = $story->stage;
 $stageList   = implode(',', array_keys($this->lang->story->stageList));
@@ -250,7 +250,7 @@ detailBody
                 set::name($lang->story->grade),
                 picker(setID('grade'), set::name('grade'), set::required(true), set::items($fields['grade']['options']), set::value($story->grade), set::disabled($gradeRule == 'stepwise'))
             ) : picker(setID('grade'), set::name('grade'), set::required(true), set::items($fields['grade']['options']), set::value($story->grade), set::hidden(true)),
-            $story->type == 'story' ? item
+            item
             (
                 set::trClass(zget($fields['plan'], 'className', '')),
                 set::name($lang->story->plan),
@@ -264,7 +264,7 @@ detailBody
                     empty($fields['plan']['options']) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), setData(array('toggle' => 'modal')), icon('plus')) : null,
                     empty($fields['plan']['options']) ? btn(set('onclick', "loadProductPlans({$story->product})"), setClass('refresh'), icon('refresh')) : null
                 )
-            ) : null,
+            ),
             item
             (
                 set::name($lang->story->source),
