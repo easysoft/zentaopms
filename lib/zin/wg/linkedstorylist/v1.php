@@ -30,7 +30,7 @@ class linkedStoryList extends storyList
             const $this = $(e.target).closest('li').find('.unlinkStory');
             zui.Modal.confirm({message: window.unlinkStoryTip || $this.closest('ul').data('unlinkStoryTip'), icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
             {
-                if(res) $.get($this.attr('url'), function(){$this.closest('li').remove()});
+                if(res) $.get($this.attr('data-url'), function(){$this.closest('li').remove()});
             });
         };
         JS;
