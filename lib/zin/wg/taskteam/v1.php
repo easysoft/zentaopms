@@ -30,11 +30,11 @@ class taskTeam extends wg
 
         $cols = array();
 
-        $cols['account']  = array('title' => $lang->task->team, 'type' => 'user', 'fixed' => 'left');
-        $cols['estimate'] = array('title' => $lang->task->estimateAB, 'type' => 'number', 'flex' => 1);
-        $cols['consumed'] = array('title' => $lang->task->consumedAB, 'type' => 'number', 'flex' => 1);
-        $cols['left']     = array('title' => $lang->task->leftAB, 'type' => 'number', 'flex' => 1);
-        $cols['status']   = array('title' => $lang->task->statusAB, 'type' => 'status', 'statusMap' => $this->prop('statusMap', $lang->task->statusList), 'flex' => 1);
+        $cols['account']  = array('title' => $lang->task->team, 'type' => 'user', 'fixed' => 'left', 'sort' => true);
+        $cols['estimate'] = array('title' => $lang->task->estimateAB, 'type' => 'number', 'flex' => 1, 'sort' => true);
+        $cols['consumed'] = array('title' => $lang->task->consumedAB, 'type' => 'number', 'flex' => 1, 'sort' => true);
+        $cols['left']     = array('title' => $lang->task->leftAB, 'type' => 'number', 'flex' => 1, 'sort' => true);
+        $cols['status']   = array('title' => $lang->task->statusAB, 'type' => 'status', 'statusMap' => $this->prop('statusMap', $lang->task->statusList), 'flex' => 1, 'sort' => true);
 
         return $cols;
     }
