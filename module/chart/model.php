@@ -589,8 +589,26 @@ class chartModel extends model
      */
     public static function isClickable(object $chart, string $action): bool
     {
-        if($chart->builtin) return false;
-        return true;
+        $builtinCharts = array();
+        $builtinCharts[] = array(1001,  1110);
+        $builtinCharts[] = array(10000, 10119);
+        $builtinCharts[] = array(10201, 10220);
+        $builtinCharts[] = array(20002, 20015);
+
+        $found = false; // 标记ID是否在范围内
+
+        foreach ($builtinCharts as $range) {
+            $minId = $range[0];
+            $maxId = $range[1];
+
+            if ($chart->id >= $minId && $chart->id <= $maxId) {
+                $found = true;
+                break;
+            }
+        }
+
+        return !$found && !$chart->builtin;
+
     }
 
     /**
