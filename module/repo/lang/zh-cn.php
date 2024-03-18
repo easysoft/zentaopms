@@ -268,3 +268,15 @@ $lang->repo->typeList['redundancy']  = '冗余';
 $lang->repo->typeList['logicError']  = '逻辑错误';
 
 $lang->repo->featureBar['maintain']['all'] = '全部';
+
+$lang->repo->errorLang[0] = "只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。";
+$lang->repo->errorLang[1] = '分支名已存在。';
+$lang->repo->errorLang[2] = '分支名已存在。';
+$lang->repo->errorLang[3] = '权限不足。';
+$lang->repo->errorLang[4] = "分支名不能包含 ' ', '~', '^'或':'。";
+
+$lang->repo->apiError[0] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
+$lang->repo->apiError[1] = 'Branch is exists';
+$lang->repo->apiError[2] = 'branch .* already exists';
+$lang->repo->apiError[3] = '403 Forbidden';
+$lang->repo->apiError[4] = 'cannot have ASCII control characters';

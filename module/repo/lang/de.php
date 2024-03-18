@@ -268,3 +268,15 @@ $lang->repo->typeList['redundancy']  = 'Redundancy';
 $lang->repo->typeList['logicError']  = 'Logic Error';
 
 $lang->repo->featureBar['maintain']['all'] = 'All';
+
+$lang->repo->errorLang[0] = '';
+
+
+
+
+
+$lang->repo->apiError[0] = '';
+
+
+
+

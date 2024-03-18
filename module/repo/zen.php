@@ -1611,4 +1611,26 @@ class repoZen extends repo
         if(empty($repoUrl) && isset($repo->apiPath) && substr($repo->apiPath, 0, 4) == 'http') $repoUrl = $repo->apiPath;
         return $repoUrl && !$this->loadModel('admin')->checkInternet($repoUrl);
     }
+
+    /**
+     * 翻译API返回错误信息。
+     * Parse api log to client lang.
+     *
+     * @param  string $message
+     * @access protected
+     * @return string
+     */
+    protected function parseErrorContent(string $message): string
+    {
+        foreach($this->lang->repo->apiError as $key => $pattern)
+        {
+            if(preg_match("/$pattern/", $message))
+            {
+                $message = zget($this->lang->repo->errorLang, $key);
+                break;
+            }
+        }
+
+        return $message;
+    }
 }
