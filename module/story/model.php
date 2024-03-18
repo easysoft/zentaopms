@@ -769,11 +769,11 @@ class storyModel extends model
         {
             $gradeDiff = (int)$story->grade - (int)$oldStory->grade;
             $this->dao->update(TABLE_STORY)
-                      ->set("grade = grade + $gradeDiff")
-                      ->where('top')->eq($oldStory->top)
-                      ->andWhere('grade')->gt($oldStory->grade)
-                      ->andWhere('id')->ne($storyID)
-                      ->exec();
+                 ->set("grade = grade + $gradeDiff")
+                 ->where('top')->eq($oldStory->top)
+                 ->andWhere('grade')->gt($oldStory->grade)
+                 ->andWhere('id')->ne($storyID)
+                 ->exec();
         }
         $parentChanged = $story->parent != $oldStory->parent;
         if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory->parent);
@@ -871,7 +871,7 @@ class storyModel extends model
 
         $status = $oldParentStory->status;
         if(count($childrenStatus) == 1 and current($childrenStatus) == 'closed') $status = current($childrenStatus); // Close parent story.
-        if($oldParentStory->status == 'closed') $status = $this->getActivateStatus($parentID); // Activate parent story.
+        if($oldParentStory->status == 'closed' && $childStory->status == 'active') $status = $this->getActivateStatus($parentID); // Activate parent story.
 
         $action    = '';
         $preStatus = '';
@@ -906,6 +906,8 @@ class storyModel extends model
             $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', $preStatus, '', false);
             $this->action->logHistory($actionID, $changes);
         }
+
+        if($newParentStory->parent > 0 && $newParentStory->type == $childStory->type) return $this->updateParentStatus($parentID, $newParentStory->parent, true);
         return true;
     }
 
@@ -1383,6 +1385,7 @@ class storyModel extends model
         /* Set childStories. */
         $childStories = implode(',', $SRList);
         $newStory     = new stdClass();
+        $newStory->isParent       = '1';
         $newStory->plan           = '';
         $newStory->lastEditedBy   = $this->app->user->account;
         $newStory->lastEditedDate = $now;
@@ -1397,8 +1400,8 @@ class storyModel extends model
      * 关闭需求。
      * Close the story.
      *
-     * @param  int    $storyID
-     * @param  object $postData
+     * @param  int         $storyID
+     * @param  object      $postData
      * @access public
      * @return array|false
      */
@@ -1483,6 +1486,7 @@ class storyModel extends model
             if(empty($story->closedReason)) continue;
 
             $oldStory = $oldStories[$storyID];
+            if($oldStory->isParent == '1') continue;
 
             $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()
                 ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
@@ -2567,29 +2571,6 @@ class storyModel extends model
     }
 
     /**
-     * 关闭用户需求，如果所有细分的软件需求已被关闭。
-     * Close the parent user requirement if all divided stories has been closed.
-     *
-     * @param  int    $storyID
-     * @param  object $postData
-     * @access public
-     * @return void
-     */
-    public function closeParentRequirement(int $storyID, object $postData): void
-    {
-        $parentID = $this->dao->select('BID')->from(TABLE_RELATION)->where('AID')->eq($storyID)->fetch();
-        if(empty($parentID)) return;
-
-        $stories  = $this->dao->select('t2.id, t2.status')->from(TABLE_RELATION)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t2.id=t1.AID')
-            ->where('t1.BType')->eq('requirement')
-            ->andWhere('t2.status')->ne('closed')
-            ->andWhere('t2.type')->eq('story')
-            ->fetchPairs();
-        if(empty($stories)) $this->close($parentID->BID, $postData);
-    }
-
-    /**
      * Get stories of a user.
      *
      * @param  string     $account
@@ -3294,7 +3275,7 @@ class storyModel extends model
         $action = strtolower($action);
 
         if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
-        if($action == 'close')      return $story->status != 'closed';
+        if($action == 'close')      return $story->status != 'closed' && $story->isParent == '0';
         if($action == 'activate')   return $story->status == 'closed';
         if($action == 'assignto')   return $story->status != 'closed';
         if($action == 'batchcreate' and $story->parent > 0) return false;

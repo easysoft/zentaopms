@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+data('activeMenuID', $storyType);
 jsVar('twinsCount', $twinsCount);
 jsVar('langTwins', $lang->story->twins . ': ');
 if(!empty($errorTips)) pageJS("zui.Modal.alert({message: '{$errorTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");

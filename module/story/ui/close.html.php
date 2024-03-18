@@ -13,6 +13,9 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('storyType', $story->type);
+jsVar('storyID', $story->id);
+jsVar('closeParent', $closeParent);
+jsVar('closeParentNotice', sprintf($lang->story->allChildrenClosed, '#' . $story->parent));
 
 modalHeader();
 formPanel
