@@ -461,6 +461,10 @@ function setDateField(query)
     if(query == '.form-date')     $(query).datepicker();
     if(query == '.form-datetime') $(query).datetimepicker();
 
+    var dateVal = $(query).val();
+    $(query).val('').datetimepicker('update').trigger('mousedown');
+    $(query).val(dateVal);
+
     $(query).on('show', function(e)
     {
         var $e   = $(e.target);
