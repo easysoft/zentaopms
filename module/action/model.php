@@ -657,7 +657,7 @@ class actionModel extends model
             elseif($objectType == 'story' && $actionName == 'distributed')
             {
                 $demand = $this->loadModel('demand')->getById($action->extra);
-                if($demand) $action->extra = common::hasPriv('demand', 'view') ? html::a(helper::createLink('demand', 'view', "demandID=$action->extra"), "#$action->extra " . $demand->title) : "#$action->extra " . $demand->title;
+                if($demand) $action->extra = common::hasPriv('demand', 'view') && $this->config->vision == 'or' ? html::a(helper::createLink('demand', 'view', "demandID=$action->extra"), "#$action->extra " . $demand->title) : "#$action->extra " . $demand->title;
             }
 
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
