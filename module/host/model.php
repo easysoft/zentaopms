@@ -65,6 +65,35 @@ class hostModel extends model
     }
 
     /**
+     * 获取主机键值对列表。
+     * Get pairs.
+     *
+     * @param  string  $moduleIdList
+     * @access public
+     * @return array
+     */
+    public function getPairs(string $moduleIdList = ''): array
+    {
+        $modules = array();
+        if($moduleIdList)
+        {
+            $this->loadModel('tree');
+            foreach(explode(',', $moduleIdList) as $moduleID)
+            {
+                if(empty($moduleID)) continue;
+                $modules += $this->tree->getAllChildId($moduleID);
+            }
+        }
+
+        return $this->dao->select('id, name')->from(TABLE_HOST)
+            ->where('deleted')->eq('0')
+            ->andWhere('type')->eq('normal')
+            ->beginIF($modules)->andWhere('`group`')->in($modules)->fi()
+            ->orderBy('`group`')
+            ->fetchPairs();
+    }
+
+    /**
      * 创建主机。
      * create a host.
      *
