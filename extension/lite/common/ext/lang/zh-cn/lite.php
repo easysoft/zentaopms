@@ -53,8 +53,17 @@ else
 $lang->task->common = '任务';
 $lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
 
-/* Ticket. */
-if($config->edition != 'open') $lang->feedback->menu->ticket = array('link' => '工单|ticket|browse|browseType=unclosed');
+/* Feedback. */
+if($config->edition != 'open')
+{
+    $lang->feedback->menu->ticket   = array('link' => '工单|ticket|browse|browseType=unclosed');
+    $lang->feedback->menu->products = array('link' => '设置|feedback|products', 'alias' => 'manageproduct');
+
+    $lang->feedback->menuOrder[5]  = 'browse';
+    $lang->feedback->menuOrder[10] = 'ticket';
+    $lang->feedback->menuOrder[15] = 'faq';
+    $lang->feedback->menuOrder[20] = 'products';
+}
 
 /* My menu. */
 $lang->my->menu           = new stdclass();
