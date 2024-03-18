@@ -24,7 +24,7 @@ class repoZen extends repo
     {
         if($this->config->inContainer || $this->config->inQuickon)
         {
-            $formData->data->client = $_POST['client'] = $this->post->SCM == 'Subversion' ? 'svn' : 'git';
+            $formData->data->client = $this->post->client = $this->post->SCM == 'Subversion' ? 'svn' : 'git';
         }
         else
         {
@@ -199,7 +199,7 @@ class repoZen extends repo
      */
     protected function checkClient(): bool
     {
-        if($this->post->SCM == 'Gitlab') return true;
+        if(in_array($this->post->SCM, $this->config->repo->notSyncSCM)) return true;
         if(!$this->config->features->checkClient) return true;
 
         if(!$this->post->client)
