@@ -30,7 +30,7 @@ $notEmptyRule   = $this->session->notEmptyRule;
 
 if(!empty($suhosinInfo))
 {
-    div(setClass('alert secondary'), $suhosinInfo);
+    div(setClass('alert secondary'), html($suhosinInfo));
 }
 elseif(empty($maxImport) and $allCount > $this->config->file->maxImport)
 {
