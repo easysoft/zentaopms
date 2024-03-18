@@ -105,7 +105,7 @@ class search extends control
         $this->view->queryID      = (empty($module) && empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
         $this->view->style        = !empty($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : 'full';
         $this->view->onMenuBar    = !empty($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : 'no';
-        $this->view->formSession  = $_SESSION[$module . 'Form'];
+        $this->view->formSession  = $_SESSION[$searchForm];
         $this->view->formName     = $formName;
 
         if($module == 'program') $this->view->options = $this->searchZen->setOptions($fields, $this->view->fieldParams, $this->view->queries);
