@@ -105,6 +105,7 @@ class storyRelatedList extends relatedList
                     $item['data-toggle'] = 'modal';
                     $item['data-size']   = 'lg';
                 }
+                return $item;
             }
         );
 
@@ -132,6 +133,7 @@ class storyRelatedList extends relatedList
                     $item['url'] = createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}");
                     $item['data-app'] = 'devops';
                 }
+                return $item;
             }
         );
 
