@@ -496,7 +496,7 @@ class detail extends wg
 
     protected function build()
     {
-        list($objectType, $objectID) = $this->prop(array('objectType', 'objectID'));
+        list($objectType, $objectID, $layout) = $this->prop(array('objectType', 'objectID', 'layout'));
 
         return div
         (
@@ -505,7 +505,7 @@ class detail extends wg
             setData('type', $objectType),
             $this->buildHeader(),
             $this->buildBody(),
-            $this->buildPrevAndNext()
+            $layout === 'simple' ? null : $this->buildPrevAndNext()
         );
     }
 }
