@@ -153,7 +153,7 @@ class designModel extends model
         if(!isset($repo->SCM)) return true;
 
         /* If the repo type is Gitlab, first store the commit log in the repohistory table and get the commit ID. */
-        if($repo->SCM == 'Gitlab')
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
         {
             $logs = array();
             foreach($this->session->designRevisions as $commit)
