@@ -96,7 +96,10 @@ class form extends formBase
                 $this->setProp('pinnedItems', explode(',', $config->$module->custom->$key));
             }
         }
+    }
 
+    protected function beforeBuild()
+    {
         $fields = $this->prop('fields');
         if(is_string($fields)) $fields = explode(',', $fields);
         if(is_array($fields))  $fields = useFields($fields);
@@ -117,7 +120,7 @@ class form extends formBase
                 $this->setProp('autoLoad', $autoLoad);
             }
         }
-   }
+    }
 
     protected function getItemLabel(string $name): ?string
     {
@@ -316,5 +319,11 @@ class form extends formBase
         }
 
         return $items;
+    }
+
+    protected function build()
+    {
+        $this->beforeBuild();
+        return parent::build();
     }
 }
