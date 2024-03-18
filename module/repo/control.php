@@ -983,18 +983,18 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
         }
 
-        $gitlabList = $this->loadModel('gitlab')->getList();
-        $gitlab     = empty($server) ? array_shift($gitlabList) : $this->gitlab->getById($server);
+        $serverList    = $this->loadModel('gitlab')->getList() + $this->loadModel('gitfox')->getList();
+        $defaultServer = empty($server) ? array_shift($serverList) : $this->loadModel('pipeline')->getById($server);
 
-        $repoList = $gitlab ? $this->repoZen->getGitlabNotExistRepos($gitlab) : array();
+        $repoList = $defaultServer ? $this->repoZen->getNotExistRepos($defaultServer) : array();
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
-        $this->view->gitlabPairs = $this->gitlab->getPairs();
-        $this->view->products    = $products;
-        $this->view->projects    = $this->product->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->gitlab      = $gitlab;
-        $this->view->repoList    = array_values($repoList);
+        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
+        $this->view->servers       = $this->gitlab->getPairs() + $this->gitfox->getPairs();
+        $this->view->products      = $products;
+        $this->view->projects      = $this->product->getProjectPairsByProductIDList(array_keys($products));
+        $this->view->defaultServer = $defaultServer;
+        $this->view->repoList      = array_values($repoList);
         $this->display();
     }
 

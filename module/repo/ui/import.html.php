@@ -13,8 +13,8 @@ namespace zin;
 $items = array();
 $items[] = array('name' => 'no', 'label' => $lang->user->abbr->id, 'control' => 'static', 'width' => '32px', 'class' => 'no');
 $items[] = array('name' => 'serviceProject', 'label' => '', 'hidden' => true);
-$items[] = array('name' => 'name_with_namespace', 'label' => $lang->repo->repo, 'control' => 'static', 'width' => '264px');
-$items[] = array('name' => 'name', 'label' => $lang->repo->importName);
+$items[] = array('name' => $defaultServer->type == 'gitlab' ? 'name_with_namespace' : 'path', 'label' => $lang->repo->repo, 'control' => 'static', 'width' => '264px');
+$items[] = array('name' => $defaultServer->type == 'gitlab' ? 'name' : 'identifier', 'label' => $lang->repo->importName);
 $items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $products);
 $items[] = array('name' => 'projects', 'label' => $lang->repo->projects, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $projects);
 
@@ -41,8 +41,8 @@ foreach($repoList as $repo)
         set::name('servers'),
         set::id('servers'),
         set::placeholder($lang->repo->importServer),
-        set::items(array('' => '') + $gitlabPairs),
-        set::value($gitlab->id)
+        set::items(array('' => '') + $servers),
+        set::value($defaultServer->id)
     )
 );
 
@@ -52,7 +52,7 @@ formBatchPanel
     (
         set::type('hidden'),
         set::name('serviceHost'),
-        set::value($gitlab->id)
+        set::value($defaultServer->id)
     ),
     set::id('repoList'),
     set::back('repo-maintain'),

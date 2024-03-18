@@ -335,9 +335,9 @@ class repoModel extends model
             $repo->serviceHost    = $serviceHost;
             $repo->serviceProject = $data['serviceProject'];
             $repo->product        = $data['product'];
-            $repo->name           = $data['name'];
+            $repo->name           = isset($data['name']) ? $data['name'] : $data['identifier'];
             $repo->projects       = $data['projects'];
-            $repo->SCM            = 'Gitlab';
+            $repo->SCM            = isset($data['name']) ? 'Gitlab' : 'GitFox';
             $repo->encoding       = 'utf-8';
             $repo->encrypt        = 'base64';
 
@@ -353,12 +353,12 @@ class repoModel extends model
 
             $repoID = $this->dao->lastInsertID();
 
-            if($repo->SCM == 'Gitlab')
+            if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
             {
                 /* Add webhook. */
                 $repo = $this->getByID($repoID);
-                $this->loadModel('gitlab')->addPushWebhook($repo);
-                $this->gitlab->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->loadModel($repo->SCM)->addPushWebhook($repo);
+                $this->{$repo->SCM}->updateCodePath($repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');

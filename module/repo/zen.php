@@ -513,10 +513,14 @@ class repoZen extends repo
         {
             $products = array_filter($this->post->product[$i]);
             if(empty($products)) continue;
-            if($this->post->name[$i] == '') dao::$errors['name_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
+            if(isset($this->post->name[$i]) && $this->post->name[$i] == '') dao::$errors['name_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
+            if(isset($this->post->identifier[$i]) && $this->post->identifier[$i] == '') dao::$errors['identifier_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
             if(dao::isError()) continue;
 
-            $data[] = array('serviceProject' => $project, 'product' => implode(',', $this->post->product[$i]), 'name' => $this->post->name[$i], 'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
+            $nameList = isset($this->post->name) ? array('name' => $this->post->name[$i]) : array('identifier' => $this->post->identifier[$i]);
+            $data[] = $nameList + array('serviceProject' => $project,
+                'product' => implode(',', $this->post->product[$i]),
+                'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
         }
         if(dao::isError()) return false;
 
@@ -524,22 +528,23 @@ class repoZen extends repo
     }
 
     /**
-     * 获取gitlab还没存在禅道的项目列表。
-     * Get gitlab not exist repos.
+     * 获取还没存在禅道的项目列表。
+     * Get not exist repos.
      *
      * @param  object    $gitlab
      * @access protected
      * @return array
      */
-    protected function getGitlabNotExistRepos(object $gitlab): array
+    protected function getNotExistRepos(object $server): array
     {
         $repoList = array();
-        if(!empty($gitlab))
+        if(!empty($server))
         {
-            $repoList      = $this->loadModel('gitlab')->apiGetProjects($gitlab->id);
+            $repoList      = $server->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetProjects($server->id) : $this->loadModel('gitfox')->apiGetRepos($server->id);
+            $type = $server->type == 'gitlab' ? 'Gitlab' : 'GitFox';
             $existRepoList = $this->dao->select('serviceProject,name')->from(TABLE_REPO)
-                ->where('SCM')->eq(ucfirst($gitlab->type))
-                ->andWhere('serviceHost')->eq($gitlab->id)
+                ->where('SCM')->eq($type)
+                ->andWhere('serviceHost')->eq($server->id)
                 ->fetchPairs();
             foreach($repoList as $key => $repo)
             {
