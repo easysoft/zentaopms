@@ -1,30 +1,41 @@
 <?php
 class createProductTester extends tester
 {
-    public function createWithoutName()
+    /**
+     * Check the page jump after creating the product.
+     *
+     * @param  string    $name
+     * @access public
+     * @return object
+     */
+    public function checkLocatePage($name)
     {
         $this->login();
         $createPage = $this->loadPage('product', 'create');
-        return $createPage->submit();
+        $createPage->name->setValue($name);
+        $createPage->submit();
+        return $createPage->getUrl();
     }
 
-    public function checkLocatePage()
+    /**
+     * Create a default product.
+     *
+     * @param  string    $name
+     * @access public
+     * @return object
+     */
+    public function createDefault($name)
     {
-        $this->login();
-        $createPage = $this->loadPage('product', 'create');
-        $createPage->name->setValue('正常产品' . time());
-        return $createPage->submit();
-    }
-
-    public function createDefault()
-    {
-        $name = '默认产品' . time();
-
+        /* 提交表单。 */
         $this->login();
         $createPage = $this->loadPage('product', 'create');
         $createPage->name->setValue($name);
         $createPage->submit();
 
+        $url = $createPage->getUrl();
+        if($url->method != 'browse') return failed($createPage->getFormTips());
+
+        /* 跳转到产品需求页面，点击设置菜单查看产品设置页面。 */
         $browsePage = $this->setPage('product', 'browse');
         $browsePage->settings->click();
 
@@ -33,6 +44,6 @@ class createProductTester extends tester
         if($viewPage->type->getText() != '正常') return failed('类型错误');
         if($viewPage->acl->getText() != '公开') return failed('权限错误');
 
-        return success('SUCCESS');
+        return success();
     }
 }

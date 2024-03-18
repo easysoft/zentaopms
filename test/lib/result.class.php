@@ -2,6 +2,9 @@
 class result
 {
     public $status;
+    public $message;
+    public $url;
+
     public $pageObject;
     public $pageInfo = array();
     public $errors = array();
@@ -9,40 +12,7 @@ class result
     public function setPage(&$page)
     {
         $this->pageObject = $page;
-        $this->getPageInfo();
-    }
-
-    public function getPageInfo()
-    {
-        if(empty($this->pageObject)) return $this->pageInfo;
-
-        $url   = $this->pageObject->getUrl();
-        if(!$url) return $this->pageInfo;
-
-        $title = $this->pageObject->getTitle();
-        $parseURL = parse_url($url);
-        if(isset($parseURL['query']))
-        {
-            $query = $parseURL['query'];
-            parse_str($query, $queryParams);
-            $module = $queryParams['m'];
-            $method = $queryParams['f'];
-        }
-        else
-        {
-            $path = $parseURL['path'];
-            $pathParts = explode('-', trim($path, '/'));
-
-            $module = str_replace('.html', '', $pathParts[0]);
-            $method = str_replace('.html', '', $pathParts[1]);
-        }
-
-        $this->pageInfo['url']    = $url;
-        $this->pageInfo['title']  = $title;
-        $this->pageInfo['module'] = $module;
-        $this->pageInfo['method'] = $method;
-
-        return $this->pageInfo;
+        $page->getUrl();
     }
 
     /**
@@ -61,10 +31,11 @@ class result
         }
 
         $result = array();
-        $result['errors'] = $this->errors;
-        $result['page']   = $this->pageObject;
-        $result['url']    = isset($this->pageInfo['module']) && isset($this->pageInfo['method']) ? $this->pageInfo['module'] . '-' . $this->pageInfo['method'] : '';
-        $result['status'] = $this->status;
+        $result['errors']  = $this->errors;
+        $result['page']    = $this->pageObject;
+        $result['url']     = $this->url;
+        $result['status']  = $this->status;
+        $result['message'] = $this->message;
 
         return $param ? zget($result, $param, '') : $result;
     }

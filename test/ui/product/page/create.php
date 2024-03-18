@@ -6,7 +6,7 @@ class createPage extends Page
         parent::__construct();
 
         $doms = array(
-            'settings'       => "//*[@id='navbar']//a[@data-id='settings']/span",
+            'settings' => "//*[@id='navbar']//a[@data-id='settings']/span",
         );
         $this->doms = array_merge($this->doms, $doms);
     }
@@ -16,7 +16,7 @@ class createPage extends Page
         global $lang, $result;
         $this->btn($lang->product->saveBtn)->click();
         sleep(1);
-        $result->getPageInfo();
+        //$result->getPageInfo();
 
         return $this;
     }

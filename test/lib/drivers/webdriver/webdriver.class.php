@@ -9,6 +9,8 @@ use Facebook\WebDriver\WebDriverSelect;
 use Facebook\WebDriver\WebDriverTargetLocator;
 use Facebook\WebDriver\WebDriverDimension;
 
+use function zin\globalSearch;
+
 require_once('phpwebdriver/autoload.php');
 
 /**
@@ -41,7 +43,7 @@ class webdriver
     {
         global $result;
         $this->result = $result;
-        $this->config  = $config;;
+        $this->config = $config;;
 
         $this->initBrowser($config->chrome);
         $this->cookieFile = dirname(__FILE__, 4) . '/config/cookie/cookie';
@@ -226,6 +228,7 @@ class webdriver
         if(preg_match('/^(xpath:|css:|id:|class:|name:|tag:|link:).*/i', $selector, $matches) !== 0)
         {
             $type = str_replace(':', '', $matches[1]);
+            $selector = substr($selector, strlen($type) + 1);
             switch($type)
             {
                 case 'xpath':
@@ -754,12 +757,37 @@ class webdriver
      * Get url of current page.
      *
      * @access public
-     * @return string
+     * @return object
      */
     public function getUrl()
     {
         $url = $this->driver->getCurrentURL();
-        return $url;
+
+        $parseURL = parse_url($url);
+        if(isset($parseURL['query']))
+        {
+            $query = $parseURL['query'];
+            parse_str($query, $queryParams);
+            $module = $queryParams['m'];
+            $method = $queryParams['f'];
+        }
+        else
+        {
+            $path = $parseURL['path'];
+            $pathParts = explode('-', trim($path, '/'));
+
+            $module = str_replace('.html', '', $pathParts[0]);
+            $method = str_replace('.html', '', $pathParts[1]);
+        }
+
+        $result = new stdclass();
+        $result->url    = $url;
+        $result->module = $module;
+        $result->method = $method;
+
+        if(!empty($result)) $this->result->url = $result;
+
+        return $result;
     }
 
     /**

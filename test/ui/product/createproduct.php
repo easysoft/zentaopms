@@ -13,6 +13,6 @@ include dirname(__FILE__) . '/createproduct.class.php';
 zdTable('product')->config('product', false, 1)->gen(10);
 $createTester = new createProductTester();
 
-r($createTester->createWithoutName()) && p('text:nameTip') && e('『产品名称』不能为空。'); // 缺少产品名称，创建失败
-r($createTester->checkLocatePage())   && p('url')          && e('product,browse'); // 创建正常产品成功
-r($createTester->createDefault())     && p('status')       && e('SUCCESS'); // 使用默认选项创建产品
+r($createTester->createDefault(''))                    && p('message:nameTip')   && e('『产品名称』不能为空。'); // 缺少产品名称，创建失败
+r($createTester->createDefault('默认产品' . time()))   && p('status')            && e('SUCCESS'); // 使用默认选项创建产品
+r($createTester->checkLocatePage('正常产品' . time())) && p('url:module,method') && e('product,browse'); // 创建正常产品成功

@@ -42,10 +42,9 @@ function r($result)
  */
 function p($keys = '', $delimiter = ',')
 {
-    global $_result, $result;
+    global $_result;
 
     if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
-    if($keys == 'url')  return print($result->get('url') . PHP_EOL);
 
     if(is_array($_result) && isset($_result['code']) && $_result['code'] == 'fail') return print((string) $_result['message'] . "\n");
 
@@ -95,10 +94,6 @@ function getPageAttr($arrKey, $keys)
                 $value->$key = $page->{$element}->$method($attr);
             }
         }
-        elseif($arrKey == 'url')
-        {
-            print($result->get('url') . PHP_EOL);
-        }
         else
         {
             $value->$key = $page->$method();
@@ -132,7 +127,7 @@ function getValues($value, $keys, $delimiter)
     $keys = explode($delimiter, $keys);
     if($index != -1)
     {
-        if(in_array($arrKey, array('text', 'attr', 'url', 'title', 'value')))
+        if(in_array($arrKey, array('text', 'attr', 'title', 'value')))
         {
             $value = getPageAttr($arrKey, $keys);
         }
@@ -169,20 +164,35 @@ function e($expect)
 {
 }
 
-function success($status = '')
+/**
+ * Set success result set.
+ *
+ * @access public
+ * @return object
+ */
+function success()
 {
     global $result;
-    $result->status= $status;
+    $result->status = 'SUCCESS';
 
-    return $result->get();
+    return $result;
 }
 
-function failed($status)
+/**
+ * Set failure result set.
+ *
+ * @param  string    $message
+ * @access public
+ * @return object
+ */
+function failed($message)
 {
     global $result;
-    $result->status= $status;
+    $result->status  = 'FAILED';
+    $result->message = $message;
+    if(!empty($result->page)) $result->page->getErrors();
 
-    return $result->get('status');
+    return $result;
 }
 
 class tester
@@ -225,6 +235,16 @@ class tester
         return $this->page;
     }
 
+    /**
+     * Load and jump to the test page.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  array  $params
+     * @param  string $iframeID
+     * @access public
+     * @return object
+     */
     public function loadPage($module, $method, $params = array(), $iframeID = '')
     {
         if($this->config->requestType == 'GET')
@@ -247,6 +267,14 @@ class tester
         return $this->setPage($module, $method);
     }
 
+    /**
+     * Set up a test page.
+     *
+     * @param  strign  $module
+     * @param  strign  $method
+     * @access public
+     * @return object
+     */
     public function setPage($module, $method)
     {
         global $result;

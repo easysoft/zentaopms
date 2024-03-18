@@ -181,6 +181,26 @@ class page
     }
 
     /**
+     * Get tips in page form.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFormTips()
+    {
+        $elements = $this->driver->getElementList('xpath://div[contains(@class, "form-tip")]');
+
+        $tips = array();
+        foreach($elements as $element)
+        {
+            $id = $element->getAttribute('id');
+            $tips[$id] = $element->getText();
+        }
+
+        return $tips;
+    }
+
+    /**
      * Methods in the public webdriver class.
      *
      * @param  string $method
