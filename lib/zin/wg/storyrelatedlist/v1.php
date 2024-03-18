@@ -99,7 +99,7 @@ class storyRelatedList extends relatedList
             {
                 $storyID = $linkedStory->id;
                 $hasPriv = ($app->user->admin || str_contains(",{$app->user->view->products},", ",{$storyProducts[$story->id]},"));
-                $item['url'] = $hasPriv ? createLink("storyID=$storyID&version=0&param=0&storyType=$story->type") : false;
+                $item['url'] = $hasPriv ? createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type") : false;
                 if($hasPriv)
                 {
                     $item['data-toggle'] = 'modal';
