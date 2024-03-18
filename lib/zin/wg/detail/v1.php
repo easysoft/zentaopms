@@ -9,6 +9,7 @@ require_once dirname(__DIR__) . DS . 'history' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'tabs' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'tabpane' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'entitytitle' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'toolbar' . DS . 'v1.php';
 
 class detail extends wg
 {
@@ -215,16 +216,10 @@ class detail extends wg
 
         if(!$toolbarBlock && !$toolbar) return null;
 
-        $toolbarProps = array_is_list($toolbar) ? array('items' => $toolbar) : $toolbar;
-
         return div
         (
             setClass('detail-toolbar'),
-            $toolbarProps ? toolbar
-            (
-                set::urlFormatter($this->prop('urlFormatter')),
-                set($toolbarProps),
-            ) : null,
+            $toolbar ? toolbar::create($toolbar, set::urlFormatter($this->prop('urlFormatter'))) : null,
             $toolbarBlock
         );
     }
@@ -257,10 +252,18 @@ class detail extends wg
             unset($item['title']);
         }
 
+        $titleActions = isset($item['titleActions']) ? $item['titleActions'] : null;
+        if($titleActions) unset($item['titleActions']);
+
         return div
         (
             setClass('detail-section'),
-            $title ? h2(setClass('detail-section-title text-md py-1'), $title) : null,
+            $title ? div
+            (
+                setClass('detail-section-title row items-center gap-2'),
+                span(setClass('text-md py-1 font-bold'), $title),
+                $titleActions ? toolbar::create($titleActions) : null
+            ) : null,
             div
             (
                 setClass('detail-section-content py-1'),
