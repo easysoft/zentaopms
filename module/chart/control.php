@@ -147,6 +147,9 @@ class chart extends control
             case 'stackedBarY':
                 $data = $this->chart->genCluBar($fields, $settings, $sql, $filterFormat, 'total', $langs);
                 break;
+            case 'waterpolo':
+                $data = $this->chart->genWaterpolo($settings, $sql, $filterFormat);
+                break;
         }
 
         echo json_encode($data);

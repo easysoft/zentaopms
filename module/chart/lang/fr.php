@@ -44,3 +44,4 @@ $lang->chart->typeList['cluBarY']     = 'Clustered Bar Y';
 $lang->chart->typeList['stackedBarY'] = 'Stacked Bar Y';
 $lang->chart->typeList['cluBarX']     = 'Clustered Bar X';
 $lang->chart->typeList['stackedBar']  = 'Stacked Bar';
+$lang->chart->typeList['waterpolo']   = 'Liquid Fill';
