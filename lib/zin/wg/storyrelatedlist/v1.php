@@ -8,7 +8,6 @@ class storyRelatedList extends relatedList
 {
     protected static array $defineProps = array
     (
-
         'fromBug'       => '?object',          // 来源 BUG。
         'bugs'          => '?array',           // 关联的 BUG 列表。
         'builds'        => '?array',           // 关联的版本列表。

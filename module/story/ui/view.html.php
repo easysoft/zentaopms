@@ -68,7 +68,6 @@ if($story->files)
 {
     $sections[] = array
     (
-        'title'      => $lang->files,
         'control'    => 'fileList',
         'files'      => $story->files,
         'showDelete' => false,
