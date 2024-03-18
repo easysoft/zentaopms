@@ -2323,7 +2323,7 @@ class repoModel extends model
         else
         {
             $gitlabUser = $this->loadModel('pipeline')->getOpenIdByAccount($gitlabID, 'gitlab', $this->app->user->account);
-            if(!$gitlabUser) $this->app->control->send(array('message' => array()));
+            if(!$gitlabUser) return array();
 
             $projects    = $this->loadModel('gitlab')->apiGetProjects($gitlabID, $projectFilter ? 'false' : 'true');
             $groupIDList = array(0 => 0);
