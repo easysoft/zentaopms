@@ -643,7 +643,7 @@ function initTableActions(array &$fieldList, string $actionMenu): void
         if(!isset($fieldList['actions']['list'][$action])) continue;
 
         $actionConfig = $fieldList['actions']['list'][$action];
-        $actionConfig['text'] = '';
+        if(!empty($actionConfig['icon'])) $actionConfig['text'] = '';
 
         if(!empty($actionConfig['url']['module']) && !empty($actionConfig['url']['method']))
         {
