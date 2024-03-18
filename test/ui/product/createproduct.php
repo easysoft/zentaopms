@@ -23,12 +23,10 @@ include dirname(__FILE__) . '/createproduct.class.php';
 zdTable('product')->config('product', false, 1)->gen(10);
 $createTester = new createProductTester();
 
-$name = '正常产品' . time();
-
-r($createTester->createDefault(''))                            && p('message:nameTip')   && e('『产品名称』不能为空。'); // 缺少产品名称，创建失败
-r($createTester->createDefault($name))                         && p('status')            && e('SUCCESS');                // 使用默认选项创建产品
-r($createTester->createDefault($name))                         && p('message:nameTip')   && e('SUCCESS');                // 使用默认选项创建产品
-r($createTester->checkLocatePage('正常产品' . time()))         && p('url:module,method') && e('product,browse');         // 创建正常产品后的跳转链接检查
-r($createTester->createMultiBranch('多分支产品产品' . time())) && p('status')            && e('SUCCESS');                // 创建正常产品成功
+r($createTester->createDefault(''))                   && p('message:nameTip')   && e('『产品名称』不能为空。');                     // 缺少产品名称，创建失败
+r($createTester->createDefault('默认产品'))           && p('status')            && e('SUCCESS');                                    // 使用默认选项创建产品
+r($createTester->createDefault('默认产品'))           && p('message:nameTip')   && e('『产品名称』已经有『默认产品』这条记录了。'); // 创建重复名称的产品
+r($createTester->checkLocatePage('正常产品'))         && p('url:module,method') && e('product,browse');                             // 创建正常产品后的跳转链接检查
+r($createTester->createMultiBranch('多分支产品产品')) && p('status')            && e('SUCCESS');                                    // 创建正常产品成功
 
 closeBrowser();
