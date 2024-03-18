@@ -256,7 +256,7 @@ $lang->task->confirmDeleteLastEffort   = "您确定要删除该条工时日志�
 $lang->task->copyStoryTitle            = "同{$lang->SRCommon}";
 $lang->task->afterSubmit               = "添加之后";
 $lang->task->successSaved              = "成功添加，";
-$lang->task->delayWarning              = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->task->delayWarning              = "延期%s天";
 $lang->task->remindBug                 = "该任务为Bug转化得到，是否更新Bug:%s ?";
 $lang->task->remindIssue               = "该任务为问题转化得到，是否更新问题:%s ?";
 $lang->task->confirmChangeExecution    = "修改{$lang->executionCommon}会导致相应的所属模块、相关{$lang->SRCommon}和指派人发生变化，确定吗？";

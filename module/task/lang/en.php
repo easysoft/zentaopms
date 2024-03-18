@@ -256,7 +256,7 @@ $lang->task->confirmDeleteLastEffort   = "Do you want to delete the log? After d
 $lang->task->copyStoryTitle            = "Copy Story";
 $lang->task->afterSubmit               = "Next ";
 $lang->task->successSaved              = "Created!";
-$lang->task->delayWarning              = " <strong class='text-danger'> Delay %s days </strong>";
+$lang->task->delayWarning              = "Delay %s days";
 $lang->task->remindBug                 = "This task is converted from a bug. Do you want to update the Bug:%s?";
 $lang->task->remindIssue               = "This task is converted from a issue. Do you want to update the Issue:%s?";
 $lang->task->confirmChangeExecution    = "If you change {$lang->executionCommon}, Module, Story and AssignedTo will also be changed. Do you want to change it?";
