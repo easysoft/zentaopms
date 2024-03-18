@@ -482,6 +482,7 @@ class chartModel extends model
         $denominatorWheres = array();
         foreach($settings['conditions'] as $condition)
         {
+            $condition = (array)$condition;
             $where = "{$condition['field']} {$this->config->chart->conditionList[$condition['condition']]} '{$condition['value']}'";
             $moleculeWheres[]    = $where;
         }
