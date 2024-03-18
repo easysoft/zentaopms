@@ -300,6 +300,14 @@ class aiModel extends model
             ->where('id')->eq($modelID)
             ->exec();
 
+        if(isset($model->name))
+        {
+            $this->dao->update(TABLE_IM_CHAT)
+                ->set('name')->eq($model->name)
+                ->where('gid')->like( "%&ai-$modelID")
+                ->exec();
+        }
+
         return !dao::isError();
     }
 
