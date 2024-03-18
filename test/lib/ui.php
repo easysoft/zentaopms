@@ -7,7 +7,7 @@ define('MODULE_ROOT', dirname(__FILE__, 2) . '/ui/');
 include CONFIG_ROOT . '/config.php';
 
 include __DIR__ . '/result.class.php';
-include __DIR__ . '/drivers/webdriver/webdriver.class.php';
+include __DIR__ . '/webdriver/webdriver.class.php';
 $driver = new webdriver($config);
 
 /* Set the error reporting. */

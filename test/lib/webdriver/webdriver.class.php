@@ -11,7 +11,7 @@ use Facebook\WebDriver\WebDriverDimension;
 
 use function zin\globalSearch;
 
-require_once('phpwebdriver/autoload.php');
+require_once('vendor/autoload.php');
 
 /**
  * Webdriver engine class.
@@ -46,7 +46,7 @@ class webdriver
         $this->config = $config;;
 
         $this->initBrowser($config->chrome);
-        $this->cookieFile = dirname(__FILE__, 4) . '/config/cookie/cookie';
+        $this->cookieFile = dirname(__FILE__, 3) . '/config/cookie/cookie';
     }
 
     /**
@@ -118,7 +118,7 @@ class webdriver
             $langName = 'en';
         }
 
-        $langFile = dirname(__FILE__, 4) . "/lang/{$langName}.php";
+        $langFile = dirname(__FILE__, 3) . "/lang/{$langName}.php";
 
         if(file_exists($langFile)) include $langFile;
 
