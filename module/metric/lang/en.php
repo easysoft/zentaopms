@@ -115,7 +115,7 @@ $lang->metric->viewType->multiple = 'Multiple view';
 
 $lang->metric->descTip            = 'Enter the meaning, purpose, and impact of the metric';
 $lang->metric->definitionTip      = 'Enter the calculation rules and filtering conditions of the metric';
-$lang->metric->aliasTip           = 'This metric will be displayed with its abbreviation on the metric library';
+$lang->metric->aliasTip           = 'Displayed in the metrics library as alias';
 $lang->metric->collectConfText    = "%s %s %s";
 $lang->metric->dirNotExist        = "Failed to create a directory. Please create a directory: <strong>%s</strong>.";
 $lang->metric->fileMoveFail       = "File move failed, please move <strong>%s</strong> to <strong>%s</strong>.";
