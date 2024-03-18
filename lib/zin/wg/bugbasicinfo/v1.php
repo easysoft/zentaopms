@@ -129,7 +129,7 @@ class bugBasicInfo extends wg
             'text'    => $statusText
         );
 
-        $items[$lang->bug->activatedCount] = $bug->activatedCount ? array('content' => $bug->activatedCount) : '';
+        $items[$lang->bug->activatedCount] = $bug->activatedCount ? "{$bug->activatedCount}" : '';
         $items[$lang->bug->activatedDate]  = formatTime($bug->activatedDate);
         $items[$lang->bug->confirmed]      = $lang->bug->confirmedList[$bug->confirmed];
         $items[$lang->bug->assignedTo]     = $bug->assignedTo ? zget($users, $bug->assignedTo) . $lang->at . formatTime($bug->assignedDate) : '';
