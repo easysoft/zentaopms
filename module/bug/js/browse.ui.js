@@ -45,6 +45,7 @@ window.onRenderCell = function(result, {row, col})
 
     if(result && col.name == 'deadline')
     {
+        if(row.data.deadline === '0000-00-00') return result;
         if(row.data.deadline < today) result[0] = {html: '<span class="text-danger" >' + row.data.deadline + '</span>'};
     }
 
