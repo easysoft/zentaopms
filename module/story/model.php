@@ -2112,7 +2112,15 @@ class storyModel extends model
         $children = $this->dao->select('id')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('top')->eq($story->top)
+            ->beginIF($story->type == 'requirement')
+            ->andWhere("((type = 'requirement' and grade > {$story->grade}) or (type = 'story'))")
+            ->fi()
+            ->beginIF($story->type == 'epic')
+            ->andWhere("((type = 'epic' and grade > {$story->grade}) or (type = 'story') or (type = 'requirement'))")
+            ->fi()
+            ->beginIF($story->type == 'story')
             ->andWhere('grade')->gt($story->grade)
+            ->fi()
             ->fetchPairs();
 
         return array_keys($children);

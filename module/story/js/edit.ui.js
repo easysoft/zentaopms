@@ -13,6 +13,15 @@ window.loadProduct = function()
         }
     }
 
+    if(productID != oldProductID)
+    {
+        if(!confirm(changeProductTips))
+        {
+            $product.$.setValue(oldProductID.toString());
+            return false;
+        }
+    }
+
     if(parentStory)
     {
         confirmLoadProduct = confirm(moveChildrenTips);

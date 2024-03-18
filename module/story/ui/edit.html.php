@@ -44,6 +44,7 @@ jsVar('reviewerNotEmpty', $lang->story->notice->reviewerNotEmpty);
 jsVar('oldProductID', $story->product);
 jsVar('twins', $story->twins);
 jsVar('relievedTwinsTip', $lang->story->relievedTwinsTip);
+jsVar('changeProductTips', $lang->story->changeProductTips);
 jsVar('parentStory', !empty($story->children));
 jsVar('moveChildrenTips', $lang->story->moveChildrenTips);
 jsVar('executionID', isset($objectID) ? $objectID : 0);

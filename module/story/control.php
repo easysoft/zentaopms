@@ -276,6 +276,7 @@ class story extends control
         $this->loadModel('file');
         $this->app->loadLang('bug');
         $this->commonAction($storyID);
+        $this->story->getAllChildId($storyID);
 
         if(!empty($_POST))
         {
