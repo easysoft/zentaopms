@@ -120,6 +120,7 @@ $lang->story->project          = $lang->projectCommon;
 $lang->story->branch           = "Branch/Platform";
 $lang->story->module           = 'Module';
 $lang->story->moduleAB         = 'Module';
+$lang->story->roadmap          = 'Roadmap';
 $lang->story->source           = 'Von';
 $lang->story->sourceNote       = 'Hinweis';
 $lang->story->fromBug          = 'Von Bug';

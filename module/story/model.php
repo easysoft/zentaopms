@@ -4411,6 +4411,7 @@ class storyModel extends model
         $story->module    = zget(zget($options, 'modules',    array()), $story->module, '');
         $story->branch    = zget(zget($options, 'branches',   array()), $story->branch, '');
         $story->plan      = isset($story->planTitle) ? $story->planTitle : zget(zget($options, 'plans', array()), $story->plan, '');
+        $story->roadmap   = zget(zget($options, 'roadmaps', array()), $story->roadmap, 0);
 
         $story->source       = zget($this->lang->story->sourceList,   $story->source, '');
         $story->category     = zget($this->lang->story->categoryList, $story->category);
