@@ -44,4 +44,4 @@ $lang->chart->typeList['cluBarY']     = '簇状条形图';
 $lang->chart->typeList['stackedBarY'] = '堆积条形图';
 $lang->chart->typeList['cluBarX']     = '簇状柱形图';
 $lang->chart->typeList['stackedBar']  = '堆积柱形图';
-$lang->chart->typeList['waterpolo']   = '水球图';
+//$lang->chart->typeList['waterpolo']   = '水球图';
