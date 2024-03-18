@@ -447,8 +447,6 @@ class storyModel extends model
         $storyID = $this->storyTao->doCreateStory($story);
         if(!$storyID) return false;
 
-        $this->dao->update(TABLE_STORY)->set('path')->eq(",{$storyID},")->where('id')->eq($storyID)->exec();
-
         /* Upload files. */
         $this->loadModel('action');
         $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, $story->type);
@@ -466,7 +464,14 @@ class storyModel extends model
         if($bugID)       $this->storyTao->closeBugWhenToStory($bugID, $storyID);
         if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer);
         if(!empty($story->URS))      $this->storyTao->doCreateURRelations($storyID, $story->URS);
-        if(!empty($story->parent))   $this->subdivide($story->parent, array($storyID));
+        if(!empty($story->parent))
+        {
+            $this->subdivide($story->parent, array($storyID));
+        }
+        else
+        {
+            $this->dao->update(TABLE_STORY)->set('top')->eq($storyID)->where('id')->eq($storyID)->exec();
+        }
         if(!empty($story->plan))
         {
             $this->updateStoryOrderOfPlan($storyID, (string)$story->plan); // Set story order in this plan.
@@ -586,7 +591,14 @@ class storyModel extends model
             if(!$storyID) return array();
 
             $this->storyTao->doCreateSpec($storyID, $story);
-            if($story->parent > 0) $this->subdivide($story->parent, array($storyID));
+            if(!empty($story->parent))
+            {
+                $this->subdivide($story->parent, array($storyID));
+            }
+            else
+            {
+                $this->dao->update(TABLE_STORY)->set('top')->eq($storyID)->where('id')->eq($storyID)->exec();
+            }
 
             /* Update product plan stories order. */
             if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer);
@@ -748,10 +760,15 @@ class storyModel extends model
         if($story->grade != $oldStory->grade)
         {
             $gradeDiff = (int)$story->grade - (int)$oldStory->grade;
-            $this->dao->update(TABLE_STORY)->set("grade = grade + $gradeDiff")->where('path')->like($oldStory->path . '%')->andWhere('id')->ne($storyID)->exec();
+            $this->dao->update(TABLE_STORY)
+                      ->set("grade = grade + $gradeDiff")
+                      ->where('top')->eq($oldStory->top)
+                      ->andWhere('grade')->gt($oldStory->grade)
+                      ->andWhere('id')->ne($storyID)
+                      ->exec();
         }
         $parentChanged = $story->parent != $oldStory->parent;
-        if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory->parent, $oldStory->path);
+        if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory->parent);
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, !$parentChanged);
         if($story->parent > 0) $this->updateParentStatus($storyID, $story->parent, !$parentChanged);
 
@@ -1004,12 +1021,11 @@ class storyModel extends model
         }
 
         $this->loadModel('action');
-        $changeGradeList = array();
         foreach($stories as $storyID => $story)
         {
             $oldStory = $oldStories[$storyID];
             if(!$story->grade) $story->grade = $oldStory->grade;
-            $this->dao->update(TABLE_STORY)->data($story)
+            $this->dao->update(TABLE_STORY)->data($story, 'grade')
                 ->autoCheck()
                 ->checkIF($story->closedBy, 'closedReason', 'notempty')
                 ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
@@ -1020,14 +1036,20 @@ class storyModel extends model
             if(dao::isError()) return false;
 
             /* Update story sort of plan when story plan has changed. */
-            if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, (string)$story->plan, $oldStory->plan);
             if($story->grade != $oldStory->grade)
             {
-                $changeGradeList[$storyID]['oldGrade'] = $oldStory->grade;
-                $changeGradeList[$storyID]['newGrade'] = $story->grade;
+                $gradeDiff = (int)$story->grade - (int)$oldStory->grade;
+                $this->dao->update(TABLE_STORY)
+                     ->set("grade = grade + $gradeDiff")
+                     ->where('top')->eq($oldStory->top)
+                     ->andWhere('grade')->gt($oldStory->grade)
+                     ->andWhere('id')->ne($storyID)
+                     ->exec();
+                $this->dao->update(TABLE_STORY)->set('grade')->eq($story->grade)->where('id')->eq($storyID)->exec();
             }
+            if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, (string)$story->plan, $oldStory->plan);
             $parentChanged = $story->parent != $oldStory->parent;
-            if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory->parent, $oldStory->path);
+            if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory->parent);
             if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, !$parentChanged);
             if($story->parent > 0) $this->updateParentStatus($storyID, $story->parent, !$parentChanged);
 
@@ -1047,12 +1069,6 @@ class storyModel extends model
                 $feedbacks[$oldStory->feedback] = $oldStory->feedback;
                 $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
             }
-        }
-
-        foreach($changeGradeList as $storyID => $oldStory)
-        {
-            $gradeDiff = $oldStory['newGrade'] - $oldStory['oldGrade'];
-            $this->dao->update(TABLE_STORY)->set("grade = grade + $gradeDiff")->where('path')->like("%,{$storyID},%")->andWhere('id')->ne($storyID)->exec();
         }
 
         $this->loadModel('score')->create('ajax', 'batchEdit');
@@ -1334,10 +1350,9 @@ class storyModel extends model
         /* Set parent to child story. */
         foreach($SRList as $childStoryID)
         {
-            $path = rtrim($oldStory->path, ',') . ",$childStoryID,";
             $this->dao->update(TABLE_STORY)
                  ->set('parent')->eq($storyID)
-                 ->set('path')->eq($path)
+                 ->set('top')->eq($oldStory->top)
                  ->where('id')->eq($childStoryID)
                  ->exec();
         }
@@ -2043,11 +2058,10 @@ class storyModel extends model
      * 获取需求的所有子需求ID。
      *
      * @param  int    $storyID
-     * @param  bool   $includeSelf
      * @access public
      * @return array
      */
-    public function getAllChildId(int $storyID, bool $includeSelf = true): array
+    public function getAllChildId(int $storyID): array
     {
         if($storyID == 0) return array();
 
@@ -2055,9 +2069,9 @@ class storyModel extends model
         if(empty($story)) return array();
 
         $children = $this->dao->select('id')->from(TABLE_STORY)
-            ->where('path')->like($story->path . '%')
-            ->andWhere('deleted')->eq(0)
-            ->beginIF(!$includeSelf)->andWhere('id')->ne($storyID)->fi()
+            ->where('deleted')->eq(0)
+            ->andWhere('top')->eq($story->top)
+            ->andWhere('grade')->gt($story->grade)
             ->fetchPairs();
 
         return array_keys($children);
@@ -2214,10 +2228,10 @@ class storyModel extends model
      * @param  string|array $modules
      * @param  string       $fieldName
      * @param  string       $fieldValue
-     * @param  string       $type         requirement|story
+     * @param  string       $type       requirement|story
      * @param  string       $orderBy
      * @param  object       $pager
-     * @param  string       $operator     equal|include
+     * @param  string       $operator   equal|include
      * @access public
      * @return array
      */
@@ -4636,7 +4650,11 @@ class storyModel extends model
      */
     public function getGradeList($type = 'story'): array
     {
-        return $this->dao->select('*')->from(TABLE_STORYGRADE)->where('type')->eq($type)->orderBy('grade_asc')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_STORYGRADE)
+            ->where('1=1')
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
+            ->orderBy('grade_asc')
+            ->fetchAll();
     }
 
     /**
@@ -4719,7 +4737,7 @@ class storyModel extends model
     public function checkGrade(object $story, object $oldStory, string $method = 'edit')
     {
         $maxGrade = $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORY)
-             ->where('path')->like("{$oldStory->path}%")
+             ->where('top')->eq($oldStory->top)
              ->andWhere('deleted')->eq('0')
              ->fetch('maxGrade');
 

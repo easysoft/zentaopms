@@ -24,10 +24,10 @@ CREATE TABLE `zt_storygrade` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_story` ADD `grade` smallint(6) NOT NULL AFTER `parent`;
-ALTER TABLE `zt_story` ADD `path` varchar(255) NULL AFTER `grade`;
-update zt_story set grade = 1, path = concat(',', id, ',') where type != 'story';
-update zt_story set grade = 1, path = concat(',', id, ',') where type = 'story' and parent <= 0;
-update zt_story set grade = 2, path = concat(',', parent, ',', id, ',') where type = 'story' and parent > 0;
+ALTER TABLE `zt_story` ADD `top` mediumint NOT NULL DEFAULT '0' AFTER `parent`;
+update zt_story set grade = 1, parent = 0, top = id where type != 'story';
+update zt_story set grade = 1, parent = 0, top = id where type = 'story' and parent <= 0;
+update zt_story set grade = 2, top = parent where type = 'story' and parent > 0;
 
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'gradeRule', 'stepwise');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'requirement', '', 'gradeRule', 'stepwise');

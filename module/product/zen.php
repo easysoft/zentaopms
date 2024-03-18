@@ -1451,6 +1451,10 @@ class productZen extends product
         $projectProducts = $this->getProjectProductList($projectID, $storyType, $isProjectStory);
         list($branchOpt, $branchTagOpt) = $this->getBranchAndTagOption($projectID, $product, $isProjectStory);
 
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $gradeGroup = array();
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         /* Set show module by config. */
         $showModule = empty($this->config->product->browse->showModule) ? 0 : $this->config->product->browse->showModule;
         if($isProjectStory) $showModule = empty($this->config->projectstory->story->showModule) ? 0 : $this->config->projectstory->story->showModule;
@@ -1461,6 +1465,8 @@ class productZen extends product
         $this->view->projectID       = $projectID;
         $this->view->project         = $project;
         $this->view->stories         = $stories;
+        $this->view->gradeGroup      = $gradeGroup;
+        $this->view->showGrade       = $storyType == 'story' ? count($gradeGroup[$storyType]) > 2 : count($gradeGroup[$storyType]) > 1;
         $this->view->storyType       = $storyType;
         $this->view->browseType      = $browseType;
         $this->view->isProjectStory  = $isProjectStory;

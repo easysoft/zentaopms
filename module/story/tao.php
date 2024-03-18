@@ -817,14 +817,11 @@ class storyTao extends storyModel
      * @param  int       $storyID
      * @param  object    $story
      * @param  int       $oldStoryParent
-     * @param  string    $oldStoryPath
      * @access protected
      * @return void
      */
-    protected function doChangeParent(int $storyID, object $story, int $oldStoryParent, string $oldStoryPath)
+    protected function doChangeParent(int $storyID, object $story, int $oldStoryParent)
     {
-        if($story->parent == $oldStoryParent) return;
-
         $this->loadModel('action');
         if($oldStoryParent > 0)
         {
@@ -841,9 +838,9 @@ class storyTao extends storyModel
 
         if($story->parent > 0)
         {
-            $parentStory    = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
-            $story->path    = rtrim($parentStory->path, ',') . ',' . $storyID . ',';
-            $children       = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+            $parentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
+            $newTop      = $parentStory->top;
+            $children    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
             $this->dao->update(TABLE_STORY)
                 ->set('childStories')->eq(implode(',', $children))
                 ->set('lastEditedBy')->eq($this->app->user->account)
@@ -859,16 +856,12 @@ class storyTao extends storyModel
         }
         else
         {
-            $story->path = ",$storyID,";
+            $newTop = $storyID;
         }
 
         $childStories = $this->getAllChildId($storyID);
-        foreach($childStories as $childStoryID)
-        {
-            $oldChildPath = $this->dao->select('path')->from(TABLE_STORY)->where('id')->eq($childStoryID)->fetch('path');
-            $newChildPath = str_replace($oldStoryPath, $story->path, $oldChildPath);
-            $this->dao->update(TABLE_STORY)->set('path')->eq($newChildPath)->where('id')->eq($childStoryID)->exec();
-        }
+        if($childStories) $this->dao->update(TABLE_STORY)->set('top')->eq($newTop)->where('id')->in($childStories)->exec();
+        $this->dao->update(TABLE_STORY)->set('top')->eq($newTop)->where('id')->eq($storyID)->exec();
     }
 
     /**

@@ -15,6 +15,8 @@ namespace zin;
 data('storyType', $storyType);
 data('activeMenuID', $storyType);
 jsVar('URChanged', $this->lang->story->URChanged);
+jsVar('gradeGroup', $gradeGroup);
+jsVar('showGrade', $showGrade);
 
 $storyCommon       = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;
 $isProjectStory    = $this->app->rawModule == 'projectstory';
