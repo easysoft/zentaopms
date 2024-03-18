@@ -68,10 +68,10 @@ if($bug->files)
 {
     $sections[] = array
     (
-        'title'      => $lang->files,
         'control'    => 'fileList',
         'files'      => $bug->files,
-        'object'     => $bug
+        'object'     => $bug,
+        'padding'    => false
     );
 }
 
