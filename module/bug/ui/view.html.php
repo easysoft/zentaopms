@@ -53,11 +53,7 @@ $actions = array();
 if(!$bug->deleted)
 {
     /* Construct common actions for bug. */
-    foreach($operateList['mainActions'] as $operate)
-    {
-        if(!empty($operate['id']) && $operate['id'] == 'toStory') $operate['data-url'] = createLink('story', 'create', "product={$bug->product}&branch={$bug->branch}&module={$bug->module}&story=0&execution=0&bugID={$bug->id}");
-        $actions[] = $operate;
-    }
+    $actions = $operateList['mainActions'];
     if(!empty($operateList['suffixActions'])) $actions = array_merge($actions, array(array('type' => 'divider')), $operateList['suffixActions']);
 }
 
@@ -107,7 +103,7 @@ $tabs[] = setting()
 
 detail
 (
-    set::urlFormatter(array('{id}' => $bug->id, '{product}' => $bug->product, '{branch}' => $bug->branch, '{project}' => $bug->project, '{execution}' => $bug->execution)),
+    set::urlFormatter(array('{id}' => $bug->id, '{product}' => $bug->product, '{branch}' => $bug->branch, '{project}' => $bug->project, '{execution}' => $bug->execution, '{module}' => $bug->module)),
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),

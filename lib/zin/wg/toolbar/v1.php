@@ -73,6 +73,7 @@ class toolbar extends wg
                     $url = str_replace(array_keys($urlFormatter), array_values($urlFormatter), $url);
                     $item['url'] = $url;
                 }
+                if(!empty($item['data-url'])) $item['data-url'] = str_replace(array_keys($urlFormatter), array_values($urlFormatter), $item['data-url']);
                 $itemChildren = isset($item['items']) ? $item['items'] : null;
                 if(is_array($itemChildren))
                 {
@@ -87,6 +88,7 @@ class toolbar extends wg
                                 $itemChildren[$key]['url'] = $url;
                             }
                         }
+                        if(!empty($itemChildren[$key]['data-url'])) $$itemChildren[$key]['data-url'] = str_replace(array_keys($urlFormatter), array_values($urlFormatter), $itemChildren[$key]['data-url']);
                     }
                     $item['items'] = $itemChildren;
                 }
