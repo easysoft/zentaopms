@@ -256,7 +256,7 @@ $lang->task->confirmDeleteLastEffort   = "Do you want to delete the log? After d
 $lang->task->copyStoryTitle            = "Story kopieren";
 $lang->task->afterSubmit               = "Nach der Erstellung,";
 $lang->task->successSaved              = "Erstellt!";
-$lang->task->delayWarning              = " <strong class='text-danger'> Verzögerung %s Tage </strong>";
+$lang->task->delayWarning              = "Verzögerung %s Tage";
 $lang->task->remindBug                 = "Diese Aufgabe wurde aus einem Bus erzeugt. Möchten Sie den Bug aktualisieren:%s?";
 $lang->task->remindIssue               = "This task is converted from a issue. Do you want to update the Issue:%s?";
 $lang->task->confirmChangeExecution    = "Wenn Sie {$lang->executionCommon} ändern, das verwendete Modul, Story and Assignor will be changed. Do you want to do it?";
