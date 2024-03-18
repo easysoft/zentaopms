@@ -125,10 +125,10 @@ if($task->files)
 {
     $sections[] = array
     (
-        'title'      => $lang->files,
-        'control'    => 'fileList',
-        'files'      => $task->files,
-        'object'     => $task
+        'control' => 'fileList',
+        'files'   => $task->files,
+        'object'  => $task,
+        'padding' => false
     );
 }
 
