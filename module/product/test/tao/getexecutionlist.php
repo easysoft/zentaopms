@@ -36,6 +36,7 @@ $productIdList[2] = range(100, 110);
 
 global $tester;
 $tester->loadModel('product');
+$tester->app->user->admin = true;
 r($tester->product->getExecutionList($projectIdList[0], $productIdList[0]))     && p()                        && e('0');    // 测试项目跟产品的ID列表都为空的情况
 r($tester->product->getExecutionList($projectIdList[1], $productIdList[0]))     && p()                        && e('0');    // 测试项目ID列表不为空，产品ID列表为空的情况
 r($tester->product->getExecutionList($projectIdList[2], $productIdList[0]))     && p()                        && e('0');    // 测试项目ID列表不存在，产品ID列表为空的情况

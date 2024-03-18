@@ -8,10 +8,10 @@ cid=0
 
 - 执行product模块的getProjectStatsByProductTest方法，参数是$productID = 0, 'all', '', false, 'order_desc'  @0
 - 执行product模块的getProjectStatsByProductTest方法，参数是$productID = 1, 'all', '', false, 'order_desc'
- - 第11条的totalConsumed属性 @36
- - 第11条的totalEstimate属性 @16
+ - 第11条的totalConsumed属性 @25
+ - 第11条的totalEstimate属性 @10
  - 第11条的totalLeft属性 @6
- - 第11条的progress属性 @85.70
+ - 第11条的progress属性 @80.60
  - 第11条的teamCount属性 @0
 - 执行product模块的getProjectStatsByProductTest方法，参数是$productID = 1, 'all', '', true, 'order_desc'
  - 第61条的totalConsumed属性 @45
@@ -59,5 +59,5 @@ $projectproduct->gen(8);
 $product = new productTest('admin');
 
 r($product->getProjectStatsByProductTest($productID = 0, 'all', '', false, 'order_desc')) && p() && e('0');
-r($product->getProjectStatsByProductTest($productID = 1, 'all', '', false, 'order_desc')) && p('11:totalConsumed,totalEstimate,totalLeft,progress,teamCount') && e('36,16,6,85.70,0');
+r($product->getProjectStatsByProductTest($productID = 1, 'all', '', false, 'order_desc')) && p('11:totalConsumed,totalEstimate,totalLeft,progress,teamCount') && e('25,10,6,80.60,0');
 r($product->getProjectStatsByProductTest($productID = 1, 'all', '', true,  'order_desc')) && p('61:totalConsumed,totalEstimate,totalLeft,progress,teamCount') && e('45,40,34,56.90,0');
