@@ -33,6 +33,7 @@ class taskEffortInfo extends wg
         $items[$lang->task->deadline]['content'] =
             helper::isZeroDate($task->deadline) ? '' : $task->deadline;
         if(isset($task->delay)) $items[$lang->task->deadline]['children'] = label(html(sprintf($lang->task->delayWarning, $task->delay)), setClass('danger-pale circle'));
+
         return $items;
     }
 
