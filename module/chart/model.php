@@ -648,6 +648,9 @@ class chartModel extends model
 
                     if(empty($begin) or empty($end)) break;
 
+                    $begin = date('Y-m-d 00:00:00', strtotime($begin));
+                    $end   = date('Y-m-d 23:59:59', strtotime($end));
+
                     $value = "'$begin' and '$end'";
                     $filterFormat[$field] = array('operator' => 'BETWEEN', 'value' => $value);
                     break;
