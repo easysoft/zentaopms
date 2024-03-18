@@ -1,5 +1,23 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getDataOfStoriesPerClosedReason();
+cid=0
+
+- 按照需求关闭原因分组，获取分组后的需求数量 @7
+- 按照需求关闭原因分组，获取各个关闭原因下的需求数量，查看willnotdo的数据
+ - 第willnotdo条的name属性 @不做
+ - 第willnotdo条的value属性 @3
+- 按照需求关闭原因分组，获取各个关闭原因下的需求数量，查看bydesign的数据
+ - 第bydesign条的name属性 @设计如此
+ - 第bydesign条的value属性 @2
+- 按照需求关闭原因分组，获取各个关闭原因下的需求数量，查看cancel的数据
+ - 第cancel条的name属性 @已取消
+ - 第cancel条的value属性 @2
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 $story = zdTable('story');
@@ -7,14 +25,6 @@ $story->version->range('1-4');
 $story->gen(20);
 
 su('admin');
-
-/**
-
-title=测试 storyModel->getDataOfStoriesPerClosedReason();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

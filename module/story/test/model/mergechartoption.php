@@ -1,18 +1,31 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
 
 /**
 
 title=测试 storyModel->mergeChartOption();
-cid=1
-pid=1
+cid=0
 
-
+- 执行$tester->story->lang->story->report->storiesPerProduct
+ - 属性type @pie
+ - 属性width @500
+ - 属性height @140
+- 执行$tester->story->lang->story->report->storiesPerModule->graph属性xAxisName @模块
+- 执行$tester->story->lang->story->report->storiesPerSource->graph属性xAxisName @来源
+- 执行$tester->story->lang->story->report->storiesPerPlan->graph属性xAxisName @计划
+- 执行$tester->story->lang->story->report->storiesPerStatus->graph属性xAxisName @状态
+- 执行$tester->story->lang->story->report->storiesPerStage->graph属性xAxisName @所处阶段
+- 执行$tester->story->lang->story->report->storiesPerPri->graph属性xAxisName @优先级
+- 执行$tester->story->lang->story->report->storiesPerEstimate->graph属性xAxisName @预计时间
+- 执行$tester->story->lang->story->report->storiesPerOpenedBy->graph属性xAxisName @由谁创建
+- 执行$tester->story->lang->story->report->storiesPerAssignedTo->graph属性xAxisName @当前指派
+- 执行$tester->story->lang->story->report->storiesPerClosedReason->graph属性xAxisName @关闭原因
+- 执行$tester->story->lang->story->report->storiesPerChange->graph属性xAxisName @变更次数
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/story.class.php';
+su('admin');
 
 global $tester;
 $tester->loadModel('story');

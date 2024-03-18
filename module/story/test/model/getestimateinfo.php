@@ -1,17 +1,20 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-zdTable('storyestimate')->gen(10);
 
 /**
 
 title=测试 storyModel->getEstimateInfo();
-cid=1
-pid=1
+cid=0
+
+- 执行$storyInfo
+ - 属性round @1
+ - 属性average @1.5
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+su('admin');
+
+zdTable('storyestimate')->gen(10);
 
 global $tester;
 $tester->loadModel('story');

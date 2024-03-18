@@ -1,5 +1,20 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->replaceRevertQuery();
+cid=0
+
+- 不传入数据。 @0
+- 传入产品参数，不传入查询语句。 @0
+- 传入不符合条件的查询语句，不传入产品参数。 @1
+- 传入不符合条件的查询语句，传入产品参数。 @1
+- 传入符合条件查询语句，不传入产品参数。 @0
+- 传入符合条件查询语句，传入有数据的产品参数。 @1
+- 传入符合条件查询语句，传入无数据的产品参数。 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 $module = zdTable('action');
@@ -12,14 +27,6 @@ $module->extra->range('Revert');
 $module->gen(10);
 
 su('admin');
-
-/**
-
-title=测试 storyModel->replaceRevertQuery();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

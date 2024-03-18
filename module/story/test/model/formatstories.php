@@ -1,19 +1,27 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->formatStories();
+cid=0
+
+- 获取处理title之前的需求列表数量 @2
+- 获取处理title之前的需求列表数量 @2
+- 获取处理title之前的需求title第2条的title属性 @软件需求2
+- 获取处理title之前的需求title第6条的title属性 @软件需求6
+- 获取处理title之后的需求列表数量 @2
+- 获取处理title之后的需求列表数量 @2
+- 获取处理title之后的需求title属性2 @2:软件需求2 (优先级:2,预计工时:2)
+- 获取处理title之后的需求title属性6 @6:软件需求6 (优先级:2,预计工时:2)
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 $story = zdTable('story');
 $story->estimate->range('1-4');
 $story->gen(20);
-
-/**
-
-title=测试 storyModel->formatStories();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

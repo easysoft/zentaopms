@@ -1,5 +1,20 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->batchChangeModule();
+cid=0
+
+- 批量修改6个需求的模块，查看被修改模块的需求数量 @6
+- 批量修改6个需求的模块，查看需求1修改后的模块ID第1条的module属性 @1366
+- 批量修改6个需求的模块，查看需求2修改后的模块ID第2条的module属性 @1366
+- 批量修改6个需求的模块，查看需求3修改后的模块ID第3条的module属性 @1366
+- 批量修改6个需求的模块，查看需求4修改后的模块ID第4条的module属性 @1366
+- 批量修改6个需求的模块，查看需求5修改后的模块ID第5条的module属性 @1366
+- 批量修改6个需求的模块，查看需求6修改后的模块ID第6条的module属性 @1366
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -8,14 +23,6 @@ $story = zdTable('story');
 $story->version->range(1);
 $story->gen(10);
 zdTable('storyspec')->gen(50);
-
-/**
-
-title=测试 storyModel->batchChangeModule();
-cid=1
-pid=1
-
-*/
 
 $story       = new storyTest();
 $storyIdList = array(1, 2, 3, 4, 5, 6);

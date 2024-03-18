@@ -1,5 +1,26 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getStoriesByPlanIdList();
+cid=0
+
+- 传入计划ID列表，获取其下面的需求数量 @3
+- 传入计划ID列表，获取其下面的需求数量 @3
+- 传入计划ID列表，获取其下面的需求数量 @10
+- 传入计划ID列表，获取其下面的需求数量 @5
+- 传入计划ID列表，查看其下面的需求详情
+ - 第1条的title属性 @用户需求1
+ - 第1条的type属性 @requirement
+ - 第1条的status属性 @draft
+- 传入计划ID列表，获取其下面的需求数量 @5
+- 传入计划ID列表，查看其下面的需求详情
+ - 第4条的title属性 @软件需求4
+ - 第4条的type属性 @story
+ - 第4条的status属性 @changing
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -10,20 +31,6 @@ $story->gen(50);
 $planstory = zdTable('planstory');
 $planstory->plan->range('1-10');
 $planstory->gen(50);
-
-/**
-
-title=测试 storyModel->getStoriesByPlanIdList();
-cid=1
-pid=1
-
-传入计划ID列表，获取其下面的需求数量 >> 20
-传入计划ID列表，查看其下面的需求详情 >> 软件需求388,story,draft
-传入计划ID列表，获取其下面的需求数量 >> 20
-传入计划ID列表，查看其下面的需求详情 >> 软件需求392,story,draft
-传入空的计划ID列表，获取系统中所有需求数量 >> 424
-
-*/
 
 global $tester;
 $tester->loadModel('story');

@@ -1,5 +1,29 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->batchChangeStage();
+cid=0
+
+- 批量修改6个需求的阶段，查看被修改阶段的需求数量 @5
+- 批量修改6个需求的阶段，查看需求101修改后的阶段
+ - 第0条的id属性 @1
+ - 第0条的stage属性 @~~
+- 批量修改6个需求的阶段，查看需求102修改后的阶段
+ - 第1条的id属性 @2
+ - 第1条的stage属性 @developing
+- 批量修改6个需求的阶段，查看需求104修改后的阶段
+ - 第2条的id属性 @6
+ - 第2条的stage属性 @developing
+- 批量修改6个需求的阶段，查看需求110修改后的阶段
+ - 第3条的id属性 @10
+ - 第3条的stage属性 @developing
+- 批量修改6个需求的阶段，查看需求114修改后的阶段
+ - 第4条的id属性 @14
+ - 第4条的stage属性 @developing
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -10,14 +34,6 @@ $story->gen(20);
 zdTable('storyspec')->gen(20);
 zdTable('storystage')->gen(20);
 zdTable('product')->gen(20);
-
-/**
-
-title=测试 storyModel->batchChangeStage();
-cid=1
-pid=1
-
-*/
 
 $story       = new storyTest();
 $storyIdList = array(1, 2, 6, 10, 14);

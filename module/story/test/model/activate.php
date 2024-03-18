@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 storyModel->activate();
-cid=1
-pid=1
+cid=0
 
 - 查看激活之前的需求状态属性status @draft
 - 查看激活之前的需求状态属性status @active

@@ -1,5 +1,26 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getLinkedBranchesAndProjects();
+cid=0
+
+- 不传入需求，检查关联的分支。 @0
+- 不传入需求，检查关联的项目。 @0
+- 传入需求，检查关联的分支。 @0:1:2
+- 传入需求，检查 11 是否是项目看板。 @0
+- 传入需求，检查 11 项目关联的分支。 @0
+- 传入需求，检查 12 是否是项目看板。 @1
+- 传入需求，检查 12 项目关联的分支。 @0
+- 传入需求，检查 13 是否是项目看板。 @0
+- 传入需求，检查 13 项目关联的分支。属性1 @1
+- 传入需求，检查 14 是否是项目看板。 @1
+- 传入需求，检查 14 项目关联的分支。属性2 @2
+- 传入不存在的需求，检查关联的分支。 @0
+- 传入不存在的需求，检查关联的项目。 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -22,14 +43,6 @@ $projectProduct->product->range('1');
 $projectProduct->project->range('11-20');
 $projectProduct->branch->range('0{2},1,2');
 $projectProduct->gen(4);
-
-/**
-
-title=测试 storyModel->getLinkedBranchesAndProjects();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

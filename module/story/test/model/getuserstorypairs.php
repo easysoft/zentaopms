@@ -1,9 +1,16 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 storyModel->getUserStoryPairs();
-cid=1
-pid=1
+cid=0
+
+- 获取指派给 user2 的需求数量，每页10条 @10
+- 获取指派给 user2 的用户需求，每页20条 @20
+- 获取指派给 user2 的所有需求总数 @40
+- 获取指派给 user2 的、不在产品5里的用户需求 @30
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

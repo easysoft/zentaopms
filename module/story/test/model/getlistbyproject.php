@@ -1,18 +1,25 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getListByProject();
+cid=0
+
+- 查询不存在的项目 @0
+- 查询存在的项目 @2
+- 查询不存在的项目 @0
+- 查看通过产品1获取的用户需求的type、product、module字段
+ - 第1条的type属性 @story
+ - 第1条的product属性 @1
+ - 第1条的module属性 @1824
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 zdTable('projectstory')->gen(50);
 zdTable('story')->gen(100);
-
-/**
-
-title=测试 storyModel->getListByProject();
-timeout=0
-cid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

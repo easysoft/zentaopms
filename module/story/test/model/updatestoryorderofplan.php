@@ -1,18 +1,29 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->updateStoryOrderOfPlan();
+timeout=0
+cid=0
+
+- 把需求1迁移到计划1下，获取更新后的planstory
+ - 第0条的plan属性 @1
+ - 第0条的story属性 @1
+ - 第0条的order属性 @21
+- 把需求1迁移到计划1下，获取更新后的planstory数量 @4
+- 把需求1迁移到计划2下，获取更新后的planstory
+ - 第0条的plan属性 @2
+ - 第0条的story属性 @1
+ - 第0条的order属性 @1
+- 把需求1迁移到计划2下，获取更新后的planstory数量 @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
 zdTable('planstory')->gen(5);
-
-/**
-
-title=测试 storyModel->updateStoryOrderOfPlan();
-cid=1
-pid=1
-
-*/
 
 $story = new storyTest();
 $planStories1 = $story->updateStoryOrderOfPlanTest(1, 1);

@@ -1,5 +1,23 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->update();
+cid=0
+
+- 编辑用户需求，判断返回的信息，stage为空
+ - 属性pri @4
+ - 属性estimate @1
+ - 属性sourceNote @测试来源备注1
+ - 属性product @2
+- 编辑软件需求，判断返回的信息，stage为wait，parent为2
+ - 属性pri @4
+ - 属性estimate @1
+ - 属性sourceNote @测试来源备注1
+ - 属性product @2
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -7,17 +25,6 @@ su('admin');
 zdTable('story')->gen(10);
 zdTable('storyspec')->gen(30);
 zdTable('product')->gen(30);
-
-/**
-
-title=测试 storyModel->update();
-cid=1
-pid=1
-
-编辑用户需求，判断返回的信息，stage为空 >> 2,4,1,测试来源备注1,2
-编辑软件需求，判断返回的信息，stage为wait，parent为2 >> 2,4,1,测试来源备注1,2
-
-*/
 
 $story  = new storyTest();
 $story1 = $tester->loadModel('story')->fetchByID(2);

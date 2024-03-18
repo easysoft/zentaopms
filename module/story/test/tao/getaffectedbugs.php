@@ -1,5 +1,15 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getAffectedBugs();
+cid=0
+
+- 获取需求2关联bug数 @3
+- 获取需求28关联bug数，包含孪生需求 @4
+
+*/
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/story.class.php';
 
@@ -23,14 +33,6 @@ $storySpec->gen(90);
 $bug = zdTable('bug');
 $bug->story->range('2-30:2');
 $bug->gen(40);
-
-/**
-
-title=测试 storyModel->getAffectedBugs();
-cid=1
-pid=1
-
-*/
 
 $story = new storyTest();
 $affectedStory2  = $story->getAffectedBugsTest(2);

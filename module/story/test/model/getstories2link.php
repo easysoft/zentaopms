@@ -1,5 +1,21 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getStories2Link();
+cid=0
+
+- 获取需求1可关联的需求数量 @9
+- 获取需求2可关联的需求数量 @3
+- 获取需求1可关联的需求id、product
+ - 第12条的type属性 @story
+ - 第12条的product属性 @1
+- 获取需求2可关联的需求id、product
+ - 第2条的type属性 @requirement
+ - 第2条的product属性 @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -19,19 +35,6 @@ $relation->AType->range('requirement,story,design');
 $relation->BType->range('story,requirement,commit');
 $relation->relation->range('subdivideinto,subdividedfrom,completedin');
 $relation->gen(24);
-
-/**
-
-title=测试 storyModel->getStories2Link();
-cid=1
-pid=1
-
-获取需求1可关联的需求数量 >> 2
-获取需求2可关联的需求数量 >> 2
-获取需求1可关联的需求id、product >> story,1
-获取需求2可关联的需求id、product >> requirement,1
-
-*/
 
 global $tester;
 $stories1 = $tester->loadModel('story')->getStories2Link(1, 'linkStories', 'bySearch', 0, 'requirement');

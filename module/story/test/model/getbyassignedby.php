@@ -4,8 +4,7 @@
 /**
 
 title=测试 storyModel->getByAssignedby();
-timeout=0
-cid=1
+cid=0
 
 - 查看产品 1 由我指派的需求 @0
 - 查看产品 2 由我指派的需求 @0

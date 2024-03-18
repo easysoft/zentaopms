@@ -1,18 +1,27 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->doCreateSpec();
+cid=0
+
+- 不传入任何数据。 @0
+- 验证spec信息。
+ - 属性story @10
+ - 属性title @test story
+ - 属性spec @test spec
+ - 属性verify @test verify
+ - 属性version @1
+ - 属性files @1:2
+- 不传入附件，验证附件信息。 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
 
 zdTable('storyspec')->gen(0);
-
-/**
-
-title=测试 storyModel->doCreateSpec();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

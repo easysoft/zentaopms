@@ -1,5 +1,17 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getTeamMembers();
+cid=0
+
+- 查找需求20的相关团队成员数量 @1
+- 查找需求21的变更时影响的团队成员数量 @1
+- 查找需求21的变更时影响的团队成员数量属性user97 @user97
+- 查找需求0的相关团队成员数量 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -10,19 +22,6 @@ $project->status->range('doing');
 $project->gen(20);
 zdTable('projectstory')->gen(20);
 zdTable('team')->gen(100);
-
-/**
-
-title=测试 storyModel->getTeamMembers();
-cid=1
-pid=1
-
-查找需求20的相关团队成员数量 >> 2
-查找需求21的变更时影响的团队成员数量 >> 3
-查找需求21的变更时影响的团队成员数量 >> po87,user97,test97
-查找需求0的相关团队成员数量 >> 0
-
-*/
 
 global $tester;
 $tester->loadModel('story');

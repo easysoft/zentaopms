@@ -1,17 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getDataOfStoriesPerAssignedTo();
+cid=0
+
+- 按照需求指派人分组，获取分组后的需求数量 @4
+- 按照需求指派人分组，获取各个指派人名下的需求数量，查看admin下的数据
+ - 第admin条的name属性 @admin
+ - 第admin条的value属性 @5
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('story')->gen(20);
 
 su('admin');
-/**
-
-title=测试 storyModel->getDataOfStoriesPerAssignedTo();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

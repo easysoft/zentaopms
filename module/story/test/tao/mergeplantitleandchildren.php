@@ -1,5 +1,18 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->mergePlanTitleAndChildren();
+cid=0
+
+- 不传入任何数据。 @0
+- 只传入产品。 @0
+- 传入产品和需求，查看planTitle字段。 @计划1
+- 传入产品和需求，查看子需求是否存在。 @1
+- 传入产品和需求，查看parentName字段。 @用户需求5
+
+*/
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 
 $productplan = zdTable('productplan');
@@ -13,14 +26,6 @@ $relation = zdTable('relation');
 $relation->AID->range('11,1,12,2,13,3,14,4,15,5,16,6,17,7,18,8,19,9');
 $relation->BID->range('1,11,2,12,3,13,4,14,5,15,6,16,7,17,8,18,9,19');
 $relation->gen(18);
-
-/**
-
-title=测试 storyModel->mergePlanTitleAndChildren();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

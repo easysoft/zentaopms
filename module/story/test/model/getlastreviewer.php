@@ -1,5 +1,15 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getlastreviewer();
+cid=0
+
+- 执行story模块的getLastReviewer方法  @0
+- 执行story模块的getLastReviewer方法，参数是1  @dev2
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -14,14 +24,6 @@ $history->field->range('reviewer,reviewers');
 $history->old->range('``');
 $history->new->range('admin,dev1,dev2,dev3');
 $history->gen(4);
-
-/**
-
-title=测试 storyModel->getlastreviewer();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

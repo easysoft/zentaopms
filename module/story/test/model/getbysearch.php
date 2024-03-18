@@ -1,5 +1,16 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getBySearch();
+cid=0
+
+- 获取产品ID=2的需求数量 @2
+- 根据关联执行获取需求数量 @1
+- 根据第二个query获取需求数量 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -19,14 +30,6 @@ $story->gen(100);
 $storyreview = zdTable('storyreview');
 $storyreview->story->range('1-100');
 $storyreview->gen(100);
-
-/**
-
-title=测试 storyModel->getBySearch();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

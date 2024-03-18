@@ -1,5 +1,27 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyTest->getExecutionStoriesBySearch();
+cid=0
+
+- 不传入数据。 @0
+- 只传入产品。 @0
+- 传入执行 ID。 @9
+- 传入执行 ID，传入产品 ID。 @9
+- 传入排除需求号。 @7
+- 传入分页。 @5
+- 只传入保存查询条件 ID. @0
+- 传入保存查询条件 ID，传入产品 ID。 @0
+- 传入执行 ID，传入保存查询条件 ID。 @1
+- 传入执行 ID，传入保存查询条件 ID，传入产品 ID。 @1
+- 搜索条件中有 result = pass 数据，传入执行 ID，不传入产品 ID。 @0
+- 搜索条件中有 result = pass 数据，传入执行 ID，传入产品 ID。 @0
+- 搜索条件中有 result = revert 数据，传入执行 ID，不传入产品 ID。 @0
+- 搜索条件中有 result = revert 数据，传入执行 ID，传入产品 ID。 @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 
@@ -33,14 +55,6 @@ $userquery = zdTable('userquery');
 $userquery->sql->range('(1 = 1 AND `id` = 2)');
 $userquery->form->range('``');
 $userquery->gen(1);
-
-/**
-
-title=测试 storyTest->getExecutionStoriesBySearch();
-cid=1
-pid=1
-
-*/
 
 $storyTest = new storyTest();
 

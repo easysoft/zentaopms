@@ -1,5 +1,29 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->batchUpdate();
+cid=0
+
+- 更新两条软件需求，判断返回的需求总量 @2
+- 更新两条用户需求，判断返回的需求总量 @2
+- 更新两条软件需求，判断返回的title、type等信息
+ - 第14条的title属性 @测试软件需求2
+ - 第14条的type属性 @story
+ - 第14条的pri属性 @3
+ - 第14条的sourceNote属性 @测试软件需求来源备注2
+ - 第14条的estimate属性 @3
+ - 第14条的module属性 @2223
+- 更新两条用户需求，判断返回的title、type等信息
+ - 第15条的title属性 @测试用户需求2
+ - 第15条的type属性 @requirement
+ - 第15条的pri属性 @3
+ - 第15条的sourceNote属性 @测试用户需求来源备注2
+ - 第15条的estimate属性 @3
+ - 第15条的module属性 @2223
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -9,14 +33,6 @@ $story->version->range('1');
 $story->gen(20);
 zdTable('storyspec')->gen(20);
 zdTable('product')->gen(20);
-
-/**
-
-title=测试 storyModel->batchUpdate();
-cid=1
-pid=1
-
-*/
 
 $story = new storyTest();
 $stories = array();

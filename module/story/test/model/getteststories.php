@@ -1,20 +1,19 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
-su('admin');
 
 /**
 
 title=测试 storyModel->getTestStories();
-cid=1
-pid=1
+cid=0
 
-获取和执行103关联的ID为9的测试类型的需求 >> 9
-获取和执行111关联的ID为41的测试类型的需求 >> 41
-获取和执行103关联的测试类型的需求,为空 >> 0
+- 获取和执行103关联的ID为9的测试类型的需求属性9 @9
+- 获取和执行111关联的ID为41的测试类型的需求属性41 @41
+- 获取和执行103关联的测试类型的需求,为空 @0
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/story.class.php';
+su('admin');
 
 $story = new storyTest();
 $storyIdList1 = array(9, 41, 73);

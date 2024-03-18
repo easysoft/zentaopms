@@ -1,5 +1,23 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->mergeReviewer();
+cid=0
+
+- 获取需求2的评审人 @admin|user1|user2
+- 获取需求2的待评审人 @admin|user1
+- 获取需求18的评审人 @admin|user1|user2
+- 获取需求18的待评审人 @admin|user1
+- 获取需求18子需求的评审人 @admin|user1|user2
+- 获取需求18子需求的待评审人 @admin|user1
+- 批量获取需求18的评审人 @admin|user1|user2
+- 批量获取需求18的待评审人 @admin|user1
+- 批量获取需求18子需求的评审人 @admin|user1|user2
+- 批量获取需求18子需求的待评审人 @admin|user1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -23,14 +41,6 @@ $storyReview->reviewer->range('admin,user1,user2');
 $storyReview->result->range('``{2}, pass');
 $storyReview->version->range('1');
 $storyReview->gen(90);
-
-/**
-
-title=测试 storyModel->mergeReviewer();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $story = $tester->loadModel('story')->getById(2);

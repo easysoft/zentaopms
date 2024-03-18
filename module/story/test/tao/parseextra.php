@@ -1,14 +1,22 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . "/test/lib/init.php";
 
 /**
 
 title=测试 storyModel->parseExtra();
-cid=1
-pid=1
+cid=0
+
+- 不传入任何数据 @0
+- 传入项目 ID。属性projectID @1
+- 传入项目和Bug ID，用逗号连接。
+ - 属性projectID @1
+ - 属性bugID @2
+- 传入项目和Bug ID，用&连接。
+ - 属性projectID @1
+ - 属性bugID @2
 
 */
+include dirname(__FILE__, 5) . "/test/lib/init.php";
 
 global $tester;
 $storyModel = $tester->loadModel('story');

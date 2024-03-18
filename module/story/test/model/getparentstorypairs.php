@@ -1,9 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 storyModel->getParentStoryPairs();
-cid=1
-pid=1
+cid=0
+
+- 第91个元素和第0个元素的值
+ - 属性91 @用户需求91
+ -  @~~
+- 获取符合条件的需求数 @5
+- 测试附加的需求ID1，需求1以数字1结尾属性1 @~f:1$~
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

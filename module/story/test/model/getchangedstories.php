@@ -1,5 +1,17 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getChangedStories();
+cid=0
+
+- 获取需求12关联的用户需求数量 @1
+- 获取需求12关联的用户需求详情
+ - 第3条的title属性 @用户需求3
+ - 第3条的type属性 @requirement
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -17,14 +29,6 @@ $relation->AVersion->range('1');
 $relation->BID->range('10,1,11,2,12,3,13,4,14,5,15,6,16,7,17,8');
 $relation->BVersion->range('1');
 $relation->gen(16);
-
-/**
-
-title=测试 storyModel->getChangedStories();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

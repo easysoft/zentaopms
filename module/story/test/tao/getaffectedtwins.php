@@ -1,5 +1,15 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getAffectedTwins();
+cid=0
+
+- 检查需求2孪生需求 @1
+- 检查需求28孪生需求 @1
+
+*/
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 include dirname(__FILE__, 2) . '/story.class.php';
 
@@ -21,14 +31,6 @@ $storySpec->version->range('1-3');
 $storySpec->gen(90);
 
 zdTable('branch')->gen(5);
-
-/**
-
-title=测试 storyModel->getAffectedTwins();
-cid=1
-pid=1
-
-*/
 
 $story = new storyTest();
 $affectedStory2  = $story->getAffectedTwinsTest(2);

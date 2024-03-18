@@ -1,9 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=测试 storyModel->create();
-cid=1
+title=测试 storyModel->createTwins();
+cid=0
 
 - 检查创建后的数据。
  - 属性id @5

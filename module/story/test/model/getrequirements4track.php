@@ -1,5 +1,20 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getRequirements4Track();
+cid=0
+
+- 执行storyModel模块的getRequirements4Track方法，参数是0, '', 0, $pager  @0
+- 执行$tracks[1]->track[11] @1
+- 执行$tracks[1]->track[11] @1
+- 执行$tracks[1]->track[11] @1
+- 执行storyModel模块的getRequirements4Track方法，参数是1, 0, 1, $pager  @0
+- 执行$tracks[1]->track[11] @1
+- 执行storyModel模块的getRequirements4Track方法，参数是1, 0, 1, $pager  @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zdTable('product')->gen(2);
@@ -40,14 +55,6 @@ $relation->relation->range('subdivideinto,subdividedfrom,completedin');
 $relation->gen(24);
 
 zdTable('repohistory')->gen(10);
-
-/**
-
-title=测试 storyModel->getRequirements4Track();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

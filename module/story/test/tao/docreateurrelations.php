@@ -1,5 +1,27 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->doCreateURRelations();
+cid=0
+
+- 不传入任何数据。 @0
+- 只传入用户需求列表。 @0
+- 只传入软件需求 ID。 @0
+- 传入软件需求 ID 和 用户需求列表，查看relation表记录的数量。 @2
+- 传入软件需求 ID 和 用户需求列表，查看relation表记录的关系。
+ - 属性AID @1
+ - 属性BID @2
+ - 属性relation @subdivideinto
+- 传入软件需求 ID 和 用户需求列表，查看relation表记录的关系。
+ - 属性AID @2
+ - 属性BID @1
+ - 属性relation @subdividedfrom
+- 传入的用户需求列表，不是用户需求类型。 @0
+- 传入的用户需求列表，需求不存在。 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -17,14 +39,6 @@ $story->gen(4);
 $storySpec = zdTable('storyspec');
 $storySpec->story->range('1-6');
 $storySpec->gen(4);
-
-/**
-
-title=测试 storyModel->doCreateURRelations();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

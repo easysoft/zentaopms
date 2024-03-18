@@ -1,5 +1,42 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->getByField();
+cid=0
+
+- 根据指派给获取软件需求
+ - 第1条的title属性 @用户需求1
+ - 第1条的type属性 @requirement
+ - 第1条的assignedTo属性 @admin
+- 根据创建人获取软件需求
+ - 第6条的title属性 @软件需求6
+ - 第6条的openedBy属性 @user2
+- 根据由谁评审获取软件需求
+ - 第12条的title属性 @软件需求12
+ - 第12条的reviewedBy属性 @admin
+- 根据由谁评审获取软件需求数量 @1
+- 根据由谁评审获取软件需求
+ - 第40条的title属性 @软件需求40
+ - 第40条的type属性 @story
+- 根据由谁关闭获取软件需求
+ - 第23条的title属性 @用户需求23
+ - 第23条的type属性 @requirement
+ - 第23条的closedBy属性 @test3
+ - 第23条的closedReason属性 @subdivided
+- 根据状态获取软件需求
+ - 第22条的title属性 @软件需求22
+ - 第22条的status属性 @active
+ - 第22条的type属性 @story
+- 根据计划获取软件需求
+ - 第26条的title属性 @软件需求26
+ - 第26条的stage属性 @projected
+ - 第26条的product属性 @7
+ - 第26条的plan属性 @19
+- 根据计划获取软件需求数量 @2
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -10,14 +47,6 @@ $story->gen(100);
 $storyreview = zdTable('storyreview');
 $storyreview->story->range('1-100');
 $storyreview->gen(100);
-
-/**
-
-title=测试 storyModel->getByField();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

@@ -1,9 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 storyModel->recordReviewAction();
-cid=1
+cid=0
 
 - 执行story模块的recordReviewActionTest方法，参数是$storyData 属性action @reviewed
 - 执行story模块的recordReviewActionTest方法，参数是$storyData 属性action @reviewpassed
@@ -56,7 +57,6 @@ $storyData->finalResult = 'clarify';
 r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewclarified');
 $storyData->finalResult = 'revert';
 r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewreverted');
-
 
 $story->objectModel->app->user->account = 'admin';
 $story->objectModel->app->rawModule = 'story';

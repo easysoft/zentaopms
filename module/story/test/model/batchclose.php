@@ -1,5 +1,43 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->batchClose();
+cid=0
+
+- 批量关闭需求，查看需求1被关闭后的字段
+ - 第2条的status属性 @closed
+ - 第2条的stage属性 @closed
+ - 第2条的closedReason属性 @done
+ - 第2条的duplicateStory属性 @0
+- 批量关闭需求，查看需求2被关闭后的字段
+ - 第4条的status属性 @closed
+ - 第4条的stage属性 @closed
+ - 第4条的closedReason属性 @willnotdo
+ - 第4条的duplicateStory属性 @0
+- 批量关闭需求，查看需求3被关闭后的字段
+ - 第6条的status属性 @closed
+ - 第6条的stage属性 @closed
+ - 第6条的closedReason属性 @putoff
+ - 第6条的duplicateStory属性 @0
+- 批量关闭需求，查看需求4被关闭后的字段
+ - 第8条的status属性 @closed
+ - 第8条的stage属性 @closed
+ - 第8条的closedReason属性 @duplicate
+ - 第8条的duplicateStory属性 @20
+- 批量关闭需求，查看需求5被关闭后的字段
+ - 第10条的status属性 @closed
+ - 第10条的stage属性 @closed
+ - 第10条的closedReason属性 @cancel
+ - 第10条的duplicateStory属性 @0
+- 批量关闭需求，查看需求6被关闭后的字段
+ - 第12条的status属性 @closed
+ - 第12条的stage属性 @closed
+ - 第12条的closedReason属性 @bydesign
+ - 第12条的duplicateStory属性 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -14,14 +52,6 @@ $storyspec->version->range('1');
 $storyspec->gen(12);
 
 zdTable('product')->gen(1);
-
-/**
-
-title=测试 storyModel->batchClose();
-cid=1
-pid=1
-
-*/
 
 $story = new storyTest();
 $storyIdList   = array(2, 4, 6, 8, 10, 12);

@@ -1,5 +1,19 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->fetchExecutionStories();
+cid=0
+
+- 不传入执行，也不传入产品。 @0
+- 传入执行，不传入产品。 @50
+- 传入产品，不传入执行。 @0
+- 传入产品，传入执行。 @25
+- 传入产品，传入执行，设置SESSION。 @5
+- 分页获取需求。 @5
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 
@@ -21,14 +35,6 @@ $story->type->range('story');
 $story->branch->range('0{30},1{10},2{10}');
 $story->status->range('draft,reviewing,active,closed,changing');
 $story->gen(50);
-
-/**
-
-title=测试 storyModel->fetchExecutionStories();
-cid=1
-pid=1
-
-*/
 
 $storyTest = new storyTest();
 

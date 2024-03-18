@@ -1,5 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->batchGetRelations();
+cid=0
+
+- 执行storyModel模块的batchGetRelations方法，参数是array  @0
+- 执行$group[1]['11']) and isset($group[2][12] @1
+- 执行storyModel模块的batchGetRelations方法，参数是array  @0
+- 执行$group[1]['11']) and isset($group[2][12] @1
+- 执行parent) and isset($group[2][12]模块的parent方法  @1
+- 执行$group[11]['1']) and isset($group[12][2] @1
+- 执行storyModel模块的batchGetRelations方法，参数是array  @0
+- 执行$group[11]['1']) and isset($group[12][2] @1
+- 执行parent) and isset($group[12][2]模块的parent方法  @1
+
+*/
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 
 zdTable('story')->gen(20);
@@ -7,14 +24,6 @@ $relation = zdTable('relation');
 $relation->AID->range('1,11,2,12,3,13,4,14,5,15,6,16,7,17,8,18');
 $relation->BID->range('11,1,12,2,13,3,14,4,15,5,16,6,17,7,18,8');
 $relation->gen(16);
-
-/**
-
-title=测试 storyModel->batchGetRelations();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $storyModel = $tester->loadModel('story');

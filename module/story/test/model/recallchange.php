@@ -1,5 +1,25 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->recallChange();
+cid=0
+
+- 执行$storyList[28]
+ - 属性title @用户需求版本二89
+ - 属性status @active
+ - 属性version @2
+- 执行$storyList[30]
+ - 属性title @用户需求版本二89
+ - 属性status @active
+ - 属性version @2
+- 执行$storySpecList[28][3] @0
+- 执行$storySpecList[30][3] @0
+- 执行$storyReviewList[28][3] @0
+- 执行$storyReviewList[30][3] @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -26,14 +46,6 @@ $storyReview->story->range('1-30');
 $storyReview->reviewer->range('admin');
 $storyReview->version->range('3');
 $storyReview->gen(30);
-
-/**
-
-title=测试 storyModel->recallChange();
-cid=1
-pid=1
-
-*/
 
 global $tester;
 $tester->loadModel('story');

@@ -1,5 +1,21 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->closeBugWhenToStory();
+cid=0
+
+- 不传入Bug，也不传入需求。 @0
+- 传入Bug，不传入需求。 @0
+- 不传入Bug，传入需求。 @0
+- 传入Bug，传入需求，检查字段。
+ - 属性toStory @1
+ - 属性status @closed
+ - 属性resolution @tostory
+- 传入Bug，传入需求，检查关联的附件。 @5
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 
@@ -9,14 +25,6 @@ $file = zdTable('file');
 $file->objectType->range('bug');
 $file->objectID->range('1');
 $file->gen(5);
-
-/**
-
-title=测试 storyModel->closeBugWhenToStory();
-cid=1
-pid=1
-
-*/
 
 $storyTest = new storyTest();
 

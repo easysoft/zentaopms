@@ -1,5 +1,14 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->updateStoryVersion();
+cid=0
+
+- 执行story模块的updateStoryVersionTest方法，参数是12 属性AVersion @2
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/story.class.php';
 su('admin');
@@ -22,14 +31,6 @@ $relation->AVersion->range('1');
 $relation->BID->range('10,1,11,2,12,3,13,4,14,5,15,6,16,7,17,8');
 $relation->BVersion->range('1');
 $relation->gen(16);
-
-/**
-
-title=测试 storyModel->updateStoryVersion();
-cid=1
-pid=1
-
-*/
 
 $story = new storyTest();
 r($story->updateStoryVersionTest(12)) && p('AVersion') && e('2');

@@ -1,24 +1,23 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-zdTable('story')->gen(10);
 
 /**
 
 title=测试 storyModel->getToAndCcList();
-cid=1
-pid=1
+cid=0
 
-获取创建需求1时的通知人数量 >> 2
-获取评审需求1时的通知人数量 >> 2
-获取变更需求1时的通知人数量 >> 2
-获取创建需求1时的通知人详情 >> admin
-获取评审需求1时的通知人详情 >> admin
-获取变更需求1时的通知人详情 >> po82,user92,
+- 获取创建需求1时的通知人数量 @2
+- 获取评审需求1时的通知人数量 @2
+- 获取变更需求1时的通知人数量 @2
+- 获取创建需求1时的通知人详情 @admin
+- 获取评审需求1时的通知人详情 @admin
+- 获取变更需求1时的通知人详情 @user92,
 
 */
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+su('admin');
+
+zdTable('story')->gen(10);
 
 global $tester;
 $tester->loadModel('story');

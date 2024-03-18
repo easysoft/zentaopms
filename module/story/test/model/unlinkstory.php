@@ -1,5 +1,15 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 storyModel->unlinkStory();
+cid=0
+
+- 删除用户需求1的关联关系之前，获取关联关系数量 @1
+- 删除用户需求1的关联关系之后，获取关联关系数量 @0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
@@ -11,17 +21,6 @@ $relation->AType->range('requirement,story,design');
 $relation->BType->range('story,requirement,commit');
 $relation->relation->range('subdivideinto,subdividedfrom,completedin');
 $relation->gen(24);
-
-/**
-
-title=测试 storyModel->unlinkStory();
-cid=1
-pid=1
-
-删除用户需求1的关联关系之前，获取关联关系数量 >> 1
-删除用户需求1的关联关系之后，获取关联关系数量 >> 0
-
-*/
 
 global $tester;
 $tester->loadModel('story');
