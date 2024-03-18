@@ -615,18 +615,6 @@ class webdriver
     }
 
     /**
-     * Save image to report.
-     *
-     * @param  int    $src
-     * @access public
-     * @return void
-     */
-    public function saveImage($src)
-    {
-        $img = "<img style='max-width:100%;' src='{$src}' />";
-    }
-
-    /**
      * Wait and retry until condition occured.
      *
      * @param  string  $condition  format: [title|url]:xxx for example: title:地盘 url:a.com
@@ -811,7 +799,6 @@ class webdriver
      */
     public function closeBrowser()
     {
-        if($this->config->reportType == 'html') $this->results->endReport();
         $this->driver->quit();
     }
 

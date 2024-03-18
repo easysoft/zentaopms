@@ -195,6 +195,18 @@ function failed($message)
     return $result;
 }
 
+/**
+ * Close the Browser.
+ *
+ * @access public
+ * @return void
+ */
+function closeBrowser()
+{
+    global $driver;
+    $driver->closeBrowser();
+}
+
 class tester
 {
     public $page;
