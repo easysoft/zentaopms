@@ -14,6 +14,7 @@ class toolbar extends wg
         'btnClass?: string',
         'btnType?: string',
         'size?: string',
+        'gap?: int',
         'btnProps?: array',
         'urlFormatter?: array'
     );
@@ -112,9 +113,10 @@ class toolbar extends wg
 
     protected function build()
     {
+        $gap = $this->prop('gap');
         return div
         (
-            setClass('toolbar'),
+            setClass('toolbar', $gap ? "gap-$gap" : ''),
             set($this->getRestProps()),
             $this->buildItems(),
             $this->children()
