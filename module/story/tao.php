@@ -611,7 +611,9 @@ class storyTao extends storyModel
      */
     protected function getUnclosedStatusKeys(): array
     {
-        $moduleName     = $this->app->rawModule;
+        $moduleName = $this->app->rawModule;
+        if(!in_array($moduleName, array('story', 'epic', 'requirement'))) $moduleName = 'story';
+
         $unclosedStatus = $this->lang->{$moduleName}->statusList;
         unset($unclosedStatus['closed']);
         return array_keys($unclosedStatus);

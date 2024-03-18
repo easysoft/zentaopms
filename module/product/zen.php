@@ -1194,6 +1194,9 @@ class productZen extends product
             }
         }
 
+        $gradePairs = $this->loadModel('story')->getGradePairs($storyType, 'grade', 'name', 'all');
+        $this->config->product->search['params']['grade']['values'] = $gradePairs;
+
         /* Build search form. */
         $params    = $isProjectStory ? "projectID=$projectID&" : '';
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
