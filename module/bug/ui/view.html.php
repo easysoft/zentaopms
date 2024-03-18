@@ -19,182 +19,12 @@ jsVar('branchID',  $bug->branch);
 jsVar('errorNoExecution', $lang->bug->noExecution);
 jsVar('errorNoProject',   $lang->bug->noProject);
 
+$isInModal    = isInModal();
 $canCreateBug = hasPriv('bug', 'create');
 $canViewRepo  = hasPriv('repo', 'revision');
 $canViewMR    = hasPriv('mr', 'view');
 $canViewBug   = hasPriv('bug', 'view');
-
-$moduleHTML = array();
-$moduleTitle = '';
-$moduleItems = array();
-if(empty($modulePath))
-{
-    $moduleTitle  .= '/';
-    $moduleItems[] = span('/');
-}
-else
-{
-    if($bug->branch and isset($branches[$bug->branch]))
-    {
-        $moduleTitle  .= $branches[$bug->branch] . '/';
-        $moduleItems[] = span($branches[$bug->branch], icon('angle-right'));
-    }
-
-    foreach($modulePath as $key => $module)
-    {
-        $moduleTitle  .= $module->name;
-        $moduleItems[] = $product->shadow ? span($module->name) : a(set::href(helper::createLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch&browseType=byModule&param=$module->id")), $module->name);
-        if(isset($modulePath[$key + 1]))
-        {
-            $moduleTitle  .= '/';
-            $moduleItems[] = icon('angle-right');
-        }
-    }
-}
-$legendBasic['module']['text'] = $moduleItems;
-
-$buildsHTML   = array();
-$openedBuilds = explode(',', $legendLife['openedBuild']['text']);
-foreach($openedBuilds as $openedBuild)
-{
-    if(!$openedBuild) continue;
-    $buildsHTML[] = div(zget($builds, $openedBuild));
-}
-
-$osHTML = array();
-$osList = explode(',', $legendBasic['os']['text']);
-foreach($osList as $os)
-{
-    $osHTML[] = span(zget($lang->bug->osList, $os));
-    $osHTML[] = ' ';
-}
-
-$browserHTML = array();
-$browserList = explode(',', $legendBasic['browser']['text']);
-foreach($browserList as $browser)
-{
-    $browserHTML[] = span(zget($lang->bug->browserList, $browser));
-    $browserHTML[] = ' ';
-}
-
-$mailtoHTML = array();
-if(!empty($legendBasic['mailto']['text']))
-{
-    $mailtoList = explode(',', str_replace(' ', '', $legendBasic['mailto']['text']));
-    foreach($mailtoList as $account)
-    {
-        $mailtoHTML[] = span(zget($users, $account));
-        $mailtoHTML[] = ' ';
-    }
-}
-
-$duplicateLink = $bug->duplicateBug && $canViewBug ? a
-(
-    set('href', $this->createLink('bug', 'view', "bugID={$bug->duplicateBug}")),
-    setData
-    (
-        array
-        (
-            'toggle' => 'modal',
-            'size'   => 'lg',
-        )
-    ),
-    $bug->duplicateBugTitle
-) : '';
-$duplicateBug = $bug->duplicateBug ? span("#{$bug->duplicateBug}:", $duplicateLink) : '';
-
-$linkCases = array();
-foreach($legendMisc['toCase']['text'] as $caseID => $caseTitle)
-{
-    $linkCases[] = div(setClass('mb-2'),
-    a
-    (
-        set('href', $this->createLink('testcase', 'view', "bugID={$caseID}")),
-        setData
-        (
-            array
-            (
-                'toggle' => 'modal',
-                'size'   => 'lg',
-            )
-        ),
-        span(label(setClass('dark-outline rounded-full mr-2'), $caseID), $caseTitle)
-    ));
-}
-
-$relatedBugs = array();
-foreach($legendMisc['relatedBug']['text'] as $relatedBugID => $relatedBugTitle)
-{
-    $relatedBugs[] = div(a
-    (
-        set('href', $this->createLink('bug', 'view', "bugID={$relatedBugID}")),
-        setData
-        (
-            array
-            (
-                'toggle' => 'modal',
-                'size'   => 'lg',
-            )
-        ),
-        span(label(setClass('dark-outline rounded-full mr-2'), $relatedBugID), $relatedBugTitle)
-    ));
-}
-
-$linkMR = array();
-foreach($legendMisc['linkMR']['text'] as $MRID => $linkMRTitle)
-{
-    $linkMR[] = div(a
-    (
-        $canViewMR ? set('href', $this->createLink('mr', 'view', "MRID={$MRID}")) : null,
-        setData(array('app' => 'devops')),
-        span(label(setClass('dark-outline rounded-full mr-2'), $MRID), $linkMRTitle)
-    ));
-}
-
-$linkCommits = array();
-foreach($legendMisc['linkCommit']['text'] as $commit)
-{
-    $linkCommits[] = div(a
-    (
-        setData(array('app' => 'devops')),
-        $canViewRepo ? set('href', $this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")) : null,
-        "{$commit->comment}"
-    ));
-}
-
-if(isset($bug->delay)) $legendBasic['deadline']['text'] = html($legendBasic['deadline']['text']);
-
-$legendBasic['os']['text']         = $osHTML;
-$legendBasic['browser']['text']    = $browserHTML;
-$legendBasic['mailto']['text']     = $mailtoHTML;
-$legendBasic['severity']['text']   = severityLabel($legendBasic['severity']['text'], set::text($lang->bug->severityList));
-$legendBasic['pri']['text']        = priLabel($legendBasic['pri']['text'], set::text($lang->bug->priList));
-$legendLife['openedBuild']['text'] = $buildsHTML;
-$legendLife['resolution']['text']  = div(zget($lang->bug->resolutionList, $bug->resolution), $duplicateBug);
-$legendMain['story']['text']       = $bug->story ? div
-(
-    label
-    (
-        setClass('dark-outline rounded-full size-sm mr-2'),
-        $bug->story
-    ),
-    span($bug->storyTitle),
-    $bug->storyStatus == 'active' && $bug->latestStoryVersion > $bug->storyVersion && common::hasPriv('bug', 'confirmStoryChange') ? span
-    (
-        ' (',
-        a
-        (
-            set::href(createLink('bug', 'confirmStoryChange', "bugID=$bug->id")),
-            $lang->confirm,
-        ),
-        ')'
-    ) : ''
-) : '';
-$legendMain['task']['text']       = $bug->task  ? div(label(setClass('dark-outline rounded-full size-sm mr-2'), $bug->task),  span($bug->taskName))   : '';;
-$legendMisc['toCase']['text']     = $linkCases;
-$legendMisc['relatedBug']['text'] = $relatedBugs;
-$legendMisc['linkCommit']['text'] = $linkCommits;
-$legendMisc['linkMR']['text']     = $linkMR;
+$operateList  = $this->loadModel('common')->buildOperateMenu($bug);
 
 /* Handling special tags in bug descriptions. */
 $tplStep   = strip_tags(trim($lang->bug->tplStep));
@@ -205,146 +35,83 @@ $tplExpect = strip_tags(trim($lang->bug->tplExpect));
 $steps     = str_replace('<p>' . $tplExpect, '<p class="font-bold my-1">' . $tplExpect . '</p><p>', $steps);
 $steps     = str_replace('<p></p>', '', $steps);
 
-detailHeader
-(
-    to::title
-    (
-        entityLabel
-        (
-            set::entityID($bug->id),
-            set::level(1),
-            span(setStyle('color', $bug->color), $bug->title),
-            $bug->case ? a
-            (
-                set::href($legendBasic['fromCase']['href']),
-                setClass('font-medium text-base text-gray'),
-                icon('testcase px-1'),
-                $lang->case->fromCase . $lang->colon . $bug->case
-            ) : null
-        ),
-        $bug->deleted ? span(setClass('label danger'), $lang->bug->deleted) : null
-    ),
-    to::suffix
-    (
-        !isAjaxRequest('modal') && $canCreateBug ?  btn
-        (
-            set::icon('plus'),
-            set::type('primary'),
-            set::text($lang->bug->create),
-            set::url($this->createLink('bug', 'create', "productID={$product->id}"))
-        ) : null
-    )
-);
-
-/**
- * Build content of table data.
- *
- * @param  array  $items
- * @access public
- * @return array
- */
-$buildItems = function($items): array
+/* 初始化头部右上方工具栏。Init detail toolbar. */
+$toolbar = array();
+if(!$isInModal && $canCreateBug)
 {
-    $itemList = array();
-    foreach($items as $item)
-    {
-        $itemList[] = item
-        (
-            set::name($item['name']),
-            !empty($item['href']) ? a
-            (
-                set::href($item['href']),
-                !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
-                $item['text']
-            ) : $item['text'],
-            set::collapse(!empty($item['text']))
-        );
-    }
-
-    return $itemList;
-};
-
-$fileList = array();
-if(!empty($bug->files))
-{
-    $fileList[] = fileList
+    $toolbar[] = array
     (
-        set::files($bug->files),
-        set::padding(false)
+        'icon' => 'plus',
+        'type' => 'primary',
+        'text' => $lang->bug->create,
+        'url'  => createLink('bug', 'create', "productID={$product->id}")
     );
 }
 
-$actions = $this->loadModel('common')->buildOperateMenu($bug);
-detailBody
+/* 初始化底部操作栏。Init bottom actions. */
+$actions = array();
+if(!$bug->deleted)
+{
+    /* Construct common actions for bug. */
+    foreach($operateList['mainActions'] as $operate)
+    {
+        if(!empty($operate['id']) && $operate['id'] == 'toStory') $operate['data-url'] = createLink('story', 'create', "product={$bug->product}&branch={$bug->branch}&module={$bug->module}&story=0&execution=0&bugID={$bug->id}");
+        $actions[] = $operate;
+    }
+    if(!empty($operateList['suffixActions'])) $actions = array_merge($actions, array(array('type' => 'divider')), $operateList['suffixActions']);
+}
+
+/* 初始化主栏内容。Init sections in main column. */
+$sections = array();
+$sections[] = setting()
+    ->title($lang->bug->legendSteps)
+    ->control('html')
+    ->content($steps);
+
+if($bug->files)
+{
+    $sections[] = array
+    (
+        'title'      => $lang->files,
+        'control'    => 'fileList',
+        'files'      => $bug->files,
+        'object'     => $bug
+    );
+}
+
+/* 初始化侧边栏标签页。Init sidebar tabs. */
+$tabs = array();
+
+/* 基本信息。Legend basic items. */
+$tabs[] = setting()
+    ->group('basic')
+    ->title($lang->bug->legendBasicInfo)
+    ->control('bugBasicInfo')
+    ->statusText($this->processStatus('bug', $bug));
+
+/* 一生信息。Legend life items. */
+$tabs[] = setting()
+    ->group('basic')
+    ->title($lang->bug->legendLife)
+    ->control('bugLifeInfo');
+
+$tabs[] = setting()
+    ->group('related')
+    ->title(!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask)
+    ->control('bugRelatedInfo');
+
+$tabs[] = setting()
+    ->group('related')
+    ->title($lang->bug->legendMisc)
+    ->control('bugRelatedList');
+
+detail
 (
-    sectionList
-    (
-        section
-        (
-            set::title($lang->bug->legendSteps),
-            set::content($steps),
-            set::useHtml(true)
-        ),
-        $fileList
-    ),
-    history(),
-    floatToolbar
-    (
-        set::object($bug),
-        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), setClass('ghost text-white'), $lang->goback)),
-        set::main($actions['mainActions']),
-        set::suffix($actions['suffixActions'])
-    ),
-    detailSide
-    (
-        tabs
-        (
-            set::collapse(true),
-            tabPane
-            (
-                set::key('legendBasicInfo'),
-                set::title($lang->bug->legendBasicInfo),
-                set::active(true),
-                tableData
-                (
-                    $buildItems($legendBasic)
-                )
-            ),
-            tabPane
-            (
-                set::key('legendLife'),
-                set::title($lang->bug->legendLife),
-                tableData
-                (
-                    $buildItems($legendLife)
-                )
-            )
-        ),
-        tabs
-        (
-            set::collapse(true),
-            tabPane
-            (
-                set::key('legendMain'),
-                set::title(!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask),
-                set::active(true),
-                tableData
-                (
-                    $buildItems($legendMain)
-                )
-            ),
-            tabPane
-            (
-                set::key('legendMisc'),
-                set::title($lang->bug->legendMisc),
-                tableData
-                (
-                    set::useTable(false),
-                    $buildItems($legendMisc)
-                )
-            )
-        )
-    )
+    set::urlFormatter(array('{id}' => $bug->id, '{product}' => $bug->product, '{branch}' => $bug->branch, '{project}' => $bug->project, '{execution}' => $bug->execution)),
+    set::toolbar($toolbar),
+    set::sections($sections),
+    set::tabs($tabs),
+    set::actions($actions)
 );
 
 modal
@@ -394,14 +161,3 @@ modal
         )
     )
 );
-
-if(!isInModal())
-{
-    floatPreNextBtn
-    (
-        !empty($preAndNext->pre)  ? set::preLink(createLink('bug', 'view', "bugID={$preAndNext->pre->id}"))   : null,
-        !empty($preAndNext->next) ? set::nextLink(createLink('bug', 'view', "bugID={$preAndNext->next->id}")) : null
-    );
-}
-
-render();
