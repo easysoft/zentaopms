@@ -89,7 +89,7 @@ class twinsStoryList extends storyList
         {
             $btn = array
             (
-                'class'       => ($this->compact ? 'text-primary opacity-0 group-hover:opacity-100' : 'primary-pale'),
+                'class'       => ($this->compact ? 'relievedTwins text-primary opacity-0 group-hover:opacity-100' : 'relievedTwins primary-pale'),
                 'icon'        => 'unlink',
                 'data-id'     => $story->id,
                 'data-on'     => 'click',
