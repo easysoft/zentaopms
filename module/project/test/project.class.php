@@ -670,4 +670,23 @@ class Project
         $whitelist = $this->project->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('whitelist');
         return str_replace(',', '|', $whitelist);
     }
+
+    /**
+     * 获取旧页面1.5级下拉。
+     * Get project swapper.
+     *
+     * @param  int    $projectID
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return bool
+     */
+    public function getSwitcherTest(int $projectID, string $module, string $method): bool
+    {
+        $projectName = $this->project->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('name');
+        $output      = $this->project->getSwitcher($projectID, $module, $method);
+
+        if(!$output) return false;
+        return strpos($output, $projectName) !== false;
+    }
 }
