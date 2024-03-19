@@ -102,11 +102,11 @@ else
                     to::suffix(label(count($story->children))),
                     set::key('affectedChildren'),
                     set::title($lang->story->children),
-                    dtable
+                    $story->children ? dtable
                     (
                         set::cols($config->story->affect->children->fields),
                         set::data(array_values($story->children))
-                    )
+                    ): null
                 )
             )
         );

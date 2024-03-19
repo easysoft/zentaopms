@@ -316,6 +316,17 @@ if($isProjectStory and $storyType == 'requirement')
 $queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}");
 featureBar
 (
+    to::leading
+    (
+        picker
+        (
+            set::items($gradeMenu),
+            set::menu(array
+            (
+                'checkbox' => true
+            ))
+        )
+    ),
     set::current($storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID")),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),

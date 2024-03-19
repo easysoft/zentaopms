@@ -1555,8 +1555,6 @@ class storyTao extends storyModel
      */
     protected function getAffectedChildren(object $story, array $users): object
     {
-        if(empty($story->children)) return $story;
-
         if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
         $this->config->story->affect->children = new stdclass();
         $this->config->story->affect->children->fields[] = array('name' => 'id',           'title' => $this->lang->idAB, 'type' => 'id');

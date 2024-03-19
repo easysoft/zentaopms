@@ -4836,6 +4836,41 @@ class storyModel extends model
     }
 
     /**
+     * 获取需求列表层级设置菜单。
+     * Get grade menu in story list.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getGradeMenu(string $storyType): array
+    {
+        $menu = array();
+        if($storyType == 'epic')
+        {
+            $items = array();
+            $gradePairs = $this->getGradePairs('epic');
+            foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => $grade);
+            $menu[] = array('text' => $this->lang->preview . $this->lang->ERCommon, 'value' => 'epic', 'items' => $items);
+        }
+
+        if($storyType == 'requirement' || $storyType == 'epic')
+        {
+            $items = array();
+            $gradePairs = $this->getGradePairs('requirement');
+            foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => $grade);
+            $menu[] = array('text' => $this->lang->preview . $this->lang->URCommon, 'value' => 'requirement', 'items' => $items);
+        }
+
+        $items = array();
+        $gradePairs = $this->getGradePairs('story');
+        foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => $grade);
+        $menu[] = array('text' => $this->lang->preview . $this->lang->SRCommon, 'value' => 'story', 'items' => $items);
+
+        return $menu;
+    }
+
+    /**
      * 获取需求层级下拉列表。
      * Get grade options.
      *
