@@ -2143,12 +2143,13 @@ class repoModel extends model
         $bugs    = empty($relationList['bug'])   ? array() : $this->loadModel('bug')->getByIdList(array_keys($relationList['bug']));
         $tasks   = empty($relationList['task'])  ? array() : $this->loadModel('task')->getByIdList(array_keys($relationList['task']));
 
+        $index     = 0;
         $titleList = array();
         foreach($relationList as $objectType => $objects)
         {
-            foreach($objects as $key => $object)
+            foreach($objects as $object)
             {
-                $titleList[$key] = array(
+                $titleList[$index] = array(
                     'id'    => $object->id,
                     'type'  => $objectType,
                     'title' => "#$object->id "
@@ -2156,18 +2157,20 @@ class repoModel extends model
                 if($objectType == 'story')
                 {
                     $story = zget($stories, $object->id, array());
-                    $titleList[$key]['title'] .=  zget($story, 'title', '');
+                    $titleList[$index]['title'] .=  zget($story, 'title', '');
                 }
                 elseif($objectType == 'bug')
                 {
                     $bug = zget($bugs, $object->id, array());
-                    $titleList[$key]['title'] .=  zget($bug, 'title', '');
+                    $titleList[$index]['title'] .=  zget($bug, 'title', '');
                 }
                 elseif($objectType == 'task')
                 {
                     $task = zget($tasks, $object->id, array());
-                    $titleList[$key]['title'] .=  zget($task, 'name', '');
+                    $titleList[$index]['title'] .=  zget($task, 'name', '');
                 }
+
+                $index ++;
             }
         }
 
