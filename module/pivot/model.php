@@ -2085,18 +2085,25 @@ class pivotModel extends model
         $this->app->loadConfig('dataview');
         $records      = json_decode(json_encode($records), true);
         $fieldOptions = $this->getFieldsOptions($fields, $sql);
+
+        foreach($fields as $field => $fieldSetting)
+        {
+            $tableField = $fieldSetting['object'] . '-' . $fieldSetting['field'];
+
+            $fields[$field]['withComma'] = in_array($tableField, $this->config->dataview->multipleMappingFields);
+            $fields[$field]['options']   = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
+        }
+
         foreach($records as $index => $record)
         {
-            foreach($record as $field => $value)
+            foreach($fields as $field => $fieldSetting)
             {
-                $tableField = !isset($fields[$field]) ? '' : $fields[$field]['object'] . '-' . $fields[$field]['field'];
-                $withComma  = in_array($tableField, $this->config->dataview->multipleMappingFields);
-
-                $optionList = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
+                $withComma  = $fieldSetting['withComma'];
+                $optionList = $fieldSetting['options'];
 
                 if($withComma)
                 {
-                    $valueArr  = array_filter(explode(',', $value));
+                    $valueArr  = array_filter(explode(',', $record[$field]));
                     $resultArr = array();
                     foreach($valueArr as $val)
                     {
@@ -2107,8 +2114,8 @@ class pivotModel extends model
                 }
                 else
                 {
-                    $valueKey       = "$value";
-                    $record[$field] = isset($optionList[$valueKey]) ? $optionList[$valueKey] : $value;
+                    $valueKey       = "$record[$field]";
+                    $record[$field] = isset($optionList[$valueKey]) ? $optionList[$valueKey] : $record[$field];
                 }
             }
 
