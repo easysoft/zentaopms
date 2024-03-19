@@ -26,7 +26,7 @@ $fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
         set::defaultValue($scope),
         set::text($scopeText),
         set::caret(false),
-        set::popWidth(200),
+        set::popWidth(160),
         set::popClass('popup text-md'),
         set::data(array('search' => false, 'checkIcon' => false, 'link' => $link, 'data' => $scopeList))
     );
