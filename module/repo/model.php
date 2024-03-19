@@ -2349,12 +2349,26 @@ class repoModel extends model
      * Get gitfox projects.
      *
      * @param  int    $gitfoxID
+     * @param  string $projectFilter
      * @access public
      * @return array
      */
-    public function getGitfoxProjects(int $gitfoxID): array
+    public function getGitfoxProjects(int $gitfoxID, string $projectFilter = ''): array
     {
-        $projects = $this->loadModel('gitfox')->apiGetRepos($gitfoxID);
+        if($this->app->user->admin || ($projectFilter == 'ALL' && common::hasPriv('repo', 'create')))
+        {
+            $projects = $this->loadModel('gitfox')->apiGetRepos($gitfoxID);
+        }
+        else
+        {
+            $gitfoxUser = $this->loadModel('pipeline')->getOpenIdByAccount($gitfoxID, 'gitfox', $this->app->user->account);
+            if(!$gitfoxUser) return array();
+
+            $projects    = $this->loadModel('gitfox')->apiGetRepos($gitfoxID, $projectFilter);
+            $groupIDList = array(0 => 0);
+            $groups      = $this->gitfox->apiGetGroups($gitfoxID, 'name_asc');
+            foreach($groups as $group) $groupIDList[] = $group->id;
+        }
 
         return $projects;
     }

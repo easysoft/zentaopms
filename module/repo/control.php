@@ -1423,12 +1423,13 @@ class repo extends control
      *
      * @param  string $gitfoxID
      * @param  array $projectIdList
+     * @param  array $filter
      * @access public
      * @return void
      */
-    public function ajaxGetGitfoxProjects(int $gitfoxID, string $projectIdList = '')
+    public function ajaxGetGitfoxProjects(int $gitfoxID, string $projectIdList = '', string $filter = '')
     {
-        $projects = $this->repo->getGitfoxProjects($gitfoxID);
+        $projects = $this->repo->getGitfoxProjects($gitfoxID, $filter);
 
         if(!$projects) return print('[]');
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;

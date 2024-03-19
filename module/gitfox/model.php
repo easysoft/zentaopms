@@ -67,16 +67,15 @@ class gitfoxModel extends model
         $gitfox = $this->getByID($gitfoxID);
         if(!$gitfox || $gitfox->type != 'gitfox') return '';
 
-        $sudoParam = '';
+        $apiRoot = new stdclass;
+        $apiRoot->url    = rtrim($gitfox->url, '/') . '/api/v1%s';
+        $apiRoot->header = array('Authorization: Bearer ' . $gitfox->token);
+
         if($sudo == true && !$this->app->user->admin)
         {
             $openID = $this->loadModel('pipeline')->getOpenIdByAccount($gitfoxID, 'gitfox', $this->app->user->account);
-            if($openID) $sudoParam = "&sudo={$openID}";
+            if($openID) $apiRoot->header[] = "Sudo: $openID";
         }
-
-        $apiRoot = new stdclass;
-        $apiRoot->url    = rtrim($gitfox->url, '/') . '/api/v1%s' . $sudoParam;
-        $apiRoot->header = array('Authorization: Bearer ' . $gitfox->token);
 
         return $apiRoot;
     }
@@ -110,11 +109,11 @@ class gitfoxModel extends model
      * @access public
      * @return object|array|null
      */
-    public function apiGetSingleRepo(int $gitfoxID, int $repoID): object|array|null
+    public function apiGetSingleRepo(int $gitfoxID, int $repoID, bool $useUser = true): object|array|null
     {
         if(isset($this->repos[$gitfoxID][$repoID])) return $this->repos[$gitfoxID][$repoID];
 
-        $apiRoot = $this->getApiRoot($gitfoxID);
+        $apiRoot = $this->getApiRoot($gitfoxID, $useUser);
         $url     = sprintf($apiRoot->url, "/repos/$repoID");
         $repo    = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
 
@@ -157,9 +156,9 @@ class gitfoxModel extends model
      * @access public
      * @return array
      */
-    public function apiGetRepos(int $gitfoxID, string $query = ''): array
+    public function apiGetRepos(int $gitfoxID, string $query = '', bool $sudo = true): array
     {
-        $apiRoot = $this->getApiRoot($gitfoxID);
+        $apiRoot = $this->getApiRoot($gitfoxID, $sudo);
         if(!$apiRoot) return array();
 
         $url = sprintf($apiRoot->url, "/repos");
@@ -167,7 +166,9 @@ class gitfoxModel extends model
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($url . "?query={$query}&page={$page}&limit=100"));
+            $url = $url . "?page={$page}&limit=100";
+            if($query) $url .= "&query={$query}";
+            $results = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results) < 100) break;
@@ -210,7 +211,7 @@ class gitfoxModel extends model
      */
     public function apiGetHooks(int $gitfoxID, int $repoID, int $hookID = 0): object|array|null
     {
-        $apiRoot  = $this->getApiRoot($gitfoxID);
+        $apiRoot  = $this->getApiRoot($gitfoxID, false);
         $apiPath  = "/repos/{$repoID}/webhooks" . ($hookID ? "/{$hookID}" : '');
         $url      = sprintf($apiRoot->url, $apiPath);
 
@@ -237,7 +238,7 @@ class gitfoxModel extends model
 
         foreach($hook as $index => $item) $newHook->$index= $item;
 
-        $apiRoot = $this->getApiRoot($gitfoxID);
+        $apiRoot = $this->getApiRoot($gitfoxID, false);
         $url     = sprintf($apiRoot->url, "/repos/{$repoID}/webhooks");
 
         return json_decode(commonModel::http($url, $newHook, array(), $apiRoot->header, 'json'));
@@ -323,14 +324,14 @@ class gitfoxModel extends model
      *
      * @param  int     $gitfoxID
      * @param  string  $orderBy
-     * @param  string  $minRole
+     * @param  bool    $minRole
      * @param  string  $keyword
      * @access public
      * @return array
      */
-    public function apiGetGroups(int $gitfoxID, string $orderBy = 'id_desc', string $keyword = ''): array
+    public function apiGetGroups(int $gitfoxID, string $orderBy = 'id_desc', bool $minRole = true, string $keyword = ''): array
     {
-        $apiRoot = $this->getApiRoot($gitfoxID);
+        $apiRoot = $this->getApiRoot($gitfoxID, $minRole);
         $url     = sprintf($apiRoot->url, "/spaces");
 
         if($keyword) $url .= '&query=' . urlencode($keyword);
@@ -429,7 +430,7 @@ class gitfoxModel extends model
      */
     public function apiGetCurrentUser(int $gitfoxID): object|array|null|false
     {
-        $apiRoot = $this->getApiRoot($gitfoxID);
+        $apiRoot = $this->getApiRoot($gitfoxID, false);
         $url     = sprintf($apiRoot->url, "/user");
         return json_decode(commonModel::http($url, null, array(), $apiRoot->header));
     }
@@ -492,7 +493,7 @@ class gitfoxModel extends model
             if($onlyLinked and !isset($linkedUsers[$gitfoxUser->id])) continue;
 
             $user = new stdclass;
-            $user->id             = $gitfoxUser->uid;
+            $user->id             = $gitfoxUser->id;
             $user->realname       = $gitfoxUser->display_name;
             $user->account        = $gitfoxUser->uid;
             $user->email          = zget($gitfoxUser, 'email', '');
