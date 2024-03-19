@@ -146,7 +146,7 @@ if($this->config->URAndSR && !$hiddenURS && $config->vision != 'or')
         ->items($relations)
         ->story($story);
 }
-if($isStoryType && common::hasPriv('story', 'tasks'))
+if($isStoryType && hasPriv('story', 'tasks'))
 {
     $tabs[] = setting()
         ->group('relatives')
@@ -162,6 +162,9 @@ $tabs[] = setting()
         ->title($lang->story->legendRelated)
         ->control('storyRelatedList');
 
+$parentTitle = $story->parent > 0 ? set::parentTitle($story->parentName) : null;
+$parentUrl   = $story->parent > 0 ? set::parentUrl(createLink('story', 'view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")) : null;
+
 $versionBtn = count($versions) > 1 ? to::title(dropdown
 (
     btn(set::type('ghost'), setClass('text-link font-normal text-base'), "#{$version}"),
@@ -175,7 +178,9 @@ detail
     set::sections($sections),
     set::tabs($tabs),
     set::actions($actions),
-    $versionBtn
+    $versionBtn,
+    $parentTitle,
+    $parentUrl
 );
 
 /**
@@ -201,7 +206,7 @@ if(isset($libs))
                     set::required(true)
                 )
             ),
-            (!common::hasPriv('assetlib', 'approveStory') && !common::hasPriv('assetlib', 'batchApproveStory')) ? formGroup
+            (!hasPriv('assetlib', 'approveStory') && !hasPriv('assetlib', 'batchApproveStory')) ? formGroup
             (
                 set::label($lang->story->approver),
                 picker
