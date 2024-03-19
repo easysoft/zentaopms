@@ -187,3 +187,6 @@ function taskBasicInfo(): taskBasicInfo {return createWg('taskBasicInfo', func_g
 function taskEffortInfo(): taskEffortInfo {return createWg('taskEffortInfo', func_get_args());}
 function taskLifeInfo(): taskLifeInfo {return createWg('taskLifeInfo', func_get_args());}
 function taskMiscInfo(): taskMiscInfo {return createWg('taskMiscInfo', func_get_args());}
+function caseBasicInfo(): caseBasicInfo {return createWg('caseBasicInfo', func_get_args());}
+function caseTimeInfo(): caseTimeInfo {return createWg('caseTimeInfo', func_get_args());}
+function caseRelatedList(): caseRelatedList {return createWg('caseRelatedList', func_get_args());}
