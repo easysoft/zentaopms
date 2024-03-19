@@ -25,6 +25,7 @@ class myIm extends im
         $broadcast->content     = $this->lang->ai->miniPrograms->clearContext;
         $broadcast->type        = 'broadcast';
         $broadcast->contentType = 'text';
+        $broadcast->data        = json_encode(array('reminders' => array()));
 
         $broadcastMessage = $this->im->messageCreate(array($broadcast), $userID);
 
