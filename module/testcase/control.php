@@ -1083,7 +1083,7 @@ class testcase extends control
             $this->view->branchTagOption  = $branchTagOption;
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;
-            $this->view->stories          = $stories;
+            $this->view->stories          = array('' => '') + $stories;
         }
 
         $sceneOptionMenu = $this->testcase->getSceneMenu($productID, $case->module, $viewType = 'case', $startSceneID = 0,  0 );
