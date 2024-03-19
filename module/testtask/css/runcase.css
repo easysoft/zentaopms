@@ -35,3 +35,4 @@
 .result-item .span-warning{color: #f1a325;}
 
 [id^="fileModal"] .modal-body {overflow: auto !important;}
+[id^="fileModal"] .file-save-btn {margin-bottom: 6px;}
