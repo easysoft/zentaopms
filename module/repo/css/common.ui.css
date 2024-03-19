@@ -41,6 +41,7 @@
 #monacoTabs .tab-content {margin-top: 40px;}
 #monacoTabsContainer {background: #efefef;}
 .monaco-dropmenu{background: #efefef; height: 40px; line-height: 40px;}
+.ghost.monaco-dropmenu:hover{background-color: #efefef;}
 #fileTabs > .btn {background: #efefef; border: none; --tw-ring-shadow: none;}
 #fileTabs > .btn-right {padding-right: 40px;}
 #repoBranchDropMenu > .dropmenu-btn {background: white; --tw-ring-color: none; color: inherit; margin-bottom: 10px;}
