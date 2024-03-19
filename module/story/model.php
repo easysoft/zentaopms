@@ -2612,8 +2612,39 @@ class storyModel extends model
     public function getRequirementParents(int $productID, string|int $appendedStories = '', string $storyType = 'requirement', int $storyID = 0): array
     {
         $lastGrade    = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->andWhere('status')->eq('enable')->orderBy('grade_desc')->limit(1)->fetch('grade');
+        $ERGradePairs = $this->getGradePairs('epic');
         $URGradePairs = $this->getGradePairs('requirement');
-        $childIdList  = $this->getAllChildId($storyID);
+        $epics = $this->dao->select('id, parent, grade, title')->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->andWhere('type')->eq('epic')
+            ->andWhere('status')->eq('active')
+            ->andWhere('grade')->in(array_keys($ERGradePairs))
+            ->fetchAll('id');
+
+        $parents = array();
+        foreach($epics as $epic) $parents[$epic->parent] = $epic->parent;
+
+        $epicPairs = array();
+        foreach($epics as $id => $epic)
+        {
+            if(isset($parents[$epic->id]))
+            {
+                unset($epics[$id]);
+                continue;
+            }
+
+            $epicPairs[$epic->id] = isset($ERGradePairs[$epic->grade]) ? '(' . $ERGradePairs[$epic->grade] . ') ' . $epic->title : $epic->title;
+        }
+
+        $childIdList     = $this->getAllChildId($storyID);
+        $allStoryParents = $this->dao->select('parent')->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->andWhere('type')->eq('story')
+            ->andWhere('parent')->gt('0')
+            ->fetchPairs();
+
         $requirements = $this->dao->select('id, parent, grade, title')->from(TABLE_STORY)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
@@ -2621,6 +2652,7 @@ class storyModel extends model
             ->andWhere('status')->eq('active')
             ->andWhere('grade')->in(array_keys($URGradePairs))
             ->andWhere('grade')->ne($lastGrade)
+            ->andWhere('id')->notIN($allStoryParents)
             ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
             ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
             ->fetchAll('id');
@@ -2628,7 +2660,48 @@ class storyModel extends model
         $requirementPairs = array();
         foreach($requirements as $requirement) $requirementPairs[$requirement->id] = isset($URGradePairs[$requirement->grade]) ? '(' . $URGradePairs[$requirement->grade] . ') ' . $requirement->title : $requirement->title;
 
-        return $requirementPairs;
+        return $epicPairs + $requirementPairs;
+    }
+
+    /**
+     * 获取业务需求的父需求键值对。
+     * Get epic parents.
+     *
+     * @param  int        $productID
+     * @param  string|int $appendedStories
+     * @param  string     $storyType
+     * @param  int        $storyID
+     * @access public
+     * @return array
+     */
+    public function getEpicParents(int $productID, string|int $appendedStories = '', string $storyType = 'epic', int $storyID = 0): array
+    {
+        $lastGrade    = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->andWhere('status')->eq('enable')->orderBy('grade_desc')->limit(1)->fetch('grade');
+        $ERGradePairs = $this->getGradePairs('epic');
+        $childIdList  = $this->getAllChildId($storyID);
+
+        $allRequirementParents = $this->dao->select('parent')->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->andWhere('type')->eq('requirement')
+            ->andWhere('parent')->gt('0')
+            ->fetchPairs();
+        $epics = $this->dao->select('id, parent, grade, title')->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->andWhere('type')->eq('epic')
+            ->andWhere('status')->eq('active')
+            ->andWhere('grade')->in(array_keys($ERGradePairs))
+            ->andWhere('grade')->ne($lastGrade)
+            ->andWhere('id')->notIN($allRequirementParents)
+            ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
+            ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
+            ->fetchAll('id');
+
+        $epicPairs = array();
+        foreach($epics as $epic) $epicPairs[$epic->id] = isset($ERGradePairs[$epic->grade]) ? '(' . $ERGradePairs[$epic->grade] . ') ' . $epic->title : $epic->title;
+
+        return $epicPairs;
     }
 
     /**
