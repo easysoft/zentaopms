@@ -1,13 +1,6 @@
 <?php
 
-/**
- * Context for MySQL 5.5.
- *
- * This file was auto-generated from tools/contexts/*.txt.
- * Use tools/run_generators.sh for update.
- *
- * @see https://dev.mysql.com/doc/refman/5.5/en/keywords.html
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Contexts;
 
@@ -17,9 +10,10 @@ use PhpMyAdmin\SqlParser\Token;
 /**
  * Context for MySQL 5.5.
  *
- * @category   Contexts
+ * This class was auto-generated from tools/contexts/*.txt.
+ * Use tools/run_generators.sh for update.
  *
- * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
+ * @see https://dev.mysql.com/doc/refman/5.5/en/keywords.html
  */
 class ContextMySql50500 extends Context
 {
@@ -32,26 +26,27 @@ class ContextMySql50500 extends Context
      *      Token::FLAG_KEYWORD_DATA_TYPE Token::FLAG_KEYWORD_KEY
      *      Token::FLAG_KEYWORD_FUNCTION
      *
-     * @var array
+     * @var array<string,int>
+     * @phpstan-var non-empty-array<non-empty-string,Token::FLAG_KEYWORD_*|int>
      */
-    public static $KEYWORDS = array(
+    public static $KEYWORDS = [
         'AT' => 1, 'DO' => 1, 'IO' => 1, 'NO' => 1, 'XA' => 1,
         'ANY' => 1, 'CPU' => 1, 'END' => 1, 'IPC' => 1, 'NDB' => 1, 'NEW' => 1,
         'ONE' => 1, 'ROW' => 1,
-        'BOOL' => 1, 'BYTE' => 1, 'CODE' => 1, 'CUBE' => 1, 'DATA' => 1, 'DISK' => 1,
-        'ENDS' => 1, 'FAST' => 1, 'FILE' => 1, 'FULL' => 1, 'HASH' => 1, 'HELP' => 1,
-        'HOST' => 1, 'LAST' => 1, 'LESS' => 1, 'LIST' => 1, 'LOGS' => 1, 'MODE' => 1,
-        'NAME' => 1, 'NEXT' => 1, 'NONE' => 1, 'OPEN' => 1, 'PAGE' => 1, 'PORT' => 1,
-        'PREV' => 1, 'ROWS' => 1, 'SLOW' => 1, 'SOME' => 1, 'STOP' => 1, 'THAN' => 1,
-        'TYPE' => 1, 'VIEW' => 1, 'WAIT' => 1, 'WORK' => 1, 'X509' => 1,
+        'BYTE' => 1, 'CODE' => 1, 'CUBE' => 1, 'DATA' => 1, 'DISK' => 1, 'ENDS' => 1,
+        'FAST' => 1, 'FILE' => 1, 'FULL' => 1, 'HASH' => 1, 'HELP' => 1, 'HOST' => 1,
+        'LAST' => 1, 'LESS' => 1, 'LIST' => 1, 'LOGS' => 1, 'MODE' => 1, 'NAME' => 1,
+        'NEXT' => 1, 'NONE' => 1, 'OPEN' => 1, 'PAGE' => 1, 'PORT' => 1, 'PREV' => 1,
+        'ROWS' => 1, 'SLOW' => 1, 'SOME' => 1, 'STOP' => 1, 'THAN' => 1, 'TYPE' => 1,
+        'VIEW' => 1, 'WAIT' => 1, 'WORK' => 1, 'X509' => 1,
         'AFTER' => 1, 'BEGIN' => 1, 'BLOCK' => 1, 'BTREE' => 1, 'CACHE' => 1,
         'CHAIN' => 1, 'CLOSE' => 1, 'ERROR' => 1, 'EVENT' => 1, 'EVERY' => 1,
-        'FIRST' => 1, 'FIXED' => 1, 'FLUSH' => 1, 'FOUND' => 1, 'HOSTS' => 1,
-        'LEVEL' => 1, 'LOCAL' => 1, 'LOCKS' => 1, 'MERGE' => 1, 'MUTEX' => 1,
-        'NAMES' => 1, 'NCHAR' => 1, 'OWNER' => 1, 'PHASE' => 1, 'PROXY' => 1,
-        'QUERY' => 1, 'QUICK' => 1, 'RELAY' => 1, 'RESET' => 1, 'RTREE' => 1,
-        'SHARE' => 1, 'SLAVE' => 1, 'START' => 1, 'SUPER' => 1, 'SWAPS' => 1,
-        'TYPES' => 1, 'UNTIL' => 1, 'VALUE' => 1,
+        'FIRST' => 1, 'FLUSH' => 1, 'FOUND' => 1, 'HOSTS' => 1, 'LEVEL' => 1,
+        'LOCAL' => 1, 'LOCKS' => 1, 'MERGE' => 1, 'MUTEX' => 1, 'NAMES' => 1,
+        'NCHAR' => 1, 'OWNER' => 1, 'PHASE' => 1, 'PROXY' => 1, 'QUERY' => 1,
+        'QUICK' => 1, 'RELAY' => 1, 'RESET' => 1, 'RTREE' => 1, 'SHARE' => 1,
+        'SLAVE' => 1, 'START' => 1, 'SUPER' => 1, 'SWAPS' => 1, 'TYPES' => 1,
+        'UNTIL' => 1, 'VALUE' => 1,
         'ACTION' => 1, 'BACKUP' => 1, 'BINLOG' => 1, 'CIPHER' => 1, 'CLIENT' => 1,
         'COMMIT' => 1, 'ENABLE' => 1, 'ENGINE' => 1, 'ERRORS' => 1, 'ESCAPE' => 1,
         'EVENTS' => 1, 'FAULTS' => 1, 'FIELDS' => 1, 'GLOBAL' => 1, 'GRANTS' => 1,
@@ -115,9 +110,8 @@ class ContextMySql50500 extends Context
         'FOR' => 3, 'NOT' => 3, 'OUT' => 3, 'SQL' => 3, 'SSL' => 3, 'USE' => 3,
         'XOR' => 3,
         'BOTH' => 3, 'CALL' => 3, 'CASE' => 3, 'DESC' => 3, 'DROP' => 3, 'DUAL' => 3,
-        'EACH' => 3, 'ELSE' => 3, 'EXIT' => 3, 'FROM' => 3, 'INT1' => 3, 'INT2' => 3,
-        'INT3' => 3, 'INT4' => 3, 'INT8' => 3, 'INTO' => 3, 'JOIN' => 3, 'KEYS' => 3,
-        'KILL' => 3, 'LIKE' => 3, 'LOAD' => 3, 'LOCK' => 3, 'LONG' => 3, 'LOOP' => 3,
+        'EACH' => 3, 'ELSE' => 3, 'EXIT' => 3, 'FROM' => 3, 'INTO' => 3, 'JOIN' => 3,
+        'KEYS' => 3, 'KILL' => 3, 'LIKE' => 3, 'LOAD' => 3, 'LOCK' => 3, 'LOOP' => 3,
         'NULL' => 3, 'READ' => 3, 'SHOW' => 3, 'THEN' => 3, 'TRUE' => 3, 'UNDO' => 3,
         'WHEN' => 3, 'WITH' => 3,
         'ALTER' => 3, 'CHECK' => 3, 'CROSS' => 3, 'FALSE' => 3, 'FETCH' => 3,
@@ -127,10 +121,9 @@ class ContextMySql50500 extends Context
         'UNION' => 3, 'USAGE' => 3, 'USING' => 3, 'WHERE' => 3, 'WHILE' => 3,
         'WRITE' => 3,
         'BEFORE' => 3, 'CHANGE' => 3, 'COLUMN' => 3, 'CREATE' => 3, 'CURSOR' => 3,
-        'DELETE' => 3, 'ELSEIF' => 3, 'FLOAT4' => 3, 'FLOAT8' => 3, 'HAVING' => 3,
-        'IGNORE' => 3, 'INFILE' => 3, 'LINEAR' => 3, 'OPTION' => 3, 'REGEXP' => 3,
-        'RENAME' => 3, 'RETURN' => 3, 'REVOKE' => 3, 'SELECT' => 3, 'SIGNAL' => 3,
-        'UNLOCK' => 3, 'UPDATE' => 3,
+        'DELETE' => 3, 'ELSEIF' => 3, 'HAVING' => 3, 'IGNORE' => 3, 'INFILE' => 3,
+        'LINEAR' => 3, 'OPTION' => 3, 'REGEXP' => 3, 'RENAME' => 3, 'RETURN' => 3,
+        'REVOKE' => 3, 'SELECT' => 3, 'SIGNAL' => 3, 'UNLOCK' => 3, 'UPDATE' => 3,
         'ANALYZE' => 3, 'BETWEEN' => 3, 'CASCADE' => 3, 'COLLATE' => 3, 'DECLARE' => 3,
         'DELAYED' => 3, 'ESCAPED' => 3, 'EXPLAIN' => 3, 'FOREIGN' => 3, 'ITERATE' => 3,
         'LEADING' => 3, 'NATURAL' => 3, 'OUTFILE' => 3, 'PRIMARY' => 3, 'RELEASE' => 3,
@@ -139,8 +132,8 @@ class ContextMySql50500 extends Context
         'MAXVALUE' => 3, 'MODIFIES' => 3, 'OPTIMIZE' => 3, 'RESIGNAL' => 3, 'RESTRICT' => 3,
         'SPECIFIC' => 3, 'SQLSTATE' => 3, 'STARTING' => 3, 'TRAILING' => 3, 'UNSIGNED' => 3,
         'ZEROFILL' => 3,
-        'CONDITION' => 3, 'DATABASES' => 3, 'MIDDLEINT' => 3, 'PRECISION' => 3,
-        'PROCEDURE' => 3, 'SENSITIVE' => 3, 'SEPARATOR' => 3,
+        'CONDITION' => 3, 'DATABASES' => 3, 'PRECISION' => 3, 'PROCEDURE' => 3,
+        'SENSITIVE' => 3, 'SEPARATOR' => 3,
         'ACCESSIBLE' => 3, 'ASENSITIVE' => 3, 'CONSTRAINT' => 3, 'DAY_MINUTE' => 3,
         'DAY_SECOND' => 3, 'OPTIONALLY' => 3, 'READ_WRITE' => 3, 'REFERENCES' => 3,
         'SQLWARNING' => 3, 'TERMINATED' => 3, 'YEAR_MONTH' => 3,
@@ -154,29 +147,34 @@ class ContextMySql50500 extends Context
         'SQL_CALC_FOUND_ROWS' => 3,
         'MASTER_SSL_VERIFY_SERVER_CERT' => 3,
 
+        'NO SQL' => 7,
         'GROUP BY' => 7, 'NOT NULL' => 7, 'ORDER BY' => 7, 'SET NULL' => 7,
         'AND CHAIN' => 7, 'FULL JOIN' => 7, 'IF EXISTS' => 7, 'LEFT JOIN' => 7,
         'LESS THAN' => 7, 'LOAD DATA' => 7, 'NO ACTION' => 7, 'ON DELETE' => 7,
         'ON UPDATE' => 7, 'UNION ALL' => 7,
         'CROSS JOIN' => 7, 'ESCAPED BY' => 7, 'FOR UPDATE' => 7, 'INNER JOIN' => 7,
         'LINEAR KEY' => 7, 'NO RELEASE' => 7, 'OR REPLACE' => 7, 'RIGHT JOIN' => 7,
-        'ENCLOSED BY' => 7, 'LINEAR HASH' => 7, 'STARTING BY' => 7,
-        'AND NO CHAIN' => 7, 'FOR EACH ROW' => 7, 'NATURAL JOIN' => 7, 'PARTITION BY' => 7,
-        'SET PASSWORD' => 7, 'SQL SECURITY' => 7,
+        'ENCLOSED BY' => 7, 'LINEAR HASH' => 7, 'ON SCHEDULE' => 7, 'STARTING BY' => 7,
+        'WITH ROLLUP' => 7,
+        'AND NO CHAIN' => 7, 'CONTAINS SQL' => 7, 'FOR EACH ROW' => 7, 'NATURAL JOIN' => 7,
+        'PARTITION BY' => 7, 'SET PASSWORD' => 7, 'SQL SECURITY' => 7,
         'CHARACTER SET' => 7, 'IF NOT EXISTS' => 7, 'TERMINATED BY' => 7,
-        'DATA DIRECTORY' => 7, 'UNION DISTINCT' => 7,
+        'DATA DIRECTORY' => 7, 'READS SQL DATA' => 7, 'UNION DISTINCT' => 7,
         'DEFAULT CHARSET' => 7, 'DEFAULT COLLATE' => 7, 'FULL OUTER JOIN' => 7, 'INDEX DIRECTORY' => 7,
         'LEFT OUTER JOIN' => 7, 'SUBPARTITION BY' => 7,
-        'GENERATED ALWAYS' => 7, 'RIGHT OUTER JOIN' => 7,
-        'NATURAL LEFT JOIN' => 7, 'START TRANSACTION' => 7,
-        'LOCK IN SHARE MODE' => 7, 'NATURAL RIGHT JOIN' => 7, 'SELECT TRANSACTION' => 7,
+        'DISABLE ON SLAVE' => 7, 'GENERATED ALWAYS' => 7, 'RIGHT OUTER JOIN' => 7,
+        'MODIFIES SQL DATA' => 7, 'NATURAL LEFT JOIN' => 7, 'START TRANSACTION' => 7,
+        'COALESCE PARTITION' => 7, 'LOCK IN SHARE MODE' => 7, 'NATURAL RIGHT JOIN' => 7,
+        'SELECT TRANSACTION' => 7,
         'DEFAULT CHARACTER SET' => 7,
+        'ON COMPLETION PRESERVE' => 7,
         'NATURAL LEFT OUTER JOIN' => 7,
         'NATURAL RIGHT OUTER JOIN' => 7, 'WITH CONSISTENT SNAPSHOT' => 7,
+        'ON COMPLETION NOT PRESERVE' => 7,
 
         'BIT' => 9, 'XML' => 9,
-        'ENUM' => 9, 'JSON' => 9, 'TEXT' => 9,
-        'ARRAY' => 9,
+        'BOOL' => 9, 'ENUM' => 9, 'JSON' => 9, 'TEXT' => 9,
+        'ARRAY' => 9, 'FIXED' => 9,
         'SERIAL' => 9,
         'BOOLEAN' => 9,
         'DATETIME' => 9, 'GEOMETRY' => 9, 'MULTISET' => 9,
@@ -184,15 +182,18 @@ class ContextMySql50500 extends Context
         'MULTILINEPOLYGON' => 9,
 
         'INT' => 11, 'SET' => 11,
-        'BLOB' => 11, 'REAL' => 11,
+        'BLOB' => 11, 'INT1' => 11, 'INT2' => 11, 'INT3' => 11, 'INT4' => 11, 'INT8' => 11,
+        'LONG' => 11, 'REAL' => 11,
         'FLOAT' => 11,
-        'BIGINT' => 11, 'DOUBLE' => 11,
+        'BIGINT' => 11, 'DOUBLE' => 11, 'FLOAT4' => 11, 'FLOAT8' => 11,
         'DECIMAL' => 11, 'INTEGER' => 11, 'NUMERIC' => 11, 'TINYINT' => 11, 'VARCHAR' => 11,
         'LONGBLOB' => 11, 'LONGTEXT' => 11, 'SMALLINT' => 11, 'TINYBLOB' => 11, 'TINYTEXT' => 11,
-        'CHARACTER' => 11, 'MEDIUMINT' => 11, 'VARBINARY' => 11,
+        'CHARACTER' => 11, 'MEDIUMINT' => 11, 'MIDDLEINT' => 11, 'VARBINARY' => 11,
         'MEDIUMBLOB' => 11, 'MEDIUMTEXT' => 11,
 
-        'BINARY VARYING' => 15,
+        'LONG VARCHAR' => 15,
+        'BINARY VARYING' => 15, 'LONG VARBINARY' => 15,
+        'CHARACTER VARYING' => 15,
 
         'KEY' => 19,
         'INDEX' => 19,
@@ -245,9 +246,8 @@ class ContextMySql50500 extends Context
         'SUBSTRING' => 33, 'UPDATEXML' => 33,
         'BIT_LENGTH' => 33, 'CONVERT_TZ' => 33, 'DAYOFMONTH' => 33, 'EXPORT_SET' => 33,
         'FOUND_ROWS' => 33, 'GET_FORMAT' => 33, 'INTERSECTS' => 33, 'MBRTOUCHES' => 33,
-        'MULTIPOINT' => 33, 'NAME_CONST' => 33, 'PERIOD_ADD' => 33, 'STARTPOINT' => 33,
-        'STDDEV_POP' => 33, 'TO_SECONDS' => 33, 'UNCOMPRESS' => 33, 'UUID_SHORT' => 33,
-        'WEEKOFYEAR' => 33,
+        'NAME_CONST' => 33, 'PERIOD_ADD' => 33, 'STARTPOINT' => 33, 'STDDEV_POP' => 33,
+        'TO_SECONDS' => 33, 'UNCOMPRESS' => 33, 'UUID_SHORT' => 33, 'WEEKOFYEAR' => 33,
         'AES_DECRYPT' => 33, 'AES_ENCRYPT' => 33, 'CHAR_LENGTH' => 33, 'DATE_FORMAT' => 33,
         'DES_DECRYPT' => 33, 'DES_ENCRYPT' => 33, 'FIND_IN_SET' => 33, 'GEOMFROMWKB' => 33,
         'LINEFROMWKB' => 33, 'MBRCONTAINS' => 33, 'MBRDISJOINT' => 33, 'MBROVERLAPS' => 33,
@@ -256,9 +256,9 @@ class ContextMySql50500 extends Context
         'TIME_TO_SEC' => 33,
         'COERCIBILITY' => 33, 'EXTERIORRING' => 33, 'EXTRACTVALUE' => 33, 'GEOMETRYTYPE' => 33,
         'GEOMFROMTEXT' => 33, 'GROUP_CONCAT' => 33, 'IS_FREE_LOCK' => 33, 'IS_USED_LOCK' => 33,
-        'LINEFROMTEXT' => 33, 'MLINEFROMWKB' => 33, 'MPOLYFROMWKB' => 33, 'MULTIPOLYGON' => 33,
-        'OCTET_LENGTH' => 33, 'OLD_PASSWORD' => 33, 'POINTFROMWKB' => 33, 'POLYFROMTEXT' => 33,
-        'RELEASE_LOCK' => 33, 'SESSION_USER' => 33, 'TIMESTAMPADD' => 33,
+        'LINEFROMTEXT' => 33, 'MLINEFROMWKB' => 33, 'MPOLYFROMWKB' => 33, 'OCTET_LENGTH' => 33,
+        'OLD_PASSWORD' => 33, 'POINTFROMWKB' => 33, 'POLYFROMTEXT' => 33, 'RELEASE_LOCK' => 33,
+        'SESSION_USER' => 33, 'TIMESTAMPADD' => 33,
         'CONNECTION_ID' => 33, 'FROM_UNIXTIME' => 33, 'INTERIORRINGN' => 33, 'MBRINTERSECTS' => 33,
         'MLINEFROMTEXT' => 33, 'MPOINTFROMWKB' => 33, 'MPOLYFROMTEXT' => 33, 'NUMGEOMETRIES' => 33,
         'POINTFROMTEXT' => 33, 'TIMESTAMPDIFF' => 33,
@@ -294,12 +294,13 @@ class ContextMySql50500 extends Context
         'POINT' => 41,
         'POLYGON' => 41,
         'TIMESTAMP' => 41,
-        'LINESTRING' => 41,
+        'LINESTRING' => 41, 'MULTIPOINT' => 41,
+        'MULTIPOLYGON' => 41,
         'MULTILINESTRING' => 41,
         'GEOMETRYCOLLECTION' => 41,
 
         'CHAR' => 43,
         'BINARY' => 43,
         'INTERVAL' => 43,
-    );
+    ];
 }

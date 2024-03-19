@@ -1,8 +1,6 @@
 <?php
 
-/**
- * `SET` keyword parser.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Components;
 
@@ -11,12 +9,15 @@ use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
 
+use function implode;
+use function in_array;
+use function is_array;
+use function trim;
+
 /**
  * `SET` keyword parser.
  *
- * @category   Keywords
- *
- * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
+ * @final
  */
 class SetOperation extends Component
 {
@@ -35,8 +36,6 @@ class SetOperation extends Component
     public $value;
 
     /**
-     * Constructor.
-     *
      * @param string $column Field's name..
      * @param string $value  new value
      */
@@ -47,17 +46,17 @@ class SetOperation extends Component
     }
 
     /**
-     * @param Parser     $parser  the parser that serves as context
-     * @param TokensList $list    the list of tokens that are being parsed
-     * @param array      $options parameters for parsing
+     * @param Parser               $parser  the parser that serves as context
+     * @param TokensList           $list    the list of tokens that are being parsed
+     * @param array<string, mixed> $options parameters for parsing
      *
      * @return SetOperation[]
      */
-    public static function parse(Parser $parser, TokensList $list, array $options = array())
+    public static function parse(Parser $parser, TokensList $list, array $options = [])
     {
-        $ret = array();
+        $ret = [];
 
-        $expr = new self();
+        $expr = new static();
 
         /**
          * The state of the parser.
@@ -65,7 +64,7 @@ class SetOperation extends Component
          * Below are the states of the parser.
          *
          *      0 ---------------------[ col_name ]--------------------> 0
-         *      0 ------------------------[ = ]------------------------> 1
+         *      0 ---------------------[ = or := ]---------------------> 1
          *      1 -----------------------[ value ]---------------------> 1
          *      1 ------------------------[ , ]------------------------> 0
          *
@@ -83,8 +82,6 @@ class SetOperation extends Component
         for (; $list->idx < $list->count; ++$list->idx) {
             /**
              * Token parsed at this moment.
-             *
-             * @var Token
              */
             $token = $list->tokens[$list->idx];
 
@@ -99,7 +96,8 @@ class SetOperation extends Component
             }
 
             // No keyword is expected.
-            if (($token->type === Token::TYPE_KEYWORD)
+            if (
+                ($token->type === Token::TYPE_KEYWORD)
                 && ($token->flags & Token::FLAG_KEYWORD_RESERVED)
                 && ($state === 0)
             ) {
@@ -107,7 +105,7 @@ class SetOperation extends Component
             }
 
             if ($state === 0) {
-                if ($token->token === '=') {
+                if (in_array($token->token, ['=', ':='], true)) {
                     $state = 1;
                 } elseif ($token->value !== ',') {
                     $expr->column .= $token->token;
@@ -118,22 +116,22 @@ class SetOperation extends Component
                 $tmp = Expression::parse(
                     $parser,
                     $list,
-                    array(
-                        'breakOnAlias' => true
-                    )
+                    ['breakOnAlias' => true]
                 );
-                if (is_null($tmp)) {
+                if ($tmp === null) {
                     $parser->error('Missing expression.', $token);
                     break;
                 }
+
                 $expr->column = trim($expr->column);
                 $expr->value = $tmp->expr;
                 $ret[] = $expr;
-                $expr = new self();
+                $expr = new static();
                 $state = 0;
                 $commaLastSeenAt = null;
             }
         }
+
         --$list->idx;
 
         // We saw a comma, but didn't see a column-value pair after it
@@ -146,11 +144,11 @@ class SetOperation extends Component
 
     /**
      * @param SetOperation|SetOperation[] $component the component to be built
-     * @param array                       $options   parameters for building
+     * @param array<string, mixed>        $options   parameters for building
      *
      * @return string
      */
-    public static function build($component, array $options = array())
+    public static function build($component, array $options = [])
     {
         if (is_array($component)) {
             return implode(', ', $component);

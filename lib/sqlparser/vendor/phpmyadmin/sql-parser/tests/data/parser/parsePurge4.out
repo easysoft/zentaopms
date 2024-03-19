@@ -1,1 +1,152 @@
-a:4:{s:5:"query";s:37:"PURGE MASTER LOGS TO 'mysql-bin.010';";s:5:"lexer";O:26:"PhpMyAdmin\SqlParser\Lexer":8:{s:3:"str";s:37:"PURGE MASTER LOGS TO 'mysql-bin.010';";s:3:"len";i:37;s:4:"last";i:37;s:4:"list";O:31:"PhpMyAdmin\SqlParser\TokensList":3:{s:6:"tokens";a:11:{i:0;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:5:"PURGE";s:5:"value";s:5:"PURGE";s:7:"keyword";s:5:"PURGE";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:0;}i:1;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:5;}i:2;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:"MASTER";s:5:"value";s:6:"MASTER";s:7:"keyword";s:6:"MASTER";s:4:"type";i:1;s:5:"flags";i:1;s:8:"position";i:6;}i:3;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:12;}i:4;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:4:"LOGS";s:5:"value";s:4:"LOGS";s:7:"keyword";s:4:"LOGS";s:4:"type";i:1;s:5:"flags";i:1;s:8:"position";i:13;}i:5;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:17;}i:6;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:2:"TO";s:5:"value";s:2:"TO";s:7:"keyword";s:2:"TO";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:18;}i:7;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:20;}i:8;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:15:"'mysql-bin.010'";s:5:"value";s:13:"mysql-bin.010";s:7:"keyword";N;s:4:"type";i:7;s:5:"flags";i:1;s:8:"position";i:21;}i:9;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:";";s:5:"value";s:1:";";s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";i:36;}i:10;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";N;s:5:"value";N;s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";N;}}s:5:"count";i:11;s:3:"idx";i:11;}s:9:"delimiter";s:1:";";s:12:"delimiterLen";i:1;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"parser";O:27:"PhpMyAdmin\SqlParser\Parser":5:{s:4:"list";r:7;s:10:"statements";a:1:{i:0;O:46:"PhpMyAdmin\SqlParser\Statements\PurgeStatement":6:{s:8:"log_type";s:6:"MASTER";s:10:"end_option";s:2:"TO";s:8:"end_expr";O:42:"PhpMyAdmin\SqlParser\Components\Expression":7:{s:8:"database";N;s:5:"table";N;s:6:"column";s:13:"mysql-bin.010";s:4:"expr";s:15:"'mysql-bin.010'";s:5:"alias";N;s:8:"function";N;s:8:"subquery";N;}s:7:"options";N;s:5:"first";i:0;s:4:"last";i:9;}}s:8:"brackets";i:0;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"errors";a:2:{s:5:"lexer";a:0:{}s:6:"parser";a:0:{}}}
+{
+    "query": "PURGE MASTER LOGS TO 'mysql-bin.010';",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "str": "PURGE MASTER LOGS TO 'mysql-bin.010';",
+        "len": 37,
+        "last": 37,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "PURGE",
+                    "value": "PURGE",
+                    "keyword": "PURGE",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 5
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "MASTER",
+                    "value": "MASTER",
+                    "keyword": "MASTER",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 6
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 12
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "LOGS",
+                    "value": "LOGS",
+                    "keyword": "LOGS",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 13
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 17
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "TO",
+                    "value": "TO",
+                    "keyword": "TO",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 18
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 20
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "'mysql-bin.010'",
+                    "value": "mysql-bin.010",
+                    "keyword": null,
+                    "type": 7,
+                    "flags": 1,
+                    "position": 21
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ";",
+                    "value": ";",
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": 36
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 11,
+            "idx": 11
+        },
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": {
+        "@type": "PhpMyAdmin\\SqlParser\\Parser",
+        "list": {
+            "@type": "@1"
+        },
+        "statements": [
+            {
+                "@type": "PhpMyAdmin\\SqlParser\\Statements\\PurgeStatement",
+                "log_type": "MASTER",
+                "end_option": "TO",
+                "end_expr": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                    "database": null,
+                    "table": null,
+                    "column": "mysql-bin.010",
+                    "expr": "'mysql-bin.010'",
+                    "alias": null,
+                    "function": null,
+                    "subquery": null
+                },
+                "options": null,
+                "first": 0,
+                "last": 9
+            }
+        ],
+        "brackets": 0,
+        "strict": false,
+        "errors": []
+    },
+    "errors": {
+        "lexer": [],
+        "parser": []
+    }
+}

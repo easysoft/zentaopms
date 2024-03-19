@@ -1,1 +1,157 @@
-a:4:{s:5:"query";s:39:"SET CHARSET 'utf8' CHARACTER SET 'utf8'";s:5:"lexer";O:26:"PhpMyAdmin\SqlParser\Lexer":8:{s:3:"str";s:39:"SET CHARSET 'utf8' CHARACTER SET 'utf8'";s:3:"len";i:39;s:4:"last";i:39;s:4:"list";O:31:"PhpMyAdmin\SqlParser\TokensList":3:{s:6:"tokens";a:10:{i:0;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:3:"SET";s:5:"value";s:3:"SET";s:7:"keyword";s:3:"SET";s:4:"type";i:1;s:5:"flags";i:11;s:8:"position";i:0;}i:1;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:3;}i:2;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:7:"CHARSET";s:5:"value";s:7:"CHARSET";s:7:"keyword";s:7:"CHARSET";s:4:"type";i:1;s:5:"flags";i:33;s:8:"position";i:4;}i:3;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:11;}i:4;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:"'utf8'";s:5:"value";s:4:"utf8";s:7:"keyword";N;s:4:"type";i:7;s:5:"flags";i:1;s:8:"position";i:12;}i:5;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:18;}i:6;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:13:"CHARACTER SET";s:5:"value";s:13:"CHARACTER SET";s:7:"keyword";s:13:"CHARACTER SET";s:4:"type";i:1;s:5:"flags";i:7;s:8:"position";i:19;}i:7;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:32;}i:8;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:"'utf8'";s:5:"value";s:4:"utf8";s:7:"keyword";N;s:4:"type";i:7;s:5:"flags";i:1;s:8:"position";i:33;}i:9;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";N;s:5:"value";N;s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";N;}}s:5:"count";i:10;s:3:"idx";i:10;}s:9:"delimiter";s:1:";";s:12:"delimiterLen";i:1;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"parser";O:27:"PhpMyAdmin\SqlParser\Parser":5:{s:4:"list";r:7;s:10:"statements";a:1:{i:0;O:44:"PhpMyAdmin\SqlParser\Statements\SetStatement":5:{s:7:"options";O:44:"PhpMyAdmin\SqlParser\Components\OptionsArray":1:{s:7:"options";a:2:{i:3;a:4:{s:4:"name";s:7:"CHARSET";s:6:"equals";b:0;s:4:"expr";s:6:"'utf8'";s:5:"value";s:4:"utf8";}i:13;a:4:{s:4:"name";s:13:"CHARACTER SET";s:6:"equals";b:0;s:4:"expr";s:6:"'utf8'";s:5:"value";s:4:"utf8";}}}s:11:"end_options";N;s:3:"set";a:0:{}s:5:"first";i:0;s:4:"last";i:8;}}s:8:"brackets";i:0;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"errors";a:2:{s:5:"lexer";a:0:{}s:6:"parser";a:1:{i:0;a:3:{i:0;s:37:"This option conflicts with "CHARSET".";i:1;r:51;i:2;i:0;}}}}
+{
+    "query": "SET CHARSET 'utf8' CHARACTER SET 'utf8'",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "str": "SET CHARSET 'utf8' CHARACTER SET 'utf8'",
+        "len": 39,
+        "last": 39,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "SET",
+                    "value": "SET",
+                    "keyword": "SET",
+                    "type": 1,
+                    "flags": 11,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 3
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "CHARSET",
+                    "value": "CHARSET",
+                    "keyword": "CHARSET",
+                    "type": 1,
+                    "flags": 33,
+                    "position": 4
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 11
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "'utf8'",
+                    "value": "utf8",
+                    "keyword": null,
+                    "type": 7,
+                    "flags": 1,
+                    "position": 12
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 18
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "CHARACTER SET",
+                    "value": "CHARACTER SET",
+                    "keyword": "CHARACTER SET",
+                    "type": 1,
+                    "flags": 7,
+                    "position": 19
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 32
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "'utf8'",
+                    "value": "utf8",
+                    "keyword": null,
+                    "type": 7,
+                    "flags": 1,
+                    "position": 33
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 10,
+            "idx": 10
+        },
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": {
+        "@type": "PhpMyAdmin\\SqlParser\\Parser",
+        "list": {
+            "@type": "@1"
+        },
+        "statements": [
+            {
+                "@type": "PhpMyAdmin\\SqlParser\\Statements\\SetStatement",
+                "options": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                    "options": {
+                        "3": {
+                            "name": "CHARSET",
+                            "equals": false,
+                            "expr": "'utf8'",
+                            "value": "utf8"
+                        },
+                        "13": {
+                            "name": "CHARACTER SET",
+                            "equals": false,
+                            "expr": "'utf8'",
+                            "value": "utf8"
+                        }
+                    }
+                },
+                "end_options": null,
+                "set": [],
+                "first": 0,
+                "last": 8
+            }
+        ],
+        "brackets": 0,
+        "strict": false,
+        "errors": []
+    },
+    "errors": {
+        "lexer": [],
+        "parser": [
+            [
+                "This option conflicts with \"CHARSET\".",
+                {
+                    "@type": "@8"
+                },
+                0
+            ]
+        ]
+    }
+}

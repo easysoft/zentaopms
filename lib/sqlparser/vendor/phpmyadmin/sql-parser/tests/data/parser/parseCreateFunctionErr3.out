@@ -1,10 +1,216 @@
-a:4:{s:5:"query";s:45:"DELIMITER $$
-CREATE FUNCTION coincide
-END;$$
-";s:5:"lexer";O:26:"PhpMyAdmin\SqlParser\Lexer":8:{s:3:"str";s:45:"DELIMITER $$
-CREATE FUNCTION coincide
-END;$$
-";s:3:"len";i:45;s:4:"last";i:45;s:4:"list";O:31:"PhpMyAdmin\SqlParser\TokensList":3:{s:6:"tokens";a:15:{i:0;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:9:"DELIMITER";s:5:"value";s:9:"DELIMITER";s:7:"keyword";N;s:4:"type";i:0;s:5:"flags";i:0;s:8:"position";i:0;}i:1;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:9;}i:2;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:2:"$$";s:5:"value";s:2:"$$";s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";i:10;}i:3;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:"
-";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:12;}i:4;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:6:"CREATE";s:5:"value";s:6:"CREATE";s:7:"keyword";s:6:"CREATE";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:13;}i:5;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:19;}i:6;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:8:"FUNCTION";s:5:"value";s:8:"FUNCTION";s:7:"keyword";s:8:"FUNCTION";s:4:"type";i:1;s:5:"flags";i:1;s:8:"position";i:20;}i:7;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:28;}i:8;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:8:"coincide";s:5:"value";s:8:"coincide";s:7:"keyword";N;s:4:"type";i:0;s:5:"flags";i:0;s:8:"position";i:29;}i:9;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:"
-";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:37;}i:10;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:3:"END";s:5:"value";s:3:"END";s:7:"keyword";s:3:"END";s:4:"type";i:1;s:5:"flags";i:1;s:8:"position";i:38;}i:11;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:";";s:5:"value";s:1:";";s:7:"keyword";N;s:4:"type";i:2;s:5:"flags";i:16;s:8:"position";i:41;}i:12;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:2:"$$";s:5:"value";s:2:"$$";s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";i:42;}i:13;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:"
-";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:44;}i:14;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";N;s:5:"value";N;s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";N;}}s:5:"count";i:15;s:3:"idx";i:17;}s:9:"delimiter";s:2:"$$";s:12:"delimiterLen";i:2;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"parser";O:27:"PhpMyAdmin\SqlParser\Parser":5:{s:4:"list";r:7;s:10:"statements";a:1:{i:0;O:47:"PhpMyAdmin\SqlParser\Statements\CreateStatement":17:{s:4:"name";O:42:"PhpMyAdmin\SqlParser\Components\Expression":7:{s:8:"database";N;s:5:"table";s:8:"coincide";s:6:"column";N;s:4:"expr";s:8:"coincide";s:5:"alias";N;s:8:"function";N;s:8:"subquery";N;}s:13:"entityOptions";O:44:"PhpMyAdmin\SqlParser\Components\OptionsArray":1:{s:7:"options";a:0:{}}s:6:"fields";N;s:6:"select";N;s:4:"like";N;s:11:"partitionBy";N;s:13:"partitionsNum";N;s:14:"subpartitionBy";N;s:16:"subpartitionsNum";N;s:10:"partitions";N;s:5:"table";N;s:6:"return";N;s:10:"parameters";a:0:{}s:4:"body";a:0:{}s:7:"options";O:44:"PhpMyAdmin\SqlParser\Components\OptionsArray":1:{s:7:"options";a:1:{i:6;s:8:"FUNCTION";}}s:5:"first";i:4;s:4:"last";i:16;}}s:8:"brackets";i:0;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"errors";a:2:{s:5:"lexer";a:0:{}s:6:"parser";a:1:{i:0;a:3:{i:0;s:33:"A "RETURNS" keyword was expected.";i:1;r:79;i:2;i:0;}}}}
+{
+    "query": "DELIMITER $$\nCREATE FUNCTION coincide\nEND;$$\n",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "str": "DELIMITER $$\nCREATE FUNCTION coincide\nEND;$$\n",
+        "len": 45,
+        "last": 45,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "DELIMITER",
+                    "value": "DELIMITER",
+                    "keyword": null,
+                    "type": 0,
+                    "flags": 0,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 9
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "$$",
+                    "value": "$$",
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": 10
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "\n",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 12
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "CREATE",
+                    "value": "CREATE",
+                    "keyword": "CREATE",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 13
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 19
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "FUNCTION",
+                    "value": "FUNCTION",
+                    "keyword": "FUNCTION",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 20
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 28
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "coincide",
+                    "value": "coincide",
+                    "keyword": null,
+                    "type": 0,
+                    "flags": 0,
+                    "position": 29
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "\n",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 37
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "END",
+                    "value": "END",
+                    "keyword": "END",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 38
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ";",
+                    "value": ";",
+                    "keyword": null,
+                    "type": 2,
+                    "flags": 16,
+                    "position": 41
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "$$",
+                    "value": "$$",
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": 42
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "\n",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 44
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 15,
+            "idx": 17
+        },
+        "delimiter": "$$",
+        "delimiterLen": 2,
+        "strict": false,
+        "errors": []
+    },
+    "parser": {
+        "@type": "PhpMyAdmin\\SqlParser\\Parser",
+        "list": {
+            "@type": "@1"
+        },
+        "statements": [
+            {
+                "@type": "PhpMyAdmin\\SqlParser\\Statements\\CreateStatement",
+                "name": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\Expression",
+                    "database": null,
+                    "table": "coincide",
+                    "column": null,
+                    "expr": "coincide",
+                    "alias": null,
+                    "function": null,
+                    "subquery": null
+                },
+                "entityOptions": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                    "options": []
+                },
+                "fields": null,
+                "with": null,
+                "select": null,
+                "like": null,
+                "partitionBy": null,
+                "partitionsNum": null,
+                "subpartitionBy": null,
+                "subpartitionsNum": null,
+                "partitions": null,
+                "table": null,
+                "return": null,
+                "parameters": [],
+                "body": [],
+                "options": {
+                    "@type": "PhpMyAdmin\\SqlParser\\Components\\OptionsArray",
+                    "options": {
+                        "6": "FUNCTION"
+                    }
+                },
+                "first": 4,
+                "last": 16
+            }
+        ],
+        "brackets": 0,
+        "strict": false,
+        "errors": []
+    },
+    "errors": {
+        "lexer": [],
+        "parser": [
+            [
+                "A \"RETURNS\" keyword was expected.",
+                {
+                    "@type": "@12"
+                },
+                0
+            ]
+        ]
+    }
+}

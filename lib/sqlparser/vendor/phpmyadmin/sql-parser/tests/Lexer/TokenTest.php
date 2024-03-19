@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Lexer;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -7,7 +9,7 @@ use PhpMyAdmin\SqlParser\Token;
 
 class TokenTest extends TestCase
 {
-    public function testExtractKeyword()
+    public function testExtractKeyword(): void
     {
         $tok = new Token('SelecT', Token::TYPE_KEYWORD, Token::FLAG_KEYWORD_RESERVED);
         $this->assertEquals($tok->value, 'SELECT');
@@ -16,13 +18,13 @@ class TokenTest extends TestCase
         $this->assertEquals($tok->value, 'AS');
     }
 
-    public function testExtractWhitespace()
+    public function testExtractWhitespace(): void
     {
         $tok = new Token(" \t \r \n ", Token::TYPE_WHITESPACE);
         $this->assertEquals($tok->value, ' ');
     }
 
-    public function testExtractBool()
+    public function testExtractBool(): void
     {
         $tok = new Token('false', Token::TYPE_BOOL);
         $this->assertFalse($tok->value);
@@ -31,7 +33,7 @@ class TokenTest extends TestCase
         $this->assertTrue($tok->value);
     }
 
-    public function testExtractNumber()
+    public function testExtractNumber(): void
     {
         $tok = new Token('--42', Token::TYPE_NUMBER, Token::FLAG_NUMBER_NEGATIVE);
         $this->assertEquals($tok->value, 42);
@@ -49,7 +51,7 @@ class TokenTest extends TestCase
         $this->assertEquals($tok->value, 3.14);
     }
 
-    public function testExtractString()
+    public function testExtractString(): void
     {
         $tok = new Token('"foo bar "', Token::TYPE_STRING);
         $this->assertEquals($tok->value, 'foo bar ');
@@ -64,7 +66,7 @@ class TokenTest extends TestCase
         $this->assertEquals($tok->value, 'cdefghijklmpqsuvwxyz');
     }
 
-    public function testExtractSymbol()
+    public function testExtractSymbol(): void
     {
         $tok = new Token('@foo', Token::TYPE_SYMBOL, Token::FLAG_SYMBOL_VARIABLE);
         $this->assertEquals($tok->value, 'foo');
@@ -82,7 +84,7 @@ class TokenTest extends TestCase
         $this->assertEquals($tok->value, '?');
     }
 
-    public function testInlineToken()
+    public function testInlineToken(): void
     {
         $token = new Token(" \r \n \t ");
         $this->assertEquals($token->getInlineToken(), ' \r \n \t ');

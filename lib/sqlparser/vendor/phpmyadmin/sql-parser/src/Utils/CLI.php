@@ -1,8 +1,6 @@
 <?php
 
-/**
- * CLI interface.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Utils;
 
@@ -10,56 +8,108 @@ use PhpMyAdmin\SqlParser\Context;
 use PhpMyAdmin\SqlParser\Lexer;
 use PhpMyAdmin\SqlParser\Parser;
 
+use function count;
+use function getopt;
+use function implode;
+use function in_array;
+use function rtrim;
+use function stream_get_contents;
+use function stream_select;
+use function var_export;
+
+use const STDIN;
+
 /**
  * CLI interface.
- *
- * @category   Exceptions
- *
- * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class CLI
 {
+    public function run(): int
+    {
+        $params = $this->getopt('', ['lint', 'highlight', 'tokenize']);
+        if ($params !== false) {
+            if (isset($params['lint'])) {
+                return $this->runLint(false);
+            }
+
+            if (isset($params['highlight'])) {
+                return $this->runHighlight(false);
+            }
+
+            if (isset($params['tokenize'])) {
+                return $this->runTokenize(false);
+            }
+        }
+
+        $this->usageLint(false);
+        $this->usageHighlight(false);
+        $this->usageTokenize(false);
+
+        return 1;
+    }
+
+    /**
+     * @param string[]|false[] $params
+     * @param string[]         $longopts
+     *
+     * @return void
+     */
     public function mergeLongOpts(&$params, &$longopts)
     {
         foreach ($longopts as $value) {
             $value = rtrim($value, ':');
-            if (isset($params[$value])) {
-                $params[$value[0]] = $params[$value];
+            if (! isset($params[$value])) {
+                continue;
             }
+
+            $params[$value[0]] = $params[$value];
         }
     }
 
-    public function usageHighlight()
+    /**
+     * @return void
+     */
+    public function usageHighlight(bool $isStandalone = true)
     {
-        echo "Usage: highlight-query --query SQL [--format html|cli|text] [--ansi]\n";
-        echo "       cat file.sql | highlight-query\n";
+        $command = $isStandalone ? 'highlight-query' : 'sql-parser --highlight';
+
+        echo 'Usage: ' . $command . ' --query SQL [--format html|cli|text] [--ansi]' . "\n";
+        echo '       cat file.sql | ' . $command . "\n";
     }
 
+    /**
+     * @param string   $opt
+     * @param string[] $long
+     *
+     * @return string[]|false[]|false
+     */
     public function getopt($opt, $long)
     {
         return getopt($opt, $long);
     }
 
+    /**
+     * @return mixed|false
+     */
     public function parseHighlight()
     {
-        $longopts = array(
+        $longopts = [
             'help',
             'query:',
             'format:',
-            'ansi'
-        );
-        $params = $this->getopt(
-            'hq:f:a',
-            $longopts
-        );
+            'ansi',
+        ];
+        $params = $this->getopt('hq:f:a', $longopts);
         if ($params === false) {
             return false;
         }
+
         $this->mergeLongOpts($params, $longopts);
         if (! isset($params['f'])) {
             $params['f'] = 'cli';
         }
-        if (! in_array($params['f'], array('html', 'cli', 'text'))) {
+
+        if (! in_array($params['f'], ['html', 'cli', 'text'])) {
             echo "ERROR: Invalid value for format!\n";
 
             return false;
@@ -68,148 +118,186 @@ class CLI
         return $params;
     }
 
-    public function runHighlight()
+    /**
+     * @return int
+     */
+    public function runHighlight(bool $isStandalone = true)
     {
         $params = $this->parseHighlight();
         if ($params === false) {
             return 1;
         }
+
         if (isset($params['h'])) {
-            $this->usageHighlight();
+            $this->usageHighlight($isStandalone);
 
             return 0;
         }
-        if (!isset($params['q'])) {
-            if ($stdIn = $this->readStdin()) {
+
+        if (! isset($params['q'])) {
+            $stdIn = $this->readStdin();
+
+            if ($stdIn) {
                 $params['q'] = $stdIn;
             }
         }
 
         if (isset($params['a'])) {
-            Context::setMode('ANSI_QUOTES');
+            Context::setMode(Context::SQL_MODE_ANSI_QUOTES);
         }
+
         if (isset($params['q'])) {
             echo Formatter::format(
                 $params['q'],
-                array('type' => $params['f'])
+                ['type' => $params['f']]
             );
             echo "\n";
 
             return 0;
         }
+
         echo "ERROR: Missing parameters!\n";
-        $this->usageHighlight();
+        $this->usageHighlight($isStandalone);
 
         return 1;
     }
 
-    public function usageLint()
+    /**
+     * @return void
+     */
+    public function usageLint(bool $isStandalone = true)
     {
-        echo "Usage: lint-query --query SQL [--ansi]\n";
-        echo "       cat file.sql | lint-query\n";
+        $command = $isStandalone ? 'lint-query' : 'sql-parser --lint';
+
+        echo 'Usage: ' . $command . ' --query SQL [--ansi]' . "\n";
+        echo '       cat file.sql | ' . $command . "\n";
     }
 
+    /**
+     * @return mixed
+     */
     public function parseLint()
     {
-        $longopts = array(
+        $longopts = [
             'help',
             'query:',
             'context:',
-            'ansi'
-        );
-        $params = $this->getopt(
-            'hq:c:a',
-            $longopts
-        );
+            'ansi',
+        ];
+        $params = $this->getopt('hq:c:a', $longopts);
         $this->mergeLongOpts($params, $longopts);
 
         return $params;
     }
 
-    public function runLint()
+    /**
+     * @return int
+     */
+    public function runLint(bool $isStandalone = true)
     {
         $params = $this->parseLint();
         if ($params === false) {
             return 1;
         }
+
         if (isset($params['h'])) {
-            $this->usageLint();
+            $this->usageLint($isStandalone);
 
             return 0;
         }
+
         if (isset($params['c'])) {
             Context::load($params['c']);
         }
-        if (!isset($params['q'])) {
-            if ($stdIn = $this->readStdin()) {
+
+        if (! isset($params['q'])) {
+            $stdIn = $this->readStdin();
+
+            if ($stdIn) {
                 $params['q'] = $stdIn;
             }
         }
+
         if (isset($params['a'])) {
-            Context::setMode('ANSI_QUOTES');
+            Context::setMode(Context::SQL_MODE_ANSI_QUOTES);
         }
 
         if (isset($params['q'])) {
             $lexer = new Lexer($params['q'], false);
             $parser = new Parser($lexer->list);
-            $errors = Error::get(array($lexer, $parser));
+            $errors = Error::get([$lexer, $parser]);
             if (count($errors) === 0) {
                 return 0;
             }
+
             $output = Error::format($errors);
             echo implode("\n", $output);
             echo "\n";
 
             return 10;
         }
+
         echo "ERROR: Missing parameters!\n";
-        $this->usageLint();
+        $this->usageLint($isStandalone);
 
         return 1;
     }
 
-    public function usageTokenize()
+    /**
+     * @return void
+     */
+    public function usageTokenize(bool $isStandalone = true)
     {
-        echo "Usage: tokenize-query --query SQL [--ansi]\n";
-        echo "       cat file.sql | tokenize-query\n";
+        $command = $isStandalone ? 'tokenize-query' : 'sql-parser --tokenize';
+
+        echo 'Usage: ' . $command . ' --query SQL [--ansi]' . "\n";
+        echo '       cat file.sql | ' . $command . "\n";
     }
 
+    /**
+     * @return mixed
+     */
     public function parseTokenize()
     {
-        $longopts = array(
+        $longopts = [
             'help',
             'query:',
-            'ansi'
-        );
-        $params = $this->getopt(
-            'hq:a',
-            $longopts
-        );
+            'ansi',
+        ];
+        $params = $this->getopt('hq:a', $longopts);
         $this->mergeLongOpts($params, $longopts);
 
         return $params;
     }
 
-    public function runTokenize()
+    /**
+     * @return int
+     */
+    public function runTokenize(bool $isStandalone = true)
     {
         $params = $this->parseTokenize();
         if ($params === false) {
             return 1;
         }
+
         if (isset($params['h'])) {
-            $this->usageTokenize();
+            $this->usageTokenize($isStandalone);
 
             return 0;
         }
-        if (!isset($params['q'])) {
-            if ($stdIn = $this->readStdin()) {
+
+        if (! isset($params['q'])) {
+            $stdIn = $this->readStdin();
+
+            if ($stdIn) {
                 $params['q'] = $stdIn;
             }
         }
 
         if (isset($params['a'])) {
-            Context::setMode('ANSI_QUOTES');
+            Context::setMode(Context::SQL_MODE_ANSI_QUOTES);
         }
+
         if (isset($params['q'])) {
             $lexer = new Lexer($params['q'], false);
             foreach ($lexer->list->tokens as $idx => $token) {
@@ -227,17 +315,21 @@ class CLI
 
             return 0;
         }
+
         echo "ERROR: Missing parameters!\n";
-        $this->usageTokenize();
+        $this->usageTokenize($isStandalone);
 
         return 1;
     }
 
+    /**
+     * @return string|false
+     */
     public function readStdin()
     {
-        $read = array(STDIN);
-        $write = array();
-        $except = array();
+        $read = [STDIN];
+        $write = [];
+        $except = [];
 
         // Assume there's nothing to be read from STDIN.
         $stdin = null;

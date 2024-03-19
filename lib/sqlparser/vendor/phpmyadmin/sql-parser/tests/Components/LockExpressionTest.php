@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Components;
 
 use PhpMyAdmin\SqlParser\Components\LockExpression;
@@ -8,7 +10,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class LockExpressionTest extends TestCase
 {
-    public function testParse()
+    public function testParse(): void
     {
         $component = LockExpression::parse(new Parser(), $this->getTokensList('table1 AS t1 READ LOCAL'));
         $this->assertNotNull($component->table);
@@ -17,7 +19,7 @@ class LockExpressionTest extends TestCase
         $this->assertEquals($component->type, 'READ LOCAL');
     }
 
-    public function testParse2()
+    public function testParse2(): void
     {
         $component = LockExpression::parse(new Parser(), $this->getTokensList('table1 LOW_PRIORITY WRITE'));
         $this->assertNotNull($component->table);
@@ -27,11 +29,8 @@ class LockExpressionTest extends TestCase
 
     /**
      * @dataProvider parseErrProvider
-     *
-     * @param mixed $expr
-     * @param mixed $error
      */
-    public function testParseErr($expr, $error)
+    public function testParseErr(string $expr, string $error): void
     {
         $parser = new Parser();
         LockExpression::parse($parser, $this->getTokensList($expr));
@@ -39,30 +38,33 @@ class LockExpressionTest extends TestCase
         $this->assertEquals($errors[0][0], $error);
     }
 
-    public function parseErrProvider()
+    /**
+     * @return string[][]
+     */
+    public function parseErrProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 'table1 AS t1',
                 'Unexpected end of LOCK expression.',
-            ),
-            array(
+            ],
+            [
                 'table1 AS t1 READ WRITE',
                 'Unexpected keyword.',
-            ),
-            array(
+            ],
+            [
                 'table1 AS t1 READ 2',
                 'Unexpected token.',
-            )
-        );
+            ],
+        ];
     }
 
-    public function testBuild()
+    public function testBuild(): void
     {
-        $component = array(
+        $component = [
             LockExpression::parse(new Parser(), $this->getTokensList('table1 AS t1 READ LOCAL')),
-            LockExpression::parse(new Parser(), $this->getTokensList('table2 LOW_PRIORITY WRITE'))
-        );
+            LockExpression::parse(new Parser(), $this->getTokensList('table2 LOW_PRIORITY WRITE')),
+        ];
         $this->assertEquals(
             LockExpression::build($component),
             'table1 AS `t1` READ LOCAL, table2 LOW_PRIORITY WRITE'

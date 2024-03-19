@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -8,18 +10,19 @@ class RestoreStatementTest extends TestCase
 {
     /**
      * @dataProvider restoreProvider
-     *
-     * @param mixed $test
      */
-    public function testRestore($test)
+    public function testRestore(string $test): void
     {
         $this->runParserTest($test);
     }
 
-    public function restoreProvider()
+    /**
+     * @return string[][]
+     */
+    public function restoreProvider(): array
     {
-        return array(
-            array('parser/parseRestore')
-        );
+        return [
+            ['parser/parseRestore'],
+        ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -8,18 +10,37 @@ class ExplainStatementTest extends TestCase
 {
     /**
      * @dataProvider explainProvider
-     *
-     * @param mixed $test
      */
-    public function testExplain($test)
+    public function testExplain(string $test): void
     {
         $this->runParserTest($test);
     }
 
-    public function explainProvider()
+    /**
+     * @return string[][]
+     */
+    public function explainProvider(): array
     {
-        return array(
-            array('parser/parseExplain')
-        );
+        return [
+            ['parser/parseExplain'],
+            ['parser/parseExplain1'],
+            ['parser/parseExplain2'],
+            ['parser/parseExplain3'],
+            ['parser/parseExplain4'],
+            ['parser/parseExplain5'],
+            ['parser/parseExplain6'],
+            ['parser/parseExplain7'],
+            ['parser/parseExplain8'],
+            ['parser/parseExplain9'],
+            ['parser/parseExplain10'],
+            ['parser/parseExplain11'],
+            ['parser/parseExplain12'],
+            ['parser/parseExplain13'],
+            ['parser/parseExplain14'],
+            ['parser/parseExplainErr'],
+            ['parser/parseExplainErr1'],
+            ['parser/parseExplainErr2'],
+            ['parser/parseExplainErr3'],
+        ];
     }
 }

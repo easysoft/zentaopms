@@ -1,1 +1,154 @@
-a:4:{s:5:"query";s:30:"PURGE LOGS TO 'mysql-bin.010';";s:5:"lexer";O:26:"PhpMyAdmin\SqlParser\Lexer":8:{s:3:"str";s:30:"PURGE LOGS TO 'mysql-bin.010';";s:3:"len";i:30;s:4:"last";i:30;s:4:"list";O:31:"PhpMyAdmin\SqlParser\TokensList":3:{s:6:"tokens";a:9:{i:0;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:5:"PURGE";s:5:"value";s:5:"PURGE";s:7:"keyword";s:5:"PURGE";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:0;}i:1;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:5;}i:2;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:4:"LOGS";s:5:"value";s:4:"LOGS";s:7:"keyword";s:4:"LOGS";s:4:"type";i:1;s:5:"flags";i:1;s:8:"position";i:6;}i:3;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:10;}i:4;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:2:"TO";s:5:"value";s:2:"TO";s:7:"keyword";s:2:"TO";s:4:"type";i:1;s:5:"flags";i:3;s:8:"position";i:11;}i:5;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:" ";s:5:"value";s:1:" ";s:7:"keyword";N;s:4:"type";i:3;s:5:"flags";i:0;s:8:"position";i:13;}i:6;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:15:"'mysql-bin.010'";s:5:"value";s:13:"mysql-bin.010";s:7:"keyword";N;s:4:"type";i:7;s:5:"flags";i:1;s:8:"position";i:14;}i:7;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";s:1:";";s:5:"value";s:1:";";s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";i:29;}i:8;O:26:"PhpMyAdmin\SqlParser\Token":6:{s:5:"token";N;s:5:"value";N;s:7:"keyword";N;s:4:"type";i:9;s:5:"flags";i:0;s:8:"position";N;}}s:5:"count";i:9;s:3:"idx";i:9;}s:9:"delimiter";s:1:";";s:12:"delimiterLen";i:1;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"parser";O:27:"PhpMyAdmin\SqlParser\Parser":5:{s:4:"list";r:7;s:10:"statements";a:1:{i:0;O:46:"PhpMyAdmin\SqlParser\Statements\PurgeStatement":6:{s:8:"log_type";N;s:10:"end_option";N;s:8:"end_expr";N;s:7:"options";N;s:5:"first";i:0;s:4:"last";i:7;}}s:8:"brackets";i:0;s:6:"strict";b:0;s:6:"errors";a:0:{}}s:6:"errors";a:2:{s:5:"lexer";a:0:{}s:6:"parser";a:4:{i:0;a:3:{i:0;s:18:"Unexpected keyword";i:1;r:23;i:2;i:0;}i:1;a:3:{i:0;s:18:"Unexpected keyword";i:1;r:37;i:2;i:0;}i:2;a:3:{i:0;s:17:"Unexpected token.";i:1;r:51;i:2;i:0;}i:3;a:3:{i:0;s:17:"Unexpected token.";i:1;r:51;i:2;i:0;}}}}
+{
+    "query": "PURGE LOGS TO 'mysql-bin.010';",
+    "lexer": {
+        "@type": "PhpMyAdmin\\SqlParser\\Lexer",
+        "str": "PURGE LOGS TO 'mysql-bin.010';",
+        "len": 30,
+        "last": 30,
+        "list": {
+            "@type": "PhpMyAdmin\\SqlParser\\TokensList",
+            "tokens": [
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "PURGE",
+                    "value": "PURGE",
+                    "keyword": "PURGE",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 0
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 5
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "LOGS",
+                    "value": "LOGS",
+                    "keyword": "LOGS",
+                    "type": 1,
+                    "flags": 1,
+                    "position": 6
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 10
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "TO",
+                    "value": "TO",
+                    "keyword": "TO",
+                    "type": 1,
+                    "flags": 3,
+                    "position": 11
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": " ",
+                    "value": " ",
+                    "keyword": null,
+                    "type": 3,
+                    "flags": 0,
+                    "position": 13
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": "'mysql-bin.010'",
+                    "value": "mysql-bin.010",
+                    "keyword": null,
+                    "type": 7,
+                    "flags": 1,
+                    "position": 14
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": ";",
+                    "value": ";",
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": 29
+                },
+                {
+                    "@type": "PhpMyAdmin\\SqlParser\\Token",
+                    "token": null,
+                    "value": null,
+                    "keyword": null,
+                    "type": 9,
+                    "flags": 0,
+                    "position": null
+                }
+            ],
+            "count": 9,
+            "idx": 9
+        },
+        "delimiter": ";",
+        "delimiterLen": 1,
+        "strict": false,
+        "errors": []
+    },
+    "parser": {
+        "@type": "PhpMyAdmin\\SqlParser\\Parser",
+        "list": {
+            "@type": "@1"
+        },
+        "statements": [
+            {
+                "@type": "PhpMyAdmin\\SqlParser\\Statements\\PurgeStatement",
+                "log_type": null,
+                "end_option": null,
+                "end_expr": null,
+                "options": null,
+                "first": 0,
+                "last": 7
+            }
+        ],
+        "brackets": 0,
+        "strict": false,
+        "errors": []
+    },
+    "errors": {
+        "lexer": [],
+        "parser": [
+            [
+                "Unexpected keyword",
+                {
+                    "@type": "@4"
+                },
+                0
+            ],
+            [
+                "Unexpected keyword",
+                {
+                    "@type": "@6"
+                },
+                0
+            ],
+            [
+                "Unexpected token.",
+                {
+                    "@type": "@8"
+                },
+                0
+            ],
+            [
+                "Unexpected token.",
+                {
+                    "@type": "@8"
+                },
+                0
+            ]
+        ]
+    }
+}
