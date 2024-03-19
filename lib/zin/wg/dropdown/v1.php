@@ -20,7 +20,8 @@ class dropdown extends wg
         'id?: string',
         'menuClass?: string',
         'hasIcons?: bool',
-        'staticMenu?: bool'
+        'staticMenu?: bool',
+        'triggerProps?: array'
     );
 
     protected static array $defineBlocks = array
@@ -32,7 +33,7 @@ class dropdown extends wg
 
     protected function build(): array
     {
-        list($items, $placement, $strategy, $offset, $flip, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'arrow', 'trigger', 'menu', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu'));
+        list($items, $placement, $strategy, $offset, $flip, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu, $triggerProps) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'arrow', 'trigger', 'menu', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu', 'triggerProps'));
 
         $triggerBlock = $this->block('trigger');
         $menu         = $this->block('menu');
@@ -48,9 +49,7 @@ class dropdown extends wg
         if($triggerBlock instanceof node)
         {
             if($triggerBlock instanceof btn) $triggerBlock->setDefaultProps(array('caret' => true));
-            $triggerBlock->setProp($this->getRestProps());
-
-            $triggerProps = array
+            $triggerProps = array_merge(array
             (
                 'data-target'         => $triggerBlock->hasProp('target', 'href') ? null : $target,
                 'data-toggle'         => 'dropdown',
@@ -60,7 +59,7 @@ class dropdown extends wg
                 'data-flip'           => $flip,
                 'data-arrow'          => $arrow,
                 'data-trigger'        => $trigger
-            );
+            ), is_array($triggerProps) ? $triggerProps : array());
             $triggerBlock->setProp($triggerProps);
 
             $triggerID = $triggerBlock->id();
@@ -147,7 +146,8 @@ class dropdown extends wg
                         'className'      => $menuClass,
                         'hasIcons'       => $hasIcons,
                         'menu'           => $menuProps
-                    ))
+                    )),
+                    set($this->getRestProps())
                 );
             }
         }
