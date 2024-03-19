@@ -1495,6 +1495,56 @@ class pivotModel extends model
     }
 
     /**
+     * Get select fields from settings.
+     *
+     * @param  array    $settings
+     * @access public
+     * @return array
+     */
+    public function getSelectFieldsFromSettings($settings)
+    {
+        $fields = array();
+        foreach($settings as $key => $value)
+        {
+            if(strpos($key, 'group') !== false && !empty($value)) $fields[] = $value;
+        }
+
+        if(isset($settings['columns']))
+        {
+            $columns = $settings['columns'];
+            foreach($columns as $column)
+            {
+                $columnField = $column['field'];
+                $columnSlice = zget($column, 'slice', 'noSlice');
+                $fields[] = $columnField;
+                if($columnSlice != 'noSlice') $fields[] = $columnSlice;
+            }
+        }
+
+        return array_filter(array_unique($fields));
+    }
+
+    /**
+     * Filter field settings with select fields.
+     *
+     * @param  array    $fieldSettings
+     * @param  array    $selectFields
+     * @access public
+     * @return array
+     */
+    public function filterWithSelectFields($fieldSettings, $selectFields)
+    {
+        $selectFieldSettings = array();
+        foreach($fieldSettings as $fieldSetting)
+        {
+            $field = zget($fieldSetting, 'field', '');
+            if(in_array($field, $selectFields)) $selectFieldSettings[$field] = $fieldSetting;
+        }
+
+        return $selectFieldSettings;
+    }
+
+    /**
      * Implode group keys of record.
      *
      * @param  array  $groups
@@ -1684,7 +1734,7 @@ class pivotModel extends model
      * @access public
      * @return string
      */
-    public function appendWhereFilterToSql($sql, $filters)
+    public function appendSelectAndWhereFilterToSql($sql, $fields, $filters)
     {
         $connectSQL = '';
         if(!empty($filters) && !isset($filters[0]['from']))
@@ -1699,7 +1749,15 @@ class pivotModel extends model
             $connectSQL .= " where $whereStr";
         }
 
-        $sql = "select * from ($sql) tt" . $connectSQL;
+        $fieldWithAlias = array();
+        foreach($fields as $field)
+        {
+            $fieldWithAlias[] = "tt.`$field`";
+        }
+
+        $fieldStr = implode(', ', $fieldWithAlias);
+
+        $sql = "select $fieldStr from ($sql) tt" . $connectSQL;
 
         return $sql;
     }
@@ -1946,11 +2004,13 @@ class pivotModel extends model
     {
         $groups = $this->getGroupsFromSettings($settings);
         $cols   = $this->generateTableCols($fields, $groups, $langs);
+        $selectFields = $this->getSelectFieldsFromSettings($settings);
+        $fields = $this->filterWithSelectFields($fields, $selectFields);
 
         /* Replace the variable with the default value. */
         $sql = $this->initVarFilter($filters, $sql);
         $sql = $this->trimSemicolon($sql);
-        $sql = $this->appendWhereFilterToSql($sql, $filters);
+        $sql = $this->appendSelectAndWhereFilterToSql($sql, $selectFields, $filters);
 
         $records = $this->dao->query($sql)->fetchAll();
         $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql);
