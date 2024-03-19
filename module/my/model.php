@@ -537,6 +537,7 @@ class myModel extends model
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList;
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array_keys($products), 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        unset($this->config->bug->search['fields']['branch']);
 
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
@@ -664,7 +665,7 @@ class myModel extends model
         $this->config->product->search['params']['product']['values'] = $products;
         $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
         $this->config->product->search['fields']['title']             = $this->lang->story->title;
-        unset($this->config->product->search['fields']['module']);
+        unset($this->config->product->search['fields']['module'], $this->config->product->search['fields']['branch']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
@@ -741,6 +742,7 @@ class myModel extends model
         unset($this->config->product->search['fields']['plan']);
         unset($this->config->product->search['fields']['stage']);
         unset($this->config->product->search['fields']['module']);
+        unset($this->config->product->search['fields']['branch']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
