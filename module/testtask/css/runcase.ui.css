@@ -9,3 +9,5 @@
 #caseStepForm tbody > tr > td.real-td {padding: 0.25rem 0px;}
 #caseStepForm tbody > tr > td .inputGroup {line-height: 1.5rem;}
 #caseStepForm .step-item-id {color: var(--color-gray-500);}
+
+.modal[id^='fileModal'] .modal-dialog {max-height: 100%;}
