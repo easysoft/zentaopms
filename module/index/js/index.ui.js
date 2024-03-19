@@ -33,7 +33,7 @@ function triggerAppEvent(code, event, args)
 function isOldPage(url)
 {
     if(typeof url !== 'object') url = $.parseLink(url);
-    return apps.oldPages.has(`${url.moduleName}-${url.methodName}`.toLowerCase());
+    return apps.oldPages.has(url.moduleName.toLowerCase()) || apps.oldPages.has(`${url.moduleName}-${url.methodName}`.toLowerCase());
 }
 
 /**
