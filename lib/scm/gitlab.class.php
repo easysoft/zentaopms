@@ -994,4 +994,34 @@ class gitlabRepo
         $api = $this->root . $target . '?' . http_build_query($params);
         return $api;
     }
+
+    /**
+     * 通过API创建合并请求。
+     * Create mr by api.
+     *
+     *  @param object $MR
+     *  @param string $openID
+     *  @param string $assignee
+     *  @access public
+     *  @return object|null
+     */
+    public function createMR(object $MR, string $openID, string $assignee): object|null
+    {
+        $MRObject = new stdclass();
+        $MRObject->title                = $MR->title;
+        $MRObject->target_project_id    = $MR->targetProject;
+        $MRObject->source_branch        = $MR->sourceBranch;
+        $MRObject->target_branch        = $MR->targetBranch;
+        $MRObject->description          = $MR->description;
+        $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
+        $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
+        if(!empty($assignee)) $MRObject->assignee_ids = $assignee;
+
+        global $app;
+        $url = str_replace('repository/', '', $this->root);
+        $url .= "merge_requests?private_token={$this->token}";
+        if(!$app->user->admin) $url .= "&sudo={$openID}";
+        return json_decode(commonModel::http($url, $MRObject));
+
+    }
 }

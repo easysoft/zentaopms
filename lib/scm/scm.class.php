@@ -311,6 +311,20 @@ class scm
     {
         return $this->engine->getFilesByCommit($revision);
     }
+
+    /**
+     * Create mr by api.
+     *
+     * @param  object $MR
+     * @param  string $openID
+     * @param  string $assignee
+     * @access public
+     * @return null|object
+     */
+    public function createMR($MR, $openID = '', $assignee = '')
+    {
+        return $this->engine->createMR($MR, $openID, $assignee);
+    }
 }
 
 /**

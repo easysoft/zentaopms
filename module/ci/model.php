@@ -294,7 +294,7 @@ class ciModel extends model
         }
         elseif(isset($relateMR->synced) && $relateMR->synced == '0')
         {
-            $rawMR = $this->loadModel('mr')->apiCreateMR($relateMR->hostID, $relateMR->sourceProject, $relateMR);
+            $rawMR = $this->loadModel('mr')->apiCreateMR($relateMR->hostID, $relateMR);
             if(!empty($rawMR->iid))
             {
                 $newMR = new stdclass();

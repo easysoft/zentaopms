@@ -129,6 +129,8 @@ $lang->mr->apiErrorMap[6] = "Invalid PullRequest: There are no changes between t
 $lang->mr->apiErrorMap[7] = "/(user doesn't have access to repo).*/";
 $lang->mr->apiErrorMap[8] = "/(git apply).*/";
 
+
+
 $lang->mr->errorLang[1] = 'The source project branch cannot be the same as the target project branch';
 $lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: ID%u';
 $lang->mr->errorLang[3] = "Unauthorized";
@@ -137,6 +139,8 @@ $lang->mr->errorLang[5] = 'Another open merge request already exists for this so
 $lang->mr->errorLang[6] = 'The source project branch cannot be the same as the target project branch';
 $lang->mr->errorLang[7] = "user doesn't have access to repo";
 $lang->mr->errorLang[8] = 'The source branch and target branch cannot be merged';
+
+
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";

@@ -215,7 +215,7 @@ class mrModel extends model
         $MRID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('mr', $MRID, 'opened');
 
-        $rawMR = $this->apiCreateMR($MR->hostID, $MR->sourceProject, $MR);
+        $rawMR = $this->apiCreateMR($MR->hostID, $MR);
 
         /**
          * Another open merge request already exists for this source branch.
@@ -521,53 +521,24 @@ class mrModel extends model
      * Create MR by API.
      *
      * @param  int    $hostID
-     * @param  string $projectID
      * @param  object $MR
      * @access public
      * @return object|null
      */
-    public function apiCreateMR(int $hostID, string $projectID, object $MR): object|null
+    public function apiCreateMR(int $hostID, object $MR): object|null
     {
-        $host = $this->loadModel('pipeline')->getByID($hostID);
-        if(!$host) return null;
+        $repo = $this->loadModel('repo')->getByID($MR->repoID);
+        if(!$repo) return null;
 
-        if($MR->assignee) $assignee = $this->pipeline->getOpenIdByAccount($hostID, $host->type, $MR->assignee);
+        $openID   = $this->loadModel('pipeline')->getOpenIdByAccount($hostID, strtolower($repo->SCM), $this->app->user->account);
+        $assignee = '';
+        if($MR->assignee) $assignee = $this->pipeline->getOpenIdByAccount($hostID, strtolower($repo->SCM), $MR->assignee);
 
-        $MRObject = new stdclass();
-        $MRObject->title = $MR->title;
-        if($host->type == 'gitlab')
-        {
-            $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests");
-
-            $MRObject->target_project_id    = $MR->targetProject;
-            $MRObject->source_branch        = $MR->sourceBranch;
-            $MRObject->target_branch        = $MR->targetBranch;
-            $MRObject->description          = $MR->description;
-            $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
-            $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
-            if(!empty($assignee)) $MRObject->assignee_ids = $assignee;
-            return json_decode(commonModel::http($url, $MRObject));
-        }
-        elseif(in_array($host->type, array('gitea', 'gogs')))
-        {
-            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls");
-
-            $MRObject->head = $MR->sourceBranch;
-            $MRObject->base = $MR->targetBranch;
-            $MRObject->body = $MR->description;
-            if(!empty($assignee)) $MRObject->assignee = $assignee;
-
-            $mergeResult = json_decode(commonModel::http($url, $MRObject));
-            if(isset($mergeResult->number)) $mergeResult->iid = $mergeResult->number;
-            if(isset($mergeResult->mergeable))
-            {
-                if($mergeResult->mergeable) $mergeResult->merge_status = 'can_be_merged';
-                if(!$mergeResult->mergeable) $mergeResult->merge_status = 'cannot_be_merged';
-            }
-            if(isset($mergeResult->state) && $mergeResult->state == 'open') $mergeResult->state = 'opened';
-            if(isset($mergeResult->merged) && $mergeResult->merged) $mergeResult->state = 'merged';
-            return $mergeResult;
-        }
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $result = $scm->createMR($MR, $assignee, $openID);
+        if(!empty($result->message)) $result->message = $this->convertApiError($result->message);
+        return $result;
     }
 
     /**

@@ -896,4 +896,37 @@ class gitfoxRepo
         if(isset($project->git_url)) $url->http = $project->git_url;
         return $url;
     }
+
+    /**
+     * 通过API创建合并请求。
+     * Create mr by api.
+     *
+     *  @param  object $MR
+     *  @param  string $openID
+     *  @access public
+     *  @return object|null
+     */
+    public function createMR(object $MR, string $openID): object|null
+    {
+        $MRObject = new stdclass();
+        $MRObject->title = $MR->title;
+        $MRObject->source_branch  = $MR->sourceBranch;
+        $MRObject->target_branch  = $MR->targetBranch;
+        $MRObject->description  = $MR->description;
+
+        global $app;
+        $url = "{$this->root}pullreq";
+        if(!$app->user->admin) $url .= "?sudo={$openID}";
+
+        $MR = json_decode(commonModel::http($url, $MRObject, array(), array("Authorization: Bearer {$this->token}"), 'json'));
+        if(isset($MR->number)) $MR->iid = $MR->number;
+        if(isset($MR->merge_check_status))
+        {
+            if(!$MR->merge_check_status) $MR->merge_status = 'can_be_merged';
+            if($MR->merge_check_status)  $MR->merge_status = 'cannot_be_merged';
+        }
+        if(isset($MR->state)  && $MR->state == 'open') $MR->state = 'opened';
+        if(isset($MR->merged) && $MR->merged)          $MR->state = 'merged';
+        return $MR;
+    }
 }

@@ -47,7 +47,7 @@ function onProjectChange()
         },
     });
 
-    getBranchPriv(projectID);
+    if(repo.SCM != 'GitFox') getBranchPriv(projectID);
 }
 
 function onSourceProjectChange()
