@@ -10,6 +10,11 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+if(in_array("{$module}-{$method}", $config->index->oldPages))
+{
+    include '../view/ajaxgetdropmenu.html.php';
+    return;
+}
 
 /**
  * 获取项目所属分组。

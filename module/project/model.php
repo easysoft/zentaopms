@@ -2076,6 +2076,7 @@ class projectModel extends model
         /* Set secondary menu. */
         $this->projectTao->setMenuByModel($project->model);
         $this->projectTao->setMenuByProduct($projectID, $project->hasProduct, $project->model);
+        $this->lang->switcherMenu = $this->getSwitcher($projectID, $moduleName, $methodName);
 
         /* Replace url params. */
         common::setMenuVars('project', $projectID);
@@ -2487,5 +2488,41 @@ class projectModel extends model
         $project = $this->dao->select('end')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
         $this->dao->update(TABLE_PROJECT)->set('firstEnd')->eq(helper::isZeroDate($project->end) ? null : $project->end)->where('id')->eq($projectID)->exec();
         return !dao::isError();
+    }
+
+    /*
+     * 获取旧页面1.5级下拉。
+     * Get project swapper.
+     *
+     * @param  int     $projectID
+     * @param  string  $currentModule
+     * @param  string  $currentMethod
+     * @access public
+     * @return string
+     */
+    public function getSwitcher(int $projectID, string $currentModule, string $currentMethod): string
+    {
+        if($currentModule == 'project' && $currentMethod == 'browse') return '';
+
+        $currentProjectName = $this->lang->project->common;
+        if($projectID)
+        {
+            $currentProject     = $this->getById($projectID);
+            $currentProjectName = $currentProject->name;
+        }
+
+        if($this->app->viewType == 'mhtml' && $projectID)
+        {
+            $output  = $this->lang->project->common . $this->lang->colon;
+            $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '')\">{$currentProjectName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            return $output;
+        }
+
+        $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'><span class='text'>{$currentProjectName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
+
+        return $output;
     }
 }
