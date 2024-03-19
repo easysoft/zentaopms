@@ -88,7 +88,7 @@ if(!$task->fromBug && $task->story)
         'objectID' => $task->storyID,
         'toolbar'  => $task->needConfirm ? array
         (
-            array('text' => $lang->task->storyChange, 'class' => 'ghost pointer-events-none'),
+            array('text' => $lang->task->storyChange, 'class' => 'ghost pointer-events-none text-danger'),
             array('text' => $lang->confirm, 'type' => 'primary', 'url' => createLink('task', 'confirmStoryChange', "taskID={$task->id}"))
         ) : null,
         'sections' => array
