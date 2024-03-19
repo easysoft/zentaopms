@@ -31,7 +31,7 @@ if(!$isInModal && hasPriv('testcase', 'create', $case))
 
 /* 初始化底部操作栏。Init bottom actions. */
 $actions = $this->loadModel('common')->buildOperateMenu($case);
-$actions = array_merge($actions['mainActions'], $actions['suffixActions']);
+$actions = $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
 foreach($actions as $index => $action)
 {
     if(!isset($action['url'])) continue;
