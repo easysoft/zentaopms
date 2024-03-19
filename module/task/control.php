@@ -364,6 +364,7 @@ class task extends control
                 foreach($bug->files as $file) $task->files[] = $file;
             }
             $this->view->fromBug = $bug;
+            if($this->app->tab == 'qa') $this->view->productID = $bug->product;
         }
         else
         {
