@@ -1376,6 +1376,7 @@ class storyModel extends model
         {
             $this->dao->update(TABLE_STORY)
                  ->set('parent')->eq($storyID)
+                 ->set('parentVersion')->eq($oldStory->version)
                  ->set('top')->eq($oldStory->top)
                  ->where('id')->eq($childStoryID)
                  ->exec();
@@ -2539,23 +2540,12 @@ class storyModel extends model
                 ->andWhere('product')->eq($productID)
                 ->andWhere('type')->eq('requirement')
                 ->andWhere('status')->eq('active')
+                ->andWhere('isParent')->eq('0')
                 ->andWhere('grade')->in(array_keys($URGradePairs))
                 ->fetchAll('id');
 
-            $parents = array();
-            foreach($requirements as $requirement) $parents[$requirement->parent] = $requirement->parent;
-
             $requirementPairs = array();
-            foreach($requirements as $id => $requirement)
-            {
-                if(isset($parents[$requirement->id]))
-                {
-                    unset($requirement[$id]);
-                    continue;
-                }
-
-                $requirementPairs[$requirement->id] = isset($URGradePairs[$requirement->grade]) ? '(' . $URGradePairs[$requirement->grade] . ') ' . $requirement->title : $requirement->title;
-            }
+            foreach($requirements as $requirement) $requirementPairs[$requirement->id] = isset($URGradePairs[$requirement->grade]) ? '(' . $URGradePairs[$requirement->grade] . ') ' . $requirement->title : $requirement->title;
 
             $childIdList = $this->getAllChildId($storyID);
             $stories = $this->dao->select('id, grade, title')->from(TABLE_STORY)
@@ -2574,8 +2564,47 @@ class storyModel extends model
 
             return array(0 => '') + $requirementPairs + $storyPairs;
         }
+        elseif($storyType == 'requirement')
+        {
+            return $this->getRequirementParents($productID, $appendedStories, $storyType, $storyID);
+        }
+        elseif($storyType == 'epic')
+        {
+            return $this->getEpicParents($productID, $appendedStories, $storyType, $storyID);
+        }
+    }
 
-        return array(0 => '');
+    /**
+     * 获取用户需求的父需求键值对。
+     * Get requirement parents.
+     *
+     * @param  int        $productID
+     * @param  string|int $appendedStories
+     * @param  string     $storyType
+     * @param  int        $storyID
+     * @access public
+     * @return array
+     */
+    public function getRequirementParents(int $productID, string|int $appendedStories = '', string $storyType = 'requirement', int $storyID = 0): array
+    {
+        $lastGrade    = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->andWhere('status')->eq('enable')->orderBy('grade_desc')->limit(1)->fetch('grade');
+        $URGradePairs = $this->getGradePairs('requirement');
+        $childIdList  = $this->getAllChildId($storyID);
+        $requirements = $this->dao->select('id, parent, grade, title')->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->andWhere('type')->eq('requirement')
+            ->andWhere('status')->eq('active')
+            ->andWhere('grade')->in(array_keys($URGradePairs))
+            ->andWhere('grade')->ne($lastGrade)
+            ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
+            ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
+            ->fetchAll('id');
+
+        $requirementPairs = array();
+        foreach($requirements as $requirement) $requirementPairs[$requirement->id] = isset($URGradePairs[$requirement->grade]) ? '(' . $URGradePairs[$requirement->grade] . ') ' . $requirement->title : $requirement->title;
+
+        return $requirementPairs;
     }
 
     /**
@@ -4715,21 +4744,18 @@ class storyModel extends model
         if(!$story) return $this->getGradePairs($storyType, 'grade', 'grade');
 
         $gradeOptions = array();
-        if($storyType == 'story')
+        if($storyType != $story->type)
         {
-            if($story->type == 'requirement')
-            {
-                $gradeOptions = $this->getGradePairs($storyType, 'grade', 'grade');
-            }
-            else
-            {
-                $gradeOptions = $this->dao->select('grade')->from(TABLE_STORYGRADE)
-                    ->where('type')->eq($storyType)
-                    ->andWhere('grade')->gt($story->grade)
-                    ->andWhere('status')->eq('enable')
-                    ->orderBy('grade_asc')
-                    ->fetchPairs();
-            }
+            $gradeOptions = $this->getGradePairs($storyType, 'grade', 'grade');
+        }
+        else
+        {
+            $gradeOptions = $this->dao->select('grade')->from(TABLE_STORYGRADE)
+                ->where('type')->eq($storyType)
+                ->andWhere('grade')->gt($story->grade)
+                ->andWhere('status')->eq('enable')
+                ->orderBy('grade_asc')
+                ->fetchPairs();
         }
 
         return $gradeOptions;

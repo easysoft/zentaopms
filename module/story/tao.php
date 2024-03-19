@@ -844,6 +844,7 @@ class storyTao extends storyModel
             $parentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
             $newTop      = $parentStory->top;
             $children    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+            $this->dao->update(TABLE_STORY)->set('parentVersion')->eq($parentStory->version)->where('id')->eq($storyID)->exec();
             $this->dao->update(TABLE_STORY)
                 ->set('isParent')->eq('1')
                 ->set('childStories')->eq(implode(',', $children))

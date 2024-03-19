@@ -26,6 +26,7 @@ CREATE TABLE `zt_storygrade` (
 ALTER TABLE `zt_story` ADD `grade` smallint(6) NOT NULL AFTER `parent`;
 ALTER TABLE `zt_story` ADD `top` mediumint NOT NULL DEFAULT '0' AFTER `parent`;
 ALTER TABLE `zt_story` ADD `isParent` enum('0','1') NOT NULL DEFAULT '0' AFTER `parent`;
+ALTER TABLE `zt_story` ADD `parentVersion` smallint NOT NULL DEFAULT '0' AFTER `version`;
 update zt_story set isParent = 1 where parent = -1;
 update zt_story set grade = 1, parent = 0, top = id where type != 'story';
 update zt_story set grade = 1, parent = 0, top = id where type = 'story' and parent <= 0;
