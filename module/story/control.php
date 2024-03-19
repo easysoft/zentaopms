@@ -546,6 +546,7 @@ class story extends control
         $this->view->releases   = $this->loadModel('release')->getStoryReleases($storyID);
         $this->view->story      = $story;
         $this->view->product    = $product;
+        $this->view->gradePairs = $this->story->getGradePairs($story->type, 'all');
         $this->view->showGrade  = $this->story->showGrade($story->type);
         $this->view->actions    = $this->action->getList('story', $storyID);
 

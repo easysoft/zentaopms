@@ -289,7 +289,7 @@ detailBody
                     $showGrade ? item
                     (
                         set::name($lang->story->grade),
-                        $story->grade
+                        zget($gradePairs, $story->grade)
                     ) : null,
                     ($story->parent != -1 and !$hiddenPlan) ? item
                     (

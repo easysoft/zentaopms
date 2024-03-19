@@ -326,6 +326,7 @@ $lang->story->errorNotSubdivide     = "状态不是激活，或者阶段不是�
 $lang->story->errorEmptyReviewedBy  = "『{$lang->story->reviewers}』不能为空。";
 $lang->story->mustChooseResult      = '必须选择评审意见';
 $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
+$lang->story->noEpic                = "暂时没有{$lang->ERCommon}。";
 $lang->story->noStory               = "暂时没有{$lang->SRCommon}。";
 $lang->story->noRequirement         = "暂时没有{$lang->URCommon}。";
 $lang->story->ignoreChangeStage     = "{$lang->SRCommon} %s 状态为草稿或已关闭，本次操作已被过滤。";

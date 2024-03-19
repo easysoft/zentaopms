@@ -326,6 +326,7 @@ $lang->story->errorNotSubdivide    = "If the status is not active, or the stage 
 $lang->story->errorEmptyReviewedBy = "『{$lang->story->reviewers}』canot be blank.";
 $lang->story->mustChooseResult     = 'Select Result';
 $lang->story->mustChoosePreVersion = 'Select a version to revert to.';
+$lang->story->noEpic               = "No Epics.";
 $lang->story->noStory              = 'No stories yet. ';
 $lang->story->noRequirement        = 'No requirements yet. ';
 $lang->story->ignoreChangeStage    = 'The status of %s is Draft or Closed. This operation has been filtered.';

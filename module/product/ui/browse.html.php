@@ -346,6 +346,10 @@ $fnGenerateSideBar();
 $footToolbar = $fnGenerateFootToolbar();
 $sortLink    = createLink('product', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&storyType={$storyType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID");
 if($this->app->rawModule == 'projectstory') $sortLink = createLink('projectstory', 'story', "projectID={$projectID}&productID={$productID}&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+
+$emptyTip = $lang->story->noStory;
+if($storyType == 'requirement') $emptyTip = $lang->story->noRequirement;
+if($storyType == 'epic')        $emptyTip = $lang->story->noEpic;
 dtable
 (
     set::id('stories'),
@@ -360,9 +364,9 @@ dtable
     set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
     set::footPager(usePager()),
     set::footToolbar($footToolbar),
-    set::emptyTip($storyType == 'story' ? $lang->story->noStory : $lang->story->noRequirement),
+    set::emptyTip($emptyTip),
     set::createTip($lang->story->create),
-    set::createLink(hasPriv($storyType, 'create') ? createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
+    set::createLink(hasPriv($storyType, 'create') ? createLink($storyType, 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
 );
 
 modal(set::id('#batchUnlinkStoryBox'));
