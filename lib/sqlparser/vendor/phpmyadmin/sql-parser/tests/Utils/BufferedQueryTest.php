@@ -1,45 +1,50 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Utils;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
 use PhpMyAdmin\SqlParser\Utils\BufferedQuery;
 
+use function count;
+use function str_split;
+
 class BufferedQueryTest extends TestCase
 {
     /**
-     * @dataProvider extractProvider
+     * @param array<string, bool> $options
+     * @param string[]            $expected
+     * @psalm-param array{delimiter?: non-empty-string, parse_delimiter?: bool, add_delimiter?: bool} $options
+     * @psalm-param positive-int $chunkSize
      *
-     * @param mixed $query
-     * @param mixed $chunkSize
+     * @dataProvider extractProvider
      */
     public function testExtract(
-        $query,
-        $chunkSize,
+        string $query,
+        int $chunkSize,
         array $options,
         array $expected
-    ) {
+    ): void {
         $chunks = str_split($query, $chunkSize);
         $count = count($chunks);
 
         /**
          * The array of extracted statements.
-         *
-         * @var array
          */
-        $statements = array();
+        $statements = [];
 
         /**
          * The `BufferedQuery` instance used for extraction.
-         *
-         * @var BufferedQuery
          */
         $bq = new BufferedQuery('', $options);
 
         // Feeding chunks and extracting queries.
         $i = 0;
         while ($i < $count) {
-            if ($stmt = $bq->extract()) {
+            $stmt = $bq->extract();
+
+            if ($stmt) {
                 $statements[] = $stmt;
             } else {
                 $bq->query .= $chunks[$i++];
@@ -54,7 +59,11 @@ class BufferedQueryTest extends TestCase
         $this->assertEquals($expected, $statements);
     }
 
-    public function extractProvider()
+    /**
+     * @return array<int, array<int, int|string|string[]|bool[]>>
+     * @psalm-return list<array{string, positive-int, array{parse_delimiter: bool, add_delimiter: bool}, string[]}>
+     */
+    public function extractProvider(): array
     {
         $query =
             '/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;' . "\n" .
@@ -68,7 +77,8 @@ class BufferedQueryTest extends TestCase
             '/* a comment */ DELIMITER $$' . "\n" .
             '' . "\n" .
             '# Bash-like comment sytanx.' . "\n" .
-            'CREATE DEFINER=`root`@`localhost` PROCEDURE `film_in_stock` (IN `p_film_id` INT, IN `p_store_id` INT, OUT `p_film_count` INT)  READS SQL DATA' . "\n" .
+            'CREATE DEFINER=`root`@`localhost` PROCEDURE `film_in_stock` (IN `p_film_id` ' .
+            'INT, IN `p_store_id` INT, OUT `p_film_count` INT)  READS SQL DATA' . "\n" .
             'BEGIN' . "\n" .
             '     SELECT inventory_id' . "\n" .
             '     FROM inventory' . "\n" .
@@ -99,33 +109,31 @@ class BufferedQueryTest extends TestCase
             '/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;' . "\n" .
             '/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */';
 
-        return array(
-            array(
+        return [
+            [
                 "SELECT '\'';\nSELECT '\'';",
                 8,
-                array(
+                [
                     'parse_delimiter' => true,
                     'add_delimiter' => true,
-                ),
-                array(
+                ],
+                [
                     "SELECT '\'';",
                     "SELECT '\'';",
-                ),
-            ),
+                ],
+            ],
 
-            array(
-                "SELECT \\",
+            [
+                'SELECT \\',
                 8,
-                array(
+                [
                     'parse_delimiter' => false,
                     'add_delimiter' => false,
-                ),
-                array(
-                    "SELECT \\",
-                ),
-            ),
+                ],
+                ['SELECT \\'],
+            ],
 
-            array(
+            [
                 "CREATE TABLE `test` (\n" .
                 "  `txt` varchar(10)\n" .
                 ");\n" .
@@ -133,58 +141,58 @@ class BufferedQueryTest extends TestCase
                 "INSERT INTO `test` (`txt`) VALUES('\\\\');\n" .
                 "INSERT INTO `test` (`txt`) VALUES('xyz');\n",
                 8,
-                array(
+                [
                     'parse_delimiter' => true,
                     'add_delimiter' => true,
-                ),
-                array(
+                ],
+                [
                     "CREATE TABLE `test` (\n" .
                     "  `txt` varchar(10)\n" .
                     ');',
                     "INSERT INTO `test` (`txt`) VALUES('abc');",
                     "INSERT INTO `test` (`txt`) VALUES('\\\\');",
                     "INSERT INTO `test` (`txt`) VALUES('xyz');",
-                ),
-            ),
+                ],
+            ],
 
-            array(
+            [
                 'SELECT """""""";' .
                 'SELECT """\\\\"""',
                 8,
-                array(
+                [
                     'parse_delimiter' => true,
                     'add_delimiter' => true,
-                ),
-                array(
+                ],
+                [
                     'SELECT """""""";',
                     'SELECT """\\\\"""',
-                ),
-            ),
+                ],
+            ],
 
-            array(
+            [
                 'DELIMITER A_VERY_LONG_DEL' . "\n" .
                 'SELECT 1 A_VERY_LONG_DEL' . "\n" .
                 'DELIMITER ;',
                 3,
-                array(
+                [
                     'parse_delimiter' => true,
                     'add_delimiter' => true,
-                ),
-                array(
+                ],
+                [
                     'DELIMITER A_VERY_LONG_DEL',
                     'SELECT 1 A_VERY_LONG_DEL',
                     'DELIMITER ;',
-                ),
-            ),
+                ],
+            ],
 
-            array(
+            [
                 $query,
                 32,
-                array(
+                [
                     'parse_delimiter' => false,
                     'add_delimiter' => false,
-                ),
-                array(
+                ],
+                [
                     '/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */',
 
                     '/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */',
@@ -198,7 +206,8 @@ class BufferedQueryTest extends TestCase
                     'SET time_zone = "+00:00"',
 
                     '# Bash-like comment sytanx.' . "\n" .
-                    'CREATE DEFINER=`root`@`localhost` PROCEDURE `film_in_stock` (IN `p_film_id` INT, IN `p_store_id` INT, OUT `p_film_count` INT)  READS SQL DATA' . "\n" .
+                    'CREATE DEFINER=`root`@`localhost` PROCEDURE `film_in_stock` (IN `p_film_id` ' .
+                    'INT, IN `p_store_id` INT, OUT `p_film_count` INT)  READS SQL DATA' . "\n" .
                     'BEGIN' . "\n" .
                     '     SELECT inventory_id' . "\n" .
                     '     FROM inventory' . "\n" .
@@ -228,17 +237,17 @@ class BufferedQueryTest extends TestCase
                     '/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */',
 
                     '/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */',
-                ),
-            ),
+                ],
+            ],
 
-            array(
+            [
                 $query,
                 32,
-                array(
+                [
                     'parse_delimiter' => true,
                     'add_delimiter' => false,
-                ),
-                array(
+                ],
+                [
                     '/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */',
 
                     '/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */',
@@ -254,7 +263,8 @@ class BufferedQueryTest extends TestCase
                     '/* a comment */  DELIMITER $$',
 
                     '# Bash-like comment sytanx.' . "\n" .
-                    'CREATE DEFINER=`root`@`localhost` PROCEDURE `film_in_stock` (IN `p_film_id` INT, IN `p_store_id` INT, OUT `p_film_count` INT)  READS SQL DATA' . "\n" .
+                    'CREATE DEFINER=`root`@`localhost` PROCEDURE `film_in_stock` (IN `p_film_id` ' .
+                    'INT, IN `p_store_id` INT, OUT `p_film_count` INT)  READS SQL DATA' . "\n" .
                     'BEGIN' . "\n" .
                     '     SELECT inventory_id' . "\n" .
                     '     FROM inventory' . "\n" .
@@ -286,17 +296,17 @@ class BufferedQueryTest extends TestCase
                     '/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */',
 
                     '/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */',
-                ),
-            ),
+                ],
+            ],
 
-            array(
+            [
                 $query,
                 64,
-                array(
+                [
                     'parse_delimiter' => false,
                     'add_delimiter' => true,
-                ),
-                array(
+                ],
+                [
                     '/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;',
 
                     '/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;',
@@ -310,7 +320,8 @@ class BufferedQueryTest extends TestCase
                     'SET time_zone = "+00:00";',
 
                     '# Bash-like comment sytanx.' . "\n" .
-                    'CREATE DEFINER=`root`@`localhost` PROCEDURE `film_in_stock` (IN `p_film_id` INT, IN `p_store_id` INT, OUT `p_film_count` INT)  READS SQL DATA' . "\n" .
+                    'CREATE DEFINER=`root`@`localhost` PROCEDURE `film_in_stock` (IN `p_film_id` ' .
+                    'INT, IN `p_store_id` INT, OUT `p_film_count` INT)  READS SQL DATA' . "\n" .
                     'BEGIN' . "\n" .
                     '     SELECT inventory_id' . "\n" .
                     '     FROM inventory' . "\n" .
@@ -340,8 +351,8 @@ class BufferedQueryTest extends TestCase
                     '/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;',
 
                     '/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */',
-                ),
-            )
-        );
+                ],
+            ],
+        ];
     }
 }

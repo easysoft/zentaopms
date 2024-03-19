@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -8,51 +10,90 @@ class AlterStatementTest extends TestCase
 {
     /**
      * @dataProvider alterProvider
-     *
-     * @param mixed $test
      */
-    public function testAlter($test)
+    public function testAlter(string $test): void
     {
         $this->runParserTest($test);
     }
 
-    public function alterProvider()
+    /**
+     * @return string[][]
+     */
+    public function alterProvider(): array
     {
-        return array(
-            array('parser/parseAlter'),
-            array('parser/parseAlter2'),
-            array('parser/parseAlter3'),
-            array('parser/parseAlter4'),
-            array('parser/parseAlter5'),
-            array('parser/parseAlter6'),
-            array('parser/parseAlter7'),
-            array('parser/parseAlter8'),
-            array('parser/parseAlter9'),
-            array('parser/parseAlter10'),
-            array('parser/parseAlter11'),
-            array('parser/parseAlter12'),
-            array('parser/parseAlter13'),
-            array('parser/parseAlterErr'),
-            array('parser/parseAlterErr2'),
-            array('parser/parseAlterErr3'),
-            array('parser/parseAlterErr4'),
-            array('parser/parseAlterWithInvisible'),
-            array('parser/parseAlterTableCharacterSet1'),
-            array('parser/parseAlterTableCharacterSet2'),
-            array('parser/parseAlterTableCharacterSet3'),
-            array('parser/parseAlterTableCharacterSet4'),
-            array('parser/parseAlterTableCharacterSet5'),
-            array('parser/parseAlterTableCharacterSet6'),
-            array('parser/parseAlterTableCharacterSet7'),
-            array('parser/parseAlterUser'),
-            array('parser/parseAlterUser1'),
-            array('parser/parseAlterUser2'),
-            array('parser/parseAlterUser3'),
-            array('parser/parseAlterUser4'),
-            array('parser/parseAlterUser5'),
-            array('parser/parseAlterUser6'),
-            array('parser/parseAlterUser7'),
-            array('parser/parseAlterUser8'),
-        );
+        return [
+            ['parser/parseAlter'],
+            ['parser/parseAlter2'],
+            ['parser/parseAlter3'],
+            ['parser/parseAlter4'],
+            ['parser/parseAlter5'],
+            ['parser/parseAlter6'],
+            ['parser/parseAlter7'],
+            ['parser/parseAlter8'],
+            ['parser/parseAlter9'],
+            ['parser/parseAlter10'],
+            ['parser/parseAlter11'],
+            ['parser/parseAlter12'],
+            ['parser/parseAlter13'],
+            ['parser/parseAlter14'],
+            ['parser/parseAlterErr'],
+            ['parser/parseAlterErr2'],
+            ['parser/parseAlterErr3'],
+            ['parser/parseAlterErr4'],
+            ['parser/parseAlterTableRenameIndex1'],
+            ['parser/parseAlterTableRenameIndex2'],
+            ['parser/parseAlterTablePartitionByRange1'],
+            ['parser/parseAlterTablePartitionByRange2'],
+            ['parser/parseAlterTableCoalescePartition'],
+            ['parser/parseAlterTableAddSpatialIndex1'],
+            ['parser/parseAlterTableDropAddIndex1'],
+            ['parser/parseAlterTableDropColumn1'],
+            ['parser/parseAlterTableModifyColumn'],
+            ['parser/parseAlterTableModifyColumnEnum1'],
+            ['parser/parseAlterTableModifyColumnEnum2'],
+            ['parser/parseAlterTableModifyColumnEnum3'],
+            ['parser/parseAlterWithInvisible'],
+            ['parser/parseAlterTableCharacterSet1'],
+            ['parser/parseAlterTableCharacterSet2'],
+            ['parser/parseAlterTableCharacterSet3'],
+            ['parser/parseAlterTableCharacterSet4'],
+            ['parser/parseAlterTableCharacterSet5'],
+            ['parser/parseAlterTableCharacterSet6'],
+            ['parser/parseAlterTableCharacterSet7'],
+            ['parser/parseAlterUser'],
+            ['parser/parseAlterUser1'],
+            ['parser/parseAlterUser2'],
+            ['parser/parseAlterUser3'],
+            ['parser/parseAlterUser4'],
+            ['parser/parseAlterUser5'],
+            ['parser/parseAlterUser6'],
+            ['parser/parseAlterUser7'],
+            ['parser/parseAlterUser8'],
+            ['parser/parseAlterUser9'],
+            ['parser/parseAlterUser10'],
+            ['parser/parseAlterEvent'],
+            ['parser/parseAlterEvent2'],
+            ['parser/parseAlterEvent3'],
+            ['parser/parseAlterEvent4'],
+            ['parser/parseAlterEvent5'],
+            ['parser/parseAlterEvent6'],
+            ['parser/parseAlterEvent7'],
+            ['parser/parseAlterEvent8'],
+            ['parser/parseAlterEvent9'],
+            ['parser/parseAlterEventComplete'],
+            ['parser/parseAlterEventErr'],
+            ['parser/parseAlterEventOnScheduleAt'],
+            ['parser/parseAlterEventOnScheduleAt2'],
+            ['parser/parseAlterEventOnScheduleEvery'],
+            ['parser/parseAlterEventOnScheduleEvery2'],
+            ['parser/parseAlterEventOnScheduleEvery3'],
+            ['parser/parseAlterEventOnScheduleEvery4'],
+            ['parser/parseAlterEventOnScheduleEvery5'],
+            ['parser/parseAlterEventOnScheduleEvery6'],
+            ['parser/parseAlterEventWithDefiner'],
+            ['parser/parseAlterEventWithOtherDefiners'],
+            ['parser/parseAlterRenameColumn'],
+            ['parser/parseAlterRenameColumns'],
+        ];
     }
 }

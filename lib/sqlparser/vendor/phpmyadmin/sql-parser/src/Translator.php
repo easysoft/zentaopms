@@ -1,17 +1,22 @@
 <?php
 
-/**
- * Defines the localization helper infrastructure of the library.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser;
 
+use PhpMyAdmin\MoTranslator\Loader;
+
+use function class_exists;
+
+/**
+ * Defines the localization helper infrastructure of the library.
+ */
 class Translator
 {
     /**
      * The MoTranslator loader object.
      *
-     * @var \PhpMyAdmin\MoTranslator\Loader
+     * @var Loader
      */
     private static $loader;
 
@@ -24,12 +29,14 @@ class Translator
 
     /**
      * Loads translator.
+     *
+     * @return void
      */
     public static function load()
     {
-        if (is_null(self::$loader)) {
+        if (self::$loader === null) {
             // Create loader object
-            self::$loader = new \PhpMyAdmin\MoTranslator\Loader();
+            self::$loader = new Loader();
 
             // Set locale
             self::$loader->setlocale(
@@ -43,10 +50,12 @@ class Translator
             self::$loader->bindtextdomain('sqlparser', __DIR__ . '/../locale/');
         }
 
-        if (is_null(self::$translator)) {
-            // Get translator
-            self::$translator = self::$loader->getTranslator();
+        if (self::$translator !== null) {
+            return;
         }
+
+        // Get translator
+        self::$translator = self::$loader->getTranslator();
     }
 
     /**

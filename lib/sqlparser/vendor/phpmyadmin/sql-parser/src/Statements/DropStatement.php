@@ -1,8 +1,6 @@
 <?php
 
-/**
- * `DROP` statement.
- */
+declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Statements;
 
@@ -11,19 +9,16 @@ use PhpMyAdmin\SqlParser\Statement;
 
 /**
  * `DROP` statement.
- *
- * @category   Statements
- *
- * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class DropStatement extends Statement
 {
     /**
      * Options of this statement.
      *
-     * @var array
+     * @var array<string, int|array<int, int|string>>
+     * @psalm-var array<string, (positive-int|array{positive-int, ('var'|'var='|'expr'|'expr=')})>
      */
-    public static $OPTIONS = array(
+    public static $OPTIONS = [
         'DATABASE' => 1,
         'EVENT' => 1,
         'FUNCTION' => 1,
@@ -39,48 +34,49 @@ class DropStatement extends Statement
         'USER' => 1,
 
         'TEMPORARY' => 2,
-        'IF EXISTS' => 3
-    );
+        'IF EXISTS' => 3,
+    ];
 
     /**
      * The clauses of this statement, in order.
      *
      * @see Statement::$CLAUSES
      *
-     * @var array
+     * @var array<string, array<int, int|string>>
+     * @psalm-var array<string, array{non-empty-string, (1|2|3)}>
      */
-    public static $CLAUSES = array(
-        'DROP' => array(
+    public static $CLAUSES = [
+        'DROP' => [
             'DROP',
             2,
-        ),
+        ],
         // Used for options.
-        '_OPTIONS' => array(
+        '_OPTIONS' => [
             '_OPTIONS',
             1,
-        ),
+        ],
         // Used for select expressions.
-        'DROP_' => array(
+        'DROP_' => [
             'DROP',
             1,
-        ),
-        'ON' => array(
+        ],
+        'ON' => [
             'ON',
             3,
-        )
-    );
+        ],
+    ];
 
     /**
      * Dropped elements.
      *
-     * @var Expression[]
+     * @var Expression[]|null
      */
     public $fields;
 
     /**
      * Table of the dropped index.
      *
-     * @var Expression
+     * @var Expression|null
      */
     public $table;
 }

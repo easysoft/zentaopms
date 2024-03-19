@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Components;
 
 use PhpMyAdmin\SqlParser\Components\OptionsArray;
@@ -8,69 +10,69 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class OptionsArrayTest extends TestCase
 {
-    public function testParse()
+    public function testParse(): void
     {
         $component = OptionsArray::parse(
             new Parser(),
             $this->getTokensList('A B = /*comment*/ (test) C'),
-            array(
+            [
                 'A' => 1,
-                'B' => array(
+                'B' => [
                     2,
                     'var',
-                ),
-                'C' => 3
-            )
+                ],
+                'C' => 3,
+            ]
         );
         $this->assertEquals(
-            array(
+            [
                 1 => 'A',
-                2 => array(
+                2 => [
                     'name' => 'B',
                     'expr' => '(test)',
                     'value' => 'test',
                     'equals' => true,
-                ),
+                ],
                 3 => 'C',
-            ),
+            ],
             $component->options
         );
     }
 
-    public function testParseExpr()
+    public function testParseExpr(): void
     {
         $component = OptionsArray::parse(
             new Parser(),
             $this->getTokensList('SUM = (3 + 5) RESULT = 8'),
-            array(
-                'SUM' => array(
+            [
+                'SUM' => [
                     1,
                     'expr',
-                    array('parenthesesDelimited' => true),
-                ),
-                'RESULT' => array(
+                    ['parenthesesDelimited' => true],
+                ],
+                'RESULT' => [
                     2,
                     'var',
-                )
-            )
+                ],
+            ]
         );
         $this->assertEquals('(3 + 5)', (string) $component->has('SUM', true));
         $this->assertEquals('8', $component->has('RESULT'));
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $component = OptionsArray::parse(
             new Parser(),
             $this->getTokensList('A B = /*comment*/ (test) C'),
-            array(
+            [
                 'A' => 1,
-                'B' => array(
+                'B' => [
                     2,
                     'var',
-                ),
-                'C' => 3
-            )
+                ],
+                'C' => 3,
+            ]
         );
         $this->assertTrue($component->has('A'));
         $this->assertEquals('test', $component->has('B'));
@@ -78,51 +80,51 @@ class OptionsArrayTest extends TestCase
         $this->assertFalse($component->has('D'));
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         /* Assertion 1 */
-        $component = new OptionsArray(array('a', 'b', 'c'));
+        $component = new OptionsArray(['a', 'b', 'c']);
         $this->assertTrue($component->remove('b'));
         $this->assertFalse($component->remove('d'));
-        $this->assertEquals($component->options, array(0 => 'a', 2 => 'c'));
+        $this->assertEquals($component->options, [0 => 'a', 2 => 'c']);
 
         /* Assertion 2 */
         $component = OptionsArray::parse(
             new Parser(),
             $this->getTokensList('A B = /*comment*/ (test) C'),
-            array(
+            [
                 'A' => 1,
-                'B' => array(
+                'B' => [
                     2,
                     'var',
-                ),
-                'C' => 3
-            )
+                ],
+                'C' => 3,
+            ]
         );
         $this->assertEquals('test', $component->has('B'));
         $component->remove('B');
         $this->assertFalse($component->has('B'));
     }
 
-    public function testMerge()
+    public function testMerge(): void
     {
-        $component = new OptionsArray(array('a'));
-        $component->merge(array('b', 'c'));
-        $this->assertEquals($component->options, array('a', 'b', 'c'));
+        $component = new OptionsArray(['a']);
+        $component->merge(['b', 'c']);
+        $this->assertEquals($component->options, ['a', 'b', 'c']);
     }
 
-    public function testBuild()
+    public function testBuild(): void
     {
         $component = new OptionsArray(
-            array(
+            [
                 'ALL',
                 'SQL_CALC_FOUND_ROWS',
-                array(
+                [
                     'name' => 'MAX_STATEMENT_TIME',
                     'value' => '42',
                     'equals' => true,
-                ),
-            )
+                ],
+            ]
         );
         $this->assertEquals(
             OptionsArray::build($component),

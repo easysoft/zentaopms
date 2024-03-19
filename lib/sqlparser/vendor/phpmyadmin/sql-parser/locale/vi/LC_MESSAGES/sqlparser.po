@@ -6,11 +6,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: SQL parser 0\n"
+"Project-Id-Version: SQL parser 5\n"
 "Report-Msgid-Bugs-To: translators@phpmyadmin.net\n"
-"POT-Creation-Date: 2017-08-21 12:54+0200\n"
-"PO-Revision-Date: 2018-06-30 00:46+0000\n"
-"Last-Translator: Name <Noname932018@gmail.com>\n"
+"POT-Creation-Date: 2023-02-26 22:46+0100\n"
+"PO-Revision-Date: 2023-01-26 07:10+0000\n"
+"Last-Translator: liviuconcioiu <liviu.concioiu@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/phpmyadmin/"
 "sql-parser/vi/>\n"
 "Language: vi\n"
@@ -18,19 +18,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.1-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
-#: src/Component.php:43 src/Component.php:63
+#: src/Component.php:39 src/Component.php:59
 msgid "Not implemented yet."
 msgstr "Chưa được viết mã thực thi."
 
-#: src/Components/AlterOperation.php:241 src/Statement.php:334
+#: src/Components/AlterOperation.php:415 src/Statement.php:359
 msgid ""
 "A new statement was found, but no delimiter between it and the previous one."
 msgstr ""
 "Tìm thấy câu lệnh mới, nhưng không có dấu ngăn cách giữa nó và lệnh trước."
 
-#: src/Components/AlterOperation.php:253
+#: src/Components/AlterOperation.php:427
+msgid "Missing comma before start of a new alter operation."
+msgstr ""
+
+#: src/Components/AlterOperation.php:472
 msgid "Unrecognized alter operation."
 msgstr "Không nhận ra thao tác thay đổi."
 
@@ -39,34 +43,57 @@ msgstr "Không nhận ra thao tác thay đổi."
 msgid "%1$d values were expected, but found %2$d."
 msgstr "Cần giá trị %1$d, nhưng lại nhận được %2$d."
 
-#: src/Components/Array2d.php:111
+#: src/Components/Array2d.php:108
 msgid "An opening bracket followed by a set of values was expected."
 msgstr "Cần một dấu ngoặc ôm mở theo sau bởi một tập hợp các giá trị."
 
-#: src/Components/ArrayObj.php:114 src/Components/CreateDefinition.php:201
+#: src/Components/ArrayObj.php:106 src/Components/CreateDefinition.php:233
 msgid "An opening bracket was expected."
 msgstr "Cần dấu ngoặc ôm mở."
 
-#: src/Components/CaseExpression.php:135 src/Components/CaseExpression.php:164
-#: src/Components/CaseExpression.php:176 src/Components/CaseExpression.php:190
-#: src/Statements/DeleteStatement.php:227
-#: src/Statements/DeleteStatement.php:244
-#: src/Statements/DeleteStatement.php:292
-#: src/Statements/DeleteStatement.php:303
-#: src/Statements/DeleteStatement.php:333
-#: src/Statements/DeleteStatement.php:344
+#: src/Components/CaseExpression.php:133 src/Components/CaseExpression.php:161
+#: src/Components/CaseExpression.php:172 src/Components/CaseExpression.php:184
+#: src/Components/IndexHint.php:134 src/Components/IndexHint.php:164
+#: src/Components/LockExpression.php:173 src/Components/LockExpression.php:180
+#: src/Components/LockExpression.php:188 src/Statements/DeleteStatement.php:249
+#: src/Statements/DeleteStatement.php:268
+#: src/Statements/DeleteStatement.php:308
+#: src/Statements/DeleteStatement.php:320
+#: src/Statements/DeleteStatement.php:346
+#: src/Statements/DeleteStatement.php:353
 #: src/Statements/InsertStatement.php:189
-#: src/Statements/InsertStatement.php:217 src/Statements/LoadStatement.php:258
-#: src/Statements/ReplaceStatement.php:155
-#: src/Statements/ReplaceStatement.php:182
+#: src/Statements/InsertStatement.php:220 src/Statements/LoadStatement.php:265
+#: src/Statements/LockStatement.php:85 src/Statements/ReplaceStatement.php:149
+#: src/Statements/ReplaceStatement.php:178
 msgid "Unexpected keyword."
 msgstr "Từ khóa không mong muốn."
 
-#: src/Components/CaseExpression.php:199
+#: src/Components/CaseExpression.php:192
 msgid "Unexpected end of CASE expression"
 msgstr "Kết thúc bất ngờ của biểu thức CASE"
 
-#: src/Components/CreateDefinition.php:223
+#: src/Components/CaseExpression.php:212
+#, fuzzy
+#| msgid "Unexpected end of CASE expression"
+msgid "Potential duplicate alias of CASE expression."
+msgstr "Kết thúc bất ngờ của biểu thức CASE"
+
+#: src/Components/CaseExpression.php:225
+msgid "An alias expected after AS but got "
+msgstr ""
+
+#: src/Components/CaseExpression.php:238 src/Components/Expression.php:352
+#: src/Components/Expression.php:372 src/Components/Expression.php:424
+msgid "An alias was previously found."
+msgstr "Một bí danh đã tìm thấy từ trước đây."
+
+#: src/Components/CaseExpression.php:252
+#, fuzzy
+#| msgid "An alias was expected."
+msgid "An alias was expected after AS."
+msgstr "Cần một bí danh."
+
+#: src/Components/CreateDefinition.php:255
 msgid ""
 "A symbol name was expected! A reserved keyword can not be used as a column "
 "name without backquotes."
@@ -74,156 +101,197 @@ msgstr ""
 "Cần tên biểu tượng. Một từ khoá truy ngược không thể được sử dụng như là một "
 "tên cột mà không có các ngoặc sau."
 
-#: src/Components/CreateDefinition.php:237
+#: src/Components/CreateDefinition.php:268
 #, fuzzy
 #| msgid "Variable name was expected."
 msgid "A symbol name was expected!"
 msgstr "Cần tên biến."
 
-#: src/Components/CreateDefinition.php:270
+#: src/Components/CreateDefinition.php:300
 msgid "A comma or a closing bracket was expected."
 msgstr "Cần dấu phẩy hoặc dấu ngoặc ôm đóng."
 
-#: src/Components/CreateDefinition.php:286
+#: src/Components/CreateDefinition.php:313 src/Statements/WithStatement.php:328
 msgid "A closing bracket was expected."
 msgstr "Cần dấu ngoặc ôm đóng."
 
-#: src/Components/DataType.php:123
+#: src/Components/DataType.php:130
 msgid "Unrecognized data type."
 msgstr "Không nhận ra kiểu dữ liệu."
 
-#: src/Components/Expression.php:244 src/Components/Expression.php:394
-msgid "An alias was expected."
-msgstr "Cần một bí danh."
-
-#: src/Components/Expression.php:332 src/Components/Expression.php:351
-#: src/Components/Expression.php:383
-msgid "An alias was previously found."
-msgstr "Một bí danh đã tìm thấy từ trước đây."
-
-#: src/Components/Expression.php:364
-msgid "Unexpected dot."
-msgstr "Gặp dấu chấm không cần."
-
-#: src/Components/ExpressionArray.php:102
+#: src/Components/ExpressionArray.php:106 src/Statements/WithStatement.php:197
 msgid "An expression was expected."
 msgstr "Cần một biểu thức."
 
-#: src/Components/Limit.php:86 src/Components/Limit.php:108
+#: src/Components/Expression.php:257 src/Components/Expression.php:435
+msgid "An alias was expected."
+msgstr "Cần một bí danh."
+
+#: src/Components/Expression.php:403
+msgid "Unexpected dot."
+msgstr "Gặp dấu chấm không cần."
+
+#: src/Components/IndexHint.php:140 src/Components/IndexHint.php:170
+#: src/Components/Key.php:259 src/Components/LockExpression.php:161
+#: src/Components/SetOperation.php:138 src/Statement.php:258
+#: src/Statements/DeleteStatement.php:263
+#: src/Statements/DeleteStatement.php:315
+#: src/Statements/ExplainStatement.php:161
+#: src/Statements/InsertStatement.php:203
+#: src/Statements/InsertStatement.php:240 src/Statements/LoadStatement.php:270
+#: src/Statements/LoadStatement.php:291 src/Statements/LoadStatement.php:310
+#: src/Statements/LockStatement.php:93 src/Statements/LockStatement.php:100
+#: src/Statements/PurgeStatement.php:106 src/Statements/PurgeStatement.php:119
+#: src/Statements/PurgeStatement.php:140
+#: src/Statements/ReplaceStatement.php:163 src/Statements/WithStatement.php:132
+msgid "Unexpected token."
+msgstr "Gặp thẻ bài không cần."
+
+#: src/Components/Limit.php:78 src/Components/Limit.php:105
 msgid "An offset was expected."
 msgstr "Cần vị trí tương đối."
 
-#: src/Components/OptionsArray.php:143
+#: src/Components/LockExpression.php:91 src/Components/LockExpression.php:201
+msgid "Unexpected end of LOCK expression."
+msgstr "Kết thúc bất ngờ của biểu thức LOCK."
+
+#: src/Components/OptionsArray.php:146
 #, php-format
 msgid "This option conflicts with \"%1$s\"."
 msgstr "Tùy chọn này xung đột với \"%1$s\"."
 
-#: src/Components/RenameOperation.php:109
+#: src/Components/RenameOperation.php:103
 msgid "The old name of the table was expected."
 msgstr "Cần tên cũ của bảng."
 
-#: src/Components/RenameOperation.php:119
+#: src/Components/RenameOperation.php:109
 msgid "Keyword \"TO\" was expected."
 msgstr "Cần từ khóa \"TO\"."
 
-#: src/Components/RenameOperation.php:135
+#: src/Components/RenameOperation.php:124
 msgid "The new name of the table was expected."
 msgstr "Cần tên mới của bảng."
 
-#: src/Components/RenameOperation.php:153
+#: src/Components/RenameOperation.php:140
 msgid "A rename operation was expected."
 msgstr "Cần thao tác đổi tên."
 
-#: src/Components/SetOperation.php:117
+#: src/Components/SetOperation.php:121
 msgid "Missing expression."
 msgstr "Thiếu biểu thức chính quy."
 
-#: src/Lexer.php:237
+#: src/Lexer.php:274
 msgid "Unexpected character."
 msgstr "Gặp ký tự không cần."
 
-#: src/Lexer.php:278
+#: src/Lexer.php:313
 msgid "Expected whitespace(s) before delimiter."
 msgstr "Cần các khoảng trắng trước dấu phân tách."
 
-#: src/Lexer.php:296 src/Lexer.php:314
+#: src/Lexer.php:329 src/Lexer.php:348
 msgid "Expected delimiter."
 msgstr "Cần dấu phân tách."
 
-#: src/Lexer.php:843
+#: src/Lexer.php:1004
 #, php-format
 msgid "Ending quote %1$s was expected."
 msgstr "Cần trích dẫn đóng %1$s."
 
-#: src/Lexer.php:884
+#: src/Lexer.php:1056
 msgid "Variable name was expected."
 msgstr "Cần tên biến."
 
-#: src/Parser.php:423
+#: src/Parser.php:456
 msgid "Unexpected beginning of statement."
 msgstr "Gặp phần đầu mệnh đề không cần."
 
-#: src/Parser.php:442
+#: src/Parser.php:499
 msgid "Unrecognized statement type."
 msgstr "Không thừa nhận kiểu mệnh đề."
 
-#: src/Parser.php:527
+#: src/Parser.php:587
 msgid "No transaction was previously started."
 msgstr "Chưa có giao địch nào đã bắt đầu trước đây."
 
-#: src/Statement.php:242 src/Statements/DeleteStatement.php:254
-#: src/Statements/DeleteStatement.php:306
-#: src/Statements/InsertStatement.php:226
-#: src/Statements/InsertStatement.php:246 src/Statements/LoadStatement.php:261
-#: src/Statements/LoadStatement.php:291 src/Statements/LoadStatement.php:310
-#: src/Statements/ReplaceStatement.php:190
-msgid "Unexpected token."
-msgstr "Gặp thẻ bài không cần."
-
-#: src/Statement.php:306
+#: src/Statement.php:327
 msgid "This type of clause was previously parsed."
 msgstr "Kiểu của mệnh đề này đã được phân tích trước đây."
 
-#: src/Statement.php:366
+#: src/Statement.php:398
 msgid "Unrecognized keyword."
 msgstr "Không nhận ra từ khóa."
 
-#: src/Statement.php:377
+#: src/Statement.php:409
 #, fuzzy
 #| msgid "Unexpected beginning of statement."
 msgid "Keyword at end of statement."
 msgstr "Gặp phần đầu mệnh đề không cần."
 
-#: src/Statement.php:503
+#: src/Statement.php:555
 msgid "Unexpected ordering of clauses."
 msgstr "Đặt mệnh đề không mong muốn."
 
-#: src/Statements/CreateStatement.php:375
+#: src/Statements/CreateStatement.php:549
 msgid "The name of the entity was expected."
 msgstr "Cần tên của thực thể."
 
-#: src/Statements/CreateStatement.php:430
+#: src/Statements/CreateStatement.php:598
 #, fuzzy
 #| msgid "Variable name was expected."
 msgid "A table name was expected."
 msgstr "Cần tên biến."
 
-#: src/Statements/CreateStatement.php:438
+#: src/Statements/CreateStatement.php:603
 msgid "At least one column definition was expected."
 msgstr "Chưa có bảng nào được chọn."
 
-#: src/Statements/CreateStatement.php:550
+#: src/Statements/CreateStatement.php:707
 msgid "A \"RETURNS\" keyword was expected."
 msgstr "Cần từ khóa \"RETURNS\"."
 
-#: src/Statements/DeleteStatement.php:314
+#: src/Statements/DeleteStatement.php:329
 msgid "This type of clause is not valid in Multi-table queries."
 msgstr "Mệnh đề loại này không hợp lệ trong các truy vấn Đa bảng."
 
-#: tests/Lexer/LexerTest.php:19 tests/Parser/ParserTest.php:58
-msgid "error #1"
-msgstr "lỗi #1"
+#: src/Statements/LockStatement.php:120
+#, fuzzy
+#| msgid "Unexpected beginning of statement."
+msgid "Unexpected end of LOCK statement."
+msgstr "Gặp phần đầu mệnh đề không cần."
 
-#: tests/Lexer/LexerTest.php:46 tests/Parser/ParserTest.php:80
-msgid "strict error"
-msgstr "lỗi nghiêm ngặt"
+#: src/Statements/PurgeStatement.php:138
+msgid "Unexpected keyword"
+msgstr "Từ khóa không mong muốn"
+
+#: src/Statements/WithStatement.php:118
+#, fuzzy
+#| msgid "The name of the entity was expected."
+msgid "The name of the CTE was expected."
+msgstr "Cần tên của thực thể."
+
+#: src/Statements/WithStatement.php:137
+#, fuzzy
+#| msgid "A \"RETURNS\" keyword was expected."
+msgid "AS keyword was expected."
+msgstr "Cần từ khóa \"RETURNS\"."
+
+#: src/Statements/WithStatement.php:149
+#, fuzzy
+#| msgid "The name of the entity was expected."
+msgid "Subquery of the CTE was expected."
+msgstr "Cần tên của thực thể."
+
+#: src/Statements/WithStatement.php:266
+#, fuzzy
+#| msgid "Unexpected beginning of statement."
+msgid "Unexpected end of the WITH CTE."
+msgstr "Gặp phần đầu mệnh đề không cần."
+
+#~ msgid "Unexpected end of Lock expression."
+#~ msgstr "Kết thúc bất ngờ của biểu thức LOCK."
+
+#~ msgid "error #1"
+#~ msgstr "lỗi #1"
+
+#~ msgid "strict error"
+#~ msgstr "lỗi nghiêm ngặt"

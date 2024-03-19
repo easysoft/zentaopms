@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -8,20 +10,23 @@ class CallStatementTest extends TestCase
 {
     /**
      * @dataProvider callProvider
-     *
-     * @param mixed $test
      */
-    public function testCall($test)
+    public function testCall(string $test): void
     {
         $this->runParserTest($test);
     }
 
-    public function callProvider()
+    /**
+     * @return string[][]
+     */
+    public function callProvider(): array
     {
-        return array(
-            array('parser/parseCall'),
-            array('parser/parseCall2'),
-            array('parser/parseCall3')
-        );
+        return [
+            ['parser/parseCall'],
+            ['parser/parseCall2'],
+            ['parser/parseCall3'],
+            ['parser/parseCall4'],
+            ['parser/parseCall5'],
+        ];
     }
 }
