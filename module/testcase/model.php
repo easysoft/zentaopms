@@ -1133,13 +1133,17 @@ class testcaseModel extends model
 
         $action = strtolower($action);
 
-        if($action == 'runcase')            return $case->auto == 'no' && $case->status != 'wait';
+        if($action == 'runcase')            return (!$case->lib || !empty($case->product)) && $case->auto == 'no' && $case->status != 'wait';
+        if($action == 'runresult')          return !$case->lib || !empty($case->product);
+        if($action == 'importtolib')        return !$case->lib || !empty($case->product);
         if($action == 'ztfrun')             return $case->auto == 'auto';
         if($action == 'confirmchange')      return isset($case->caseStatus) && isset($case->caseVersion) && $case->caseStatus != 'wait' && $case->version < $case->caseVersion;
         if($action == 'confirmstorychange') return !empty($case->needconfirm) || (isset($case->browseType) && $case->browseType == 'needconfirm');
         if($action == 'createbug')          return isset($case->caseFails) && $case->caseFails > 0;
+        if($action == 'create')             return !$case->lib || !empty($case->product);
         if($action == 'review')             return ($config->testcase->needReview || !empty($config->testcase->forceReview)) && (isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait');
         if($action == 'showscript')         return $case->auto == 'auto';
+        if($action == 'createcase')         return $case->lib && empty($case->product);
 
         return true;
     }

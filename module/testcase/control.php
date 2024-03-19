@@ -447,6 +447,7 @@ class testcase extends control
             $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $case->branch, '');
         }
 
+        $this->view->testcase   = $case;
         $this->view->stepsType  = $stepsType;
         $this->view->version    = $version ? $version : $case->version;
         $this->view->isLibCase  = $isLibCase;

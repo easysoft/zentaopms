@@ -12,7 +12,7 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
-$isInModal     = isInModal();
+$isInModal = isInModal();
 
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
