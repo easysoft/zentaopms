@@ -5,25 +5,25 @@ $(function()
         $('#subNavbar li[data-id=' + mode + ']').addClass('active');
         if(typeof rawMethod === 'string' && rawMethod == 'work')
         {
-            $("#subNavbar li[data-id='task'] a").append('<span class="label label-light label-badge">' + taskCount + '</span>');
-            $("#subNavbar li[data-id='story'] a").append('<span class="label label-light label-badge">' + storyCount + '</span>');
-            $("#subNavbar li[data-id='bug'] a").append('<span class="label label-light label-badge">' + bugCount + '</span>');
-            $("#subNavbar li[data-id='testcase'] a").append('<span class="label label-light label-badge">' + caseCount + '</span>');
-            $("#subNavbar li[data-id='testtask'] a").append('<span class="label label-light label-badge">' + testTaskCount + '</span>');
+            $("#subNavbar li[data-id='task'] a").append('<span class="label label-light label-badge">' + todoCount.task + '</span>');
+            $("#subNavbar li[data-id='story'] a").append('<span class="label label-light label-badge">' + todoCount.story + '</span>');
+            $("#subNavbar li[data-id='bug'] a").append('<span class="label label-light label-badge">' + todoCount.bug + '</span>');
+            $("#subNavbar li[data-id='testcase'] a").append('<span class="label label-light label-badge">' + todoCount.case + '</span>');
+            $("#subNavbar li[data-id='testtask'] a").append('<span class="label label-light label-badge">' + todoCount.testtask + '</span>');
 
-            if(isOpenedURAndSR !== 0) $("#subNavbar li[data-id='requirement'] a").append('<span class="label label-light label-badge">' + requirementCount + '</span>');
+            if(isOpenedURAndSR !== 0) $("#subNavbar li[data-id='requirement'] a").append('<span class="label label-light label-badge">' + todoCount.requirement + '</span>');
 
             if(isBiz !== 0 || isMax !== 0) 
             {
-                $("#subNavbar li[data-id='feedback'] a").append('<span class="label label-light label-badge">' + feedbackCount + '</span>');
-                $("#subNavbar li[data-id='ticket'] a").append('<span class="label label-light label-badge">' + ticketCount + '</span>');
+                $("#subNavbar li[data-id='feedback'] a").append('<span class="label label-light label-badge">' + todoCount.feedback + '</span>');
+                $("#subNavbar li[data-id='ticket'] a").append('<span class="label label-light label-badge">' + todoCount.ticket + '</span>');
             }
             if(isMax !== 0)
             {
-                $("#subNavbar li[data-id='issue'] a").append('<span class="label label-light label-badge">' + issueCount + '</span>');
-                $("#subNavbar li[data-id='risk'] a").append('<span class="label label-light label-badge">' + riskCount + '</span>');
-                $("#subNavbar li[data-id='nc'] a").append('<span class="label label-light label-badge">' + qaCount + '</span>');
-                $("#subNavbar li[data-id='myMeeting'] a").append('<span class="label label-light label-badge">' + meetingCount + '</span>');
+                $("#subNavbar li[data-id='issue'] a").append('<span class="label label-light label-badge">' + todoCount.issue + '</span>');
+                $("#subNavbar li[data-id='risk'] a").append('<span class="label label-light label-badge">' + todoCount.risk + '</span>');
+                $("#subNavbar li[data-id='nc'] a").append('<span class="label label-light label-badge">' + todoCount.qa + '</span>');
+                $("#subNavbar li[data-id='myMeeting'] a").append('<span class="label label-light label-badge">' + todoCount.meeting + '</span>');
             }
         }
     }
