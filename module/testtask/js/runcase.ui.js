@@ -54,3 +54,13 @@ function checkStepValue(event)
 {
     if($(event.target).val() == 'pass') custom = true;
 }
+/**
+ * Set height of the file modal.
+ *
+ * @access public
+ * @return void
+ */
+function setFileModalHeight()
+{
+    $($(this).data('target')).find('.modal-content').css('max-height', $('#runCaseModal').height() + 'px');
+}

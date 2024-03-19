@@ -114,6 +114,7 @@ if($confirm != 'yes')
                                 setClass('ml-2 text-primary'),
                                 $step->type != 'group' ? set::target("#fileModal{$step->id}") : '',
                                 $step->type != 'group' ? set('data-toggle', 'modal') : '',
+                                on::click('setFileModalHeight'),
                                 set('title', $lang->testtask->files),
                                 set::icon('paper-clip'),
                                 set::disabled($step->type == 'group')
