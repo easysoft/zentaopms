@@ -205,7 +205,8 @@ class branchModel extends model
             $product = $products[$productID];
             foreach($branches as $branch)
             {
-                $branchPairs[$branch->id] = $product->name . '/' . htmlspecialchars_decode($branch->name);
+                $branchPairs[$branch->id] = htmlspecialchars_decode($branch->name);
+                if(strpos($params, 'noproductname') === false) $branchPairs[$branch->id] = $product->name . '/' . $branchPairs[$branch->id];
             }
         }
 

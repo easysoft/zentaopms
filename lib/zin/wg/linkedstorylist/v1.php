@@ -83,7 +83,7 @@ class linkedStoryList extends storyList
             if(!isset($item['actions'])) $item['actions'] = array();
             $btn = array
             (
-                'class'       => 'unlinkStory unlink opacity-0 group-hover:opacity-100 primary',
+                'class'       => 'unlinkStory unlink opacity-0 group-hover:opacity-100 text-primary',
                 'icon'        => 'unlink',
                 'data-id'     => $story->id,
                 'data-on'     => 'click',

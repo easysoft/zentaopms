@@ -4,6 +4,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'idlabel' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'statuslabel' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'branchlabel' . DS . 'v1.php';
 
 class relatedList extends wg
 {
@@ -30,6 +31,7 @@ class relatedList extends wg
         if($url) $info['url'] = $url;
 
         if(isset($group['statusList']) && isset($item->status)) $info['content'] = array('html' => wg(statusLabel::create($item->status, $group['statusList'][$item->status]))->render(), 'className' => 'flex-none');
+        if(isset($item->branchName)) $info['leading']['html'] = wg(branchLabel::create($item->branch, $item->branchName))->render() . $info['leading']['html'];
 
         $props = isset($group['props']) ? $group['props'] : array('data-toggle' => 'modal', 'data-size' => 'lg');
         if($props) $info = array_merge($info, $props);

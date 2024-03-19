@@ -74,7 +74,20 @@ class storyModel extends model
         if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
 
         $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
-        if($story->{$linkStoryField}) $story->linkStoryTitles = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($story->{$linkStoryField})->fetchPairs();
+        if($story->{$linkStoryField})
+        {
+            $multiBranches = $this->loadModel('branch')->getAllPairs('noproductname');
+            $multiProducts = $this->loadModel('product')->getMultiBranchPairs();
+            $linkStoryList = $this->dao->select('id,title,product,branch,status')->from(TABLE_STORY)->where('id')->in($story->{$linkStoryField})->fetchAll('id');
+            $linkStoryTitles = array();
+            foreach($linkStoryList as $linkStory)
+            {
+                $linkStoryTitles[$linkStory->id] = $linkStory->title;
+                if(isset($multiProducts[$linkStory->product]) && isset($multiBranches[$linkStory->branch])) $linkStory->branchName = $multiBranches[$linkStory->branch];
+            }
+            $story->linkStoryList   = $linkStoryList;
+            $story->linkStoryTitles = $linkStoryTitles;
+        }
 
         $story->openedDate     = helper::isZeroDate($story->openedDate)     ? '' : substr($story->openedDate,     0, 19);
         $story->assignedDate   = helper::isZeroDate($story->assignedDate)   ? '' : substr($story->assignedDate,   0, 19);
