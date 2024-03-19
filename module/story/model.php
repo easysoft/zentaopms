@@ -7070,11 +7070,10 @@ class storyModel extends model
         foreach($objects as $object)
         {
             if($this->app->rawModule == 'testtask') $object->id = $object->case;
+
             $objectIDList[] = $object->id;
-            if($objectType == 'story') $storyIDList[] = $object->id;
-            if($objectType != 'story') $storyIDList[] = $object->story;
-            $object->retractConfirm = false;
-            $object->retractObject  = array();
+            $storyIDList[]  = $objectType == 'story' ? $object->id : $object->story;
+            $object->confirmeObject = array();
         }
 
         /* 获取需要确认的用户需求id。 */
@@ -7082,48 +7081,50 @@ class storyModel extends model
         $URIds = implode(',', $URs);
         if(!$URIds) return $objectInfo ? $objectInfo : $objects;
 
-        /* 获取已经撤回的用户需求。*/
-        $requirements = $this->dao->select('id')->from(TABLE_STORY)
-            ->where('id')->in($URIds)
-            ->andWhere('retractedBy')->ne('')
-            ->fetchPairs('id');
-        if(!$requirements) return $objectInfo ? $objectInfo : $objects;
+        /* 查询最近一次撤回/移除操作。 */
+        $lastActions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq('story')
+            ->andWhere('objectID')->in($URIds)
+            ->andWhere('action')->in('retractclosed,unlinkedfromroadmap')
+            ->orderBy('id_asc')
+            ->fetchAll('objectID');
 
         /* 获取已经确认过的对象。*/
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+        $confirmedActions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectIDList)
-            ->andWhere('action')->eq('confirmedretract')
-            ->fetchPairs('objectID', 'extra');
-        foreach($actions as $objecyID => $action) $actions[$objecyID] = explode(',', $action);
+            ->andWhere('action')->in('confirmedretract,confirmedunlink')
+            ->orderBy('id_asc')
+            ->fetchAll('extra');
+
+        $needConfirmList = array();
+        /* 获取需要进行确认操作的用户需求。*/
+        foreach($lastActions as $storyID => $action)
+        {
+            $actionType = $action->action == 'retractclosed' ? 'confirmedretract' : 'confirmedunlink';
+            if(isset($confirmedActions[$storyID]) and $confirmedActions[$storyID]->date > $action->date and $confirmedActions[$storyID]->action == $actionType) continue;
+            $needConfirmList[$storyID] = $actionType;
+        }
 
         /* 获取需要进行确认操作的研发需求 => 用户需求。*/
         $confirmObjects = array();
-        foreach($requirements as $requirement)
+        foreach($needConfirmList as $requirementID => $type)
         {
             foreach($URs as $storyID => $UR)
             {
-                if (strpos($UR, (string) $requirement) !== false) $confirmObjects[$storyID][$requirement] = $requirement;
+                if (strpos($UR, (string) $requirementID) !== false) $confirmObjects[$storyID] = array('id' => $requirementID, 'type' => $type);
             }
         }
 
         /* 将确认信息插入到objects中并且过滤掉已经确认的用户需求。*/
         foreach($objects as $object)
         {
-            $confirmed = array();
-
             if($this->app->rawModule == 'testtask') $object->id = $object->case;
-            if(isset($actions[$object->id])) $confirmed = $actions[$object->id]; // 已经确认的用户需求
+            $objectID = $objectType == 'story' ? $object->id : $object->story;
 
-            if($objectType == 'story' and isset($confirmObjects[$object->id]))
+            if(isset($confirmObjects[$objectID]))
             {
-                $object->retractObject  = array_diff($confirmObjects[$object->id], $confirmed);
-                if($object->retractObject) $object->retractConfirm = true;
-            }
-            else if($objectType != 'story' and isset($confirmObjects[$object->story]))
-            {
-                $object->retractObject  = array_diff($confirmObjects[$object->story], $confirmed);
-                if($object->retractObject) $object->retractConfirm = true;
+                $object->confirmeObject = $confirmObjects[$objectID];
             }
         }
 
