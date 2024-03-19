@@ -116,7 +116,10 @@ class gitfoxModel extends model
 
         $apiRoot = $this->getApiRoot($gitfoxID);
         $url     = sprintf($apiRoot->url, "/repos/$repoID");
-        $this->repos[$gitfoxID][$repoID] = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+        $repo    = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+
+        $repo->name_with_namespace = $repo->path;
+        $this->repos[$gitfoxID][$repoID] = $repo;
         return $this->repos[$gitfoxID][$repoID];
     }
 

@@ -204,8 +204,15 @@ class mr extends control
             $repo     = $repoList[$repoID];
         }
 
-        if($repo->SCM == 'Gitlab') $repo->serviceProject = (int)$repo->serviceProject;
-        $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) $repo->serviceProject = (int)$repo->serviceProject;
+        if($repo->SCM == 'GitFox')
+        {
+            $project = $this->loadModel('gitfox')->apiGetSingleRepo($repo->gitService, $repo->serviceProject);
+        }
+        else
+        {
+            $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
+        }
 
         $jobPairs = array();
         $jobs     = $this->loadModel('job')->getListByRepoID($repoID);

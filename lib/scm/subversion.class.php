@@ -1,5 +1,5 @@
 <?php
-class Subversion
+class subversionRepo
 {
     public $client;
     public $root;

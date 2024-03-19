@@ -192,5 +192,31 @@ class gitfox extends control
         $this->view->zentaoUsers = $zentaoUsers;
         $this->display();
     }
-}
 
+    /**
+     * Ajax方式获取项目分支。
+     * AJAX: Get project branches.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjectBranches(int $repoID)
+    {
+        $repo = $this->loadModel('repo')->getByID($repoID);
+        if(!$repo) return print(array());
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $branches = $scm->branch();
+
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
+        foreach($branches as $branch)
+        {
+            $options[] = array('text' => $branch, 'value' => $branch);
+        }
+        return print(json_encode($options));
+    }
+}

@@ -1,5 +1,5 @@
 <?php
-class gitfox
+class gitfoxRepo
 {
     public $client;
     public $projectID;

@@ -32,7 +32,7 @@ function getBranchPriv(project)
 function onProjectChange()
 {
     var sourceProject = projectNamespace ? urlencode(projectNamespace) : projectID;
-    var branchUrl     = $.createLink(hostType, 'ajaxGetProjectBranches', hostType + "ID=" + hostID + "&projectID=" + sourceProject);
+    var branchUrl     = $.createLink(hostType, 'ajaxGetProjectBranches', "id=" + (repo.SCM == 'GitFox' ? repo.id : hostID) + "&projectID=" + sourceProject);
     $.ajaxSubmit(
     {
         url: branchUrl,

@@ -146,6 +146,32 @@ class mrModel extends model
     }
 
     /**
+     * 获取GitFox服务器的项目.
+     * Get gitfox projects.
+     *
+     * @param  int    $hostID
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getGitFoxProjects(int $hostID = 0, array $projectIdList = array()): array
+    {
+        $gitfoxUsers = $this->loadModel('pipeline')->getProviderPairsByAccount('gitfox');
+        if(!$this->app->user->admin && !isset($gitfoxUsers[$hostID])) return array();
+
+        $projectPairs = array();
+        $projects     = $this->loadModel('gitfox')->apiGetRepos($hostID);
+        foreach($projects as $project)
+        {
+            if($projectIdList && !in_array($project->id, $projectIdList)) continue;
+
+            $projectPairs[$hostID][$project->id] = $project;
+        }
+
+        return $projectPairs;
+    }
+
+    /**
      * 创建本地合并请求。
      * Create a local merge request.
      *

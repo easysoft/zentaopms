@@ -1,5 +1,5 @@
 <?php
-class Gogs
+class gogsRepo
 {
     public $client;
     public $root;

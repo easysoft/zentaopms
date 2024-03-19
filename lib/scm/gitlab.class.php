@@ -1,5 +1,5 @@
 <?php
-class gitlab
+class gitlabRepo
 {
     public $client;
     public $projectID;

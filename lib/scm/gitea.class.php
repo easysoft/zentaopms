@@ -1,5 +1,5 @@
 <?php
-class Gitea
+class giteaRepo
 {
     public $client;
     public $root;
