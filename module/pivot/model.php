@@ -134,7 +134,7 @@ class pivotModel extends model
                 $pivot->descs = $pivotDescs;
             }
 
-            $pivot->used = $this->checkIFChartInUse($pivot->id, $screenList, 'pivot');
+            $pivot->used = $this->checkIFChartInUse($pivot->id, 'pivot', $screenList);
         }
     }
 
@@ -147,8 +147,12 @@ class pivotModel extends model
      * @access public
      * @return bool
      */
-    public function checkIFChartInUse(int $chartID, array $screenList, string $type = 'chart'): bool
+    public function checkIFChartInUse(int $chartID, string $type = 'chart', array $screens = array()): bool
     {
+        static $screenList = array();
+        if($screens) $screenList = $screens;
+        if(empty($screenList)) $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
+
         foreach($screenList as $screen)
         {
             $scheme = json_decode($screen->scheme);
