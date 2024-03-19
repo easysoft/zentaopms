@@ -3072,7 +3072,7 @@ class baseRouter
          * 忽略该错误：Redefining already defined constructor。
          * Skip the error: Redefining already defined constructor.
          **/
-        if(mb_strpos($message, 'Redefining') !== false) return true;
+        if(strpos($message, 'Redefining') !== false) return true;
 
         /*
          * 设置错误信息。

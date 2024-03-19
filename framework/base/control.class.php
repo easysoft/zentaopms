@@ -482,7 +482,7 @@ class baseControl
         $cssExtPath = $this->app->getModuleExtPath($moduleName, 'css');
 
         $clientLang = $this->app->getClientLang();
-        $notCNLang  = mb_strpos('|zh-cn|zh-tw|', "|{$clientLang}|") === false;
+        $notCNLang  = strpos('|zh-cn|zh-tw|', "|{$clientLang}|") === false;
 
         $css          = '';
         $devicePrefix = $this->devicePrefix;
@@ -537,7 +537,7 @@ class baseControl
     public function getExtCSS(array $files, string $suffix = ''): string
     {
         $clientLang = $this->app->getClientLang();
-        $notCNLang  = mb_strpos('|zh-cn|zh-tw|', "|{$clientLang}|") === false;
+        $notCNLang  = strpos('|zh-cn|zh-tw|', "|{$clientLang}|") === false;
 
         $filePairs = array();
         foreach($files as $cssFile)
