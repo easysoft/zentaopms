@@ -4,6 +4,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'label' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'statuslabel' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'branchlabel' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'storylist' . DS . 'v1.php';
 
 class twinsStoryList extends storyList
@@ -74,24 +75,21 @@ class twinsStoryList extends storyList
         $item        = parent::getItem($story);
         $relievedBtn = $this->relievedBtn;
 
-        $branch      = isset($this->branches[$story->branch]) ? $this->branches[$story->branch] : '';
-        $stage       = $lang->story->stageList[$story->stage];
-        $labelClass  = $this->story->branch == $story->branch ? 'primary' : '';
-
         if(!isset($item['leading']))    $item['leading'] = array();
-        if($branch)
+        if(isset($this->branches[$story->branch]))
         {
             if(!is_array($item['leading'])) $item['leading'] = array($item['leading']);
-            $item['leading'] = array_merge(array(new label(setClass($labelClass, 'circle branch size-sm'), set::title($branch), $branch), $item['leading']));
+            $item['leading'] = array_merge(array(branchLabel::create($story->branch, $this->branches[$story->branch]), $item['leading']));
         }
 
-        $item['text'] = statusLabel::create($story->stage, $stage, setClass('flex-none'));
+        $item['content']    = statusLabel::create($story->status, $lang->story->statusList[$story->status], setClass('flex-none'));
+        $item['titleClass'] = 'gap-2 items-center min-w-0 text-clip';
 
         if($relievedBtn)
         {
             $btn = array
             (
-                'class'       => ($this->compact ? 'primary opacity-0 group-hover:opacity-100' : 'primary-pale'),
+                'class'       => ($this->compact ? 'text-primary opacity-0 group-hover:opacity-100' : 'primary-pale'),
                 'icon'        => 'unlink',
                 'data-id'     => $story->id,
                 'data-on'     => 'click',
