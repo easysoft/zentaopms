@@ -171,6 +171,8 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
     set::items($versions)
 )) : null;
 
+$deletedLabel = $story->deleted ? to::title(label($lang->story->deleted, setClass('danger'))) : null;
+
 detail
 (
     set::objectType('story'),
@@ -178,9 +180,10 @@ detail
     set::sections($sections),
     set::tabs($tabs),
     set::actions($actions),
-    $versionBtn,
     $parentTitle,
-    $parentUrl
+    $parentUrl,
+    $versionBtn,
+    $deletedLabel
 );
 
 /**
