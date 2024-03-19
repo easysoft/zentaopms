@@ -1626,7 +1626,7 @@ class story extends control
         $story = $this->story->fetchByID($storyID);
         $gradeOptions = $this->story->getGradeOptions($story, $type);
 
-        $items = array_map(function($grade){return array('text' => $grade, 'value' => $grade);}, $gradeOptions);
+        $items = array_map(function($grade, $name){return array('text' => $name, 'value' => $grade);}, $gradeOptions);
 
         return $this->send(array('items' => array_values($items), 'default' => current($gradeOptions)));
     }
