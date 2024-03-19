@@ -121,5 +121,76 @@ class gitfox extends control
         if(is_bool($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitfox->serverFail))));
         if(!isset($user[0]->uid)) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitfox->tokenError))));
     }
+
+    /**
+     * Bind gitfox user to zentao users.
+     *
+     * @param  int     $gitfoxID
+     * @param  string  $type
+     * @access public
+     * @return void
+     */
+    public function bindUser(int $gitfoxID, string $type = 'all')
+    {
+        $userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');
+
+        $user   = $this->gitfox->apiGetCurrentUser($gitfoxID);
+        if(!isset($user->admin) or !$user->admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitfox->tokenLimit, 'locate' => $this->createLink('gitfox', 'edit', array('gitfoxID' => $gitfoxID))));
+
+        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
+
+        if($_POST)
+        {
+            $users       = $this->post->zentaoUsers;
+            $gitfoxNames = $this->post->gitfoxUserNames;
+
+            $result = $this->gitfoxZen->checkUserRepeat($users, $userPairs);
+            if($result['result'] != 'success') return $this->send($result);
+
+            $this->gitfoxZen->bindUsers($gitfoxID, $users, $gitfoxNames, $zentaoUsers);
+
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
+        }
+
+        $userList      = array();
+        $gitfoxUsers   = $this->gitfox->apiGetUsers($gitfoxID);
+        $bindedUsers   = $this->loadModel('pipeline')->getUserBindedPairs($gitfoxID, 'gitfox', 'account,openID');
+        $matchedResult = $this->gitfox->getMatchedUsers($gitfoxID, $gitfoxUsers, $zentaoUsers);
+
+        foreach($gitfoxUsers as $gitfoxUser)
+        {
+            $user = new stdclass();
+            $user->email            = '';
+            $user->status           = 'notBind';
+            $user->gitfoxID         = $gitfoxUser->id;
+            $user->gitfoxEmail      = $gitfoxUser->email;
+            $user->gitfoxUser       = $gitfoxUser->realname . '@' . $gitfoxUser->account;
+
+            $user->zentaoUsers = isset($matchedResult[$gitfoxUser->id]) ? $matchedResult[$gitfoxUser->id]->zentaoAccount : '';
+            if($user->zentaoUsers)
+            {
+                if(isset($zentaoUsers[$user->zentaoUsers])) $user->email = $zentaoUsers[$user->zentaoUsers]->email;
+
+                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $gitfoxUser->id)
+                {
+                    $user->status = 'binded';
+                    if(!isset($bindedUsers[$user->zentaoUsers])) $user->status = 'bindedError';
+                }
+            }
+
+            if($type != 'all' && $user->status != $type) continue;
+            $userList[] = $user;
+        }
+
+        $this->view->title       = $this->lang->gitfox->bindUser;
+        $this->view->type        = $type;
+        $this->view->gitfoxID    = $gitfoxID;
+        $this->view->recTotal    = count($userList);
+        $this->view->userList    = $userList;
+        $this->view->userPairs   = $userPairs;
+        $this->view->zentaoUsers = $zentaoUsers;
+        $this->display();
+    }
 }
 

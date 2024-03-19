@@ -153,6 +153,7 @@ $lang->action->objectTypes['gitlabbranch']     = 'GitLab分支';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab保护分支';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab标签';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab标签保护';
+$lang->action->objectTypes['gitfoxuser']       = 'GitFox用户';
 $lang->action->objectTypes['giteauser']        = 'Gitea用户';
 $lang->action->objectTypes['gogsuser']         = 'Gogs用户';
 $lang->action->objectTypes['kanbanspace']      = '看板空间';

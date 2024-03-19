@@ -964,7 +964,7 @@ class instanceModel extends model
             if(!common::hasPriv('instance', 'manage')) return false;
 
             if($action === 'edit') return true;
-            if($action == 'bindUser')  return in_array($instance->appName, array('GitLab', 'Gitea', 'Gogs'));
+            if($action == 'bindUser')  return in_array($instance->appName, array('GitLab', 'GitFox', 'Gitea', 'Gogs'));
             if($action == 'ajaxUninstall') return true;
             return false;
         }
@@ -975,7 +975,7 @@ class instanceModel extends model
         if($action == 'visit')         return !empty($instance->domain) && $this->canDo('visit', $instance);
         if($action == 'upgrade')       return !empty($instance->latestVersion) && in_array($instance->status, array('stopped', 'running'));
         if($action == 'edit')          return false;
-        if($action == 'bindUser')      return $instance->status == 'running' && $instance->appName == 'GitLab';
+        if($action == 'bindUser')      return $instance->status == 'running' && in_array($instance->appName, array('GitLab', 'GitFox'));
 
         return true;
     }

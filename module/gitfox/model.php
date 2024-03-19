@@ -62,13 +62,20 @@ class gitfoxModel extends model
      * @access public
      * @return string|object
      */
-    public function getApiRoot(int $gitfoxID): string|object
+    public function getApiRoot(int $gitfoxID, bool $sudo = true): string|object
     {
         $gitfox = $this->getByID($gitfoxID);
         if(!$gitfox || $gitfox->type != 'gitfox') return '';
 
+        $sudoParam = '';
+        if($sudo == true && !$this->app->user->admin)
+        {
+            $openID = $this->loadModel('pipeline')->getOpenIdByAccount($gitfoxID, 'gitfox', $this->app->user->account);
+            if($openID) $sudoParam = "&sudo={$openID}";
+        }
+
         $apiRoot = new stdclass;
-        $apiRoot->url    = rtrim($gitfox->url, '/') . '/api/v1%s';
+        $apiRoot->url    = rtrim($gitfox->url, '/') . '/api/v1%s' . $sudoParam;
         $apiRoot->header = array('Authorization: Bearer ' . $gitfox->token);
 
         return $apiRoot;
@@ -407,5 +414,142 @@ class gitfoxModel extends model
 
         if(!$response) dao::$errors[] = false;
         return false;
+    }
+
+    /**
+     * 获取最新用户。
+     * Get current user.
+     *
+     * @param  int $gitfoxID
+     * @access public
+     * @return object|array|null|false
+     */
+    public function apiGetCurrentUser(int $gitfoxID): object|array|null|false
+    {
+        $apiRoot = $this->getApiRoot($gitfoxID);
+        $url     = sprintf($apiRoot->url, "/user");
+        return json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+    }
+
+    /**
+     * 获取gitfox用户列表。
+     * Get gitfox user list.
+     *
+     * @param  int    $gitfoxID
+     * @param  bool   $onlyLinked
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function apiGetUsers(int $gitfoxID, bool $onlyLinked = false, string $orderBy = 'id_desc'): array
+    {
+        /* GitLab API '/users' can only return 20 users per page in default, so we use a loop to fetch all users. */
+        $page     = 1;
+        $perPage  = 100;
+        $response = array();
+        $apiRoot  = $this->getApiRoot($gitfoxID);
+
+        /* Get order data. */
+        $orders = explode('_', $orderBy);
+        $order  = array_pop($orders);
+        $sort   = join('_', $orders);
+
+        while(true)
+        {
+            /* Also use `per_page=20` to fetch users in API. Fetch active users only. */
+            $url      = sprintf($apiRoot->url, "/admin/users") . "?order={$order}&sort={$sort}&page={$page}&limit={$perPage}";
+            $httpData = commonModel::http($url, null, array(), $apiRoot->header, 'data', 'GET', 30, true, false);
+            if(empty($httpData['body'])) break;
+
+            $result   = json_decode($httpData['body']);
+            if(!empty($result) && is_array($result))
+            {
+                $response = array_merge($response, $result);
+                $page += 1;
+
+                $resultPage      = isset($httpData['header']['X-Page']) ? $httpData['header']['X-Page'] : $httpData['header']['x-page'];
+                $resultTotalPage = isset($httpData['header']['X-Total-Pages']) ? $httpData['header']['X-Total-Pages'] : $httpData['header']['x-total-pages'];
+                if($resultPage == $resultTotalPage) break;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if(!$response) return array();
+
+        /* Get linked users. */
+        $linkedUsers = array();
+        if($onlyLinked) $linkedUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitfoxID, 'gitfox', 'openID,account');
+
+        $users = array();
+        foreach($response as $gitfoxUser)
+        {
+            if($onlyLinked and !isset($linkedUsers[$gitfoxUser->id])) continue;
+
+            $user = new stdclass;
+            $user->id             = $gitfoxUser->uid;
+            $user->realname       = $gitfoxUser->display_name;
+            $user->account        = $gitfoxUser->uid;
+            $user->email          = zget($gitfoxUser, 'email', '');
+            $user->createdAt      = zget($gitfoxUser, 'created', '');
+            $user->lastActivityOn = zget($gitfoxUser, 'updated', '');
+
+            $users[] = $user;
+        }
+
+        return $users;
+    }
+
+    /**
+     * 获取匹配的gitfox用户列表。
+     * Get matched gitfox users.
+     *
+     * @param  int    $gitfoxID
+     * @param  array  $gitfoxUsers
+     * @param  array  $zentaoUsers
+     * @access public
+     * @return array
+     */
+    public function getMatchedUsers(int $gitfoxID, array $gitfoxUsers, array $zentaoUsers): array
+    {
+        $matches = new stdclass;
+        foreach($gitfoxUsers as $gitfoxUser)
+        {
+            foreach($zentaoUsers as $zentaoUser)
+            {
+                if($gitfoxUser->email == $zentaoUser->email)       $matches->emails[$gitfoxUser->email][]     = $zentaoUser->account;
+                if($gitfoxUser->account == $zentaoUser->account)   $matches->accounts[$gitfoxUser->account][] = $zentaoUser->account;
+                if($gitfoxUser->realname == $zentaoUser->realname) $matches->names[$gitfoxUser->realname][]   = $zentaoUser->account;
+            }
+        }
+
+        $bindedUsers = $this->loadModel('pipeline')->getUserBindedPairs($gitfoxID, 'gitfox', 'openID,account');
+
+        $matchedUsers = array();
+        foreach($gitfoxUsers as $gitfoxUser)
+        {
+            if(isset($bindedUsers[$gitfoxUser->id]))
+            {
+                $gitfoxUser->zentaoAccount     = $bindedUsers[$gitfoxUser->id];
+                $matchedUsers[$gitfoxUser->id] = $gitfoxUser;
+                continue;
+            }
+
+            $matchedZentaoUsers = array();
+            if(isset($matches->emails[$gitfoxUser->email]))     $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$gitfoxUser->email]);
+            if(isset($matches->names[$gitfoxUser->realname]))   $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$gitfoxUser->realname]);
+            if(isset($matches->accounts[$gitfoxUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$gitfoxUser->account]);
+
+            $matchedZentaoUsers = array_unique($matchedZentaoUsers);
+            if(count($matchedZentaoUsers) == 1)
+            {
+                $gitfoxUser->zentaoAccount     = current($matchedZentaoUsers);
+                $matchedUsers[$gitfoxUser->id] = $gitfoxUser;
+            }
+        }
+
+        return $matchedUsers;
     }
 }

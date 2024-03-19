@@ -50,3 +50,27 @@ $config->gitfox->dtable->fieldList['actions']['sortType'] = false;
 $config->gitfox->dtable->fieldList['actions']['fixed']    = 'right';
 $config->gitfox->dtable->fieldList['actions']['menu']     = array('edit', 'bindUser', 'delete');
 $config->gitfox->dtable->fieldList['actions']['list']     = $config->gitfox->actionList;
+
+$config->gitfox->dtable->bindUser = new stdclass();
+$config->gitfox->dtable->bindUser->fieldList['gitfoxUser']['title']    = $lang->gitfox->gitfoxAccount;
+$config->gitfox->dtable->bindUser->fieldList['gitfoxUser']['type']     = 'avatarName';
+$config->gitfox->dtable->bindUser->fieldList['gitfoxUser']['sortType'] = false;
+$config->gitfox->dtable->bindUser->fieldList['gitfoxUser']['width']    = 300;
+
+$config->gitfox->dtable->bindUser->fieldList['gitfoxEmail']['title'] = $lang->gitfox->gitfoxEmail;
+$config->gitfox->dtable->bindUser->fieldList['gitfoxEmail']['type']  = 'text';
+$config->gitfox->dtable->bindUser->fieldList['gitfoxEmail']['width'] = 200;
+
+$config->gitfox->dtable->bindUser->fieldList['email']['title'] = $lang->gitfox->zentaoEmail;
+$config->gitfox->dtable->bindUser->fieldList['email']['type']  = 'text';
+$config->gitfox->dtable->bindUser->fieldList['email']['width'] = 200;
+
+$config->gitfox->dtable->bindUser->fieldList['zentaoUsers']['title']   = array('html' => $lang->gitfox->zentaoAccount . "<span class='text-gray'>{$lang->gitfox->accountDesc}</span>");
+$config->gitfox->dtable->bindUser->fieldList['zentaoUsers']['type']    = 'control';
+$config->gitfox->dtable->bindUser->fieldList['zentaoUsers']['control'] = 'picker';
+$config->gitfox->dtable->bindUser->fieldList['zentaoUsers']['width']   = 300;
+
+$config->gitfox->dtable->bindUser->fieldList['status']['title'] = $lang->gitfox->bindingStatus;
+$config->gitfox->dtable->bindUser->fieldList['status']['html']  = true;
+$config->gitfox->dtable->bindUser->fieldList['status']['width'] = 100;
+$config->gitfox->dtable->bindUser->fieldList['status']['map']   = $lang->gitfox->bindStatus;

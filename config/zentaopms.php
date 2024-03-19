@@ -289,6 +289,7 @@ $config->openMethods[] = 'gitlab.createtag';
 $config->openMethods[] = 'gitlab.deletetag';
 $config->openMethods[] = 'gitfox.create';
 $config->openMethods[] = 'gitfox.edit';
+$config->openMethods[] = 'gitfox.binduser';
 $config->openMethods[] = 'gogs.create';
 $config->openMethods[] = 'gogs.edit';
 $config->openMethods[] = 'gogs.binduser';
