@@ -372,13 +372,14 @@ class release extends control
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+        $excludeStoryIdList = $this->releaseZen->getExcludeStoryIdList($release);
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $executionIdList, 'story', $release->stories, 'draft,reviewing,changing', $pager);
+            $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $executionIdList, 'story', $excludeStoryIdList, 'draft,reviewing,changing', $pager);
         }
         else
         {
-            $allStories = $this->story->batchGetExecutionStories(implode(',', $executionIdList), $release->product, 't1.`order`_desc', 'byBranch', $release->branch, 'story', $release->stories, $pager);
+            $allStories = $this->story->batchGetExecutionStories(implode(',', $executionIdList), $release->product, 't1.`order`_desc', 'byBranch', $release->branch, 'story', $excludeStoryIdList, $pager);
         }
 
         $this->view->allStories = $allStories;

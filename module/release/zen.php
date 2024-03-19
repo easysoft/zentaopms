@@ -156,6 +156,32 @@ class releaseZen extends release
     }
 
     /**
+     * 获取发布不可关联的需求ID列表。
+     * Get the story id list that can not be linked to the release.
+     *
+     * @param  object    $release
+     * @access protected
+     * @return array
+     */
+    public function getExcludeStoryIdList(object $release): array
+    {
+        $parentIdList = $this->dao->select('id')->from(TABLE_STORY)
+            ->where('product')->eq($release->product)
+            ->andWhere('type')->eq('story')
+            ->andWhere('isParent')->eq('1')
+            ->andWhere('status')->notIN('draft,reviewing,changing')
+            ->fetchPairs();
+
+        foreach(explode(',', $release->stories) as $storyID)
+        {
+            if(!$storyID) continue;
+            if(!isset($parentIdList[$storyID])) $parentIdList[$storyID] = $storyID;
+        }
+
+        return $parentIdList;
+    }
+
+    /**
      * 生成的发布详情页面的需求数据。
      * Generate the story data for the release view page.
      *
