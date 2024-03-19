@@ -126,6 +126,7 @@ $lang->story->source           = 'Von';
 $lang->story->sourceNote       = 'Hinweis';
 $lang->story->fromBug          = 'Von Bug';
 $lang->story->title            = 'Titel';
+$lang->story->name             = "Name";
 $lang->story->type             = "Story/Requirement";
 $lang->story->category         = 'Category';
 $lang->story->color            = 'Color';

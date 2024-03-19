@@ -161,6 +161,7 @@ if(!empty($story->children))
     $cols['estimate']   = $config->story->dtable->fieldList['estimate'];
     $cols['status']     = $config->story->dtable->fieldList['status'];
     $cols['actions']    = $config->story->dtable->fieldList['actions'];
+    $cols['title']['title']        = $lang->story->name;
     $cols['id']['checkbox']        = false;
     $cols['title']['nestedToggle'] = false;
     $cols['actions']['minWidth']   = 190;
@@ -209,7 +210,8 @@ detailHeader
     )
 );
 
-$statusClass = $story->URChanged ? 'status-changed' : "status-{$story->status}";
+$parentChanged = !empty($story->parentChanged);
+$statusClass   = $parentChanged ? 'status-changed' : "status-{$story->status}";
 detailBody
 (
     sectionList
@@ -234,7 +236,7 @@ detailBody
         ) : null,
         empty($story->children) ? null : section
         (
-            set::title($story->type == 'requirement' ? $lang->story->story : $lang->story->children),
+            set::title($lang->story->children),
             dtable
             (
                 set::cols($cols),
@@ -319,7 +321,7 @@ detailBody
                         span
                         (
                             setClass("status-story $statusClass"),
-                            $story->URChanged ? $lang->story->URChanged : $this->processStatus('story', $story)
+                            $parentChanged ? $lang->story->parent . $lang->story->change : $this->processStatus('story', $story)
                         )
                     ),
                     $story->type == 'requirement' ? null : item

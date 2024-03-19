@@ -341,7 +341,7 @@ class storyTao extends storyModel
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->beginIF($productID)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
 
         $parents = $this->extractParents($stories);
-        if($parents) $parents = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
+        if($parents) $parents = $this->dao->select('id,title,version')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
 
         $mainID  = $type == 'story' ? 'BID' : 'AID';
         $countID = $type == 'story' ? 'AID' : 'BID';
@@ -357,7 +357,11 @@ class storyTao extends storyModel
         foreach($stories as $story)
         {
             /* Merge parent story title. */
-            if($story->parent > 0 and isset($parents[$story->parent])) $story->parentName = $parents[$story->parent]->title;
+            if($story->parent > 0 and isset($parents[$story->parent]))
+            {
+                $story->parentName = $parents[$story->parent]->title;
+                if($parents[$story->parent]->version > $story->parentVersion && $story->parentVersion > 0) $story->parentChanged = true;
+            }
 
             /* Merge plan title. */
             $story->planTitle = '';
@@ -1541,6 +1545,36 @@ class storyTao extends storyModel
     }
 
     /**
+     * 获取该需求影响的子需求。
+     * Get affected children for this story.
+     *
+     * @param  object    $story
+     * @param  array     $users
+     * @access protected
+     * @return object
+     */
+    protected function getAffectedChildren(object $story, array $users): object
+    {
+        if(empty($story->children)) return $story;
+
+        if(!isset($this->config->story->affect)) $this->config->story->affect = new stdclass();
+        $this->config->story->affect->children = new stdclass();
+        $this->config->story->affect->children->fields[] = array('name' => 'id',           'title' => $this->lang->idAB, 'type' => 'id');
+        $this->config->story->affect->children->fields[] = array('name' => 'title',        'title' => $this->lang->story->name, 'link' => helper::createLink('story', 'view', 'id={id}'), 'type' => 'title');
+        $this->config->story->affect->children->fields[] = array('name' => 'pri',          'title' => $this->lang->priAB, 'type' => 'pri');
+        $this->config->story->affect->children->fields[] = array('name' => 'status',       'title' => $this->lang->story->status, 'type' => 'status');
+        $this->config->story->affect->children->fields[] = array('name' => 'openedBy',     'title' => $this->lang->story->openedBy, 'type' => 'user');
+
+        foreach($story->children as $child)
+        {
+            $child->status   = $this->processStatus('story', $child);
+            $child->openedBy = zget($users, $child->openedBy);
+        }
+
+        return $story;
+    }
+
+    /**
      * 获取该需求影响的孪生需求。
      * Get affected twins for this story.
      *
@@ -1613,21 +1647,21 @@ class storyTao extends storyModel
         $executionID     = empty($execution) ? 0 : $execution->id;
         if(!isset($story->from)) $story->from = '';
 
-        $closeLink              = helper::createLink($story->type, 'close', $params . "&from=$story->from");
-        $processStoryChangeLink = helper::createLink($story->type, 'processStoryChange', $params);
-        $changeLink             = helper::createLink($story->type, 'change', $params . "&from=$story->from");
-        $submitReviewLink       = helper::createLink($story->type, 'submitReview', "storyID=$story->id");
-        $reviewLink             = helper::createLink($story->type, 'review', $params . "&from=$story->from") . ($this->app->tab == 'project' ? '#app=project' : '');
-        $recallLink             = helper::createLink($story->type, 'recall', $params . "&from=list&confirm=no");
-        $batchCreateStoryLink   = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0");
-        $editLink               = helper::createLink($story->type, 'edit', $params . "&kanbanGroup=default") . ($this->app->tab == 'project' ? '#app=project' : '');
-        $createCaseLink         = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
+        $closeLink               = helper::createLink($story->type, 'close', $params . "&from=$story->from");
+        $processStoryChangeLink  = helper::createLink('story', 'processStoryChange', $params);
+        $changeLink              = helper::createLink($story->type, 'change', $params . "&from=$story->from");
+        $submitReviewLink        = helper::createLink($story->type, 'submitReview', "storyID=$story->id");
+        $reviewLink              = helper::createLink($story->type, 'review', $params . "&from=$story->from") . ($this->app->tab == 'project' ? '#app=project' : '');
+        $recallLink              = helper::createLink($story->type, 'recall', $params . "&from=list&confirm=no");
+        $batchCreateStoryLink    = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0");
+        $editLink                = helper::createLink($story->type, 'edit', $params . "&kanbanGroup=default") . ($this->app->tab == 'project' ? '#app=project' : '');
+        $createCaseLink          = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
 
         /* If the story cannot be changed, render the close button. */
         $canClose = common::hasPriv($story->type, 'close') && $this->isClickable($story, 'close');
         if(!common::canBeChanged($story->type, $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
-        $canProcess = common::hasPriv($story->type, 'processStoryChange');
-        if($story->URChanged) return array(array('name' => 'processStoryChange', 'data-toggle' => 'modal', 'url' => $canProcess ? $processStoryChangeLink : null, 'disabled' => !$canProcess));
+        $canProcessChange = common::hasPriv('story', 'processStoryChange');
+        if(!empty($story->parentChanged)) return array(array('name' => 'processStoryChange', 'url' => $canProcessChange ? $processStoryChangeLink : null, 'disabled' => !$canProcessChange, 'innerClass' => 'ajax-submit'));
 
         /* Change button. */
         $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change');

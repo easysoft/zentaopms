@@ -51,10 +51,16 @@ class storyModel extends model
 
         $story->tasks = $this->dao->select('id,name,assignedTo,execution,project,status,consumed,`left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('story')->in($twinsIdList)->orderBy('id DESC')->fetchGroup('execution');
 
-        if($story->toBug)          $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
-        if($story->parent > 0)     $story->parentName = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch('title');
-        if($story->fromStory)      $story->sourceName = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($story->fromStory)->fetch('title');
-        if($story->parent == '-1') $story->children   = $this->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
+        if($story->parent > 0)
+        {
+            $parent = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
+            $story->parentName    = $parent->title;
+            $story->parentChanged = $story->parentVersion > 0 && $parent->version > $story->parentVersion;
+        }
+
+        if($story->toBug)           $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
+        if($story->fromStory)       $story->sourceName = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($story->fromStory)->fetch('title');
+        if($story->isParent == '1') $story->children   = $this->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
         if($story->plan)
         {
             $plans = $this->dao->select('id,title,branch')->from(TABLE_PRODUCTPLAN)->where('id')->in($story->plan)->fetchAll('id');
@@ -185,10 +191,17 @@ class storyModel extends model
     {
         $users = $this->loadModel('user')->getPairs('pofirst|nodeleted', "{$story->lastEditedBy},{$story->openedBy},{$story->assignedTo}");
 
-        $story = $this->storyTao->getAffectedProjects($story, $users);
-        $story = $this->storyTao->getAffectedBugs($story, $users);
-        $story = $this->storyTao->getAffectedCases($story, $users);
-        $story = $this->storyTao->getAffectedTwins($story, $users);
+        if($story->type == 'story')
+        {
+            $story = $this->storyTao->getAffectedProjects($story, $users);
+            $story = $this->storyTao->getAffectedBugs($story, $users);
+            $story = $this->storyTao->getAffectedCases($story, $users);
+            $story = $this->storyTao->getAffectedTwins($story, $users);
+        }
+        else
+        {
+            $story = $this->storyTao->getAffectedChildren($story, $users);
+        }
 
         return $story;
     }
@@ -2540,12 +2553,23 @@ class storyModel extends model
                 ->andWhere('product')->eq($productID)
                 ->andWhere('type')->eq('requirement')
                 ->andWhere('status')->eq('active')
-                ->andWhere('isParent')->eq('0')
                 ->andWhere('grade')->in(array_keys($URGradePairs))
                 ->fetchAll('id');
 
+            $parents = array();
+            foreach($requirements as $requirement) $parents[$requirement->parent] = $requirement->parent;
+
             $requirementPairs = array();
-            foreach($requirements as $requirement) $requirementPairs[$requirement->id] = isset($URGradePairs[$requirement->grade]) ? '(' . $URGradePairs[$requirement->grade] . ') ' . $requirement->title : $requirement->title;
+            foreach($requirements as $id => $requirement)
+            {
+                if(isset($parents[$requirement->id]))
+                {
+                    unset($requirements[$id]);
+                    continue;
+                }
+
+                $requirementPairs[$requirement->id] = isset($URGradePairs[$requirement->grade]) ? '(' . $URGradePairs[$requirement->grade] . ') ' . $requirement->title : $requirement->title;
+            }
 
             $childIdList = $this->getAllChildId($storyID);
             $stories = $this->dao->select('id, grade, title')->from(TABLE_STORY)
@@ -4549,7 +4573,6 @@ class storyModel extends model
      */
     public function buildActionButtonList(object $story, $type = 'browse', object|null $execution = null, $storyType = 'story'): array
     {
-        $menu   = '';
         $params = "storyID=$story->id";
 
         if($type == 'browse') return $this->storyTao->buildBrowseActionBtnList($story, $params, $storyType, $execution);
@@ -4612,8 +4635,17 @@ class storyModel extends model
             $story->actions = $actions;
         }
 
-        $story->rawStatus = $story->status;
-        $story->status    = zget($this->lang->{$story->type}->statusList, $story->status);
+        /* Parent story has changed. */
+        if(!empty($story->parentChanged))
+        {
+            $story->rawStatus = 'changing';
+            $story->status    = $this->lang->story->parent . $this->lang->story->change;
+        }
+        else
+        {
+            $story->rawStatus = $story->status;
+            $story->status    = zget($this->lang->{$story->type}->statusList, $story->status);
+        }
         return $story;
     }
 

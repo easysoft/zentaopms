@@ -1434,29 +1434,20 @@ class story extends control
     }
 
     /**
-     * 当软件需求关联的用户需求有变更时，让用户决定是否变更软件需求。
-     * Ask user to decide to whether change related story after the user requirement changed.
+     * 需求的父需求变更时，子需求确认变更。
+     * Confirm the change of the parent story.
      *
      * @param  int    $storyID
-     * @param  string $result  yes|no
      * @access public
      * @return void
      */
-    public function processStoryChange(int $storyID, string $result = 'yes')
+    public function processStoryChange(int $storyID)
     {
-        $this->commonAction($storyID);
-        $story = $this->story->getByID($storyID);
+        $story  = $this->story->fetchByID($storyID);
+        $parent = $this->story->fetchByID($story->parent);
 
-        if($result == 'no')
-        {
-            $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($storyID)->exec();
-            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
-        }
-
-        $this->view->changedStories = $this->story->getChangedStories($story);
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->storyID        = $storyID;
-        $this->display();
+        $this->dao->update(TABLE_STORY)->set('parentVersion')->eq($parent->version)->where('id')->eq($storyID)->exec();
+        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
     }
 
     /**
