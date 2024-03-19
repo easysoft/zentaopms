@@ -325,6 +325,18 @@ class scm
     {
         return $this->engine->createMR($MR, $openID, $assignee);
     }
+
+    /**
+     * Get a mr by api.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array
+     */
+    public function getSingleMR($MRID)
+    {
+        return $this->engine->getSingleMR($MRID);
+    }
 }
 
 /**

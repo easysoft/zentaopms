@@ -1024,4 +1024,18 @@ class gitlabRepo
         return json_decode(commonModel::http($url, $MRObject));
 
     }
+
+    /**
+     * Get a mr by api.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array
+     */
+    public function getSingleMR(int $MRID): null|object
+    {
+        $this->root = str_replace('repository/', '', $this->root);
+
+        return $this->fetch("merge_requests/$MRID");
+    }
 }

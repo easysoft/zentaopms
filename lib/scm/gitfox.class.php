@@ -929,4 +929,26 @@ class gitfoxRepo
         if(isset($MR->merged) && $MR->merged)          $MR->state = 'merged';
         return $MR;
     }
+
+    /**
+     * Get a mr by api.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array
+     */
+    public function getSingleMR(int $MRID): null|object
+    {
+        $MR = $this->fetch("pullreq/{$MRID}");
+        $MR->iid               = $MR->number;
+        $MR->web_url           = '';
+        $MR->state             = $MR->state == 'open' ? 'opened' : $MR->state;
+        $MR->merge_status      = $MR->merge_check_status ? 'cannot_be_merged' : 'can_be_merged';
+        $MR->changes_count     = $MR->stats->commits;
+        $MR->source_project_id = $MR->source_repo_id;
+        $MR->target_project_id = $MR->target_repo_id;
+        $MR->has_conflicts     = $MR->merge_check_status == 'conflict';
+        if($MR->merged) $MR->state = 'merged';
+        return $MR;
+    }
 }

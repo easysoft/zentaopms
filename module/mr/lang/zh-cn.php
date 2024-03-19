@@ -130,6 +130,7 @@ $lang->mr->apiErrorMap[7]  = "/(user doesn't have access to repo).*/";
 $lang->mr->apiErrorMap[8]  = "/(git apply).*/";
 $lang->mr->apiErrorMap[9]  = "a pull request for this target and source branch already exists";
 $lang->mr->apiErrorMap[10] = 'Internal error occurred';
+$lang->mr->apiErrorMap[11] = "The source branch doesn't contain any new commits";
 
 $lang->mr->errorLang[1]  = '源项目分支与目标项目分支不能相同';
 $lang->mr->errorLang[2]  = '存在另外一个同样的合并请求在源项目分支中: ID%u';
@@ -141,6 +142,7 @@ $lang->mr->errorLang[7]  = '您无权合并改版本库';
 $lang->mr->errorLang[8]  = '当前源分支和目标分支无法合并';
 $lang->mr->errorLang[9]  = '已存在相同的合并请求';
 $lang->mr->errorLang[10] = '服务器错误';
+$lang->mr->errorLang[11] = '源分支不包含任何新的提交';
 
 $lang->mr->from = "从";
 $lang->mr->to   = "合并到";

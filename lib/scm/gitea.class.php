@@ -825,4 +825,43 @@ class giteaRepo
         if(isset($MR->merged) && $MR->merged)          $MR->state = 'merged';
         return $MR;
     }
+
+    /**
+     * Get a mr by api.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array
+     */
+    public function getSingleMR(int $MRID): null|object
+    {
+        $hostID    = $this->repo->serviceHost;
+        $projectID = $this->repo->serviceProject;
+
+        global $app;
+        $apiRoot = $app->control->loadModel('gitea')->getApiRoot($hostID);
+        $url     = sprintf($apiRoot, "/repos/{$projectID}/pulls/$MRID");
+        $MR      = json_decode(commonModel::http($url));
+        if(!$MR || isset($MR->message) || isset($MR->errors)) return null;
+
+        if(isset($MR->url) || isset($MR->html_url))
+        {
+            $diff = common::http(sprintf($apiRoot, "/repos/$projectID/pulls/$MRID.diff"));
+
+            $MR->web_url = $MR->url;
+            $MR->iid     = $MR->number;
+            $MR->state   = $MR->state == 'open' ? 'opened' : $MR->state;
+            if($MR->merged) $MR->state = 'merged';
+
+            $MR->merge_status      = $MR->mergeable ? 'can_be_merged' : 'cannot_be_merged';
+            $MR->changes_count     = empty($diff) ? 0 : 1;
+            $MR->description       = $MR->body;
+            $MR->target_branch     = $MR->base->ref;
+            $MR->source_branch     = $MR->head->ref;
+            $MR->source_project_id = $projectID;
+            $MR->target_project_id = $projectID;
+            $MR->has_conflicts     = empty($diff) ? true : false;
+        }
+        return $MR;
+    }
 }
