@@ -372,7 +372,8 @@ function getAppCode(urlOrModuleName)
     if(moduleName === 'report')
     {
         if(['usereport', 'editreport', 'deletereport', 'custom'].includes(methodLowerCase) && link.params.from) return 'system';
-        else return link.prj ? 'project' : 'report';
+        if(methodName == 'projectsummary') return 'project';
+        return 'bi';
     }
     if(moduleName === 'story' && vision === 'lite') return 'project'
     if(moduleName === 'testcase' && methodLowerCase === 'zerocase')
