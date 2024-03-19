@@ -498,7 +498,7 @@ class storyZen extends story
         $product        = $this->product->getByID($productID);
         $users          = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $stories        = $this->story->getParentStoryPairs($productID, '', $storyType);
-        $grades         = $this->story->getGradePairs($storyType, 'grade', 'grade');
+        $grades         = $this->story->getGradePairs($storyType);
         $plans          = $this->loadModel('productplan')->getPairs($productID, $branch == 0 ? '' : $branch, 'unexpired|noclosed', true);
         $plans          = array_map(function($planName){return str_replace(FUTURE_TIME, $this->lang->story->undetermined, $planName);}, $plans);
         $forceReview    = $this->story->checkForceReview();
@@ -671,7 +671,7 @@ class storyZen extends story
         $reviewers = $this->story->getProductReviewers($productID);
         $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $stories   = $this->story->getParentStoryPairs($productID);
-        $grades    = $this->story->getGradePairs($storyType, 'grade', 'grade');
+        $grades    = $this->story->getGradePairs($storyType);
 
         $storyTypes = strpos($product->vision, 'or') !== false ? 'launched' : 'active';
         $URS        = $storyType != 'story' ? array() : $this->story->getProductStoryPairs($productID, $branch, 0, $storyTypes, 'id_desc', 0, '', 'requirement');

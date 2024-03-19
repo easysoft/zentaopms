@@ -4821,14 +4821,13 @@ class storyModel extends model
      * Get story grade pairs.
      *
      * @param  string $type story|requirement|epic
-     * @param  string $field1
-     * @param  string $field2
+     * @param  string $status enable|disable
      * @access public
      * @return array
      */
-    public function getGradePairs($type = 'story', $field1 = 'grade', $field2 = 'name', $status = 'enable'): array
+    public function getGradePairs($type = 'story', $status = 'enable'): array
     {
-        return $this->dao->select("$field1, $field2")->from(TABLE_STORYGRADE)
+        return $this->dao->select("grade, name")->from(TABLE_STORYGRADE)
             ->where('type')->eq($type)
             ->beginIF($status == 'enable')->andWhere('status')->eq('enable')->fi()
             ->orderBy('grade_asc')
@@ -4881,16 +4880,16 @@ class storyModel extends model
      */
     public function getGradeOptions(object|bool $story, string $storyType): array
     {
-        if(!$story) return $this->getGradePairs($storyType, 'grade', 'grade');
+        if(!$story) return $this->getGradePairs($storyType);
 
         $gradeOptions = array();
         if($storyType != $story->type)
         {
-            $gradeOptions = $this->getGradePairs($storyType, 'grade', 'grade');
+            $gradeOptions = $this->getGradePairs($storyType);
         }
         else
         {
-            $gradeOptions = $this->dao->select('grade')->from(TABLE_STORYGRADE)
+            $gradeOptions = $this->dao->select('grade, name')->from(TABLE_STORYGRADE)
                 ->where('type')->eq($storyType)
                 ->andWhere('grade')->gt($story->grade)
                 ->andWhere('status')->eq('enable')
