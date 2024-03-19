@@ -44,7 +44,6 @@ if($config->edition != 'open')
             'text'  => $lang->pivot->toDesign,
             'class' => 'primary',
             'url'   => inlink('browse'),
-            'data-toggle' => 'modal'
         ))) : null,
     );
 }
