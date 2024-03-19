@@ -581,14 +581,12 @@ function setBranchRelated(event)
         let $row = $currentRow;
         while($row.length)
         {
-            const $module = $row.find('.form-batch-input[data-name="module"]').empty();
-            $.each(data.modules, function(index, module)
-            {
-                $module.append('<option value="' + module.value + '"' + (module.value == data.currentModuleID ? 'selected' : '')  + '>' + module.text + '</option>');
-            });
+            const currentModuleID = $row.find('.form-batch-control[data-name="module"] input').val();
+            const $modulePicker   = $row.find('.form-batch-control[data-name="module"] input').zui('picker');
+            $modulePicker.render({items: data.modules});
+            $modulePicker.$.setValue(currentModuleID);
 
             $row = $row.next('tr');
-
             if(!$row.find('td[data-name="module"][data-ditto="on"]').length) break;
         }
     });
@@ -601,15 +599,12 @@ function setBranchRelated(event)
         let $row = $currentRow;
         while($row.length)
         {
-            const currentProjectID = $row.find('.form-batch-input[data-name="project"]').val();
-            const $project         = $row.find('.form-batch-input[data-name="project"]').empty();
-            $.each(projects, function(index, project)
-            {
-                $project.append('<option value="' + project.value + '"' + (project.value == currentProjectID ? 'selected' : '')  + '>' + project.text + '</option>');
-            });
+            const currentProjectID = $row.find('.form-batch-control[data-name="project"] input').val();
+            const $projectPikcer   = $row.find('.form-batch-control[data-name="project"] input').zui('picker');
+            $projectPikcer.render({items: projects});
+            $projectPikcer.$.setValue(currentProjectID);
 
             $row = $row.next('tr');
-
             if(!$row.find('td[data-name="project"][data-ditto="on"]').length) break;
         }
     });
@@ -623,15 +618,12 @@ function setBranchRelated(event)
         let $row = $currentRow;
         while($row.length)
         {
-            const currentExecutionID = $row.find('.form-batch-input[data-name="execution"]').val();
-            const $execution         = $row.find('.form-batch-input[data-name="execution"]').empty();
-            $.each(executions, function(index, execution)
-            {
-                $execution.append('<option value="' + execution.value + '"' + (execution.value == currentExecutionID ? 'selected' : '')  + '>' + execution.text + '</option>');
-            });
+            const currentExecutionID = $row.find('.form-batch-control[data-name="execution"] input').val();
+            const $executionPicker   = $row.find('.form-batch-control[data-name="execution"] input').zui('picker');
+            $executionPicker.render({items: executions});
+            $executionPicker.$.setValue(currentExecutionID);
 
             $row = $row.next('tr');
-
             if(!$row.find('td[data-name="execution"][data-ditto="on"]').length) break;
         }
     });
