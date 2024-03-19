@@ -17,7 +17,9 @@ include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 $isInModal     = isInModal();
 $isRequirement = $story->type == 'requirement';
 $isStoryType   = $story->type == 'story';
-$actions       = $isInModal ? null : $this->story->buildOperateMenu($story, 'view', $project ? $project : null);
+$actions       = $this->story->buildOperateMenu($story, 'view', $project ? $project : null);
+if($story->deleted) $actions = array();
+if($isInModal)      $actions = false;
 
 /* 版本列表。Version list. */
 $versions = array();
