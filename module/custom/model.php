@@ -897,6 +897,7 @@ class customModel extends model
      */
     public function setStoryGrade(string $module, array $data): bool
     {
+        $oldGrades = $this->dao->select('*')->from(TABLE_STORYGRADE)->where('type')->eq($module)->fetchAll('grade');
         $this->dao->delete()->from(TABLE_STORYGRADE)->where('type')->eq($module)->exec();
         foreach($data['grade'] as $key => $value)
         {
@@ -907,7 +908,7 @@ class customModel extends model
             $grade->grade  = $value;
             $grade->name   = $name;
             $grade->type   = $module;
-            $grade->status = 'enable';
+            $grade->status = isset($oldGrades[$value]) ? $oldGrades[$value]->status : 'enable';
 
             $this->dao->insert(TABLE_STORYGRADE)->data($grade)->exec();
         }
