@@ -21,10 +21,12 @@ class taskMiscInfo extends wg
         if(!$task) return array();
 
         $items = array();
-
         if($task->linkedBranch)
         {
-            $items[$lang->task->relatedBranch] = $task->linkedBranch;
+            $items[$lang->task->relatedBranch] = array(
+                'control' => 'list',
+                'items'   => array_values($task->linkedBranch)
+            );
         }
 
         $linkMRTitles = $this->prop('linkMRTitles', data('linkMRTitles'));
