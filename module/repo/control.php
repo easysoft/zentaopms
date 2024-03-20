@@ -1146,7 +1146,7 @@ class repo extends control
 
         $logs    = array();
         $version = 1;
-        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
+        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM))
         {
             $latestInDB = $this->repo->getLatestCommit($repoID, false);
 

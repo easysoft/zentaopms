@@ -289,6 +289,7 @@ class gitlabModel extends model
 
             $comment->revision        = $comment->id;
             $comment->originalComment = $comment->title;
+            $comment->committed_date  = $commitDate;
             $comment->comment         = $this->loadModel('repo')->replaceCommentLink($comment->title);
             $comment->committer       = isset($comment->author->identity->name) ? $comment->author->identity->name : $comment->committer_name;
             $comment->time            = date("Y-m-d H:i:s", strtotime($commitDate));

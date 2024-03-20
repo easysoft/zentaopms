@@ -417,9 +417,9 @@ class repoModel extends model
 
         $this->rmClientVersionFile();
 
-        if($data->SCM == 'Gitlab')
+        if(in_array($data->SCM, $this->config->repo->notSyncSCM))
         {
-            $this->loadModel('gitlab')->updateCodePath($data->serviceHost, (int)$data->serviceProject, $repo->id);
+            $this->loadModel($data->SCM)->updateCodePath($data->serviceHost, (int)$data->serviceProject, $repo->id);
             $data->path = $this->getByID($repo->id)->path;
             $this->updateCommitDate($repo->id);
         }

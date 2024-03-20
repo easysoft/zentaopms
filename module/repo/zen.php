@@ -1471,7 +1471,7 @@ class repoZen extends repo
                 if($branchID) $this->repo->fixCommit($repo->id);
             }
 
-            if(empty($branchID) || $repo->SCM == 'Gitlab')
+            if(empty($branchID) || in_array($repo->SCM, $this->config->repo->notSyncSCM))
             {
                 helper::setcookie("syncBranch", '');
 
