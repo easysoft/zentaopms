@@ -7074,6 +7074,7 @@ class storyModel extends model
             $objectIDList[] = $object->id;
             $storyIDList[]  = $objectType == 'story' ? $object->id : $object->story;
             $object->confirmeObject = array();
+            $object->URs            = '';
         }
 
         /* 获取需要确认的用户需求id。 */
@@ -7095,36 +7096,37 @@ class storyModel extends model
             ->andWhere('objectID')->in($objectIDList)
             ->andWhere('action')->in('confirmedretract,confirmedunlink')
             ->orderBy('id_asc')
-            ->fetchAll('extra');
-
-        $needConfirmList = array();
-        /* 获取需要进行确认操作的用户需求。*/
-        foreach($lastActions as $storyID => $action)
-        {
-            $actionType = $action->action == 'retractclosed' ? 'confirmedretract' : 'confirmedunlink';
-            if(isset($confirmedActions[$storyID]) and $confirmedActions[$storyID]->date > $action->date and $confirmedActions[$storyID]->action == $actionType) continue;
-            $needConfirmList[$storyID] = $actionType;
-        }
-
-        /* 获取需要进行确认操作的研发需求 => 用户需求。*/
-        $confirmObjects = array();
-        foreach($needConfirmList as $requirementID => $type)
-        {
-            foreach($URs as $storyID => $UR)
-            {
-                if (strpos($UR, (string) $requirementID) !== false) $confirmObjects[$storyID] = array('id' => $requirementID, 'type' => $type);
-            }
-        }
+            ->fetchAll('objectID');
 
         /* 将确认信息插入到objects中并且过滤掉已经确认的用户需求。*/
-        foreach($objects as $object)
+        foreach($objects as $objectID => $object)
         {
             if($this->app->rawModule == 'testtask') $object->id = $object->case;
-            $objectID = $objectType == 'story' ? $object->id : $object->story;
+            $objectID = $object->id;
+            $storyID  = $objectType == 'story' ? $object->id : $object->story;
+            $object->URs = isset($URs[$storyID]) ? $URs[$storyID] : '';
+            if(!$object->URs) continue;
 
-            if(isset($confirmObjects[$objectID]))
+            $objectURs = explode(',', $object->URs);
+            $URAction  = $objectAction = array();
+
+            foreach($objectURs as $URID)
             {
-                $object->confirmeObject = $confirmObjects[$objectID];
+                if(!isset($lastActions[$URID])) continue;
+
+                if(empty($URAction)) $URAction = $lastActions[$URID];
+                if($URAction->date < $lastActions[$URID]->date) $URAction = $lastActions[$URID];
+
+                if(!isset($confirmedActions[$objectID])) continue;
+
+                $objectAction = $confirmedActions[$objectID];
+                if($objectAction and $objectAction->date > $URAction->date) $URAction = array();
+            }
+
+            if($URAction)
+            {
+                $actionType = $URAction->action == 'retractclosed' ? 'confirmedretract' : 'confirmedunlink';
+                $object->confirmeObject = array('id' => $URAction->objectID, 'type' => $actionType);
             }
         }
 
