@@ -46,7 +46,7 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return true;
 
-        echo(js::alert($this->lang->project->accessDenied));
+        //echo(js::alert($this->lang->project->accessDenied));
         $this->session->set('project', '');
 
         return print(js::locate(helper::createLink('project', 'index')));
