@@ -592,6 +592,7 @@ define('TABLE_AI_MINIPROGRAMFIELD', '`' . $config->db->prefix . 'ai_miniprogramf
 define('TABLE_AI_MINIPROGRAMSTAR',  '`' . $config->db->prefix . 'ai_miniprogramstar`');
 define('TABLE_AI_MESSAGE',          '`' . $config->db->prefix . 'ai_message`');
 define('TABLE_AI_MODEL',            '`' . $config->db->prefix . 'ai_model`');
+define('TABLE_AI_ASSISTANT',        '`' . $config->db->prefix . 'ai_assistant`');
 
 define('TABLE_SQLITE_QUEUE', '`' . $config->db->prefix . 'sqlite_queue`');
 
