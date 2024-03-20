@@ -101,4 +101,6 @@ window.addGrade = function()
     newRow.find("input[type=hidden]").val(newIndex);
     newRow.find('td.index').text(newIndex);
     $(this).closest('tbody').append(newRow);
+
+    $(this).remove();
 };
