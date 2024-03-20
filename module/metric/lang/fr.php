@@ -70,7 +70,7 @@ $lang->metric->placeholder->select    = "Please select";
 $lang->metric->placeholder->project   = "All Projects";
 $lang->metric->placeholder->product   = "All Products";
 $lang->metric->placeholder->execution = "All Executions";
-$lang->metric->placeholder->dept      = "All Teams";
+$lang->metric->placeholder->dept      = "All Departments";
 $lang->metric->placeholder->user      = "All Users";
 $lang->metric->placeholder->program   = "All Program Sets";
 

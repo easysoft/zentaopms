@@ -71,7 +71,7 @@ $lang->metric->placeholder->select    = "请选择";
 $lang->metric->placeholder->project   = "全部项目";
 $lang->metric->placeholder->product   = "全部产品";
 $lang->metric->placeholder->execution = "全部执行";
-$lang->metric->placeholder->dept      = "全部团队";
+$lang->metric->placeholder->dept      = "全部部门";
 $lang->metric->placeholder->user      = "全部用户";
 $lang->metric->placeholder->program   = "全部项目集";
 
