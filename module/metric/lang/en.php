@@ -1,4 +1,5 @@
 <?php
+$lang->metric->metric        = "Metric";
 $lang->metric->common        = "Metric";
 $lang->metric->name          = "Metric name";
 $lang->metric->stage         = "Stage";

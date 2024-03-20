@@ -1,5 +1,6 @@
 <?php
 $lang->metric->common        = "Metric";
+$lang->metric->metric        = "Metric";
 $lang->metric->name          = "Metric name";
 $lang->metric->stage         = "Stage";
 $lang->metric->scope         = "Metric scope";
