@@ -2015,6 +2015,7 @@ class pivotModel extends model
      */
     public function getSysOptions($type, $object = '', $field = '', $source = '', $saveAs = '')
     {
+        $this->loadModel('bi');
         $options = array('' => '');
         switch($type)
         {
@@ -2040,12 +2041,7 @@ class pivotModel extends model
             case 'option':
                 if($field)
                 {
-                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                    if(is_file($path))
-                    {
-                        include $path;
-                        $options = $schema->fields[$field]['options'];
-                    }
+                    $options = $this->bi->getDataviewOptions($object, $field);
                 }
                 break;
             case 'object':
@@ -2058,30 +2054,7 @@ class pivotModel extends model
                     }
                     else
                     {
-                        $useField = $field;
-                        $useTable = $object;
-
-                        $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                        if(is_file($path))
-                        {
-                            include $path;
-                            $fieldObject = $schema->fields[$field]['object'];
-                            $fieldShow   = explode('.', $schema->fields[$field]['show']);
-
-                            if($fieldObject) $useTable = $fieldObject;
-                            if(count($fieldShow) == 2) $useField = $show[1];
-                        }
-
-                        $table = isset($this->config->objectTables[$useTable]) ? $this->config->objectTables[$useTable] : zget($this->config->objectTables, $object, '');
-                        if($table)
-                        {
-                            $columns = $this->dbh->query("SHOW COLUMNS FROM $table")->fetchAll();
-                            foreach($columns as $id => $column) $columns[$id] = (array)$column;
-                            $fieldList = array_column($columns, 'Field');
-
-                            $useField = in_array($useField, $fieldList) ? $useField : 'id';
-                            $options = $this->dao->select("id, {$useField}")->from($table)->fetchPairs();
-                        }
+                        $options = $this->bi->getObjectOptions($object, $field);
                     }
                 }
                 break;
@@ -2104,11 +2077,11 @@ class pivotModel extends model
             {
                 $keyField   = $field;
                 $valueField = $saveAs ? $saveAs : $field;
-                $options = $this->getOptionsFromSql($source, $keyField, $valueField);
+                $options = $this->bi->getOptionsFromSql($source, $keyField, $valueField);
             }
             elseif($saveAs)
             {
-                $options = $this->getOptionsFromSql($source, $field, $saveAs);
+                $options = $this->bi->getOptionsFromSql($source, $field, $saveAs);
             }
         }
 
