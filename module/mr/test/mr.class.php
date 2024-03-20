@@ -191,7 +191,9 @@ class mrTest
      */
     public function apiCreateMrTester(int $hostID, string $project, object $params): array|object|null
     {
-        $result = $this->objectModel->apiCreateMR($hostID, $project, $params);
+        $params->repoID        = $hostID;
+        $params->sourceProject = $project;
+        $result = $this->objectModel->apiCreateMR($hostID, $params);
         if(empty($result->iid) && empty($result->id)) return $result;
 
         $this->objectModel->apiDeleteMR($hostID, $project, empty($result->iid) ? $result->id : $result->iid);
@@ -246,12 +248,14 @@ class mrTest
      */
     public function apiDeleteMrTester(int $hostID, string $project, object $params): array|object|null
     {
-        $result = $this->objectModel->apiCreateMR($hostID, $project, $params);
+        $params->repoID        = $hostID;
+        $params->sourceProject = $project;
+        $result = $this->objectModel->apiCreateMR($hostID, $params);
         if(!$result) return null;
 
         $mrID   = empty($result->iid) ? $result->id : $result->iid;
         $this->objectModel->apiDeleteMR($hostID, $project, $mrID);
-        return $this->objectModel->apiGetSingleMR($hostID, $project, $mrID);
+        return $this->objectModel->apiGetSingleMR($hostID, $mrID);
     }
 
     /**
@@ -266,8 +270,7 @@ class mrTest
     public function apiCloseMrTester(int $hostID, string $project, int $mrID): array|object|null
     {
         $this->objectModel->apiReopenMR($hostID, $project, $mrID);
-        $this->objectModel->apiCloseMR($hostID, $project, $mrID);
-        return $this->objectModel->apiGetSingleMR($hostID, $project, $mrID);
+        return $this->objectModel->apiCloseMR($hostID, $project, $mrID);
     }
 
     /**
@@ -283,7 +286,7 @@ class mrTest
     {
         $this->objectModel->apiCloseMR($hostID, $project, $mriid);
         $this->objectModel->apiReopenMR($hostID, $project, $mriid);
-        return $this->objectModel->apiGetSingleMR($hostID, $project, $mriid);
+        return $this->objectModel->apiGetSingleMR($hostID, $mriid);
     }
 
     /**

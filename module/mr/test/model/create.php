@@ -21,6 +21,7 @@ include dirname(__FILE__, 2) . '/mr.class.php';
 zdTable('pipeline')->gen(1);
 zdTable('repo')->config('repo')->gen(1);
 zdTable('mr')->config('mr')->gen(1);
+su('admin');
 
 $mrModel = new mrTest();
 

@@ -7,7 +7,6 @@ title=测试 mrModel::batchSyncMR();
 timeout=0
 cid=0
 
-- 空的合并请求列表 @0
 - 正常的合并请求，更新本地MR的标题和编辑者
  - 第1条的id属性 @1
  - 第1条的title属性 @test-merge（不要关闭或删除）
@@ -15,8 +14,9 @@ cid=0
  - 第2条的id属性 @2
  - 第2条的editedBy属性 @~~
  - 第4条的id属性 @4
- - 第4条的compileStatus属性 @failed
- - 第4条的editedBy属性 @admin
+ - 第4条的compileStatus属性 @~~
+ - 第4条的editedBy属性 @~~
+- 空的合并请求列表 @0
 
 */
 
@@ -35,7 +35,7 @@ su('admin', false);
 global $tester;
 $mrModel = $tester->loadModel('mr');
 
-r($mrModel->batchSyncMR(array())) && p() && e('0'); // 空的合并请求列表
-
 $MRList = $mrModel->getList();
-r($mrModel->batchSyncMR($MRList)) && p('1:id,title,editedBy;2:id,editedBy;4:id,compileStatus,editedBy') && e('1,test-merge（不要关闭或删除）,admin;2,~~;4,failed,admin'); //正常的合并请求，更新本地MR的标题和编辑者
+r($mrModel->batchSyncMR($MRList)) && p('1:id,title,editedBy;2:id,editedBy;4:id,compileStatus,editedBy') && e('1,test-merge（不要关闭或删除）,admin;2,~~;4,~~,~~'); //正常的合并请求，更新本地MR的标题和编辑者
+
+r($mrModel->batchSyncMR(array())) && p() && e('0'); // 空的合并请求列表

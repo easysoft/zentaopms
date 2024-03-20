@@ -37,7 +37,7 @@ $mrID      = 28;
 r($mrModel->apiGetDiffs($hostID['error'], $projectID, $mrID)) && p() && e('0'); // 不存在的主机
 r($mrModel->apiGetDiffs($hostID['gitlab'], $projectID, $mrID)) && p() && e('0'); // GitLab 服务器
 
-$result = $mrModel->apiGetDiffs($hostID['gitea'], $projectID, $mrID);
+$result = $mrModel->apiGetDiffs($hostID['gitea'], $projectID, 29);
 r(strpos($result, 'unittest')) && p() && e('116'); // 正确的数据
 
 $mrID = 10000;
