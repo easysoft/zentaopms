@@ -38,7 +38,7 @@
   </div>
 </div>
 <div id="mainContent">
-  <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='workFeedback' data-url=<?php echo $this->createLink('search', 'buildOldForm', 'module=feedback');?>></div>
+  <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='workFeedback' data-url=<?php echo $this->createLink('search', 'buildOldForm', 'module=workFeedback');?>></div>
   <?php if(empty($feedbacks)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->feedback->noFeedback;?></span></p>

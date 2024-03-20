@@ -13,10 +13,14 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php js::set('mode', $mode);?>
 <?php js::set('rawMethod', $app->rawMethod);?>
+<?php js::set('todoCount', $todoCount);?>
+<?php js::set('isMax', $isMax);?>
+<?php js::set('isBiz', $isBiz);?>
+<?php js::set('isOpenedURAndSR', $isOpenedURAndSR);?>
 <div id='mainMenu' class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    foreach($lang->my->featureBar[$app->rawMethod]['ticket'] as $key => $name)
+    foreach($lang->my->featureBar[$app->rawMethod] as $key => $name)
     {
         $label  = "<span class='text'>{$name}</span>";
         $label .= $key == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
@@ -28,7 +32,7 @@
   </div>
 </div>
 <div id='mainContent' class="main-row fade">
-  <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='workTicket'></div>
+  <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='workTicket' data-url="<?php echo $this->createLink('search', 'buildOldForm', 'module=workTicket');?>"></div>
   <?php if(empty($tickets)):?>
   <div class="table-empty-tip">
     <p>
