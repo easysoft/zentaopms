@@ -86,7 +86,7 @@ class projectStory extends control
      * @access public
      * @return void
      */
-    public function track($projectID = 0, $productID = 0, $branch = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function track(int $projectID = 0, int $productID = 0, int $branch = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $products = $this->loadModel('product')->getProductPairsByProject($projectID);
         if(empty($productID)) $productID = key($products);
