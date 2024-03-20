@@ -1863,8 +1863,8 @@ class repoModel extends model
         $jobs = zget($commentGroup, $repo->id, array());
 
         $accountPairs  = array();
-        $userList      = $this->loadModel('gitlab')->apiGetUsers($repo->gitService);
-        $acountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs($repo->gitService, 'gitlab', 'openID,account');
+        $userList      = $this->loadModel($repo->SCM)->apiGetUsers($repo->gitService);
+        $acountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs($repo->gitService, strtolower($repo->SCM), 'openID,account');
         foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
 
         foreach($data->commits as $commit)
