@@ -30,7 +30,7 @@ formPanel
         set::label($lang->programplan->viewSetting),
         checkList
         (
-            set::name('stageCustom'),
+            set::name('stageCustom[]'),
             set::items($lang->programplan->stageCustom),
             set::value($stageCustom),
             set::inline(true)
@@ -42,7 +42,7 @@ formPanel
         set::label($lang->customField),
         checkList
         (
-            set::name('ganttFields'),
+            set::name('ganttFields[]'),
             set::items($customFields),
             set::value($showFields),
             set::inline(true)
