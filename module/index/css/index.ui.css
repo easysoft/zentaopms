@@ -26,6 +26,7 @@
 .hide-menu #menu .nav > .divider {padding: 0; margin: 6px}
 .hide-menu #menu .nav > li > a {justify-content: center;}
 .hide-menu #menu .nav > li > a > .text {display: none;}
+.hide-menu #menu #menuMoreNav .nav > li > a > .text {display: flex;}
 .hide-menu #menu .menu-toggle > .icon {transform: rotate(180deg);}
 
 #apps {position: fixed; left: var(--zt-menu-width, 96px); top: 0; bottom: 40px; right: 0; background-color: var(--zt-page-bg); transition: left .2s;}
