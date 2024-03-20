@@ -340,6 +340,7 @@ class repoModel extends model
             $repo->SCM            = isset($data['name']) ? 'Gitlab' : 'GitFox';
             $repo->encoding       = 'utf-8';
             $repo->encrypt        = 'base64';
+            $repo->acl            = '{"acl":"open","groups":[""],"users":[""]}';
 
             $this->dao->insert(TABLE_REPO)->data($repo)
                 ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
