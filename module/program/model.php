@@ -558,7 +558,8 @@ class programModel extends model
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi();
+            ->beginIF(!$queryAll and !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($this->config->systemMode == 'ALM')->andWhere('t1.model')->ne('ipd')->fi();
         if($this->cookie->involved || $involved)
         {
             $stmt->andWhere('t2.type')->eq('project')
