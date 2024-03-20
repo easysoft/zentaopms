@@ -73,7 +73,7 @@ class programplanZen extends programplan
             if(in_array($this->config->edition, array('max', 'ipd')))
             {
                 $plan->planDuration = $this->programplan->getDuration($plan->begin, $plan->end);
-                $plan->realDuration = $this->programplan->getDuration($plan->realBegan, $plan->realEnd);
+                $plan->realDuration = $this->programplan->getDuration((string)$plan->realBegan, (string)$plan->realEnd);
             }
 
             /* Check duplicated names to avoid to save same names. */
@@ -234,7 +234,7 @@ class programplanZen extends programplan
      */
     protected function buildAjaxCustomView(string $owner, string $module, array $customFields)
     {
-        $stageCustom = $this->setting->getItem("owner=$owner&module=$module&section=browse&key=stageCustom");
+        $stageCustom = $this->loadModel('setting')->getItem("owner=$owner&module=$module&section=browse&key=stageCustom");
         $ganttFields = $this->setting->getItem("owner=$owner&module=$module&section=ganttCustom&key=ganttFields");
         $zooming     = $this->setting->getItem("owner=$owner&module=$module&section=ganttCustom&key=zooming");
 
@@ -305,8 +305,44 @@ class programplanZen extends programplan
         $selectCustom = 0; // Display date and task settings.
         $dateDetails  = 1; // Gantt chart detail date display.
 
-        /* Get data of type lists. */
-        if($type == 'lists')
+        /* Get data of type. */
+        if($type == 'gantt')
+        {
+            $this->loadModel('setting');
+            $owner        = $this->app->user->account;
+            $module       = 'programplan';
+            $section      = 'browse';
+            $object       = 'stageCustom';
+            if(!isset($this->config->programplan->browse->stageCustom)) $this->setting->setItem("$owner.$module.browse.stageCustom", 'date,task,point');
+
+            $selectCustom = $this->setting->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
+
+            if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
+
+            $plans = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false);
+
+            /* Set Custom. */
+            foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
+            $this->view->customFields = $customFields;
+            $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
+        }
+        elseif($type == 'assignedTo')
+        {
+            $owner        = $this->app->user->account;
+            $module       = 'programplan';
+            $section      = 'browse';
+            $object       = 'stageCustom';
+            $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
+            if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
+
+            $plans = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $productID, $baselineID, $selectCustom, false);
+
+            /* Set Custom. */
+            foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
+            $this->view->customFields = $customFields;
+            $this->view->showFields   = $this->config->programplan->ganttCustom->ganttFields;
+        }
+        elseif($type == 'lists')
         {
             $sort   = common::appendOrder($orderBy);
             $stages = $this->programplan->getPlans($projectID, $productID, $sort);

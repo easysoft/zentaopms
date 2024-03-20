@@ -257,7 +257,7 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
     var $ganttDridData  = $ganttView.find('.gantt_grid_data');
 
     var ganttRowHeight = $ganttView.find('.gantt_row').first().outerHeight() || 25;
-    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight() + <?php echo count($plans['data'])?> * ganttRowHeight;
+    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight() + <?php echo count($stages['data'])?> * ganttRowHeight;
     <?php if($selectCustom == 'task'):?>
     var ganttWidth  = $ganttDridData.width() - 100;
     <?php else:?>
@@ -577,7 +577,7 @@ $(function()
         $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 120)));
     };
 
-    var ganttData = $.parseJSON(<?php echo json_encode(json_encode($plans));?>);
+    var ganttData = $.parseJSON(<?php echo json_encode(json_encode($stages));?>);
     if(!ganttData.data) ganttData.data = [];
 
     <?php

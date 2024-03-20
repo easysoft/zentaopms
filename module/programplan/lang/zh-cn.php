@@ -96,9 +96,8 @@ $lang->programplan->confirmDelete     = '确定要删除当前计划吗？';
 $lang->programplan->confirmChangeAttr = '修改后子阶段的类型将根据父阶段类型同步调整为“%s”，是否保存？';
 $lang->programplan->workloadTips      = '子阶段工作量占比按百分百的比例进行拆分';
 
-$lang->programplan->stageCustom = new stdClass();
-$lang->programplan->stageCustom->date = '显示日期';
-$lang->programplan->stageCustom->task = '显示任务';
+$lang->programplan->stageCustom['date'] = '显示日期';
+$lang->programplan->stageCustom['task'] = '显示任务';
 
 $lang->programplan->ganttCustom['PM']           ='负责人';
 $lang->programplan->ganttCustom['deadline']     ='计划完成';
