@@ -220,8 +220,10 @@ $lang->product->aclTips['private'] = "les membres de l'équipe et les membres de
 
 $lang->product->storySummary       = "Total de <strong>%s</strong> {$lang->SRCommon} sur cette page. Estimé: <strong>%s</strong> (h), et couverture de la recette: <strong>%s</strong>.";
 $lang->product->checkedSRSummary   = "<strong>%total%</strong> {$lang->SRCommon} sélectionnées, Estimé: <strong>%estimate%</strong>, et couverture de la recette: <strong>%rate%</strong>.";
-$lang->product->requirementSummary = "Total de <strong>%s</strong> {$lang->URCommon}, <strong>%s</strong> {$lang->SRCommon} sur cette page. Estimé: <strong>%s</strong> (h),.";
-$lang->product->checkedURSummary   = "<strong>%total%</strong> {$lang->URCommon}, <strong>%SRTotal%</strong> {$lang->SRCommon} sélectionnées, Estimé: <strong>%estimate%</strong>,.";
+$lang->product->requirementSummary = "Total <strong>%s</strong> {$lang->URCommon} on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}).";
+$lang->product->checkedURSummary   = "<strong>%total%</strong> {$lang->URCommon} selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}).";
+$lang->product->epicSummary        = "Total <strong>%s</strong> {$lang->ERCommon} on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}).";
+$lang->product->checkedERSummary   = "<strong>%total%</strong> {$lang->ERCommon} selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}).";
 $lang->product->noModule           = "<div>Vous n'avez aucun modules. </div><div>Gérer Maintenant</div>";
 $lang->product->noProduct          = "No {$lang->productCommon} à ce jour. ";
 $lang->product->noMatched          = '"%s" cannot be found.' . $lang->productCommon;

@@ -220,8 +220,10 @@ $lang->product->aclTips['private'] = "{$lang->executionCommon} team members only
 
 $lang->product->storySummary       = "Total <strong>%s</strong> {$lang->SRCommon} on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%s</strong>.";
 $lang->product->checkedSRSummary   = "<strong>%total%</strong> {$lang->SRCommon} selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%rate%</strong>.";
-$lang->product->requirementSummary = "Total <strong>%s</strong> {$lang->URCommon}, <strong>%s</strong> {$lang->SRCommon} on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}).";
-$lang->product->checkedURSummary   = "<strong>%total%</strong> {$lang->URCommon}, <strong>%SRTotal%</strong> {$lang->SRCommon} selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}).";
+$lang->product->requirementSummary = "Total <strong>%s</strong> {$lang->URCommon} on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}).";
+$lang->product->checkedURSummary   = "<strong>%total%</strong> {$lang->URCommon} selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}).";
+$lang->product->epicSummary        = "Total <strong>%s</strong> {$lang->ERCommon} on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}).";
+$lang->product->checkedERSummary   = "<strong>%total%</strong> {$lang->ERCommon} selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}).";
 $lang->product->noModule           = '<div>You have no modules. </div><div>Manage Now</div>';
 $lang->product->noProduct          = "No {$lang->productCommon} yet. ";
 $lang->product->noMatched          = '"%s" cannot be found.' . $lang->productCommon;

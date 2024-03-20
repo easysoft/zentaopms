@@ -107,6 +107,7 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
         if(checkedIdList.includes(row.id))
         {
             const story = row.data;
+            if(story.type != storyType) return;
             estimate   += parseFloat(story.estimate);
             if(story.caseCount > 0)
             {

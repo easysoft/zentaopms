@@ -220,8 +220,10 @@ $lang->product->aclTips['private'] = "{$lang->productCommon}相关负责人、�
 
 $lang->product->storySummary       = "本页共 <strong>%s</strong> 个{$lang->SRCommon}，预计 <strong>%s</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%s</strong>。";
 $lang->product->checkedSRSummary   = "选中 <strong>%total%</strong> 个{$lang->SRCommon}，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%rate%</strong>。";
-$lang->product->requirementSummary = "本页共 <strong>%s</strong> 个{$lang->URCommon}，<strong>%s</strong>个{$lang->SRCommon}，预计 <strong>%s</strong> 个{$lang->hourCommon}。";
-$lang->product->checkedURSummary   = "选中 <strong>%total%</strong> 个{$lang->URCommon}，<strong>%SRTotal%</strong>个{$lang->SRCommon}，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}。";
+$lang->product->requirementSummary = "本页共 <strong>%s</strong> 个{$lang->URCommon}，预计 <strong>%s</strong> 个{$lang->hourCommon}。";
+$lang->product->checkedURSummary   = "选中 <strong>%total%</strong> 个{$lang->URCommon}，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}。";
+$lang->product->epicSummary        = "本页共 <strong>%s</strong> 个{$lang->ERCommon}，预计 <strong>%s</strong> 个{$lang->hourCommon}。";
+$lang->product->checkedERSummary   = "选中 <strong>%total%</strong> 个{$lang->ERCommon}，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}。";
 $lang->product->noModule           = "<div>您现在还没有模块信息</div><div>请维护模块</div>";
 $lang->product->noProduct          = "暂时没有{$lang->productCommon}。";
 $lang->product->noMatched          = '找不到包含"%s"的' . $lang->productCommon;

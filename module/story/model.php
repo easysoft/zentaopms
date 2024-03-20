@@ -3584,6 +3584,40 @@ class storyModel extends model
     }
 
     /**
+     * 向业务需求和用户需求追加子需求。
+     * Append children to story.
+     *
+     * @param  int          $productID
+     * @param  array        $stories
+     * @param  string       $storyType
+     * @access public
+     * @return array|object
+     */
+    public function appendChildren(int $productID, array $stories, string $storyType): array
+    {
+        $topIdList = array();
+        foreach($stories as $story) $topIdList[] = $story->top;
+        $children = $this->dao->select('*')->from(TABLE_STORY)
+            ->where('top')->in($topIdList)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF($storyType == 'requirement')
+            ->andWhere('type')->eq('story')
+            ->fi()
+            ->beginIF($storyType == 'epic')
+            ->andWhere('type')->ne('epic')
+            ->fi()
+            ->fetchAll('id');
+
+        if($children)
+        {
+            $children = $this->storyTao->mergePlanTitleAndChildren($productID, $children, $storyType);
+            return array_merge($stories, $children);
+        }
+
+        return $stories;
+    }
+
+    /**
      * Set report condition.
      *
      * @access public

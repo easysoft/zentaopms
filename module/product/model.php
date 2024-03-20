@@ -1193,44 +1193,32 @@ class productModel extends model
         $storyIdList   = array();
 
         $rateCount = 0;
-        $allCount  = 0;
         $SRTotal   = 0;
+        $URTotal   = 0;
+        $ERTotal   = 0;
 
         foreach($stories as $story)
         {
-            if($storyType == 'requirement' && $story->type == 'story') $SRTotal += 1;
-            if(!empty($story->type) && $story->type != $storyType) continue;
+            if($story->type == 'story')       $SRTotal += 1;
+            if($story->type == 'requirement') $URTotal += 1;
+            if($story->type == 'epic')        $ERTotal += 1;
 
-            if($story->isParent == '0') $totalEstimate += $story->estimate;
-            $allCount ++;
+            if($story->isParent == '0' && $storyType == $story->type) $totalEstimate += $story->estimate;
 
             if($story->parent >= 0 && ($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed'))))
             {
                 $storyIdList[] = $story->id;
                 $rateCount ++;
             }
-
-            /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
-            if(empty($story->children)) continue;
-            foreach($story->children as $child)
-            {
-                if($storyType == 'requirement' && $child->type == 'story') $SRTotal += 1;
-                if($child->type != $storyType) continue;
-
-                $allCount ++;
-                if($child->status != 'closed' || in_array($child->closedReason, array('done', 'postponed')))
-                {
-                    $storyIdList[] = $child->id;
-                    $rateCount ++;
-                }
-            }
         }
 
         $casesCount = count($this->productTao->filterNoCasesStory($storyIdList));
         $rate       = empty($stories) || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 2);
 
-        if($storyType == 'story') return sprintf($this->lang->product->storySummary, $allCount, $totalEstimate, $rate * 100 . "%");
-        return sprintf($this->lang->product->requirementSummary, $allCount, $SRTotal, $totalEstimate);
+        if($storyType == 'epic')        return sprintf($this->lang->product->epicSummary, $ERTotal, $totalEstimate);
+        if($storyType == 'requirement') return sprintf($this->lang->product->requirementSummary, $URTotal, $totalEstimate);
+
+        return sprintf($this->lang->product->storySummary, $SRTotal, $totalEstimate, $rate * 100 . "%");
     }
 
     /**

@@ -298,6 +298,9 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
 /* Layout. */
 global $app;
 if($app->rawModule == 'projectstory' && !empty($project)) dropmenu(set::text($project->name));
+$checkedSummary = $lang->product->checkedSRSummary;
+if($storyType == 'requirement') $checkedSummary = $lang->product->checkedURSummary;
+if($storyType == 'epic')        $checkedSummary = $lang->product->checkedERSummary;
 
 data('storyBrowseType', $storyBrowseType);
 
@@ -305,7 +308,7 @@ jsVar('childrenAB',     $lang->story->childrenAB);
 jsVar('projectID',      $projectID);
 jsVar('modulePairs',    $modulePairs);
 jsVar('storyType',      $storyType);
-jsVar('checkedSummary', $storyType == 'story' ? $lang->product->checkedSRSummary : $lang->product->checkedURSummary);
+jsVar('checkedSummary', $checkedSummary);
 
 if($isProjectStory and $storyType == 'requirement')
 {
