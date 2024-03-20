@@ -259,7 +259,7 @@ class mr extends control
         }
 
         $MR = $this->mr->fetchByID($MRID);
-        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
+        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
         $this->view->title = $this->lang->mr->edit;
         $this->view->MR    = $MR;
         $this->view->rawMR = isset($rawMR) ? $rawMR : false;
@@ -316,7 +316,7 @@ class mr extends control
         $MR = $this->mr->fetchByID($MRID);
         if(!$MR) return $this->locate($this->createLink('mr', 'browse'));
 
-        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
+        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
         if($MR->synced && (!isset($rawMR->id) || empty($rawMR))) return $this->display();
 
         /* Sync MR from GitLab to ZenTaoPMS. */
@@ -329,7 +329,9 @@ class mr extends control
             $MR->sourceProject = (int)$MR->sourceProject;
             $MR->targetProject = (int)$MR->targetProject;
         }
-        $sourceProject = $this->loadModel($host->type)->apiGetSingleProject($MR->hostID, $MR->sourceProject);
+
+        $projectMethod = $host->type == 'gitfox' ? 'apiGetSingleRepo' : 'apiGetSingleProject';
+        $sourceProject = $this->loadModel($host->type)->$projectMethod($MR->hostID, (int)$MR->sourceProject);
         if(isset($MR->hostID) && !$this->app->user->admin)
         {
             $openID = $this->loadModel('pipeline')->getOpenIdByAccount($MR->hostID, $host->type, $this->app->user->account);
@@ -346,9 +348,9 @@ class mr extends control
         $this->view->projectOwner  = $projectOwner;
         $this->view->projectEdit   = $this->mrZen->checkProjectEdit($host->type, $sourceProject, $MR);
         $this->view->sourceProject = $sourceProject;
-        $this->view->targetProject = $this->{$host->type}->apiGetSingleProject($MR->hostID, $MR->targetProject);
-        $this->view->sourceBranch  = $this->{$host->type}->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
-        $this->view->targetBranch  = $this->{$host->type}->apiGetSingleBranch($MR->hostID, $MR->targetProject, $MR->targetBranch);
+        $this->view->targetProject = $this->{$host->type}->$projectMethod($MR->hostID, (int)$MR->targetProject);
+        $this->view->sourceBranch  = $this->mrZen->getBranchUrl($host, (int)$MR->sourceProject, $MR->sourceBranch);
+        $this->view->targetBranch  = $this->mrZen->getBranchUrl($host, (int)$MR->targetProject, $MR->targetBranch);
         $this->display();
     }
 
@@ -439,7 +441,7 @@ class mr extends control
         $this->view->MR    = $MR;
         if($MR->synced)
         {
-            $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
+            $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
             if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
         }
 

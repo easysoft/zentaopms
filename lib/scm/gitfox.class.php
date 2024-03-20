@@ -940,8 +940,8 @@ class gitfoxRepo
     public function getSingleMR(int $MRID): null|object
     {
         $MR = $this->fetch("pullreq/{$MRID}");
+        $MR->id                = $MR->number;
         $MR->iid               = $MR->number;
-        $MR->web_url           = '';
         $MR->state             = $MR->state == 'open' ? 'opened' : $MR->state;
         $MR->merge_status      = $MR->merge_check_status ? 'cannot_be_merged' : 'can_be_merged';
         $MR->changes_count     = $MR->stats->commits;

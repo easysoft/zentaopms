@@ -165,6 +165,7 @@ class mrModel extends model
         {
             if($projectIdList && !in_array($project->id, $projectIdList)) continue;
 
+            $project->full_name = $project->path;
             $projectPairs[$hostID][$project->id] = $project;
         }
 
@@ -822,11 +823,10 @@ class mrModel extends model
      * Get MR diff versions by API.
      *
      * @param  object $MR
-     * @param  string $encoding
      * @access public
      * @return array
      */
-    public function getDiffs(object $MR, string $encoding = ''): array
+    public function getDiffs(object $MR): array
     {
         if(!isset($MR->repoID)) return array();
 
@@ -834,11 +834,8 @@ class mrModel extends model
         if(!$repo) return array();
 
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
-        $repo->gitService = $host->id;
-        $repo->project    = $MR->targetProject;
-        $repo->password   = $host->token;
-        $repo->account    = '';
-        $repo->encoding   = $encoding;
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
 
         $lines = array();
         if($host->type == 'gitlab')
@@ -863,20 +860,18 @@ class mrModel extends model
                 }
             }
         }
+        elseif($host->type == 'gitfox')
+        {
+            $lines = $scm->diff('', $MR->targetBranch, $MR->sourceBranch, 'isBranchOrTag');
+        }
         else
         {
-            $diffs = $this->apiGetDiffs($MR->hostID, $MR->targetProject, $MR->mriid);
-            $lines = explode("\n", $diffs);
+            $lines = $this->apiGetDiffs($MR->hostID, $MR->targetProject, $MR->mriid);
         }
 
-        if(empty($MR->synced))
-        {
-            $diffs = preg_replace('/^\s*$\n?\r?/m', '', $MR->diffs);
-            $lines = explode("\n", $diffs);
-        }
+        if(empty($MR->synced)) $lines = preg_replace('/^\s*$\n?\r?/m', '', $MR->diffs);
 
-        $scm = $this->app->loadClass('scm');
-        $scm->setEngine($repo);
+        if(is_string($lines)) $lines = explode("\n", $lines);
         return $scm->engine->parseDiff($lines);
     }
 

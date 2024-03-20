@@ -255,4 +255,28 @@ class mrZen extends mr
 
         return false;
     }
+
+    /**
+     * 获取代码分支的访问地址。
+     * Get repo branch url.
+     *
+     * @param  object $host
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access protected
+     * @return string
+     */
+    protected function getBranchUrl(object $host, int $projectID, string $branch): string
+    {
+        if($host->type == 'gitfox')
+        {
+            $project = $this->loadModel('gitfox')->apiGetSingleRepo($host->id, $projectID, false);
+            if(empty($project->id)) return '';
+
+            return rtrim($host->url, '/') . "/{$project->path}/files/{$branch}";
+        }
+
+        $branch = $this->{$host->type}->apiGetSingleBranch($host->id, $projectID, $branch);
+        return $branch ? zget($branch, 'web_url', '') : '';
+    }
 }
