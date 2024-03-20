@@ -118,8 +118,8 @@ class pivotModel extends model
 
         if(empty($pivot->type))
         {
-            $pivot->names = array();
-            $pivot->descs = array();
+            $pivot->names = array('zh-cn' => '', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '');
+            $pivot->descs = array('zh-cn' => '', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '');
             if(!empty($pivot->name))
             {
                 $pivotNames   = json_decode($pivot->name, true);
