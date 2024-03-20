@@ -120,6 +120,7 @@ $lang->metric->aliasTip           = 'Displayed in the metrics library as alias';
 $lang->metric->collectConfText    = "%s %s %s";
 $lang->metric->dirNotExist        = "Failed to create a directory. Please create a directory: <strong>%s</strong>.";
 $lang->metric->fileMoveFail       = "File move failed, please move <strong>%s</strong> to <strong>%s</strong>.";
+$lang->metric->emptyCollect       = 'There are no collect metrics at this time.';
 $lang->metric->maxSelect          = 'A maximum of %s metrics can be selected';
 $lang->metric->maxSelectTip       = 'Multiple metrics can be selected across a range, up to a maximum of %s.';
 $lang->metric->upgradeTip         = 'This measure is supported by an earlier version. If you want to edit it, reconfigure it according to the rules for configuring the measure of the latest version. Also note that the new version of the measure no longer supports the SQL editor and cannot be referenced by the report template for the time being. Check whether you need to edit it.';
