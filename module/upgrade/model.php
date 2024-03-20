@@ -8592,4 +8592,55 @@ class upgradeModel extends model
         $this->saveLogs('Execute 18_10_1');
         $this->execSQL($this->getUpgradeFile('18.10.1'));
     }
+
+    /**
+     * 为自定义过的需求阶段增加条目。
+     * Add items for custom story stage.
+     *
+     * @access public
+     * @return bool
+     */
+    public function changeCustomStoryStage(): bool
+    {
+        $clientLang = $this->app->getClientLang();
+        $customStagePairs = $this->dao->select('`key`, value')->from(TABLE_LANG)
+            ->where('module')->eq('story')
+            ->andWhere('section')->eq('stageList')
+            ->andWhere('lang')->eq($clientLang)
+            ->fetchPairs();
+
+        if(empty($customStagePairs))
+        {
+            $clientLang = 'all';
+            $customStagePairs = $this->dao->select('`key`, value')->from(TABLE_LANG)
+                ->where('module')->eq('story')
+                ->andWhere('section')->eq('stageList')
+                ->andWhere('lang')->eq($clientLang)
+                ->fetchPairs();
+        }
+
+        if(empty($customStagePairs)) return false;
+
+        $this->dao->delete()->from(TABLE_LANG)
+            ->where('module')->eq('story')
+            ->andWhere('section')->eq('stageList')
+            ->andWhere('lang')->eq($clientLang)
+            ->exec();
+
+        foreach($this->lang->upgrade->storyStageList as $key => $value)
+        {
+            $item = new stdclass();
+            $item->lang    = $clientLang;
+            $item->module  = 'story';
+            $item->section = 'stageList';
+            $item->key     = $key;
+            $item->value   = isset($customStagePairs[$key]) ? $customStagePairs[$key] : $value;
+            $item->system  = '1';
+            $item->vision  = 'rnd';
+
+            $this->dao->insert(TABLE_LANG)->data($item)->exec();
+        }
+
+        return true;
+    }
 }

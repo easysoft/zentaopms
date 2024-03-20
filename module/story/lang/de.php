@@ -233,11 +233,15 @@ $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'Wartend';
 $lang->story->stageList['planned']    = 'Geplant';
 $lang->story->stageList['projected']  = 'Projektiert';
+$lang->story->stageList['designing']  = 'Designing';
+$lang->story->stageList['designed']   = 'Designed';
 $lang->story->stageList['developing'] = 'Entwicklung';
 $lang->story->stageList['developed']  = 'Entwickelt';
 $lang->story->stageList['testing']    = 'Testen';
 $lang->story->stageList['tested']     = 'Getestet';
 $lang->story->stageList['verified']   = 'Akzepiert';
+$lang->story->stageList['rejected']   = 'Verify Rejected';
+$lang->story->stageList['pending']    = 'Release Pending';
 $lang->story->stageList['released']   = 'Freigegeben';
 $lang->story->stageList['closed']     = 'Geschlossen';
 

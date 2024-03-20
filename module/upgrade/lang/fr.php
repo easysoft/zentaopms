@@ -164,3 +164,19 @@ $lang->upgrade->remarkDesc = 'You can also switch the mode in the Admin-System-M
 $lang->upgrade->upgradingTip = 'The system is being upgraded, please wait patiently...';
 
 $lang->upgrade->addTraincoursePrivTips = "In order to facilitate everyone's learning of project management-related knowledge, we have made the courses and practical repositories of the academy accessible to all permission groups by default. This ensures that everyone can easily access the resources. However, if you do not require this feature, you can disable it in the backend feature switch.";
+
+$lang->upgrade->storyStageList['']           = '';
+$lang->upgrade->storyStageList['wait']       = 'Waiting';
+$lang->upgrade->storyStageList['planned']    = 'Planned';
+$lang->upgrade->storyStageList['projected']  = 'Projected';
+$lang->upgrade->storyStageList['designing']  = 'Designing';
+$lang->upgrade->storyStageList['designed']   = 'Designed';
+$lang->upgrade->storyStageList['developing'] = 'Developing';
+$lang->upgrade->storyStageList['developed']  = 'Developed';
+$lang->upgrade->storyStageList['testing']    = 'Testing';
+$lang->upgrade->storyStageList['tested']     = 'Tested';
+$lang->upgrade->storyStageList['verified']   = 'Accepted';
+$lang->upgrade->storyStageList['rejected']   = 'Verify Rejected';
+$lang->upgrade->storyStageList['pending']    = 'Release Pending';
+$lang->upgrade->storyStageList['released']   = 'Released';
+$lang->upgrade->storyStageList['closed']     = 'Closed';

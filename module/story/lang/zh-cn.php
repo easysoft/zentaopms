@@ -233,11 +233,15 @@ $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未开始';
 $lang->story->stageList['planned']    = "已计划";
 $lang->story->stageList['projected']  = '已立项';
+$lang->story->stageList['designing']  = '设计中';
+$lang->story->stageList['designed']   = '设计完毕';
 $lang->story->stageList['developing'] = '研发中';
 $lang->story->stageList['developed']  = '研发完毕';
 $lang->story->stageList['testing']    = '测试中';
 $lang->story->stageList['tested']     = '测试完毕';
 $lang->story->stageList['verified']   = '已验收';
+$lang->story->stageList['rejected']   = '验收失败';
+$lang->story->stageList['pending']    = '待发布';
 $lang->story->stageList['released']   = '已发布';
 $lang->story->stageList['closed']     = '已关闭';
 
