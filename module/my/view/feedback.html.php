@@ -14,6 +14,10 @@
 <?php js::set('mode', $mode);?>
 <?php js::set('total', $pager->recTotal);?>
 <?php js::set('rawMethod', $app->rawMethod);?>
+<?php js::set('todoCount', $todoCount);?>
+<?php js::set('isMax', $isMax);?>
+<?php js::set('isBiz', $isBiz);?>
+<?php js::set('isOpenedURAndSR', $isOpenedURAndSR);?>
 <?php $viewMethod = 'view'?>
 <style>
 .table-form>tbody>tr>th {width:135px;}
@@ -22,7 +26,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    foreach($lang->my->featureBar[$app->rawMethod]['feedback'] as $key => $name)
+    foreach($lang->my->featureBar[$app->rawMethod] as $key => $name)
     {
         $label  = "<span class='text'>{$name}</span>";
         $label .= $key == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
@@ -34,7 +38,7 @@
   </div>
 </div>
 <div id="mainContent">
-  <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='workFeedback'></div>
+  <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='workFeedback' data-url=<?php echo $this->createLink('search', 'buildOldForm', 'module=feedback');?>></div>
   <?php if(empty($feedbacks)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->feedback->noFeedback;?></span></p>
