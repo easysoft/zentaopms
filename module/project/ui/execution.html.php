@@ -98,7 +98,7 @@ featureBar
             set::id('showTask'),
             set::name('showTask'),
             set::checked($this->cookie->showTask ? 'checked' : ''),
-            set::text($lang->programplan->stageCustom->task),
+            set::text($lang->programplan->stageCustom['task']),
             set::rootClass('ml-4')
         )
     )

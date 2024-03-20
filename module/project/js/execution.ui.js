@@ -3,7 +3,7 @@ $(document).off('click', '#showTask').on('click', '#showTask', function()
     const show = $(this).is(':checked') ? 1 : 0;
     $.cookie.set('showTask', show, {expires:config.cookieLife, path:config.webRoot});
 
-    loadCurrentPage();
+    reloadPage();
 });
 
 $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
