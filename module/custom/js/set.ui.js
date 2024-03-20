@@ -97,7 +97,8 @@ window.addGrade = function()
     newIndex = parseInt(maxIndex);
 
     newRow.find('input').val('');
-    newRow.find('.btn-delete-grade').removeClass('hidden');
+    newRow.find('.btn-delete-grade').remove();
+    newRow.find('.btn-close').remove();
     newRow.find("input[type=hidden]").val(newIndex);
     newRow.find('td.index').text(newIndex);
     $(this).closest('tbody').append(newRow);
