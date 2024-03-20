@@ -756,6 +756,8 @@ class my extends control
      */
     public function risk(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->loadModel('risk');
+
         /* Set session. */
         $this->app->session->set('riskList', $this->app->getURI(true), 'project');
 
@@ -770,7 +772,6 @@ class my extends control
         $this->my->buildRiskSearchForm($queryID, $actionURL, $currentMethod);
 
         /* Get risks by type*/
-        $this->loadModel('risk');
         if($type == 'assignedBy')
         {
             $risks = $this->my->getAssignedByMe($this->app->user->account, $pager, $orderBy, 'risk');
