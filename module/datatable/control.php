@@ -129,9 +129,9 @@ class datatable extends control
         {
             unset($cols['product'], $cols['module']);
             if($extra != 'requirement') unset($cols['SRS']);
-            if($extra == 'requirement')
+            if($extra != 'story')
             {
-                foreach(array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount', 'URS') as $field) unset($cols[$field]);
+                foreach(array('taskCount', 'bugCount', 'caseCount', 'URS') as $field) unset($cols[$field]);
                 $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
             }
         }

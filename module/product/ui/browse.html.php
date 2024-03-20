@@ -181,7 +181,7 @@ $config->story->dtable->fieldList['title']['title'] = $lang->story->title;
 if($app->rawModule == 'projectstory') $config->story->dtable->fieldList['title']['link'] = array('url' => helper::createLink('projectstory', 'view', 'storyID={id}&projectID={project}'));
 
 $setting = $this->loadModel('datatable')->getSetting('product', 'browse', false, $storyType);
-if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
+if($storyType != 'story') unset($setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 $cols = array_values($setting);
 
 /* DataTable data. */

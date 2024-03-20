@@ -324,7 +324,7 @@ detailBody
                             $parentChanged ? $lang->story->parent . $lang->story->change : $this->processStatus('story', $story)
                         )
                     ),
-                    $story->type == 'requirement' ? null : item
+                    item
                     (
                         set::trClass('stage-line'),
                         set::name($lang->story->stage),
