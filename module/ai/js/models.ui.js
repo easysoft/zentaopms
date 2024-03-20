@@ -18,3 +18,11 @@ window.confirmDisable = function(modelID)
         if(res) $.ajaxSubmit({url: $.createLink('ai', 'modeldisable', `modelID=${modelID}`)});
     })
 };
+
+$(function()
+{
+    const container = window.frameElement?.closest('.load-indicator');
+    delete container.dataset.loading;
+    container.classList.remove('loading');
+    container.classList.remove('no-delay');
+});
