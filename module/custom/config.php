@@ -27,7 +27,7 @@ $config->custom->requiredModules[40] = 'task';
 $config->custom->requiredModules[45] = 'build';
 
 $config->custom->allFeatures   = array('program', 'productRR', 'productUR', 'productLine', 'projectScrum', 'projectWaterfall', 'projectKanban', 'projectAgileplus', 'projectWaterfallplus', 'execution', 'qa', 'devops', 'kanban', 'doc', 'report', 'system', 'admin', 'vision', 'ai');
-$config->custom->dataFeatures  = array('productUR', 'waterfall', 'waterfallplus');
+$config->custom->dataFeatures  = array('productER', 'productUR', 'waterfall', 'waterfallplus');
 $config->custom->scrumFeatures = array();
 
 $config->custom->requiredModules[50] = 'bug';

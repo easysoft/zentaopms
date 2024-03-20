@@ -1061,7 +1061,23 @@ class customModel extends model
         $URAndSR = strpos(",$disabledFeatures,", ',productUR,') === false ? '1' : '0';
         $this->setting->setItem('system.custom.URAndSR', $URAndSR);
 
+        $disableER = strpos(",$disabledFeatures,", ',productER,') !== false;
+        $enableER  = (!$URAndSR || $disableER) ? '0' : '1';
+        $this->setting->setItem('system.custom.enableER', $enableER);
+
         $this->processMeasrecordCron();
+    }
+
+    /**
+     * 检查系统中是否有业务需求数据。
+     * Check whether there is epic data in the system.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasProductERData(): int
+    {
+        return (int)$this->dao->select('*')->from(TABLE_STORY)->where('type')->eq('epic')->andWhere('deleted')->eq('0')->count();
     }
 
     /**

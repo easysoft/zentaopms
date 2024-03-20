@@ -27,11 +27,14 @@ ALTER TABLE `zt_story` ADD `grade` smallint(6) NOT NULL AFTER `parent`;
 ALTER TABLE `zt_story` ADD `top` mediumint NOT NULL DEFAULT '0' AFTER `parent`;
 ALTER TABLE `zt_story` ADD `isParent` enum('0','1') NOT NULL DEFAULT '0' AFTER `parent`;
 ALTER TABLE `zt_story` ADD `parentVersion` smallint NOT NULL DEFAULT '0' AFTER `version`;
-update zt_story set isParent = 1 where parent = -1;
-update zt_story set grade = 1, parent = 0, top = id where type != 'story';
-update zt_story set grade = 1, parent = 0, top = id where type = 'story' and parent <= 0;
-update zt_story set grade = 2, top = parent where type = 'story' and parent > 0;
+UPDATE `zt_story` SET isParent = 1 WHERE parent = -1;
+UPDATE `zt_story` SET grade = 1, parent = 0, top = id WHERE type != 'story';
+UPDATE `zt_story` SET grade = 1, parent = 0, top = id WHERE type = 'story' AND parent <= 0;
+UPDATE `zt_story` SET grade = 2, top = parent WHERE type = 'story' AND parent > 0;
 
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'gradeRule', 'stepwise');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'requirement', '', 'gradeRule', 'stepwise');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'epic', '', 'gradeRule', 'stepwise');
+INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'enableER', '0');
+
+UPDATE `zt_config` SET `value` = CONCAT(`value`, ',productER') WHERE `key` = 'closedFeatures' AND module = 'common';
