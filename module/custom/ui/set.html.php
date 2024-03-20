@@ -512,9 +512,10 @@ if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade'
     $tbody = array();
     foreach($storyGrades as $grade)
     {
-        $items  = array();
-        $hidden = ($module != 'story' && $grade->grade == 1) || ($module == 'story' && $grade->grade <= 2) ? 'hidden' : '';
-        if($grade == end($storyGrades)) $items[] = array('icon' => 'plus',  'class' => 'btn ghost btn-add-grade');
+        $items   = array();
+        $hidden  = ($grade->grade == 1) ? 'hidden' : '';
+        $hideAdd = (end($storyGrades) == $grade) ? '' : 'hidden';
+        $items[] = array('icon' => 'plus',  'class' => "btn ghost btn-add-grade $hideAdd");
         if($grade->status == 'enable' && common::hasPriv('custom', 'closeGrade'))     $items[] = array('icon' => 'off',   'class' => "btn ghost btn-close ajax-submit $hidden", 'url' => inlink('closeGrade', "type={$module}&id={$grade->grade}"), 'data-confirm' => $lang->custom->notice->closeGrade);
         if($grade->status == 'disable' && common::hasPriv('custom', 'activateGrade')) $items[] = array('icon' => 'magic', 'class' => "btn ghost btn-active ajax-submit", 'url' => inlink('activateGrade', "type={$module}&id={$grade->grade}"), 'data-confirm' => $lang->custom->notice->activateGrade);
         if(common::hasPriv('custom', 'deleteGrade')) $items[] = array('icon' => 'trash', 'class' => "btn ghost btn-delete-grade ajax-submit $hidden", 'url' => inlink('deleteGrade', "type={$module}&id={$grade->grade}"));
@@ -549,7 +550,7 @@ if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade'
                 setClass('table table-form borderless'),
                 h::tr(
                     h::td($lang->story->grade),
-                    h::td($lang->story->gradeName),
+                    h::td($lang->story->gradeName, setClass('required')),
                     h::td($lang->story->statusAB),
                     h::td($lang->actions)
                 ),

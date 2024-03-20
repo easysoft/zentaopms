@@ -90,6 +90,12 @@ window.savaTestcaseReview = function()
     $.ajaxSubmit({url, data:form});
 }
 
+window.deleteGrade = function()
+{
+    $(this).closest('tr').remove();
+    $('#gradeList tbody').find('tr').last().find('.btn-add-grade').removeClass('hidden');
+}
+
 window.addGrade = function()
 {
     let newRow   = $(this).closest('tr').clone();
@@ -97,11 +103,11 @@ window.addGrade = function()
     newIndex = parseInt(maxIndex);
 
     newRow.find('input').val('');
-    newRow.find('.btn-delete-grade').remove();
+    newRow.find('.btn-delete-grade').attr('href', 'javascript:void').removeClass('ajax-submit').on('click', deleteGrade);
     newRow.find('.btn-close').remove();
     newRow.find("input[type=hidden]").val(newIndex);
     newRow.find('td.index').text(newIndex);
     $(this).closest('tbody').append(newRow);
 
-    $(this).remove();
+    $(this).addClass('hidden');
 };

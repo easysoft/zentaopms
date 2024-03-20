@@ -897,12 +897,21 @@ class customModel extends model
      */
     public function setStoryGrade(string $module, array $data): bool
     {
+        $this->app->loadLang('story');
+        foreach($data['grade'] as $key => $value)
+        {
+            if(!$data['gradeName'][$key])
+            {
+                dao::$errors['grade'] = sprintf($this->lang->error->notempty, $this->lang->story->gradeName);
+                return false;
+            }
+        }
+
         $oldGrades = $this->dao->select('*')->from(TABLE_STORYGRADE)->where('type')->eq($module)->fetchAll('grade');
         $this->dao->delete()->from(TABLE_STORYGRADE)->where('type')->eq($module)->exec();
         foreach($data['grade'] as $key => $value)
         {
             $name = $data['gradeName'][$key];
-            if(!$value || !$name) continue;
 
             $grade = new stdclass();
             $grade->grade  = $value;
