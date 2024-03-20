@@ -282,11 +282,11 @@ detailBody
                 span(setClass("status-{$story->status}"), $this->processStatus('story', $story)),
                 formHidden('status', $story->status)
             ),
-            $story->type == 'story' ? item
+            ($story->type == 'story' && $story->isParent == '0') ? item
             (
                 set::name($lang->story->stage),
                 picker(setID('stage'), set::name('stage'), set::items($fields['stage']['options']), set::value($minStage))
-            ) : null,
+            ) : formHidden('stage', $story->stage),
             item
             (
                 set::name($lang->story->category),

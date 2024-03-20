@@ -1781,7 +1781,6 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL DEFAULT '',
   `stage` enum('','wait','planned','projected','designing','designed','developing','developed','testing','tested','verified','rejected','pending','released','closed') NOT NULL DEFAULT 'wait',
-  `editedStage` enum('','wait','planned','projected','designing','designed','developing','developed','testing','tested','verified','rejected','pending','released','closed') NOT NULL DEFAULT '',
   `stagedBy` char(30) NOT NULL DEFAULT '',
   `mailto` text NULL,
   `lib` mediumint(8) unsigned NOT NULL DEFAULT '0',
