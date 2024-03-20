@@ -20,9 +20,11 @@ $isNotOpen = $config->edition != 'open';
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('ai', 'importMiniProgram')): ?>
-      <a class="btn btn-link" data-toggle="tooltip" data-placement="top" title="<?= $lang->ai->toZentaoStoreAIPage; ?>" href="https://www.zentao.net/extension-browse-1625.html" target="_blank">
-        <i class="icon icon-help"></i>
-        <?= $lang->help; ?>
+    <a style="display: flex; align-items: center; gap: 2px;" class="btn btn-link" data-toggle="tooltip" data-placement="left" title="<?= $lang->ai->toZentaoStoreAIPage; ?>" href="https://www.zentao.net/extension-browse-1625.html" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1.75962 11.375V9.49025C1.75787 9.47362 1.75087 9.45963 1.75087 9.44213L1.75 7.45412C1.75 7.20125 1.94687 7 2.1875 7C2.429 6.99825 2.6075 7.30275 2.6075 7.55212V9.541C2.6075 9.57163 2.61363 9.49988 2.6075 9.52875V10.5079H10.5V8.463C10.5009 8.46475 10.4991 8.46387 10.5 8.46475V7.45412C10.5 7.20125 10.7004 7 10.941 7C11.1825 6.99825 11.375 7.203 11.375 7.45325V9.44213C11.375 9.44825 11.3759 9.4535 11.375 9.45963V11.375H1.75962ZM3.6155 4.592C3.6155 5.43813 4.27175 6.125 5.08113 6.125C5.88875 6.125 6.545 5.43813 6.545 4.592C6.545 5.43813 7.20125 6.125 8.00975 6.125C8.81913 6.125 9.47538 5.43813 9.47538 4.592C9.47538 5.43813 9.97588 6.125 10.7844 6.125C11.5938 6.125 12.25 5.43813 12.25 4.592L10.7844 0.875H2.33975L0.875 4.592C0.875 5.43813 1.34225 6.125 2.15075 6.125C2.95925 6.125 3.6155 5.43813 3.6155 4.592ZM12.25 12.6875C12.25 12.446 12.054 12.25 11.8125 12.25H1.3125C1.071 12.25 0.875 12.446 0.875 12.6875C0.875 12.929 1.071 13.125 1.3125 13.125H11.8125C12.054 13.125 12.25 12.929 12.25 12.6875Z" fill="#838A9D"/>
+        </svg>
+        <?= $lang->ai->store; ?>
       </a>
       <a class="btn btn-primary" data-toggle="modal" data-target="#import-miniprogram">
         <i class="icon icon-import"></i>
