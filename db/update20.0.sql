@@ -27,6 +27,8 @@ ALTER TABLE `zt_story` ADD `grade` smallint(6) NOT NULL AFTER `parent`;
 ALTER TABLE `zt_story` ADD `top` mediumint NOT NULL DEFAULT '0' AFTER `parent`;
 ALTER TABLE `zt_story` ADD `isParent` enum('0','1') NOT NULL DEFAULT '0' AFTER `parent`;
 ALTER TABLE `zt_story` ADD `parentVersion` smallint NOT NULL DEFAULT '0' AFTER `version`;
+ALTER TABLE `zt_story` CHANGE `stage` `stage` enum('','wait','planned','projected','designing','designed','developing','developed','testing','tested','verified','rejected','pending','released','closed') NOT NULL DEFAULT 'wait';
+ALTER TABLE `zt_story` ADD `editedStage` enum('','wait','planned','projected','designing','designed','developing','developed','testing','tested','verified','rejected','pending','released','closed') NOT NULL DEFAULT '' AFTER `stage`;
 UPDATE `zt_story` SET isParent = 1 WHERE parent = -1;
 UPDATE `zt_story` SET grade = 1, parent = 0, top = id WHERE type != 'story';
 UPDATE `zt_story` SET grade = 1, parent = 0, top = id WHERE type = 'story' AND parent <= 0;
