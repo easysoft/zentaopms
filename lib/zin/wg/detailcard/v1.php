@@ -105,7 +105,7 @@ class detailCard extends wg
             set::title($title),
             set::color($color),
             set::idClass('font-normal'),
-            set::titleClass('text-md text-clip min-w-0'),
+            set::titleClass('text-base text-clip min-w-0 font-normal'),
             set::url($url),
             $titleBlock
         );
@@ -140,7 +140,7 @@ class detailCard extends wg
         return div
         (
             setClass('detail-section'),
-            $title ? h2(setClass('detail-section-title text-md text-gray py-1'), $title) : null,
+            $title ? h2(setClass('detail-section-title text-base text-gray py-1 font-normal'), $title) : null,
             div
             (
                 setClass('detail-section-content py-1'),
