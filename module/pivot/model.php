@@ -1162,6 +1162,75 @@ class pivotModel extends model
     }
 
     /**
+     * Generate group tree.
+     *
+     * @param  array    $groups
+     * @param  array    $records
+     * @access public
+     * @return array
+     */
+    public function generateGroupTree(array $groups, array $records): array
+    {
+        $groupTree = array();
+        foreach($records as $record)
+        {
+            $currentGroupTree = &$groupTree;
+            foreach($groups as $group)
+            {
+                $groupValue = $record->$group;
+                if(!isset($currentGroupTree[$groupValue])) $currentGroupTree[$groupValue] = array();
+
+                $currentGroupTree = &$currentGroupTree[$groupValue];
+            }
+        }
+
+        return $groupTree;
+    }
+
+    /**
+     * Flatten group tree.
+     *
+     * @param  array  $groups
+     * @param  array  $groupTree
+     * @access public
+     * @return void
+     */
+    public function flattenGroupTree($groups, $groupTree)
+    {
+        $flattenGroup = array_map(function($key, $value) {
+            return array($key, $value);
+        }, array_keys($groupTree), $groupTree);
+
+        $groupLevels           = count($groups);
+        $currentLevel          = 1;
+        $flattenGroupRecords   = array();
+        while($currentLevel < count($groups))
+        {
+            $nextFlatten = array();
+            foreach($flattenGroup as $flatten)
+            {
+                $lastValue = array_pop($flatten);
+                foreach($lastValue as $key => $value)
+                {
+                    /* 如果value为空，那么说明到了最后一级，直接构建分组键值的数组。*/
+                    /* If the value is empty, it means that the last level has been reached, and the array of the group key value is constructed directly. */
+                    if(empty($value))
+                    {
+                        $unionKey = implode('_', $flatten) . '_' . $key;
+                        $flattenGroupRecords[$unionKey] = array();
+                        continue;
+                    }
+                    $nextFlatten[] = array_merge($flatten, array($key, $value));
+                }
+            }
+            $flattenGroup = $nextFlatten;
+            $currentLevel ++;
+        }
+
+        return $flattenGroupRecords;
+    }
+
+    /**
      * Calculate merge cell config.
      *
      * @param  array    $groups
@@ -1936,8 +2005,7 @@ class pivotModel extends model
     }
 
     /**
-     * 根据类型获取选项。
-     * Get options by type.
+     * Get sys options.
      *
      * @param  string $type
      * @param  string $object
@@ -1945,23 +2013,30 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getSysOptions(string $type, string $object = '', string $field = '', string $sql = ''): array
+    public function getSysOptions($type, $object = '', $field = '', $source = '', $saveAs = '')
     {
-        $options = array();
+        $options = array('' => '');
         switch($type)
         {
             case 'user':
-                return $this->loadModel('user')->getPairs('noletter');
-            case 'project':
-                return $this->loadModel('project')->getPairsByProgram();
+                $options = $this->loadModel('user')->getPairs('noletter');
+                break;
             case 'product':
+                $options = $this->loadModel('product')->getPairs();
+                break;
+            case 'project':
+                $options = $this->loadModel('project')->getPairsByProgram();
+                break;
             case 'execution':
-                return $this->loadModel($type)->getPairs();
+                $options = $this->loadModel('execution')->getPairs();
+                break;
             case 'dept':
-                return $this->loadModel('dept')->getOptionMenu(0);
+                $options = $this->loadModel('dept')->getOptionMenu(0);
+                break;
             case 'project.status':
                 $this->app->loadLang('project');
-                return $this->lang->project->statusList;
+                $options = $this->lang->project->statusList;
+                break;
             case 'option':
                 if($field)
                 {
@@ -1972,26 +2047,72 @@ class pivotModel extends model
                         $options = $schema->fields[$field]['options'];
                     }
                 }
-                return $options;
+                break;
             case 'object':
                 if($field)
                 {
-                    $table = zget($this->config->objectTables, $object, '');
-                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
-                }
-                return $options;
-            case 'string':
-                if($field && $sql)
-                {
-                    $cols = $this->dbh->query($sql)->fetchAll();
-                    foreach($cols as $col)
+                    if(is_array($source))
                     {
-                        $data = $col->{$field};
-                        $options[$data] = $data;
+                        $options = array();
+                        foreach($source as $row) $options[$row->id] = $row->$field;
+                    }
+                    else
+                    {
+                        $useField = $field;
+                        $useTable = $object;
+
+                        $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
+                        if(is_file($path))
+                        {
+                            include $path;
+                            $fieldObject = $schema->fields[$field]['object'];
+                            $fieldShow   = explode('.', $schema->fields[$field]['show']);
+
+                            if($fieldObject) $useTable = $fieldObject;
+                            if(count($fieldShow) == 2) $useField = $show[1];
+                        }
+
+                        $table = isset($this->config->objectTables[$useTable]) ? $this->config->objectTables[$useTable] : zget($this->config->objectTables, $object, '');
+                        if($table)
+                        {
+                            $columns = $this->dbh->query("SHOW COLUMNS FROM $table")->fetchAll();
+                            foreach($columns as $id => $column) $columns[$id] = (array)$column;
+                            $fieldList = array_column($columns, 'Field');
+
+                            $useField = in_array($useField, $fieldList) ? $useField : 'id';
+                            $options = $this->dao->select("id, {$useField}")->from($table)->fetchPairs();
+                        }
                     }
                 }
-                return $options;
+                break;
+            case 'string':
+            case 'number':
+                if($field)
+                {
+                    $options = array();
+                    if(is_array($source))
+                    {
+                        foreach($source as $row) $options["{$row->$field}"] = $row->$field;
+                    }
+                }
+                break;
         }
+
+        if(is_string($source) and $source)
+        {
+            if(in_array($type, array('string', 'number')))
+            {
+                $keyField   = $field;
+                $valueField = $saveAs ? $saveAs : $field;
+                $options = $this->getOptionsFromSql($source, $keyField, $valueField);
+            }
+            elseif($saveAs)
+            {
+                $options = $this->getOptionsFromSql($source, $field, $saveAs);
+            }
+        }
+
+        return array_filter($options);
     }
 
     /**
@@ -2066,6 +2187,36 @@ class pivotModel extends model
     {
         if($pivot->builtin) return false;
         return true;
+    }
+
+    /**
+     * Get field options.
+     *
+     * @param  array  $fieldSettings
+     * @param  string $sql
+     * @access public
+     * @return array
+     *
+     */
+    public function getFieldsOptions(array $fieldSettings, string $sql): array
+    {
+        $options = array();
+
+        $sqlRecords = $this->dbh->query($sql)->fetchAll();
+
+        foreach($fieldSettings as $key => $fieldSetting)
+        {
+            $type   = $fieldSetting['type'];
+            $object = $fieldSetting['object'];
+            $field  = $fieldSetting['field'];
+
+            $source = $sql;
+            if(in_array($type, array('string', 'number', 'date'))) $source = $sqlRecords;
+
+            $options[$key] = $this->getSysOptions($type, $object, $field, $source);
+        }
+
+        return $options;
     }
 
     /**
