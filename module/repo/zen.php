@@ -517,7 +517,7 @@ class repoZen extends repo
             if(isset($this->post->identifier[$i]) && $this->post->identifier[$i] == '') dao::$errors['identifier_' . ($i -1)][] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
             if(dao::isError()) continue;
 
-            $nameList = isset($this->post->name) ? array('name' => $this->post->name[$i]) : array('identifier' => $this->post->identifier[$i]);
+            $nameList = isset($this->post->name[$i]) ? array('name' => $this->post->name[$i]) : array('identifier' => $this->post->identifier[$i]);
             $data[] = $nameList + array('serviceProject' => $project,
                 'product' => implode(',', $this->post->product[$i]),
                 'projects' => empty($_POST['projects'][$i]) ? '' : implode(',', $this->post->projects[$i]));
