@@ -1961,6 +1961,7 @@ class repoModel extends model
                     {
                         $this->post->set('resolvedBuild', 'trunk');
                         $this->post->set('resolution', 'fixed');
+                        $this->post->set('resolvedBy', $log->author);
                         $changes = $this->bug->resolve($bugID);
                         foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
                         if($changes)
