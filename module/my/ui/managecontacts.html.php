@@ -125,6 +125,7 @@ panel
                     formGroup
                     (
                         set::width('1/2'),
+                        set::required(true),
                         set::label($lang->user->contacts->listName),
                         input
                         (
@@ -138,6 +139,7 @@ panel
                     formGroup
                     (
                         set::label($lang->user->contacts->selectedUsers),
+                        set::required(true),
                         picker
                         (
                             set::multiple(true),

@@ -4,6 +4,6 @@
 #mainContent .tab-pane li.active {font-weight: 600; color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity));}
 #mainContent .tab-pane li:hover {color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity));}
 #manageContacts .tabs > .nav-tabs {margin-top: 1rem;}
-#contactPanel .form-row .form-group {padding-left: 60px;}
-#contactPanel .form-row .form-group .form-label {padding-left: 0; justify-content: start; width: 70px;}
+#contactPanel .form-row .form-group {padding-left: 70px;}
+#contactPanel .form-row .form-group .form-label {padding-left: 0; justify-content: start; width: 80px;}
 #contactPanel .form-actions {margin-top: 0;}
