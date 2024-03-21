@@ -37,7 +37,7 @@ class detailSide extends wg
                 )
             );
         }
-        return tableData(set::title($lang->other), $extraSide);
+        return tableData(set::title($lang->extInfo), $extraSide);
     }
 
     protected function build()
