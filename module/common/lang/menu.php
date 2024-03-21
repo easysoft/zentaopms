@@ -491,7 +491,7 @@ $lang->devops->homeMenu->repos        = array('link' => "{$lang->devops->repo}|r
 $lang->devops->homeMenu->compile      = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->artifactrepo = array('link' => "{$lang->devops->artifactrepo}|artifactrepo|browse", 'alias' => 'create');
 if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'alias' => 'steps,managestep,create,edit,browse,view,scope,cases', 'subModule' => 'ops,deploy');
-$lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
+$lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitfox,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
