@@ -71,6 +71,23 @@ $generateData = function() use ($lang, $title, $pivot, $filters, $data, $configs
                     'class' => 'ghost',
                     'url'   => inlink('design', "id=$pivot->id"),
                 ))) : null,
+                (hasPriv('pivot', 'edit') and $clickable) ? item(set(array
+                (
+                    'text'  => $lang->edit,
+                    'icon'  => 'edit',
+                    'class' => 'ghost',
+                    'url'   => inlink('edit', "id=$pivot->id", '', true),
+                    'data-toggle' => 'modal',
+                    'data-type'   => 'iframe',
+                ))) : null,
+                (hasPriv('pivot', 'delete') and $clickable) ? item(set(array
+                (
+                    'text'  => $lang->delete,
+                    'icon'  => 'trash',
+                    'class' => 'ghost ajax-submit',
+                    'url'   => inlink('delete', "id=$pivot->id&confirm=yes&isOld=no"),
+                    'data-confirm' => $lang->pivot->deleteTip,
+                ))) : null
             ),
             $filters ? div
             (

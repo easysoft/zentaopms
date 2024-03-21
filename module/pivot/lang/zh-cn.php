@@ -24,6 +24,8 @@ $lang->pivot->designAB     = '设计';
 $lang->pivot->exportType   = '导出格式';
 $lang->pivot->exportRange  = '导出范围';
 
+$lang->pivot->deleteTip = '您确认要删除吗？';
+
 $lang->pivot->rangeList['current'] = '当前页';
 $lang->pivot->rangeList['all']     = '全部';
 
