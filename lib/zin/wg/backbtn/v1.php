@@ -68,6 +68,7 @@ class backBtn extends btn
             'project'        => 'program-browse,program-project,project-browse,project-view,project-team',
             'product'        => 'product-all,program-productview,program-product,product-view',
             'gitlab'         => 'space-browse,gitlab-browseproject',
+            'gitfox'         => 'space-browse',
             'zanode'         => 'zanode-browse,zanode-view',
             'zahost'         => 'zahost-browse,zahost-view',
             'stakeholder'    => 'stakeholder-browse',
