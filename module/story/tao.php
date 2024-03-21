@@ -1321,8 +1321,9 @@ class storyTao extends storyModel
         $allClosed   = true;
         foreach($children as $child)
         {
-            if(!in_array($child->stage, array('wait', 'defining')) && !($child->stage == 'closed' && $child->closedReason != 'done')) $allDefining = false; // Defining
-            if($child->stage != 'closed') $allClosed = false; // Closed
+            if($child->stage == 'closed' && $child->closedReason != 'done') continue;
+            if(!in_array($child->stage, array('wait', 'defining'))) $allDefining = false;
+            if($child->stage != 'closed') $allClosed = false;
         }
 
         $parentStage = $parent->stage;
@@ -1341,11 +1342,12 @@ class storyTao extends storyModel
             foreach($children as $child)
             {
                 /* Planning. */
+                if($child->stage == 'closed' && $child->closedReason != 'done') continue;
                 if(in_array($child->stage, array('planning', 'planned', 'projected')))
                 {
                     $hasPlanning = true;
                 }
-                elseif(!in_array($child->stage, array('wait', 'defining')) && !($child->stage == 'closed' && $child->closedReason != 'done'))
+                elseif(!in_array($child->stage, array('wait', 'defining')))
                 {
                     $allClosedOrDefining = false;
                 }
@@ -1362,11 +1364,12 @@ class storyTao extends storyModel
                 $allClosedOrDefiningOrPlanning = true;
                 foreach($children as $child)
                 {
+                    if($child->stage == 'closed' && $child->closedReason != 'done') continue;
                     if(in_array($child->stage, array('designing', 'designed', 'developing', 'developed', 'testing', 'tested', 'verified', 'rejected')))
                     {
                         $hasDeveloping = true;
                     }
-                    elseif(!in_array($child->stage, array('wait', 'defining', 'planning', 'planned', 'projected')) && !($child->stage == 'closed' && $child->closedReason != 'done'))
+                    elseif(!in_array($child->stage, array('wait', 'defining', 'planning', 'planned', 'projected')))
                     {
                         $allClosedOrDefiningOrPlanning = false;
                     }
