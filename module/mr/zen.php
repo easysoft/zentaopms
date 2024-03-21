@@ -50,36 +50,52 @@ class mrZen extends mr
     protected function assignEditData(object $MR, string $scm): void
     {
         $MR->canDeleteBranch = true;
-        if($scm == 'gitlab')
+        if($scm != 'gitfox')
         {
-            $MR->sourceProject = (int)$MR->sourceProject;
-            $MR->targetProject = (int)$MR->targetProject;
-        }
-        $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
-        foreach($branchPrivs as $priv)
-        {
-            if($MR->canDeleteBranch && $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
+            if($scm == 'gitlab') $MR->sourceProject = (int)$MR->sourceProject;
+            $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
+            foreach($branchPrivs as $priv)
+            {
+                if($MR->canDeleteBranch && $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
+            }
         }
 
-        $targetBranchList = array();
-        $branchList       = $this->loadModel($scm)->apiGetBranches($MR->hostID, $MR->targetProject);
-        foreach($branchList as $branch) $targetBranchList[$branch->name] = $branch->name;
+        $sourceProject = $targetProject = $MR->sourceProject;
+        if($MR->sourceProject != $MR->targetProject) $targetProject = $MR->targetProject;
+        if($scm == 'gitlab' || $scm == 'gitfox')
+        {
+            $method  = $scm == 'gitfox' ? 'apiGetSingleRepo' : 'apiGetSingleProject';
+            $project = $this->loadModel($scm)->$method($MR->hostID, (int)$MR->sourceProject);
+            $targetProject = $sourceProject = zget($project, 'name_with_namespace', '');
+            if($MR->sourceProject != $MR->targetProject)
+            {
+                $project = $this->loadModel($scm)->$method($MR->hostID, (int)$MR->targetProject);
+                $targetProject = zget($project, 'name_with_namespace', '');
+            }
 
-        $jobList = array();
+        }
+
+        $branches = array();
+        $jobList  = array();
         if($MR->repoID)
         {
             $rawJobList = $this->loadModel('job')->getListByRepoID($MR->repoID);
             foreach($rawJobList as $rawJob) $jobList[$rawJob->id] = "[$rawJob->id] $rawJob->name";
 
-            $this->view->repo = $this->loadModel('repo')->getByID($MR->repoID);
+            $repo = $this->loadModel('repo')->getByID($MR->repoID);
+            $scm  = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $branches = $scm->branch();
+            $this->view->repo = $repo;
         }
 
-        $this->view->title            = $this->lang->mr->edit;
-        $this->view->MR               = $MR;
-        $this->view->users            = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->jobList          = $jobList;
-        $this->view->targetBranchList = $targetBranchList;
-
+        $this->view->title         = $this->lang->mr->edit;
+        $this->view->MR            = $MR;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->jobList       = $jobList;
+        $this->view->branches      = $branches;
+        $this->view->sourceProject = $sourceProject;
+        $this->view->targetProject = $targetProject;
         $this->display();
     }
 

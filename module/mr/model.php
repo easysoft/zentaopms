@@ -639,6 +639,7 @@ class mrModel extends model
 
         if(!empty($MR->assignee)) $assignee = $this->pipeline->getOpenIdByAccount($host->id, $host->type, $MR->assignee);
 
+        $apiRoot = $this->loadModel($host->type)->getApiRoot($host->id);
         $MRObject = new stdclass();
         $MRObject->title = $MR->title;
         if($host->type == 'gitlab')
@@ -649,8 +650,16 @@ class mrModel extends model
             if(isset($MR->squash))               $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
             if(!empty($assignee))                $MRObject->assignee_ids         = $assignee;
 
-            $url = sprintf($this->loadModel('gitlab')->getApiRoot($host->id), "/projects/{$oldMR->sourceProject}/merge_requests/{$oldMR->id}");
+            $url = sprintf($apiRoot, "/projects/{$oldMR->sourceProject}/merge_requests/{$oldMR->mriid}");
             return json_decode(commonModel::http($url, $MRObject, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        }
+        elseif($host->type == 'gitfox')
+        {
+            if(isset($MR->description)) $MRObject->description = $MR->description;
+            $url = sprintf($apiRoot->url, "/repos/{$oldMR->sourceProject}/pullreq/{$oldMR->mriid}");
+            $mergeResult = json_decode(commonModel::http($url, $MRObject, array(), $apiRoot->header, 'json', 'PATCH'));
+            if(isset($mergeResult->number)) $mergeResult->id = $mergeResult->number;
+            return $mergeResult;
         }
         else
         {
@@ -658,7 +667,7 @@ class mrModel extends model
             if(isset($MR->description))  $MRObject->body     = $MR->description;
             if(!empty($assignee))        $MRObject->assignee = $assignee;
 
-            $url = sprintf($this->loadModel($host->type)->getApiRoot($host->id), "/repos/{$oldMR->sourceProject}/pulls/{$oldMR->id}");
+            $url = sprintf($apiRoot, "/repos/{$oldMR->sourceProject}/pulls/{$oldMR->mriid}");
             $mergeResult = json_decode(commonModel::http($url, $MRObject, array(), array(), 'json', 'PATCH'));
 
             if(isset($mergeResult->number)) $mergeResult->iid = $host->type == 'gitea' ? $mergeResult->number : $mergeResult->id;

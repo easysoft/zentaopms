@@ -22,10 +22,6 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
-$hostName = $this->loadModel('pipeline')->getByID($MR->hostID)->name;
-$sourceProject = $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->sourceProject)->name_with_namespace : $MR->sourceProject;
-$targetProject = $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace : $MR->targetProject;
-
 $noEditBranch = $MR->status == 'merged' || $MR->status == 'closed' || $host->type == 'gogs';
 
 dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
@@ -66,7 +62,7 @@ formPanel
             set::label($lang->mr->targetBranch),
             set::value($MR->targetBranch),
             !$noEditBranch ? set::name('targetBranch') : null,
-            !$noEditBranch ? set::items($targetBranchList) : set::control('static')
+            !$noEditBranch ? set::items($branches) : set::control('static')
         )
     ),
     formGroup
