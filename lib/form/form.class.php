@@ -72,6 +72,7 @@ class form extends fixer
         global $app, $config;
 
         if($configObject === null) $configObject = $config->{$app->moduleName}->form->{$app->methodName};
+        $configObject = $app->control->appendExtendFormConfig($configObject);
         return (new form)->config($configObject);
     }
 
