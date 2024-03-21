@@ -7113,6 +7113,7 @@ class storyModel extends model
             foreach($objectURs as $URID)
             {
                 if(!isset($lastActions[$URID])) continue;
+                if($object->openedDate > $lastActions[$URID]->date) continue;
 
                 if(empty($URAction)) $URAction = $lastActions[$URID];
                 if($URAction->date < $lastActions[$URID]->date) $URAction = $lastActions[$URID];

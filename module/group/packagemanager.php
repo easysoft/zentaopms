@@ -739,6 +739,7 @@ $config->group->package->manageStory->privs['story-relieved']             = arra
 $config->group->package->manageStory->privs['story-batchEdit']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('product-browse'), 'recommend' => array('story-edit'));
 $config->group->package->manageStory->privs['story-relation']             = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 19, 'depend' => array('story-view'), 'recommend' => array());
 $config->group->package->manageStory->privs['story-confirmdemandretract'] = array('edition' => 'ipd', 'vision' => 'rnd', 'order' => 19, 'depend' => array('story-view'), 'recommend' => array());
+$config->group->package->manageStory->privs['story-confirmdemandunlink']  = array('edition' => 'ipd', 'vision' => 'rnd', 'order' => 19, 'depend' => array('story-view'), 'recommend' => array());
 
 $config->group->package->importStory = new stdclass();
 $config->group->package->importStory->order  = 20;
@@ -1800,6 +1801,7 @@ $config->group->package->manageBug->privs['bug-batchChangeModule']    = array('e
 $config->group->package->manageBug->privs['bug-batchChangeBranch']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 17, 'depend' => array(), 'recommend' => array('bug-edit'));
 $config->group->package->manageBug->privs['bug-batchChangePlan']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 18, 'depend' => array(), 'recommend' => array('bug-edit'));
 $config->group->package->manageBug->privs['bug-confirmdemandretract'] = array('edition' => 'ipd', 'vision' => 'rnd,or', 'order' => 19, 'depend' => array(), 'recommend' => array('bug-edit'));
+$config->group->package->manageBug->privs['bug-confirmdemandunlink']  = array('edition' => 'ipd', 'vision' => 'rnd,or', 'order' => 19, 'depend' => array(), 'recommend' => array('bug-edit'));
 
 $config->group->package->deleteBug = new stdclass();
 $config->group->package->deleteBug->order  = 20;
@@ -1847,6 +1849,7 @@ $config->group->package->manageCase->privs['testcase-ignoreLibcaseChange']     =
 $config->group->package->manageCase->privs['testcase-submit']                  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('testcase-view'), 'recommend' => array('testcase-confirmChange', 'testcase-confirmLibcaseChange', 'testcase-confirmStoryChange', 'testcase-create', 'testcase-edit', 'testcase-ignoreLibcaseChange', 'testcase-linkBugs', 'testcase-linkCases'));
 $config->group->package->manageCase->privs['testcase-updateOrder']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array(), 'recommend' => array());
 $config->group->package->manageCase->privs['testcase-confirmdemandretract']    = array('edition' => 'ipd', 'vision' => 'rnd,or', 'order' => 30, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageCase->privs['testcase-confirmdemandunlink']     = array('edition' => 'ipd', 'vision' => 'rnd,or', 'order' => 30, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->importCase = new stdclass();
 $config->group->package->importCase->order  = 25;
