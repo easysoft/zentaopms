@@ -286,40 +286,6 @@ class storyTao extends storyModel
     }
 
     /**
-     * 将需求列表中的子需求合并到列表中的父需求下。
-     * Merge children to parent.
-     *
-     * @param  array     $stories
-     * @param  string    $type
-     * @access protected
-     * @return int[]
-     */
-    protected function appendSRToChildren(array $stories): array
-    {
-        /* For requirement children. */
-        $relationGroups = $this->batchGetRelations(array_keys($stories), 'requirement', array('*'));
-        if(empty($stories));
-
-        foreach($stories as $story)
-        {
-            /* Merge subdivided stories for requirement. */
-            if(empty($relationGroups[$story->id])) continue;
-
-            $story->parent = '-1';
-            foreach($relationGroups[$story->id] as $SRID => $SRStory)
-            {
-                if(empty($SRStory)) continue;
-
-                $children = clone $SRStory;
-                $children->parent = $story->id;
-                $story->children[$SRID] = $children;
-            }
-            $story->linkStories = implode(',', array_column($story->children, 'title'));
-        }
-        return $stories;
-    }
-
-    /**
      * 追加需求所属的计划标题和子需求。
      * Merge plan title and children.
      *
@@ -353,7 +319,6 @@ class storyTao extends storyModel
             ->groupBy($mainID)
             ->fetchAll($mainID);
 
-        if($type == 'requirement') $stories = $this->appendSRToChildren($stories);
         foreach($stories as $story)
         {
             /* Merge parent story title. */
