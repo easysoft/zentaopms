@@ -135,7 +135,7 @@ class gitfox extends control
         $userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');
 
         $user   = $this->gitfox->apiGetCurrentUser($gitfoxID);
-        if(!isset($user->admin) or !$user->admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitfox->tokenLimit, $this->locate($this->createLink('gitfox', 'edit', array('gitfoxID' => $gitfoxID)))));
+        if(!isset($user->admin) or !$user->admin) return $this->sendError($this->lang->gitfox->tokenLimit, $this->createLink('gitfox', 'edit', array('gitfoxID' => $gitfoxID)));
 
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
 
