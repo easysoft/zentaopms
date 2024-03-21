@@ -10,6 +10,7 @@ zui.Modal.hide = function(selector)
 
 $(document).off('locate.zt').on('locate.zt', function(e, data)
 {
+    if(data === true) data = 'reload';
     parent.parent.$(parent.parent.document).trigger('locate.zt', data);
 });
 
