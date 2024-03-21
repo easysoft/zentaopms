@@ -663,7 +663,7 @@
         if(typeof options === 'string') options = {url: options};
         options = options || {};
 
-        if((options.method || '').toLowerCase() !== 'post' && $.apps.isOldPage(options.url)) return loadOldPage(options.url);
+        if(options.url && (options.method || '').toLowerCase() !== 'post' && $.apps.isOldPage(options.url)) return loadOldPage(options.url);
         else hideOldPage();
 
         if(typeof selector === 'string')      options.selector = selector;
