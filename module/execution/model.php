@@ -132,7 +132,7 @@ class executionModel extends model
         }
 
         $this->session->set('execution', $executionID, $this->app->tab);
-        $this->lang->switcherMenu = $this->getSwitcher($executionID, $this->app->rawModule, $this->app->rawMethod);
+        $this->lang->switcherMenu = $this->getSwitcher($executionID, (string)$this->app->rawModule, (string)$this->app->rawMethod);
         common::setMenuVars('execution', $executionID);
 
         if($execution->type != 'kanban' && $this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr')
