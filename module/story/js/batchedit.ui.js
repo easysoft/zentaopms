@@ -1,6 +1,7 @@
 $(function()
 {
     $('#mainNavbar .nav .nav-item').find("[href$='" + storyType + "']").addClass('active');
+    if($.apps.currentCode == 'qa' && $('#mainNavbar .nav .nav-item').find("[href$='" + storyType + "']").length == 0)  $('#navbar  .nav .nav-item').find("[data-id='testcase']").addClass('active');
 });
 
 window.renderRowData = function($row, index, story)
