@@ -542,7 +542,7 @@ class control extends baseControl
     }
 
     /**
-     * append workflow js and css to form.
+     * append workflow field to form.
      *
      * @param  string $position   info|basic
      * @param  object $object
@@ -595,6 +595,37 @@ class control extends baseControl
             return $fieldList;
         }
         return array();
+    }
+
+    /**
+     * append workflow form config.
+     *
+     * @param  array  $config
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
+    public function appendExtendFormConfig(array $config, string $moduleName = '', string $methodName = '')
+    {
+        if($this->config->edition == 'open') return $config;
+
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
+
+        $flow      = $this->loadModel('workflow')->getByModule($moduleName);
+        $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
+        $layouts   = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        if($layouts)
+        {
+            foreach($fieldList as $key => $field)
+            {
+                if($field->buildin || !$field->show || !isset($layouts[$field->field])) continue;
+                $config[$field->field] = array('required' => false, 'type' => $field->type);
+            }
+        }
+        return $config;
     }
 
     /**
