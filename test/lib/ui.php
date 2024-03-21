@@ -1,21 +1,39 @@
 <?php
+/* Set the error reporting. */
 error_reporting(E_ALL);
+define('RUN_MODE', 'test');
 
+/* Load the framework. */
+include $frameworkRoot . 'router.class.php';
+include $frameworkRoot . 'control.class.php';
+include $frameworkRoot . 'model.class.php';
+include $frameworkRoot . 'helper.class.php';
+
+$app = router::createApp('pms', dirname(__FILE__, 3), 'router');
+$app->loadCommon();
+
+/* 加载框架配置项 */
 define('DS', DIRECTORY_SEPARATOR);
 define('CONFIG_ROOT', dirname(__FILE__, 2) . '/config/');
 define('MODULE_ROOT', dirname(__FILE__, 2) . '/ui/');
 include CONFIG_ROOT . '/config.php';
 
+/* 加载用例执行结果处理类 */
 include __DIR__ . '/result.class.php';
+
+/* 初始化php-webdriver类 */
 include __DIR__ . '/webdriver/webdriver.class.php';
 $driver = new webdriver($config);
 
-/* Set the error reporting. */
+/* 初始化页面元素 */
 include 'page.class.php';
 
+/* 引入禅道框架helper类，加载数据库操作类dao */
 include dirname(__FILE__, 3) . '/framework/helper.class.php';
 include dirname(__FILE__, 3) . '/lib/dao/dao.class.php';
 $dao = new dao();
+
+/* 加载测试数据处理类，初始化测试数据 */
 include 'yaml.class.php';
 
 /**
@@ -25,11 +43,8 @@ include 'yaml.class.php';
  * @access public
  * @return bool true
  */
-function r($result)
+function r()
 {
-    global $_result, $result;
-    $_result = $result->get();
-    return true;
 }
 
 /**
@@ -42,7 +57,9 @@ function r($result)
  */
 function p($keys = '', $delimiter = ',')
 {
-    global $_result;
+    global $result;
+
+    $_result = $result->get();
 
     if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
 
@@ -50,7 +67,6 @@ function p($keys = '', $delimiter = ',')
 
     /* Print $_result. */
     if($keys === '' && is_array($_result)) return print_r($_result) . "\n";
-    if($keys === '' || !is_array($_result) && !is_object($_result)) return print((string) $_result . "\n");
 
     $parts  = explode(';', $keys);
     foreach($parts as $part)
@@ -160,12 +176,12 @@ function getValues($value, $keys, $delimiter)
  * @access public
  * @return void
  */
-function e($expect)
+function e()
 {
 }
 
 /**
- * Set success result set.
+ * Set success result.
  *
  * @access public
  * @return object
@@ -179,7 +195,7 @@ function success()
 }
 
 /**
- * Set failure result set.
+ * Set failure result.
  *
  * @param  string    $message
  * @access public
@@ -248,7 +264,7 @@ class tester
     }
 
     /**
-     * Load and jump to the test page.
+     * Open a test URL.
      *
      * @param  string $module
      * @param  string $method
@@ -257,8 +273,12 @@ class tester
      * @access public
      * @return object
      */
-    public function loadPage($module, $method, $params = array(), $iframeID = '')
+    public function openURL($module, $method, $params = array(), $iframeID = '')
     {
+        if($module || $method) return;
+        $this->result->module = $module;
+        $this->result->method = $method;
+
         if($this->config->requestType == 'GET')
         {
             $url = "index.php?m=$module&f=$method";
@@ -276,26 +296,40 @@ class tester
         $this->page->wait(1);
         $this->page->getErrors($appIframeID);
 
-        return $this->setPage($module, $method);
+        return $this;
     }
 
     /**
      * Set up a test page.
      *
-     * @param  strign  $module
-     * @param  strign  $method
+     * @param  string  $module
+     * @param  string  $method
      * @access public
      * @return object
      */
-    public function setPage($module, $method)
+    public function initPage($module = '', $method = '')
     {
-        global $result;
+        if($this->result->module) $module = $this->result->module;
+        if($this->result->method) $method = $this->result->method;
 
         $pageClass = "{$method}Page";
         if(!class_exists($pageClass))include dirname(__FILE__, 2). "/ui/$module/page/$method.php";
 
         $methodPage = new $pageClass();
-        $result->setPage($methodPage);
+        $this->result->setPage($methodPage);
         return $methodPage;
+    }
+
+    /**
+     * Parsing the current page's URL.
+     *
+     * @access public
+     * @return void
+     */
+    public function parseCurrentUrl()
+    {
+        if(empty($this->result->page)) return;
+
+        return $this->result->page->getUrl();
     }
 }

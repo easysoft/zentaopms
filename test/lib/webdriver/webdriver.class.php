@@ -95,7 +95,7 @@ class webdriver
         if(substr($this->config->webRoot, -1) !== '/') $this->config->webRoot .= '/';
         if(!preg_match('/^http:|^https:/', $url)) $url = $this->config->webRoot . $url;
         $this->driver->get($url);
-        $this->setLang();
+        $this->loadLang();
     }
 
     /**
@@ -104,7 +104,7 @@ class webdriver
      * @access public
      * @return object
      */
-    public function setLang()
+    public function loadLang($module = '')
     {
         global $lang;
 
@@ -116,6 +116,11 @@ class webdriver
         elseif($langName)
         {
             $langName = 'en';
+        }
+
+        if($module)
+        {
+            $langFile = dirname(__FILE__, 4) . "/{$module}/lang/{$langName}.php";
         }
 
         $langFile = dirname(__FILE__, 3) . "/lang/{$langName}.php";

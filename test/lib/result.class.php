@@ -4,15 +4,22 @@ class result
     public $status;
     public $message;
     public $url;
+    public $module;
+    public $method;
 
     public $pageObject;
-    public $pageInfo = array();
     public $errors = array();
 
+    /**
+     * Set page info.
+     *
+     * @param  int    $page
+     * @access public
+     * @return void
+     */
     public function setPage(&$page)
     {
         $this->pageObject = $page;
-        $page->getUrl();
     }
 
     /**
