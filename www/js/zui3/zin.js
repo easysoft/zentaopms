@@ -527,6 +527,7 @@
                             {
                                 zui.Modal.alert(data.load.alert).then(function()
                                 {
+                                    if(data.load.modal)  loadModal(data.load.modal);
                                     if(data.load.locate) openUrl(data.load.locate);
                                 });
                             }
