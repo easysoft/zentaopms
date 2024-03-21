@@ -3093,4 +3093,23 @@ class executionTest
         if(!isset($executions[$executionID])) return (int)key($executions);
         return $this->executionModel->checkAccess($executionID, $executions);
     }
+
+    /**
+     * 获取旧页面1.5级下拉。
+     * Get execution switcher.
+     *
+     * @param  int    $executionID
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return bool
+     */
+    public function getSwitcherTest(int $executionID, string $module, string $method): bool
+    {
+        $executionName = $this->executionModel->dao->select('name')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('name');
+        $output      = $this->executionModel->getSwitcher($executionID, $module, $method);
+
+        if(!$output) return false;
+        return strpos($output, $output) !== false;
+    }
 }
