@@ -29,7 +29,7 @@ class detailBody extends wg
     {
         global $app;
 
-        $fields    = $app->control->appendExtendForm();
+        $fields    = $app->control->appendExtendForm('info', data($app->getModuleName()));
         $extraMain = array();
         foreach($fields as $field)
         {
@@ -43,7 +43,7 @@ class detailBody extends wg
                     set::required($field->required),
                     set::control($field->control),
                     set::items($field->items),
-                    set::value($filed->value)
+                    set::value($field->value)
                 )
             );
         }
