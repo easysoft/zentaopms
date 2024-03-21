@@ -366,7 +366,7 @@ class repoZen extends repo
         $this->repo->saveState(0, $objectID);
 
         $this->app->loadLang('action');
-
+        $this->loadModel('product');
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $products = $this->loadModel('project')->getBranchesByProject($objectID);
@@ -376,10 +376,10 @@ class repoZen extends repo
         }
         else
         {
-            $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+            $products = $this->product->getPairs('', 0, '', 'all');
         }
 
-        $projects = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
+        $projects = $this->product->getProjectPairsByProductIDList(array_keys($products));
         $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
