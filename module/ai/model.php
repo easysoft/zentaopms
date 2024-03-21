@@ -2714,14 +2714,23 @@ class aiModel extends model
     }
 
     /**
-     * create a assistant.
+     * create an assistant.
      * @param  object    $assistant
      * @access public
      * @return false|int
      */
-    public function createAssistant($assistant)
+    public function createAssistant($assistant, $publish = false)
     {
         $assistant->createdDate = helper::now();
+        if($publish)
+        {
+            $assistant->publishedDate = helper::now();
+            $assistant->enabled = '1';
+        }
+        else
+        {
+            $assistant->enabled = '0';
+        }
         $this->dao
             ->insert(TABLE_AI_ASSISTANT)
             ->data($assistant)
