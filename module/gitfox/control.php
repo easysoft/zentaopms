@@ -61,7 +61,7 @@ class gitfox extends control
             $actionID = $this->action->create('gitfox', $gitfoxID, 'edited');
             $changes  = common::createChanges($oldGitFox, $gitFox);
             $this->action->logHistory($actionID, $changes);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadCurrentPage()', 'closeModal' => true));
         }
 
         $this->view->title  = $this->lang->gitfox->common . $this->lang->colon . $this->lang->gitfox->edit;
