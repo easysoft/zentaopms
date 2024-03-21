@@ -230,7 +230,9 @@ if($config->systemMode == 'PLM')
 }
 
 $lang->story->stageList['']           = '';
+$lang->story->stageList['defining']   = 'Defining';
 $lang->story->stageList['wait']       = 'Waiting';
+$lang->story->stageList['planning']   = 'Planning';
 $lang->story->stageList['planned']    = 'Planned';
 $lang->story->stageList['projected']  = 'Projected';
 $lang->story->stageList['designing']  = 'Designing';
@@ -241,6 +243,7 @@ $lang->story->stageList['testing']    = 'Testing';
 $lang->story->stageList['tested']     = 'Tested';
 $lang->story->stageList['verified']   = 'Accepted';
 $lang->story->stageList['rejected']   = 'Verify Rejected';
+$lang->story->stageList['delivering'] = 'Delivering';
 $lang->story->stageList['pending']    = 'Release Pending';
 $lang->story->stageList['released']   = 'Released';
 $lang->story->stageList['closed']     = 'Closed';

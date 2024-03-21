@@ -1207,7 +1207,12 @@ class storyTao extends storyModel
         {
             if(!empty($branchID)) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq((int)$branchID)->set('stage')->eq('closed')->exec();
         }
-        if($story->stage != 'closed') $this->updateLinkedLane($storyID, $linkedProjects);
+
+        if($story->stage != 'closed')
+        {
+            $this->updateLinkedLane($storyID, $linkedProjects);
+            if($story->parent > 0) $this->computeParentStage($story);
+        }
         return true;
     }
 
@@ -1260,8 +1265,140 @@ class storyTao extends storyModel
             $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($storyID)->exec();
         }
 
-        if($story->stage != $stage) $this->updateLinkedLane($storyID, $linkedProjects);
+        if($story->stage != $stage)
+        {
+            $this->updateLinkedLane($storyID, $linkedProjects);
+            if($story->parent > 0) $this->computeParentStage($story);
+        }
         return true;
+    }
+
+    /**
+     * 通过子需求更新父需求的阶段。
+     * 子需求阶段范围：未开始、已计划、已立项、设计中、设计完毕、研发中、研发完毕、测试中、测试完毕、已验收、验收失败、待发布、已发布、已关闭。
+     * 父需求阶段范围：定义中、规划中、研发中、交付中、已关闭。
+     *
+     * 父需求阶段由子需求阶段决定，规则如下：
+     * 1. 定义中:
+     *   排除已关闭（关闭原因不是已完成）后，所有子需求阶段仅为定义中、未开始。
+     * 2. 规划中:
+     *   排除已关闭（关闭原因不是已完成）后，至少有一个子级需求为规划中、已立项、已计划， 其他子需求阶段仅为定义中、未开始。
+     * 3. 研发中:
+     *   排除已关闭（关闭原因不是已完成）后，至少有一个子级需求为设计中、设计完毕、研发中、研发完毕、测试中、测试完毕、已验收、验收失败， 其他子需求阶段仅为未开始、规划中、已立项、已计划。
+     * 4. 交付中:
+     *   至少有一个子级需求为交付中、待发布、已发布；或者有一个子级需求为已关闭（关闭原因是已完成）。
+     * 5. 已关闭:
+     *   所有子需求都已关闭。
+     *
+     * Update parent stage by children.
+     * Parent stage is decided by children stage, the rules are as follows:
+     * 1. Defining:
+     *   All children stages are defining or wait, and no children stage is closed and closedReason is not done.
+     * 2. Planning:
+     *   At least one child stage is planning, planned or projected, and all other children stages are defining or wait, and no children stage is closed and closedReason is not done.
+     * 3. Developing:
+     *   At least one child stage is designing, designed, developing, developed, testing, tested, verified or rejected, and all other children stages are defining, planning, planned or projected, and no children stage is closed and closedReason is not done.
+     * 4. Delivering:
+     *   At least one child stage is delivering, pending or released, or at least one child stage is closed and closedReason is done.
+     * 5. Closed:
+     *   All children stages are closed.
+     *
+     * @param  object    $story
+     * @access protected
+     * @return void
+     */
+    protected function computeParentStage(object $story)
+    {
+        $parent = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
+        if(empty($parent)) return;
+
+        $children = $this->dao->select('id, stage, closedReason')->from(TABLE_STORY)
+            ->where('parent')->eq($story->parent)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+
+        $allDefining = true;
+        $allClosed   = true;
+        foreach($children as $child)
+        {
+            if(!in_array($child->stage, array('wait', 'defining')) && !($child->stage == 'closed' && $child->closedReason != 'done')) $allDefining = false; // Defining
+            if($child->stage != 'closed') $allClosed = false; // Closed
+        }
+
+        $parentStage = $parent->stage;
+        if($allClosed)
+        {
+            $parentStage = 'closed';
+        }
+        elseif($allDefining)
+        {
+            $parentStage = 'defining';
+        }
+        else
+        {
+            $hasPlanning = false;
+            $allClosedOrDefining = true;
+            foreach($children as $child)
+            {
+                /* Planning. */
+                if(in_array($child->stage, array('planning', 'planned', 'projected')))
+                {
+                    $hasPlanning = true;
+                }
+                elseif(!in_array($child->stage, array('wait', 'defining')) && !($child->stage == 'closed' && $child->closedReason != 'done'))
+                {
+                    $allClosedOrDefining = false;
+                }
+            }
+
+            if($hasPlanning && $allClosedOrDefining)
+            {
+                $parentStage = 'planning';
+            }
+            else
+            {
+                /* Developing. */
+                $hasDeveloping = false;
+                $allClosedOrDefiningOrPlanning = true;
+                foreach($children as $child)
+                {
+                    if(in_array($child->stage, array('designing', 'designed', 'developing', 'developed', 'testing', 'tested', 'verified', 'rejected')))
+                    {
+                        $hasDeveloping = true;
+                    }
+                    elseif(!in_array($child->stage, array('wait', 'defining', 'planning', 'planned', 'projected')) && !($child->stage == 'closed' && $child->closedReason != 'done'))
+                    {
+                        $allClosedOrDefiningOrPlanning = false;
+                    }
+                }
+
+                if($hasDeveloping && $allClosedOrDefiningOrPlanning)
+                {
+                    $parentStage = 'developing';
+                }
+                else
+                {
+                    /* Delivering. */
+                    $hasDelivering = false;
+                    foreach($children as $child)
+                    {
+                        if(in_array($child->stage, array('delivering', 'pending', 'released')) || ($child->stage == 'closed' && $child->closedReason == 'done'))
+                        {
+                            $hasDelivering = true;
+                            break;
+                        }
+                    }
+
+                    if($hasDelivering) $parentStage = 'delivering';
+                }
+            }
+        }
+
+        if($parentStage != $parent->stage)
+        {
+            $this->dao->update(TABLE_STORY)->set('stage')->eq($parentStage)->where('id')->eq($parent->id)->exec();
+            if($parent->parent > 0) $this->computeParentStage($parent);
+        }
     }
 
     /**
@@ -1301,7 +1438,7 @@ class storyTao extends storyModel
     protected function getLinkedTaskStat(int $storyID, array $linkedProjects): array
     {
         $tasks = $this->dao->select('type,execution,status')->from(TABLE_TASK)->where('execution')->in(array_keys($linkedProjects))
-            ->andWhere('type')->in('devel,test')
+            ->andWhere('type')->in('devel,test,design')
             ->andWhere('story')->eq($storyID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('cancel')
@@ -1310,9 +1447,10 @@ class storyTao extends storyModel
         if(empty($tasks)) return array();
 
         /* Cycle all tasks, get counts of every type and every status. */
-        $branchStatusList    = $branchDevelCount = $branchTestCount = array();
-        $statusList['devel'] = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
-        $statusList['test']  = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
+        $branchStatusList     = $branchDevelCount = $branchTestCount = $branchDesignCount = array();
+        $statusList['design'] = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
+        $statusList['devel']  = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
+        $statusList['test']   = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
         foreach($tasks as $type => $typeTasks)
         {
             if(!isset($statusList[$type])) continue;
@@ -1328,12 +1466,13 @@ class storyTao extends storyModel
                     if(!isset($branchStatusList[$branch])) $branchStatusList[$branch] = $statusList;
 
                     $branchStatusList[$branch][$type][$status] ++;
-                    if($type == 'devel') $branchDevelCount[$branch] = !isset($branchDevelCount[$branch]) ? 1 : ($branchDevelCount[$branch] + 1);
-                    if($type == 'test')  $branchTestCount[$branch]  = !isset($branchTestCount[$branch])  ? 1 : ($branchTestCount[$branch] + 1);
+                    if($type == 'devel')  $branchDevelCount[$branch]  = !isset($branchDevelCount[$branch])  ? 1 : ($branchDevelCount[$branch] + 1);
+                    if($type == 'test')   $branchTestCount[$branch]   = !isset($branchTestCount[$branch])   ? 1 : ($branchTestCount[$branch] + 1);
+                    if($type == 'design') $branchDesignCount[$branch] = !isset($branchDesignCount[$branch]) ? 1 : ($branchDesignCount[$branch] + 1);
                 }
             }
         }
-        return array($branchStatusList, $branchDevelCount, $branchTestCount);
+        return array($branchStatusList, $branchDevelCount, $branchTestCount, $branchDesignCount);
     }
 
     /**
@@ -1380,14 +1519,18 @@ class storyTao extends storyModel
         }
 
         /* 根据任务状态统计信息，计算该需求所处的阶段。 */
-        list($branchStatusList, $branchDevelCount, $branchTestCount) = $taskStat;
+        list($branchStatusList, $branchDevelCount, $branchTestCount, $branchDesignCount) = $taskStat;
         foreach($branchStatusList as $branch => $statusList)
         {
             $branch     = (int)$branch;
             $stage      = 'projected';
-            $testCount  = isset($branchTestCount[$branch])  ? $branchTestCount[$branch]  : 0;
-            $develCount = isset($branchDevelCount[$branch]) ? $branchDevelCount[$branch] : 0;
+            $desginCount = isset($branchDesignCount[$branch])  ? $branchDesignCount[$branch]  : 0;
+            $testCount   = isset($branchTestCount[$branch])  ? $branchTestCount[$branch]  : 0;
+            $develCount  = isset($branchDevelCount[$branch]) ? $branchDevelCount[$branch] : 0;
 
+            $doingDesignTask  = $statusList['design']['wait'] < $desginCount && $statusList['design']['done'] < $desginCount && $desginCount > 0;
+            $doneDesignTask   = $statusList['design']['done'] == $desginCount && $desginCount > 0;
+            $notStartDevTask  = $statusList['devel']['wait'] == $develCount;
             $doingDevelTask   = $statusList['devel']['wait'] < $develCount && $statusList['devel']['done'] < $develCount && $develCount > 0;
             $doneDevelTask    = $statusList['devel']['done'] == $develCount && $develCount > 0;
             $notStartTestTask = $statusList['test']['wait'] == $testCount;
@@ -1396,13 +1539,15 @@ class storyTao extends storyModel
             $hasDoingTestTask = $statusList['test']['doing'] > 0 || $statusList['test']['pause'] > 0;
             $notDoingTestTask = $statusList['test']['doing'] == 0;
 
-            if($doingDevelTask && $notStartTestTask) $stage = 'developing'; //开发任务没有全部完成，测试任务没有开始，阶段为开发中。
-            if($doingDevelTask && $notDoingTestTask) $stage = 'developing'; //开发任务没有全部完成，没有测试中的测试任务，阶段为开发中。
-            if($doingDevelTask && $doneTestTask)     $stage = 'testing';    //开发任务没有全部完成，测试任务已经完成，阶段为测试中。
-            if($doneDevelTask  && $notStartTestTask) $stage = 'developed';  //开发任务已经完成，测试任务还没有开始，阶段为开发完成。
-            if($doneDevelTask  && $doingTestTask)    $stage = 'testing';    //开发任务已经完成，测试任务已经开始，阶段为测试中。
-            if($hasDoingTestTask)                    $stage = 'testing';    //有测试任务正在测试，阶段为测试中。
-            if($doneDevelTask && $doneTestTask)      $stage = 'tested';     //开发任务已经完成，测试任务已经完成，阶段为测试完成。
+            if($doingDesignTask && $notStartDevTask)  $stage = 'designing';  //设计任务没有全部完成，开发任务还没有开始，阶段为设计中。
+            if($doneDesignTask  && $notStartDevTask)  $stage = 'designed';   //设计任务全部完成，开发任务还没有开始，阶段为设计完成。
+            if($doingDevelTask  && $notStartTestTask) $stage = 'developing'; //开发任务没有全部完成，测试任务没有开始，阶段为开发中。
+            if($doingDevelTask  && $notDoingTestTask) $stage = 'developing'; //开发任务没有全部完成，没有测试中的测试任务，阶段为开发中。
+            if($doingDevelTask  && $doneTestTask)     $stage = 'testing';    //开发任务没有全部完成，测试任务已经完成，阶段为测试中。
+            if($doneDevelTask   && $notStartTestTask) $stage = 'developed';  //开发任务已经完成，测试任务还没有开始，阶段为开发完成。
+            if($doneDevelTask   && $doingTestTask)    $stage = 'testing';    //开发任务已经完成，测试任务已经开始，阶段为测试中。
+            if($hasDoingTestTask)                     $stage = 'testing';    //有测试任务正在测试，阶段为测试中。
+            if($doneDevelTask && $doneTestTask)       $stage = 'tested';     //开发任务已经完成，测试任务已经完成，阶段为测试完成。
 
             $stages[(int)$branch] = $stage;
         }

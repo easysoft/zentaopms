@@ -230,7 +230,9 @@ if($config->systemMode == 'PLM')
 }
 
 $lang->story->stageList['']           = '';
+$lang->story->stageList['defining']   = '定义中';
 $lang->story->stageList['wait']       = '未开始';
+$lang->story->stageList['planning']   = '规划中';
 $lang->story->stageList['planned']    = "已计划";
 $lang->story->stageList['projected']  = '已立项';
 $lang->story->stageList['designing']  = '设计中';
@@ -241,6 +243,7 @@ $lang->story->stageList['testing']    = '测试中';
 $lang->story->stageList['tested']     = '测试完毕';
 $lang->story->stageList['verified']   = '已验收';
 $lang->story->stageList['rejected']   = '验收失败';
+$lang->story->stageList['delivering'] = '交付中';
 $lang->story->stageList['pending']    = '待发布';
 $lang->story->stageList['released']   = '已发布';
 $lang->story->stageList['closed']     = '已关闭';

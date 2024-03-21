@@ -57,6 +57,7 @@ window.renderRowData = function($row, index, story)
     var $branch = $row.find('.form-batch-control[data-name="branch"]');
     var $parent = $row.find('.form-batch-control[data-name="parent"]');
     var $grade  = $row.find('.form-batch-control[data-name="grade"]');
+    var $stage  = $row.find('.form-batch-control[data-name="stage"]');
 
     if($parent.length > 0)
     {
@@ -79,6 +80,31 @@ window.renderRowData = function($row, index, story)
             data = JSON.parse(data);
             $gradePicker.render({items: data.items});
             $gradePicker.$.setValue(story.grade);
+        })
+    }
+
+    if($stage.length > 0)
+    {
+        $stage.find('.picker-box').on('inited', function(e, info)
+        {
+            let $picker = info[0];
+            let options = $picker.options;
+            let items   = options.items;
+
+            if(story.type == 'story' && story.isParent == '0')
+            {
+                /* 叶子需求删除父需求的阶段。*/
+                items.splice(0, 1);
+                items.splice(1, 1);
+                items.splice(11, 1);
+                options.items = items;
+            }
+            else if(story.type != 'story' || story.isParent == '1')
+            {
+                options.disabled = true;
+            }
+
+            $picker.render(options);
         })
     }
 

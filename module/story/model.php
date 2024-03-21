@@ -1767,6 +1767,8 @@ class storyModel extends model
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
+            if($oldStory->type != 'story' || $oldStory->isParent == '1') continue;
+
             if($oldStory->status == 'draft' or $oldStory->status == 'closed')
             {
                 $ignoreStories .= "#{$storyID} ";
@@ -1952,8 +1954,9 @@ class storyModel extends model
      */
     public function setStage(int $storyID): bool
     {
-        $story  = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if(empty($story)) return false;
+        if($story->type != 'story' || $story->isParent == '1') return false;
 
         /* 获取已经存在的分支阶段. */
         $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');

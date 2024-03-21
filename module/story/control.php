@@ -67,7 +67,7 @@ class story extends control
             helper::setcookie('lastStoryModule', $moduleID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
             /* Get story data from post. */
-            $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID);
+            $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID, $storyType);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response = $this->storyZen->checkRepeatStory($storyData, $objectID);

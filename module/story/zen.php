@@ -1152,12 +1152,13 @@ class storyZen extends story
      * 构建创建需求数据。
      * Build story for create
      *
-     * @param  int       $executionID
-     * @param  int       $bugID
+     * @param  int          $executionID
+     * @param  int          $bugID
+     * @param  string       $storyType
      * @access protected
      * @return object|false
      */
-    protected function buildStoryForCreate(int $executionID, int $bugID): object|false
+    protected function buildStoryForCreate(int $executionID, int $bugID, string $storyType = 'story'): object|false
     {
         $moduleName   = $this->app->rawModule;
         $fields       = $this->config->story->form->create;
@@ -1167,7 +1168,8 @@ class storyZen extends story
 
         $storyData = form::data($fields)
             ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
-            ->setIF($this->post->plan > 0, 'stage', 'planned')
+            ->setIF($storyType != 'story', 'stage', 'defining')
+            ->setIF($this->post->plan > 0 && $storyType == 'story', 'stage', 'planned')
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF($executionID > 0, 'stage', 'projected')
@@ -1397,7 +1399,7 @@ class storyZen extends story
 
         if(isset($_POST['plan']) and is_array($_POST['plan'])) $story->plan   = trim(implode(',', $_POST['plan']), ',');
         if(isset($_POST['branch']) and $_POST['branch'] == 0)  $story->branch = 0;
-        if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
+        if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|rejected|pending|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
         if(isset($_POST['reviewer']) or isset($_POST['needNotReview'])) $this->story->doUpdateReviewer($storyID, $story);
     }
 
@@ -1480,12 +1482,20 @@ class storyZen extends story
             $story->type       = $storyType;
             $story->status     = (empty($story->reviewer) && !$forceReview) ? 'active' : 'reviewing';
             $story->status     = $saveDraft ? 'draft' : $story->status;
-            $story->stage      = ($this->app->tab == 'project' || $this->app->tab == 'execution') ? 'projected' : 'wait';
             $story->product    = $productID;
             $story->openedBy   = $account;
             $story->vision     = $this->config->vision;
             $story->openedDate = $now;
             $story->version    = 1;
+
+            if(in_array($this->app->tab, array('project', 'execution')))
+            {
+                $story->stage = $storyType == 'story' ? 'projected' : 'planning';
+            }
+            else
+            {
+                $story->stage = $storyType == 'story' ? 'wait' : 'defining';
+            }
 
             !empty($story->assignedTo) && $story->assignedDate = $now;
             if($this->post->uploadImage && $this->post->uploadImage[$i]) $story->uploadImage = $this->post->uploadImage[$i];
@@ -1524,7 +1534,7 @@ class storyZen extends story
 
             if($oldStory->assignedTo != $story->assignedTo) $story->assignedDate = $now;
             if($oldStory->parent < 0) $story->plan = '';
-            if($story->stage != $oldStory->stage) $story->stagedBy = (str_contains('|tested|verified|released|closed|', "|{$story->stage}|")) ? $account : '';
+            if($story->stage != $oldStory->stage) $story->stagedBy = (str_contains('|tested|verified|rejected|pending|released|closed|', "|{$story->stage}|")) ? $account : '';
 
             if($story->closedBy     && helper::isZeroDate($oldStory->closedDate)) $story->closedDate = $now;
             if($story->closedReason && helper::isZeroDate($oldStory->closedDate)) $story->closedDate = $now;
