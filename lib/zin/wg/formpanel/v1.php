@@ -73,6 +73,14 @@ class formPanel extends panel
 
     protected function created()
     {
+        $fields = $this->prop('fields');
+        if(is_object($fields))
+        {
+            global $app;
+            $fields = $app->control->appendExtendFields($fields);
+            $this->setProp('fields', $fields);
+        }
+
         $customFields = $this->prop('customFields');
         if($customFields === true)
         {

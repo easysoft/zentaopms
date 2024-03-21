@@ -489,6 +489,28 @@ class control extends baseControl
     }
 
     /**
+     * append workflow fields to form.
+     *
+     * @param  zin\fieldList $fields
+     * @param  string        $moduleName
+     * @param  string        $methodName
+     * @access public
+     * @return void
+     */
+    public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = '')
+    {
+        if($this->config->edition == 'open') return false;
+
+        $moduleName = $moduleName ?: $this->app->getModuleName();
+        $methodName = $methodName ?: $this->app->getMethodName();
+
+        $flow      = $this->loadModel('workflow')->getByModule($moduleName);
+        $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
+        return $this->loadModel('flow')->buildFormFields($fields, $fieldList);
+    }
+
+    /**
      * Process status of an object according to its subStatus.
      *
      * @param  string $module   product | release | story | project | task | bug | testcase | testtask | feedback
