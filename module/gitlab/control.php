@@ -156,7 +156,7 @@ class gitlab extends control
 
         $gitlab = $this->gitlab->getByID($gitlabID);
         $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
-        if(!isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->tokenLimit, 'locate' => $this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
+        if(empty($user->is_admin)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->gitlab->tokenLimit, 'modal' => $this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID)))));
 
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
 
