@@ -746,8 +746,7 @@ class mrModel extends model
         }
         else
         {
-            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
-            return json_decode(commonModel::http($url, array('state' => 'closed'), array(), array(), 'json', 'PATCH'));
+            return $this->apiDeleteMR($hostID, $projectID, $MRID);
         }
     }
 
@@ -766,29 +765,21 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($hostID);
         if(!$host) return null;
 
+        $apiRoot = $this->loadModel($host->type)->getApiRoot($hostID);
         if($host->type == 'gitlab')
         {
-            $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=reopen';
+            $url = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID") . '&state_event=reopen';
             return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        }
+        elseif($host->type == 'gitfox')
+        {
+            $url = sprintf($apiRoot->url, "/repos/$projectID/pullreq/$MRID/state");
+            return json_decode(commonModel::http($url, array('state' => 'open'), array(), $apiRoot->header, 'json'));
         }
         else
         {
-            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
-            $MR  = json_decode(commonModel::http($url, array('state' => 'open'), array(), array(), 'json', 'PATCH'));
-            if(!$MR) return null;
-
-            $MR->iid   = $host->type == 'gitea' ? $MR->number : $MR->id;
-            $MR->state = $MR->state == 'open' ? 'opened' : $MR->state;
-            if($MR->merged) $MR->state = 'merged';
-
-            $MR->merge_status      = $MR->mergeable ? 'can_be_merged' : 'cannot_be_merged';
-            $MR->description       = $MR->body;
-            $MR->target_branch     = $host->type == 'gitea' ? $MR->base->ref : $MR->base_branch;
-            $MR->source_branch     = $host->type == 'gitea' ? $MR->head->ref : $MR->head_branch;
-            $MR->source_project_id = $projectID;
-            $MR->target_project_id = $projectID;
-
-            return $MR;
+            $url = sprintf($apiRoot, "/repos/$projectID/pulls/$MRID");
+            return json_decode(commonModel::http($url, array('state' => 'open'), array(), array(), 'json', 'PATCH'));
         }
     }
 
@@ -1042,12 +1033,10 @@ class mrModel extends model
         $link = helper::createLink('mr', 'view', "mr={$MR->id}");
         if($MR->status == 'opened') return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'load' => $link);
 
-        $actionID = $this->loadModel('action')->create('mr', $MR->id, 'reopen');
-        $rawMR    = $this->apiReopenMR($MR->hostID, $MR->targetProject, $MR->mriid);
-        $changes  = common::createChanges($MR, $rawMR);
-        $this->action->logHistory($actionID, $changes);
+        $this->loadModel('action')->create('mr', $MR->id, 'reopen');
+        $rawMR = $this->apiReopenMR($MR->hostID, $MR->targetProject, $MR->mriid);
 
-        if(isset($rawMR->state) && $rawMR->state == 'opened') return array('result' => 'success', 'message' => $this->lang->mr->reopenSuccess, 'load' => $link);
+        if(!empty($rawMR) && empty($rawMR->message)) return array('result' => 'success', 'message' => $this->lang->mr->reopenSuccess, 'load' => $link);
         return array('result' => 'fail', 'message' => $this->lang->fail, 'load' => $link);
     }
 
