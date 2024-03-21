@@ -49,7 +49,8 @@ class projectModel extends model
         //echo(js::alert($this->lang->project->accessDenied));
         $this->session->set('project', '');
 
-        return print(js::locate(helper::createLink('project', 'index')));
+        $projectLink = isset($this->config->projectLink) ? $this->config->projectLink : 'project-browse';
+        return print(js::locate($projectLink));
     }
 
     /**
