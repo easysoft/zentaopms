@@ -41,6 +41,7 @@ class picker extends wg
         'name?: string',                    // 作为表单项的名称。
         'value?: string|string[]',          // 默认值。
         'emptyValue?: string',              // 允许的空值，使用逗号分隔多个允许的空值。
+        'display?: string|callback',        // 触发器上显示的文本。
         'onChange?: function',              // 值变更回调函数。
         'disabled?: boolean',               // 是否禁用。
         'readonly?: boolean',               // 是否只读。
