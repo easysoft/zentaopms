@@ -478,6 +478,9 @@ class actionTao extends actionModel
                 break;
             case 'execution':
             case 'kanban':
+            case 'story':
+                $paramString = "{$type}ID={$action->extra}";
+                break;
             case 'task':
                 $paramString = "{$type}ID={$action->extra}";
                 break;
