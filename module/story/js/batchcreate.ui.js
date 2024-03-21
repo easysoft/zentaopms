@@ -44,8 +44,10 @@ window.setGrade = function(e)
     $.get(link, function(data)
     {
         data = JSON.parse(data);
-        $(e.target).closest('.table').find('[name^=grade]').each(function()
+        const currentIndex = $(e.target).closest('tr').attr('data-index');
+        $(e.target).closest('tbody').find('[name^=grade]').each(function(index)
         {
+            if(index < currentIndex) return;
             let $grade = $(this).zui('picker');
             $grade.render({items: data.items});
             $grade.$.setValue(data.default);
