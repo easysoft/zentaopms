@@ -29,17 +29,16 @@ foreach($fields as $field => $attr)
 
     $formItems[$field] = formRow
     (
-        in_array($field, array('assignedTo', 'closedReason', 'pri', 'estimate', 'childStories')) ? setID($field . 'Box') : null,
+        in_array($field, array('assignedTo', 'duplicateStory', 'pri', 'estimate', 'childStories')) ? setID($field . 'Box') : null,
         in_array($field, array('closedReason', 'duplicateStory', 'pri', 'estimate', 'childStories', 'status')) ? set::hidden(true) : null,
 
-        $field == 'duplicateStory' ? setID('rejectedReasonBox') : null,
-        $field == 'assignedTo'     ? set::hidden(!$isLastOne) : null,
-        $field == 'result'         ? on::change('switchShow(e.target);') : null,
-        $field == 'closedReason'   ? on::change('setStory(e.target);') : null,
+        $field == 'closedReason' ? setID('rejectedReasonBox') : null,
+        $field == 'assignedTo'   ? set::hidden(!$isLastOne) : null,
+        $field == 'result'       ? on::change('switchShow(e.target);') : null,
+        $field == 'closedReason' ? on::change('setStory(e.target);') : null,
 
         formGroup
         (
-
             set::width($width),
             set::name($fieldName),
             set::label($attr['title']),
