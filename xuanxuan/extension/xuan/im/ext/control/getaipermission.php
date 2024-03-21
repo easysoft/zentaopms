@@ -4,6 +4,7 @@ class myIm extends im {
     public function getAiPermission($userID = 0, $version = '', $device = 'desktop')
     {
         $user = $this->im->user->getByID($userID);
+        $user->rights = $this->loadModel('user')->authorize($user->account);
 
         global $app;
         $app->user = $user;
