@@ -712,8 +712,13 @@ class mrModel extends model
         $rowMR  = $this->apiGetSingleMR((int)$repoID, $MRID);
         if($rowMR && $rowMR->state == 'opened')
         {
-            $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
-            return json_decode(commonModel::http($url, array('state' => 'closed'), array(), array(), 'json', 'PATCH'));
+            $apiRoot = $this->loadModel($host->type)->getApiRoot($hostID);
+            $header = is_string($apiRoot) ? array() : $apiRoot->header;
+
+            if(is_object($apiRoot)) $apiRoot = $apiRoot->url;
+            $api = "/repos/$projectID/pulls/$MRID";
+            if($host->type == 'gitfox') $api = "/repos/$projectID/pullreq/$MRID/state";
+            return json_decode(commonModel::http(sprintf($apiRoot, $api), array('state' => 'closed'), array(), $header, 'json', $host->type == 'gitfox' ? 'POST' : 'PATCH'));
         }
 
         return null;
