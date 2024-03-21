@@ -19,7 +19,7 @@ class detailSide extends wg
     {
         global $app, $lang;
 
-        $fields    = $app->control->appendExtendForm('basic');
+        $fields    = $app->control->appendExtendForm('basic', data($app->getModuleName()));
         $extraSide = array();
         foreach($fields as $field)
         {
@@ -33,7 +33,7 @@ class detailSide extends wg
                     set::required($field->required),
                     set::control($field->control),
                     set::items($field->items),
-                    set::value($filed->value)
+                    set::value($field->value)
                 )
             );
         }
