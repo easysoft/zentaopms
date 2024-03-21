@@ -369,8 +369,10 @@ class repoZen extends repo
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
-            $products = $this->loadModel('product')->getProductPairsByProject($objectID);
+            $products = $this->loadModel('project')->getBranchesByProject($objectID);
             if(empty($products)) return $this->sendError($this->lang->repo->error->noProduct, true);
+
+            $products = $this->product->getProducts($objectID, 'all', '', false, array_keys($products));
         }
         else
         {
