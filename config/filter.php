@@ -262,7 +262,6 @@ $filter->mail->ztcloud->cookie['ztCloudLicense'] = 'equal::yes';
 
 $filter->product->browse->cookie['preBranch']         = 'reg::word';
 $filter->product->browse->cookie['preProductID']      = 'int';
-$filter->product->browse->cookie['productStoryOrder'] = 'reg::orderBy';
 $filter->product->browse->cookie['storyModule']       = 'int';
 $filter->product->browse->cookie['storyBranch']       = 'int';
 $filter->product->browse->cookie['treeBranch']        = 'reg::word';

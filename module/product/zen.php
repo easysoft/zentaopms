@@ -852,9 +852,6 @@ class productZen extends product
 
         if($browseType == 'bybranch') helper::setcookie('storyBranch', $branch, 0);
 
-        /* Save sort order of product stories list. */
-        helper::setcookie('productStoryOrder', $orderBy, 0);
-
         /* Set product ID and branch of the pre visited product. */
         helper::setcookie('preProductID', (string)$productID);
         helper::setcookie('preBranch', $branch, 0);
