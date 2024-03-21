@@ -2712,6 +2712,23 @@ class aiModel extends model
 
         return true;
     }
+
+    /**
+     * create a assistant.
+     * @param  object    $assistant
+     * @access public
+     * @return false|int
+     */
+    public function createAssistant($assistant)
+    {
+        $assistant->createdDate = helper::now();
+        $this->dao
+            ->insert(TABLE_AI_ASSISTANT)
+            ->data($assistant)
+            ->exec();
+        if (dao::isError()) return false;
+        return $this->dao->lastInsertID();
+    }
 }
 
 /**

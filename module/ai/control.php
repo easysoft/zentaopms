@@ -282,6 +282,35 @@ class ai extends control
     }
 
     /**
+     * create an assistant.
+     *
+     * @access public
+     * @return void
+     */
+    public function assistantcreate()
+    {
+        if(strtolower($this->server->request_method) == 'post')
+        {
+            $assistant = fixer::input('post')->get();
+            $assistantID = $this->ai->createAssistant($assistant);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'callback' => "gotoAssistant($assistantID)"));
+        }
+
+        $models = $this->ai->getLanguageModels('', false);
+        $models = array_reduce($models, function($acc, $model)
+        {
+            $acc[$model->id] = $model->name;
+            return $acc;
+        }, array());
+
+        $this->view->models = $models;
+        $this->view->title  = $this->lang->ai->assistants->create;
+        $this->display();
+    }
+
+    /**
      * List mini programs.
      *
      * @access public
