@@ -674,6 +674,7 @@ $lang->navGroup->job              = 'devops';
 $lang->navGroup->jenkins          = 'devops';
 $lang->navGroup->mr               = 'devops';
 $lang->navGroup->gitlab           = 'devops';
+$lang->navGroup->gitfox           = 'devops';
 $lang->navGroup->gogs             = 'devops';
 $lang->navGroup->gitea            = 'devops';
 $lang->navGroup->sonarqube        = 'devops';
