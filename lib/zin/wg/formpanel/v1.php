@@ -170,6 +170,35 @@ class formPanel extends panel
         return parent::buildHeadingActions();
     }
 
+    protected function buildExtraMain()
+    {
+        global $app;
+
+        $layout = $this->prop('layout');
+        if($layout == 'grid') return null;
+
+        $fields    = $app->control->appendExtendForm('info', data($app->getModuleName()));
+        $extraMain = array();
+        foreach($fields as $field)
+        {
+            $extraMain[] = formGroup
+            (
+                set::width($field->width),
+                set::label($field->name),
+                formGroup
+                (
+                    set::id($field->field),
+                    set::name($field->field),
+                    set::required($field->required),
+                    set::control($field->control),
+                    set::items($field->items),
+                    set::value($field->value)
+                )
+            );
+        }
+        return $extraMain;
+    }
+
     /**
      * Build form widget by mode.
      *
@@ -212,6 +241,7 @@ class formPanel extends panel
             set::className($this->prop('formClass')),
             set($this->props->pick($formProps)),
             $this->children(),
+            $this->buildExtraMain(),
             $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
         );
     }

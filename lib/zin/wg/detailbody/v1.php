@@ -105,7 +105,8 @@ class detailBody extends wg
                     ),
                     $side
                 )
-            )
+            ),
+            html($app->control->appendExtendCssAndJS())
         );
     }
 }
