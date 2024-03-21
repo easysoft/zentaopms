@@ -1256,7 +1256,10 @@ class myModel extends model
             }
             else
             {
-                $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->andWhere('deleted')->eq('0')->fetchAll('id');
+                $objectGroup[$objectType] = $this->dao->select('*')->from($table)
+                    ->where('id')->in($idList)
+                    ->beginIF(strpos(',attend,overtime,makeup,leave,lieu,', ",{$objectType},") === false)->andWhere('deleted')->eq('0')->fi()
+                    ->fetchAll('id');
             }
         }
 
