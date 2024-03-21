@@ -11,5 +11,5 @@ $(function()
  */
 function setFileModalHeight()
 {
-    $($(this).attr('href')).find('.modal-body').css('max-height', $(this).closest('.modal-content').height() + 'px');
+    $($(this).attr('href')).find('.modal-body').css('max-height', ($(this).closest('.modal-content').height() - 35) + 'px');
 }
