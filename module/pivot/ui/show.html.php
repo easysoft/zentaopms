@@ -41,7 +41,7 @@ foreach($pivot->filters as $filter)
     }
 }
 
-$generateData = function() use ($lang, $title, $pivot, $filters, $data, $configs)
+$generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $configs)
 {
     $clickable = $this->pivot->isClickable($pivot, 'design');
     list($cols, $rows, $cellSpan) = $this->convertDataForDtable($data, $configs);
@@ -51,7 +51,7 @@ $generateData = function() use ($lang, $title, $pivot, $filters, $data, $configs
         panel
         (
             setID('pivotPanel'),
-            set::title($title),
+            set::title($pivotName),
             set::shadow(false),
             set::bodyClass('pt-0'),
             $pivot->desc ? to::titleSuffix(

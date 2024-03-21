@@ -168,7 +168,7 @@ class pivotZen extends pivot
 
         list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
 
-        $this->view->title        = $pivot->name;
+        $this->view->pivotName    = $pivot->name;
         $this->view->currentMenu  = $groupID . '_' . $pivot->id;
         $this->view->currentGroup = $groupID;
         $this->view->pivot        = $pivot;
