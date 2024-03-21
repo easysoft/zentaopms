@@ -499,7 +499,7 @@ class control extends baseControl
      */
     public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = '')
     {
-        if($this->config->edition == 'open') return false;
+        if($this->config->edition == 'open') return $fields;
 
         $moduleName = $moduleName ?: $this->app->getModuleName();
         $methodName = $methodName ?: $this->app->getMethodName();
