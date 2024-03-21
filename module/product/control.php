@@ -343,8 +343,8 @@ class product extends control
             if($project->model != 'scrum') unset($this->config->product->search['fields']['plan']);             // The none-product and none-scrum project don't need display the plan in the search form.
         }
 
-        $roadmaps = array();
-        if(!empty($project->charter)) $roadmaps = $this->loadModel('roadmap')->getPairsByProjectID($projectID);
+        $linkedRoadmaps = array();
+        if(!empty($project->charter)) $linkedRoadmaps = $this->loadModel('roadmap')->getPairsByProjectID($projectID);
 
         /* Build search form. */
         $params    = $isProjectStory ? "projectID=$projectID&" : '';
@@ -370,7 +370,7 @@ class product extends control
         $this->view->stories         = $stories;
         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired,noclosed', true);
         $this->view->productPlans    = isset($productPlans) ? array(0 => '') + $productPlans : array();
-        $this->view->roadmaps        = $roadmaps;
+        $this->view->linkedRoadmaps  = $linkedRoadmaps;
         $this->view->summary         = $this->product->summary($stories, $storyType);
         $this->view->moduleTree      = $moduleTree;
         $this->view->parentModules   = $this->tree->getParents($moduleID);

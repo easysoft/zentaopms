@@ -615,7 +615,7 @@ js::set('pageSummary',       $summary);
       </div>
       <div class="modal-body">
         <div class='input-group'>
-          <?php echo html::select('roadmap', $roadmaps, '', "class='form-control chosen' id='roadmap'");?>
+          <?php echo html::select('roadmap', $linkedRoadmaps, '', "class='form-control chosen' id='roadmap'");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='linkRoadmapButton'", 'btn btn-primary');?></span>
         </div>
       </div>
