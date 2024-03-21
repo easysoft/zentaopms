@@ -387,6 +387,7 @@ class user extends control
         $this->view->type      = $type;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
+        $this->view->userList  = $this->user->setUserList($users, $userID);
 
         $this->display();
     }
@@ -417,6 +418,7 @@ class user extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+
         $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->risk;
         $this->view->risks     = $this->loadModel('risk')->getUserRisks($type, $user->account, $orderBy, $pager);
         $this->view->deptUsers = $users;
@@ -424,6 +426,7 @@ class user extends control
         $this->view->type      = $type;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
+        $this->view->userList  = $this->user->setUserList($users, $userID);
 
         $this->display();
     }
