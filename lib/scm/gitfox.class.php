@@ -943,7 +943,7 @@ class gitfoxRepo
         $MR->id                = $MR->number;
         $MR->iid               = $MR->number;
         $MR->state             = $MR->state == 'open' ? 'opened' : $MR->state;
-        $MR->merge_status      = $MR->merge_check_status ? 'cannot_be_merged' : 'can_be_merged';
+        $MR->merge_status      = $MR->merge_check_status != 'mergeable' ? 'cannot_be_merged' : 'can_be_merged';
         $MR->changes_count     = $MR->stats->commits;
         $MR->source_project_id = $MR->source_repo_id;
         $MR->target_project_id = $MR->target_repo_id;

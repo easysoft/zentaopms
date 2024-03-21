@@ -805,22 +805,27 @@ class mrModel extends model
             $url = sprintf($apiRoot, "/projects/$MR->targetProject/merge_requests/$MR->mriid/merge");
             return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
         }
+        elseif($host->type == 'gitfox')
+        {
+            $rowMR = $this->apiGetSingleMR($MR->repoID, $MR->mriid);
+            $url   = sprintf($apiRoot->url, "/repos/$MR->targetProject/pullreq/$MR->mriid/merge");
+            $data  = array('dry_run' => false, 'bypass_rules' => false, 'source_sha' => $rowMR->source_sha, 'method' => $MR->squash == '1' ? 'squash' : 'merege');
+        }
         else
         {
-            $url   = sprintf($apiRoot, "/repos/$MR->targetProject/pulls/$MR->mriid/merge");
-            $merge = $MR->squash == '1' ? 'squash' : 'merge';
-            $data  = array('Do' => $merge);
+            $url  = sprintf($apiRoot, "/repos/$MR->targetProject/pulls/$MR->mriid/merge");
+            $data = array('Do' => $MR->squash == '1' ? 'squash' : 'merge');
             if($MR->removeSourceBranch == '1') $data['delete_branch_after_merge'] = true;
-
-            $rowMR = json_decode(commonModel::http($url, $data, array(), array(), 'json', 'POST'));
-            if(!isset($rowMR->massage))
-            {
-                $rowMR = $this->apiGetSingleMR($MR->repoID, $MR->mriid);
-                if($MR->removeSourceBranch == '1') $this->loadModel('gogs')->apiDeleteBranch($MR->hostID, $MR->targetProject, $MR->sourceBranch);
-            }
-
-            return $rowMR;
         }
+
+        $rowMR = json_decode(commonModel::http($url, $data, array(), $host->type == 'gitfox' ? $apiRoot->header : array(), 'json', 'POST'));
+        if(!isset($rowMR->massage))
+        {
+            $rowMR = $this->apiGetSingleMR($MR->repoID, $MR->mriid);
+            if($MR->removeSourceBranch == '1' && in_array($host->type, array('gogs', 'gitfox'))) $this->loadModel($host->type)->apiDeleteBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
+        }
+
+        return $rowMR;
     }
 
     /**

@@ -558,4 +558,25 @@ class gitfoxModel extends model
 
         return $matchedUsers;
     }
+
+    /**
+     * 通过API删除GitFox分支。
+     * Api delete branch.
+     *
+     * @param  int    $gitfoxID
+     * @param  string $project
+     * @param  string $branch
+     * @access public
+     * @return object|null
+     */
+    public function apiDeleteBranch(int $gitfoxID, string $project, string $branch): object|null
+    {
+        if(empty($branch) || empty($project)) return null;
+
+        $apiRoot = $this->getApiRoot($gitfoxID);
+        $url = sprintf($apiRoot->url, "/repos/$project/branches/$branch");
+        if(!$url) return null;
+
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $apiRoot->header));
+    }
 }
