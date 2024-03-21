@@ -250,7 +250,7 @@ class formPanel extends panel
             setClass('panel-body ' . $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
             $this->buildContainer($this->buildForm()),
-            html($app->control->appendExtendHtml())
+            html($app->control->appendExtendCssAndJS())
         );
     }
 }

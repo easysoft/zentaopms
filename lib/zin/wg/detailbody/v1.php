@@ -25,13 +25,41 @@ class detailBody extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
+    protected function buildExtraMain()
+    {
+        global $app;
+
+        $fields    = $app->control->appendExtendForm();
+        $extraMain = array();
+        foreach($fields as $field)
+        {
+            $extraMain[] = section
+            (
+                set::title($field->name),
+                formGroup
+                (
+                    set::id($field->field),
+                    set::name($field->field),
+                    set::required($field->required),
+                    set::control($field->control),
+                    set::items($field->items),
+                    set::value($filed->value)
+                )
+            );
+        }
+        return sectionList($extraMain);
+    }
+
     protected function build()
     {
-        $main     = $this->block('main');
-        $side     = $this->block('side');
-        $bottom   = $this->block('bottom');
-        $floating = $this->block('floating');
-        $isForm   = $this->prop('isForm');
+        global $app;
+
+        $main      = $this->block('main');
+        $side      = $this->block('side');
+        $bottom    = $this->block('bottom');
+        $floating  = $this->block('floating');
+        $isForm    = $this->prop('isForm');
+        $extraMain = $this->buildExtraMain();
 
         if(!$isForm)
         {
@@ -43,6 +71,7 @@ class detailBody extends wg
                 (
                     setClass('col gap-1 grow min-w-0'),
                     $main,
+                    $extraMain,
                     $bottom,
                     empty($floating) ? null : center(setClass('pt-6 sticky bottom-0'), $floating)
                 ),
@@ -66,6 +95,7 @@ class detailBody extends wg
                     (
                         setClass('col grow min-w-0'),
                         $main,
+                        $extraMain,
                         $bottom
                     ),
                     div

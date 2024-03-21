@@ -501,8 +501,8 @@ class control extends baseControl
     {
         if($this->config->edition == 'open') return $fields;
 
-        $moduleName = $moduleName ?: $this->app->getModuleName();
-        $methodName = $methodName ?: $this->app->getMethodName();
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
 
         $flow      = $this->loadModel('workflow')->getByModule($moduleName);
         $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
@@ -518,12 +518,12 @@ class control extends baseControl
      * @access public
      * @return void
      */
-    public function appendExtendHtml(string $moduleName = '', string $methodName = '')
+    public function appendExtendCssAndJS(string $moduleName = '', string $methodName = '')
     {
-        if($this->config->edition == 'open') return false;
+        if($this->config->edition == 'open') return '';
 
-        $moduleName = $moduleName ?: $this->app->getModuleName();
-        $methodName = $methodName ?: $this->app->getMethodName();
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
 
         $flow      = $this->loadModel('workflow')->getByModule($moduleName);
         $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
@@ -539,6 +539,62 @@ class control extends baseControl
         if(!empty($action->js)) $html .= "<script>$action->js</script>";
 
         return $html;
+    }
+
+    /**
+     * append workflow js and css to form.
+     *
+     * @param  string $position   info|basic
+     * @param  object $object
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
+    public function appendExtendForm(string $position = 'info', object $object = null, string $moduleName = '', string $methodName = '')
+    {
+        if($this->config->edition == 'open') return array();
+
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
+
+        if(!$object) $object = new stdclass();
+
+        $this->loadModel('flow');
+        $this->loadModel('workflowfield');
+        $wrapControl  = array('textarea', 'richtext', 'file');
+        $flow         = $this->loadModel('workflow')->getByModule($moduleName);
+        $action       = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $fieldList    = $this->workflowaction->getFields($flow->module, $action->action);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+
+        if($layouts)
+        {
+            $allFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($moduleName)->fetchAll('field');
+            foreach($fieldList as $fieldName => $field)
+            {
+                if(isset($allFields[$fieldName])) $field->default = $allFields[$fieldName]->default;
+            }
+
+            foreach($fieldList as $key => $field)
+            {
+                if($field->buildin || !$field->show || !isset($layouts[$field->field]) || (!empty($field->position) && $position != $field->position)) unset($fieldList[$key]);
+
+                if((is_numeric($field->default) || $field->default) && empty($field->defaultValue)) $field->defaultValue = $field->default;
+                if(empty($object->{$field->field})) $object->{$field->field} = $field->defaultValue;
+                if(in_array($field->type, $this->config->workflowfield->numberTypes)) $field = $this->workflowfield->processNumberField($field);
+
+                $field->required = $field->readonly || ($notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false);
+                $field->control  = $this->flow->buildFormControl($field);
+                $field->items    = $field->options ? array_filter($field->options) : null;
+                $field->value    = !empty($object) ? zget($object, $field->field, '') : $defaultValue;
+                $field->width    = $field->width != 'auto' ? $field->width : 'full';
+            }
+
+            return $fieldList;
+        }
+        return array();
     }
 
     /**
