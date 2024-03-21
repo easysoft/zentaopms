@@ -846,7 +846,7 @@ class storyTao extends storyModel
         if($story->parent > 0)
         {
             $parentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
-            $newTop      = $parentStory->top;
+            $newRoot     = $parentStory->root;
             $children    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
             $this->dao->update(TABLE_STORY)->set('parentVersion')->eq($parentStory->version)->where('id')->eq($storyID)->exec();
             $this->dao->update(TABLE_STORY)
@@ -865,12 +865,12 @@ class storyTao extends storyModel
         }
         else
         {
-            $newTop = $storyID;
+            $newRoot = $storyID;
         }
 
         $childStories = $this->getAllChildId($storyID);
-        if($childStories) $this->dao->update(TABLE_STORY)->set('top')->eq($newTop)->where('id')->in($childStories)->exec();
-        $this->dao->update(TABLE_STORY)->set('top')->eq($newTop)->where('id')->eq($storyID)->exec();
+        if($childStories) $this->dao->update(TABLE_STORY)->set('root')->eq($newRoot)->where('id')->in($childStories)->exec();
+        $this->dao->update(TABLE_STORY)->set('root')->eq($newRoot)->where('id')->eq($storyID)->exec();
     }
 
     /**

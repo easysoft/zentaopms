@@ -483,7 +483,7 @@ class storyModel extends model
         }
         else
         {
-            $this->dao->update(TABLE_STORY)->set('top')->eq($storyID)->where('id')->eq($storyID)->exec();
+            $this->dao->update(TABLE_STORY)->set('root')->eq($storyID)->where('id')->eq($storyID)->exec();
         }
         if(!empty($story->plan))
         {
@@ -614,7 +614,7 @@ class storyModel extends model
             }
             else
             {
-                $this->dao->update(TABLE_STORY)->set('top')->eq($storyID)->where('id')->eq($storyID)->exec();
+                $this->dao->update(TABLE_STORY)->set('root')->eq($storyID)->where('id')->eq($storyID)->exec();
             }
 
             /* Update product plan stories order. */
@@ -783,7 +783,7 @@ class storyModel extends model
             $gradeDiff = (int)$story->grade - (int)$oldStory->grade;
             $this->dao->update(TABLE_STORY)
                  ->set("grade = grade + $gradeDiff")
-                 ->where('top')->eq($oldStory->top)
+                 ->where('root')->eq($oldStory->root)
                  ->andWhere('grade')->gt($oldStory->grade)
                  ->andWhere('id')->ne($storyID)
                  ->exec();
@@ -1077,7 +1077,7 @@ class storyModel extends model
                 $gradeDiff = (int)$story->grade - (int)$oldStory->grade;
                 $this->dao->update(TABLE_STORY)
                      ->set("grade = grade + $gradeDiff")
-                     ->where('top')->eq($oldStory->top)
+                     ->where('root')->eq($oldStory->root)
                      ->andWhere('grade')->gt($oldStory->grade)
                      ->andWhere('id')->ne($storyID)
                      ->exec();
@@ -1390,7 +1390,7 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)
                  ->set('parent')->eq($storyID)
                  ->set('parentVersion')->eq($oldStory->version)
-                 ->set('top')->eq($oldStory->top)
+                 ->set('root')->eq($oldStory->root)
                  ->where('id')->eq($childStoryID)
                  ->exec();
         }
@@ -2128,7 +2128,7 @@ class storyModel extends model
 
         $children = $this->dao->select('id')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
-            ->andWhere('top')->eq($story->top)
+            ->andWhere('root')->eq($story->root)
             ->beginIF($story->type == 'requirement')
             ->andWhere("((type = 'requirement' and grade > {$story->grade}) or (type = 'story'))")
             ->fi()
@@ -3598,10 +3598,10 @@ class storyModel extends model
      */
     public function appendChildren(int $productID, array $stories, string $storyType): array
     {
-        $topIdList = array();
-        foreach($stories as $story) $topIdList[] = $story->top;
+        $rootIdList = array();
+        foreach($stories as $story) $rootIdList[] = $story->root;
         $children = $this->dao->select('*')->from(TABLE_STORY)
-            ->where('top')->in($topIdList)
+            ->where('root')->in($rootIdList)
             ->andWhere('deleted')->eq('0')
             ->beginIF($storyType == 'requirement')
             ->andWhere('type')->eq('story')
@@ -4965,7 +4965,7 @@ class storyModel extends model
     public function checkGrade(object $story, object $oldStory, string $method = 'edit')
     {
         $maxGrade = $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORY)
-             ->where('top')->eq($oldStory->top)
+             ->where('root')->eq($oldStory->root)
              ->andWhere('deleted')->eq('0')
              ->fetch('maxGrade');
 

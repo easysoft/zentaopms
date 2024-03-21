@@ -124,7 +124,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = 'top_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
+    public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
     {
         $browseType = strtolower($browseType);
 
@@ -133,7 +133,7 @@ class product extends control
         $this->loadModel('epic');
         $this->loadModel('tree');
         $isProjectStory = $this->app->rawModule == 'projectstory';
-        $cookieOrderBy  = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
+        $cookieOrderBy  = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'root_desc';
 
         /* Load pager. */
         $this->app->loadClass('pager', true);

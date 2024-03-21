@@ -1763,6 +1763,8 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `parent` mediumint(9) NOT NULL DEFAULT '0',
+  `isParent` enum('0', '1') NOT NULL DEFAULT '0',
+  `root` mediumint(9) NOT NULL DEFAULT '0',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
