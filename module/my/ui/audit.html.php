@@ -47,7 +47,11 @@ foreach($reviewList as $review)
 
     $statusList = array();
     if(isset($lang->$type->statusList)) $statusList = $lang->$type->statusList;
-    if($type == 'attend')               $statusList = $lang->attend->reviewStatusList;
+    if($type == 'attend')
+    {
+        $this->app->loadLang('attend');
+        $statusList = $lang->attend->reviewStatusList;
+    }
 
     if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review')) && !$isOAObject)
     {

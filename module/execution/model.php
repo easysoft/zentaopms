@@ -132,6 +132,7 @@ class executionModel extends model
         }
 
         $this->session->set('execution', $executionID, $this->app->tab);
+        $this->lang->switcherMenu = $this->getSwitcher($executionID, (string)$this->app->rawModule, (string)$this->app->rawMethod);
         common::setMenuVars('execution', $executionID);
 
         if($execution->type != 'kanban' && $this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr')
@@ -5073,5 +5074,41 @@ class executionModel extends model
     public function getChildIdGroup(array $parentIdList): array
     {
         return $this->dao->select('id,parent')->from(TABLE_EXECUTION)->where('parent')->in($parentIdList)->andWhere('type')->in('stage,kanban,sprint')->fetchGroup('parent', 'id');
+    }
+
+    /*
+     * 获取旧页面1.5级下拉。
+     * Get execution switcher.
+     *
+     * @param  int     $executionID
+     * @param  string  $currentModule
+     * @param  string  $currentMethod
+     * @access public
+     * @return string
+     */
+    public function getSwitcher(int $executionID, string $currentModule, string $currentMethod): string
+    {
+        if($currentModule == 'execution' and in_array($currentMethod,  array('index', 'all', 'batchedit', 'create'))) return '';
+
+        $currentExecutionName = $this->lang->execution->common;
+        if($executionID)
+        {
+            $currentExecution     = $this->getById($executionID);
+            $currentExecutionName = $currentExecution->name;
+        }
+
+        if($this->app->viewType == 'mhtml' and $executionID)
+        {
+            $output  = html::a(helper::createLink('execution', 'index'), $this->lang->executionCommon) . $this->lang->colon;
+            $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('execution', '$executionID', '$currentModule', '$currentMethod', '')\">{$currentExecutionName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            return $output;
+        }
+
+        $dropMenuLink = helper::createLink('execution', 'ajaxGetDropMenu', "executionID=$executionID&module=$currentModule&method=$currentMethod&extra=");
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'>{$currentExecutionName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='dropmenu' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
+
+        return $output;
     }
 }

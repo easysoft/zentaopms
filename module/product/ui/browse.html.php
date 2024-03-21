@@ -107,10 +107,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
             ),
             dropdown
             (
-                span(setClass('caret')),
-                setClass('btn'),
-                setClass($app->tab != 'product' ? 'secondary' : 'primary'),
-                setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0')),
+                btn(setClass('dropdown-toggle'), setClass($app->tab != 'product' ? 'secondary' : 'primary'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
                 set::placement('bottom-end'),
                 set::items($items)
             )

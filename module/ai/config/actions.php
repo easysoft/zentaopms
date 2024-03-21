@@ -11,6 +11,7 @@ $config->ai->actionList['modelenable']['text']             = $lang->ai->models->
 $config->ai->actionList['modelenable']['hint']             = $lang->ai->models->enable;
 $config->ai->actionList['modelenable']['url']              = array('module' => 'ai', 'method' => 'modelenable', 'params' => 'modelID={id}');
 $config->ai->actionList['modelenable']['data-app']         = $app->tab;
+$config->ai->actionList['modelenable']['className']        = 'ajax-submit';
 $config->ai->actionList['modeldisable']['icon']            = 'ban-circle';
 $config->ai->actionList['modeldisable']['text']            = $lang->ai->models->disable;
 $config->ai->actionList['modeldisable']['hint']            = $lang->ai->models->disable;

@@ -1457,7 +1457,7 @@ class aiModel extends model
         foreach($fields as $field)
         {
             $field = (array)$field;
-            if(is_array($field['options'])) $field['options'] = implode(',', $field['options']);
+            if(isset($field['options']) && is_array($field['options'])) $field['options'] = implode(',', $field['options']);
             $this->dao->insert(TABLE_AI_MINIPROGRAMFIELD)
                 ->data($field)
                 ->exec();

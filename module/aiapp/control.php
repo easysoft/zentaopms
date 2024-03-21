@@ -57,6 +57,7 @@ class aiapp extends control
         $this->view->fields       = $this->ai->getMiniProgramFields($id);
         $this->view->collectedIDs = $this->aiapp->getCollectedMiniProgramIDs($this->app->user->id);
         $this->view->title        = "{$this->lang->aiapp->title}#{$miniProgram->id} $miniProgram->name";
+        $this->view->hasModels    = $this->ai->hasModelsAvailable();
         $this->display();
     }
 

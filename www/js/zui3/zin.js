@@ -663,7 +663,7 @@
         if(typeof options === 'string') options = {url: options};
         options = options || {};
 
-        if((options.method || '').toLowerCase() !== 'post' && $.apps.isOldPage(options.url)) return loadOldPage(options.url);
+        if(options.url && (options.method || '').toLowerCase() !== 'post' && $.apps.isOldPage(options.url)) return loadOldPage(options.url);
         else hideOldPage();
 
         if(typeof selector === 'string')      options.selector = selector;
@@ -1400,7 +1400,8 @@
     $(document).on('click', handleGlobalClick).on('locate.zt', (_e, data) =>
     {
         if(!data) return;
-        if(data === true) return reloadPage();
+        if(data === true) return loadCurrentPage();
+        if(data === 'reload') return reloadPage();
         if(typeof data === 'string')
         {
             if(data === 'table') return loadTable();

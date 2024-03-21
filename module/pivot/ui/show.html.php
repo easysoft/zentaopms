@@ -43,6 +43,7 @@ foreach($pivot->filters as $filter)
 
 $generateData = function() use ($lang, $title, $pivot, $filters, $data, $configs)
 {
+    $clickable = $this->pivot->isClickable($pivot, 'design');
     list($cols, $rows, $cellSpan) = $this->convertDataForDtable($data, $configs);
 
     return array
@@ -61,6 +62,16 @@ $generateData = function() use ($lang, $title, $pivot, $filters, $data, $configs
                     'help'
                 )
             ) : null,
+            toolbar
+            (
+                (hasPriv('pivot', 'design') and $clickable) ? item(set(array
+                (
+                    'text'  => $lang->pivot->designAB,
+                    'icon'  => 'design',
+                    'class' => 'ghost',
+                    'url'   => inlink('design', "id=$pivot->id"),
+                ))) : null,
+            ),
             $filters ? div
             (
                 setID('conditions'),

@@ -73,6 +73,14 @@ class formPanel extends panel
 
     protected function created()
     {
+        $fields = $this->prop('fields');
+        if(is_object($fields))
+        {
+            global $app;
+            $fields = $app->control->appendExtendFields($fields);
+            $this->setProp('fields', $fields);
+        }
+
         $customFields = $this->prop('customFields');
         if($customFields === true)
         {
@@ -235,11 +243,14 @@ class formPanel extends panel
      */
     protected function buildBody(): node
     {
+        global $app;
+
         return div
         (
             setClass('panel-body ' . $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
-            $this->buildContainer($this->buildForm())
+            $this->buildContainer($this->buildForm()),
+            html($app->control->appendExtendCssAndJS())
         );
     }
 }

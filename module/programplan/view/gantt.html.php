@@ -100,7 +100,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   <?php if($this->app->getModuleName() == 'programplan'):?>
   <div class='btn-toolbar pull-left'>
     <div class='btn-group'>
-      <?php if(!empty($project->division)):?>
+      <?php if($project->stageBy == 'product'):?>
       <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
@@ -257,7 +257,7 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
     var $ganttDridData  = $ganttView.find('.gantt_grid_data');
 
     var ganttRowHeight = $ganttView.find('.gantt_row').first().outerHeight() || 25;
-    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight() + <?php echo count($plans['data'])?> * ganttRowHeight;
+    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight() + <?php echo count($stages['data'])?> * ganttRowHeight;
     <?php if($selectCustom == 'task'):?>
     var ganttWidth  = $ganttDridData.width() - 100;
     <?php else:?>
@@ -577,7 +577,7 @@ $(function()
         $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 120)));
     };
 
-    var ganttData = $.parseJSON(<?php echo json_encode(json_encode($plans));?>);
+    var ganttData = $.parseJSON(<?php echo json_encode(json_encode($stages));?>);
     if(!ganttData.data) ganttData.data = [];
 
     <?php

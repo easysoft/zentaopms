@@ -20,6 +20,12 @@ $lang->pivot->design       = '设计透视表';
 $lang->pivot->export       = '导出透视表';
 $lang->pivot->query        = '查询';
 $lang->pivot->browseAction = '进入透视表设计';
+$lang->pivot->designAB     = '设计';
+$lang->pivot->exportType   = '导出格式';
+$lang->pivot->exportRange  = '导出范围';
+
+$lang->pivot->rangeList['current'] = '当前页';
+$lang->pivot->rangeList['all']     = '全部';
 
 $lang->pivot->id          = 'ID';
 $lang->pivot->name        = '名称';
@@ -70,9 +76,13 @@ $lang->pivot->item        = '条目';
 $lang->pivot->percent     = '百分比';
 $lang->pivot->undefined   = '未设定';
 $lang->pivot->project     = $lang->projectCommon;
-$lang->pivot->PO          = '产品负责人';
+$lang->pivot->PO          = 'PO';
+$lang->pivot->showPivot   = '查看透视表';
+$lang->pivot->showOrigin  = '查看原始数据';
 
 $lang->pivot->showOriginItem = '展示原始条目';
+$lang->pivot->recTotalTip    = '共 <strong> %s </strong> 项';
+$lang->pivot->recPerPageTip  = "每页 <strong>%s</strong> 项";
 
 $lang->pivot->showOriginPlaceholder = new stdclass();
 $lang->pivot->showOriginPlaceholder->slice    = '展示原始条目后无需配置切片';
@@ -126,6 +136,7 @@ $lang->pivot->id            = '编号';
 $lang->pivot->execution     = $lang->execution->common;
 $lang->pivot->product       = $lang->productCommon;
 $lang->pivot->user          = '姓名';
+$lang->pivot->bugTotal      = 'Bug';
 $lang->pivot->bug           = 'Bug';
 $lang->pivot->task          = '任务数';
 $lang->pivot->estimate      = '总预计';
@@ -141,6 +152,7 @@ $lang->pivot->validRate     = "有效率";
 $lang->pivot->validRateTips = "方案为已解决或延期/状态为已解决或已关闭";
 $lang->pivot->unplanned     = "未计划";
 $lang->pivot->workhour      = '每天工时';
+$lang->pivot->workday       = '每天工时';
 $lang->pivot->diffDays      = '工作日天数';
 
 $lang->pivot->typeList['default'] = '默认';
@@ -220,6 +232,7 @@ $lang->pivot->resultFilter    = '结果筛选器';
 $lang->pivot->queryFilter     = '查询筛选器';
 $lang->pivot->noName          = '未命名';
 $lang->pivot->filterName      = '名称';
+$lang->pivot->showAs          = '显示为';
 $lang->pivot->default         = '默认值';
 $lang->pivot->unlimited       = '不限';
 $lang->pivot->colon           = '至';
@@ -266,9 +279,9 @@ $lang->pivot->noPivot         = '暂时没有透视表';
 $lang->pivot->dataError       = '"%s" 填写的不是合法的值';
 $lang->pivot->noChartSelected = '请选择至少一个图表。';
 $lang->pivot->beginGtEnd      = '开始时间不得大于结束时间。';
-$lang->pivot->resetSettings   = '查询数据的配置已修改，是否清空透视表设计，并重新设计。';
+$lang->pivot->resetSettings   = '查询数据的配置已修改，是否清空透视表设计，重新设计。';
 $lang->pivot->clearSettings   = '查询数据的配置已修改，是否清空透视表设计并保存。';
-$lang->pivot->draftSave       = '已发布的内容被编辑，将覆盖，是否继续?';
+$lang->pivot->draftSave       = '该透视表已发布，将变为草稿态，是否继续？';
 $lang->pivot->cannotAddQuery  = '已添加结果筛选器，无法添加查询筛选器';
 $lang->pivot->cannotAddResult = '已添加查询筛选器，无法添加结果筛选器';
 

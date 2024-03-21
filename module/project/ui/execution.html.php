@@ -98,7 +98,7 @@ featureBar
             set::id('showTask'),
             set::name('showTask'),
             set::checked($this->cookie->showTask ? 'checked' : ''),
-            set::text($lang->programplan->stageCustom->task),
+            set::text($lang->programplan->stageCustom['task']),
             set::rootClass('ml-4')
         )
     )
@@ -108,6 +108,11 @@ featureBar
 $createLink = $isStage ? createLink('programplan', 'create', "projectID={$projectID}&productID={$productID}") : createLink('execution', 'create', "projectID={$projectID}");
 toolbar
 (
+    in_array($project->model, array('waterfall', 'waterfallplus')) && $this->config->edition == 'max' ? btnGroup
+    (
+        a(setClass('btn square'), icon('gantt-alt'), set::title($lang->programplan->gantt), set::href(createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"))),
+        a(setClass('btn square text-primary'), icon('list'), set::title($lang->project->bylist))
+    ) : null,
     hasPriv('execution', 'export') ? item(set(array
     (
         'icon'        => 'export',

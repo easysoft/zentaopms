@@ -42,6 +42,7 @@ $lang->product->track            = 'View Stories Matrix';
 $lang->product->checkedProducts  = "%s {$lang->productCommon}s selected";
 $lang->product->pageSummary      = "Total {$lang->productCommon}s: %s.";
 $lang->product->lineSummary      = "Total product lines: %s, Total {$lang->productCommon}s: %s.";
+$lang->product->noData           = 'No data.';
 
 $lang->product->indexAction    = "All {$lang->productCommon}";
 $lang->product->closeAction    = "Close {$lang->productCommon}";

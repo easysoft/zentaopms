@@ -90,8 +90,8 @@ class my extends control
     public function work(string $mode = 'task', string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($mode == 'testcase' && $type == 'assignedTo') $type = 'assigntome';
+        if(strpos(',auditplan,nc,mymeeting,', ",$mode,") === false) $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
 
-        $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
         echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
@@ -114,8 +114,8 @@ class my extends control
         if(($mode == 'issue' || $mode == 'risk') && $type == 'openedBy') $type = 'createdBy';
         if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
         if(($mode == 'doc' || $mode == 'testcase') && $type == 'openedBy') $type = 'openedbyme';
+        if($mode != 'nc') $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
 
-        $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
         echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
@@ -756,6 +756,8 @@ class my extends control
      */
     public function risk(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->loadModel('risk');
+
         /* Set session. */
         $this->app->session->set('riskList', $this->app->getURI(true), 'project');
 
@@ -770,7 +772,6 @@ class my extends control
         $this->my->buildRiskSearchForm($queryID, $actionURL, $currentMethod);
 
         /* Get risks by type*/
-        $this->loadModel('risk');
         if($type == 'assignedBy')
         {
             $risks = $this->my->getAssignedByMe($this->app->user->account, $pager, $orderBy, 'risk');

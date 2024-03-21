@@ -489,6 +489,115 @@ class control extends baseControl
     }
 
     /**
+     * append workflow fields to form.
+     *
+     * @param  zin\fieldList $fields
+     * @param  string        $moduleName
+     * @param  string        $methodName
+     * @access public
+     * @return void
+     */
+    public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = '')
+    {
+        if($this->config->edition == 'open') return $fields;
+
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
+
+        $flow      = $this->loadModel('workflow')->getByModule($moduleName);
+        $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
+        return $this->loadModel('flow')->buildFormFields($fields, $fieldList);
+    }
+
+    /**
+     * append workflow js and css to form.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
+    public function appendExtendCssAndJS(string $moduleName = '', string $methodName = '')
+    {
+        if($this->config->edition == 'open') return '';
+
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
+
+        $flow      = $this->loadModel('workflow')->getByModule($moduleName);
+        $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
+
+        $html = '';
+        if(!empty($flow->css))   $html .= "<style>$flow->css</style>";
+        if(!empty($action->css)) $html .= "<style>$action->css</style>";
+
+        $html .= $this->getFormulaScript($moduleName, $action, $fieldList);
+        if($action->linkages)   $html .= $this->getLinkageScript($action, $fieldList);
+        if(!empty($flow->js))   $html .= "<script>$flow->js</script>";
+        if(!empty($action->js)) $html .= "<script>$action->js</script>";
+
+        return $html;
+    }
+
+    /**
+     * append workflow js and css to form.
+     *
+     * @param  string $position   info|basic
+     * @param  object $object
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
+    public function appendExtendForm(string $position = 'info', object $object = null, string $moduleName = '', string $methodName = '')
+    {
+        if($this->config->edition == 'open') return array();
+
+        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
+        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
+
+        if(!$object) $object = new stdclass();
+
+        $this->loadModel('flow');
+        $this->loadModel('workflowfield');
+        $wrapControl  = array('textarea', 'richtext', 'file');
+        $flow         = $this->loadModel('workflow')->getByModule($moduleName);
+        $action       = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $fieldList    = $this->workflowaction->getFields($flow->module, $action->action);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+
+        if($layouts)
+        {
+            $allFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($moduleName)->fetchAll('field');
+            foreach($fieldList as $fieldName => $field)
+            {
+                if(isset($allFields[$fieldName])) $field->default = $allFields[$fieldName]->default;
+            }
+
+            foreach($fieldList as $key => $field)
+            {
+                if($field->buildin || !$field->show || !isset($layouts[$field->field]) || (!empty($field->position) && $position != $field->position)) unset($fieldList[$key]);
+
+                if((is_numeric($field->default) || $field->default) && empty($field->defaultValue)) $field->defaultValue = $field->default;
+                if(empty($object->{$field->field})) $object->{$field->field} = $field->defaultValue;
+                if(in_array($field->type, $this->config->workflowfield->numberTypes)) $field = $this->workflowfield->processNumberField($field);
+
+                $field->required = $field->readonly || ($notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false);
+                $field->control  = $this->flow->buildFormControl($field);
+                $field->items    = $field->options ? array_filter($field->options) : null;
+                $field->value    = !empty($object) ? zget($object, $field->field, '') : $defaultValue;
+                $field->width    = $field->width != 'auto' ? $field->width : 'full';
+            }
+
+            return $fieldList;
+        }
+        return array();
+    }
+
+    /**
      * Process status of an object according to its subStatus.
      *
      * @param  string $module   product | release | story | project | task | bug | testcase | testtask | feedback

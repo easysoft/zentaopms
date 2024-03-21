@@ -15,13 +15,40 @@ class detailSide extends wg
         CSS;
     }
 
+    protected function buildExtraSide()
+    {
+        global $app, $lang;
+
+        $fields    = $app->control->appendExtendForm('basic');
+        $extraSide = array();
+        foreach($fields as $field)
+        {
+            $extraSide[] = item
+            (
+                set::name($field->name),
+                formGroup
+                (
+                    set::id($field->field),
+                    set::name($field->field),
+                    set::required($field->required),
+                    set::control($field->control),
+                    set::items($field->items),
+                    set::value($filed->value)
+                )
+            );
+        }
+        return tableData(set::title($lang->other), $extraSide);
+    }
+
     protected function build()
     {
+        $extraSide = $this->buildExtraSide();
         return div
         (
             setClass('detail-side canvas flex-none px-6 h-min'),
             set($this->getRestProps()),
-            $this->children()
+            $this->children(),
+            $extraSide
         );
     }
 }

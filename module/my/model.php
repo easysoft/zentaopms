@@ -768,7 +768,7 @@ class myModel extends model
         $this->config->ticket->search['queryID']   = $queryID;
         $this->config->ticket->search['actionURL'] = $actionURL;
         $this->config->ticket->search['params']['product']['values'] = $grantProducts;
-        $this->config->ticket->search['params']['module']['values']  = $this->loadModel('tree')->getAllModulePairs();
+        $this->config->ticket->search['params']['module']['values']  = $this->loadModel('feedback')->getModuleList('ticket', true, 'no');
         $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array_keys($grantProducts), 'all', 'releasetag');
 
         $this->loadModel('search')->setSearchParams($this->config->ticket->search);
@@ -1256,7 +1256,10 @@ class myModel extends model
             }
             else
             {
-                $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->andWhere('deleted')->eq('0')->fetchAll('id');
+                $objectGroup[$objectType] = $this->dao->select('*')->from($table)
+                    ->where('id')->in($idList)
+                    ->beginIF(strpos(',attend,overtime,makeup,leave,lieu,', ",{$objectType},") === false)->andWhere('deleted')->eq('0')->fi()
+                    ->fetchAll('id');
             }
         }
 

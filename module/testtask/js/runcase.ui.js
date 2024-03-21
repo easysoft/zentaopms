@@ -54,6 +54,7 @@ function checkStepValue(event)
 {
     if($(event.target).val() == 'pass') custom = true;
 }
+
 /**
  * Set height of the file modal.
  *

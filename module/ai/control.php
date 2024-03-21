@@ -191,7 +191,7 @@ class ai extends control
         $result = $this->ai->toggleModel($modelID, true);
         if($result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        return $this->sendSuccess(array('load' => array($modelID)));
+        return $this->sendSuccess(array('load' => true, 'message' => ''));
     }
 
     /**
@@ -206,7 +206,7 @@ class ai extends control
         $result = $this->ai->toggleModel($modelID, false);
         if($result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        return $this->sendSuccess(array('load' => array($modelID), 'message' => ''));
+        return $this->sendSuccess(array('load' => true, 'message' => ''));
     }
 
     /**
