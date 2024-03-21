@@ -511,6 +511,37 @@ class control extends baseControl
     }
 
     /**
+     * append workflow js and css to form.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
+    public function appendExtendHtml(string $moduleName = '', string $methodName = '')
+    {
+        if($this->config->edition == 'open') return false;
+
+        $moduleName = $moduleName ?: $this->app->getModuleName();
+        $methodName = $methodName ?: $this->app->getMethodName();
+
+        $flow      = $this->loadModel('workflow')->getByModule($moduleName);
+        $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
+
+        $html = '';
+        if(!empty($flow->css))   $html .= "<style>$flow->css</style>";
+        if(!empty($action->css)) $html .= "<style>$action->css</style>";
+
+        $html .= $this->getFormulaScript($moduleName, $action, $fieldList);
+        if($action->linkages)   $html .= $this->getLinkageScript($action, $fieldList);
+        if(!empty($flow->js))   $html .= "<script>$flow->js</script>";
+        if(!empty($action->js)) $html .= "<script>$action->js</script>";
+
+        return $html;
+    }
+
+    /**
      * Process status of an object according to its subStatus.
      *
      * @param  string $module   product | release | story | project | task | bug | testcase | testtask | feedback

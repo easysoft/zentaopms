@@ -243,11 +243,14 @@ class formPanel extends panel
      */
     protected function buildBody(): node
     {
+        global $app;
+
         return div
         (
             setClass('panel-body ' . $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
-            $this->buildContainer($this->buildForm())
+            $this->buildContainer($this->buildForm()),
+            html($app->control->appendExtendHtml())
         );
     }
 }
