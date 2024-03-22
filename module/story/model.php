@@ -5068,7 +5068,7 @@ class storyModel extends model
         if($newMaxGrade > $systemMaxGrade)
         {
             if($method == 'batchEdit') return false;
-            dao::$errors['grade'] = sprintf($this->lang->story->gradeOverflow, $newMaxGrade, $systemMaxGrade);
+            dao::$errors['grade'] = sprintf($this->lang->story->gradeOverflow, $systemMaxGrade, $newMaxGrade);
         }
 
         return !dao::isError();
