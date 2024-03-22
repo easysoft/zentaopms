@@ -166,7 +166,14 @@ class pivotZen extends pivot
         $fields = json_decode(json_encode($pivot->fieldSettings), true);
         $langs  = json_decode($pivot->langs, true) ?? array();
 
-        list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
+        if(isset($pivot->settings['summary']) and $pivot->settings['summary'] =='notuse')
+        {
+            list($data, $configs) = $this->pivot->genOriginSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
+        }
+        else
+        {
+            list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
+        }
 
         $this->view->pivotName    = $pivot->name;
         $this->view->currentMenu  = $groupID . '_' . $pivot->id;
