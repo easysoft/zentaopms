@@ -33,13 +33,14 @@ class detailBody extends wg
         $extraMain = array();
         foreach($fields as $field)
         {
+            $fieldControl = $field->control;
             $extraMain[] = section
             (
                 set::title($field->name),
                 formGroup
                 (
                     set::id($field->field),
-                    set::name($field->field),
+                    set::name($field->field . (is_array($fieldControl) && $fieldControl['control'] == 'checkList' ? '[]' : '' )),
                     set::required($field->required),
                     set::control($field->control),
                     set::items($field->items),

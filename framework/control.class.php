@@ -635,7 +635,14 @@ class control extends baseControl
             foreach($fieldList as $key => $field)
             {
                 if($field->buildin || !$field->show || !isset($layouts[$field->field])) continue;
-                $config[$field->field] = array('required' => false, 'type' => $field->type);
+                if($field->control == 'multi-select' || $field->control == 'checkbox')
+                {
+                    $config[$field->field] = array('required' => false, 'type' => 'array', 'default' => array(''), 'filter' => 'join');
+                }
+                else
+                {
+                    $config[$field->field] = array('required' => false, 'type' => 'string');
+                }
             }
         }
         return $config;
