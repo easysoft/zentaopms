@@ -217,13 +217,15 @@ class transferModel extends model
             $options = $this->workflowfield->getFieldOptions($field, true);
             if($options)
             {
-                $control = $field->control == 'multi-select' ? 'multiple' : 'select';
                 $fieldList[$field->field]['name']    = $field->field;
                 $fieldList[$field->field]['label']   = $field->name;
                 $fieldList[$field->field]['title']   = $field->name;
-                $fieldList[$field->field]['control'] = $control;
+                $fieldList[$field->field]['control'] = 'picker';
                 $fieldList[$field->field]['items']   = $options;
                 $fieldList[$field->field]['from']    = 'workflow';
+                if($field->control == 'multi-select') $fieldList[$field->field]['multiple'] = true;
+
+                $this->moduleListFields[] = $field->field;
                 $this->config->$module->listFields .=  ',' . $field->field;
             }
         }
