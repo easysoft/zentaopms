@@ -18,7 +18,7 @@ class projectZen extends project
      * @access protected
      * @return object|false
      */
-    protected function prepareCreateExtras(object $postData, int $copyProjectID): object|false
+    protected function prepareCreateExtras(object $postData, int $copyProjectID = 0): object|false
     {
         $copyProject = $this->project->getByID($copyProjectID);
         $project     = $postData->setDefault('status', 'wait')
