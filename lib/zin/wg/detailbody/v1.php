@@ -50,7 +50,7 @@ class detailBody extends wg
                 formGroup
                 (
                     set::id($field->field),
-                    set::name($field->field . (is_array($fieldControl) && $fieldControl['control'] == 'checkList' ? '[]' : '' )),
+                    set::name($field->field),
                     set::control($field->control),
                     set::items($field->items),
                     set::value($field->value)
