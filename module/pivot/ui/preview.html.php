@@ -16,6 +16,12 @@ $generateData = function() use ($lang) {return div(setClass('bg-canvas center te
 $viewFile = strtolower($method) . '.html.php';
 if(file_exists($viewFile)) include_once $viewFile;
 
+if($this->config->edition != 'open')
+{
+    $pivotPath = $this->app->getModuleExtPath('pivot', 'view');
+    include $pivotPath['common'] . 'exportdata.html.php';
+}
+
 jsVar('dimensionID', $dimensionID);
 jsVar('groupID', $groupID);
 
@@ -36,7 +42,7 @@ if($config->edition != 'open')
             'text'  => $lang->export,
             'icon'  => 'export',
             'class' => 'ghost',
-            'url'   => '#export',
+            'data-target' => '#export',
             'data-toggle' => 'modal'
         ))) : null,
         hasPriv('pivot', 'browse') ? item(set(array
