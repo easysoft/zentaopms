@@ -59,6 +59,12 @@ else
     $submitText  = $isEndPage ? $lang->save : $lang->file->saveAndNext;
     $isStartPage = $pagerID == 1;
 
+    $index = 1;
+    foreach($datas as $data)
+    {
+        if(empty($data->id)) $data->id = $index ++;
+    }
+
     formBatchPanel
     (
         set::title($lang->transfer->import),
