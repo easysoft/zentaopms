@@ -61,7 +61,7 @@ class datatableModel extends model
         if($this->config->edition != 'open')
         {
             $fields            = $this->loadModel('workflowfield')->getList($module);
-            $workflowFieldList = $this->loadModel('flow')->buildDtableCols($fields, array(), array());
+            $workflowFieldList = $this->loadModel('flow')->buildDtableCols($fields);
             $fieldList         = array_merge($fieldList, $workflowFieldList);
         }
 
