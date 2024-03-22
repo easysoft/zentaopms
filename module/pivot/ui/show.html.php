@@ -111,6 +111,11 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                 set::plugins(array('header-group', $cellSpan ? 'cellspan' : null)),
                 $cellSpan ? set::getCellSpan(jsRaw('getCellSpan')) : null,
                 $cellSpan ? set::cellSpanOptions($cellSpan) : null
+            ),
+            div
+            (
+                setID('exportData'),
+                setClass('hidden')
             )
         )
     );

@@ -227,3 +227,9 @@ getHeight = function(height)
 
     return Math.min(windowHeight - headerHeight - menuHeight - conditionHeight - parentGapHeight - panelHeadingHeight - panelBodyPaddingY, height);
 }
+
+exportData = function()
+{
+    const $domObj = $(".table-condensed")[0];
+    exportFile($domObj);
+}
