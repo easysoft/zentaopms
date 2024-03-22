@@ -107,6 +107,7 @@ window.addGrade = function()
     newRow.find('.btn-close').remove();
     newRow.find("input[type=hidden]").val(newIndex);
     newRow.find('td.index').text(newIndex);
+    newRow.find('td.grade-status').text(enableLang);
     $(this).closest('tbody').append(newRow);
 
     $(this).addClass('hidden');

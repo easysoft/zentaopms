@@ -509,6 +509,7 @@ else
 
 if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade')
 {
+    jsVar('enableLang', $lang->custom->gradeStatusList['enable']);
     $tbody = array();
     foreach($storyGrades as $grade)
     {
@@ -524,7 +525,7 @@ if(in_array($module, array('story', 'requirement', 'epic')) && $field == 'grade'
             formHidden('grade[]', $grade->grade),
             h::td($grade->grade, set::width('100px'), setClass('index')),
             h::td(input(set::name('gradeName[]'), set::value($grade->name))),
-            h::td(zget($lang->custom->gradeStatusList, $grade->status), set::width('80px')),
+            h::td(zget($lang->custom->gradeStatusList, $grade->status), set::width('80px'), setClass('grade-status')),
             h::td(
                 set::width('100px'),
                 btnGroup
