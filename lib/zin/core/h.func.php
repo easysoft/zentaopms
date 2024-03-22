@@ -17,6 +17,8 @@ require_once __DIR__ . DS . 'h.class.php';
 function h(mixed ...$args): h          {return h::create(...$args);}
 function div(mixed ...$args): h        {return h::div(...$args);}
 function span(mixed ...$args): h       {return h::span(...$args);}
+function strong(mixed ...$args): h     {return h::strong(...$args);}
+function small(mixed ...$args): h      {return h::small(...$args);}
 function code(mixed ...$args): h       {return h::code(...$args);}
 function canvas(mixed ...$args): h     {return h::canvas(...$args);}
 function br(mixed ...$args): h         {return h::br(...$args);}
