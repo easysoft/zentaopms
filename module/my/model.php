@@ -666,6 +666,7 @@ class myModel extends model
         $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
         $this->config->product->search['fields']['title']             = $this->lang->story->title;
         unset($this->config->product->search['fields']['module'], $this->config->product->search['fields']['branch']);
+        if($this->config->edition != 'ipd') unset($this->config->product->search['fields']['roadmap']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
