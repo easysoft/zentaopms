@@ -270,10 +270,11 @@ class tree extends control
      *
      * @param  int    $rootID
      * @param  string $viewType
+     * @param  string $oldPage  yes|no
      * @access public
      * @return void
      */
-    public function manageChild(int $rootID, string $viewType)
+    public function manageChild(int $rootID, string $viewType, string $oldPage = 'no')
     {
         if(!empty($_POST))
         {
@@ -286,6 +287,7 @@ class tree extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "renderModulePicker($rootID, '$viewType');"));
             }
 
+            if($oldPage == 'yes') return print(js::reload('parent'));
             return $this->sendSuccess(array('load' => true));
         }
     }
