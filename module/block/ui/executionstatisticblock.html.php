@@ -44,18 +44,18 @@ foreach($projects as $projectID => $projectName)
 
 $burn = center
 (
-    set::className((!$longBlock ? ' py-6 w-1/2' : '')),
+    setClass((!$longBlock ? ' py-6 w-1/2' : '')),
     cell
     (
-        set::className('flex-1 w-full'),
+        setClass('flex-1 w-full'),
         div
         (
-            $longBlock ? set::className('pb-2') : null,
-            span(set::className('font-bold'), $lang->block->executionstatistic->burn)
+            $longBlock ? setClass('pb-2') : null,
+            span(setClass('font-bold'), $lang->block->executionstatistic->burn)
         ),
         div
         (
-            set::className('py-2 chart line-chart'),
+            setClass('py-2 chart line-chart'),
             echarts
             (
                 set::color(array('#2B80FF', '#17CE97')),
@@ -109,21 +109,21 @@ statisticBlock
     set::items($items),
     div
     (
-        set::className('flex h-full ' . ($longBlock ? '' : 'col')),
+        setClass('flex h-full ' . ($longBlock ? '' : 'col')),
         cell
         (
-            set::className('flex-1'),
+            setClass('flex-1'),
             $longBlock ? set('width', '70%') : null,
             div
             (
-                set::className('flex h-full ' . ($longBlock ? '' : 'col')),
+                setClass('flex h-full ' . ($longBlock ? '' : 'col')),
                 cell
                 (
                     $longBlock ? set('width', '40%') : null,
-                    set::className('p-4'),
+                    setClass('p-4'),
                     div
                     (
-                        set::className('flex align-center justify-around' . ($longBlock ? ' py-4' : '')),
+                        setClass('flex align-center justify-around' . ($longBlock ? ' py-4' : '')),
                         center
                         (
                             setClass('w-1/2'),
@@ -143,15 +143,16 @@ statisticBlock
                                             $lang->block->executionstatistic->progress,
                                             icon
                                             (
-                                                setClass('text-light ml-0.5 text-sm'),
-                                                toggle::tooltip
+                                                setClass('opacity-50 ml-0.5 text-sm cursor-pointer'),
+                                                toggle::popover
                                                 (
                                                     array
                                                     (
                                                         'content'   => array('html' => $lang->block->tooltips['executionProgress']),
                                                         'placement' => 'bottom',
-                                                        'type'      => 'white',
-                                                        'className' => 'text-dark border border-light leading-5'
+                                                        'width'     => 400,
+                                                        'closeBtn'  => false,
+                                                        'className' => 'leading-5'
                                                     )
                                                 ),
                                                 'help'
@@ -165,54 +166,54 @@ statisticBlock
                     ),
                     cell
                     (
-                        set::className('flex justify-evenly px-4'),
+                        setClass('flex justify-evenly gap-1'),
                         cell
                         (
-                            set::className('flex-1 text-center'),
+                            setClass('flex-1 text-center'),
                             div
                             (
-                                span(set::className('text-lg'), !empty($execution->totalEstimate) ? $execution->totalEstimate : 0),
-                                span(' h')
+                                span(setClass('text-lg num font-bold'), !empty($execution->totalEstimate) ? $execution->totalEstimate : 0),
+                                span(setClass('text-gray'), 'h')
                             ),
                             div
                             (
                                 span
                                 (
-                                    set::className('text-sm'),
+                                    setClass('text-sm text-gray'),
                                     $lang->block->executionstatistic->totalEstimate
                                 )
                             )
                         ),
                         cell
                         (
-                            set::className('flex-1 text-center'),
+                            setClass('flex-1 text-center'),
                             div
                             (
-                                span(set::className('text-lg'), !empty($execution->totalConsumed) ? $execution->totalConsumed : 0),
-                                span(' h')
+                                span(setClass('text-lg num font-bold'), !empty($execution->totalConsumed) ? $execution->totalConsumed : 0),
+                                span(setClass('text-gray'), 'h')
                             ),
                             div
                             (
                                 span
                                 (
-                                    set::className('text-sm'),
+                                    setClass('text-sm text-gray'),
                                     $lang->block->executionstatistic->totalConsumed
                                 )
                             )
                         ),
                         cell
                         (
-                            set::className('flex-1 text-center'),
+                            setClass('flex-1 text-center'),
                             div
                             (
-                                span(set::className('text-lg'), !empty($execution->totalLeft) ? $execution->totalLeft : 0),
-                                span(' h')
+                                span(setClass('text-lg num font-bold'), !empty($execution->totalLeft) ? $execution->totalLeft : 0),
+                                span(setClass('text-gray'), 'h')
                             ),
                             div
                             (
                                 span
                                 (
-                                    set::className('text-sm'),
+                                    setClass('text-sm text-gray'),
                                     $lang->block->executionstatistic->totalLeft
                                 )
                             )
@@ -222,70 +223,56 @@ statisticBlock
                 cell
                 (
                     $longBlock ? set('width', '60%') : null,
-                    set::className('px-4 pb-4' . ($longBlock ? ' pt-4' : '')),
+                    setClass('px-4 pb-4' . ($longBlock ? ' pt-6' : '')),
                     $longBlock ? $burn : null,
                     cell
                     (
-                        set::className('flex py-2'),
-                        cell
+                        setClass('pt-6'),
+                        row
                         (
-                            set('width', '50%'),
-                            set::className('border-r pr-4'),
-                            div
+                            div(setClass('w-12 flex-none'), strong($lang->block->executionstatistic->task)),
+                            row
                             (
-                                div(set::className('pb-4'), span(set::className('font-bold'), $lang->block->executionstatistic->story)),
-                                div
+                                setClass('flex-auto'),
+                                cell
                                 (
-                                    set::className('progress h-2'),
-                                    div
-                                    (
-                                        set::className('progress-bar'),
-                                        set('role', 'progressbar'),
-                                        setStyle(array('width' => '50%', 'background' => 'var(--color-primary-300)'))
-                                    )
+                                    setClass('w-1/3'),
+                                    span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalTask),
+                                    strong(setClass('num ml-2'), $execution->totalTask)
                                 ),
-                                div
+                                cell
                                 (
-                                    set::className('flex pt-4'),
-                                    cell
-                                    (
-                                        set('width', '50%'),
-                                        set::className('text-center'),
-                                        div(span($execution->doneStory)),
-                                        div(set::className('text-sm text-gray'), span($lang->block->executionstatistic->doneStory))
-                                    ),
-                                    cell
-                                    (
-                                        set('width', '50%'),
-                                        set::className('text-center'),
-                                        div(span($execution->totalStory)),
-                                        div(set::className('text-sm text-gray'), span($lang->block->executionstatistic->totalStory))
-                                    )
+                                    setClass('w-1/3'),
+                                    span(setClass('text-sm text-gray'), $lang->block->executionstatistic->undoneTask),
+                                    strong(setClass('num ml-2'), $execution->undoneTask)
+                                ),
+                                cell
+                                (
+                                    setClass('w-1/3'),
+                                    span(setClass('text-sm text-gray'), $lang->block->executionstatistic->yesterdayDoneTask),
+                                    strong(setClass('num ml-2'), $execution->yesterdayDoneTask)
                                 )
                             )
                         ),
-                        cell
+                        row
                         (
-                            set('width', '50%'),
-                            set::className('px-4 flex h-28'),
-                            cell
+                            setClass('pt-3'),
+                            div(setClass('w-12 flex-none'), strong($lang->block->executionstatistic->story)),
+                            row
                             (
-                                set::className('flex-1'),
-                                span(set::className('font-bold'), $lang->block->executionstatistic->task)
-                            ),
-                            cell
-                            (
-                                set::className('pr-2 flex col py-2'),
-                                cell(set::className('flex flex-1 items-center justify-end'), span(set::className('text-sm text-gray'), $lang->block->executionstatistic->totalTask)),
-                                cell(set::className('flex flex-1 items-center justify-end'), span(set::className('text-sm text-gray'), $lang->block->executionstatistic->undoneTask)),
-                                cell(set::className('flex flex-1 items-center justify-end'), span(set::className('text-sm text-gray'), $lang->block->executionstatistic->yesterdayDoneTask))
-                            ),
-                            cell
-                            (
-                                set::className('pl-2 flex col py-2'),
-                                cell(set::className('flex flex-1 items-center'), span(set::className('text-lg'), $execution->totalTask)),
-                                cell(set::className('flex flex-1 items-center'), span(set::className('text-lg'), $execution->undoneTask)),
-                                cell(set::className('flex flex-1 items-center'), span(set::className('text-lg'), $execution->yesterdayDoneTask))
+                                setClass('flex-auto'),
+                                cell
+                                (
+                                    setClass('w-1/3'),
+                                    span(setClass('text-sm text-gray'), $lang->block->executionstatistic->doneStory),
+                                    strong(setClass('num ml-2'), $execution->doneStory)
+                                ),
+                                cell
+                                (
+                                    setClass('w-1/3'),
+                                    span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalStory),
+                                    strong(setClass('num ml-2'), $execution->totalStory)
+                                )
                             )
                         )
                     )
