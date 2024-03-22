@@ -1196,10 +1196,14 @@ class storyTao extends storyModel
      */
     protected function updateStage(int $storyID, array $stages, array $oldStages = array(), array $linkedProjects = array()): bool
     {
-        if(empty($stages) && $oldStages) $stages = array_column($oldStages, 'stage', 'branch');
-        if(empty($stages)) return false;
-
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if(empty($stages) && $oldStages) $stages = array_column($oldStages, 'stage', 'branch');
+        if(empty($stages))
+        {
+            if($story->parent > 0) $this->computeParentStage($story);
+            return false;
+        }
+
         if(empty($story)) return false;
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         if($product and $product->type != 'normal' and empty($story->branch))

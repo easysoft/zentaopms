@@ -1956,7 +1956,22 @@ class storyModel extends model
     {
         $story = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if(empty($story)) return false;
-        if($story->type != 'story' || $story->isParent == '1') return false;
+
+        /* 父需求主动关联计划、项目的情况。 */
+        if($story->type != 'story' || $story->isParent == '1')
+        {
+            list($linkedBranches, $linkedProjects) = $this->storyTao->getLinkedBranchesAndProjects($storyID);
+            if($story->stage == 'defining')
+            {
+                if(!empty($linkedProjects) || !empty($story->plan)) $this->dao->update(TABLE_STORY)->set('stage')->eq('planning')->where('id')->eq($storyID)->exec();
+            }
+            elseif($story->stage == 'planning')
+            {
+                $child = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq('0')->fetch('id');
+                if(empty($linkedBranches) && empty($story->plan) && empty($child)) $this->dao->update(TABLE_STORY)->set('stage')->eq('defining')->where('id')->eq($storyID)->exec();
+            }
+            return false;
+        }
 
         /* 获取已经存在的分支阶段. */
         $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
