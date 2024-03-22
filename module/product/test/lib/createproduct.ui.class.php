@@ -1,0 +1,80 @@
+<?php
+class createProductTester extends tester
+{
+    /**
+     * Check the page jump after creating the product.
+     *
+     * @param  string    $name
+     * @access public
+     * @return object
+     */
+    public function checkLocatePage($name)
+    {
+        $this->login();
+        $formPage = $this->formPage('product', 'create');
+        $formPage->name->setValue($name);
+        $formPage->submit();
+        return $this->parseCurrentUrl();
+    }
+
+    /**
+     * Create a default product.
+     *
+     * @param  string    $name
+     * @access public
+     * @return object
+     */
+    public function createDefault($name)
+    {
+        /* 提交表单。 */
+        $this->login();
+        $formPage = $this->formPage('product', 'create');
+        $formPage->name->setValue($name);
+        $formPage->submit();
+
+        $this->parseCurrentUrl();
+        if($this->result->method != 'browse') return failed($formPage->getFormTips());
+
+        /* 跳转到产品需求页面，点击设置菜单查看产品设置页面。 */
+        $browsePage = $this->initPage('product', 'browse');
+        $browsePage->settings->click();
+
+        $viewPage = $this->initPage('product', 'view');
+        if($viewPage->productName->getText() != $name) return failed('名称错误');
+        if($viewPage->type->getText() != '正常') return failed('类型错误');
+        if($viewPage->acl->getText() != '公开') return failed('权限错误');
+
+        return success();
+    }
+
+    /**
+     * Create a multi-branch product
+     *
+     * @param  string    $name
+     * @access public
+     * @return object
+     */
+    public function createMultiBranch($name)
+    {
+        /* 提交表单。 */
+        $this->login();
+        $formPage = $this->formPage('product', 'create');
+        $formPage->name->setValue($name);
+        $formPage->type->picker('多分支');
+        $formPage->submit();
+
+        $this->parseCurrentUrl();
+        if($this->result->method != 'browse') return failed($formPage->getFormTips());
+
+        /* 跳转到产品需求页面，点击设置菜单查看产品设置页面。 */
+        $browsePage = $this->initPage('product', 'browse');
+        $browsePage->settings->click();
+
+        $viewPage = $this->initPage('product', 'view');
+        if($viewPage->productName->getText() != $name) return failed('名称错误');
+        if($viewPage->type->getText() != '多分支') return failed('类型错误');
+        if($viewPage->branchProductACL->getText() != '公开') return failed('权限错误');
+
+        return success();
+    }
+}

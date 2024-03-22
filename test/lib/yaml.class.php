@@ -250,9 +250,9 @@ class yaml
      */
     public function __construct($tableName)
     {
-        global $config, $tester, $dao;
+        global $config, $tester, $uiTester;
         $this->config    = $config;
-        $this->dao       = isset($tester->dao) ? $tester->dao : $dao;
+        $this->dao       = isset($tester->dao) ? $tester->dao : $uiTester->dao;
         $this->tableName = $tableName;
         $this->fields    = new fields();
         dao::$cache      = array();

@@ -1,7 +1,13 @@
 <?php
 /* Set the error reporting. */
 error_reporting(E_ALL);
+
+/* 设置常量和常用目录路径 */
 define('RUN_MODE', 'test');
+$zentaoRoot    = dirname(__FILE__, 3) . '/';
+$testPath      = $zentaoRoot . 'test' . '/';
+$frameworkRoot = $zentaoRoot . 'framework' . '/';
+
 
 /* Load the framework. */
 include $frameworkRoot . 'router.class.php';
@@ -9,14 +15,16 @@ include $frameworkRoot . 'control.class.php';
 include $frameworkRoot . 'model.class.php';
 include $frameworkRoot . 'helper.class.php';
 
-$app = router::createApp('pms', dirname(__FILE__, 3), 'router');
-$app->loadCommon();
+
+/* 初始化禅道框架 */
+$app      = router::createApp('pms', dirname(__FILE__, 3), 'router');
+$uiTester = $app->loadCommon();
 
 /* 加载框架配置项 */
-define('DS', DIRECTORY_SEPARATOR);
-define('CONFIG_ROOT', dirname(__FILE__, 2) . '/config/');
-define('MODULE_ROOT', dirname(__FILE__, 2) . '/ui/');
-include CONFIG_ROOT . '/config.php';
+define('CONFIG_ROOT', $testPath . 'config' . '/');
+global $config;
+include CONFIG_ROOT . 'config.php';
+
 
 /* 加载用例执行结果处理类 */
 include __DIR__ . '/result.class.php';
@@ -27,11 +35,6 @@ $driver = new webdriver($config);
 
 /* 初始化页面元素 */
 include 'page.class.php';
-
-/* 引入禅道框架helper类，加载数据库操作类dao */
-include dirname(__FILE__, 3) . '/framework/helper.class.php';
-include dirname(__FILE__, 3) . '/lib/dao/dao.class.php';
-$dao = new dao();
 
 /* 加载测试数据处理类，初始化测试数据 */
 include 'yaml.class.php';
@@ -309,8 +312,8 @@ class tester
      */
     public function initPage($module = '', $method = '')
     {
-        if($this->result->module) $module = $this->result->module;
-        if($this->result->method) $method = $this->result->method;
+        if($this->result->module && !$module) $module = $this->result->module;
+        if($this->result->method && !$method) $method = $this->result->method;
 
         $pageClass = "{$method}Page";
         if(!class_exists($pageClass))include dirname(__FILE__, 2). "/ui/$module/page/$method.php";
@@ -318,6 +321,21 @@ class tester
         $methodPage = new $pageClass();
         $this->result->setPage($methodPage);
         return $methodPage;
+    }
+
+    /**
+     * Visit a form test page.
+     *
+     * @param  int    $module
+     * @param  int    $method
+     * @param  array  $params
+     * @param  string $iframeID
+     * @access public
+     * @return object
+     */
+    public function formPage($module, $method, $params = array(), $iframeID = '')
+    {
+        return $this->openURL($module, $method, $params, $iframeID)->initPage();
     }
 
     /**
