@@ -108,7 +108,7 @@ if(!empty($copyProjects))
             setClass($copyProjectID == $id ? 'primary-outline' : ''),
             set('data-id', $id),
             set('data-pinyin', zget($copyPinyinList, $name, '')),
-            icon(setClass('text-gray'), $lang->icons['project']),
+            icon(setClass('text-gray'), !empty($model) ? ($model == 'scrum' ? 'sprint' : $model) : $lang->icons['project']),
             span($name, set::title($name), setClass('text-left'))
         );
     }
