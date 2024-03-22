@@ -123,3 +123,12 @@ function loadOptionsList(optionsType, selectControl)
         defaultValuePicker.render({items: options});
     });
 }
+
+window.confirmDelist = function(metricID, metricName)
+{
+    zui.Modal.confirm(confirmDelist.replace('%s', metricName)).then((res) =>
+    {
+        if(res) $.ajaxSubmit({url: $.createLink('metric', 'delist', 'metricID=' + metricID)});
+    });
+};
+
