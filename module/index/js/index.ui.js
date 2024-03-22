@@ -633,7 +633,7 @@ function initAppsMenu(items)
 
         const $link= $('<a data-pos="menu"></a>')
             .attr('data-app', item.code)
-            .attr('href', item.url ? ($.createLink('index', 'index') + '#app=' + item.code) : '#')
+            .attr('href', item.url || '#')
             .addClass('rounded show-in-app')
             .html(item.title);
 
