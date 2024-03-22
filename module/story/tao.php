@@ -307,7 +307,7 @@ class storyTao extends storyModel
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->beginIF($productID)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
 
         $parents = $this->extractParents($stories);
-        if($parents) $parents = $this->dao->select('id,title,version')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
+        if($parents) $parents = $this->dao->select('id,title,version,type')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
 
         $mainID  = $type == 'story' ? 'BID' : 'AID';
         $countID = $type == 'story' ? 'AID' : 'BID';
