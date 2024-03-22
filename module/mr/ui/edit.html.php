@@ -113,7 +113,7 @@ formPanel
     ),
     formRow
     (
-        setClass('hidden'),
+        $MR->needCI == '1' ? null : setClass('hidden'),
         formGroup
         (
             set::width('1/2'),
