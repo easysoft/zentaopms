@@ -402,7 +402,7 @@ class project extends control
             if($this->post->longTime || $this->post->LONG_TIME) $this->config->project->form->create['end']['skipRequired'] = true;
 
             $postData = form::data($this->config->project->form->create);
-            $project  = $this->projectZen->prepareCreateExtras($postData);
+            $project  = $this->projectZen->prepareCreateExtras($postData, $copyProjectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $projectID = $this->project->create($project, $postData);
