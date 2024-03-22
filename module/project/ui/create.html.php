@@ -109,7 +109,7 @@ if(!empty($copyProjects))
             set('data-id', $id),
             set('data-pinyin', zget($copyPinyinList, $name, '')),
             icon(setClass('text-gray'), $lang->icons['project']),
-            span($name, set::title($name))
+            span($name, set::title($name), setClass('text-left'))
         );
     }
 }
