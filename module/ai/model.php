@@ -2721,12 +2721,32 @@ class aiModel extends model
         return true;
     }
 
+    /**
+     * Get assistants.
+     * @param  pager    $pager
+     * @param  string   $orderBy
+     * @access public
+     * @return array
+     */
     public function getAssistants($pager = null, $orderBy = 'id_desc')
     {
         return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+    }
+
+    /**
+     * Get assistant by id.
+     * @param  int    $assistantId
+     * @access public
+     * @return object
+     */
+    public function getAssistantById($assistantId)
+    {
+        return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
+            ->where('id')->eq($assistantId)
+            ->fetch();
     }
 
     /**
@@ -2754,6 +2774,34 @@ class aiModel extends model
         if (dao::isError()) return false;
         return $this->dao->lastInsertID();
     }
+
+    /**
+     * update an assistant.
+     * @param  object $assistant
+     * @access public
+     * @return bool
+     */
+    public function updateAssistant($assistant)
+    {
+        $originAssistant = $this->getAssistantById($assistant->id);
+        foreach ($assistant as $key => $value)
+        {
+            if(isset($originAssistant->$key)) $originAssistant->$key = $value;
+        }
+        if(empty($originAssistant->publishedDate))
+        {
+            unset($originAssistant->publishedDate);
+        }
+
+        $this->dao->update(TABLE_AI_ASSISTANT)
+            ->data($originAssistant)
+            ->where('id')->eq($assistant->id)
+            ->exec();
+        if(dao::isError()) return false;
+
+        return true;
+    }
+
 }
 
 /**

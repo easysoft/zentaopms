@@ -305,7 +305,10 @@ class ai extends control
                 return $model->id == $assistant->modelId;
             }))->name;
 
-            if(empty($assistant->publishedDate)) $assistant->publishedDate = '-';
+            if(empty($assistant->publishedDate) || $assistant->publishedDate == '0000-00-00 00:00:00')
+            {
+                $assistant->publishedDate = '-';
+            }
             return $assistant;
         }, $assistants);
 
@@ -350,6 +353,38 @@ class ai extends control
 
         $this->view->models = $models;
         $this->view->title  = $this->lang->ai->assistants->create;
+        $this->display();
+    }
+
+    /**
+     * Edit an assistant.
+     * @param  int  $assistantId
+     * @access public
+     * @return void
+     */
+    public function assistantEdit($assistantId)
+    {
+        if(strtolower($this->server->request_method) == 'post')
+        {
+            $assistant = fixer::input('post')->get();
+            $assistant->id = $assistantId;
+            $this->ai->updateAssistant($assistant);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'locate' => helper::createLink('ai', 'assistants')));
+        }
+
+        $models = $this->ai->getLanguageModels('', false);
+        $models = array_reduce($models, function($acc, $model)
+        {
+            $acc[$model->id] = $model->name;
+            return $acc;
+        }, array());
+
+        $assistant = $this->ai->getAssistantById($assistantId);
+        $this->view->models = $models;
+        $this->view->assistant = $assistant;
+        $this->view->title = $this->lang->ai->assistants->edit;
         $this->display();
     }
 
