@@ -40,6 +40,26 @@ class statisticBlock extends blockPanel
      */
     public static function getPageCSS(): ?string
     {
+        return <<<'CSS'
+        .block-statistic-nav {overflow-y: overlay;  --nav-active-bg: var(--color-primary-50); --nav-active-color: var(--color-fore)}
+        .block-statistic-nav-item .text {opacity: .8;}
+        .block-statistic-nav-item.active .text, .block-statistic-nav-item:hover .text {opacity: 1;}
+
+        .is-long .block-statistic-nav-item {width: auto!important; height: 36px!important;}
+        .is-long .block-statistic-nav-item:hover {padding-right: 32px;}
+        .is-long .block-statistic-nav-url {position: absolute!important; padding: 0!important; width: 32px!important; justify-content: center!important; height: 36px!important;}
+        .is-long .block-statistic-nav-url:hover {background-color: var(--color-canvas);}
+
+
+        .is-short .block-statistic-nav .nav {justify-content: center;}
+        .is-short .block-statistic-nav .nav-item {gap: 0;}
+        .is-short .block-statistic-nav .nav-item.active {gap: 0;}
+        .is-short .block-statistic-nav .nav-item:not(.active) {display: none;}
+        .is-short .block-statistic-nav .nav-item > a {gap: 0; padding: 0px 0.25rem;}
+        .is-short .block-statistic-nav .nav-item .block-statistic-nav-item {display: none;}
+
+        .block-statistic-nav-btn {opacity: 1;}
+        CSS;
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
@@ -68,7 +88,7 @@ class statisticBlock extends blockPanel
             }
             $navItems[] = li
             (
-                setClass('nav-item group' . ($item['id'] == $active ? ' active' : '')),
+                setClass('nav-item item group' . ($item['id'] == $active ? ' active' : '')),
                 a
                 (
                     toggle::tab(array('target' => "#blockTab_{$id}_{$item['id']}")),
@@ -87,10 +107,10 @@ class statisticBlock extends blockPanel
 
         return div
         (
-            setClass('flex-none block-statistic-nav border-r', $longBlock ? 'bg-surface w-52' : 'relative w-full'),
+            setClass('flex-none block-statistic-nav border-r', $longBlock ? 'w-52' : 'relative w-full'),
             nav
             (
-                setClass('scrollbar-thin scrollbar-hover', $longBlock ? 'overflow-y-auto overflow-x-hidden h-full' : 'overflow-x-auto overflow-y-hidden p-2'),
+                setClass('scrollbar-thin scrollbar-hover p-2 pr-0.5', $longBlock ? 'overflow-y-auto overflow-x-hidden h-full' : 'overflow-x-auto overflow-y-hidden'),
                 set::stacked($longBlock),
                 $navItems
             ),
