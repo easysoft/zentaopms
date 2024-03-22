@@ -38,7 +38,7 @@ class detailSide extends wg
                 formGroup
                 (
                     set::id($field->field),
-                    set::name($field->field . (is_array($fieldControl) && $fieldControl['control'] == 'checkList' ? '[]' : '' )),
+                    set::name($field->field),
                     set::required($field->required),
                     set::control($field->control),
                     set::items($field->items),
