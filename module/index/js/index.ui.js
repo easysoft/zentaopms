@@ -867,13 +867,27 @@ window.notifyMessage = function(data)
 window.browserNotify = function()
 {
     let windowBlur = false;
-
     setInterval(function()
     {
         if(window.Notification && Notification.permission == 'granted')
         {
             window.onblur  = function(){windowBlur = true;}
             window.onfocus = function(){windowBlur = false;}
+            $('iframe').each(function()
+            {
+                let iframeID = $(this).attr('id');
+                let $this = document.getElementById(iframeID);
+                if(document.all)
+                {
+                    $this.onblur  = function(){windowBlur = true;}
+                    $this.onfocus = function(){windowBlur = false;}
+                }
+                else
+                {
+                    $this.contentWindow.onblur  = function(){windowBlur = true;}
+                    $this.contentWindow.onfocus = function(){windowBlur = false;}
+                }
+            });
         }
 
         $.get($.createLink('message', 'ajaxGetMessage', "windowBlur=" + (windowBlur ? '1' : '0')), function(data)
