@@ -225,6 +225,7 @@ div
     div
     (
         setClass('flex-auto'),
+        setID('modulePanel'),
         panel
         (
             setClass('pb-4'),
