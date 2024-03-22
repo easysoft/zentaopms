@@ -744,6 +744,7 @@ class myModel extends model
         unset($this->config->product->search['fields']['stage']);
         unset($this->config->product->search['fields']['module']);
         unset($this->config->product->search['fields']['branch']);
+        if($this->config->edition != 'ipd') unset($this->config->product->search['fields']['roadmap']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
