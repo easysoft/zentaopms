@@ -124,7 +124,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = 'id_desc,root_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
+    public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
     {
         $browseType = strtolower($browseType);
 
@@ -133,6 +133,7 @@ class product extends control
         $this->loadModel('epic');
         $this->loadModel('tree');
         $isProjectStory = $this->app->rawModule == 'projectstory';
+        $cookieOrderBy  = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -144,6 +145,7 @@ class product extends control
         $product   = $this->productZen->getBrowseProduct($productID);
         $project   = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         $branchID  = $this->productZen->getBranchID($product, $branch);
+        $orderBy   = $orderBy  ? $orderBy  : $cookieOrderBy;
         $branch    = $branchID ? $branchID : $branch;
 
         /* ATTENTION: be careful to change the order of follow sentences. */
@@ -834,6 +836,18 @@ class product extends control
     public function ajaxSetShowSetting()
     {
         $this->loadModel('setting')->updateItem("{$this->app->user->account}.product.showAllProjects", $this->post->showAllProjects);
+    }
+
+    /**
+     * 设置需求列表展示的需求等级。
+     * Ajax set show grades.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSetShowGrades(string $storyType, string $showGrades)
+    {
+        $this->loadModel('setting')->updateItem("{$this->app->user->account}.$storyType.showGrades", $showGrades);
     }
 
     /**

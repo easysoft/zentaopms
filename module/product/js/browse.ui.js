@@ -127,3 +127,15 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
 
     return {html: checkedSummary.replace('%total%', total).replace('%estimate%', estimate).replace('%rate%', rate).replace('%SRTotal%', SRTotal)};
 };
+
+window.setShowGrades = function()
+{
+    const showGrades = $('[name^=showGrades]').zui('picker').$.state.value;
+    if(oldShowGrades == showGrades) return;
+
+    const link = $.createLink('product', 'ajaxSetShowGrades', 'storyType=' + storyType + '&showGrades=' + showGrades);
+    $.get(link, function()
+    {
+        loadCurrentPage();
+    });
+}

@@ -84,6 +84,7 @@ $lang->story->relieved           = '解除';
 $lang->story->relievedTwins      = '解除孪生需求';
 $lang->story->loadAllStories     = '所有';
 $lang->story->hasDividedTask     = '已经分解任务';
+$lang->story->viewAllGrades      = '查看所有层级';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";

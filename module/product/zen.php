@@ -852,6 +852,9 @@ class productZen extends product
 
         if($browseType == 'bybranch') helper::setcookie('storyBranch', $branch, 0);
 
+        /* Save sort order of product stories list. */
+        helper::setcookie('productStoryOrder', $orderBy, 0);
+
         /* Set product ID and branch of the pre visited product. */
         helper::setcookie('preProductID', (string)$productID);
         helper::setcookie('preBranch', $branch, 0);
@@ -1468,6 +1471,8 @@ class productZen extends product
         $this->view->stories         = $stories;
         $this->view->gradeGroup      = $gradeGroup;
         $this->view->showGrade       = $storyType == 'story' ? count($gradeGroup[$storyType]) > 2 : count($gradeGroup[$storyType]) > 1;
+        $this->view->gradeMenu       = $this->loadModel('story')->getGradeMenu($storyType);
+        $this->view->showGrades      = isset($this->config->{$storyType}->showGrades) ? $this->config->{$storyType}->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
         $this->view->storyType       = $storyType;
         $this->view->browseType      = $browseType;
         $this->view->isProjectStory  = $isProjectStory;
@@ -1477,7 +1482,6 @@ class productZen extends product
         $this->view->branchOptions   = (empty($product) && $isProjectStory) ? $this->getBranchOptions($projectProducts, $projectID) : array($productID => $branchOpt);
         $this->view->branchTagOption = $branchTagOpt;
         $this->view->projectProducts = $projectProducts;
-        $this->view->gradeMenu       = $this->loadModel('story')->getGradeMenu($storyType);
 
         $this->view->summary    = $this->product->summary($stories, $storyType);
         $this->view->plans      = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' || empty($branch)) ? '' : $branch, 'unexpired,noclosed', true);

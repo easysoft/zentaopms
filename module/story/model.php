@@ -2059,6 +2059,13 @@ class storyModel extends model
     public function getProductStories(string|int $productID = 0, array|string|int $branch = 0, array|string $moduleIdList = '', array|string $status = 'all', string $type = 'story', string $orderBy = 'id_desc', bool $hasParent = true, array|string $excludeStories = '', object|null $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
+        $showGrades = isset($this->config->{$type}->showGrades) ? $this->config->{$type}->showGrades : null;
+        if($showGrades)
+        {
+            $pattern = "/{$type}(\d+)/";
+            preg_match_all($pattern, $showGrades, $matches);
+            $showGrades = isset($matches[1]) ? $matches[1] : null;
+        }
 
         $productQuery = $this->storyTao->buildProductsCondition($productID, $branch);
         $stories      = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
@@ -2070,6 +2077,7 @@ class storyModel extends model
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
+            ->beginIF($showGrades)->andWhere('grade')->in($showGrades)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -2311,10 +2319,19 @@ class storyModel extends model
         $sql = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1');
         if($fieldName == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version');
 
+        $showGrades = isset($this->config->{$type}->showGrades) ? $this->config->{$type}->showGrades : null;
+        if($showGrades)
+        {
+            $pattern = "/{$type}(\d+)/";
+            preg_match_all($pattern, $showGrades, $matches);
+            $showGrades = isset($matches[1]) ? $matches[1] : null;
+        }
+
         $stories = $sql->where('t1.product')->in($productID)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->andWhere('t1.type')->eq($type)
+            ->beginIF($showGrades)->andWhere('t1.grade')->in($showGrades)->fi()
             ->beginIF($branch != 'all')->andWhere("t1.branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("t1.module")->in($modules)->fi()
             ->beginIF($operator == 'equal' and $fieldName != 'reviewBy' and $fieldName != 'assignedBy')->andWhere('t1.' . $fieldName)->eq($fieldValue)->fi()
@@ -2345,9 +2362,18 @@ class storyModel extends model
      */
     public function get2BeClosed(int $productID, int|string $branch, string|array $modules, string $type = 'story', string $orderBy = '', object|null $pager = null): array
     {
+        $showGrades = isset($this->config->{$type}->showGrades) ? $this->config->{$type}->showGrades : null;
+        if($showGrades)
+        {
+            $pattern = "/{$type}(\d+)/";
+            preg_match_all($pattern, $showGrades, $matches);
+            $showGrades = isset($matches[1]) ? $matches[1] : null;
+        }
+
         $stories = $this->dao->select("*,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->andWhere('type')->eq($type)
+            ->beginIF($showGrades)->andWhere('grade')->in($showGrades)->fi()
             ->beginIF($branch and $branch != 'all')->andWhere("branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->andWhere('deleted')->eq(0)
@@ -2507,6 +2533,14 @@ class storyModel extends model
             }
         }
 
+        $showGrades = isset($this->config->{$type}->showGrades) ? $this->config->{$type}->showGrades : null;
+        if($showGrades)
+        {
+            $pattern = "/{$type}(\d+)/";
+            preg_match_all($pattern, $showGrades, $matches);
+            $showGrades = isset($matches[1]) ? $matches[1] : null;
+        }
+
         $tmpStories = $this->dao->select("DISTINCT t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->beginIF(strpos($sql, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version')->fi()
@@ -2515,6 +2549,7 @@ class storyModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->beginIF($type != 'all')->andWhere('t1.type')->eq($type)->fi()
+            ->beginIF($showGrades)->andWhere('t1.grade')->in($showGrades)->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
@@ -3598,6 +3633,19 @@ class storyModel extends model
      */
     public function appendChildren(int $productID, array $stories, string $storyType): array
     {
+        $storyGrades       = array();
+        $requirementGrades = array();
+        $showGrades = isset($this->config->{$storyType}->showGrades) ? $this->config->{$storyType}->showGrades : null;
+        if($showGrades)
+        {
+            foreach(explode(',', $showGrades) as $grade)
+            {
+                if(!$grade) continue;
+                if(strpos($grade, 'requirement') !== false) $requirementGrades[] = str_replace('requirement', '', $grade);
+                if(strpos($grade, 'story') !== false)       $storyGrades[]       = str_replace('story', '', $grade);
+            }
+        }
+
         $rootIdList = array();
         foreach($stories as $story) $rootIdList[] = $story->root;
         $children = $this->dao->select('*')->from(TABLE_STORY)
@@ -3605,9 +3653,15 @@ class storyModel extends model
             ->andWhere('deleted')->eq('0')
             ->beginIF($storyType == 'requirement')
             ->andWhere('type')->eq('story')
+            ->beginIF($storyGrades)->andWhere('grade')->in($storyGrades)->fi()
             ->fi()
             ->beginIF($storyType == 'epic')
-            ->andWhere('type')->ne('epic')
+            ->andWhere('(type')->eq('requirement')
+            ->beginIF($requirementGrades)->andWhere('grade')->in($requirementGrades)->fi()
+            ->markRight(1)
+            ->orWhere('(type')->eq('story')
+            ->beginIF($storyGrades)->andWhere('grade')->in($storyGrades)->fi()
+            ->markRight(1)
             ->fi()
             ->fetchAll('id');
 
@@ -4886,7 +4940,7 @@ class storyModel extends model
         {
             $items = array();
             $gradePairs = $this->getGradePairs('epic');
-            foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => $grade);
+            foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => "epic{$grade}");
             $menu[] = array('text' => $this->lang->preview . $this->lang->ERCommon, 'value' => 'epic', 'items' => $items);
         }
 
@@ -4894,13 +4948,13 @@ class storyModel extends model
         {
             $items = array();
             $gradePairs = $this->getGradePairs('requirement');
-            foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => $grade);
+            foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => "requirement{$grade}");
             $menu[] = array('text' => $this->lang->preview . $this->lang->URCommon, 'value' => 'requirement', 'items' => $items);
         }
 
         $items = array();
         $gradePairs = $this->getGradePairs('story');
-        foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => $grade);
+        foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => "story{$grade}");
         $menu[] = array('text' => $this->lang->preview . $this->lang->SRCommon, 'value' => 'story', 'items' => $items);
 
         return $menu;
@@ -4950,6 +5004,28 @@ class storyModel extends model
         $grades = $this->getGradePairs($storyType);
 
         return $storyType == 'story' ? count($grades) > 2 : count($grades) > 1;
+    }
+
+    /**
+     * 获取需求列表默认展示的层级。
+     * Get the default show grades.
+     *
+     * @param  array $gradeMenu
+     * @access public
+     * @return string
+     */
+    public function getDefaultShowGrades(array $gradeMenu): string
+    {
+        $showGrades = '';
+        foreach($gradeMenu as $menu)
+        {
+            foreach($menu['items'] as $item)
+            {
+                $showGrades .= $item['value'] . ',';
+            }
+        }
+
+        return $showGrades;
     }
 
     /**

@@ -84,6 +84,7 @@ $lang->story->relieved           = 'Relieved';
 $lang->story->relievedTwins      = 'Relieved Twins';
 $lang->story->loadAllStories     = 'All';
 $lang->story->hasDividedTask     = 'has divided task';
+$lang->story->viewAllGrades      = 'View All Grades';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Change {$lang->SRCommon}";
