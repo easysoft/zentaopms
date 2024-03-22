@@ -511,4 +511,260 @@ class metricTao extends metricModel
     {
         $this->dao->exec("DROP TABLE IF EXISTS `metriclib_distinct`");
     }
+
+    /**
+     * 创建sqlite备份数据库。
+     * Create backup database.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function createBackupDatabase()
+    {
+        $database = $this->config->db->name . $this->config->metric->sqliteSuffix;
+        $this->dao->exec("DROP DATABASE IF EXISTS `{$database}`");
+        $this->dao->exec("CREATE DATABASE `$database` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;");
+    }
+
+    /**
+     * 同步数据库结构。
+     * Sync database schema.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function syncDatabaseSchema()
+    {
+        $fromDB = $this->config->db->name;
+        $toDB   = $this->config->db->name . $this->config->metric->sqliteSuffix;
+
+        $tableSql = "SELECT table_name as tableName FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = '{$fromDB}' order by table_name;";
+        $tables = $this->dao->query($tableSql)->fetchAll();
+
+        $createSqls = array();
+        foreach($tables as $table)
+        {
+            $tableName = $table->tableName;
+            $createSql = $this->dao->query("SHOW CREATE TABLE `$fromDB`.`$tableName`")->fetchAll();
+            $createSql = $createSql[0]->{'Create Table'};
+
+            $createSql = str_replace("CREATE TABLE `$tableName`", "CREATE TABLE `$toDB`.`$tableName`", $createSql);
+
+            $this->dao->exec("DROP TABLE IF EXISTS `$toDB`.`$tableName`;");
+            $this->dao->exec($createSql);
+        }
+    }
+
+    /**
+     * 获取数据库表。
+     * Get database tables.
+     *
+     * @param  int    $db
+     * @param  string $orderBy
+     * @access protected
+     * @return void
+     */
+    protected function getDatabaseTables($db, $orderBy = 'table_name')
+    {
+        $tablePrefix = $this->config->db->prefix;
+        $sql = "SELECT table_name as tableName, TABLE_ROWS AS rowCount FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = '$db' and table_name like '$tablePrefix%' order by $orderBy";
+
+        $tables = $this->dao->query($sql)->fetchAll();
+
+        return array_map(function($table){return $table->tableName;}, $tables);
+    }
+
+    /**
+     * 获取数据库表字段。
+     * Get database table fields.
+     *
+     * @param  int    $db
+     * @param  int    $tableName
+     * @access protected
+     * @return void
+     */
+    protected function getTableFields($db, $tableName)
+    {
+        $fields = $this->dao->query("desc `$db`.`$tableName`", array("Field"))->fetchAll();
+        $fields = array_map(function($field){return $field->Field;}, $fields);
+
+        return $fields;
+    }
+
+    /**
+     * 同步数据。
+     * Sync data.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function syncData()
+    {
+        $fromDB         = $this->config->db->name;
+        $db             = $this->config->db->name . $this->config->metric->sqliteSuffix;
+        $tablePrefix    = $this->config->db->prefix;
+        $keepTableNames = $this->config->metric->keepTables;
+        $ignoreFields   = $this->config->metric->ignoreFields;
+
+        $existTables = $this->getDatabaseTables($db);
+
+        $dropSqls = array();
+
+        foreach ($existTables as $existTable)
+        {
+            $tableName = $existTable;
+            $tableNameNoPrefix = str_replace($tablePrefix, '', $tableName);
+            if (in_array($tableNameNoPrefix, $keepTableNames))
+            {
+                $fields = zget($ignoreFields, $tableNameNoPrefix, array());
+                if (empty($fields)) continue;
+                // Drop table fields.
+                foreach ($fields as $field)
+                {
+                    $this->dao->exec("ALTER TABLE `$db`.`$tableName` DROP COLUMN `$field`;");
+                }
+            }
+            else
+            {
+                $this->dao->exec("DROP TABLE IF EXISTS `$db`.`$tableName`;");
+            }
+        }
+
+        $existTables = $this->getDatabaseTables($db);
+
+        foreach($existTables as $existTable)
+        {
+            $fields = $this->getTableFields($db, $existTable);
+            $fields = implode("`,`", $fields);
+            $this->dao->exec("INSERT INTO `$db`.`$existTable` (`$fields`) SELECT `$fields` FROM `$fromDB`.`$existTable`;");
+        }
+    }
+
+    /**
+     * 获取mysql表行数。
+     * Get mysql table rows.
+     *
+     * @param  int    $db
+     * @param  int    $tableName
+     * @access protected
+     * @return void
+     */
+    protected function mysqlRows($db, $tableName = null)
+    {
+        if(empty($tableName))
+        {
+            $sql = "SELECT SUM(TABLE_ROWS) AS total_count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '$db';";
+            $count = $this->dao->query($sql)->fetchAll();
+            $count = $count[0]->total_count;
+            return $count;
+        }
+        $sql = "SELECT count(1) as count FROM `$db`.`$tableName`";
+        $count = $this->dao->query($sql)->fetchAll();
+        $count = $count[0]->count;
+        return $count;
+    }
+
+    /**
+     * 切割表。
+     * Slice tables.
+     *
+     * @param  float  $sliceRows
+     * @access protected
+     * @return void
+     */
+    protected function sliceTables($sliceRows = 50 * 10000)
+    {
+        $db          = $this->config->db->name . $this->config->metric->sqliteSuffix;
+        $tablePrefix = $this->config->db->prefix;
+        $tables      = $this->getDatabaseTables($db, 'table_rows desc');
+
+        $allTables   = array();
+        $currentRows = 0;
+        $sliceTables = array();
+        foreach($tables as $tableName)
+        {
+            $count     = $this->mysqlRows($db, $tableName);
+            $currentRows += $count;
+            $sliceTables[$tableName] = $count;
+            if($currentRows > $sliceRows)
+            {
+                $allTables[] = $sliceTables;
+                $sliceTables = array();
+                $currentRows = 0;
+            }
+        }
+
+        if(!empty($sliceTables)) $allTables[] = $sliceTables;
+
+        return $allTables;
+    }
+
+    /**
+     * 获取sqlite临时目录。
+     * Get sqlite temp root.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function getSqliteTmpRoot()
+    {
+        $tmpRoot = $this->app->getTmpRoot();
+        $root    = $tmpRoot . 'sqlite' . DS;
+        if(!is_dir($root)) mkdir($root, 0777, true);
+        return $root;
+    }
+
+    /**
+     * 同步数据到sqlite。
+     * Sync data to sqlite.
+     *
+     * @param  int    $sliceTables
+     * @access protected
+     * @return void
+     */
+    protected function syncData2Sqlite($sliceTables)
+    {
+        $host = $this->config->db->host;
+        $port = $this->config->db->port;
+        $db   = $this->config->db->name . $this->config->metric->sqliteSuffix;
+        $user = $this->config->db->user;
+        $pwd  = $this->config->db->password;
+
+        $tmpRoot = $this->getSqliteTmpRoot();
+        $zentaoSql = $tmpRoot . 'zentao_%s.sql';
+        $sqliteDB  = $tmpRoot . 'sqlite.db';
+
+        // Delete sqlite db file if exist.
+        if(file_exists($sqliteDB)) unlink($sqliteDB);
+
+        $mysqldumpCommand = $this->config->metricDB->command->mysqldump;
+        $sqlite3Command   = $this->config->metricDB->command->sqlite3;
+        $mysql2sqlite     = $this->app->getModuleRoot() . 'metric' . DS . 'sqlite' . DS . 'mysql2sqlite';
+
+        foreach($sliceTables as $index => $sliceTable)
+        {
+            $tables = array_keys($sliceTable);
+            $tables = implode(" ", $tables);
+
+            // 导出从库的数据到sql文件
+            $sqlFile = sprintf($zentaoSql, str_pad((string)($index + 1), 3, "0", STR_PAD_LEFT));
+            $command = "{$mysqldumpCommand} -h{$host} -P{$port} -u{$user} -p{$pwd} {$db} {$tables} > {$sqlFile} --skip-comments";
+            exec($command, $output);
+
+            // 将导出的sql文件转为sqlite3类型的sql文件
+            $sqliteFile = sprintf($zentaoSql, '_sqlite' . str_pad((string)($index + 1), 3, "0", STR_PAD_LEFT));
+            $command = "$mysql2sqlite {$sqlFile} > {$sqliteFile}";
+            exec($command, $output);
+
+            // 将导出的sqlite3类型的sql文件导入sqlite3数据库
+            $command = "$sqlite3Command {$sqliteDB} < {$sqliteFile}";
+            exec($command, $output);
+
+            // 删除导出的sql文件
+            if(file_exists($sqlFile)) unlink($sqlFile);
+            // 删除导出的sqlite3类型的sql文件
+            if(file_exists($sqliteFile)) unlink($sqliteFile);
+        }
+        $this->dao->exec("DROP DATABASE IF EXISTS `{$db}`");
+    }
 }

@@ -74,7 +74,7 @@ class sqlite
     public function connectSqlite(string $sqliteFile = ''): object
     {
         $tmpRoot = $this->app->getTmpRoot();
-        if(empty($sqliteFile) || !is_file($sqliteFile)) $sqliteFile = $tmpRoot . 'sqlite.db';
+        if(empty($sqliteFile) || !is_file($sqliteFile)) $sqliteFile = $tmpRoot . DS . 'sqlite' . DS . 'sqlite.db';
 
         $sqliteFile = realpath($sqliteFile);
         if(strpos($sqliteFile, $tmpRoot) !== 0) return helper::end("The sqlite file '$sqliteFile' is not in the tmp root '$tmpRoot'");

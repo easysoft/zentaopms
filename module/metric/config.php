@@ -7,6 +7,7 @@ $config->metric->dateList      = array('year', 'month', 'week', 'day');
 $config->metric->excludeGlobal = array('program', 'project', 'product', 'execution', 'user', 'dept');
 
 $config->metric->maxSelectNum = 10;
+$config->metric->sqliteSuffix = '_sqlite_backup';
 
 global $lang;
 $this->loadLang('metric');

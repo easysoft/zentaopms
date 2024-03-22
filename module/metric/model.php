@@ -767,6 +767,22 @@ class metricModel extends model
     }
 
     /**
+     * 同步Sqlite。
+     * Sync sqlite.
+     *
+     * @access public
+     * @return void
+     */
+    public function syncSqlite()
+    {
+        $this->metricTao->createBackupDatabase();
+        $this->metricTao->syncDatabaseSchema();
+        $this->metricTao->syncData();
+        $sliceTables = $this->metricTao->sliceTables();
+        $this->metricTao->syncData2Sqlite($sliceTables);
+    }
+
+    /**
      * 根据度量项收集周期来清理过期的度量库数据。
      * Clear outdated metric records by cycle.
      *

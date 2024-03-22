@@ -218,6 +218,7 @@ class metric extends control
 
         // 开启调试模式
         $this->config->debug = 2;
+        if($this->config->metricDB->type == 'sqlite') $this->metric->syncSqlite();
 
         $calcList = $this->metric->getCalcInstanceList();
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);

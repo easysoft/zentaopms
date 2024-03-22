@@ -71,6 +71,10 @@ $config->slaveDBList         = array();   // 支持多个从库。         Suppo
 $config->metricDB = new stdclass();
 $config->metricDB->type      = 'mysql';   // 度量计算数据库类型。   The type of metric database.
 
+$config->metricDB->command = new stdclass();
+$config->metricDB->command->mysqldump = 'mysqldump';
+$config->metricDB->command->sqlite3   = 'sqlite3';
+
 /* 可用域名后缀列表。Domain postfix lists. */
 $config->domainPostfix  = "|com|com.cn|com.hk|com.tw|com.vc|edu.cn|es|";
 $config->domainPostfix .= "|eu|fm|gov.cn|gs|hk|im|in|info|jp|kr|la|me|";
