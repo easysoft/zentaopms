@@ -2074,11 +2074,12 @@ class metricModel extends model
      * 根据日期类型和日期，拆解出日期的年、月、周、日。
      * Get date values by date type and date.
      *
-     * @param  string  $date
+     * @param  string $date
+     * @param  string $dateType
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function generateDateValues($date)
+    public function parseDateStr($date, $dateType = 'all')
     {
         $timestamp = strtotime($date);
 
@@ -2089,14 +2090,13 @@ class metricModel extends model
         $week  = substr($week, -2);
 
         $dateValues = new stdClass();
-
         $dateValues->year   = array('year' => $year);
         $dateValues->month  = array('year' => $year, 'month' => $month);
         $dateValues->week   = array('year' => $year, 'week' => $week);
         $dateValues->day    = array('year' => $year, 'month' => $month, 'day' => $day);
         $dateValues->nodate = array();
 
-        return $dateValues;
+        return $dateType == 'all' ? $dateValues : $dateValues->$dateType;
     }
 
     /**
