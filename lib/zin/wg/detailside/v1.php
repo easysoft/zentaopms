@@ -19,17 +19,26 @@ class detailSide extends wg
     {
         global $app, $lang;
 
-        $fields    = $app->control->appendExtendForm('basic', data($app->getModuleName()));
+        $data      = data($app->getModuleName());
+        $fields    = $app->control->appendExtendForm('basic', $data);
         $extraSide = array();
         foreach($fields as $field)
         {
             $extraSide[] = item
             (
+                $field->control == 'file' && $data->files ? fileList
+                (
+                    set::files($data->files),
+                    set::extra($field->field),
+                    set::fieldset(false),
+                    set::showEdit(true),
+                    set::showDelete(true)
+                ) : null,
                 set::name($field->name),
                 formGroup
                 (
                     set::id($field->field),
-                    set::name($field->field),
+                    set::name($field->field . (is_array($fieldControl) && $fieldControl['control'] == 'checkList' ? '[]' : '' )),
                     set::required($field->required),
                     set::control($field->control),
                     set::items($field->items),
