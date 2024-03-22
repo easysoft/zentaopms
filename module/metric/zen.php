@@ -182,20 +182,19 @@ class metricZen extends metric
      */
     protected function prepareMetricRecord($calcList)
     {
-        $yesterday = strtotime('-1 day', strtotime('today'));
-        $yesterday = date('j', $yesterday);
+        $yesterday = date('j', strtotime('-1 day', strtotime('today')));
         $today     = date('j');
         $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => "$today,$yesterday");
 
         $now        = helper::now();
-        $dateValues = $this->metric->generateDateValues($now);
+        $dateValues = $this->metric->parseDateStr($now);
 
         $records = array();
         foreach($calcList as $code => $calc)
         {
             $metric       = $this->metric->getByCode($code);
             $dateType     = $this->metric->getDateTypeByCode($code);
-            $recordCommon = $this->buildMetricRecordCommonFields($metric->id, $code, $now, $dateValues->$dateType);
+            $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateValues->$dateType);
             $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope);
 
             $results = $calc->getResult($options);
@@ -277,7 +276,7 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function buildMetricRecordCommonFields($metricID, $code, $date, $dateValues)
+    protected function buildRecordCommonFields($metricID, $code, $date, $dateValues)
     {
         $record = new stdclass();
         $record->value      = 0;
