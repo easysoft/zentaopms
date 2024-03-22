@@ -1378,6 +1378,98 @@ class pivotModel extends model
     }
 
     /**
+     * Gen sheet by origin sql.
+     *
+     * @param  array  $fields
+     * @param  array  $settings
+     * @param  string $sql
+     * @param  array  $filters
+     * @param  array  $langs
+     * @access public
+     * @return string
+     */
+    public function genOriginSheet($fields, $settings, $sql, $filters, $langs = array())
+    {
+        $sql = $this->initVarFilter($filters, $sql);
+
+        /* Process rows. */
+        $connectSQL = '';
+        if(!empty($filters) && !isset($filters[0]['from']))
+        {
+            $wheres = array();
+            foreach($filters as $field => $filter)
+            {
+                $wheres[] = "tt.`$field` {$filter['operator']} {$filter['value']}";
+            }
+
+            $whereStr    = implode(' and ', $wheres);
+            $connectSQL .= " where $whereStr";
+        }
+
+        $this->app->loadClass('sqlparser', true);
+        $parser    = new sqlparser($sql);
+        $statement = $parser->statements[0];
+        if(!$statement->limit)
+        {
+            $statement->limit = new stdclass();
+            $statement->limit->offset   = 0;
+            $statement->limit->rowCount = 99999999;
+        }
+        $sql = $statement->build();
+
+        $columnSQL = "select * from ($sql) tt" . $connectSQL;
+        $rows = $this->dao->query($columnSQL)->fetchAll();
+        $rows = json_decode(json_encode($rows), true);
+
+        $cols = array();
+        $clientLang = $this->app->getClientLang();
+        /* Build cols. */
+        foreach($fields as $field)
+        {
+            $key = $field['field'];
+
+            $col = new stdclass();
+            $col->name    = $key;
+            $col->isGroup = true;
+
+            $fieldObject  = $field['object'];
+            $relatedField = $field['field'];
+
+            $colLabel = $key;
+            if($fieldObject)
+            {
+                $this->app->loadLang($fieldObject);
+                if(isset($this->lang->$fieldObject->$relatedField)) $colLabel = $this->lang->$fieldObject->$relatedField;
+            }
+
+            if(isset($langs[$key]) and !empty($langs[$key][$clientLang])) $colLabel = $langs[$key][$clientLang];
+            $col->label = $colLabel;
+
+            $cols[0][] = $col;
+        }
+
+        $fieldOptions = $this->getFieldsOptions($fields, $sql);
+        foreach($rows as $key => $row)
+        {
+            foreach($row as $field => $value)
+            {
+                $optionList  = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
+                $row[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
+            }
+
+            $rows[$key] = $row;
+        }
+
+        $data = new stdclass();
+        $data->cols  = $cols;
+        $data->array = $rows;
+
+        $configs = array_fill(0, count($rows), array_fill(0, count($fields), 1));
+
+        return array($data, $configs);
+    }
+
+    /**
      * 初始化分组信息。
      * Init groups info.
      *

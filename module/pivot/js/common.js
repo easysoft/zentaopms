@@ -139,10 +139,16 @@ function checkFormSetting()
  */
 function validate(showError = false)
 {
-    var pivot = DataStorage.pivot;
+    var pivot        = DataStorage.pivot;
     var formSettings = pivot.settings;
-    /* Code for temporary */
-    var isReady = true;
+    var isReady      = true;
+    var firstErrDom  = null;
+
+    if("summary" in formSettings && formSettings.summary == 'notuse')
+    {
+        if(isReady) $('#datagrid-tip').addClass('hidden');
+        return true;
+    }
 
     /* check group settings. */
     var exist = false;
@@ -164,6 +170,8 @@ function validate(showError = false)
             var error = '<div id="groupLabel" class="text-danger help-text">' + moreThanOneLang + '</div>';
             tr.find('#group1').addClass('has-error');
             tr.find('#group1').next().after(error);
+
+            firstErrDom = tr.find('#group1').parents('tr');
         }
     }
 
@@ -183,7 +191,9 @@ function validate(showError = false)
             {
                 var error = '<div id="column' + index + 'Label" class="text-danger help-text">' + notemptyLang.replace('%s', pivotLang.step2.columnField) + '</div>';
                 $column.find('#column').addClass('has-error');
-                $column.find('#column').next().after(error);
+                $column.find('#column').parent().after(error);
+
+                if(!firstErrDom) firstErrDom = $column.find('#column').parents('.column');
             }
         }
 
@@ -195,11 +205,14 @@ function validate(showError = false)
                 var error = '<div id="stat' + index + 'Label" class="text-danger help-text">' + notemptyLang.replace('%s', pivotLang.step2.calcMode) + '</div>';
                 $column.find('#stat').addClass('has-error');
                 $column.find('#stat').next().after(error);
+
+                if(!firstErrDom) firstErrDom = $column.find('#stat').parents('.column');
             }
         }
     });
 
     if(isReady)  $('#datagrid-tip').addClass('hidden');
+    if(!isReady && firstErrDom) firstErrDom[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
     return isReady;
 }
 
@@ -436,7 +449,7 @@ function setDateField(query)
             var target = $(query).parents('table, #queryFilters, #filterItems,#filterForm').find('[data-index="' + $period.attr('data-index') + '"]').find('#default:visible');
             if(target.length)
             {
-                target.val($(this).attr('href').replace('#', '$'));
+                target.val($(this).attr('href').replace('#', '$')).trigger('change');
                 $period.hide();
             }
             event.stopPropagation();
@@ -446,6 +459,10 @@ function setDateField(query)
 
     if(query == '.form-date')     $(query).datepicker();
     if(query == '.form-datetime') $(query).datetimepicker();
+
+    var dateVal = $(query).val();
+    $(query).val('').datetimepicker('update').trigger('mousedown');
+    $(query).val(dateVal);
 
     $(query).on('show', function(e)
     {
