@@ -96,7 +96,7 @@ statisticBlock
         (
             btn
             (
-                setClass('ghost text-gray font-normal'),
+                setClass('font-normal rounded-full gray-400-outline size-md ml-3'),
                 set::caret(true),
                 isset($projects[$currentProjectID]) ? $projects[$currentProjectID] : $lang->block->executionstatistic->allProject,
             ),
