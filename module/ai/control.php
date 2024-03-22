@@ -285,17 +285,25 @@ class ai extends control
      * create an assistant.
      *
      * @access public
-     * @return void
+     * @return int
      */
     public function assistantcreate()
     {
         if(strtolower($this->server->request_method) == 'post')
         {
             $assistant = fixer::input('post')->get();
-            $assistantID = $this->ai->createAssistant($assistant);
+            if(empty($assistant->publish))
+            {
+                $this->ai->createAssistant($assistant);
+            }
+            else
+            {
+                unset($assistant->publish);
+                $assistant->id = $this->ai->createAssistant($assistant, true);
+            }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'callback' => "gotoAssistant($assistantID)"));
+            return $this->send(array('result' => 'success', 'locate' => helper::createLink('ai', 'assistants')));
         }
 
         $models = $this->ai->getLanguageModels('', false);

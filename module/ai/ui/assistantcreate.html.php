@@ -9,8 +9,8 @@ formPanel
     set::id('assistant-form'),
     set::actions(
         array(
-            array('text' => $lang->ai->prompts->action->publish, 'id' => 'test-conn-btn', 'class' => 'btn primary', 'url' => helper::createLink('ai', 'assistants')),
-            array('text' => $lang->save, 'class' => 'btn secondary', 'btnType'=> 'submit'),
+            array('text' => $lang->ai->prompts->action->publish, 'id' => 'save-publish-assistant-button', 'class' => 'btn primary'),
+            array('text' => $lang->save, 'class' => 'btn secondary', 'id' => 'save-assistant-button', 'btnType' => 'submit'),
             'cancel'
         )
     ),
