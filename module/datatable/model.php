@@ -64,6 +64,8 @@ class datatableModel extends model
             foreach($fields as $field)
             {
                 if($field->buildin) continue;
+                if($field->control == 'file') continue;
+
                 $fieldList[$field->field]['title'] = $field->name;
                 $fieldList[$field->field]['width'] = '120';
             }
