@@ -227,6 +227,44 @@ class metricZen extends metric
         return $records;
     }
 
+    protected function getRecordByCodeAndDate($code, $calc, $date)
+    {
+        $now = helper::now();
+
+        $metric   = $this->metric->getByCode($code);
+        $dateType = $this->metric->getDateTypeByCode($code);
+
+        $dateConfig   = $this->metric->parseDateStr($date, $dateType);
+        $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateConfig);
+        $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope, "{$date} 23:59:59");
+
+        $results = $calc->getResult($dateConfig);
+        if(is_array($results))
+        {
+            foreach($results as $record)
+            {
+                $record = (object)$record;
+                if(empty($record->value)) continue;
+
+                $record->metricID   = $metric->id;
+                $record->metricCode = $code;
+                $record->date       = $now;
+                $record->system     = $metric->scope == 'system' ? 1 : 0;
+
+                $uniqueKey = $this->getUniqueKeyByRecord($record);
+                if(!isset($initRecords[$uniqueKey]))
+                {
+                    $initRecords[$uniqueKey] = $record;
+                    continue;
+                }
+
+                $initRecords[$uniqueKey]->value = $record->value;
+            }
+        }
+
+        return array_values($initRecords);
+    }
+
     /**
      * 根据度量项编码，初始化度量数据。
      * Initialize metric data based on metric code.
@@ -237,7 +275,7 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function initMetricRecords($recordCommon, $scope)
+    protected function initMetricRecords($recordCommon, $scope, $date = 'now')
     {
         $records = array();
         if($scope == 'system')
@@ -250,7 +288,15 @@ class metricZen extends metric
         }
         else
         {
-            $scopeList = $this->metric->getPairsByScope($scope);
+            if($date == 'now')
+            {
+                $scopeList = $this->metric->getPairsByScope($scope);
+            }
+            else
+            {
+                $scopeList = $this->metric->getPairsByScopeAndDate($scope, $date);
+            }
+
             foreach($scopeList as $key => $value)
             {
                 $record = clone $recordCommon;

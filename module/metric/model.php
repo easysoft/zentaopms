@@ -1131,6 +1131,62 @@ class metricModel extends model
     }
 
     /**
+     * 根据范围和创建日期获取对象列表。
+     * Get object pairs by scope and createdDate.
+     *
+     * @param  string $scope
+     * @param  string $date
+     * @param  string $vision
+     * @access public
+     * @return array
+     */
+    public function getPairsByScopeAndDate($scope, $date, $vision = 'rnd')
+    {
+        $objectPairs = array();
+        switch($scope)
+        {
+            case 'product':
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_PRODUCT)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('shadow')->eq(0)
+                    ->andWhere('createdDate')->le($date)
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->fetchPairs();
+                break;
+            case 'project':
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('type')->eq('project')
+                    ->andWhere('openedDate')->le($date)
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->fetchPairs();
+                break;
+            case 'execution':
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('type')->in('sprint,stage,kanban')
+                    ->andWhere('openedDate')->le($date)
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->fetchPairs();
+                break;
+            case 'user':
+                $objectPairs = $this->dao->select('account,realname')->from(TABLE_USER)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('join', true)->le(substr($date, 0, 10))
+                    ->orWhere("`join` IS NULL")->markRight(1)
+                    ->andWhere("visions LIKE '%{$vision}%'", true)
+                    ->orWhere("visions IS NULL")->markRight(1)
+                    ->fetchPairs();
+                break;
+        }
+
+        return $objectPairs;
+    }
+
+    /**
      * Get object pairs by id list.
      *
      * @param  string $scope

@@ -159,6 +159,52 @@ class metric extends control
     }
 
     /**
+     * 计算历史数据。
+     * Update metric lib of history.
+     *
+     * @param  string $date
+     * @access public
+     * @return void
+     */
+    public function updateHistoryMetricLib($date)
+    {
+        $date = str_replace('_', '-', $date);
+
+        $originalDebug = $this->config->debug;
+        $this->config->debug = 2;
+
+        $calcList            = $this->metric->getCalcInstanceList();
+        $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
+
+        foreach($classifiedCalcGroup as $calcGroup)
+        {
+            if($this->config->edition == 'open' and in_array($calcGroup->dataset, array('getFeedbacks', 'getIssues', 'getRisks'))) continue;
+            if($this->config->edition == 'biz' and in_array($calcGroup->dataset, array('getIssues', 'getRisks'))) continue;
+
+            try
+            {
+                $statement = $this->metricZen->prepareDataset($calcGroup);
+                if(empty($statement)) continue;
+
+                $rows = $statement->fetchAll();
+                $this->metricZen->calcMetric($rows, $calcGroup->calcList);
+
+                $records = array();
+                foreach($calcGroup->calcList as $code => $calc) $records[$code] = $this->metricZen->getRecordByCodeAndDate($code, $calc, $date);
+                $this->metric->insertMetricLib($records);
+            }
+            catch(Exception $e)
+            {
+                a($this->metricZen->formatException($e));
+            }
+            catch(Error $e)
+            {
+                a($this->metricZen->formatException($e));
+            }
+        }
+    }
+
+    /**
      * 计算度量项。
      * Execute metric.
      *
