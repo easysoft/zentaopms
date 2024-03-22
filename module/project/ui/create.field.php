@@ -15,6 +15,7 @@ $fields->field('parent')
     ->value($copyProject ? data('copyProject.parent') : data('parentProgram.id'));
 
 $fields->field('hasProduct')
+    ->disabled(!!$copyProject)
     ->control('checkBtnGroup', array('className' => $copyProject ? 'has-warning' : ''))
     ->value($copyProject ? data('copyProject.hasProduct') : '1');
 
