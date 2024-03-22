@@ -29,13 +29,22 @@ class detailBody extends wg
     {
         global $app;
 
-        $fields    = $app->control->appendExtendForm('info', data($app->getModuleName()));
+        $data      = data($app->getModuleName());
+        $fields    = $app->control->appendExtendForm('info', $data);
         $extraMain = array();
         foreach($fields as $field)
         {
             $fieldControl = $field->control;
             $extraMain[] = section
             (
+                $field->control == 'file' && $data->files ? fileList
+                (
+                    set::files($data->files),
+                    set::extra($field->field),
+                    set::fieldset(false),
+                    set::showEdit(true),
+                    set::showDelete(true)
+                ) : null,
                 set::title($field->name),
                 formGroup
                 (
@@ -45,6 +54,7 @@ class detailBody extends wg
                     set::control($field->control),
                     set::items($field->items),
                     set::value($field->value)
+
                 )
             );
         }
