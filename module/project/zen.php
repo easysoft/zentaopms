@@ -20,8 +20,7 @@ class projectZen extends project
      */
     protected function prepareCreateExtras(object $postData, int $copyProjectID = 0): object|false
     {
-        $copyProject = $this->project->getByID($copyProjectID);
-        $project     = $postData->setDefault('status', 'wait')
+        $project = $postData->setDefault('status', 'wait')
             ->setIF($this->post->longTime || $this->post->delta == '999', 'end', LONG_TIME)
             ->setIF($this->post->longTime || $this->post->delta == '999', 'days', 0)
             ->setIF($this->post->acl      == 'open', 'whitelist', '')
@@ -29,8 +28,6 @@ class projectZen extends project
             ->setIF($this->post->multiple != 'on', 'multiple', '0')
             ->setIF($this->post->multiple == 'on' || !in_array($this->post->model, array('scrum', 'kanban')) || $this->config->vision == 'lite', 'multiple', '1')
             ->setIF($this->post->model == 'ipd', 'stageBy', 'project')
-            ->setIF(isset($copyProject->multiple), 'multiple', $copyProject->multiple)
-            ->setIF(isset($copyProject->hasProduct), 'hasProduct', $copyProject->hasProduct)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', $this->post->name)
@@ -42,6 +39,13 @@ class projectZen extends project
             ->join('auth', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->get();
+
+        $copyProject = $this->project->getByID($copyProjectID);
+        if($copyProject)
+        {
+            $project->multiple   = $copyProject->multiple;
+            $project->hasProduct = $copyProject->hasProduct;
+        }
 
         if(!isset($this->config->setCode) || $this->config->setCode == 0) unset($project->code);
 
