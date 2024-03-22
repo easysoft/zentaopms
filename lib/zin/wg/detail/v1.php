@@ -274,9 +274,9 @@ CSS;
 
     protected function buildMainSections()
     {
-        global $app;
+        global $app, $config;
         $sections = $this->prop('sections');
-        if($this->config->edition != 'open') $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
+        if($config->edition != 'open') $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
 
         $list = array();
         foreach($sections as $key => $item)
@@ -392,9 +392,9 @@ CSS;
 
     protected function buildTabsList()
     {
-        global $app;
+        global $app, $config;
         $tabs = $this->prop('tabs');
-        if($this->config->edition != 'open') $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
+        if($config->edition != 'open') $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
         if(!$tabs) return null;
 
         $groups = array();
