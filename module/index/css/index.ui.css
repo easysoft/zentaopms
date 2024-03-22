@@ -1,4 +1,14 @@
-#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg, var(--color-primary-600)); width: var(--zt-menu-width, 96px); color: rgba(var(--color-canvas-rgb), .8); transition: width .2s; user-select: none; z-index: 10;}
+:root
+{
+    --zt-apps-bar-height: 36px;
+    --zt-apps-bar-bg: var(--color-canvas);
+    --zt-menu-width: 96px;
+    --zt-menu-fold-width: 36px;
+    --zt-menu-bg: var(--color-gray-800);
+}
+[lang^='en'] {--zt-menu-width: 106px;}
+
+#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: rgba(var(--color-canvas-rgb), .8); transition: width .2s; user-select: none; z-index: 10;}
 #menu .nav {flex-direction: column; align-items: stretch;}
 #menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 8px; transition: padding .2s;}
 #menu .nav > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 0; margin: 6px 12px;}
@@ -17,11 +27,11 @@
 #menuMoreNav {display: none;}
 .show-more-nav #menuMoreNav {display: block;}
 #menuMoreNav > li > a.with-popover-show {background-color: rgba(255,255,255,.1);}
-#menuMoreList {background: var(--zt-menu-bg, var(--color-gray-800)); padding: 8px 0; min-width: 100px;}
+#menuMoreList {background: var(--zt-menu-bg); padding: 8px 0; min-width: 100px;}
 #menuMoreList > .menu-item {padding: 1px 12px!important; height: 32px!important;}
 #menuMoreList > .menu-item > a > .text {flex: auto;}
 
-.hide-menu #menu {width: var(--zt-menu-fold-width, 40px)!important;}
+.hide-menu #menu {width: var(--zt-menu-fold-width)!important;}
 .hide-menu #menu .nav > li {padding: 4px}
 .hide-menu #menu .nav > .divider {padding: 0; margin: 6px}
 .hide-menu #menu .nav > li > a {justify-content: center;}
@@ -29,11 +39,11 @@
 .hide-menu #menu #menuMoreNav .nav > li > a > .text {display: flex;}
 .hide-menu #menu .menu-toggle > .icon {transform: rotate(180deg);}
 
-#apps {position: fixed; left: var(--zt-menu-width, 96px); top: 0; bottom: 40px; right: 0; background-color: var(--zt-page-bg); transition: left .2s;}
-.hide-menu #apps {left: var(--zt-menu-fold-width, 40px)!important;}
+#apps {position: fixed; left: var(--zt-menu-width); top: 0; bottom: var(--zt-apps-bar-height); right: 0; background-color: var(--zt-page-bg); transition: left .2s;}
+.hide-menu #apps {left: var(--zt-menu-fold-width)!important;}
 
-#appsBar {display: flex; flex-wrap: nowrap; align-items: center; position: fixed; left: var(--zt-menu-width, 96px); bottom: 0; right: 0; height: 40px; padding: 0 4px; background: var(--zt-apps-bar-bg, var(--color-canvas)); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s; border-top-width: 1px;}
-.hide-menu #appsBar {left: var(--zt-menu-fold-width, 40px)!important;}
+#appsBar {display: flex; flex-wrap: nowrap; align-items: center; position: fixed; left: var(--zt-menu-width); bottom: 0; right: 0; height: var(--zt-apps-bar-height); padding: 0 4px; background: var(--zt-apps-bar-bg); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s; border-top-width: 1px;}
+.hide-menu #appsBar {left: var(--zt-menu-fold-width)!important;}
 #appTabs {flex: auto; user-select: none; --nav-active-color: currentColor}
 #appTabs > li > a {border-radius: var(--radius-md); opacity: .6;}
 #appTabs > li + li::before {display: block; content: ' '; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--color-inverse); opacity: .12;}
@@ -62,10 +72,8 @@
 .btn.tooltip-tutorial,.hl-tutorial.hl-in:hover { position: relative!important; z-index: 1010!important; -webkit-box-shadow: 0 0 30px 0 #ffff8d,0 0 0 5px #ffd180,0 0 0 3000px rgba(0,0,0,.3)!important; box-shadow: 0 0 30px 0 #ffff8d,0 0 0 5px #ffd180,0 0 0 3000px rgba(0,0,0,.3)!important
 }
 
-[lang^='en'] {--zt-menu-width: 106px;}
-
- #visionTips {width: 280px; height: 0; position: absolute; bottom: 120px; left: 0; z-index: 200; color: #ffffff;}
- #visionTips .inner {width: 270px; height: 58px; position: relative; bottom: 0; left: 0; border-radius: 8px; display: flex; justify-content: space-around; align-items: center;}
- #visionTips .line {width: 2px; height: 31px; position: absolute; bottom: -31px; left: 64px;}
- #visionTips .circle {width: 10px; height: 10px; border-radius: 50%; border-width: 3px; border-style: solid; position: relative; left: -4px; top: 31px; background-color: white;color: #fff; border-color: var(--color-primary-500);}
- #visionTips .inner > button {border-color: white; background: var(--skin-text);}
+#visionTips {width: 280px; height: 0; position: absolute; bottom: 120px; left: 0; z-index: 200; color: #ffffff;}
+#visionTips .inner {width: 270px; height: 58px; position: relative; bottom: 0; left: 0; border-radius: 8px; display: flex; justify-content: space-around; align-items: center;}
+#visionTips .line {width: 2px; height: 31px; position: absolute; bottom: -31px; left: 64px;}
+#visionTips .circle {width: 10px; height: 10px; border-radius: 50%; border-width: 3px; border-style: solid; position: relative; left: -4px; top: 31px; background-color: white;color: #fff; border-color: var(--color-primary-500);}
+#visionTips .inner > button {border-color: white; background: var(--skin-text);}
