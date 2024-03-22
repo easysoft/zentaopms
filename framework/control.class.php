@@ -482,9 +482,22 @@ class control extends baseControl
 
         $moduleName = $moduleName ?: $this->app->getModuleName();
         $methodName = $methodName ?: $this->app->getMethodName();
-        $fields     = $this->loadModel('flow')->printFields($moduleName, $methodName, $object, $type, $extras);
-        if(!$print) return $fields;
 
+        $this->loadModel('flow');
+        if($type == 'html')
+        {
+            parse_str($extras, $result);
+            $fields   = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'));
+        }
+        else
+        {
+            ob_start();
+            $this->flow->printFields($moduleName, $methodName, $object, $type, $extras);
+            $fields = ob_get_contents();
+            ob_end_clean();
+        }
+
+        if(!$print) return $fields;
         echo $fields;
     }
 

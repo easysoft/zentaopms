@@ -111,7 +111,7 @@ class detail extends wg
         .detail-side .tabs {padding: 12px 8px 12px 16px}
         .detail-side .tabs-header {position: sticky; top: 0; background: var(--color-surface-light);}
         .detail-side .tab-pane {padding: 0}
-        CSS;
+CSS;
     }
 
     protected function created()
@@ -274,9 +274,11 @@ class detail extends wg
 
     protected function buildMainSections()
     {
+        global $app;
         $sections = $this->prop('sections');
-        $list     = array();
+        if($this->config->edition != 'open') $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
 
+        $list = array();
         foreach($sections as $key => $item)
         {
             if($item === '-')
@@ -390,7 +392,9 @@ class detail extends wg
 
     protected function buildTabsList()
     {
+        global $app;
         $tabs = $this->prop('tabs');
+        if($this->config->edition != 'open') $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
         if(!$tabs) return null;
 
         $groups = array();
