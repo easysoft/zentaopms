@@ -518,6 +518,8 @@ class control extends baseControl
         $methodName = $methodName ? $moduleName : $this->app->getMethodName();
 
         $flow      = $this->loadModel('workflow')->getByModule($moduleName);
+        if(!$flow) return $fields;
+
         $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList);
@@ -539,6 +541,8 @@ class control extends baseControl
         $methodName = $methodName ? $moduleName : $this->app->getMethodName();
 
         $flow      = $this->loadModel('workflow')->getByModule($moduleName);
+        if(!$flow) return '';
+
         $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
 
@@ -575,8 +579,11 @@ class control extends baseControl
 
         $this->loadModel('flow');
         $this->loadModel('workflowfield');
+
+        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        if(!$flow) return array();
+
         $wrapControl  = array('textarea', 'richtext', 'file');
-        $flow         = $this->loadModel('workflow')->getByModule($moduleName);
         $action       = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         $fieldList    = $this->workflowaction->getFields($flow->module, $action->action);
         $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
@@ -626,7 +633,9 @@ class control extends baseControl
         $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
         $methodName = $methodName ? $moduleName : $this->app->getMethodName();
 
-        $flow      = $this->loadModel('workflow')->getByModule($moduleName);
+        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        if(!$flow) return $config;
+
         $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
         $layouts   = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
