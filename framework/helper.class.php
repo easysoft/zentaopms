@@ -494,8 +494,11 @@ function initPageEntity(object $object): array
  * @access public
  * @return array
  */
-function initTableData(array $items, array &$fieldList, object $model = null): array
+function initTableData(array $items, array &$fieldList, object $model = null, string $moduleName = ''): array
 {
+    global $config;
+    if($config->edition != 'open') $fieldList = initTableFields($fieldList, $moduleName);
+
     if(!empty($_GET['orderBy']) && strpos($_GET['orderBy'], '-') !== false) list($orderField, $orderValue) = explode('_', $_GET['orderBy']);
     if(!empty($orderField) && !empty($orderValue) && !empty($fieldList[$orderField]))
     {
@@ -600,6 +603,50 @@ function initTableData(array $items, array &$fieldList, object $model = null): a
     if($fieldList['actions']['minWidth'] < 48) $fieldList['actions']['minWidth'] = 48;
 
     return array_values($items);
+}
+
+/**
+ * 初始化表格工作流内置字段。
+ * Init workflow buildin fields in table.
+ *
+ * @param  array  $fieldList
+ * @param  string $moduleName
+ * @access public
+ * @return array
+ */
+function initTableFields(array $fieldList, string $moduleName = ''): array
+{
+    global $app;
+    if(empty($moduleName)) $moduleName = $app->rawModule;
+    $workflowFields = $app->control->loadModel('workflowfield')->getList($moduleName);
+    foreach($workflowFields as $fieldKey => $field)
+    {
+        if($field->buildin || !isset($fieldList[$fieldKey])) continue;
+        switch($field->control)
+        {
+            case 'select':
+            case 'radio':
+                $fieldList[$fieldKey]['map'] = $app->control->workflowfield->getFieldOptions($field);
+                break;
+            case 'multi-select':
+            case 'checkbox':
+                $fieldList[$fieldKey]['map']  = $app->control->workflowfield->getFieldOptions($field);
+                $fieldList[$fieldKey]['type'] = 'category';
+                break;
+            case 'richtext':
+                $fieldList[$fieldKey]['type'] = 'html';
+            case 'date':
+            case 'datetime':
+                $fieldList[$fieldKey]['type'] = $field->control;
+            case 'int':
+            case 'decimal':
+                $fieldList[$fieldKey]['type'] = 'number';
+            default:
+                $fieldList[$fieldKey]['type'] = 'text';
+                break;
+        }
+    }
+    return $fieldList;
 }
 
 /**
