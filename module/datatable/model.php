@@ -60,15 +60,9 @@ class datatableModel extends model
         /* Logic except open source version .*/
         if($this->config->edition != 'open')
         {
-            $fields = $this->loadModel('workflowfield')->getList($module);
-            foreach($fields as $field)
-            {
-                if($field->buildin) continue;
-                if($field->control == 'file') continue;
-
-                $fieldList[$field->field]['title'] = $field->name;
-                $fieldList[$field->field]['width'] = '120';
-            }
+            $fields            = $this->loadModel('workflowfield')->getList($module);
+            $workflowFieldList = $this->loadModel('flow')->buildDtableCols($fields, array(), array());
+            $fieldList         = array_merge($fieldList, $workflowFieldList);
         }
 
         return $fieldList;
