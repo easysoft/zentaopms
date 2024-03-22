@@ -63,7 +63,13 @@ formPanel
             set::value($MR->targetBranch),
             !$noEditBranch ? set::name('targetBranch') : null,
             !$noEditBranch ? set::items($branches) : set::control('static')
-        )
+        ),
+        $noEditBranch ? input
+        (
+            set::type('hidden'),
+            set::name('targetBranch'),
+            set::value($MR->targetBranch)
+        ) : null,
     ),
     formGroup
     (
