@@ -194,15 +194,12 @@ class formPanel extends panel
                 ) : null,
                 set::width($field->width),
                 set::label($field->name),
-                formGroup
-                (
-                    set::id($field->field),
-                    set::name($field->field),
-                    set::required($field->required),
-                    set::control($field->control),
-                    set::items($field->items),
-                    set::value($field->value)
-                )
+                set::id($field->field),
+                set::name($field->field),
+                set::required($field->required),
+                set::control($field->control),
+                set::items($field->items),
+                set::value($field->value)
             );
         }
         return $extraMain;
