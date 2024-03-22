@@ -630,15 +630,17 @@ function initAppsMenu(items)
         const oldItem = apps.map[item.code];
         if(item === 'divider') return $menuMainNav.append('<li class="divider"></li>');
         if(oldItem !== item && oldItem) item = $.extend({}, apps.map[item.code], item, {active: oldItem.active});
+        item.external = item.external || item.url && item.url.includes('://');
 
         const $link= $('<a data-pos="menu"></a>')
-            .attr('data-app', item.code)
+            .attr('data-app', item.notApp ? undefined : item.code)
             .attr('href', item.url || '#')
-            .addClass('rounded show-in-app')
+            .attr('target', item.notApp ? '_blank' : undefined)
+            .addClass('rounded' + (item.notApp ? '' : ' show-in-app'))
             .html(item.title);
 
         item.icon = ($link.find('.icon').attr('class') || '').replace('icon ', '');
-        item.text = $link.text().trim();
+        item.text = item.text || $link.text().trim();
         $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>');
         if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
         apps.map[item.code] = item;
