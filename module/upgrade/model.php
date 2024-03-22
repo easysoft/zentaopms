@@ -8569,4 +8569,83 @@ class upgradeModel extends model
         $this->saveLogs('Execute 18_10_1');
         $this->execSQL($this->getUpgradeFile('18.10.1'));
     }
+
+    /**
+     * 更新通过工作流添加的字段的默认值。
+     * Update the default value of the fields added through the workflow.
+     *
+     * @access public
+     * @return true
+     */
+    public function updateWorkflowFieldDefaultValue(): bool
+    {
+        $this->loadModel('workflowfield');
+
+        $tables     = $this->dao->select('module, `table`')->from(TABLE_WORKFLOW)->fetchPairs();
+        $nullFields = $this->dao->select('module, field, type')->from(TABLE_WORKFLOWFIELD)
+            ->where('buildin')->eq(0)
+            ->andWhere('type')->in('date, datetime, text')
+            ->andWhere('field')->notin('id, subStatus, deleted')
+            ->fetchAll();
+        $notNullFields = $this->dao->select('module, field, type, length, `default`')->from(TABLE_WORKFLOWFIELD)
+            ->where('buildin')->eq(0)
+            ->andWhere('type')->notin('date, datetime, text')
+            ->andWhere('field')->notin('id, subStatus, deleted')
+            ->andWhere('default', true)->eq(0)
+            ->orWhere('default')->eq('')
+            ->markRight(1)
+            ->fetchAll();
+        if(!$nullFields && !$notNullFields) return true;
+
+        $sql = '';
+        foreach($nullFields as $field)
+        {
+            if(!isset($tables[$field->module])) continue;
+
+            $table = $tables[$field->module];
+            $sql  .= "ALTER TABLE `$table` MODIFY `$field->field` $field->type NULL;";
+        }
+
+        foreach($notNullFields as $field)
+        {
+            if(!isset($tables[$field->module])) continue;
+
+            $table    = $tables[$field->module];
+            $isNumber = in_array($field->type, $this->config->workflowfield->numberTypes);
+
+            if($field->length)
+            {
+                if($field->type == 'decimal')
+                {
+                    list($integerDigits, $decimalDigits) = explode(',', $field->length);
+                    $field->length = $integerDigits + $decimalDigits . ',' . $decimalDigits;
+                }
+
+                $field->type .= "($field->length)";
+            }
+
+            $sql .= "ALTER TABLE `$table` MODIFY `$field->field` $field->type NOT NULL";
+            if($field->default)
+            {
+                $sql .= ' DEFAULT ' . $this->dbh->quote($field->default) . ';';
+            }
+            else
+            {
+                $sql .= $isNumber ? ' DEFAULT 0;' : " DEFAULT '';";
+            }
+        }
+
+        if(!$sql) return true;
+
+        try
+        {
+            $this->saveLogs($sql);
+            $this->dbh->query($sql);
+        }
+        catch(PDOException $exception)
+        {
+            static::$errors[] = $e->getMessage();
+        }
+        return true;
+    }
 }
