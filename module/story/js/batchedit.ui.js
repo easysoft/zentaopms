@@ -13,6 +13,8 @@ window.renderRowData = function($row, index, story)
         $picker.render(options);
     });
 
+    $row.addClass('story' + story.id);
+
     var $closedReasonTD = $row.find('[data-name="closedReason"]');
     $closedReasonTD.find('.picker-box').on('inited', function(e, info)
     {
@@ -249,4 +251,22 @@ window.setGrade = function(e)
         $grade.render({items: data.items});
         $grade.$.setValue(data.default);
     })
+
+    /* 两个需求不能互为父需求。 */
+    const parentTr = $(e.target).closest('tbody').find('tr.story' + parent);
+    if(parentTr.length > 0)
+    {
+        const items    = parentTr.find("[name^='parent']").zui('picker').options.items;
+        const sourceId = $(e.target).closest('tr').find('.form-batch-input[data-name=storyIdList]').val();
+        for(let i = 0; i < items.length; i++)
+        {
+            if(items[i].value == sourceId)
+            {
+                items[i].disabled = true;
+                break;
+            }
+        }
+
+        parentTr.find("[name^='parent']").zui('picker').render({items: items});
+    }
 }

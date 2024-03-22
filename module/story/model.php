@@ -2131,24 +2131,19 @@ class storyModel extends model
     {
         if($storyID == 0) return array();
 
-        $story = $this->fetchByID($storyID);
-        if(empty($story)) return array();
-
         $children = $this->dao->select('id')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
-            ->andWhere('root')->eq($story->root)
-            ->beginIF($story->type == 'requirement')
-            ->andWhere("((type = 'requirement' and grade > {$story->grade}) or (type = 'story'))")
-            ->fi()
-            ->beginIF($story->type == 'epic')
-            ->andWhere("((type = 'epic' and grade > {$story->grade}) or (type = 'story') or (type = 'requirement'))")
-            ->fi()
-            ->beginIF($story->type == 'story')
-            ->andWhere('grade')->gt($story->grade)
-            ->fi()
+            ->andWhere('parent')->eq($storyID)
             ->fetchPairs();
 
-        return array_keys($children);
+        $childIdList = array();
+        foreach($children as $childID)
+        {
+            $childIdList[] = $childID;
+            $childIdList   = array_merge($childIdList, $this->getAllChildId($childID));
+        }
+
+        return $childIdList;
     }
 
     /**
@@ -2617,6 +2612,7 @@ class storyModel extends model
                 ->andWhere('status')->eq('active')
                 ->andWhere('grade')->ne($lastGrade)
                 ->andWhere('grade')->in(array_keys($SRGradePairs))
+                ->beginIF($storyID)->andWhere('id')->ne($storyID)->fi()
                 ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
                 ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
                 ->fetchAll();
@@ -2691,6 +2687,7 @@ class storyModel extends model
             ->andWhere('grade')->in(array_keys($URGradePairs))
             ->andWhere('grade')->ne($lastGrade)
             ->andWhere('id')->notIN($allStoryParents)
+            ->beginIF($storyID)->andWhere('id')->ne($storyID)->fi()
             ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
             ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
             ->fetchAll('id');
@@ -2731,6 +2728,7 @@ class storyModel extends model
             ->andWhere('status')->eq('active')
             ->andWhere('grade')->in(array_keys($ERGradePairs))
             ->andWhere('grade')->ne($lastGrade)
+            ->beginIF($storyID)->andWhere('id')->ne($storyID)->fi()
             ->andWhere('id')->notIN($allRequirementParents)
             ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
             ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()

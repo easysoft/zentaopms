@@ -1670,7 +1670,7 @@ class story extends control
     {
         if($storyID)
         {
-            $story = $this->story->fetchByID($storyID);
+            $story   = $this->story->fetchByID($storyID);
             $stories = $this->story->getParentStoryPairs($story->product, $story->parent, $story->type, $storyID);
         }
         else
