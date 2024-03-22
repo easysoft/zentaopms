@@ -642,6 +642,7 @@ class control extends baseControl
                 else
                 {
                     $config[$field->field] = array('required' => false, 'type' => 'string');
+                    if($field->control == 'richtext') $config[$field->field]['control'] = 'editor';
                 }
             }
         }

@@ -112,10 +112,7 @@ detailBody
         section
         (
             set::title($lang->bug->legendComment),
-            editor
-            (
-                set::name('comment'),
-            )
+            editor(set::name('comment'))
         )
     ),
     history(),
