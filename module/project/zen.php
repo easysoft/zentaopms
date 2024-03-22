@@ -13,13 +13,15 @@ class projectZen extends project
     /**
      * Append extras data to post data.
      *
-     * @param  object $postData
+     * @param  object       $postData
+     * @param  int          $copyProjectID
      * @access protected
      * @return object|false
      */
-    protected function prepareCreateExtras(object $postData): object|false
+    protected function prepareCreateExtras(object $postData, int $copyProjectID): object|false
     {
-        $project = $postData->setDefault('status', 'wait')
+        $copyProject = $this->project->getByID($copyProjectID);
+        $project     = $postData->setDefault('status', 'wait')
             ->setIF($this->post->longTime || $this->post->delta == '999', 'end', LONG_TIME)
             ->setIF($this->post->longTime || $this->post->delta == '999', 'days', 0)
             ->setIF($this->post->acl      == 'open', 'whitelist', '')
@@ -27,6 +29,8 @@ class projectZen extends project
             ->setIF($this->post->multiple != 'on', 'multiple', '0')
             ->setIF($this->post->multiple == 'on' || !in_array($this->post->model, array('scrum', 'kanban')) || $this->config->vision == 'lite', 'multiple', '1')
             ->setIF($this->post->model == 'ipd', 'stageBy', 'project')
+            ->setIF(isset($copyProject->multiple), 'multiple', $copyProject->multiple)
+            ->setIF(isset($copyProject->hasProduct), 'hasProduct', $copyProject->hasProduct)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', $this->post->name)
