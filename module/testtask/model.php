@@ -1965,10 +1965,10 @@ class testtaskModel extends model
                 break;
             case 'actions':
                 if($isScene) break;
-                if(!empty($run->retractConfirm))
+                if(!empty($run->confirmeObject))
                 {
-                    $retractObject = join(',', $run->retractObject);
-                    common::printIcon('testcase', 'confirmDemandRetract', "objectID=$run->case&object=case&extra=$retractObject", $run, 'list', 'search', '', 'iframe', true);
+                    $method = $run->confirmeObject['type'] == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+                    common::printIcon('testcase', $method, "objectID=$run->case&object=case&extra={$run->confirmeObject['id']}", $run, 'list', 'search', '', 'iframe', true);
                     break;
                 }
 

@@ -138,10 +138,10 @@
               <?php
               if($canBeChanged)
               {
-                  if(!empty($task->retractConfirm))
+                  if(!empty($task->confirmeObject))
                   {
-                      $retractObject = join(',', $task->retractObject);
-                       common::printIcon('task', 'confirmDemandRetract', "objectID=$task->id&object=task&extra=$retractObject", $task, 'browse', 'search', '', 'iframe', true);
+                      $method = $task->confirmeObject['type'] == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+                      common::printIcon('task', $method, "objectID=$task->id&object=task&extra={$task->confirmeObject['id']}", $task, 'browse', 'search', '', 'iframe', true);
                   }
                   else if($task->needConfirm)
                   {

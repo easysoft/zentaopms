@@ -315,7 +315,7 @@ class product extends control
             $storyIdList[$story->id] = $story->id;
             if(!empty($story->children))
             {
-                if($this->config->edition == 'ipd') $this->story->getAffectObject($story->children, 'story');
+                if($this->config->edition == 'ipd' and $this->config->vision != 'or') $this->story->getAffectObject($story->children, 'story');
                 foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
             }
         }
@@ -357,7 +357,7 @@ class product extends control
 
         $productName = ($isProjectStory and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
 
-        if($this->config->edition == 'ipd') $this->story->getAffectObject($stories, 'story');
+        if($this->config->edition == 'ipd' and $this->config->vision != 'or') $this->story->getAffectObject($stories, 'story');
 
         /* Assign. */
         $this->view->title           = $productName . $this->lang->colon . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);

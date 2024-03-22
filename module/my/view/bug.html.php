@@ -145,10 +145,10 @@
           <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
           <td class='c-actions'>
             <?php
-            if(!empty($bug->retractConfirm))
+            if(!empty($bug->confirmeObject))
             {
-                $retractObject = join(',', $bug->retractObject);
-                 common::printIcon('bug', 'confirmDemandRetract', "objectID=$bug->id&object=bug&extra=$retractObject", $bug, 'browse', 'search', '', 'iframe', true);
+                 $method = $bug->confirmeObject['type'] == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+                 common::printIcon('bug', $method, "objectID=$bug->id&object=bug&extra={$bug->confirmeObject['id']}", $bug, 'browse', 'search', '', 'iframe', true);
             }
             else if($canBeChanged)
             {

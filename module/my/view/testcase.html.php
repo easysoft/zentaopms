@@ -112,10 +112,10 @@
           <td class='result-testcase <?php echo $case->lastRunResult;?>'><?php echo $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted;?></td>
           <td class='c-actions'>
             <?php
-            if(!empty($case->retractConfirm))
+            if(!empty($case->confirmeObject))
             {
-                $retractObject = join(',', $case->retractObject);
-                 common::printIcon('testcase', 'confirmDemandRetract', "objectID=$case->id&object=case&extra=$retractObject", $case, 'browse', 'search', '', 'iframe', true);
+                 $method = $case->confirmeObject['type'] == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+                 common::printIcon('testcase', $method, "objectID=$case->id&object=case&extra={$case->confirmeObject['id']}", $case, 'browse', 'search', '', 'iframe', true);
             }
             else if($canBeChanged)
             {

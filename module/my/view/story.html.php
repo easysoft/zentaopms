@@ -100,10 +100,10 @@
           <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
             <?php
-            if(!empty($story->retractConfirm))
+            if(!empty($story->confirmeObject))
             {
-                $retractObject = join(',', $story->retractObject);
-                 common::printIcon('story', 'confirmDemandRetract', "objectID=$story->id&object=story&extra=$retractObject", $story, 'browse', 'search', '', 'iframe', true);
+                $method = $story->confirmeObject['type'] == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+                common::printIcon('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObject['id']}", $story, 'browse', 'search', '', 'iframe', true);
             }
             else if($canBeChanged)
             {
