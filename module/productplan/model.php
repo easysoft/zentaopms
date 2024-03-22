@@ -440,7 +440,7 @@ class productplanModel extends model
         $planID = $this->dao->lastInsertID();
         $this->file->updateObjectID($this->post->uid, $planID, 'plan');
         $this->loadModel('score')->create('productplan', 'create', $planID);
-        if(!empty($plan->parent) && $parentPlan->parent == '0')
+        if($plan->parent > 0 && empty($parentPlan->parent))
         {
             $plan->id = $planID;
             $this->transferStoriesAndBugs($plan);
@@ -500,7 +500,11 @@ class productplanModel extends model
         if(dao::isError()) return false;
 
         $this->file->updateObjectID($this->post->uid, $oldPlan->id, 'plan');
-        if(!empty($plan->parent) && isset($parentPlan->parent) && $parentPlan->parent == '0') $this->transferStoriesAndBugs($plan);
+        if(!empty($plan->parent) && empty($parentPlan->parent))
+        {
+            $plan->id = $oldPlan->id;
+            $this->transferStoriesAndBugs($plan);
+        }
         return common::createChanges($oldPlan, $plan);
     }
 
@@ -1147,9 +1151,11 @@ class productplanModel extends model
 
         /* Transfer stories linked with the parent plan to the child plan. */
         $stories       = $this->dao->select('*')->from(TABLE_STORY)->where("CONCAT(',', plan, ',')")->like("%,{$plan->parent},%")->fetchAll('id');
+        $existStories  = $this->dao->select('story')->from(TABLE_PLANSTORY)->where('plan')->eq($plan->id)->fetchPairs('story');
         $unlinkStories = array();
         foreach($stories as $storyID => $story)
         {
+            if(isset($existStories[$storyID])) $unlinkStories[$storyID] = $storyID;
             if(!empty($story->branch) && strpos(",$plan->branch,", ",$story->branch,") === false)
             {
                 $unlinkStories[$storyID] = $storyID;
