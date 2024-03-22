@@ -966,3 +966,26 @@ $lang->ai->engineeredPrompts->askForFunctionCalling = array((object)array('role'
 
 $lang->ai->aiResponseException = array();
 $lang->ai->aiResponseException['notFunctionCalling'] = 'The response is not a function calling';
+
+$lang->ai->assistants = new stdclass();
+$lang->ai->assistants->title                    = 'AI Assistant';
+$lang->ai->assistants->create                   = 'Add Assistant';
+$lang->ai->assistants->edit                     = 'Edit Assistant';
+$lang->ai->assistants->name                     = 'Assistant Name';
+$lang->ai->assistants->refModel                 = 'Referenced Language Model';
+$lang->ai->assistants->createdDate              = 'Creation Time';
+$lang->ai->assistants->publishedDate            = 'Publication Time';
+$lang->ai->assistants->desc                     = 'Description';
+$lang->ai->assistants->descPlaceholder          = 'Please briefly describe the functions of this AI assistant and the experience it can bring to users.';
+$lang->ai->assistants->systemMessage            = 'System Built-in Message';
+$lang->ai->assistants->systemMessagePlaceholder = 'You can give this AI dialogue a "persona", for example, "You are a weekly report assistant, you will generate a formatted weekly report based on the input content".';
+$lang->ai->assistants->greetings                = 'Greetings';
+$lang->ai->assistants->greetingsPlaceholder     = 'You can set the greeting message for this AI dialogue, for example, "Hello, I am your weekly report assistant, are you still troubled by writing weekly reports? Try sending me a week\'s work?"';
+$lang->ai->assistants->publish                  = 'Publish';
+$lang->ai->assistants->withdraw                 = 'Withdraw';
+
+$lang->ai->assistants->statusList = array();
+$lang->ai->assistants->statusList['0']   = 'Unpublished';
+$lang->ai->assistants->statusList['off'] = 'Unpublished';
+$lang->ai->assistants->statusList['1']   = 'Published';
+$lang->ai->assistants->statusList['on']  = 'Published';

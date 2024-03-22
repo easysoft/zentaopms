@@ -282,6 +282,41 @@ class ai extends control
     }
 
     /**
+     * List assistants.
+     * @param  string  $orderBy
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
+     * @access public
+     * @return void
+     */
+    public function assistants($orderBy = 'id_asc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+
+        $assistants = $this->ai->getAssistants($pager, $orderBy);
+        $models = $this->ai->getLanguageModels('', false);
+        $assistants = array_map(function ($assistant) use ($models)
+        {
+            $assistant->model = current(array_filter($models, function ($model) use ($assistant)
+            {
+                return $model->id == $assistant->modelId;
+            }))->name;
+
+            if(empty($assistant->publishedDate)) $assistant->publishedDate = '-';
+            return $assistant;
+        }, $assistants);
+
+        $this->view->assistants = $assistants;
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
+        $this->view->title   = $this->lang->ai->assistants->title;
+        $this->display();
+    }
+
+    /**
      * create an assistant.
      *
      * @access public

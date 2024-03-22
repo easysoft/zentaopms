@@ -215,5 +215,6 @@ $lang->admin->ai->model        = '语言模型';
 $lang->admin->ai->conversation = '会话';
 $lang->admin->ai->miniPrograms = '小程序';
 $lang->admin->ai->prompt       = '提词';
+$lang->admin->ai->assistant    = 'AI 助手';
 
 include dirname(__FILE__) . '/menu.php';

@@ -966,3 +966,26 @@ $lang->ai->engineeredPrompts->askForFunctionCalling = array((object)array('role'
 
 $lang->ai->aiResponseException = array();
 $lang->ai->aiResponseException['notFunctionCalling'] = 'AI 提词执行返回值结构不正确，请重试（可能可以通过优化提词来解决）';
+
+$lang->ai->assistants = new stdclass();
+$lang->ai->assistants->title                    = 'AI 助手';
+$lang->ai->assistants->create                   = '添加助手';
+$lang->ai->assistants->edit                     = '编辑助手';
+$lang->ai->assistants->name                     = '助手名称';
+$lang->ai->assistants->refModel                 = '引用语言模型';
+$lang->ai->assistants->createdDate              = '创建时间';
+$lang->ai->assistants->publishedDate            = '发布时间';
+$lang->ai->assistants->desc                     = '简介';
+$lang->ai->assistants->descPlaceholder          = '请简述此AI助手的功能及可以给使用者带来的体验。';
+$lang->ai->assistants->systemMessage            = '系统内置消息';
+$lang->ai->assistants->systemMessagePlaceholder = '您可以赋予此AI对话“人设”，例如，“你是一个周报小助手，会根据输入的内容生成格式化的周报”。';
+$lang->ai->assistants->greetings                = '问候语';
+$lang->ai->assistants->greetingsPlaceholder     = '您可以设置此AI对话的打招呼文案，例如，“哈喽，我是你的周报小助手，还在为写周报困扰吗，试试将一周的工作发送给我试试？”';
+$lang->ai->assistants->publish                  = '发布';
+$lang->ai->assistants->withdraw                 = '下架';
+
+$lang->ai->assistants->statusList = array();
+$lang->ai->assistants->statusList['0']   = '未发布';
+$lang->ai->assistants->statusList['off'] = '未发布';
+$lang->ai->assistants->statusList['1']   = '已发布';
+$lang->ai->assistants->statusList['on']  = '已发布';

@@ -56,6 +56,14 @@ class aiModel extends model
         {
             if($object->enabled == '0') return false;
         }
+        elseif (strtolower($action) === 'assistantpublish')
+        {
+            if($object->enabled == '1') return false;
+        }
+        elseif (strtolower($action) === 'assistantwithdraw')
+        {
+            if($object->enabled == '0') return false;
+        }
 
         return true;
     }
@@ -2711,6 +2719,14 @@ class aiModel extends model
         if(dao::isError()) return false;
 
         return true;
+    }
+
+    public function getAssistants($pager = null, $orderBy = 'id_desc')
+    {
+        return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
     }
 
     /**
