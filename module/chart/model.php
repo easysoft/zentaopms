@@ -866,6 +866,7 @@ class chartModel extends model
     public function getTables($sql)
     {
         $processedSql = trim($sql, ';');
+        $processedSql = trim($processedSql);
         $processedSql = str_replace(array("\r\n", "\n"), ' ', $processedSql);
         $processedSql = str_replace('`', '', $processedSql);
         preg_match_all('/^select (.+) from (.+)$/i', $processedSql, $selectAndFrom);
