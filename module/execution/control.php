@@ -91,7 +91,7 @@ class execution extends control
         $this->execution->setMenu($executionID, 0, $extra);
 
         /* Assign view data. */
-        if($this->app->tab == 'project') $this->view->projectID = $executionID;
+        if($this->app->tab == 'project') $this->view->projectID = $execution->project;
         $this->view->hidden          = !empty($project->hasProduct) ? '' : 'hide';
         $this->view->executions      = $this->executions;
         $this->view->execution       = $execution;
