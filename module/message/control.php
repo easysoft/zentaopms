@@ -82,11 +82,12 @@ class message extends control
     {
         if(strtolower($this->server->request_method) == "post")
         {
+            $this->loadModel('setting');
             $data = fixer::input('post')->get();
             $data->messageSetting = !empty($data->messageSetting) ? json_encode($data->messageSetting) : '';
             $data->blockUser      = !empty($data->blockUser) ? implode(',', $data->blockUser) : '';
-            $this->loadModel('setting')->setItem('system.message.setting', $data->messageSetting);
-            $this->loadModel('setting')->setItem('system.message.blockUser', $data->blockUser);
+            $this->setting->setItem('system.message.setting@' . $this->config->vision, $data->messageSetting);
+            $this->setting->setItem('system.message.blockUser@' . $this->config->vision, $data->blockUser);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
