@@ -95,6 +95,7 @@ $config->upgrade->execFlow['18_9']        = array('functions' => 'addDefaultTrai
 $config->upgrade->execFlow['18_10_1']     = array('functions' => 'migrateAIModelConfig');
 $config->upgrade->execFlow['20_0_alpha1'] = array('functions' => 'revertStoryCustomFields');
 $config->upgrade->execFlow['20_0_beta1']  = array('functions' => 'hideOA,updateMetricDateType,update18101,migrateAIModelConfig');
+$config->upgrade->execFlow['20_0_beta2']  = array('functions' => 'updateWorkflowFieldDefaultValue');
 
 if(!empty($config->isINT))
 {
