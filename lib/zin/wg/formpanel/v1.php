@@ -177,18 +177,27 @@ class formPanel extends panel
         $layout = $this->prop('layout');
         if($layout == 'grid') return null;
 
-        $fields    = $app->control->appendExtendForm('info', data($app->getModuleName()));
+        $data      = data($app->getModuleName());
+        $fields    = $app->control->appendExtendForm('info', $data);
         $extraMain = array();
         foreach($fields as $field)
         {
             $extraMain[] = formGroup
             (
+                $field->control == 'file' && $data->files ? fileList
+                (
+                    set::files($data->files),
+                    set::extra($field->field),
+                    set::fieldset(false),
+                    set::showEdit(true),
+                    set::showDelete(true)
+                ) : null,
                 set::width($field->width),
                 set::label($field->name),
                 formGroup
                 (
                     set::id($field->field),
-                    set::name($field->field),
+                    set::name($field->field . (is_array($fieldControl) && $fieldControl['control'] == 'checkList' ? '[]' : '' )),
                     set::required($field->required),
                     set::control($field->control),
                     set::items($field->items),
