@@ -3648,10 +3648,11 @@ class storyModel extends model
     {
         $storyGrades       = array();
         $requirementGrades = array();
-        $showGrades = isset($this->config->{$storyType}->showGrades) ? $this->config->{$storyType}->showGrades : null;
+
+        $showGrades = isset($this->config->{$storyType}->showGrades);
         if($showGrades)
         {
-            foreach(explode(',', $showGrades) as $grade)
+            foreach(explode(',', $this->config->{$storyType}->showGrades) as $grade)
             {
                 if(!$grade) continue;
                 if(strpos($grade, 'requirement') !== false) $requirementGrades[] = str_replace('requirement', '', $grade);
@@ -3666,14 +3667,14 @@ class storyModel extends model
             ->andWhere('deleted')->eq('0')
             ->beginIF($storyType == 'requirement')
             ->andWhere('type')->eq('story')
-            ->beginIF($storyGrades)->andWhere('grade')->in($storyGrades)->fi()
+            ->beginIF($showGrades && isset($storyGrades))->andWhere('grade')->in($storyGrades)->fi()
             ->fi()
             ->beginIF($storyType == 'epic')
             ->andWhere('(type')->eq('requirement')
-            ->beginIF($requirementGrades)->andWhere('grade')->in($requirementGrades)->fi()
+            ->beginIF($showGrades && isset($requirementGrades))->andWhere('grade')->in($requirementGrades)->fi()
             ->markRight(1)
             ->orWhere('(type')->eq('story')
-            ->beginIF($storyGrades)->andWhere('grade')->in($storyGrades)->fi()
+            ->beginIF($showGrades && isset($storyGrades))->andWhere('grade')->in($storyGrades)->fi()
             ->markRight(1)
             ->fi()
             ->fetchAll('id');

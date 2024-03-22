@@ -847,7 +847,7 @@ class product extends control
      */
     public function ajaxSetShowGrades(string $storyType, string $showGrades)
     {
-        $this->loadModel('setting')->updateItem("{$this->app->user->account}.$storyType.showGrades", $showGrades);
+        if($showGrades) $this->loadModel('setting')->updateItem("{$this->app->user->account}.$storyType.showGrades", $showGrades);
     }
 
     /**
