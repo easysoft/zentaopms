@@ -165,7 +165,7 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function updateMetricLib()
+    public function updateMetricLib($from = 'cron')
     {
         // 保存当前的错误报告级别和显示错误的设置
         $originalDebug = $this->config->debug;
@@ -189,7 +189,7 @@ class metric extends control
                 $rows = $statement->fetchAll();
                 $this->metricZen->calcMetric($rows, $calcGroup->calcList);
 
-                $recordWithCode = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
+                $recordWithCode = $this->metricZen->prepareMetricRecord($calcGroup->calcList, $from);
                 $this->metric->insertMetricLib($recordWithCode);
             }
             catch(Exception $e)
