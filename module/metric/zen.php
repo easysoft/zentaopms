@@ -180,12 +180,16 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function prepareMetricRecord($calcList)
+    protected function prepareMetricRecord($calcList, $from = 'cron')
     {
-        $yesterday = strtotime('-1 day', strtotime('today'));
-        $yesterday = date('j', $yesterday);
-        $today     = date('j');
-        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => "$today,$yesterday");
+        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2));
+
+        if($from == 'cron')
+        {
+            $yesterday = date('j', strtotime('-1 day', strtotime('today')));
+            $today     = date('j');
+            $options['day'] = "$today,$yesterday";
+        }
 
         $now        = helper::now();
         $dateValues = $this->metric->generateDateValues($now);
