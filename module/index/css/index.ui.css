@@ -4,7 +4,7 @@
     --zt-apps-bar-bg: var(--color-canvas);
     --zt-menu-width: 100px;
     --zt-menu-fold-width: 64px;
-    --zt-menu-bg: var(--color-gray-800);
+    --zt-menu-bg: var(--color-primary-600);
 }
 [lang^='en'] {--zt-menu-width: 106px;}
 
