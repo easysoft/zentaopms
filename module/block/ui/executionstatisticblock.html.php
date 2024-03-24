@@ -42,51 +42,194 @@ foreach($projects as $projectID => $projectName)
     $projectItems[] = array('text' => $projectName, 'data-url' => $url, 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
 }
 
-$burn = center
+/* 燃尽图。Burn chart. */
+$burn = div
 (
-    setClass((!$longBlock ? ' py-6 w-1/2' : '')),
-    cell
+    setClass('h-28'),
+    div(setClass('font-bold mb-2'), $lang->block->executionstatistic->burn),
+    burn
     (
-        setClass('flex-1 w-full'),
-        div
+        set::responsive(false),
+        set::height(80),
+        set::referenceLine(true),
+        set::lineSize(3),
+        set::data($chartData['burnLine'])
+    )
+);
+
+/* 进度环。Progress circle. */
+$progressCircle = progressCircle
+(
+    setClass('relative w-28 h-28 hide-before-init opacity-0 transition-opacity'),
+    set::percent($execution->progress),
+    set::size(112),
+    set::text(false),
+    set::circleWidth(0.06),
+    div(span(setClass('text-2xl font-bold'), $execution->progress), '%'),
+    row
+    (
+        setClass('text-gray items-center gap-1'),
+        $lang->block->executionstatistic->progress,
+        icon
         (
-            $longBlock ? setClass('pb-2') : null,
-            span(setClass('font-bold'), $lang->block->executionstatistic->burn)
-        ),
-        div
-        (
-            setClass('py-2 chart line-chart'),
-            echarts
+            'help',
+            setClass('opacity-50 text-sm cursor-pointer'),
+            toggle::popover(array
             (
-                set::color(array('#2B80FF', '#17CE97')),
-                set::grid(array('left' => 0, 'bottom' => 0, 'top' => 0, 'right' => 0)),
-                set::legend(array('show' => false, 'width' => '100%')),
-                set::xAxis(array('show' => false, 'type' => 'category', 'data' => $chartData['labels'], 'boundaryGap' => false)),
-                set::yAxis(array('show' => false)),
-                set::series
-                (
-                    array
-                    (
-                        array
-                        (
-                            'type'       => 'line',
-                            'data'       => $chartData['baseLine'],
-                            'symbolSize' => 0,
-                            'itemStyle'  => array('normal' => array('color' => '#D8D8D8', 'lineStyle' => array('width' => 2, 'color' => '#F1F1F1')))
-                        ),
-                        array
-                        (
-                            'data'       => $chartData['burnLine'],
-                            'type'       => 'line',
-                            'symbolSize' => 0,
-                            'areaStyle'  => array('color' => array('type' => 'linear', 'x' => '0', 'y' => '0', 'x2' => '0', 'y2' => '1', 'colorStops' => array(array('offset' => 0, 'color' => '#DDECFE'), array('offset' => 1, 'color' => '#FFF')), 'global' => false))
-                        )
-                    )
-                )
-            )->size('100%', $longBlock ? 64 : 80)
+                'content'   => array('html' => $lang->block->tooltips['executionProgress']),
+                'placement' => 'bottom',
+                'width'     => 400,
+                'trigger'   => 'hover',
+                'closeBtn'  => false,
+                'className' => 'leading-5'
+            ))
         )
     )
 );
+
+/* 工时信息。 Hours info. */
+$hoursInfo = row
+(
+    setClass('justify-evenly w-full'),
+    cell
+    (
+        setClass('flex-1 text-center'),
+        div
+        (
+            span(setClass('text-lg num font-bold'), !empty($execution->totalEstimate) ? $execution->totalEstimate : 0),
+            span(setClass('text-gray'), 'h')
+        ),
+        div
+        (
+            setClass('text-sm text-gray'),
+            $lang->block->executionstatistic->totalEstimate
+        )
+    ),
+    cell
+    (
+        setClass('flex-1 text-center'),
+        div
+        (
+            span(setClass('text-lg num font-bold'), !empty($execution->totalConsumed) ? $execution->totalConsumed : 0),
+            span(setClass('text-gray'), 'h')
+        ),
+        div
+        (
+            setClass('text-sm text-gray'),
+            $lang->block->executionstatistic->totalConsumed
+        )
+    ),
+    cell
+    (
+        setClass('flex-1 text-center'),
+        div
+        (
+            span(setClass('text-lg num font-bold'), !empty($execution->totalLeft) ? $execution->totalLeft : 0),
+            span(setClass('text-gray'), 'h')
+        ),
+        div
+        (
+            setClass('text-sm text-gray'),
+            $lang->block->executionstatistic->totalLeft
+        )
+    )
+);
+
+/* 任务故事信息。Task story info. */
+$taskStoryInfo = col
+(
+    setClass('gap-2'),
+    row
+    (
+        div(setClass('w-12 flex-none'), strong($lang->block->executionstatistic->task)),
+        row
+        (
+            setClass('flex-auto'),
+            cell
+            (
+                setClass('w-1/3'),
+                span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalTask),
+                strong(setClass('num ml-2'), $execution->totalTask)
+            ),
+            cell
+            (
+                setClass('w-1/3'),
+                span(setClass('text-sm text-gray'), $lang->block->executionstatistic->undoneTask),
+                strong(setClass('num ml-2'), $execution->undoneTask)
+            ),
+            cell
+            (
+                setClass('w-1/3'),
+                span(setClass('text-sm text-gray'), $lang->block->executionstatistic->yesterdayDoneTask),
+                strong(setClass('num ml-2'), $execution->yesterdayDoneTask)
+            )
+        )
+    ),
+    row
+    (
+        div(setClass('w-12 flex-none'), strong($lang->block->executionstatistic->story)),
+        row
+        (
+            setClass('flex-auto'),
+            cell
+            (
+                setClass('w-1/3'),
+                span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalStory),
+                strong(setClass('num ml-2'), $execution->totalStory)
+            ),
+            cell
+            (
+                setClass('w-1/3'),
+                span(setClass('text-sm text-gray'), $lang->block->executionstatistic->doneStory),
+                strong(setClass('num ml-2'), $execution->doneStory)
+            )
+        )
+    )
+);
+
+$blockView = null;
+if($longBlock)
+{
+    $blockView = row
+    (
+        setClass('gap-4 h-full items-center px-4'),
+        col
+        (
+            setClass('gap-6 w-2/5 flex-none items-center pr-2'),
+            $progressCircle,
+            $hoursInfo
+        ),
+        col
+        (
+            setClass('gap-6 flex-auto'),
+            $burn,
+            $taskStoryInfo
+        )
+    );
+}
+else
+{
+    $blockView = col
+    (
+        setClass('gap-8 px-6 pt-10'),
+        row
+        (
+            setClass('gap-2 items-center w-full'),
+            cell
+            (
+                setClass('gap-2 w-2/5 flex-none items-center'),
+                $progressCircle,
+            ),
+            cell
+            (
+                setClass('flex-auto min-w-0'),
+                $burn
+            )
+        ),
+        $hoursInfo,
+        $taskStoryInfo
+    );
+}
 
 statisticBlock
 (
@@ -96,7 +239,7 @@ statisticBlock
         (
             btn
             (
-                setClass('font-normal rounded-full gray-400-outline size-md ml-3'),
+                setClass('font-normal rounded-full gray-400-outline size-sm ml-3 text-sm'),
                 set::caret(true),
                 isset($projects[$currentProjectID]) ? $projects[$currentProjectID] : $lang->block->executionstatistic->allProject,
             ),
@@ -107,177 +250,5 @@ statisticBlock
     set::active($active),
     set::moreLink(createLink('execution', 'all', 'status=' . $block->params->type)),
     set::items($items),
-    div
-    (
-        setClass('flex h-full ' . ($longBlock ? '' : 'col')),
-        cell
-        (
-            setClass('flex-1'),
-            $longBlock ? set('width', '70%') : null,
-            div
-            (
-                setClass('flex h-full ' . ($longBlock ? '' : 'col')),
-                cell
-                (
-                    $longBlock ? set('width', '40%') : null,
-                    setClass('p-4'),
-                    div
-                    (
-                        setClass('flex align-center justify-around' . ($longBlock ? ' py-4' : '')),
-                        center
-                        (
-                            setClass('w-1/2'),
-                            center
-                            (
-                                setClass('relative w-28 h-28 hide-before-init opacity-0 transition-opacity'),
-                                setData(array('zui' => 'ProgressCircle', 'percent' => $execution->progress, 'size' => 112, 'text' => false, 'circle-width' => 0.06)),
-                                div
-                                (
-                                    setClass('center absolute inset-0 num gap-1'),
-                                    div(span(setClass('text-2xl font-bold'), $execution->progress), '%'),
-                                    div
-                                    (
-                                        span
-                                        (
-                                            setClass('text-sm text-gray'),
-                                            $lang->block->executionstatistic->progress,
-                                            icon
-                                            (
-                                                setClass('opacity-50 ml-0.5 text-sm cursor-pointer'),
-                                                toggle::popover
-                                                (
-                                                    array
-                                                    (
-                                                        'content'   => array('html' => $lang->block->tooltips['executionProgress']),
-                                                        'placement' => 'bottom',
-                                                        'width'     => 400,
-                                                        'closeBtn'  => false,
-                                                        'className' => 'leading-5'
-                                                    )
-                                                ),
-                                                'help'
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        ),
-                        !$longBlock ? $burn : null
-                    ),
-                    cell
-                    (
-                        setClass('flex justify-evenly gap-1'),
-                        cell
-                        (
-                            setClass('flex-1 text-center'),
-                            div
-                            (
-                                span(setClass('text-lg num font-bold'), !empty($execution->totalEstimate) ? $execution->totalEstimate : 0),
-                                span(setClass('text-gray'), 'h')
-                            ),
-                            div
-                            (
-                                span
-                                (
-                                    setClass('text-sm text-gray'),
-                                    $lang->block->executionstatistic->totalEstimate
-                                )
-                            )
-                        ),
-                        cell
-                        (
-                            setClass('flex-1 text-center'),
-                            div
-                            (
-                                span(setClass('text-lg num font-bold'), !empty($execution->totalConsumed) ? $execution->totalConsumed : 0),
-                                span(setClass('text-gray'), 'h')
-                            ),
-                            div
-                            (
-                                span
-                                (
-                                    setClass('text-sm text-gray'),
-                                    $lang->block->executionstatistic->totalConsumed
-                                )
-                            )
-                        ),
-                        cell
-                        (
-                            setClass('flex-1 text-center'),
-                            div
-                            (
-                                span(setClass('text-lg num font-bold'), !empty($execution->totalLeft) ? $execution->totalLeft : 0),
-                                span(setClass('text-gray'), 'h')
-                            ),
-                            div
-                            (
-                                span
-                                (
-                                    setClass('text-sm text-gray'),
-                                    $lang->block->executionstatistic->totalLeft
-                                )
-                            )
-                        )
-                    )
-                ),
-                cell
-                (
-                    $longBlock ? set('width', '60%') : null,
-                    setClass('px-4 pb-4' . ($longBlock ? ' pt-6' : '')),
-                    $longBlock ? $burn : null,
-                    cell
-                    (
-                        setClass('pt-6'),
-                        row
-                        (
-                            div(setClass('w-12 flex-none'), strong($lang->block->executionstatistic->task)),
-                            row
-                            (
-                                setClass('flex-auto'),
-                                cell
-                                (
-                                    setClass('w-1/3'),
-                                    span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalTask),
-                                    strong(setClass('num ml-2'), $execution->totalTask)
-                                ),
-                                cell
-                                (
-                                    setClass('w-1/3'),
-                                    span(setClass('text-sm text-gray'), $lang->block->executionstatistic->undoneTask),
-                                    strong(setClass('num ml-2'), $execution->undoneTask)
-                                ),
-                                cell
-                                (
-                                    setClass('w-1/3'),
-                                    span(setClass('text-sm text-gray'), $lang->block->executionstatistic->yesterdayDoneTask),
-                                    strong(setClass('num ml-2'), $execution->yesterdayDoneTask)
-                                )
-                            )
-                        ),
-                        row
-                        (
-                            setClass('pt-3'),
-                            div(setClass('w-12 flex-none'), strong($lang->block->executionstatistic->story)),
-                            row
-                            (
-                                setClass('flex-auto'),
-                                cell
-                                (
-                                    setClass('w-1/3'),
-                                    span(setClass('text-sm text-gray'), $lang->block->executionstatistic->doneStory),
-                                    strong(setClass('num ml-2'), $execution->doneStory)
-                                ),
-                                cell
-                                (
-                                    setClass('w-1/3'),
-                                    span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalStory),
-                                    strong(setClass('num ml-2'), $execution->totalStory)
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        )
-    )
+    $blockView,
 );
