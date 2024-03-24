@@ -175,11 +175,11 @@ class statisticBlock extends blockPanel
             setClass('flex-auto block-statistic-panes overflow-clip'),
             $panes,
             on::show('.tab-pane.need-load', <<<'JS'
-            if(!$(e.target).hasClass('tab-pane')) return;
             const $target = $(target);
+            if(!$target.hasClass('tab-pane')) return;
             const blockID = $target.closest(".dashboard-block").attr("data-id");
-            const url = $(target).data("active");
-            loadPartial(url, `#${target.id}>*`, {id: "blockTab_' . $id . '"});
+            const url = $target.data("active");
+            loadPartial(url, `#${target.id}>*`, {id: "blockTab_' . $id . '", success: () => $target.removeClass("need-load")});
             $("#dashboard").dashboard("update", {id: blockID, fetch: url, needLoad: false});
             JS)
         );
