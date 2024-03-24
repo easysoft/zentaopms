@@ -625,10 +625,10 @@ $lang->block->executionstatistic->totalLeft         = '剩余工时';
 $lang->block->executionstatistic->burn              = '执行燃尽图';
 $lang->block->executionstatistic->story             = '需求';
 $lang->block->executionstatistic->doneStory         = '已完成';
-$lang->block->executionstatistic->totalStory        = '总数量';
+$lang->block->executionstatistic->totalStory        = '需求总数';
 $lang->block->executionstatistic->task              = '任务';
 $lang->block->executionstatistic->totalTask         = '任务总数';
-$lang->block->executionstatistic->undoneTask        = '未完成任务';
+$lang->block->executionstatistic->undoneTask        = '未完成';
 $lang->block->executionstatistic->yesterdayDoneTask = '昨日完成';
 
 $lang->block->executionoverview = new stdclass();
