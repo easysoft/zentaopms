@@ -1,11 +1,8 @@
-.projectstatistic-block {background: #FCFDFE;}
 .projectstatistic-block .panel-body {padding: 0;}
 .projectstatistic-block .tab-content {width: 78%;}
 .projectstatistic-block.block-sm .tab-content {width: 100%;}
-.projectstatistic-block .bg-secondary-pale {background: #F3F6FA;}
 
 .projectstatistic-block .project-statistic-table table {width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; padding-right: 1rem;}
-.projectstatistic-block .project-statistic-table table tr:first-child {background: url(static/svg/arrow-step1-grey.svg) center no-repeat; background-size: 100%;}
 .projectstatistic-block .project-statistic-table table th {padding-right: 0px; margin-top: 1rem; font-size: 12px;}
 .projectstatistic-block .project-statistic-table table td {padding-left: 0px; margin-top: 1rem;}
 .projectstatistic-block .tab-pane .nav-tabs>.nav-item>a:after {border-bottom: none;}
