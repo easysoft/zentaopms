@@ -2,8 +2,8 @@
 {
     --zt-apps-bar-height: 36px;
     --zt-apps-bar-bg: var(--color-canvas);
-    --zt-menu-width: 96px;
-    --zt-menu-fold-width: 36px;
+    --zt-menu-width: 100px;
+    --zt-menu-fold-width: 64px;
     --zt-menu-bg: var(--color-gray-800);
 }
 [lang^='en'] {--zt-menu-width: 106px;}
