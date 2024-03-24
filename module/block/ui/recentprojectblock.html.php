@@ -37,6 +37,24 @@ foreach($projects as $projectID => $project)
             div
             (
                 setClass('space-y-3'),
+                div
+                (
+                    span
+                    (
+                        setClass('text-gray mr-1'),
+                        $lang->projectCommon . $lang->project->member . ': ',
+                    ),
+                    sprintf($lang->block->totalMember, $project->teamCount)
+                ),
+                div
+                (
+                    span
+                    (
+                        setClass('text-gray mr-1'),
+                        $lang->project->end . ': '
+                    ),
+                    $project->end == LONG_TIME ? $lang->program->longTime : $project->end
+                ),
                 ($project->multiple && $execution) ? array
                 (
                     div
@@ -57,25 +75,7 @@ foreach($projects as $projectID => $project)
                             $lang->execution->statusList[$execution->status]
                         )
                     ),
-                ) : null,
-                div
-                (
-                    span
-                    (
-                        setClass('text-gray mr-1'),
-                        $lang->projectCommon . $lang->project->member . ': ',
-                    ),
-                    sprintf($lang->block->totalMember, $project->teamCount)
-                ),
-                div
-                (
-                    span
-                    (
-                        setClass('text-gray mr-1'),
-                        $lang->project->end . ': '
-                    ),
-                    $project->end == LONG_TIME ? $lang->program->longTime : $project->end
-                )
+                ) : null
             )
         )
     );
