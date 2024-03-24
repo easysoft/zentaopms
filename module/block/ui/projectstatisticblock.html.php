@@ -85,7 +85,7 @@ if($project)
             $lang->block->projectstatistic->lastestExecution,
             hasPriv('execution', 'task') ? a
             (
-                setClass('pl-2 text-primary'),
+                setClass('pl-2'),
                 set::href(helper::createLink('execution', 'task', "executionID={$project->executions[0]->id}")),
                 set('title', $project->executions[0]->name),
                 $project->executions[0]->name
@@ -422,7 +422,7 @@ statisticBlock
     (
         div
         (
-            setClass('flex bg-white leading-6 px-2 py-1 mt-1 mx-3 shadow items-center gap-x-2 justify-between' . ($longBlock ? ' h-10 mb-6 flex-nowrap' : 'h-20 mb-4 flex-wrap')),
+            setClass('flex bg-white leading-6 px-2 py-1 mt-1 mx-3 items-center gap-x-2 justify-between' . ($longBlock ? ' h-10 mb-6 flex-nowrap' : 'h-20 mb-4 flex-wrap')),
             $projectOverview,
             $lastestExecution
         ),
