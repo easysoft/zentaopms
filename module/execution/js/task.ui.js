@@ -110,11 +110,11 @@ window.renderCell = function(result, info)
 
         if(task.mode)
         {
-            html += "<span class='label gray-pale rounded-xl mr-1'>" + multipleAB + "</span>";
+            html += "<span class='label gray-pale rounded p-0 size-sm'>" + multipleAB + "</span>";
         }
         if(task.parent > 0)
         {
-            html += "<span class='label gray-pale rounded-xl mr-1'>" + childrenAB + "</span>";
+            html += "<span class='label gray-pale rounded p-0 size-sm'>" + childrenAB + "</span>";
         }
         if(task.color) result[0].props.style = 'color: ' + task.color;
         if(html) result.unshift({html});
