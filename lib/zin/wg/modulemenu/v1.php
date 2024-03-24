@@ -127,25 +127,32 @@ class moduleMenu extends wg
 
         $datatableId = $app->moduleName . ucfirst($app->methodName);
 
-        return div
+        $items = array();
+        if($settingLink) $items[] = array
         (
-            setClass('module-menu-actions col gap-2 py-3 px-4'),
-            $settingLink ? btn
+            'text'      => $settingText,
+            'url'       => $settingLink,
+            'data-app'  => $tab ? $tab : $app->tab
+        );
+        if($showDisplay) $items[] = array
+        (
+            'text'        => $lang->displaySetting,
+            'url'         => createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod"),
+            'data-toggle' => 'modal',
+            'data-size'   => 'md'
+        );
+
+        return dropdown
+        (
+            btn
             (
-                set::type('primary-pale'),
-                set::url($settingLink),
-                set::size('md'),
-                setData(array('app' => $tab ? $tab : $app->tab)),
-                $settingText
-            ) : null,
-            $showDisplay ? btn
-            (
-                toggle::modal(),
-                set::size('md'),
-                set::type('ghost text-gray'),
-                set::url(createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod")),
-                $lang->displaySetting
-            ) : null
+                setClass('ghost absolute right-1 top-1'),
+                set::icon('cog-outline'),
+                set::size('sm'),
+                set::caret(false)
+            ),
+            set::items($items),
+            set::placement('bottom-end')
         );
     }
 
@@ -199,7 +206,7 @@ class moduleMenu extends wg
             div
             (
                 setID('moduleMenu'),
-                setClass('shadow-sm rounded bg-canvas col rounded-sm'),
+                setClass('module-menu shadow-sm rounded bg-canvas col rounded-sm relative'),
                 $isInSidebar ? null : $header,
                 zui::tree
                 (
