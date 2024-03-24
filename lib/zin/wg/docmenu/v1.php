@@ -431,7 +431,7 @@ class docMenu extends wg
 
         $header = h::header
         (
-            setClass('module-menu-header h-10 flex items-center pl-4 flex-none gap-3', $isInSidebar ? 'is-fixed rounded rounded-r-none canvas' : ''),
+            setClass('doc-menu-header h-10 flex items-center pl-4 flex-none gap-3', $isInSidebar ? 'is-fixed rounded rounded-r-none canvas' : ''),
             span
             (
                 setClass('module-title text-lg font-semibold clip'),
@@ -453,17 +453,17 @@ class docMenu extends wg
                 ) : null,
                 div
                 (
-                    setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
+                    setClass('doc-menu rounded shadow-sm bg-white col rounded-sm'),
                     h::main
                     (
                         setClass($menuLink ? 'pt-3' : ''),
-                        setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
+                        setClass('col flex-auto overflow-y-auto overflow-x-hidden px-1'),
                         setStyle('--menu-selected-bg', 'none'),
                         zui::tree(set::_tag('menu'), $treeProps)
                     ),
                     $this->buildBtns()
                 ),
-                $isInSidebar ? h::js("$('#mainContainer').addClass('has-module-menu-header')") : null
+                $isInSidebar ? h::js("$('#mainContainer').addClass('has-doc-menu-header')") : null
             )
         );
     }
