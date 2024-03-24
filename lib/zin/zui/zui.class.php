@@ -203,6 +203,11 @@ class zui extends wg
         return $value ? setClass('disabled') : null;
     }
 
+    public static function gap($value)
+    {
+        return zui::skin('gap', $value, '0', 'gap');
+    }
+
     public static function width($value)
     {
         return zui::skin('w', $value, '0', 'width');
