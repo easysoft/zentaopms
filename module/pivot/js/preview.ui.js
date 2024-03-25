@@ -125,6 +125,12 @@ function loadCustomPivot()
     postAndLoadPage(link, form, '#table-pivot-preview');
 }
 
+exportData = function()
+{
+    const $domObj = $(".table-condensed")[0];
+    exportFile($domObj);
+}
+
 /**
  * 把日期字符串转换成日期对象。
  * Convert date string to date object.
@@ -226,10 +232,4 @@ getHeight = function(height)
     const parentGapHeight    = parentHeight - conditionHeight - panelHeight;
 
     return Math.min(windowHeight - headerHeight - menuHeight - conditionHeight - parentGapHeight - panelHeadingHeight - panelBodyPaddingY, height);
-}
-
-exportData = function()
-{
-    const $domObj = $(".table-condensed")[0];
-    exportFile($domObj);
 }
