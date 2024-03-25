@@ -185,7 +185,7 @@ detailBody
                 set::key('stories'),
                 set::title($lang->productplan->linkedStories),
                 set::active($type == 'story'),
-                toolbar
+                $plan->parent >= 0 ? toolbar
                 (
                     setClass('tab-actions absolute right-0 gap-2'),
                     setStyle('top', '-8px'),
@@ -210,7 +210,7 @@ detailBody
                         set::text($lang->productplan->linkStory),
                         bind::click("window.showLink('story')")
                     ) : null
-                ),
+                ) : null,
                 dtable
                 (
                     setID('storyDTable'),
@@ -241,18 +241,18 @@ detailBody
                 set::key('bugs'),
                 set::title($lang->productplan->linkedBugs),
                 set::active($type == 'bug'),
-                toolbar
+                $plan->parent >= 0 && common::hasPriv('productplan', 'linkBug')? toolbar
                 (
                     setClass('tab-actions absolute right-0 gap-2'),
                     setStyle('top', '-8px'),
-                    common::hasPriv('productplan', 'linkBug') ? btn
+                    btn
                     (
                         set::type('primary'),
                         set::icon('link'),
                         set::text($lang->productplan->linkBug),
                         bind::click("window.showLink('bug')")
-                    ) : null
-                ),
+                    )
+                ) : null,
                 dtable
                 (
                     setID('bugDTable'),
