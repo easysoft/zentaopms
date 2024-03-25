@@ -5,22 +5,22 @@ namespace zin;
 class dtable extends wg
 {
     protected static array $defineProps = array(
-        'className?:string="shadow rounded"', // 表格样式。
-        'id?:string',                            // ID。
-        'customCols?: bool|array',               // 是否支持自定义列。
-        'cols?:array',                           // 表格列配置。
-        'data?:array',                           // 表格数据源。
-        'module?:string',                        // 模块信息，主要是获取语言项。
-        'emptyTip?:string',                      // 表格数据源为空时显示的文本。
-        'createTip?:string',                     // 表格数据源为空时的创建文本。
-        'createLink?:array|string',              // 表格数据源为空时的创建链接。
-        'createAttr?:string',                    // 表格数据源为空时的创建链接属性。
-        'sortLink?:array|string',                // 排序链接。
-        'orderBy?:string',                       // 排序字段。
-        'loadPartial?: bool',                    // 启用部分加载，不更新浏览器地址栏 URL。
-        'loadOptions?: array',                   // 分页和排序加载选项。
-        'userMap?: array',                       // 用户账号姓名对应列表
-        'unassignedText?: string'                // 未指派文本
+        'className?:string="shadow ring rounded"', // CSS 类。
+        'id?:string',                              // ID。
+        'customCols?: bool|array',                 // 是否支持自定义列。
+        'cols?:array',                             // 表格列配置。
+        'data?:array',                             // 表格数据源。
+        'module?:string',                          // 模块信息，主要是获取语言项。
+        'emptyTip?:string',                        // 表格数据源为空时显示的文本。
+        'createTip?:string',                       // 表格数据源为空时的创建文本。
+        'createLink?:array|string',                // 表格数据源为空时的创建链接。
+        'createAttr?:string',                      // 表格数据源为空时的创建链接属性。
+        'sortLink?:array|string',                  // 排序链接。
+        'orderBy?:string',                         // 排序字段。
+        'loadPartial?: bool',                      // 启用部分加载，不更新浏览器地址栏 URL。
+        'loadOptions?: array',                     // 分页和排序加载选项。
+        'userMap?: array',                         // 用户账号姓名对应列表
+        'unassignedText?: string'                  // 未指派文本
     );
 
     static $dtableID = 0;
