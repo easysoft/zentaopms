@@ -242,11 +242,11 @@ $config->ai->menuPrint->locations['doc']['view'] = (object)array(
     'targetContainer' => '#docPanel > .panel-heading > .panel-actions > .toolbar',
 );
 
-$config->ai->injectAuditButton = new stdclass(); // TODO: fix this.
+$config->ai->injectAuditButton = new stdclass();
 $config->ai->injectAuditButton->locations = array();
 $config->ai->injectAuditButton->locations['task']['edit'] = array(
     'toolbar' => (object)array(
-        'targetContainer' => '#mainContent form div',
+        'targetContainer' => '#mainContent .detail-header, #mainContent .panel-heading, #mainContent form div',
         'injectMethod'    => 'append',
         'class'           => 'pull-right btn-toolbar',
     ),
@@ -258,8 +258,9 @@ $config->ai->injectAuditButton->locations['task']['edit'] = array(
 
 $config->ai->injectAuditButton->locations['bug']['create'] = array(
     'toolbar' => (object)array(
-        'targetContainer' => '#mainContent .main-header .btn-toolbar',
-        'injectMethod'    => 'prepend',
+        'targetContainer' => '#mainContent .panel-heading',
+        'injectMethod'    => 'append',
+        'containerStyles' => '{"padding-right": "8px"}',
     ),
     'action' => (object)array(
         'targetContainer' => '#mainContent .form-actions',
@@ -269,13 +270,12 @@ $config->ai->injectAuditButton->locations['bug']['create'] = array(
 
 $config->ai->injectAuditButton->locations['doc']['edit'] = array(
     'toolbar' => (object)array(
-        'targetContainer' => '#mainContent #headerBox .btn-tools',
-        'injectMethod'    => 'prepend',
+        'targetContainer' => '.titleBox',
+        'injectMethod'    => 'append',
     ),
     'action' => (object)array(
-        'targetContainer' => '#mainContent #headerBox .btn-tools',
-        'injectMethod'    => 'html',
-        'containerStyles' => '{"width": "600px"}'
+        'targetContainer' => '.titleBox',
+        'injectMethod'    => 'append',
     )
 );
 
