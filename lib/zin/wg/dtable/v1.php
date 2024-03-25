@@ -193,8 +193,9 @@ class dtable extends wg
                         foreach($modifier as $subModifier)
                         {
                             if(!is_callable($subModifier)) continue;
+                            if($subModifier instanceof \Closure) $subModifier = $subModifier->bindTo($item);
                             if(is_object($item)) $item->$key = $subModifier($item->$key);
-                            else $item[$key] = $subModifier($item[$key]);
+                            else                 $item[$key] = $subModifier($item[$key]);
                         }
                     }
                     $this->setProp('data', array_values($tableData));
