@@ -40,9 +40,11 @@ $getMeasureItem = function($data)
 };
 
 $blockNavCode = 'nav-' . uniqid();
-panel
+blockPanel
 (
-    set('class', 'welcome-block'),
+    setClass('welcome-block'),
+    set::title(false),
+    set::headingClass('pb-0 border-b-0'),
     to::heading
     (
         div
