@@ -1363,7 +1363,7 @@ class pivotModel extends model
         $data->groups      = $groups;
         $data->cols        = $cols;
         $data->array       = json_decode(json_encode($mergeRecords), true);
-        if($showColTotal == 'sum') $this->processLastRow($data->array[count($data->array) - 1]);
+        if($showColTotal == 'sum' && count($data->array)) $this->processLastRow($data->array[count($data->array) - 1]);
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
 
         $configs = $this->calculateMergeCellConfig($groups, $mergeRecords);
