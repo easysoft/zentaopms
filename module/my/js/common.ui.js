@@ -13,7 +13,7 @@ $(function()
             if(isBiz !== 0 || isMax !== 0) $.extend(countMap, {feedback: 'feedback', ticket: 'ticket'});
             if(isMax !== 0)                $.extend(countMap, {issue: 'issue', risk: 'risk', nc: 'qa', myMeeting: 'meeting'});
 
-            $.each(countMap, (name, key) => $mainNavbar.find('.nav-item > a[data-id=' + name + ']').append('<span class="label rounded-full gray-pale size-sm">' + todoCount[key] + '</span>'));
+            $.each(countMap, (name, key) => $mainNavbar.find('.nav-item > a[data-id=' + name + ']').append('<span class="label rounded gray-pale size-sm">' + todoCount[key] + '</span>'));
         }
     }
 });
