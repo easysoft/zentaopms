@@ -1,38 +1,30 @@
 function changeEngine(event)
 {
     const engine = $(event.target).val();
+    const repos = [];
+    for(const repoID in repoList)
+    {
+        const repo = repoList[repoID];
+        if(engine == 'jenkins')
+        {
+            repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
+            continue;
+        }
 
-    if(engine == 'jenkins')
-    {
-        $('.reference').addClass('hidden');
-    }
-    else
-    {
-        $('.reference').addClass('hidden');
-    }
-
-    var repos     = engine == 'gitlab' ? gitlabRepos : repoPairs;
-    var repoItems = [];
-    var repoID    = 0;
-    for(i in repos)
-    {
-        if(repoID == 0) repoID = i;
-        repoItems.push({'text': repos[i], 'value': i});
+        if(repo.SCM.toLowerCase() == engine) repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
     }
 
     const picker = $('[name=repo]').zui('picker');
-    picker.render({items: repoItems});
-    picker.$.setValue(repoID);
+    picker.render({items: repos});
+    picker.$.setValue(repos.length > 0 ? [0].value : '');
 
-    if(engine == 'gitlab')
+    if(engine == 'jenkins')
     {
-        $('#gitlabServerTR').removeClass('hidden');
-        $('#jenkinsServerTR').addClass('hidden');
+        $('#jenkinsServerTR').removeClass('hidden');
     }
     else
     {
-        $('#gitlabServerTR').addClass('hidden');
-        $('#jenkinsServerTR').removeClass('hidden');
+        $('#jenkinsServerTR').addClass('hidden');
     }
 
     var items = [];

@@ -2,24 +2,28 @@ function changeEngine(engine)
 {
     engine == 'jenkins' ? $('.reference').show() : $('.reference').hide();
 
-    var repos     = engine == 'gitlab' ? gitlabRepos : repoPairs;
-    var repoItems = [];
-    for(i in repos)
+    const repos = [];
+    for(const repoID in repoList)
     {
-        repoItems.push({'text': repos[i], 'value': i});
+        const repo = repoList[repoID];
+        if(engine == 'jenkins')
+        {
+            repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
+            continue;
+        }
+
+        if(repo.SCM.toLowerCase() == engine) repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
     }
     const picker = $('[name=repo]').zui('picker');
-    if(picker) picker.render({items: repoItems});
+    if(picker) picker.render({items: repos});
 
-    if(engine == 'gitlab')
+    if(engine == 'jenkins')
     {
-        $('#gitlabServerTR').removeClass('hidden');
-        $('#jenkinsServerTR').addClass('hidden');
+        $('#jenkinsServerTR').removeClass('hidden');
     }
     else
     {
-        $('#gitlabServerTR').addClass('hidden');
-        $('#jenkinsServerTR').removeClass('hidden');
+        $('#jenkinsServerTR').addClass('hidden');
     }
 }
 

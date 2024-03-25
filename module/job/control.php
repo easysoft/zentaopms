@@ -110,12 +110,8 @@ class job extends control
         $this->loadModel('ci');
         $this->app->loadLang('action');
 
-        list($repoPairs, $gitlabRepos, $repoTypes) = $this->jobZen->getRepoList($this->projectID);
-
         $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
-        $this->view->repoPairs           = $repoPairs;
-        $this->view->gitlabRepos         = $gitlabRepos;
-        $this->view->repoTypes           = $repoTypes;
+        $this->view->repoList            = $this->loadModel('repo')->getList($this->projectID);
         $this->view->products            = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
         $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
         $this->view->sonarqubeServerList = $this->pipeline->getPairs('sonarqube');
@@ -156,8 +152,6 @@ class job extends control
         if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
         $this->jobZen->getSubversionDir($repo, $job->triggerType);
 
-        list($repoPairs, $gitlabRepos, $repoTypes) = $this->jobZen->getRepoList($this->projectID, $repo);
-
         $products = $this->repo->getProductsByRepo($job->repo);
         if(!isset($products[$job->product]))
         {
@@ -171,10 +165,7 @@ class job extends control
         }
 
         $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
-        $this->view->repoPairs           = $repoPairs;
-        $this->view->gitlabRepos         = $gitlabRepos;
-        $this->view->repoTypes           = $repoTypes;
-        $this->view->repoType            = zget($repoTypes, $job->repo, 'Git');
+        $this->view->repoList            = $this->loadModel('repo')->getList($this->projectID);
         $this->view->job                 = $job;
         $this->view->products            = $products;
         $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');

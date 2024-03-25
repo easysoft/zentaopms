@@ -10,8 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('repoPairs', $repoPairs);
-jsVar('gitlabRepos', $gitlabRepos);
+jsVar('repoList', $repoList);
 jsVar('engine', $job->engine);
 jsVar('job', $job);
 jsVar('dirChange', $lang->job->dirChange);
@@ -142,7 +141,7 @@ formPanel
             set::required(true),
             set::width('1/2'),
             set::name('repo'),
-            set::items($repoPairs),
+            set::items(array()),
             set::value($job->repo),
             on::change('changeRepo')
         ),

@@ -108,34 +108,6 @@ class jobZen extends job
     }
 
     /**
-     * 获取版本库列表。
-     * Get repo list.
-     *
-     * @param  int       $projectID
-     * @param  object    $repo
-     * @access protected
-     * @return array
-     */
-    protected function getRepoList(int $projectID, object $repo = null): array
-    {
-        $repoList    = $this->loadModel('repo')->getList($projectID);
-        $repoPairs   = $repo ? array($repo->id => $repo->name) : array();
-        $gitlabRepos = array();
-        $repoTypes   = $repo ? array($repo->id => $repo->SCM) : array();
-
-        foreach($repoList as $repo)
-        {
-            if(empty($repo->synced)) continue;
-
-            $repoPairs[$repo->id] = "[{$repo->SCM}] " . $repo->name;
-            $repoTypes[$repo->id] = $repo->SCM;
-            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = "[{$repo->SCM}] " . $repo->name;
-        }
-
-        return array($repoPairs, $gitlabRepos, $repoTypes);
-    }
-
-    /**
      * 获取svn目录。
      * Get subversion dir.
      *
