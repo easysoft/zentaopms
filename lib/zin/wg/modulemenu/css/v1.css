@@ -1,4 +1,4 @@
-.module-menu {max-height: calc(100vh - 80px); --menu-selected-bg: none;}
+.module-menu {max-height: calc(100vh - 80px); min-height: 32px; --menu-selected-bg: none;}
 .module-menu header a:hover > .icon {color: var(--color-primary-600) !important;}
 .module-menu .tree-item * {white-space: nowrap;}
 .module-menu .tree-item .item-content {color: var(--color-gray-700)}

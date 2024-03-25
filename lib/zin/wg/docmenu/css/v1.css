@@ -1,4 +1,4 @@
-.doc-menu {max-height: calc(100vh - 105px); padding: 8px;}
+.doc-menu {max-height: calc(100vh - 105px); min-height: 32px; padding: 8px;}
 .doc-menu .active {color: var(--color-primary-600); font-weight: 500;}
 .doc-menu header a:hover > .icon {color: var(--color-primary-600) !important;}
 .doc-menu .tree-item * {white-space: nowrap;}
