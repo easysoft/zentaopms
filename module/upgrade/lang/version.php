@@ -186,7 +186,8 @@ $lang->upgrade->fromVersions['18_8']        = '18.8';
 $lang->upgrade->fromVersions['18_9']        = '18.9';
 $lang->upgrade->fromVersions['18_10']       = '18.10';
 $lang->upgrade->fromVersions['18_10_1']     = '18.10.1';
-$lang->upgrade->fromVersions['18_11']       = '18.11'; // pms insert position.
+$lang->upgrade->fromVersions['18_11']       = '18.11';
+$lang->upgrade->fromVersions['18_12']       = '18.12'; // pms insert position.
 
 global $config;
 /* Lite. */
@@ -377,7 +378,8 @@ $lang->upgrade->fromVersions['biz8_8']        = 'Biz8.8';
 $lang->upgrade->fromVersions['biz8_9']        = 'Biz8.9';
 $lang->upgrade->fromVersions['biz8_10']       = 'Biz8.10';
 $lang->upgrade->fromVersions['biz8_10_1']     = 'Biz8.10.1';
-$lang->upgrade->fromVersions['biz8_11']       = 'Biz8.11'; // biz insert position.
+$lang->upgrade->fromVersions['biz8_11']       = 'Biz8.11';
+$lang->upgrade->fromVersions['biz8_12']       = 'Biz8.12'; // biz insert position.
 
 /* Max. */
 $lang->upgrade->fromVersions['max2_0_beta4']  = 'Max2.0.beta4';
@@ -426,7 +428,8 @@ $lang->upgrade->fromVersions['max4_8']        = 'Max4.8';
 $lang->upgrade->fromVersions['max4_9']        = 'Max4.9';
 $lang->upgrade->fromVersions['max4_10']       = 'Max4.10';
 $lang->upgrade->fromVersions['max4_10_1']     = 'Max4.10.1';
-$lang->upgrade->fromVersions['max4_11']       = 'Max4.11'; // max insert position.
+$lang->upgrade->fromVersions['max4_11']       = 'Max4.11';
+$lang->upgrade->fromVersions['max4_12']       = 'Max4.12'; // max insert position.
 
 /* Ipd */
 $lang->upgrade->fromVersions['ipd1_0_beta1'] = 'Ipd1.0.beta1';
@@ -436,4 +439,5 @@ $lang->upgrade->fromVersions['ipd1_0_2']     = 'Ipd1.0.2';
 $lang->upgrade->fromVersions['ipd1_1']       = 'Ipd1.1';
 $lang->upgrade->fromVersions['ipd1_1_1']     = 'Ipd1.1.1';
 $lang->upgrade->fromVersions['ipd1_1_2']     = 'Ipd1.1.2';
-$lang->upgrade->fromVersions['ipd1_2']       = 'Ipd1.2'; // ipd insert position.
+$lang->upgrade->fromVersions['ipd1_2']       = 'Ipd1.2';
+$lang->upgrade->fromVersions['ipd1_3']       = 'Ipd1.3'; // ipd insert position.
