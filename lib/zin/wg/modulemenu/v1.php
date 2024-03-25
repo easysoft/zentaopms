@@ -42,6 +42,8 @@ class moduleMenu extends wg
         .module-menu-header.is-fixed > .btn-close {position: absolute; right: 0; font-weight: normal;}
         .module-menu-header.is-fixed > .btn-close:not(:hover) {opacity: .5;}
         .sidebar.is-collapsed > .module-menu-header.is-fixed {display: flex;}
+        .sidebar-left > .module-menu {margin-right: -8px}
+        .is-expanded > .module-menu + .sidebar-gutter > .gutter-toggle {opacity: 0}
         .has-module-menu-header .sidebar-left {transition-property: width;}
         .has-module-menu-header .module-menu {max-height: calc(100vh - 105px); }
         .has-module-menu-header .module-menu > .tree {padding-top: 8px; padding-bottom: 8px;}
@@ -254,9 +256,21 @@ class moduleMenu extends wg
                     set::preserve($preserve),
                     set($treeProps)
                 ),
-                $this->buildActions()
+                $this->buildActions(),
+                row
+                (
+                    setClass('justify-end p-1'),
+                    btn
+                    (
+                        set::type('ghost'),
+                        set::size('sm'),
+                        set::icon('menu-arrow-left text-gray'),
+                        set::hint($app->lang->collapse),
+                        on::click()->call('$this.closest(".sidebar").sidebar("toggle")')
+                    )
+                ),
+                $isInSidebar ? on::init()->do('$("#mainContainer").addClass("has-module-menu-header")') : null
             ),
-            $isInSidebar ? h::js("$('#mainContainer').addClass('has-module-menu-header')") : null
        );
     }
 }
