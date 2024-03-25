@@ -7,6 +7,7 @@ body {padding-bottom: 20px;}
     #dashboard > .row > .col-main {padding-right: 10px;}
     #dashboard > .row > .col-side {padding-left: 10px;}
 }
+#dashboard {margin: -4px -8px}
 #dashboard.sortable-sorting .panel {margin-bottom: 10px; box-shadow: 0 1px 1px rgba(0,0,0,.075), 0 2px 6px 0 rgba(0,0,0,.075); height: 46px;}
 #dashboard.sortable-sorting .panel > * {display: none;}
 #dashboard.sortable-sorting .panel:before {display: block; content: attr(data-name); padding: 12px 20px; font-weight: bold; font-size: 14px; color: #3c4353; opacity: 1 !important; text-align: left; visibility: visible;}
