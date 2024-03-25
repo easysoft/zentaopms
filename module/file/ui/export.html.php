@@ -18,7 +18,7 @@ $this->loadModel('file');
 if(isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'calendar')) unset($lang->exportTypeList['selected']);
 
 /* Generate custom export fields. */
-$hideExportRange     = isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'kanban');
+if(!isset($hideExportRange)) $hideExportRange = isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'kanban');
 $customExportRowList = array();
 $isCustomExport      = (!empty($customExport) and !empty($allExportFields));
 $showBizGuide        = $config->edition == 'open' && empty($config->{$this->moduleName}->closeBizGuide) ? true : false;
@@ -27,7 +27,7 @@ $bizName             = $showBizGuide ? "<a href='{$bizGuideLink}' target='_blank
 
 if($isCustomExport)
 {
-    $allExportFields  = explode(',', $allExportFields);
+    if(is_string($allExportFields)) $allExportFields = explode(',', $allExportFields);
     $hasDefaultField  = isset($selectedFields);
     $selectedFields   = $hasDefaultField ? explode(',', $selectedFields) : array();
     $moduleName       = $this->moduleName;
