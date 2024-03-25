@@ -9,6 +9,7 @@ class dtable extends wg
         'id?:string',                              // ID。
         'customCols?: bool|array',                 // 是否支持自定义列。
         'cols?:array',                             // 表格列配置。
+        'dataModifier?:callable|array',            // 数据处理函数。
         'data?:array',                             // 表格数据源。
         'module?:string',                          // 模块信息，主要是获取语言项。
         'emptyTip?:string',                        // 表格数据源为空时显示的文本。
@@ -51,6 +52,24 @@ class dtable extends wg
         $this->initFooterBar();
 
         $tableData = $this->prop('data', array());
+        $dataModifier = $this->prop('dataModifier');
+        if($dataModifier)
+        {
+            if(is_callable($dataModifier))
+            {
+                $tableData = array_map($dataModifier, $tableData);
+            }
+            elseif(is_array($dataModifier))
+            {
+                foreach($dataModifier as $key => $modifier)
+                {
+                    foreach($tableData as $index => &$item)
+                    {
+                        $item[$key] = $modifier($item[$key], $item, $index);
+                    }
+                }
+            }
+        }
         $this->setProp('data', array_values($tableData));
     }
 
@@ -163,6 +182,28 @@ class dtable extends wg
                 {
                     $this->setProp('currentUser', $app->user->account);
                 }
+            }
+
+            if(isset($config['modifier']))
+            {
+                $modifier = $config['modifier'];
+                if($modifier)
+                {
+                    $tableData = $this->prop('data', array());
+                    $key       = $config['name'];
+                    if(!is_array($modifier)) $modifier = array($modifier);
+                    foreach($tableData as &$item)
+                    {
+                        foreach($modifier as $subModifier)
+                        {
+                            if(!is_callable($subModifier)) continue;
+                            if(is_object($item)) $item->$key = $subModifier($item->$key);
+                            else $item[$key] = $subModifier($item[$key]);
+                        }
+                    }
+                    $this->setProp('data', array_values($tableData));
+                }
+                unset($config['modifier']);
             }
         }
 
