@@ -21,7 +21,8 @@ class dropdown extends wg
         'menuClass?: string',
         'hasIcons?: bool',
         'staticMenu?: bool',
-        'triggerProps?: array'
+        'triggerProps?: array',
+        'caret?: bool'
     );
 
     protected static array $defineBlocks = array
@@ -33,7 +34,7 @@ class dropdown extends wg
 
     protected function build(): array
     {
-        list($items, $placement, $strategy, $offset, $flip, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu, $triggerProps) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'arrow', 'trigger', 'menu', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu', 'triggerProps'));
+        list($items, $placement, $strategy, $offset, $flip, $arrow, $trigger, $menuProps, $target, $id, $menuClass, $hasIcons, $staticMenu, $triggerProps, $caret) = $this->prop(array('items', 'placement', 'strategy', 'offset', 'flip', 'arrow', 'trigger', 'menu', 'target', 'id', 'menuClass', 'hasIcons', 'staticMenu', 'triggerProps', 'caret'));
 
         $triggerBlock = $this->block('trigger');
         $menu         = $this->block('menu');
@@ -42,13 +43,14 @@ class dropdown extends wg
         if(empty($id))                      $id        = $this->gid;
         if(empty($target) && empty($items)) $target    = "#$id";
         if(empty($menuProps))               $menuProps = array();
+        if(is_null($caret))                 $caret     = true;
 
         if(empty($triggerBlock))        $triggerBlock = h::a($this->children());
         elseif(is_array($triggerBlock)) $triggerBlock = $triggerBlock[0];
         $triggerID = '';
         if($triggerBlock instanceof node)
         {
-            if($triggerBlock instanceof btn) $triggerBlock->setDefaultProps(array('caret' => true));
+            if($triggerBlock instanceof btn) $triggerBlock->setDefaultProps(array('caret' => $caret));
             $triggerProps = array_merge(array
             (
                 'data-target'         => $triggerBlock->hasProp('target', 'href') ? null : $target,
