@@ -42,14 +42,14 @@ $auditInject = function() use($module, $method)
 
         if($module == 'doc')
         {
-            $containerStyles = empty($this->config->ai->injectAuditButton->locations[$module][$method]['action']->containerStyles) ? '{}' : $this->config->ai->injectAuditButton->locations[$module][$method]['action']->containerStyles;
+            $actionContainerStyles = empty($this->config->ai->injectAuditButton->locations[$module][$method]['action']->containerStyles) ? '{}' : $this->config->ai->injectAuditButton->locations[$module][$method]['action']->containerStyles;
             $exitAuditButton = html::commonButton($this->lang->ai->audit->exit, "id='promptAuditExit'", 'btn');
 
             $auditScript .= <<< JAVASCRIPT
-            const containerStyles = JSON.parse('$containerStyles');
+            const actionContainerStyles = JSON.parse('$actionContainerStyles');
             const injectHTML = `$publishBtn`;
             $(`$targetContainer`)[`$injectMethod`](injectHTML);
-            $(`$targetContainer`).css(containerStyles);
+            $(`$targetContainer`).css(actionContainerStyles);
             $('#mainContent #headerBox td:first-child').html(`$exitAuditButton`);
             JAVASCRIPT;
         }
@@ -69,7 +69,7 @@ $auditInject = function() use($module, $method)
         {
         JAVASCRIPT;
 
-        $regenButton = html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $this->lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"');
+        $regenButton = html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $this->lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn ghost"');
         $auditButton = html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $this->lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"');
         $targetContainer = $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->targetContainer;
         $injectMethod    = $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->injectMethod;
@@ -78,8 +78,11 @@ $auditInject = function() use($module, $method)
         $auditScript .= <<< JAVASCRIPT
         const buttonHTML = `$buttonHTML`;
         JAVASCRIPT;
-        $auditScript .= "$(`$targetContainer`).first().$injectMethod(buttonHTML)";
+        $toolbarContainerStyles = empty($this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->containerStyles) ? '{}' : $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->containerStyles;
+        $auditScript .= "$(`$targetContainer`).first().$injectMethod(buttonHTML);";
         $auditScript .= <<< JAVASCRIPT
+            const toolbarContainerStyles = JSON.parse('$toolbarContainerStyles');
+            $(`$targetContainer`).css(toolbarContainerStyles);
         };
         JAVASCRIPT;
 
