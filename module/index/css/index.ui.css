@@ -53,7 +53,7 @@
 #appsToolbar > .btn-zentao > .icon {color: var(--color-primary-400)}
 
 #visionSwitcher {flex: none; position: relative; margin-right: 12px; margin-left: 4px;}
-#visionSwitcher::before, #visionSwitcher::after {content: ''; display: block; position: absolute; right: -9px; top: -4px; width: 0; height: 0; border-style: solid; border-width: 20px 0 20px 10px; border-color: transparent transparent transparent var(--color-canvas);}
+#visionSwitcher::before, #visionSwitcher::after {content: ''; display: block; position: absolute; right: -9px; top: -2px; width: 0; height: 0; border-style: solid; border-width: 18px 0 18px 8px; border-color: transparent transparent transparent var(--color-canvas);}
 #visionSwitcher::before {right: -10px; border-left-color: var(--color-fore); opacity: .1;}
 #versionSwitchBtn {padding: 0 6px;}
 
