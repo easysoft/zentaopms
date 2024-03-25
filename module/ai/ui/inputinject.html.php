@@ -69,8 +69,8 @@ $auditInject = function() use($module, $method)
         {
         JAVASCRIPT;
 
-        $regenButton = html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $this->lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn ghost"');
-        $auditButton = html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $this->lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"');
+        $regenButton = html::linkButton('<i class="icon icon-refresh muted"></i> ' . $this->lang->ai->audit->regenerate, helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), 'self', "id='promptRegenerate'", 'btn ghost');
+        $auditButton = html::commonButton($this->lang->ai->audit->designPrompt, 'data-toggle="modal" data-type="iframe" data-url="' . helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId") . '"', 'btn btn-info iframe');
         $targetContainer = $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->targetContainer;
         $injectMethod    = $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->injectMethod;
         $buttonHTML = $isAudit ? "$regenButton $auditButton" : $auditButton;
