@@ -156,12 +156,14 @@ class dropmenu extends wg
         }
 
         if($tab == 'caselib') $objectID = data('libID');
+        if($tab == 'feedback') $objectID = data('productID');
 
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
         if(empty($text) && !empty($tab) && !empty($objectID))
         {
-            $object = $app->control->loadModel($tab)->getByID((int)$objectID);
-            $text   = $object ? $object->name : '';
+            $loadModel = $tab == 'feedback' ? 'product' : $tab;
+            $object    = $app->control->loadModel($loadModel)->getByID((int)$objectID);
+            $text      = $object ? $object->name : '';
             if($tab == 'execution' && !$object->hasProduct)
             {
                 $project = $app->control->loadModel('project')->getByID((int)$object->project);

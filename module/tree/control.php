@@ -72,6 +72,7 @@ class tree extends control
         {
             $syncConfig             = json_decode($this->config->global->syncProduct, true);
             $this->view->syncConfig = isset($syncConfig[$viewType]) ? $syncConfig[$viewType] : array();
+            $this->view->productID  = $rootID;
         }
 
         /* 获取产品的分支。 Get branches of product. */
