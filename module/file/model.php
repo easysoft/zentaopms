@@ -850,7 +850,12 @@ class fileModel extends model
      */
     public function replaceImgURL(object $data, string $fields): object
     {
+        $moduleName = $this->app->getModuleName();
+        $methodName = $this->app->getMethodName();
         if(is_string($fields)) $fields = explode(',', str_replace(' ', '', $fields));
+
+        $textareaFields = $this->dao->select('id,field')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($moduleName)->andWhere('control')->eq('richtext')->andWhere('buildin')->eq('0')->fetchPairs();
+        if($textareaFields) $fields = array_merge($fields, $textareaFields);
 
         foreach($fields as $field)
         {
@@ -858,8 +863,6 @@ class fileModel extends model
             $data->$field = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $data->$field);
 
             /* Convert plain text URLs into HTML hyperlinks. */
-            $moduleName = $this->app->getModuleName();
-            $methodName = $this->app->getMethodName();
             if(isset($this->config->file->convertURL['common'][$methodName]) or isset($this->config->file->convertURL[$moduleName][$methodName]))
             {
                 $fieldData = $data->$field;
