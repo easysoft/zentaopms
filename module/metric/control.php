@@ -170,9 +170,31 @@ class metric extends control
     {
         $date = str_replace('_', '-', $date);
 
-        $originalDebug = $this->config->debug;
-        $this->config->debug = 2;
+        $classifiedCalcGroup = json_decode(file_get_contents($this->app->getTmpRoot() . 'calc'));
+        $calcList            = $this->metric->getCalcInstanceList();
 
+        $records = array();
+        foreach($classifiedCalcGroup as $calcGroup)
+        {
+            foreach($calcGroup->calcList as $code => $calc) 
+            {
+                $calcObj = $calcList[$code];
+                $calcObj->result = json_decode(json_encode($calc->result), true);
+                $records[$code] = $this->metricZen->getRecordByCodeAndDate($code, $calcObj, $date);
+            }
+        }
+        $this->metric->insertMetricLib($records);
+    }
+
+    /**
+     * 保存计算后的度量项对象。
+     * Save calculated metric to file.
+     *
+     * @access public
+     * @return void
+     */
+    public function saveClassifiedCalcGroup()
+    {
         $calcList            = $this->metric->getCalcInstanceList();
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
 
@@ -189,9 +211,7 @@ class metric extends control
                 $rows = $statement->fetchAll();
                 $this->metricZen->calcMetric($rows, $calcGroup->calcList);
 
-                $records = array();
-                foreach($calcGroup->calcList as $code => $calc) $records[$code] = $this->metricZen->getRecordByCodeAndDate($code, $calc, $date);
-                $this->metric->insertMetricLib($records);
+                foreach($calcGroup->calcList as $calc) $calc->setDAO(null);
             }
             catch(Exception $e)
             {
@@ -202,6 +222,21 @@ class metric extends control
                 a($this->metricZen->formatException($e));
             }
         }
+
+        file_put_contents($this->app->getTmpRoot(). 'calc', json_encode($classifiedCalcGroup));
+    }
+
+    /**
+     * 删除重复度量库数据。
+     * Delete duplication record in metric data.
+     *
+     * @access public
+     * @return void
+     */
+    public function deduplicateRecord()
+    {
+        $metrics = $this->metric->getExecutableMetric();
+        foreach($metrics as $code) $this->metric->deduplication($code);
     }
 
     /**
