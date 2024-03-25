@@ -154,10 +154,11 @@ class pivotZen extends pivot
     public function show(int $groupID, int $pivotID): void
     {
         $pivot = $this->pivot->getByID($pivotID);
-        if($this->post->filterValues)
+        if(isset($_POST['filterValues']) and $_POST['filterValues'])
         {
             foreach($this->post->filterValues as $key => $value) $pivot->filters[$key]['default'] = $value;
         }
+        if(isset($_POST['summary']) and $_POST['summary']) $pivot->settings['summary'] = $this->post->summary;
 
         list($sql, $filterFormat) = $this->pivot->getFilterFormat($pivot->sql, $pivot->filters);
 
@@ -166,7 +167,7 @@ class pivotZen extends pivot
         $fields = json_decode(json_encode($pivot->fieldSettings), true);
         $langs  = json_decode($pivot->langs, true) ?? array();
 
-        if(isset($pivot->settings['summary']) and $pivot->settings['summary'] =='notuse')
+        if(isset($pivot->settings['summary']) and $pivot->settings['summary'] == 'notuse')
         {
             list($data, $configs) = $this->pivot->genOriginSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
         }

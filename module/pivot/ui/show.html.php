@@ -64,6 +64,20 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
             ) : null,
             toolbar
             (
+                item
+                (
+                    setID('origin-query'),
+                    setClass('ghost'),
+                    set::text($lang->pivot->showOrigin),
+                    on::click("toggleShowMode('origin')"),
+                ),
+                item
+                (
+                    setID('pivot-query'),
+                    setClass('ghost hidden'),
+                    set::text($lang->pivot->showPivot),
+                    on::click("toggleShowMode('group')"),
+                ),
                 (hasPriv('pivot', 'design') and $clickable) ? item(set(array
                 (
                     'text'  => $lang->pivot->designAB,
