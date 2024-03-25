@@ -91,10 +91,11 @@ class job extends control
         if($_POST)
         {
             $job = form::data($this->config->job->form->create)
-                ->setIF($this->post->triggerType != 'commit', 'comment', '')
-                ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
-                ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
-                ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
+                ->setIF($this->post->useZentao != '1', 'triggerType', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'commit', 'comment', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atDay', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atTime', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'tag', 'lastTag', '')
                 ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
                 ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
                 ->get();
@@ -135,10 +136,11 @@ class job extends control
         if($_POST)
         {
             $job = form::data($this->config->job->form->edit)
-                ->setIF($this->post->triggerType != 'commit', 'comment', '')
-                ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
-                ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
-                ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
+                ->setIF($this->post->useZentao != '1', 'triggerType', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'commit', 'comment', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atDay', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atTime', '')
+                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'tag', 'lastTag', '')
                 ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
                 ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
                 ->get();

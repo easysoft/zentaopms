@@ -52,6 +52,7 @@ $lang->job->projectKey      = 'SonarQube Project';
 
 $lang->job->lblBasic = 'Infos de Base';
 
+$lang->job->auto           = 'Auto';
 $lang->job->example        = 'ex.';
 $lang->job->commitEx       = "Utilis pour faire correspondre les mots cl閟 utilis閟 pour cr閑r une compilation. Plusieurs mots cl閟 sont s閜ar閟 par ','";
 $lang->job->cronSample     = 'ex: 0 0 2 * * 2-6/1 signifie 2:00 a.m. chaque jour de la semaine.';

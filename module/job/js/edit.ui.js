@@ -180,6 +180,7 @@ function changeSonarqubeServer(event)
 $(function()
 {
     changeEngine(engine);
+    changeTrigger(job.triggerType);
     changeTriggerType(job.triggerType);
 
     $(document).on('click', '.dropmenu-list li.tree-item', function()

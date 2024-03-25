@@ -149,6 +149,8 @@ class jobModel extends model
               $atDay = trim($atDay, ',');
               return "{$triggerType}({$atDay}, {$job->atTime})";
           }
+
+          return $this->lang->job->auto;
     }
 
     /**

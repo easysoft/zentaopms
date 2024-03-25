@@ -108,6 +108,7 @@ formPanel
     (
         set::name('triggerType'),
         set::width('1/2'),
+        set::required(true),
         set::label($lang->job->triggerType),
         set::items($lang->job->triggerTypeList),
         on::change('changeTriggerType')

@@ -60,7 +60,17 @@ function loadRepoList(engine = '')
 
 function changeTrigger(event)
 {
-    if($(event.target).val() == 1)
+    let useZentao;
+    if(typeof(event) == 'object')
+    {
+        useZentao = $(event.target).val();
+    }
+    else
+    {
+        useZentao = event;
+    }
+
+    if(useZentao == 1)
     {
         $('.job-form #paramDiv').show();
         $('.job-form .sonarqube').show();

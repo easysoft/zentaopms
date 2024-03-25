@@ -9,7 +9,7 @@ $config->job->form->create['name']            = array('type' => 'string', 'requi
 $config->job->form->create['engine']          = array('type' => 'string', 'required' => true);
 $config->job->form->create['repo']            = array('type' => 'int',    'required' => true);
 $config->job->form->create['frame']           = array('type' => 'string', 'required' => false, 'default' => '');
-$config->job->form->create['triggerType']     = array('type' => 'string', 'required' => true);
+$config->job->form->create['triggerType']     = array('type' => 'string', 'required' => false);
 $config->job->form->create['svnDir']          = array('type' => 'array',  'required' => false, 'default' => array());
 $config->job->form->create['product']         = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->job->form->create['sonarqubeServer'] = array('type' => 'int',    'required' => false, 'default' => 0);
@@ -29,7 +29,7 @@ $config->job->form->edit['name']            = array('type' => 'string', 'require
 $config->job->form->edit['engine']          = array('type' => 'string', 'required' => true);
 $config->job->form->edit['repo']            = array('type' => 'int',    'required' => true);
 $config->job->form->edit['frame']           = array('type' => 'string', 'required' => false, 'default' => '');
-$config->job->form->edit['triggerType']     = array('type' => 'string', 'required' => true);
+$config->job->form->edit['triggerType']     = array('type' => 'string', 'required' => false);
 $config->job->form->edit['svnDir']          = array('type' => 'array',  'required' => false, 'default' => array());
 $config->job->form->edit['product']         = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->job->form->edit['sonarqubeServer'] = array('type' => 'int',    'required' => false, 'default' => 0);
