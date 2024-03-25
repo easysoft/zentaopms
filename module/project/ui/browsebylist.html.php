@@ -20,7 +20,7 @@ featureBar
     set::linkParams("programID={$programID}&status={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     checkbox
     (
-        set::rootClass('ml-2'),
+        set::rootClass('ml-2 mr-4'),
         set::name('involved'),
         set::text($lang->project->mine),
         set::checked($this->cookie->involved ? 'checked' : '')
