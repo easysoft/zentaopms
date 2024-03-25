@@ -459,7 +459,7 @@
                         location.href = response.url;
                         return;
                     }
-                    if(isInAppTab && currentCode !== $.apps.getAppCode(response.url))
+                    if(isInAppTab && currentCode !== $.apps.getAppCode(response.url, currentCode))
                     {
                         $.apps.openApp(response.url, response.url.includes('#app=') ? null : currentCode);
                         return;
@@ -1377,7 +1377,7 @@
             }
             if(options.closeModal) zui.Modal.hide(typeof options.closeModal === 'string' ? options.closeModal : $modal);
             let app = options.app;
-            if(!options.app) options.app = $.apps.getAppCode(url);
+            if(!options.app) options.app = $.apps.getAppCode(url, currentCode);
             if(app === currentCode && options.load !== 'modal')
             {
                 options.load === 'modal';
