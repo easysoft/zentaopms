@@ -36,7 +36,7 @@ class searchToggle extends wg
 
         if(isset($config->zin->mode) && $config->zin->mode == 'compatible')
         {
-            if(is_null($url))       $url       = createLink('search', 'buildZinForm', 'module=' . $this->prop('module'));
+            if(is_null($url))       $url       = createLink('search', 'buildZinForm', 'module=' . $module);
             if(is_null($searchUrl)) $searchUrl = createLink('search', 'buildZinQuery');
         }
 
