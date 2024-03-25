@@ -1363,6 +1363,7 @@ class pivotModel extends model
         $data->groups      = $groups;
         $data->cols        = $cols;
         $data->array       = json_decode(json_encode($mergeRecords), true);
+        if($showColTotal == 'sum') $this->processLastRow($data->array[count($data->array) - 1]);
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
 
         $configs = $this->calculateMergeCellConfig($groups, $mergeRecords);
@@ -1375,6 +1376,21 @@ class pivotModel extends model
          * 代表在整个tbody中，位于[0,0]坐标的td rowspan为2，位于[0,1]坐标的td rowspan为1, 位于[2,0]坐标的td rowspan为2
          */
         return array($data, $configs);
+    }
+
+    /**
+     * Process last column data.
+     *
+     * @param  array  $data
+     * @access public
+     * @return void
+     */
+    public function processLastRow(array &$data)
+    {
+        foreach($data as $key => $value)
+        {
+            if($value == '$totalGroup$') $data[$key] = $this->lang->pivot->step2->total;
+        }
     }
 
     /**
