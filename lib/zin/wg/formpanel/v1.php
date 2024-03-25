@@ -205,6 +205,27 @@ class formPanel extends panel
         return $extraMain;
     }
 
+    protected function buildExtraBatchItem()
+    {
+        global $app;
+
+        $data   = data($app->getModuleName());
+        $fields = $app->control->appendExtendForm('info', $data);
+
+        $formBatchItem = array();
+        foreach($fields as $field)
+        {
+            $formBatchItem[] = formBatchItem
+            (
+                set::name($field->field),
+                set::label($field->name),
+                set::control($field->control),
+                set::width('200px')
+            );
+        }
+        return $formBatchItem;
+    }
+
     /**
      * Build form widget by mode.
      *
@@ -229,6 +250,7 @@ class formPanel extends panel
                 set::id($formID),
                 set($this->props->pick(array_keys($props))),
                 $this->children(),
+                $this->buildExtraBatchItem(),
                 jsVar('formBatch', true),
                 $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
             );
