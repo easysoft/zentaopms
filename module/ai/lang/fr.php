@@ -118,6 +118,7 @@ $lang->ai->prompts->lastEditor   = 'Last Editor';
 $lang->ai->prompts->modelNeutral = 'Model Neutral';
 
 $lang->ai->prompts->summary = 'There are %s prompts on this page.';
+$lang->ai->prompts->fieldSeparator = ', ';
 
 $lang->ai->prompts->action = new stdclass();
 $lang->ai->prompts->action->goDesignConfirm = 'The current prompt is not complete, continue designing?';

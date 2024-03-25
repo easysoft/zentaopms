@@ -118,6 +118,7 @@ $lang->ai->prompts->lastEditor   = '最后编辑';
 $lang->ai->prompts->modelNeutral = '通用';
 
 $lang->ai->prompts->summary = '本页共 %s 个提词。';
+$lang->ai->prompts->fieldSeparator = '、';
 
 $lang->ai->prompts->action = new stdclass();
 $lang->ai->prompts->action->goDesignConfirm = '当前提词未完成，是否继续设计？';
