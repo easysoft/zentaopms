@@ -672,7 +672,7 @@ class metricTao extends metricModel
      * @access protected
      * @return void
      */
-    protected function sliceTables($sliceRows = 50 * 10000)
+    protected function sliceTables($sliceRows = 500000)
     {
         $db          = $this->config->db->name . $this->config->metric->sqliteSuffix;
         $tablePrefix = $this->config->db->prefix;
