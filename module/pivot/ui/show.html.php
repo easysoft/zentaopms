@@ -115,7 +115,9 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
             div
             (
                 setID('exportData'),
-                setClass('hidden')
+                setClass('hidden'),
+                rawContent(),
+                $this->pivot->buildPivotTable($data, $configs),
             )
         )
     );

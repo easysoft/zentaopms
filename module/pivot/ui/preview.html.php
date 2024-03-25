@@ -18,7 +18,7 @@ if(file_exists($viewFile)) include_once $viewFile;
 
 if($this->config->edition != 'open')
 {
-    $pivotPath = $this->app->getModuleExtPath('pivot', 'view');
+    $pivotPath = $this->app->getModuleExtPath('pivot', 'ui');
     include $pivotPath['common'] . 'exportdata.html.php';
 }
 
@@ -43,7 +43,8 @@ if($config->edition != 'open')
             'icon'  => 'export',
             'class' => 'ghost',
             'data-target' => '#export',
-            'data-toggle' => 'modal'
+            'data-toggle' => 'modal',
+            'data-size' => 'sm'
         ))) : null,
         hasPriv('pivot', 'browse') ? item(set(array
         (
