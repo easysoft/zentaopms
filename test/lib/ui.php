@@ -22,7 +22,6 @@ $uiTester = $app->loadCommon();
 
 /* 加载框架配置项 */
 define('CONFIG_ROOT', $testPath . 'config' . '/');
-global $config;
 include CONFIG_ROOT . 'config.php';
 
 
@@ -31,7 +30,7 @@ include __DIR__ . '/result.class.php';
 
 /* 初始化php-webdriver类 */
 include __DIR__ . '/webdriver/webdriver.class.php';
-$driver = new webdriver($config);
+$driver = new webdriver();
 
 /* 初始化页面元素 */
 include 'page.class.php';
@@ -48,6 +47,7 @@ include 'yaml.class.php';
  */
 function r()
 {
+    return true;
 }
 
 /**
@@ -250,8 +250,8 @@ class tester
      */
     public function login($account = '', $password = '')
     {
-        if(!$account)  $account  = $this->config->defaultAccount;
-        if(!$password) $password = $this->config->defaultPassword;
+        if(!$account)  $account  = $this->config->uitest->defaultAccount;
+        if(!$password) $password = $this->config->uitest->defaultPassword;
 
         $this->page->deleteCookie();
 
@@ -278,7 +278,7 @@ class tester
      */
     public function openURL($module, $method, $params = array(), $iframeID = '')
     {
-        if($module || $method) return;
+        if(!$module || !$method) return;
         $this->result->module = $module;
         $this->result->method = $method;
 
@@ -316,7 +316,7 @@ class tester
         if($this->result->method && !$method) $method = $this->result->method;
 
         $pageClass = "{$method}Page";
-        if(!class_exists($pageClass))include dirname(__FILE__, 2). "/ui/$module/page/$method.php";
+        if(!class_exists($pageClass)) include dirname(__FILE__, 3). "/module/$module/test/ui/page/$method.php";
 
         $methodPage = new $pageClass();
         $this->result->setPage($methodPage);
@@ -335,7 +335,8 @@ class tester
      */
     public function formPage($module, $method, $params = array(), $iframeID = '')
     {
-        return $this->openURL($module, $method, $params, $iframeID)->initPage();
+        $this->openURL($module, $method, $params, $iframeID);
+        return $this->initPage();
     }
 
     /**
@@ -344,10 +345,10 @@ class tester
      * @access public
      * @return void
      */
-    public function parseCurrentUrl()
+   public function parseCurrentUrl()
     {
-        if(empty($this->result->page)) return;
+        if(empty($this->result->pageObject)) return;
 
-        return $this->result->page->getUrl();
+        return $this->result->pageObject->getUrl();
     }
 }

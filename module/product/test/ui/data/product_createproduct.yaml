@@ -1,13 +1,12 @@
 ---
 fields:
 - field: id
-  range: 1-1000
+  range: 1-100
 - field: program
-  note: 所属项目集
-  range: 0-10
+  range: 1
 - field: name
+  range: 1-30
   prefix: 产品
-  range: 1-10
 - field: code
   note: 产品代号
   fields:
@@ -16,17 +15,13 @@ fields:
   - field: code2
     range: 1-300
 - field: shadow
-  note: 影子产品
-  range: 0
+  range: 0{25},1{5},0{5},1{5}
 - field: line
-  note: 产品线
-  range: 0-10
+  range: 1{10},2{10},3{10}
 - field: type
-  note: 产品类型
-  range: normal{40},branch{40},platform{40},normal{20},branch{20},platform{20},normal{20}
+  range: normal{5},branch{5},normal{20}
 - field: status
-  note: 状态
-  range: normal{20},closed{20},normal{20},closed{20},normal{20},closed{20},normal{10},closed{10},normal{10},closed{10},normal{10},closed{10},normal{20}
+  range: normal{20},closed{10}
 - field: subStatus
   note: 子状态
   range: ""
@@ -42,12 +37,7 @@ fields:
     range: <div> <p><h1>一、禅道项目管理软件是做什么的？</h1> 禅道由 青岛易软天创网络科技有限公司开发，国产开源项目管理软件。它集产品管理、项目管理、质量管理、文档管理、组织管理和事务管理于一体，是一款专业的研发项目管理软件，完整覆盖了研发项目管理的核心流程。禅道管理思想注重实效，功能完备丰富，操作简洁高效，界面美观大方，搜索功能强大，统计报表丰富多样，软件架构合理，扩展灵活，有完善的API可以调用。禅道，专注研发项目管理
       </p> <p>我是数字符号23@#$%#^$ </p> <p>我是英文dashcuscbrewg </p> </div>{30}, 1-20
 - field: PO
-  note: 产品负责人
-  fields:
-  - field: po1
-    range: po{120},[]{7}
-  - field: po2
-    range: 1-10{12!},[]{7}
+  range: admin{10},user1{10},user2{10}
 - field: QD
   note: 测试负责人
   fields:

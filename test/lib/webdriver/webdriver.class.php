@@ -9,8 +9,6 @@ use Facebook\WebDriver\WebDriverSelect;
 use Facebook\WebDriver\WebDriverTargetLocator;
 use Facebook\WebDriver\WebDriverDimension;
 
-use function zin\globalSearch;
-
 require_once('vendor/autoload.php');
 
 /**
@@ -39,13 +37,13 @@ class webdriver
 
     protected $exceptions = array();
 
-    public function __construct($config)
+    public function __construct()
     {
-        global $result;
+        global $result, $config;
         $this->result = $result;
         $this->config = $config;;
 
-        $this->initBrowser($config->chrome);
+        $this->initBrowser($config->uitest->chrome);
         $this->cookieFile = dirname(__FILE__, 3) . '/config/cookie/cookie';
     }
 
@@ -92,10 +90,10 @@ class webdriver
     public function get($url)
     {
         $url = trim($url);
-        if(substr($this->config->webRoot, -1) !== '/') $this->config->webRoot .= '/';
-        if(!preg_match('/^http:|^https:/', $url)) $url = $this->config->webRoot . $url;
+        if(substr($this->config->uitest->webRoot, -1) !== '/') $this->config->uitest->webRoot .= '/';
+        if(!preg_match('/^http:|^https:/', $url)) $url = $this->config->uitest->webRoot . $url;
         $this->driver->get($url);
-        $this->loadLang();
+        $this->setLang();
     }
 
     /**
@@ -104,28 +102,19 @@ class webdriver
      * @access public
      * @return object
      */
-    public function loadLang($module = '')
+    public function setLang()
     {
-        global $lang;
+        global $lang, $app;
 
         $langName = $this->driver->manage()->getCookieNamed('lang')->getValue();
         if(substr($langName, 0, 2) == 'zh')
         {
-            $langName = 'zh-cn';
+            $app->clientLang = 'zh-cn';
         }
         elseif($langName)
         {
-            $langName = 'en';
+            $app->clientLang = 'en';
         }
-
-        if($module)
-        {
-            $langFile = dirname(__FILE__, 4) . "/{$module}/lang/{$langName}.php";
-        }
-
-        $langFile = dirname(__FILE__, 3) . "/lang/{$langName}.php";
-
-        if(file_exists($langFile)) include $langFile;
 
         return $lang;
     }
@@ -196,8 +185,8 @@ class webdriver
     public function switchToUrl($url, $loginFlag = false, $cookieFile = '')
     {
         $url = trim($url);
-        if(substr($this->config->webRoot, -1) !== '/') $this->config->webRoot .= '/';
-        if(!preg_match('/^http:|^https:/', $url)) $url = $this->config->webRoot . $url;
+        if(substr($this->config->uitest->webRoot, -1) !== '/') $this->config->uitest->webRoot .= '/';
+        if(!preg_match('/^http:|^https:/', $url)) $url = $this->config->uitest->webRoot . $url;
 
         if($loginFlag == true)
         {
@@ -209,7 +198,7 @@ class webdriver
             sleep(2);
             $cookies = $this->driver->manage()->getCookies();
         }
-        $this->driver->get($this->config->webRoot);
+        $this->driver->get($this->config->uitest->webRoot);
         $this->driver->manage()->deleteAllCookies();
         foreach($cookies as $cookie)
         {
@@ -325,7 +314,7 @@ class webdriver
      */
     public function capture($image = '')
     {
-        $image = $image ? $image : $this->config->captureRoot;
+        $image = $image ? $image : $this->config->uitest->captureRoot;
 
         if(empty($this->element))
         {
@@ -773,14 +762,11 @@ class webdriver
             $method = str_replace('.html', '', $pathParts[1]);
         }
 
-        $result = new stdclass();
-        $result->url    = $url;
-        $result->module = $module;
-        $result->method = $method;
+        $this->result->url    = $url;
+        $this->result->module = $module;
+        $this->result->method = $method;
 
-        if(!empty($result)) $this->result->url = $result;
-
-        return $result;
+        return $this->result;
     }
 
     /**

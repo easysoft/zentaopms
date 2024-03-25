@@ -41,6 +41,8 @@ class result
         $result['errors']  = $this->errors;
         $result['page']    = $this->pageObject;
         $result['url']     = $this->url;
+        $result['method']  = $this->method;
+        $result['module']  = $this->module;
         $result['status']  = $this->status;
         $result['message'] = $this->message;
 

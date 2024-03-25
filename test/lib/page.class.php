@@ -2,15 +2,17 @@
 class page
 {
     public $driver;
+    public $lang;
     public $xpathName;
     public $doms;
     public $xpath;
-    public $timeout = 30;
+    public $timeout = 5;
 
     public function __construct()
     {
-        global $driver;
+        global $driver, $lang;
         $this->driver = $driver;
+        $this->lang   = $lang;
         $this->doms   = array(
             'menuMoreNav' => '//*[@id="menuMoreNav"]/li[2]/a'
         );

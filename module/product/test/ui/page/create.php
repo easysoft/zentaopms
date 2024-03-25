@@ -12,10 +12,7 @@ class createPage extends Page
 
     public function submit()
     {
-        global $uiTester;
-
-        $uiTester->app->loadLang('product');
-        $this->btn($this->lang->product->create)->click();
+        $this->btn($this->lang->save)->click();
         sleep(1);
 
         return $this;
