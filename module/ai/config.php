@@ -193,8 +193,8 @@ $config->ai->menuPrint = new stdclass();
 $config->ai->menuPrint->locations = array();
 $config->ai->menuPrint->locations['story']['view'] = (object)array(
     'module'          => 'story',
-    'targetContainer' => '#mainContent .detail-body .section:first-of-type > div:first-of-type',
-    'stylesheet'      => '#mainContent .detail-body .section:first-of-type > div:first-of-type {width: 100%; justify-content: space-between;}'
+    'targetContainer' => '#mainContent .detail-body .detail-section:first-of-type > div:first-of-type',
+    'stylesheet'      => '#mainContent .detail-body .detail-section:first-of-type > div:first-of-type {width: 100%; justify-content: space-between;}'
 );
 $config->ai->menuPrint->locations['task']['view']             = clone $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['task']['view']->module     = 'task';
@@ -246,7 +246,7 @@ $config->ai->injectAuditButton = new stdclass(); // TODO: fix this.
 $config->ai->injectAuditButton->locations = array();
 $config->ai->injectAuditButton->locations['task']['edit'] = array(
     'toolbar' => (object)array(
-        'targetContainer' => '#mainContent .main-header',
+        'targetContainer' => '#mainContent form div',
         'injectMethod'    => 'append',
         'class'           => 'pull-right btn-toolbar',
     ),

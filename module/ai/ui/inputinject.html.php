@@ -14,12 +14,132 @@
 
 namespace zin;
 
-$inputInject = function()
+$this->app->loadLang('ai');
+$this->app->loadConfig('ai');
+$module = $this->app->getModuleName();
+$method = $this->app->getMethodName();
+
+/* Inject audit menu, called from within $inputInject(), be aware of javascript assembling abuse. */
+$auditInject = function() use($module, $method)
 {
-    $this->app->loadLang('ai');
-    $this->app->loadConfig('ai');
-    $module = $this->app->getModuleName();
-    $method = $this->app->getMethodName();
+    if(!isset($_SESSION['aiPrompt']['prompt']) || empty($_SESSION['aiPrompt']['objectId'])) return;
+
+    $prompt   = $_SESSION['aiPrompt']['prompt'];
+    $objectId = $_SESSION['aiPrompt']['objectId'];
+    $isAudit  = isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60;
+
+    $auditScript = '';
+    if(isset($this->config->ai->injectAuditButton->locations[$module][$method]))
+    {
+        $publishBtn      = html::commonButton($this->lang->ai->promptPublish, "id='promptPublish' data-promptId=$prompt->id", 'btn btn-primary btn-wide');
+        $targetContainer = $this->config->ai->injectAuditButton->locations[$module][$method]['action']->targetContainer;
+        $injectMethod    = $this->config->ai->injectAuditButton->locations[$module][$method]['action']->injectMethod;
+
+        $auditScript = <<< JAVASCRIPT
+        window.injectAuditAction = () =>
+        {
+        JAVASCRIPT;
+
+        if($module == 'doc')
+        {
+            $containerStyles = empty($this->config->ai->injectAuditButton->locations[$module][$method]['action']->containerStyles) ? '{}' : $this->config->ai->injectAuditButton->locations[$module][$method]['action']->containerStyles;
+            $exitAuditButton = html::commonButton($this->lang->ai->audit->exit, "id='promptAuditExit'", 'btn');
+
+            $auditScript .= <<< JAVASCRIPT
+            const containerStyles = JSON.parse('$containerStyles');
+            const injectHTML = `$publishBtn`;
+            $(`$targetContainer`)[`$injectMethod`](injectHTML);
+            $(`$targetContainer`).css(containerStyles);
+            $('#mainContent #headerBox td:first-child').html(`$exitAuditButton`);
+            JAVASCRIPT;
+        }
+        else
+        {
+            $exitAuditButton = html::commonButton($this->lang->ai->audit->exit, "id='promptAuditExit'", 'btn btn-wide');
+
+            $auditScript .= <<< JAVASCRIPT
+            const injectHTML = `$publishBtn $exitAuditButton`;
+            $(`$targetContainer`)[`$injectMethod`](injectHTML);
+            JAVASCRIPT;
+        }
+
+        $auditScript .= <<< JAVASCRIPT
+        };
+        window.injectAuditToolbar = () =>
+        {
+        JAVASCRIPT;
+
+        $regenButton = html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $this->lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"');
+        $auditButton = html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $this->lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"');
+        $targetContainer = $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->targetContainer;
+        $injectMethod    = $this->config->ai->injectAuditButton->locations[$module][$method]['toolbar']->injectMethod;
+        $buttonHTML = $isAudit ? "$regenButton $auditButton" : $auditButton;
+
+        $auditScript .= <<< JAVASCRIPT
+        const buttonHTML = `$buttonHTML`;
+        JAVASCRIPT;
+        $auditScript .= "$(`$targetContainer`).first().$injectMethod(buttonHTML)";
+        $auditScript .= <<< JAVASCRIPT
+        };
+        JAVASCRIPT;
+
+        if($isAudit) $auditScript .= 'window.injectAuditAction();';
+        $auditScript .= "if(typeof window.injectData !== 'undefined') {window.injectAuditToolbar();}";
+
+        $loadingText = $this->lang->ai->execute->loading;
+        $auditScript .= <<< JAVASCRIPT
+        const publishButton = document.getElementById('promptPublish');
+        if(publishButton)
+        {
+            publishButton.addEventListener('click', e =>
+            {
+                e.preventDefault();
+
+                const promptId = publishButton.dataset.promptId;
+                const publishLink = document.createElement('a');
+                publishLink.href = createLink('ai', 'promptPublish', 'promptId=' + promptId + '&backToTestingLocation=true') + '#app=admin';
+                publishLink.style.display = 'none';
+                document.body.appendChild(publishLink);
+                publishLink.click();
+
+                /* TODO: find a way to close app. */
+                // if($.appCode !== 'admin') $.apps.close($.appCode);
+            });
+        }
+        const auditExitButton = document.getElementById('promptAuditExit');
+        if(auditExitButton)
+        {
+            auditExitButton.addEventListener('click', e =>
+            {
+                e.preventDefault();
+
+                const exitLink = document.createElement('a');
+                exitLink.href = createLink('ai', 'promptAudit', 'promptId=' + promptId + '&objectId=0' + '&exit=true') + '#app=admin';
+                exitLink.style.display = 'none';
+                document.body.appendChild(exitLink);
+                exitLink.click();
+
+                /* TODO: find a way to close app. */
+                // if($.appCode !== 'admin') $.apps.close($.appCode);
+            });
+        }
+        const regenButton = document.getElementById('promptRegenerate');
+        if(regenButton)
+        {
+            regenButton.addEventListener('click', e =>
+            {
+                $('body').attr('data-loading', `$loadingText`);
+                $('body').addClass('load-indicator loading');
+            });
+        }
+        JAVASCRIPT;
+    }
+    h::globalJS("(() => {requestAnimationFrame(() => {{$auditScript}});})();");
+};
+
+/* Inject input data. */
+$inputInject = function() use($module, $method, &$auditInject)
+{
     if(!isset($this->config->ai->availableForms[$module]) || !in_array($method, $this->config->ai->availableForms[$module])) return;
 
     if(isset($_SESSION['aiInjectData']) && isset($_SESSION['aiInjectData'][$module]) && isset($_SESSION['aiInjectData'][$module][$method])) $injectData = $_SESSION['aiInjectData'][$module][$method];
@@ -182,6 +302,6 @@ $inputInject = function()
     })();
     JAVASCRIPT);
 
-    /* TODO: handle prompt audit, see original ../view/inputinject.html.php. */
+    $auditInject();
 };
 $inputInject();
