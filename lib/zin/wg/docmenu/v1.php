@@ -130,7 +130,7 @@ class docMenu extends wg
                 'hint'        => $setting->name,
                 'icon'        => $this->getIcon($setting),
                 'url'         => $this->buildLink($setting),
-                'titleAttrs'  => array('data-app' => $this->tab),
+                'titleAttrs'  => array('data-app' => $this->tab, 'class' => 'item-title w-full'),
                 'data-id'     => $itemID,
                 'data-lib'    => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : zget($setting, 'libID', ''),
                 'data-type'   => $setting->type,
