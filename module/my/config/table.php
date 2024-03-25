@@ -245,7 +245,7 @@ $config->my->task->dtable->fieldList['name']['sortType']     = true;
 $config->my->task->dtable->fieldList['pri']['name']     = 'pri';
 $config->my->task->dtable->fieldList['pri']['title']    = $lang->priAB;
 $config->my->task->dtable->fieldList['pri']['type']     = 'pri';
-$config->my->task->dtable->fieldList['pri']['map']      = $lang->task->priList;
+$config->my->task->dtable->fieldList['pri']['priList']  = $lang->task->priList;
 $config->my->task->dtable->fieldList['pri']['group']    = 'pri';
 $config->my->task->dtable->fieldList['pri']['sortType'] = true;
 
