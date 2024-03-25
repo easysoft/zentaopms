@@ -230,13 +230,19 @@ class todoZen extends todo
      *
      * @param  form      $form
      * @access protected
-     * @return object
+     * @return array|false
      */
-    protected function beforeBatchCreate(form $form): array
+    protected function beforeBatchCreate(form $form): array|false
     {
         $todos = $form->get();
-        foreach($todos as $todo)
+        foreach($todos as $rawID => $todo)
         {
+            if($todo->end < $todo->begin)
+            {
+                dao::$errors["end[{$rawID}]"] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+                continue;
+            }
+
             $account = $this->app->user->account;
             $todo->date         = $this->post->futureDate ? FUTURE_TIME : $this->post->date;
             $todo->account      = $account;
@@ -251,6 +257,8 @@ class todoZen extends todo
 
             unset($todo->switchTime);
         }
+
+        if(dao::isError()) return false;
         return $todos;
     }
 
