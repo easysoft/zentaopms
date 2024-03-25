@@ -3671,11 +3671,12 @@ class storyModel extends model
             ->beginIF($showGrades && isset($storyGrades))->andWhere('grade')->in($storyGrades)->fi()
             ->fi()
             ->beginIF($storyType == 'epic')
-            ->andWhere('(type')->eq('requirement')
+            ->andWhere('((type')->eq('requirement')
             ->beginIF($showGrades && isset($requirementGrades))->andWhere('grade')->in($requirementGrades)->fi()
             ->markRight(1)
             ->orWhere('(type')->eq('story')
             ->beginIF($showGrades && isset($storyGrades))->andWhere('grade')->in($storyGrades)->fi()
+            ->markRight(1)
             ->markRight(1)
             ->fi()
             ->fetchAll('id');
