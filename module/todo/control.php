@@ -94,8 +94,10 @@ class todo extends control
 
         if(!empty($_POST))
         {
-            $form       = form::batchData($this->config->todo->batchCreate->form);
-            $todosData  = $this->todoZen->beforeBatchCreate($form);
+            $form      = form::batchData($this->config->todo->batchCreate->form);
+            $todosData = $this->todoZen->beforeBatchCreate($form);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $todoIdList = $this->todo->batchCreate($todosData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
