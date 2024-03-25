@@ -987,6 +987,7 @@ $lang->ai->assistants->publish                  = 'Publish';
 $lang->ai->assistants->withdraw                 = 'Disable';
 $lang->ai->assistants->confirmPublishTip        = 'After publishing, it will be displayed in the AI dialogue and client dialogue in the lower right corner of ZenTao. Do you want to confirm the publication? ';
 $lang->ai->assistants->confirmWithdrawTip       = 'After deactivation, front-end users will not be able to see this AI assistant. Do you confirm the deactivation? ';
+$lang->ai->assistants->duplicateTip             = 'Assistant names in the same language model cannot be same.';
 
 $lang->ai->assistants->statusList = array();
 $lang->ai->assistants->statusList['0']   = 'Unpublished';

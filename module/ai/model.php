@@ -2825,6 +2825,20 @@ class aiModel extends model
         return true;
     }
 
+    /**
+     * Find assistants name is duplicate.
+     * @param  string $AssistantName
+     * @param  int    $modelId
+     * @access public
+     * @return bool
+     */
+    public function checkAssistantDuplicate($AssistantName, $modelId)
+    {
+        return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
+            ->where('name')->eq($AssistantName)
+            ->andWhere('modelId')->eq($modelId)
+            ->fetch();
+    }
 }
 
 /**

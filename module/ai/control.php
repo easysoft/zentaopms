@@ -358,6 +358,9 @@ class ai extends control
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $exists = $this->ai->checkAssistantDuplicate($assistant->name, $assistant->modelId);
+            if($exists) return $this->send(array('result' => 'fail', 'message' => array('name' => $this->lang->ai->assistants->duplicateTip)));
+
             if(empty($assistant->publish))
             {
                 $this->ai->createAssistant($assistant);
@@ -404,6 +407,9 @@ class ai extends control
                 dao::$errors['greetings'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->assistants->greetings);
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $exists = $this->ai->checkAssistantDuplicate($assistant->name, $assistant->modelId);
+            if($exists) return $this->send(array('result' => 'fail', 'message' => array('name' => $this->lang->ai->assistants->duplicateTip)));
 
             $assistant->id = $assistantId;
             $this->ai->updateAssistant($assistant);

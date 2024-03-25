@@ -987,6 +987,7 @@ $lang->ai->assistants->publish                  = '发布';
 $lang->ai->assistants->withdraw                 = '停用';
 $lang->ai->assistants->confirmPublishTip        = '发布后将显示在禅道右下角AI对话和客户端对话中，是否确认发布？';
 $lang->ai->assistants->confirmWithdrawTip       = '停用后前台用户将无法看到此AI助手，是否确认停用？';
+$lang->ai->assistants->duplicateTip             = '同一语言模型下的助手名称不可重复。';
 
 $lang->ai->assistants->statusList = array();
 $lang->ai->assistants->statusList['0']   = '未发布';
