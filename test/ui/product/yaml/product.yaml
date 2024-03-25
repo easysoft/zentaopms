@@ -1,8 +1,0 @@
-title: product
-author: Yanyi Cao
-version: "1.0"
-fields:
-  - field: name
-    prefix: 产品
-    range: 1-10
-
