@@ -837,10 +837,11 @@ class metricModel extends model
      * Insert into metric lib.
      *
      * @param  array  $recordWithCode
+     * @param  string $calcType
      * @access public
      * @return void
      */
-    public function insertMetricLib($recordWithCode)
+    public function insertMetricLib($recordWithCode, $calcType = 'cron')
     {
         $this->dao->begin();
         foreach($recordWithCode as $code => $records)
@@ -848,6 +849,8 @@ class metricModel extends model
             foreach($records as $record)
             {
                 if(empty($record)) continue;
+
+                $record->calcType = $calcType;
                 $this->dao->insert(TABLE_METRICLIB)
                     ->data($record)
                     ->exec();
@@ -2376,5 +2379,21 @@ class metricModel extends model
         if(!empty($todayData) && empty($dataWithCode)) return $this->lang->metric->noDataAfterCollect;
 
         return $this->lang->metric->noData;
+    }
+
+    public function checkHasInferenceOfDate($code, $dateType, $date)
+    {
+        if($dateType == 'day' || $dateType == 'nodate') return false;
+
+        $date = $this->parseDateStr($date, $dateType);
+
+        $records = $this->dao->select('id')->from(TABLE_METRICLIB)
+           ->where('metricCode')->eq($code)
+           ->andWhere('calcType')->eq('inference')
+           ->beginIF($dateType == 'year')->andWhere('year')->eq($date['year'])->fi()
+           ->beginIF($dateType == 'month')->andWhere('year')->eq($date['year'])->andWhere('month')->eq($date['month'])->fi()
+           ->beginIF($dateType == 'week')->andWhere('year')->eq($date['year'])->andWhere('week')->eq($date['week'])->fi()
+           ->fetch();
+        return !empty($records);
     }
 }

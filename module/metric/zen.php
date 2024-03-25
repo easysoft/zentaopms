@@ -234,6 +234,9 @@ class metricZen extends metric
         $metric   = $this->metric->getByCode($code);
         $dateType = $this->metric->getDateTypeByCode($code);
 
+        if($dateType == 'nodate') return array();
+        if($this->metric->checkHasInferenceOfDate($code, $dateType, $date)) return array();
+
         $dateConfig   = $this->metric->parseDateStr($date, $dateType);
         $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateConfig);
         $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope, "{$date} 23:59:59");

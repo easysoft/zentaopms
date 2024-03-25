@@ -180,10 +180,11 @@ class metric extends control
             {
                 $calcObj = $calcList[$code];
                 $calcObj->result = json_decode(json_encode($calc->result), true);
-                $records[$code] = $this->metricZen->getRecordByCodeAndDate($code, $calcObj, $date);
+                $inferenceRecord = $this->metricZen->getRecordByCodeAndDate($code, $calcObj, $date);
+                if(!empty($inferenceRecord)) $records[$code] = $inferenceRecord;
             }
         }
-        $this->metric->insertMetricLib($records);
+        $this->metric->insertMetricLib($records, 'inference');
     }
 
     /**
