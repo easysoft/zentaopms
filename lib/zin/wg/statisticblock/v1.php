@@ -116,8 +116,8 @@ class statisticBlock extends blockPanel
             ),
             $longBlock ? null : array
             (
-                btn(span(setClass('chevron-left scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full shadow-lg absolute top-3 left-2'), setData('type', 'prev'), set::disabled(!$hasPrev)),
-                btn(span(setClass('chevron-right scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full shadow-lg absolute top-3 right-2'), setData('type', 'next'), set::disabled(!$hasNext)),
+                btn(span(setClass('chevron-left scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full absolute top-3 left-2'), setData('type', 'prev'), set::disabled(!$hasPrev)),
+                btn(span(setClass('chevron-right scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full absolute top-3 right-2'), setData('type', 'next'), set::disabled(!$hasNext)),
                 bind::click('.block-statistic-nav-btn', implode('', array
                 (
                     'const disabled = "disabled";',
