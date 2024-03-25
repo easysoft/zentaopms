@@ -3664,6 +3664,7 @@ class storyModel extends model
         foreach($stories as $story) $rootIdList[] = $story->root;
         $children = $this->dao->select('*')->from(TABLE_STORY)
             ->where('root')->in($rootIdList)
+            ->andWhere('product')->eq($productID)
             ->andWhere('deleted')->eq('0')
             ->beginIF($storyType == 'requirement')
             ->andWhere('type')->eq('story')
