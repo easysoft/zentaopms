@@ -15,6 +15,7 @@ class searchToggle extends wg
     public static function getPageCSS(): ?string
     {
         return <<<'CSS'
+        .nav-item + li > .search-form-toggle {margin-left: 0.5rem}
         .search-form-toggle.active,
         .show-search-form #featureBar .search-form-toggle {--skin-text: var(--color-primary-500); --skin-ring: var(--color-primary-500)}
         CSS;
