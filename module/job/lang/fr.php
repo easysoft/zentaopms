@@ -29,6 +29,7 @@ $lang->job->server          = 'Serveur';
 $lang->job->pipeline        = 'Pipeline';
 $lang->job->buildType       = 'Type Build';
 $lang->job->frame           = 'Cadre';
+$lang->job->useZentao       = 'Trigger by ZenTao';
 $lang->job->triggerType     = 'D閏lencheur';
 $lang->job->atDay           = 'Jours Person.';
 $lang->job->atTime          = 'heure';
@@ -66,6 +67,9 @@ $lang->job->selectPipeline = 'Please select a pipeline';
 $lang->job->buildTypeList['build']          = 'Seulement Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build et D閜loiement';
 $lang->job->buildTypeList['buildAndTest']   = 'Build et Test';
+
+$lang->job->zentaoTrigger['1'] = 'Yes';
+$lang->job->zentaoTrigger['0'] = 'No';
 
 $lang->job->triggerTypeList['tag']      = 'Tag';
 $lang->job->triggerTypeList['commit']   = 'Code Commit';

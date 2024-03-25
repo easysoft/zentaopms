@@ -29,6 +29,7 @@ $lang->job->server          = '服务器';
 $lang->job->pipeline        = '流水线';
 $lang->job->buildType       = '构建类型';
 $lang->job->frame           = '工具/框架';
+$lang->job->useZentao       = '禅道触发';
 $lang->job->triggerType     = '触发方式';
 $lang->job->atDay           = '自定义日期';
 $lang->job->atTime          = '执行时间';
@@ -66,6 +67,9 @@ $lang->job->selectPipeline = '请选择流水线';
 $lang->job->buildTypeList['build']          = '仅构建';
 $lang->job->buildTypeList['buildAndDeploy'] = '构建部署';
 $lang->job->buildTypeList['buildAndTest']   = '构建测试';
+
+$lang->job->zentaoTrigger['1'] = '是';
+$lang->job->zentaoTrigger['0'] = '否';
 
 $lang->job->triggerTypeList['tag']      = '打标签';
 $lang->job->triggerTypeList['commit']   = '提交注释包含关键字';
