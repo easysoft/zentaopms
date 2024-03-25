@@ -70,7 +70,11 @@ function openApp(url, code, options)
         if(!code) return openApp('my');
     }
     const app = apps.map[code];
-    if(!app) return zui.Messager.show('App not found', {type: 'danger', time: 2000});
+    if(!app)
+    {
+        if(debug) console.log('[APPS]', 'App not found.', code, {url, options});
+        return zui.Messager.show('App not found.', {type: 'danger', time: 2000});
+    }
 
     /* Create iframe for app */
     let openedApp = apps.openedMap[code];
