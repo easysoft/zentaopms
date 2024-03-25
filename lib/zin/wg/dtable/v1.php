@@ -135,6 +135,10 @@ class dtable extends wg
             if(!empty($config['type']) && $config['type'] == 'control') $config = $this->initFormCol($config);
             if(!empty($config['actionsMap'])) $config['actionsMap'] = $this->initActions($config['actionsMap'], $module);
 
+            if(!empty($config['stripTags']))
+            {
+                $config['map'] = jsRaw("(value) => {return window.stripTags(value)}");
+            }
             if(!empty($config['delimiter']))
             {
                 if(!empty($config['map']))     $dataPairs = $config['map'];
