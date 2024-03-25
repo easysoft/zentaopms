@@ -1754,6 +1754,7 @@ class kanbanModel extends model
                     $cardData['assignedTo'] = empty($cardData['assignedTo']) ? $object->assignedTo : $cardData['assignedTo'];
                     $cardData['deadline']   = $browseType == 'story' ? '' : $object->deadline;
                     $cardData['severity']   = $browseType == 'bug' ? $object->severity : '';
+                    $cardData['status']     = $object->status;
 
                     if($lane->type == 'story') $cardData['menus'] = $storyCardMenu[$object->id];
                     if($lane->type == 'bug')   $cardData['menus'] = $bugCardMenu[$object->id];
