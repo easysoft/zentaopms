@@ -330,7 +330,7 @@ function hideApp(code)
  * @param {String} urlOrModuleName Url string
  * @return {String}
  */
-function getAppCode(urlOrModuleName)
+function getAppCode(urlOrModuleName, defaultCode)
 {
     var code = navGroup[urlOrModuleName];
     if(code) return code;
@@ -437,7 +437,7 @@ function getAppCode(urlOrModuleName)
     }
 
     code = navGroup[moduleName] || moduleName || urlOrModuleName;
-    return apps.map[code] ? code : '';
+    return apps.map[code] ? code : defaultCode;
 }
 
 /**
