@@ -117,7 +117,7 @@ $lang->misc->feature->aiMiniProgramStencilImage = 'theme/default/images/main/ai_
 $lang->misc->feature->learnMoreLink             = 'https://www.zentao.net/book/zentaopms/1168.html';
 
 /* Release Date. */
-$lang->misc->releaseDate['18.12']       = '2024-03-21';
+$lang->misc->releaseDate['18.12']       = '2024-03-25';
 $lang->misc->releaseDate['18.11']       = '2024-02-28';
 $lang->misc->releaseDate['18.10.1']     = '2024-01-17';
 $lang->misc->releaseDate['18.10']       = '2023-12-18';
@@ -226,6 +226,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.12'][]       = array('title' => '禅道新版本中取消非研发用户的信息和相关判断，技术服务临期增加提醒。实现度量项条目化管理、自定义度量项、基础度量库、一键重算历史度量数据。需求池需求矩阵，路标支持移除已立项需求，运营管理界面增加反馈设置功能，需求池需求搜索条件中增加所属需求池搜索条件。', 'desc' => '');
 $lang->misc->feature->all['18.11'][]       = array('title' => '实现AI小程序功能，实现大屏引用度量项、全局筛选器功能,OR界面实现反馈功能，需求池需求增加关键词，撤回用户需求后需求池需求可以再次分发。', 'desc' => '');
 $lang->misc->feature->all['18.10.1'][]     = array('title' => '需求池增加通知功能，支持产品线功能，支持一个需求分发到多个产品。', 'desc' => '');
 $lang->misc->feature->all['18.10'][]       = array('title' => '用例库可以从其他用例库导入用例，文档导出可以按Word自适应图片比例，历史记录排序方式增加cookie记录，优化修改他人日志逻辑。反馈、工单转化时可自动带入附件，反馈增加关键词、抄送字段，图表类型新增水球图，优化度量项的采集逻辑和展示样式。', 'desc' => '');
