@@ -27,7 +27,7 @@ class moduleMenu extends wg
     public static function getPageCSS(): ?string
     {
         return <<<'CSS'
-        .module-menu {max-height: calc(100vh - 80px); min-height: 32px; --menu-selected-bg: none;}
+        .module-menu {max-height: calc(100vh - 79px); min-height: 32px; --menu-selected-bg: none;}
         .module-menu header a:hover > .icon {color: var(--color-primary-600) !important;}
         .module-menu .tree-item * {white-space: nowrap;}
         .module-menu .tree-item .item-content {color: var(--color-gray-700)}
@@ -43,7 +43,7 @@ class moduleMenu extends wg
         .module-menu-header.is-fixed > .btn-close:not(:hover) {opacity: .5;}
         .sidebar.is-collapsed > .module-menu-header.is-fixed {display: flex;}
         .has-module-menu-header .sidebar-left {transition-property: width;}
-        .has-module-menu-header .module-menu {max-height: calc(100vh - 106px); }
+        .has-module-menu-header .module-menu {max-height: calc(100vh - 105px); }
         .has-module-menu-header .module-menu > .tree {padding-top: 8px; padding-bottom: 8px;}
         CSS;
     }
@@ -243,7 +243,7 @@ class moduleMenu extends wg
             div
             (
                 setID('moduleMenu'),
-                setClass('module-menu shadow-sm rounded bg-canvas col rounded-sm relative'),
+                setClass('module-menu shadow ring rounded bg-canvas col relative'),
                 $isInSidebar ? null : $header,
                 zui::tree
                 (

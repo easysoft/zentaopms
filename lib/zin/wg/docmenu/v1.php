@@ -453,7 +453,7 @@ class docMenu extends wg
                 ) : null,
                 div
                 (
-                    setClass('doc-menu rounded shadow-sm bg-white col rounded-sm'),
+                    setClass('doc-menu rounded shadow ring bg-white col'),
                     h::main
                     (
                         setClass($menuLink ? 'pt-3' : ''),
