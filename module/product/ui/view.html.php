@@ -263,7 +263,8 @@ div
                         span(setClass('ml-2'), $product->executions)
                     )
                 )
-            )
+            ),
+            html($this->printExtendFields($product, 'html', "position=info", false))
         )
     ),
     cell
@@ -288,6 +289,7 @@ div
             set::shadow(false),
             dynamic()
         ),
+        html($this->printExtendFields($product, 'html', "position=basic", false)),
         div
         (
             setClass('mt-4'),

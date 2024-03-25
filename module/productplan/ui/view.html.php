@@ -294,6 +294,7 @@ detailBody
                     item(set::name($lang->productplan->status), $lang->productplan->statusList[$plan->status]),
                     item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc)))
                 ),
+                html($this->printExtendFields($plan, 'html', 'position=all', false)),
                 h::hr(setClass('mt-4')),
                 history(set::objectID($plan->id), set::commentBtn(false))
             )

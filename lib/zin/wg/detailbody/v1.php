@@ -29,8 +29,10 @@ class detailBody extends wg
     {
         global $app;
 
-        $data      = data($app->getModuleName());
-        $fields    = $app->control->appendExtendForm('info', $data);
+        $app->control->loadModel('flow');
+        $isForm    = $this->prop('isForm');
+        $object    = data($app->getModuleName());
+        $fields    = $app->control->appendExtendForm('info', $object);
         $extraMain = array();
         foreach($fields as $field)
         {
@@ -47,7 +49,7 @@ class detailBody extends wg
                 ) : null,
                 set::title($field->name),
                 set::required($field->required),
-                formGroup
+                !$isForm ? div($app->control->flow->getFieldValue($field, $object)) : formGroup
                 (
                     set::id($field->field),
                     set::name($field->field),
@@ -58,7 +60,7 @@ class detailBody extends wg
                 )
             );
         }
-        return sectionList($extraMain);
+        return empty($extraMain) ? null : sectionList($extraMain);
     }
 
     protected function build()

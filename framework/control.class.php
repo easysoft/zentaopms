@@ -487,7 +487,7 @@ class control extends baseControl
         if($type == 'html')
         {
             parse_str($extras, $result);
-            $fields   = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'));
+            $fields = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'));
         }
         else
         {

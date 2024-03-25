@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 $isInModal = isAjaxRequest('modal');
+
+data('caselib', $lib);
 detailHeader
 (
     $isInModal ? to::prefix('') : '',
@@ -34,8 +36,8 @@ detailBody
             set::content($lib->desc),
             set::useHtml(true)
         ),
-        history(set::objectID($lib->id))
     ),
+    history(set::objectID($lib->id)),
     floatToolbar
     (
         !$isInModal ? set::prefix

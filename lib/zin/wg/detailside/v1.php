@@ -12,15 +12,17 @@ class detailSide extends wg
         .detail-side .tabs:not(:first-child) {border-top: 1px solid #E6EAF1;}
         .detail-side .tabs {padding-top: 12px; padding-bottom: 20px;}
         .detail-side > .table-data {width: 100%;}
-        CSS;
+CSS;
     }
 
     protected function buildExtraSide()
     {
         global $app, $lang;
 
-        $data      = data($app->getModuleName());
-        $fields    = $app->control->appendExtendForm('basic', $data);
+        $app->control->loadModel('flow');
+        $isForm    = $this->prop('isForm');
+        $object    = data($app->getModuleName());
+        $fields    = $app->control->appendExtendForm('basic', $object);
         $extraSide = array();
         foreach($fields as $field)
         {
@@ -35,7 +37,7 @@ class detailSide extends wg
                     set::showDelete(true)
                 ) : null,
                 set::name($field->name),
-                formGroup
+                !$isForm ? div($app->control->flow->getFieldValue($field, $object)) : formGroup
                 (
                     set::id($field->field),
                     set::name($field->field),

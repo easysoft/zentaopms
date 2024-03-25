@@ -277,6 +277,7 @@ detailBody
                             html($build->desc)
                         )
                     ),
+                    html($this->printExtendFields($build, 'html', 'position=all', false)),
                     $build->files ? h::hr(set::className('mt-6')) : null,
                     section
                     (
