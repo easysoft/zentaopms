@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('repoList', $repoList);
 jsVar('engine', $job->engine);
 jsVar('job', $job);
 jsVar('dirChange', $lang->job->dirChange);
@@ -100,6 +99,18 @@ if($this->session->repoID)
     dropmenu(set::objectID($this->session->repoID), set::text($repoName), set::tab('repo'));
 }
 
+$repoPairs = array();
+foreach($repoList as $repoID => $repo)
+{
+    if($job->engine == 'jenkins')
+    {
+        $repoPairs[$repoID] = "[{$repo->SCM}] {$repo->name}";
+        continue;
+    }
+
+    if(strtolower($repo->SCM) == $job->engine) $repoPairs[$repoID] = "[{$repo->SCM}] {$repo->name}";
+}
+
 formPanel
 (
     set::title($lang->job->edit),
@@ -141,13 +152,13 @@ formPanel
             set::required(true),
             set::width('1/2'),
             set::name('repo'),
-            set::items(array()),
+            set::items($repoPairs),
             set::value($job->repo),
             on::change('changeRepo')
         ),
         formGroup
         (
-            $job->engine == 'jenkins' ? setClass('reference hidden') : setClass('reference hidden'),
+            setClass('reference hidden'),
             set::labelWidth('5em'),
             set::label($lang->job->branch),
             set::required(true),

@@ -1,32 +1,3 @@
-function changeEngine(engine)
-{
-    engine == 'jenkins' ? $('.reference').show() : $('.reference').hide();
-
-    const repos = [];
-    for(const repoID in repoList)
-    {
-        const repo = repoList[repoID];
-        if(engine == 'jenkins')
-        {
-            repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
-            continue;
-        }
-
-        if(repo.SCM.toLowerCase() == engine) repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
-    }
-    const picker = $('[name=repo]').zui('picker');
-    if(picker) picker.render({items: repos});
-
-    if(engine == 'jenkins')
-    {
-        $('#jenkinsServerTR').removeClass('hidden');
-    }
-    else
-    {
-        $('#jenkinsServerTR').addClass('hidden');
-    }
-}
-
 function changeFrame(event)
 {
     const frame = $(event.target).val();
@@ -183,7 +154,6 @@ function changeSonarqubeServer(event)
 
 $(function()
 {
-    changeEngine(engine);
     changeTrigger(job.triggerType);
     changeTriggerType(job.triggerType);
 
