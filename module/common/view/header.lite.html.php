@@ -11,7 +11,7 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
 $commonLang   = array('zh-cn', 'zh-tw', 'en', 'fr', 'de');
 ?>
 <!DOCTYPE html>
-<html lang='<?php echo $clientLang;?>'>
+<html lang='<?php echo $clientLang;?>' class='theme-<?php echo $this->cookie->theme;?>'>
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>

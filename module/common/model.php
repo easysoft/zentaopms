@@ -2908,7 +2908,7 @@ class commonModel extends model
 
         $html .= "</ul>";
         $html .= "<a class='dropdown-toggle' data-toggle='dropdown'>";
-        $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
+        $html .= "<i class='icon icon-plus'></i>";
         $html .= "</a>";
 
         echo $html;

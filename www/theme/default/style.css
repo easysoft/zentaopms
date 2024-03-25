@@ -78,14 +78,25 @@ th.c-confirmed, th.c-confirm {text-align: center;}
 .confirmed, .confirm1 {color: #313C52;}
 .unconfirmed, .confirm0 {color: #9EA3B0;}
 
-#userNav>li.open>a:before, #userNav>li>a:hover:before {position: absolute; bottom: 0px; left: calc(50% - 10px); width: 0; height: 0; content: ' '; border-color: transparent transparent #fff transparent; border-style: solid; border-width: 0 10px 10px 10px;}
+#navbar .nav>li.active>a {background-color: transparent;}
+#navbar .nav>li.active>a:before {position: absolute; right: 10px; bottom: 8px!important; left: 10px; display: block; height: 2px; content: ' '; background-color: var(--color-primary); opacity: .9;}
+.theme-default #navbar .nav>li.active>a:before {background-color: #fff;}
+
+#userNav > li {height: 48px; display: flex; align-items: center; justify-content: center;}
+#userNav > li + li {margin-left: 8px;}
+#userNav .avatar {margin: 1px; width: 28px; height: 28px;}
+#userNav > li > .dropdown-toggle > .icon {width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 18px; position: relative; margin-top: 1px; color: var(--color-primary)}
+#userNav > li > .dropdown-toggle > .icon::after {content: ' '; display: block; position: absolute; left: 0; top: 0; right: 0; bottom: 0; border-radius: 2px; opacity: .4; border: 1px solid currentColor}
+.theme-default #userNav > li > .dropdown-toggle > .icon {color: #fff;}
+#userNav>li.open>a:before, #userNav>li>a:hover:before {position: absolute; bottom: 0px; left: calc(50% - 5px); width: 0; height: 0; content: ' '; border-color: transparent transparent #fff transparent; border-style: solid; border-width: 0 6px 6px 6px;}
 #userNav .dropdown-menu {z-index: 2000;}
-#userNav .dropdown-menu:hover + .dropdown-toggle:before {position: absolute; bottom: 0px; left: calc(50% - 10px); width: 0; height: 0; content: ' '; border-color: transparent transparent #fff transparent; border-style: solid; border-width: 0 10px 10px 10px;}
+#userNav .dropdown-menu:hover + .dropdown-toggle:before {position: absolute; bottom: 0px; left: calc(50% - 5px); width: 0; height: 0; content: ' '; border-color: transparent transparent #fff transparent; border-style: solid; border-width: 0 6px 6px 6px;}
 #userNav .dropdown-menu, #userNav .create-list {margin-right: -15px !important; border-top: 0px;}
 #userNav .dropdown-menu .dropdown-submenu>ul {margin-right: 0px !important;}
 #userNav .dropdown-menu .dropdown-submenu>ul::before {position: absolute; content: ''; top: -60px; bottom: -40px; left: -40px; right: 0;}
 #userNav .dropdown-menu>li>a::before {position: absolute; content: ''; top: -4px; bottom: -4px; left: -10px; right: -10px;}
 #userNav .create-list:hover:before {right: 21.5% !important;}
+#userNav .dropdown-menu > li > a:hover > .user-profile-role {color: #FFFFFF;}
 #modules li>a, #modules ul>li>a {overflow: hidden; white-space: nowrap;}
 
 .fixed-head-table{z-index:1000;}
@@ -240,7 +251,5 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 #adminMenu.dropdown-menu > li > a {padding: 6px 29px 6px 20px;}
 #adminMenu.dropdown-menu > li > a > img {padding-bottom: 4px; padding-right: 8px;}
 #adminMenu.dropdown-menu > li.disabled img {filter: grayscale(100%); opacity: .6;}
-
-#userNav .dropdown-menu > li > a:hover > .user-profile-role {color: #FFFFFF;}
 
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding: 6px;}
