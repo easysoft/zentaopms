@@ -34,7 +34,7 @@ $config->ai->actionList['modeldelete']['url']              = 'javascript:confirm
 $config->ai->actionList['assistantpublish']['icon']     = 'publish';
 $config->ai->actionList['assistantpublish']['text']     = $lang->ai->assistants->publish;
 $config->ai->actionList['assistantpublish']['hint']     = $lang->ai->assistants->publish;
-$config->ai->actionList['assistantpublish']['url']      = array('module' => 'ai', 'method' => 'assistantpublish', 'params' => 'assistantID={id}');
+$config->ai->actionList['assistantpublish']['url']      = 'javascript:confirmPublish("{id}")';
 $config->ai->actionList['assistantwithdraw']['icon']    = 'ban-circle';
 $config->ai->actionList['assistantwithdraw']['text']    = $lang->ai->assistants->withdraw;
 $config->ai->actionList['assistantwithdraw']['hint']    = $lang->ai->assistants->withdraw;

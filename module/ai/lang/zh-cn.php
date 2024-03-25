@@ -984,7 +984,9 @@ $lang->ai->assistants->systemMessagePlaceholder = '您可以赋予此AI对话“
 $lang->ai->assistants->greetings                = '问候语';
 $lang->ai->assistants->greetingsPlaceholder     = '您可以设置此AI对话的打招呼文案，例如，“哈喽，我是你的周报小助手，还在为写周报困扰吗，试试将一周的工作发送给我试试？”';
 $lang->ai->assistants->publish                  = '发布';
-$lang->ai->assistants->withdraw                 = '下架';
+$lang->ai->assistants->withdraw                 = '停用';
+$lang->ai->assistants->confirmPublishTip        = '发布后将显示在禅道右下角AI对话和客户端对话中，是否确认发布？';
+$lang->ai->assistants->confirmWithdrawTip       = '停用后前台用户将无法看到此AI助手，是否确认停用？';
 
 $lang->ai->assistants->statusList = array();
 $lang->ai->assistants->statusList['0']   = '未发布';

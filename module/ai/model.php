@@ -2807,6 +2807,24 @@ class aiModel extends model
         return true;
     }
 
+    /**
+     * Toggle an assistant.
+     * @param  int    $assistantId
+     * @param  bool   $enabled
+     * @access public
+     * @return bool
+     */
+    public function toggleAssistant($assistantId, $enabled)
+    {
+        $this->dao->update(TABLE_AI_ASSISTANT)
+            ->set('enabled')->eq($enabled ? '1' : '0')
+            ->where('id')->eq($assistantId)
+            ->exec();
+        if(dao::isError()) return false;
+
+        return true;
+    }
+
 }
 
 /**

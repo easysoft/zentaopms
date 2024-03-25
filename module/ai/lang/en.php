@@ -984,7 +984,9 @@ $lang->ai->assistants->systemMessagePlaceholder = 'You can give this AI dialogue
 $lang->ai->assistants->greetings                = 'Greetings';
 $lang->ai->assistants->greetingsPlaceholder     = 'You can set the greeting message for this AI dialogue, for example, "Hello, I am your weekly report assistant, are you still troubled by writing weekly reports? Try sending me a week\'s work?"';
 $lang->ai->assistants->publish                  = 'Publish';
-$lang->ai->assistants->withdraw                 = 'Withdraw';
+$lang->ai->assistants->withdraw                 = 'Disable';
+$lang->ai->assistants->confirmPublishTip        = 'After publishing, it will be displayed in the AI dialogue and client dialogue in the lower right corner of ZenTao. Do you want to confirm the publication? ';
+$lang->ai->assistants->confirmWithdrawTip       = 'After deactivation, front-end users will not be able to see this AI assistant. Do you confirm the deactivation? ';
 
 $lang->ai->assistants->statusList = array();
 $lang->ai->assistants->statusList['0']   = 'Unpublished';

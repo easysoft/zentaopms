@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('confirmPublishTip', $lang->ai->assistants->confirmPublishTip);
+jsVar('confirmWithdrawTip', $lang->ai->assistants->confirmWithdrawTip);
+
 featureBar();
 toolbar(
     item(
