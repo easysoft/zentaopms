@@ -710,7 +710,7 @@ class bugZen extends bug
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
-        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $bug->uid);
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->edit['id'], $bug->uid);
 
         return $bug;
     }
