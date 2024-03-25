@@ -104,6 +104,7 @@ if($this->session->repoID)
 formPanel
 (
     set::title($lang->job->edit),
+    setClass('job-form'),
     set::labelWidth('10em'),
     on::click('.add-param', 'addItem'),
     on::click('.delete-param', 'deleteItem'),
@@ -173,6 +174,16 @@ formPanel
         set::width('1/2'),
         on::change('changeFrame')
     ),
+    formGroup
+    (
+        set::name('useZentao'),
+        set::label($lang->job->useZentao),
+        set::control('radioListInline'),
+        set::items($lang->job->zentaoTrigger),
+        set::value($job->triggerType ? '1' : '0'),
+        set::width('1/2'),
+        on::change('changeTrigger')
+    ),
     formRow
     (
         formGroup
@@ -193,7 +204,6 @@ formPanel
             set::name('svnDir[]'),
             set::width('1/2'),
             set::label($lang->job->svnDir),
-            set::control('select'),
             set::items(!empty($dirs) ? $dirs : array()),
             set::value($job->svnDir)
         )

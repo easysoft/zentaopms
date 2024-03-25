@@ -85,19 +85,12 @@ function changeRepo(event)
                 $('.reference').removeClass('gitRepo');
                 if($('[name=triggerType]').val() == 'tag') $('.svn-fields').removeClass('hidden');
 
-                $('#svnDir').remove();
-                $('#svnDirBox').append("<div class='load-indicator loading'></div>");
                 $.getJSON($.createLink('repo', 'ajaxGetSVNDirs', 'repoID=' + repoID), function(tags)
                 {
-                    html = "<select id='svnDir' name='svnDir[]' class='form-control'>";
-                    for(path in tags)
-                    {
-                        var encodePath = tags[path];
-                        html += "<option value='" + path + "' data-encodePath='" + encodePath + "'>" + path + "</option>";
-                    }
-                    html += '</select>';
-                    $('#svnDirBox .loading').remove();
-                    $('#svnDirBox').append(html);
+                    const $svnDom = $('#svnDir').zui('picker');
+                    const options = [];
+                    for(path in tags) options.push({text: path, value: path});
+                    $svnDom.render({items: options});
                 })
             }
 

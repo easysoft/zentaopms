@@ -57,3 +57,25 @@ function loadRepoList(engine = '')
         }
     });
 }
+
+function changeTrigger(event)
+{
+    if($(event.target).val() == 1)
+    {
+        $('.job-form #paramDiv').show();
+        $('.job-form .sonarqube').show();
+        $('.job-form .custom-fields').show();
+        $('.job-form .comment-fields').show();
+        $('.job-form #jenkinsServerTR').show();
+        $('.job-form [data-name="triggerType"]').show();
+    }
+    else
+    {
+        $('.job-form #paramDiv').hide();
+        $('.job-form .sonarqube').hide();
+        $('.job-form .custom-fields').hide();
+        $('.job-form .comment-fields').hide();
+        $('.job-form #jenkinsServerTR').hide();
+        $('.job-form [data-name="triggerType"]').hide();
+    }
+}

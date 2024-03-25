@@ -25,6 +25,7 @@ if($this->session->repoID)
 formPanel
 (
     set::title($lang->job->create),
+    setClass('job-form'),
     set::labelWidth('10em'),
     on::click('.add-param', 'addItem'),
     on::click('.delete-param', 'deleteItem'),
@@ -93,26 +94,33 @@ formPanel
         set::width('1/2'),
         on::change('changeFrame')
     ),
-    formRow
+    formGroup
     (
-        formGroup
-        (
-            set::name('triggerType'),
-            set::width('1/2'),
-            set::label($lang->job->triggerType),
-            set::items($lang->job->triggerTypeList),
-            on::change('changeTriggerType')
-        )
+        set::name('useZentao'),
+        set::label($lang->job->useZentao),
+        set::control('radioListInline'),
+        set::items($lang->job->zentaoTrigger),
+        set::value('1'),
+        set::width('1/2'),
+        on::change('changeTrigger')
+    ),
+    formGroup
+    (
+        set::name('triggerType'),
+        set::width('1/2'),
+        set::label($lang->job->triggerType),
+        set::items($lang->job->triggerTypeList),
+        on::change('changeTriggerType')
     ),
     formRow
     (
         setClass('svn-fields hidden'),
         formGroup
         (
-            set::id('svnDirBox'),
+            set::name('svnDir[]'),
             set::width('1/2'),
             set::label($lang->job->svnDir),
-            set::control('static'),
+            set::items(array())
         )
     ),
     formRow
