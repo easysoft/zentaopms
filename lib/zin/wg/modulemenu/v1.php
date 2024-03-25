@@ -26,7 +26,26 @@ class moduleMenu extends wg
 
     public static function getPageCSS(): ?string
     {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+        return <<<'CSS'
+        .module-menu {max-height: calc(100vh - 80px); min-height: 32px; --menu-selected-bg: none;}
+        .module-menu header a:hover > .icon {color: var(--color-primary-600) !important;}
+        .module-menu .tree-item * {white-space: nowrap;}
+        .module-menu .tree-item .item-content {color: var(--color-gray-700)}
+        .module-menu .tree-item > .selected .item-content {color: var(--color-fore)}
+        .has-module-menu-header #mainMenu {padding-left: 180px;}
+        .module-menu-header.is-fixed {position: absolute; left: 0; top: -44px; width: 160px; height: 32px; border: 1px solid var(--color-border); justify-content: center; padding: 0 24px; border-right: 0;}
+        .module-menu-header.is-fixed::before,
+        .module-menu-header.is-fixed::after {content: ''; position: absolute; top: 0; right: -12px; width: 0; height: 0; border-style: solid; border-color: transparent transparent transparent var(--color-border); border-width: 15px 0 15px 12px;}
+        .module-menu-header.is-fixed::after {right: -11px; border-color: transparent transparent transparent var(--color-canvas);}
+        .has-module-menu-header.is-sidebar-left-collapsed .module-menu-header.is-fixed {left: var(--gutter-width)}
+        .module-menu-header.is-fixed .module-title {font-size: var(--font-size-base);}
+        .module-menu-header.is-fixed > .btn-close {position: absolute; right: 0; font-weight: normal;}
+        .module-menu-header.is-fixed > .btn-close:not(:hover) {opacity: .5;}
+        .sidebar.is-collapsed > .module-menu-header.is-fixed {display: flex;}
+        .has-module-menu-header .sidebar-left {transition-property: width;}
+        .has-module-menu-header .module-menu {max-height: calc(100vh - 106px); }
+        .has-module-menu-header .module-menu > .tree {padding-top: 8px; padding-bottom: 8px;}
+        CSS;
     }
 
     private array $modules = array();
@@ -113,34 +132,52 @@ class moduleMenu extends wg
     private function buildActions(): node|null
     {
         $settingLink = $this->prop('settingLink');
-        $settingText = $this->prop('settingText');
         $showDisplay = $this->prop('showDisplay');
-        $tab         = $this->prop('settingApp');
         if(!$settingLink && !$showDisplay) return null;
 
         global $app;
         $lang = $app->loadLang('datatable')->datatable;
-        $currentModule = $app->rawModule;
-        $currentMethod = $app->rawMethod;
-
-        if(!$settingText) $settingText = $lang->moduleSetting;
-
-        $datatableId = $app->moduleName . ucfirst($app->methodName);
 
         $items = array();
-        if($settingLink) $items[] = array
-        (
-            'text'      => $settingText,
-            'url'       => $settingLink,
-            'data-app'  => $tab ? $tab : $app->tab
-        );
-        if($showDisplay) $items[] = array
-        (
-            'text'        => $lang->displaySetting,
-            'url'         => createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod"),
-            'data-toggle' => 'modal',
-            'data-size'   => 'md'
-        );
+        if($settingLink)
+        {
+            $tab         = $this->prop('settingApp',  $app->tab);
+            $settingText = $this->prop('settingText', $lang->moduleSetting);
+
+            if(empty($this->prop('items')))
+            {
+                return btn
+                (
+                    setClass('m-4 mt-0'),
+                    set::text($settingText),
+                    set::url($settingLink),
+                    set::type('primary-pale'),
+                    setData('app', $tab),
+                );
+            }
+
+            $items[] = array
+            (
+                'text'      => $settingText,
+                'url'       => $settingLink,
+                'data-app'  => $tab
+            );
+        }
+        if($showDisplay)
+        {
+            $datatableId   = $app->moduleName . ucfirst($app->methodName);
+            $currentModule = $app->rawModule;
+            $currentMethod = $app->rawMethod;
+            $items[] = array
+            (
+                'text'        => $lang->displaySetting,
+                'url'         => createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod"),
+                'data-toggle' => 'modal',
+                'data-size'   => 'md'
+            );
+        }
+
+        if(empty($item)) return null;
 
         return dropdown
         (
