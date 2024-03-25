@@ -130,6 +130,7 @@ class mainNavbar extends nav
         return div
         (
             setID('mainNavbar'),
+            setClass('shadow'),
             div
             (
                 setClass('container'),
