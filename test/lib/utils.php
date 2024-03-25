@@ -132,7 +132,7 @@ function zdRun($isDev = false)
     if($isDev === true)
     {
         if(isset($config->db->devDbName)) $dao->exec("set global sql_mode = ''; set global max_allowed_packet = 1000000000; set global net_buffer_length = 10000000;  use {$config->db->devDbName};");
-        $zdRoot = dirname(dirname(__FILE__)) . "/devdata/";
+        $zdRoot = dirname(dirname(__FILE__)) . "/data/dev/";
     }
 
     $zdPath = RUNTIME_ROOT . 'zd';
