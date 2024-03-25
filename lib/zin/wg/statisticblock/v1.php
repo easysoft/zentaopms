@@ -110,14 +110,14 @@ class statisticBlock extends blockPanel
             setClass('flex-none block-statistic-nav border-r', $longBlock ? 'w-52' : 'relative w-full'),
             nav
             (
-                setClass('scrollbar-thin scrollbar-hover p-2 pr-0.5', $longBlock ? 'overflow-y-auto overflow-x-hidden h-full' : 'overflow-x-auto overflow-y-hidden'),
+                setClass('scrollbar-thin scrollbar-hover pr-0.5', $longBlock ? 'p-2 overflow-y-auto overflow-x-hidden h-full' : 'm-2 bg-primary-50 px-4 overflow-x-auto overflow-y-hidden'),
                 set::stacked($longBlock),
                 $navItems
             ),
             $longBlock ? null : array
             (
-                btn(span(setClass('chevron-left scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full absolute top-3 left-2'), setData('type', 'prev'), set::disabled(!$hasPrev)),
-                btn(span(setClass('chevron-right scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity canvas text-primary rounded-full absolute top-3 right-2'), setData('type', 'next'), set::disabled(!$hasNext)),
+                btn(span(setClass('chevron-left scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity ghost text-primary absolute top-3 left-4'), setData('type', 'prev'), set::disabled(!$hasPrev)),
+                btn(span(setClass('chevron-right scale-75')), setClass('block-statistic-nav-btn size-sm square w-6 transition-opacity ghost text-primary absolute top-3 right-4'), setData('type', 'next'), set::disabled(!$hasNext)),
                 bind::click('.block-statistic-nav-btn', implode('', array
                 (
                     'const disabled = "disabled";',
