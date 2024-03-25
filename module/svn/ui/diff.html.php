@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader(set::titile("$url@$revision"));
+modalHeader(set::title("$url@$revision"));
 
 div
 (
