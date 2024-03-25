@@ -546,14 +546,7 @@ div
                 (
                     h::tr
                     (
-                        h::td
-                        (
-                            div
-                            (
-                                setClass('flex flex-wrap member-list pt-2'),
-                                $membersDom
-                            )
-                        )
+                        h::td(div(setClass('flex flex-wrap member-list pt-2'), $membersDom))
                     )
                 )
             ),
@@ -566,14 +559,7 @@ div
                 (
                     h::tr
                     (
-                        h::th
-                        (
-                            div
-                            (
-                                setClass('flex items-center justify-between'),
-                                span($lang->execution->DurationStats)
-                            )
-                        )
+                        h::th(div(setClass('flex items-center justify-between'), span($lang->execution->DurationStats)))
                     )
                 ),
                 h::tbody
@@ -588,58 +574,26 @@ div
                                 div
                                 (
                                     setClass('w-1/4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->begin
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->begin
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->begin),
+                                    span(setClass('ml-2'), $execution->begin)
                                 ),
                                 div
                                 (
                                     setClass('w-1/4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->end
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->end
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->end),
+                                    span(setClass('ml-2'), $execution->end)
                                 ),
                                 div
                                 (
                                     setClass('w-1/4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->realBeganAB
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->realBeganAB),
+                                    span(setClass('ml-2'), helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan)
                                 ),
                                 div
                                 (
                                     setClass('w-1/4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->realEndAB
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        helper::isZeroDate($execution->realEnd) ? '' : $execution->realEnd
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->realEndAB),
+                                    span(setClass('ml-2'), helper::isZeroDate($execution->realEnd) ? '' : $execution->realEnd)
                                 )
                             )
                         )
@@ -653,14 +607,7 @@ div
                 (
                     h::tr
                     (
-                        h::th
-                        (
-                            div
-                            (
-                                setClass('flex items-center justify-between'),
-                                span($lang->execution->lblStats)
-                            )
-                        )
+                        h::th(div(setClass('flex items-center justify-between'), span($lang->execution->lblStats)))
                     )
                 ),
                 h::tbody
@@ -675,72 +622,32 @@ div
                                 div
                                 (
                                     setClass('w-1/3'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->estimateHours
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->totalEstimate . $lang->execution->workHourUnit
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->estimateHours),
+                                    span(setClass('ml-2'), $execution->totalEstimate . $lang->execution->workHourUnit)
                                 ),
                                 div
                                 (
                                     setClass('w-1/3'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->consumedHours
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->totalConsumed . $lang->execution->workHourUnit
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->consumedHours),
+                                    span(setClass('ml-2'), $execution->totalConsumed . $lang->execution->workHourUnit)
                                 ),
                                 div
                                 (
                                     setClass('w-1/3'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->leftHours
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->totalLeft . $lang->execution->workHourUnit
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->leftHours),
+                                    span(setClass('ml-2'), $execution->totalLeft . $lang->execution->workHourUnit)
                                 ),
                                 div
                                 (
                                     setClass('w-1/3 mt-4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->totalDays
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->days
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->totalDays),
+                                    span(setClass('ml-2'), $execution->days)
                                 ),
                                 div
                                 (
                                     setClass('w-1/3 mt-4'),
-                                    span
-                                    (
-                                        setClass('text-gray'),
-                                        $lang->execution->totalHours
-                                    ),
-                                    span
-                                    (
-                                        setClass('ml-2'),
-                                        $execution->totalHours . $lang->execution->workHourUnit
-                                    )
+                                    span(setClass('text-gray'), $lang->execution->totalHours),
+                                    span(setClass('ml-2'), $execution->totalHours . $lang->execution->workHourUnit)
                                 )
                             )
                         )
@@ -777,17 +684,11 @@ div
                 (
                     h::tr
                     (
-                        h::td
-                        (
-                            div
-                            (
-                                setClass('flex flex-wrap pt-2'),
-                                $docLibDom
-                            )
-                        )
+                        h::td(div(setClass('flex flex-wrap pt-2'), $docLibDom))
                     )
                 )
-            ) : null
+            ) : null,
+            html($this->printExtendFields($execution, 'html', 'position=info', false))
         )
     ),
     div
@@ -797,11 +698,7 @@ div
         (
             to::heading
             (
-                div
-                (
-                    set('class', 'panel-title'),
-                    $lang->execution->latestDynamic
-                )
+                div(set('class', 'panel-title'), $lang->execution->latestDynamic)
             ),
             to::headingActions
             (
@@ -816,6 +713,7 @@ div
             set::shadow(false),
             dynamic()
         ),
+        html($this->printExtendFields($execution, 'html', 'position=basic', false)),
         div
         (
             setClass('mt-4'),

@@ -12,6 +12,7 @@ namespace zin;
 
 $isInModal = isAjaxRequest('modal');
 
+data('testtask', $task);
 detailHeader
 (
     to::title
@@ -85,61 +86,29 @@ detailBody
                         set::name($lang->testtask->build),
                         span
                         (
-                            $isInModal ? $buildName :a
+                            $isInModal ? $buildName : a
                             (
                                 set::href(createLink('build', 'view', "buildID=$task->build")),
                                 $buildName
                             )
                         )
                     ),
-                    item
-                    (
-                        set::name($lang->testtask->type),
-                        $taskType
-                    ),
-                    item
-                    (
-                        set::name($lang->testtask->owner),
-                        zget($users, $task->owner)
-                    ),
-                    item
-                    (
-                        set::name($lang->testtask->mailto),
-                        $mailto
-                    ),
-                    item
-                    (
-                        set::name($lang->testtask->pri),
-                        priLabel($task->pri, set::text($lang->testtask->priList))
-                    ),
-                    item
-                    (
-                        set::name($lang->testtask->begin),
-                        $task->begin
-                    ),
-                    item
-                    (
-                        set::name($lang->testtask->end),
-                        $task->end
-                    ),
-                    item
-                    (
-                        set::name($lang->testtask->realFinishedDate),
-                        !helper::isZeroDate($task->realFinishedDate) ? $task->realFinishedDate : ''
-                    ),
-                    item
-                    (
-                        set::name($lang->testtask->status),
-                        $this->processStatus('testtask', $task)
-                    ),
+                    item(set::name($lang->testtask->type), $taskType),
+                    item(set::name($lang->testtask->owner), zget($users, $task->owner)),
+                    item(set::name($lang->testtask->mailto), $mailto),
+                    item(set::name($lang->testtask->pri), priLabel($task->pri, set::text($lang->testtask->priList))),
+                    item(set::name($lang->testtask->begin), $task->begin),
+                    item(set::name($lang->testtask->end), $task->end),
+                    item(set::name($lang->testtask->realFinishedDate), !helper::isZeroDate($task->realFinishedDate) ? $task->realFinishedDate : ''),
+                    item(set::name($lang->testtask->status), $this->processStatus('testtask', $task)),
                     item
                     (
                         set::name($lang->testtask->testreport),
-                        !empty($task->testreport) ? a
+                        empty($task->testreport) ? null : a
                         (
                             set('href', createLink('testreport', 'view', "reportID=$task->testreport")),
                             zget($testreport, 'title', '')
-                        ) : null
+                        )
                     )
                 )
             )
