@@ -45,7 +45,7 @@ class mainNavbar extends nav
         return <<<'CSS'
         #mainNavbar {padding-left: 1rem; padding-right: 1rem;}
         #mainNavbar .main-navbar-left {position: absolute; z-index: 2;}
-        #mainNavbar .main-navbar-left #switcher {position: relative; top: 5px; border: 1px solid rgb(var(--color-primary-500-rgb));}
+        #mainNavbar .main-navbar-left #switcher {position: relative; top: 5px; left: -1rem; border: 1px solid rgb(var(--color-primary-500-rgb));}
         #mainNavbar .main-navbar-left #switcher > .dropmenu-btn {background: #FFF;}
         #mainNavbar .main-navbar-left #switcher > .dropmenu-btn:before {background: unset;}
         #mainNavbar .main-navbar-left #switcher:after, #mainNavbar .main-navbar-left #switcher:before {position: absolute; display: block; width: 0; height: 0; content: ' '; border-style: solid; border-width: 17px 0 17px 8px; top: -1px;}
