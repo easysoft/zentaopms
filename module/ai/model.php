@@ -360,6 +360,11 @@ class aiModel extends model
             ->where('id')->eq($modelID)
             ->exec();
 
+        $this->dao->update(TABLE_IM_CHAT)
+            ->set('dismissDate')->eq(helper::now())
+            ->where('gid')->like( "%&ai-$modelID")
+            ->exec();
+
         return !dao::isError();
     }
 
