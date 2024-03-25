@@ -312,7 +312,7 @@ detailBody
                     html($this->printExtendFields($release, 'html', 'position=all', false)),
                     fileList(set::files($release->files)),
                     h::hr(set::className('mt-6')),
-                    history(set::objectID($release->id))
+                    history(set::objectID($release->id), set::objectType('release'))
                 )
             )
         )
