@@ -998,7 +998,7 @@
             location.href = $.createLink('index', 'app', 'url=' + btoa(url));
             return;
         }
-        $.apps.openApp(url, $.extend({code: appCode, forceReload: true}, options));
+        $.apps.openApp(url, $.extend({code: appCode || currentCode, forceReload: true}, options));
     }
 
     function autoLoad(id)
