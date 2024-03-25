@@ -177,7 +177,7 @@ class moduleMenu extends wg
             );
         }
 
-        if(empty($item)) return null;
+        if(empty($items)) return null;
 
         return dropdown
         (
