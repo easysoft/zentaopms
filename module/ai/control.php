@@ -347,6 +347,17 @@ class ai extends control
         if(strtolower($this->server->request_method) == 'post')
         {
             $assistant = fixer::input('post')->get();
+
+            if(empty($assistant->name))
+            {
+                dao::$errors['name'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->assistants->name);
+            }
+            if(empty($assistant->greetings))
+            {
+                dao::$errors['greetings'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->assistants->greetings);
+            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if(empty($assistant->publish))
             {
                 $this->ai->createAssistant($assistant);
@@ -384,6 +395,16 @@ class ai extends control
         if(strtolower($this->server->request_method) == 'post')
         {
             $assistant = fixer::input('post')->get();
+            if(empty($assistant->name))
+            {
+                dao::$errors['name'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->assistants->name);
+            }
+            if(empty($assistant->greetings))
+            {
+                dao::$errors['greetings'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->assistants->greetings);
+            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $assistant->id = $assistantId;
             $this->ai->updateAssistant($assistant);
 

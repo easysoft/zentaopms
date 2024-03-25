@@ -7,12 +7,6 @@ formPanel
 (
     set::title($lang->ai->assistants->edit),
     set::id('assistant-form'),
-    set::actions(
-        array(
-            array('text' => $lang->save, 'class' => 'btn primary', 'id' => 'save-assistant-button', 'btnType' => 'submit'),
-            'cancel'
-        )
-    ),
     formGroup
     (
         set::label($lang->ai->assistants->name),
@@ -67,9 +61,12 @@ formPanel
         textarea
         (
             set::name('greetings'),
+            set::required(true),
             set::rows(3),
             set::placeholder($lang->ai->assistants->greetingsPlaceholder),
             set::value($assistant->greetings)
         )
     )
 );
+
+render();
