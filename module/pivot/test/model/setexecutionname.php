@@ -38,5 +38,5 @@ $pivot->setExecutionName($executionList[1], $canViewList[1]);
 $pivot->setExecutionName($executionList[2], $canViewList[2]);
 
 r($execution1->executionName) && p('') && e('空');  //测试当execution的multiple为0时，生成的executionName为空
-r($execution2->executionName) && p('') && e('name1');  //测试当execution的multiple为1时，生成的executionName为executionName值本身、
+r($execution2->executionName) && p('') && e('<span title=name1>name1</span>');  //测试当execution的multiple为1时，生成的executionName为executionName值本身、
 r($execution3->executionName && trim(strip_tags($execution3->executionName)) == trim($execution3_->executionName)) && p('') && e('1');  //测试当execution的multiple为1时，生成的executionName为带了标签的值。

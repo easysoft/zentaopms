@@ -96,5 +96,7 @@ fields:
     range: ''
   - field: hasProduct
     range: 1
+  - field: progress
+    range: '0.00'
   - field: deleted
     range: 0

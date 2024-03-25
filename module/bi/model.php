@@ -41,8 +41,8 @@ class biModel extends model
         if(is_file($path))
         {
             include $path;
-            $fieldObject = $schema->fields[$field]['object'];
-            $fieldShow   = explode('.', $schema->fields[$field]['show']);
+            $fieldObject = isset($schema->fields[$field]['object']) ? $schema->fields[$field]['object'] : '';
+            $fieldShow   = isset($schema->fields[$field]['show']) ? explode('.', $schema->fields[$field]['show']) : array();
 
             if($fieldObject) $useTable = $fieldObject;
             if(count($fieldShow) == 2) $useField = $show[1];

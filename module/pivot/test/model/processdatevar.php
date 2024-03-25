@@ -21,7 +21,7 @@ $pivot = new pivotTest();
 
 $varList = array('', '123123123', '$MONDAY', '$SUNDAY', '$MONTHBEGIN', '$MONTHEND');
 
-$monday = date('Y-m-d', strtotime('last monday'));
+$monday = date('Y-m-d', strtotime('this monday'));
 $sunday = date('Y-m-d', strtotime('this sunday'));
 $monthbegin = date('Y-m-01');
 $monthend = date('Y-m-t');
