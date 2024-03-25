@@ -35,13 +35,13 @@ class fileModel extends model
     /**
      * Get files of an object.
      *
-     * @param  string   $objectType
-     * @param  string   $objectID
-     * @param  string   $extra
+     * @param  string    $objectType
+     * @param  int|array $objectID
+     * @param  string    $extra
      * @access public
      * @return array
      */
-    public function getByObject(string $objectType, int $objectID, string $extra = ''): array
+    public function getByObject(string $objectType, int|array $objectID, string $extra = ''): array
     {
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq($objectType)
