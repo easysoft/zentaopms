@@ -22,11 +22,11 @@ foreach($dynamics as $key => $dynamic)
         set('target', '_blank'),
         div
         (
-            set('class', 'shadow-sm p-3 ' . ($key > 0 ? 'mt-4' : '')),
+            setClass('px-1 py-3'),
             div
             (
                 label(set('class', $key > 0 ? 'special' : 'secondary'), $dynamic->title),
-                label(set('class', 'text-black font-bold ml-1 ' . ($key > 0 ? 'special-pale' : 'secondary-pale')), $dynamic->label),
+                label(set('class', 'text-fore font-bold ml-1 ' . ($key > 0 ? 'special-pale' : 'secondary-pale')), $dynamic->label),
                 $dynamic->linklabel ? span
                 (
                     setStyle(array('float' => 'right')),
@@ -36,29 +36,16 @@ foreach($dynamics as $key => $dynamic)
             ),
             div
             (
-                set('class', 'ellipsis text-black mt-4'),
+                set('class', 'ellipsis text-black mt-2'),
                 $dynamic->content
             )
         )
     );
 }
-panel
+
+blockPanel
 (
     set::className('zentaoDynamic-block'),
-    set::bodyClass('p-0 px-4'),
-    set::title($block->title),
-    to::headingActions
-    (
-        a
-        (
-            set('class', 'text-gray'),
-            set('href', $config->admin->dynamicURL),
-            set('target', '__blank'),
-            $lang->more,
-            icon('caret-right')
-        )
-    ),
+    set::moreLink(array('url' => $config->admin->dynamicURL, 'target' => '_blank')),
     div($dynamicCards)
 );
-
-render();

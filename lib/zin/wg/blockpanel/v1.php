@@ -31,7 +31,7 @@ class blockPanel extends panel
         'title?: string',                   // 标题。
         'headingClass?: string="border-b"', // 标题栏类名。
         'longBlock?: bool',                 // 是否为长区块。
-        'moreLink?: string'                 // 更多链接。
+        'moreLink?: string|array'           // 更多链接 URL 或链接按钮属性。
     );
 
     protected function created()
@@ -55,7 +55,10 @@ class blockPanel extends panel
         if(empty($moreLink) && !empty($block) && isset($block->moreLink)) $moreLink = $block->moreLink;
         if(empty($this->prop('headingActions')) && !empty($moreLink))
         {
-            $props['headingActions'] = array(array('type' => 'ghost', 'url' => $moreLink, 'text' => $lang->more, 'caret' => 'right', 'size' => 'sm'));
+            $moreBtnProps = array('type' => 'ghost', 'text' => $lang->more, 'caret' => 'right', 'size' => 'sm');
+            if(is_string($moreLink))    $moreBtnProps['url'] = $moreLink;
+            elseif(is_array($moreLink)) $moreBtnProps = array_merge($moreBtnProps, $moreLink);
+            $props['headingActions'] = array($moreBtnProps);
         }
 
         if(empty($this->prop('title'))) $props['title'] = empty($block) ? $lang->block->titleList[$name] : $block->title;
