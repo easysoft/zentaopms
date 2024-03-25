@@ -5,6 +5,7 @@ $config->ai->actions = new stdclass();
 $config->ai->actions->modelview  = array('mainActions' => array('modelenable', 'modeldisable', 'modeltestconnection'), 'suffixActions' => array('modeledit', 'modeldelete'));
 $config->ai->actions->models     = array('modelenable|modeldisable', 'modeledit');
 $config->ai->actions->assistants = array('assistantpublish|assistantwithdraw', 'assistantedit');
+$config->ai->actions->assistantview = array('mainActions' => array('assistantpublish', 'assistantwithdraw'), 'suffixActions' => array('assistantedit', 'assistantdelete'));
 
 $config->ai->actionList = array();
 $config->ai->actionList['modelenable']['icon']             = 'magic';
@@ -42,3 +43,7 @@ $config->ai->actionList['assistantedit']['icon']        = 'edit';
 $config->ai->actionList['assistantedit']['text']        = $lang->ai->assistants->edit;
 $config->ai->actionList['assistantedit']['hint']        = $lang->ai->assistants->edit;
 $config->ai->actionList['assistantedit']['url']         = array('module' => 'ai', 'method' => 'assistantedit', 'params' => 'assistantID={id}');
+$config->ai->actionList['assistantdelete']['icon']      = 'trash';
+$config->ai->actionList['assistantdelete']['text']      = $lang->delete;
+$config->ai->actionList['assistantdelete']['hint']      = $lang->delete;
+$config->ai->actionList['assistantdelete']['url']       = 'javascript:confirmDelete("{id}")';

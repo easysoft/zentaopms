@@ -320,6 +320,23 @@ class ai extends control
     }
 
     /**
+     * View assistant details.
+     * @param  int  $assistantId
+     * @access public
+     * @return void
+     */
+    public function assistantView($assistantId)
+    {
+        $assistant = $this->ai->getAssistantById($assistantId);
+        $model     = $this->ai->getLanguageModel($assistant->modelId);
+
+        $this->view->assistant = $assistant;
+        $this->view->model     = $model;
+        $this->view->title     = $this->lang->ai->assistants->view;
+        $this->display();
+    }
+
+    /**
      * create an assistant.
      *
      * @access public

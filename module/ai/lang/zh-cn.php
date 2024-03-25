@@ -968,8 +968,10 @@ $lang->ai->aiResponseException = array();
 $lang->ai->aiResponseException['notFunctionCalling'] = 'AI 提词执行返回值结构不正确，请重试（可能可以通过优化提词来解决）';
 
 $lang->ai->assistants = new stdclass();
+$lang->ai->assistants->view                     = 'AI 助手详情';
 $lang->ai->assistants->title                    = 'AI 助手';
 $lang->ai->assistants->create                   = '添加助手';
+$lang->ai->assistants->details                  = '助手详情';
 $lang->ai->assistants->edit                     = '编辑助手';
 $lang->ai->assistants->name                     = '助手名称';
 $lang->ai->assistants->refModel                 = '引用语言模型';

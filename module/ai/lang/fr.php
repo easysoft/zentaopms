@@ -968,9 +968,11 @@ $lang->ai->aiResponseException = array();
 $lang->ai->aiResponseException['notFunctionCalling'] = 'The response is not a function calling';
 
 $lang->ai->assistants = new stdclass();
+$lang->ai->assistants->view                     = 'AI Assistant Details';
 $lang->ai->assistants->title                    = 'AI Assistant';
 $lang->ai->assistants->create                   = 'Add Assistant';
 $lang->ai->assistants->edit                     = 'Edit Assistant';
+$lang->ai->assistants->details                  = 'Assistant Details';
 $lang->ai->assistants->name                     = 'Assistant Name';
 $lang->ai->assistants->refModel                 = 'Referenced Language Model';
 $lang->ai->assistants->createdDate              = 'Creation Time';
