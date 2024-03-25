@@ -11,14 +11,13 @@ declare(strict_types=1);
 
 namespace zin;
 
-panel
+blockPanel
 (
     setClass('teamachievement-block'),
-    set::bodyClass('p-0 px-6'),
-    set::title($block->title),
+    set::bodyClass('pl-6'),
     div
     (
-        setClass('flex flex-wrap gap-y-4 py-0.5'),
+        setClass('flex flex-wrap gap-y-3 py-0.5'),
         div
         (
             setClass('flex shadow p-4 w-full item-row'),
