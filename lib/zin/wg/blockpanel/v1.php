@@ -61,7 +61,7 @@ class blockPanel extends panel
             $props['headingActions'] = array($moreBtnProps);
         }
 
-        if(empty($this->prop('title'))) $props['title'] = empty($block) ? $lang->block->titleList[$name] : $block->title;
+        if(is_null($this->prop('title'))) $props['title'] = empty($block) ? $lang->block->titleList[$name] : $block->title;
 
         if($this->prop('longBlock') === null) $props['longBlock'] = data('longBlock');
 
