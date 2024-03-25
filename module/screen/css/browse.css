@@ -33,9 +33,16 @@
 .main-col .row .col-md-3 {padding: 8px;}
 .main-col .row .col-md-3 a {min-width: 297px;}
 
+#mainContent {background-color: white;}
+#mainContent .row {margin:10px 0px; padding: 12px;}
+#mainContent .row .col-md-3 {padding: 8px;}
+
 #firstGuide .modal-dialog {width: 800px !important;}
 #firstGuide .modal-body {padding: 0 !important; max-height: 465px !important;}
 #firstGuide .background-img {height: 460px !important;}
 #firstGuide .modal-footer {text-align: center !important; border-top: none !important; padding: 24px 0px !important;}
 #firstGuide .btn-wide {min-width: 90px !important;}
 #firstGuide .clickable-area {position: absolute; width: 50px; height: 20px; top: 235px; right: 117px;}
+
+#main .bizGuide {width: 100%;}
+#main .bizGuide > a {float: right;}

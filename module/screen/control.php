@@ -16,7 +16,6 @@ class screen extends control
         parent::__construct($moduleName, $methodName, $appName);
         $this->dao->exec("SET @@sql_mode=''");
     }
-
     /**
      * 浏览一个维度下的所有大屏。
      * Browse screens of a dimension.
@@ -30,6 +29,10 @@ class screen extends control
         $this->checkShowGuide();
 
         $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
+
+        $screens = $this->screen->getList($dimensionID);
+        $screens = $this->screen->getThumbnail($screens);
+        $screens = $this->screen->removeScheme($screens);
 
         $this->view->title       = $this->lang->screen->common;
         $this->view->screens     = $this->screen->getList($dimensionID);
@@ -81,7 +84,7 @@ class screen extends control
      * @access public
      * @return void
      */
-    public function view(int $screenID, int $year = 0, int $dept = 0, string $account = '')
+    public function view(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
         if($screenID == 3)
         {
@@ -91,7 +94,7 @@ class screen extends control
 
         if(empty($year)) $year = date('Y');
 
-        $screen = $this->screen->getByID($screenID, $year, $dept, $account);
+        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account, false);
 
         $this->view->title  = $screen->name;
         $this->view->screen = $screen;
@@ -105,11 +108,19 @@ class screen extends control
         }
         else
         {
+            if(empty($month)) $month = date('m');
             $this->view->year    = $year;
+            $this->view->month   = $month;
             $this->view->dept    = $dept;
             $this->view->account = $account;
             $this->display();
         }
+    }
+
+    public function ajaxGetScreenScheme(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
+    {
+        $screen = $this->screen->getByID($screenID, $year, $month, $dept, $account);
+        echo(json_encode($screen));
     }
 
     /**
@@ -123,50 +134,153 @@ class screen extends control
     {
         if(!empty($_POST))
         {
-            $chartID   = $this->post->sourceID;
-            $type      = $this->post->type;
-            $queryType = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
-            $type      = ($type == 'Tables' || $type == 'pivot') ? 'pivot' : 'chart';
-            $table     = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
-            $chart     = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+            $sourceID = $this->post->sourceID;
+            $type     = $this->post->type;
 
-            $filterFormat = '';
-            if($queryType == 'filter')
+            if($type == 'Filters')
             {
-                $filterParams = json_decode($this->post->filters, true);
-                $filters      = json_decode($chart->filters,      true);
-                $mergeFilters = array();
-                foreach($filters as $index => $filter)
-                {
-                    $default = $filterParams[$index]['default'] ?? null;
-                    if(in_array($filter['type'], array('date', 'datetime')))
-                    {
-                        if(isset($filter['from']) && $filter['from'] == 'query')
-                        {
-                            if(is_numeric($default)) $default = date('Y-m-d H:i:s', $default / 1000);
-                        }
-                        else
-                        {
-                            $default = is_array($default) ? array('begin' => date('Y-m-d H:i:s', $default[0] / 1000), 'end' => date('Y-m-d H:i:s', $default[1] / 1000)) : array('begin' => '', 'end' => '');
-                        }
-                    }
-                    $filter['default'] = $default;
-                    $mergeFilters[] = $filter;
-                }
-
-                if($table == TABLE_PIVOT)
-                {
-                    list($chart->sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chart->sql, $mergeFilters);
-                }
-                else
-                {
-                    $filterFormat = $this->loadModel($type)->getFilterFormat($mergeFilters);
-                }
+                $filterComponent = $this->screen->genFilterComponent($sourceID);
+                return print(json_encode($filterComponent));
             }
 
-            $component = new stdclass();
-            $this->screen->genComponentData($chart, $component, $type, $filterFormat);
+            $queryType    = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
+            $component    = isset($_POST['component']) ? json_decode($this->post->component) : null;
+            $filterParams = isset($_POST['filters']) ? json_decode($this->post->filters, true) : array();
+
+            $type = $this->screen->getChartType($type);
+
+            if($type == 'metric')
+            {
+                $metric     = $this->loadModel('metric')->getByID($sourceID);
+                $metricData = $this->screen->genMetricComponent($metric, $component, $filterParams);
+                return print(json_encode($metricData));
+            }
+
+            $table = $this->config->objectTables[$type];
+            $chartOrPivot = $this->dao->select('*')->from($table)->where('id')->eq($sourceID)->fetch();
+
+            $filterFormat = '';
+            if($queryType == 'filter') list($chartOrPivot, $filterFormat) = $this->screen->mergeChartAndPivotFilters($type, $chartOrPivot, $sourceID, $filterParams);
+
+            $component = $this->screen->genComponentData($chartOrPivot, $type, $component, $filterFormat);
             print(json_encode($component));
         }
+    }
+
+    /**
+     * 获取度量数据。
+     * Ajax get metric data.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMetricData()
+    {
+        $metricID   = $this->post->metricID;
+        list($pager, $pagination) = $this->screen->preparePaginationBeforeFetchRecords($_POST['pagination']);
+
+        $metric = $this->loadModel('metric')->getByID($metricID);
+        $result = $this->metric->getLatestResultByCode($metric->code, $_POST, $pager);
+
+        $pagination['total']     = $pager->recTotal;
+        $pagination['pageTotal'] = $pager->pageTotal;
+
+        $metricData = new stdclass();
+        $metricData->header     = $this->metric->getViewTableHeader($metric);
+        $metricData->data       = $this->metric->getViewTableData($metric, $result);
+        $metricData->pagination = $pagination;
+
+        echo(json_encode($metricData));
+    }
+
+    public function ajaxGetFilterOptions()
+    {
+        $this->loadModel('metric');
+
+        $type         = $_POST['type'];
+        $params       = json_decode($_POST['params']);
+        $query        = $_POST['query'];
+        $defaultValue = $_POST['defaultValue'];
+
+        $type = $this->screen->getChartType($type);
+
+        if($type == 'metric')
+        {
+            $scope = $params->typeOption;
+            $objectPairs = $this->metric->getPairsByScope($scope, true);
+        }
+        else
+        {
+            if(isset($params->typeOption))
+            {
+                $objectPairs = $this->screen->getSysOptions($params->typeOption);
+            }
+            else
+            {
+                $sourceId = $params->sourceID;
+                $field    = $params->field;
+                $saveAs   = isset($params->saveAs) ? $params->saveAs : '';
+
+                $table = $this->config->objectTables[$type];
+                $chart = $this->dao->select('*')->from($table)->where('id')->eq($sourceId)->fetch();
+                $fields = json_decode($chart->fields, true);
+
+                $fieldObj = zget($fields, $field);
+                $objectPairs = $this->screen->getSysOptions($fieldObj['type'], $fieldObj['object'], $fieldObj['field'], $chart->sql, $saveAs);
+            }
+        }
+
+        $options = array_map(function($objectID, $objectName)
+        {
+            return array(
+                'label' => $objectName,
+                'value' => "$objectID"
+            );
+        }, array_keys($objectPairs), array_values($objectPairs));
+
+        if(empty($query))
+        {
+            if(!empty($defaultValue))
+            {
+                $defaultValue = is_array($defaultValue) ? $defaultValue : explode(',', $defaultValue);
+                $defaultOptions = array_filter($options, function($option) use($defaultValue)
+                {
+                    return in_array($option['value'], $defaultValue);
+                });
+            }
+
+            // return limit 10 options.
+            $options = array_slice($options, 0, 10);
+
+            if(!empty($defaultOptions))
+            {
+                $uniqueOptions = array();
+                foreach($options as $option)
+                {
+                    $findInDefault = array_filter($defaultOptions, function($defaultOption) use($option)
+                    {
+                        return $defaultOption['value'] == $option['value'];
+                    });
+
+                    if(empty($findInDefault))
+                    {
+                        $uniqueOptions[] = $option;
+                    }
+                }
+                $options = array_merge($defaultOptions, $uniqueOptions);
+            }
+
+            echo(json_encode($options));
+            return;
+        }
+
+        $options = array_filter($options, function($option) use($query)
+        {
+            return strpos(strtolower($option['label']), strtolower($query)) !== false;
+        });
+
+        $options = array_values($options);
+
+        echo(json_encode($options));
     }
 }

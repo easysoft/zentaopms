@@ -32,6 +32,7 @@ class screenModel extends model
         parent::__construct();
 
         $this->loadBIDAO();
+        $this->loadModel('bi');
 
         $this->filter = new stdclass();
         $this->filter->screen  = '';
@@ -69,13 +70,13 @@ class screenModel extends model
      * @access public
      * @return object|bool
      */
-    public function getByID(int $screenID, int $year = 0, int $dept = 0, string $account = ''): object|bool
+    public function getByID(int $screenID, int $year = 0, int $dept = 0, int $month = 0, string $account = '', $withChartData = true): object|bool
     {
         $screen = $this->dao->select('*')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
         if(!$screen) return false;
 
         if(empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
-        $screen->chartData = $this->genChartData($screen, $year, $dept, $account);
+        if($withChartData) $screen->chartData = $this->genChartData($screen, $year, $month, $dept, $account);
 
         return $screen;
     }
@@ -91,347 +92,676 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function genChartData(object $screen, int $year, int $dept, string $account): object
+    public function genChartData(object $screen, int $year, int $month, int $dept, string $account): object
     {
         $this->filter = new stdclass();
         $this->filter->screen  = $screen->id;
         $this->filter->year    = $year;
+        $this->filter->month   = $month;
         $this->filter->dept    = $dept;
         $this->filter->account = $account;
         $this->filter->charts  = array();
 
-        if($screen->id == 5) return new stdclass();
-        if(!$screen->builtin || in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen);
+        if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen))
+        {
+            $scheme = json_decode($screen->scheme);
 
-        $config = new stdclass();
-        $config->width            = 1300;
-        $config->height           = 1080;
-        $config->filterShow       = false;
-        $config->hueRotate        = 0;
-        $config->saturate         = 1;
-        $config->contrast         = 1;
-        $config->brightness       = 1;
-        $config->opacity          = 1;
-        $config->rotateZ          = 0;
-        $config->rotateX          = 0;
-        $config->rotateY          = 0;
-        $config->skewX            = 0;
-        $config->skewY            = 0;
-        $config->blendMode        = 'normal';
-        $config->background       = '#001028';
-        $config->selectColor      = true;
-        $config->chartThemeColor  = 'dark';
-        $config->previewScaleType = 'scrollY';
+            foreach($scheme->componentList as $component)
+            {
+                if(!empty($component->isGroup))
+                {
+                    foreach($component->groupList as $key => $groupComponent)
+                    {
+                        if(isset($groupComponent->key) and $groupComponent->key === 'Select') $groupComponent = $this->buildSelect($groupComponent);
+                    }
+                }
+                else
+                {
+                    if(isset($component->key) and $component->key === 'Select') $component = $this->buildSelect($component);
+                }
+            }
+
+            return $scheme;
+        }
+
+        $editCanvasConfig = $this->config->screen->editCanvasConfig;
 
         $componentList = json_decode($screen->scheme);
         if(empty($componentList)) $componentList = array();
 
-        /* 重置容器的高度。 */
         /* Reset height of canvas. */
         foreach($componentList as $component)
         {
             if(!isset($component->attr)) continue;
 
             $height = $component->attr->y + $component->attr->h;
-            if($height > $config->height) $config->height = $height;
+            if($height > $editCanvasConfig->height) $editCanvasConfig->height = $height;
         }
-        $config->height += 50;
+        $editCanvasConfig->height += 50;
 
         $chartData = new stdclass();
-        $chartData->editCanvasConfig    = $config;
-        $chartData->componentList       = $this->buildComponentList($componentList);
-        $chartData->requestGlobalConfig = json_decode('{ "requestDataPond": [], "requestOriginUrl": "", "requestInterval": 30, "requestIntervalUnit": "second", "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
+        $chartData->editCanvasConfig = $editCanvasConfig;
+        $chartData->componentList    = $this->buildComponentList($componentList);
 
         return $chartData;
     }
 
     /**
-     * 为新的大屏构建图表数据。
-     * Generate chartData of new screen.
+     * Get the latest chart.
      *
-     * @param  object $screen
-     * @access public
-     * @return object
-     */
-    public function genNewChartData(object $screen): object
-    {
-        $scheme = json_decode($screen->scheme);
-        foreach($scheme->componentList as $component)
-        {
-            $list = !empty($component->isGroup) ? $component->groupList : array($component);
-            foreach($list as $groupComponent) isset($groupComponent->key) && $groupComponent->key === 'Select' && $this->buildSelect($groupComponent);
-        }
-
-        /* 过滤为空的组件，并且为组件生成图表数据。 */
-        /* Filter component list is empty and generate chartData of component. */
-        $list = array();
-        array_map(function($component)use(&$list){
-            !empty($component->isGroup) ? array_merge($list, $component->groupList) : array_push($list, $component);
-        }, array_filter($scheme->componentList));
-        foreach($list as $component) $this->getLatestChart($component);
-
-        return $scheme;
-    }
-
-    /**
-     * 为组件生成图表数据。
-     * Generate chartData of component.
-     *
-     * @param  object $component
+     * @param  object  $component
      * @access public
      * @return void
      */
-    public function getLatestChart(object $component): void
+    public function getLatestChart($component)
     {
-        /* 不存在的chartID或者为select的组件不需要构建。 */
-        /* If chartID is empty or component is select, it doesn't need to build. */
-        if(isset($component->key) && $component->key === 'Select') return;
+        if(isset($component->key) and $component->key === 'Select') return $component;
         $chartID = zget($component->chartConfig, 'sourceID', '');
-        if(!$chartID) return;
+        if(!$chartID) return $component;
 
-        $type  = $component->chartConfig->package == 'Tables' ? 'pivot' : 'chart';
-        $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
-        $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+        $type  = $component->chartConfig->package;
+        $type  = $this->getChartType($type);
+        $table = $this->config->objectTables[$type];
 
-        $this->genComponentData($chart, $component, $type);
+        if($type == 'metric')
+        {
+            $chart = $this->loadModel('metric')->getByID($chartID);
+        }
+        else
+        {
+            $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+        }
+
+        if($type == 'metric') return $this->genMetricComponent($chart);
+        return $this->genComponentData($chart, $type, $component);
     }
 
     /**
-     * 构建组件数据。
+     * mergeChartAndPivotFilters
+     *
+     * @param  int    $type
+     * @param  int    $chartOrPivot
+     * @param  int    $sourceID
+     * @param  int    $filters
+     * @access public
+     * @return void
+     */
+    public function mergeChartAndPivotFilters($type, $chartOrPivot, $sourceID, $filters)
+    {
+        $filterFormat = '';
+        $chartOrPivotFilters = json_decode($chartOrPivot->filters, true);
+        $mergeFilters = array();
+
+        foreach($chartOrPivotFilters as $index => $chartOrPivotFilter)
+        {
+            if(!isset($filters[$index]['default'])) continue;
+
+            $filterDefault = $filters[$index]['default'];
+            if($filterDefault === null) continue;
+
+            $filterType = $chartOrPivotFilter['type'];
+            $filterFrom = zget($chartOrPivotFilter, 'from', '');
+            if($filterType == 'date' or $filterType == 'datetime')
+            {
+                if($filterFrom == 'query')
+                {
+                    if(is_numeric($filterDefault)) $filterDefault = date('Y-m-d H:i:s', $filterDefault / 1000);
+                }
+                else
+                {
+                    if(is_array($filterDefault))
+                    {
+                        $begin = $filterDefault[0];
+                        $end   = $filterDefault[1];
+
+                        $begin = date('Y-m-d H:i:s', $begin / 1000);
+                        $end = date('Y-m-d H:i:s', $end / 1000);
+
+                        $filterDefault = array('begin' => $begin, 'end' => $end);
+                    }
+                    else
+                    {
+                        $filterDefault = array('begin' => '', 'end' => '');
+                    }
+                }
+
+            }
+            $chartOrPivotFilter['default'] = $filterDefault;
+            $mergeFilters[] = $chartOrPivotFilter;
+        }
+
+        if($type == 'pivot')
+        {
+            list($sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chartOrPivot->sql, $mergeFilters);
+            $chartOrPivot->sql = $sql;
+        }
+        else
+        {
+            $filterFormat = $this->loadModel($type)->getFilterFormat($mergeFilters);
+        }
+
+        return array($chartOrPivot, $filterFormat);
+    }
+
+    /**
      * Generate a component of screen.
      *
      * @param  object $chart
      * @param  string $type
      * @param  object $component
-     * @param  array  $filters
-     * @param  bool   $unit
      * @access public
-     * @return void
+     * @return object
      */
-    public function genComponentData(object $chart, object $component, string $type = 'chart', array $filters = array(), bool $unit = false): void
+    public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
     {
-        if(!$unit) $chart = clone($chart);
-        if($type == 'pivot' && $chart)
+        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
         {
-            $this->loadModel('pivot')->processPivot($chart);
+            return $this->genNotFoundOrDraftComponentOption($component, $chart, $type);
+        }
+
+        $component = $this->unsetComponentDraftMarker($component);
+
+        $chart = clone($chart);
+        if($type == 'pivot' and $chart)
+        {
+            $chart = $this->loadModel('pivot')->processPivot($chart);
             $chart->settings = json_encode($chart->settings);
         }
 
-        if(empty($filters) && !empty($chart->filters))
+        if(empty($filters) and !empty($chart->filters))
         {
-            $params = array(json_decode($chart->filters, true));
-            if($type == 'pivot') array_unshift($params, $chart->sql);
-            $result = call_user_func_array(array($this->loadModel($type), 'getFilterFormat'), $params);
-
-            list($chart->sql, $filters) = isset($result[0]) ? $result : array($chart->sql, $result);
+            if($type == 'pivot')
+            {
+                list($sql, $filters) = $this->loadModel($type)->getFilterFormat($chart->sql, json_decode($chart->filters, true));
+                $chart->sql = $sql;
+            }
+            else
+            {
+                $filters = $this->loadModel($type)->getFilterFormat(json_decode($chart->filters, true));
+            }
         }
 
-        $this->initComponent($chart, $type, $component);
-        $this->completeComponent($chart, $type, $filters, $component);
-    }
+        list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
 
-    /**
-     * 补充组件信息。
-     * Complete component info.
-     *
-     * @param  object $chart
-     * @param  string $type
-     * @param  array  $filters
-     * @param  object $component
-     * @access public
-     * @return void
-     */
-    public function completeComponent(object $chart, string $type, array $filters, object $component): void
-    {
-        /* 处理图表为空，图表stage值为draft和图表被删除的情况，都给默认值。 */
-        /* Process chart is empty, chart stage is draft and chart is deleted, all give default value. */
-        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
-        {
-            $this->completeComponentShowInfo($chart, $component, $type);
-            return;
-        }
+        $component = $this->getChartOption($chart, $component, $filters);
+        if($type == 'chart') $component = $this->getAxisRotateOption($chart, $component);
 
-        /* 根据图表类型获取图表配置。 */
-        /* Get chart option by chart type. */
-        $this->getChartOption($chart, $component, $filters);
-        $component->chartConfig->dataset  = $component->option->dataset;
-        $component->chartConfig->fields   = json_decode($chart->fields);
-        $component->chartConfig->filters  = $this->getChartFilters($chart);
+        $latestFilters = $this->getChartFilters($chart);
+        $component = $this->updateComponentFilters($component, $latestFilters);
 
-        /* 当type类型为chart并且图表不是内置图表的时候，需要填充series数组的长度或者修改雷达图的部分配置。 */
-        /* When type is chart or chart is not builtin, need to fill length of series array or modify part of radar chart config. */
-        if($type == 'chart' && (!$chart->builtin || in_array($chart->id, $this->config->screen->builtinChart)))
+        if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
         {
             if(!empty($component->option->series))
             {
+
                 $defaultSeries = $component->option->series;
                 if($component->type == 'radar')
                 {
-                    /* 处理雷达图。 */
-                    /* Process radar chart. */
                     $component->option->radar->indicator = $component->option->dataset->radarIndicator;
                     $defaultSeries[0]->data = $component->option->dataset->seriesData;
 
-                    $component->option->legend->data = array_map(function($item){return $item->name;}, $component->option->dataset->seriesData);
+                    $legends = array();
+                    foreach($component->option->dataset->seriesData as $seriesData) $legends[] = $seriesData->name;
+                    $component->option->legend->data = $legends;
                 }
-                else
+                elseif($component->type != 'waterpolo')
                 {
-                    if(isset($component->option->dataset->dimensions)) $component->option->series = array_pad([], count($component->option->dataset->dimensions), $defaultSeries[0]);
+                    $series = array();
+                    for($i = 1; $i < count($component->option->dataset->dimensions); $i ++) $series[] = $defaultSeries[0];
+                    $component->option->series = $series;
                 }
             }
         }
+
+        return $component;
     }
 
     /**
-     * 补充组件展示信息。
-     * Complete component chart info.
+     * Update piovt or chart component chartConfig filters.
      *
-     * @param  object $chart
      * @param  object $component
-     * @param  string $type
+     * @param  array  $latestFilters
+     * @access public
+     * @return object
+     */
+    public function updateComponentFilters($component, $latestFilters)
+    {
+        // 如果传过来的component->chartConfig中有filters，判断filters是否发生了改变，改变则重置filters，其中单个filter的linkedGlobalFilter属性就不存在了
+        if(!isset($component->chartConfig->filters))
+        {
+            $component->chartConfig->filters = $latestFilters;
+            $component->chartConfig->noSetupGlobalFilterList = array();
+        }
+        else
+        {
+            $oldFilters = $component->chartConfig->filters;
+            $filterChanged = $this->isFilterChange($oldFilters, $latestFilters);
+
+            if($filterChanged)
+            {
+                $component->chartConfig->filters = $latestFilters;
+                $component->chartConfig->noSetupGlobalFilterList = array();
+            }
+            else
+            {
+                if(!isset($_POST['filters'])) // 如果不是前端进行筛选操作，则说明是第一次打开页面，此时看看后台的默认值有没有发生变更
+                {
+                    foreach($oldFilters as $index => $filter)
+                    {
+                        $newFilter = $latestFilters[$index];
+                        $oldDefault = isset($filter->default) ? $filter->default : '';
+                        $newDefault = isset($newFilter->default) ? $newFilter->default : '';
+                        if($oldDefault !== $newDefault) $component->chartConfig->filters[$index]->default = $newDefault;
+                    }
+                }
+                foreach($oldFilters as $index => $filter)
+                {
+                    $isSelect  = $filter->type == 'select' && $latestFilters[$index]->type == 'select';
+                    $oldSaveAs = zget($filter, 'saveAs', '');
+                    $newSaveAs = zget($latestFilters[$index], 'saveAs', '');
+
+                    if($oldSaveAs !== $newSaveAs) $component->chartConfig->filters[$index]->default = $newSaveAs;
+                    if($isSelect and $oldSaveAs !== $newSaveAs) $component->chartConfig->filters[$index]->saveAs  = $newSaveAs;
+                }
+            }
+        }
+
+        return $component;
+    }
+
+    /**
+     * 判断图表/透视表的筛选器是否发生了变化。
+     * Determine if the filter for the chart/pivot has changed.
+     *
+     * @param  array  $oldFilters
+     * @param  array  $latestFilters
      * @access public
      * @return void
      */
-    public function completeComponentShowInfo(object $chart, object $component, string $type): void
+    public function isFilterChange($oldFilters, $latestFilters)
     {
-        $component->option = new stdclass();
-        if($type == 'chart') $this->completeChartShowInfo($chart, $component);
-        if($type == 'pivot') $this->completePivotShowInfo($chart, $component);
+        $filterChanged = false;
+
+        if(empty($latestFilters)) return true;
+
+        if(count($oldFilters) != count($latestFilters)) $filterChanged = true;
+        foreach($oldFilters as $index => $oldFilter)
+        {
+            $newFilter = $latestFilters[$index];
+
+            // 结果筛选器和查询筛选器都有的三个字段
+            if($oldFilter->field != $newFilter->field || $oldFilter->name != $newFilter->name || $oldFilter->type != $newFilter->type) $filterChanged = true;
+
+            // 如果一个是查询筛选器一个不是，也判定为更改
+            $oldHaveQuery = isset($oldFilter->from) and $oldFilter->from = 'query';
+            $newHaveQuery = isset($newFilter->from) and $newFilter->from = 'query';
+            if($oldHaveQuery != $newHaveQuery) $filterChanged = true;
+
+            // 对于查询筛选器，可以再做进一步判断，如果下拉选择器的typeOption发生了变化，也应该判定为更改
+            if($oldHaveQuery and $newHaveQuery)
+            {
+                if($oldFilter->type == 'select' && $newFilter->type == 'select' && $oldFilter->typeOption != $newFilter->typeOption) $filterChanged = true;
+            }
+
+            // 如果发生了变化，不必再去判断后续
+            if($filterChanged) break;
+        }
+
+        return $filterChanged;
     }
 
     /**
-     * 补充图表展示信息。
-     * Complete chart show info.
+     * 生成不存在的图表或者草稿图表的参数。
+     * Generate not found or draft chart option.
      *
-     * @param  object $chart
      * @param  object $component
+     * @param  object   $chart
      * @access public
      * @return void
      */
-    public function completeChartShowInfo(object $chart, object $component): void
+    public function genNotFoundOrDraftComponentOption($component, $chart, $type)
     {
-        /* 设置图表的title信息。 */
-        /* Set chart title info. */
-        $component->option->title = new stdclass();
-        $component->option->title->text = sprintf($this->lang->screen->noData, $chart->name);
-        $component->option->title->left = 'center';
-        $component->option->title->top  = '50%';
+        if(empty($component)) $component = new stdclass();
+        $noDataLang = $type == 'chart' ? 'noChartData' : 'noPivotData';
 
-        /* 初始化x和y轴。 */
-        /* Init x and y axis. */
-        $component->option->xAxis = new stdclass();
-        $component->option->xAxis->show = false;
-        $component->option->yAxis = new stdclass();
-        $component->option->yAxis->show = false;
+        if(!isset($component->option)) $component->option = new stdclass();
+        if(!isset($component->option->title)) $component->option->title = new stdclass();
+
+        $component->option->title->notFoundText = sprintf($this->lang->screen->$noDataLang, $chart->name);
+        $component->option->isDeleted = true;
+
+        return $component;
     }
 
     /**
-     * 补充透视表展示信息。
-     * Complete pivot show info.
+     * 删除component的已删除标记。
+     * Unset component option isDeleted.
      *
-     * @param  object $chart
      * @param  object $component
      * @access public
-     * @return void
+     * @return object
      */
-    public function completePivotShowInfo(object $chart, object $component): void
+    public function unsetComponentDraftMarker($component)
     {
-        $component->option->ineffective = 1;
-        $component->option->header      = array();
-        $component->option->align       = array('center');
-        $component->option->headerBGC   = 'transparent';
-        $component->option->oddRowBGC   = 'transparent';
-        $component->option->evenRowBGC  = 'transparent';
-        $component->option->columnWidth = array();
-        $component->option->rowspan     = array();
-        $component->option->colspan     = array();
-        $component->option->rowNum      = 1;
-        $component->option->dataset     = array(array(sprintf($this->lang->screen->noData, $chart->name)));
+        if(isset($component->option->isDeleted)) unset($component->option->isDeleted);
+        if(isset($component->option->title))     unset($component->option->title->notFoundText);
+        return $component;
     }
 
     /**
-     * 获取图表配置。
+     * 生成全局筛选器的组件。
+     * Generate component of global filters.
+     *
+     * @param  string $filterType
+     * @access public
+     * @return object
+     */
+    public function genFilterComponent($filterType)
+    {
+        $this->loadModel('metric');
+        $type = ucfirst($filterType);
+
+        $component = new stdclass();
+        $component->chartConfig = new stdclass();
+        $component->chartConfig->id           = $type;
+        $component->chartConfig->key          = "{$type}Filter";
+        $component->chartConfig->chartKey     = "V{$type}Filter";
+        $component->chartConfig->conKey       = "VC{$type}Filter";
+        $component->chartConfig->category     = 'Filters';
+        $component->chartConfig->categoryName = $this->lang->screen->globalFilter;
+        $component->chartConfig->package      = 'Decorates';
+
+        if(in_array($filterType, $this->config->metric->scopeList))
+        {
+            $objectPairs = $this->metric->getPairsByScope($filterType, true);
+            $component->chartConfig->objectList = array_map(function($objectID, $objectTitle)
+            {
+                $object = new stdclass();
+                $object->label = $objectTitle;
+                $object->value = $objectID;
+                return $object;
+            }, array_keys($objectPairs), array_values($objectPairs));
+        }
+
+        $firstAction = $this->dao->select('YEAR(date) as year')->from(TABLE_ACTION)->orderBy('id_asc')->limit(1)->fetch();
+        $yearRange = range((int)date('Y'), $firstAction->year);
+        $component->chartConfig->yearList = array_map(function($year)
+        {
+            $yearObject = new stdclass();
+            $yearObject->label = $year;
+            $yearObject->value = $year;
+            return $yearObject;
+        }, $yearRange);
+
+        return $component;
+    }
+
+    /**
+     * Generate metric component.
+     *
+     * @param  object      $metric
+     * @param  object|null $component
+     * @param  array       $filterParams
+     * @access public
+     * @return object
+     */
+    public function genMetricComponent($metric, $component = null, $filterParams = array())
+    {
+        $this->loadModel('metric');
+
+        $pagination = $this->getMetricPagination($component);
+        $filters    = $this->processMetricFilter($filterParams, $metric->dateType);
+
+        list($pager, $pagination) = $this->preparePaginationBeforeFetchRecords($pagination);
+        $result = $this->metric->getResultByCode($metric->code, $filters, 'cron', $pager);
+
+        $pagination['total']     = $pager->recTotal;
+        $pagination['pageTotal'] = $pager->pageTotal;
+
+        $resultHeader   = $this->metric->getViewTableHeader($metric);
+        $resultData     = $this->metric->getViewTableData($metric, $result);
+        $isObjectMetric = $metric->scope != 'system';
+        $isDateMetric   = $metric->dateType != 'nodate';
+
+        $tableOption = $this->getMetricTableOption($metric, $resultHeader, $resultData, $component);
+        $chartOption = $this->getMetricChartOption($metric, $resultHeader, $resultData, $component);
+        $card        = $this->getMetricCardOption($metric, $resultData, $component);
+
+        $tableOption->pagination = $pagination;
+        $card->pagination        = $pagination;
+
+        list($component, $typeChanged) = $this->initMetricComponent($metric, $component);
+
+        $component->chartConfig->title       = $metric->name;
+        $component->chartConfig->sourceID    = $metric->id;
+        $component->chartConfig->scope       = $metric->scope;
+        $component->chartConfig->dateType    = $metric->dateType;
+
+        $latestFilters = $this->buildMetricFilters($metric, $isObjectMetric, $isDateMetric);
+        $component     = $this->updateMetricFilters($component, $latestFilters);
+
+        $component->option->chartOption           = $chartOption;
+        $component->option->tableOption           = $tableOption;
+        $component->option->card                  = $card;
+        $component->option->card->isDateMetric    = $isDateMetric;
+        $component->option->card->isObjectMetric  = $isObjectMetric;
+        $component->option->card->cardDateDefault = $component->option->card->filterValue ? $component->option->card->filterValue->dateString : '';
+        $component->option->noDataTip             = $this->metric->getNoDataTip($metric->code);
+
+        return $component;
+    }
+
+    public function getMetricPagination($component)
+    {
+        $tablePagination = array('index' => 1, 'size' => 5, 'total' => 0, 'pageTotal' => 1);
+        $cardPagination  = array('index' => 1, 'size' => 2 * 6, 'total' => 0, 'pageTotal' => 1);
+
+        if(empty($component)) return $tablePager;
+
+        $option = $component->option;
+        $displayType = $option->displayType;
+        if(isset($option->card->pagination)) $cardPagination = array_merge($cardPagination, (array)$option->card->pagination);
+        if(isset($option->tableOption->pagination)) $tablePagination = array_merge($tablePagination, (array)$option->tableOption->pagination);
+
+        $tableOption = $option->tableOption;
+        $cardOption  = $option->card;
+
+        if(isset($tableOption->rowNum)) $tablePagination['size'] = $tableOption->rowNum;
+
+        $cardRow = isset($cardOption->countEachRow) ? $cardOption->countEachRow : 2;
+        $cardColumn = isset($cardOption->countEachColumn) ? $cardOption->countEachColumn : 6;
+        $cardPagination['size'] = $cardRow * $cardColumn;
+
+        return $displayType == 'normal' ? $tablePagination : $cardPagination;
+    }
+
+    /**
+     * Prepare pagination before fetch records.
+     *
+     * @param  object    $pagination
+     * @access public
+     * @return array
+     */
+    public function preparePaginationBeforeFetchRecords($pagination)
+    {
+        $defaultPagination = array('index' => 1, 'size' => 2 * 6, 'total' => 0);
+
+        if(is_string($pagination)) $pagination = json_decode($pagination, true);
+        if(empty($pagination)) return $pagination;
+
+        $pagination = array_merge($defaultPagination, (array)$pagination);
+
+        extract($pagination);
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($total, $size, $index);
+
+        return array($pager, $pagination);
+    }
+
+    /**
+     * Update metric component chartConfig filters.
+     *
+     * @param  object $component
+     * @param  array  $latestFilters
+     * @access public
+     * @return object
+     */
+    public function updateMetricFilters($component, $latestFilters)
+    {
+        if(!isset($component->chartConfig->filters))
+        {
+            $component->chartConfig->filters = $latestFilters;
+        }
+
+        return $component;
+    }
+
+    /**
+     * Build filters for metric.
+     *
+     * @param  object $metric
+     * @access public
+     * @return array
+     */
+    public function buildMetricFilters($metric, $isObjectMetric, $isDateMetric)
+    {
+        $this->loadModel('metric');
+        $scope = $metric->scope;
+
+        $filters = array();
+        if($isObjectMetric)
+        {
+            $scopeFilter = new stdclass();
+            $scopeFilter->belong     = 'metric';
+            $scopeFilter->field      = $scope;
+            $scopeFilter->name       = $this->lang->screen->belong . $this->lang->$scope->common;
+            $scopeFilter->type       = 'select';
+            $scopeFilter->typeOption = $scope;
+            $scopeFilter->default    = null;
+
+            $filters[] = $scopeFilter;
+        }
+
+        if($isDateMetric)
+        {
+            $dateFilter = new stdclass();
+            $dateFilter->belong     = 'metric';
+            $dateFilter->field      = 'date';
+            $dateFilter->name       = $this->lang->screen->dateRange;
+            $dateFilter->type       = 'dateRange';
+            $dateFilter->typeOption = null;
+            $dateFilter->default    = null;
+
+            $filters[] = $dateFilter;
+        }
+
+        return $filters;
+    }
+
+    /**
      * Get chart option.
      *
      * @param  object $chart
      * @param  object $component
      * @param  array  $filters
      * @access public
-     * @return void
+     * @return object
      */
-    public function getChartOption(object $chart, object $component, array $filters): void
+    public function getChartOption($chart, $component, $filters = '')
     {
-        $type = $component->type ? : 'default';
-        switch($type)
+        switch($component->type)
         {
             case 'line':
-                $this->getLineChartOption($component, $chart, $filters);
-                break;
+                return $this->getLineChartOption($component, $chart, $filters);
             case 'cluBarY':
             case 'stackedBarY':
             case 'cluBarX':
             case 'stackedBar':
             case 'bar':
-                $this->getBarChartOption($component, $chart, $filters);
-                break;
+                return $this->getBarChartOption($component, $chart, $filters);
             case 'piecircle':
-                $this->buildPieCircleChart($component, $chart);
-                break;
+                return $this->buildPieCircleChart($component, $chart);
             case 'pie':
-                $this->getPieChartOption($component, $chart, $filters);
-                break;
+                return $this->getPieChartOption($component, $chart, $filters);
             case 'table':
-                $this->getTableChartOption($component, $chart, $filters);
-                break;
+                return $this->getTableChartOption($component, $chart, $filters);
             case 'radar':
-                $this->getRadarChartOption($component, $chart, $filters);
-                break;
+                return $this->getRadarChartOption($component, $chart, $filters);
             case 'card':
-                $this->buildCardChart($component, $chart);
-                break;
+                return $this->buildCardChart($component, $chart);
             case 'waterpolo':
-                $this->getWaterPoloOption($component, $chart);
-                break;
+                if(strpos($chart->settings, 'waterpolo') === false) return $this->buildWaterPolo($component, $chart);
+                return $this->getWaterPoloOption($component, $chart, $filters);
+            case 'metric':
+                return $this->getMetricOption($component, $chart, $filters);
             default:
-                break;
+                return '';
         }
     }
 
     /**
-     * 获取条形图配置。
+     * Get chart option about rotate.
+     *
+     * @param  object $chart
+     * @param  object $component
+     * @access public
+     * @return object
+     */
+    public function getAxisRotateOption($chart, $component)
+    {
+        $this->loadModel('chart');
+        if(!in_array($chart->type, $this->config->chart->canLabelRotate)) return $component;
+
+        $settings = json_decode($chart->settings, true);
+        if(!isset($settings[0])) return $component;
+
+        $setting  = $settings[0];
+
+        $component->chartConfig->xAxis = new stdclass();
+        $component->chartConfig->yAxis = new stdclass();
+        $component->chartConfig->xAxis->axisLabel = new stdclass();
+        $component->chartConfig->yAxis->axisLabel = new stdclass();
+
+        $component->chartConfig->xAxis->axisLabel->rotate = 0;
+        $component->chartConfig->yAxis->axisLabel->rotate = 0;
+        if(isset($setting['rotateX']) && $setting['rotateX'] == 'use') $component->chartConfig->xAxis->axisLabel->rotate = 30;
+        if(isset($setting['rotateY']) && $setting['rotateY'] == 'use') $component->chartConfig->yAxis->axisLabel->rotate = 30;
+
+        return $component;
+    }
+
+    /**
      * Get bar chart option.
      *
      * @param  object $component
      * @param  object $chart
-     * @param  array  $filters
      * @access public
-     * @return void
+     * @return object
      */
-    public function getBarChartOption(object $component, object $chart, array $filters = array()): void
+    public function getBarChartOption($component, $chart, $filters = '')
     {
         if($chart->sql)
         {
-            /* 获取图表字段配置和语言项。 */
-            /* Get chart fields and langs. */
             $settings = json_decode($chart->settings, true);
-            $langs    = json_decode($chart->langs,    true);
-            $settings = current($settings);
+            $langs    = json_decode($chart->langs, true);
+            $settings = $settings[0];
 
-            /* 获取图表的相关配置和原始数据。 */
-            /* Get chart related settings and raw data. */
-            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
-            $fields       = json_decode($chart->fields);
+            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters);
+
+            $fields       = json_decode($chart->fields, true);
             $dimensions   = array($settings['xaxis'][0]['field']);
             $sourceData   = array();
             $clientLang   = $this->app->getClientLang();
-            $xLabelValues = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
+            $xLabelValues = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
 
             foreach($yStats as $index => $dataList)
             {
-                $fieldConfig = zget($fields, $metrics[$index]);
-                $fieldName   = $langs[$fieldConfig->field][$clientLang] ?? $fieldConfig->name;
+                $field     = zget($fields, $metrics[$index]);
+                $fieldName = $field['name'];
+                if(isset($langs[$field['field']]) and !empty($langs[$field['field']][$clientLang])) $fieldName = $langs[$field['field']][$clientLang];
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
-                array_push($dimensions, $field);
+                $dimensions[] = $field;
 
                 foreach($dataList as $valueField => $value)
                 {
@@ -448,46 +778,42 @@ class screenModel extends model
             $component->option->dataset->source     = array_values($sourceData);
         }
 
-        /* 设置组件默认属性。 */
-        /* Set component default attributes. */
-        $this->setComponentDefaults($component);
+        $component = $this->setComponentDefaults($component);
+
+        return $component;
     }
 
     /**
-     * 获取折线图配置。
      * Get line chart option.
      *
      * @param  object $component
      * @param  object $chart
-     * @param  array  $filters
      * @access public
-     * @return void
+     * @return object
      */
-    public function getLineChartOption(object $component, object $chart, array $filters = array()): void
+    public function getLineChartOption($component, $chart, $filters = '')
     {
         if($chart->sql)
         {
-            /* 获去字段配置和语言项。 */
-            /* Get chart fields and langs. */
             $settings = json_decode($chart->settings, true);
-            $langs    = json_decode($chart->langs,    true);
-            $settings = current($settings);
+            $langs    = json_decode($chart->langs, true);
+            $settings = $settings[0];
 
-            /* 获取图表的相关配置和原始数据。 */
-            /* Get chart related settings and raw data. */
-            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
-            $fields       = json_decode($chart->fields);
+            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters);
+
+            $fields       = json_decode($chart->fields, true);
             $dimensions   = array($settings['xaxis'][0]['field']);
             $sourceData   = array();
             $clientLang   = $this->app->getClientLang();
-            $xLabelValues = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
+            $xLabelValues = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
 
             foreach($yStats as $index => $dataList)
             {
-                $fieldConfig = zget($fields, $metrics[$index]);
-                $fieldName   = $langs[$fieldConfig->field][$clientLang] ?? $fieldConfig->name;
+                $field     = zget($fields, $metrics[$index]);
+                $fieldName = $field['name'];
+                if(isset($langs[$field['field']]) and !empty($langs[$field['field']][$clientLang])) $fieldName = $langs[$field['field']][$clientLang];
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
-                array_push($dimensions, $field);
+                $dimensions[] = $field;
 
                 foreach($dataList as $valueField => $value)
                 {
@@ -501,7 +827,6 @@ class screenModel extends model
                 }
             }
 
-            /* 填充空数据。 */
             /* Completing empty values. */
             foreach($sourceData as $lineData)
             {
@@ -515,50 +840,41 @@ class screenModel extends model
             $component->option->dataset->source     = array_values($sourceData);
         }
 
-        /* 设置组件默认属性。 */
-        /* Set component default attributes. */
-        $this->setComponentDefaults($component);
+        return $this->setComponentDefaults($component);
     }
 
     /**
-     * 获取饼图配置。
      * Get pie chart option.
      *
      * @param  object $component
      * @param  object $chart
-     * @param  array  $filters
      * @access public
-     * @return void
+     * @return object
      */
-    public function getPieChartOption(object $component, object $chart, array $filters = array()): void
+    public function getPieChartOption($component, $chart, $filters = '')
     {
         if($chart->sql)
         {
-            /* 获取字段配置。 */
-            /* Get chart settings. */
             $settings = json_decode($chart->settings, true);
-            $settings = current($settings);
+            $settings = $settings[0];
 
-            /* 获取图表的相关配置和原始数据。 */
-            /* Get chart related settings and raw data. */
             $options = $this->loadModel('chart')->genPie(json_decode($chart->fields, true), $settings, $chart->sql, $filters);
-            $groupField = $settings['group'][0]['field'];
-            $metricField = $settings['metric'][0]['field'];
 
-            if($groupField == $metricField) $groupField .= '1';
-            $dimensions = array($groupField, $metricField);
+            if($settings['group'][0]['field'] == $settings['metric'][0]['field']) $settings['group'][0]['field'] = $settings['group'][0]['field'] . '1';
+            $dimensions = array($settings['group'][0]['field'], $settings['metric'][0]['field']);
             $sourceData = array();
             foreach($options['series'] as $dataList)
             {
+                $field = $settings['metric'][0]['field'];
                 foreach($dataList['data'] as $data)
                 {
                     $fieldValue = $data['name'];
                     if(empty($sourceData[$fieldValue]))
                     {
                         $sourceData[$fieldValue] = new stdclass();
-                        $sourceData[$fieldValue]->{$groupField} = (string)$fieldValue;
+                        $sourceData[$fieldValue]->{$settings['group'][0]['field']} = (string)$fieldValue;
                     }
-                    $sourceData[$fieldValue]->{$metricField} = $data['value'];
+                    $sourceData[$fieldValue]->{$field} = $data['value'];
                 }
             }
 
@@ -568,101 +884,103 @@ class screenModel extends model
             $component->option->dataset->source     = array_values($sourceData);
         }
 
-        /* 设置组件默认属性。 */
-        /* Set component default attributes. */
-        $this->setComponentDefaults($component);
+        return $this->setComponentDefaults($component);
     }
 
     /**
-     * 获取雷达图配置。
      * Get radar chart option.
      *
      * @param  object $component
      * @param  object $chart
-     * @param  array  $filters
      * @access public
-     * @return void
+     * @return object
      */
-    public function getRadarChartOption(object $component, object $chart, array $filters = array()): void
+    public function getRadarChartOption($component, $chart, $filters = '')
     {
+        $indicator  = array();
+        $seriesData = array();
         if($chart->sql)
         {
-            /* 获取字段配置和语言项。 */
-            /* Get chart fields and langs. */
             $settings = json_decode($chart->settings, true);
-            $langs    = json_decode($chart->langs,    true);
-            $settings = current($settings);
+            $langs    = json_decode($chart->langs, true);
+            $settings = $settings[0];
 
-            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
+            list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters);
 
-            $fields         = json_decode($chart->fields);
+            $fields         = json_decode($chart->fields, true);
             $radarIndicator = array();
             $seriesData     = array();
             $max            = 0;
             $clientLang     = $this->app->getClientLang();
-            $xLabelValues   = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
+            $xLabelValues   = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
 
             foreach($yStats as $index => $dataList)
             {
-                $fieldConfig = zget($fields, $metrics[$index]);
-                $fieldName   = $langs[$fieldConfig->field][$clientLang] ?? $fieldConfig->name;
-                $field       = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
+                $fieldObj  = zget($fields, $metrics[$index]);
+                $fieldName = $fieldObj['name'];
+                $field     = $fieldObj['field'];
+
+                if(isset($langs[$field])) $fieldName = zget($langs[$field], $clientLang, $fieldName);
 
                 $seriesData[$index] = new stdclass();
-                $seriesData[$index]->name = $field;
+                $seriesData[$index]->name = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
 
-                $values = array_map(function($value){return (float)$value;}, $dataList);
-                $max = max($values);
+                $values = array();
+                foreach($dataList as $valueField => $value)
+                {
+                    $values[] = (float)$value;
+                    $max = $max < $value ? (float)$value : (float)$max;
+                }
                 $seriesData[$index]->value = $values;
             }
 
-            /* 如果最后一列不为空，则添加一个指标列。 */
-            /* If the last column is not empty, add an indicator column. */
             if(!empty($dataList))
             {
-                foreach(array_keys($dataList) as $valueField)
+                foreach($dataList as $valueField => $value)
                 {
                     $indicator = new stdclass();
                     $indicator->name   = $xLabelValues[$valueField];
                     $indicator->max    = $max;
-                    $radarIndicator[]  = $indicator;
+                    $radarIndicator[]  = $indicator;;
                 }
             }
             $component->option->dataset->radarIndicator = $radarIndicator;
             $component->option->dataset->seriesData     = $seriesData;
         }
 
-        /* 设置组件默认属性。 */
-        /* Set component default attributes. */
-        $this->setComponentDefaults($component);
+        return $this->setComponentDefaults($component);
     }
 
 
     /**
-     * 获取表格图表配置。
      * Get table chart option.
      *
      * @param  object $component
      * @param  object $chart
-     * @param  array  $filters
      * @access public
-     * @return void
+     * @return object
      */
-    public function getTableChartOption(object $component, object $chart, array $filters = array()): void
+    public function getTableChartOption($component, $chart, $filters = '')
     {
         if($chart->sql)
         {
-            /* 获取表格字段配置以及单元格合并配置。 */
-            /* Get table fields and merge cells config. */
             $settings = json_decode($chart->settings, true);
-            $langs    = json_decode($chart->langs,    true) ? : array();
-            $fields   = json_decode($chart->fields,   true);
-            list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs);
+            $fields   = json_decode(json_encode($chart->fieldSettings), true);
+            $langs    = json_decode($chart->langs, true);
 
-            /* 处理合计行。 */
-            /* Process total row. */
+            if(empty($langs)) $langs = array();
+
+            if(isset($settings['summary']) and $settings['summary'] == 'notuse')
+            {
+                list($options, $config) = $this->loadModel('pivot')->genOriginSheet($fields, $settings, $chart->sql, $filters, $langs);
+            }
+            else
+            {
+                list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs);
+            }
+
             $colspan = array();
-            if($options->columnTotal && $options->columnTotal == 'sum' && !empty($options->array))
+            if(isset($options->columnTotal) and $options->columnTotal == 'sum' and !empty($options->array))
             {
                 $optionsData = $options->array;
                 $count       = count($optionsData);
@@ -680,158 +998,214 @@ class screenModel extends model
                 $colspan[$count - 1][0] = count($options->groups);
             }
 
-            $dataset = array_map(function($data){return array_values($data);}, $options->array);
+            $dataset = array();
+            foreach($options->array as $data) $dataset[] = array_values($data);
 
-            /* 处理单元格合并数据。 */
-            /* Process merge cells data. */
             foreach($config as $i => $data)
             {
                 foreach($data as $j => $rowspan)
                 {
-                    for($k = 1; $k < $rowspan; $k ++) unset($dataset[$i + $k][$j]);
+                    for($k = 1; $k < $rowspan; $k ++)
+                    {
+                        unset($dataset[$i + $k][$j]);
+                    }
                 }
             }
 
-            $this->setComponentTableInfo($component, $options->cols, $dataset, $config, $colspan);
+            $align   = array();
+            $headers = array();
+            foreach($options->cols as $cols)
+            {
+                $count  = 1;
+                $header = array();
+                foreach($cols as $data)
+                {
+                    $header[] = $data;
+                    if($count == 1) $align[] = 'center';
+                }
+                $headers[] = $header;
+                $count ++;
+            }
+
+            if(!isset($component->chartConfig->tableInfo)) $component->chartConfig->tableInfo = new stdclass();
+            $component->option->header      = $headers;
+            $component->option->align       = $align;
+            $component->option->columnWidth = array();
+            $component->option->rowspan     = $config;
+            $component->option->colspan     = $colspan;
+            $component->option->dataset     = $dataset;
         }
 
-        /* 设置组件默认属性。 */
-        /* Set component default attributes. */
-        $this->setComponentDefaults($component);
+        return $this->setComponentDefaults($component);
     }
 
     /**
-     * 设置组件表格信息。
-     * Set component table info.
-     *
-     * @param  object  $component
-     * @param  array   $cols
-     * @param  array   $dataset
-     * @param  array   $config
-     * @param  array   $colspan
-     * @access private
-     * @return void
-     */
-    public function setComponentTableInfo(object $component, array $cols, array $dataset, array $config, array $colspan): void
-    {
-        $align = array_map(function(){return 'center';}, current($cols));
-
-        if(!isset($component->chartConfig->tableInfo)) $component->chartConfig->tableInfo = new stdclass();
-        $component->option->header      = $component->chartConfig->tableInfo->header      = $cols;
-        $component->option->align       = $component->chartConfig->tableInfo->align       = $align;
-        $component->option->columnWidth = $component->chartConfig->tableInfo->columnWidth = array();
-        $component->option->rowspan     = $component->chartConfig->tableInfo->rowspan     = $config;
-        $component->option->colspan     = $component->chartConfig->tableInfo->colspan     = $colspan;
-        $component->option->dataset     = $dataset;
-    }
-
-    /**
-     * 获取图表的过滤条件。
-     * Get chart filters.
+     * Get chart filters
      *
      * @param object $chart
      * @access public
-     * @return array
+     * @return void
      */
-    public function getChartFilters(object $chart): array
+    public function getChartFilters($chart)
     {
         $filters = json_decode($chart->filters, true);
-        $fields  = json_decode($chart->fields,  true);
+        $fields  = json_decode($chart->fields, true);
 
-        return !empty($filters) ? array_map(function($filter)use($fields, $chart){
-            $isQuery = (isset($filter['from']) && $filter['from'] == 'query');
-            if($isQuery) $this->setIsQueryScreenFilters($filter);
-            if(!$isQuery && ($filter['type'] == 'date' || $filter['type'] == 'datetime')) $this->setDefaultByDate($filter);
-            if(!$isQuery && $filter['type'] == 'select')
+        if(empty($filters)) return array();
+
+        $this->loadModel('pivot');
+
+        $screenFilters = array();
+        foreach($filters as $filter)
+        {
+            $isQuery = (isset($filter['from']) and $filter['from'] == 'query');
+
+            if($isQuery)
             {
-                $field = zget($fields, $filter['field']);
-                $options = $this->getSysOptions($field['type'], $field['object'], $field['field'], $chart->sql);
-                $filter['options'] = array_map(function($item, $index){return array('label' => $item, 'value' => $index);}, $options, array_keys($options));
+                if($filter['type'] == 'date' or $filter['type'] == 'datetime')
+                {
+                    if(isset($filter['default']))
+                    {
+                        $default = $this->pivot->processDateVar($filter['default']);
+
+                        $filter['default'] = empty($default) ? null : strtotime($default) * 1000;
+                    }
+                }
+
+                $screenFilters[] = (object)$filter;
+                continue;
             }
 
-            return $filter;
-        }, $filters) : array();
-    }
-
-    /**
-     * 设置组件的查询过滤条件。
-     * Set component query filters.
-     *
-     * @param  array  $filter
-     * @access public
-     * @return void
-     */
-    public function setIsQueryScreenFilters(array &$filter): void
-    {
-        if($filter['type'] == 'date' || $filter['type'] == 'datetime')
-        {
-            if(isset($filter['default']))
+            if($filter['type'] == 'date' or $filter['type'] == 'datetime')
             {
-                $default = $this->loadModel('pivot')->processDateVar($filter['default']);
-                $filter['default'] = empty($default) ? null : strtotime($default) * 1000;
+                if(isset($filter['default']))
+                {
+                    $default = $filter['default'];
+                    $begin   = $default['begin'];
+                    $end     = $default['end'];
+
+                    if(empty($begin) and empty($end))
+                    {
+                        $filter['default'] = null;
+                    }
+                    else if(empty($begin) or empty($end))
+                    {
+                        $filter['default'] = empty($begin) ? strtotime($end) * 1000 : strtotime($begin) * 1000;
+                    }
+                    else
+                    {
+                        $filter['default'] = array(strtotime($begin) * 1000, strtotime($end) * 1000);
+                    }
+                }
+                else
+                {
+                    $filter['default'] = null;
+                }
             }
+
+            $screenFilters[] = (object)$filter;
         }
 
-        if($filter['type'] == 'select')
-        {
-            $options = $this->getSysOptions($filter['typeOption']);
-            $filter['options'] = array_map(function($item, $index){return array('label' => $item, 'value' => $index);}, $options, array_keys($options));
-        }
+        return $screenFilters;
     }
 
     /**
-     * 根据时间设置默认值。
-     * Set default by date.
+     * Process xLabel with lang
      *
-     * @param  array  $filter
-     * @access public
-     * @return void
-     */
-    public function setDefaultByDate(array &$filter): void
-    {
-        $filter['default'] = $filter['default'] ?? null;
-
-        if(isset($filter['default']))
-        {
-            extract($filter['default']);
-            if(empty($begin)  || empty($end))  $filter['default'] = empty($begin) ? strtotime($end) * 1000 : strtotime($begin) * 1000;
-            if(!empty($begin) && !empty($end)) $filter['default'] = array(strtotime($begin) * 1000, strtotime($end) * 1000);
-            if(empty($begin)  && empty($end))  $filter['default'] = null;
-        }
-    }
-
-    /**
-     * 根据语言处理横坐标的值。
-     * Process xLabel value with lang.
-     *
-     * @param  array  $xLabel
-     * @param  string $type
-     * @param  string $object
-     * @param  string $field
+     * @param  array   $xLabel
+     * @param  string  $type
+     * @param  string  $object
+     * @param  string  $field
      * @access public
      * @return array
      */
-    public function processXLabel(array $xLabels, string $type, string $object, string $field): array
+    public function processXLabel($xLabels, $type, $object, $field)
     {
+        $options = $this->getSysOptions($type, $object, $field);
         $xLabelValues = array();
-        $options      = $this->getSysOptions($type, $object, $field);
-        foreach($xLabels as $label) $xLabelValues[$label] = isset($options[$label]) ? $options[$label] : $label;
+        foreach($xLabels as $index => $label)
+        {
+            $xLabelValues[$label] = isset($options[$label]) ? $options[$label] : $label;
+        }
 
         return $xLabelValues;
     }
 
     /**
-     * 获取系统配置。
-     * Get system options.
+     * Process metric filter.
      *
-     * @param  string $type
-     * @param  string $object
-     * @param  string $field
-     * @param  string $sql
+     * @param  array  $filterParams
+     * @param  string $dateType
      * @access public
      * @return array
      */
-    public function getSysOptions(string $type, string $object = '', string $field = '', string $sql = ''): array
+    public function processMetricFilter($filterParams, $dateType)
+    {
+        $filters = array();
+        foreach($filterParams as $filterParam)
+        {
+            $field = $filterParam['field'];
+            $value = $filterParam['default'];
+            if(empty($value)) continue;
+
+            if($field == 'date')
+            {
+                $beginValue = $value[0];
+                $endValue   = $value[1];
+
+                $beginFilter = $this->formatMetricDateByType($beginValue, $dateType);
+                $endFilter   = $this->formatMetricDateByType($endValue, $dateType);
+
+                $beginFilter->value = $beginValue;
+                $endFilter->value   = $endValue;
+
+                $filters['dateBegin'] = $beginFilter->$dateType;
+                $filters['dateEnd']   = $endFilter->$dateType;
+            }
+            else
+            {
+                $scopeFilter = new stdclass();
+                $scopeFilter->value = $value;
+                $scopeFilter->type  = $field;
+
+                $filters['scope'] = implode(',', $value);
+            }
+        }
+
+        return $filters;
+    }
+
+    /**
+     * Format date of metric's filter by type.
+     *
+     * @param string  $stamp
+     * @param string  $dateType
+     * @access public
+     * @return array
+     */
+    public function formatMetricDateByType($stamp, $dateType)
+    {
+        $formatedDate = new stdclass();
+        $formatedDate->year = date('Y', $stamp/1000);
+        if($dateType == 'month') $formatedDate->month = date('Y-m', $stamp/1000);
+        if($dateType == 'week')  $formatedDate->week  = date('Y-W', $stamp/1000);
+        if($dateType == 'day')   $formatedDate->day   = date('Y-m-d', $stamp/1000);
+
+        return $formatedDate;
+    }
+
+    /**
+     * Get system options.
+     *
+     * @param string $type
+     * @param string $object
+     * @param string $field
+     * @param string $sql
+     * @param string $saveAs
+     * @access public
+     * @return array
+     */
+    public function getSysOptions($type, $object = '', $field = '', $sql = '', $saveAs = '')
     {
         $options = array();
         switch($type)
@@ -858,9 +1232,7 @@ class screenModel extends model
             case 'option':
                 if($field)
                 {
-                    /* 引入dataview下的相关文件。 */
-                    /* Include related files in dataview. */
-                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "{$object}.php";
+                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
                     if(is_file($path))
                     {
                         include $path;
@@ -871,248 +1243,279 @@ class screenModel extends model
             case 'object':
                 if($field)
                 {
-                    /* 查询相关字段的值。 */
-                    /* Get field value. */
-                    $table = zget($this->config->objectTables, $object, '');
-                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                    $useField = $field;
+                    $useTable = $object;
+
+                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
+                    if(is_file($path))
+                    {
+                        include $path;
+                        if(isset($schema->fields[$field]['object']))
+                        {
+                            $fieldObject = $schema->fields[$field]['object'];
+                            $fieldShow   = explode('.', $schema->fields[$field]['show']);
+
+                            if($fieldObject) $useTable = $fieldObject;
+                            if(count($fieldShow) == 2) $useField = $fieldShow[1];
+                        }
+                    }
+
+                    $table = isset($this->config->objectTables[$useTable]) ? $this->config->objectTables[$useTable] : zget($this->config->objectTables, $object, '');
+                    if($table)
+                    {
+                        $columns = $this->dbh->query("SHOW COLUMNS FROM $table")->fetchAll();
+                        foreach($columns as $id => $column) $columns[$id] = (array)$column;
+                        $fieldList = array_column($columns, 'Field');
+
+                        $useField = in_array($useField, $fieldList) ? $useField : 'id';
+                        $options = $this->dao->select("id, {$useField}")->from($table)->fetchPairs();
+                    }
                 }
                 break;
             default:
-                if($field && $sql)
+                if($field and $sql)
                 {
-                    /* 通过sql查询展示字段。 */
-                    /* Get field by sql. */
-                    $cols = $this->dao->query("select tt.`$field` from ($sql) tt group by tt.`$field` order by tt.`$field` desc")->fetchAll();
-                    foreach($cols as $col) $options[$col->{$field}] = $col->{$field};
+                    $keyField   = $field;
+                    $valueField = $saveAs ? $saveAs : $field;
+                    $options = $this->getOptionsFromSql($sql, $keyField, $valueField);
                 }
                 break;
+        }
 
+        if($sql and $field and $saveAs and in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'project.status', 'option', 'object')))
+        {
+            $options = $this->getOptionsFromSql($sql, $field, $saveAs);
         }
 
         return array_filter($options);
     }
 
     /**
-     * 构建组件列表。
-     * Build component list.
+     * Get pairs from column by keyField and valueField.
      *
-     * @param  array  $componentList
+     * @param  string $sql
+     * @param  string $keyField
+     * @param  string $valueField
      * @access public
      * @return array
      */
-    public function buildComponentList(array|object $componentList): array
+    public function getOptionsFromSql($sql, $keyField, $valueField)
     {
-        /* 清除空数据并且重构每个组件。 */
-        /* Clear empty data and rebuild each component. */
-        return array_map(function($component){$this->buildComponent($component);return $component;}, array_filter($componentList));
+        $options = array();
+        $cols    = $this->dbh->query($sql)->fetchAll();
+        $sample  = current($cols);
+
+        if(!isset($sample->$keyField) or !isset($sample->$valueField)) return $options;
+
+        foreach($cols as $col)
+        {
+            $key   = $col->$keyField;
+            $value = $col->$valueField;
+            $options[$key] = $value;
+        }
+
+        return $options;
     }
 
     /**
-     * 构建组件。
+     * Build component list.
+     *
+     * @param  array $componentList
+     * @access public
+     * @return array
+     */
+    public function buildComponentList($componentList)
+    {
+        $components = array();
+        foreach($componentList as $component)
+        {
+            if($component) $components[] = $this->buildComponent($component);
+        }
+
+        return $components;
+    }
+
+    /**
      * Build component.
      *
      * @param  object $component
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildComponent(object $component): void
+    public function buildComponent($component)
     {
-        /* 如果是内置图表，构建图表。 */
         /* If chart is builtin, build it. */
-        if(isset($component->sourceID) && $component->sourceID)
-        {
-            $this->buildChart($component);
-            return;
-        }
+        if(isset($component->sourceID) and $component->sourceID) return $this->buildChart($component);
+        if(isset($component->key) and $component->key === 'Select') return $this->buildSelect($component);
 
-        /* 如果是select图表，构建select相关图表。 */
-        /* If chart is select, build select chart. */
-        if(isset($component->key) && $component->key === 'Select')
-        {
-            $this->buildSelect($component);
-            return;
-        }
-
-        /* 如果当前组件不是组件集合，设置默认值。 */
-        /* If current component is not group, set default value. */
-        if(empty($component->isGroup))
-        {
-            $this->setComponentDefaults($component);
-            return;
-        }
+        if(empty($component->isGroup)) return $this->setComponentDefaults($component);
 
         $component->groupList = $this->buildComponentList($component->groupList);
-        $this->buildGroup($component);
+        return $this->buildGroup($component);
     }
 
     /**
-     * 构建图表组的默认属性。
-     * Build group default attributes.
+     * Build chart group.
      *
      * @param  object $component
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildGroup(object $component): void
+    public function buildGroup($component)
     {
-        $this->setComponentDefaults($component);
+        return $this->setComponentDefaults($component);
     }
 
     /**
-     * 设置组件的默认值。
      * Set component defaults.
      *
      * @param  object $component
      * @access public
-     * @return void
+     * @return object
      */
-    public function setComponentDefaults(object $component): void
+    public function setComponentDefaults($component)
     {
-        if(!isset($component->styles))  $component->styles  = $this->config->screen->chart->default->config->styles;
-        if(!isset($component->status))  $component->status  = $this->config->screen->chart->default->config->status;
-        if(!isset($component->request)) $component->request = $this->config->screen->chart->default->config->request;
+        if(!isset($component->styles))  $component->styles  = json_decode('{"filterShow": false, "hueRotate": 0, "saturate": 1, "contrast": 1, "brightness": 1, "opacity": 1, "rotateZ": 0, "rotateX": 0, "rotateY": 0, "skewX": 0, "skewY": 0, "blendMode": "normal", "animations": []}');
+        if(!isset($component->status))  $component->status  = json_decode('{"lock": false, "hide": false}');
+        if(!isset($component->request)) $component->request = json_decode('{ "requestDataType": 0, "requestHttpType": "get", "requestUrl": "", "requestIntervalUnit": "second", "requestContentType": 0, "requestParamsBodyType": "none", "requestSQLContent": { "sql": "select * from  where" }, "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
+
+        return $component;
     }
 
     /**
-     * 构建选择框。
      * Build select.
      *
      * @param  object $component
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildSelect(object $component): void
+    public function buildSelect($component)
     {
         switch($component->type)
         {
             case 'year':
                 $component->option->value = $this->filter->year;
 
-                /* 只查询从2009年开始的数据。 */
-                /* Only query data from 2009. */
-                $begin = $this->dao->select('YEAR(MIN(date)) year')->from(TABLE_ACTION)->where('date')->notZeroDate()->fetch('year');
-                if($begin < 2009) $begin = 2009;
+                $beginYear = $this->dao->select('YEAR(MIN(date)) year')->from(TABLE_ACTION)->where('date')->notZeroDate()->fetch('year');
+                if($beginYear < 2009) $beginYear = 2009;
 
-                /* 构建年份数据。 */
-                /* Build year data. */
                 $options = array();
-                for($year = date('Y'); $year >= $begin; $year--) $options[] = array('label' => $year, 'value' => $year);
+                for($year = date('Y'); $year >= $beginYear; $year--) $options[] = array('label' => $year, 'value' => $year);
                 $component->option->dataset = $options;
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=' + value + '&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
+                $component->option->onChange = "window.location.href = $url";
                 break;
             case 'dept':
                 $component->option->value = (string)$this->filter->dept;
 
-                /* 构建部门数据。 */
-                /* Build dept data. */
                 $options = array(array('label' => $this->lang->screen->allDepts, 'value' => '0'));
                 $depts = $this->dao->select('id,name')->from(TABLE_DEPT)->where('grade')->eq(1)->fetchAll();
-                array_map(function($dept)use(&$options){array_push($options, array('label' => $dept->name, 'value' => $dept->id));}, $depts);
+                foreach($depts as $dept)
+                {
+                    $options[] = array('label' => $dept->name, 'value' => $dept->id);
+                }
                 $component->option->dataset = $options;
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen . "&year=" . $this->filter->year . "&dept=' + value + '&account=')";
+                $component->option->onChange = "window.location.href = $url";
                 break;
             case 'account':
                 $component->option->value = $this->filter->account;
 
-                /* 构建用户数据。 */
-                /* Build user data. */
                 $options = array(array('label' => $this->lang->screen->allUsers, 'value' => ''));
                 $depts   = array();
                 if($this->filter->dept) $depts = $this->dao->select('id')->from(TABLE_DEPT)->where('path')->like(',' . $this->filter->dept . ',%')->fetchPairs();
-                $users = $this->dao->select('account,realname')->from(TABLE_USER)->where('deleted')->eq(0)->beginIF($this->filter->dept)->andWhere('dept')->in($depts)->fi()->fetchAll();
-                array_map(function($user)use(&$options){array_push($options, array('label' => $user->realname, 'value' => $user->account));}, $users);
+                $users = $this->dao->select('account,realname')->from(TABLE_USER)
+                    ->where('deleted')->eq(0)
+                    ->beginIF($this->filter->dept)->andWhere('dept')->in($depts)->fi()
+                    ->fetchAll();
+                foreach($users as $user)
+                {
+                    $options[] = array('label' => $user->realname, 'value' => $user->account);
+                }
                 $component->option->dataset = $options;
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen . "&year=" . $this->filter->year . "&dept=" . $this->filter->dept . "&account=' + value)";
+                $component->option->onChange = "window.location.href = $url";
                 break;
         }
 
-        if(isset($url)) $component->option->onChange = "window.location.href = {$url}";
-
-        /* 设置全局图表过滤条件。 */
-        /* Set global chart filter. */
         foreach($component->filterCharts as $chart)
         {
             if(!isset($this->filter->charts[$chart->chart])) $this->filter->charts[$chart->chart] = array();
             $this->filter->charts[$chart->chart][$component->type] = $chart->field;
         }
 
-        $this->setComponentDefaults($component);
+        return $this->setComponentDefaults($component);
     }
 
     /**
-     * 构建图表。
      * Build chart.
      *
      * @param  object $component
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildChart(object $component): void
+    public function buildChart($component)
     {
         $chart = $this->dao->select('*')->from(TABLE_CHART)->where('id')->eq($component->sourceID)->fetch();
         switch($chart->type)
         {
             case 'card':
-                $this->buildCardChart($component, $chart);
+                return $this->buildCardChart($component, $chart);
                 break;
             case 'line':
                 if($chart->builtin == '0')
                 {
                     $chart->sql = $this->setFilterSQL($chart);
-                    $this->getLineChartOption($component, $chart, array());
-                    break;
+                    return $this->getLineChartOption($component, $chart, array());
                 }
-                $this->buildLineChart($component, $chart);
+                return $this->buildLineChart($component, $chart);
                 break;
             case 'bar':
-                $this->buildBarChart($component, $chart);
+                return $this->buildBarChart($component, $chart);
                 break;
             case 'piecircle':
-                $this->buildPieCircleChart($component, $chart);
+                return $this->buildPieCircleChart($component, $chart);
                 break;
             case 'pie':
-                /* 通过判断是否是内置图表调用不同的方法。 */
-                /* Call different methods by judging whether it is a builtin chart. */
-                $chart->builtin == '0' ? $this->getPieChartOption($component, $chart, array()) : $this->buildPieChart($component, $chart);
+                if($chart->builtin == '0') return $this->getPieChartOption($component, $chart, array());
+                return $this->buildPieChart($component, $chart);
                 break;
             case 'radar':
-                $this->buildRadarChart($component, $chart);
+                return $this->buildRadarChart($component, $chart);
                 break;
             case 'org':
-                $this->buildOrgChart($component, $chart);
+                return $this->buildOrgChart($component, $chart);
                 break;
             case 'funnel':
-                $this->buildFunnelChart($component, $chart);
+                return $this->buildFunnelChart($component, $chart);
                 break;
             case 'table':
-                $this->buildTableChart($component, $chart);
+                return $this->buildTableChart($component, $chart);
                 break;
             case 'cluBarY':
             case 'stackedBarY':
             case 'cluBarX':
             case 'stackedBar':
                 $chart->sql = $this->setFilterSQL($chart);
-                $this->getBarChartOption($component, $chart);
+                return $this->getBarChartOption($component, $chart);
                 break;
             case 'waterpolo':
-                $this->getWaterPoloOption($component, $chart, array());
+                return $this->getWaterPoloOption($component, $chart, array());
         }
     }
 
     /**
-     * 设置sql过滤条件。
-     * Set SQL filter.
+     * Set SQL filter
      *
-     * @param  object $chart
+     * @param object $chart
      * @access public
      * @return string
      */
-    public function setFilterSQL(object $chart): string
+    public function setFilterSQL($chart)
     {
-        $sql = $chart->sql;
         if(isset($this->filter->charts[$chart->id]))
         {
             $conditions = array();
@@ -1121,120 +1524,139 @@ class screenModel extends model
                 switch($key)
                 {
                     case 'year':
-                        $conditions[] = $field . " = '" . $this->filter->{$key} . "'";
+                        $conditions[] = $field . " = '" . $this->filter->$key . "'";
                         break;
                     case 'dept':
-                        if($this->filter->dept && !$this->filter->account)
+                        if($this->filter->dept and !$this->filter->account)
                         {
-                            /* 根据部门查询用户。 */
-                            /* Query users by dept. */
                             $accountField = $this->filter->charts[$chart->id]['account'];
                             $users = $this->dao->select('account')->from(TABLE_USER)->alias('t1')
                                 ->leftJoin(TABLE_DEPT)->alias('t2')
                                 ->on('t1.dept = t2.id')
                                 ->where('t2.path')->like(',' . $this->filter->dept . ',%')
                                 ->fetchPairs('account');
-                            $accounts = array_map(function($account){return "'" . $account . "'";}, $users);
+                            $accounts = array();
+                            foreach($users as $account) $accounts[] = "'" . $account . "'";
 
                             $conditions[] = $accountField . ' IN (' . implode(',', $accounts) . ')';
                         }
                         break;
                     case 'account':
-                        if($this->filter->account) $conditions[] = $field . " = '" . $this->filter->{$key} . "'";
+                        if($this->filter->account) $conditions[] = $field . " = '" . $this->filter->$key . "'";
                         break;
                 }
             }
 
-            if($conditions) $sql = 'SELECT * FROM (' . str_replace(';', '', $chart->sql) . ') AS t1 WHERE ' . implode(' AND ', $conditions);
+            if($conditions) return 'SELECT * FROM (' . str_replace(';', '', $chart->sql) . ') AS t1 WHERE ' . implode(' AND ', $conditions);
         }
 
-        /* 兼容新版本开启了严格模式的数据库，处理可能会报错的sql。 */
-        /* Compatible with databases that have strict mode enabled in new versions, and process sql that may cause errors. */
-        return str_replace('0000-00-00', '1970-01-01', $sql);
+        return $chart->sql;
     }
 
     /**
-     * 构建卡片图表。
      * Build card chart.
      *
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildCardChart(object $component, object $chart): void
+    public function buildCardChart($component, $chart)
     {
-        $component->option->dataset = '?';
-        if($chart->settings)
+        if(!$chart->settings)
+        {
+            $component->option->dataset = '?';
+        }
+        else
         {
             $value = 0;
+
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
-                $value = '?';
-                if($settings && isset($settings->value))
+                if($settings and isset($settings->value))
                 {
                     $field   = $settings->value->field;
-                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
+                    $sql     = $this->setFilterSQL($chart);
+                    $results = $this->buildDataset($chart->id, $sql);
 
-                    if($settings->value->type === 'value') $value = !count($results) ? 0 : current($results)->{$field};
-                    if($settings->value->agg  === 'count') $value = count($results);
-                    if($settings->value->agg  === 'sum')
+                    if($settings->value->type === 'text')
                     {
-                        $value = 0;
-                        foreach($results as $result) $value += (float)$result->{$field};
+                        $value = empty($results[0]) ? '' : $results[0]->$field;
+                    }
+                    if($settings->value->type === 'value')
+                    {
+                        $value = empty($results[0]) ? 0 : $results[0]->$field;
+                    }
+                    if($settings->value->agg === 'count')
+                    {
+                        $value = count($results);
+                    }
+                    else if($settings->value->agg === 'sum')
+                    {
+                        foreach($results as $result)
+                        {
+                            $value += intval($result->$field);
+                        }
+
                         $value = round($value);
                     }
+                }
+                else
+                {
+                    $value = '?';
                 }
             }
             $component->option->dataset = (string)$value;
         }
 
-        $this->setComponentDefaults($component);
+        return $this->setComponentDefaults($component);
     }
 
     /**
-     * 构建折线图。
      * Build line chart.
      *
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildLineChart(object $component, object $chart): void
+    public function buildLineChart($component, $chart)
     {
-        /* 如果没有设置图表配置，设置默认值。 */
-        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
-            $this->screenTao->setChartDefault('line', $component);
-            $this->setComponentDefaults($component);
+            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
+            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
+            $component->key         = "LineCommon";
+            $component->chartConfig = json_decode('{"key":"LineCommon","chartKey":"VLineCommon","conKey":"VCLineCommon","title":"折线图","category":"Lines","categoryName":"折线图","package":"Charts","chartFrame":"echarts","image":"/static/png/line-e714bc74.png"}');
+            $component->option      = json_decode('{"legend":{"show":true,"top":"5%","textStyle":{"color":"#B9B8CE"}},"xAxis":{"type":"category"},"yAxis":{"show":true,"axisLine":{"show":true},"type":"value"},"backgroundColor":"rgba(0,0,0,0)"}');
+
+            return $this->setComponentDefaults($component);
         }
         else
         {
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
-                if($settings && isset($settings->xaxis))
+                if($settings and isset($settings->xaxis))
                 {
                     $dimensions = array($settings->xaxis[0]->name);
                     foreach($settings->yaxis as $yaxis) $dimensions[] = $yaxis->name;
 
-                    /* 通过sql查询数据，并且处理数据。 */
-                    /* Query data by sql and process data. */
                     $sourceData = array();
-                    $results    = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
+
+                    $sql     = $this->setFilterSQL($chart);
+                    $results = $this->dao->query($sql)->fetchAll();
                     foreach($results as $result)
                     {
                         $key   = $settings->xaxis[0]->name;
                         $field = $settings->xaxis[0]->field;
-                        $row   = array($key => $result->{$field});
+                        $row   = array($key => $result->$field);
 
                         foreach($settings->yaxis as $yaxis)
                         {
                             $field = $yaxis->field;
-                            $row[$yaxis->name] = $result->{$field};
+                            $row[$yaxis->name] = $result->$field;
                         }
                         $sourceData[] = $row;
                     }
@@ -1244,85 +1666,101 @@ class screenModel extends model
                 }
             }
 
-            $this->setComponentDefaults($component);
+            return $this->setComponentDefaults($component);
         }
     }
 
     /**
-     * 构建表格图。
      * Build table chart
      *
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildTableChart(object $component, object $chart): void
+    public function buildTableChart($component, $chart)
     {
-        /* 如果没有设置图表配置，设置默认值。 */
-        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
-            $this->screenTao->setChartDefault('table', $component);
-            $this->setComponentDefaults($component);
+            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
+            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
+            $component->key         = "TableScrollBoard";
+            $component->chartConfig = json_decode('{"key":"TableScrollBoard","chartKey":"VTableScrollBoard","conKey":"VCTableScrollBoard","title":"轮播列表","category":"Tables","categoryName":"表格","package":"Tables","chartFrame":"common","image":"/static/png/table_scrollboard-fb642e78.png"}');
+            $component->option      = json_decode('{"header":["列1","列2","列3"],"dataset":[["行1列1","行1列2","行1列3"],["行2列1","行2列2","行2列3"],["行3列1","行3列2","行3列3"]],"rowNum":2,"waitTime":2,"headerHeight":35,"carousel":"single","headerBGC":"#00BAFF","oddRowBGC":"#003B51","evenRowBGC":"#0A2732"}');
+
+            return $this->setComponentDefaults($component);
         }
         else
         {
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
-                if($settings && isset($settings->column))
+                if($settings and isset($settings->column))
                 {
-                    $header = $dataset = array();
-                    foreach($settings->column as $column) $header[$column->field] = $column->name;
+                    $header  = array();
+                    $dataset = array();
+                    foreach($settings->column as $column)
+                    {
+                        $header[$column->field] = $column->name;
+                    }
 
-                    /* 通过sql查询数据，并且处理数据。 */
-                    /* Query data by sql and process data. */
-                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
-                    foreach($results as $result) $dataset[] = array_map(function($field)use($result){return $result->{$field};}, array_keys($header));
+                    $sql     = $this->setFilterSQL($chart);
+                    $results = $this->buildDataset($chart->id, $sql);
+
+                    foreach($results as $result)
+                    {
+                        $row = array();
+                        foreach($header as $field => $name)
+                        {
+                            $row[] = $result->$field;
+                        }
+                        $dataset[] = $row;
+                    }
 
                     $component->option->header  = array_values($header);
                     $component->option->dataset = $dataset;
                 }
             }
 
-            $this->setComponentDefaults($component);
+            return $this->setComponentDefaults($component);
         }
     }
 
     /**
-     * 构建条形图。
      * Build bar chart.
      *
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildBarChart(object $component, object $chart): void
+    public function buildBarChart($component, $chart)
     {
-        /* 如果没有设置图表配置，设置默认值。 */
-        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
-            $this->screenTao->setChartDefault('bar', $component);
-            $this->setComponentDefaults($component);
+            $component->request     = json_decode('{"requestDataType": 0, "requestHttpType": "get", "requestUrl": "", "requestIntervalUnit": "second", "requestContentType": 0, "requestParamsBodyType": "none", "requestSQLContent": { "sql": "select * from  where" }, "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {}}}');
+            $component->events      = json_decode('{"baseEvent": {}, "advancedEvents": {}}');
+            $component->key         = "BarCrossrange";
+            $component->chartConfig = json_decode('{"key": "BarCrossrange", "chartKey": "VBarCrossrange", "conKey": "VCBarCrossrange", "title": "横向柱状图", "category": "Bars", "categoryName": "柱状图", "package": "Charts", "chartFrame": "echarts", "image": "/static/png/bar_y-05067169.png" }');
+            $component->option      = json_decode('{"xAxis": { "show": true, "type": "category" }, "yAxis": { "show": true, "axisLine": { "show": true }, "type": "value" }, "series": [], "backgroundColor": "rgba(0,0,0,0)"}');
+
+            return $this->setComponentDefaults($component);
         }
         else
         {
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
-                if($settings && isset($settings->xaxis))
+                if($settings and isset($settings->xaxis))
                 {
                     $dimensions = array($settings->xaxis[0]->name);
                     foreach($settings->yaxis as $yaxis) $dimensions[] = $yaxis->name;
 
                     $sourceData = array();
 
-                    /* 通过sql查询数据，并且处理数据。 */
-                    /* Query data by sql and process data. */
-                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
+                    $sql     = $this->setFilterSQL($chart);
+                    $results = $this->dao->query($sql)->fetchAll();
+
                     foreach($results as $result)
                     {
                         $key   = $settings->xaxis[0]->name;
@@ -1330,18 +1768,24 @@ class screenModel extends model
 
                         if($settings->yaxis[0]->agg == 'sum')
                         {
-                            if(!isset($sourceData[$result->{$field}])) $sourceData[$result->{$field}] = array($key => $result->{$field});
+                            if(!isset($sourceData[$result->$field])) $sourceData[$result->$field] = array($key => $result->$field);
 
                             foreach($settings->yaxis as $yaxis)
                             {
-                                if(!isset($sourceData[$result->{$field}][$yaxis->name])) $sourceData[$result->{$field}][$yaxis->name] = 0;
-                                $sourceData[$result->{$field}][$yaxis->name] += $result->{$yaxis->field};
+                                $valueField = $yaxis->field;
+                                if(!isset($sourceData[$result->$field][$yaxis->name])) $sourceData[$result->$field][$yaxis->name] = 0;
+                                $sourceData[$result->$field][$yaxis->name] += $result->$valueField;
                             }
                         }
                         else
                         {
-                            $row = array($key => $result->{$field});
-                            foreach($settings->yaxis as $yaxis) $row[$yaxis->name] = $result->{$yaxis->field};
+                            $row = array($key => $result->$field);
+
+                            foreach($settings->yaxis as $yaxis)
+                            {
+                                $field = $yaxis->field;
+                                $row[$yaxis->name] = $result->$field;
+                            }
                             $sourceData[] = $row;
                         }
                     }
@@ -1351,41 +1795,42 @@ class screenModel extends model
                 }
             }
 
-            $this->setComponentDefaults($component);
+            return $this->setComponentDefaults($component);
         }
     }
 
     /**
-     * 构建饼图。
      * Build pie chart.
      *
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildPieChart(object $component, object $chart): void
+    public function buildPieChart($component, $chart)
     {
-        /* 如果没有设置图表配置，设置默认值。 */
-        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
-            $this->screenTao->setChartDefault('pie', $component);
-            $this->setComponentDefaults($component);
+            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
+            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
+            $component->key         = "PieCommon";
+            $component->chartConfig = json_decode('{"key":"PieCommon","chartKey":"VPieCommon","conKey":"VCPieCommon","title":"饼图","category":"Pies","categoryName":"饼图","package":"Charts","chartFrame":"echarts","image":"/static/png/pie-9620f191.png"}');
+            $component->option      = json_decode('{"type":"nomal","series":[{"type":"pie","radius":"70%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
+
+            return $this->setComponentDefaults($component);
         }
         else
         {
             if($chart->sql)
             {
-                $sourceData = array();
                 $settings = json_decode($chart->settings);
-                if($settings && isset($settings->metric))
+                if($settings and isset($settings->metric))
                 {
                     $dimensions = array($settings->group[0]->name, $settings->metric[0]->field);
+                    $sourceData = array();
 
-                    /* 通过sql查询数据，并且处理数据。 */
-                    /* Query data by sql and process data. */
-                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
+                    $sql     = $this->setFilterSQL($chart);
+                    $results = $this->dao->query($sql)->fetchAll();
                     $group = $settings->group[0]->field;
 
                     $groupCount = array();
@@ -1393,13 +1838,16 @@ class screenModel extends model
                     {
                         if($settings->metric[0]->agg == 'count')
                         {
-                            if(!isset($groupCount[$result->{$group}])) $groupCount[$result->{$group}] = 0;
-                            $groupCount[$result->{$group}]++;
+                            if(!isset($groupCount[$result->$group])) $groupCount[$result->$group] = 0;
+                            $groupCount[$result->$group]++;
                         }
                     }
                     arsort($groupCount);
 
-                    foreach($groupCount as $groupValue => $groupCount) $sourceData[] = array($settings->group[0]->name => $groupValue, $settings->metric[0]->field => $groupCount);
+                    foreach($groupCount as $groupValue => $groupCount)
+                    {
+                        $sourceData[] = array($settings->group[0]->name => $groupValue, $settings->metric[0]->field => $groupCount);
+                    }
                 }
                 if(empty($sourceData)) $dimensions = array();
 
@@ -1407,80 +1855,102 @@ class screenModel extends model
                 $component->option->dataset->source     = $sourceData;
             }
 
-            $this->setComponentDefaults($component);
+            return $this->setComponentDefaults($component);
         }
     }
 
     /**
-     * 构建环形饼图。
      * Build piecircle chart.
      *
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildPieCircleChart(object $component, object $chart): void
+    public function buildPieCircleChart($component, $chart)
     {
-        /* 如果没有设置图表配置，设置默认值。 */
-        /* Set default value if chart settings is empty. */
+        $option = new stdclass();
+        $option->type = 'nomal';
+        $option->series = array();
+        $option->series[0] = new stdclass();
+        $option->series[0]->type = 'pie';
+        $option->series[0]->radius = '70%';
+        $option->series[0]->roseType = false;
+        $option->backgroundColor = 'rgba(0,0,0,0)';
+        $option->series[0]->data = array();
+        $option->series[0]->data[0] = new stdclass();
+        $option->series[0]->data[0]->value = array();
+        $option->series[0]->data[0]->value[0] = 0;
+        $option->series[0]->data[1] = new stdclass();
+        $option->series[0]->data[1]->value = array();
+        $option->series[0]->data[1]->value[0] = 0;
+
         if(!$chart->settings)
         {
-            $this->screenTao->setChartDefault('piecircle', $component);
-            $this->setComponentDefaults($component);
+            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
+            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
+            $component->key         = "PieCircle";
+            $component->chartConfig = json_decode('{"key":"PieCircle","chartKey":"VPieCircle","conKey":"VCPieCircle","title":"饼图","category":"Pies","categoryName":"饼图","package":"Charts","chartFrame":"echarts","image":"/static/png/pie-circle-258fcce7.png"}');
+            $component->option      = $option;
+
+            return $this->setComponentDefaults($component);
         }
         else
         {
             if($chart->sql)
             {
-                $sourceData = array();
                 $settings = json_decode($chart->settings);
-                if($settings && isset($settings->metric))
+                if($settings and isset($settings->metric))
                 {
-                    /* 通过sql查询数据，并且处理数据。 */
-                    /* Query data by sql and process data. */
-                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
-                    $group   = $settings->group[0]->field;
+                    $sourceData = array();
+
+                    $sql     = $this->setFilterSQL($chart);
+                    $results = $this->dao->query($sql)->fetchAll();
+                    $group = $settings->group[0]->field;
 
                     $groupCount = array();
                     foreach($results as $result)
                     {
                         if($settings->metric[0]->agg == 'count')
                         {
-                            if(!isset($groupCount[$result->{$group}])) $groupCount[$result->{$group}] = 0;
-                            $groupCount[$result->{$group}]++;
+                            if(!isset($groupCount[$result->$group])) $groupCount[$result->$group] = 0;
+                            $groupCount[$result->$group]++;
                         }
                     }
 
                     foreach($groupCount as $groupValue => $groupCount) $sourceData[$groupValue] = $groupCount;
                 }
-                $doneData = round((array_sum($sourceData) != 0 && !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0, 4);
+                $doneData = round((array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0, 4);
                 $component->option->dataset = $doneData;
+                if(!isset($component->option->series) || !is_array($component->option->series)) $component->option->series = $option->series;
+                if(!isset($component->option)) $component->option = $option;
                 $component->option->series[0]->data[0]->value  = array($doneData);
                 $component->option->series[0]->data[1]->value  = array(1 - $doneData);
             }
 
-            $this->setComponentDefaults($component);
+            return $this->setComponentDefaults($component);
         }
     }
 
     /**
-     * 构建水球图。
      * Build water polo chart.
      *
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildWaterPolo(object $component, object $chart): void
+    public function buildWaterPolo($component, $chart)
     {
-        /* 如果没有设置图表配置，设置默认值。 */
-        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
-            $this->screenTao->setChartDefault('waterpolo', $component);
-            $this->setComponentDefaults($component);
+            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
+            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
+            $component->key         = "PieCircle";
+            $component->chartConfig = json_decode('{"key":"WaterPolo","chartKey":"VWaterPolo","conKey":"VCWaterPolo","title":"水球图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"common","image":"water_WaterPolo.png"}');
+            $component->option      = json_decode('{"type":"nomal","series":[{"type":"liquidFill","radius":"90%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
+
+            return $this->setComponentDefaults($component);
         }
         else
         {
@@ -1488,11 +1958,10 @@ class screenModel extends model
             {
                 $settings   = json_decode($chart->settings);
                 $sourceData = 0;
-                if($settings && isset($settings->metric))
+                if($settings and isset($settings->metric))
                 {
-                    /* 通过sql查询数据，并且处理数据。 */
-                    /* Query data by sql and process data. */
-                    $result     = $this->dao->query($this->setFilterSQL($chart))->fetch();
+                    $sql        = $this->setFilterSQL($chart);
+                    $result     = $this->dao->query($sql)->fetch();
                     $group      = $settings->group[0]->field;
                     $sourceData = zget($result, $group, 0);
                     if(empty($sourceData)) $sourceData = 0;
@@ -1500,7 +1969,7 @@ class screenModel extends model
                 $component->option->dataset = $sourceData;
             }
 
-            $this->setComponentDefaults($component);
+            return $this->setComponentDefaults($component);
         }
     }
 
@@ -1512,7 +1981,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getWaterPoloOption(object $component, object $chart, array $filters)
+    public function getWaterPoloOption($component, $chart, $filters)
     {
         if(!$chart->settings)
         {
@@ -1527,16 +1996,226 @@ class screenModel extends model
         else
         {
             $setting = json_decode($chart->settings, true)[0];
-            $options = $this->loadModel('chart')->genWaterPolo($setting, $chart->sql, $filters);
+            $options = $this->bi->genWaterPolo(json_decode($chart->fields, true), $setting, $chart->sql, $filters);
 
             $component->option->dataset = $options['series'][0]['data'][0];
             return $this->setComponentDefaults($component);
         }
     }
 
+    /**
+     * Get option of metric chart.
+     *
+     * @param  object $metric
+     * @param  array  $resultHeader
+     * @param  array  $resultData
+     * @param  object $component
+     * @access public
+     * @return object
+     */
+    public function getMetricChartOption($metric, $resultHeader, $resultData, $component = null)
+    {
+        $chartOption = $this->metric->getEchartsOptions($resultHeader, $resultData);
+
+        if(isset($component) && isset($component->option->chartOption))
+        {
+            $preChartOption = $component->option->chartOption;
+            $preChartOption->series = $chartOption['series'];
+            if(!isset($preChartOption->xAxis)) $preChartOption->xAxis = $chartOption['xAxis'];
+            $preChartOption->xAxis->data = $chartOption['xAxis']['data'];
+            return $preChartOption;
+        }
+
+        if(!isset($chartOption['title']))
+        {
+            $chartOption['title'] = array();
+            $chartOption['title']['show']      = false;
+            $chartOption['title']['titleShow'] = true;
+            $chartOption['title']['textStyle'] = array('color' => '#BFBFBF');
+        }
+
+        $chartOption['title']['text']   = $metric->name;
+        $chartOption['backgroundColor'] = "#0B1727FF";
+
+        if(!isset($chartOption['legend'])) $chartOption['legend'] = array();
+        $chartOption['legend']['textStyle']['color'] = 'white';
+        $chartOption['legend']['inactiveColor']      = 'gray';
+
+        return $chartOption;
+    }
 
     /**
-     * 构建雷达图。
+     * Get option of metric table.
+     *
+     * @param  array  $resultHeader
+     * @param  array  $resultData
+     * @param  array  $filterParams
+     * @param  object $component
+     * @access public
+     * @return object
+     */
+    public function getMetricTableOption($metric, $resultHeader, $resultData, $component = null)
+    {
+        $this->loadModel('metric');
+
+        $isObjectMetric = $this->metric->isObjectMetric($resultHeader);
+        $dateType       = $metric->dateType;
+
+        list($groupHeader, $groupData) = $this->metric->getGroupTable($resultHeader, $resultData, $metric->dateType, false);
+
+        $tableOption = new stdclass();
+        if(!empty($component) && isset($component->option->tableOption)) $tableOption = $component->option->tableOption;
+
+        $tableOption->headers = $isObjectMetric ? $this->getMetricHeaders($groupHeader, $dateType) : array($groupHeader);
+        $tableOption->data    = $groupData;
+        $tableOption->scope   = $metric->scope;
+
+        return $tableOption;
+    }
+
+    /**
+     * Filter metric data.
+     *
+     * @param  array  $data
+     * @param  string $dateType
+     * @param  bool   $isObjectMetric
+     * @param  array  $filters
+     * @access public
+     * @return array
+     */
+    public function filterMetricData($data, $dateType, $isObjectMetric, $filters = array())
+    {
+        if(empty($filters)) return $data;
+
+        if($isObjectMetric)
+        {
+            if(isset($filters['scope']))
+            {
+                $scopeFilter     = $filters['scope'];
+                $objectPairs     = $this->loadModel('metric')->getPairsByScope($scopeFilter->type);
+                $selectedObjects = array_intersect_key($objectPairs, array_flip($scopeFilter->value));
+
+                foreach($data as $index => $row)
+                {
+                    if(!in_array($row['scope'], $selectedObjects)) unset($data[$index]);
+                }
+            }
+
+            $filteredData = array();
+            if(isset($filters['begin'], $filters['end']))
+            {
+                $beginFilter = $filters['begin']->$dateType;
+                $endFilter   = $filters['end']->$dateType;
+                foreach($data as $index => $row)
+                {
+                    $filteredData[$index] = array_filter($row, function($value, $key) use ($beginFilter, $endFilter)
+                    {
+                        if($key == 'scope') return true;
+                        if($key >= $beginFilter && $key <= $endFilter) return true;
+                        return false;
+                    }, ARRAY_FILTER_USE_BOTH);
+                }
+            }
+            else
+            {
+                $filteredData = $data;
+            }
+        }
+        else
+        {
+            $beginFilter = $filters['begin']->$dateType;
+            $endFilter   = $filters['end']->$dateType;
+            $filteredData = array_filter($data, function($row) use ($beginFilter, $endFilter)
+            {
+                if($row['date'] >= $beginFilter && $row['date'] <= $endFilter) return true;
+            });
+        }
+
+        return array_values($filteredData);
+    }
+
+    /**
+     * 获取度量项卡片参数。
+     * Get card option of metric.
+     *
+     * @param  object $metric
+     * @access public
+     * @return object
+     */
+    public function getMetricCardOption(object $metric, $resultData, $component = null): object
+    {
+        $this->loadModel('metric');
+
+        $option = new stdclass();
+        if(empty($component))
+        {
+            $option->displayType = 'normal';
+            $option->cardType    = 'A';
+            $option->dateType    = $metric->dateType;
+            $option->bgColor     = '#26292EFF';
+            $option->border      = array('color' => '#515458FF', 'width' => 1, 'radius' => 2);
+            $option->scope       = $metric->scope;
+            $option->objectPairs = array();
+        }
+        else
+        {
+            $option = $component->option->card;
+        }
+        $option->data        = $resultData;
+        $option->filterValue = (is_array($option->data) && !empty($option->data)) ? current($option->data) : array();
+
+        return $option;
+    }
+
+    /**
+     * Get table headers of metric in screen designer.
+     *
+     * @param  array  $resultHeaders
+     * @param  string $dateType
+     * @param  object $filters
+     * @access public
+     * @return object
+     */
+    public function getMetricHeaders($resultHeader, $dateType)
+    {
+        $headers = array_fill(0, 2, array());
+
+        foreach($resultHeader as $head)
+        {
+            if($head['name'] == 'scope')
+            {
+                if($dateType != 'year') $head['rowspan'] = 2;
+                $headers[0][] = $head;
+            }
+            else
+            {
+                $row = $dateType == 'year' ? 0 : 1;
+
+                $head['type']  = $dateType;
+                $head['value'] = $head['name'];
+                $headers[$row][] = $head;
+            }
+        }
+
+        $dateGroups = array_count_values(array_column($resultHeader, 'headerGroup'));
+        foreach($dateGroups as $date => $count)
+        {
+            $dateGroup = array();
+            $dateGroup['colspan'] = $count;
+            $dateGroup['title']   = $date;
+            $dateGroup['name']    = $date;
+            $dateGroup['value']   = substr($date, 0, 4);
+            $dateGroup['type']    = 'year';
+
+            $headers[0][] = $dateGroup;
+        }
+
+        if($dateType == 'year') unset($headers[1]);
+
+        return $headers;
+    }
+
+    /**
      * Build radar chart.
      *
      * @param  object $component
@@ -1544,25 +2223,62 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function buildRadarChart(object $component, object $chart): void
+    public function buildRadarChart($component, $chart)
     {
-        /* 如果没有设置图表配置，设置默认值。 */
-        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
-            $this->screenTao->setChartDefault('radar', $component);
-            $this->setComponentDefaults($component);
+            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
+            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
+            $component->key         = "Radar";
+            $component->chartConfig = json_decode('{"key":"Radar","chartKey":"VRadar","conKey":"VCRadar","title":"雷达图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"common","image":"/static/png/radar-91567f95.png"}');
+            $component->option      = json_decode('{"radar":{"indicator":[{"name":"数据1","max":6500},{"name":"数据2","max":16000},{"name":"数据3","max":30000},{"name":"数据4","max":38000},{"name":"数据5","max":52000}]},"series":[{"name":"radar","type":"radar","areaStyle":{"opacity":0.1},"data":[{"name":"data1","value":[4200,3000,20000,35000,50000]}]}],"backgroundColor":"rgba(0,0,0,0)"}');
+
+            return $this->setComponentDefaults($component);
         }
         else
         {
-            $indicator = $seriesData = array();
+            $indicator  = array();
+            $seriesData = array();
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
+                if($settings and isset($settings->metric))
+                {
+                    $sql     = $this->setFilterSQL($chart);
+                    $results = $this->dao->query($sql)->fetchAll();
+                    $group   = $settings->group[0]->field;
 
-                /* 通过sql查询数据，并且处理数据。 */
-                /* Query data by sql and process data. */
-                if($settings && isset($settings->metric)) $value = $this->screenTao->processRadarData($this->setFilterSQL($chart), $settings, $indicator, $seriesData);
+                    $metrics = array();
+                    foreach($settings->metric as $metric)
+                    {
+                        $metrics[$metric->key] = array('field' => $metric->field, 'name' => $metric->name, 'value' => 0);
+                    }
+
+
+                    foreach($results as $result)
+                    {
+                        if(isset($metrics[$result->$group]))
+                        {
+                            $field = $metrics[$result->$group]['field'];
+                            $metrics[$result->$group]['value'] += $result->$field;
+                        }
+                    }
+                    $max = 0;
+                    foreach($metrics as $data)
+                    {
+                        if($data['value'] > $max) $max = $data['value'];
+                    }
+
+                    $data  = array('name' => '', 'value' => array());
+                    $value = array();
+                    foreach($metrics as $key => $metric)
+                    {
+                        $indicator[]     = array('name' => $metric['name'], 'max' => $max);
+                        $data['value'][] = $metric['value'];
+                        $value[]         = $metric['value'];
+                    }
+                    $seriesData[] = $data;
+                }
 
                 $component->option->dataset->radarIndicator   = $indicator;
                 $component->option->radar->indicator          = $indicator;
@@ -1570,83 +2286,88 @@ class screenModel extends model
                 $component->option->series[0]->data[0]->value = $value;
             }
 
-            $this->setComponentDefaults($component);
+            return $this->setComponentDefaults($component);
         }
     }
 
     /**
-     * 构建漏斗图。
+     * Build org chart.
+     *
+     * @param  object $component
+     * @param  object $chart
+     * @access public
+     * @return object
+     */
+    public function buildOrgChart($component, $chart)
+    {
+        //TODO
+    }
+
+    /**
      * Build funnel chart.
      *
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return void
+     * @return object
      */
-    public function buildFunnelChart(object $component, object $chart): void
+    public function buildFunnelChart($component, $chart)
     {
         if(!$chart->settings)
         {
-            $this->screenTao->setChartDefault('funnel', $component);
-            $this->setComponentDefaults($component);
+            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
+            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
+            $component->key         = "Funnel";
+            $component->chartConfig = json_decode('{"key":"Funnel","chartKey":"VFunnel","conKey":"VCFunnel","title":"漏斗图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"echarts","image":"/static/png/funnel-d032fdf6.png"}');
+            $component->option      = json_decode('{"dataset":{"dimensions":["product","dataOne"],"source":[{"product":"data1","dataOne":20},{"product":"data2","dataOne":40},{"product":"data3","dataOne":60},{"product":"data4","dataOne":80},{"product":"data5","dataOne":100}]},"series":[{"name":"Funnel","type":"funnel","gap":5,"label":{"show":true,"position":"inside"}}],"backgroundColor":"rgba(0,0,0,0)"}');
+
+            return $this->setComponentDefaults($component);
         }
     }
 
     /**
-     * 获取燃尽图数据。
      * Get burn data.
      *
      * @access public
      * @return array
      */
-    public function getBurnData(): array
+    public function getBurnData()
     {
         $type = 'withdelay';
-
-        /* 获取所有正在进行的执行和阶段。 */
-        /* Get all sprint and stage which are doing. */
-        $executions = $this->loadModel('execution')->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
+        $this->loadModel('execution');
+        $executions    = $this->execution->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
 
         $executionData = array();
 
-        foreach(array_keys($executions) as $executionID)
+        foreach($executions as $executionID => $execution)
         {
             $execution = $this->execution->getByID($executionID);
 
-            $project = $this->loadModel('project')->getByID($execution->project);
-            if(!$project) continue;
+            /* Splice project name for the execution name. */
+            $execution->name = $this->loadModel('project')->getByID($execution->project)->name . '--' . $execution->name;
 
-            $execution->name = $project->name . '--' . $execution->name;
-
-            if(((strpos('closed,suspended', $execution->status) === false && helper::today() > $execution->end)
-                || ($execution->status == 'closed'    && substr($execution->closedDate, 0, 10) > $execution->end)
-                || ($execution->status == 'suspended' && $execution->suspendedDate > $execution->end))
-                && strpos($type, 'delay') === false)
+            /* Get date list. */
+            if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
+                or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
+                or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
+                and strpos($type, 'delay') === false)
                 $type .= ',withdelay';
 
-            /* 处理执行的截止日期。 */
-            /* Process execution deadline. */
             $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
             $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
-            $endDate  = (strpos($type, 'withdelay') !== false && $deadline > $execution->end) ? $deadline : $execution->end;
-            list($dateList) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $deadline);
+            $endDate  = (strpos($type, 'withdelay') !== false and $deadline > $execution->end) ? $deadline : $execution->end;
+            list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $deadline);
 
-            /* 处理执行的延迟日期。 */
-            /* Process execution delay date. */
             $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
-            $chartData    = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
-            $chartData['baseLine']  = '[' . implode(',', $chartData['baseLine']) . ']';
-            $chartData['burnLine']  = '[' . implode(',', $chartData['burnLine']) . ']';
-            if(isset($chartData['delayLine'])) $chartData['delayLine'] = '[' . implode(',', $chartData['delayLine']) . ']';
-            $execution->chartData = $chartData;
+            $chartData = $this->execution->buildBurnData($executionID, $dateList, $type, 'left', $executionEnd);
 
+            $execution->chartData = $chartData;
             $executionData[$executionID] = $execution;
         }
         return $executionData;
     }
 
     /**
-     * 初始化图表。
      * Init component.
      *
      * @param  object $chart
@@ -1655,64 +2376,678 @@ class screenModel extends model
      * @access public
      * @return void
      */
-    public function initComponent(object $chart, string $type, object $component): void
+    public function initComponent($chart, $type, $component = null)
     {
-        if(!$component)
-        {
-            $component = new stdclass();
-            return;
-        }
-        if(!$chart) return;
+        if($type == 'metric') return $this->initMetricComponent($chart, $component);
+        if($type == 'chart' || $type == 'pivot') return $this->initChartAndPivotComponent($chart, $type, $component);
 
-        $settings = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
+        return array($component, false);
+    }
 
-        /* 设置组件部分属性的默认值。 */
-        /* Set default value of component. */
-        if(!isset($component->id))       $component->id       = $chart->id;
-        if(!isset($component->sourceID)) $component->sourceID = $chart->id;
-        if(!isset($component->title))    $component->title    = $chart->name;
+    /**
+     * Init metric component.
+     *
+     * @param  object $metric
+     * @param  object $component
+     * @access public
+     * @return array
+     */
+    public function initMetricComponent($metric, $component = null)
+    {
+        if(!$component)                     $component = new stdclass();
+        if(!isset($component->id))          $component->id          = $metric->id;
+        if(!isset($component->sourceID))    $component->sourceID    = $metric->id;
+        if(!isset($component->title))       $component->title       = $metric->name;
+        if(!isset($component->type))        $component->type        = 'metric';
+        if(!isset($component->chartConfig)) $component->chartConfig = json_decode($this->config->screen->chartConfig['metric']);
+        if(!isset($component->option))      $component->option      = new stdclass();
 
-        /* 设置图表类型。 */
-        /* Set chart type. */
-        if($type == 'chart') $chartType = ($chart->builtin && !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : current($settings)->type;
-        if($type == 'pivot') $chartType = 'table';
+        return array($component, false);
+    }
+
+    /**
+     * Init chart or pivot component.
+     *
+     * @param  object $metric
+     * @param  string $type
+     * @param  object $component
+     * @access public
+     * @return array
+     */
+    public function initChartAndPivotComponent($chart, $type, $component = null)
+    {
+        if(!$component) $component = new stdclass();
+        if(!$chart) return array($component, false);
+
+        $chartID   = $chart->id;
+        $chartName = $chart->name;
+        $settings  = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
+        $builtin   = $chart->builtin;
+        $isBuiltin = ($builtin and !in_array($chartID, $this->config->screen->builtinChart));
+
+        if(!isset($component->id))       $component->id       = $chartID;
+        if(!isset($component->sourceID)) $component->sourceID = $chartID;
+        if(!isset($component->title))    $component->title    = $chartName;
+
+        if($type == 'chart')  $chartType = ($chart->builtin and !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : $settings[0]->type;
+        if($type == 'pivot')  $chartType = 'table';
+        if($type == 'metric') $chartType = 'metric';
         $component->type = $chartType;
 
         $typeChanged = false;
 
-        /* 判断图表类型是否改变。 */
-        /* Judge whether chart type is changed. */
+        // Get type is changed or not.
         if(isset($component->chartConfig))
         {
-            $componentType = '';
             foreach($this->config->screen->chartConfig as $type => $chartConfig)
             {
-                $chartConfig = json_decode($chartConfig);
-                if($chartConfig->key == $component->chartConfig->key) $componentType = $type;
+                $chartConfig = json_decode($chartConfig, true);
+                if($chartConfig['key'] == $component->chartConfig->key) $componentType = $type;
             }
+
             $typeChanged = $chartType != $componentType;
         }
 
-        /* 如果没有设置图表配置，使用系统的图表配置默认值。 */
-        /* Use system default value if chart settings is empty. */
-        if(!isset($component->chartConfig) || $typeChanged)
+        // New component type or change component type.
+        if(!isset($component->chartConfig) or $typeChanged)
         {
             $chartConfig = json_decode(zget($this->config->screen->chartConfig, $chartType));
-            if(empty($chartConfig)) return;
+            if(empty($chartConfig)) return null;
 
             $component->chartConfig = $chartConfig;
+            $component->key         = $chartConfig->key;
         }
 
-        /* 如果组件没有配置，则使用系统的组件配置默认值。 */
-        /* Use system default value if component settings is empty. */
-        if(!isset($component->option) || $typeChanged)
+        if(!isset($component->option) or $typeChanged)
         {
-            $component->option = json_decode(zget($this->config->screen->chartOption, $component->type));
+            $component->option          = new stdclass();
             $component->option->dataset = new stdclass();
         }
-
+        $component = $this->initOptionTitle($component, $type, $chartName);
         if(!isset($component->option->dataset)) $component->option->dataset = new stdclass();
-        $component->chartConfig->title    = $chart->name;
+
+        $component->chartConfig->title    = $chartName;
         $component->chartConfig->sourceID = $component->sourceID;
+
+        return array($component, $typeChanged);
+    }
+
+    public function initOptionTitle($component, $type, $chartName)
+    {
+        if($type == 'pivot')
+        {
+            if(!isset($component->option->caption)) $component->option->caption = $chartName;
+        }
+        elseif($type == 'chart')
+        {
+            if(!isset($component->option->title))
+            {
+                $component->option->title = new stdclass();
+                $component->option->title->text      = $chartName;
+                $component->option->title->show      = false;
+                $component->option->title->titleShow = true;
+            }
+        }
+
+        return $component;
+    }
+
+    /**
+     * Check if the Chart is in use.
+     *
+     * @param  int    $chartID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function checkIFChartInUse($chartID, $type = 'chart')
+    {
+        static $screenList = array();
+        if(empty($screenList)) $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
+
+        foreach($screenList as $screen)
+        {
+            $scheme = json_decode($screen->scheme);
+            if(empty($scheme->componentList)) continue;
+
+            foreach($scheme->componentList as $component)
+            {
+                if(!empty($component->isGroup))
+                {
+                    foreach($component->groupList as $key => $groupComponent)
+                    {
+                        if(!isset($groupComponent->chartConfig)) continue;
+
+                        $sourceID   = zget($groupComponent->chartConfig, 'sourceID', '');
+                        $sourceType = zget($groupComponent->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
+
+                        if($chartID == $sourceID and $type == $sourceType) return true;
+                    }
+                }
+                else
+                {
+                    if(!isset($component->chartConfig)) continue;
+
+                    $sourceID   = zget($component->chartConfig, 'sourceID', '');
+                    $sourceType = zget($component->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
+                    if($chartID == $sourceID and $type == $sourceType) return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get chart type.
+     *
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function getChartType($type)
+    {
+        if($type == 'Tables' || $type == 'pivot') return 'pivot';
+        if($type == 'Metrics') return 'metric';
+        return 'chart';
+    }
+
+    /**
+     * 构建大屏图表的数据源。
+     * Build dataset of chart.
+     *
+     * @param  int    $chartID
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function buildDataset($chartID, $sql = '')
+    {
+        if(!in_array($chartID, $this->config->screen->phpChart)) return $this->dao->query($sql)->fetchAll();
+
+        $year  = $this->filter->year;
+        $month = $this->filter->month;
+
+        $projectList = $this->getUsageReportProjects($year, $month);
+        $productList = $this->getUsageReportProducts($year, $month);
+
+        if($chartID == 20002) return $this->getActiveUserTable($year, $month, $projectList);
+        if($chartID == 20012) return $this->getProductStoryTable($year, $month, $productList);
+        if($chartID == 20011) return $this->getProductTestTable($year, $month, $productList);
+        if($chartID == 20004) return $this->getActiveProductCard($year, $month);
+        if($chartID == 20007) return $this->getActiveProjectCard($year, $month);
+        if($chartID == 20013) return $this->getProjectStoryTable($year, $month, $projectList);
+        if($chartID == 20010) return $this->getProjectTaskTable($year, $month, $projectList);
+    }
+
+    /**
+     * 获取应用健康度体检报告的活跃账号数项目间对比表格。
+     * Get table of active account per project in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $projectList
+     * @access public
+     * @return array
+     */
+    public function getActiveUserTable($year, $month, $projectList)
+    {
+        $date = date("Y-m-t", strtotime("$year-$month"));
+
+        $loginUserList = $this->dao->select('distinct actor')->from(TABLE_ACTION)
+            ->where('objectType')->eq('user')
+            ->andWhere('action')->eq('login')
+            ->andWhere('year(date)')->eq($year)
+            ->andWhere('month(date)')->eq($month)
+            ->fetchPairs();
+
+        $dataset = array();
+        foreach($projectList as $projectID => $projectName)
+        {
+            $teamMemberList = $this->dao->select('t2.id, t2.account')->from(TABLE_TEAM)->alias('t1')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+                ->where('t1.root')->eq($projectID)
+                ->andWhere('t1.type')->eq('project')
+                ->andWhere('date(t1.join)')->le($date)
+                ->andWhere('t2.deleted')->eq('0')
+                ->fetchPairs();
+
+            $activeUser = array_filter($teamMemberList, function($item) use ($loginUserList)
+            {
+                return in_array($item, $loginUserList);
+            });
+
+            $row = new stdclass();
+            $row->id            = $projectID;
+            $row->name          = $projectName;
+            $row->year          = $year;
+            $row->month         = $month;
+            $row->totalAccount  = count($teamMemberList);
+            $row->activeAccount = count($activeUser);
+            $row->ratio         = $row->totalAccount == 0 ? '0.00%' : number_format(($row->activeAccount/$row->totalAccount) * 100, 2) . '%';
+
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
+     * 获取应用健康度体检报告的活跃项目数卡片。
+     * Get card of active project in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return array
+     */
+    public function getActiveProjectCard($year, $month)
+    {
+        return $this->dao->select('count(distinct t1.project) as count')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.project')->ne(0)
+            ->andWhere('year(t1.date)')->eq($year)
+            ->andWhere('month(t1.date)')->eq($month)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
+            ->fetchAll();
+    }
+
+    /**
+     * 获取应用健康度体检报告的活跃产品数卡片。
+     * Get card of active product in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return array
+     */
+    public function getActiveProductCard($year, $month)
+    {
+        $noDeletedProductList = $this->dao->select('id')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq('0')
+            ->andWhere('shadow')->eq(0)
+            ->fetchPairs();
+
+        $activeProductList = $this->dao->select('distinct product')->from(TABLE_ACTION)
+            ->where('product')->ne(',0,')
+            ->andWhere('product')->ne(',,')
+            ->andWhere('product')->ne(',,0,,')
+            ->andWhere('objectType')->notin('project,execution,task')
+            ->andWhere('year(date)')->eq($year)
+            ->andWhere('month(date)')->eq($month)
+            ->fetchPairs();
+
+        $activeProductCount = 0;
+        foreach($activeProductList as $product)
+        {
+            $productID = trim($product, ',');
+            if(in_array($productID, $noDeletedProductList)) $activeProductCount ++;
+        }
+
+        $activeProductCard = new stdclass();
+        $activeProductCard->count = $activeProductCount;
+        $activeProductCard->year  = $year;
+        $activeProductCard->month = $month;
+        return array($activeProductCard);
+    }
+
+    /**
+     * 获取应用健康度体检报告的 产品测试表。
+     * Get table of product test summary in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $productList
+     * @access public
+     * @return array
+     */
+    public function getProductTestTable($year, $month, $productList)
+    {
+        $dataset = array();
+        foreach($productList as $productID => $productName)
+        {
+            $createdCaseCount = $this->dao->select('count(t2.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetch();
+
+            $linkedBugCount = $this->dao->select('count(t3.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.id=t2.product')
+                ->leftJoin(TABLE_BUG)->alias('t3')->on('t2.id=t3.case')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t3.deleted')->eq('0')
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetch();
+
+            $createdBugCount = $this->dao->select('count(t2.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetch();
+
+            $fixedBugList = $this->dao->select('t2.id,datediff(t2.closedDate, t2.openedDate) as fixedCycle')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.status')->eq('closed')
+                ->andWhere('t2.resolution')->eq('fixed')
+                ->andWhere('year(t2.closedDate)')->eq($year)
+                ->andWhere('month(t2.closedDate)')->eq($month)
+                ->andWhere('t1.id')->eq($productID)
+                ->fetchPairs();
+
+            $row = new stdclass();
+            $row->id            = $productID;
+            $row->name          = $productName;
+            $row->year          = $year;
+            $row->month         = $month;
+            $row->createdCases  = $createdCaseCount->count;
+            $row->avgBugsOfCase = $createdCaseCount->count == 0 ? 0 : round($linkedBugCount->count/$createdCaseCount->count, 2);
+            $row->createdBugs   = $createdBugCount->count;
+            $row->fixedBugs     = count($fixedBugList);
+            $row->avgFixedCycle = count($fixedBugList) == 0 ? 0 : round(array_sum($fixedBugList)/count($fixedBugList), 2);
+
+            if($row->createdCases === 0 && $row->avgBugsOfCase === 0 && $row->createdBugs === 0 && $row->fixedBugs === 0 && $row->avgFixedCycle === 0) continue;
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
+     * 获取应用健康度体检报告的项目任务概况表。
+     * Get table of project task summary in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $projectList
+     * @access public
+     * @return array
+     */
+    public function getProjectTaskTable($year, $month, $projectList)
+    {
+        $deletedExecutionList = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq('1')
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->fetchPairs();
+
+        $dataset = array();
+        foreach($projectList as $projectID => $projectName)
+        {
+            $createdTaskList = $this->dao->select('id,openedBy')->from(TABLE_TASK)
+                ->where('project')->eq($projectID)
+                ->andWhere('year(openedDate)')->eq($year)
+                ->andWhere('month(openedDate)')->eq($month)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', vision)")
+                ->andWhere('execution')->notin($deletedExecutionList)
+                ->fetchPairs();
+
+            $finishedTaskList = $this->dao->select('id')->from(TABLE_TASK)
+                ->where('project')->eq($projectID)
+                ->andWhere('year(finishedDate)')->eq($year)
+                ->andWhere('month(finishedDate)')->eq($month)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', vision)")
+                ->andWhere('execution')->notin($deletedExecutionList)
+                ->fetchPairs();
+
+            $row = new stdclass();
+            $row->name          = $projectName;
+            $row->year          = $year;
+            $row->month         = $month;
+            $row->createdTasks  = count(array_unique(array_keys($createdTaskList)));
+            $row->finishedTasks = count(array_unique($finishedTaskList));
+            $row->contributors  = count(array_unique(array_values($createdTaskList)));
+
+            if($row->createdTasks === 0 && $row->finishedTasks === 0 && $row->contributors === 0) continue;
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
+     * 获取应用健康度体检报告的产品需求概况表。
+     * Get table of product story summary in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $productList
+     * @access public
+     * @return array
+     */
+    public function getProductStoryTable($year, $month, $productList)
+    {
+        $releasedStories = $this->dao->select('t2.id, t1.id as product')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
+            ->leftJoin(TABLE_ACTION)->alias('t3')->on('t2.id=t3.objectID')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
+            ->andWhere('t2.stage')->eq('released')
+            ->andWhere('t3.objectType')->eq('story')
+            ->andWhere('t3.action')->eq('linked2release')
+            ->andWhere('year(t3.date)')->eq($year)
+            ->andWhere('month(t3.date)')->eq($month)
+            ->fetchPairs();
+
+        $releasedStoryGroups = array();
+        foreach($releasedStories as $storyID => $productID)
+        {
+            if(!isset($releasedStoryGroups[$productID])) $releasedStoryGroups[$productID] = array();
+            $releasedStoryGroups[$productID][] = $storyID;
+        }
+
+        $dataset = array();
+        foreach($productList as $productID => $productName)
+        {
+            $createdStoryCount = $this->dao->select('count(t2.id) as count')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
+                ->andWhere('t1.id')->eq($productID)
+                ->andWhere('year(t2.openedDate)')->eq($year)
+                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->fetch();
+
+            $finishedStoryList = $this->dao->select('t2.id')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
+                ->andWhere('t1.id')->eq($productID)
+                ->andWhere('t2.closedReason')->eq('done')
+                ->andWhere('year(t2.closedDate)')->eq($year)
+                ->andWhere('month(t2.closedDate)')->eq($month)
+                ->fetchPairs();
+
+            $releasedStoryList = isset($releasedStoryGroups[$productID]) ? $releasedStoryGroups[$productID] : array();
+            $deliveredStoryCount = count(array_merge($finishedStoryList, (array)$releasedStoryList));
+
+            $row = new stdclass();
+            $row->id               = $productID;
+            $row->name             = $productName;
+            $row->createdStories   = $createdStoryCount->count;
+            $row->deliveredStories = $deliveredStoryCount;
+
+            if($row->createdStories === 0 && $row->deliveredStories === 0) continue;
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
+     * 获取应用健康度体检报告的项目需求概况表。
+     * Get table of project story summary in usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @param  array  $projectList
+     * @access public
+     * @return array
+     */
+    public function getProjectStoryTable($year, $month, $projectList)
+    {
+        $releasedStories = $this->dao->select('t3.id,t1.id as projectID')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
+            ->leftJoin(TABLE_ACTION)->alias('t4')->on('t3.id=t4.objectID')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+            ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
+            ->andWhere('t3.stage')->eq('released')
+            ->andWhere('t4.objectType')->eq('story')
+            ->andWhere('t4.action')->eq('linked2release')
+            ->andWhere('year(t4.date)')->eq($year)
+            ->andWhere('month(t4.date)')->eq($month)
+            ->fetchPairs();
+
+        $releasedStoryGroups = array();
+        foreach($releasedStories as $storyID => $projectID)
+        {
+            if(!isset($releasedStoryGroups[$projectID])) $releasedStoryGroups[$projectID] = array();
+            $releasedStoryGroups[$projectID][] = $storyID;
+        }
+
+        $dataset = array();
+        foreach($projectList as $projectID => $projectName)
+        {
+            $createdStoryCount = $this->dao->select('count(t3.id) as count')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t3.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+                ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
+                ->andWhere('t1.type')->eq('project')
+                ->andWhere('t3.type')->eq('story')
+                ->andWhere('t1.id')->eq($projectID)
+                ->andWhere('year(t3.openedDate)')->eq($year)
+                ->andWhere('month(t3.openedDate)')->eq($month)
+                ->fetch();
+
+            $finishedStoryList = $this->dao->select('t3.id')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t3.deleted')->eq('0')
+                ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
+                ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
+                ->andWhere('t1.id')->eq($projectID)
+                ->andWhere('t3.closedReason')->eq('done')
+                ->andWhere('year(t3.closedDate)')->eq($year)
+                ->andWhere('month(t3.closedDate)')->eq($month)
+                ->fetchPairs();
+
+            $releasedStoryList = isset($releasedStoryGroups[$projectID]) ? $releasedStoryGroups[$projectID] : array();
+            $deliveredStoryCount = count(array_merge($finishedStoryList, (array)$releasedStoryList));
+
+            $row = new stdclass();
+            $row->id               = $projectID;
+            $row->name             = $projectName;
+            $row->createdStories   = $createdStoryCount->count;
+            $row->deliveredStories = $deliveredStoryCount;
+
+            if($row->createdStories === 0 && $row->deliveredStories === 0) continue;
+            $dataset[] = $row;
+        }
+
+        return $dataset;
+    }
+
+    /**
+     * 获取应用健康度体检报告的项目列表。
+     * Get project list for usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return array
+     */
+    public function getUsageReportProjects($year, $month)
+    {
+        $date = date("Y-m-t", strtotime("$year-$month"));
+
+        return $this->dao->select('id,name')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('date(openedDate)')->le($date)
+            ->andWhere("NOT FIND_IN_SET('or', vision)")
+            ->andWhere('date(closedDate)', true)->gt($date)
+            ->orWhere('date(closedDate)')->eq('0000-00-00')
+            ->orWhere('closedDate')->in(NULL)
+            ->markRight(true)
+            ->fetchPairs();
+    }
+
+    /**
+     * 获取应用健康度体检报告的产品列表。
+     * Get product list for usage report.
+     *
+     * @param  string $year
+     * @param  string $month
+     * @access public
+     * @return array
+     */
+    public function getUsageReportProducts($year, $month)
+    {
+        $date = date("Y-m-t", strtotime("$year-$month"));
+
+        return $this->dao->select('id,name')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq('0')
+            ->andWhere('shadow')->eq(0)
+            ->andWhere('date(createdDate)')->le($date)
+            ->fetchPairs();
+    }
+
+        /**
+     * Get screen thumbnail.
+     *
+     * @param  array    $screens
+     * @access public
+     * @return array
+     */
+    public function getThumbnail($screens)
+    {
+        foreach($screens as $screen)
+        {
+            $images = $this->loadModel('file')->getByObject('screen', $screen->id);
+            if(empty($images)) continue;
+
+            $image = end($images);
+            $screen->cover = helper::createLink('file', 'read', "fileID={$image->id}", 'png');
+        }
+
+        return $screens;
+    }
+
+    /**
+     * Remove scheme field of screen.
+     *
+     * @param  array    $screens
+     * @access public
+     * @return array
+     */
+    public function removeScheme($screens)
+    {
+        foreach($screens as $screen) unset($screen->scheme);
+
+        return $screens;
     }
 }
