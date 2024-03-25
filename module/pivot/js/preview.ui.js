@@ -76,14 +76,48 @@ function loadWorkload()
     loadPage(link, '#table-pivot-preview');
 }
 
+function toggleShowMode(showMode = 'group')
+{
+    if(showMode == 'group')
+    {
+        $('#origin-query').removeClass('hidden');
+        $('#pivot-query').addClass('hidden');
+    }
+    else
+    {
+        $('#origin-query').addClass('hidden');
+        $('#pivot-query').removeClass('hidden');
+    }
+
+    loadCustomPivot(showMode);
+}
+
 /**
  * 查询条件改变时重新加载自定义透视表。
  * Reload custom pivot table when query conditions changed.
  *
  * @access public
+ * @param  showMode group|origin
  * @return void
  */
-function loadCustomPivot()
+function loadCustomPivot(showMode = 'group')
+{
+    const form = getFilterForm();
+    if(showMode == 'origin') form.append('summary', 'notuse');
+
+    const params = window.btoa('groupID=' + currentGroup + '&pivotID=' + pivotID);
+    const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=show&params=' + params);
+    postAndLoadPage(link, form, '#table-pivot-preview');
+}
+
+/**
+ * 获得筛选器表单数据。
+ * Get filter form data.
+ *
+ * @access public
+ * @return object
+ */
+function getFilterForm()
 {
     const form = new FormData();
     $('#conditions .filter').each(function(index)
@@ -120,12 +154,17 @@ function loadCustomPivot()
         }
     });
 
-    const params = window.btoa('groupID=' + currentGroup + '&pivotID=' + pivotID);
-    const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=show&params=' + params);
-    postAndLoadPage(link, form, '#table-pivot-preview');
+    return form;
 }
 
-exportData = function()
+/**
+ * 导出透视表数据。
+ * Export pivot table data.
+ *
+ * @access public
+ * @return void
+ */
+function exportData()
 {
     const $domObj = $(".table-condensed")[0];
     exportFile($domObj);
