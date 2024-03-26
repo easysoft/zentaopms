@@ -24,6 +24,25 @@ foreach($groups as $id => $name)
 
 featureBar(set::items($items));
 
+if($config->edition != 'open')
+{
+    toolbar
+    (
+        hasPriv('chart', 'export') ? item(set(array
+        (
+            'text'  => $lang->export,
+            'icon'  => 'export',
+            'class' => 'ghost',
+        ))) : null,
+        hasPriv('chart', 'browse') ? item(set(array
+        (
+            'text'  => $lang->chart->toDesign,
+            'class' => 'primary',
+            'url'   => inlink('browse'),
+        ))) : null,
+    );
+}
+
 $chart = zget($charts, 0, null);
 
 div
