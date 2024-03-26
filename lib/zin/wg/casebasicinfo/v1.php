@@ -190,7 +190,7 @@ class caseBasicInfo extends wg
         $items[$lang->testcase->status] = array('children' => wg($this->getStatus($case)));
         if(!$isLibCase)
         {
-            $items[$lang->testcase->lastRunTime]   = !helper::isZeroDate($case->lastRunDate) ? $case->lastRunDate : '';
+            $items[$lang->testcase->lastRunDate]   = !helper::isZeroDate($case->lastRunDate) ? $case->lastRunDate : '';
             $items[$lang->testcase->lastRunResult] = $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted;
         }
         $items[$lang->testcase->keywords] = $case->keywords;
