@@ -9,8 +9,8 @@ cid=0
 - 不传入任何数据。 @0
 - 只传入产品。 @0
 - 传入产品和需求，查看planTitle字段。 @计划1
-- 传入产品和需求，查看子需求是否存在。 @0
-- 传入产品和需求，查看parentName字段。 @0
+- 传入产品和需求，查看子需求是否存在。 @1
+- 传入产品和需求，查看parentName字段。 @用户需求5
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
@@ -51,6 +51,6 @@ r($storyModel->mergePlanTitleAndChildren(0, array())) && p() && e('0'); //不传
 r($storyModel->mergePlanTitleAndChildren(1, array())) && p() && e('0'); //只传入产品。
 
 $mergedStories = $storyModel->mergePlanTitleAndChildren(1, $stories, 'requirement');
-r($mergedStories[12]->planTitle)           && p() && e('计划1'); // 传入产品和需求，查看planTitle字段。
-r(isset($mergedStories[13]->children[3]))  && p() && e('0');     // 传入产品和需求，查看子需求是否存在。
-r($mergedStories[15]->linkStories)         && p() && e('0');     // 传入产品和需求，查看parentName字段。
+r($mergedStories[12]->planTitle)           && p() && e('计划1');     // 传入产品和需求，查看planTitle字段。
+r(isset($mergedStories[13]->children[3]))  && p() && e('1');         // 传入产品和需求，查看子需求是否存在。
+r($mergedStories[15]->linkStories)         && p() && e('用户需求5'); // 传入产品和需求，查看parentName字段。
