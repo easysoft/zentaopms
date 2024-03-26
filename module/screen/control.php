@@ -33,9 +33,10 @@ class screen extends control
         $screens = $this->screen->getList($dimensionID);
         $screens = $this->screen->getThumbnail($screens);
         $screens = $this->screen->removeScheme($screens);
+        $screens = $this->screenZen->prepareCardList($screens);
 
         $this->view->title       = $this->lang->screen->common;
-        $this->view->screens     = $this->screen->getList($dimensionID);
+        $this->view->screens     = $screens;
         $this->view->dimensionID = $dimensionID;
         $this->display();
     }
