@@ -37,6 +37,9 @@ class storyModel extends model
         $story->files  = !empty($spec->files)  ? $this->file->getByIdList($spec->files) : array();
         $story->stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchPairs('branch', 'stage');
 
+        /* Clear the extra field to display file. */
+        foreach($story->files as $file) $file->extra = '';
+
         $story = $this->file->replaceImgURL($story, 'spec,verify');
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);

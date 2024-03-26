@@ -68,11 +68,11 @@ $sections[] = setting()
     ->content(empty($story->verify) ? $lang->noDesc : $story->verify);
 if($story->files)
 {
-    foreach($story->files as $file) $file->extra = '';
     $sections[] = array
     (
         'control'    => 'fileList',
         'files'      => $story->files,
+        'showDelete' => false,
         'object'     => $story
     );
 }
