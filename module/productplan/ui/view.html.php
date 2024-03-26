@@ -159,6 +159,12 @@ $fnGetChildrenPlans = function($childrenPlans)
     return $childrenPlanItems;
 };
 
+$actions = $this->loadModel('common')->buildOperateMenu($plan);
+foreach($actions['mainActions'] as $key => $action)
+{
+    $actions['mainActions'][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
+    $actions['mainActions'][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
+}
 detailHeader
 (
     to::prefix
@@ -169,7 +175,7 @@ detailHeader
         span(setClass('label circle primary'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
         $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null
     ),
-    (!$plan->deleted && $actionMenus) ? to::suffix(btnGroup(set::items($actionMenus))) : null
+    (!$plan->deleted && $actions) ? to::suffix(btnGroup(set::items($actions['mainActions']))) : null
 );
 
 detailBody
