@@ -221,7 +221,9 @@ class formPanel extends panel
             (
                 set::name($field->field),
                 set::label($field->name),
+                set::required($field->required),
                 set::control($field->control),
+                set::items($field->items),
                 set::width('200px')
             );
         }

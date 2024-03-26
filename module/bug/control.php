@@ -831,10 +831,34 @@ class bug extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $oldBugs = $this->bug->getByIdList(array_column($bugs, 'id'));
-
             $message = '';
+            $uidList = $this->post->uid;
+            $fileList = $_FILES;
+            $this->loadModel('file');
             foreach($bugs as $bugID => $bug)
             {
+                $_POST['uid'] = $uidList[$bugID];
+                $bug = $this->file->processImgURL($bug, $this->config->bug->editor->batchedit['id'], $this->post->uid);
+
+                if($fileList)
+                {
+                    $currentFile = array();
+                    foreach($fileList as $fieldName => $files)
+                    {
+                        foreach($files as $type => $infoList)
+                        {
+                            foreach($infoList as $infos)
+                            {
+                                foreach($infos as $key => $val)
+                                {
+                                    if($key == $bugID) $currentFile[$fieldName][$type][] = $val;
+                                }
+                            }
+                        }
+                    }
+                    $_FILES = $currentFile;
+                }
+
                 $this->bug->update($bug);
 
                 $oldBug = $oldBugs[$bugID];

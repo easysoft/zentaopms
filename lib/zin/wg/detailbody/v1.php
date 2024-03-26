@@ -39,9 +39,9 @@ class detailBody extends wg
             $fieldControl = $field->control;
             $extraMain[] = section
             (
-                $field->control == 'file' && $data->files ? fileList
+                $field->control == 'file' && $object->files ? fileList
                 (
-                    set::files($data->files),
+                    set::files($object->files),
                     set::extra($field->field),
                     set::fieldset(false),
                     set::showEdit(true),
