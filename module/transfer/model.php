@@ -142,6 +142,7 @@ class transferModel extends model
         $this->mergeConfig($module);
         $this->transferConfig->sysDataList = $this->initSysDataFields();
         $transferFieldList = $this->transferConfig->fieldList; //生成一个完整的fieldList结构。
+        if(is_array($this->moduleConfig->dateFields)) $this->moduleConfig->dateFields = implode(',', $this->moduleConfig->dateFields);
 
         $fieldList = array();
         /* build module fieldList. */
@@ -166,12 +167,18 @@ class transferModel extends model
                 }
             }
 
+
+            if(strpos(",{$this->transferConfig->dateFields},", ",{$field},") !== false) $moduleFieldList['control'] = 'datePicker';
+            if(strpos(",{$this->transferConfig->datetimeFields},", ",{$field},") !== false) $moduleFieldList['control'] = 'datetimePicker';
             $moduleFieldList['multiple'] = $moduleFieldList['control'] == 'multiple';
             if($moduleFieldList['control'] == 'select' || $moduleFieldList['control'] == 'multiple') $moduleFieldList['control'] = 'picker';
-            $moduleFieldList['name']  = $field;
+
             $moduleFieldList['width'] = isset($this->moduleConfig->dtable->fieldList[$field]['width']) ? $this->moduleConfig->dtable->fieldList[$field]['width'] : '136px';
             if(is_numeric($moduleFieldList['width'])) $moduleFieldList['width'] .= 'px';
+
+            $moduleFieldList['name']  = $field;
             $moduleFieldList['items'] = $this->initItems($module, $field, $moduleFieldList, $withKey);
+
             $fieldList[$field] = $moduleFieldList;
         }
 
@@ -209,6 +216,11 @@ class transferModel extends model
 
         foreach($workflowFields as $field)
         {
+            if(in_array($field->control, array('date', 'datetime')))
+            {
+                $fieldList[$field->field]['control'] = $field->control . 'Picker';
+                continue;
+            }
             if(!in_array($field->control, array('select', 'radio', 'multi-select', 'checkbox'))) continue;
             if(!isset($fields[$field->field]) and !array_search($field->field, $fields)) continue;
             if(empty($field->options)) continue;
