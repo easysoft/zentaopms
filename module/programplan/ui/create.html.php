@@ -210,6 +210,7 @@ jsVar('projectID', $project->id);
 jsVar('productID', $productID);
 jsVar('planID',    $planID);
 jsVar('type',      $executionType);
+jsVar('project',   $project);
 
 featureBar(li
 (
