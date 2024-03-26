@@ -167,7 +167,7 @@ $tabs[] = setting()
 
 detail
 (
-    $task->parent ? array
+    $task->parent > 0 ? array
     (
         set::parentTitle($task->parentName),
         set::parentUrl(createLink('task', 'view', "taskID={$task->parent}")),
