@@ -91,3 +91,7 @@ $config->productplan->actionList['unlinkBug']['url']  = 'javascript:unlinkObject
 $config->productplan->actionList['unlinkStory']['icon'] = 'unlink';
 $config->productplan->actionList['unlinkStory']['hint'] = $lang->productplan->unlinkStory;
 $config->productplan->actionList['unlinkStory']['url']  = 'javascript:unlinkObject("story", "{id}")';
+
+$config->productplan->actions = new stdclass();
+$config->productplan->actions->view = array();
+$config->productplan->actions->view['mainActions'] = array('start', 'finish', 'close', 'activate', 'create', 'edit', 'delete');

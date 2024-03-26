@@ -331,36 +331,4 @@ class productplanZen extends productplan
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
-
-    /**
-     * 构造计划详情页面的操作菜单。
-     * Build operate menu for plan detail page.
-     *
-     * @param  object $plan
-     * @access public
-     * @return array
-     */
-    public function buildViewActions(object $plan): array
-    {
-        $params = "planID=$plan->id";
-
-        $canEdit        = common::hasPriv('productplan', 'edit');
-        $canStart       = common::hasPriv('productplan', 'start')    && $this->productplan->isClickable($plan, 'start');
-        $canFinish      = common::hasPriv('productplan', 'finish')   && $this->productplan->isClickable($plan, 'finish');
-        $canClose       = common::hasPriv('productplan', 'close')    && $this->productplan->isClickable($plan, 'close');
-        $canActivate    = common::hasPriv('productplan', 'activate') && $this->productplan->isClickable($plan, 'activate');
-        $canCreateChild = common::hasPriv('productplan', 'create')   && $this->productplan->isClickable($plan, 'create');
-        $canDelete      = common::hasPriv('productplan', 'delete')   && $this->productplan->isClickable($plan, 'delete');
-
-        $menu = array();
-        if($canStart)       $menu[] = array('icon' => 'play text-primary',    'class' => 'ghost', 'text' => $this->lang->productplan->startAB,    'data-url' => helper::createLink('productplan', 'start', $params), 'data-action' => 'start', 'onclick' => 'ajaxConfirmLoad(this)');
-        if($canFinish)      $menu[] = array('icon' => 'checked text-primary', 'class' => 'ghost', 'text' => $this->lang->productplan->finishAB,   'data-url' => helper::createLink('productplan', 'finish', $params), 'data-action' => 'finish', 'onclick' => 'ajaxConfirmLoad(this)');
-        if($canClose)       $menu[] = array('icon' => 'off text-primary',     'class' => 'ghost', 'text' => $this->lang->productplan->closeAB,    'url' => helper::createLink('productplan', 'close', $params, '', true), 'data-toggle' => 'modal');
-        if($canActivate)    $menu[] = array('icon' => 'magic text-primary',   'class' => 'ghost', 'text' => $this->lang->productplan->activateAB, 'data-url' => helper::createLink('productplan', 'activate', $params), 'data-action' => 'activate', 'onclick' => 'ajaxConfirmLoad(this)');
-        if($canCreateChild) $menu[] = array('icon' => 'split text-primary',   'class' => 'ghost', 'text' => $this->lang->productplan->children,   'url' => helper::createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"));
-        if($canEdit)        $menu[] = array('icon' => 'edit text-primary',    'class' => 'ghost', 'text' => $this->lang->edit,                    'url' => helper::createLink('productplan', 'edit', $params));
-        if($canDelete)      $menu[] = array('icon' => 'trash text-primary',   'class' => 'ghost', 'text' => $this->lang->delete,                  'data-url' => helper::createLink('productplan', 'delete', $params), 'data-action' => 'delete', 'onclick' => 'ajaxConfirmLoad(this)');
-
-        return $menu;
-    }
 }
