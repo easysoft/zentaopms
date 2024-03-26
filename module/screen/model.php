@@ -960,7 +960,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function getTableChartOption($component, $chart, $filters = '')
+    public function getTableChartOption($component, $chart, $filters = array())
     {
         if($chart->sql)
         {
@@ -969,6 +969,7 @@ class screenModel extends model
             $langs    = json_decode($chart->langs, true);
 
             if(empty($langs)) $langs = array();
+            if(!is_array($filters)) $filters = array();
 
             if(isset($settings['summary']) and $settings['summary'] == 'notuse')
             {
