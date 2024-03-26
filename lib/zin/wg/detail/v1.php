@@ -444,8 +444,7 @@ CSS;
         if(!$linkCreator && $preAndNext && ($prevBtn === true || $nextBtn === true))
         {
             global $app;
-            $objectType  = $this->prop('objectType');
-            $linkCreator = createLink($objectType, $app->rawMethod, $objectType . 'ID={id}');
+            $linkCreator = createLink($app->rawModule, $app->rawMethod, $objectType . 'ID={id}');
         }
         if($prevBtn === true && $preAndNext && $preAndNext->pre && $linkCreator)
         {
