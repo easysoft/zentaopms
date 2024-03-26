@@ -71,3 +71,11 @@ window.loadImplement = function(link)
     $("#" + modal.id).attr('load-url', link);
     modal.render({url: link});
 }
+
+window.confirmRecalculate = function()
+{
+    zui.Modal.confirm(confirmRecalculate).then((res)=> 
+    {
+        if(res) zui.Modal.open({url: $.createLink('metric', 'recalculate')});
+    });
+}
