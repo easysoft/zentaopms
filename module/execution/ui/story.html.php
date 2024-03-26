@@ -411,7 +411,8 @@ foreach($stories as $story)
 
 jsVar('cases', $storyCases);
 jsVar('summary', $summary);
-jsVar('checkedSummary', $lang->product->checkedSRSummary);
+jsVar('storyType', $storyType);
+jsVar('checkedSummary', $storyType == 'story' ? $lang->product->checkedSRSummary : $lang->product->checkedURSummary);
 dtable
 (
     setClass('shadow rounded'),
