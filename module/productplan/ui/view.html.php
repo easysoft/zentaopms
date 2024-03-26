@@ -167,7 +167,11 @@ foreach($actions as $actionType => $typeActions)
         $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$plan->id, $action['url']);
         $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
         $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
-        if($actionType == 'suffixActions') $actions['suffixActions'][$key]['text'] = $action['hint'];
+        if($actionType == 'suffixActions')
+        {
+            if($action['icon'] == 'edit')  $actions['suffixActions'][$key]['text'] = $lang->edit;
+            if($action['icon'] == 'trash') $actions['suffixActions'][$key]['text'] = $lang->delete;
+        }
     }
 }
 detailHeader
