@@ -75,7 +75,7 @@ class tabs extends wg
             setClass('tabs-header'),
             ul
             (
-                setClass('tabs-nav nav nav-tabs gap-x-5', $collapse ? 'relative' : null, $headerClass ?: null),
+                setClass('tabs-nav nav nav-tabs gap-x-5', $collapse ? 'relative' : null, $headerClass),
                 $isVertical ? setClass('nav-stacked') : null,
                 $titleViews
             ),
