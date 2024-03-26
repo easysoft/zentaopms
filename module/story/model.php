@@ -5168,6 +5168,11 @@ class storyModel extends model
                 $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id&project={$this->session->project}");
                 $canView   = common::hasPriv('projectstory', 'view');
             }
+            elseif(empty($execution->multiple))
+            {
+                $storyLink = helper::createLink('execution', 'storyView', "storyID=$story->id&execution={$this->session->execution}");
+                $canView   = common::hasPriv('execution', 'storyView');
+            }
             else
             {
                 $storyLink = helper::createLink('story', 'view', "storyID=$story->id&version=0&param={$this->session->execution}&storyType=$story->type");

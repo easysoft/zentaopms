@@ -1321,8 +1321,9 @@ class story extends control
                 $params  = "storyID=$storyID";
                 if(!$this->session->multiple)
                 {
-                    $module  = 'story';
-                    $params .= "&version=0&param={$this->session->project}&storyType=$storyType";
+                    $module  = 'execution';
+                    $method  = 'storyView';
+                    $params .= "storyID=$storyID";
                 }
             }
             elseif($this->app->tab == 'execution')
@@ -1698,9 +1699,19 @@ class story extends control
 
             if($from == 'project')
             {
-                $module = 'projectstory';
-                $method = 'view';
-                $params = "storyID=$storyID";
+                $project = $this->execution->getByID($this->session->project);
+                if(empty($project->multiple))
+                {
+                    $module = 'execution';
+                    $method = 'storyView';
+                    $params = "storyID=$storyID";
+                }
+                else
+                {
+                    $module = 'projectstory';
+                    $method = 'view';
+                    $params = "storyID=$storyID";
+                }
             }
             elseif($from == 'execution')
             {
