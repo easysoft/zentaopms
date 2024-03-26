@@ -14,6 +14,7 @@ jsVar('engine', $job->engine);
 jsVar('job', $job);
 jsVar('dirChange', $lang->job->dirChange);
 jsVar('buildTag', $lang->job->buildTag);
+jsVar('repoList', $repoList);
 jsVar('dirs', !empty($dirs) ? $dirs : '');
 
 if($job->engine != 'jenkins') unset($lang->job->frameList['sonarqube']);
@@ -100,15 +101,15 @@ if($this->session->repoID)
 }
 
 $repoPairs = array();
-foreach($repoList as $repoID => $repo)
+foreach($repoList as $repoID => $codeRepo)
 {
     if($job->engine == 'jenkins')
     {
-        $repoPairs[$repoID] = "[{$repo->SCM}] {$repo->name}";
+        $repoPairs[$repoID] = "[{$codeRepo->SCM}] {$codeRepo->name}";
         continue;
     }
 
-    if(strtolower($repo->SCM) == $job->engine) $repoPairs[$repoID] = "[{$repo->SCM}] {$repo->name}";
+    if(strtolower($codeRepo->SCM) == $job->engine) $repoPairs[$repoID] = "[{$codeRepo->SCM}] {$codeRepo->name}";
 }
 
 formPanel
@@ -166,6 +167,15 @@ formPanel
             set::items(!empty($refList) ? $refList : array()),
             set::value(isset($job->reference) ? $job->reference : '')
         )
+    ),
+    formGroup
+    (
+        setClass('gitfox-pipeline', $repo->SCM == 'GitFox' ? '' : 'hidden'),
+        set::label($lang->job->gitfoxpipeline),
+        set::required(true),
+        set::name('gitfoxpipeline'),
+        set::items($pipelines),
+        set::width('1/2')
     ),
     formGroup
     (

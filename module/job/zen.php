@@ -57,6 +57,10 @@ class jobZen extends job
             {
                 if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
             }
+            elseif($job->engine == 'gitfox')
+            {
+                $job->pipeline = $job->repoName;
+            }
 
             $job->lastExec    = $job->lastExec ? $job->lastExec : '';
             $job->triggerType = $this->job->getTriggerConfig($job);

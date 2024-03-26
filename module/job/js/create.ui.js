@@ -16,7 +16,7 @@ function changeEngine(event)
 
     const picker = $('[name=repo]').zui('picker');
     picker.render({items: repos});
-    picker.$.setValue(repos.length > 0 ? [0].value : '');
+    picker.$.setValue(repos.length > 0 ? repos[0].value : '');
 
     if(engine == 'jenkins')
     {
@@ -89,7 +89,9 @@ function changeRepo()
                 {
                     if(response.result == 'success')
                     {
-                        $('#reference').zui('picker').render({items: response.refList});
+                        const $reference = $('#reference').zui('picker');
+                        $reference.render({items: response.refList});
+                        $reference.$.setValue(response.refList.length > 0 ? response.refList[0].value : '');
                     }
                 });
             }
@@ -116,80 +118,20 @@ function changeRepo()
         }
     });
 
+    setPipeline();
+
     /* Check exists sonarqube data. */
     checkSonarquebLink();
-
-}
-
-/*
- * Check sonarqube linked.
- */
-function checkSonarquebLink()
-{
-    var repoID = $('#repo').val();
-    var frame  = $('#frame').val();
-
-    if(frame != 'sonarqube' || repoID == 0) return false;
-
-    $.getJSON(createLink('job', 'ajaxCheckSonarqubeLink', 'repoID=' + repoID), function(result)
-    {
-        if(result.result  != 'success')
-        {
-            alert(result.message);
-            $('#repo').val(0).trigger('chosen:updated');
-            $('#reference').val('').trigger('chosen:updated');
-            $('.reference').hide();
-            return false;
-        }
-    })
-}
-
-function changeJenkinsServer(event)
-{
-    const jenkinsID = $(event.target).val();
-
-    var pipelineDropmenu = zui.Dropmenu.query('#pipelineDropmenu');
-    if(!jenkinsID)
-    {
-        pipelineDropmenu.render({fetcher: ''});
-    }
-    else
-    {
-        pipelineDropmenu.render({fetcher: $.createLink('jenkins', 'ajaxGetJenkinsTasks', 'jenkinsID=' + jenkinsID)})
-    }
-}
-
-function changeTriggerType(event)
-{
-    var type = $(event.target).val();
-    $('.svn-fields').addClass('hidden');
-    $('.comment-fields').addClass('hidden');
-    $('.custom-fields').addClass('hidden');
-    if(type == 'commit')   $('.comment-fields').removeClass('hidden');
-    if(type == 'schedule') $('.custom-fields').removeClass('hidden');
-}
-
-function changeSonarqubeServer(event)
-{
-    var sonarqubeID = $(event.target).val();
-    $.get($.createLink('sonarqube', 'ajaxGetProjectList', 'sonarqubeID=' + sonarqubeID), function(data)
-    {
-        data = JSON.parse(data);
-        $('#projectKey').zui('picker').render({items: data});
-    })
-
-    /* There has been a problem with handling the prompt label. */
-    $('#projectKeyLabel').remove();
 }
 
 $(document).ready(function()
 {
-    $('#engine').trigger('change');
-    $('#triggerType').trigger('change');
+    $('[name=engine]').trigger('change');
+    $('[name=triggerType]').trigger('change');
 
     $(document).on('click', '.dropmenu-list li.tree-item', function()
     {
-        $('#jkTask').val($('#pipelineDropmenu button.dropmenu-btn').data('value'));
+        $('[name=jkTask]').val($('#pipelineDropmenu button.dropmenu-btn').data('value'));
     });
     $(document).on('change', 'select.paramValue', function()
     {

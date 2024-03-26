@@ -70,7 +70,7 @@ function changeTrigger(event)
         useZentao = event;
     }
 
-    if(useZentao == 1)
+    if(useZentao)
     {
         $('.job-form #paramDiv').show();
         $('.job-form .sonarqube').show();
@@ -88,4 +88,89 @@ function changeTrigger(event)
         $('.job-form #jenkinsServerTR').hide();
         $('.job-form [data-name="triggerType"]').hide();
     }
+}
+
+/*
+ * Check sonarqube linked.
+ */
+function setPipeline()
+{
+    $('.gitfox-pipeline').addClass('hidden');
+    const $pipeline = $('[name=gitfoxpipeline]').zui('picker');
+    $pipeline.$.clear();
+
+    const repoID = $('[name=repo]').val();
+    console.log(repoID)
+    if(repoID == 0) return false;
+    if(!repoList[repoID] || repoList[repoID].SCM != 'GitFox') return;
+
+    $.getJSON($.createLink('job', 'ajaxGetPipelines', 'repoID=' + repoID), function(result)
+    {
+        let pipelines = [];
+        if(result.data.length > 0) pipelines = result.data;
+
+        $pipeline.render({items: pipelines});
+        $('.gitfox-pipeline').removeClass('hidden');
+    })
+}
+
+/*
+ * Check sonarqube linked.
+ */
+function checkSonarquebLink()
+{
+    var repoID = $('[name=repo]').val();
+    var frame  = $('[name=frame]').val();
+
+    if(frame != 'sonarqube' || repoID == 0) return false;
+
+    $.getJSON($.createLink('job', 'ajaxCheckSonarqubeLink', 'repoID=' + repoID), function(result)
+    {
+        if(result.result  != 'success') zui.Modal.alert(result.message);
+    })
+}
+
+function changeJenkinsServer(event)
+{
+    const jenkinsID = $(event.target).val();
+
+    var pipelineDropmenu = zui.Dropmenu.query('#pipelineDropmenu');
+    if(!jenkinsID)
+    {
+        pipelineDropmenu.render({fetcher: ''});
+    }
+    else
+    {
+        pipelineDropmenu.render({fetcher: $.createLink('jenkins', 'ajaxGetJenkinsTasks', 'jenkinsID=' + jenkinsID)})
+    }
+}
+
+function changeTriggerType(event)
+{
+    if(typeof(event) == 'object')
+    {
+        var type = $(event.target).val();
+    }
+    else
+    {
+        var type = event;
+    }
+    dirs ? $('.svn-fields').removeClass('hidden') : $('.svn-fields').addClass('hidden');
+    $('.comment-fields').addClass('hidden');
+    $('.custom-fields').addClass('hidden');
+    if(type == 'commit')   $('.comment-fields').removeClass('hidden');
+    if(type == 'schedule') $('.custom-fields').removeClass('hidden');
+}
+
+function changeSonarqubeServer(event)
+{
+    var sonarqubeID = $(event.target).val();
+    $.get($.createLink('sonarqube', 'ajaxGetProjectList', 'sonarqubeID=' + sonarqubeID), function(data)
+    {
+        data = JSON.parse(data);
+        $('#projectKey').zui('picker').render({items: data});
+    })
+
+    /* There has been a problem with handling the prompt label. */
+    $('#projectKeyLabel').remove();
 }

@@ -27,6 +27,7 @@ $lang->job->buildSpec       = 'Build Target'; // 'pipeline@server'
 $lang->job->engine          = 'Engine';
 $lang->job->server          = 'Serveur';
 $lang->job->pipeline        = 'Pipeline';
+$lang->job->gitfoxpipeline  = 'Pipeline';
 $lang->job->buildType       = 'Type Build';
 $lang->job->frame           = 'Cadre';
 $lang->job->useZentao       = 'Trigger by ZenTao';

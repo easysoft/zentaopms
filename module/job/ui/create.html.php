@@ -80,6 +80,15 @@ formPanel
     ),
     formGroup
     (
+        setClass('gitfox-pipeline hidden'),
+        set::label($lang->job->gitfoxpipeline),
+        set::required(true),
+        set::name('gitfoxpipeline'),
+        set::items(array()),
+        set::width('1/2')
+    ),
+    formGroup
+    (
         set::name('product'),
         set::label($lang->job->product),
         set::width('1/2'),

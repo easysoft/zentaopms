@@ -27,6 +27,7 @@ $lang->job->buildSpec       = '构建对象'; // 'pipeline@server'
 $lang->job->engine          = '引擎';
 $lang->job->server          = '服务器';
 $lang->job->pipeline        = '流水线';
+$lang->job->gitfoxpipeline  = '关联流水线';
 $lang->job->buildType       = '构建类型';
 $lang->job->frame           = '工具/框架';
 $lang->job->useZentao       = '禅道触发';

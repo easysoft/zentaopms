@@ -729,10 +729,17 @@ class gitfoxRepo
             for($page = 1; true; $page++)
             {
                 $results = json_decode(commonModel::http($api . "&page={$page}", $data, array(), $header));
+                if(is_array($results))
+                {
+                    $allResults = array_merge($allResults, $results);
+                    if(count($results) < $params['limit']) break;
+                    continue;
+                }
+
                 if(isset($results->content)) $results = $results->content;
                 if(empty($results->$field) || !is_array($results->$field)) break;
                 if(!empty($results->$field)) $allResults = array_merge($allResults, $results->$field);
-                if(count($results->$field) < 100) break;
+                if(count($results->$field) < $params['limit']) break;
             }
 
             return $allResults;
@@ -950,5 +957,16 @@ class gitfoxRepo
         $MR->has_conflicts     = $MR->merge_check_status == 'conflict';
         if($MR->merged) $MR->state = 'merged';
         return $MR;
+    }
+
+    /**
+     * Get pipeline list by api.
+     *
+     * @access public
+     * @return array
+     */
+    public function pipelines(): array
+    {
+        return $this->fetch('pipelines', array(), true);
     }
 }

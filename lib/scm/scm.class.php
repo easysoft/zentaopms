@@ -338,6 +338,17 @@ class scm
     {
         return $this->engine->getSingleMR($MRID);
     }
+
+    /**
+     * Get pipeline list by api.
+     *
+     * @access public
+     * @return array
+     */
+    public function pipelines()
+    {
+        return $this->engine->pipelines();
+    }
 }
 
 /**
