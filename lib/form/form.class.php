@@ -88,6 +88,7 @@ class form extends fixer
         global $app, $config;
 
         if($configObject === null) $configObject = $config->{$app->moduleName}->form->{$app->methodName};
+        $configObject = $app->control->appendExtendFormConfig($configObject);
         return (new form)->config($configObject, 'batch');
     }
 
@@ -333,11 +334,6 @@ class form extends fixer
     public function get(string $fields = ''): mixed
     {
         global $config;
-
-        foreach($this->rawconfig as $field => $fieldConfig)
-        {
-            if(isset($fieldConfig['control']) && $fieldConfig['control'] == 'editor') $this->stripTags($field, $config->allowedTags);
-        }
 
         if($this->formType == 'single') return parent::get($fields);
         foreach($this->dataList as $rowIndex => $data)
