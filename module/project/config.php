@@ -322,52 +322,63 @@ $config->project->team->actionList['unlink']['url']  = 'javascript:deleteMember(
 
 $config->project->actionList = array();
 $config->project->actionList['start']['icon']        = 'play';
+$config->project->actionList['start']['text']        = $lang->project->start;
 $config->project->actionList['start']['hint']        = $lang->project->start;
 $config->project->actionList['start']['url']         = helper::createLink('project', 'start', 'projectID={id}');
 $config->project->actionList['start']['data-toggle'] = 'modal';
 
 $config->project->actionList['close']['icon']        = 'off';
+$config->project->actionList['close']['text']        = $lang->project->close;
 $config->project->actionList['close']['hint']        = $lang->project->close;
 $config->project->actionList['close']['url']         = helper::createLink('project', 'close', 'projectID={id}');
 $config->project->actionList['close']['data-toggle'] = 'modal';
 
 $config->project->actionList['activate']['icon']        = 'magic';
+$config->project->actionList['activate']['text']        = $lang->project->activate;
 $config->project->actionList['activate']['hint']        = $lang->project->activate;
 $config->project->actionList['activate']['url']         = helper::createLink('project', 'activate', 'projectID={id}');
 $config->project->actionList['activate']['data-toggle'] = 'modal';
 
 $config->project->actionList['edit']['icon'] = 'edit';
+$config->project->actionList['edit']['text'] = $lang->project->edit;
 $config->project->actionList['edit']['hint'] = $lang->project->edit;
 $config->project->actionList['edit']['url']  = array('module' => 'project', 'method' => 'edit', 'params' => 'projectID={id}');
 
 $config->project->actionList['suspend']['icon']        = 'pause';
+$config->project->actionList['suspend']['text']        = $lang->project->suspend;
 $config->project->actionList['suspend']['hint']        = $lang->project->suspend;
 $config->project->actionList['suspend']['url']         = helper::createLink('project', 'suspend', 'projectID={id}');
 $config->project->actionList['suspend']['data-toggle'] = 'modal';
 
 $config->project->actionList['group']['icon'] = 'group';
+$config->project->actionList['group']['text'] = $lang->project->team;
 $config->project->actionList['group']['hint'] = $lang->project->team;
 $config->project->actionList['group']['url']  = array('module' => 'project', 'method' => 'team', 'params' => 'projectID={id}');
 
 $config->project->actionList['perm']['icon'] = 'lock';
+$config->project->actionList['perm']['text'] = $lang->project->group;
 $config->project->actionList['perm']['hint'] = $lang->project->group;
 $config->project->actionList['perm']['url']  = array('module' => 'project', 'method' => 'group', 'params' => 'projectID={id}');
 
 $config->project->actionList['link']['icon'] = 'link';
+$config->project->actionList['link']['text'] = $lang->project->manageProducts;
 $config->project->actionList['link']['hint'] = $lang->project->manageProducts;
 $config->project->actionList['link']['url']  = array('module' => 'project', 'method' => 'manageProducts', 'params' => 'projectID={id}');
 
 $config->project->actionList['whitelist']['icon'] = 'shield-check';
+$config->project->actionList['whitelist']['text'] = $lang->project->whitelist;
 $config->project->actionList['whitelist']['hint'] = $lang->project->whitelist;
 $config->project->actionList['whitelist']['url']  = array('module' => 'project', 'method' => 'whitelist', 'params' => 'projectID={id}');
 
 $config->project->actionList['delete']['icon'] = 'trash';
+$config->project->actionList['delete']['text'] = $lang->project->delete;
 $config->project->actionList['delete']['hint'] = $lang->project->delete;
 $config->project->actionList['delete']['url']  = 'javascript:confirmDelete("{id}", "{name}")';
 
-$config->project->view = new stdclass();
-$config->project->view->operateList['main']   = array('start', 'activate', 'suspend', 'close');
-$config->project->view->operateList['common'] = array('edit', 'delete');
+$config->project->actions = new stdclass();
+$config->project->actions->view = array();
+$config->project->actions->view['mainActions']   = array('start', 'activate', 'suspend', 'close');
+$config->project->actions->view['suffixActions'] = array('edit', 'delete');
 
 $config->project->statusLabelList['wait']      = 'wait lighter';
 $config->project->statusLabelList['doing']     = 'doing primary-pale';

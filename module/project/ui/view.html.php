@@ -544,39 +544,15 @@ row
     )
 );
 
-/* Construct suitable actions for the current project. */
-$operateMenus = array();
-foreach($config->project->view->operateList['main'] as $operate)
-{
-    if(!common::hasPriv('project', $operate)) continue;
-    if(!$this->project->isClickable($project, $operate)) continue;
-
-    $action = $config->project->actionList[$operate];
-    $action['text'] = $action['hint'];
-    $operateMenus[] = $action;
-}
-
-/* Construct common actions for project. */
-$commonActions = array();
-foreach($config->project->view->operateList['common'] as $operate)
-{
-    if(!common::hasPriv('project', $operate)) continue;
-
-    $settings = $config->project->actionList[$operate];
-    $settings['text'] = '';
-    if($operate == 'edit') $settings['url'] = createLink('project', 'edit', "projectID={$project->id}&from=view");
-
-    $commonActions[] = $settings;
-}
-
+$actions = $this->loadModel('common')->buildOperateMenu($project);
 div
 (
     setClass('w-2/3 center fixed actions-menu'),
     floatToolbar
     (
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-        set::main($operateMenus),
-        set::suffix($commonActions),
+        set::main($actions['mainActions']),
+        set::suffix($actions['suffixActions']),
         set::object($project)
     )
 );
