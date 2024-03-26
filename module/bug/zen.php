@@ -69,7 +69,7 @@ class bugZen extends bug
     protected function checkRquiredForEdit(object $bug): bool
     {
         $requiredFields = explode(',', $this->config->bug->edit->requiredFields);
-        $editErrors         = array();
+        $editErrors     = array();
         /* Check required fields. */
         foreach($requiredFields as $requiredField)
         {
@@ -1454,11 +1454,15 @@ class bugZen extends bug
         /* Get bugs and old bugs. */
         $bugs    = form::batchData($this->config->bug->form->batchEdit)->get();
         $oldBugs = $this->bug->getByIdList($bugIdList);
+        $now     = helper::now();
+        $uidList = $this->post->uid;
 
         /* Process bugs. */
-        $now     = helper::now();
-        foreach($bugs as $bug)
+        $this->loadModel('file');
+        foreach($bugs as $index => $bug)
         {
+            $_POST['uid'] = $uidList[$index];
+            $bug = $this->file->processImgURL($bug, $this->config->bug->editor->batchedit['id'], $this->post->uid);
             $oldBug = $oldBugs[$bug->id];
 
             if(is_array($bug->os))      $bug->os      = implode(',', $bug->os);

@@ -183,11 +183,21 @@ class bugModel extends model
      */
     public function getByIdList(int|array|string $bugIdList = 0, string $fields = '*', string $orderBy = ''): array
     {
-        return $this->dao->select($fields)->from(TABLE_BUG)
+        $bugs = $this->dao->select($fields)->from(TABLE_BUG)
             ->where('deleted')->eq('0')
             ->beginIF($bugIdList)->andWhere('id')->in($bugIdList)->fi()
             ->beginIF($orderBy)->orderBy($orderBy)->fi()
             ->fetchAll('id');
+
+        if($bugs)
+        {
+            foreach($bugs as $bug)
+            {
+                $bug = $this->loadModel('file')->replaceImgURL($bug, 'steps');
+            }
+        }
+
+        return $bugs;
     }
 
     /**

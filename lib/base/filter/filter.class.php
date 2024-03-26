@@ -1345,6 +1345,13 @@ class baseFixer
      */
     public function get(string $fields = ''): mixed
     {
+        global $config;
+
+        foreach($this->rawconfig as $field => $fieldConfig)
+        {
+            if(isset($fieldConfig['control']) && $fieldConfig['control'] == 'editor') $this->stripTags($field, $config->allowedTags);
+        }
+
         $fields = str_replace(' ', '', trim($fields));
         foreach($this->data as $field => $value) $this->specialChars($field);
 
