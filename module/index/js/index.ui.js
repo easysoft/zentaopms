@@ -873,6 +873,7 @@ window.browserNotify = function()
     let windowBlur = false;
     setInterval(function()
     {
+        if(window.Notification && Notification.permission == 'default') Notification.requestPermission();
         if(window.Notification && Notification.permission == 'granted')
         {
             window.onblur  = function(){windowBlur = true;}
