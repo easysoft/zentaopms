@@ -16,6 +16,7 @@ jsVar('scope', $scope);
 jsVar('metricSql', $lang->metric->oldMetric->sql);
 jsVar('metricTip', $lang->metric->oldMetric->tip);
 jsVar('implementType', $lang->metric->implementType);
+jsVar('confirmRecalculate', $lang->metric->confirmRecalculate);
 
 $fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
 {
@@ -42,6 +43,13 @@ featureBar
 toolbar
 (
     setClass('clear-gap'),
+    btn
+    (
+        setClass('btn ghost update-history pr-5'),
+        set::icon('refresh'),
+        $lang->metric->recalculate,
+        bind::click("confirmRecalculate()")
+    ),
     btn
     (
         setClass('btn primary-outline'),
