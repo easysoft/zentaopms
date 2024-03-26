@@ -4,6 +4,10 @@ namespace zin;
 
 class detailSide extends wg
 {
+    protected static array $defineProps = array(
+        'isForm?: bool=false'
+    );
+
     public static function getPageCSS(): ?string
     {
         return <<<CSS

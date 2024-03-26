@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+data('testcase', $case);
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
 jsVar('tab', $this->app->tab);
@@ -158,6 +159,7 @@ detailBody
     history(set::objectID($case->id)),
     detailSide
     (
+        set::isForm(true),
         tableData
         (
             setClass('mt-5'),
