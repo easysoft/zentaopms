@@ -44,6 +44,7 @@ $lang->action->editComment   = 'Edit Comment';
 $lang->action->create        = 'Add Comment';
 $lang->action->comment       = 'Comment';
 $lang->action->actioncomment = 'Comment';
+$lang->action->lastComment   = 'Comment';
 $lang->action->byQuery       = 'Search';
 
 $lang->action->trashAction    = 'Recycle List';
