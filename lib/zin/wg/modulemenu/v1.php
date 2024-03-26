@@ -43,7 +43,7 @@ class moduleMenu extends wg
         .module-menu-header.is-fixed > .btn-close:not(:hover) {opacity: .5;}
         .sidebar.is-collapsed > .module-menu-header.is-fixed {display: flex;}
         .sidebar-left > .module-menu {margin-right: -8px}
-        .is-expanded > .module-menu + .sidebar-gutter > .gutter-toggle {opacity: 0}
+        .is-expanded > .module-menu ~ .sidebar-gutter > .gutter-toggle {opacity: 0}
         .has-module-menu-header .sidebar-left {transition-property: width;}
         .has-module-menu-header .module-menu {max-height: calc(100vh - 105px); }
         .has-module-menu-header .module-menu > .tree {padding-top: 8px; padding-bottom: 8px;}
