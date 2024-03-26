@@ -169,6 +169,7 @@ detailBody
     history(),
     detailSide
     (
+        set::isForm(true),
         tableData
         (
             set::title($lang->story->legendBasicInfo),
