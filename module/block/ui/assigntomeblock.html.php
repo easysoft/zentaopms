@@ -131,16 +131,19 @@ blockPanel
     setClass('assigntome-block list-block'),
     to::heading
     (
-        div
+        ul
         (
-            ul
-            (
-                setClass('nav nav-tabs'),
-                $menus
-            )
+            setClass('nav'),
+            $menus,
+            on::show()->call('handleAssignToMeTabShow')
         )
     ),
-    div($contents)
+    div($contents),
+    h::css
+    (
+        '.block-assigntome .nav > .nav-item > a {padding: 0 16px; border-radius: 4px; height: 28px; color: var(--color-gray-700)}',
+        '.block-assigntome .nav > .nav-item > a.active {font-weight: bold; color: var(--color-gray-900); background: var(--color-primary-50)}'
+    )
 );
 
 render();
