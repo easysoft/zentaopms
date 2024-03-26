@@ -159,6 +159,7 @@ if(common::hasPriv('project', 'manageMembers'))
 
 row
 (
+    setClass('w-full'),
     cell
     (
         setClass('main w-2/3'),
