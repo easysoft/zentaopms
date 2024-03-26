@@ -440,6 +440,36 @@ class metric extends control
     }
 
     /**
+     * 重算度量项历史数据。
+     * Recalculate metric history data.
+     *
+     * @access public
+     * @return string
+     */
+    public function recalculate()
+    {
+        $this->display();
+    }
+
+    /**
+     * 重算度量项进度。
+     * Show recalculate progress.
+     *
+     * @param  string $calcType all|inference
+     * @access public
+     * @return string
+     */
+    public function recalculateProgress($calcType)
+    {
+        $startDate = $this->metric->getInstallDate();
+        if($calcType == 'all') $endDate = helper::now();
+
+        $this->view->startDate = substr($startDate, 0, 10);
+        $this->view->endDate   = substr($endDate, 0, 10);
+        $this->display();
+    }
+
+    /**
      * 获取数据表格的数据。
      * Get data of datatable.
      *

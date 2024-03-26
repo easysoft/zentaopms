@@ -2396,4 +2396,20 @@ class metricModel extends model
            ->fetch();
         return !empty($records);
     }
+
+    /**
+     * 根据动态获取安装禅道的大概时间。
+     * Get date of install zentao accorrading action.
+     *
+     * @access public
+     * @return string
+     */
+    public function getInstallDate()
+    {
+        return $this->dao->select('date')->from(TABLE_ACTION)
+            ->where('date')->ne('0000-00-00 00:00:00')
+            ->orderBy('date_asc')
+            ->limit(1)
+            ->fetch('date');
+    }
 }
