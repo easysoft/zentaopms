@@ -25,6 +25,7 @@ $cols['name']['type']         = 'text';
 $cols['name']['link']         = $config->user->execution->dtable->name['link'];
 $cols['name']['name']         = 'name';
 $cols['name']['title']        = $lang->execution->name;
+$cols['name']['data-app']     = 'execution';
 
 $cols['status']['title'] = $lang->statusAB;
 

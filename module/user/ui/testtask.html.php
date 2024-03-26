@@ -28,7 +28,8 @@ unset($cols[$statusKey]);
 $titleIndex = array_search($titleKey, array_keys($cols)) + 1;
 $cols       = array_merge(array_slice($cols, 0, $titleIndex), array($statusKey => $statusValue), array_slice($cols, $titleIndex));
 
-$cols['id']['checkbox'] = false;
+$cols['id']['checkbox']    = false;
+$cols['title']['data-app'] = 'qa';
 
 $cols = array_map(function($col)
 {
