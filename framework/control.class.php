@@ -637,21 +637,24 @@ class control extends baseControl
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $config;
 
-        $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
-        $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
-        $layouts   = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        $action       = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $fieldList    = $this->workflowaction->getFields($flow->module, $action->action);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
         if($layouts)
         {
             foreach($fieldList as $key => $field)
             {
                 if($field->buildin || !$field->show || !isset($layouts[$field->field])) continue;
+
+                $required = $field->readonly || ($notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false);
                 if($field->control == 'multi-select' || $field->control == 'checkbox')
                 {
-                    $config[$field->field] = array('required' => false, 'type' => 'array', 'default' => array(''), 'filter' => 'join');
+                    $config[$field->field] = array('required' => $required, 'type' => 'array', 'default' => array(''), 'filter' => 'join');
                 }
                 else
                 {
-                    $config[$field->field] = array('required' => false, 'type' => 'string');
+                    $config[$field->field] = array('required' => $required, 'type' => 'string');
                     if($field->control == 'richtext') $config[$field->field]['control'] = 'editor';
                 }
             }

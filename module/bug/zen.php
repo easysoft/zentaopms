@@ -1455,14 +1455,10 @@ class bugZen extends bug
         $bugs    = form::batchData($this->config->bug->form->batchEdit)->get();
         $oldBugs = $this->bug->getByIdList($bugIdList);
         $now     = helper::now();
-        $uidList = $this->post->uid;
 
         /* Process bugs. */
-        $this->loadModel('file');
         foreach($bugs as $index => $bug)
         {
-            $_POST['uid'] = $uidList[$index];
-            $bug = $this->file->processImgURL($bug, $this->config->bug->editor->batchedit['id'], $this->post->uid);
             $oldBug = $oldBugs[$bug->id];
 
             if(is_array($bug->os))      $bug->os      = implode(',', $bug->os);
