@@ -14,3 +14,38 @@ $config->chart->dateConvert['day']   = 'DATE';
 $config->chart->conditionList['eq'] = '=';
 
 $config->chart->chartMaxChecked = 6;
+
+$config->chart->dataZoom = new stdclass();
+
+$config->chart->dataZoom->common = new stdclass();
+$config->chart->dataZoom->common->inside = new stdclass();
+$config->chart->dataZoom->common->inside->type             = 'inside';
+$config->chart->dataZoom->common->inside->startValue       = 0;
+$config->chart->dataZoom->common->inside->endValue         = 5;
+$config->chart->dataZoom->common->inside->minValueSpan     = 10;
+$config->chart->dataZoom->common->inside->maxValueSpan     = 10;
+$config->chart->dataZoom->common->inside->zoomOnMouseWheel = false;
+$config->chart->dataZoom->common->inside->moveOnMouseWheel = true;
+$config->chart->dataZoom->common->inside->moveOnMouseMove  = true;
+
+$config->chart->dataZoom->common->slider = new stdclass();
+$config->chart->dataZoom->common->slider->type            = 'slider';
+$config->chart->dataZoom->common->slider->realtime        = true;
+$config->chart->dataZoom->common->slider->startValue      = 0;
+$config->chart->dataZoom->common->slider->endValue        = 5;
+$config->chart->dataZoom->common->slider->zoomLock        = true;
+$config->chart->dataZoom->common->slider->brushSelect     = false;
+$config->chart->dataZoom->common->slider->fillerColor     = '#ccc';
+$config->chart->dataZoom->common->slider->borderColor     = '#33aaff00';
+$config->chart->dataZoom->common->slider->backgroundColor = '#cfcfcf00';
+$config->chart->dataZoom->common->slider->handleSize      = 0;
+$config->chart->dataZoom->common->slider->showDataShadow  = false;
+$config->chart->dataZoom->common->slider->showDetail      = false;
+
+$config->chart->dataZoom->slider = new stdclass();
+$config->chart->dataZoom->slider->width  = 5;
+$config->chart->dataZoom->slider->height = '80%';
+$config->chart->dataZoom->slider->bottom = 0;
+$config->chart->dataZoom->slider->left   = '10%';
+$config->chart->dataZoom->slider->top    = '10%';
+$config->chart->dataZoom->slider->right  = 0;
