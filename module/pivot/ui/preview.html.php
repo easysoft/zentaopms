@@ -71,7 +71,8 @@ div
         ),
         $config->edition == 'open' ? div
         (
-            setClass('bg-canvas px-4 pb-4'),
+            set::width(240),
+            setClass('bg-canvas px-4 py-2 module-menu shadow'),
             html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
         ) : null
     ),
