@@ -1245,6 +1245,7 @@ class productModel extends model
         $action = strtolower($action);
 
         if($action == 'close') return $product->status != 'closed';
+        if($action == 'activate') return $product->status == 'closed';
 
         return true;
     }
