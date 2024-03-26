@@ -502,6 +502,7 @@ CSS;
 
     protected function build()
     {
+        global $app;
         list($objectType, $objectID, $layout) = $this->prop(array('objectType', 'objectID', 'layout'));
 
         return div
@@ -511,7 +512,8 @@ CSS;
             setData('type', $objectType),
             $this->buildHeader(),
             $this->buildBody(),
-            $layout === 'simple' ? null : $this->buildPrevAndNext()
+            $layout === 'simple' ? null : $this->buildPrevAndNext(),
+            html($app->control->appendExtendCssAndJS())
         );
     }
 }

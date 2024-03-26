@@ -487,18 +487,19 @@ class control extends baseControl
         if($type == 'html')
         {
             parse_str($extras, $result);
-            $fields = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'));
+            $html  = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'));
+            $html .= $this->appendExtendCssAndJS($moduleName, $methodName);
         }
         else
         {
             ob_start();
             $this->flow->printFields($moduleName, $methodName, $object, $type, $extras);
-            $fields = ob_get_contents();
+            $html = ob_get_contents();
             ob_end_clean();
         }
 
-        if(!$print) return $fields;
-        echo $fields;
+        if(!$print) return $html;
+        echo $html;
     }
 
     /**
@@ -540,7 +541,7 @@ class control extends baseControl
         $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
         $methodName = $methodName ? $moduleName : $this->app->getMethodName();
 
-        $flow      = $this->loadModel('workflow')->getByModule($moduleName);
+        $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return '';
 
         $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
@@ -550,8 +551,8 @@ class control extends baseControl
         if(!empty($flow->css))   $html .= "<style>$flow->css</style>";
         if(!empty($action->css)) $html .= "<style>$action->css</style>";
 
-        $html .= $this->getFormulaScript($moduleName, $action, $fieldList);
-        if($action->linkages)   $html .= $this->getLinkageScript($action, $fieldList);
+        $html .= $this->loadModel('flow')->getFormulaScript($moduleName, $action, $fieldList);
+        if($action->linkages)   $html .= $this->flow->getLinkageScript($action, $fieldList);
         if(!empty($flow->js))   $html .= "<script>$flow->js</script>";
         if(!empty($action->js)) $html .= "<script>$action->js</script>";
 

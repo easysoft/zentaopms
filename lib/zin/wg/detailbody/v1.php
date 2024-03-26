@@ -88,7 +88,8 @@ class detailBody extends wg
                     $bottom,
                     empty($floating) ? null : center(setClass('pt-6 sticky bottom-0'), $floating)
                 ),
-                $side
+                $side,
+                html($app->control->appendExtendCssAndJS())
             );
         }
 
