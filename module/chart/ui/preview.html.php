@@ -44,12 +44,12 @@ div
         ),
         $treeMenu ? div
         (
-            setClass('flex bg-canvas gap-4 px-4 pb-4'),
+            setClass('bg-canvas px-4 py-2 module-menu shadow'),
             btn($lang->chart->preview, setClass('primary'), on::click('previewCharts'))
         ) : null,
         $config->edition == 'open' ? div
         (
-            setClass('bg-canvas px-4 pb-4'),
+            setClass('bg-canvas px-4 py-2 module-menu shadow'),
             html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
         ) : null
     ),
