@@ -63,7 +63,8 @@ class formPanel extends panel
         'foldableItems?: array|string',                // 可折叠的表单项。
         'pinnedItems?: array|string',                  // 固定显示的表单项。
         'customBtn?: array|bool',                      // 是否显示表单自定义按钮。
-        'customFields?: array=[]'                      // @deprecated 自定义表单项。
+        'customFields?: array=[]',                     // @deprecated 自定义表单项。
+        'showExtra?: bool=true'                        // 是否显示工作流字段。
     );
 
     public static function getPageJS(): ?string
@@ -250,7 +251,7 @@ class formPanel extends panel
                 set::id($formID),
                 set($this->props->pick(array_keys($props))),
                 $this->children(),
-                $this->buildExtraBatchItem(),
+                $this->prop('showExtra') ? $this->buildExtraBatchItem() : null,
                 jsVar('formBatch', true),
                 $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
             );
