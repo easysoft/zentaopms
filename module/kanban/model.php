@@ -2126,7 +2126,7 @@ class kanbanModel extends model
             $kanban->order = $maxOrder ? $maxOrder + 1 : 1;
 
             $space = $this->getSpaceById($kanban->space);
-            if($space->type == 'private') $kanban->owner = $account;
+            if(!empty($space) && $space->type == 'private') $kanban->owner = $account;
         }
 
         $this->kanbanTao->createKanban($kanban);
@@ -2140,7 +2140,7 @@ class kanbanModel extends model
         $this->loadModel('file')->saveUpload('kanban', $kanbanID);
         $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
-        $kanban->copyRegion ? $this->copyRegions($kanbanInfo, $kanban->copyKanbanID): $this->createDefaultRegion($kanbanInfo);
+        !empty($kanban->copyRegion) ? $this->copyRegions($kanbanInfo, $kanban->copyKanbanID): $this->createDefaultRegion($kanbanInfo);
 
         if(!empty($kanbanInfo->team) || !empty($kanbanInfo->whitelist))
         {
