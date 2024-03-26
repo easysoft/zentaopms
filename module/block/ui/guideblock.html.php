@@ -95,14 +95,11 @@ blockPanel
     setClass('guide-block'),
     to::heading
     (
-        !commonModel::isTutorialMode() ? a(
-            set(
-                array(
-                    'href' => createLink('tutorial', 'start'),
-                    'class' => 'btn btn-primary warning',
-                    'data-toggle' => 'modal'
-                )
-            ),
+        !commonModel::isTutorialMode() ? btn
+        (
+            set::url('tutorial', 'start'),
+            set::type('warning'),
+            toggle::modal(),
             $lang->block->tutorial
         ) : null
     ),
@@ -112,10 +109,10 @@ blockPanel
         cell
         (
             set('width', '18%'),
-            set('class', 'border-r overflow-y-auto'),
+            set('class', 'border-r overflow-y-auto px-2 py-4'),
             ul
             (
-                set('class', 'nav nav-tabs nav-stacked'),
+                set('class', 'nav nav-stacked'),
                 $getGuideTabs($blockNavCode)
             )
         ),
