@@ -108,8 +108,8 @@ class formBase extends wg
         {
             $props[] = set(array
             (
-                'data-action'  => empty($url) ? $_SERVER['REQUEST_URI'] : $url,
-                'data-target'  => $target === 'ajax' ? null: $target,
+                'data-action'  => $url,
+                'data-target'  => $target,
                 'data-enctype' => $enctype,
                 'data-method'  => $method
             ));
