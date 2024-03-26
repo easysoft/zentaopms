@@ -72,10 +72,10 @@ window.loadImplement = function(link)
     modal.render({url: link});
 }
 
-window.confirmRecalculate = function()
+window.confirmRecalculate = function(code = 'all')
 {
     zui.Modal.confirm(confirmRecalculate).then((res)=> 
     {
-        if(res) zui.Modal.open({url: $.createLink('metric', 'recalculate')});
+        if(res) zui.Modal.open({url: $.createLink('metric', 'recalculate', 'code=' + code)});
     });
 }

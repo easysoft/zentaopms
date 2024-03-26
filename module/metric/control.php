@@ -159,6 +159,27 @@ class metric extends control
     }
 
     /**
+     * 计算一个度量项的历史数据。
+     * Update history metric lib of single metric.
+     *
+     * @param  string $code
+     * @param  string $date
+     * @access public
+     * @return void
+     */
+    public function updateSingleMetricLib($code, $date)
+    {
+        $date = str_replace('_', '-', $date);
+
+        $calc = $this->metric->calculateMetricByCode($code);
+        $record = $this->metricZen->getRecordByCodeAndDate($code, $calc, $date);
+
+        $records = array();
+        $records[$code] = $record;
+        $this->metric->insertMetricLib($records, 'inference');
+    }
+
+    /**
      * 计算历史数据。
      * Update metric lib of history.
      *
@@ -443,11 +464,13 @@ class metric extends control
      * 重算度量项历史数据。
      * Recalculate metric history data.
      *
+     * @param  string $code
      * @access public
      * @return string
      */
-    public function recalculate()
+    public function recalculate($code = 'all')
     {
+        $this->view->code = $code;
         $this->display();
     }
 
@@ -456,14 +479,17 @@ class metric extends control
      * Show recalculate progress.
      *
      * @param  string $calcType all|inference
+     * @param  string $code
      * @access public
      * @return string
      */
-    public function recalculateProgress($calcType)
+    public function recalculateProgress($calcType, $code = 'all')
     {
         $startDate = $this->metric->getInstallDate();
         if($calcType == 'all') $endDate = helper::now();
 
+        $this->view->code      = $code;
+        $this->view->dateType  = $dateType;
         $this->view->startDate = substr($startDate, 0, 10);
         $this->view->endDate   = substr($endDate, 0, 10);
         $this->display();

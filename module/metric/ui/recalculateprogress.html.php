@@ -13,6 +13,8 @@ namespace zin;
 jsVar('startDate', $startDate);
 jsVar('endDate', $endDate);
 jsVar('recalculateLogText', $lang->metric->recalculateLog);
+jsVar('code', $code);
+jsVar('dateType', $dateType);
 
 detailHeader
 (

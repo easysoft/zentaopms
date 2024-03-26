@@ -54,10 +54,7 @@ class metricZen extends metric
      */
     protected function responseAfterCreate($metricID, $afterCreate, $from, $location)
     {
-        if($afterCreate == 'back' && $location)
-        {
-            return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
-        }
+        if($afterCreate == 'back' && $location) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
 
         $location = $this->createLink('metric', 'implement', "metricID=$metricID&from=$from");
         $callback = array('name' => 'loadImplement', 'params' => $location);

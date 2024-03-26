@@ -1,18 +1,25 @@
 $(document).ready(function()
 {
-    recalculate(startDate, endDate);
+    if(code == 'all') 
+    {
+        recalculateAll(startDate, endDate);
+    }
+    else
+    {
+        recalculateSingle(code, startDate, endDate);
+    }
 });
 
-function recalculate(startDate, endDate)
+function recalculateAll(startDate, endDate)
 {
     var dateRange = getDateRange(startDate, endDate);
 
     var calcLink = $.createLink('metric', 'saveClassifiedCalcGroup');
     $.get(calcLink, function(result){
-        updateHistory(dateRange);
+        updateAllHistory(dateRange);
     });
 
-    function updateHistory(dateRange, index = 0)
+    function updateAllHistory(dateRange, index = 0)
     {
         if(index >= dateRange.length) 
         {
@@ -21,19 +28,37 @@ function recalculate(startDate, endDate)
             return;
         }
         
-        var date = dateRange[index];
-
-        var year = date.getFullYear();
-        var month = (date.getMonth() + 1).toString().padStart(2, '0');
-        var day = date.getDate().toString().padStart(2, '0');
-
-        var date  = year + '_' + month + '_' + day;
+        var date = dateToString(dateRange[index]);
         var $html = recalculateLog(date);
 
         var link = $.createLink('metric', 'updateHistoryMetricLib', 'date=' + date);
         $.get(link, function(result){
             $('.verify-content').append($html);
-            updateHistory(dateRange, index + 1);
+            updateAllHistory(dateRange, index + 1);
+        });
+    }
+}
+
+function recalculateSingle(code, startDate, endDate)
+{
+    var dateRange = getDateRange(startDate, endDate, dateType);
+    updateSingleHistory(dateRange);
+    function updateSingleHistory(dateRange, index = 0)
+    {
+        if(index >= dateRange.length) 
+        {
+            var deduplication = $.createLink('metric', 'deduplicateRecord');
+            $.get(deduplication, function(result){});
+            return;
+        }
+
+        var date = dateToString(dateRange[index]);
+        var $html = recalculateLog(date);
+
+        var link = $.createLink('metric', 'updateSingleMetricLib', 'code=' + code + '&date=' + date);
+        $.get(link, function(result){
+            $('.verify-content').append($html);
+            updateSingleHistory(dateRange, index + 1);
         });
     }
 }
@@ -48,17 +73,30 @@ function recalculateLog(date)
     return html;
 }
 
-function getDateRange(startDate, endDate)
+function getDateRange(startDate, endDate, dateType = 'day')
 {
     var startDate = new Date(startDate);
     var endDate   = new Date(endDate);
 
     var dateRange = [];
-    while(startDate <= endDate) 
+
+    if(dateType == 'day')
     {
-        dateRange.push(new Date(startDate));
-        startDate.setDate(startDate.getDate() + 1);
+        while(startDate <= endDate) 
+        {
+            dateRange.push(new Date(startDate));
+            startDate.setDate(startDate.getDate() + 1);
+        }
     }
 
     return dateRange;
+}
+
+function dateToString(date)
+{
+    var year  = date.getFullYear();
+    var month = (date.getMonth() + 1).toString().padStart(2, '0');
+    var day   = date.getDate().toString().padStart(2, '0');
+
+    return year + '_' + month + '_' + day;
 }

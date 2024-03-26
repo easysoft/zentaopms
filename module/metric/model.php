@@ -643,6 +643,34 @@ class metricModel extends model
     }
 
     /**
+     * 根据代号计算度量项。 
+     * Calculate metric by code.
+     *
+     * @param  string $code
+     * @access public
+     * @return void
+     */
+    public function calculateMetricByCode($code)
+    {
+        $metric = $this->metricTao->fetchMetricByCode($code);
+        if(!$metric) return false;
+
+        $calcPath = $this->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
+        if(!is_file($calcPath)) return false;
+
+        include_once $this->getBaseCalcPath();
+        include_once $calcPath;
+        $calculator = new $metric->code;
+
+        $statement = $this->getDataStatement($calculator, 'statement', 'rnd');
+        $rows = $statement->fetchAll();
+
+        foreach($rows as $row) $calculator->calculate($row);
+
+        return $calculator;
+    }
+
+    /**
      * 根据代号获取计算实时度量项的结果。
      * Get result of calculate metric by code.
      *

@@ -26,7 +26,7 @@ form
     btn
     (
         setClass('btn primary-outline'),
-        bind::click('window.showRecalculateProgress()'),
+        bind::click("window.showRecalculateProgress('$code')"),
         $lang->metric->recalculate
     )
 );
