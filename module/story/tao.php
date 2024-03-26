@@ -314,14 +314,16 @@ class storyTao extends storyModel
             /* Merge subdivided stories for requirement. */
             if(empty($relationGroups[$story->id])) continue;
 
-            $story->parent = '-1';
+            $story->parent   = '-1';
+            $story->children = array();
             foreach($relationGroups[$story->id] as $SRID => $SRStory)
             {
                 if(empty($SRStory)) continue;
+                if(!isset($projectIDList[$SRID])) continue;
 
                 $children = clone $SRStory;
                 $children->parent  = $story->id;
-                $children->project = isset($projectIDList[$SRID]) ? $projectIDList[$SRID] : 0;
+                $children->project = $projectIDList[$SRID];
                 $story->children[$SRID] = $children;
             }
             $story->linkStories = implode(',', array_column($story->children, 'title'));
