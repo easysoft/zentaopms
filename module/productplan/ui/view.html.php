@@ -164,9 +164,10 @@ foreach($actions as $actionType => $typeActions)
 {
     foreach($typeActions as $key => $action)
     {
+        $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$plan->id, $action['url']);
         $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
         $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
-        $actions[$actionType][$key]['url'] = str_replace('{id}', (string)$plan->id, $action['url']);
+        if($actionType == 'suffixActions') $actions['suffixActions'][$key]['text'] = $action['hint'];
     }
 }
 detailHeader
@@ -182,7 +183,7 @@ detailHeader
     !$plan->deleted && $actions ? to::suffix
     (
         btnGroup(set::items($actions['mainActions'])),
-        !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? div(setClass('divider')): null,
+        !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? div(setClass('divider mx-2')): null,
         btnGroup(set::items($actions['suffixActions']))
     ) : null
 );
