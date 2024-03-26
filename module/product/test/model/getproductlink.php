@@ -37,9 +37,9 @@ cid=0
 - 当前页面是ticket-edit，切换1.5级导航时跳转链接。 @/ticket-browse-byProduct-%s.html
 - 当前页面是feedback-view，切换1.5级导航时跳转链接。 @/feedback-admin-byProduct-%s.html
 - 当前页面是productplan-create，切换1.5级导航时跳转链接。 @/productplan-create-%s.html
-- 当前页面是productplan-view，切换1.5级导航时跳转链接。 @/productplan-view-%s.html
+- 当前页面是productplan-view，切换1.5级导航时跳转链接。 @/productplan-browse-%s.html
 - 当前页面是release-create，切换1.5级导航时跳转链接。 @/release-create-%s.html
-- 当前页面是release-view，切换1.5级导航时跳转链接。 @/release-view-%s.html
+- 当前页面是release-view，切换1.5级导航时跳转链接。 @/release-browse-%s.html
 - 当前页面是testsuite-create，切换1.5级导航时跳转链接。 @/testsuite-create-%s.html
 - 当前页面是testsuite-view，切换1.5级导航时跳转链接。 @/testsuite-browse-%s.html
 - 当前页面是design-view，切换1.5级导航时跳转链接。 @/design-browse-%s.html
@@ -101,9 +101,9 @@ r($productModel->getProductLink('ticket',      'view'))        && p() && e('/tic
 r($productModel->getProductLink('ticket',      'edit'))        && p() && e('/ticket-browse-byProduct-%s.html');                   //当前页面是ticket-edit，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('feedback',    'view'))        && p() && e('/feedback-admin-byProduct-%s.html');                  //当前页面是feedback-view，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('productplan', 'create'))      && p() && e('/productplan-create-%s.html');                        //当前页面是productplan-create，切换1.5级导航时跳转链接。
-r($productModel->getProductLink('productplan', 'view'))        && p() && e('/productplan-view-%s.html');                          //当前页面是productplan-view，切换1.5级导航时跳转链接。
+r($productModel->getProductLink('productplan', 'view'))        && p() && e('/productplan-browse-%s.html');                        //当前页面是productplan-view，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('release',     'create'))      && p() && e('/release-create-%s.html');                            //当前页面是release-create，切换1.5级导航时跳转链接。
-r($productModel->getProductLink('release',     'view'))        && p() && e('/release-view-%s.html');                              //当前页面是release-view，切换1.5级导航时跳转链接。
+r($productModel->getProductLink('release',     'view'))        && p() && e('/release-browse-%s.html');                            //当前页面是release-view，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testsuite',   'create'))      && p() && e('/testsuite-create-%s.html');                          //当前页面是testsuite-create，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testsuite',   'view'))        && p() && e('/testsuite-browse-%s.html');                          //当前页面是testsuite-view，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('design',      'view'))        && p() && e('/design-browse-%s.html');                             //当前页面是design-view，切换1.5级导航时跳转链接。
