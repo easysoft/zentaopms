@@ -118,6 +118,7 @@ detailBody
     history(),
     detailSide
     (
+        set::isForm(true),
         tableData
         (
             setClass('mt-5'),
