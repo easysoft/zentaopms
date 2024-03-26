@@ -319,11 +319,11 @@ class storyTao extends storyModel
             foreach($relationGroups[$story->id] as $SRID => $SRStory)
             {
                 if(empty($SRStory)) continue;
-                if(!isset($projectIDList[$SRID])) continue;
+                if(!empty($projectID) && !isset($projectIDList[$SRID])) continue;
 
                 $children = clone $SRStory;
                 $children->parent  = $story->id;
-                $children->project = $projectIDList[$SRID];
+                $children->project = isset($projectIDList[$SRID]) ? $projectIDList[$SRID] : 0;
                 $story->children[$SRID] = $children;
             }
             $story->linkStories = implode(',', array_column($story->children, 'title'));
