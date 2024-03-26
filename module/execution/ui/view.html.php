@@ -18,27 +18,6 @@ $chartURL = createLink('execution', $isKanban ? 'ajaxGetCFD' : 'ajaxGetBurn', "e
 
 /* Construct suitable actions for the current execution. */
 $execution->rawID = $execution->id;
-$operateMenus = array();
-foreach($config->execution->view->operateList['main'] as $operate)
-{
-    if(!common::hasPriv('execution', $operate)) continue;
-    if(!$this->execution->isClickable($execution, $operate)) continue;
-
-    $operateMenus[] = $config->execution->actionList[$operate];
-}
-
-/* Construct common actions for execution. */
-$commonActions = array();
-foreach($config->execution->view->operateList['common'] as $operate)
-{
-    if(!common::hasPriv('execution', $operate)) continue;
-
-    $settings = $config->execution->actionList[$operate];
-    $settings['text'] = '';
-    if($operate == 'edit') unset($settings['data-toggle']);
-
-    $commonActions[] = $settings;
-}
 
 $programDom = null;
 if($config->systemMode == 'ALM' && isset($execution->projectInfo->grade) && $execution->projectInfo->grade > 1)
@@ -726,14 +705,15 @@ div
     )
 );
 
+$actions = $this->loadModel('common')->buildOperateMenu($execution);
 div
 (
     setClass('center w-2/3'),
     floatToolbar
     (
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-        set::main($operateMenus),
-        set::suffix($commonActions),
+        set::main($actions['mainActions']),
+        set::suffix($actions['suffixActions']),
         set::object($execution)
     )
 );
