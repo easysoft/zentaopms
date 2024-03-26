@@ -60,6 +60,7 @@ $lang->metric->week          = 'Week';
 $lang->metric->day           = 'Date';
 $lang->metric->nodate        = 'Collection date';
 $lang->metric->implementType = 'Implement Type';
+$lang->metric->recalculate   = 'Recalculate All Metrics';
 
 $lang->metric->yearFormat      = 'Year %s';
 $lang->metric->weekFormat      = 'Week %s';
@@ -143,9 +144,10 @@ $lang->metric->noDataAfterCollect  = "No data is available after the time for da
 $lang->metric->legendBasicInfo  = 'Basic Information';
 $lang->metric->legendCreateInfo = 'Creation and Editing Information';
 
-$lang->metric->confirmDelete = "Are you sure you want to delete?";
-$lang->metric->confirmDelist = "Are you sure you want to delist?";
-$lang->metric->notExist      = "The measure does not exist";
+$lang->metric->confirmDelete      = "Are you sure you want to delete?";
+$lang->metric->confirmDelist      = "Are you sure you want to delist?";
+$lang->metric->confirmRecalculate = "Recalculation results may overwrite existing metric records. Do you want to continue?";
+$lang->metric->notExist           = "The measure does not exist";
 
 $lang->metric->browse          = 'Browse Metrics';
 $lang->metric->browseAction    = 'Metric List';
@@ -376,6 +378,9 @@ $lang->metric->tips->view               = 'View';
 $lang->metric->tips->click2InsertData   = "Click <span class='ke-icon-holder'></span> to insert a metric or report";
 $lang->metric->tips->noticeUnchangeable = "[Scope], [Object], [Purpose], [Date Type], and [Code] will affect the acquisition of measurement values, cannot be changed after creation.";
 $lang->metric->tips->noticeCode         = "The code must be a combination of English letters, numbers or underscores.";
+$lang->metric->tips->noticeRecalculate  = "Updating data..., please do not manipulate metric data.";
+
+$lang->metric->recalculateLog = "%s has been calculated";
 
 $lang->metric->param = new stdclass();
 $lang->metric->param->varName      = 'Variable Name';

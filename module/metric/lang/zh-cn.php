@@ -60,6 +60,7 @@ $lang->metric->week          = '周';
 $lang->metric->day           = '日期';
 $lang->metric->nodate        = '采集日期';
 $lang->metric->implementType = '实现方式';
+$lang->metric->recalculate   = '重算全部度量项';
 
 $lang->metric->yearFormat     = '%s年';
 $lang->metric->weekFormat     = '%s周';
@@ -143,9 +144,10 @@ $lang->metric->noDataAfterCollect  = "度量范围内未产生数据，暂无数
 $lang->metric->legendBasicInfo  = '基本信息';
 $lang->metric->legendCreateInfo = '创建编辑信息';
 
-$lang->metric->confirmDelete = "确认要删除吗？";
-$lang->metric->confirmDelist = "确认要下架吗？";
-$lang->metric->notExist      = "度量项不存在";
+$lang->metric->confirmDelete      = "确认要删除吗？";
+$lang->metric->confirmDelist      = "确认要下架吗？";
+$lang->metric->confirmRecalculate = "重算结果可能会覆盖已存在的度量值，是否继续？";
+$lang->metric->notExist           = "度量项不存在";
 
 $lang->metric->browse          = '浏览度量项';
 $lang->metric->browseAction    = '度量项列表';
@@ -376,6 +378,9 @@ $lang->metric->tips->view               = '预览';
 $lang->metric->tips->click2InsertData   = "点击 <span class='ke-icon-holder'></span> 来插入度量指标或报表";
 $lang->metric->tips->noticeUnchangeable = '[范围]、[对象]、[目的]、[时间属性]、[代号]会影响度量值的获取，创建后不可变更。';
 $lang->metric->tips->noticeCode         = "代号必须是英文字母、数字或下划线的组合。";
+$lang->metric->tips->noticeRecalculate  = "更新数据中，请勿操作度量数据。";
+
+$lang->metric->recalculateLog = "%s计算完成";
 
 $lang->metric->param = new stdclass();
 $lang->metric->param->varName      = '变量名';
