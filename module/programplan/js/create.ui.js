@@ -3,6 +3,15 @@ window.onRenderRow = function(row, rowIdx, data)
     if(row.children('[data-name=milestone]').find('input[type=radio]:checked').length == 0) row.children('[data-name=milestone]').find('input[type=radio]').eq(1).prop('checked', true);
     row.children('[data-name=type]').find('[name^=type]').picker({disabled: true});
 
+    if(project.model == 'ipd')
+    {
+        row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $attributePicker = info[0];
+            $attributePicker.render({disabled: true});
+        });
+    }
+
     if(data != undefined)
     {
         if(data.hasOwnProperty('type'))

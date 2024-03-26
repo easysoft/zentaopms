@@ -107,6 +107,11 @@ class programplanZen extends programplan
         /* Compute fields for create view. */
         list($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields) = $this->computeFieldsCreateView($viewData->executionType);
 
+        if($viewData->project->model == 'ipd')
+        {
+            $this->config->programplan->form->create['attribute']['options'] = $this->lang->stage->ipdTypeList;
+        }
+
         $this->view->title              = $this->lang->programplan->create . $this->lang->colon . $viewData->project->name;
         $this->view->productList        = $viewData->productList;
         $this->view->project            = $viewData->project;
