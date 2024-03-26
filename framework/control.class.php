@@ -539,7 +539,7 @@ class control extends baseControl
         if($this->config->edition == 'open') return '';
 
         $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
-        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
+        $methodName = $methodName ? $methodName : $this->app->getMethodName();
 
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return '';
