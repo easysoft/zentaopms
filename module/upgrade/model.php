@@ -8591,19 +8591,16 @@ class upgradeModel extends model
             ->where('buildin')->eq(0)
             ->andWhere('type')->notin('date, datetime, text')
             ->andWhere('field')->notin('id, subStatus, deleted')
-            ->andWhere('default', true)->eq(0)
-            ->orWhere('default')->eq('')
-            ->markRight(1)
             ->fetchAll();
         if(!$nullFields && !$notNullFields) return true;
 
-        $sql = '';
+        $sqls = array();
         foreach($nullFields as $field)
         {
             if(!isset($tables[$field->module])) continue;
 
             $table = $tables[$field->module];
-            $sql  .= "ALTER TABLE `$table` MODIFY `$field->field` $field->type NULL;";
+            $sqls[] = "ALTER TABLE `$table` MODIFY `$field->field` $field->type NULL;";
         }
 
         foreach($notNullFields as $field)
@@ -8624,7 +8621,7 @@ class upgradeModel extends model
                 $field->type .= "($field->length)";
             }
 
-            $sql .= "ALTER TABLE `$table` MODIFY `$field->field` $field->type NOT NULL";
+            $sql = "ALTER TABLE `$table` MODIFY `$field->field` $field->type NOT NULL";
             if($field->default)
             {
                 $sql .= ' DEFAULT ' . $this->dbh->quote($field->default) . ';';
@@ -8633,18 +8630,22 @@ class upgradeModel extends model
             {
                 $sql .= $isNumber ? ' DEFAULT 0;' : " DEFAULT '';";
             }
+            $sqls[] = $sql;
         }
 
-        if(!$sql) return true;
+        if(!$sqls) return true;
 
         try
         {
-            $this->saveLogs($sql);
-            $this->dbh->query($sql);
+            foreach($sqls as $sql)
+            {
+                $this->saveLogs($sql);
+                $this->dbh->query($sql);
+            }
         }
         catch(PDOException $exception)
         {
-            static::$errors[] = $e->getMessage();
+            static::$errors[] = $exception->getMessage();
         }
         return true;
     }
