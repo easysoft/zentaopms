@@ -276,7 +276,7 @@ class dataviewModel extends model
     public function getTypeOptions(string $objectName): array
     {
         $schema  = $this->includeTable($objectName);
-        if(empty($schema)) return array();
+        if(is_null($schema)) return array();
 
         $options = array();
         foreach($schema->fields as $key => $field)
@@ -317,9 +317,9 @@ class dataviewModel extends model
     *
     * @param  string $table
     * @access public
-    * @return object
+    * @return object|null
     */
-    public function includeTable(string $table): object
+    public function includeTable(string $table): object|null
     {
         $path = __DIR__ . DS . 'table' . DS . "$table.php";
         if(file_exists($path))
@@ -334,6 +334,8 @@ class dataviewModel extends model
             include $path;
             return $schema;
         }
+
+        return null;
     }
 
     /**
