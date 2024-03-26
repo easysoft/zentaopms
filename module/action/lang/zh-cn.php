@@ -44,6 +44,7 @@ $lang->action->editComment   = '修改备注';
 $lang->action->create        = '添加备注';
 $lang->action->comment       = '备注';
 $lang->action->actioncomment = '备注';
+$lang->action->lastComment   = '备注';
 $lang->action->byQuery       = '搜索';
 
 $lang->action->trashAction    = '回收站列表';
