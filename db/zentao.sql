@@ -1818,6 +1818,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `submitedBy` varchar(30) NOT NULL DEFAULT '',
   `roadmap` VARCHAR(255)  NOT NULL  DEFAULT '',
   `URChanged` enum('0','1') NOT NULL DEFAULT '0',
+  `unlinkReason` ENUM('', 'omit', 'other') NOT NULL DEFAULT '',
   `retractedReason` enum('', 'omit', 'other') NOT NULL DEFAULT '',
   `retractedBy` varchar(30) NOT NULL DEFAULT '',
   `retractedDate` datetime,
