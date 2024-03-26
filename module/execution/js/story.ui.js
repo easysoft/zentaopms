@@ -53,22 +53,22 @@ window.setStatistics = function(element, checkedIdList)
 
     let checkedEstimate = 0;
     let checkedCase     = 0;
+    let SRTotal         = 0;
+    let total           = 0;
 
     checkedIdList.forEach((rowID) => {
-        const task = element.getRowInfo(rowID);
-        if(task)
+        const story  = element.getRowInfo(rowID);
+        if(storyType == 'requirement' && story.data.type == 'story') SRTotal += 1;
+        if(storyType == story.data.type) total += 1;
+        if(story)
         {
-            checkedEstimate += parseFloat(task.data.estimate);
+            checkedEstimate += parseFloat(story.data.estimate);
             if(cases[rowID]) checkedCase += 1;
         }
     })
 
     const rate = Math.round(checkedCase / checkedTotal * 10000) / 100 + '' + '%';
-    return {
-        html: checkedSummary.replace('%total%', checkedTotal)
-            .replace('%estimate%', checkedEstimate)
-            .replace('%rate%', rate)
-    };
+    return {html: checkedSummary.replace('%total%', total).replace('%estimate%', checkedEstimate).replace('%rate%', rate).replace('%SRTotal%', SRTotal)};
 }
 
 window.renderStoryCell = function(result, info)
