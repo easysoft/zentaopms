@@ -19,7 +19,7 @@ cid=1
 - 创建私人空间
  - 属性name @测试创建私人看板
  - 属性space @2
- - 属性owner @po16
+ - 属性owner @admin
  - 属性whitelist @user4
 - 创建公共空间
  - 属性name @测试创建公共看板
@@ -91,7 +91,7 @@ su('admin');
 $kanban = new kanbanTest();
 
 r($kanban->createTest($kanban1)) && p('name,space,owner,whitelist') && e('测试创建协作看板,1,po15,~~');     // 创建协同空间
-r($kanban->createTest($kanban2)) && p('name,space,owner,whitelist') && e('测试创建私人看板,2,po16,user4');  // 创建私人空间
+r($kanban->createTest($kanban2)) && p('name,space,owner,whitelist') && e('测试创建私人看板,2,admin,user4'); // 创建私人空间
 r($kanban->createTest($kanban3)) && p('name,space,owner,whitelist') && e('测试创建公共看板,3,po17,~~');     // 创建公共空间
 r($kanban->createTest($kanban4)) && p('name:0')                     && e('『看板名称』不能为空。');         // 创建没有名字的公共空间
 r($kanban->createTest($kanban5)) && p('space:0')                    && e('『所属空间』不能为空。');         // 创建没有空间公共空间
