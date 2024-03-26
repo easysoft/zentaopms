@@ -311,8 +311,6 @@ div
     floatToolbar
     (
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
-        !empty($actionMenuList['main']) ? set::main($actionMenuList['main']) : null,
-        !empty($actionMenuList['suffix']) ? set::suffix($actionMenuList['suffix']) : null,
         !empty($actionMenuList['mainActions']) ? set::main($actionMenuList['mainActions']) : null,
         !empty($actionMenuList['suffixActions']) ? set::suffix($actionMenuList['suffixActions']) : null,
         set::object($product)
