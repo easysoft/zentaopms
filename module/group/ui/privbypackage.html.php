@@ -274,7 +274,7 @@ else
             $mainNavItems,
             li
             (
-                setClass('nav-item'),
+                setClass('nav-item mx-2'),
                 a
                 (
                     setClass($nav == 'general' ? 'active' : ''),
@@ -286,9 +286,9 @@ else
             (
                 setID('versionSelect'),
                 set::name('version'),
-                set::items($this->lang->group->versions),
+                set::items($lang->group->versions),
                 set::value($version),
-                set::placeholder($this->lang->group->versions['']),
+                set::placeholder($lang->group->versions['']),
                 on::change('showPriv')
             )
         )
