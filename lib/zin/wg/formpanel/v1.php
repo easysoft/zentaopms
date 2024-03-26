@@ -39,6 +39,7 @@ class formPanel extends panel
         'formClass?: string',                          // 表单样式。
         'method?: "get"|"post"="post"',                // 表单提交方式。
         'enctype?: string',                            // 表单提交类型。
+        'tagName?: string="form"',                     // 表单标签名。
         'url?: string',                                // 表单提交地址。
         'actions?: array',                             // 表单操作按钮，如果不指定则使用默认行为的 “保存” 和 “返回” 按钮。
         'actionsClass?: string="form-group no-label"', // 表单操作按钮栏类名。
