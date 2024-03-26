@@ -57,6 +57,30 @@ class fileModel extends model
     }
 
     /**
+     * Delete files by object.
+     *
+     * @param  string    $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return bool
+     */
+    public function deleteByObject($objectType, $objectID)
+    {
+        $files = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->in($objectID)
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('id');
+
+        foreach($files as $file)
+        {
+            $this->dao->update(TABLE_FILE)->set('deleted')->eq(1)->where('id')->eq($file->id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
      * Get info of a file.
      *
      * @param  int    $fileID
