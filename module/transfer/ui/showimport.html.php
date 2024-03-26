@@ -72,6 +72,7 @@ else
         set::items($fields),
         set::data(array_values($datas)),
         set::actions(array()),
+        set::showExtra(false),
         div
         (
             setClass('toolbar form-actions form-group no-label'),
@@ -107,5 +108,6 @@ else
         $('#importNoticeModal [name=insert]').val(type == 'insert' ? 1 : 0);
     };
     JAVASCRIPT);
+    css('.form-batch-container .form-batch-control .check-list-inline {padding-top: 0;}');
 }
 

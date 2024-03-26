@@ -209,7 +209,7 @@ class transferModel extends model
 
         foreach($workflowFields as $field)
         {
-            if(!in_array($field->control, array('select', 'radio', 'multi-select'))) continue;
+            if(!in_array($field->control, array('select', 'radio', 'multi-select', 'checkbox'))) continue;
             if(!isset($fields[$field->field]) and !array_search($field->field, $fields)) continue;
             if(empty($field->options)) continue;
 
