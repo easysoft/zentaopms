@@ -71,13 +71,13 @@ dtable
     set::cols($cols),
     set::data($allStories),
     set::orderBy($orderBy),
-    set::sortLink(createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}")),
+    set::sortLink(createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&extra={$extra}&storyType={$storyType}")),
     set::checkable(true),
     set::onRenderCell(jsRaw('window.onRenderLinkStoryCell')),
     set::showToolbarOnChecked(false),
     set::footToolbar($footToolbar),
     set::footPager(usePager(array(
-        'linkCreator' => helper::createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recPerPage={recPerPage}&page={page}&extra=$extra") . "#app={$app->tab}"
+        'linkCreator' => helper::createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recPerPage={recPerPage}&page={page}&extra=$extra&storyType={$storyType}") . "#app={$app->tab}"
     )))
 );
 

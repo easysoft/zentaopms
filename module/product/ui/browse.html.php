@@ -146,7 +146,7 @@ $fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProdu
 
     $canLinkStory     = common::hasPriv('projectstory', 'linkStory');
     $canlinkPlanStory = !empty($product) && common::hasPriv('projectstory', 'importPlanStories') && $storyType == 'story';
-    $linkStoryUrl     = $this->createLink('projectstory', 'linkStory', "project=$project->id&browseType=&param=0&recTotal=0&recPerPage=50&pageID=1&storyType=$storyType");
+    $linkStoryUrl     = $this->createLink('projectstory', 'linkStory', "project=$project->id&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=&storyType=$storyType");
     $linkItem         = array('text' => $lang->execution->linkStory, 'url' => $linkStoryUrl);
     $linkPlanItem     = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
     if($canLinkStory && $canlinkPlanStory)
