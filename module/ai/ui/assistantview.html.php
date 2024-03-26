@@ -8,7 +8,7 @@ jsVar('confirmWithdrawTip', $lang->ai->assistants->confirmWithdrawTip);
 
 detailHeader
 (
-    set::backUrl($this->createLink('ai', 'models')),
+    set::backUrl($this->createLink('ai', 'assistants')),
     to::title
     (
         entityLabel
