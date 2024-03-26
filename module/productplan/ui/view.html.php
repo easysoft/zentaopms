@@ -160,10 +160,14 @@ $fnGetChildrenPlans = function($childrenPlans)
 };
 
 $actions = $this->loadModel('common')->buildOperateMenu($plan);
-foreach($actions['mainActions'] as $key => $action)
+foreach($actions as $actionType => $typeActions)
 {
-    $actions['mainActions'][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
-    $actions['mainActions'][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
+    foreach($typeActions as $key => $action)
+    {
+        $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
+        $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
+        $actions[$actionType][$key]['url'] = str_replace('{id}', (string)$plan->id, $action['url']);
+    }
 }
 detailHeader
 (
@@ -175,7 +179,12 @@ detailHeader
         span(setClass('label circle primary'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
         $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null
     ),
-    (!$plan->deleted && $actions) ? to::suffix(btnGroup(set::items($actions['mainActions']))) : null
+    !$plan->deleted && $actions ? to::suffix
+    (
+        btnGroup(set::items($actions['mainActions'])),
+        !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? div(setClass('divider')): null,
+        btnGroup(set::items($actions['suffixActions']))
+    ) : null
 );
 
 detailBody
