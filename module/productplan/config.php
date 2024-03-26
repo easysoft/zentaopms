@@ -68,8 +68,8 @@ $config->productplan->actionList['linkBug']['text'] = $lang->productplan->linkBu
 if($app->rawModule) $config->productplan->actionList['linkBug']['url']  = helper::createLink($app->rawModule, 'view', 'planID={id}&type=bug&orderBy=id_desc&link=true');
 
 $config->productplan->actionList['edit']['icon'] = 'edit';
-$config->productplan->actionList['edit']['hint'] = $lang->edit;
-$config->productplan->actionList['edit']['text'] = $lang->edit;
+$config->productplan->actionList['edit']['hint'] = $lang->productplan->edit;
+$config->productplan->actionList['edit']['text'] = $lang->productplan->edit;
 if($app->rawModule) $config->productplan->actionList['edit']['url']  = helper::createLink($app->rawModule, 'edit', 'planID={id}');
 
 $config->productplan->actionList['create']['icon'] = 'split';
@@ -78,8 +78,8 @@ $config->productplan->actionList['create']['text'] = $lang->productplan->createC
 if($app->rawModule) $config->productplan->actionList['create']['url']  = helper::createLink($app->rawModule, 'create', 'product={product}&branch={branch}&parent={id}');
 
 $config->productplan->actionList['delete']['icon']         = 'trash';
-$config->productplan->actionList['delete']['hint']         = $lang->delete;
-$config->productplan->actionList['delete']['text']         = $lang->delete;
+$config->productplan->actionList['delete']['hint']         = $lang->productplan->delete;
+$config->productplan->actionList['delete']['text']         = $lang->productplan->delete;
 $config->productplan->actionList['delete']['url']          = helper::createLink('productplan', 'delete', 'planID={id}');
 $config->productplan->actionList['delete']['data-confirm'] = array('message' => $lang->productplan->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->productplan->actionList['delete']['innerClass']   = 'ajax-submit';
