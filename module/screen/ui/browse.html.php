@@ -25,27 +25,46 @@ else
 {
     $items   = array();
     $canView = hasPriv('screen', 'view');
+
     foreach($screens as $screenID => $screen)
     {
         if($screenID == 3 && !hasPriv('screen', 'annualData')) continue;
 
-        $class   = empty($screen->cover) ? "image_{$screen->status}" : '';
-        $src     = empty($screen->cover) ? "static/images/screen_{$screen->status}.png" : $screen->cover;
         $content = div
         (
             setClass('border border-strong'),
             div
             (
-                setClass("h-48 {$class}"),
-                img(setClass('h-full object-cover object-top'), set(array('src' => $src, 'width' => '100%')))
+                setClass("h-48 image_{$screen->status}"),
+                img(setClass('h-full object-cover object-top'), set(array('src' => $screen->src, 'width' => '100%')))
             ),
             div
             (
-                setClass('px-4 py-3 h-20'),
+                setClass('px-4 py-3 h-20 relative'),
                 setData(array('builtin' => $screen->builtin, 'status' => $screen->status)),
                 div(setClass('text-black text-md overflow-hidden'), set::title($screen->name), $screen->name),
-                div(setClass('text-gray text-sm overflow-hidden'), set::title($screen->name), $screen->desc ?: $lang->screen->noDesc)
-            )
+                div(setClass('text-gray text-sm overflow-hidden'), set::title($screen->name), $screen->desc ?: $lang->screen->noDesc),
+                !empty($screen->actions) ? div
+                (
+                    setClass('absolute right-0 top-0'),
+                    dropdown
+                    (
+                        btn
+                        (
+                            set::type('ghost'),
+                            set::icon('ellipsis-v'),
+                            set::caret(false),
+                            on::click()->prevent()->stop()
+                        ),
+                        set::items($screen->actions),
+                        set::flip(true),
+                        set::placement('bottom-center'),
+                        set::strategy('absolute'),
+                        set::hasIcons(false),
+                        set::trigger('hover'),
+                    )
+                ) : null
+            ),
         );
 
         $items[] = div
