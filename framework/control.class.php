@@ -545,16 +545,16 @@ class control extends baseControl
         if(!$flow) return '';
 
         $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
-        $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
+        $fieldList = $this->workflowaction->getFields($flow->module, !empty($action->action) ? $action->action: '');
 
         $html = '';
         if(!empty($flow->css))   $html .= "<style>$flow->css</style>";
         if(!empty($action->css)) $html .= "<style>$action->css</style>";
 
         $html .= $this->loadModel('flow')->getFormulaScript($moduleName, $action, $fieldList);
-        if($action->linkages)   $html .= $this->flow->getLinkageScript($action, $fieldList);
-        if(!empty($flow->js))   $html .= "<script>$flow->js</script>";
-        if(!empty($action->js)) $html .= "<script>$action->js</script>";
+        if(!empty($action->linkages)) $html .= $this->flow->getLinkageScript($action, $fieldList);
+        if(!empty($flow->js))         $html .= "<script>$flow->js</script>";
+        if(!empty($action->js))       $html .= "<script>$action->js</script>";
 
         return $html;
     }
