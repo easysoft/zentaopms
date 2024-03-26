@@ -36,14 +36,15 @@ $lang->action->new           = 'New';
 $lang->action->to            = 'To';
 $lang->action->superReviewer = 'Super Reviewer';
 
-$lang->action->trash       = 'Corbeille';
-$lang->action->undelete    = 'Restaurer';
-$lang->action->hideOne     = 'Masquer';
-$lang->action->hideAll     = 'Masquer Tout';
-$lang->action->editComment = 'Editer commentaire';
-$lang->action->create      = 'Ajouter commentaire';
-$lang->action->comment     = 'Commentaire';
-$lang->action->byQuery     = 'Search';
+$lang->action->trash         = 'Corbeille';
+$lang->action->undelete      = 'Restaurer';
+$lang->action->hideOne       = 'Masquer';
+$lang->action->hideAll       = 'Masquer Tout';
+$lang->action->editComment   = 'Editer commentaire';
+$lang->action->create        = 'Ajouter commentaire';
+$lang->action->comment       = 'Commentaire';
+$lang->action->actioncomment = 'Commentaire';
+$lang->action->byQuery       = 'Search';
 
 $lang->action->trashAction    = 'Recycle List';
 $lang->action->undeleteAction = 'Reset Data';

@@ -36,14 +36,15 @@ $lang->action->new           = '新值为';
 $lang->action->to            = '到';
 $lang->action->superReviewer = '超级评审人';
 
-$lang->action->trash       = '回收站';
-$lang->action->undelete    = '还原';
-$lang->action->hideOne     = '隐藏';
-$lang->action->hideAll     = '全部隐藏';
-$lang->action->editComment = '修改备注';
-$lang->action->create      = '添加备注';
-$lang->action->comment     = '备注';
-$lang->action->byQuery     = '搜索';
+$lang->action->trash         = '回收站';
+$lang->action->undelete      = '还原';
+$lang->action->hideOne       = '隐藏';
+$lang->action->hideAll       = '全部隐藏';
+$lang->action->editComment   = '修改备注';
+$lang->action->create        = '添加备注';
+$lang->action->comment       = '备注';
+$lang->action->actioncomment = '备注';
+$lang->action->byQuery       = '搜索';
 
 $lang->action->trashAction    = '回收站列表';
 $lang->action->undeleteAction = '还原数据';
