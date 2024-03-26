@@ -3560,7 +3560,7 @@ class kanbanModel extends model
                 if($object->parent > 0)
                 {
                     $parent = $this->getColumnByID($object->parent);
-                    if(!empty($parent) && $parent->deleted == '1' || $parent->archived == '1') return false;
+                    if(!empty($parent) && ($parent->deleted == '1' || $parent->archived == '1')) return false;
                 }
                 return $object->archived == '1';
             case 'archivecolumn' :
