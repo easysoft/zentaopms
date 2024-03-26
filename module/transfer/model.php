@@ -142,7 +142,8 @@ class transferModel extends model
         $this->mergeConfig($module);
         $this->transferConfig->sysDataList = $this->initSysDataFields();
         $transferFieldList = $this->transferConfig->fieldList; //生成一个完整的fieldList结构。
-        if(is_array($this->moduleConfig->dateFields)) $this->moduleConfig->dateFields = implode(',', $this->moduleConfig->dateFields);
+        if(is_string($this->moduleConfig->dateFields)) $this->moduleConfig->dateFields = explode(',', $this->moduleConfig->dateFields);
+        if(is_string($this->moduleConfig->datetimeFields)) $this->moduleConfig->datetimeFields = explode(',', $this->moduleConfig->datetimeFields);
 
         $fieldList = array();
         /* build module fieldList. */
@@ -168,8 +169,8 @@ class transferModel extends model
             }
 
 
-            if(strpos(",{$this->transferConfig->dateFields},", ",{$field},") !== false) $moduleFieldList['control'] = 'datePicker';
-            if(strpos(",{$this->transferConfig->datetimeFields},", ",{$field},") !== false) $moduleFieldList['control'] = 'datetimePicker';
+            if(in_array($field, $this->moduleConfig->dateFields)) $moduleFieldList['control'] = 'datePicker';
+            if(in_array($field, $this->moduleConfig->datetimeFields)) $moduleFieldList['control'] = 'datetimePicker';
             $moduleFieldList['multiple'] = $moduleFieldList['control'] == 'multiple';
             if($moduleFieldList['control'] == 'select' || $moduleFieldList['control'] == 'multiple') $moduleFieldList['control'] = 'picker';
 
@@ -683,7 +684,9 @@ class transferModel extends model
     {
         $this->commonActions($module);
         $fieldList = $this->initFieldList($module, array_keys($fields), false);
-        if(is_array($this->moduleConfig->dateFields)) $this->moduleConfig->dateFields = implode(',', $this->moduleConfig->dateFields);
+        if(is_string($this->moduleConfig->dateFields))     $this->moduleConfig->dateFields     = explode(',', $this->moduleConfig->dateFields);
+        if(is_string($this->moduleConfig->datetimeFields)) $this->moduleConfig->datetimeFields = explode(',', $this->moduleConfig->datetimeFields);
+        if(is_string($this->transferConfig->dateFields))   $this->transferConfig->dateFields   = explode(',', $this->transferConfig->dateFields);
 
         foreach($rows as $key => $data)
         {
@@ -692,8 +695,8 @@ class transferModel extends model
             foreach($data as $field => $cellValue)
             {
                 if(empty($cellValue) || is_array($cellValue)) continue;
-                if(strpos($this->transferConfig->dateFields, $field) !== false and helper::isZeroDate($cellValue)) $rows[$key]->$field = ''; // 如果是日期,并且为 0000-00-00,则转换为空
-                if(strpos($this->moduleConfig->dateFields, $field) !== false or strpos($this->moduleConfig->datetimeFields, $field) !== false) $rows[$key]->$field = $this->loadModel('common')->formatDate((string)$cellValue); // 如果是时间类型字段,则转换为时间
+                if(in_array($field, $this->transferConfig->dateFields) and helper::isZeroDate($cellValue)) $rows[$key]->$field = ''; // 如果是日期,并且为 0000-00-00,则转换为空
+                if(in_array($field, $this->moduleConfig->dateFields) or in_array($field, $this->moduleConfig->datetimeFields)) $rows[$key]->$field = $this->loadModel('common')->formatDate((string)$cellValue); // 如果是时间类型字段,则转换为时间
 
                 /* 获取字段的控件类型。*/
                 /* Get field control type. */
