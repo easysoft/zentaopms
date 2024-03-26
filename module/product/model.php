@@ -2006,9 +2006,10 @@ class productModel extends model
         if($module == 'ticket')      return helper::createLink('ticket',      $method,  'productID=%s');
         if($module == 'testtask')    return helper::createLink('testtask',    'browse', "productID=%s&branch={$branchID}");
 
+        if(in_array($module, array('productplan', 'release', 'roadmap')) && $method != 'create') return helper::createLink($module, 'browse', "productID=%s{$branchParam}");
+
         if($module == 'api'         || $module == 'doc')     return helper::createLink('doc',   'productSpace', "objectID=%s");
         if($module == 'productplan' || $module == 'release') return helper::createLink($module, $method,        "productID=%s{$branchParam}");
-        if(in_array($module, array('productplan', 'release', 'roadmap')) && $method != 'create') return helper::createLink($module, 'browse', "productID=%s{$branchParam}");
 
         if($module == 'testcase' && in_array($method, array('groupcase', 'zerocase')) && $this->app->tab == 'project')
         {
