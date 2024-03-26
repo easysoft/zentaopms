@@ -229,6 +229,7 @@ $config->execution->actionList['putoff']['url']         = helper::createLink('ex
 $config->execution->actionList['putoff']['data-toggle'] = 'modal';
 $config->execution->actionList['putoff']['data-size']   = 'lg';
 
-$config->execution->view = new stdclass();
-$config->execution->view->operateList['main']   = array('putoff', 'start', 'activate', 'suspend', 'close');
-$config->execution->view->operateList['common'] = array('edit', 'delete');
+$config->execution->actions = new stdclass();
+$config->execution->actions->view = array();
+$config->execution->actions->view['mainActions']   = array('putoff', 'start', 'activate', 'suspend', 'close');
+$config->execution->actions->view['suffixActions'] = array('edit', 'delete');
