@@ -113,8 +113,8 @@ $config->story->actionList['activate']['url']         = array('module' => 'story
 $config->story->actionList['activate']['data-toggle'] = 'modal';
 
 $config->story->actionList['importToLib']['icon']        = 'assets';
-$config->story->actionList['importToLib']['text']        = $lang->story->importToLib;
-$config->story->actionList['importToLib']['hint']        = $lang->story->importToLib;
+if(isset($lang->story->importToLib)) $config->story->actionList['importToLib']['text']        = $lang->story->importToLib;
+if(isset($lang->story->importToLib)) $config->story->actionList['importToLib']['hint']        = $lang->story->importToLib;
 $config->story->actionList['importToLib']['url']         = '#importToLib';
 $config->story->actionList['importToLib']['data-toggle'] = 'modal';
 
