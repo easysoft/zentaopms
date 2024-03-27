@@ -43,8 +43,9 @@ class fileZen extends file
      */
     protected function buildDownloadTable(array $fields, array $rows, string $kind, array $rowspans = array(), array $colspans = array()): string
     {
-        $rows = array_values($rows);
-        $host = common::getSysURL();
+        $rows      = array_values($rows);
+        $host      = common::getSysURL();
+        $fileModel = $this->file;
 
         $output  = "<table><tr>";
         $output .= implode("\n", array_map(function($fieldLabel){return "<th><nobr>$fieldLabel</nobr></th>";}, $fields));
@@ -52,8 +53,8 @@ class fileZen extends file
 
         foreach($rows as $i => $row)
         {
-            if(in_array($kind, array('story', 'bug', 'testcase'))) $row->title = html::a($host . $this->createLink($kind, 'view', "{$kind}ID=$row->id"), $row->title);
-            if($kind == 'task') $row->name = html::a($host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name);
+            if(in_array($kind, array('story', 'bug', 'testcase'))) $row->title = html::a($host . $this->createLink($kind, 'view', "{$kind}ID=$row->id"), $row->title, '_blank');
+            if($kind == 'task') $row->name = html::a($host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name, '_blank');
 
             $output    .= "<tr valign='top'>\n";
             $col        = 0;
@@ -80,7 +81,14 @@ class fileZen extends file
                     $endColspan = $col + $colspans[$i]['cols'][$fieldName];
                 }
 
-                if($fieldValue && is_string($fieldValue)) $fieldValue = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $host . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $fieldValue);
+                if($fieldValue && is_string($fieldValue))
+                {
+                    $fieldValue = preg_replace_callback('/ src="{([0-9]+)(\.(\w+))?}" /', function($matches) use($host, $fileModel)
+                    {
+                        $file   = $fileModel->getById((int)$matches[1]);
+                        return $file ? ' src="' . $host . $file->webPath . '" ' : $matches[0];
+                    }, $fieldValue);
+                }
                 $output .= "<td $rowspan $colspan><nobr>$fieldValue</nobr></td>\n";
             }
             $output .= "</tr>\n";

@@ -32,7 +32,7 @@ $hostID = array
 );
 
 $projectID = 'gitea/unittest';
-$mrID      = 28;
+$mrID      = 3;
 
 r($mrModel->apiGetDiffs($hostID['error'], $projectID, $mrID)) && p() && e('0'); // 不存在的主机
 r($mrModel->apiGetDiffs($hostID['gitlab'], $projectID, $mrID)) && p() && e('0'); // GitLab 服务器

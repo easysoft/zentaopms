@@ -9,12 +9,13 @@ zdTable('project')->config('project')->gen(1, false ,false);
 zdTable('project')->config('execution_burn')->gen(30, false, false);
 
 /**
-title=测试 screenModel->getBurnData();
-cid=1
-pid=1
 
-测试生成的数据条数         >> 16
-测试生成的数据是否正确     >> 项目集1--项目集4
+title=测试 screenModel->getBurnData();
+timeout=0
+cid=1
+
+- 测试生成的数据条数 @16
+- 测试生成的数据是否正确第104条的name属性 @项目集1--项目集4
 
 */
 

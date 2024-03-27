@@ -127,11 +127,11 @@ class linkedStoryList extends storyList
 
             $btn = new btn
             (
-                set::url(createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")),
+                set::url('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type"),
                 set::icon('plus'),
                 set::size('sm'),
                 set::type('secondary'),
-                setClass('mt-2'),
+                setClass('my-2'),
                 setData(array('toggle' => 'modal', 'size' => 'lg')),
                 setID('linkButton'),
                 is_array($newLinkBtn) ? set($newLinkBtn) : null,

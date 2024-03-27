@@ -29,6 +29,8 @@ foreach($config->build->defaultFields['linkBug'] as $field)
     if($field != 'resolvedBy') $cols[$field]['sort'] = true;
     if(!empty($cols[$field]['sortType'])) unset($cols[$field]['sortType']);
 }
+$cols['title']['data-toggle'] = 'modal';
+$cols['title']['data-size']   = 'lg';
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 
 searchForm

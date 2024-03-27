@@ -4,18 +4,21 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/screen.class.php';
 
 /**
-title=测试 screenModel->buildChart();
-cid=1
-pid=1
 
-当type为line的时候，判断是否生成了默认属性       >> 1
-当type为table的时候，判断是否生成了默认属性      >> 1
-当type为bar的时候，判断是否生成了默认属性        >> 1
-当type为pie的时候，判断是否生成了默认属性        >> 1
-当type为piecircle的时候，判断是否生成了默认属性  >> 1
-当type为waterpolo的时候，判断是否生成了默认属性  >> 1
-当type为radar的时候，判断是否生成了默认属性      >> 1
-当type为funnel的时候，判断是否生成了默认属性     >> 1
+title=测试 screenModel->buildChart();
+timeout=0
+cid=1
+
+- 当type为line的时候，判断是否生成了默认属性 @1
+- 当type为table的时候，判断是否生成了默认属性 @1
+- 当type为bar的时候，判断是否生成了默认属性 @1
+- 当type为pie的时候，判断是否生成了默认属性 @1
+- 当type为piecircle的时候，判断是否生成了默认属性 @1
+- 当type为waterpolo的时候，判断是否生成了默认属性 @1
+- 当type为radar的时候，判断是否生成了默认属性 @1
+- 当type为funnel的时候，判断是否生成了默认属性 @1
+- 当type为xlabel的时候，判断是否生成了默认属性 @0
+
 */
 
 $screen = new screenTest();

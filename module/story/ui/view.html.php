@@ -17,9 +17,6 @@ include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 $isInModal     = isInModal();
 $isRequirement = $story->type == 'requirement';
 $isStoryType   = $story->type == 'story';
-$actions       = $this->story->buildOperateMenu($story, 'view', $project ? $project : null);
-if($story->deleted) $actions = array();
-if($isInModal)      $actions = false;
 
 /* 版本列表。Version list. */
 $versions = array();
@@ -173,6 +170,10 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
     set::items($versions)
 )) : null;
 
+$actions    = $story->deleted || $isInModal ? array() : $this->loadModel('common')->buildOperateMenu($story);
+$hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
+$actions    = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
+if(!$hasDivider) unset($actions['type']);
 detail
 (
     set::objectType('story'),

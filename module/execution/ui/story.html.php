@@ -15,6 +15,7 @@ data('activeMenuID', $storyType);
 jsVar('executionID', $execution->id);
 jsVar('childrenAB', $lang->story->childrenAB);
 jsVar('modulePairs', $modulePairs);
+jsVar('hasProduct', $execution->hasProduct);
 
 /* Show feature bar. */
 featureBar

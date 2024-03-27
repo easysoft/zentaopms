@@ -2328,36 +2328,74 @@ class commonModel extends model
                 $actionData = $config->{$moduleName}->actionList[$action];
                 if($isInModal && !empty($actionData['notInModal'])) continue;
 
-                if(!empty($actionData['url']) && is_array($actionData['url']))
+                if(isset($actionData['items']) && is_array($actionData['items']))
                 {
-                    $module = $actionData['url']['module'];
-                    $method = $actionData['url']['method'];
-                    $params = $actionData['url']['params'];
-                    if(!common::hasPriv($module, $method)) continue;
-                    $actionData['url'] = helper::createLink($module, $method, $params);
-                }
-                else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
-                {
-                    $module = $actionData['data-url']['module'];
-                    $method = $actionData['data-url']['method'];
-                    $params = $actionData['data-url']['params'];
-                    if(!common::hasPriv($module, $method)) continue;
-                    $actionData['data-url'] = helper::createLink($module, $method, $params);
+                    foreach($actionData['items'] as $key => $itemAction)
+                    {
+                        $itemActionData = $config->{$moduleName}->actionList[$itemAction];
+                        $itemActionData = $this->checkPrivForOperateAction($itemActionData, $itemAction, $moduleName, $data, $menu);
+                        if(($isInModal && !empty($itemActionData['notInModal'])) || $itemActionData === false)
+                        {
+                            unset($actionData['items'][$key]);
+                        }
+                        else
+                        {
+                            $actionData['items'][$key] = $itemActionData;
+                        }
+                    }
+                    if(!empty($actionData['items'])) $actions[] = $actionData;
                 }
                 else
                 {
-                    if(!common::hasPriv($moduleName, $action)) continue;
+                    $actionData = $this->checkPrivForOperateAction($actionData, $action, $moduleName, $data, $menu);
+                    if($actionData !== false) $actions[] = $actionData;
                 }
 
-                if(method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) continue;
-
-                if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';
-
-                $actions[] = $actionData;
             }
             $actionsMenu[$menu] = $actions;
         }
         return $actionsMenu;
+    }
+
+    /**
+     * 检查详情页操作按钮的权限。
+     * Check the privilege of the operate action.
+     *
+     * @param  array      $actionData
+     * @param  string     $action
+     * @param  string     $moduleName
+     * @param  object     $data
+     * @param  object     $menu
+     * @access public
+     * @return array|bool
+     */
+    private function checkPrivForOperateAction(array $actionData, string $action, string $moduleName, object $data, string $menu): array|bool
+    {
+        if(!empty($actionData['url']) && is_array($actionData['url']))
+        {
+            $module = $actionData['url']['module'];
+            $method = $actionData['url']['method'];
+            $params = $actionData['url']['params'];
+            if(!common::hasPriv($module, $method)) return false;
+            $actionData['url'] = helper::createLink($module, $method, $params);
+        }
+        else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
+        {
+            $module = $actionData['data-url']['module'];
+            $method = $actionData['data-url']['method'];
+            $params = $actionData['data-url']['params'];
+            if(!common::hasPriv($module, $method)) return false;
+            $actionData['data-url'] = helper::createLink($module, $method, $params);
+        }
+        else
+        {
+            if(!common::hasPriv($moduleName, $action)) return false;
+        }
+
+        if(method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
+
+        if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';
+        return $actionData;
     }
 
     /**

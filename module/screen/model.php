@@ -37,6 +37,7 @@ class screenModel extends model
         $this->filter = new stdclass();
         $this->filter->screen  = '';
         $this->filter->year    = '';
+        $this->filter->month   = '';
         $this->filter->dept    = '';
         $this->filter->account = '';
         $this->filter->charts  = array();
@@ -70,7 +71,7 @@ class screenModel extends model
      * @access public
      * @return object|bool
      */
-    public function getByID(int $screenID, int $year = 0, int $dept = 0, int $month = 0, string $account = '', $withChartData = true): object|bool
+    public function getByID(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '', $withChartData = true): object|bool
     {
         $screen = $this->dao->select('*')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
         if(!$screen) return false;
@@ -556,7 +557,7 @@ class screenModel extends model
         $tablePagination = array('index' => 1, 'size' => 5, 'total' => 0, 'pageTotal' => 1);
         $cardPagination  = array('index' => 1, 'size' => 2 * 6, 'total' => 0, 'pageTotal' => 1);
 
-        if(empty($component)) return $tablePager;
+        if(empty($component)) return $tablePagination;
 
         $option = $component->option;
         $displayType = $option->displayType;
@@ -965,10 +966,11 @@ class screenModel extends model
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
-            $fields   = json_decode(json_encode($chart->fieldSettings), true);
+            $fields   = json_decode($chart->fields, true);
             $langs    = json_decode($chart->langs, true);
 
             if(empty($langs)) $langs = array();
+            if(empty($fields)) $fields = array();
             if(!is_array($filters)) $filters = array();
 
             if(isset($settings['summary']) and $settings['summary'] == 'notuse')
@@ -2360,7 +2362,7 @@ class screenModel extends model
             list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $deadline);
 
             $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
-            $chartData = $this->execution->buildBurnData($executionID, $dateList, $type, 'left', $executionEnd);
+            $chartData = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
 
             $execution->chartData = $chartData;
             $executionData[$executionID] = $execution;
@@ -2440,6 +2442,7 @@ class screenModel extends model
         // Get type is changed or not.
         if(isset($component->chartConfig))
         {
+            $componentType = $chartType;
             foreach($this->config->screen->chartConfig as $type => $chartConfig)
             {
                 $chartConfig = json_decode($chartConfig, true);

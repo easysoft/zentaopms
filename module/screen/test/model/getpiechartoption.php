@@ -14,8 +14,8 @@ title=测试 screenModel->getchartoption();
 timeout=0
 cid=1
 
-- 测试type为pie的图表是否显示正确，生成的指标项和数据项是否正确。 @0
-- 测试type为pie的图表是否显示正确，生成的指标项和数据项是否正确。 @1
+- 测试type为pie的图表是否显示正确，生成的指标项是否正确和数据项是否正确。。 @1
+- 测试type为pie的图表是否显示正确，生成的数据项是否正确。 @1
 
 */
 

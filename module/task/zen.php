@@ -1328,7 +1328,7 @@ class taskZen extends task
             $task->story   = isset($relatedStories[$task->story]) ? $relatedStories[$task->story] . "(#$task->story)" : '';
             $task->fromBug = empty($task->fromBug) ? '' : "#$task->fromBug " . $bugs[$task->fromBug]->title;
 
-            if(isset($relatedModules[$task->module]))             $task->module       = $relatedModules[$task->module] . "(#$task->module)";
+            if(isset($relatedModules[$task->module])) $task->module = $relatedModules[$task->module] . "(#$task->module)";
 
             /* Convert username to real name. */
             if(!empty($task->mailto))
