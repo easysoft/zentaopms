@@ -772,47 +772,6 @@ class buildModel extends model
     }
 
     /**
-     * 构造详情页面的操作菜单。
-     * Build operate menu for detail page.
-     *
-     * @param  object $build
-     * @access public
-     * @return array
-     */
-    public function buildOperateMenu(object $build): array
-    {
-        $menu         = array();
-        $params       = "buildID={$build->id}";
-        $canBeChanged = common::canBeChanged('build', $build);
-        if($build->deleted || !$canBeChanged) return $menu;
-
-        $moduleName = $this->app->tab == 'project' ? 'projectbuild' : 'build';
-
-        if(common::hasPriv($moduleName, 'edit', $build))
-        {
-            $menu[] = array(
-                'text'  => $this->lang->build->edit,
-                'icon'  => 'edit',
-                'url'   => helper::createLink($moduleName, 'edit', $params),
-                'class' => 'btn ghost'
-            );
-        }
-
-        if(common::hasPriv($moduleName, 'delete', $build))
-        {
-            $menu[] = array(
-                'text'  => $this->lang->build->delete,
-                'icon'  => 'trash',
-                'url'   => helper::createLink($moduleName, 'delete', $params),
-                'class' => 'btn ghost ajax-submit',
-                'data-confirm' =>  array('message' => $this->lang->build->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x')
-            );
-        }
-
-        return $menu;
-    }
-
-    /**
      * 为区块获取版本数据。
      * Get build's data for block.
      *
