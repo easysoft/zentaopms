@@ -352,7 +352,7 @@ class compileModel extends model
         /* Get build list by API. */
         for($page = 1; true; $page++)
         {
-            $param   = $job->lastSyncDate ? '&updated_after=' . strtotime($job->lastSyncDate) : '';
+            $param   = $job->lastSyncDate ? '&after=' . strtotime($job->lastSyncDate) : '';
             $builds  = json_decode(commonModel::http($url . "&page={$page}&limit=100" . $param, null, array(), $apiRoot->header));
             if(!is_array($builds)) break;
 
