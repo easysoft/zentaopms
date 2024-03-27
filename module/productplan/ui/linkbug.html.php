@@ -15,6 +15,9 @@ foreach($config->productplan->defaultFields['linkBug'] as $field) $cols[$field] 
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['assignedTo']['type'] = 'user';
 
+$cols['title']['data-toggle'] = 'modal';
+$cols['title']['data-size']   = 'lg';
+
 searchForm
 (
     set::module('bug'),
