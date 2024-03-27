@@ -2736,6 +2736,7 @@ class aiModel extends model
     public function getAssistants($pager = null, $orderBy = 'id_desc')
     {
         return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
+            ->where('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -2851,6 +2852,10 @@ class aiModel extends model
             ->exec();
         if(dao::isError()) return false;
 
+        $actionType = $assistant->status == '0' ? 'unpublished' : 'published';
+        $actionId = $this->loadModel('action')->create('aiAssistant', $assistant->id, $actionType);
+        $this->action->logHistory($actionId, $changes);
+
         return true;
     }
 
@@ -2867,6 +2872,19 @@ class aiModel extends model
             ->where('name')->eq($AssistantName)
             ->andWhere('modelId')->eq($modelId)
             ->fetch();
+    }
+
+    public function deleteAssistant($assistantId)
+    {
+        $this->dao->update(TABLE_AI_ASSISTANT)
+            ->set('deleted')->eq(1)
+            ->where('id')->eq($assistantId)
+            ->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('aiAssistant', $assistantId, 'deleted');
+
+        return true;
     }
 }
 

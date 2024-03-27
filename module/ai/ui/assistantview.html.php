@@ -5,6 +5,7 @@ namespace zin;
 
 jsVar('confirmPublishTip', $lang->ai->assistants->confirmPublishTip);
 jsVar('confirmWithdrawTip', $lang->ai->assistants->confirmWithdrawTip);
+jsVar('confirmDeleteTip', $lang->ai->assistants->confirmDeleteTip);
 
 detailHeader
 (

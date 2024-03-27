@@ -346,7 +346,7 @@ class ai extends control
      * @access public
      * @return int
      */
-    public function assistantcreate()
+    public function assistantCreate()
     {
         if(strtolower($this->server->request_method) == 'post')
         {
@@ -490,6 +490,14 @@ class ai extends control
     public function assistantWithdraw($assistantId)
     {
         $result = $this->ai->toggleAssistant($assistantId, false);
+        if($result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success'));
+    }
+
+    public function assistantDelete($assistantId)
+    {
+        $result = $this->ai->deleteAssistant($assistantId);
         if($result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success'));
