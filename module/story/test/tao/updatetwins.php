@@ -20,5 +20,5 @@ zdTable('story')->gen(5);
 
 $storyTest = new storyTest();
 
-r($storyTest->updateTwinsTest(array())) && p() && e('0'); //不传入需求，也不传入产品。
-r($storyTest->updateTwinsTest(array(1 => 1, 2 => 2, 3 => 3))) && p('1,2,3') && e(':2:3:,:1:3:,:1:2:'); //传入需求列表，检查twins字段。
+r($storyTest->updateTwinsTest(array(), 1)) && p() && e('0'); //不传入需求，也不传入产品。
+r($storyTest->updateTwinsTest(array(1 => 1, 2 => 2, 3 => 3), 1)) && p('1,2,3') && e(':2:3:,:1:3:,:1:2:'); //传入需求列表，检查twins字段。

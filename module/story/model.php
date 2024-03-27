@@ -471,7 +471,7 @@ class storyModel extends model
         $files = $this->file->saveUpload($story->type, $storyID, 1);
 
         /* Add story spec verify. */
-        $this->storyTao->doCreateSpec($storyID, $story, $files);
+        $this->storyTao->doCreateSpec($storyID, $story, $files ?: '');
 
         $extraList   = $this->storyTao->parseExtra($extra);
         $storyFrom   = isset($extraList['fromType']) ? $extraList['fromType'] : '';
@@ -544,7 +544,7 @@ class storyModel extends model
             if(empty($mainStoryID)) $mainStoryID = $storyID;
         }
 
-        $this->storyTao->updateTwins($storyIdList);
+        $this->storyTao->updateTwins($storyIdList, $mainStoryID);
         return $mainStoryID;
     }
 
