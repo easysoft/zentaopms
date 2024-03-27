@@ -156,7 +156,7 @@ REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `projectType`, `createdBy`, 
 ('开发',        '50',   'develop',   'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
 ('验证',        '15',   'qualify',   'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
 ('发布',        '10',   'launch',    'ipd', 'admin', '2020-02-08 21:08:30',  'admin', '2020-02-12 13:50:27',  '0'),
-('全生命周期',  '5',    'lifecycle', 'ipd', 'admin', '2020-02-08 21:08:45',  'admin', '2020-02-12 13:50:27',  '0');
+('生命周期',    '5',    'lifecycle', 'ipd', 'admin', '2020-02-08 21:08:45',  'admin', '2020-02-12 13:50:27',  '0');
 
 ALTER TABLE `zt_review` ADD `begin` date NULL AFTER `createdDate`;
 ALTER TABLE `zt_review` MODIFY `doc` varchar(255);
