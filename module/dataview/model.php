@@ -25,6 +25,28 @@ class dataviewModel extends model
         $this->loadBIDAO();
     }
 
+
+    /**
+     * Verify the sql with select statement.
+     *
+     * @param  string    $sql
+     * @access public
+     * @return void
+     */
+    public function verifySqlWithModify($sql)
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser = new sqlparser($sql);
+
+        if(count($parser->statements) == 0) return array('result' => 'fail', 'message' => $this->lang->dataview->empty);
+        if(count($parser->statements) > 1)  return array('result' => 'fail', 'message' => $this->lang->dataview->onlyOne);
+
+        $statement = $parser->statements[0];
+        if($statement instanceof PhpMyAdmin\SqlParser\Statements\SelectStatement == false) return array('result' => 'fail', 'message' => $this->lang->dataview->allowSelect);
+
+        return true;
+    }
+
     /**
      * 获取模块名数组。
      * Get module names.
