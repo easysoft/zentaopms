@@ -115,7 +115,7 @@ formPanel
 $ai = $config->ai;
 
 div(
-    setClass('modal fade"'),
+    setClass('modal fade'),
     setData('backdrop', 'static'),
     setID('edit-icon-modal'),
     div(
@@ -136,6 +136,19 @@ div(
                 (
                     setClass('text-muted'),
                     'Emoji icons by Twemoji with CC-BY4.0'
+                )
+            ),
+            div
+            (
+                setClass('modal-actions'),
+                button
+                (
+                    setClass('btn square ghost'),
+                    setData('dismiss', 'modal'),
+                    span
+                    (
+                        setClass('close')
+                    )
                 )
             ),
             div(
