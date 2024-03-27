@@ -619,7 +619,7 @@ class screenModel extends model
         $tablePagination = array('index' => 1, 'size' => 5, 'total' => 0, 'pageTotal' => 1);
         $cardPagination  = array('index' => 1, 'size' => 2 * 6, 'total' => 0, 'pageTotal' => 1);
 
-        if(empty($component)) return $tablePager;
+        if(empty($component)) return $tablePagination;
 
         $option = $component->option;
         $displayType = $option->displayType;
@@ -1023,7 +1023,7 @@ class screenModel extends model
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
-            $fields   = json_decode(json_encode($chart->fieldSettings), true);
+            $fields   = json_decode($chart->fields, true);
             $langs    = json_decode($chart->langs, true);
 
             if(isset($settings['summary']) and $settings['summary'] == 'notuse')
