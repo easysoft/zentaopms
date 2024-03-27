@@ -43,13 +43,13 @@ featureBar
 toolbar
 (
     setClass('clear-gap'),
-    btn
+    common::hasPriv('metric', 'recalculate') ? btn
     (
         setClass('btn ghost update-history pr-5'),
         set::icon('refresh'),
         $lang->metric->recalculate,
         bind::click("confirmRecalculate('all')")
-    ),
+    ) : null,
     btn
     (
         setClass('btn primary-outline'),
