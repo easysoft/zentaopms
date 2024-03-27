@@ -492,18 +492,15 @@ class metric extends control
 
         if($calcRange == 'single')
         {
-            if($calcType == 'inference')
-            {
-                $endDate = $this->metric->getInferenceEndDate($code, $dateType);
-            }
-            else
-            {
-                $endDate = helper::now();
-            }
+            if($calcType == 'inference') $endDate = $this->metric->getInferenceEndDate($code, $dateType);
+            if($calcType == 'all' )      $endDate = helper::now();
+        }
+        else
+        {
+            if($calcType == 'all' )      $endDate = helper::now();
         }
 
         $startDate = $this->metric->getInstallDate();
-        if($calcType == 'all') $endDate = helper::now();
 
         $this->view->code      = $code;
         $this->view->dateType  = $dateType;
