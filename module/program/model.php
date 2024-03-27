@@ -1323,7 +1323,7 @@ class programModel extends model
     {
         $updateTime = zget($this->app->config->global, 'projectStatsTime', '');
         $now        = helper::now();
-        if(time() - strtotime($updateTime) < $this->config->program->refreshInterval && !$refreshAll) return;
+        if($updateTime && time() - strtotime($updateTime) < $this->config->program->refreshInterval && !$refreshAll) return;
 
         /*
          * If projectStatsTime is before two weeks ago, refresh all executions directly.
