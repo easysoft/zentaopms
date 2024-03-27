@@ -1618,13 +1618,14 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $type
+     * @param  int    $grade
      * @access public
      * @return void
      */
-    public function ajaxGetGrade(int $storyID, string $type = 'story')
+    public function ajaxGetGrade(int $storyID, string $type = 'story', int $grade = 0)
     {
         $story = $this->story->fetchByID($storyID);
-        $gradeOptions = $this->story->getGradeOptions($story, $type);
+        $gradeOptions = $this->story->getGradeOptions($story, $type, (array)$grade);
 
         $items = array();
         foreach($gradeOptions as $grade => $name) $items[] = array('text' => $name, 'value' => $grade);

@@ -75,7 +75,7 @@ window.renderRowData = function($row, index, story)
 
     if($grade.length > 0)
     {
-        const link = $.createLink('story', 'ajaxGetGrade', 'parent=' + story.parent + '&type=' + story.type);
+        const link = $.createLink('story', 'ajaxGetGrade', 'parent=' + story.parent + '&type=' + story.type + '&grade=' + story.grade);
         $.get(link, function(data)
         {
             let $gradePicker = $grade.find('[name^=grade]').zui('picker');

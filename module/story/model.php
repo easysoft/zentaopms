@@ -4926,14 +4926,16 @@ class storyModel extends model
      *
      * @param  string $type story|requirement|epic
      * @param  string $status enable|disable
+     * @param  array  $appendList
      * @access public
      * @return array
      */
-    public function getGradePairs($type = 'story', $status = 'enable'): array
+    public function getGradePairs(string $type = 'story', string $status = 'enable', array $appendList = array()): array
     {
         return $this->dao->select("grade, name")->from(TABLE_STORYGRADE)
             ->where('type')->eq($type)
             ->beginIF($status == 'enable')->andWhere('status')->eq('enable')->fi()
+            ->beginIF($appendList)->orWhere('grade')->in($appendList)->fi()
             ->orderBy('grade_asc')
             ->fetchPairs();
     }
@@ -4979,17 +4981,18 @@ class storyModel extends model
      *
      * @param  object|bool $story
      * @param  string      $storyType
+     * @param  array       $appendList
      * @access public
      * @return array
      */
-    public function getGradeOptions(object|bool $story, string $storyType): array
+    public function getGradeOptions(object|bool $story, string $storyType, array $appendList = array()): array
     {
-        if(!$story) return $this->getGradePairs($storyType);
+        if(!$story) return $this->getGradePairs($storyType, 'enable', $appendList);
 
         $gradeOptions = array();
         if($storyType != $story->type)
         {
-            $gradeOptions = $this->getGradePairs($storyType);
+            $gradeOptions = $this->getGradePairs($storyType, 'enable', $appendList);
         }
         else
         {
@@ -4997,6 +5000,7 @@ class storyModel extends model
                 ->where('type')->eq($storyType)
                 ->andWhere('grade')->gt($story->grade)
                 ->andWhere('status')->eq('enable')
+                ->beginIF($appendList)->orWhere('grade')->in($appendList)->fi()
                 ->orderBy('grade_asc')
                 ->fetchPairs();
         }

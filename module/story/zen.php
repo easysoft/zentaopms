@@ -569,7 +569,7 @@ class storyZen extends story
         /* 准备数据。*/
         $story        = $this->view->story;
         $parent       = $this->story->fetchByID($story->parent);
-        $grades       = $this->story->getGradeOptions($parent, $story->type);
+        $grades       = $this->story->getGradeOptions($parent, $story->type, (array)$story->grade);
         $product      = $this->view->product;
         $users        = $this->loadModel('user')->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
         $stories      = $this->story->getParentStoryPairs($story->product, $story->parent, $story->type, $storyID);
