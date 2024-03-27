@@ -4,7 +4,7 @@ global $app, $lang;
 $app->loadLang('execution');
 $app->loadLang('stage');
 $config->programplan->form = new stdClass();
-$config->programplan->form->create = common::formConfig('programplan', 'create');
+$config->programplan->form->create = array();
 $config->programplan->form->create['id']         = array('label' => '',                            'type' => 'int',    'control' => 'text',     'required' => false, 'default' => 0);
 $config->programplan->form->create['order']      = array('label' => '',                            'type' => 'int',    'control' => 'text',     'required' => false, 'default' => 0);
 $config->programplan->form->create['type']       = array('label' => $lang->execution->method,      'type' => 'string', 'control' => 'picker',   'required' => true,  'default' => 'stage', 'options' => $lang->execution->typeList);
@@ -22,7 +22,7 @@ $config->programplan->form->create['milestone']  = array('label' => $lang->progr
 $config->programplan->form->create['desc']       = array('label' => $lang->programplan->desc,      'type' => 'string', 'control' => 'textarea', 'required' => false, 'default' => '', 'filter' => 'trim');
 $config->programplan->form->create['output']     = array('label' => '',                            'type' => 'string', 'control' => 'text',     'required' => false, 'default' => '');
 
-$config->programplan->form->edit = common::formConfig('programplan', 'edit');
+$config->programplan->form->edit = array();
 $config->programplan->form->edit['parent']    = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->programplan->form->edit['name']      = array('required' => true,  'type' => 'string', 'default' => '');
 $config->programplan->form->edit['code']      = array('required' => false, 'type' => 'string', 'default' => '');

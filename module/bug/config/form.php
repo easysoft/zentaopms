@@ -129,7 +129,7 @@ $config->bug->form->activate['toTask']         = array('required' => false, 'typ
 $config->bug->form->activate['toStory']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->activate['comment']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 
-$config->bug->form->batchActivate = common::formConfig('bug', 'batchActivate');
+$config->bug->form->batchActivate = array();
 $config->bug->form->batchActivate['id']             = array('required' => false, 'type' => 'int',    'base'    => true);
 $config->bug->form->batchActivate['status']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchActivate['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');
@@ -149,7 +149,7 @@ $config->bug->form->batchActivate['toStory']        = array('required' => false,
 $config->bug->form->batchActivate['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => isset($app->user->account) ? $app->user->account : '');
 $config->bug->form->batchActivate['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
 
-$config->bug->form->batchCreate = common::formConfig('bug', 'batchCreate');
+$config->bug->form->batchCreate = array();
 $config->bug->form->batchCreate['module']      = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchCreate['project']     = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchCreate['execution']   = array('required' => false, 'type' => 'int',    'default' => 0);

@@ -1,7 +1,7 @@
 <?php
 global $app;
 $config->mr->form = new stdclass();
-$config->mr->form->create = common::formConfig('mr', 'create');
+$config->mr->form->create = array();
 $config->mr->form->create['hostID']             = array('type' => 'int',    'required' => true);
 $config->mr->form->create['sourceProject']      = array('type' => 'string', 'required' => true);
 $config->mr->form->create['targetProject']      = array('type' => 'string', 'required' => true);
@@ -19,7 +19,7 @@ $config->mr->form->create['description']        = array('type' => 'string', 'req
 $config->mr->form->create['createdBy']          = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->mr->form->create['createdDate']        = array('type' => 'string', 'required' => false, 'default' => helper::now());
 
-$config->mr->form->edit = common::formConfig('mr', 'edit');
+$config->mr->form->edit = array();
 $config->mr->form->edit['title']              = array('type' => 'string', 'required' => true);
 $config->mr->form->edit['assignee']           = array('type' => 'string', 'required' => true);
 $config->mr->form->edit['repoID']             = array('type' => 'int',    'required' => true);

@@ -4,7 +4,7 @@ $now = helper::now();
 $config->testreport->form = new stdclass();
 
 global $app;
-$config->testreport->form->create = common::formConfig('testreport', 'create');
+$config->testreport->form->create = array();
 $config->testreport->form->create['tasks']       = array('type' => 'string',   'required' => true,  'default' => '0');
 $config->testreport->form->create['begin']       = array('type' => 'string',   'required' => false, 'default' => '');
 $config->testreport->form->create['end']         = array('type' => 'string',   'required' => false, 'default' => '');
@@ -23,7 +23,7 @@ $config->testreport->form->create['stories']     = array('type' => 'string',   '
 $config->testreport->form->create['createdBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->testreport->form->create['createdDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
-$config->testreport->form->edit = common::formConfig('testreport', 'edit');
+$config->testreport->form->edit = array();
 $config->testreport->form->edit['tasks']       = array('type' => 'string',   'required' => true,  'default' => '0');
 $config->testreport->form->edit['begin']       = array('type' => 'string',   'required' => false, 'default' => '');
 $config->testreport->form->edit['end']         = array('type' => 'string',   'required' => false, 'default' => '');
