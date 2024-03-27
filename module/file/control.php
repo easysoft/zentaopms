@@ -233,7 +233,8 @@ class file extends control
     {
         $this->view->fields = $this->post->fields;
         $this->view->rows   = $this->post->rows;
-        $this->host         = common::getSysURL();
+        $host               = common::getSysURL();
+        $fileModel          = $this->file;
         $kind               = $this->post->kind;
 
         foreach($this->view->rows as $row)
@@ -241,11 +242,15 @@ class file extends control
             foreach($row as &$field)
             {
                 if(empty($field)) continue;
-                $field = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $this->host . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $field);
+                $field = preg_replace_callback('/ src="{([0-9]+)(\.(\w+))?}" /', function($matches) use($host, $fileModel)
+                {
+                    $file   = $fileModel->getById((int)$matches[1]);
+                    return $file ? ' src="' . $host . $file->webPath . '" ' : $matches[0];
+                }, $field);
             }
 
-            if(in_array($kind, array('story', 'bug', 'testcase'))) $row->title = html::a($this->host . $this->createLink($kind, 'view', "{$kind}ID=$row->id"), $row->title);
-            if($kind == 'task') $row->name = html::a($this->host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name);
+            if(in_array($kind, array('story', 'bug', 'testcase'))) $row->title = html::a($host . $this->createLink($kind, 'view', "{$kind}ID=$row->id"), $row->title, '_blank');
+            if($kind == 'task') $row->name = html::a($host . $this->createLink('task', 'view', "taskID=$row->id"), $row->name, '_blank');
         }
 
         $this->view->fileName = $this->post->fileName;
