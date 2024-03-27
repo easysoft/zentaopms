@@ -15,6 +15,8 @@ foreach($config->productplan->defaultFields['linkStory'] as $field) $cols[$field
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
 $cols['title']['nestedToggle'] = false;
+$cols['title']['data-toggle']  = 'modal';
+$cols['title']['data-size']    = 'lg';
 $cols['plan']['name']          = 'planTitle';
 $cols['assignedTo']['type']    = 'user';
 $cols['module']['type']        = 'text';
