@@ -1033,25 +1033,13 @@ class storyModel extends model
                     }
                 }
             }
-
-            if($story->grade > $oldStory->grade)
-            {
-                if(!$this->checkGrade($story, $oldStory, 'batchEdit')) $invaildStories[] = '#' . $storyID;
-            }
-        }
-
-        if($invaildStories)
-        {
-            dao::$errors['grade'] = sprintf($this->lang->story->batchGradeOverflow, implode(',', $invaildStories));
-            return false;
         }
 
         $this->loadModel('action');
         foreach($stories as $storyID => $story)
         {
             $oldStory = $oldStories[$storyID];
-            if(!$story->grade) $story->grade = $oldStory->grade;
-            $this->dao->update(TABLE_STORY)->data($story, 'grade')
+            $this->dao->update(TABLE_STORY)->data($story)
                 ->autoCheck()
                 ->checkIF($story->closedBy, 'closedReason', 'notempty')
                 ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
@@ -1061,14 +1049,9 @@ class storyModel extends model
 
             if(dao::isError()) return false;
 
-            if($story->grade != $oldStory->grade) $this->syncGrade($oldStory, $story);
-
             /* Update story sort of plan when story plan has changed. */
             if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, (string)$story->plan, $oldStory->plan);
-            $parentChanged = $story->parent != $oldStory->parent;
-            if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory->parent);
-            if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, !$parentChanged);
-            if($story->parent > 0) $this->updateParentStatus($storyID, $story->parent, !$parentChanged);
+            if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
 
             $this->executeHooks($storyID);
             if($oldStory->type == 'story' && $story->stage != $oldStory->stage) $this->batchChangeStage(array($storyID), $story->stage);
@@ -5044,11 +5027,10 @@ class storyModel extends model
      *
      * @param  object $story
      * @param  object $oldStory
-     * @param  string $method
      * @access public
      * @return bool
      */
-    public function checkGrade(object $story, object $oldStory, string $method = 'edit')
+    public function checkGrade(object $story, object $oldStory)
     {
         $maxGrade = $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORY)
              ->where('root')->eq($oldStory->root)
@@ -5063,7 +5045,6 @@ class storyModel extends model
         $newMaxGrade = (int)$maxGrade + (int)$story->grade - (int)$oldStory->grade;
         if($newMaxGrade > $systemMaxGrade)
         {
-            if($method == 'batchEdit') return false;
             dao::$errors['grade'] = sprintf($this->lang->story->gradeOverflow, $systemMaxGrade, $newMaxGrade);
         }
 
