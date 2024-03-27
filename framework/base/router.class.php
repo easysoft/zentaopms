@@ -3100,6 +3100,8 @@ class baseRouter
         if(!function_exists('error_get_last')) return;
         $error = error_get_last();
         if($error) $this->saveError($error['type'], $error['message'], $error['file'], $error['line']);
+
+        if(!empty($this->config->debug) && (!is_dir($this->logRoot) || !is_writable($this->logRoot))) helper::end('ERROR: ' . $error['message']);
     }
 
     /**
