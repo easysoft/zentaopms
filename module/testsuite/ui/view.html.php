@@ -11,6 +11,19 @@ declare(strict_types=1);
 namespace zin;
 
 data('testsuite', $suite);
+$config->testsuite->actionList['edit']['text'] = $config->testsuite->actionList['edit']['hint'] = $lang->edit;
+$config->testsuite->actionList['delete']['text'] = $config->testsuite->actionList['delete']['hint'] = $lang->delete;
+$actions = $this->loadModel('common')->buildOperateMenu($suite);
+foreach($actions as $actionType => $typeActions)
+{
+    foreach($typeActions as $key => $action)
+    {
+        $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
+        $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
+        $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$suite->id, $action['url']);
+    }
+}
+
 detailHeader
 (
     to::title
@@ -27,29 +40,7 @@ detailHeader
     (
         toolbar
         (
-            common::hasPriv('testsuite', 'linkCase') ? a
-            (
-                setClass('ghost btn btn-default'),
-                set::href(createLink('testsuite', 'linkCase', "suiteID={$suite->id}")),
-                icon('link', setClass('text-primary')),
-                $lang->testsuite->linkCase,
-            ) : '',
-            div(setClass('toolbar-divider')),
-            common::hasPriv('testsuite', 'edit') ? a
-            (
-                setClass('ghost btn btn-default'),
-                set::href(createLink('testsuite', 'edit', "suiteID={$suite->id}")),
-                icon('edit', setClass('text-primary')),
-                $lang->edit,
-            ) : '',
-            common::hasPriv('testsuite', 'delete') ? a
-            (
-                setClass('ghost btn btn-default'),
-                setData('confirm', $lang->testsuite->confirmDelete),
-                set::href(createLink('testsuite', 'delete', "suiteID={$suite->id}")),
-                icon('trash', setClass('text-primary')),
-                $lang->delete,
-            ) : ''
+            set::items($actions['mainActions'])
         )
     )
 );
@@ -108,6 +99,3 @@ detailBody
         )
     )
 );
-
-render();
-

@@ -15,3 +15,6 @@ $config->testsuite->datatable->defaultField = array('id', 'pri', 'title', 'type'
 $config->testsuite->custom = new stdclass();
 $config->testsuite->custom->createFields = 'stage,pri,keywords';
 $config->testsuite->customCreateFields   = 'stage,pri,keywords';
+
+$config->testsuite->actions = new stdclass();
+$config->testsuite->actions->view['mainActions'] = array('linkCase', 'edit', 'delete');
