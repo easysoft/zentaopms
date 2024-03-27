@@ -27,8 +27,8 @@ zdTable('user')->gen(5);
 zdTable('action')->gen(0);
 
 $project = zdTable('project');
-$project->begin->range('2023-11-01')->type('timestamp')->format('YYYY-MM-DD');
-$project->end->range('2023-12-31')->type('timestamp')->format('YYYY-MM-DD');
+$project->begin->range('20231101 000000:0')->type('timestamp')->format('YYYY-MM-DD');
+$project->end->range('20231231 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $project->gen(2);
 
 su('admin');
@@ -62,9 +62,9 @@ $emptyName->PM            = 'user1';
 
 $programID = array(1, 2);
 
-r($upgrade->createProjectTest($programID[0], $project1))  && p()         && e('project:3,项目1,2059-12-31,open; program:2023-12-01,2024-03-12; actionCount:2');                // 测试创建 project1 到项目集 1
+r($upgrade->createProjectTest($programID[0], $project1))  && p()         && e('project:3,项目1,2059-12-31,open; program:2023-11-01,2023-12-31; actionCount:2');                // 测试创建 project1 到项目集 1
 r($upgrade->createProjectTest($programID[0], $project2))  && p()         && e('project:4,项目2,2024-12-31,open; program:2021-12-01,2024-12-31; actionCount:1');                // 测试创建 project2 到项目集 1
-r($upgrade->createProjectTest($programID[1], $project1))  && p()         && e('project:5,项目1,2059-12-31,open; program:2023-12-01,2024-03-12; actionCount:2');                // 测试创建 project1 到项目集 2
+r($upgrade->createProjectTest($programID[1], $project1))  && p()         && e('project:5,项目1,2059-12-31,open; program:2023-11-01,2023-12-31; actionCount:2');                // 测试创建 project1 到项目集 2
 r($upgrade->createProjectTest($programID[1], $project2))  && p()         && e('project:6,项目2,2024-12-31,open; program:2021-12-01,2024-12-31; actionCount:1');                // 测试创建 project2 到项目集 2
 r($upgrade->createProjectTest($programID[0], $emptyName)) && p('name:0') && e('『项目名称』不能为空。');                                                                        // 测试创建 项目名称空 的项目到项目集 1
 r($upgrade->createProjectTest($programID[1], $project1))  && p('name:0') && e('『项目名称』已经有『项目1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 测试重复创建 project1 到项目集 2

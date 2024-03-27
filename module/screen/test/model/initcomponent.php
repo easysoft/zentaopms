@@ -19,6 +19,8 @@ cid=1
 
 */
 
+zdTable('screen')->gen(0);
+
 $screen = new screenTest();
 
 $component1 = new stdclass();

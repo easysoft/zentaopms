@@ -628,53 +628,6 @@ class control extends baseControl
     }
 
     /**
-     * 追加工作流新增的字段到表单提交配置。
-     * append workflow form config.
-     *
-     * @param  array  $config
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @access public
-     * @return array
-     */
-    public function appendExtendFormConfig(array $config, string $moduleName = '', string $methodName = ''): array
-    {
-        if($this->config->edition == 'open') return $config;
-
-        $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
-        $methodName = $methodName ? $moduleName : $this->app->getMethodName();
-
-        $flow = $this->loadModel('workflow')->getByModule($moduleName);
-        if(!$flow) return $config;
-
-        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
-        if(!$action) return $config;
-
-        $fieldList    = $this->workflowaction->getFields($flow->module, $action->action);
-        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
-        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
-        if($layouts)
-        {
-            foreach($fieldList as $key => $field)
-            {
-                if($field->buildin || !$field->show || !isset($layouts[$field->field])) continue;
-
-                $required = $field->readonly || ($notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false);
-                if($field->control == 'multi-select' || $field->control == 'checkbox')
-                {
-                    $config[$field->field] = array('required' => $required, 'type' => 'array', 'default' => array(''), 'filter' => 'join');
-                }
-                else
-                {
-                    $config[$field->field] = array('required' => $required, 'type' => 'string');
-                    if($field->control == 'richtext') $config[$field->field]['control'] = 'editor';
-                }
-            }
-        }
-        return $config;
-    }
-
-    /**
      * Process status of an object according to its subStatus.
      *
      * @param  string $module   product | release | story | project | task | bug | testcase | testtask | feedback

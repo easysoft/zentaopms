@@ -24,6 +24,8 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/screen.class.php';
 
+zdTable('screen')->gen(0);
+
 $screenTest = new screenTest();
 $screenIDList = array(1, 5, 8);
 $screenList   = array();
