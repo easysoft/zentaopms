@@ -21,13 +21,14 @@ $pivot = new pivotTest();
 
 $varList = array('', '123123123', '$MONDAY', '$SUNDAY', '$MONTHBEGIN', '$MONTHEND');
 
-$monday = date('Y-m-d', strtotime('this monday'));
-$sunday = date('Y-m-d', strtotime('this sunday'));
+
+$monday = date('Y-m-d', strtotime('monday this week'));
+$sunday = date('Y-m-d', strtotime('sunday this week'));
 $monthbegin = date('Y-m-01');
 $monthend = date('Y-m-t');
 
-r($pivot->processDateVar($varList[0])) && p('')        && e('0');                    //测试空值
-r($pivot->processDateVar($varList[1])) && p('')        && e('123123123');             //测试非法值生成是正确
+r($pivot->processDateVar($varList[0])) && p('')        && e('0');            //测试空值
+r($pivot->processDateVar($varList[1])) && p('')        && e('123123123');    //测试非法值生成是正确
 r($pivot->processDateVar($varList[2]) === $monday)     && p('') && e('1');   //测试$MONDAY生成是否正确
 r($pivot->processDateVar($varList[3]) === $sunday)     && p('') && e('1');   //测试$SUNDAY生成是否正确
 r($pivot->processDateVar($varList[4]) === $monthbegin) && p('') && e('1');   //测试$MONTHBEGIN生成是否正确

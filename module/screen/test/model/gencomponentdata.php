@@ -14,6 +14,8 @@ cid=1
 
 */
 
+zdTable('screen')->gen(0);
+
 global $tester;
 $screen = new screenTest();
 

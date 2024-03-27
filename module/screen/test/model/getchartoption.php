@@ -29,6 +29,8 @@ cid=1
 
 */
 
+zdTable('screen')->gen(0);
+
 $screen = new screenTest();
 
 function getComponetAndChart($screen, $filters = array())

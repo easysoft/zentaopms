@@ -17,6 +17,11 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/my.class.php';
 
 zdtable('action')->gen('100');
+zdtable('doc')->gen('0');
+zdtable('api')->gen('0');
+zdtable('doclib')->gen('0');
+zdtable('project')->gen('0');
+zdtable('product')->gen('0');
 zdTable('user')->gen('1');
 
 su('admin');

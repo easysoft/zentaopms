@@ -52,6 +52,8 @@ $bug = zdTable('bug');
 $bug->execution->range('0');
 $bug->gen(10);
 
+zdTable('product')->gen(20);
+zdTable('user')->gen(20);
 zdTable('repo')->config('repo')->gen(4);
 
 global $app;

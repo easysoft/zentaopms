@@ -20,6 +20,8 @@ cid=1
 
 */
 
+zdTable('screen')->gen(0);
+
 $screen = new screenTest();
 
 $screenIDList = array(0, 1, 2, 3, 4, 5, 6, 7, 8);
