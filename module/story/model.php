@@ -5020,7 +5020,7 @@ class storyModel extends model
     {
         $grades = $this->getGradePairs($storyType);
 
-        return $storyType == 'story' ? count($grades) > 2 : count($grades) > 1;
+        return count($grades) > 1;
     }
 
     /**

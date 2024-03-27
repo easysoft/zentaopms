@@ -32,7 +32,6 @@ $(document).off('click','#linkStoryByPlan button[type="submit"]').on('click', '#
 
 $(document).off('click', '.batchUnlinkStory').on('click', '.batchUnlinkStory', function(e)
 {
-    const $this       = $(this);
     const dtable      = zui.DTable.query($('#stories'));
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
