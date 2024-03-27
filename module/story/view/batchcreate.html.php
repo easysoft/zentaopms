@@ -152,7 +152,9 @@
     <tr id='addRow' class='hidden'>
       <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control chosen' onchange='setModuleAndPlan(this.value, $productID, $i)'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, 'ditto', "class='form-control chosen'");?></td>
+      <?php if(!$hiddenPlan):?>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?> planBox' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, 'ditto', "class='form-control chosen'");?></td>
+      <?php endif;?>
       <?php if(isset($execution) and $execution->type == 'kanban'):?>
       <td class='text-left'><?php echo html::select("regions[$i]", $regionPairs, $regionID, "class='form-control chosen' onchange='setLane(this.value, $i)'");?>
       <td class='text-left'><?php echo html::select("lanes[$i]", $lanePairs, $laneID, "class='form-control chosen'");?>
