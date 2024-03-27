@@ -500,7 +500,9 @@ class metricTest
      */
     public function getMetricRecordDateField($code)
     {
-        return $this->objectModel->getMetricRecordDateField($code);
+        $metric = $this->objectModel->getByCode($code);
+        $metric = $this->objectModel->getByID($metric->id);
+        return $this->objectModel->getMetricRecordDateField($metric);
     }
 
     /**
@@ -797,16 +799,16 @@ class metricTest
      * @access public
      * @return array
      */
-    public function initActionBtn($metric)
+    public function initActionBtn($metric, $cols)
     {
-        $metrics = $this->objectModel->initActionBtn(array($metric));
+        list($cols, $metrics) = $this->objectModel->initActionBtn(array($metric), $cols);
 
         $actions = current($metrics)->actions;
         foreach($actions as $key => $action)
         {
             $actions[$key]['disabled'] = $action['disabled'] ? 'yes' : 'no';
         }
-        return $actions;
+        return array($cols, $actions);
     }
 
     /**

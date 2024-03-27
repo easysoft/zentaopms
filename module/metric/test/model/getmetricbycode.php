@@ -16,11 +16,9 @@ title=getMetricByCode
 timeout=0
 cid=1
 
-- 测试按产品统计的计划数第0条的value属性 @2
 - 测试按产品统计年度关闭反馈数第0条的value属性 @4
 
 */
-
 
 global $config;
 $config->vision = 'rnd';

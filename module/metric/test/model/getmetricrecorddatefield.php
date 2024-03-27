@@ -15,7 +15,7 @@ cid=1
 - 测试度量项count_of_weekly_created_release的日期类型
  -  @year
  - 属性1 @week
-- 测试度量项count_of_case_in_product的日期类型 @0
+- 测试度量项count_of_case_in_product的日期类型 @product
 - 测试度量项count_of_annual_fixed_bug_in_product的日期类型 @year
 - 测试度量项count_of_monthly_created_bug_in_product的日期类型
  -  @year
@@ -46,7 +46,7 @@ r($metric->getMetricRecordDateField($metricList[0])) && p('')      && e('0');   
 r($metric->getMetricRecordDateField($metricList[1])) && p('0')     && e('year');           // 测试度量项count_of_annual_created_product的日期类型
 r($metric->getMetricRecordDateField($metricList[2])) && p('0,1')   && e('year,month');     // 测试度量项count_of_monthly_created_project的日期类型
 r($metric->getMetricRecordDateField($metricList[3])) && p('0,1')   && e('year,week');      // 测试度量项count_of_weekly_created_release的日期类型
-r($metric->getMetricRecordDateField($metricList[4])) && p('')      && e('0');              // 测试度量项count_of_case_in_product的日期类型
+r($metric->getMetricRecordDateField($metricList[4])) && p('0')     && e('product');        // 测试度量项count_of_case_in_product的日期类型
 r($metric->getMetricRecordDateField($metricList[5])) && p('0')     && e('year');           // 测试度量项count_of_annual_fixed_bug_in_product的日期类型
 r($metric->getMetricRecordDateField($metricList[6])) && p('0,1')   && e('year,month');     // 测试度量项count_of_monthly_created_bug_in_product的日期类型
 r($metric->getMetricRecordDateField($metricList[7])) && p('0,1,2') && e('year,month,day'); // 测试度量项count_of_daily_closed_bug_in_product的日期类型
