@@ -345,7 +345,7 @@ div
             $groupData ? div
             (
                 setClass('table-side'),
-                setStyle(array('flex-basis' => $tableWidth . 'px')),
+                setStyle(array('flex-basis' => $tableWidth . 'px', 'min-width' => $tableWidth . 'px')),
                 div
                 (
                     dtable

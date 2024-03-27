@@ -166,7 +166,8 @@ class metricModel extends model
         foreach($data as $dataInfo)
         {
             $value       = $withCalcTime ? array($dataInfo->value, $dataInfo->calcTime) : $dataInfo->value;
-            $dataSeries  = array('date' => $dataInfo->date, 'value' => $value);
+            $date        = isset($dataInfo->date) ? $dataInfo->date : $dataInfo->dateString;
+            $dataSeries  = array('date' => $date, 'value' => $value);
             $groupData[] = $dataSeries;
         }
 

@@ -52,9 +52,9 @@ $cols1 = array('actions' => array());
 $cols2 = array('actions' => array());
 $cols3 = array('actions' => array());
 
-$metric1 = (object)array_merge(array('actions' => $action1), $priv1);
-$metric2 = (object)array_merge(array('actions' => $action2), $priv2);
-$metric3 = (object)array_merge(array('actions' => $action2), $priv3);
+$metric1 = (object)array_merge(array('actions' => $action1), $priv1, array('builtin' => '1'));
+$metric2 = (object)array_merge(array('actions' => $action2), $priv2, array('builtin' => '1'));
+$metric3 = (object)array_merge(array('actions' => $action2), $priv3, array('builtin' => '1'));
 
 list($cols1, $actions1) = $metric->initActionBtn($metric1, $cols1);
 list($cols2, $actions2) = $metric->initActionBtn($metric2, $cols2);
