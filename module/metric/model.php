@@ -1443,8 +1443,9 @@ class metricModel extends model
             {
                 $isClick = true;
 
-                if($action['name'] == 'edit')      $isClick = $metric->canEdit;
-                if($action['name'] == 'implement') $isClick = $metric->canImplement;
+                if($action['name'] == 'edit')        $isClick = $metric->canEdit;
+                if($action['name'] == 'recalculate') $isClick = $metric->canRecalculate;
+                if($action['name'] == 'implement')   $isClick = $metric->canImplement;
                 if($action['name'] == 'delist')
                 {
                     $isClick = $metric->canDelist;
