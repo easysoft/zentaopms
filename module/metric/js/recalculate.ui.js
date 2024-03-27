@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-    if(code == 'all') 
+    if(calcRange == 'all') 
     {
         recalculateAll(startDate, endDate);
     }
@@ -31,7 +31,7 @@ function recalculateAll(startDate, endDate)
         var date = dateToString(dateRange[index]);
         var $html = recalculateLog(date);
 
-        var link = $.createLink('metric', 'updateHistoryMetricLib', 'date=' + date);
+        var link = $.createLink('metric', 'updateHistoryMetricLib', 'date=' + date + '&calcType=' + calcType);
         $.get(link, function(result){
             $('.verify-content').append($html);
             updateAllHistory(dateRange, index + 1);

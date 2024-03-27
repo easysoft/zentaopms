@@ -184,21 +184,25 @@ class metric extends control
      * Update metric lib of history.
      *
      * @param  string $date
+     * @param  string $calcType
      * @access public
      * @return void
      */
-    public function updateHistoryMetricLib($date)
+    public function updateHistoryMetricLib($date, $calcType)
     {
         $date = str_replace('_', '-', $date);
+        $calcList = $this->metric->getCalcInstanceList();
 
         $classifiedCalcGroup = json_decode(file_get_contents($this->app->getTmpRoot() . 'calc'));
-        $calcList            = $this->metric->getCalcInstanceList();
+        if($calcType == 'inference') $lastInferenceDateList = json_decode(file_get_contents($this->app->getTmpRoot() . 'inferencelist'));
 
         $records = array();
         foreach($classifiedCalcGroup as $calcGroup)
         {
             foreach($calcGroup->calcList as $code => $calc) 
             {
+                if($calcType == 'inference' && !empty($lastInferenceDateList) && $lastInferenceDateList->$code < $date) continue;
+
                 $calcObj = $calcList[$code];
                 $calcObj->result = json_decode(json_encode($calc->result), true);
                 $inferenceRecord = $this->metricZen->getRecordByCodeAndDate($code, $calcObj, $date);
@@ -245,7 +249,8 @@ class metric extends control
             }
         }
 
-        file_put_contents($this->app->getTmpRoot(). 'calc', json_encode($classifiedCalcGroup));
+        file_put_contents($this->app->getTmpRoot() . 'calc', json_encode($classifiedCalcGroup));
+        file_put_contents($this->app->getTmpRoot() . 'inferencelist', json_encode($this->metric->getLastInferenceDateList()));
     }
 
     /**
@@ -497,13 +502,14 @@ class metric extends control
         }
         else
         {
-            if($calcType == 'all' )      $endDate = helper::now();
+            $endDate = helper::now();
         }
 
         $startDate = $this->metric->getInstallDate();
 
         $this->view->code      = $code;
-        $this->view->dateType  = $dateType;
+        $this->view->calcType  = $calcType;
+        $this->view->calcRange = $calcRange;
         $this->view->startDate = substr($startDate, 0, 10);
         $this->view->endDate   = substr($endDate, 0, 10);
         $this->display();

@@ -402,6 +402,14 @@ class metricModel extends model
         return $this->metricTao->fetchMetricsByCodeList($codeList);
     }
 
+    public function getReleasedCodePairs()
+    {
+        return $this->dao->select('code')->from(TABLE_METRIC)
+            ->where('deleted')->eq(0)
+            ->andWhere('stage')->eq('released')
+            ->fetchPairs();
+    }
+
     /**
      * 获取旧度量项列表。
      * Get old metric list.
@@ -2408,6 +2416,20 @@ class metricModel extends model
         if(!empty($todayData) && empty($dataWithCode)) return $this->lang->metric->noDataAfterCollect;
 
         return $this->lang->metric->noData;
+    }
+
+    public function getLastInferenceDateList()
+    {
+        $codeList = $this->getReleasedCodePairs();
+
+        $inferenceDateList = array();
+        foreach($codeList as $code)
+        {
+            $dateType = $this->getDateTypeByCode($code);
+            if($this->isFirstInference($code)) $inferenceDateList[$code] = $this->getInferenceEndDate($code, $dateType);
+        }
+
+        return $inferenceDateList;
     }
 
     public function checkHasInferenceOfDate($code, $dateType, $date)
