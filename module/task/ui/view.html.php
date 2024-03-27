@@ -31,7 +31,7 @@ if(!$isInModal && hasPriv('task', 'create', $task))
 $config->task->actionList['batchCreate']['hint'] = $config->task->actionList['batchCreate']['text'] = $lang->task->children;
 $actions    = !$task->deleted ? $this->loadModel('common')->buildOperateMenu($task) : array();
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
-$actions    = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
+if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
 if(!$hasDivider) unset($actions['type']);
 foreach($actions as $key => $action)
 {
