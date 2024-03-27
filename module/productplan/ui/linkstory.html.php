@@ -20,6 +20,8 @@ $cols['assignedTo']['type']    = 'user';
 $cols['module']['type']        = 'text';
 $cols['module']['map']         = $modules;
 
+foreach($cols as $colKey => $colConfig) $cols[$colKey]['sort'] = true;
+
 foreach($allStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
 
 searchForm
@@ -38,6 +40,7 @@ dtable
     set::data(array_values($allStories)),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
     set::extraHeight('+144'),
+    set::loadPartial(true),
     set::footToolbar(array('items' => array(array
         (
             'text'      => $lang->productplan->linkStory,
@@ -48,12 +51,7 @@ dtable
         ))
     )),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('view', "planID=$plan->id&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
-    set::footPager(usePager(array
-    (
-        'recPerPage' => $pager->recPerPage,
-        'recTotal' => $pager->recTotal,
-        'linkCreator' => helper::createLink('productplan', 'view', "planID={$plan->id}&type=story&orderBy={$orderBy}&link=true&param=" . helper::safe64Encode("&browseType={$browseType}&param={$param}") . "&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
-    )))
+    set::footPager(usePager())
 );
 
 render();
