@@ -254,8 +254,10 @@ class releaseZen extends release
 
         unset($this->config->product->search['fields']['product']);
         unset($this->config->product->search['fields']['project']);
+        unset($this->config->product->search['fields']['grade']);
         unset($this->config->product->search['params']['product']);
         unset($this->config->product->search['params']['project']);
+        unset($this->config->product->search['params']['grade']);
 
         $this->config->product->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "releaseID={$release->id}&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
