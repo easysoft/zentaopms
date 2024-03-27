@@ -331,6 +331,7 @@ class jobModel extends model
 
         if($job->engine == 'jenkins') $compile = $this->execJenkinsPipeline($job, $repo, $compileID, $extraParam);
         if($job->engine == 'gitlab')  $compile = $this->execGitlabPipeline($job);
+        if($job->engine == 'gitfox')  $compile = $this->execGitfoxPipeline($job);
 
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
@@ -435,6 +436,38 @@ class jobModel extends model
         else
         {
             $compile->queue  = $pipeline->id;
+            $compile->status = zget($pipeline, 'status', 'create_fail');
+        }
+
+        return $compile;
+    }
+
+    /**
+     * 执行gitfox流水线。
+     * Exec gitfox pipeline.
+     *
+     * @param  object $job
+     * @access public
+     * @return object
+     */
+    public function execGitfoxPipeline(object $job): object
+    {
+        $pipeline = json_decode($job->pipeline);
+
+        /* Run pipeline. */
+        $compile      = new stdclass();
+        $pipelineName = zget($pipeline, 'name', '');
+        $params       = array('branch' => zget($pipeline, 'reference', ''));
+        $apiRoot      = $this->loadModel('gitfox')->getApiRoot($job->server);
+        $pipeline     = json_decode(common::http(sprintf($apiRoot->url, "/repos/{$pipeline->project}/pipelines/{$pipelineName}/executions"), $params, array(), $apiRoot->header));
+        if(!empty($pipeline->message))
+        {
+            dao::$errors[] = $pipeline->message;
+            $compile->status = 'create_fail';
+        }
+        else
+        {
+            $compile->queue  = $pipeline->number;
             $compile->status = zget($pipeline, 'status', 'create_fail');
         }
 
