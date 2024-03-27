@@ -12,7 +12,6 @@ namespace zin;
 
 $buildModule  = $app->tab == 'project' ? 'projectbuild' : 'build';
 $canBeChanged = common::canBeChanged($buildModule, $build);
-$menus        = $this->build->buildOperateMenu($build);
 $decodeParam  = helper::safe64Decode($param);
 
 $buildItems = array();
@@ -25,6 +24,21 @@ foreach($buildPairs as $id => $name)
     $buildItems[] = $buildItem;
 }
 
+$actions = $build->deleted || !$canBeChanged ? array() : $this->loadModel('common')->buildOperateMenu($build);
+foreach($actions as $actionType => $typeActions)
+{
+    foreach($typeActions as $key => $action)
+    {
+        $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
+        $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
+        $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$build->id, $action['url']);
+        if($actionType == 'suffixActions')
+        {
+            if($action['icon'] == 'edit')  $actions['suffixActions'][$key]['text'] = $lang->edit;
+            if($action['icon'] == 'trash') $actions['suffixActions'][$key]['text'] = $lang->delete;
+        }
+    }
+}
 detailHeader
 (
     to::prefix
@@ -53,7 +67,12 @@ detailHeader
             set::items($buildItems),
         )
     ),
-    !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
+    !empty($actions['mainActions']) || !empty($actions['suffixActions']) ? to::suffix
+    (
+        btnGroup(set::items($actions['mainActions'])),
+        !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? div(setClass('divider')): null,
+        btnGroup(set::items($actions['suffixActions']))
+    ) : null
 );
 
 jsVar('initLink',       $link);
