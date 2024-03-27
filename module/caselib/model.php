@@ -317,4 +317,18 @@ class caselibModel extends model
 
         return true;
     }
+
+    /**
+     * 判断操作是否可以点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $lib
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $lib, string $action): bool
+    {
+        return common::hasPriv('caselib', $action);
+    }
 }

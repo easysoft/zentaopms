@@ -34,3 +34,6 @@ $config->caselib->actionList['delete']['className']    = 'ajax-submit';
 $config->caselib->actionList['delete']['data-confirm'] = array('message' => $lang->caselib->libraryDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->caselib->exportTemplateFields = array('module', 'title', 'precondition', 'stepDesc', 'stepExpect', 'keywords', 'pri', 'type', 'stage');
+
+$config->caselib->actions = new stdclass();
+$config->caselib->actions->view['mainActions'] = array('edit', 'delete');
