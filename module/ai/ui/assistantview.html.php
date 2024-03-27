@@ -59,6 +59,24 @@ detailBody
                     set::name($lang->statusAB),
                     $lang->ai->assistants->statusList[$assistant->enabled]
                 ),
+                item
+                (
+                    set::name($lang->ai->miniPrograms->icon),
+                    button
+                    (
+                        set('id', 'ai-edit-icon'),
+                        setClass('btn btn-icon'),
+                        setStyle(array(
+                            'width' => '46px',
+                            'height' => '46px',
+                            'border-radius' => '50%',
+                            'border' => "1px solid {$config->ai->miniPrograms->themeList[$iconTheme][1]}",
+                            'background-color' => $config->ai->miniPrograms->themeList[$iconTheme][0],
+                            'padding' => '0',
+                        )),
+                        html($config->ai->assistants->iconList[$iconName])
+                    )
+                )
             )
         )
     ),

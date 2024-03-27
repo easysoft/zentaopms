@@ -330,6 +330,10 @@ class ai extends control
         $assistant = $this->ai->getAssistantById($assistantId);
         $model     = $this->ai->getLanguageModel($assistant->modelId);
 
+        list($iconName, $iconTheme) = explode('-', $assistant->icon);
+
+        $this->view->iconName  = $iconName;
+        $this->view->iconTheme = $iconTheme;
         $this->view->assistant = $assistant;
         $this->view->model     = $model;
         $this->view->title     = $this->lang->ai->assistants->view;
