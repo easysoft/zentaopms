@@ -74,10 +74,20 @@ function changeRepo()
 
     /* Add new way get repo type. */
     var link = $.createLink('job', 'ajaxGetRepoType', 'repoID=' + repoID);
+    const $trigger = $('[name=triggerType]').zui('picker');
     $.getJSON(link, function(data)
     {
         if(data.result == 'success')
         {
+            let triggerOptions = [];
+            for(code in triggerList)
+            {
+                if(code == 'tag' && data.type == 'gitfox') continue;
+                triggerOptions.push({text: triggerList[code], value: code})
+            }
+            $trigger.render({items: triggerOptions});
+            $trigger.$.setValue(triggerOptions[0].value);
+
             if(data.type.indexOf('git') != -1)
             {
                 $('.reference').addClass('gitRepo');
@@ -109,12 +119,11 @@ function changeRepo()
                 })
             }
 
-            var triggerOptions = $('#triggerType').zui('picker').options.items;
             for(i in triggerOptions)
             {
                 if(triggerOptions[i].value == 'tag') triggerOptions[i].text = data.type != 'subversion' ? buildTag : dirChange;
             }
-            $('#triggerType').zui('picker').render({items: triggerOptions});
+            $trigger.render({items: triggerOptions});
         }
     });
 

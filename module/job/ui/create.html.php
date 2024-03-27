@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('frameList', $lang->job->frameList);
+jsVar('triggerList', $lang->job->triggerTypeList);
 jsVar('repoList', $repoList);
 jsVar('dirChange', $lang->job->dirChange);
 jsVar('buildTag', $lang->job->buildTag);

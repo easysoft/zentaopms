@@ -100,7 +100,6 @@ function setPipeline()
     $pipeline.$.clear();
 
     const repoID = $('[name=repo]').val();
-    console.log(repoID)
     if(repoID == 0) return false;
     if(!repoList[repoID] || repoList[repoID].SCM != 'GitFox') return;
 
@@ -155,7 +154,7 @@ function changeTriggerType(event)
     {
         var type = event;
     }
-    dirs ? $('.svn-fields').removeClass('hidden') : $('.svn-fields').addClass('hidden');
+    type == 'tag' ? $('.svn-fields').removeClass('hidden') : $('.svn-fields').addClass('hidden');
     $('.comment-fields').addClass('hidden');
     $('.custom-fields').addClass('hidden');
     if(type == 'commit')   $('.comment-fields').removeClass('hidden');
