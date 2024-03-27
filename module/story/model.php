@@ -476,7 +476,6 @@ class storyModel extends model
         if($executionID) $this->storyTao->linkToExecutionForCreate($executionID, $storyID, $story, $extra);
         if($bugID)       $this->storyTao->closeBugWhenToStory($bugID, $storyID);
         if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer);
-        if(!empty($story->URS))      $this->storyTao->doCreateURRelations($storyID, $story->URS);
         if(!empty($story->parent))
         {
             $this->subdivide($story->parent, array($storyID));
@@ -628,8 +627,6 @@ class storyModel extends model
                     $link2Plans[$planID] = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";
                 }
             }
-
-            if(!empty($story->URS)) $this->storyTao->doCreateURRelations($storyID, $story->URS);
 
             $this->setStage($storyID);
             $this->executeHooks($storyID);

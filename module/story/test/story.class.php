@@ -762,24 +762,6 @@ class storyTest
     }
 
     /**
-     * 测试 doCreateURRelations 方法。
-     * Test doCreateURRelations method.
-     *
-     * @param  int    $storyID
-     * @param  array  $URList
-     * @access public
-     * @return array
-     */
-    public function doCreateURRelationsTest(int $storyID, array $URList): array
-    {
-        $this->objectModel->dao->delete()->from(TABLE_RELATION)->exec();
-        $this->objectModel->doCreateURRelations($storyID, $URList);
-
-        if(dao::isError()) return dao::getError();
-        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->fetchAll();
-    }
-
-    /**
      * 测试 doCreateReviewer 方法。
      * Test doCreateReviewer method.
      *

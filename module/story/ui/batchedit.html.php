@@ -43,6 +43,7 @@ $items['stage']['ditto']             = true;
 $items['grade']['required']          = true;
 $items['grade']['disabled']          = true;
 $items['grade']['hidden']            = !$showGrade;
+$items['parent']['hidden']           = !$showGrade && $storyType == 'epic';
 $items['assignedTo']['defaultDitto'] = 'off';
 $items['source']['defaultDitto']     = 'off';
 $items['stage']['defaultDitto']      = 'off';

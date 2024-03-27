@@ -877,53 +877,6 @@ class storyTao extends storyModel
     }
 
     /**
-     * 创建用户需求和软件需求的关联关系。
-     * Do create UR and SR relations.
-     *
-     * @param  int       $storyID
-     * @param  array     $URList
-     * @access protected
-     * @return void
-     */
-    protected function doCreateURRelations(int $storyID, array $URList): void
-    {
-        if(empty($storyID) || empty($URList)) return;
-
-        $requirements = $this->getByList($URList);
-        $data         = new stdclass();
-        foreach($URList as $URID)
-        {
-            if(!isset($requirements[$URID])) continue;
-
-            $requirement = $requirements[$URID];
-            if($requirement->type != 'requirement') continue;
-
-            $requirement    = $requirements[$URID];
-            $data->product  = $requirement->product;
-            $data->AType    = 'requirement';
-            $data->BType    = 'story';
-            $data->relation = 'subdivideinto';
-            $data->AID      = $URID;
-            $data->BID      = $storyID;
-            $data->AVersion = $requirement->version;
-            $data->BVersion = 1;
-            $data->extra    = 1;
-
-            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
-
-            $data->AType    = 'story';
-            $data->BType    = 'requirement';
-            $data->relation = 'subdividedfrom';
-            $data->AID      = $storyID;
-            $data->BID      = $URID;
-            $data->AVersion = 1;
-            $data->BVersion = $requirement->version;
-
-            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
-        }
-    }
-
-    /**
      * 在创建需求的时候，将需求关联到项目或执行。
      * Link to execution for create story.
      *

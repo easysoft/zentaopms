@@ -674,7 +674,6 @@ class storyZen extends story
         $grades    = $this->story->getGradePairs($storyType);
 
         $storyTypes = strpos($product->vision, 'or') !== false ? 'launched' : 'active';
-        $URS        = $storyType != 'story' ? array() : $this->story->getProductStoryPairs($productID, $branch, 0, $storyTypes, 'id_desc', 0, '', 'requirement');
         /* 追加字段的label属性。 */
         foreach($fields as $field => $attr)
         {
@@ -713,20 +712,17 @@ class storyZen extends story
         $fields['assignedTo']['options'] = $users;
         $fields['mailto']['options']     = $users;
         $fields['parent']['options']     = array_filter($stories);
-        $fields['URS']['options']        = $URS;
 
         if($this->story->checkForceReview()) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);
         if($this->view->hiddenPlan) unset($fields['plan']);
-        if($storyType == 'requirement')
-        {
-            unset($fields['parent']);
-            unset($fields['URS']);
-        }
+
+        $hiddenGrade = !$this->story->showGrade($storyType);
+        if($hiddenGrade && $storyType == 'epic') unset($fields['parent']);
 
         $this->view->branchID    = $branch;
         $this->view->gradeRule   = $this->config->{$storyType}->gradeRule;
-        $this->view->hiddenGrade = !$this->story->showGrade($storyType);
+        $this->view->hiddenGrade = $hiddenGrade;
         return $fields;
     }
 
@@ -1055,8 +1051,11 @@ class storyZen extends story
             $fields['assignedTo']['options'] = $teamUsers;
         }
 
+        $hiddenGrade = !$this->story->showGrade($storyType);
+        if($hiddenGrade && $storyType == 'epic') $hiddenParent = true;
+
         $this->view->hiddenParent = $hiddenParent;
-        $this->view->hiddenGrade  = !$this->story->showGrade($storyType);
+        $this->view->hiddenGrade  = $hiddenGrade;
         return $fields;
     }
 
