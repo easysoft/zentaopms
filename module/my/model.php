@@ -1077,7 +1077,7 @@ class myModel extends model
      */
     public function getReviewingFlows($objectType = 'all', $orderBy = 'id_desc', $checkExists = false): array|bool
     {
-        if($this->config->edition != 'max') return array();
+        if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
 
         $stmt = $this->dao->select('t2.objectType,t2.objectID')->from(TABLE_APPROVALNODE)->alias('t1')
             ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')->on('t2.approval = t1.approval')
