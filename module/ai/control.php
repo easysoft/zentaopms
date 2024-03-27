@@ -411,9 +411,18 @@ class ai extends control
         if(strtolower($this->server->request_method) == 'post')
         {
             $assistant = fixer::input('post')->get();
+
             if(empty($assistant->name))
             {
                 dao::$errors['name'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->assistants->name);
+            }
+            if(empty($assistant->modelId))
+            {
+                dao::$errors['modelId'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->common);
+            }
+            if(empty($assistant->systemMessage))
+            {
+                dao::$errors['systemMessage'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->assistants->systemMessage);
             }
             if(empty($assistant->greetings))
             {
@@ -421,10 +430,14 @@ class ai extends control
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $exists = $this->ai->checkAssistantDuplicate($assistant->name, $assistant->modelId);
-            if($exists) return $this->send(array('result' => 'fail', 'message' => array('name' => $this->lang->ai->assistants->duplicateTip)));
-
             $assistant->id = $assistantId;
+
+            $exists = $this->ai->checkAssistantDuplicate($assistant->name, $assistant->modelId);
+            if($exists && $exists->id != $assistantId) return $this->send(array('result' => 'fail', 'message' => array('name' => $this->lang->ai->assistants->duplicateTip)));
+
+            $assistant->icon = "$assistant->iconName-$assistant->iconTheme";
+            unset($assistant->iconName, $assistant->iconTheme);
+
             $this->ai->updateAssistant($assistant);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -439,9 +452,14 @@ class ai extends control
         }, array());
 
         $assistant = $this->ai->getAssistantById($assistantId);
-        $this->view->models = $models;
+
+        list($iconName, $iconTheme) = explode('-', $assistant->icon);
+
+        $this->view->models    = $models;
         $this->view->assistant = $assistant;
-        $this->view->title = $this->lang->ai->assistants->edit;
+        $this->view->iconName  = $iconName;
+        $this->view->iconTheme = $iconTheme;
+        $this->view->title     = $this->lang->ai->assistants->edit;
         $this->display();
     }
 

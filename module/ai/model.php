@@ -2830,7 +2830,7 @@ class aiModel extends model
      * @param  string $AssistantName
      * @param  int    $modelId
      * @access public
-     * @return bool
+     * @return object
      */
     public function checkAssistantDuplicate($AssistantName, $modelId)
     {

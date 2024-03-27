@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('iconCheck', $config->ai->miniPrograms->iconCheck);
+jsVar('iconName', $iconName);
+jsVar('iconTheme', $iconTheme);
 
 formPanel
 (
