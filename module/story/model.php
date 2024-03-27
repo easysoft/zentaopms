@@ -775,16 +775,7 @@ class storyModel extends model
             $childStories = $this->getAllChildId($storyID);
             foreach($childStories as $childStoryID) $this->updateStoryProduct($childStoryID, $story->product);
         }
-        if($story->grade != $oldStory->grade)
-        {
-            $gradeDiff = (int)$story->grade - (int)$oldStory->grade;
-            $this->dao->update(TABLE_STORY)
-                 ->set("grade = grade + $gradeDiff")
-                 ->where('root')->eq($oldStory->root)
-                 ->andWhere('grade')->gt($oldStory->grade)
-                 ->andWhere('id')->ne($storyID)
-                 ->exec();
-        }
+        if($story->grade != $oldStory->grade) $this->syncGrade($oldStory, $story);
         $parentChanged = $story->parent != $oldStory->parent;
         if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory->parent);
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, !$parentChanged);
@@ -872,6 +863,7 @@ class storyModel extends model
         if(empty($childrenStatus)) return true;
 
         $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
+        if(isset($oldParentStory->type) && $childStory->type != $oldParentStory->type) return false;
         if(empty($oldParentStory))
         {
             $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($storyID)->exec();
@@ -917,7 +909,7 @@ class storyModel extends model
             $this->action->logHistory($actionID, $changes);
         }
 
-        if($newParentStory->parent > 0 && $newParentStory->type == $childStory->type) return $this->updateParentStatus($parentID, $newParentStory->parent, true);
+        if($newParentStory->parent) return $this->updateParentStatus($parentID, $newParentStory->parent, true);
         return true;
     }
 
@@ -1069,17 +1061,8 @@ class storyModel extends model
 
             if(dao::isError()) return false;
 
-            if($story->grade != $oldStory->grade)
-            {
-                $gradeDiff = (int)$story->grade - (int)$oldStory->grade;
-                $this->dao->update(TABLE_STORY)
-                     ->set("grade = grade + $gradeDiff")
-                     ->where('root')->eq($oldStory->root)
-                     ->andWhere('grade')->gt($oldStory->grade)
-                     ->andWhere('id')->ne($storyID)
-                     ->exec();
-                $this->dao->update(TABLE_STORY)->set('grade')->eq($story->grade)->where('id')->eq($storyID)->exec();
-            }
+            if($story->grade != $oldStory->grade) $this->syncGrade($oldStory, $story);
+
             /* Update story sort of plan when story plan has changed. */
             if($oldStory->plan != $story->plan) $this->updateStoryOrderOfPlan($storyID, (string)$story->plan, $oldStory->plan);
             $parentChanged = $story->parent != $oldStory->parent;
@@ -4935,7 +4918,11 @@ class storyModel extends model
         return $this->dao->select("grade, name")->from(TABLE_STORYGRADE)
             ->where('type')->eq($type)
             ->beginIF($status == 'enable')->andWhere('status')->eq('enable')->fi()
-            ->beginIF($appendList)->orWhere('grade')->in($appendList)->fi()
+            ->beginIF($appendList)
+            ->orWhere('(grade')->in($appendList)
+            ->andWhere('type')->eq($type)
+            ->markRight(1)
+            ->fi()
             ->orderBy('grade_asc')
             ->fetchPairs();
     }
@@ -5000,7 +4987,11 @@ class storyModel extends model
                 ->where('type')->eq($storyType)
                 ->andWhere('grade')->gt($story->grade)
                 ->andWhere('status')->eq('enable')
-                ->beginIF($appendList)->orWhere('grade')->in($appendList)->fi()
+                ->beginIF($appendList)
+                ->orWhere('(grade')->in($appendList)
+                ->andWhere('type')->eq($storyType)
+                ->markRight(1)
+                ->fi()
                 ->orderBy('grade_asc')
                 ->fetchPairs();
         }
@@ -5075,5 +5066,32 @@ class storyModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * 父需求层级变更时，同步子需求层级。
+     * Sync child story grade when parent story grade changed.
+     *
+     * @param  object $oldStory
+     * @param  object $story
+     * @access public
+     * @return array
+     */
+    public function syncGrade(object $oldStory, object $story)
+    {
+        if($oldStory->isParent != '1') return;
+
+        $childIdList = $this->getAllChildId($oldStory->id);
+        if($childIdList)
+        {
+            $this->loadModel('action');
+            $children = $this->getByList($childIdList);
+            foreach($children as $child)
+            {
+                $grade = (int)$child->grade + (int)$story->grade - (int)$oldStory->grade;
+                $this->dao->update(TABLE_STORY)->set('grade')->eq($grade)->where('id')->eq($child->id)->exec();
+                $this->action->create('story', $child->id, 'syncGrade', '', $grade);
+            }
+        }
     }
 }

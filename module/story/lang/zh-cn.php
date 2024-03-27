@@ -390,6 +390,7 @@ $lang->story->action->unlinkrelatedstory    = array('main' => "\$date, 由 <stro
 $lang->story->action->unlinkchildstory      = array('main' => "\$date, 由 <strong>\$actor</strong> 移除细分{$lang->SRCommon} <strong>\$extra</strong>。");
 $lang->story->action->recalledchange        = array('main' => "\$date, 由 <strong>\$actor</strong> 撤销变更。");
 $lang->story->action->synctwins             = array('main' => "\$date, 系统判断由于孪生需求 <strong>\$extra</strong> \$operate，本需求同步调整。", 'operate' => 'operateList');
+$lang->story->action->syncgrade             = array('main' => "\$date, 系统判断由于父需求层级变动，本需求层级同步修改为 <strong>\$extra</strong>。");
 $lang->story->action->linked2roadmap        = array('main' => '$date, 由 <strong>$actor</strong> 关联到路标 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromroadmap   = array('main' => '$date, 由 <strong>$actor</strong> 从路标 <strong>$extra</strong> 移除。');
 $lang->story->action->changedbycharter      = array('main' => '$date, 由 <strong>$actor</strong> 通过立项申请 <strong>$extra</strong> ，需求状态同步调整为已立项。');
