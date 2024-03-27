@@ -347,8 +347,6 @@ CSS;
 
     protected function buildMain()
     {
-        $isSimple = $this->prop('layout') === 'simple';
-
         return div
         (
             setClass('detail-main flex-auto col gap-1 min-w-0'),
@@ -359,7 +357,7 @@ CSS;
                 $this->block('main')
             ),
             $this->buildHistory(),
-            $isSimple ? null : $this->buildActions()
+            $this->buildActions()
         );
     }
 
