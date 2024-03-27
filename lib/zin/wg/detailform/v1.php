@@ -412,7 +412,7 @@ class detailForm extends wg
             $this->buildHeader(),
             new formBase
             (
-                setClass('canvas shadow rounded gap-0'),
+                setClass('canvas shadow ring rounded gap-0'),
                 set($this->props->pick($formProps)),
                 set($backProps),
                 set::actionsClass('py-4 sticky border-t bottom-0 canvas z-5', isset($formProps['actionsClass']) ? $formProps['actionsClass'] : null),
