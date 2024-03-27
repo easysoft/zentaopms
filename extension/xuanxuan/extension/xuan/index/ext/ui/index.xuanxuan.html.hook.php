@@ -1,10 +1,20 @@
-<?php if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') != false): ?>
-<?php $this->app->setClientTheme('blue'); ?>
+<?php
+
+use function zin\jsVar;
+
+ if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') != false): ?>
+<?php global $app; $app->setClientTheme('blue'); ?>
 <style>
 #appsBar, #apps {left: 0!important;}
+.xxc-embed #menu {display: none;}
+.xxc-embed #userMenu-toggle {display: none;}
+.xxc-embed #apps {left: 0;}
+.xxc-embed #toolbar {position: fixed; right: 130px; height: 47px;}
 </style>
 <script>
 $('html').addClass('xxc-embed');
+
+const appsMenuItems = JSON.parse(`<?php echo json_encode(commonModel::getMainNavList($app->rawModule)); ?>`);
 
 /** Update zentao client app menu */
 function updateAppMenu()
@@ -31,20 +41,22 @@ $(document).on('hideapp', function(e, app)
 </script>
 <?php else: ?>
 <?php
-$this->loadModel('im');
-$xxdStatus = $this->im->getXxdStatus();
-if(isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon && $xxdStatus == 'online')
+global $config;
+global $app;
+$im        = $app->control->loadModel('im');
+$xxdStatus = $im->getXxdStatus();
+if(isset($config->xuanxuan->turnon) && $config->xuanxuan->turnon && $xxdStatus == 'online')
 {
     $xuanConfig  = new stdclass();
-    $token       = $this->im->userGetAuthToken($this->app->user->id, 'zentaoweb');
-    $clientUrl   = isset($this->config->webClientUrl) ? $this->config->webClientUrl : 'data/xuanxuan/web/index.html';
-    $backendUrl  = $this->im->getServer('zentao');
+    $token       = $im->userGetAuthToken($app->user->id, 'zentaoweb');
+    $clientUrl   = isset($config->webClientUrl) ? $config->webClientUrl : 'data/xuanxuan/web/index.html';
+    $backendUrl  = $im->getServer('zentao');
 
     $xuanConfig->clientUrl = $clientUrl;
-    $xuanConfig->server    = ($this->config->xuanxuan->https == 'on' ? 'https' : 'http') . '://' . parse_url($backendUrl, PHP_URL_HOST) . ':' . $this->config->xuanxuan->commonPort;
-    $xuanConfig->account   = $this->app->user->account;
+    $xuanConfig->server    = ($config->xuanxuan->https == 'on' ? 'https' : 'http') . '://' . parse_url($backendUrl, PHP_URL_HOST) . ':' . $config->xuanxuan->commonPort;
+    $xuanConfig->account   = $app->user->account;
     $xuanConfig->authKey   = $token->token;
-    $xuanConfig->debug     = $this->config->debug;
+    $xuanConfig->debug     = $config->debug;
 }
 ?>
 <?php if(isset($xuanConfig)): ?>
@@ -62,8 +74,8 @@ if(isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon && 
 #xx-embed-container .xx-embed-body {min-height: initial!important;}
 </style>
 <?php js::import($webRoot . 'data/xuanxuan/sdk/sdk.min.js'); ?>
-<?php js::set('xuanConfig', $xuanConfig); ?>
-<?php js::set('lang', $this->app->getClientLang()); ?>
+<?php jsVar('xuanConfig', $xuanConfig); ?>
+<?php global $app; jsVar('lang', $app->getClientLang()); ?>
 <script>
 /* Toggle xuan client popover */
 function toggleXuanClient()
