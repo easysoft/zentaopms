@@ -15,6 +15,9 @@
     });
 })();
 
+let selectedTheme = iconTheme ?? 7;
+let selectedIcon = iconName ?? 'coding';
+
 function changeMiniProgramTheme(event)
 {
     const $icon = $('#preview-icon');
