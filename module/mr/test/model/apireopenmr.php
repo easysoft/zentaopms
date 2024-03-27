@@ -44,7 +44,7 @@ $projectID = array
 $mrID = array
 (
     'gitlab' => 138,
-    'gitea'  => 28,
+    'gitea'  => 2,
     'gogs'   => 18,
 );
 
