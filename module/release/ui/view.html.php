@@ -17,7 +17,21 @@ $releaseModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'relea
 jsVar('initLink', $link);
 jsVar('type', $type);
 $canBeChanged = common::canBeChanged($releaseModule, $release);
-$menus        = $this->release->buildOperateViewMenu($release);
+$actions      = $this->loadModel('common')->buildOperateMenu($release);
+foreach($actions as $actionType => $typeActions)
+{
+    foreach($typeActions as $key => $action)
+    {
+        $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
+        $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
+        $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$release->id, $action['url']);
+        if($actionType == 'suffixActions')
+        {
+            if($action['icon'] == 'edit')  $actions['suffixActions'][$key]['text'] = $lang->edit;
+            if($action['icon'] == 'trash') $actions['suffixActions'][$key]['text'] = $lang->delete;
+        }
+    }
+}
 detailHeader
 (
     to::prefix
@@ -31,7 +45,12 @@ detailHeader
         entityLabel(set(array('entityID' => $release->id, 'level' => 2, 'text' => $release->name))),
         $release->deleted ? span(setClass('label danger'), $lang->release->deleted) : null
     ),
-    !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
+    !empty($actions['mainActions']) || !empty($actions['suffixActions']) ? to::suffix
+    (
+        btnGroup(set::items($actions['mainActions'])),
+        !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? div(setClass('divider')): null,
+        btnGroup(set::items($actions['suffixActions']))
+    ) : null
 );
 
 jsVar('releaseID', $release->id);
