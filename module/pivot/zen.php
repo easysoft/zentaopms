@@ -125,25 +125,6 @@ class pivotZen extends pivot
     }
 
     /**
-     * 获取透视表过滤器下拉选项。
-     * Get filter options of pivot.
-     *
-     * @param  string $type
-     * @param  string $object
-     * @param  string $field
-     * @param  string $sql
-     * @access public
-     * @return array
-     */
-    public function getFilterOptions(string $type, string $object = '', string $field = '', string $sql = ''): array
-    {
-        $result  = array();
-        $options = $this->pivot->getSysOptions($type, $object, $field, $sql);
-        foreach($options as $key => $value) $result[] = array('text' => $value, 'value' => $key);
-        return $result;
-    }
-
-    /**
      * Preview pivots of a group.
      *
      * @param  int    $groupID

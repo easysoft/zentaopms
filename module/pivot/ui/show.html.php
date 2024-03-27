@@ -25,7 +25,7 @@ foreach($pivot->filters as $filter)
     if($from == 'query')
     {
         $typeOption = $filter['typeOption'];
-        if($type == 'select' && !isset($options[$typeOption])) $options[$typeOption] = $this->getFilterOptions($typeOption);
+        if($type == 'select' && !isset($options[$typeOption])) $options[$typeOption] = $this->pivot->getSysOptions($typeOption);
 
         $filters[] = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $typeOption, array()))));
     }
@@ -34,7 +34,7 @@ foreach($pivot->filters as $filter)
         if($type == 'select' && !isset($options[$field]))
         {
             $fieldSetting = $pivot->fieldSettings->$field;
-            $options[$field] = $this->getFilterOptions($fieldSetting->type, $fieldSetting->object, $fieldSetting->field, $pivot->sql);
+            $options[$field] = $this->pivot->getSysOptions($fieldSetting->type, $fieldSetting->object, $fieldSetting->field, $pivot->sql, zget($filter, 'saveAs', ''));
         }
 
         $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $field, array()))));
