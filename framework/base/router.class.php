@@ -2054,7 +2054,11 @@ class baseRouter
 
         $mergedTargetDir  = $this->getTmpRoot() . $class . DS . $extTargetPrefix;
         $mergedTargetFile = $mergedTargetDir . $moduleName . '.php';
-        if(!is_dir($mergedTargetDir)) mkdir($mergedTargetDir, 0755, true);
+        if(!is_dir($mergedTargetDir))
+        {
+            $made = mkdir($mergedTargetDir, 0755, true);
+            if(!$made && !empty($this->config->debug)) helper::end("ERROR: Can NOT create required directory '{$mergedTargetDir}', please create it manually with correct permission.");
+        }
 
         /* 判断生成的缓存文件是否需要更新。 Judge whether the merged target file needed update or not. */
         if(!$this->needTargetFileUpdate($mergedTargetFile, $extFiles, $hookFiles, $apiFiles, $targetExtPaths, $mainTargetFile)) return $mergedTargetFile;
