@@ -97,7 +97,6 @@ $lang->story->deleteAction    = "删除{$lang->SRCommon}";
 $lang->story->exportAction    = "导出{$lang->SRCommon}";
 $lang->story->reportAction    = "统计报表";
 
-$lang->story->skipStory        = '系统检测到您选择了父需求，父需求无法主动关闭，只能由子需求的状态变化而触发关闭。';
 $lang->story->closedStory      = '需求：%s 已关闭，将不会被关闭。';
 $lang->story->batchToTaskTips  = "只有激活状态的{$lang->SRCommon}才能转为任务。";
 $lang->story->successToTask    = '批量转任务成功';
@@ -350,7 +349,6 @@ $lang->story->confirmRecallChange   = "撤销变更后，需求内容会回退�
 $lang->story->confirmRecallReview   = "您确定要撤回评审吗？";
 $lang->story->noStoryToTask         = "只有激活的{$lang->SRCommon}才能转为任务！";
 $lang->story->ignoreClosedStory     = "{$lang->SRCommon} %s 状态为已关闭，本次操作已被过滤。";
-$lang->story->allChildrenClosed     = "%s需求下的子需求均已关闭，是否自动关闭这些需求？";
 $lang->story->changeProductTips     = "确认修改所属产品吗，修改后，需求的所有子级需求也会跟随变更。";
 $lang->story->gradeOverflow         = "系统检测该需求下子需求的最大层级为%s，同步修改后为%s，超出系统设置的层级范围，无法修改。";
 $lang->story->batchGradeOverflow    = "%s需求的子需求同步修改后，超出系统设置的层级范围，无法修改。";

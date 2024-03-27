@@ -828,14 +828,6 @@ class story extends control
             return $this->send(array('result' => 'success', 'load' => $this->createLink($module, 'view', $params), 'message' => $this->lang->saveSuccess, 'closeModal' => true));
         }
 
-        $closeParent = false;
-        if($story->parent > 0)
-        {
-            $parent      = $this->story->fetchByID($story->parent);
-            $activeChild = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('status')->ne('closed')->andWhere('deleted')->eq('0')->fetch('id');
-            $closeParent = $parent->status != 'closed' and !$activeChild;
-        }
-
         /* Get story and product. */
         $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, `type`')->fetch();
 
@@ -854,7 +846,6 @@ class story extends control
         $this->view->title          = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
         $this->view->product        = $product;
         $this->view->story          = $story;
-        $this->view->closeParent    = $closeParent;
         $this->view->productStories = $productStories;
         $this->view->actions        = $this->action->getList('story', $storyID);
         $this->view->users          = $this->loadModel('user')->getPairs();
@@ -898,7 +889,6 @@ class story extends control
         /* Get the skipped and already closed stories, and the count of stories which have a twin. */
         $stories      = $this->story->getByList($storyIdList);
         $closedStory  = array();
-        $skippedStory = array();
         $ignoreTwins  = array();
         $twinsCount   = array();
         $storyCount   = count($stories);
@@ -910,7 +900,6 @@ class story extends control
                 continue;
             }
 
-            if($story->isParent == '1')    $skippedStory[] = $story->id;
             if($story->status == 'closed') $closedStory[]  = $story->id;
             if($story->parent == -1 || $story->status == 'closed') unset($stories[$story->id]);
 
@@ -928,8 +917,7 @@ class story extends control
         if($storyCount == count($closedStory)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->notice->closed, 'locate' => $this->session->storyList)));
 
         $errorTips = '';
-        if($closedStory)  $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
-        if($skippedStory) $errorTips .= $this->lang->story->skipStory;
+        if($closedStory) $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
 
         $this->view->productID  = $productID;
         $this->view->stories    = $stories;

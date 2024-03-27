@@ -97,7 +97,6 @@ $lang->story->deleteAction    = "Delete Story";
 $lang->story->exportAction    = "Export Story";
 $lang->story->reportAction    = "Story Report";
 
-$lang->story->skipStory        = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory      = 'Story %s is closed and will not be closed.';
 $lang->story->batchToTaskTips  = "Only active {$lang->SRCommon} can be converted into tasks.";
 $lang->story->successToTask    = "Converted to task.";
@@ -350,7 +349,6 @@ $lang->story->confirmRecallChange  = "After undo the change, the story content w
 $lang->story->confirmRecallReview  = "Are you sure you want to withdraw the review?";
 $lang->story->noStoryToTask        = "Only the activated {$lang->SRCommon} can be converted into a task!";
 $lang->story->ignoreClosedStory    = "{$lang->SRCommon} %s status is closed, and the operation has been filtered.";
-$lang->story->allChildrenClosed    = "All sub-requirements under the %s requirement have been closed. Whether to automatically close these requirements?";
 $lang->story->changeProductTips    = "Are you sure you want to modify the product? After modification, all sub-level requirements of the requirement will also be changed accordingly.";
 $lang->story->gradeOverflow        = "The system detects that the maximum level of sub-requirements under this requirement is %s. After synchronization modification, it is %s. It exceeds the level range set by the system and cannot be modified.";
 $lang->story->batchGradeOverflow   = "After the sub-requirements of the %s requirement are modified synchronously, they exceed the level range set by the system and cannot be modified.";

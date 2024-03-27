@@ -1918,12 +1918,17 @@ class storyTao extends storyModel
 
         if($status == 'closed')
         {
+            $closedReason = $this->dao->select('closedReason')->from(TABLE_STORY)
+                ->where('parent')->eq($parentID)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('closedReason')->eq('done')
+                ->fetch('closedReason');
+
             $story->assignedTo   = 'closed';
             $story->assignedDate = $now;
             $story->closedBy     = $this->app->user->account;
             $story->closedDate   = $now;
-            $story->closedReason = 'done';
-            $story->closedReason = 'done';
+            $story->closedReason = $closedReason ? 'done' : 'willnotdo';
         }
 
         $story->lastEditedBy   = $this->app->user->account;

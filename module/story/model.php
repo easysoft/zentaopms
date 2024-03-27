@@ -3440,7 +3440,7 @@ class storyModel extends model
         $action = strtolower($action);
 
         if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
-        if($action == 'close')      return $story->status != 'closed' && $story->isParent == '0';
+        if($action == 'close')      return $story->status != 'closed';
         if($action == 'activate')   return $story->status == 'closed';
         if($action == 'assignto')   return $story->status != 'closed';
         if($action == 'batchcreate' and $story->parent > 0) return false;
