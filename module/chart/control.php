@@ -70,31 +70,107 @@ class chart extends control
      */
     public function ajaxGetFilterForm()
     {
-        $filters = $this->post->filters;
+        $fieldList     = $this->post->fieldList;
+        $filters       = $this->post->filters;
+        $fieldSettings = $this->post->fieldSettings;
+        $langs         = $this->post->langs;
+        $sql           = $this->post->sql;
+        $clientLang    = $this->app->getClientLang();
 
-        /* 获取关联字段下拉菜单数据。*/
-        /* Get the options for the related field in filter. */
-        $fields = $this->chartZen->getOptions4SelectField();
+        $verifyResult = $this->loadModel('dataview')->verifySqlWithModify($sql);
+
+        if($verifyResult !== true) return $this->send($verifyResult);
+
+        $fieldPairs = array();
+        foreach($fieldList as $field => $fieldName)
+        {
+            $fieldObject  = $fieldSettings[$field]['object'];
+            $relatedField = $fieldSettings[$field]['field'];
+
+            $this->app->loadLang($fieldObject);
+            $fieldPairs[$field] = isset($this->lang->$fieldObject->$relatedField) ? $this->lang->$fieldObject->$relatedField : $field;
+
+            if(!isset($langs[$field])) continue;
+            if(!empty($langs[$field][$clientLang])) $fieldPairs[$field] = $langs[$field][$clientLang];
+        }
 
         $htmls = array();
         foreach($filters as $filter)
         {
-            $field = $filter['field'];
-            $type  = $filter['type'];
+            $field   = $filter['field'];
+            $type    = $filter['type'];
+            $default = isset($filter['default']) ? $filter['default'] : '';
+
+            $saveAs      = isset($filter['saveAs']) ? $filter['saveAs'] : '';
+            $saveAsClass = $type == 'select' ? '' : 'hidden'; // 只有是选择的时候，才展示显示为
+
+            $options = array();
+            if($type == 'select')
+            {
+                $fieldSetting = $fieldSettings[$field];
+                $options      = $this->chart->getSysOptions(zget($fieldSetting, 'type', ''), zget($fieldSetting, 'object', ''), zget($fieldSetting, 'field', ''), $sql, zget($filter, 'saveAs', ''));
+            }
 
             $filterHtml = array();
 
             /* field html */
-            $filterHtml['field'] = html::select('field', $fields, $field, "class='form-control picker-select' onchange='initFilterForm(this, this.value)'");
+            $filterHtml['field']  = html::select('field', $fieldPairs, $field, "class='form-control picker-select' onchange='initFilterForm(this, this.value)'");
+            $filterHtml['saveAs'] = html::select('saveAs', array('' => '') + $fieldPairs, $saveAs, "class='form-control picker-select' onchange='changeSaveAs(this, this.value)'");
+            $filterHtml['saveAsClass'] = $saveAsClass;
 
             /* default html */
-            $filterHtml['default'] = $this->chartZen->getHTML('default', $type, $filter);
+            $filterHtml['default'] = '';
+
+            if($type == 'input') $filterHtml['default'] .= html::input('default', $default, "class='form-control' onchange='changeDefault(this,this.value)'");
+            if($type == 'date' or $type == 'datetime')
+            {
+                if(empty($default)) $default = array('begin' => '', 'end' => '');
+                $class = $type == 'date' ? 'form-date' : 'form-datetime';
+                $filterHtml['default'] .= '<div class="input-group">';
+                $filterHtml['default'] .= html::input('default[begin]', $default['begin'], "class='form-control $class default-begin' placeholder='{$this->lang->chart->unlimited}' onchange='changeDefault(this,this.value)'");
+                $filterHtml['default'] .= "<span class='input-group-addon fix-border borderBox' style='border-radius: 0px;'>{$this->lang->chart->colon}</span>";
+                $filterHtml['default'] .= html::input('default[end]', $default['end'], "class='form-control $class default-end' placeholder='{$this->lang->chart->unlimited}' onchange='changeDefault(this,this.value)'");
+                $filterHtml['default'] .= '</div>';
+            }
+            if($type == 'select') $filterHtml['default'] = html::select('default[]', $options, $default, "class='form-control picker-select' onchange='changeDefault(this,this.value)' multiple");
+            if($type == 'condition')
+            {
+                $operator = isset($filter['operator']) ? $filter['operator'] : '';
+                $value    = isset($filter['value'])    ? $filter['value']    : '';
+                $hidden   = strpos($operator, 'NULL') !== false ? 'hidden' : '';
+                $filterHtml['default']  = "<div class='conditionGroup' style='display:flex'>";
+                $filterHtml['default'] .= html::select('operator', $this->config->bi->conditionList, $operator, "class='form-control picker-select' onchange='changeCondition(this,this.value)'");
+                $filterHtml['default'] .= html::input('value', $value, "class='form-control $hidden' onchange='changeConditionValue(this,this.value)'");
+                $filterHtml['default'] .= "<div/>";
+            }
 
             /* type html */
             $filterHtml['type'] = html::select('type', $this->lang->chart->fieldTypeList, $type, "class='form-control picker-select' onchange='changeType(this, this.value)'");
 
             /* filter item html */
-            $filterHtml['item'] = $this->chartZen->getHTML('item', $type, $filter);
+            $filterHtml['item'] = '';
+            if($type == 'input') $filterHtml['item'] .= html::input('default', $default, "class='form-control'");
+            if($type == 'date' or $type == 'datetime')
+            {
+                if(empty($default)) $default = array('begin' => '', 'end' => '');
+                $class = $type == 'date' ? 'form-date' : 'form-datetime';
+                $filterHtml['item'] .= '<div class="input-group">';
+                $filterHtml['item'] .= "<input type='text' name='default[begin]' id='default[begin]' value='{$default['begin']}' class='form-control $class default-begin' autocomplete='off' placeholder='{$this->lang->chart->unlimited}' onchange='changeDefault(this, this.value)'>";
+                $filterHtml['item'] .= '<span class="input-group-addon fix-border borderBox" style="border-radius: 0px;">' . $this->lang->chart->colon . '</span>';
+                $filterHtml['item'] .= "<input type='text' name='default[end]' id='default[end]' value='{$default['end']}' class='form-control $class default-end' autocomplete='off' placeholder='{$this->lang->chart->unlimited}' onchange='changeDefault(this, this.value)'>";
+                $filterHtml['item'] .= '</div>';
+            }
+            if($type == 'select') $filterHtml['item'] .= html::select('default', array('' => '') + $options, $default, "class='form-control picker-select' multiple");
+            if($type == 'condition')
+            {
+                $operator = isset($filter['operator']) ? $filter['operator'] : '';
+                $value    = isset($filter['value'])    ? $filter['value']    : '';
+                $hidden   = strpos($operator, 'NULL') !== false ? 'hidden' : '';
+                $filterHtml['item']  = "<div class='conditionGroup' style='display:flex'>";
+                $filterHtml['item'] .= html::select('operator', $this->config->bi->conditionList, $operator, "class='form-control picker-select' onchange='changeCondition(this,this.value, true)'");
+                $filterHtml['item'] .= html::input('value', $value, "class='form-control $hidden'");
+                $filterHtml['item'] .= "<div/>";
+            }
 
             $htmls[] = $filterHtml;
         }
