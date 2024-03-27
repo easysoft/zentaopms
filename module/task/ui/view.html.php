@@ -28,40 +28,23 @@ if(!$isInModal && hasPriv('task', 'create', $task))
 }
 
 /* 初始化底部操作栏。Init bottom actions. */
-$actions = array();
-if(!$task->deleted)
+$config->task->actionList['batchCreate']['hint'] = $config->task->actionList['batchCreate']['text'] = $lang->task->children;
+$actions    = !$task->deleted ? $this->loadModel('common')->buildOperateMenu($task) : array();
+$hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
+$actions    = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
+if(!$hasDivider) unset($actions['type']);
+foreach($actions as $key => $action)
 {
-    $hasRepo = common::hasPriv('repo', 'createBranch') && empty($task->linkedBranch) && $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
-    /* Construct suitable actions for the current task. */
-    foreach($config->task->view->operateList['main'] as $operate)
+    if(isset($action['url']) && strpos($action['url'], 'createBranch') !== false)
     {
-        if($operate == 'createBranch')
-        {
-            if(empty($hasRepo) || !common::hasPriv('repo', $operate) || !empty($task->linkedBranch) || !common::canModify('execution', $execution)) continue;
-        }
-        else
-        {
-            if(!common::hasPriv('task', $operate, $task)) continue;
-            if(!$this->task->isClickable($task, $operate)) continue;
-
-            if($operate == 'batchCreate') $config->task->actionList['batchCreate']['text'] = $lang->task->children;
-        }
-
-        $actions[] = $config->task->actionList[$operate];
+        $hasRepo = common::hasPriv('repo', 'createBranch') && empty($task->linkedBranch) && $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
+        if(empty($hasRepo) || !common::hasPriv('repo', 'createBranch') || !empty($task->linkedBranch) || !common::canModify('execution', $execution)) unset($actions[$key]);
     }
-    /* Construct common actions for task. */
-    $commonActions = array();
-    foreach($config->task->view->operateList['common'] as $operate)
+    if(isset($action['url']) && strpos($action['url'], 'view') !== false && $task->parent == 0) unset($actions[$key]);
+    if(isset($actions[$key]['url']))
     {
-        if(!common::hasPriv('task', $operate, $task)) continue;
-        if($operate == 'view' && $task->parent <= 0) continue;
-
-        $settings = $config->task->actionList[$operate];
-        if($operate != 'view') $settings['text'] = '';
-
-        $commonActions[] = $settings;
+        $actions[$key]['url'] = str_replace(array('{story}', '{module}', '{parent}', '{execution}'), array($task->story, $task->module, $task->parent, $task->execution), $action['url']);
     }
-    if($commonActions) $actions = array_merge($actions, array(array('type' => 'divider')), $commonActions);
 }
 
 /* 初始化主栏内容。Init sections in main column. */

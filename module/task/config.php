@@ -140,6 +140,7 @@ if($config->vision != 'lite')
     $config->task->actionList['batchCreate']['text']     = $lang->task->batchCreate;
     $config->task->actionList['batchCreate']['url']      = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={id}');
     $config->task->actionList['batchCreate']['data-app'] = $app->tab;
+
 }
 
 $config->task->actionList['create']['icon']     = 'copy';
@@ -155,10 +156,11 @@ $config->task->actionList['delete']['url']          = helper::createLink('task',
 $config->task->actionList['delete']['data-confirm'] = array('message' => $lang->task->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->task->actionList['delete']['class']        = 'ajax-submit';
 
-$config->task->actionList['view']['icon'] = 'chevron-double-up';
-$config->task->actionList['view']['hint'] = $lang->task->parent;
-$config->task->actionList['view']['text'] = $lang->task->parent;
-$config->task->actionList['view']['url']  = helper::createLink('task', 'view', 'taskID={parent}');
+$config->task->actionList['view']['icon']     = 'chevron-double-up';
+$config->task->actionList['view']['hint']     = $lang->task->parent;
+$config->task->actionList['view']['text']     = $lang->task->parent;
+$config->task->actionList['view']['url']      = helper::createLink('task', 'view', 'taskID={parent}');
+$config->task->actionList['view']['showText'] = true;
 
 $config->task->actionList['cancel']['icon']        = 'ban-circle';
 $config->task->actionList['cancel']['hint']        = $lang->task->cancel;
@@ -190,5 +192,7 @@ $config->task->actionList['createBranch']['text']        = $lang->task->createBr
 $config->task->actionList['createBranch']['url']         = helper::createLink('repo', 'createBranch', 'taskID={id}&execution={execution}');
 $config->task->actionList['createBranch']['data-toggle'] = 'modal';
 
-$config->task->view->operateList['main']   = array('batchCreate', 'assignTo', 'start', 'restart', 'createBranch', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
-$config->task->view->operateList['common'] = array('edit', 'create', 'delete', 'view');
+$config->task->actions = new stdclass();
+$config->task->actions->view = array();
+$config->task->actions->view['mainActions']   = array('batchCreate', 'assignTo', 'start', 'restart', 'createBranch', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
+$config->task->actions->view['suffixActions'] = array('edit', 'create', 'delete', 'view');
