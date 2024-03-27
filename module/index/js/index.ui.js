@@ -134,6 +134,7 @@ function openApp(url, code, options)
     {
         $lastItem.removeClass('active');
         $menuNav.find('li[data-app="' + code + '"]>a').addClass('active');
+        openedApp.$app.trigger('showapp', openedApp);
     }
 
     /* Show and load app */
@@ -296,6 +297,7 @@ function closeApp(code)
     $('#appTabs a.active[data-app="' + code + '"]').parent().remove();
 
     app.closed = true;
+    app.$app.trigger('hideapp', app);
     app.$app.remove();
     app.$bar.remove();
 

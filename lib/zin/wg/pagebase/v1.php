@@ -101,6 +101,9 @@ class pageBase extends wg
 
         $currentLang = $this->props->get('lang');
         if(empty($currentLang)) $currentLang = $app->getClientLang();
+        $setXuanClass = str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')
+            ? setClass('xxc-embed')
+            : null;
 
         return h::html
         (
@@ -108,6 +111,7 @@ class pageBase extends wg
             set($attrs),
             set::className("theme-$themeName", $this->prop('class')),
             set::lang($currentLang),
+            $setXuanClass,
             h::head
             (
                 html($metas),
@@ -120,6 +124,7 @@ class pageBase extends wg
             (
                 set($bodyProps),
                 set::className($bodyClass),
+                $setXuanClass,
                 empty($imports) ? null : h::import($imports),
                 h::css($css, setClass('zin-page-css')),
                 $body,

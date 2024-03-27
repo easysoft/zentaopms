@@ -111,6 +111,11 @@ class visionSwitcher extends wg
             );
         }
 
+        pageJS(<<<JS
+            window.getUserVisions = () => '{$user->visions}'.split(',');
+            window.getCurrentVision = () => '{$currentVision}';
+        JS);
+    
         $dropdown = new dropdown
         (
             new btn
