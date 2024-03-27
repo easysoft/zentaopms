@@ -36,9 +36,9 @@ class screenTest
      * @access public
      * @return object|bool
      */
-    public function getByIDTest(int $screenID, int $year = 0, int $dept = 0, string $account = ''): object|bool
+    public function getByIDTest(int $screenID, int $year = 0, int $month, int $dept = 0, string $account = ''): object|bool
     {
-        return $this->objectModel->getByID($screenID, $year, $dept, $account);
+        return $this->objectModel->getByID($screenID, $year, $month, $dept, $account);
     }
 
     /**
@@ -206,7 +206,8 @@ class screenTest
      */
     public function getChartFiltersTest(object $chart): array
     {
-        return $this->objectModel->getChartFilters($chart);
+        $filters = $this->objectModel->getChartFilters($chart);
+        return json_decode(json_encode($filters), true);
     }
 
     /**
@@ -341,7 +342,7 @@ class screenTest
      */
     public function genComponentDataTest(object $chart, object $component, string $type, array $filter): void
     {
-        $this->objectModel->genComponentData($chart, $component, $type, $filter, true);
+        $this->objectModel->genComponentData($chart, $type, $component, $filter);
     }
 
     /**
@@ -401,9 +402,9 @@ class screenTest
      * @access public
      * @return array
      */
-    public function genChartDataTest(object $screen, int $year = 0, int $dept = 0, string $account = ''): array
+    public function genChartDataTest(object $screen, int $year = 0, int $month = 0, int $dept = 0, string $account = ''): array
     {
-        $chartData = $this->objectModel->genChartData($screen, $year, $dept, $account);
+        $chartData = $this->objectModel->genChartData($screen, $year, $month, $dept, $account);
         $filter = $this->objectModel->filter;
 
         return array($chartData, $filter);

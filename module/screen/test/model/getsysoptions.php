@@ -14,19 +14,42 @@ zdTable('dept')->gen(10);
 zdTable('bug')->gen(5);
 
 /**
-title=测试 screenModel->getSysOptions();
-cid=1
-pid=1
 
-测试type为user，对象类型为空，字段为空，sql为空的情况下，用户列表获取是否正确。           >> A:admin,Closed
-测试type为product，对象类型为空，字段为空，sql为空的情况下，产品列表获取是否正确。        >> 正常产品1,正常产品10
-测试type为project，对象类型为空，字段为空，sql为空的情况下，项目列表获取是否正确。        >> 项目集1,项目集10
-测试type为execution，对象类型为空，字段为空，sql为空的情况下，执行列表获取是否正确。      >> /项目集1,/项目集10
-测试type为dept，对象类型为空，字段为空，sql为空的情况下，部门列表获取是否正确。           >> /产品部1,/一级部门10
-测试type为project.status，对象类型为空，字段为空，sql为空的情况下，项目状态获取是否正确。 >> 未开始,进行中,已挂起,已关闭,已延期
-测试type为option，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。             >> 激活,已解决,已关闭
-测试type为object，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。             >> BUG1,BUG5
-测试type为other，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。              >> user1,user9
+title=测试 screenModel->getSysOptions();
+timeout=0
+cid=1
+
+- 测试type为user，对象类型为空，字段为空，sql为空的情况下，用户列表获取是否正确。
+ - 属性admin @A:admin
+ - 属性closed @Closed
+- 测试type为product，对象类型为空，字段为空，sql为空的情况下，产品列表获取是否正确。
+ - 属性1 @正常产品1
+ - 属性10 @正常产品10
+- 测试type为project，对象类型为空，字段为空，sql为空的情况下，项目列表获取是否正确。
+ - 属性11 @项目集1
+ - 属性20 @项目集10
+- 测试type为execution，对象类型为空，字段为空，sql为空的情况下，执行列表获取是否正确。
+ - 属性101 @/项目集1
+ - 属性110 @/项目集10
+- 测试type为dept，对象类型为空，字段为空，sql为空的情况下，部门列表获取是否正确。
+ - 属性1 @/产品部1
+ - 属性10 @/一级部门10
+- 测试type为dept，对象类型为空，字段为空，sql为空的情况下，项目状态获取是否正确。
+ - 属性wait @未开始
+ - 属性doing @进行中
+ - 属性suspended @已挂起
+ - 属性closed @已关闭
+ - 属性delay @已延期
+- 测试type为option，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。
+ - 属性active @激活
+ - 属性resolved @已解决
+ - 属性closed @已关闭
+- 测试type为object，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。
+ - 属性1 @BUG1
+ - 属性5 @BUG5
+- 测试type为other，对象类型为空，字段为空，sql为空的情况下，数据获取是否正确。
+ - 属性user1 @user1
+ - 属性user9 @user9
 
 */
 
