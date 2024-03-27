@@ -2758,7 +2758,7 @@ class aiModel extends model
      * create an assistant.
      * @param  object    $assistant
      * @access public
-     * @return false|int
+     * @return bool
      */
     public function createAssistant($assistant, $publish = false)
     {
@@ -2777,7 +2777,9 @@ class aiModel extends model
             ->data($assistant)
             ->exec();
         if (dao::isError()) return false;
-        return $this->dao->lastInsertID();
+        $assistantId = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('aiAssistant', $assistantId, 'created');
+        return true;
     }
 
     /**
@@ -2789,6 +2791,27 @@ class aiModel extends model
     public function updateAssistant($assistant)
     {
         $originAssistant = $this->getAssistantById($assistant->id);
+
+        $actionType = 'edited';
+
+        if(!empty($originAssistant))
+        {
+            $changedFields = array();
+            foreach($assistant as $key => $value)
+            {
+                if($value != $originAssistant->$key) $changedFields[] = $key;
+            }
+
+            if(count($changedFields) == 1 && current($changedFields) == 'status')
+            {
+                $actionType = $assistant->status == '0' ? 'unpublished' : 'published';
+            }
+            else
+            {
+                $changes = commonModel::createChanges($originAssistant, $assistant);
+            }
+        }
+
         foreach ($assistant as $key => $value)
         {
             if(isset($originAssistant->$key)) $originAssistant->$key = $value;
@@ -2803,6 +2826,12 @@ class aiModel extends model
             ->where('id')->eq($assistant->id)
             ->exec();
         if(dao::isError()) return false;
+
+        if(!empty($changes))
+        {
+            $actionId = $this->loadModel('action')->create('aiAssistant', $assistant->id, $actionType);
+            $this->action->logHistory($actionId, $changes);
+        }
 
         return true;
     }

@@ -80,6 +80,7 @@ detailBody
             )
         )
     ),
+    history(set::objectID($assistant->id), set::objectType('aiAssistant')),
     floatToolbar
     (
         set::object($assistant),
