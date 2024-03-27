@@ -3157,14 +3157,30 @@ class storyModel extends model
         global $app, $config;
         $action = strtolower($action);
 
-        if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
-        if($action == 'close')      return $story->status != 'closed';
-        if($action == 'activate')   return $story->status == 'closed';
-        if($action == 'assignto')   return $story->status != 'closed';
-        if($action == 'batchcreate' and $story->parent > 0) return false;
-        if($action == 'batchcreate' and !empty($story->twins)) return false;
-        if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
-        if($action == 'submitreview' and strpos('draft,changing', $story->status) === false) return false;
+        if($action == 'recallchange') return $story->status == 'changing';
+        if($action == 'recall')       return $story->status == 'reviewing';
+        if($action == 'close')        return $story->status != 'closed';
+        if($action == 'activate')     return $story->status == 'closed';
+        if($action == 'assignto')     return $story->status != 'closed';
+        if($action == 'batchcreate'  && $story->parent > 0)    return false;
+        if($action == 'batchcreate'  && !empty($story->twins)) return false;
+        if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
+        if($action == 'subdivide' && (!helper::isAjaxRequest('modal') || $config->vision != 'lite')) return false;
+        if($action == 'batchcreate'  && $story->type == 'requirement' && $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
+        if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->parent >= 0 && $story->type != 'requirement';
+
+        if($action == 'createtask')
+        {
+            if($app->tab == 'project' && !empty($_SESSION['project']))
+            {
+                global $dao;
+                $project = $dao->findByID($_SESSION['project'])->from(TABLE_PROJECT)->fetch();
+            }
+            return ($app->tab == 'execution' || (!empty($project) && $project->multiple == '0')) && $story->status == 'active' && $story->type == 'story';
+        }
+
+        $disabledFeatures = ",{$config->disabledFeatures},";
+        if($action == 'importToLib') return in_array($config->edition, array('max', 'ipd')) && $app->tab == 'project' && common::hasPriv('story', 'importToLib') && strpos($disabledFeatures, ',assetlibStorylib,') === false && strpos($disabledFeatures, ',assetlib,') === false;
 
         static $shadowProducts = array();
         static $taskGroups     = array();
@@ -3176,7 +3192,7 @@ class storyModel extends model
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
 
-        if($hasShadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_TASK . " WHERE story = $story->id")->fetch();
+        if($hasShadow && empty($taskGroups[$story->id])) $taskGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_TASK . " WHERE story = $story->id")->fetch();
 
         if(isset($story->parent) && $story->parent < 0 && strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
 
@@ -3193,8 +3209,8 @@ class storyModel extends model
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
         $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
 
-        if($action == 'change') return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
-        if($action == 'review') return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
+        if($action == 'change') return (($isSuperReviewer !== false || count($story->reviewer) == 0 || count($story->notReview) == 0) && $story->status == 'active');
+        if($action == 'review') return (($isSuperReviewer !== false || in_array($app->user->account, $story->notReview)) && $story->status == 'reviewing');
 
         return true;
     }
