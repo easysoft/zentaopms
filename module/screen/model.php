@@ -557,7 +557,7 @@ class screenModel extends model
         $tablePagination = array('index' => 1, 'size' => 5, 'total' => 0, 'pageTotal' => 1);
         $cardPagination  = array('index' => 1, 'size' => 2 * 6, 'total' => 0, 'pageTotal' => 1);
 
-        if(empty($component)) return $tablePager;
+        if(empty($component)) return $tablePagination;
 
         $option = $component->option;
         $displayType = $option->displayType;
