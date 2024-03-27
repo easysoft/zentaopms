@@ -51,8 +51,8 @@ class ciModel extends model
             ->from(TABLE_COMPILE)->alias('compile')
             ->leftJoin(TABLE_JOB)->alias('job')->on('compile.job=job.id')
             ->leftJoin(TABLE_PIPELINE)->alias('pipeline')->on('job.server=pipeline.id')
-            //->where('compile.status')->notIN('success, failure, create_fail, timeout, canceled')
-            ->where('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
+            ->where('compile.status')->notIN('success, failure, create_fail, timeout, canceled')
+            ->andWhere('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->beginIf($compileID)->andWhere('compile.id')->eq($compileID)->fi()
             ->fetchAll();
 
@@ -164,14 +164,14 @@ class ciModel extends model
     public function syncCompileStatus(object $compile, int $MRID = 0): bool
     {
         /* Max retry times is: 3. */
-        //if($compile->times >= 3)
-        //{
-        //    $this->updateBuildStatus($compile, 'failure');
+        if($compile->times >= 3)
+        {
+            $this->updateBuildStatus($compile, 'failure');
 
-        //    /* Added merge request result push to xuanxuan. */
-        //    if($MRID) $this->loadModel('message')->send('mr', $MRID, 'compilefail', 0);
-        //    return false;
-        //}
+            /* Added merge request result push to xuanxuan. */
+            if($MRID) $this->loadModel('message')->send('mr', $MRID, 'compilefail', 0);
+            return false;
+        }
 
         if($compile->engine == 'gitlab') return $this->syncGitlabTaskStatus($compile);
         if($compile->engine == 'gitfox') return $this->syncGitFoxTaskStatus($compile);
