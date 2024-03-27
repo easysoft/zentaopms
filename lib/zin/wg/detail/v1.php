@@ -327,6 +327,7 @@ CSS;
             if(empty($toolbarProps['items'])) $toolbarProps['items'] = array($backBtn);
             else array_unshift($toolbarProps['items'], $backBtn, array('type' => 'divider'));
         }
+        if(empty($toolbarProps['items']) && empty($actions)) return null;
 
         return div
         (
