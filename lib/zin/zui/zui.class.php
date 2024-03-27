@@ -25,7 +25,7 @@ class zui extends wg
         '_map?:array',
         '_props?: array',
         '_options?: array',
-        '_size?: array',
+        '_style?: array',
         '_id?: string',
         '_class?: string',
         '_call?: string',
@@ -34,8 +34,7 @@ class zui extends wg
 
     protected function build(): mixed
     {
-        list($name, $target, $tagName, $targetProps, $size, $id, $class, $map, $call, $initWithShareData, $userOptions) = $this->prop(array('_name', '_to', '_tag', '_props', '_size', '_id', '_class', '_map', '_call', '_initWithShareData', '_options'));
-        list($width, $height) = $size;
+        list($name, $target, $tagName, $targetProps, $style, $id, $class, $map, $call, $initWithShareData, $userOptions) = $this->prop(array('_name', '_to', '_tag', '_props', '_style', '_id', '_class', '_map', '_call', '_initWithShareData', '_options'));
 
         $options  = $this->getRestProps();
         $children = $this->children();
@@ -77,8 +76,7 @@ class zui extends wg
                 $tagName,
                 setClass($class),
                 setID($id),
-                setStyle('width', $width),
-                setStyle('height', $height),
+                $style ? setStyle($style) : null,
                 set($targetProps),
                 $children,
             );
