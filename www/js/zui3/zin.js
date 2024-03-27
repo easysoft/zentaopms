@@ -1341,7 +1341,7 @@
         if(isInAppTab) window.parent.$('body').trigger('click');
 
         const $link = $(e.target).closest('a,.open-url');
-        if(!$link.length || $link.hasClass('ajax-submit') || $link.attr('data-on') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
+        if(!$link.length || $link.hasClass('ajax-submit') || $link.attr('data-on') || $link.hasClass('show-in-app') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
 
         const href = $link.attr('href');
         if($link.is('a') && (/^(https?|javascript):/.test(href)) && !$link.data('app')) return;
