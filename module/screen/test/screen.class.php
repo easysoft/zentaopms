@@ -36,7 +36,7 @@ class screenTest
      * @access public
      * @return object|bool
      */
-    public function getByIDTest(int $screenID, int $year = 0, int $month, int $dept = 0, string $account = ''): object|bool
+    public function getByIDTest(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = ''): object|bool
     {
         return $this->objectModel->getByID($screenID, $year, $month, $dept, $account);
     }
