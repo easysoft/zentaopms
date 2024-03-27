@@ -843,7 +843,7 @@ class repoTest
         $scm  = $this->objectModel->app->loadClass('scm');
         $repo = $this->objectModel->getByID($repoID);
         $scm->setEngine($repo);
-        $diffs = $scm->diff('', $oldRevision, $newRevision, 'yes', 'isBranchOrTag');
+        $diffs = $scm->diff('', $oldRevision, $newRevision);
 
         $diffs = $this->objectModel->getApposeDiff($diffs);
         return $diffs;
