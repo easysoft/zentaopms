@@ -173,6 +173,17 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
 $actions    = $story->deleted || $isInModal ? array() : $this->loadModel('common')->buildOperateMenu($story);
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 $actions    = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
+foreach($actions as $key => $action)
+{
+    if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}'), array($story->id, $story->type, $story->product, $story->branch, $story->module), $action['url']);
+    if(isset($action['items']))
+    {
+        foreach($action['items'] as $itemKey => $itemAction)
+        {
+            if(isset($itemAction['url'])) $actions[$key]['items'][$itemKey]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}'), array($story->id, $story->type, $story->product, $story->branch, $story->module), $itemAction['url']);
+        }
+    }
+}
 if(!$hasDivider) unset($actions['type']);
 detail
 (
