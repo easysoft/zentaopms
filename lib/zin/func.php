@@ -190,3 +190,4 @@ function taskMiscInfo(): taskMiscInfo {return createWg('taskMiscInfo', func_get_
 function caseBasicInfo(): caseBasicInfo {return createWg('caseBasicInfo', func_get_args());}
 function caseTimeInfo(): caseTimeInfo {return createWg('caseTimeInfo', func_get_args());}
 function caseRelatedList(): caseRelatedList {return createWg('caseRelatedList', func_get_args());}
+function flowSubTable(): flowSubTable {return createWg('flowSubTable', func_get_args());}
