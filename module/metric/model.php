@@ -2425,6 +2425,42 @@ class metricModel extends model
         return !empty($records);
     }
 
+    public function getInferenceEndDate($code, $dateType)
+    {
+        $isFirstInference = $this->isFirstInference($date);
+
+        $time = $this->dao->select('date')->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->beginIF($isFirstInference)->andWhere('calcType')->eq('cron')->fi()
+            ->beginIF(!$isFirstInference)->andWhere('calcType')->eq('inference')->fi()
+            ->beginIF($isFirstInference)->orderBy('date_asc')->fi()
+            ->beginIF(!$isFirstInference)->orderBy('date_desc')->fi()
+            ->limit(1)
+            ->fetch('date');
+        $date = substr($time, 0, 10);
+
+        if($isFirstInference)
+        {
+            if($dateType == 'year')  return date('Y-12-31', strtotime('-1 year', strtotime($date)));
+            if($dateType == 'month') return date('Y-m-t', strtotime('-1 month', strtotime($date)));
+            return date('Y-m-d', strtotime('-2 days', strtotime($date)));
+        }
+        else
+        {
+            return $date;
+        }
+    }
+
+    public function isFirstInference($code)
+    {
+        $inferenceRecordCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->andWhere('calcType')->eq('inference')
+            ->fetch('count');
+
+        return $inferenceRecordCount == 0 ? true : false;
+    }
+
     /**
      * 根据动态获取安装禅道的大概时间。
      * Get date of install zentao accorrading action.

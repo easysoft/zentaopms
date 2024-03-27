@@ -10,7 +10,28 @@ declare(strict_types=1);
  */
 namespace zin;
 
-form
+detailHeader
+(
+    to::title
+    (
+        entityLabel
+        (
+            setClass('text-xl font-black'),
+            set::level(1),
+            set::text($lang->metric->setting)
+        )
+    )
+);
+div
+(
+    setClass('alert secondary'),
+    div
+    (
+        setClass('alert text bg-secondary'),
+        $lang->metric->tips->noticeRecalculateConfig,
+    )
+);
+formPanel
 (
     formGroup
     (
@@ -19,14 +40,14 @@ form
             setClass('isCalcAll'),
             set::name('isCalcAll'),
             set::checked(false),
-            set::text($lang->metric->recalculate)
+            set::text($lang->metric->recalculateAll)
         )
     ),
     set::actions(array()),
     btn
     (
-        setClass('btn primary-outline'),
-        bind::click("window.showRecalculateProgress('$code')"),
-        $lang->metric->recalculate
+        setClass('btn btn-primary'),
+        bind::click("window.showRecalculateProgress('$calcRange', '$code')"),
+        $lang->metric->startRecalculate
     )
 );

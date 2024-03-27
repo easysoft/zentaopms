@@ -432,7 +432,7 @@ class metricTao extends metricModel
         $fields = array();
         foreach(array_keys((array)$record) as $field)
         {
-            if(in_array($field, array('id', 'metricID', 'metricCode', 'value', 'date'))) continue;
+            if(in_array($field, array('id', 'metricID', 'metricCode', 'value', 'date', 'calcType'))) continue;
             if(!empty($record->$field)) $fields[] = $field;
         }
 

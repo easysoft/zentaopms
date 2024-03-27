@@ -75,18 +75,47 @@ function recalculateLog(date)
 
 function getDateRange(startDate, endDate, dateType = 'day')
 {
-    var startDate = new Date(startDate);
-    var endDate   = new Date(endDate);
+    var start = new Date(startDate);
+    var end   = new Date(endDate);
 
     var dateRange = [];
 
     if(dateType == 'day')
     {
-        while(startDate <= endDate) 
+        while(start <= end) 
         {
-            dateRange.push(new Date(startDate));
-            startDate.setDate(startDate.getDate() + 1);
+            dateRange.push(new Date(start));
+            start.setDate(start.getDate() + 1);
         }
+    }
+
+    if(dateType == 'month')
+    {
+        start.setDate(1);
+        while(start <= end) 
+        {
+            var nextMonth = new Date(start.getFullYear(), start.getMonth() + 1, 1);
+            var lastDayOfMonth = new Date(nextMonth - 1);
+            dateRange.push(lastDayOfMonth);
+
+            start = nextMonth;
+        }
+        dateRange.pop();
+        dateRange.push(end);
+    }
+
+    if(dateType == 'year')
+    {
+        startYear = start.getFullYear();
+        endYear   = end.getFullYear();
+
+        for(let year = startYear; year <= endYear; year++)
+        {
+            var lastDayOfYear = year + '-12-31';
+            dateRange.push(new Date(lastDayOfYear));
+        }
+        dateRange.pop();
+        dateRange.push(end);
     }
 
     return dateRange;

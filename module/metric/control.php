@@ -464,13 +464,15 @@ class metric extends control
      * 重算度量项历史数据。
      * Recalculate metric history data.
      *
+     * @param  string $calcRange all|single
      * @param  string $code
      * @access public
      * @return string
      */
-    public function recalculate($code = 'all')
+    public function recalculate($calcRange= 'all', $code = '')
     {
-        $this->view->code = $code;
+        $this->view->calcRange = $calcRange;
+        $this->view->code      = $code;
         $this->display();
     }
 
@@ -478,13 +480,28 @@ class metric extends control
      * 重算度量项进度。
      * Show recalculate progress.
      *
-     * @param  string $calcType all|inference
+     * @param  string $calcType  all|inference
+     * @param  string $calcRange all|single
      * @param  string $code
      * @access public
      * @return string
      */
-    public function recalculateProgress($calcType, $code = 'all')
+    public function recalculateProgress($calcType, $calcRange = 'all', $code = '')
     {
+        $dateType = $this->metric->getDateTypeByCode($code);
+
+        if($calcRange == 'single')
+        {
+            if($calcType == 'inference')
+            {
+                $endDate = $this->metric->getInferenceEndDate($code, $dateType);
+            }
+            else
+            {
+                $endDate = helper::now();
+            }
+        }
+
         $startDate = $this->metric->getInstallDate();
         if($calcType == 'all') $endDate = helper::now();
 

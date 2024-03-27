@@ -1,6 +1,6 @@
-window.showRecalculateProgress = function(code = 'all')
+window.showRecalculateProgress = function(calcRange = 'all', code = '')
 {
     var calcType = $('.isCalcAll').prop('checked') ? 'all' : 'inference';
-    var link = $.createLink('metric', 'recalculateProgress', 'calcType=' + calcType + '&code=' + code);
+    var link = $.createLink('metric', 'recalculateProgress', 'calcType=' + calcType + '&calcRange=' + calcRange + '&code=' + code);
     loadPage(link);
 }

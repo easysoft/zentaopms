@@ -48,7 +48,7 @@ toolbar
         setClass('btn ghost update-history pr-5'),
         set::icon('refresh'),
         $lang->metric->recalculate,
-        bind::click("confirmRecalculate()")
+        bind::click("confirmRecalculate('all')")
     ),
     btn
     (
