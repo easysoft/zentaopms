@@ -31,18 +31,21 @@ $config->release->actionList['unlinkLeftBug']['hint'] = $lang->release->unlinkBu
 $config->release->actionList['unlinkLeftBug']['url']  = 'javascript: unlinkObject("leftBug", "{id}")';
 
 $config->release->actionList['play']['icon']         = 'play';
+$config->release->actionList['play']['text ']         = $this->lang->release->changeStatusList['normal'];
 $config->release->actionList['play']['hint']         = $this->lang->release->changeStatusList['normal'];
 $config->release->actionList['play']['url']          = helper::createLink($app->tab == 'project' ? 'projectrelease' : 'release', 'changeStatus', 'releaseID={id}&status=normal');
 $config->release->actionList['play']['className']    = 'ajax-submit';
 $config->release->actionList['play']['data-confirm'] = array('message' => $lang->release->confirmActivate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->release->actionList['pause']['icon']         = 'pause';
+$config->release->actionList['pause']['text']         = $this->lang->release->changeStatusList['terminate'];
 $config->release->actionList['pause']['hint']         = $this->lang->release->changeStatusList['terminate'];
 $config->release->actionList['pause']['url']          = helper::createLink($app->tab == 'project' ? 'projectrelease' : 'release', 'changeStatus', 'releaseID={id}&status=terminate');
 $config->release->actionList['pause']['className']    = 'ajax-submit';
 $config->release->actionList['pause']['data-confirm'] = array('message' => $lang->release->confirmTerminate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->release->actionList['edit']['icon'] = 'edit';
+$config->release->actionList['edit']['text'] = $lang->release->edit;
 $config->release->actionList['edit']['hint'] = $lang->release->edit;
 $config->release->actionList['edit']['url']  = helper::createLink('release', 'edit', 'releaseID={id}');
 
@@ -52,6 +55,7 @@ $config->release->actionList['notify']['url']         = helper::createLink('rele
 $config->release->actionList['notify']['data-toggle'] = 'modal';
 
 $config->release->actionList['delete']['icon']         = 'trash';
+$config->release->actionList['delete']['text']         = $lang->release->delete;
 $config->release->actionList['delete']['hint']         = $lang->release->delete;
 $config->release->actionList['delete']['url']          = helper::createLink($app->tab == 'project' ? 'projectrelease' : 'release', 'delete', 'releaseID={id}');
 $config->release->actionList['delete']['className']    = 'ajax-submit';
@@ -74,3 +78,8 @@ $config->release->search['params']['build']   = array('operator' => 'include', '
 $config->release->search['params']['status']  = array('operator' => '=',       'control' => 'select', 'values' => $lang->release->statusList);
 $config->release->search['params']['date']    = array('operator' => '=',       'control' => 'date',  'values' => '');
 $config->release->search['params']['marker']  = array('operator' => '=',       'control' => 'select', 'values' => $lang->release->markerList);
+
+$config->release->actions = new stdclass();
+$config->release->actions->view = array();
+$config->release->actions->view['mainActions']   = array('play', 'pause');
+$config->release->actions->view['suffixActions'] = array('edit', 'delete');
