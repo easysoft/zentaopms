@@ -2,6 +2,7 @@
 $config->product = new stdclass();
 $config->product->orderBy         = 'isClosed,program_asc,order_asc';
 $config->product->showAllProjects = 0;
+$config->product->refreshInterval = 120;
 
 $config->product->customBatchEditFields = 'PO,QD,RD,status,type,acl';
 if($config->systemMode == 'ALM') $config->product->customBatchEditFields = 'program,line,' . $config->product->customBatchEditFields;

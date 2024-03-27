@@ -1809,6 +1809,7 @@ class productModel extends model
     {
         $updateTime = zget($this->app->config->global, 'productStatsTime', '');
         $now        = helper::now();
+        if($updateTime && time() - strtotime($updateTime) < $this->config->product->refreshInterval && !$refreshAll) return;
 
         /*
          * If productStatsTime is before two weeks ago, refresh all products directly.
