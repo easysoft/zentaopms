@@ -6,7 +6,7 @@ $config->task->form->team = new stdclass();
 $config->task->form->testTask = new stdclass();
 
 global $app;
-$config->task->form->create = common::formConfig('task', 'create');
+$config->task->form->create = array();
 $config->task->form->create['execution']    = array('type' => 'int',      'required' => true,  'default' => 0);
 $config->task->form->create['type']         = array('type' => 'string',   'required' => true,  'default' => '');
 $config->task->form->create['assignedTo']   = array('type' => 'string',   'required' => false, 'default' => '');
@@ -49,7 +49,7 @@ $config->task->form->manageTeam['consumed']       = array('type' => 'float',    
 $config->task->form->manageTeam['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->task->form->manageTeam['assignedDate']   = array('type' => 'string',   'required' => false, 'default' => $now);
 
-$config->task->form->edit = common::formConfig('task', 'edit');
+$config->task->form->edit = array();
 $config->task->form->edit['name']           = array('type' => 'string',   'required' => true);
 $config->task->form->edit['color']          = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->edit['desc']           = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
@@ -89,7 +89,7 @@ $config->task->form->team->create['teamLeft']     = array('type' => 'array',  'r
 
 $config->task->form->team->edit = $config->task->form->team->create;
 
-$config->task->form->batchedit = common::formConfig('task', 'batchEdit');
+$config->task->form->batchedit = array();
 $config->task->form->batchedit['id']             = array('type' => 'int',      'required' => false, 'default' => 0, 'base' => true);
 $config->task->form->batchedit['module']         = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchedit['name']           = array('type' => 'string',   'required' => true,  'default' => '');
@@ -106,7 +106,7 @@ $config->task->form->batchedit['deadline']       = array('type' => 'date',     '
 $config->task->form->batchedit['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->task->form->batchedit['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
-$config->task->form->batchcreate = common::formConfig('task', 'batchCreate');
+$config->task->form->batchcreate = array();
 $config->task->form->batchcreate['module']        = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchcreate['parent']        = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchcreate['story']         = array('type' => 'int',      'required' => false, 'default' => 0);

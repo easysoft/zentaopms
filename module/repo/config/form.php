@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 $config->repo->form = new stdclass();
 
-$config->repo->form->create = common::formConfig('repo', 'create');
+$config->repo->form->create = array();
 $config->repo->form->create['product']        = array('required' => true,  'type' => 'array');
 $config->repo->form->create['projects']       = array('required' => false, 'type' => 'array', 'default' => array());
 $config->repo->form->create['SCM']            = array('required' => true,  'type' => 'string', 'filter' => 'trim');
@@ -18,7 +18,7 @@ $config->repo->form->create['password']       = array('required' => false, 'type
 $config->repo->form->create['encrypt']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->create['desc']           = array('required' => false, 'type' => 'string', 'default' => '');
 
-$config->repo->form->edit = common::formConfig('repo', 'edit');
+$config->repo->form->edit = array();
 $config->repo->form->edit['product']        = array('required' => true,  'type' => 'array');
 $config->repo->form->edit['projects']       = array('required' => false, 'type' => 'array', 'default' => array());
 $config->repo->form->edit['SCM']            = array('required' => true,  'type' => 'string', 'filter' => 'trim');

@@ -1,7 +1,7 @@
 <?php
 global $lang;
 $config->user->form = new stdclass();
-$config->user->form->create = common::formConfig('user', 'create');
+$config->user->form->create = array();
 $config->user->form->create['type']             = array('required' => true,  'type' => 'string', 'default' => 'inside');
 $config->user->form->create['company']          = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->create['new']              = array('required' => false, 'type' => 'int',    'default' => 0);
@@ -22,7 +22,7 @@ $config->user->form->create['verifyPassword']   = array('required' => true,  'ty
 $config->user->form->create['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->create['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
 
-$config->user->form->batchCreate = common::formConfig('user', 'batchCreate');
+$config->user->form->batchCreate = array();
 $config->user->form->batchCreate['type']          = array('required' => true,  'type' => 'string', 'default' => 'inside');
 $config->user->form->batchCreate['dept']          = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->batchCreate['company']       = array('required' => false, 'type' => 'int',    'default' => 0);
@@ -49,7 +49,7 @@ $config->user->form->batchCreate['slack']         = array('required' => false, '
 $config->user->form->batchCreate['address']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->batchCreate['zipcode']       = array('required' => false, 'type' => 'string', 'default' => '');
 
-$config->user->form->edit = common::formConfig('user', 'edit');
+$config->user->form->edit = array();
 $config->user->form->edit['type']             = array('required' => true,  'type' => 'string', 'default' => 'inside');
 $config->user->form->edit['company']          = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->edit['new']              = array('required' => false, 'type' => 'int',    'default' => 0);
