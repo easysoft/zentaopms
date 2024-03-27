@@ -40,10 +40,6 @@ $items['title']['inputClass']        = 'filter-none';
 $items['assignedTo']['ditto']        = true;
 $items['source']['ditto']            = true;
 $items['stage']['ditto']             = true;
-$items['grade']['required']          = true;
-$items['grade']['disabled']          = true;
-$items['grade']['hidden']            = !$showGrade;
-$items['parent']['hidden']           = !$showGrade && $storyType == 'epic';
 $items['assignedTo']['defaultDitto'] = 'off';
 $items['source']['defaultDitto']     = 'off';
 $items['stage']['defaultDitto']      = 'off';
@@ -75,7 +71,6 @@ foreach($stories as $storyID => $story)
 
 formBatchPanel
 (
-    on::change('[data-name="parent"]', 'setGrade'),
     set::title($lang->story->batchEdit),
     set::mode('edit'),
     set::items($items),

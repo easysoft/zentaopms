@@ -57,33 +57,7 @@ window.renderRowData = function($row, index, story)
     var $module = $row.find('.form-batch-control[data-name="module"]');
     var $plan   = $row.find('.form-batch-control[data-name="plan"]');
     var $branch = $row.find('.form-batch-control[data-name="branch"]');
-    var $parent = $row.find('.form-batch-control[data-name="parent"]');
-    var $grade  = $row.find('.form-batch-control[data-name="grade"]');
     var $stage  = $row.find('.form-batch-control[data-name="stage"]');
-
-    if($parent.length > 0)
-    {
-        const link = $.createLink('story', 'ajaxGetParentStory', 'productID=' + story.product + '&id=' + story.id);
-        $.get(link, function(data)
-        {
-            let $parentPicker = $parent.find('[name^=parent]').zui('picker');
-            data = JSON.parse(data);
-            $parentPicker.render({items: data});
-            $parentPicker.$.setValue(story.parent);
-        })
-    }
-
-    if($grade.length > 0)
-    {
-        const link = $.createLink('story', 'ajaxGetGrade', 'parent=' + story.parent + '&type=' + story.type + '&grade=' + story.grade);
-        $.get(link, function(data)
-        {
-            let $gradePicker = $grade.find('[name^=grade]').zui('picker');
-            data = JSON.parse(data);
-            $gradePicker.render({items: data.items});
-            $gradePicker.$.setValue(story.grade);
-        })
-    }
 
     if($stage.length > 0)
     {
@@ -168,7 +142,6 @@ window.renderRowData = function($row, index, story)
                 items.push({text: plans[plan], value: plan});
             }
             options.items = items;
-            options.disabled = story.parent < 0;
             options.defaultValue = story.plan;
             options.multiple = story.type != 'story' ? true : false;
 
@@ -238,35 +211,3 @@ window.setDuplicateAndChild = function(resolution, storyID)
         $('#childStoryBox' + storyID).addClass('hidden');
     }
 };
-
-window.setGrade = function(e)
-{
-    const parent = e.target.value;
-    const type   = $(e.target).closest('tr').attr('type');
-    const link   = $.createLink('story', 'ajaxGetGrade', 'parent=' + parent + '&type=' + type);
-    $.get(link, function(data)
-    {
-        data = JSON.parse(data);
-        const $grade = $(e.target).closest('tr').find('[name^=grade]').zui('picker');
-        $grade.render({items: data.items});
-        $grade.$.setValue(data.default);
-    })
-
-    /* 两个需求不能互为父需求。 */
-    const parentTr = $(e.target).closest('tbody').find('tr.story' + parent);
-    if(parentTr.length > 0)
-    {
-        const items    = parentTr.find("[name^='parent']").zui('picker').options.items;
-        const sourceId = $(e.target).closest('tr').find('.form-batch-input[data-name=storyIdList]').val();
-        for(let i = 0; i < items.length; i++)
-        {
-            if(items[i].value == sourceId)
-            {
-                items[i].disabled = true;
-                break;
-            }
-        }
-
-        parentTr.find("[name^='parent']").zui('picker').render({items: items});
-    }
-}

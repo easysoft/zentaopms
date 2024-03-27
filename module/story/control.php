@@ -350,17 +350,11 @@ class story extends control
 
         /* Set Custom*/
         foreach(explode(',', $this->config->story->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->story->$field;
-        $showFields = $this->config->story->custom->batchEditFields;
-        if($storyType == 'requirement')
-        {
-            unset($customFields['plan'], $customFields['stage']);
-            $showFields = str_replace(array('plan', 'stage'),  '', $showFields);
-        }
 
         $product = $this->product->getByID($productID);
         if($product && $product->type == 'normal') unset($customFields['branch']);
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $showFields;
+        $this->view->showFields   = $this->config->story->custom->batchEditFields;
 
         $this->storyZen->setFormOptionsForBatchEdit($productID, $executionID, $stories);
 
@@ -371,7 +365,6 @@ class story extends control
         $this->view->stories     = $stories;
         $this->view->executionID = $executionID;
         $this->view->from        = $from;
-        $this->view->showGrade   = $this->story->showGrade($storyType);
         $this->display();
     }
 
