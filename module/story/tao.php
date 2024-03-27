@@ -1082,10 +1082,11 @@ class storyTao extends storyModel
      * Update twins.
      *
      * @param  array     $storyIdList
+     * @param  int       $mainStoryID
      * @access protected
      * @return void
      */
-    protected function updateTwins(array $storyIdList): void
+    protected function updateTwins(array $storyIdList, int $mainStoryID): void
     {
         if(count($storyIdList) <= 1) return;
 
@@ -1095,6 +1096,9 @@ class storyTao extends storyModel
             unset($twinsIdList[$storyID]);
             $this->dao->update(TABLE_STORY)->set('twins')->eq(',' . implode(',', $twinsIdList) . ',')->where('id')->eq($storyID)->exec();
         }
+
+        $storyFiles = $this->dao->select('files')->from(TABLE_STORYSPEC)->where('story')->eq($mainStoryID)->fetch('files');
+        $this->dao->update(TABLE_STORYSPEC)->set('files')->eq($storyFiles)->where('story')->in($storyIdList)->exec();
     }
 
     /**

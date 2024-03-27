@@ -689,12 +689,13 @@ class storyTest
      * Test updateTwins method.
      *
      * @param  array  $storyIdList
+     * @param  int    $mainStoryID
      * @access public
      * @return array
      */
-    public function updateTwinsTest(array $storyIdList): array
+    public function updateTwinsTest(array $storyIdList, int $mainStoryID): array
     {
-        $this->objectModel->updateTwins($storyIdList);
+        $this->objectModel->updateTwins($storyIdList, $mainStoryID);
 
         if(empty($storyIdList)) return array();
         if($storyIdList)
