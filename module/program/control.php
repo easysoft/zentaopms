@@ -120,11 +120,13 @@ class program extends control
             $this->view->program = $program;
         }
 
+        $this->loadModel('product')->refreshStats();
+
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $products = $this->loadModel('product')->getList($programID, $browseType);
+        $products = $this->product->getList($programID, $browseType);
         $this->view->products = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story',  $programID);
 
         $this->view->title         = $this->lang->program->product;
