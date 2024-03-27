@@ -281,3 +281,5 @@ UPDATE `zt_metric` SET `name` = 'variance_of_time_in_project'     WHERE `code` =
 UPDATE `zt_metric` SET `dateType` = 'nodate' WHERE `code` = 'count_of_feedback_in_product';
 
 ALTER TABLE `zt_story` ADD COLUMN `unlinkReason` ENUM('', 'omit', 'other') NOT NULL DEFAULT '';
+
+UPDATE `zt_stage` SET `name` = '生命周期' WHERE `type` = 'lifecycle' AND `projectType` = 'ipd';
