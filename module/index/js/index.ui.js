@@ -137,7 +137,7 @@ function openApp(url, code, options)
     }
 
     /* Show and load app */
-    const isSameUrl = openedApp.currentUrl === url;
+    const isSameUrl = $.parseLink(openedApp.currentUrl).url === $.parseLink(url).url;
     const needLoad = !isSameUrl || forceReload !== false;
     if(needLoad)
     {
@@ -174,7 +174,7 @@ function openApp(url, code, options)
         $tabs.find('li[data-app="' + code + '"]>a').addClass('active');
     }
 
-    if(debug) console.log('[APPS]', 'open:', code, {url, options, forceReload});
+    if(debug) console.log('[APPS]', 'open:', code, {url, options, needLoad, forceReload});
     triggerAppEvent(code, 'openapp', [openedApp, {load: needLoad}]);
 
     return openedApp;
@@ -756,7 +756,10 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
     if($link.is('[data-modal],[data-toggle],.iframe,.not-in-app')) return;
     const url = $link.attr('href') || $link.data('url');
     if(url && url.includes('onlybody=yes')) return;
-    if(openApp(url, $link.data('app'), !$link.hasClass('show-in-app'))) e.preventDefault();
+    const code = $link.data('app');
+    if($.apps.openedMap[code]) showApp(code);
+    else openApp(url, $link.data('app'), !$link.hasClass('show-in-app'));
+    e.preventDefault();
 }).on('contextmenu', '.open-in-app,.show-in-app', function(event)
 {
     const $btn  = $(this);
