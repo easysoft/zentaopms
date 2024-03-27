@@ -16104,6 +16104,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
   `desc` text NOT NULL,
   `systemMessage` text NOT NULL,
   `greetings` text NOT NULL,
+  `icon` varchar(30) DEFAULT 'coding-1' NOT NULL,
   `enabled` enum('0', '1') NOT NULL DEFAULT '1',
   `createdDate` datetime NOT NULL,
   `publishedDate` datetime DEFAULT NULL,

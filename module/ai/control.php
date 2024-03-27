@@ -352,6 +352,14 @@ class ai extends control
             {
                 dao::$errors['name'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->assistants->name);
             }
+            if(empty($assistant->modelId))
+            {
+                dao::$errors['modelId'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->common);
+            }
+            if(empty($assistant->systemMessage))
+            {
+                dao::$errors['systemMessage'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->assistants->systemMessage);
+            }
             if(empty($assistant->greetings))
             {
                 dao::$errors['greetings'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->assistants->greetings);
@@ -360,6 +368,9 @@ class ai extends control
 
             $exists = $this->ai->checkAssistantDuplicate($assistant->name, $assistant->modelId);
             if($exists) return $this->send(array('result' => 'fail', 'message' => array('name' => $this->lang->ai->assistants->duplicateTip)));
+
+            $assistant->icon = "$assistant->iconName-$assistant->iconTheme";
+            unset($assistant->iconName, $assistant->iconTheme);
 
             if(empty($assistant->publish))
             {
@@ -382,8 +393,10 @@ class ai extends control
             return $acc;
         }, array());
 
-        $this->view->models = $models;
-        $this->view->title  = $this->lang->ai->assistants->create;
+        $this->view->models    = $models;
+        $this->view->iconName  = 'coding';
+        $this->view->iconTheme = 1;
+        $this->view->title     = $this->lang->ai->assistants->create;
         $this->display();
     }
 
