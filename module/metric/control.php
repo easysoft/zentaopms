@@ -469,7 +469,7 @@ class metric extends control
      * @access public
      * @return string
      */
-    public function recalculate($calcRange= 'all', $code = '')
+    public function recalculateSetting($calcRange= 'all', $code = '')
     {
         $this->view->calcRange = $calcRange;
         $this->view->code      = $code;
@@ -486,7 +486,7 @@ class metric extends control
      * @access public
      * @return string
      */
-    public function recalculateProgress($calcType, $calcRange = 'all', $code = '')
+    public function recalculate($calcType, $calcRange = 'all', $code = '')
     {
         $dateType = $this->metric->getDateTypeByCode($code);
 

@@ -2455,8 +2455,8 @@ class metricModel extends model
     public function isFirstInference($code)
     {
         $inferenceRecordCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->andWhere('calcType')->eq('inference')
+            ->where('calcType')->eq('inference')
+            ->beginIF($code == null)->andWhere('metricCode')->eq($code)->fi()
             ->fetch('count');
 
         return $inferenceRecordCount == 0 ? true : false;
