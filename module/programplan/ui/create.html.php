@@ -44,9 +44,31 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
 /* Generate checkboxes for sub-stage management. */
 $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $executionType)
 {
-    if(empty($planID) || !in_array($project->model, array('waterfallplus', 'ipd'))) return div();
+    if((empty($planID) && $project->model != 'ipd') || !in_array($project->model, array('waterfallplus', 'ipd'))) return div();
 
-    $typeList = $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->programplan->typeList;
+    if(empty($planID) && $project->model == 'ipd')
+    {
+        foreach($lang->programplan->parallelList as $key => $value)
+        {
+            $items[] = div(setClass('px-1'), checkbox
+            (
+                set::type('radio'),
+                set::name('parallel'),
+                set::text($value),
+                set::value($key),
+                set::checked($key == $project->parallel)
+            ));
+        }
+
+        return div
+        (
+            setClass('flex w-1/2 items-center'),
+            div(setClass('font-bold'), $lang->programplan->parallel . ':'),
+            $items
+        );
+    }
+
+    $typeList = $lang->programplan->typeList;
 
     $items = array();
     if(count($typeList) > 1)
@@ -97,7 +119,7 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
 $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project)
 {
     $items   = array();
-    $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
+    $items[] = $project->model == 'ipd' ? null : array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
 
     $fields['attribute']['required'] = $fields['acl']['required'] = true;
     if(isset($requiredFields['code'])) $fields['code']['required'] = true;
@@ -235,5 +257,7 @@ formBatchPanel
     to::headingActions(array($fnGenerateSubPlanManageFields())),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),
     set::items($fnGenerateFields()),
-    set::data($fnGenerateDefaultData())
+    set::data($fnGenerateDefaultData()),
+    $project->model == 'ipd' ? set::maxRows(count($fnGenerateDefaultData())) : null,
+    $project->model == 'ipd' ? set::mode('edit') : null
 );
