@@ -37,6 +37,7 @@ class screenModel extends model
         $this->filter = new stdclass();
         $this->filter->screen  = '';
         $this->filter->year    = '';
+        $this->filter->month   = '';
         $this->filter->dept    = '';
         $this->filter->account = '';
         $this->filter->charts  = array();
@@ -965,7 +966,7 @@ class screenModel extends model
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
-            $fields   = json_decode(json_encode($chart->fieldSettings), true);
+            $fields   = json_decode($chart->fields, true);
             $langs    = json_decode($chart->langs, true);
 
             if(empty($langs)) $langs = array();
@@ -2441,6 +2442,7 @@ class screenModel extends model
         // Get type is changed or not.
         if(isset($component->chartConfig))
         {
+            $componentType = $chartType;
             foreach($this->config->screen->chartConfig as $type => $chartConfig)
             {
                 $chartConfig = json_decode($chartConfig, true);
