@@ -228,9 +228,9 @@ class compileModel extends model
      * @param  int    $repoID
      * @param  int    $repoID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function syncCompile(int $repoID = 0, int $jobID = 0): void
+    public function syncCompile(int $repoID = 0, int $jobID = 0): bool
     {
         if($jobID)
         {
@@ -241,22 +241,17 @@ class compileModel extends model
             $jobList = $this->loadModel('job')->getList($repoID);
         }
 
-        $jenkinsPairs = $this->loadModel('pipeline')->getList('jenkins');
-        $gitlabPairs  = $this->loadModel('pipeline')->getList('gitlab');
+        $servers = $this->loadModel('pipeline')->getList('');
 
         foreach($jobList as $job)
         {
-            if($job->engine == 'jenkins')
-            {
-                $server = zget($jenkinsPairs, $job->server);
-                $this->syncJenkinsBuildList($server, $job);
-            }
-            else
-            {
-                $server = zget($gitlabPairs, $job->server);
-                $this->syncGitlabBuildList($server, $job);
-            }
+            $server = zget($servers, $job->server);
+            $method = "sync{$job->engine}BuildList";
+            $this->$method($server, $job);
+
+            $this->compileTao->updateJobLastSyncDate($job->id, helper::now());
         }
+        return !dao::isError();
     }
 
     /**
@@ -265,21 +260,21 @@ class compileModel extends model
      * @param  object $jenkins
      * @param  object $job
      * @access public
-     * @return void
+     * @return bool
      */
-    public function syncJenkinsBuildList(object $jenkins, object $job): void
+    public function syncJenkinsBuildList(object $jenkins, object $job): bool
     {
-        if(empty($jenkins->account)) return;
+        if(empty($jenkins->account)) return false;
         $userPWD = $this->loadModel('jenkins')->getApiUserPWD($jenkins);
 
         /* Get build list by API. */
         $urlPrefix = $this->compileTao->getJenkinsUrlPrefix($jenkins->url, $job->pipeline);
         $url       = $urlPrefix . 'api/json?tree=builds[id,number,result,queueId,timestamp]';
         $response  = common::http($url, '', array(CURLOPT_USERPWD => $userPWD));
-        if(!$response) return;
+        if(!$response) return false;
 
         $jobInfo = json_decode($response);
-        if(empty($jobInfo)) return;
+        if(empty($jobInfo)) return false;
 
         $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->gt(0)->fetchPairs();
         foreach($jobInfo->builds as $build)
@@ -290,9 +285,7 @@ class compileModel extends model
 
             $this->compileTao->createByBuildInfo($job->name, $job->id, $build, 'jenkins');
         }
-
-        $now = helper::now();
-        $this->compileTao->updateJobLastSyncDate($job->id, $now);
+        return !dao::isError();
     }
 
     /**
@@ -301,11 +294,11 @@ class compileModel extends model
      * @param  object $gitlab
      * @param  object $job
      * @access public
-     * @return void
+     * @return bool
      */
-    public function syncGitlabBuildList(object $gitlab, object $job): void
+    public function syncGitlabBuildList(object $gitlab, object $job): bool
     {
-        if(empty($gitlab->id)) return;
+        if(empty($gitlab->id)) return false;
 
         $pipeline  = json_decode($job->pipeline);
         $projectID = isset($pipeline->project) ? $pipeline->project : '';
@@ -335,9 +328,55 @@ class compileModel extends model
 
             if(count($builds) < 100) break;
         }
+        return !dao::isError();
+    }
 
-        $now = helper::now();
-        $this->compileTao->updateJobLastSyncDate($job->id, $now);
+    /**
+     * Sync gitfox build list.
+     *
+     * @param  object $gitfox
+     * @param  object $job
+     * @access public
+     * @return bool
+     */
+    public function syncGitfoxBuildList(object $gitfox, object $job): bool
+    {
+        if(empty($gitfox->id)) return false;
+
+        $pipeline  = json_decode($job->pipeline);
+        $projectID = zget($pipeline, 'project',   '');
+        $pipeline  = zget($pipeline, 'name',      '');
+        $apiRoot   = $this->loadModel('gitfox')->getApiRoot($gitfox->id, false);
+        $url       = sprintf($apiRoot->url, "/repos/{$projectID}/pipelines/{$pipeline}/executions");
+
+        /* Get build list by API. */
+        for($page = 1; true; $page++)
+        {
+            $param   = $job->lastSyncDate ? '&updated_after=' . strtotime($job->lastSyncDate) : '';
+            $builds  = json_decode(commonModel::http($url . "&page={$page}&limit=100" . $param, null, array(), $apiRoot->header));
+            if(!is_array($builds)) break;
+
+            if(!empty($builds))
+            {
+                $queueIDList = array();
+                foreach($builds as &$build)
+                {
+                    $build->id = $build->number;
+                    $queueIDList[] = $build->id;
+                }
+                $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->in($queueIDList)->fetchPairs();
+
+                foreach($builds as $build)
+                {
+                    if(isset($compilePairs[$build->id])) continue;
+
+                    $this->compileTao->createByBuildInfo($job->name, $job->id, $build, 'gitfox');
+                }
+            }
+
+            if(count($builds) < 100) break;
+        }
+        return !dao::isError();
     }
 
     /**

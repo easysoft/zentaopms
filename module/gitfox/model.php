@@ -579,4 +579,63 @@ class gitfoxModel extends model
 
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $apiRoot->header));
     }
+
+    /**
+     * 通过api获取一个流水线。
+     * Get single pipline by api.
+     *
+     * @param  int    $gitfoxID
+     * @param  int    $projectID
+     * @param  string $pipelineID
+     * @param  int    $executionID
+     * @access public
+     * @return object|array|null
+     */
+    public function apiGetSinglePipeline(int $gitfoxID, int $projectID, string $pipelineID, int $executionID): object|array|null
+    {
+        $apiRoot = $this->getApiRoot($gitfoxID, false);
+        $url = sprintf($apiRoot->url, "/repos/{$projectID}/pipelines/{$pipelineID}/executions/{$executionID}");
+        return json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+    }
+
+    /**
+     * 通过api获取一个流水线日志。
+     * Get single pipline logs by api.
+     *
+     * @param  int    $gitfoxID
+     * @param  int    $projectID
+     * @param  object $pipeline
+     * @access public
+     * @return string
+     */
+    public function apiGetPipelineLogs(int $gitfoxID, int $projectID, object $pipeline): string
+    {
+        if(empty($pipeline->stages)) return '';
+
+        $apiRoot = $this->getApiRoot($gitfoxID, false);
+        $url     = sprintf($apiRoot->url, "/repos/{$projectID}/pipelines/{$pipeline->name}/executions/{$pipeline->number}/logs");
+        $log     = '';
+        $jobUrl  = isset($pipeline->params->DRONE_BUILD_LINK) ? $pipeline->params->DRONE_BUILD_LINK : '';
+        foreach($pipeline->stages as $stage)
+        {
+            $duration = ($stage->stopped - $stage->started) / 1000;
+            if(empty($stage->stopped) || $stage->started == '') $duration = '-';
+
+            $log .= "<font style='font-weight:bold'>&gt;&gt;&gt; Job: {$stage->name}, Status: {$stage->status}, Duration: $duration Sec\r\n </font>";
+            $log .= "Job URL: <a href=\"{$jobUrl}\" target='_blank'>{$jobUrl}</a> \r\n";
+            foreach($stage->steps as $step)
+            {
+                $duration = ($stage->stopped - $stage->started) / 1000;
+                if(empty($stage->stopped) || $stage->started == '') $duration = '-';
+
+                $log .= "<font style='font-weight:bold'>&gt;&gt;&gt; Step: {$step->name}, Status: {$step->status}, Duration: $duration Sec\r\n </font>";
+                $logs = json_decode(common::http("{$url}/{$stage->number}/{$step->number}", null, array(), $apiRoot->header));
+                if(!is_array($logs)) continue;
+
+                foreach($logs as $row) $log .= $row->out;
+            }
+        }
+
+        return $log;
+    }
 }

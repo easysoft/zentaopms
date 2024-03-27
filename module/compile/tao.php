@@ -71,14 +71,14 @@ class compileTao extends compileModel
             $data->status      = $build->result == 'SUCCESS' ? 'success' : 'failure';
             $data->createdDate = date('Y-m-d H:i:s', (int)($build->timestamp / 1000));
         }
-        elseif($buildType == 'gitlab')
+        else
         {
-            $data->queue       = $build->id;
-            $data->status      = $build->status;
-            $data->createdDate = date('Y-m-d H:i:s', strtotime($build->created_at));
+            $data->queue       = !empty($build->number) ? $build->number : $build->id;
+            $data->status      = $build->status == 'success' ? 'success' : 'failure';
+            $data->createdDate = date('Y-m-d H:i:s', $buildType == 'gitfox' ? $build->created :  strtotime($build->created_at));
         }
 
-        $data->createdBy  = 'guest';
+        $data->createdBy  = $this->app->user ? $this->app->user->account : 'guest';
         $data->updateDate = $data->createdDate ?? date('Y-m-d H:i:s');
 
         $this->dao->insert(TABLE_COMPILE)->data($data)->exec();

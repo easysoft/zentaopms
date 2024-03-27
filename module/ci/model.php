@@ -51,9 +51,9 @@ class ciModel extends model
             ->from(TABLE_COMPILE)->alias('compile')
             ->leftJoin(TABLE_JOB)->alias('job')->on('compile.job=job.id')
             ->leftJoin(TABLE_PIPELINE)->alias('pipeline')->on('job.server=pipeline.id')
-            ->where('compile.status')->notIN('success, failure, create_fail, timeout, canceled')
+            //->where('compile.status')->notIN('success, failure, create_fail, timeout, canceled')
+            ->where('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->beginIf($compileID)->andWhere('compile.id')->eq($compileID)->fi()
-            ->andWhere('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
         $notCompileMR = $this->dao->select('jobID,id')
@@ -164,16 +164,17 @@ class ciModel extends model
     public function syncCompileStatus(object $compile, int $MRID = 0): bool
     {
         /* Max retry times is: 3. */
-        if($compile->times >= 3)
-        {
-            $this->updateBuildStatus($compile, 'failure');
+        //if($compile->times >= 3)
+        //{
+        //    $this->updateBuildStatus($compile, 'failure');
 
-            /* Added merge request result push to xuanxuan. */
-            if($MRID) $this->loadModel('message')->send('mr', $MRID, 'compilefail', 0);
-            return false;
-        }
+        //    /* Added merge request result push to xuanxuan. */
+        //    if($MRID) $this->loadModel('message')->send('mr', $MRID, 'compilefail', 0);
+        //    return false;
+        //}
 
         if($compile->engine == 'gitlab') return $this->syncGitlabTaskStatus($compile);
+        if($compile->engine == 'gitfox') return $this->syncGitFoxTaskStatus($compile);
 
         $jenkinsServer   = $compile->url;
         $jenkinsPassword = $compile->token ? $compile->token : base64_decode($compile->password);
@@ -230,6 +231,50 @@ class ciModel extends model
             $data->logs .= "Job URL: <a href=\"$job->web_url\" target='_blank'>$job->web_url</a> \r\n";
             $data->logs .= $this->transformAnsiToHtml($this->gitlab->apiGetJobLog($compile->server, $compile->project, $job->id));
         }
+
+        $this->dao->update(TABLE_COMPILE)->data($data)->where('id')->eq($compile->id)->exec();
+        $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();
+
+        /* Send mr message by compile status. */
+        $relateMR = $this->dao->select('*')->from(TABLE_MR)->where('compileID')->eq($compile->id)->fetch();
+        if($relateMR)
+        {
+            if($data->status == 'success') $this->loadModel('action')->create('mr', $relateMR->id, 'compilePass');
+            if($data->status == 'failed')  $this->loadModel('action')->create('mr', $relateMR->id, 'compileFail');
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 同步gitfox任务状态。
+     * Sync gitfox task status.
+     *
+     * @param  object $compile
+     * @access public
+     * @return bool
+     */
+    public function syncGitFoxTaskStatus(object $compile): bool
+    {
+        /* The value of `$compile->pipeline` is like `'{"project":"46", "name": "test", "reference":"master"}'` in current design. */
+        $pipeline = json_decode($compile->pipeline);
+        $compile->project = isset($pipeline->project) ? (int)$pipeline->project : (int)$compile->pipeline;
+        $compile->pipline = zget($pipeline, 'name', '');
+
+        $now      = helper::now();
+        $pipeline = $this->loadModel('gitfox')->apiGetSinglePipeline($compile->server, $compile->project, $compile->pipline, $compile->queue);
+        if(!isset($pipeline->number) || isset($pipeline->message)) /* The pipeline is not available. */
+        {
+            $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq('create_fail')->where('id')->eq($compile->job)->exec();
+            return false;
+        }
+
+        $pipeline->name = $compile->pipline;
+        $logs = $this->gitfox->apiGetPipelineLogs($compile->server, $compile->project, $pipeline);
+        $data = new stdclass;
+        $data->status     = $pipeline->status;
+        $data->updateDate = $now;
+        $data->logs       = $this->transformAnsiToHtml($logs);
 
         $this->dao->update(TABLE_COMPILE)->data($data)->where('id')->eq($compile->id)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();

@@ -22,6 +22,7 @@ class jobTao extends jobModel
      */
     protected function getServerAndPipeline(object &$job, object $repo): bool
     {
+        $project = zget($repo, 'serviceProject', '');
         if($job->engine == 'jenkins')
         {
             $job->server   = (int)zget($job, 'jkServer', 0);
@@ -30,11 +31,10 @@ class jobTao extends jobModel
         elseif($job->engine == 'gitfox')
         {
             $job->server   = (int)zget($repo, 'serviceHost', 0);
-            $job->pipeline = json_encode(array('project' => $job->gitfoxpipeline, 'reference' => $job->reference));
+            $job->pipeline = json_encode(array('project' => $project, 'name' => $job->gitfoxpipeline, 'reference' => $job->reference));
         }
         elseif($job->engine == 'gitlab')
         {
-            $project = zget($repo, 'project');
             if($job->repo && !empty($repo))
             {
                 $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, '');
