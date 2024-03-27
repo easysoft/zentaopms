@@ -101,6 +101,17 @@ featureBar
             set::text($lang->programplan->stageCustom['task']),
             set::rootClass('ml-4')
         )
+    ),
+    li
+    (
+        checkbox
+        (
+            set::id('showStage'),
+            set::name('showStage'),
+            set::checked($this->cookie->showStage ? 'checked' : ''),
+            set::text($lang->programplan->stageCustom['point']),
+            set::rootClass('ml-4')
+        )
     )
 );
 

@@ -6,6 +6,14 @@ $(document).off('click', '#showTask').on('click', '#showTask', function()
     reloadPage();
 });
 
+$(document).off('click', '#showStage').on('click', '#showStage', function()
+{
+    const show = $(this).is(':checked') ? 1 : 0;
+    $.cookie.set('showStage', show, {expires:config.cookieLife, path:config.webRoot});
+
+    reloadPage();
+});
+
 $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 {
     const dtable = zui.DTable.query($(this).target);
