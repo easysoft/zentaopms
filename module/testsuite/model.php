@@ -293,7 +293,7 @@ class testsuiteModel extends model
      */
     public function isClickable(object $report, string $action): bool
     {
-        return true;
+        return common::hasPriv('testsuite', $action);
     }
 
     /**
