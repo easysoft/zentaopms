@@ -169,7 +169,7 @@ class program extends control
             $this->view->program = $program;
         }
 
-        $this->loadModel('product')->refreshStats(true);
+        $this->loadModel('product')->refreshStats();
 
         $this->view->title         = $this->lang->program->product;
         $this->view->position[]    = $this->lang->program->product;
