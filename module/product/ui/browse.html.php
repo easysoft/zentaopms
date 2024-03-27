@@ -18,6 +18,7 @@ jsVar('URChanged', $this->lang->story->URChanged);
 jsVar('gradeGroup', $gradeGroup);
 jsVar('showGrade', $showGrade);
 jsVar('oldShowGrades', $showGrades);
+jsVar('storyType', $storyType);
 
 $storyCommon       = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;
 $isProjectStory    = $this->app->rawModule == 'projectstory';
@@ -320,7 +321,7 @@ if($isProjectStory and $storyType == 'requirement')
 $queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}");
 featureBar
 (
-    $showGrade ? to::leading
+    ($showGrade || $storyType != 'story') ? to::leading
     (
         picker
         (
