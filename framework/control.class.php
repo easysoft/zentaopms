@@ -503,38 +503,42 @@ class control extends baseControl
     }
 
     /**
+     * 追加工作流新增的字段，给formGridPanel组件使用。
      * append workflow fields to form.
      *
      * @param  zin\fieldList $fields
      * @param  string        $moduleName
      * @param  string        $methodName
      * @access public
-     * @return void
+     * @return zin\fieldList
      */
-    public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = '')
+    public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = ''): zin\fieldList
     {
         if($this->config->edition == 'open') return $fields;
 
         $moduleName = $moduleName ? $moduleName : $this->app->getModuleName();
         $methodName = $methodName ? $moduleName : $this->app->getMethodName();
 
-        $flow      = $this->loadModel('workflow')->getByModule($moduleName);
+        $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $fields;
 
-        $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        if(!$action) return $fields;
+
         $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList);
     }
 
     /**
+     * 追加工作流配置的js和css到页面上。
      * append workflow js and css to form.
      *
      * @param  string $moduleName
      * @param  string $methodName
      * @access public
-     * @return void
+     * @return string
      */
-    public function appendExtendCssAndJS(string $moduleName = '', string $methodName = '')
+    public function appendExtendCssAndJS(string $moduleName = '', string $methodName = ''): string
     {
         if($this->config->edition == 'open') return '';
 
@@ -544,7 +548,9 @@ class control extends baseControl
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return '';
 
-        $action    = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        if(!$action) return '';
+
         $fieldList = $this->workflowaction->getFields($flow->module, !empty($action->action) ? $action->action: '');
 
         $html = '';
@@ -560,6 +566,7 @@ class control extends baseControl
     }
 
     /**
+     * 追加工作流新增的字段，给非formGridPanel组件使用。
      * append workflow field to form.
      *
      * @param  string $position   info|basic
@@ -567,9 +574,9 @@ class control extends baseControl
      * @param  string $moduleName
      * @param  string $methodName
      * @access public
-     * @return void
+     * @return array
      */
-    public function appendExtendForm(string $position = 'info', object $object = null, string $moduleName = '', string $methodName = '')
+    public function appendExtendForm(string $position = 'info', object $object = null, string $moduleName = '', string $methodName = ''): array
     {
         if($this->config->edition == 'open') return array();
 
@@ -584,8 +591,10 @@ class control extends baseControl
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return array();
 
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        if(!$action) return array();
+
         $wrapControl  = array('textarea', 'richtext', 'file');
-        $action       = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         $fieldList    = $this->workflowaction->getFields($flow->module, $action->action);
         $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
@@ -619,15 +628,16 @@ class control extends baseControl
     }
 
     /**
+     * 追加工作流新增的字段到表单提交配置。
      * append workflow form config.
      *
      * @param  array  $config
      * @param  string $moduleName
      * @param  string $methodName
      * @access public
-     * @return void
+     * @return array
      */
-    public function appendExtendFormConfig(array $config, string $moduleName = '', string $methodName = '')
+    public function appendExtendFormConfig(array $config, string $moduleName = '', string $methodName = ''): array
     {
         if($this->config->edition == 'open') return $config;
 
@@ -637,7 +647,9 @@ class control extends baseControl
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $config;
 
-        $action       = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        if(!$action) return $config;
+
         $fieldList    = $this->workflowaction->getFields($flow->module, $action->action);
         $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
