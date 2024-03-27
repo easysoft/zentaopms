@@ -436,7 +436,7 @@ CSS;
 
     protected function buildPrevAndNext()
     {
-        list($linkCreator, $prevBtn, $nextBtn) = $this->prop(array('linkCreator', 'prevBtn', 'nextBtn'));
+        list($linkCreator, $prevBtn, $nextBtn, $objectType) = $this->prop(array('linkCreator', 'prevBtn', 'nextBtn', 'objectType'));
         $preAndNext = data('preAndNext');
 
         if(!$linkCreator && $preAndNext && ($prevBtn === true || $nextBtn === true))
