@@ -127,6 +127,8 @@ panel
     ),
     echarts
     (
+        set::height(500),
+        set::exts('timeline'),
         set::xAxis
         (
             array
@@ -261,5 +263,5 @@ panel
                 ) : null
             )
         )
-    )->size('100%', 500),
+    )
 );
