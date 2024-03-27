@@ -10,6 +10,7 @@ zdTable('task')->gen('10');
 zdTable('story')->gen('10');
 zdTable('user')->gen('1');
 zdTable('project')->gen('0');
+zdTable('product')->gen('10');
 
 su('admin');
 

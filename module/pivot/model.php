@@ -2124,7 +2124,7 @@ class pivotModel extends model
      */
     public function getSysOptions($type, $object = '', $field = '', $source = '', $saveAs = '')
     {
-        if(in_array($type, array('user', 'product', 'project', 'execution', 'dept'))) return $this->bi->getScopeOptions($type);
+        if(in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'project.status'))) return $this->bi->getScopeOptions($type);
         if(!$field) return array();
 
         $options = array();
