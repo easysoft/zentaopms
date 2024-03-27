@@ -2225,6 +2225,7 @@ CREATE TABLE `zt_metriclib` (
   `week` char(2) NOT NULL DEFAULT '0',
   `day` char(2) NOT NULL DEFAULT '0',
   `value` varchar(100) NOT NULL DEFAULT '0',
+  `calcType` enum('cron', 'inference') NOT NULL DEFAULT 'cron',
   `date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `metricID` (`metricID`),

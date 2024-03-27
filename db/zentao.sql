@@ -16180,6 +16180,7 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `week`       char(2)      NOT NULL DEFAULT '0',
   `day`        char(2)      NOT NULL DEFAULT '0',
   `value`      varchar(100) NOT NULL DEFAULT '0',
+  `calcType`   ENUM('cron', 'inference') NOT NULL DEFAULT 'cron',
   `date`       datetime              DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
