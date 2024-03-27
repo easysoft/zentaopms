@@ -22,6 +22,7 @@ class pivotModel extends model
     {
         parent::__construct();
         $this->loadBIDAO();
+        $this->loadModel('bi');
     }
 
     /*
@@ -2123,74 +2124,48 @@ class pivotModel extends model
      */
     public function getSysOptions($type, $object = '', $field = '', $source = '', $saveAs = '')
     {
-        $this->loadModel('bi');
-        $options = array('' => '');
+        if(in_array($type, array('user', 'product', 'project', 'execution', 'dept'))) return $this->bi->getScopeOptions($type);
+        if(!$field) return array();
+
+        $options = array();
         switch($type)
         {
-            case 'user':
-                $options = $this->loadModel('user')->getPairs('noletter');
-                break;
-            case 'product':
-                $options = $this->loadModel('product')->getPairs();
-                break;
-            case 'project':
-                $options = $this->loadModel('project')->getPairsByProgram();
-                break;
-            case 'execution':
-                $options = $this->loadModel('execution')->getPairs();
-                break;
-            case 'dept':
-                $options = $this->loadModel('dept')->getOptionMenu(0);
-                break;
-            case 'project.status':
-                $this->app->loadLang('project');
-                $options = $this->lang->project->statusList;
-                break;
             case 'option':
-                if($field)
-                {
-                    $options = $this->bi->getDataviewOptions($object, $field);
-                }
+                $options = $this->bi->getDataviewOptions($object, $field);
                 break;
             case 'object':
-                if($field)
+                if(is_array($source))
                 {
-                    if(is_array($source))
-                    {
-                        $options = array();
-                        foreach($source as $row) $options[$row->id] = $row->$field;
-                    }
-                    else
-                    {
-                        $options = $this->bi->getObjectOptions($object, $field);
-                    }
+                    $options = array();
+                    foreach($source as $row) $options[$row->id] = $row->$field;
+                }
+                else
+                {
+                    $options = $this->bi->getObjectOptions($object, $field);
                 }
                 break;
             case 'string':
             case 'number':
-                if($field)
+                if($source)
                 {
                     $options = array();
                     if(is_array($source))
                     {
                         foreach($source as $row) $options["{$row->$field}"] = $row->$field;
                     }
+                    else
+                    {
+                        $keyField   = $field;
+                        $valueField = $saveAs ? $saveAs : $field;
+                        $options = $this->bi->getOptionsFromSql($source, $keyField, $valueField);
+                    }
                 }
                 break;
         }
 
-        if(is_string($source) and $source)
+        if(is_string($source) and $source and $saveAs and in_array($type, array('user', 'product', 'project', 'execution', 'dept', 'option', 'object')))
         {
-            if(in_array($type, array('string', 'number')))
-            {
-                $keyField   = $field;
-                $valueField = $saveAs ? $saveAs : $field;
-                $options = $this->bi->getOptionsFromSql($source, $keyField, $valueField);
-            }
-            elseif($saveAs)
-            {
-                $options = $this->bi->getOptionsFromSql($source, $field, $saveAs);
-            }
+            $options = $this->bi->getOptionsFromSql($source, $field, $saveAs);
         }
 
         return array_filter($options);

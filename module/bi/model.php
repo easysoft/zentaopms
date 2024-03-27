@@ -5,6 +5,38 @@ class biModel extends model
     /**
      * Get object options.
      *
+     * @param  string $type user|product|project|execution|dept
+     * @access public
+     * @return array
+     */
+    public function getScopeOptions($type)
+    {
+        $options = array();
+        switch($type)
+        {
+            case 'user':
+                $options = $this->loadModel('user')->getPairs('noletter');
+                break;
+            case 'product':
+                $options = $this->loadModel('product')->getPairs();
+                break;
+            case 'project':
+                $options = $this->loadModel('project')->getPairsByProgram();
+                break;
+            case 'execution':
+                $options = $this->loadModel('execution')->getPairs();
+                break;
+            case 'dept':
+                $options = $this->loadModel('dept')->getOptionMenu(0);
+                break;
+        }
+
+        return $options;
+    }
+
+    /**
+     * Get object options.
+     *
      * @param  string $object
      * @param  string $field
      * @access public
