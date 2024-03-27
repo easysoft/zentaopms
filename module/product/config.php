@@ -3,6 +3,7 @@ global $lang, $app;
 
 $config->product = new stdclass();
 $config->product->showAllProjects = 0;
+$config->product->refreshInterval = 120;
 
 $config->product->create = new stdclass();
 $config->product->edit   = new stdclass();
