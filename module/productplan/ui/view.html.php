@@ -164,7 +164,7 @@ foreach($actions as $actionType => $typeActions)
 {
     foreach($typeActions as $key => $action)
     {
-        $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$plan->id, $action['url']);
+        $actions[$actionType][$key]['url']       = str_replace(array('{id}', '{product}', '{branch}'), array((string)$plan->id, $plan->product, $plan->branch), $action['url']);
         $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
         $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
         if($actionType == 'suffixActions')
