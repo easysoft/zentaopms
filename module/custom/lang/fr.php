@@ -137,7 +137,6 @@ $lang->custom->story->fields['gradeRule']        = 'Grade Rule';
 
 $lang->custom->epic        = clone $lang->custom->story;
 $lang->custom->requirement = clone $lang->custom->story;
-unset($lang->custom->requirement->fields['stageList']);
 
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['required']      = $lang->custom->required;
