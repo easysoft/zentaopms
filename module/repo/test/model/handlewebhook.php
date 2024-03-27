@@ -140,6 +140,10 @@ $data   = '{
   }
 }';
 
+global $app;
+include($app->getModuleRoot() . '/repo/control.php');
+$app->control = new repo();
+
 $repo = new repoTest();
 $repo->handleWebhookTest($event, json_decode($data), $repoID);
 $result = $tester->loadModel('task')->getById(8);

@@ -46,6 +46,10 @@ $action->date   = '2023-12-29 13:14:36';
 $action->extra  = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
 $action->action = 'gitcommited';
 
+global $app;
+include($app->getModuleRoot() . '/repo/control.php');
+$app->control = new repo();
+
 $repo = new repoTest();
 $repo->setBugStatusByCommitTest($log, $action, $repoID);
 $result = $tester->loadModel('bug')->getByIdList(array(1,2));

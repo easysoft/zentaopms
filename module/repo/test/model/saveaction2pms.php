@@ -58,6 +58,9 @@ global $app;
 $app->rawModule = 'repo';
 $app->rawMethod = 'browse';
 
+include($app->getModuleRoot() . '/repo/control.php');
+$app->control = new repo();
+
 $repoID   = 1;
 $repoRoot = '';
 $scm      = 'gitlab';
