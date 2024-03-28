@@ -40,6 +40,10 @@ class pageBase extends wg
     {
         global $lang, $config, $app;
 
+        $setXuanClass = str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')
+            ? setClass('xxc-embed')
+            : null;
+
         $zui  = $this->prop('zui');
         $head = $this->buildHead();
         $body = $this->buildBody();
@@ -75,6 +79,7 @@ class pageBase extends wg
             if(!empty($extraCSS)) $headImports[] = h::importCss($webRoot . 'js/zui3/' . $extraCSS);
         }
         $headImports[] = h::jsVar('window.config', $jsConfig, setID('configJS'));
+        if($setXuanClass) $headImports[] = h::importCss($config->webRoot . 'zentaoclient.css', setID('zentaoclient'));
         if($zui)
         {
             $extraJS = isset($config->zin->extraJS) ? $config->zin->extraJS : 'zin.js';
@@ -101,9 +106,6 @@ class pageBase extends wg
 
         $currentLang = $this->props->get('lang');
         if(empty($currentLang)) $currentLang = $app->getClientLang();
-        $setXuanClass = str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')
-            ? setClass('xxc-embed')
-            : null;
 
         return h::html
         (

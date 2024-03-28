@@ -5,11 +5,8 @@ use function zin\jsVar;
  if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') != false): ?>
 <?php global $app; $app->setClientTheme('blue'); ?>
 <style>
-#appsBar, #apps {left: 0!important;}
 .xxc-embed #menu {display: none;}
-.xxc-embed #userMenu-toggle {display: none;}
-.xxc-embed #apps {left: 0;}
-.xxc-embed #toolbar {position: fixed; right: 130px; height: 47px;}
+.xxc-embed #apps, .xxc-embed #appsBar {left: 0;}
 </style>
 <script>
 $('html').addClass('xxc-embed');
