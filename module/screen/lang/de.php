@@ -13,3 +13,5 @@ $lang->screen->globalFilter  = 'Global Filter';
 
 $lang->screen->belong    = '';
 $lang->screen->dateRange = 'Date';
+
+$lang->screen->confirmDelete = "Are you sure you want to delete this screen?";
