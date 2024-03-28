@@ -66,6 +66,7 @@ $lang->metric->recalculateAll     = '重算全部数据';
 $lang->metric->recalculateHistory = '重算历史数据';
 $lang->metric->startRecalculate   = '开始重算';
 $lang->metric->recalculateAction  = '重算度量项';
+$lang->metric->recalculateBtnText = '重新计算';
 $lang->metric->exit               = '退出';
 
 $lang->metric->yearFormat     = '%s年';

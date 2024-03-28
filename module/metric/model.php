@@ -1086,6 +1086,8 @@ class metricModel extends model
         if($metric->stage == 'released' && !empty($metric->dateType) && $metric->dateType != 'nodate' && common::haspriv('metric', 'recalculate'))
         {
             $menuList['main']['recalculate'] = $this->config->metric->actionList['recalculate'];
+            $menuList['main']['recalculate']['text'] = $this->lang->metric->recalculateBtnText;
+            $menuList['main']['recalculate']['hint'] = $this->lang->metric->recalculateBtnText;
         }
 
         if($metric->builtin === '1') return $menuList;

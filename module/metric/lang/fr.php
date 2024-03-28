@@ -66,6 +66,7 @@ $lang->metric->recalculateAll     = 'Recalculate All Data';
 $lang->metric->recalculateHistory = 'Recalculate History Data';
 $lang->metric->startRecalculate   = 'Start';
 $lang->metric->recalculateAction  = 'Recalculate';
+$lang->metric->recalculateBtnText = 'Recalculate';
 $lang->metric->exit               = 'Exit';
 
 $lang->metric->yearFormat     = 'Year %s';
