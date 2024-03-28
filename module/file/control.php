@@ -242,6 +242,7 @@ class file extends control
             foreach($row as &$field)
             {
                 if(empty($field)) continue;
+                if(!is_string($field)) continue;
                 $field = preg_replace_callback('/ src="{([0-9]+)(\.(\w+))?}" /', function($matches) use($host, $fileModel)
                 {
                     $file   = $fileModel->getById((int)$matches[1]);
