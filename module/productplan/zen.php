@@ -292,6 +292,8 @@ class productplanZen extends productplan
             $this->config->product->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches;
         }
 
+        unset($this->config->product->search['fields']['grade']);
+        unset($this->config->product->search['params']['grade']);
         unset($this->config->product->search['fields']['product']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
