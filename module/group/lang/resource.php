@@ -528,6 +528,7 @@ $lang->resource->story->batchChangeBranch  = 'batchChangeBranch';
 $lang->resource->story->batchChangeStage   = 'batchChangeStage';
 $lang->resource->story->batchAssignTo      = 'batchAssignTo';
 $lang->resource->story->batchChangeModule  = 'batchChangeModule';
+$lang->resource->story->batchChangeParent  = 'batchChangeParent';
 $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->processStoryChange = 'processStoryChange';
 $lang->resource->story->linkStories        = 'linkStoriesAB';
@@ -558,10 +559,11 @@ $lang->story->methodOrder[105] = 'report';
 $lang->story->methodOrder[110] = 'linkStory';
 $lang->story->methodOrder[115] = 'batchChangeBranch';
 $lang->story->methodOrder[120] = 'batchChangeModule';
-$lang->story->methodOrder[125] = 'batchToTask';
-$lang->story->methodOrder[130] = 'processStoryChange';
-$lang->story->methodOrder[135] = 'linkStories';
-$lang->story->methodOrder[140] = 'relieved';
+$lang->story->methodOrder[125] = 'batchChangeParent';
+$lang->story->methodOrder[130] = 'batchToTask';
+$lang->story->methodOrder[135] = 'processStoryChange';
+$lang->story->methodOrder[140] = 'linkStories';
+$lang->story->methodOrder[145] = 'relieved';
 
 /* Requirement. */
 $lang->resource->requirement = new stdclass();
@@ -586,6 +588,7 @@ $lang->resource->requirement->report            = 'reportAction';
 $lang->resource->requirement->batchChangeBranch = 'batchChangeBranch';
 $lang->resource->requirement->batchAssignTo     = 'batchAssignTo';
 $lang->resource->requirement->batchChangeModule = 'batchChangeModule';
+$lang->resource->requirement->batchChangeParent = 'batchChangeParent';
 $lang->resource->requirement->linkRequirements  = 'linkRequirementsAB';
 
 $lang->requirement->methodOrder[5]   = 'create';
@@ -608,7 +611,8 @@ $lang->requirement->methodOrder[80]  = 'report';
 $lang->requirement->methodOrder[85]  = 'linkStory';
 $lang->requirement->methodOrder[90]  = 'batchChangeBranch';
 $lang->requirement->methodOrder[95]  = 'batchChangeModule';
-$lang->requirement->methodOrder[100] = 'linkRequirements';
+$lang->requirement->methodOrder[100] = 'batchChangeParent';
+$lang->requirement->methodOrder[105] = 'linkRequirements';
 
 /* Epic. */
 $lang->resource->epic = new stdclass();
@@ -632,6 +636,7 @@ $lang->resource->epic->report            = 'reportAction';
 $lang->resource->epic->batchChangeBranch = 'batchChangeBranch';
 $lang->resource->epic->batchAssignTo     = 'batchAssignTo';
 $lang->resource->epic->batchChangeModule = 'batchChangeModule';
+$lang->resource->epic->batchChangeParent = 'batchChangeParent';
 
 $lang->epic->methodOrder[5]   = 'create';
 $lang->epic->methodOrder[10]  = 'batchCreate';
@@ -652,6 +657,7 @@ $lang->epic->methodOrder[75]  = 'activate';
 $lang->epic->methodOrder[80]  = 'report';
 $lang->epic->methodOrder[90]  = 'batchChangeBranch';
 $lang->epic->methodOrder[95]  = 'batchChangeModule';
+$lang->epic->methodOrder[100] = 'batchChangeParent';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();

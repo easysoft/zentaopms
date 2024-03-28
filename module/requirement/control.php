@@ -286,6 +286,19 @@ class requirement extends control
     }
 
     /**
+     * Batch change parent.
+     *
+     * @param  int    $productID
+     * @param  string $storyType
+     * @access public
+     * @return void
+     */
+    public function batchChangeParent(int $productID = 0, string $storyType = 'requirement')
+    {
+        echo $this->fetch('story', 'batchChangeParent', "productID=$productID&storyType=requirement");
+    }
+
+    /**
      * Batch assign to.
      *
      * @param  string $storyType story|requirement
