@@ -1802,11 +1802,14 @@ class execution extends control
             $columns[] = array('name' => $columnKey, 'title' => $this->lang->execution->kanbanColType[$columnKey], 'cards' => !empty($columnCards[$columnKey]) ? $columnCards[$columnKey] : 0);
         }
 
-        $groupData['key']           = 'executionKanban';
-        $groupData['data']['lanes'] = $lanes;
-        $groupData['data']['cols']  = $columns;
-        $groupData['data']['items'] = $items;
-        $kanbanList[] = array('items' => array($groupData), 'key' => 'executionKanban', 'heading' => array('title' => $this->lang->execution->executionKanban));
+        if(!empty($kanbanGroup))
+        {
+            $groupData['key']           = 'executionKanban';
+            $groupData['data']['lanes'] = $lanes;
+            $groupData['data']['cols']  = $columns;
+            $groupData['data']['items'] = $items;
+            $kanbanList[] = array('items' => array($groupData), 'key' => 'executionKanban', 'heading' => array('title' => $this->lang->execution->executionKanban));
+        }
 
         $this->view->title      = $this->lang->execution->executionKanban;
         $this->view->kanbanList = $kanbanList;
