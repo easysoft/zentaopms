@@ -2474,8 +2474,10 @@ class repoModel extends model
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($repo);
             $commits = $scm->engine->getCommitsByPath('', '', 'HEAD', 1, 1);
+            if(empty($commits)) return;
+
             $commitDate = $repo->SCM == 'Gitlab' ? $commits[0]->committed_date : $commits[0]->author->when;
-            if($commits && !empty($commitDate))
+            if(!empty($commitDate))
             {
                 $lastCommitDate = date('Y-m-d H:i:s', strtotime($commitDate));
                 $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repoID)->exec();
