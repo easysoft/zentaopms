@@ -339,7 +339,7 @@ CSS;
                 (
                     set::urlFormatter($this->prop('urlFormatter')),
                     set::btnType('ghost'),
-                    set($toolbarProps)
+                    is_array($toolbarProps) ? set($toolbarProps) : null
                 ) : null,
                 $actionsBlock
             )
