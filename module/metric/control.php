@@ -188,7 +188,7 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function updateHistoryMetricLib($date, $calcType)
+    public function ajaxUpdateHistoryMetricLib($date, $calcType)
     {
         $date = str_replace('_', '-', $date);
         $calcList = $this->metric->getCalcInstanceList();

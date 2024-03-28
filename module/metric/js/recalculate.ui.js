@@ -34,7 +34,7 @@ function recalculateAll(startDate, endDate)
         var date = dateToString(dateRange[index]);
         var $html = recalculateLog(date);
 
-        var link = $.createLink('metric', 'updateHistoryMetricLib', 'date=' + date + '&calcType=' + calcType);
+        var link = $.createLink('metric', 'ajaxUpdateHistoryMetricLib', 'date=' + date + '&calcType=' + calcType);
         $.get(link, function(result){
             $('.recalculate-log').append($html);
             updateAllHistory(dateRange, index + 1);
