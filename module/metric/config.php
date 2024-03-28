@@ -36,7 +36,7 @@ $config->metric->actionList['delete']['data-confirm'] = $lang->metric->confirmDe
 
 $config->metric->actionList['recalculate']['icon'] = 'refresh';
 $config->metric->actionList['recalculate']['text'] = $lang->metric->recalculate;
-$config->metric->actionList['recalculate']['hint'] = $lang->metric->recalculate;
+$config->metric->actionList['recalculate']['hint'] = $lang->metric->recalculateBtnText;
 $config->metric->actionList['recalculate']['url']  = 'javascript:confirmRecalculate("single", "{code}")';
 
 $config->metric->necessaryMethodList = array('getStatement', 'calculate', 'getResult');

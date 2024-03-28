@@ -1468,7 +1468,7 @@ class metricModel extends model
                 if($action['name'] == 'recalculate') 
                 {
                     $isClick = $metric->canRecalculate;
-                    if($metric->stage == 'released' && !empty($metric->dateType) && $metric->dateType != 'nodate') $metric->actions[$key]['hint'] = $this->lang->metric->tips->banRecalculate;
+                    if($metric->stage != 'released' || (!empty($metric->dateType) && $metric->dateType == 'nodate')) $metric->actions[$key]['hint'] = $this->lang->metric->tips->banRecalculate;
                 }
 
                 $metric->actions[$key]['disabled'] = !$isClick;
