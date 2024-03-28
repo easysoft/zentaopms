@@ -6412,6 +6412,7 @@ class storyModel extends model
         $this->replaceURLang($storyType);
         $storyLang   = $this->lang->story;
         $storyConfig = $this->config->story;
+        if($storyType == 'requirement') $this->lang->story->childStories = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->childStories);
 
         /* Create field lists. */
         $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $storyConfig->list->exportFields);

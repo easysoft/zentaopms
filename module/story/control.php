@@ -2951,6 +2951,7 @@ class story extends control
      */
     public function export($productID, $orderBy, $executionID = 0, $browseType = '', $storyType = 'story')
     {
+        if($storyType == 'requirement') $this->config->story->exportFields = str_replace('childStories,', '', $this->config->story->exportFields);
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
