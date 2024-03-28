@@ -56,7 +56,7 @@ $config->story->excludeCheckFields = ',uploadImage,category,reviewer,reviewDitto
 
 global $app, $lang;
 $config->story->actionList = array();
-$config->story->actionList['change']['icon']     = 'alert';
+$config->story->actionList['change']['icon']     = 'change';
 $config->story->actionList['change']['text']     = $lang->story->change;
 $config->story->actionList['change']['hint']     = $lang->story->change;
 $config->story->actionList['change']['url']      = array('module' => 'story', 'method' => 'change', 'params' => 'storyID={id}');
@@ -82,7 +82,7 @@ $config->story->actionList['recallChange']['url']       = array('module' => 'sto
 $config->story->actionList['recallChange']['data-app']  = $app->tab;
 $config->story->actionList['recallChange']['className'] = 'ajax-submit';
 
-$config->story->actionList['review']['icon']     = 'alert';
+$config->story->actionList['review']['icon']     = 'search';
 $config->story->actionList['review']['text']     = $lang->story->review;
 $config->story->actionList['review']['hint']     = $lang->story->review;
 $config->story->actionList['review']['url']      = array('module' => 'story', 'method' => 'review', 'params' => 'storyID={id}&from=' . $app->tab . '&storyType={type}');
