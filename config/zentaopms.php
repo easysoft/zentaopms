@@ -314,6 +314,7 @@ $config->openMethods[] = 'cron.schedule';
 $config->openMethods[] = 'cron.consume';
 $config->openMethods[] = 'caselib.importfromlib';
 $config->openMethods[] = 'ai.configuredminiprogram';
+$config->openMethods[] = 'metric.recalculatesetting';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
