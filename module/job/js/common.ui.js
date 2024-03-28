@@ -325,8 +325,3 @@ window.changeCustomField = function(event)
     paramValue = paramValue.substr(1).toUpperCase();
     $(event.target).prevAll('input').val(paramValue);
 }
-
-window.setJenkinsJob = function()
-{
-    $('[name=jkTask]').val($('#pipelineDropmenu button.dropmenu-btn').data('value'));
-}
