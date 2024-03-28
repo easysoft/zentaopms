@@ -388,7 +388,7 @@ class productplan extends control
         $this->view->modulePairs  = $modulePairs;
         $this->view->planStories  = $planStories;
         $this->view->planBugs     = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
-        $this->view->summary      = $this->product->summary($planStories);
+        $this->view->summary      = $this->productplanZen->buildViewSummary($planStories);
         $this->view->actionMenus  = $this->productplanZen->buildViewActions($plan);
         $this->view->type         = $type;
         $this->view->orderBy      = $orderBy;

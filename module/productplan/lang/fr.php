@@ -78,6 +78,7 @@ $lang->productplan->projectNotEmpty    = $lang->projectCommon . ' cannot be empt
 $lang->productplan->nextStep           = "Next step";
 $lang->productplan->summary            = "Total: <strong>%s</strong>, Parents: <strong>%s</strong>, Children: <strong>%s</strong>，Independent: <strong>%s</strong>.";
 $lang->productplan->checkedSummary     = "Seleted: <strong>%total%</strong>, Parents: <strong>%parent%</strong>, Children: <strong>%child%</strong>, Independent: <strong>%independent%</strong>.";
+$lang->productplan->storySummary       = "Total: <strong>%s</strong> {$lang->ERCommon}s, <strong>%s</strong> {$lang->URCommon}s, <strong>%s</strong> {$lang->SRCommon}s on this page. Estimates <strong>%s</strong> h,  and Case Coverage: <strong>%s</strong>.";
 $lang->productplan->confirmChangePlan  = "After the branch of『%s』is unlinked, %s story and %s bugs under the branch will be removed from the plan at the same time, so still want to unassociate?";
 $lang->productplan->confirmRemoveStory = "After the branch of『%s』is unlinked, %s story under the branch will be removed from the plan at the same time, so still want to unassociate?";
 $lang->productplan->confirmRemoveBug   = "After the branch of『%s』is unlinked, %s bugs under the branch will be removed from the plan at the same time, so still want to unassociate?";

@@ -78,6 +78,7 @@ $lang->productplan->projectNotEmpty    = "所属{$lang->projectCommon}不能为�
 $lang->productplan->nextStep           = "下一步";
 $lang->productplan->summary            = "本页共 <strong>%s</strong> 个计划，父计划 <strong>%s</strong>，子计划 <strong>%s</strong>，独立计划 <strong>%s</strong>。";
 $lang->productplan->checkedSummary     = "共选中 <strong>%total%</strong> 个计划，父计划 <strong>%parent%</strong>，子计划 <strong>%child%</strong>，独立计划 <strong>%independent%</strong>。";
+$lang->productplan->storySummary       = "本页共 <strong>%s</strong> 个{$lang->ERCommon}，<strong>%s</strong> 个{$lang->URCommon}， <strong>%s</strong> 个{$lang->SRCommon}，预计 <strong>%s</strong> 个工时， 用例覆盖率 <strong>%s</strong> 。";
 $lang->productplan->confirmChangePlan  = "分支『%s』解除关联后，分支下的%s个需求和%s个Bug将同步从计划中移除，是否解除？";
 $lang->productplan->confirmRemoveStory = "分支『%s』解除关联后，分支下的%s个需求将同步从计划中移除，是否解除？";
 $lang->productplan->confirmRemoveBug   = "分支『%s』解除关联后，分支下的%s个Bug将同步从计划中移除，是否解除？";

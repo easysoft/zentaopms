@@ -339,6 +339,46 @@ class productplanZen extends productplan
     }
 
     /**
+     * 构造需求列表的摘要信息。
+     * Get the summary of product's stories.
+     *
+     * @param  array  $stories
+     * @access public
+     * @return string
+     */
+    public function buildViewSummary(array $stories): string
+    {
+        $totalEstimate = 0.0;
+        $storyIdList   = array();
+
+        $rateCount = 0;
+        $SRTotal   = 0;
+        $URTotal   = 0;
+        $ERTotal   = 0;
+
+        foreach($stories as $story)
+        {
+            if($story->type == 'story')       $SRTotal += 1;
+            if($story->type == 'requirement') $URTotal += 1;
+            if($story->type == 'epic')        $ERTotal += 1;
+
+            if($story->isParent == '0') $totalEstimate += $story->estimate;
+
+            if($story->type != 'story') continue;
+            if($story->parent >= 0 && ($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed'))))
+            {
+                $storyIdList[] = $story->id;
+                $rateCount ++;
+            }
+        }
+
+        $casesCount = count($this->loadModel('product')->filterNoCasesStory($storyIdList));
+        $rate       = empty($stories) || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 2);
+
+        return sprintf($this->lang->productplan->storySummary, $ERTotal, $URTotal, $SRTotal, $totalEstimate, $rate * 100 . "%");
+    }
+
+    /**
      * 构造计划详情页面的操作菜单。
      * Build operate menu for plan detail page.
      *
