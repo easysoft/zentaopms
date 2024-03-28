@@ -325,9 +325,6 @@ class storyTao extends storyModel
             if($story->parent > 0 and isset($parents[$story->parent]))
             {
                 if($parents[$story->parent]->version > $story->parentVersion && $story->parentVersion > 0) $story->parentChanged = true;
-                /* 软需列表和用需列表的父需求不是当前类型时不缩进。 */
-                if($type == 'story'       && $parents[$story->parent]->type == 'requirement') $story->parent = 0;
-                if($type == 'requirement' && $parents[$story->parent]->type == 'epic')        $story->parent = 0;
             }
 
             /* Merge plan title. */

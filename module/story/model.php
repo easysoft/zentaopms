@@ -1463,7 +1463,6 @@ class storyModel extends model
             if(empty($story->closedReason)) continue;
 
             $oldStory = $oldStories[$storyID];
-            if($oldStory->isParent == '1') continue;
 
             $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()
                 ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')

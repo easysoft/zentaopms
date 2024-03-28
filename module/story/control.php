@@ -900,8 +900,11 @@ class story extends control
                 continue;
             }
 
-            if($story->status == 'closed') $closedStory[]  = $story->id;
-            if($story->parent == -1 || $story->status == 'closed') unset($stories[$story->id]);
+            if($story->status == 'closed')
+            {
+                $closedStory[] = $story->id;
+                unset($stories[$story->id]);
+            }
 
             if(!empty($story->twins))
             {
