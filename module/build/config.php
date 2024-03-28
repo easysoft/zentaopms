@@ -52,7 +52,6 @@ $config->build->actionList['projectBugList'] = $config->build->actionList['bugLi
 $config->build->actionList['projectBugList']['url']  = helper::createLink('projectbuild', 'view', 'buildID={id}&type=generatedBug');
 
 $config->build->actionList['buildEdit']['icon'] = 'edit';
-$config->build->actionList['buildEdit']['text'] = $lang->edit;
 $config->build->actionList['buildEdit']['hint'] = $lang->build->edit;
 $config->build->actionList['buildEdit']['url']  = helper::createLink('build', 'edit', 'buildID={id}');
 
@@ -60,7 +59,6 @@ $config->build->actionList['projectbuildEdit'] = $config->build->actionList['bui
 $config->build->actionList['projectbuildEdit']['url'] = helper::createLink('projectbuild', 'edit', 'buildID={id}');
 
 $config->build->actionList['delete']['icon']         = 'trash';
-$config->build->actionList['delete']['text']         = $lang->delete;
 $config->build->actionList['delete']['hint']         = $lang->build->delete;
 $config->build->actionList['delete']['url']          = helper::createLink($app->tab == 'project' ? 'projectbuild' : 'build', 'delete', 'buildID={id}');
 $config->build->actionList['delete']['className']    = 'ajax-submit';
