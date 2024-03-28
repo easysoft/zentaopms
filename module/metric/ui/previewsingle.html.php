@@ -120,6 +120,7 @@ $firstScope = current(array_keys($this->lang->metric->featureBar['preview']));
 $exchangeScope = $scope == 'filter' ? $firstScope : $scope;
 toolbar
 (
+    set::id('topbar'),
     btn
     (
         setClass('btn text-black ghost primary-hover-500'),
@@ -127,13 +128,7 @@ toolbar
         set::iconClass('icon-18'),
         set::url(helper::createLink('metric', 'preview', "scope=$exchangeScope&viewType=multiple&metricID={$currentID}")),
         $lang->metric->viewType->multiple,
-    ),
-    common::hasPriv('metric', 'browse') ? btn
-    (
-        setClass('btn primary'),
-        set::url(helper::createLink('metric', 'browse')),
-        $lang->metric->manage
-    ) : null
+    )
 );
 
 $fnGenerateQueryForm = function() use($metricRecordType, $current, $dateLabels, $defaultDate)
