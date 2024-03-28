@@ -69,6 +69,7 @@ window.changeTrigger = function(event)
     {
         useZentao = event;
     }
+    console.log(useZentao)
 
     if(useZentao === '1')
     {
@@ -271,7 +272,7 @@ window.changeRepo = function()
                 triggerOptions.push({text: triggerList[code], value: code})
             }
             $trigger.render({items: triggerOptions});
-            $trigger.$.setValue(triggerOptions[0].value);
+            if($('[name=triggerType]').val() == 'tag') $trigger.$.setValue(triggerOptions[0].value);
 
             if(data.type.indexOf('git') != -1)
             {

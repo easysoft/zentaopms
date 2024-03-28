@@ -1,6 +1,9 @@
-window.afterPageUpdate = function()
+$(function()
 {
-    window.changeTrigger(job.triggerType == '' ? '0' : '1');
-    setTimeout(window.changeRepo, 10);
-    window.changeTriggerType(job.triggerType);
-};
+    setTimeout(function()
+    {
+        $('[name=repo]').trigger('change');
+        $('[name=triggerType]').trigger('change');
+        window.changeTrigger(job.triggerType == '' ? '0' : '1')
+    }, 10);
+});
