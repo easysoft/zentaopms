@@ -22,6 +22,7 @@ $lang->chart->fieldTypeList['select']   = 'Dropdown';
 $lang->chart->groupWeek = 'Week %s,%s';
 
 $lang->chart->noChart         = 'No Chart';
+$lang->chart->noData          = 'No Data';
 $lang->chart->noChartSelected = 'Please select one chart.';
 $lang->chart->chartMaxChecked = 'You can only select up to %s charts.';
 
