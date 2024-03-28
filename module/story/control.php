@@ -785,7 +785,6 @@ class story extends control
             $postData = form::data($this->config->story->form->close)
                 ->stripTags($this->config->story->editor->close['id'], $this->config->allowedTags)
                 ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
-                ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
                 ->get();
 
             if(strpos($this->config->{$story->type}->change->requiredFields, 'comment') !== false and !$this->post->comment) $this->send(array('result' => 'fail', 'message' => array('comment' => sprintf($this->lang->error->notempty, $this->lang->comment))));

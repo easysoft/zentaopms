@@ -39,7 +39,7 @@ $config->story->exportFields = '
     reviewedBy, reviewedDate,
     closedBy, closedDate, closedReason,
     lastEditedBy, lastEditedDate,
-    childStories, linkStories, duplicateStory, files';
+    linkStories, duplicateStory, files';
 
 $config->story->list->customCreateFields      = '';
 $config->story->list->customBatchCreateFields = 'plan,assignedTo,spec,source,verify,pri,estimate,URS,keywords,mailto';

@@ -1442,9 +1442,8 @@ class storyZen extends story
         $storyData    = form::data($fields)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
-            ->removeIF($result != 'reject', 'closedReason,duplicateStory,childStories')
+            ->removeIF($result != 'reject', 'closedReason,duplicateStory')
             ->removeIF($result == 'reject' && $closedReason != 'duplicate', 'duplicateStory')
-            ->removeIF($result == 'reject' && $closedReason != 'subdivided', 'childStories')
             ->get();
 
         if($oldStory->assignedTo != $storyData->assignedTo) $storyData->assignedDate = $now;
@@ -1520,7 +1519,6 @@ class storyZen extends story
         $now     = helper::now();
 
         $fields['duplicateStory'] = array('type' => 'int', 'required' => false, 'default' => 0);
-        $fields['childStories']   = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
 
         $stories    = form::batchData($fields)->get();
         $oldStories = $this->story->getByList(array_keys($stories));

@@ -798,7 +798,6 @@ class storyTao extends storyModel
             $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
             $oldChildren    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($oldStoryParent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
             if(empty($oldChildren)) $this->dao->update(TABLE_STORY)->set('isParent')->eq('0')->where('id')->eq($oldStoryParent)->exec();
-            $this->dao->update(TABLE_STORY)->set('childStories')->eq(implode(',', $oldChildren))->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldStoryParent)->exec();
             $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
 
             $this->action->create('story', $storyID, 'unlinkParentStory', '', $oldStoryParent, '', false);
@@ -811,11 +810,9 @@ class storyTao extends storyModel
         {
             $parentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
             $newRoot     = $parentStory->root;
-            $children    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
             $this->dao->update(TABLE_STORY)->set('parentVersion')->eq($parentStory->version)->where('id')->eq($storyID)->exec();
             $this->dao->update(TABLE_STORY)
                 ->set('isParent')->eq('1')
-                ->set('childStories')->eq(implode(',', $children))
                 ->set('lastEditedBy')->eq($this->app->user->account)
                 ->set('lastEditedDate')->eq(helper::now())
                 ->where('id')->eq($story->parent)

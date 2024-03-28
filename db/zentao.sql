@@ -1805,7 +1805,6 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `closedReason` varchar(30) NOT NULL DEFAULT '',
   `activatedDate` datetime NULL,
   `toBug` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `childStories` varchar(255) NOT NULL DEFAULT '',
   `linkStories` varchar(255) NOT NULL DEFAULT '',
   `linkRequirements` varchar(255) NOT NULL DEFAULT '',
   `twins` varchar(255) NOT NULL DEFAULT '',

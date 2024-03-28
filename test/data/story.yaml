@@ -226,13 +226,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: childStories
-    note: "细分需求"
-    range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: linkStories
     note: "相关需求"
     range: 0

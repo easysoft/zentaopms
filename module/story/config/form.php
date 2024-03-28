@@ -65,7 +65,6 @@ $config->story->form->edit['assignedTo']     = array('type' => 'string',  'contr
 $config->story->form->edit['closedBy']       = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => '', 'options' => 'users');
 $config->story->form->edit['closedReason']   = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => '', 'options' => $lang->story->reasonList);
 $config->story->form->edit['duplicateStory'] = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => '', 'options' => array());
-$config->story->form->edit['childStories']   = array('type' => 'array',   'control' => 'select',       'required' => false, 'default' => '', 'options' => array(), 'filter' => 'join');
 
 $config->story->form->batchCreate = common::formConfig('story', 'batchCreate');
 $config->story->form->batchCreate['branch']     = array('ditto' => true,  'type' => 'int',    'control' => 'select', 'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
@@ -136,7 +135,6 @@ $config->story->form->review['closedReason']   = array('type' => 'string', 'cont
 $config->story->form->review['pri']            = array('type' => 'int',    'control' => 'priPicker',      'required' => false, 'default' => '', 'options' => $lang->story->priList);
 $config->story->form->review['estimate']       = array('type' => 'float',  'control' => 'text',           'required' => false, 'default' => '');
 $config->story->form->review['duplicateStory'] = array('type' => 'string', 'control' => 'text',           'required' => false, 'default' => '');
-$config->story->form->review['childStories']   = array('type' => 'string', 'control' => 'text',           'required' => false, 'default' => '');
 $config->story->form->review['status']         = array('type' => 'string', 'control' => 'hidden',         'required' => false, 'default' => '');
 
 $config->story->form->activate = array();
@@ -151,7 +149,6 @@ $config->story->form->activate['reviewedBy']     = array('type' => 'string',   '
 $config->story->form->activate['reviewedDate']   = array('type' => 'datetime', 'required' => false, 'default' => null);
 $config->story->form->activate['assignedDate']   = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->story->form->activate['duplicateStory'] = array('type' => 'int',      'required' => false, 'default' => 0);
-$config->story->form->activate['childStories']   = array('type' => 'string',   'required' => false, 'default' => '');
 
 $config->story->form->close = array();
 $config->story->form->close['status']         = array('type' => 'string',   'required' => false, 'default' => 'closed');
@@ -163,7 +160,6 @@ $config->story->form->close['closedReason']   = array('type' => 'string',   'req
 $config->story->form->close['closedDate']     = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->story->form->close['assignedDate']   = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->story->form->close['duplicateStory'] = array('type' => 'int',      'required' => false, 'default' => 0);
-$config->story->form->close['childStories']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->story->form->close['closeSync']      = array('type' => 'string',   'required' => false, 'default' => '');
 
 $config->story->form->submitReview = array();

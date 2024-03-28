@@ -34,9 +34,6 @@ window.renderRowData = function($row, index, story)
             let appendStoryHtml = "<span id='duplicateStoryBox" + story.id + "' " + (story.closedReason != 'duplicate' ? "class='hidden'" : '') + ">";
             appendStoryHtml    += "<div class='form-control picker-box' data-name='duplicateStory' style='padding:0'></div></span>";
 
-            appendStoryHtml += "<span id='childStoryBox" + story.id + "' " + (story.closedReason != 'subdivided' ? "class='hidden'" : '') + ">";
-            appendStoryHtml += "<input type='text' class='form-control form-batch-input' name='childStories[" + story.id + "]' value='" + (typeof story.childStories == 'undefined' ? '' : story.childStories) + "' id='childStories_" + index + "' data-name='childStories' autocomplete='off'>";
-            appendStoryHtml += '</span>';
             $closedReasonTD.find('.input-group').append(appendStoryHtml);
 
             items = [];
@@ -197,17 +194,10 @@ window.setDuplicateAndChild = function(resolution, storyID)
 {
     if(resolution == 'duplicate')
     {
-        $('#childStoryBox' + storyID).addClass('hidden');
         $('#duplicateStoryBox' + storyID).removeClass('hidden');
-    }
-    else if(resolution == 'subdivided')
-    {
-        $('#duplicateStoryBox' + storyID).addClass('hidden');
-        $('#childStoryBox' + storyID).removeClass('hidden');
     }
     else
     {
         $('#duplicateStoryBox' + storyID).addClass('hidden');
-        $('#childStoryBox' + storyID).addClass('hidden');
     }
 };

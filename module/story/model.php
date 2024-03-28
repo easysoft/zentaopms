@@ -74,7 +74,6 @@ class storyModel extends model
         $extraStories = array();
         if($story->duplicateStory) $extraStories = array($story->duplicateStory);
         if($story->linkStories)    $extraStories = array_merge($extraStories, explode(',', $story->linkStories));
-        if($story->childStories)   $extraStories = array_merge($extraStories, explode(',', $story->childStories));
 
         $extraStories = array_unique($extraStories);
         if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
@@ -1360,15 +1359,14 @@ class storyModel extends model
         $this->computeEstimate($storyID);
 
         /* Set childStories. */
-        $childStories = implode(',', $SRList);
         $newStory     = new stdClass();
         $newStory->isParent       = '1';
         $newStory->plan           = '';
         $newStory->lastEditedBy   = $this->app->user->account;
         $newStory->lastEditedDate = $now;
-        $newStory->childStories   = trim($oldStory->childStories . ',' . $childStories, ',');
         $this->dao->update(TABLE_STORY)->data($newStory)->autoCheck()->where('id')->eq($storyID)->exec();
 
+        $childStories = implode(',', $SRList);
         $actionID = $this->loadModel('action')->create('story', $storyID, 'createChildrenStory', '', $childStories);
         $this->action->logHistory($actionID, common::createChanges($oldStory, $newStory));
     }
@@ -4436,7 +4434,7 @@ class storyModel extends model
         if($this->session->storyOnlyCondition)
         {
             $queryCondition = $postData->exportType == 'selected' ? ' `id` ' . helper::dbIN($selectedIDList) : str_replace('`story`', '`id`', $this->session->storyQueryCondition);
-            $stories        = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($queryCondition)->orderBy($orderBy)->fetchAll('id');
+            $stories        = $this->dao->select('id,title,linkStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($queryCondition)->orderBy($orderBy)->fetchAll('id');
         }
         else
         {
@@ -4531,14 +4529,6 @@ class storyModel extends model
                 $linkStoriesIdList = explode(',', $story->linkStories);
                 foreach($linkStoriesIdList as $linkStoryID) $tmpLinkStories[] = zget($relatedStories, trim($linkStoryID), '');
                 $story->linkStories = implode("; \n", array_filter($tmpLinkStories));
-            }
-
-            if($story->childStories)
-            {
-                $tmpChildStories = array();
-                $childStoriesIdList = explode(',', $story->childStories);
-                foreach($childStoriesIdList as $childStoryID) $tmpChildStories[] = zget($relatedStories, trim($childStoryID));
-                $story->childStories = implode("; \n", array_filter($tmpChildStories));
             }
 
             /* Set related files. */
