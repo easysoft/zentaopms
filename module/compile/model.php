@@ -149,6 +149,8 @@ class compileModel extends model
     {
         $logs = '';
 
+        /* Get jobs by pipeline. */
+        $pipeline = json_decode($job->pipeline);
         if($job->engine == 'jenkins')
         {
             $jenkins = $this->loadModel('pipeline')->getByID($job->server);
@@ -174,10 +176,13 @@ class compileModel extends model
                 $this->dao->update(TABLE_COMPILE)->set('logs')->eq($logs)->where('id')->eq($compile->id)->exec();
             }
         }
+        elseif($job->engine == 'gitfox')
+        {
+            $pipeline->name = $compile->pipline;
+            $logs = $this->loadModel('gitfox')->apiGetPipelineLogs($job->server, $pipeline->project, $pipeline);
+        }
         else
         {
-            /* Get jobs by pipeline. */
-            $pipeline  = json_decode($job->pipeline);
             $projectID = isset($pipeline->project) ? $pipeline->project : 0;
             $jobs      = $this->loadModel('gitlab')->apiGetJobs($job->server, (int)$projectID, $compile->queue);
 
