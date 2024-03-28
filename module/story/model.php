@@ -1008,7 +1008,6 @@ class storyModel extends model
         $unlinkPlans = array();
         $link2Plans  = array();
 
-        $invaildStories = array();
         foreach($stories as $storyID => $story)
         {
             unset($story->status);
@@ -1648,6 +1647,83 @@ class storyModel extends model
     }
 
     /**
+     * 批量修改需求的父需求。
+     * Batch change the parent of story.
+     *
+     * @param  string $storyIdList
+     * @param  int    $parentID
+     * @param  string $storyType
+     * @access public
+     * @return bool|string
+     */
+    public function batchChangeParent(string $storyIdList, int $parentID, string $storyType = 'story')
+    {
+        if(empty($storyIdList)) return;
+
+        $stories    = $this->getByList($storyIdList);
+        $parent     = $this->fetchById($parentID);
+        $gradePairs = $this->getGradePairs($storyType);
+        $gradePairs = array_keys($gradePairs);
+
+        $gradeErrorStories  = array();
+        $parentErrorStories = array();
+
+        foreach($stories as $storyID => $story)
+        {
+            if($story->parent == $parentID) continue;
+            if($story->id == $parentID)
+            {
+                $parentErrorStories[] = '#' . $storyID;
+                continue;
+            }
+            if($story->root == $parent->root && $story->type == $parent->type && $story->grade < $parent->grade)
+            {
+                $parentErrorStories[] = '#' . $storyID;
+                continue;
+            }
+
+            $oldStory = clone $story;
+            $parentGradeIndex = array_search($parent->grade, $gradePairs);
+            if($parent->type == $story->type)
+            {
+                $story->grade = $gradePairs[$parentGradeIndex + 1];
+            }
+            else
+            {
+                $story->grade = current($gradePairs);
+            }
+
+            if($story->grade > $oldStory->grade)
+            {
+                if(!$this->checkGrade($story, $oldStory, 'batch'))
+                {
+                    $gradeErrorStories[] = '#' . $storyID;
+                    continue;
+                }
+            }
+
+            if($story->grade != $oldStory->grade) $this->syncGrade($oldStory, $story);
+
+            $oldParentID   = $story->parent;
+            $story->parent = $parentID;
+            $this->doChangeParent($story->id, $story, $oldParentID);
+
+            $this->dao->update(TABLE_STORY)
+                 ->set('grade')->eq($story->grade)
+                 ->set('parent')->eq($story->parent)
+                 ->autoCheck()
+                 ->where('id')->eq($story->id)
+                 ->exec();
+        }
+
+        $notice = '';
+        if($gradeErrorStories)  $notice = sprintf($this->lang->story->batchGradeOverflow, implode(',', $gradeErrorStories));
+        if($parentErrorStories) $notice = sprintf($this->lang->story->batchParentError, implode(',', $parentErrorStories));
+
+        return $notice;
+    }
+
+    /**
      * Batch change branch.
      *
      * @param  array  $storyIdList
@@ -2097,12 +2173,14 @@ class storyModel extends model
 
     /**
      * 获取需求的所有子需求ID。
+     * Get all child stories of a story.
      *
      * @param  int    $storyID
+     * @param  array  $processedIds
      * @access public
      * @return array
      */
-    public function getAllChildId(int $storyID): array
+    public function getAllChildId(int $storyID, array $processedIds = array()): array
     {
         if($storyID == 0) return array();
 
@@ -2114,12 +2192,16 @@ class storyModel extends model
         $childIdList = array();
         foreach($children as $childID)
         {
-            $childIdList[] = $childID;
-            $childIdList   = array_merge($childIdList, $this->getAllChildId($childID));
+            if(!in_array($childID, $processedIds))
+            {
+                $childIdList[] = $childID;
+                $childIdList = array_merge($childIdList, $this->getAllChildId($childID, array_merge($processedIds, array($childID))));
+            }
         }
 
         return $childIdList;
     }
+
 
     /**
      * Get stories by assignedTo.
@@ -5016,13 +5098,16 @@ class storyModel extends model
      *
      * @param  object $story
      * @param  object $oldStory
+     * @param  strign $mode     single|batch
      * @access public
      * @return bool
      */
-    public function checkGrade(object $story, object $oldStory)
+    public function checkGrade(object $story, object $oldStory, string $mode = 'single')
     {
-        $maxGrade = $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORY)
-             ->where('root')->eq($oldStory->root)
+        $children   = $this->getAllChildId($oldStory->id);
+        $children[] = $oldStory->id;
+        $maxGrade   = $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORY)
+             ->where('id')->in($children)
              ->andWhere('deleted')->eq('0')
              ->fetch('maxGrade');
 
@@ -5034,6 +5119,7 @@ class storyModel extends model
         $newMaxGrade = (int)$maxGrade + (int)$story->grade - (int)$oldStory->grade;
         if($newMaxGrade > $systemMaxGrade)
         {
+            if($mode == 'batch') return false;
             dao::$errors['grade'] = sprintf($this->lang->story->gradeOverflow, $systemMaxGrade, $newMaxGrade);
         }
 

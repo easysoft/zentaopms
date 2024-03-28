@@ -137,6 +137,7 @@ $filter->projectstory->story      = new stdclass();
 $filter->qa->default              = new stdclass();
 $filter->story->create            = new stdclass();
 $filter->story->export            = new stdclass();
+$filter->story->batchchangeparent = new stdclass();
 $filter->story->batchcreate       = new stdclass();
 $filter->story->track             = new stdclass();
 $filter->sso->getbindusers        = new stdclass();
@@ -321,11 +322,12 @@ $filter->qa->default->cookie['lastProduct']  = 'int';
 $filter->qa->default->cookie['preBranch']    = 'reg::word';
 $filter->qa->default->cookie['preProductID'] = 'int';
 
-$filter->story->create->cookie['lastStoryModule']   = 'int';
-$filter->story->batchcreate->cookie['preProductID'] = 'int';
-$filter->story->export->cookie['checkedItem']       = 'reg::checked';
-$filter->story->track->cookie['preBranch']          = 'reg::word';
-$filter->story->track->cookie['preProductID']       = 'int';
+$filter->story->create->cookie['lastStoryModule']        = 'int';
+$filter->story->batchcreate->cookie['preProductID']      = 'int';
+$filter->story->export->cookie['checkedItem']            = 'reg::checked';
+$filter->story->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
+$filter->story->track->cookie['preBranch']               = 'reg::word';
+$filter->story->track->cookie['preProductID']            = 'int';
 
 $filter->productplan->browse->cookie['viewType'] = 'code';
 $filter->projectplan->browse->cookie['viewType'] = 'code';

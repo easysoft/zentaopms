@@ -1210,7 +1210,8 @@ class productModel extends model
             $isLeafStory = !isset($childTypes[$story->id]) || (isset($childTypes[$story->id]) && !isset($childTypes[$story->id][$story->type]));
             if($storyType == $story->type && $isLeafStory) $totalEstimate += $story->estimate;
 
-            if($story->parent >= 0 && ($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed'))))
+            if($story->type != 'story') continue;
+            if($story->isParent == '0' && ($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed'))))
             {
                 $storyIdList[] = $story->id;
                 $rateCount ++;

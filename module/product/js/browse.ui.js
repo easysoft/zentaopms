@@ -19,6 +19,14 @@ $(document).off('click', '[data-formaction]').on('click', '[data-formaction]', f
     }
 });
 
+$(document).off('click', '.batchChangeParentBtn').on('click', '.batchChangeParentBtn', function(e)
+{
+    const dtable      = zui.DTable.query($('#stories'));
+    const checkedList = dtable.$.getChecks();
+
+    $.cookie.set('checkedItem', checkedList.join(','), {expires:config.cookieLife, path:config.webRoot});
+});
+
 $(document).off('click','#linkStoryByPlan button[type="submit"]').on('click', '#linkStoryByPlan button[type="submit"]', function()
 {
     var planID = $('[name=plan]').val();

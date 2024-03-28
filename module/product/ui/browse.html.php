@@ -218,10 +218,11 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     $canBatchChangeBranch = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
     $canBatchChangeModule = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && $product && $product->type == 'normal';
     $canBatchChangePlan   = $canBeChanged && hasPriv('story', 'batchChangePlan') && (!$isProjectStory || $projectHasProduct || ($isProjectStory && isset($project->model) && $project->model == 'scrum')) && $productID && $product && $product->type == 'normal';
+    $canBatchChangeParent = $canBeChanged && hasPriv('story', 'batchChangeParent');
     $canBatchAssignTo     = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
     $canBatchUnlink       = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
     $canBatchImportToLib  = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
-    $canBatchAction       = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch;
+    $canBatchAction       = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch;
 
     /* Remove empty data from data list. */
     unset($lang->story->reviewResultList[''], $lang->story->reviewResultList['revert']);
@@ -281,11 +282,13 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
         /* Module button. */
         array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? 'secondary batchChangeModuleBtn' : 'hidden', 'items' => $moduleItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
         /* Plan button. */
-        array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? 'secondary batchCnangePlanBtn' : 'hidden', 'items' => $planItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
+        array('caret' => 'up', 'text' => $lang->story->planAB, 'className' => $canBatchChangePlan ? 'secondary batchChangePlanBtn' : 'hidden', 'items' => $planItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
         /* Change branch button. */
         ($canBatchChangeBranch && $product->type != 'normal') ? array('caret' => 'up', 'text' => $lang->product->branchName[$product->type], 'className' => 'batchChangeBranchBtn', 'items' => $branchItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)) : null,
         /* AssignedTo button. */
         array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => ($canBatchAssignTo ? 'secondary batchAssignToBtn' : 'hidden'), 'items' => $assignItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
+        /* Change parent button. */
+        array('text' => $lang->story->changeParent, 'className' => $canBatchChangeParent ? 'secondary batchChangeParentBtn' : 'hidden', 'data-toggle' => 'modal', 'url' => createLink('story', 'batchChangeParent', "productID=$productID&storyType=$storyType")),
         /* Batch import to lib button .*/
         !$canBatchImportToLib ? null : array('text' => $lang->story->importToLib, 'className' => 'btn secondary batchImportToLibBtn', 'id' => 'importToLib', 'data-toggle' => 'modal', 'url' => '#batchImportToLib')
     );

@@ -1127,6 +1127,32 @@ class story extends control
     }
 
     /**
+     * 批量修改需求的父需求。
+     * Batch change the parent of story.
+     *
+     * @param  int    $productID
+     * @param  string $storyType story|requirement
+     * @access public
+     * @return void
+     */
+    public function batchChangeParent(int $productID = 0, string $storyType = 'story')
+    {
+        if($_POST)
+        {
+            if(!$this->post->parent) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->story->parent)));
+
+            $storyIdList = $this->cookie->checkedItem;
+            $result      = $this->story->batchChangeParent($storyIdList, (int)$this->post->parent, $storyType);
+            if($result) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('$result');", 'closeModal' => true, 'load' => true));
+
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+        }
+
+        $this->view->parents = $this->story->getParentStoryPairs($productID, '', $storyType);
+        $this->display();
+    }
+
+    /**
      * 需求的指派给页面。
      * Assign the story to a user.
      *
