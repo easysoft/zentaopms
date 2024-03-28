@@ -57,7 +57,14 @@ loadChart = function(chartID)
         else if($filter.hasClass('filter-select'))
         {
             const value = $filter.find('.pick-value').val();
-            form.append('filterValues[' + index + ']', typeof value == 'array' ? value.filter(Boolean) : value);
+            if(Array.isArray(value))
+            {
+                value.filter(Boolean).forEach((item) => form.append('filterValues[' + index + '][]', item));
+            }
+            else
+            {
+                form.append('filterValues[' + index + ']', value);
+            }
         }
         else if($filter.hasClass('filter-date') || $filter.hasClass('filter-datetime'))
         {

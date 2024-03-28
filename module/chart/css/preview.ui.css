@@ -1,9 +1,0 @@
-.panel-title {margin-bottom: 12px;}
-.empty-tip {height: 100%; min-height: 200px; align-items: center; display: flex; justify-content: center;}
-.echart-content {min-height: 400px; width: 100%;}
-
-.filterBox {display: flex;}
-.filter-item {flex: 0 0 30%; box-sizing: border-box; display: flex; margin-right: 5px; margin-bottom: 5px;}
-.filter-item > label {justify-content: flex-start !important; width: 100px !important;}
-.left-section {flex: 0 0 100%; display: flex; flex-wrap: wrap;}
-.right-section {flex: 0 0 0%; display: flex; justify-content: center; align-items: center;}
