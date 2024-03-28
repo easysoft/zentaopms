@@ -208,6 +208,7 @@ class chartModel extends model
         if($type == 'line')  return $this->genLineChart($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
         if($type == 'cluBarX'    || $type == 'cluBarY')     return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, '', $chart->langs);
         if($type == 'stackedBar' || $type == 'stackedBarY') return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, 'total', $chart->langs);
+        if($type == 'waterpolo') return $this->bi->genWaterpolo($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
 
         return array();
     }

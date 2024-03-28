@@ -62,7 +62,11 @@ $generateCharts = function() use($charts, $lang)
             div
             (
                 setID('chart_' . $chartID),
-                echarts(set($chartOptions))->size('100%', 400)
+                echarts
+                (
+                    set($chartOptions),
+                    $chart->type == 'waterpolo' ? set::exts('liquidfill') : null,
+                )->size('100%', 400)
             )
         );
     }
