@@ -969,7 +969,7 @@ class my extends control
 
         /* Build the search form. */
         $queryID   = $browseType == 'bysearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('my', 'work', "mode=myMeeting&browseType=bysearch&param=myQueryID");
+        $actionURL = $this->createLink('my', 'work', "mode=mymeeting&browseType=bysearch&param=myQueryID");
         $this->loadModel('meeting')->buildSearchForm($queryID, $actionURL);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
