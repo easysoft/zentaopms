@@ -32,23 +32,39 @@ div
         $lang->metric->tips->noticeRecalculateConfig,
     )
 );
+
 formPanel
 (
     formGroup
     (
+        setClass('mt-5'),
         checkbox
         (
             setClass('isCalcAll'),
             set::name('isCalcAll'),
             set::checked(false),
             set::text($lang->metric->recalculateAll)
+        ),
+        div
+        (
+            $lang->metric->tips->noticeRewriteHistoryLib
         )
     ),
     set::actions(array()),
-    btn
+    div
     (
-        setClass('btn btn-primary'),
-        bind::click("window.showRecalculateProgress('$calcRange', '$code')"),
-        $lang->metric->startRecalculate
-    )
+        setClass('form-actions'),
+        btn
+        (
+            setClass('btn btn-primary'),
+            bind::click("window.showRecalculateProgress('$calcRange', '$code')"),
+            $lang->metric->startRecalculate
+        ),
+        btn
+        (
+            setClass('btn'),
+            bind::click("window.closeModal()"),
+            $lang->cancel
+        )
+    ),
 );

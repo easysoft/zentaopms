@@ -387,7 +387,7 @@ $lang->metric->tips->noticeUnchangeable      = '[范围]、[对象]、[目的]�
 $lang->metric->tips->noticeCode              = "代号必须是英文字母、数字或下划线的组合。";
 $lang->metric->tips->noticeRecalculate       = "更新数据中，请勿操作度量数据。";
 $lang->metric->tips->noticeRecalculateConfig = "系统会默认重新计算已发布度量项中，非定时任务采集的历史数据。";
-$lang->metric->tips->noticeRewriteHistoryLib = "勾选后，系统会基于历史数据重新计算已发布的度量项，并覆盖已存在的全部度量值。";
+$lang->metric->tips->noticeRewriteHistoryLib = "(勾选后，系统会基于历史数据重新计算已发布的度量项，并覆盖已存在的全部度量值)";
 $lang->metric->tips->banRecalculate          = "该度量项尚未发布或无时间属性。";
 
 $lang->metric->recalculateLog = "%s计算完成";
