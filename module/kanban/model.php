@@ -882,7 +882,7 @@ class kanbanModel extends model
 
         $groupData['key']  = 'planKanban';
         $groupData['data'] = array('lanes' => $lanes, 'cols' => $columns, 'items' => $planList);
-        $kanbanData[] = array('items' => array($groupData), 'key' => 'planKanban', 'heading' => array('title' => $this->lang->productplan->all . ' ' . count($planList)));
+        $kanbanData[] = array('items' => array($groupData), 'key' => 'planKanban');
         return $kanbanData;
     }
 

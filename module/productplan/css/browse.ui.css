@@ -7,3 +7,8 @@
 #table-productplan-browse .dtable-nested-toggle.is-no-child {display: none}
 .card-list-item .toolbar.card-actions {opacity: 0;}
 .card-list-item:hover .toolbar.card-actions {opacity: 1;}
+
+#featureBar .nav-dropdown .statistic-plan {width: 120px; justify-content: flex-start;}
+#featureBar .nav-dropdown .statistic-plan > .text {overflow: hidden;}
+#featureBar .nav-dropdown .statistic-plan > .caret {position: absolute; right: 5px;}
+#featureBar .statistic-plan > .icon {color: unset;}
