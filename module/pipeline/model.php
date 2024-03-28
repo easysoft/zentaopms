@@ -88,7 +88,7 @@ class pipelineModel extends model
         $type = strtolower($type);
         return $this->dao->select('id,name')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->beginIF($type)->AndWhere('type')->eq($type)->fi()
+            ->beginIF($type)->AndWhere('type')->in($type)->fi()
             ->orderBy('id')->fetchPairs('id', 'name');
     }
 

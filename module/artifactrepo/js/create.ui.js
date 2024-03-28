@@ -1,4 +1,4 @@
-var repoData;
+let repoData;
 
 /**
  * Get artifactreos.
@@ -7,24 +7,24 @@ var repoData;
  * @access public
  * @return viod
  */
-function getArtifactRepo(event)
+window.getArtifactRepo = function()
 {
-    const server = $(event.target).val();
-    const url    = $.createLink('artifactrepo', 'ajaxGetArtifactRepos', 'serverID=' + server);
+    let server = $('[name=serverID]').val();
+    if(!server) server = serverID;
     if(!server) return;
 
     toggleLoading('#repoName', true);
-    $.get(url, function(response)
+    $.getJSON($.createLink('artifactrepo', 'ajaxGetArtifactRepos', 'serverID=' + server), function(response)
     {
-        repoData = JSON.parse(response);
-
+        repoData = response;
         if(repoData.result !== undefined && repoData.result === 'fail')
         {
             zui.Modal.alert(repoData.message);
             toggleLoading('#repoName', false);
             return;
         }
-        var repoItems = [];
+
+        const repoItems = [];
         for(i in repoData)
         {
             repoItems.push({'text': repoData[i].name, 'value': repoData[i].name});
@@ -42,9 +42,9 @@ function getArtifactRepo(event)
  * @access public
  * @return viod
  */
-function onRepoChange()
+window.onRepoChange = function()
 {
-    var repoName = $('[name=repoName]').val();
+    const repoName = $('[name=repoName]').val();
     if(!repoName)
     {
         $('#type').val('');
@@ -68,6 +68,5 @@ function onRepoChange()
 
 $(function()
 {
-    $('div.servers .form-label').addClass('required');
+    window.getArtifactRepo();
 });
-

@@ -10,6 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$serverPairs = array();
+foreach($servers as $server) $serverPairs[$server->id] = $server->name;
+
+jsVar('servers', $servers);
+jsVar('serverID', key($servers));
 formPanel
 (
     set::title($lang->artifactrepo->create),
@@ -35,8 +40,9 @@ formPanel
         set::width('2/3'),
         setClass('servers'),
         set::name('serverID'),
+        set::required(true),
         set::label($lang->artifactrepo->serverID),
-        set::items($nexusList),
+        set::items($serverPairs),
         on::change('getArtifactRepo')
     ),
     formGroup

@@ -42,14 +42,24 @@ class artifactrepoModel extends model
      */
     public function getList(string $orderBy = 'id_desc', object $pager = null): array
     {
-        $artifactRepos = $this->dao->select('t1.*, t2.id AS pipelineID, t2.url')->from(TABLE_ARTIFACTREPO)->alias('t1')
+        $artifactRepos = $this->dao->select('t1.*, t2.id AS pipelineID, t2.url, t2.type')->from(TABLE_ARTIFACTREPO)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.serverID = t2.id')
             ->where('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
 
-        foreach($artifactRepos as $repo) $repo->url .= '/#browse/browse:' . $repo->repoName;
+        foreach($artifactRepos as $repo)
+        {
+            if($repo->type == 'gitfox')
+            {
+                $repo->url .= "/artifacts/{$repo->repoName}";
+            }
+            else
+            {
+                $repo->url .= '/#browse/browse:' . $repo->repoName;
+            }
+        }
 
         return $artifactRepos;
     }
@@ -74,6 +84,25 @@ class artifactrepoModel extends model
 
             $response = common::http($url, '', array(CURLOPT_USERPWD => $auth), array(), 'data', 'POST', 10, true);
             $data = array('result' => $response[1] == 200, 'data' => json_decode($response['body']));
+            return $data;
+        }
+        elseif($server->type == 'gitfox')
+        {
+            $apiRoot  = $this->loadModel('gitfox')->getApiRoot($serverID);
+            $url      = sprintf($apiRoot->url, '/artifacts/repos');
+            $response = common::http($url, '', array(), $apiRoot->header, 'json', 'GET', 10, true);
+            $data     = array('result' => $response[1] == 200, 'data' => json_decode($response['body']));
+            if($data['data'])
+            {
+                foreach($data['data'] as &$repo)
+                {
+                    $repo->name   = $repo->path;
+                    $repo->online = true;
+                    $repo->type   = 'gitfox';
+                    $repo->format = 'gitfox';
+                    $repo->url    = "{$server->url}/artifacts/{$repo->path}";
+                }
+            }
             return $data;
         }
 

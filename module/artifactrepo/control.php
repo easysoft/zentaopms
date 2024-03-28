@@ -56,12 +56,7 @@ class artifactrepo extends control
     {
         if($_POST)
         {
-            $repo = form::data($this->config->artifactrepo->form->create)
-                ->join('products', ',')
-                ->add('editedBy',  $this->app->user->account)
-                ->add('createdBy', $this->app->user->account)
-                ->add('createdDate', helper::now())
-                ->get();
+            $repo = form::data($this->config->artifactrepo->form->create)->get();
             if($repo->products) $repo->products = ',' . $repo->products . ',';
 
             $repoID = $this->artifactrepo->create($repo);
@@ -71,9 +66,9 @@ class artifactrepo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
         }
 
-        $this->view->title     = $this->lang->artifactrepo->create;
-        $this->view->nexusList = $this->loadModel('pipeline')->getPairs('nexus');
-        $this->view->products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $this->view->title    = $this->lang->artifactrepo->create;
+        $this->view->servers  = $this->loadModel('pipeline')->getList('nexus,gitfox');
+        $this->view->products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->display();
     }
@@ -90,14 +85,10 @@ class artifactrepo extends control
     {
         if($_POST)
         {
-            $repo = form::data($this->config->artifactrepo->form->edit)
-                ->join('products', ',')
-                ->add('editedBy', $this->app->user->account)
-                ->add('editedDate', helper::now())
-                ->get();
+            $repo = form::data($this->config->artifactrepo->form->edit)->get();
             if($repo->products) $repo->products = ',' . $repo->products . ',';
 
-            $changes = $this->artifactrepo->update($repo, $artifactRepoID);
+            $this->artifactrepo->update($repo, $artifactRepoID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
