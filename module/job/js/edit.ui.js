@@ -1,5 +1,5 @@
 $(function()
 {
-    changeTrigger(job.triggerType);
-    changeTriggerType(job.triggerType);
+    window.changeTrigger(job.triggerType == '' ? '0' : '1');
+    window.changeTriggerType(job.triggerType);
 });
