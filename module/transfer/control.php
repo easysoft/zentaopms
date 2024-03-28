@@ -162,7 +162,12 @@ class transfer extends control
         $this->loadModel($model);
         $importFields = !empty($_SESSION[$model . 'TemplateFields']) ? $_SESSION[$model . 'TemplateFields'] : $this->config->$model->templateFields;
 
-        if($model == 'testcase' and !empty($_SESSION[$model . 'TemplateFields']) and is_array($importFields)) $this->config->$model->templateFields = implode(',', $importFields);
+        if($model == 'testcase')
+        {
+            if(!empty($_SESSION[$model . 'TemplateFields']) and is_array($importFields)) $this->config->$model->templateFields = implode(',', $importFields);
+            $this->config->testcase->datatable->fieldList['branch']['dataSource']['params'] = '$productID&active';
+        }
+
         $fields       = $this->transfer->initFieldList($model, $importFields, false);
         $formatDatas  = $this->transfer->format($model, $filter);
         $datas        = $this->transfer->getPageDatas($formatDatas, $pagerID);
@@ -204,6 +209,7 @@ class transfer extends control
         $this->loadModel($model);
         $fields = $this->config->$model->templateFields;
         if($model == 'bug') $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'product', 'method' =>'getAllExecutionPairsByProduct', 'params' => '$productID&$branch');
+        if($model == 'testcase') $this->config->testcase->datatable->fieldList['branch']['dataSource']['params'] = '$productID&active';
 
         if($this->config->edition != 'open')
         {
