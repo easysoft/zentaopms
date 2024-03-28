@@ -1035,6 +1035,7 @@ class my extends control
         $this->view->allProducts = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs();
         $this->view->modulePairs = $this->loadModel('tree')->getModulePairs(0, 'feedback');
         $this->view->modules     = $this->tree->getOptionMenu(0, 'feedback', 0);
+        $this->view->demands     = ($feedbacks and $this->config->vision == 'or') ? $this->loadModel('demand')->getByList(array_keys($feedbacks)) : array();
         $this->display();
     }
 
