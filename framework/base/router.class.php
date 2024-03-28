@@ -1198,6 +1198,7 @@ class baseRouter
             elseif(isset($this->lang->navGroup)) $tab = zget($this->lang->navGroup, $module, 'my');
             elseif(isset($_COOKIE['tab']) && $_COOKIE['tab'] && preg_match('/^\w+$/', $_COOKIE['tab'])) $tab = $_COOKIE['tab'];
 
+            if(!isset($this->lang->mainNav->{$tab})) $tab = '';
             $this->tab = empty($tab) ? 'my' : $tab;
             return;
         }
@@ -1206,6 +1207,7 @@ class baseRouter
         $this->tab = 'my';
         if(isset($this->lang->navGroup) && $module) $this->tab = zget($this->lang->navGroup, $module, 'my');
         if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', (string) $_COOKIE['tab'])) $this->tab = $_COOKIE['tab'];
+        if(!isset($this->lang->mainNav->{$this->tab})) $this->tab = 'my';
     }
 
     /**

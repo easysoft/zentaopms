@@ -11,24 +11,13 @@ declare(strict_types=1);
 namespace zin;
 
 $reason = $app->user->modifyPasswordReason;
-jsVar('isonlybody', $isonlybody);
-
-$isonlybody ? modalHeader
-(
-    set::title($lang->my->changePassword)
-) : null;
 
 formPanel
 (
     set::size('sm'),
-    $isonlybody ? null :
     to::heading
     (
-        div
-        (
-            setClass('panel-title text-lg'),
-            $lang->my->changePassword
-        )
+        div(setClass('panel-title text-lg'), $lang->my->changePassword)
     ),
     on::change('#originalPassword,#password1,#password2', 'changePassword'),
     on::click('button[type=submit]', 'clickSubmit'),
@@ -47,11 +36,7 @@ formPanel
     (
         set::label($lang->user->originalPassword),
         set::required(true),
-        input
-        (
-            set::type('password'),
-            set::name('originalPassword')
-        )
+        input(set::type('password'), set::name('originalPassword'))
     ),
     formGroup
     (
@@ -63,11 +48,7 @@ formPanel
     (
         set::label($lang->user->password2),
         set::required(true),
-        input
-        (
-            set::type('password'),
-            set::name('password2')
-        )
+        input(set::type('password'), set::name('password2'))
     ),
     input
     (
@@ -82,19 +63,14 @@ formPanel
     ) : null
 );
 
-input
-(
-    set::type('hidden'),
-    set::name('verifyRand'),
-    set::value($rand)
-);
-
-if($isonlybody)
+input(set::type('hidden'), set::name('verifyRand'), set::value($rand));
+if(isInModal())
 {
     render();
 }
 else
 {
+    h::css(".panel {margin-top: 120px; padding-top: 20px;}");
     set::zui(true);
     render('pagebase');
 }
