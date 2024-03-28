@@ -16475,13 +16475,6 @@ INSERT INTO `zt_metric`(`purpose`, `scope`, `object`, `stage`, `type`, `name`, `
 ('rate', 'code', 'mergeRequest', 'released', 'php', '按代码库统计合并请求合并次数', 'count_of_merged_pull_requests_in_codebase', '', 'count', '按代码库统计的合并请求合并次数是指在代码库中完成的全部合并请求的数量。该度量项反映了代码库的合并流程和代码合并质量，有助于评估团队的协作效率和代码更新情况。', '代码库中合并请求合并次数相加。\r\n不包含已删除。', 'realtime', 'system', '2023-08-22 08:00:00', '1', '0', 'nodate'),
 ('rate', 'code', 'commit', 'released', 'php', '按代码库统计代码提交次数', 'count_of_code_commits_in_codebase', '', 'count', '按代码库统计的代码提交次数是指代码库中的全部代码提交（Commit）操作的数量。代码提交次数反映了代码库的开发活动频率和代码更新情况，可以评估开发团队的工作量和迭代速度。', '代码库中代码提交次数相加。\r\n不包含已删除。', 'realtime', 'system', '2023-08-22 08:00:00', '1', '0', 'nodate');
 
-ALTER TABLE `zt_repo` ADD `lastCommit` DATETIME NULL DEFAULT NULL AFTER `lastSync`;
-ALTER TABLE `zt_story` ADD `releasedDate` datetime DEFAULT NULL AFTER `reviewedDate`;
-ALTER TABLE `zt_project` ADD `firstEnd` date DEFAULT NULL AFTER `end`;
-ALTER TABLE `zt_product` ADD `closedDate` date DEFAULT NULL AFTER `createdVersion`;
-ALTER TABLE `zt_productplan` ADD `finishedDate` datetime DEFAULT NULL AFTER `end`;
-ALTER TABLE `zt_productplan` ADD `closedDate` datetime DEFAULT NULL AFTER `finishedDate`;
-
 INSERT INTO `zt_cron`(`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '1', '*', '*', '*', 'moduleName=metric&methodName=updateMetricLib', '计算度量数据', 'zentao', 1, 'normal', NUll);
 
 INSERT INTO `zt_chart`(`id`, `name`, `dimension`, `type`, `group`, `dataset`, `desc`, `settings`, `filters`, `step`, `fields`, `langs`, `sql`, `stage`, `builtin`, `objects`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
