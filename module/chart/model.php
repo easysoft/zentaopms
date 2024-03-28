@@ -296,7 +296,7 @@ class chartModel extends model
             $indicator[] = array('name' => $labelName, 'max' => $max);
         }
 
-        return array('series' => $series, 'radar' => array('indicator' => $indicator), 'tooltip' => array('trigger' => 'item'));
+        return array('series' => $series, 'radar' => array('indicator' => $indicator, 'center' => array('50%', '55%')), 'tooltip' => array('trigger' => 'item'));
     }
 
     /**
@@ -340,12 +340,13 @@ class chartModel extends model
         }
 
         $label    = array('show' => true, 'position' => 'outside', 'formatter' => '{b} {d}%');
-        $series[] = array('data' => $seriesData, 'type' => 'pie', 'label' => $label);
+        $series[] = array('data' => $seriesData, 'center' => array('50%', '55%'), 'type' => 'pie', 'label' => $label);
 
         $legend = new stdclass();
         $legend->type   = 'scroll';
-        $legend->orient = 'vertical';
-        $legend->right  = 0;
+        $legend->orient = 'horizontal';
+        $legend->left  = 'center';
+        $legend->top   = 'top';
 
         return array('series' => $series, 'legend' => $legend, 'tooltip' => array('trigger' => 'item', 'formatter' => "{b}<br/> {c} ({d}%)"));
     }
@@ -434,20 +435,34 @@ class chartModel extends model
             $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'bar', 'stack' => $stack);
         }
 
-        $grid = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
-
-        /* Cluster bar X graphs and cluster bar Y graphs are really just x and y axes switched, so cluster bar Y $xaixs and $yaxis are swapped so that the method can be reused. */
-        /* 簇状柱形图和簇状条形图其实只是x轴和y轴换了换，所以交换一下簇状条形图 xAxis和yAxis即可，这样方法就可以复用了。*/
-        $isY   = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
+        $grid  = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
         $xaxis = array('type' => 'category', 'data' => $xLabels, 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true));
         $yaxis = array('type' => 'value');
+
+        /* 簇状柱形图和簇状条形图其实只是x轴和y轴换了换，所以交换一下簇状条形图 xAxis和yAxis即可，这样方法就可以复用了。*/
+        $isY   = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
         if($isY) list($xaxis, $yaxis) = array($yaxis, $xaxis);
+        $options = array('series' => $series, 'grid' => $grid, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'));
 
-        $dataZoomX = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"xAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":"80%","height":"5","xAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"bottom":"0","left":"10%"}]';
-        $dataZoomY = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"yAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":5,"height":"80%","yAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"top":"10%","right":0}]';
-        $dataZoom  = $isY ? json_decode($dataZoomY, true) : json_decode($dataZoomX, true);
+        if(is_array($xLabels) and count($xLabels) > 10)
+        {
+            $sliderConfig = $this->config->chart->dataZoom->slider;
+            $axisIndex    = $isY ? 'yAxisIndex' : 'xAxisIndex';
 
-        return array('series' => $series, 'grid' => $grid, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'dataZoom' => $dataZoom, 'tooltip' => array('trigger' => 'axis'));
+            $dataZoomCommon = $this->config->chart->dataZoom->common;
+            $dataZoomCommon->inside->$axisIndex = array(0);
+            $dataZoomCommon->slider->$axisIndex = array(0);
+            $dataZoomCommon->slider->width  = $sliderConfig->{$isY ? 'width' : 'height'};
+            $dataZoomCommon->slider->height = $sliderConfig->{$isY ? 'height' : 'width'};
+            $dataZoomCommon->slider->{$isY ? 'top' : 'bottom'} = $sliderConfig->{$isY ? 'top' : 'bottom'};
+            $dataZoomCommon->slider->{$isY ? 'right' : 'left'} = $sliderConfig->{$isY ? 'right' : 'left'};
+
+            $dataZoom = array($dataZoomCommon->inside, $dataZoomCommon->slider);
+
+            $options['dataZoom'] = $dataZoom;
+        }
+
+        return $options;
     }
 
     /**
