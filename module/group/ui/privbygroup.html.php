@@ -102,9 +102,9 @@ else
         {
             $dropDownItems[] = array
                 (
-                    'text'  => strip_tags(substr($title, 0, strpos($title, '|'))),
-                    'url'   => inlink('managePriv', sprintf($params, $navKey)),
-                    'class' => $nav == $navKey ? 'active' : ''
+                    'text'   => strip_tags(substr($title, 0, strpos($title, '|'))),
+                    'url'    => inlink('managePriv', sprintf($params, $navKey)),
+                    'active' => $nav == $navKey
                 );
         }
     }
@@ -123,7 +123,7 @@ else
                     dropdown
                     (
                         btn(
-                            setClass('ghost btn square btn-default'),
+                            setClass('ghost btn btn-default'),
                             $lang->group->more
                         ),
                         set::items($dropDownItems)
@@ -180,7 +180,7 @@ else
             $mainNavItems,
             li
             (
-                setClass('nav-item mx-2'),
+                setClass('nav-item mr-2'),
                 a
                 (
                     setClass($nav == 'general' ? 'active' : ''),
