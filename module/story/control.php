@@ -1139,8 +1139,6 @@ class story extends control
     {
         if($_POST)
         {
-            if(!$this->post->parent) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->story->parent)));
-
             $storyIdList = $this->cookie->checkedItem;
             $result      = $this->story->batchChangeParent($storyIdList, (int)$this->post->parent, $storyType);
             if($result) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('$result');", 'closeModal' => true, 'load' => true));

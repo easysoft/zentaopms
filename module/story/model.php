@@ -1676,16 +1676,16 @@ class storyModel extends model
                 $parentErrorStories[] = '#' . $storyID;
                 continue;
             }
-            if($story->root == $parent->root && $story->type == $parent->type && $story->grade < $parent->grade)
+            if($parent && $story->root == $parent->root && $story->type == $parent->type && $story->grade < $parent->grade)
             {
                 $parentErrorStories[] = '#' . $storyID;
                 continue;
             }
 
             $oldStory = clone $story;
-            $parentGradeIndex = array_search($parent->grade, $gradePairs);
-            if($parent->type == $story->type)
+            if($parent && $parent->type == $story->type)
             {
+                $parentGradeIndex = array_search($parent->grade, $gradePairs);
                 $story->grade = $gradePairs[$parentGradeIndex + 1];
             }
             else
@@ -1703,10 +1703,8 @@ class storyModel extends model
             }
 
             if($story->grade != $oldStory->grade) $this->syncGrade($oldStory, $story);
-
             $oldParentID   = $story->parent;
             $story->parent = $parentID;
-            $this->doChangeParent($story->id, $story, $oldParentID);
 
             $this->dao->update(TABLE_STORY)
                  ->set('grade')->eq($story->grade)
@@ -1714,6 +1712,9 @@ class storyModel extends model
                  ->autoCheck()
                  ->where('id')->eq($story->id)
                  ->exec();
+
+            $this->doChangeParent($story->id, $story, $oldParentID);
+            $this->setStage($story->id);
         }
 
         $notice = '';

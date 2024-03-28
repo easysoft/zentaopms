@@ -19,12 +19,10 @@ formPanel
     formGroup
     (
         set::label($lang->story->parent),
-        set::required(true),
         picker
         (
             set::name('parent'),
-            set::items($parents),
-            set::required(true)
+            set::items($parents)
         )
     ),
 );

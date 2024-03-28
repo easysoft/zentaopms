@@ -797,7 +797,7 @@ class storyTao extends storyModel
         {
             $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
             $oldChildren    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($oldStoryParent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
-            if(empty($oldChildren)) $this->dao->update(TABLE_STORY)->set('isParent')->eq('0')->where('id')->eq($oldStoryParent)->exec();
+            if(empty($oldChildren)) $this->dao->update(TABLE_STORY)->set('isParent')->eq('0')->set('stage')->eq('wait')->where('id')->eq($oldStoryParent)->exec();
             $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
 
             $this->action->create('story', $storyID, 'unlinkParentStory', '', $oldStoryParent, '', false);
