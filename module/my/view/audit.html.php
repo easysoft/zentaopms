@@ -126,7 +126,7 @@
           }
           elseif(!in_array($module, array('demand', 'story', 'testcase', 'feedback')))
           {
-              common::printLink($module, 'approvalreview', $params, $reviewIcon, '', "class='btn' data-toggle='modal' title='{$lang->review->common}'", true, true);
+              common::printLink($module, 'approvalreview', $params, $reviewIcon, '', "class='btn iframe' title='{$lang->review->common}'", true, true);
           }
           else
           {
