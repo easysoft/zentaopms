@@ -930,6 +930,17 @@ class customModel extends model
             $grade->status = isset($oldGrades[$value]) ? $oldGrades[$value]->status : 'enable';
 
             $this->dao->insert(TABLE_STORYGRADE)->data($grade)->exec();
+
+            /* New grade. */
+            if(!in_array($value, array_keys($oldGrades)))
+            {
+                $showGradesValue = $module . (string)$value;
+                $this->dao->update(TABLE_CONFIG)->set("`value` = concat(`value`, ',', '$showGradesValue')")
+                     ->where('`key`')->eq('showGrades')
+                     ->beginIF($module == 'epic')->andWhere('module')->eq('epic')->fi()
+                     ->beginIF($module == 'requirement')->andWhere('module')->in('epic,requirement')->fi()
+                     ->exec();
+            }
         }
 
         return !dao::isError();
