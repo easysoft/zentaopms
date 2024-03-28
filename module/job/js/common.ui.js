@@ -1,5 +1,5 @@
 window.customCount = 1;
-function addItem(event)
+window.addItem = function(event)
 {
     const obj        = $(event.target);
     const inputGroup = obj.closest('.input-group').clone();
@@ -12,7 +12,7 @@ function addItem(event)
     obj.closest('.form-group').append($(inputGroup));
 }
 
-function deleteItem(event)
+window.deleteItem = function(event)
 {
     const $obj = $(event.target);
     if($('.delete-param').length > 1) $obj.closest('.input-group').remove();
@@ -25,7 +25,7 @@ function deleteItem(event)
  * @access public
  * @return void
  */
-function setValueInput(event)
+window.setValueInput = function(event)
 {
     const obj = event.target;
     if($(obj).prop('checked'))
@@ -44,9 +44,9 @@ function setValueInput(event)
     }
 }
 
-function loadRepoList(engine = '')
+window.loadRepoList = function(engine = '')
 {
-    var link = $.createLink('job', 'ajaxGetRepoList', 'engine=' + engine);
+    const link = $.createLink('job', 'ajaxGetRepoList', 'engine=' + engine);
     $.get(link, function(data)
     {
         if(data)
@@ -58,7 +58,7 @@ function loadRepoList(engine = '')
     });
 }
 
-function changeTrigger(event)
+window.changeTrigger = function(event)
 {
     let useZentao;
     if(typeof(event) == 'object')
@@ -70,12 +70,12 @@ function changeTrigger(event)
         useZentao = event;
     }
 
-    if(useZentao)
+    if(useZentao === '1')
     {
         $('.job-form #paramDiv').show();
         $('.job-form .sonarqube').show();
         $('.job-form .custom-fields').show();
-        $('.job-form .comment-fields').show();
+        $('.job-form .comment-fields').css('display', 'flex');
         $('.job-form #jenkinsServerTR').show();
         $('.job-form [data-name="triggerType"]').show();
     }
@@ -93,16 +93,17 @@ function changeTrigger(event)
 /*
  * Check sonarqube linked.
  */
-function setPipeline()
+window.setPipeline = function()
 {
     $('.gitfox-pipeline').addClass('hidden');
     const $pipeline = $('[name=gitfoxpipeline]').zui('picker');
     $pipeline.$.clear();
 
-    const repoID = $('[name=repo]').val();
-    if(repoID == 0) return false;
-    if(!repoList[repoID] || repoList[repoID].SCM != 'GitFox') return;
+    const engine = $('[name=engine]').val();
+    if(engine != 'gitfox') return;
 
+    const repoID = $('[name=repo]').val();
+    if(!repoID) return;
     $.getJSON($.createLink('job', 'ajaxGetPipelines', 'repoID=' + repoID), function(result)
     {
         let pipelines = [];
@@ -116,10 +117,10 @@ function setPipeline()
 /*
  * Check sonarqube linked.
  */
-function checkSonarquebLink()
+window.checkSonarquebLink = function()
 {
-    var repoID = $('[name=repo]').val();
-    var frame  = $('[name=frame]').val();
+    const repoID = $('[name=repo]').val();
+    const frame  = $('[name=frame]').val();
 
     if(frame != 'sonarqube' || repoID == 0) return false;
 
@@ -129,11 +130,11 @@ function checkSonarquebLink()
     })
 }
 
-function changeJenkinsServer(event)
+window.changeJenkinsServer = function(event)
 {
     const jenkinsID = $(event.target).val();
 
-    var pipelineDropmenu = zui.Dropmenu.query('#pipelineDropmenu');
+    const pipelineDropmenu = zui.Dropmenu.query('#pipelineDropmenu');
     if(!jenkinsID)
     {
         pipelineDropmenu.render({fetcher: ''});
@@ -144,26 +145,31 @@ function changeJenkinsServer(event)
     }
 }
 
-function changeTriggerType(event)
+window.changeTriggerType = function(event)
 {
+    let type;
     if(typeof(event) == 'object')
     {
-        var type = $(event.target).val();
+        type = $(event.target).val();
     }
     else
     {
-        var type = event;
+        type = event;
     }
-    type == 'tag' ? $('.svn-fields').removeClass('hidden') : $('.svn-fields').addClass('hidden');
+
+    const repoID = $('[name=repo]').val();
+    $('.svn-fields').addClass('hidden');
+    if(type == 'tag' && repoList[repoID] && repoList[repoID].SCM == 'Subversion') $('.svn-fields').removeClass('hidden');
+
     $('.comment-fields').addClass('hidden');
     $('.custom-fields').addClass('hidden');
     if(type == 'commit')   $('.comment-fields').removeClass('hidden');
     if(type == 'schedule') $('.custom-fields').removeClass('hidden');
 }
 
-function changeSonarqubeServer(event)
+window.changeSonarqubeServer = function(event)
 {
-    var sonarqubeID = $(event.target).val();
+    const sonarqubeID = $(event.target).val();
     $.get($.createLink('sonarqube', 'ajaxGetProjectList', 'sonarqubeID=' + sonarqubeID), function(data)
     {
         data = JSON.parse(data);
@@ -172,4 +178,151 @@ function changeSonarqubeServer(event)
 
     /* There has been a problem with handling the prompt label. */
     $('#projectKeyLabel').remove();
+}
+
+window.changeFrame = function(event)
+{
+    const frame = $(event.target).val();
+    if(frame == 'sonarqube')
+    {
+        $('div.sonarqube').removeClass('hidden');
+
+        /* Check exists sonarqube data. */
+        checkSonarquebLink();
+    }
+    else
+    {
+        $('div.sonarqube').addClass('hidden');
+    }
+}
+
+window.changeEngine = function(event)
+{
+    const engine = $(event.target).val();
+    const repos = [];
+    for(const repoID in repoList)
+    {
+        const repo = repoList[repoID];
+        if(engine == 'jenkins')
+        {
+            repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
+            continue;
+        }
+
+        if(repo.SCM.toLowerCase() == engine) repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
+    }
+
+    const picker = $('[name=repo]').zui('picker');
+    picker.render({items: repos});
+    picker.$.setValue(repos.length > 0 ? repos[0].value : '');
+
+    if(engine == 'jenkins')
+    {
+        $('#jenkinsServerTR').removeClass('hidden');
+    }
+    else
+    {
+        $('#jenkinsServerTR').addClass('hidden');
+    }
+
+    const items = [];
+    for(frame in frameList)
+    {
+        if(engine == 'jenkins' || frame != 'sonarqube') items.push({'text': frameList[frame], 'value': frame});
+    }
+    zui.Picker.query('[name=frame]').render({items: items});
+
+    window.changeRepo();
+}
+
+window.changeRepo = function()
+{
+    const repoID = $('input[name="repo"]').val();
+    if(repoID <= 0) return;
+
+    let link = $.createLink('repo', 'ajaxLoadProducts', 'repoID=' + repoID);
+    $.get(link, function(data)
+    {
+        if(data)
+        {
+            $productPicker = $('#product').zui('picker');
+            data = JSON.parse(data);
+
+            $productPicker.render({items: data});
+            $productPicker.$.clear();
+            if(data[1]) $productPicker.$.setValue(data[1].value);
+        }
+    });
+
+    /* Add new way get repo type. */
+    link = $.createLink('job', 'ajaxGetRepoType', 'repoID=' + repoID);
+    const $trigger = $('[name=triggerType]').zui('picker');
+    $.getJSON(link, function(data)
+    {
+        if(data.result == 'success')
+        {
+            let triggerOptions = [];
+            for(code in triggerList)
+            {
+                if(code == 'tag' && data.type == 'gitfox') continue;
+                triggerOptions.push({text: triggerList[code], value: code})
+            }
+            $trigger.render({items: triggerOptions});
+            $trigger.$.setValue(triggerOptions[0].value);
+
+            if(data.type.indexOf('git') != -1)
+            {
+                $('.reference').addClass('gitRepo');
+
+                $('.svn-fields').addClass('hidden');
+                $('#reference option').remove();
+
+                $.getJSON($.createLink('job', 'ajaxGetRefList', "repoID=" + repoID), function(response)
+                {
+                    if(response.result == 'success')
+                    {
+                        const $reference = $('#reference').zui('picker');
+                        $reference.render({items: response.refList});
+                        $reference.$.setValue(response.refList.length > 0 ? response.refList[0].value : '');
+                    }
+                });
+            }
+            else
+            {
+                $('.reference').removeClass('gitRepo');
+                if($('[name=triggerType]').val() == 'tag') $('.svn-fields').removeClass('hidden');
+
+                $.getJSON($.createLink('repo', 'ajaxGetSVNDirs', 'repoID=' + repoID), function(tags)
+                {
+                    const $svnDom = $('#svnDir').zui('picker');
+                    const options = [];
+                    for(path in tags) options.push({text: path, value: path});
+                    $svnDom.render({items: options});
+                })
+            }
+
+            for(i in triggerOptions)
+            {
+                if(triggerOptions[i].value == 'tag') triggerOptions[i].text = data.type != 'subversion' ? buildTag : dirChange;
+            }
+            $trigger.render({items: triggerOptions});
+        }
+    });
+
+    window.setPipeline();
+
+    /* Check exists sonarqube data. */
+    window.checkSonarquebLink();
+}
+
+window.changeCustomField = function(event)
+{
+    let paramValue = $(event.target).val();
+    paramValue = paramValue.substr(1).toUpperCase();
+    $(event.target).prevAll('input').val(paramValue);
+}
+
+window.setJenkinsJob = function()
+{
+    $('[name=jkTask]').val($('#pipelineDropmenu button.dropmenu-btn').data('value'));
 }

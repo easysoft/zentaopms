@@ -30,6 +30,8 @@ formPanel
     on::click('.add-param', 'addItem'),
     on::click('.delete-param', 'deleteItem'),
     on::click('.custom', 'setValueInput'),
+    on::click('select.paramValue', 'changeCustomField'),
+    on::click('.dropmenu-list li.tree-item', 'setJenkinsJob'),
     set::actionsClass('w-2/3'),
     formGroup
     (
@@ -48,7 +50,7 @@ formPanel
             set::required(true),
             set::items(array('' => '') + $lang->job->engineList),
             set::value(''),
-            on::change('changeEngine')
+            on::change('window.changeEngine')
         ),
         h::span
         (
@@ -66,7 +68,7 @@ formPanel
             set::name('repo'),
             set::items(array()),
             set::width('1/2'),
-            on::change('changeRepo')
+            on::change('window.changeRepo')
         ),
         formGroup
         (
@@ -111,7 +113,7 @@ formPanel
         set::items($lang->job->zentaoTrigger),
         set::value('1'),
         set::width('1/2'),
-        on::change('changeTrigger')
+        on::change('window.changeTrigger')
     ),
     formGroup
     (
@@ -120,7 +122,7 @@ formPanel
         set::required(true),
         set::label($lang->job->triggerType),
         set::items($lang->job->triggerTypeList),
-        on::change('changeTriggerType')
+        on::change('window.changeTriggerType')
     ),
     formRow
     (
