@@ -238,8 +238,6 @@ class job extends control
      */
     public function exec(int $jobID)
     {
-        $job = $this->job->getByID($jobID);
-
         $compile = $this->job->exec($jobID);
         if(dao::isError())
         {

@@ -415,6 +415,7 @@ class compileModel extends model
         $result = new stdclass();
         if($job->engine == 'gitlab')  $result = $this->job->execGitlabPipeline($job, $compileID);
         if($job->engine == 'jenkins') $result = $this->job->execJenkinsPipeline($job, $repo, $compileID);
+        if($job->engine == 'gitfox')  $result = $this->job->execGitfoxPipeline($job, $compileID);
 
         $this->dao->update(TABLE_COMPILE)->data($result)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)
