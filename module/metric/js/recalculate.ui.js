@@ -6,7 +6,7 @@ $(document).ready(function()
     }
     else
     {
-        recalculateSingle(code, startDate, endDate);
+        recalculateSingle(code, dateType, startDate, endDate);
     }
 });
 
@@ -39,7 +39,7 @@ function recalculateAll(startDate, endDate)
     }
 }
 
-function recalculateSingle(code, startDate, endDate)
+function recalculateSingle(code, dateType, startDate, endDate)
 {
     var dateRange = getDateRange(startDate, endDate, dateType);
     updateSingleHistory(dateRange);

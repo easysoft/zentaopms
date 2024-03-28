@@ -508,6 +508,7 @@ class metric extends control
         $startDate = $this->metric->getInstallDate();
 
         $this->view->code      = $code;
+        $this->view->dateType  = $dateType;
         $this->view->calcType  = $calcType;
         $this->view->calcRange = $calcRange;
         $this->view->startDate = substr($startDate, 0, 10);
