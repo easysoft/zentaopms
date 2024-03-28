@@ -26,7 +26,7 @@ detailHeader
         (
             setClass('text-xl font-black'),
             set::level(1),
-            set::text($lang->metric->recalculate)
+            set::text($lang->metric->recalculateHistory)
         ),
         label
         (
@@ -41,47 +41,16 @@ detailHeader
     )
 );
 
-$fnGenerateDataDisplay = function() use($lang, $metric)
-{
-    if(empty($resultData)) return null;
-    return div
-    (
-        set::className('card-data'),
-        center
-        (
-            p
-            (
-                set::className('card-digit'),
-                $resultData[0]->value
-            ),
-            p
-            (
-                set::className('card-title'),
-                $lang->metric->objectList[$metric->object]
-            )
-        )
-
-    );
-};
-
 panel
 (
     setClass('clear-shadow'),
     set::bodyClass('relative'),
     div
     (
-        h1
+        div
         (
-            setClass('border-bottom margin-top24'),
-            span
-            (
-                $lang->metric->verifyResult,
-                setClass('gray-pale text-md font-bold')
-            )
-        ),
-        empty($result) ? div
-        (
-            setClass('verify-content'),
-        ) : $fnGenerateDataDisplay(),
-    )
+            setClass('recalculate-log'),
+        )
+    ),
+    set::footerActions(array(array('data-dismiss' => 'modal', 'class' => 'btn hidden exit', 'text' => $lang->metric->exit)))
 );

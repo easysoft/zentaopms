@@ -24,7 +24,10 @@ function recalculateAll(startDate, endDate)
         if(index >= dateRange.length) 
         {
             var deduplication = $.createLink('metric', 'deduplicateRecord');
-            $.get(deduplication, function(result){});
+            $.get(deduplication, function(result)
+            {
+                displayExitButton();
+            });
             return;
         }
         
@@ -33,7 +36,7 @@ function recalculateAll(startDate, endDate)
 
         var link = $.createLink('metric', 'updateHistoryMetricLib', 'date=' + date + '&calcType=' + calcType);
         $.get(link, function(result){
-            $('.verify-content').append($html);
+            $('.recalculate-log').append($html);
             updateAllHistory(dateRange, index + 1);
         });
     }
@@ -48,7 +51,10 @@ function recalculateSingle(code, dateType, startDate, endDate)
         if(index >= dateRange.length) 
         {
             var deduplication = $.createLink('metric', 'deduplicateRecord');
-            $.get(deduplication, function(result){});
+            $.get(deduplication, function(result)
+            {
+                displayExitButton();
+            });
             return;
         }
 
@@ -57,7 +63,7 @@ function recalculateSingle(code, dateType, startDate, endDate)
 
         var link = $.createLink('metric', 'updateSingleMetricLib', 'code=' + code + '&date=' + date);
         $.get(link, function(result){
-            $('.verify-content').append($html);
+            $('.recalculate-log').append($html);
             updateSingleHistory(dateRange, index + 1);
         });
     }
@@ -65,9 +71,9 @@ function recalculateSingle(code, dateType, startDate, endDate)
 
 function recalculateLog(date)
 {
-    var html = '<p class="verify-sentence-pass">';
+    var html = '<p class="recalculate-sentence-pass">';
     html += recalculateLogText.replace('%s', date);
-    html += '<i class="icon icon-pass"></i>';
+    html += '  <i class="icon icon-check success"></i>';
     html += '</p>';
 
     return html;
@@ -128,4 +134,9 @@ function dateToString(date)
     var day   = date.getDate().toString().padStart(2, '0');
 
     return year + '_' + month + '_' + day;
+}
+
+function displayExitButton()
+{
+    $('.exit').removeClass('hidden');
 }
