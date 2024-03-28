@@ -28,7 +28,7 @@ class echarts extends wg
     {
         if(isDebug())
         {
-            $this->triggerError('echarts::size() is deprecated, use echarts(set::width(' . json_encode($width) . '), set::height(' . json_encode($height) . ')) in instead.');
+            $this->triggerError('echarts::size(' . json_encode($width) . ', ' . json_encode($height) . ') is deprecated, use echarts(set::width(' . json_encode($width) . '), set::height(' . json_encode($height) . ')) in instead.', E_USER_WARNING);
         }
         $this->setProp('width', $width);
         $this->setProp('height', $height);
