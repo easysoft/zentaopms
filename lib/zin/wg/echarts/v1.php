@@ -20,11 +20,16 @@ class echarts extends wg
      */
     public static array $extMap = array
     (
-        'timeline' => 'timeline.min.js'
+        'timeline'   => 'timeline.min.js',
+        'liquidfill' => 'echarts-liquidfill.min.js'
     );
 
     public function size(string|int $width, string|int $height): echarts
     {
+        if(isDebug())
+        {
+            $this->triggerError('echarts::size() is deprecated, use echarts(set::width(' . json_encode($width) . '), set::height(' . json_encode($height) . ')) in instead.');
+        }
         $this->setProp('width', $width);
         $this->setProp('height', $height);
         return $this;
@@ -68,7 +73,7 @@ class echarts extends wg
             set::responsive($responsive),
             set::theme($theme),
             set::_style(array('width' => is_int($width) ? "{$width}px" : $width, 'height' => is_int($height) ? "{$height}px" : $height)),
-            set::_call("~((name,selector,options) => $.getLib({src: $files, root: false}, () => console.log('>>> load echarts', window.echarts) || zui.create(name,selector,options)))"),
+            set::_call("~((name,selector,options) => $.getLib({src: $files, root: false}, () => zui.create(name,selector,options)))"),
             set($this->getRestProps()),
             $this->children()
         );
