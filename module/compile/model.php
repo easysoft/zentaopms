@@ -178,8 +178,7 @@ class compileModel extends model
         }
         elseif($job->engine == 'gitfox')
         {
-            $pipeline->name = $compile->pipline;
-            $logs = $this->loadModel('gitfox')->apiGetPipelineLogs($job->server, $pipeline->project, $pipeline);
+            $logs = $this->loadModel('gitfox')->apiGetPipelineLogs($job->server, (int)$pipeline->project, $pipeline);
         }
         else
         {
