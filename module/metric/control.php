@@ -167,7 +167,7 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function updateSingleMetricLib($code, $date)
+    public function ajaxUpdateSingleMetricLib($code, $date)
     {
         $date = str_replace('_', '-', $date);
 

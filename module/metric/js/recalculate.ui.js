@@ -61,7 +61,7 @@ function recalculateSingle(code, dateType, startDate, endDate)
         var date = dateToString(dateRange[index]);
         var $html = recalculateLog(date);
 
-        var link = $.createLink('metric', 'updateSingleMetricLib', 'code=' + code + '&date=' + date);
+        var link = $.createLink('metric', 'ajaxUpdateSingleMetricLib', 'code=' + code + '&date=' + date);
         $.get(link, function(result){
             $('.recalculate-log').append($html);
             updateSingleHistory(dateRange, index + 1);
