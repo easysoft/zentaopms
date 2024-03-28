@@ -107,7 +107,7 @@ featureBar
             set::rootClass('ml-4')
         )
     ),
-    li
+    $config->edition == 'ipd' ? li
     (
         checkbox
         (
@@ -117,7 +117,7 @@ featureBar
             set::text($lang->programplan->stageCustom['point']),
             set::rootClass('ml-4')
         )
-    )
+    ) : null
 );
 
 /* zin: Define the toolbar on main menu. */
