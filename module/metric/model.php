@@ -2450,7 +2450,7 @@ class metricModel extends model
 
     public function getInferenceEndDate($code, $dateType)
     {
-        $isFirstInference = $this->isFirstInference($date);
+        $isFirstInference = $this->isFirstInference($code);
 
         $time = $this->dao->select('date')->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
