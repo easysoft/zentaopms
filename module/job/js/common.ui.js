@@ -88,6 +88,7 @@ window.changeTrigger = function(event)
         $('.job-form #jenkinsServerTR').hide();
         $('.job-form [data-name="triggerType"]').hide();
     }
+    $('[name=triggerType]').trigger('change');
 }
 
 /*
@@ -97,6 +98,7 @@ window.setPipeline = function()
 {
     $('.gitfox-pipeline').addClass('hidden');
     const $pipeline = $('[name=gitfoxpipeline]').zui('picker');
+    if(!$pipeline) return;
     $pipeline.$.clear();
 
     const engine = $('[name=engine]').val();
@@ -163,8 +165,9 @@ window.changeTriggerType = function(event)
 
     $('.comment-fields').addClass('hidden');
     $('.custom-fields').addClass('hidden');
-    if(type == 'commit')   $('.comment-fields').removeClass('hidden');
-    if(type == 'schedule') $('.custom-fields').removeClass('hidden');
+    const useZentao = $('[name=useZentao]:checked').val();
+    if(useZentao == '1' && type == 'commit')   $('.comment-fields').removeClass('hidden');
+    if(useZentao == '1' && type == 'schedule') $('.custom-fields').removeClass('hidden');
 }
 
 window.changeSonarqubeServer = function(event)
@@ -238,7 +241,7 @@ window.changeEngine = function(event)
 window.changeRepo = function()
 {
     const repoID = $('input[name="repo"]').val();
-    if(repoID <= 0) return;
+    if(!repoID) return;
 
     let link = $.createLink('repo', 'ajaxLoadProducts', 'repoID=' + repoID);
     $.get(link, function(data)
@@ -261,7 +264,7 @@ window.changeRepo = function()
     {
         if(data.result == 'success')
         {
-            let triggerOptions = [];
+            const triggerOptions = [];
             for(code in triggerList)
             {
                 if(code == 'tag' && data.type == 'gitfox') continue;

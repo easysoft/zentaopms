@@ -15,6 +15,7 @@ jsVar('job', $job);
 jsVar('dirChange', $lang->job->dirChange);
 jsVar('buildTag', $lang->job->buildTag);
 jsVar('repoList', $repoList);
+jsVar('triggerList', $lang->job->triggerTypeList);
 jsVar('dirs', !empty($dirs) ? $dirs : '');
 
 if($job->engine != 'jenkins') unset($lang->job->frameList['sonarqube']);
