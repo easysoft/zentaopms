@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
+jsVar('confirmRecalculate', $lang->metric->confirmRecalculate);
 
 /**
  * Build content of table data.

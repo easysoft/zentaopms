@@ -132,3 +132,10 @@ window.confirmDelist = function(metricID, metricName)
     });
 };
 
+window.confirmRecalculate = function(calcRange= 'all', code = '')
+{
+    zui.Modal.confirm(confirmRecalculate).then((res)=> 
+    {
+        if(res) zui.Modal.open({url: $.createLink('metric', 'recalculateSetting', 'calcRange=' + calcRange + '&code=' + code)});
+    });
+}

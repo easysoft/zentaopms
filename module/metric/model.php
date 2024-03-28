@@ -1083,6 +1083,11 @@ class metricModel extends model
             'suffix' => array()
         );
 
+        if($metric->stage == 'released' && !empty($metric->dateType) && $metric->dateType != 'nodate' && common::haspriv('metric', 'recalculate'))
+        {
+            $menuList['main']['recalculate'] = $this->config->metric->actionList['recalculate'];
+        }
+
         if($metric->builtin === '1') return $menuList;
 
         $stage = $metric->stage;
@@ -1452,12 +1457,16 @@ class metricModel extends model
                 $isClick = true;
 
                 if($action['name'] == 'edit')        $isClick = $metric->canEdit;
-                if($action['name'] == 'recalculate') $isClick = $metric->canRecalculate;
                 if($action['name'] == 'implement')   $isClick = $metric->canImplement;
                 if($action['name'] == 'delist')
                 {
                     $isClick = $metric->canDelist;
-                    if(!$isClick and $metric->builtin == '1') $metric->actions[$key]['hint'] = $this->lang->metric->builtinMetric;
+                    if(!$isClick && $metric->builtin == '1') $metric->actions[$key]['hint'] = $this->lang->metric->builtinMetric;
+                }
+                if($action['name'] == 'recalculate') 
+                {
+                    $isClick = $metric->canRecalculate;
+                    if($metric->stage == 'released' && !empty($metric->dateType) && $metric->dateType != 'nodate') $metric->actions[$key]['hint'] = $this->lang->metric->notice;
                 }
 
                 $metric->actions[$key]['disabled'] = !$isClick;
