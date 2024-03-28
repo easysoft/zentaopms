@@ -61,13 +61,16 @@ $config->story->dtable->fieldList['plan']['show']       = true;
 $config->story->dtable->fieldList['plan']['group']      = 4;
 $config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
 
-$config->story->dtable->fieldList['roadmap']['name']     = 'roadmap';
-$config->story->dtable->fieldList['roadmap']['title']    = $lang->story->roadmap;
-$config->story->dtable->fieldList['roadmap']['fixed']    = 'left';
-$config->story->dtable->fieldList['roadmap']['required'] = false;
-$config->story->dtable->fieldList['roadmap']['type']     = 'html';
-$config->story->dtable->fieldList['roadmap']['show']     = true;
-$config->story->dtable->fieldList['roadmap']['sortType'] = true;
+if($config->edition == 'ipd')
+{
+    $config->story->dtable->fieldList['roadmap']['name']     = 'roadmap';
+    $config->story->dtable->fieldList['roadmap']['title']    = $lang->story->roadmap;
+    $config->story->dtable->fieldList['roadmap']['fixed']    = 'left';
+    $config->story->dtable->fieldList['roadmap']['required'] = false;
+    $config->story->dtable->fieldList['roadmap']['type']     = 'html';
+    $config->story->dtable->fieldList['roadmap']['show']     = true;
+    $config->story->dtable->fieldList['roadmap']['sortType'] = true;
+}
 
 $config->story->dtable->fieldList['category']['name']     = 'category';
 $config->story->dtable->fieldList['category']['title']    = $lang->story->category;

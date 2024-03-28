@@ -8,7 +8,7 @@ $config->product->search['fields']['keywords'] = $lang->story->keywords;
 $config->product->search['fields']['status']   = $lang->story->status;
 $config->product->search['fields']['pri']      = $lang->story->pri;
 $config->product->search['fields']['module']   = $lang->story->module;
-$config->product->search['fields']['roadmap']  = $lang->story->roadmap;
+if($config->edition == 'ipd') $config->product->search['fields']['roadmap']  = $lang->story->roadmap;
 
 $config->product->search['fields']['stage']    = $lang->story->stage;
 $config->product->search['fields']['product']  = $lang->story->product;
