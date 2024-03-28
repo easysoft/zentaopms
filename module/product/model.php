@@ -1197,13 +1197,18 @@ class productModel extends model
         $URTotal   = 0;
         $ERTotal   = 0;
 
+        $idList = array();
+        foreach($stories as $story) $idList[] = $story->id;
+        $childTypes = $this->dao->select('parent, type')->from(TABLE_STORY)->where('parent')->in($idList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'type');
         foreach($stories as $story)
         {
             if($story->type == 'story')       $SRTotal += 1;
             if($story->type == 'requirement') $URTotal += 1;
             if($story->type == 'epic')        $ERTotal += 1;
 
-            if($story->isParent == '0' && $storyType == $story->type) $totalEstimate += $story->estimate;
+            /* 如果是父需求，并且子需求与父需求类型一致，则不统计工时。 */
+            $isLeafStory = !isset($childTypes[$story->id]) || (isset($childTypes[$story->id]) && !isset($childTypes[$story->id][$story->type]));
+            if($storyType == $story->type && $isLeafStory) $totalEstimate += $story->estimate;
 
             if($story->parent >= 0 && ($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed'))))
             {
