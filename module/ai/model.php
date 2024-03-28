@@ -2742,6 +2742,14 @@ class aiModel extends model
             ->fetchAll();
     }
 
+    public function getAssistantsByModel($modelId)
+    {
+        return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
+            ->where('modelId')->eq($modelId)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
+    }
+
     /**
      * Get assistant by id.
      * @param  int    $assistantId
@@ -2848,6 +2856,7 @@ class aiModel extends model
     {
         $this->dao->update(TABLE_AI_ASSISTANT)
             ->set('enabled')->eq($enabled ? '1' : '0')
+            ->set('publishedDate')->eq($enabled ? helper::now() : null)
             ->where('id')->eq($assistantId)
             ->exec();
         if(dao::isError()) return false;
