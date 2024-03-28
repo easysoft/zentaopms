@@ -200,17 +200,50 @@ class chartModel extends model
     {
         $settings = current($chart->settings);
         $type     = $settings['type'];
+        $options  = array();
 
         $filterFormat = $this->getFilterFormat($chart->filters);
 
-        if($type == 'pie')   return $this->genPie($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
-        if($type == 'radar') return $this->genRadar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
-        if($type == 'line')  return $this->genLineChart($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
-        if($type == 'cluBarX'    || $type == 'cluBarY')     return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, '', $chart->langs);
-        if($type == 'stackedBar' || $type == 'stackedBarY') return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, 'total', $chart->langs);
-        if($type == 'waterpolo') return $this->bi->genWaterpolo($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
+        if($type == 'pie')   $options = $this->genPie($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
+        if($type == 'radar') $options = $this->genRadar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
+        if($type == 'line')  $options = $this->genLineChart($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
+        if($type == 'cluBarX'    || $type == 'cluBarY')     $options = $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, '', $chart->langs);
+        if($type == 'stackedBar' || $type == 'stackedBarY') $options = $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, 'total', $chart->langs);
+        if($type == 'waterpolo') $options = $this->bi->genWaterpolo($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
 
-        return array();
+        return $this->addFormatter4Echart($options, $type);
+    }
+
+    /**
+     * 为 echart options 添加 formatter。
+     *
+     * @param  array  $options
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function addFormatter4Echart(array $options, string $type): array
+    {
+        if(empty($options)) return $options;
+
+        if($type == 'waterpolo')
+        {
+            $formatter = "RAWJS<(params) => (params.value * 100).toFixed(2) + '%'>RAWJS";
+            $options['series'][0]['label']['formatter'] = $formatter;
+            $options['tooltip']['formatter'] = $formatter;
+        }
+        elseif(in_array($type, $this->config->chart->canLabelRotate))
+        {
+            $labelMaxLength = $this->config->chart->labelMaxLength;
+            $labelFormatter = "RAWJS<(value) => {value = value.toString(); return value.length <= $labelMaxLength ? value : value.substring(0, $labelMaxLength) + '...'}>RAWJS";
+
+            if(!isset($options['xAxis']['axisLabel'])) $options['xAxis']['axisLabel'] = array();
+            if(!isset($options['yAxis']['axisLabel'])) $options['yAxis']['axisLabel'] = array();
+            $options['xAxis']['axisLabel']['formatter'] = $labelFormatter;
+            $options['yAxis']['axisLabel']['formatter'] = $labelFormatter;
+        }
+
+        return $options;
     }
 
     /**
