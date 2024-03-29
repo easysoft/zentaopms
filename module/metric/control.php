@@ -493,7 +493,8 @@ class metric extends control
      */
     public function recalculate($calcType, $calcRange = 'all', $code = '')
     {
-        $dateType = $this->metric->getDateTypeByCode($code);
+        $metric   = !empty($code) ? $this->metric->getByCode($code) : '';
+        $dateType = !empty($code) ? $this->metric->getDateTypeByCode($code) : '';
 
         if($calcRange == 'single')
         {
@@ -508,6 +509,7 @@ class metric extends control
         $startDate = $this->metric->getInstallDate();
 
         $this->view->code      = $code;
+        $this->view->metric    = $metric;
         $this->view->dateType  = $dateType;
         $this->view->calcType  = $calcType;
         $this->view->calcRange = $calcRange;

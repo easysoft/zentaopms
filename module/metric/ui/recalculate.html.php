@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace zin;
 jsVar('startDate', $startDate);
 jsVar('endDate', $endDate);
-jsVar('recalculateLogText', $lang->metric->recalculateLog);
 jsVar('code', $code);
 jsVar('dateType', $dateType);
 jsVar('calcType', $calcType);
 jsVar('calcRange', $calcRange);
+if($calcRange == 'single') jsVar('recalculateLogText', "$metric->name {$lang->metric->recalculateLog}");
 
 detailHeader
 (

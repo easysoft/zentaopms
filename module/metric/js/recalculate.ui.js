@@ -73,8 +73,9 @@ function recalculateSingle(code, dateType, startDate, endDate)
 
 function recalculateLog(date)
 {
+    var dateStr = date.split('_').join('-');
     var html = '<p class="recalculate-sentence-pass">';
-    html += recalculateLogText.replace('%s', date);
+    html += recalculateLogText.replace('%s', dateStr);
     html += '  <i class="icon icon-check success"></i>';
     html += '</p>';
 
