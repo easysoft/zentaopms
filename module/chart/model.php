@@ -211,7 +211,12 @@ class chartModel extends model
         if($type == 'stackedBar' || $type == 'stackedBarY') $options = $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, 'total', $chart->langs);
         if($type == 'waterpolo') $options = $this->bi->genWaterpolo($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
 
-        return $this->addFormatter4Echart($options, $type);
+        if(empty($options)) return array();
+
+        $options = $this->addFormatter4Echart($options, $type);
+        $options = $this->addRotate4Echart($options, $settings, $type);
+
+        return $options;
     }
 
     /**
@@ -224,8 +229,6 @@ class chartModel extends model
      */
     public function addFormatter4Echart(array $options, string $type): array
     {
-        if(empty($options)) return $options;
-
         if($type == 'waterpolo')
         {
             $formatter = "RAWJS<(params) => (params.value * 100).toFixed(2) + '%'>RAWJS";
@@ -241,6 +244,25 @@ class chartModel extends model
             if(!isset($options['yAxis']['axisLabel'])) $options['yAxis']['axisLabel'] = array();
             $options['xAxis']['axisLabel']['formatter'] = $labelFormatter;
             $options['yAxis']['axisLabel']['formatter'] = $labelFormatter;
+        }
+
+        return $options;
+    }
+
+    /**
+     * 为 echart options 添加 rotate。
+     *
+     * @param  array  $options
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function addRotate4Echart(array $options, array $settings, string $type): array
+    {
+        if(in_array($type, $this->config->chart->canLabelRotate))
+        {
+            if(isset($settings['rotateX']) and $settings['rotateX'] == 'use') $options['xAxis']['axisLabel']['rotate'] = 30;
+            if(isset($settings['rotateY']) and $settings['rotateY'] == 'use') $options['yAxis']['axisLabel']['rotate'] = 30;
         }
 
         return $options;
