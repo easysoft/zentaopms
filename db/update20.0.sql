@@ -31,9 +31,9 @@ ALTER TABLE `zt_story` ADD `parentVersion` smallint NOT NULL DEFAULT '0' AFTER `
 ALTER TABLE `zt_story` CHANGE `stage` `stage` enum('','wait','defining','planning','planned','projected','designing','designed','developing','developed','testing','tested','verified','rejected','delivering','pending','released','closed') NOT NULL DEFAULT 'wait';
 ALTER TABLE `zt_story` DROP `childStories`;
 UPDATE `zt_story` SET isParent = 1 WHERE parent = -1;
-UPDATE `zt_story` SET grade = 1, parent = 0, root = id WHERE type != 'story';
-UPDATE `zt_story` SET grade = 1, parent = 0, root = id WHERE type = 'story' AND parent <= 0;
-UPDATE `zt_story` SET grade = 2, root = parent WHERE type = 'story' AND parent > 0;
+UPDATE `zt_story` SET grade = 1, parent = 0, root = id, path = concat(',', id, ',') WHERE type != 'story';
+UPDATE `zt_story` SET grade = 1, parent = 0, root = id, path = concat(',', id, ',') WHERE type = 'story' AND parent <= 0;
+UPDATE `zt_story` SET grade = 2, root = parent, path = concat(',', parent, ',', id, ',') WHERE type = 'story' AND parent > 0;
 
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'gradeRule', 'stepwise');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'requirement', '', 'gradeRule', 'stepwise');
