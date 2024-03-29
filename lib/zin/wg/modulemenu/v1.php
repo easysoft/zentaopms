@@ -234,8 +234,9 @@ class moduleMenu extends wg
         $treeProps   = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck'));
         $preserve    = $app->getModuleName() . '-' . $app->getMethodName();
         $isInSidebar = $this->parent instanceof sidebar;
+        $titleShow   = $this->prop('titleShow');
 
-        $header = h::header
+        $header = $titleShow ? h::header
         (
             setClass('module-menu-header h-10 flex items-center pl-4 flex-none gap-3', $isInSidebar ? 'is-fixed rounded rounded-r-none canvas' : ''),
             span
@@ -244,7 +245,7 @@ class moduleMenu extends wg
                 $title
             ),
             $this->buildCloseBtn()
-        );
+        ) : null;
 
         return array
         (
@@ -278,7 +279,7 @@ class moduleMenu extends wg
                     )
                 ),
                 $this->block('footer'),
-                $isInSidebar ? on::init()->do('$("#mainContainer").addClass("has-module-menu-header")') : null
+                $isInSidebar && !empty($header) ? on::init()->do('$("#mainContainer").addClass("has-module-menu-header")') : null
             ),
        );
     }
