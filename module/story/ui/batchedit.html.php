@@ -44,11 +44,6 @@ $items['assignedTo']['defaultDitto'] = 'off';
 $items['source']['defaultDitto']     = 'off';
 $items['stage']['defaultDitto']      = 'off';
 
-if($storyType == 'requirement')
-{
-    unset($items['stage']);
-}
-
 if(!$branchProduct) unset($items['branch'], $customFields['branch']);
 
 /* Build form field value for batch edit. */
