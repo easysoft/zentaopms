@@ -160,5 +160,5 @@ detail
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
-    set::actions($actions)
+    set::actions(array_values($actions))
 );
