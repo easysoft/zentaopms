@@ -421,6 +421,18 @@ class storyModel extends model
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
+        /* Add parent list for display. */
+        foreach($stories as $story)
+        {
+            $story->parent = array();
+            foreach(explode(',', trim($story->path, ',')) as $parentID)
+            {
+                if(!$parentID) continue;
+                if($parentID == $story->id) continue;
+                $story->parent[] = (int)$parentID;
+            }
+        }
+
         return $stories;
     }
 
