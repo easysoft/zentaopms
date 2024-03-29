@@ -989,6 +989,7 @@ $lang->ai->assistants->confirmPublishTip        = '发布后将显示在禅道�
 $lang->ai->assistants->confirmWithdrawTip       = '停用后前台用户将无法看到此 AI 助手，是否确认停用？';
 $lang->ai->assistants->duplicateTip             = '同一语言模型下的助手名称不可重复。';
 $lang->ai->assistants->confirmDeleteTip         = '确认删除此 AI 助手？';
+$lang->ai->assistants->switchAndClearContext    = '切换助手%s，上下文关系已清除';
 
 $lang->ai->assistants->statusList = array();
 $lang->ai->assistants->statusList['0']   = '未发布';

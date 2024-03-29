@@ -989,6 +989,7 @@ $lang->ai->assistants->confirmPublishTip        = 'After publishing, it will be 
 $lang->ai->assistants->confirmWithdrawTip       = 'After deactivation, front-end users will not be able to see this AI assistant. Do you confirm the deactivation? ';
 $lang->ai->assistants->duplicateTip             = 'Assistant names in the same language model cannot be same.';
 $lang->ai->assistants->confirmDeleteTip         = 'Do you want to confirm the deletion? ';
+$lang->ai->assistants->switchAndClearContext    = 'Switch assistant %s, context has been cleared';
 
 $lang->ai->assistants->statusList = array();
 $lang->ai->assistants->statusList['0']   = 'Unpublished';

@@ -3,7 +3,7 @@ helper::import('../../control.php');
 
 class myIm extends im
 {
-    public function clearAiChatContext($modelId, $userID = 0, $version = '', $device = 'desktop')
+    public function clearAiChatContext($modelId, $assistantId, $userID = 0, $version = '', $device = 'desktop')
     {
         $user = $this->im->user->getByID($userID);
         $user->rights = $this->loadModel('user')->authorize($user->account);
@@ -19,16 +19,34 @@ class myIm extends im
 
         $chatGid = "$userID&ai-{$modelId}";
 
-        $broadcast = new stdclass();
-        $broadcast->gid         = imModel::createGID();
-        $broadcast->cgid        = $chatGid;
-        $broadcast->user        = "ai-{$modelId}";
-        $broadcast->content     = $this->lang->ai->miniPrograms->clearContext;
-        $broadcast->type        = 'broadcast';
-        $broadcast->contentType = 'text';
-        $broadcast->data        = json_encode(array('reminders' => array()));
+        if(empty($assistantId))
+        {
+            $broadcast = new stdclass();
+            $broadcast->gid         = imModel::createGID();
+            $broadcast->cgid        = $chatGid;
+            $broadcast->user        = "ai-{$modelId}";
+            $broadcast->content     = $this->lang->ai->miniPrograms->clearContext;
+            $broadcast->type        = 'broadcast';
+            $broadcast->contentType = 'text';
+            $broadcast->data        = json_encode(array('reminders' => array()));
 
-        $broadcastMessage = $this->im->messageCreate(array($broadcast), $userID);
+            $broadcastMessage = $this->im->messageCreate(array($broadcast), $userID);
+        }
+        else
+        {
+            $assistant = $this->ai->getAssistantById($assistantId);
+
+            $broadcast = new stdclass();
+            $broadcast->gid         = imModel::createGID();
+            $broadcast->cgid        = $chatGid;
+            $broadcast->user        = "ai-{$modelId}";
+            $broadcast->content     = sprintf($this->lang->ai->assistants->switchAndClearContext, $assistant->name);
+            $broadcast->type        = 'broadcast';
+            $broadcast->contentType = 'text';
+            $broadcast->data        = json_encode(array('reminders' => array()));
+
+            $broadcastMessage = $this->im->messageCreate(array($broadcast), $userID);
+        }
 
         $output = new stdclass();
         $output->result = 'success';
