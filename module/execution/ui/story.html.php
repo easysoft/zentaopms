@@ -81,8 +81,8 @@ $createItem      = array('text' => $lang->story->create,      'url' => $createLi
 $batchCreateItem = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
 
 $canLinkStory     = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && hasPriv('execution', 'linkStory');
-$canlinkPlanStory = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && hasPriv('execution', 'importPlanStories');
-$linkStoryUrl     = createLink('execution', 'linkStory', "project={$execution->id}");
+$canlinkPlanStory = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && hasPriv('execution', 'importPlanStories') && $storyType == 'story';
+$linkStoryUrl     = createLink('execution', 'linkStory', "project={$execution->id}&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=&storyType=$storyType");
 
 if(commonModel::isTutorialMode())
 {
@@ -91,7 +91,7 @@ if(commonModel::isTutorialMode())
     $canlinkPlanStory = false;
 }
 
-$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl);
+$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl, 'data-app' => $app->tab);
 $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
 $product ? toolbar
