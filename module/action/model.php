@@ -1852,11 +1852,11 @@ class actionModel extends model
      * 获取对象类型为team的link元素。
      * Get link element of objecttype team.
      *
-     * @param  object  $action
-     * @access private
+     * @param  object    $action
+     * @access protected
      * @return array
      */
-    private function getObjectTypeTeamParams(object $action): array
+    protected function getObjectTypeTeamParams(object $action): array
     {
         if($action->project) return array('project', 'team', 'projectID=' . $action->project);
         if($action->execution) return array('execution', 'team', 'executionID=' . $action->execution);
@@ -1870,10 +1870,10 @@ class actionModel extends model
      *
      * @param  object      $action
      * @param  object      $object
-     * @access private
+     * @access protected
      * @return string|bool
      */
-    private function checkActionCanUndelete(object $action, object $object): string|bool
+    protected function checkActionCanUndelete(object $action, object $object): string|bool
     {
         if($action->objectType == 'execution')
         {
@@ -1929,12 +1929,12 @@ class actionModel extends model
      * 恢复被删除对象的关联数据。
      * Recover related data of deleted object.
      *
-     * @param  object  $action
-     * @param  object  $object
-     * @access private
+     * @param  object    $action
+     * @param  object    $object
+     * @access protected
      * @return void
      */
-    private function recoverRelatedData(object $action, object $object): void
+    protected function recoverRelatedData(object $action, object $object): void
     {
         if($action->objectType == 'release' && $object->shadow) $this->dao->update(TABLE_BUILD)->set('deleted')->eq(0)->where('id')->eq($object->shadow)->exec();
 
@@ -1984,10 +1984,10 @@ class actionModel extends model
      * @param  string|int $projectID
      * @param  string|int $executionID
      * @param  array      $executions
-     * @access private
+     * @access protected
      * @return string
      */
-    private function buildUserAclsSearchCondition(string|int $productID, string|int $projectID, string|int $executionID, array &$executions): string
+    protected function buildUserAclsSearchCondition(string|int $productID, string|int $projectID, string|int $executionID, array &$executions): string
     {
         /* 验证用户的产品/项目/执行权限。 */
         /* Verify user's product/project/execution permissions。*/
@@ -2043,11 +2043,11 @@ class actionModel extends model
      * 执行和项目相关操作记录的extra信息。
      * Build execution and project action extra info.
      *
-     * @param  object  $action
-     * @access private
+     * @param  object    $action
+     * @access protected
      * @return void
      */
-    private function processExecutionAndProjectActionExtra(object $action): void
+    protected function processExecutionAndProjectActionExtra(object $action): void
     {
         $this->app->loadLang('execution');
         $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');
