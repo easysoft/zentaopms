@@ -33,6 +33,10 @@ if($config->edition != 'open')
             'text'  => $lang->export,
             'icon'  => 'export',
             'class' => 'ghost',
+            'url' => inlink('export', "chartID=&mode=preview", '', true),
+            'data-toggle' => 'modal',
+            'data-type' => 'iframe',
+            'data-size' => 'sm'
         ))) : null,
         hasPriv('chart', 'browse') ? item(set(array
         (

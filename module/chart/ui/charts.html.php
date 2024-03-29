@@ -62,6 +62,9 @@ $generateCharts = function() use($charts, $lang)
             div
             (
                 setID('chart_' . $chartID),
+                setClass('echart-content'),
+                set('data-group', $chart->currentGroup),
+                set('data-id', $chart->id),
                 echarts
                 (
                     set($chartOptions),
