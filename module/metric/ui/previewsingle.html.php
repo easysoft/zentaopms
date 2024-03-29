@@ -360,6 +360,7 @@ div
             $echartOptions ? div
             (
                 setClass('chart-side'),
+                setStyle(array('min-width' => "calc(100vh - {$tableWidth}px)")),
                 div
                 (
                     setClass('chart-type'),
