@@ -219,7 +219,7 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function saveClassifiedCalcGroup()
+    public function ajaxSaveCalculatedMetrics()
     {
         $calcList            = $this->metric->getCalcInstanceList();
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
@@ -260,7 +260,7 @@ class metric extends control
      * @access public
      * @return void
      */
-    public function deduplicateRecord()
+    public function ajaxDeduplicateRecord()
     {
         $metrics = $this->metric->getExecutableMetric();
         foreach($metrics as $code) $this->metric->deduplication($code);

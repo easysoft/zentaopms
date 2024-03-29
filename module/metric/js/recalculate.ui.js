@@ -8,7 +8,7 @@ function recalculateAll(startDate, endDate)
 {
     var dateRange = getDateRange(startDate, endDate);
 
-    var calcLink = $.createLink('metric', 'saveClassifiedCalcGroup');
+    var calcLink = $.createLink('metric', 'ajaxSaveCalculatedMetrics');
     $.get(calcLink, function(result){
         updateAllHistory(dateRange);
     });
@@ -17,7 +17,7 @@ function recalculateAll(startDate, endDate)
     {
         if(index >= dateRange.length) 
         {
-            var deduplication = $.createLink('metric', 'deduplicateRecord');
+            var deduplication = $.createLink('metric', 'ajaxDeduplicateRecord');
             $.get(deduplication, function(result)
             {
                 displayExitButton();
@@ -45,7 +45,7 @@ function recalculateSingle(code, dateType, startDate, endDate)
     {
         if(index >= dateRange.length) 
         {
-            var deduplication = $.createLink('metric', 'deduplicateRecord');
+            var deduplication = $.createLink('metric', 'ajaxDeduplicateRecord');
             $.get(deduplication, function(result)
             {
                 displayExitButton();
