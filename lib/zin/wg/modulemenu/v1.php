@@ -25,6 +25,12 @@ class moduleMenu extends wg
         'onCheck?: function'
     );
 
+    protected static array $defineBlocks = array
+    (
+        'header'   => array(),
+        'footer'   => array()
+    );
+
     public static function getPageCSS(): ?string
     {
         return <<<'CSS'
@@ -247,6 +253,7 @@ class moduleMenu extends wg
             (
                 setID('moduleMenu'),
                 setClass('module-menu shadow ring rounded bg-canvas col relative'),
+                $this->block('header'),
                 $isInSidebar ? null : $header,
                 zui::tree
                 (
@@ -270,6 +277,7 @@ class moduleMenu extends wg
                         on::click()->call('$this.closest(".sidebar").sidebar("toggle")')
                     )
                 ),
+                $this->block('footer'),
                 $isInSidebar ? on::init()->do('$("#mainContainer").addClass("has-module-menu-header")') : null
             ),
        );
