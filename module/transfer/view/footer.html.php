@@ -110,7 +110,6 @@ $(function()
         if(typeof(getTbodyLoaded) == 'function') getTbodyLoaded();
     })
 
-    $.fixedTableHead('#showData');
     $("#showData th").each(function()
     {
         if(requiredFields.indexOf(this.id) !== -1) $("#" + this.id).addClass('required');
