@@ -283,3 +283,6 @@ UPDATE `zt_metric` SET `dateType` = 'nodate' WHERE `code` = 'count_of_feedback_i
 ALTER TABLE `zt_story` ADD COLUMN `unlinkReason` ENUM('', 'omit', 'other') NOT NULL DEFAULT '';
 
 UPDATE `zt_stage` SET `name` = '生命周期' WHERE `type` = 'lifecycle' AND `projectType` = 'ipd';
+
+ALTER TABLE `zt_relationoftasks` DROP INDEX `relationoftasks`;
+ALTER TABLE `zt_relationoftasks` ADD INDEX `relationoftasks`(`execution` ASC, `task` ASC);
