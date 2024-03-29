@@ -279,6 +279,7 @@ class moduleMenu extends wg
                     set($treeProps)
                 ),
                 $this->buildActions(),
+                $this->block('footer'),
                 row
                 (
                     setClass('justify-end p-1'),
@@ -291,7 +292,6 @@ class moduleMenu extends wg
                         on::click()->call('$this.closest(".sidebar").sidebar("toggle")')
                     )
                 ),
-                $this->block('footer'),
                 $isInSidebar && !empty($header) ? on::init()->do('$("#mainContainer").addClass("has-module-menu-header")') : null
             ),
        );
