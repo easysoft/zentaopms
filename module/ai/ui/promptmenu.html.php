@@ -58,7 +58,7 @@ $promptMenuInject = function()
             container.classList.remove('no-delay');
         }
     JAVASCRIPT;
-    $script .= "$(`$menuOptions->targetContainer`)." . (!empty($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append') . "(`$html`);\n";
+    $script .= "$(`$menuOptions->targetContainer`)." . (!empty($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append') . "(`$html`).css('z-index', 2);\n";
     $script .= <<< JAVASCRIPT
         $('[data-toggle="popover"]').popover({template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
     JAVASCRIPT;
