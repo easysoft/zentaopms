@@ -402,6 +402,13 @@ class metricModel extends model
         return $this->metricTao->fetchMetricsByCodeList($codeList);
     }
 
+    /**
+     * 获取已发布的度量项列表。
+     * Get metric code pairs of released.
+     *
+     * @access public
+     * @return array|false
+     */
     public function getReleasedCodePairs()
     {
         return $this->dao->select('code')->from(TABLE_METRIC)
@@ -2248,6 +2255,14 @@ class metricModel extends model
         return 'nodate';
     }
 
+    /**
+     * 根据编号获取度量项的日期属性。
+     * Get date type by metric code.
+     *
+     * @param  string $code
+     * @access public
+     * @return string
+     */
     public function getDateTypeByCode(string $code)
     {
         /* Get dateType form db first. */
@@ -2435,6 +2450,13 @@ class metricModel extends model
         return $this->lang->metric->noData;
     }
 
+    /**
+     * 获取所有已发布度量项的最后推算时间。
+     * Get last inference date of all released metrics.
+     *
+     * @access public
+     * @return string
+     */
     public function getLastInferenceDateList()
     {
         $codeList = $this->getReleasedCodePairs();
@@ -2465,7 +2487,40 @@ class metricModel extends model
         return !empty($records);
     }
 
+    public function getMaxInferenceDate($code)
+    {
+        $maxInferenceTime = $this->dao->select('date')->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->andWhere('calcType')->eq('inference')
+            ->orderBy('date_desc')
+            ->limit(1)
+            ->fetch('date');
+
+        if(empty($maxInferenceTime)) return false;
+        return substr($maxInferenceTime, 0, 10);
+    }
+
     public function getInferenceEndDate($code, $dateType)
+    {
+        $metric = $this->getByCode($code);
+        if($metric->builtin == '1')
+        {
+            return $this->getBuiltinInferenceEndDate($code, $dateType);
+        }
+        else
+        {
+            return $this->getCustomInferenceEndDate($metric);
+        }
+    }
+
+    public function getCustomInferenceEndDate($metric)
+    {
+        $maxInferenceDate = $this->getMaxInferenceDate($metric->code);
+
+        return (!empty($maxInferenceDate) && $maxInferenceDate > $metric->implementedDate) ? $maxInferenceDate : $metric->implementedDate;
+    }
+
+    public function getBuiltinInferenceEndDate($code, $dateType)
     {
         $isFirstInference = $this->isFirstInference($code);
 
