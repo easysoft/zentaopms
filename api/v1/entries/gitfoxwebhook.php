@@ -21,7 +21,7 @@ class gitfoxWebhookEntry extends baseEntry
     public function post()
     {
         $headers = getallheaders(); /* Fetch all HTTP request headers. */
-        $event   = isset($headers['X-Gitness-Trigger']) ? $headers['X-Gitness-Trigger'] : '';
+        $event   = isset($headers['X-Gitfox-Trigger']) ? $headers['X-Gitfox-Trigger'] : '';
         if(empty($event)) return;
 
         $repoID = $this->param('repoID');
