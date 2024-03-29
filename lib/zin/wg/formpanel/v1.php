@@ -199,6 +199,7 @@ class formPanel extends panel
                 set::id($field->field),
                 set::name($field->field),
                 set::required($field->required),
+                set::disabled((bool)$field->readonly),
                 set::control($field->control),
                 set::items($field->items),
                 set::value($field->value)
