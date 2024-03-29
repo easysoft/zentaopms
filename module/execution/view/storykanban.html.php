@@ -113,7 +113,7 @@ $canLinkStory = $execution->hasProduct or $execution->multiple;
                   <div class='info'>
                     <span class='label-pri label-pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'><?php echo zget($lang->story->priList, $story->pri);?></span>
                     <span class='status status-story status-<?php echo $story->status;?>' title='<?php echo $lang->story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span>
-                    <?php if($canBeChanged and common::hasPriv('execution', 'unlinkStory')):?>
+                    <?php if($canBeChanged and common::hasPriv('execution', 'unlinkStory') and ($execution->hasProduct or $execution->multiple)):?>
                     <div class='pull-right'><?php echo html::a($this->createLink('execution', 'unlinkStory', "executionID=$executionID&story=$story->id"), "<i class='icon icon-unlink icon-sm'></i>", 'hiddenwin', "title='{$lang->execution->unlinkStory}'");?></div>
                     <?php endif;?>
                     <div class='pull-right text-muted story-estimate' title='<?php echo $lang->story->estimate?>'><?php echo $story->estimate . "$config->hourUnit ";?></div>
