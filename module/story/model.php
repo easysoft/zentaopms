@@ -55,7 +55,7 @@ class storyModel extends model
         {
             $parent = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
             $story->parentName    = $parent->title;
-            $story->parentChanged = $story->parentVersion > 0 && $parent->version > $story->parentVersion;
+            $story->parentChanged = $story->parentVersion > 0 && $parent->version > $story->parentVersion && $parent->status == 'active';
         }
 
         if($story->toBug)           $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
