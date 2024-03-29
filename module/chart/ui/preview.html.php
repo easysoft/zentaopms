@@ -59,18 +59,21 @@ div
             set::closeLink(''),
             set::showDisplay(false),
             set::checkbox(true),
-            set::checkOnClick('any')
+            set::checkOnClick('any'),
+            to::footer
+            ([
+                $treeMenu ? div
+                (
+                    setClass('bg-canvas px-4 py-2 module-menu'),
+                    btn($lang->chart->preview, setClass('primary'), on::click('previewCharts'))
+                ) : null,
+                $config->edition == 'open' ? div
+                (
+                    setClass('bg-canvas px-4 py-2 module-menu'),
+                    html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
+                ) : null
+            ])
         ),
-        $treeMenu ? div
-        (
-            setClass('bg-canvas px-4 py-2 module-menu shadow'),
-            btn($lang->chart->preview, setClass('primary'), on::click('previewCharts'))
-        ) : null,
-        $config->edition == 'open' ? div
-        (
-            setClass('bg-canvas px-4 py-2 module-menu shadow'),
-            html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
-        ) : null
     ),
     div
     (
