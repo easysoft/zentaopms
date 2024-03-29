@@ -227,6 +227,7 @@ $lang->repo->error->comment           = 'Please enter content!';
 $lang->repo->error->title             = 'Please enter title!';
 $lang->repo->error->accessDenied      = 'You do not have the privilege to access the repository.';
 $lang->repo->error->noFound           = 'The repo is not found.';
+$lang->repo->error->empty             = 'Repo is empty, cannot sync logs.';
 $lang->repo->error->noFile            = '%s does not exist.';
 $lang->repo->error->noPriv            = 'The program does not have the privilege  to switch to %s';
 $lang->repo->error->output            = "The command is: %s\nThe error is(%s): %s\n";

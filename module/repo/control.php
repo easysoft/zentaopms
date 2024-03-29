@@ -1139,6 +1139,8 @@ class repo extends control
         if(in_array($repo->SCM, $this->config->repo->gitTypeList) && !$this->cookie->syncBranch)
         {
             $branches = $this->scm->branch();
+            if(empty($branches)) return print($this->lang->repo->error->empty);
+
             $branchID = current($branches);
         }
 

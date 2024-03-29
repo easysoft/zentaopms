@@ -227,6 +227,7 @@ $lang->repo->error->comment           = '请填写内容';
 $lang->repo->error->title             = '请填写标题';
 $lang->repo->error->accessDenied      = '你没有权限访问该代码库';
 $lang->repo->error->noFound           = '你访问的代码库不存在';
+$lang->repo->error->empty             = '代码库内容为空，无法同步';
 $lang->repo->error->noFile            = '目录 %s 不存在';
 $lang->repo->error->noPriv            = '程序没有权限切换到目录 %s';
 $lang->repo->error->output            = "执行命令：%s\n错误结果(%s)： %s\n";

@@ -1416,7 +1416,9 @@ class repoZen extends repo
         if(in_array($repo->SCM, $this->config->repo->gitTypeList))
         {
             $branches = $this->scm->branch();
-            $tags     = $this->scm->tags('');
+            if(empty($branches)) return $this->sendError($this->lang->repo->error->empty, $this->createLink('repo', 'maintain'));
+
+            $tags = $this->scm->tags('');
             foreach($tags as $tag) $branches[$tag] = $tag;
 
             if($branches)

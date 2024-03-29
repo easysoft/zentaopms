@@ -3,7 +3,9 @@ function syncComments()
     $.get(link, function(data)
     {
         if(data == 'finish') return loadPage(browseLink);
-        if(isNaN(Number(data))) return zui.Modal.alert(data);
+        if(isNaN(Number(data))) return zui.Modal.alert(data).then(res => {
+            if(res == 'confirm') loadPage($.createLink('repo', 'maintain'));
+        });
 
         var count = parseInt(data);
         if(isNaN(count)) count = 0;
