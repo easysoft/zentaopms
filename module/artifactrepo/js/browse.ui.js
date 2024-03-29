@@ -1,13 +1,12 @@
 $(function()
 {
-    $.get($.createLink('artifactrepo', 'ajaxUpdateArtifactRepos'), function(response)
+    $.getJSON($.createLink('artifactrepo', 'ajaxUpdateArtifactRepos'), function(data)
     {
-        data = JSON.parse(response);
-        if(data.hasUpdate) loadTable(pageLink);
+        if(data.hasUpdate) reloadPage();
     });
 });
 
-window.renderList = function (result, {col, row, value})
+window.renderList = function (result, {col, value})
 {
     if(col.name === 'status')
     {

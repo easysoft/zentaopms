@@ -83,7 +83,7 @@ class artifactrepoModel extends model
             $auth = "{$server->account}:{$server->password}";
 
             $response = common::http($url, '', array(CURLOPT_USERPWD => $auth), array(), 'data', 'POST', 10, true);
-            $data = array('result' => $response[1] == 200, 'data' => json_decode($response['body']));
+            $data = array('result' => $response[1] == 200, 'data' => (array)json_decode($response['body']));
             return $data;
         }
         elseif($server->type == 'gitfox')
@@ -91,7 +91,7 @@ class artifactrepoModel extends model
             $apiRoot  = $this->loadModel('gitfox')->getApiRoot($serverID);
             $url      = sprintf($apiRoot->url, '/artifacts/repos');
             $response = common::http($url, '', array(), $apiRoot->header, 'json', 'GET', 10, true);
-            $data     = array('result' => $response[1] == 200, 'data' => json_decode($response['body']));
+            $data     = array('result' => $response[1] == 200, 'data' => (array)json_decode($response['body']));
             if($data['data'])
             {
                 foreach($data['data'] as &$repo)
@@ -197,14 +197,14 @@ class artifactrepoModel extends model
      * 更新版本库状态。
      * Update artifact repo status.
      *
-     * @param  int       $artifactRepoID
+     * @param  int       $artifacts
      * @param  string    $status
      * @access protected
      * @return bool
      */
-    public function updateStatus(int $artifactRepoID, string $status): bool
+    public function updateStatus(int $artifacts, string $status): bool
     {
-        $this->dao->update(TABLE_ARTIFACTREPO)->set('status')->eq($status)->where('id')->eq($artifactRepoID)->exec();
+        $this->dao->update(TABLE_ARTIFACTREPO)->set('status')->eq($status)->where('id')->eq($artifacts)->exec();
 
         return !dao::isError();
     }
