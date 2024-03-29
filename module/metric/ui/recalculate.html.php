@@ -16,7 +16,14 @@ jsVar('code', $code);
 jsVar('dateType', $dateType);
 jsVar('calcType', $calcType);
 jsVar('calcRange', $calcRange);
-if($calcRange == 'single') jsVar('recalculateLogText', "$metric->name {$lang->metric->recalculateLog}");
+if($calcRange == 'single') 
+{
+    jsVar('recalculateLogText', "$metric->name {$lang->metric->recalculateLog}");
+}
+else
+{
+    jsVar('recalculateLogText', $lang->metric->recalculateLog);
+}
 
 detailHeader
 (

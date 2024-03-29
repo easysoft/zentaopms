@@ -1,13 +1,7 @@
 $(document).ready(function()
 {
-    if(calcRange == 'all') 
-    {
-        recalculateAll(startDate, endDate);
-    }
-    else
-    {
-        recalculateSingle(code, dateType, startDate, endDate);
-    }
+    if(calcRange == 'all')    recalculateAll(startDate, endDate);
+    if(calcRange == 'single') recalculateSingle(code, dateType, startDate, endDate);
 });
 
 function recalculateAll(startDate, endDate)
@@ -74,6 +68,7 @@ function recalculateSingle(code, dateType, startDate, endDate)
 function recalculateLog(date)
 {
     var dateStr = date.split('_').join('-');
+
     var html = '<p class="recalculate-sentence-pass">';
     html += recalculateLogText.replace('%s', dateStr);
     html += '  <i class="icon icon-check success"></i>';
