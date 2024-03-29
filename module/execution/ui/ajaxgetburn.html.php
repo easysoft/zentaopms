@@ -38,6 +38,8 @@ div
     common::hasPriv('execution', 'burn') ? echarts
     (
         set::grid(array('left' => '0', 'right' => '50px', 'bottom' => '0',  'containLabel' => true)),
+        set::width('100%'),
+        set::height('150%'),
         set::xAxis
         (
             array
@@ -167,7 +169,7 @@ div
                 ) : null
             )
         )
-    )->size('100%', '150%') : null
+    ) : null
 );
 
 /* ====== Render page ====== */

@@ -144,6 +144,8 @@ div
                 echarts
                 (
                     set::color(array('#2B80FF', '#E3E4E9')),
+                    set::width(120),
+                    set::height(120),
                     set::series
                     (
                         array
@@ -158,7 +160,7 @@ div
                             )
                         )
                     )
-                )->size(120, 120),
+                ),
                 div
                 (
                     set::className('pie-chart-title text-center'),

@@ -116,6 +116,8 @@ if(isset($chartData['labels']) and count($chartData['labels']) != 1)
     $cfdChart = echarts
     (
         set::series($chartSeries),
+        set::width('100%'),
+        set::height(500),
         set::tooltip(array(
             'trigger'     => 'axis',
             'axisPointer' => array('type' => 'cross', 'label' => array('backgroundColor' => '#6a7985')),
@@ -146,7 +148,7 @@ if(isset($chartData['labels']) and count($chartData['labels']) != 1)
             'axisPointer'   => array('label' => array('show' => true, 'precision' => 0)),
             'axisLine'      => array('show' => true, 'lineStyle' => array('color' => '#999', 'width' => 1))
         )))
-    )->size('100%', 500);
+    );
 
 }
 else
