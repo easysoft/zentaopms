@@ -29,7 +29,7 @@ class createProductTester extends tester
         /* 提交表单。 */
         $this->login();
         $formPage = $this->formPage('product', 'create');
-        $formPage->name->setValue($name);
+        $formPage->dom->name->setValue($name);
         $formPage->submit();
 
         $this->parseCurrentUrl();

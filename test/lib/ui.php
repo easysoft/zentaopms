@@ -30,7 +30,7 @@ include __DIR__ . '/result.class.php';
 
 /* 初始化php-webdriver类 */
 include __DIR__ . '/webdriver/webdriver.class.php';
-$driver = new webdriver();
+$webdriver = new webdriver($config->uitest->chrome);
 
 /* 初始化页面元素 */
 include 'page.class.php';
@@ -65,8 +65,6 @@ function p($keys = '', $delimiter = ',')
     $_result = $result->get();
 
     if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
-
-    if(is_array($_result) && isset($_result['code']) && $_result['code'] == 'fail') return print((string) $_result['message'] . "\n");
 
     /* Print $_result. */
     if($keys === '' && is_array($_result)) return print_r($_result) . "\n";
@@ -231,13 +229,15 @@ class tester
     public $page;
     public $config;
     public $result;
+    public $cookieFile;
 
     public function __construct()
     {
-        global $config, $result;
+        global $webdriver, $config, $result;
         $this->config = $config;
-        $this->page   = new Page();
+        $this->page   = new Page($webdriver);
         $this->result = $result;
+        $this->cookieFile = CONFIG_ROOT . DS . 'cookie' . DS . 'cookie';
     }
 
     /**
@@ -246,22 +246,23 @@ class tester
      * @param  string $account
      * @param  string $password
      * @access public
-     * @return void
+     * @return object
      */
     public function login($account = '', $password = '')
     {
         if(!$account)  $account  = $this->config->uitest->defaultAccount;
         if(!$password) $password = $this->config->uitest->defaultPassword;
+        $webRoot = rtrim($this->config->uitest->webRoot, '/') . '/';
 
         $this->page->deleteCookie();
 
-        $this->page->get('');
+        $this->page->openURL($webRoot);
         $this->page->getErrors();
         $this->page->account->setValue($account);
         $this->page->password->setValue($password);
         $this->page->submit->click();
 
-        $this->page->getCookie();
+        $this->page->saveCookie($this->cookieFile);
 
         return $this->page;
     }
@@ -281,6 +282,8 @@ class tester
         if(!$module || !$method) return;
         $this->result->module = $module;
         $this->result->method = $method;
+        $webRoot = rtrim($this->config->uitest->webRoot, '/') . '/';
+        $cookies = json_decode(file_get_contents($this->cookieFile), true);
 
         if($this->config->requestType == 'GET')
         {
@@ -294,10 +297,11 @@ class tester
             $url .= ".html";
         }
 
-        $this->page->go($url); // 跳转到地址
+        $this->page->openURL($webRoot)->deleteCookie();
+        foreach($cookies as $cookie) if($cookie["name"] == "zentaosid")  $this->page->addCookie($cookie);
+
         $appIframeID = $iframeID ? $iframeID : "appIframe-{$module}";
-        $this->page->wait(1);
-        $this->page->getErrors($appIframeID);
+        $this->page->wait(1)->getErrors($appIframeID);
 
         return $this;
     }

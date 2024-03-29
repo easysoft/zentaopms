@@ -162,6 +162,19 @@ class webdriver
     }
 
     /**
+     * Add a cookie.
+     *
+     * @param  array    $cookie
+     * @access public
+     * @return void
+     */
+    public function addCookie($cookie)
+    {
+        $this->driver->manage()->addCookie($cookie);
+        return $this;
+    }
+
+    /**
      * Delete cookies in page.
      *
      * @access public
@@ -199,11 +212,7 @@ class webdriver
         }
         $this->driver->get($this->config->uitest->webRoot);
         $this->driver->manage()->deleteAllCookies();
-        foreach($cookies as $cookie)
-        {
-            if($cookie["name"] == "zentaosid")  $this->driver->manage()->addCookie($cookie);
-            if($cookie["name"] == "quchengsid") $this->driver->manage()->addCookie($cookie);
-        }
+        foreach($cookies as $cookie) if($cookie["name"] == "zentaosid")  $this->driver->manage()->addCookie($cookie);
         $this->driver->get($url);
     }
 
