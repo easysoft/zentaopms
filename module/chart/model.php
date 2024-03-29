@@ -799,4 +799,26 @@ class chartModel extends model
 
         return $sql;
     }
+
+    /**
+     * 在sql中将变量解析为空字符串。
+     *
+     * @param  array  $options
+     * @param  string $type
+     * @access public
+     * @return bool
+     */
+    public function isChartHaveData(array $options, string $type): bool
+    {
+        if($type == 'waterpolo') return true;
+
+        $data = array();
+        if($type == 'pie')   $data = $options['series'][0]['data'];
+        if($type == 'line')  $data = $options['xAxis']['data'];
+        if($type == 'radar') $data = $options['radar']['indicator'];
+        if($type == 'cluBarY' or $type == 'stackedBarY') $data = $options['yAxis']['data'];
+        if($type == 'cluBarX' or $type == 'stackedBar')  $data = $options['xAxis']['data'];
+
+        return count($data) ? true : false;
+    }
 }

@@ -65,12 +65,20 @@ $generateCharts = function() use($charts, $lang)
                 setClass('echart-content'),
                 set('data-group', $chart->currentGroup),
                 set('data-id', $chart->id),
-                echarts
+                $this->chart->isChartHaveData($chartOptions, $chart->type) ? echarts
                 (
                     set($chartOptions),
                     set::width('100%'),
                     set::height(400),
                     $chart->type == 'waterpolo' ? set::exts('liquidfill') : null,
+                ) : div
+                (
+                    setClass('no-data'),
+                    div
+                    (
+                        setClass('no-data-dom'),
+                        span(setClass('text-muted'), $this->lang->chart->noData)
+                    )
                 )
             )
         );
