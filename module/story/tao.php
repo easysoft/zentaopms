@@ -337,6 +337,14 @@ class storyTao extends storyModel
                 if($type == 'story')       $story->URS = $relations[$story->id]->count;
                 if($type == 'requirement') $story->SRS = $relations[$story->id]->count;
             }
+
+            $story->parent = array();
+            foreach(explode(',', trim($story->path, ',')) as $parentID)
+            {
+                if(!$parentID) continue;
+                if($parentID == $story->id) continue;
+                $story->parent[] = (int)$parentID;
+            }
         }
 
         /* For save session query. */
@@ -786,22 +794,22 @@ class storyTao extends storyModel
      *
      * @param  int       $storyID
      * @param  object    $story
-     * @param  int       $oldStoryParent
+     * @param  object    $oldStory
      * @access protected
      * @return void
      */
-    protected function doChangeParent(int $storyID, object $story, int $oldStoryParent)
+    protected function doChangeParent(int $storyID, object $story, object $oldStory)
     {
         $this->loadModel('action');
-        if($oldStoryParent > 0)
+        if($oldStory->parent > 0)
         {
-            $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
-            $oldChildren    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($oldStoryParent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
-            if(empty($oldChildren)) $this->dao->update(TABLE_STORY)->set('isParent')->eq('0')->set('stage')->eq('wait')->where('id')->eq($oldStoryParent)->exec();
-            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStoryParent)->fetch();
+            $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStory->parent)->fetch();
+            $oldChildren    = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($oldStory->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+            if(empty($oldChildren)) $this->dao->update(TABLE_STORY)->set('isParent')->eq('0')->set('stage')->eq('wait')->where('id')->eq($oldStory->parent)->exec();
+            $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStory->parent)->fetch();
 
-            $this->action->create('story', $storyID, 'unlinkParentStory', '', $oldStoryParent, '', false);
-            $actionID = $this->action->create('story', $oldStoryParent, 'unLinkChildrenStory', '', $storyID, '', false);
+            $this->action->create('story', $storyID, 'unlinkParentStory', '', $oldStory->parent, '', false);
+            $actionID = $this->action->create('story', $oldStory->parent, 'unLinkChildrenStory', '', $storyID, '', false);
             $changes  = common::createChanges($oldParentStory, $newParentStory);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
@@ -810,6 +818,8 @@ class storyTao extends storyModel
         {
             $parentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
             $newRoot     = $parentStory->root;
+            $story->path = rtrim($parentStory->path, ',') . ',' . $storyID . ',';
+
             $this->dao->update(TABLE_STORY)->set('parentVersion')->eq($parentStory->version)->where('id')->eq($storyID)->exec();
             $this->dao->update(TABLE_STORY)
                 ->set('isParent')->eq('1')
@@ -826,12 +836,20 @@ class storyTao extends storyModel
         }
         else
         {
-            $newRoot = $storyID;
+            $newRoot     = $storyID;
+            $story->path = ",{$storyID},";
         }
 
-        $childStories = $this->getAllChildId($storyID);
-        if($childStories) $this->dao->update(TABLE_STORY)->set('root')->eq($newRoot)->where('id')->in($childStories)->exec();
-        $this->dao->update(TABLE_STORY)->set('root')->eq($newRoot)->where('id')->eq($storyID)->exec();
+        $childIdList = $this->getAllChildId($storyID, false);
+        $children    = $this->getByList($childIdList);
+        foreach($children as $child)
+        {
+            $newChildPath = str_replace($oldStory->path, $story->path, $child->path);
+            $this->dao->update(TABLE_STORY)->set('path')->eq($newChildPath)->where('id')->eq($child->id)->exec();
+        }
+
+        if($childIdList) $this->dao->update(TABLE_STORY)->set('root')->eq($newRoot)->where('id')->in($childIdList)->exec();
+        $this->dao->update(TABLE_STORY)->set('root')->eq($newRoot)->set('path')->eq($story->path)->where('id')->eq($storyID)->exec();
     }
 
     /**

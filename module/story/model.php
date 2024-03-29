@@ -481,7 +481,11 @@ class storyModel extends model
         }
         else
         {
-            $this->dao->update(TABLE_STORY)->set('root')->eq($storyID)->where('id')->eq($storyID)->exec();
+            $this->dao->update(TABLE_STORY)
+                 ->set('root')->eq($storyID)
+                 ->set('path')->eq(",{$storyID},")
+                 ->where('id')->eq($storyID)
+                 ->exec();
         }
         if(!empty($story->plan))
         {
@@ -771,12 +775,12 @@ class storyModel extends model
 
         if($story->product != $oldStory->product)
         {
-            $childStories = $this->getAllChildId($storyID);
+            $childStories = $this->getAllChildId($storyID, false);
             foreach($childStories as $childStoryID) $this->updateStoryProduct($childStoryID, $story->product);
         }
         if($story->grade != $oldStory->grade) $this->syncGrade($oldStory, $story);
         $parentChanged = $story->parent != $oldStory->parent;
-        if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory->parent);
+        if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory);
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, !$parentChanged);
         if($story->parent > 0) $this->updateParentStatus($storyID, $story->parent, !$parentChanged);
 
@@ -1348,10 +1352,12 @@ class storyModel extends model
         /* Set parent to child story. */
         foreach($SRList as $childStoryID)
         {
+            $path = rtrim($oldStory->path, ',') . ",$childStoryID,";
             $this->dao->update(TABLE_STORY)
                  ->set('parent')->eq($storyID)
                  ->set('parentVersion')->eq($oldStory->version)
                  ->set('root')->eq($oldStory->root)
+                 ->set('path')->eq($path)
                  ->where('id')->eq($childStoryID)
                  ->exec();
         }
@@ -1686,7 +1692,7 @@ class storyModel extends model
             if($parent && $parent->type == $story->type)
             {
                 $parentGradeIndex = array_search($parent->grade, $gradePairs);
-                $story->grade = $gradePairs[$parentGradeIndex + 1];
+                $story->grade     = $gradePairs[$parentGradeIndex + 1];
             }
             else
             {
@@ -1703,17 +1709,16 @@ class storyModel extends model
             }
 
             if($story->grade != $oldStory->grade) $this->syncGrade($oldStory, $story);
-            $oldParentID   = $story->parent;
-            $story->parent = $parentID;
 
             $this->dao->update(TABLE_STORY)
                  ->set('grade')->eq($story->grade)
-                 ->set('parent')->eq($story->parent)
+                 ->set('parent')->eq($parentID)
                  ->autoCheck()
                  ->where('id')->eq($story->id)
                  ->exec();
 
-            $this->doChangeParent($story->id, $story, $oldParentID);
+            $story->parent = $parentID;
+            $this->doChangeParent($story->id, $story, $oldStory);
             $this->setStage($story->id);
         }
 
@@ -2177,30 +2182,24 @@ class storyModel extends model
      * Get all child stories of a story.
      *
      * @param  int    $storyID
-     * @param  array  $processedIds
+     * @param  bool   $includeSelf
      * @access public
      * @return array
      */
-    public function getAllChildId(int $storyID, array $processedIds = array()): array
+    public function getAllChildId(int $storyID, bool $includeSelf = true): array
     {
         if($storyID == 0) return array();
 
+        $story = $this->fetchByID($storyID);
+        if(empty($story)) return array();
+
         $children = $this->dao->select('id')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('parent')->eq($storyID)
+            ->where('path')->like($story->path . '%')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$includeSelf)->andWhere('id')->ne($storyID)->fi()
             ->fetchPairs();
 
-        $childIdList = array();
-        foreach($children as $childID)
-        {
-            if(!in_array($childID, $processedIds))
-            {
-                $childIdList[] = $childID;
-                $childIdList = array_merge($childIdList, $this->getAllChildId($childID, array_merge($processedIds, array($childID))));
-            }
-        }
-
-        return $childIdList;
+        return array_keys($children);
     }
 
 
@@ -2670,7 +2669,6 @@ class storyModel extends model
                 ->andWhere('status')->eq('active')
                 ->andWhere('grade')->ne($lastGrade)
                 ->andWhere('grade')->in(array_keys($SRGradePairs))
-                ->beginIF($storyID)->andWhere('id')->ne($storyID)->fi()
                 ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
                 ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
                 ->fetchAll();
@@ -2745,7 +2743,6 @@ class storyModel extends model
             ->andWhere('grade')->in(array_keys($URGradePairs))
             ->andWhere('grade')->ne($lastGrade)
             ->andWhere('id')->notIN($allStoryParents)
-            ->beginIF($storyID)->andWhere('id')->ne($storyID)->fi()
             ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
             ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
             ->fetchAll('id');
@@ -2786,7 +2783,6 @@ class storyModel extends model
             ->andWhere('status')->eq('active')
             ->andWhere('grade')->in(array_keys($ERGradePairs))
             ->andWhere('grade')->ne($lastGrade)
-            ->beginIF($storyID)->andWhere('id')->ne($storyID)->fi()
             ->andWhere('id')->notIN($allRequirementParents)
             ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
             ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
@@ -4821,11 +4817,6 @@ class storyModel extends model
         $story->category     = zget($this->lang->{$storyType}->categoryList, $story->category);
         $story->closedReason = zget($this->lang->{$storyType}->reasonList,   $story->closedReason);
 
-        /* Set rowKey to uniqueID in dTable. */
-        $story->uniqueID = $story->parent > 0 ? $story->parent . '-' . $story->id : $story->id;
-
-        if($story->parent < 0) $story->parent = 0;
-
         /* Format user list. */
         foreach(array('mailto', 'reviewer') as $fieldName)
         {
@@ -5105,9 +5096,8 @@ class storyModel extends model
      */
     public function checkGrade(object $story, object $oldStory, string $mode = 'single')
     {
-        $children   = $this->getAllChildId($oldStory->id);
-        $children[] = $oldStory->id;
-        $maxGrade   = $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORY)
+        $children = $this->getAllChildId($oldStory->id);
+        $maxGrade = $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORY)
              ->where('id')->in($children)
              ->andWhere('deleted')->eq('0')
              ->fetch('maxGrade');
@@ -5140,7 +5130,7 @@ class storyModel extends model
     {
         if($oldStory->isParent != '1') return;
 
-        $childIdList = $this->getAllChildId($oldStory->id);
+        $childIdList = $this->getAllChildId($oldStory->id, false);
         if($childIdList)
         {
             $this->loadModel('action');
