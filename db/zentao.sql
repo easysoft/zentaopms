@@ -1765,6 +1765,8 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `parent` mediumint(9) NOT NULL DEFAULT '0',
   `isParent` enum('0', '1') NOT NULL DEFAULT '0',
   `root` mediumint(9) NOT NULL DEFAULT '0',
+  `path` text NULL DEFAULT '0',
+  `grade` smallint(6) NOT NULL,
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
