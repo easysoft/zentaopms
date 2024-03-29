@@ -3,7 +3,7 @@ helper::import('../../control.php');
 
 class myIm extends im
 {
-    public function chatWithAi($modelId, $userID = 0, $version = '', $device = 'desktop')
+    public function chatWithAi($modelId, $assistantId, $userID = 0, $version = '', $device = 'desktop')
     {
         $user = $this->im->user->getByID($userID);
         $user->rights = $this->loadModel('user')->authorize($user->account);
@@ -30,6 +30,18 @@ class myIm extends im
                 'content' => $message->content,
             );
         }, $context);
+
+        if(!empty($assistantId))
+        {
+            $assistant = $this->ai->getAssistantById($assistantId);
+            if($assistant)
+            {
+                array_unshift($context, (object)array(
+                    'role'    => 'system',
+                    'content' => $assistant->systemMessage,
+                ));
+            }
+        }
 
         $messages = $this->ai->converse($modelId, $context);
 
