@@ -167,7 +167,7 @@ class bugBasicInfo extends wg
     {
         return new datalist
         (
-            set::className('bug-basic-info'),
+            set::className('bug-basic-info break-all overflow-hidden text-clip'),
             set::items($this->getItems())
         );
     }
