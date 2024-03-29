@@ -6,11 +6,11 @@ class actionTao extends actionModel
      * 获取一个action的基础数据。
      * Fetch base info of a action.
      *
-     * @param  int $actionID
-     * @access protected
+     * @param  int         $actionID
+     * @access public
      * @return object|bool
      */
-    protected function fetchBaseInfo(int $actionID): object|bool
+    public function fetchBaseInfo(int $actionID): object|bool
     {
         return $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
     }
@@ -19,14 +19,14 @@ class actionTao extends actionModel
      * 获取一个基础对象的信息。
      * Get object base info.
      *
-     * @param  string $table
-     * @param  array  $queryParam
-     * @param  string $field
-     * @param  string $orderby
-     * @access protected
+     * @param  string      $table
+     * @param  array       $queryParam
+     * @param  string      $field
+     * @param  string      $orderby
+     * @access public
      * @return object|bool
      */
-    protected function getObjectBaseInfo(string $table, array $queryParam, string $field = '*', string $orderby = ''): object|bool
+    public function getObjectBaseInfo(string $table, array $queryParam, string $field = '*', string $orderby = ''): object|bool
     {
         $querys = array_map(function($key, $query){return "`{$key}` = '{$query}'";}, array_keys($queryParam), $queryParam);
         return $this->dao->select($field)->from($table)->where(implode(' and ', $querys))->orderby($orderby)->fetch();
@@ -38,10 +38,10 @@ class actionTao extends actionModel
      *
      * @param  string $objectType
      * @param  int    $objectID
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function getNoFilterRequiredRelation(string $objectType, int $objectID): array
+    public function getNoFilterRequiredRelation(string $objectType, int $objectID): array
     {
         $product = array(0);
         $project = $execution = 0;
@@ -81,7 +81,7 @@ class actionTao extends actionModel
      * @access public
      * @return array
      */
-    protected function getNeedRelatedFields(string $objectType, int $objectID, string $actionType = '', string $extra = ''): array
+    public function getNeedRelatedFields(string $objectType, int $objectID, string $actionType = '', string $extra = ''): array
     {
         $product = array(0);
         $project = $execution = 0;
@@ -137,13 +137,13 @@ class actionTao extends actionModel
      * 获取用户故事相关的产品、项目、阶段。
      * Get story related product, project, stage.
      *
-     * @param  string    $actionType
-     * @param  int       $objectID
-     * @param  int       $extra
-     * @access protected
+     * @param  string $actionType
+     * @param  int    $objectID
+     * @param  int    $extra
+     * @access public
      * @return array
      */
-    protected function getStoryActionRelated(string $actionType, int $objectID, int $extra): array
+    public function getStoryActionRelated(string $actionType, int $objectID, int $extra): array
     {
         $product = array(0);
         $project = $execution = 0;
@@ -186,15 +186,15 @@ class actionTao extends actionModel
      * 获取用例相关的产品、项目、阶段。
      * Get case related product, project, stage.
      *
-     * @param  string    $objectType
-     * @param  string    $actionType
-     * @param  string    $table
-     * @param  int       $objectID
-     * @param  int       $extra
-     * @access protected
+     * @param  string $objectType
+     * @param  string $actionType
+     * @param  string $table
+     * @param  int    $objectID
+     * @param  int    $extra
+     * @access public
      * @return array
      */
-    protected function getCaseRelated(string $objectType, string $actionType, int $objectID, int $extra): array
+    public function getCaseRelated(string $objectType, string $actionType, int $objectID, int $extra): array
     {
         list($product, $project, $execution) = $this->getGenerateRelated($objectType, $objectID);
 
@@ -212,12 +212,12 @@ class actionTao extends actionModel
      * 常规获取相关的产品、项目、执行。
      * Get general related product, project, execution.
      *
-     * @param  string    $objectType
-     * @param  int       $objectID
-     * @access protected
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
      * @return array
      */
-    protected function getGenerateRelated(string $objectType, int $objectID): array
+    public function getGenerateRelated(string $objectType, int $objectID): array
     {
         $product = $project = $execution = 0;
         $result  = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
@@ -234,12 +234,12 @@ class actionTao extends actionModel
      * 获取分支相关的产品、项目、执行。
      * Get case related product, project, execution.
      *
-     * @param  string    $objectType
-     * @param  int       $objectID
-     * @access protected
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
      * @return array
      */
-    protected function getReleaseRelated(string $objectType, int $objectID): array
+    public function getReleaseRelated(string $objectType, int $objectID): array
     {
         $product = array(0);
         $project = 0;
@@ -256,12 +256,12 @@ class actionTao extends actionModel
      * 获取任务相关的产品、项目、执行。
      * Get task related product, project, execution.
      *
-     * @param  string    $objectType
-     * @param  int       $objectID
-     * @access protected
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
      * @return array
      */
-    protected function getTaskRelated(string $objectType, int $objectID): array
+    public function getTaskRelated(string $objectType, int $objectID): array
     {
         $product = array(0);
         $project = $execution = 0;
@@ -284,12 +284,12 @@ class actionTao extends actionModel
      * 获取需求相关的产品、项目、执行。
      * Get story related product, project, execution.
      *
-     * @param  string    $objectType
-     * @param  int       $objectID
-     * @access protected
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
      * @return array
      */
-    protected function getReviewRelated(string $objectType, int $objectID): array
+    public function getReviewRelated(string $objectType, int $objectID): array
     {
         $product = array(0);
         $project = 0;
@@ -310,10 +310,10 @@ class actionTao extends actionModel
      * @param  string $objectType
      * @param  int    $objectID
      * @param  array  $modules
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function getActionListByTypeAndID(string $objectType, array|int $objectID, array $modules): array
+    public function getActionListByTypeAndID(string $objectType, array|int $objectID, array $modules): array
     {
         return $this->dao->select('*')->from(TABLE_ACTION)
             ->beginIF($objectType == 'project')
@@ -345,12 +345,12 @@ class actionTao extends actionModel
      * 获取 linked 和 unlinked 操作记录的附加信息。
      * Get action extra info.
      *
-     * @param  object    $action
-     * @param  string    $type
-     * @access protected
+     * @param  object $action
+     * @param  string $type
+     * @access public
      * @return bool
      */
-    protected function getLinkedExtra(object $action, string $type): bool
+    public function getLinkedExtra(object $action, string $type): bool
     {
         if($type == 'plan')     $type = 'productplan';
         if($type == 'revision') $type = 'repohistory';
@@ -408,12 +408,12 @@ class actionTao extends actionModel
      * 通过ID获取对象信息。
      * Get object info by ID.
      *
-     * @param  string $table
-     * @param  int    $objectID
-     * @access protected
+     * @param  string      $table
+     * @param  int         $objectID
+     * @access public
      * @return object|bool
      */
-    protected function fetchObjectInfoByID(string $table, int $objectID, string $field = '*'): object|bool
+    public function fetchObjectInfoByID(string $table, int $objectID, string $field = '*'): object|bool
     {
         return $this->dao->select($field)->from($table)->where('id')->eq($objectID)->fetch();
     }
@@ -428,10 +428,10 @@ class actionTao extends actionModel
      * @param  string $type
      * @param  string $method
      * @param  bool   $onlyBody
-     * @access protected
+     * @access public
      * @return void
      */
-    protected function processActionExtra(string $table, object $action, string $fields, string $type, string $method = 'view', bool $onlyBody = false): void
+    public function processActionExtra(string $table, object $action, string $fields, string $type, string $method = 'view', bool $onlyBody = false): void
     {
         $object = $this->fetchObjectInfoByID($table, (int)$action->extra, $fields);
         $condition = common::hasPriv($type, $method);
@@ -444,10 +444,10 @@ class actionTao extends actionModel
      * Process attribute.
      *
      * @param  string $type
-     * @access protected
+     * @access public
      * @return string
      */
-    protected function processAttribute($type): string
+    public function processAttribute($type): string
     {
         if($type == 'testtask') $type = 'task';
         return $type;
@@ -457,12 +457,12 @@ class actionTao extends actionModel
      * 处理参数字符串。
      * Process param string.
      *
-     * @param  object    $action
-     * @param  string    $type
-     * @access protected
+     * @param  object $action
+     * @param  string $type
+     * @access public
      * @return string
      */
-    protected function processParamString(object $action, string $type): string
+    public function processParamString(object $action, string $type): string
     {
         $paramString = '';
         switch($type)
@@ -506,11 +506,11 @@ class actionTao extends actionModel
      * 搭建创建子任务的Action的extra信息。
      * Build create children action extra info.
      *
-     * @param  object    $action
-     * @access protected
+     * @param  object $action
+     * @access public
      * @return void
      */
-    protected function processCreateChildrenActionExtra(object $action): void
+    public function processCreateChildrenActionExtra(object $action): void
     {
         $names = $this->dao->select('id,name')->from(TABLE_TASK)->where('id')->in($action->extra)->fetchPairs();
         $action->extra = '';
@@ -525,11 +525,11 @@ class actionTao extends actionModel
      * 搭建创建需求的Action的extra信息。
      * Build create requirement action extra info.
      *
-     * @param  object    $action
-     * @access protected
+     * @param  object $action
+     * @access public
      * @return void
      */
-    protected function processCreateRequirementsActionExtra(object $action): void
+    public function processCreateRequirementsActionExtra(object $action): void
     {
         $names = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($action->extra)->fetchPairs();
         $action->extra = '';
@@ -544,11 +544,11 @@ class actionTao extends actionModel
      * 通过 extra 获取对象的 appendLink。
      * Get object appendLink by extra.
      *
-     * @param  object    $action
-     * @access protected
+     * @param  object $action
+     * @access public
      * @return void
      */
-    protected function processAppendLinkByExtra(object $action): void
+    public function processAppendLinkByExtra(object $action): void
     {
         $action->appendLink = '';
         if(strpos($action->extra, '|') !== false) $action->extra = substr($action->extra, 0, strpos($action->extra, '|'));
@@ -572,13 +572,13 @@ class actionTao extends actionModel
      * 搭建关联用户故事和bug的Action的extra信息。
      * Build link story and bug action extra info.
      *
-     * @param  object    $action
-     * @param  string    $module
-     * @param  string    $method
-     * @access protected
+     * @param  object $action
+     * @param  string $module
+     * @param  string $method
+     * @access public
      * @return void
      */
-    protected function processLinkStoryAndBugActionExtra(object $action, string $module, string $method): void
+    public function processLinkStoryAndBugActionExtra(object $action, string $module, string $method): void
     {
         $extra = '';
         foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv($module, $method) ? html::a(helper::createLink($module, $method, "{$module}ID={$id}"), "#{$id} ", '', "data-size='lg' data-load='modal'") . ', ' : "#{$id}, ";
@@ -589,11 +589,11 @@ class actionTao extends actionModel
      * 搭建与用户故事相关的Action的extra信息。
      * Build story related action extra info.
      *
-     * @param  object    $action
-     * @access protected
+     * @param  object $action
+     * @access public
      * @return void
      */
-    protected function processToStoryActionExtra(object $action): void
+    public function processToStoryActionExtra(object $action): void
     {
         $productShadow = $this->dao->select('shadow')->from(TABLE_PRODUCT)->where('id')->in(trim($action->product, ','))->fetch('shadow');
         $title         = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
@@ -613,12 +613,12 @@ class actionTao extends actionModel
      * 处理工时相关查询条件。
      * Process effort related search condition.
      *
-     * @param  string    $condition
-     * @param  string    $period
-     * @param  string    $begin
-     * @param  string    $end
-     * @param  string    $beginDate
-     * @access protected
+     * @param  string $condition
+     * @param  string $period
+     * @param  string $begin
+     * @param  string $end
+     * @param  string $beginDate
+     * @access public
      * @return void
      */
     public function processEffortCondition(string &$condition, string $period, string $begin, string $end, string $beginDate): void
@@ -655,10 +655,10 @@ class actionTao extends actionModel
      * @param  string     $actionCondition
      * @param  string     $orderBy
      * @param  int        $limit
-     * @access protected
+     * @access public
      * @return array|bool
      */
-    protected function getActionListByCondition(string $condition, string $date, string $period, string $begin, string $end, string $direction, string $account, string $beginDate, string|int $productID, string|int $projectID, string|int $executionID, array $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
+    public function getActionListByCondition(string $condition, string $date, string $period, string $begin, string $end, string $direction, string $account, string $beginDate, string|int $productID, string|int $projectID, string|int $executionID, array $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
     {
         $actionTable = in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
@@ -694,11 +694,11 @@ class actionTao extends actionModel
      * 根据条件获取动态表。
      * Get action table by condition.
      *
-     * @param  string    $period
-     * @access protected
+     * @param  string $period
+     * @access public
      * @return string
      */
-    protected function getActionTable(string $period): string
+    public function getActionTable(string $period): string
     {
         return in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONRECENT : TABLE_ACTION;
     }
@@ -712,10 +712,10 @@ class actionTao extends actionModel
      * @param  array  $docList
      * @param  array  $apiList
      * @param  array  $docLibList
-     * @access protected
+     * @access public
      * @return bool
      */
-    protected function checkIsActionLegal(object $action, array $shadowProducts, array $docList, array $apiList, array $docLibList): bool
+    public function checkIsActionLegal(object $action, array $shadowProducts, array $docList, array $apiList, array $docLibList): bool
     {
         if($action->objectType == 'doc' && !isset($docList[$action->objectID])) return false;
         if($action->objectType == 'api' && !isset($apiList[$action->objectID])) return false;
@@ -729,13 +729,13 @@ class actionTao extends actionModel
      * 为Action添加对象名称。
      * Add object name for action.
      *
-     * @param  object    $action
-     * @param  array     $objectNames
-     * @param  string    $objectType
-     * @access protected
+     * @param  object $action
+     * @param  array  $objectNames
+     * @param  string $objectType
+     * @access public
      * @return void
      */
-    protected function addObjectNameForAction(object $action, array $objectNames, string $objectType)
+    public function addObjectNameForAction(object $action, array $objectNames, string $objectType)
     {
         $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
@@ -790,10 +790,10 @@ class actionTao extends actionModel
      * @param  string $moduleName
      * @param  string $methodName
      * @param  string $vars
-     * @access protected
+     * @access public
      * @return void
      */
-    protected function processMaxDocObjectLink(object $action, string $moduleName, string $methodName, string $vars)
+    public function processMaxDocObjectLink(object $action, string $moduleName, string $methodName, string $vars)
     {
         if($action->objectType == 'doc')
         {
@@ -812,11 +812,11 @@ class actionTao extends actionModel
      * 获取文档库链接参数。
      * Get doclib link params.
      *
-     * @param  object $action
-     * @access protected
+     * @param  object     $action
+     * @access public
      * @return array|bool
      */
-    protected function getDocLibLinkParameters(object $action)
+    public function getDocLibLinkParameters(object $action)
     {
         $libID = $action->objectID;
         $type  = 'custom';
@@ -836,10 +836,10 @@ class actionTao extends actionModel
      * Get doclib type params.
      *
      * @param  object $action
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function getDoclibTypeParams(object $action): array
+    public function getDoclibTypeParams(object $action): array
     {
         $params = '';
         $docLib           = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
@@ -886,10 +886,10 @@ class actionTao extends actionModel
      * @param  array  $deptUsers
      * @param  string $moduleName
      * @param  string $methodName
-     * @access protected
+     * @access public
      * @return bool
      */
-    protected function checkActionClickable(object $action, array $deptUsers, string $moduleName, string $methodName): bool
+    public function checkActionClickable(object $action, array $deptUsers, string $moduleName, string $methodName): bool
     {
         if(empty($moduleName) || empty($methodName)) return false;
         if(!common::hasPriv($moduleName, $methodName)) return false;
@@ -922,10 +922,10 @@ class actionTao extends actionModel
      *
      * @param  object $action
      * @param  string $vars
-     * @access protected
+     * @access public
      * @return string
      */
-    protected function getObjectLinkParams(object $action, string $vars): string
+    public function getObjectLinkParams(object $action, string $vars): string
     {
         if($action->objectType == 'api')
         {
@@ -965,11 +965,11 @@ class actionTao extends actionModel
      * 根据对象类型获取恢复对象参数。
      * Get object params by object type.
      *
-     * @param  string    $objectType
-     * @access protected
+     * @param  string $objectType
+     * @access public
      * @return array
      */
-    protected function getUndeleteParamsByObjectType(string $objectType): array
+    public function getUndeleteParamsByObjectType(string $objectType): array
     {
         $table   = $this->config->objectTables[$objectType];
         $orderby = '';
