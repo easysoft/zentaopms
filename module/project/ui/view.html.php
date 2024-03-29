@@ -172,11 +172,11 @@ row
                 div
                 (
                     set('class', 'chart pie-chart'),
-                    set::width(120),
-                    set::height(120),
                     echarts
                     (
                         set::color(array('#2B80FF', '#E3E4E9')),
+                        set::width(120),
+                        set::height(120),
                         set::series(array(
                         array
                         (
