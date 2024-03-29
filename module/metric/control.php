@@ -280,10 +280,12 @@ class metric extends control
      * @access public
      * @return string
      */
-    public function ajaxGetMetricSideTree($scope, $checkedList)
+    public function ajaxGetMetricSideTree($scope, $checkedList, $filtersBase64 = '')
     {
         $checkedList = explode(',', $checkedList);
-        $metrics = $scope == 'collect' ? $this->metric->getListByCollect('released') : $this->metric->getList($scope, 'released');
+        $filters = json_decode(base64_decode($filtersBase64), true);
+        if(!is_array($filters)) $filters = array();
+        $metrics = $scope == 'collect' ? $this->metric->getListByCollect('released') : $this->metric->getListByFilter($filters, 'released');
 
         $this->view->groupMetrics = $this->metric->groupMetricByObject($metrics);
         $this->view->checkedList  = $checkedList;

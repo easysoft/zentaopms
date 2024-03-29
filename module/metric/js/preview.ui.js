@@ -213,7 +213,7 @@ window.ajaxGetMetrics = function(scope, filters = '', callback)
         var total   = metrics.length;
 
         var checked = window.checkedList.map(obj => obj.id).join(',');
-        var url     = $.createLink('metric', 'ajaxGetMetricSideTree', 'scope=' + scope + '&checkedList=' + checked);
+        var url     = $.createLink('metric', 'ajaxGetMetricSideTree', 'scope=' + scope + '&checkedList=' + checked + '&filters=' + filters);
 
         $('.side .metric-tree').empty();
         loadTarget(url, '.side .metric-tree');
