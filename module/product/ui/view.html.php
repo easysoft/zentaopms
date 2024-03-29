@@ -58,11 +58,13 @@ div
                     echarts
                     (
                         set::color(array('#2B80FF', '#E3E4E9')),
+                        set::width(120),
+                        set::height(120),
                         set::series
                         (
                             array(array('type' => 'pie', 'radius' => array('80%', '90%'), 'itemStyle' => array('borderRadius' => '40'), 'label' => array('show' => false), 'data' => array($product->storyDeliveryRate, 100 - $product->storyDeliveryRate)))
                         )
-                    )->size(120, 120),
+                    ),
                     div
                     (
                         set::className('pie-chart-title text-center'),
