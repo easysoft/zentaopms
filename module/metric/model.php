@@ -792,6 +792,12 @@ class metricModel extends model
         $fields = $this->metricTao->getRecordFields($code);
         if(!in_array($metric->scope, $fields)) $fields[] = $metric->scope;
 
+        if(!empty($fields) && in_array('other', $fields))
+        {
+            $key = array_search('other', $fields);
+            unset($fields[$key]);
+        }
+
         if(empty($fields)) return false;
 
         $this->metricTao->createDistinctTempTable();
