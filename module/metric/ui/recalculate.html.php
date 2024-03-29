@@ -28,15 +28,19 @@ detailHeader
             set::level(1),
             set::text($lang->metric->recalculateHistory)
         ),
-        label
+        div
         (
-            to::before(icon
+            setClass('notice-recalculate'),
+            label
             (
-                setClass('warning-ghost margin-left8'),
-                'help',
-            )),
-            set::text($lang->metric->tips->noticeRecalculate),
-            setClass('label ghost')
+                to::before(icon
+                (
+                    setClass('warning-ghost margin-left8'),
+                    'help',
+                )),
+                set::text($lang->metric->tips->noticeRecalculate),
+                setClass('label ghost')
+            )
         )
     )
 );

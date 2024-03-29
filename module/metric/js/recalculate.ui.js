@@ -27,6 +27,7 @@ function recalculateAll(startDate, endDate)
             $.get(deduplication, function(result)
             {
                 displayExitButton();
+                hideRecalculateNotice();
             });
             return;
         }
@@ -54,6 +55,7 @@ function recalculateSingle(code, dateType, startDate, endDate)
             $.get(deduplication, function(result)
             {
                 displayExitButton();
+                hideRecalculateNotice();
             });
             return;
         }
@@ -139,4 +141,9 @@ function dateToString(date)
 function displayExitButton()
 {
     $('.exit').removeClass('hidden');
+}
+
+function hideRecalculateNotice()
+{
+    $('.notice-recalculate').css('visibility', 'hidden');
 }
