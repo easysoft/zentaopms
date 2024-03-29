@@ -412,21 +412,18 @@
                 <div class='detail-title'><?php echo $lang->files?></div>
                 <div class='detail-content'>
                   <?php
-                  if($release->files)
-                  {
-                      echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false', 'object' => $release, 'method' => 'view', 'showDelete' => false));
-                  }
+                  if($release->files) echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false', 'object' => $release, 'method' => 'view', 'showDelete' => false));
                   if($release->builds)
                   {
                       foreach($release->builds as $build)
                       {
                           if($build->filePath)
                           {
-                              echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
+                              echo $lang->release->filePath . html::a($build->filePath, $build->filePath, '_blank') . '<br />';
                           }
                           elseif($build->scmPath)
                           {
-                              echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
+                              echo $lang->release->scmPath . html::a($build->scmPath, $build->scmPath, '_blank') . '<br />';
                           }
                       }
                   }
