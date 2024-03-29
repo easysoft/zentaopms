@@ -53,6 +53,7 @@ panel
     (
         div
         (
+            setID('recalculate-log'),
             setClass('recalculate-log'),
         )
     ),

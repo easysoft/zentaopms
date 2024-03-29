@@ -78,6 +78,9 @@ function recalculateLog(date)
     html += '  <i class="icon icon-check success"></i>';
     html += '</p>';
 
+    var logContainer = document.getElementById('recalculate-log');
+    logContainer.scrollTop = logContainer.scrollHeight;
+
     return html;
 }
 
