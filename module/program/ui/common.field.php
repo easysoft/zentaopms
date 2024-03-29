@@ -5,6 +5,7 @@ global $lang, $config;
 $fields = defineFieldList('program');
 
 $fields->field('parent')
+    ->control(array('control' => 'picker', 'required' => true))
     ->items(data('parents'))
     ->value(data('parentProgram.id') ? data('parentProgram.id') : 0)
     ->disabled(!empty(data('parentProgram.id')))
