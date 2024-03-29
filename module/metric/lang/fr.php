@@ -387,7 +387,7 @@ $lang->metric->tips->noticeUnchangeable      = "[Scope], [Object], [Purpose], [D
 $lang->metric->tips->noticeCode              = "The code must be a combination of English letters, numbers or underscores.";
 $lang->metric->tips->noticeRecalculate       = "Updating data..., please do not manipulate metric data.";
 $lang->metric->tips->noticeRecalculateConfig = "The system will recalculate the historical data collected by non-scheduled tasks in published metrics by default.";
-$lang->metric->tips->noticeRewriteHistoryLib = "When checked, the system will recalculate the published metrics based on historical data and overwrite all existing metric values.";
+$lang->metric->tips->noticeRewriteHistoryLib = "(When checked, the system will recalculate published metric with date type  based on historical data and overwrite all existing metric records)";
 $lang->metric->tips->banRecalculate          = "The metric has not been published or has no date type";
 
 $lang->metric->recalculateLog = "%s has been calculated";
