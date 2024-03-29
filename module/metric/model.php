@@ -2465,7 +2465,7 @@ class metricModel extends model
         foreach($codeList as $code)
         {
             $dateType = $this->getDateTypeByCode($code);
-            if($this->isFirstInference($code)) $inferenceDateList[$code] = $this->getInferenceEndDate($code, $dateType);
+            $inferenceDateList[$code] = $this->getInferenceEndDate($code, $dateType);
         }
 
         return $inferenceDateList;
@@ -2524,26 +2524,61 @@ class metricModel extends model
     {
         $isFirstInference = $this->isFirstInference($code);
 
-        $time = $this->dao->select('date')->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->beginIF($isFirstInference)->andWhere('calcType')->eq('cron')->fi()
-            ->beginIF(!$isFirstInference)->andWhere('calcType')->eq('inference')->fi()
-            ->beginIF($isFirstInference)->orderBy('date_asc')->fi()
-            ->beginIF(!$isFirstInference)->orderBy('date_desc')->fi()
-            ->limit(1)
-            ->fetch('date');
-        $date = substr($time, 0, 10);
-
         if($isFirstInference)
         {
-            if($dateType == 'year')  return date('Y-12-31', strtotime('-1 year', strtotime($date)));
-            if($dateType == 'month') return date('Y-m-t', strtotime('-1 month', strtotime($date)));
-            return date('Y-m-d', strtotime('-2 days', strtotime($date)));
+            $date = $this->getFirstCronDate($code);
         }
         else
         {
+            $hasCronRecord = $this->checkCronRecordExists($code);
+
+            if($hasCronRecord)
+            {
+                $date = $this->getFirstCronDate($code);
+            }
+            else
+            {
+                $time = $this->dao->select('date')->from(TABLE_METRICLIB)
+                    ->where('metricCode')->eq($code)
+                    ->andWhere('calcType')->eq('inference')
+                    ->orderBy('date_desc')
+                    ->limit(1)
+                    ->fetch('date');
+                $date = substr($time, 0, 10);
+            }
+        }
+
+        if(!$isFirstInference && !$hasCronRecord)
+        {
             return $date;
         }
+        else
+        {
+            if($dateType == 'year')  return date('Y-12-31', strtotime('-1 year', strtotime($date)));
+            if($dateType == 'month') return date('Y-m-t', strtotime('-1 month', strtotime($date)));
+            return date('Y-m-d', strtotime('-1 days', strtotime($date)));
+        }
+    }
+
+    public function getFirstCronDate($code)
+    {
+        $time = $this->dao->select('date')->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->andWhere('calcType')->eq('cron')
+            ->orderBy('date_asc')
+            ->limit(1)
+            ->fetch('date');
+        return substr($time, 0, 10);
+    }
+
+    public function checkCronRecordExists($code)
+    {
+        $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_METRICLIB)
+            ->where('calcType')->eq('cron')
+            ->andWhere('metricCode')->eq($code)
+            ->fetch('count');
+
+        return $count == 0 ? true : false;
     }
 
     public function isFirstInference($code)
