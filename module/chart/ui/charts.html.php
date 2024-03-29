@@ -65,8 +65,10 @@ $generateCharts = function() use($charts, $lang)
                 echarts
                 (
                     set($chartOptions),
+                    set::width('100%'),
+                    set::height(400),
                     $chart->type == 'waterpolo' ? set::exts('liquidfill') : null,
-                )->size('100%', 400)
+                )
             )
         );
     }

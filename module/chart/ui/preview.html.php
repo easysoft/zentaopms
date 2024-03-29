@@ -45,42 +45,36 @@ if($config->edition != 'open')
 
 $chart = zget($charts, 0, null);
 
+sidebar
+(
+    set::width(240),
+    moduleMenu
+    (
+        set::title($groups[$groupID]),
+        set::modules($treeMenu),
+        $charts ? set::activeKey($charts[0]->currentGroup . '_' . $charts[0]->id) : null,
+        set::closeLink(''),
+        set::showDisplay(false),
+        set::titleShow(false),
+        set::checkbox(true),
+        set::checkOnClick('any'),
+        to::footer
+        ([
+            $treeMenu ? div
+            (
+                setClass('bg-canvas px-4 py-2 module-menu'),
+                btn($lang->chart->preview, setClass('primary'), on::click('previewCharts'))
+            ) : null,
+            $config->edition == 'open' ? div
+            (
+                setClass('bg-canvas px-4 py-2 module-menu'),
+                html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
+            ) : null
+        ])
+    ),
+);
 div
 (
-    setClass('flex gap-4'),
-    sidebar
-    (
-        set::width(240),
-        moduleMenu
-        (
-            set::title($groups[$groupID]),
-            set::modules($treeMenu),
-            $charts ? set::activeKey($charts[0]->currentGroup . '_' . $charts[0]->id) : null,
-            set::closeLink(''),
-            set::showDisplay(false),
-            set::checkbox(true),
-            set::checkOnClick('any'),
-            to::footer
-            ([
-                $treeMenu ? div
-                (
-                    setClass('bg-canvas px-4 py-2 module-menu'),
-                    btn($lang->chart->preview, setClass('primary'), on::click('previewCharts'))
-                ) : null,
-                $config->edition == 'open' ? div
-                (
-                    setClass('bg-canvas px-4 py-2 module-menu'),
-                    html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
-                ) : null
-            ])
-        ),
-    ),
-    div
-    (
-        setID('chartPanel'),
-        setClass('w-full'),
-        $generateCharts()
-    )
+    setID('chartPanel'),
+    $generateCharts()
 );
-
-render();

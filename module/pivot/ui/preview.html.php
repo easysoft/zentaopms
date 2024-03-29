@@ -55,31 +55,31 @@ if($config->edition != 'open')
     );
 }
 
+sidebar
+(
+    set::width(240),
+    moduleMenu
+    (
+        set::title($groups[$groupID]),
+        set::activeKey($currentMenu),
+        set::modules($menus),
+        set::closeLink(''),
+        set::showDisplay(false),
+        set::titleShow(false),
+        to::footer
+        (
+            $config->edition == 'open' ? div
+            (
+                set::width(240),
+                setClass('bg-canvas px-4 py-2 module-menu shadow'),
+                html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
+            ) : null
+        )
+    )
+);
 div
 (
-    setClass('flex gap-4'),
-    sidebar
-    (
-        set::width(240),
-        moduleMenu
-        (
-            set::title($groups[$groupID]),
-            set::activeKey($currentMenu),
-            set::modules($menus),
-            set::closeLink(''),
-            set::showDisplay(false)
-        ),
-        $config->edition == 'open' ? div
-        (
-            set::width(240),
-            setClass('bg-canvas px-4 py-2 module-menu shadow'),
-            html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
-        ) : null
-    ),
-    div
-    (
-        setID('pivotContent'),
-        setClass('flex col gap-4 w-full'),
-        $generateData()
-    )
+    setID('pivotContent'),
+    setClass('flex col gap-4 w-full'),
+    $generateData()
 );
