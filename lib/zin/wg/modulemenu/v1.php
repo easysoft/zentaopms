@@ -177,6 +177,19 @@ class moduleMenu extends wg
             $datatableId   = $app->moduleName . ucfirst($app->methodName);
             $currentModule = $app->rawModule;
             $currentMethod = $app->rawMethod;
+
+            if(empty($this->prop('items')))
+            {
+                return btn
+                (
+                    setClass('m-4 mt-0'),
+                    set::text($lang->displaySetting),
+                    set::url(createLink('datatable', 'ajaxDisplay', "datatableId=$datatableId&moduleName=$app->moduleName&methodName=$app->methodName&currentModule=$currentModule&currentMethod=$currentMethod")),
+                    set::type('primary-pale'),
+                    setData(array('toggle' => 'modal', 'size' => 'md'))
+                );
+            }
+
             $items[] = array
             (
                 'text'        => $lang->displaySetting,
