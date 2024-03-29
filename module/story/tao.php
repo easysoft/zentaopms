@@ -1140,11 +1140,8 @@ class storyTao extends storyModel
             if(!empty($branchID)) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq((int)$branchID)->set('stage')->eq('closed')->exec();
         }
 
-        if($story->stage != 'closed')
-        {
-            $this->updateLinkedLane($storyID, $linkedProjects);
-            if($story->parent > 0) $this->computeParentStage($story);
-        }
+        if($story->stage != 'closed') $this->updateLinkedLane($storyID, $linkedProjects);
+        if($story->parent > 0) $this->computeParentStage($story);
         return true;
     }
 
@@ -1916,7 +1913,6 @@ class storyTao extends storyModel
         $now   = helper::now();
         $story = new stdclass();
         $story->status = $status;
-        $story->stage  = 'wait';
         if(strpos('launched,active,changing,draft', $status) !== false)
         {
             $story->assignedTo   = $oldParentStory->openedBy;

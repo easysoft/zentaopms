@@ -1432,11 +1432,7 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         /* Update parent story status and stage. */
-        if($oldStory->parent > 0)
-        {
-            $this->updateParentStatus($storyID, $oldStory->parent);
-            $this->setStage($oldStory->parent);
-        }
+        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
         if(!dao::isError())
         {
             $this->setStage($storyID);

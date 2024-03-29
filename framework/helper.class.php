@@ -613,10 +613,10 @@ function setParent(array $items)
 {
     foreach($items as $item)
     {
-        if(!is_int($item->parent)) continue;
+        $item->isParent = false;
+        if(!isset($item->parent) || !is_int($item->parent)) continue;
 
         /* Set parent attribute. */
-        $item->isParent = false;
         if(isset($item->parent) && $item->parent == -1)
         {
             /* When the parent is -1, the hierarchical structure is displayed incorrectly. */
