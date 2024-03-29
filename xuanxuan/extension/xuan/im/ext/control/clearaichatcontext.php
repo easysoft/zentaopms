@@ -54,6 +54,36 @@ class myIm extends im
         $output->users  = array($userID);
         $output->data   = $broadcastMessage;
 
-        return $this->im->sendOutput($output, 'messagesendResponse');
+        $outputs = array($output);
+        
+        if(!empty($assistant))
+        {
+            $replyMessage = new stdclass();
+            $replyMessage->gid         = imModel::createGID();
+            $replyMessage->cgid        = $chatGid;
+            $replyMessage->user        = "ai-{$modelId}";
+            $replyMessage->content     = $assistant->greetings;
+            $replyMessage->type        = 'normal';
+            $replyMessage->contentType = 'text';
+
+            $sender = new stdclass();
+            $sender->id          = 0;
+            $sender->displayName = $aiModel->name;
+
+            $replyMessage->data = new stdclass();
+            $replyMessage->data->sender = $sender;
+            $replyMessage->data         = json_encode($replyMessage->data);
+
+            $chatMessage = $this->im->messageCreate(array($replyMessage), $userID);
+
+            $output = new stdclass();
+            $output->result = 'success';
+            $output->method = 'messagesend';
+            $output->users  = array($userID);
+            $output->data   = $chatMessage;
+
+            $outputs[] = $output;
+        }
+        return $this->im->sendOutputGroup($outputs);
     }
 }
