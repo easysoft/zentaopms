@@ -285,5 +285,10 @@ ALTER TABLE `zt_story` ADD COLUMN `unlinkReason` ENUM('', 'omit', 'other') NOT N
 UPDATE `zt_stage` SET `name` = '生命周期' WHERE `type` = 'lifecycle' AND `projectType` = 'ipd';
 
 ALTER TABLE `zt_metriclib` ADD COLUMN `calcType` ENUM('cron', 'inference') NOT NULL DEFAULT 'cron';
+<<<<<<< Updated upstream
 
 UPDATE `zt_workflowfield` SET `control` = 'input', `options` = '' WHERE `module` = 'task' AND `field` = 'parent';
+=======
+ALTER TABLE `zt_relationoftasks` DROP INDEX `relationoftasks`;
+ALTER TABLE `zt_relationoftasks` ADD INDEX `relationoftasks`(`execution` ASC, `task` ASC);
+>>>>>>> Stashed changes

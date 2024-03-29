@@ -2612,7 +2612,7 @@ CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
   `action` ENUM( 'begin', 'end' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;
-CREATE UNIQUE INDEX `relationoftasks` ON `zt_relationoftasks` (`execution`, `task`);
+CREATE INDEX `relationoftasks` ON `zt_relationoftasks` (`execution`, `task`);
 
 -- DROP TABLE IF EXISTS `zt_report`;
 CREATE TABLE IF NOT EXISTS `zt_report` (
