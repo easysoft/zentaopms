@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+include 'component/tableandcharts.html.php';
+include 'component/queryform.html.php';
+include 'component/filterpanel.html.php';
 
 $currentID = $current->id ?? 0;
 
@@ -32,46 +35,17 @@ $fnGenerateSide = function() use($groupMetrics, $current, $viewType, $scope, $la
             if(!empty($filtersBase64)) $params .= "&filtersBase64={$filtersBase64}";
 
             $metricList[] = li
-                (
-                    set::className($class . ' metric-item font-medium'),
-                    a(
-                        $metric->name,
-                        set::href(helper::createLink('metric', 'preview', $params))
-                    )
-                );
+            (
+                set::className($class . ' metric-item font-medium'),
+                a(
+                    $metric->name,
+                    set::href(helper::createLink('metric', 'preview', $params))
+                )
+            );
         }
     }
 
     return ul($metricList);
-};
-
-
-$fnGenerateFilterPanel = function($code, $filterItem) use($lang)
-{
-    $panelClass = $filterItem['class'];
-    $items      = $filterItem['items'];
-
-    $removeAction = array
-    (
-        'class' => 'text-primary ghost',
-        'text'  => sprintf($lang->metric->filter->clearAction, $lang->metric->filter->$code),
-        'onclick' => 'window.handleFilterClearItem(this)'
-    );
-    return panel
-    (
-        setClass($panelClass),
-        set::headingClass('clear-padding'),
-        set::bodyClass('clear-padding'),
-        set::title($lang->metric->filter->$code),
-        checkList
-        (
-            set::primary(true),
-            set::name($code),
-            set::inline(true),
-            set::items($items)
-        ),
-        set::headingActions(array($removeAction))
-    );
 };
 
 $filterItems = $this->metric->buildFilterCheckList($filters);
@@ -80,40 +54,7 @@ featureBar
     set::load(''),
     set::current($scope),
     set::linkParams("scope={key}"),
-    li
-    (
-        btn
-        (
-            setClass('btn ghost filter-btn'),
-            set::icon('search'),
-            bind::click('window.handleFilterToggle($element)'),
-            span
-            (
-                setClass('common'),
-                $lang->metric->filter->common
-            ),
-            span
-            (
-                setClass('checked')
-            )
-        ),
-        panel
-        (
-            setClass('filter-panel hidden'),
-            set::footerClass('filter-actions'),
-            set::footerActions
-            (
-                array
-                (
-                    array('type' => 'primary', 'text' => $lang->metric->filter->common, 'onclick' => 'window.handleFilterClick(this)'),
-                    array('type' => 'default', 'text' => $lang->metric->filter->clear, 'onclick' => 'window.handleFilterClearAll(this)')
-                )
-            ),
-            $fnGenerateFilterPanel('scope',   $filterItems['scope']),
-            $fnGenerateFilterPanel('object',  $filterItems['object']),
-            $fnGenerateFilterPanel('purpose', $filterItems['purpose'])
-        )
-    )
+    $fnGenerateFilterContent($filterItems)
 );
 
 $firstScope = current(array_keys($this->lang->metric->featureBar['preview']));
@@ -130,119 +71,6 @@ toolbar
         $lang->metric->viewType->multiple,
     )
 );
-
-$fnGenerateQueryForm = function() use($metricRecordType, $current, $dateLabels, $defaultDate)
-{
-    if(!$metricRecordType) return null;
-    $formGroups = array();
-    if($current->scope != 'system') $objectPairs = $this->metric->getPairsByScope($current->scope);
-
-    if($metricRecordType == 'scope' || $metricRecordType == 'scope-date')
-    {
-        $formGroups[] = formGroup
-        (
-            setClass('query-inline picker-nowrap w-40'),
-            set::name('scope'),
-            set::control(array('control' => 'picker', 'multiple' => true)),
-            set::items($objectPairs),
-            set::placeholder($this->lang->metric->placeholder->{$current->scope})
-        );
-    }
-
-    if($metricRecordType == 'scope' || $metricRecordType == 'system')
-    {
-        $btnLabels = array();
-        foreach($this->lang->metric->query->dayLabels as $key => $label)
-        {
-            $active = $key == '7' ? ' selected' : '';
-            $btnLabels[] = btn
-            (
-                setClass("$active default w-16 p-0"),
-                set::key($key),
-                $label
-            );
-        }
-        $formGroups[] = formGroup
-        (
-            setClass('query-calc-date query-inline w-64'),
-            btngroup
-            (
-                $btnLabels
-            ),
-            on::click('.query-calc-date button.btn', 'window.handleCalcDateClick(target)'),
-        );
-    }
-
-    if($metricRecordType == 'date' || $metricRecordType == 'scope-date')
-    {
-        $btnLabels = array();
-        foreach($dateLabels as $key => $label)
-        {
-            $active = $key == $defaultDate ? ' selected' : '';
-            $btnLabels[] = btn
-            (
-                setClass("$active default w-16 p-0"),
-                set::key($key),
-                $label
-            );
-        }
-        $formGroups[] = formGroup
-        (
-            setClass('query-date query-inline w-64'),
-            btngroup
-            (
-                $btnLabels
-            ),
-            on::click('.query-date button.btn', 'window.handleDateLabelClick(target)'),
-        );
-
-        $formGroups[] = formGroup
-        (
-            setClass('query-inline w-80'),
-            inputGroup
-            (
-                datePicker
-                (
-                    setClass('query-date-picker'),
-                    set::name('dateBegin'),
-                    set('id', 'dateBegin'),
-                    set::placeholder($this->lang->metric->placeholder->select)
-                ),
-                $this->lang->metric->to,
-                datePicker
-                (
-                    setClass('query-date-picker'),
-                    set::name('dateEnd'),
-                    set('id', 'dateEnd'),
-                    set::placeholder($this->lang->metric->placeholder->select)
-                )
-            ),
-            on::change('.query-date-picker', 'window.handleDatePickerChange(target)'),
-        );
-    }
-
-    return form
-    (
-        set::id('queryForm' . $current->id),
-        setClass('ml-4'),
-        formRow
-        (
-            set::width('max'),
-            $formGroups,
-            !empty($formGroups) ? formGroup
-            (
-                setClass('query-btn'),
-                btn
-                (
-                    setClass('btn secondary'),
-                    set::text($this->lang->metric->query->action),
-                    set::onclick("window.handleQueryClick($current->id, 'single')")
-                )
-            ) : null
-        ),
-        set::actions(array())
-    );
-};
 
 $sideTitle = $scope == 'filter' ? sprintf($lang->metric->filter->filterTotal, count($metrics)) : $metricList;
 $star = (!empty($current->collector) and strpos($current->collector, ',' . $app->user->account . ',') !== false) ? 'star' : 'star-empty';
@@ -333,63 +161,8 @@ div
                 )
             )
         ),
-        $fnGenerateQueryForm(),
-        div
-        (
-            setClass('table-and-chart table-and-chart-single' . ($groupData ? '' : ' no-data')),
-            $groupData ? div
-            (
-                setClass('table-side'),
-                setStyle(array('flex-basis' => $tableWidth . 'px', 'min-width' => $tableWidth . 'px')),
-                div
-                (
-                    dtable
-                    (
-                        set::bordered(true),
-                        set::height(jsRaw('window.getTableHeight')),
-                        set::rowHeight(32),
-                        set::rowHover(true),
-                        set::cols($groupHeader),
-                        set::data(array_values($groupData)),
-                        set::footPager(usePager('dtablePager', $pagerExtra)),
-                        $headerGroup ? set::plugins(array('header-group')) : null,
-                        set::onRenderCell(jsRaw('window.renderDTableCell'))
-                    )
-                )
-            ) : null,
-            $echartOptions ? div
-            (
-                setClass('chart-side'),
-                setStyle(array('min-width' => "calc(100vh - {$tableWidth}px)")),
-                div
-                (
-                    setClass('chart-type'),
-                    picker
-                    (
-                        set::name('chartType'),
-                        set::items($chartTypeList),
-                        set::value('line'),
-                        set::required(true),
-                        set::onchange("window.handleChartTypeChange($current->id, 'single')")
-                    )
-                ),
-                div
-                (
-                    setClass('chart chart-single'),
-                    echarts
-                    (
-                        set::xAxis($echartOptions['xAxis']),
-                        set::yAxis($echartOptions['yAxis']),
-                        set::legend($echartOptions['legend']),
-                        set::series($echartOptions['series']),
-                        isset($echartOptions['dataZoom']) ? set::dataZoom($echartOptions['dataZoom']) : null,
-                        set::grid($echartOptions['grid']),
-                        set::tooltip($echartOptions['tooltip'])
-                    )->size('100%', '100%')
-                )
-            ) : null,
-            $groupData ? null : span($noDataTip, setClass('text-md'))
-        )
+        $fnGenerateQueryForm($viewType),
+        $fnGenerateTableAndCharts($current)
     )
 );
 

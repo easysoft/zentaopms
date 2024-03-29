@@ -9,61 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+include 'component/tableandcharts.html.php';
 jsVar('updateTimeTip', $lang->metric->updateTimeTip);
 
-div
-(
-    setClass("table-and-chart table-and-chart-{$viewType}" . ($groupData ? '' : ' no-data')),
-    $groupData ? div
-    (
-        setClass('table-side'),
-        setStyle(array('flex-basis' => $tableWidth . 'px')),
-        div
-        (
-            dtable
-            (
-                setID('ajaxmetric' . $metric->id),
-                $viewType == 'multiple' ? set::height(328) : set::height(jsRaw('window.getTableHeight')),
-                set::rowHeight(32),
-                set::bordered(true),
-                set::cols($groupHeader),
-                set::data(array_values($groupData)),
-                set::footPager(usePager('dtablePager', $pagerExtra)),
-                $headerGroup ? set::plugins(array('header-group')) : null,
-                set::onRenderCell(jsRaw('window.renderDTableCell')),
-                set::loadPartial(true)
-            )
-        )
-    ) : null,
-    $echartOptions ? div
-    (
-        setClass('chart-side'),
-        div
-        (
-            setClass('chart-type'),
-            picker
-            (
-                set::name('chartType'),
-                set::items($chartTypeList),
-                set::value('line'),
-                set::required(true),
-                set::onchange("window.handleChartTypeChange($metric->id, '$viewType')")
-            )
-        ),
-        div
-        (
-            setClass("chart chart-{$viewType}"),
-            echarts
-            (
-                set::xAxis($echartOptions['xAxis']),
-                set::yAxis($echartOptions['yAxis']),
-                set::legend($echartOptions['legend']),
-                set::series($echartOptions['series']),
-                isset($echartOptions['dataZoom']) ? set::dataZoom($echartOptions['dataZoom']) : null,
-                set::grid($echartOptions['grid']),
-                set::tooltip($echartOptions['tooltip'])
-            )->size('100%', '100%')
-        )
-    ) : null,
-    $groupData ? null : span($noDataTip, setClass('text-md'))
-);
+$fnGenerateTableAndCharts($current);
