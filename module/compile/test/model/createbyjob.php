@@ -10,11 +10,11 @@ su('admin');
 /**
 
 title=测试 compileModel->createByJob();
+timeout=0
 cid=1
-pid=1
 
-检查是否可以拿到通过id为1的job数据创建的compile >> 这是一个Job1
-检查是否可以拿到通过不存在的job数据创建的compile >> 0
+- 检查是否可以拿到通过id为1的job数据创建的compile属性name @这是一个Job1
+- 检查是否可以拿到通过不存在的job数据创建的compile属性name @0
 
 */
 

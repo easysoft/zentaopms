@@ -57,10 +57,14 @@ class compileTao extends compileModel
      * @param  object    $build
      * @param  string    $buildType
      * @access protected
-     * @return void
+     * @return bool
      */
-    protected function createByBuildInfo(string $name, int $jobID, object $build, string $buildType): void
+    protected function createByBuildInfo(string $name, int $jobID, object $build, string $buildType): bool
     {
+        if($buildType == 'jenkins' && empty($build->queueId)) return false;
+        if($buildType == 'gitlab' && empty($build->id)) return false;
+        if($buildType == 'gitfox' && empty($build->number)) return false;
+
         $data = new stdclass();
         $data->name = $name;
         $data->job  = $jobID;
@@ -73,14 +77,18 @@ class compileTao extends compileModel
         }
         else
         {
-            $data->queue       = !empty($build->number) ? $build->number : $build->id;
-            $data->status      = $build->status == 'success' ? 'success' : 'failure';
-            $data->createdDate = date('Y-m-d H:i:s', $buildType == 'gitfox' ? $build->created :  strtotime($build->created_at));
+            $data->queue  = !empty($build->number) ? $build->number : $build->id;
+            $data->status = $build->status == 'success' ? 'success' : 'failure';
+
+            $date = isset($build->created_at) ? strtotime($build->created_at) : time();
+            if(isset($build->created)) $date = $build->created;
+            $data->createdDate = date('Y-m-d H:i:s', $date);
         }
 
         $data->createdBy  = $this->app->user ? $this->app->user->account : 'guest';
         $data->updateDate = $data->createdDate ?? date('Y-m-d H:i:s');
 
         $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
+        return !dao::isError();
     }
 }

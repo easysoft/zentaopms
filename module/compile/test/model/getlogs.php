@@ -10,8 +10,8 @@ su('admin');
 /**
 
 title=测试 compileModel->getLogs();
+timeout=0
 cid=1
-pid=1
 
 - 检查jenkins返回的logs。 @Started by
 - 检查gitlab返回的logs。 @<font styl

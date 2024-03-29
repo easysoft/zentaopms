@@ -12,12 +12,12 @@ su('admin');
 /**
 
 title=测试 compileModel->exec();
+timeout=0
 cid=1
-pid=1
 
-检测job不存在时是否能执行编译 >> 0
-检测job存在但是->id不等于->job是否能执行编译 >> 1
-检测job存在同时->id等于->job是否能执行编译 >> 1
+- 检测job不存在时是否能执行编译 @0
+- 检测job存在但是$compile->id不等于$compile->job是否能执行编译 @1
+- 检测job存在同时$compile->id等于$compile->job是否能执行编译 @1
 
 */
 $compile1 = new stdclass();

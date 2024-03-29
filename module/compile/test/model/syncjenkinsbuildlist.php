@@ -10,8 +10,8 @@ su('admin');
 /**
 
 title=测试 compileModel->syncJenkinsBuildList();
+timeout=0
 cid=1
-pid=1
 
 - 调用jenkins接口之前job为1的compile数量。 @1
 - 调用jenkins接口之后job为1的compile数量。 @17

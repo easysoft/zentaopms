@@ -8,13 +8,19 @@ title=测试 compileModel->createByBuildInfo().
 timeout=0
 cid=1
 
-- 测试当buildTType为空的时候，判断创建的compile信息是否正确。
- - 属性id @1
- - 属性name @testName1
- - 属性job @1
- - 属性createdBy @guest
-- 测试当buildTType为jenkins的时候，判断创建的compile信息是否正确，是否与build内的信息一致。 @1
-- 测试当buildTType为gitlab的时候，判断创建的compile信息是否正确，是否与build内的信息一致。 @1
+- 测试当buildTType为空的时候，判断创建的compile信息是否正确。 @0
+- 测试当buildTType为jenkins的时候，判断创建的compile信息是否正确，是否与build内的信息一致。
+ - 属性name @testName2
+ - 属性job @2
+ - 属性createdBy @admin
+ - 属性queue @1
+ - 属性status @success
+- 测试当buildTType为jenkins的时候，判断创建的compile信息是否正确，是否与build内的信息一致。
+ - 属性name @testName3
+ - 属性job @3
+ - 属性createdBy @admin
+ - 属性queue @1
+ - 属性status @failure
 
 */
 
@@ -46,14 +52,12 @@ $buildList = array($build3, $build1, $build2);
 
 $compile->createByBuildInfo($nameList[0], $objectIDList[0], $buildList[0], $buildTypeList[0]);
 $compileInfo = $tester->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq(1)->fetch();
-r($compileInfo) && p('id,name,job,createdBy') && e('1,testName1,1,guest');  //测试当buildTType为空的时候，判断创建的compile信息是否正确。
+r($compileInfo) && p() && e('0');  //测试当buildTType为空的时候，判断创建的compile信息是否正确。
 
 $compile->createByBuildInfo($nameList[1], $objectIDList[1], $buildList[1], $buildTypeList[1]);
-$compileInfo = $tester->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq(2)->fetch();
-$condition = $compileInfo->name === 'testName2' && $compileInfo->job === 2 && $compileInfo->createdBy === 'guest' && $compileInfo->queue === 1 && $compileInfo->status === 'success';
-r($condition) && p() && e(1);   //测试当buildTType为jenkins的时候，判断创建的compile信息是否正确，是否与build内的信息一致。
+$compileInfo = $tester->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq(1)->fetch();
+r($compileInfo) && p('name,job,createdBy,queue,status') && e('testName2,2,admin,1,success');   //测试当buildTType为jenkins的时候，判断创建的compile信息是否正确，是否与build内的信息一致。
 
 $compile->createByBuildInfo($nameList[2], $objectIDList[2], $buildList[2], $buildTypeList[2]);
-$compileInfo = $tester->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq(3)->fetch();
-$condition = $compileInfo->name === 'testName3' && $compileInfo->createdBy === 'guest' && $compileInfo->status === 'SUCCESS' && $compileInfo->queue === 1 && $compileInfo->job === 3;
-r($condition) && p() && e(1);   //测试当buildTType为gitlab的时候，判断创建的compile信息是否正确，是否与build内的信息一致。
+$compileInfo = $tester->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq(2)->fetch();
+r($compileInfo) && p('name,job,createdBy,queue,status') && e('testName3,3,admin,1,failure');   //测试当buildTType为jenkins的时候，判断创建的compile信息是否正确，是否与build内的信息一致。

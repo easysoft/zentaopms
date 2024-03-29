@@ -11,8 +11,8 @@ su('admin');
 /**
 
 title=测试 compileModel->getUnexecutedList();
+timeout=0
 cid=1
-pid=1
 
 - 检查返回结果第二条数据的字段内容。
  - 第1条的name属性 @构建5
