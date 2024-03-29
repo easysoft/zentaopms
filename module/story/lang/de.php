@@ -71,6 +71,7 @@ $lang->story->batchChangeStage   = "Mehere Phasen ändern";
 $lang->story->batchAssignTo      = "Mehere zuordnen";
 $lang->story->batchChangeModule  = "Mehere Module ändern";
 $lang->story->batchChangeParent  = "Batch Change Parent";
+$lang->story->batchChangeGrade   = "Batch Change Grade";
 $lang->story->changeParent       = "Change Parent";
 $lang->story->viewAll            = "Alle";
 $lang->story->toTask             = 'Convert to Task';
@@ -354,6 +355,8 @@ $lang->story->ignoreClosedStory    = "{$lang->SRCommon} %s status is closed, and
 $lang->story->changeProductTips    = "Are you sure you want to modify the product? After modification, all sub-level requirements of the requirement will also be changed accordingly.";
 $lang->story->gradeOverflow        = "The system detects that the maximum level of sub-requirements under this requirement is %s. After synchronization modification, it is %s. It exceeds the level range set by the system and cannot be modified.";
 $lang->story->batchGradeOverflow   = "After the parent requirement of %s is modified, the level of its child requirement will exceed the level range set by the system, and this modification has ignored it.";
+$lang->story->batchGradeSameRoot   = 'The requirements %s has a parent-child relationship and the requirement grade will not be modified.';
+$lang->story->batchGradeGtParent   = 'The grade of %s requirements cannot be higher than its parent requirement, and it has been ignored in this modification.';
 $lang->story->batchParentError     = "The parent requirement of %s requirement cannot be itself or its child requirement, which has been ignored in this modification.";
 
 $lang->story->form = new stdclass();

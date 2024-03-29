@@ -1472,6 +1472,7 @@ class productZen extends product
         $this->view->gradeGroup      = $gradeGroup;
         $this->view->showGrade       = count($gradeGroup[$storyType]) > 2;
         $this->view->gradeMenu       = $this->loadModel('story')->getGradeMenu($storyType);
+        $this->view->gradePairs      = $this->story->getGradePairs($storyType);
         $this->view->showGrades      = isset($this->config->{$storyType}->showGrades) ? $this->config->{$storyType}->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
         $this->view->storyType       = $storyType;
         $this->view->browseType      = $browseType;

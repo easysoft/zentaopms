@@ -589,6 +589,8 @@ $lang->resource->requirement->batchChangeBranch = 'batchChangeBranch';
 $lang->resource->requirement->batchAssignTo     = 'batchAssignTo';
 $lang->resource->requirement->batchChangeModule = 'batchChangeModule';
 $lang->resource->requirement->batchChangeParent = 'batchChangeParent';
+$lang->resource->requirement->batchChangeGrade  = 'batchChangeGrade';
+$lang->resource->requirement->batchChangePlan   = 'batchChangePlan';
 $lang->resource->requirement->linkRequirements  = 'linkRequirementsAB';
 
 $lang->requirement->methodOrder[5]   = 'create';
@@ -612,7 +614,9 @@ $lang->requirement->methodOrder[85]  = 'linkStory';
 $lang->requirement->methodOrder[90]  = 'batchChangeBranch';
 $lang->requirement->methodOrder[95]  = 'batchChangeModule';
 $lang->requirement->methodOrder[100] = 'batchChangeParent';
-$lang->requirement->methodOrder[105] = 'linkRequirements';
+$lang->requirement->methodOrder[105] = 'batchChangeGrade';
+$lang->requirement->methodOrder[110] = 'batchChangePlan';
+$lang->requirement->methodOrder[115] = 'linkRequirements';
 
 /* Epic. */
 $lang->resource->epic = new stdclass();
@@ -637,6 +641,8 @@ $lang->resource->epic->batchChangeBranch = 'batchChangeBranch';
 $lang->resource->epic->batchAssignTo     = 'batchAssignTo';
 $lang->resource->epic->batchChangeModule = 'batchChangeModule';
 $lang->resource->epic->batchChangeParent = 'batchChangeParent';
+$lang->resource->epic->batchChangeGrade  = 'batchChangeGrade';
+$lang->resource->epic->batchChangePlan   = 'batchChangePlan';
 
 $lang->epic->methodOrder[5]   = 'create';
 $lang->epic->methodOrder[10]  = 'batchCreate';
@@ -658,6 +664,8 @@ $lang->epic->methodOrder[80]  = 'report';
 $lang->epic->methodOrder[90]  = 'batchChangeBranch';
 $lang->epic->methodOrder[95]  = 'batchChangeModule';
 $lang->epic->methodOrder[100] = 'batchChangeParent';
+$lang->epic->methodOrder[105] = 'batchChangeGrade';
+$lang->epic->methodOrder[110] = 'batchChangePlan';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();

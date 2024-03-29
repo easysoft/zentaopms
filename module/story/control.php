@@ -1102,6 +1102,28 @@ class story extends control
     }
 
     /**
+     * Batch change the grade of story.
+     *
+     * @param  int    $grade
+     * @access public
+     * @return void
+     */
+    public function batchChangeGrade(int $grade)
+    {
+        if(empty($_POST['storyIdList'])) return $this->send(array('result' => 'success', 'load' => true));
+
+        $storyIdList = array_unique($this->post->storyIdList);
+        $message = $this->story->batchChangeGrade($storyIdList, $grade);
+
+        $response = array();
+        $response['result'] = 'success';
+        $response['load']   = false;
+        if($message) $response['callback'] = "zui.Modal.alert('{$message}').then((res) => {loadCurrentPage()});";
+        if(empty($message)) $response['load'] = true;
+        return $this->send($response);
+    }
+
+    /**
      * Batch change the stage of story.
      *
      * @param  string    $stage
@@ -1123,7 +1145,6 @@ class story extends control
         if($message) $response['callback'] = "zui.Modal.alert('{$message}').then((res) => {loadCurrentPage()});";
         if(empty($message)) $response['load'] = true;
         return $this->send($response);
-
     }
 
     /**

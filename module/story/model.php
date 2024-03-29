@@ -628,7 +628,7 @@ class storyModel extends model
             }
             else
             {
-                $this->dao->update(TABLE_STORY)->set('root')->eq($storyID)->where('id')->eq($storyID)->exec();
+                $this->dao->update(TABLE_STORY)->set('root')->eq($storyID)->set('path')->eq(",{$storyID},")->where('id')->eq($storyID)->exec();
             }
 
             /* Update product plan stories order. */
@@ -1796,6 +1796,82 @@ class storyModel extends model
             }
         }
         return $allChanges;
+    }
+
+    /**
+     * Batch change the grade of story.
+     *
+     * @param array        $storyIdList
+     * @param int          $grade
+     *
+     * @access public
+     * @return string|null
+     */
+    public function batchChangeGrade(array $storyIdList, int $grade): string|null
+    {
+        $now           = helper::now();
+        $account       = $this->app->user->account;
+        $oldStories    = $this->getByList($storyIdList);
+        $this->loadModel('action');
+
+        $rootGroup    = array();
+        $parentIdList = array();
+        foreach($oldStories as $oldStory)
+        {
+            $rootGroup[$oldStory->root] = isset($rootGroup[$oldStory->root]) ? $rootGroup[$oldStory->root] + 1 : 1;
+            if($oldStory->parent > 0) $parentIdList[] = $oldStory->parent;
+        }
+
+        $parents = $this->dao->select('id, grade, type')->from(TABLE_STORY)->where('id')->in($parentIdList)->fetchAll('id');
+
+        $sameRootList      = '';
+        $gradeGtParentList = '';
+        $gradeOverflowList = '';
+        foreach($storyIdList as $storyID)
+        {
+            $oldStory = $oldStories[$storyID];
+            if($grade == $oldStory->grade) continue;
+
+            if($rootGroup[$oldStory->root] > 1)
+            {
+                $sameRootList .= "#{$storyID} ";
+                continue;
+            }
+
+            if($oldStory->parent > 0 && $grade < $parents[$oldStory->parent]->grade && $oldStory->type == $parents[$oldStory->parent]->type)
+            {
+                $gradeGtParentList .= "#{$storyID} ";
+                continue;
+            }
+
+            $story = new stdclass();
+            $story->lastEditedBy   = $account;
+            $story->lastEditedDate = $now;
+            $story->grade          = $grade;
+
+            if($story->grade > $oldStory->grade)
+            {
+                if(!$this->checkGrade($story, $oldStory))
+                {
+                    $gradeOverflowList .= "#{$storyID} ";
+                    continue;
+                }
+            }
+
+            if($story->grade != $oldStory->grade) $this->syncGrade($oldStory, $story);
+            $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+            if(!dao::isError())
+            {
+                $changes  = common::createChanges($oldStory, $story);
+                $actionID = $this->action->create('story', (int)$storyID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
+
+        if($gradeOverflowList) return sprintf($this->lang->story->batchGradeOverflow, $gradeOverflowList);
+        if($sameRootList)      return sprintf($this->lang->story->batchGradeSameRoot, $sameRootList);
+        if($gradeGtParentList) return sprintf($this->lang->story->batchGradeGtParent, $gradeGtParentList);
+        return null;
     }
 
     /**

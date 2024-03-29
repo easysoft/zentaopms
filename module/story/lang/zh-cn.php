@@ -71,6 +71,7 @@ $lang->story->batchChangeStage   = "批量修改阶段";
 $lang->story->batchAssignTo      = "批量指派";
 $lang->story->batchChangeModule  = "批量修改模块";
 $lang->story->batchChangeParent  = "批量修改父需求";
+$lang->story->batchChangeGrade   = "批量修改层级";
 $lang->story->changeParent       = "修改父需求";
 $lang->story->viewAll            = '查看全部';
 $lang->story->toTask             = '转任务';
@@ -354,6 +355,8 @@ $lang->story->ignoreClosedStory     = "{$lang->SRCommon} %s 状态为已关闭�
 $lang->story->changeProductTips     = "确认修改所属产品吗，修改后，需求的所有子级需求也会跟随变更。";
 $lang->story->gradeOverflow         = "系统检测该需求下子需求的最大层级为%s，同步修改后为%s，超出系统设置的层级范围，无法修改。";
 $lang->story->batchGradeOverflow    = "%s需求的父需求修改后，其子需求的层级会超出系统设置的层级范围，本次修改已将其忽略。";
+$lang->story->batchGradeSameRoot    = '%s需求存在父子关系，将不会被修改需求层级。';
+$lang->story->batchGradeGtParent    = '%s需求的层级不能高于其父需求，本次修改已将其忽略。';
 $lang->story->batchParentError      = "%s需求的父需求不能为其本身或其子需求，本次修改已将其忽略。";
 
 $lang->story->form = new stdclass();

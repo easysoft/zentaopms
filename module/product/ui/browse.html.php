@@ -207,22 +207,23 @@ foreach($stories as $story)
 }
 
 /* Generate toolbar of DataTable footer. */
-$fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans)
+$fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $gradePairs)
 {
     /* Flag variables of permissions. */
     $canBeChanged         = common::canModify('product', $product);
     $canBatchEdit         = $canBeChanged && hasPriv($storyType, 'batchEdit');
     $canBatchClose        = hasPriv($storyType, 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
     $canBatchReview       = $canBeChanged && hasPriv($storyType, 'batchReview');
+    $canBatchChangeGrade  = $canBeChanged && hasPriv($storyType, 'batchChangeGrade');
     $canBatchChangeStage  = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
     $canBatchChangeBranch = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
     $canBatchChangeModule = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && $product && $product->type == 'normal';
-    $canBatchChangePlan   = $canBeChanged && hasPriv('story', 'batchChangePlan') && (!$isProjectStory || $projectHasProduct || ($isProjectStory && isset($project->model) && $project->model == 'scrum')) && $productID && $product && $product->type == 'normal';
+    $canBatchChangePlan   = $canBeChanged && hasPriv($storyType, 'batchChangePlan') && (!$isProjectStory || $projectHasProduct || ($isProjectStory && isset($project->model) && $project->model == 'scrum')) && $productID && $product && $product->type == 'normal';
     $canBatchChangeParent = $canBeChanged && hasPriv($storyType, 'batchChangeParent');
     $canBatchAssignTo     = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
     $canBatchUnlink       = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
     $canBatchImportToLib  = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
-    $canBatchAction       = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch;
+    $canBatchAction       = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeGrade || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch;
 
     /* Remove empty data from data list. */
     unset($lang->story->reviewResultList[''], $lang->story->reviewResultList['revert']);
@@ -230,8 +231,10 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     unset($plans[''], $lang->story->stageList[''], $users['']);
 
     /* Generate dropdown menu items for the DataTable footer toolbar.*/
-    $planItems = $planItems ?? array();
+    $planItems  = $planItems ?? array();
+    $gradeItems = array();
     foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchReview', "result=$key"));
+    foreach($gradePairs as $key => $result)                    $gradeItems[]            = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeGrade', "result=$key"));
     foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchReview', "result=reject&reason=$key"));
     foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeBranch', "branchID=$branchID"));
     foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeModule', "moduleID=$moduleID"));
@@ -244,15 +247,16 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
     foreach($users as $account => $realname)
     {
         if($account == 'closed') continue;
-        $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchAssignTo', "productID={$productID}"), 'data-account' => $account);
+        $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyType, 'batchAssignTo', "productID={$productID}"), 'data-account' => $account);
     }
 
     if(isset($reviewResultItems['reject'])) $reviewResultItems['reject'] = array('class' => 'not-hide-menu', 'text' => $lang->story->reviewResultList['reject'], 'items' => $reviewRejectItems);
     $reviewResultItems = array_values($reviewResultItems);
 
     $navActionItems = array();
-    if($canBatchClose)  $navActionItems[] = array('class' => 'batch-btn batchClostBtn', 'text' => $lang->close, 'data-page' => 'batch', 'data-formaction' => helper::createLink('story', 'batchClose', "productID={$productID}&executionID=0"));
-    if($canBatchReview) $navActionItems[] = array('class' => 'not-hide-menu batchReviewBtn', 'text' => $lang->story->review, 'items' => $reviewResultItems);
+    if($canBatchClose)        $navActionItems[] = array('class' => 'batch-btn batchClostBtn', 'text' => $lang->close, 'data-page' => 'batch', 'data-formaction' => helper::createLink($storyType, 'batchClose', "productID={$productID}&executionID=0"));
+    if($canBatchChangeGrade)  $navActionItems[] = array('class' => 'not-hide-menu batchGradeBtn', 'text' => $lang->story->grade, 'items' => $gradeItems);
+    if($canBatchReview)       $navActionItems[] = array('class' => 'not-hide-menu batchReviewBtn', 'text' => $lang->story->review, 'items' => $reviewResultItems);
     if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu batchChangeStageBtn', 'text' => $lang->story->stageAB, 'items' => $stageItems);
 
     if(!$canBatchAction) return array();
