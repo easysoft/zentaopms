@@ -1,6 +1,6 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php js::set('rawMethod',  $app->rawMethod);?>
-<?php js::set('dataview',   $data);?>
+<?php js::set('dataview',   $data ? $data : '');?>
 <?php js::set('warningDesign', $lang->dataview->error->warningDesign);?>
 <?php js::set('langSettings', isset($data->langs) ? $data->langs : '')?>
 <?php js::set('objectFields', isset($objectFields) ? $objectFields : array());?>
