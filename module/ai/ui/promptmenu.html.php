@@ -17,6 +17,8 @@ namespace zin;
 
 $promptMenuInject = function()
 {
+    if(isInModal()) return;
+
     $this->loadModel('ai');
     if(!$this->ai->hasModelsAvailable() || !commonModel::hasPriv('ai', 'promptExecute')) return;
 
@@ -49,7 +51,6 @@ $promptMenuInject = function()
     /* Assemble injector script. */
     $script = <<< JAVASCRIPT
     (() => {
-        if(window.location.search.includes('onlybody')) return;
         const container = window.frameElement?.closest('.load-indicator');
         if(container && container.dataset.loading)
         {
