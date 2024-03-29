@@ -61,7 +61,7 @@ class userModel extends model
     {
         if(empty($accounts)) return array();
 
-        return $this->dao->select('id,account,realname,avatar,role')->from(TABLE_USER)
+        return $this->dao->select('id,account,realname,avatar,role,deleted')->from(TABLE_USER)
             ->where('account')->in($accounts)
             ->fetchAll($keyField);
     }

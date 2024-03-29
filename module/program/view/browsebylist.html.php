@@ -73,13 +73,24 @@
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td class="c-manager">
-          <?php if(!empty($program->PM)):?>
-          <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
-          <?php $userName = isset($PMList[$program->PM]) ? $PMList[$program->PM]->realname : '';?>
-          <?php $avatar   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->avatar : '';?>
-          <?php echo html::smallAvatar(array('avatar' => $avatar, 'account' => $program->PM, 'name' => $userName), (($program->type == 'program' and $program->grade == 1 )? 'avatar-circle avatar-top avatar-' : 'avatar-circle avatar-') . $userID); ?>
-          <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
-          <?php endif;?>
+          <?php
+          if(!empty($program->PM))
+          {
+              $userName = $program->PM;
+              $userID   = '';
+              $avatar   = '';
+              if(isset($PMList[$program->PM]))
+              {
+                  $PM     = $PMList[$program->PM];
+                  $userID = $PM->id;
+                  $avatar = $PM->avatar;
+                  if($PM->deleted == '0') $userName = $PM->realname;
+
+                  echo html::smallAvatar(array('avatar' => $avatar, 'account' => $program->PM, 'name' => $userName), (($program->type == 'program' and $program->grade == 1 )? 'avatar-circle avatar-top avatar-' : 'avatar-circle avatar-') . $userID);
+                  echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");
+              }
+          }
+          ?>
         </td>
         <?php $programBudget = $this->loadModel('project')->getBudgetWithUnit($program->budget);?>
         <td class='text-right c-budget'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
