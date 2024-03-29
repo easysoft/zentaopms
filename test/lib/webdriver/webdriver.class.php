@@ -24,27 +24,11 @@ require_once('vendor/autoload.php');
 class webdriver
 {
     public $driver;
+    public $pageElement;
 
-    public $element;
-
-    public $config;
-
-    public $cookieFile;
-
-    public $result;
-
-    public $errors = array();
-
-    protected $exceptions = array();
-
-    public function __construct()
+    public function __construct($chromeOptions)
     {
-        global $result, $config;
-        $this->result = $result;
-        $this->config = $config;;
-
-        $this->initBrowser($config->uitest->chrome);
-        $this->cookieFile = dirname(__FILE__, 3) . '/config/cookie/cookie';
+        $this->driver = $this->initBrowser($chromeOptions);
     }
 
     /**
@@ -65,19 +49,17 @@ class webdriver
      *
      * @param  object    $browser
      * @access public
-     * @return void
+     * @return object
      */
     public function initBrowser($browser)
     {
-        /* If $argv[1] is post, use it as driver host. */
-        if(isset($GLOBALS['argv'][1]) and $GLOBALS['argv'][1] != '' and preg_match('/^http(s)?/', $GLOBALS['argv'][1])) $browser->host = $GLOBALS['argv'][1];
         $capabilities = DesiredCapabilities::chrome();
 
         $options = new ChromeOptions();
         $options->addArguments($browser->options);
         $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
 
-        $this->driver = RemoteWebDriver::create($browser->host, $capabilities);
+        return RemoteWebDriver::create($browser->host, $capabilities);
     }
 
     /**
@@ -87,13 +69,12 @@ class webdriver
      * @access public
      * @return void
      */
-    public function get($url)
+    public function openURL($url)
     {
         $url = trim($url);
-        if(substr($this->config->uitest->webRoot, -1) !== '/') $this->config->uitest->webRoot .= '/';
-        if(!preg_match('/^http:|^https:/', $url)) $url = $this->config->uitest->webRoot . $url;
         $this->driver->get($url);
-        $this->setLang();
+
+        return $this;
     }
 
     /**
@@ -133,33 +114,51 @@ class webdriver
     }
 
     /**
-     * Get cookies.
+     * Get cookie in browser.
+     *
+     * @param  string $name
+     * @access public
+     * @return oid
+     */
+    public function getCookie($name = '')
+    {
+        if($name) return $this->driver->manage()->getCookieNamed($name)->getValue();
+
+        return $this->driver->manage()->getCookies();
+    }
+
+    /**
+     * Get a cookie list.
      *
      * @param  string $cookieFile
      * @access public
      * @return array
      */
-    public function getCookie($cookieFile = '')
+    public function getCookieList()
     {
-        if(!$cookieFile) $cookieFile = $this->cookieFile;
+        $cookies   = $this->getCookie();
 
-        $cookies   = $this->driver->manage()->getCookies();
         $cookieArr = array();
-        foreach($cookies as $cookie)
-        {
-            $cookieArr[] = $cookie->toArray();
-        }
-        $isSave = @file_put_contents($cookieFile, json_encode($cookieArr));
+        foreach($cookies as $cookie) $cookieArr[] = $cookie->toArray();
 
-        if($isSave)
-        {
-            return $cookies;
-        }
-        else
-        {
-            echo "cookie获取失败！" . PHP_EOL;
-            return false;
-        }
+        return $cookieArr;
+    }
+
+    /**
+     * Save the cookie in the cookie file.
+     *
+     * @param  string $cookieFile
+     * @access public
+     * @return array|bool
+     */
+    public function saveCookie($cookieFile)
+    {
+        if(!$cookieFile) return;
+
+        $cookie = $this->getCookieList();
+        $isSave = file_put_contents($cookieFile, json_encode($cookie));
+
+        return $isSave ? $cookie : false;
     }
 
     /**
@@ -211,119 +210,54 @@ class webdriver
     /**
      * Find elements.
      *
-     * @param  string $selector  format: [type]:selector,for example: 'xpath://*[@id="account"]' 'id:heading' 'tag:a' '//*[@id="account"]'
+     * @param  string $selector
      * @access public
-     * @return void
+     * @return object
      */
-    public function getElementList($selector = '')
+    public function getElementListInPage($selector = '')
     {
-        if(!$selector) return $this->element;
+        if(!$selector) return $this->pageElement;
 
-        if(preg_match('/^(xpath:|css:|id:|class:|name:|tag:|link:).*/i', $selector, $matches) !== 0)
-        {
-            $type = str_replace(':', '', $matches[1]);
-            $selector = substr($selector, strlen($type) + 1);
-            switch($type)
-            {
-                case 'xpath':
-                    $this->element = $this->driver->findElements(WebDriverBy::xpath($selector));
-                    break;
-                case 'css':
-                    $this->element = $this->driver->findElements(WebDriverBy::cssSelector($selector));
-                    break;
-                case 'id':
-                    $this->element = $this->driver->findElements(WebDriverBy::id($selector));
-                    break;
-                case 'class':
-                    $this->element = $this->driver->findElements(WebDriverBy::className($selector));
-                    break;
-                case 'name':
-                    $this->element = $this->driver->findElements(WebDriverBy::name($selector));
-                    break;
-                case 'tag':
-                    $this->element = $this->driver->findElements(WebDriverBy::tagName($selector));
-                    break;
-                case 'link':
-                    $this->element = $this->driver->findElements(WebDriverBy::linkText($selector));
-                    break;
-            }
-        }
-        else
-        {
-            $this->element = $this->driver->findElements(WebDriverBy::xpath($selector));
-        }
+        $this->pageElement = $this->driver->findElements(WebDriverBy::xpath($selector));
 
-        return $this->element;
+        return $this;
     }
 
     /**
      * Find element.
      *
-     * @param  string $selector  format: [type]:selector,for example: 'xpath://*[@id="account"]' 'id:heading' 'tag:a' '//*[@id="account"]'
+     * @param  string $selector
      * @access public
-     * @return object $element
+     * @return object
      */
     public function getElement($selector = '')
     {
-        if(!$selector) return $this->element;
+        if(!$selector) return $this->pageElement;
 
-        if(preg_match('/^(xpath:|css:|id:|class:|name:|tag:|link:).*/i', $selector, $matches) !== 0)
-        {
-            $type     = str_replace(':', '', $matches[1]);
-            $selector = str_replace("$type:", '', $selector);
-            switch(strtolower($type))
-            {
-                case 'xpath':
-                    $this->element = $this->driver->findElement(WebDriverBy::xpath($selector));
-                    break;
-                case 'css':
-                    $this->element = $this->driver->findElement(WebDriverBy::cssSelector($selector));
-                    break;
-                case 'id':
-                    $this->element = $this->driver->findElement(WebDriverBy::id($selector));
-                    break;
-                case 'class':
-                    $this->element = $this->driver->findElement(WebDriverBy::className($selector));
-                    break;
-                case 'name':
-                    $this->element = $this->driver->findElement(WebDriverBy::name($selector));
-                    break;
-                case 'tag':
-                    $this->element = $this->driver->findElement(WebDriverBy::tagName($selector));
-                    break;
-                case 'link':
-                    $this->element = $this->driver->findElement(WebDriverBy::linkText($selector));
-                    break;
-            }
-        }
-        else
-        {
-            $this->element = $this->driver->findElement(WebDriverBy::xpath($selector));
-        }
+        $this->pageElement = $this->driver->findElement(WebDriverBy::xpath($selector));
 
-        return $this->element;
+        return $this;
     }
 
     /**
      * Take screenshot.
      *
-     * @param  string $image
-     * @param  bool   $saveReport
+     * @param  string $imageFile
      * @access public
-     * @return void
+     * @return object
      */
-    public function capture($image = '')
+    public function capture($imageFile)
     {
-        $image = $image ? $image : $this->config->uitest->captureRoot;
-
-        if(empty($this->element))
+        if(empty($this->pageElement))
         {
-            $this->driver->takeScreenshot($image);
+            $this->driver->takeScreenshot($imageFile);
         }
         else
         {
-            $this->element->takeElementScreenshot($image);
+            $this->pageElement->takeElementScreenshot($imageFile);
         }
+
+        return $this;
     }
 
     /**
@@ -333,23 +267,23 @@ class webdriver
      * @access public
      * @return void
      */
-    public function switchTo($id = '')
+    public function switchToIframe($selector = '')
     {
-        if($id === '')
+        if($selector === '')
         {
             $this->driver->switchTo()->defaultContent();
         }
-        elseif(is_numeric($id))
+        elseif(is_numeric($selector))
         {
-            $this->driver->switchTo()->frame($id);
+            $this->driver->switchTo()->frame($selector);
         }
         else
         {
-            $frame = $this->driver->findElement(WebDriverBy::id($id));
+            $frame = $this->driver->findElement(WebDriverBy::xpath($selector));
             $this->driver->switchTo()->frame($frame);
         }
 
-        return $this->driver;
+        return $this;
     }
 
     /**
@@ -363,7 +297,7 @@ class webdriver
     {
         $this->driver->switchTo()->window($handler);
 
-        return $this->driver;
+        return $this;
     }
 
     /**
@@ -374,7 +308,7 @@ class webdriver
      */
     public function getValue()
     {
-        return $this->element->getAttribute('value');
+        return $this->pageElement->getAttribute('value');
     }
 
     /**
@@ -388,31 +322,15 @@ class webdriver
     {
         try
         {
-            $this->element->clear();
-            $this->element->sendKeys($value);
+            $this->clear();
+            $this->pageElement->sendKeys($value);
         }
         catch(Exception $e)
         {
-            $this->driver->executeScript("arguments[0].defaultValue='{$value}';", array($this->element));
+            $this->driver->executeScript("arguments[0].defaultValue='{$value}';", array($this->pageElement));
         }
-        return $this->element;
-    }
 
-    /**
-     * Set value of one element by xpath.
-     *
-     * @param  string $xpath
-     * @param  string $value
-     * @access public
-     * @return void
-     */
-    public function setValueByXpath($xpath, $value)
-    {
-        $element = $this->driver->findElement(WebDriverBy::xpath($xpath));
-        $element->clear();
-        $element->sendKeys($value);
-
-        return $element;
+        return $this;
     }
 
     /**
@@ -425,7 +343,7 @@ class webdriver
      */
     public function attr($attribute)
     {
-        return $this->element->getAttribute($attribute);
+        return $this->pageElement->getAttribute($attribute);
     }
 
     /**
@@ -436,7 +354,7 @@ class webdriver
      */
     public function getText()
     {
-        $text = $this->element->getText();
+        $text = $this->pageElement->getText();
         return $text;
     }
 
@@ -450,40 +368,14 @@ class webdriver
     {
         try
         {
-            $this->element->click();
+            $this->pageElement->click();
         }
         catch(Exception $e)
         {
-            $this->driver->executeScript("arguments[0].click();", array($this->element));
+            $this->driver->executeScript("arguments[0].click();", array($this->pageElement));
         }
 
-        return $this->element;
-    }
-
-    /**
-     * click by xpath.
-     *
-     * @param  string  $xpath
-     * @access public
-     * @return object
-     */
-    public function clickByXpath($xpath)
-    {
-        $element = $this->driver->findElement(WebDriverBy::xpath($xpath));
-        $element->click();
-        return $element;
-    }
-
-    /**
-     * Click By Href in a tag.
-     *
-     * @access public
-     * @return void
-     */
-    public function clickByHref()
-    {
-        $link = $this->attr('href');
-        $this->get($link);
+        return $this;
     }
 
     /**
@@ -498,14 +390,14 @@ class webdriver
         $action = new WebDriverActions($this->driver);
         if($isDouble)
         {
-            $action->moveToElement($this->element)->click()->perform();
+            $action->moveToElement($this->pageElement)->click()->perform();
         }
         else
         {
-            $action->moveToElement($this->element)->doubleClick()->perform();
+            $action->moveToElement($this->pageElement)->doubleClick()->perform();
         }
 
-        return $this->element;
+        return $this;
     }
 
     /**
@@ -516,45 +408,51 @@ class webdriver
      */
     public function clear()
     {
-        $this->element->clear();
-        return $this->element;
+        $this->pageElement->clear();
+        return $this;
     }
 
     /**
      * hover an element, Some class like .dropdown-hover can be hovered.
      *
      * @access public
-     * @return void
+     * @return object
      */
     public function hover()
     {
-        $coordinates = $this->element->getCoordinates();
+        $coordinates = $this->pageElement->getCoordinates();
         $this->driver->getMouse()->mouseMove($coordinates);
+
+        return $this;
     }
 
     /**
      * Print Errors of current page.
      *
-     * @param  mixed  $switchToIframe  If pass this param, driver will skip to specified iframe.
+     * @param  mixed  $iframe  If pass this param, driver will skip to specified iframe.
      * @access public
      * @return array
      */
-    public function getErrors($switchToIframe = '')
+    public function getErrorsInPage($iframe = '')
     {
+        $errors = array();
+        $errors['zinbar'] = array();
+
         $this->driver->switchTo()->defaultContent();
         $alerts = $this->driver->findElements(WebDriverBy::cssSelector('pre.alert'));
         foreach($alerts as $alert)
         {
             $alertInput      = $alert->findElement(WebDriverBy::tagName('input'))->getAttribute('value');
-            $this->result->errors[]  = $alert->getText() . $alertInput;
+            $errors[]  = $alert->getText() . $alertInput;
         }
-        $this->getErrorsInZinBar();
+        $errors['zinbar'][] = $this->getErrorsInZinBar();
 
         $hasException = false;
         for($identifier = 0; $identifier < 10, $hasException == false; $identifier++)
         {
-            try{
-                $this->switchTo($identifier);
+            try
+            {
+                $this->switchToIframe($identifier);
             }
             catch(Exception $e)
             {
@@ -567,16 +465,16 @@ class webdriver
                 foreach($alerts as $alert)
                 {
                     $alertInput      = $alert->findElement(WebDriverBy::tagName('input'))->getAttribute('value');
-                    $this->result->errors[]  = $alert->getText() . $alertInput;
+                    $errors[]  = $alert->getText() . $alertInput;
                 }
-                $this->getErrorsInZinBar();
+                $errors['zinbar'][] = $this->getErrorsInZinBar();
             }
         }
 
         $this->driver->switchTo()->defaultContent();
-        if(!empty($switchToIframe)) $this->switchTo($switchToIframe);
+        if(!empty($iframe)) $this->switchToIframe($iframe);
 
-        if(empty($this->result->errors)) return true;
+        if(empty($errors)) return true;
 
         return $this;
     }
@@ -589,22 +487,27 @@ class webdriver
      */
     public function getErrorsInZinBar()
     {
+        $errors = array();
+
         try
         {
             $this->getElement('//*[@id="zinbar"]/div/div[@data-hint="PHP errors"]');
-            $parentDiv = $this->getElement('//*[@id="zinbar"]/div/div[3]');
-            $errorDivs = $parentDiv->findElements(WebDriverBy::tagName('div'));
+            $this->getElement('//*[@id="zinbar"]/div/div[3]');
+            $errorDivs = $this->pageElement->findElements(WebDriverBy::tagName('div'));
+
             foreach($errorDivs as $errorDiv)
             {
                 $errorInfo = $errorDiv->findElement(WebDriverBy::xpath('div[1]'))->getText();
                 $errorLine = $errorDiv->findElement(WebDriverBy::xpath('div[2]/strong'))->getText();
                 $errorFile = $errorDiv->findElement(WebDriverBy::xpath('div[2]/span'))->getText();
-                $this->results->errors[] = "Error: $errorInfo\nLine: $errorLine $errorFile";
+                $errors[] = "Error: $errorInfo\nLine: $errorLine $errorFile";
             }
+
+            return $errors;
         }
         catch(Exception $e)
         {
-            return false;
+            return $errors;
         }
     }
 
@@ -639,7 +542,7 @@ class webdriver
             $this->driver->wait($seconds, $interval)->until(WebDriverExpectedCondition::titleMatches("/$condition/"));
         }
 
-        return $this->element;
+        return $this;
     }
 
     /**
@@ -647,7 +550,7 @@ class webdriver
      *
      * @param  int    $seconds
      * @access public
-     * @return void
+     * @return object
      */
     public function waitElement($selector, $seconds = 5, $type = 'normal')
     {
@@ -668,7 +571,7 @@ class webdriver
      *
      * @param  int    $seconds
      * @access public
-     * @return void
+     * @return object
      */
     public function wait($seconds = 3)
     {
@@ -689,11 +592,11 @@ class webdriver
     {
         if($type == 'text')
         {
-            return $this->driver->executeScript("return arguments[0].innerText;", [$this->element]);
+            return $this->driver->executeScript("return arguments[0].innerText;", [$this->pageElement]);
         }
         elseif($type == 'sendKeys')
         {
-            return $this->driver->executeScript("arguments[0].sendKeys('$value');", [$this->element]);
+            return $this->driver->executeScript("arguments[0].sendKeys('$value');", [$this->pageElement]);
         }
         else
         {
@@ -730,7 +633,7 @@ class webdriver
      * @access public
      * @return string
      */
-    public function getTitle()
+    public function getPageTitle()
     {
         return $this->driver->getTitle();
     }
@@ -741,7 +644,7 @@ class webdriver
      * @access public
      * @return object
      */
-    public function getUrl()
+    public function getPageUrl()
     {
         $url = $this->driver->getCurrentURL();
 
@@ -775,11 +678,11 @@ class webdriver
      * @access public
      * @return array
      */
-    public function getCoordinate()
+    public function getElementCoordinate()
     {
-        $x = $this->element->getCoordinates()->onPage()->getX();
-        $y = $this->element->getCoordinates()->onPage()->getY();
-        return print_r(array($x, $y));
+        $x = $this->pageElement->getCoordinates()->onPage()->getX();
+        $y = $this->pageElement->getCoordinates()->onPage()->getY();
+        return array($x, $y);
     }
 
     /**
@@ -814,7 +717,7 @@ class webdriver
      */
     public function select($type, $value)
     {
-        $select = new WebDriverSelect($this->element);
+        $select = new WebDriverSelect($this->pageElement);
 
         if($type == 'value') $select->selectByValue($value);
         if($type == 'index') $select->selectByIndex($value);
@@ -831,10 +734,10 @@ class webdriver
      */
     public function getSelect($type = '')
     {
-        $select = new WebDriverSelect($this->element);
+        $select = new WebDriverSelect($this->pageElement);
 
-        if($type == 'value') echo $select->getFirstSelectedOption()->getAttribute('value') . PHP_EOL;
-        echo $select->getFirstSelectedOption()->getText() . PHP_EOL;
+        if($type == 'value') return $select->getFirstSelectedOption()->getAttribute('value');
+        return $select->getFirstSelectedOption()->getText();
     }
 
     /**
@@ -860,7 +763,7 @@ class webdriver
     public function scrollToElement()
     {
         $js = "arguments[0].scrollIntoView(false);";
-        $arguments = array($this->element);
+        $arguments = array($this->pageElement);
 
         $this->driver->executeScript($js, $arguments);
     }
@@ -868,75 +771,54 @@ class webdriver
     /**
      * Select a option of picker.
      *
-     * @param  string $picker
      * @param  string $value
      * @access public
-     * @return viod
+     * @return object
      */
-    public function picker($picker, $value)
+    public function picker($value)
     {
-        if(strcmp(substr($picker, -4), '/div') !== 0 && strpos($picker, '@name') === false)
-        {
-            $picker = $picker . '/div';
-        }
-        else
-        {
-            if(strpos($picker, '@name') !== false) $picker = $picker . '/parent::div';
-        }
-
-        $this->driver->findElement(WebDriverBy::xpath($picker))->click();
-
-        sleep(1);
+        $this->click();
+        $this->wait(1);
 
         try
         {
-            $pickerInput = $picker . '//*[@class="picker-search"]/input';
-            $this->driver->findElement(WebDriverBy::xpath($pickerInput))->click();
+            $pickerInput = $this->pageElement->findElement(WebDriverBy::xpath('//*[@class="picker-search"]/input'));
         }
         catch (Exception $selectionException)
         {
-            $pickerInput = $picker . '//*[@class="picker-selections"]/input';
-            $this->driver->findElement(WebDriverBy::xpath($pickerInput))->click();
+            $pickerInput = $this->pageElement->findElement(WebDriverBy::xpath('//*[@class="picker-selections"]/input'));
         }
+        $pickerInput->click();
+        $pickerInput->sendKeys(trim($value));
 
-        $this->driver->findElement(WebDriverBy::xpath($pickerInput))->sendKeys(trim($value));
-        sleep(1);
+        $this->wait(1);
 
-        $pickerID = substr($this->driver->findElement(WebDriverBy::xpath($picker))->getAttribute('id'), 5);
+        $pickerID = substr($pickerInput->getAttribute('id'), 5);
         $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
+
+        return $this;
     }
 
     /**
      * Select multi options of picker.
      *
-     * @param  string    $picker
      * @param  array    $values
      * @access public
      * @return void
      */
-    public function multiPicker($picker, $values)
+    public function multiPicker($values)
     {
-        if(strcmp(substr($picker, -4), '/div') !== 0 && strpos($picker, '@name') === false)
-        {
-            $picker = $picker . '/div';
-        }
-        else
-        {
-            if(strpos($picker, '@name') !== false) $picker = $picker . '/parent::div';
-        }
-
-        $this->driver->findElement(WebDriverBy::xpath($picker))->click();
-
-        sleep(1);
+        $this->click();
+        $this->wait(1);
 
         foreach($values as $value)
         {
-            $pickerInput = $picker . '//*[@class="picker-multi-selections"]//input';
-            $this->driver->findElement(WebDriverBy::xpath($pickerInput))->click();
-            $this->driver->findElement(WebDriverBy::xpath($pickerInput))->sendKeys(trim($value));
-            sleep(1);
+            $pickerInput = $this->pageElement->findElement(WebDriverBy::xpath('//*[@class="picker-multi-selections"]//input'));
+            $pickerInput->click();
+            $pickerInput->sendKeys(trim($value));
+            $this->wait(1);
 
-            $pickerID = substr($this->driver->findElement(WebDriverBy::xpath($picker))->getAttribute('id'), 5);
+            $pickerID = substr($pickerInput->getAttribute('id'), 5);
             $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
         }
     }
@@ -944,29 +826,29 @@ class webdriver
     /**
      * Select a option of no search picker.
      *
-     * @param  string     $xpath
      * @param  string|int $value
      * @param  string     $type ''|date|menu
      * @access public
      * @return void
      */
-    public function noSearchPicker($xpath, $value, $type = '')
+    public function noSearchPicker($value, $type = '')
     {
-        $picker = $xpath . '/parent::div';
-        $this->clickByXpath($picker);
-        $pickerID = $this->driver->findElement(WebDriverBy::xpath($picker))->getAttribute('id');
+        $picker = $this->pageElement->findElement(WebDriverBy::xpath('/parent::div'));
+        $picker->click();
+
+        $pickerID = $picker->getAttribute('id');
 
         if($type == 'date')
         {
             $this->wait(1);
-            return $this->setValueByXpath("$picker/input", $value);
+            return $picker->findElement(WebDriverBy::xpath('/input'))->sendKeys($value);
         }
         elseif($type == 'menu')
         {
-            return $this->clickByXpath("//*[@id='pick-pop-$pickerID']/menu/menu/li[$value]");
+            return $this->driver->findElement(WebdriverBy::xpath("//*[@id='pick-pop-$pickerID']/menu/menu/li[$value]"))->click();
         }
 
-        return $this->clickByXpath("//*[@id='pick-pop-$pickerID']/div/button[$value]");
+        return $this->driver->findElement(WebdriverBy::xpath("//*[@id='pick-pop-$pickerID']/div/button[$value]"))->click();
     }
 
     /**
@@ -979,7 +861,7 @@ class webdriver
      */
     public function search($searchList, $groupAndOr = '')
     {
-        $this->clickByXpath('//button[@data-toggle="searchform"]');
+        $this->waitElement('//button[@data-toggle="searchform"]')->getElement('//button[@data-toggle="searchform"]')->click();
 
         $searchContainer  = '//div[contains(@class, "search-form-container")]';
         $searchSquareBtn  = $searchContainer . '/div/div[2]/div//button[contains(@class, "square")]';
@@ -989,23 +871,22 @@ class webdriver
         $restBtn          = $searchContainer . '/div/div[2]/button[2]';
 
         $this->waitElement($searchContainer);
-        $this->waitElement($restBtn);
-        $this->clickByXpath($restBtn);
+        $this->waitElement($restBtn)->getElement($restBtn)->click();
 
         if($groupAndOr)
         {
-            $groupAndOrXpath = '//*[@name="groupAndOr"]';
+            $this->getElement('//*[@name="groupAndOr"]');
             if($groupAndOr == 'and')
             {
-                $this->noSearchPicker($groupAndOrXpath, 1, 'menu');
+                $this->noSearchPicker(1, 'menu');
             }
             else
             {
-                $this->noSearchPicker($groupAndOrXpath, 2, 'menu');
+                $this->noSearchPicker(2, 'menu');
             }
         }
 
-        if(count($searchList) > 2) $this->clickByXpath($searchSquareBtn);
+        if(count($searchList) > 2) $this->getElement($searchSquareBtn)->click();
 
         foreach($searchList as $key => $value)
         {
@@ -1017,26 +898,27 @@ class webdriver
             $operatorXpath = $index % 2 === 0 ? $rightSearchGroup . "/tr[$trIndex]/td[3]/div" : $leftSearchGroup . "/tr[$trIndex]/td[3]/div";
             $valueXpath    = $index % 2 === 0 ? $rightSearchGroup . "/tr[$trIndex]/td[4]" : $leftSearchGroup . "/tr[$trIndex]/td[4]";
 
-            $this->picker($fieldXpath, $field);
-            $this->wait(1);
-            $this->clickByXpath($operatorXpath);
-            $operatorID = $this->driver->findElement(WebDriverBy::xpath($operatorXpath))->getAttribute('id');
+            $this->getElement($fieldXpath)->picker($field);
+            $this->wait(1)->getElement($operatorXpath)->click();
+            $operatorID = $this->pageElement->getAttribute('id');
             $operatorID = substr($operatorID, 5);
-            $this->clickByXpath("//*[@id='pick-pop-$operatorID']/menu/menu//*[contains(text(), '$operator')]");
+            $this->getElement("//*[@id='pick-pop-$operatorID']/menu/menu//*[contains(text(), '$operator')]")->click();
             $this->wait(1);
 
-            $valueTage = $this->getElement($valueXpath . '/*[1]')->getTagName();
+            $this->getElement($valueXpath . '/*[1]')->getTagName();
+            $valueTage = $this->pageElement->getTagName();
+
             if($valueTage == 'input')
             {
-                $this->setValueByXpath("$valueXpath/input", $value);
+                $this->getElement("$valueXpath/input")->setValue($value);
             }
             else
             {
-                $this->picker("$valueXpath/div", $value);
+                $this->getElement("$valueXpath/div")->picker($value);
             }
         }
 
-        $this->clickByXpath($searchBtn);
+        $this->getElement($searchBtn)->click();
     }
 
     /**
@@ -1101,48 +983,16 @@ class webdriver
     /**
      * Set date in datePicker.
      *
-     * @param  string    $name
      * @param  string    $value
      * @access public
      * @return object
      */
-    public function datePicker($name, $value)
+    public function datePicker($value)
     {
+        $name = $this->pageElement->attribute('name');
+        if(!$name) return false;
+
         $this->driver->executeScript("return $('[name={$name}]').zui('datePicker').$.setValue('$value')");
-        return $this;
-    }
-
-    /**
-     * Set element in page.
-     *
-     * @param  string    $name
-     * @param  int    $wait
-     * @access public
-     * @return object
-     */
-    public function setElement($name, $wait = 0)
-    {
-        $element = '//*[@name="' . $name . '"]';
-
-        try
-        {
-            $this->getElement($element);
-        }
-        catch (Exception $e)
-        {
-            $element = '//*[@id="' . $name . '"]';
-            try
-            {
-                $this->getElement($element);
-            }
-            catch (Exception $e)
-            {
-                $element = $name;
-            }
-        }
-
-        if($wait) $this->waitElement($element, $wait);
-        $this->getElement($element);
         return $this;
     }
 }
