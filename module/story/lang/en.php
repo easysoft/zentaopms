@@ -96,8 +96,8 @@ $lang->story->deleteAction    = "Delete {$lang->SRCommon}";
 $lang->story->exportAction    = "Export {$lang->SRCommon}";
 $lang->story->reportAction    = "Report";
 
-$lang->story->skipStory        = '%s is a parent story. It cannot be closed.';
-$lang->story->closedStory      = 'Story %s is closed and will not be closed.';
+$lang->story->skipStory        = "{$lang->SRCommon} %s is parent stories, and this operation has been filtered.";
+$lang->story->closedStory      = "{$lang->SRCommon} %s is closed, and this operation has been filtered.";
 $lang->story->batchToTaskTips  = "Only active {$lang->SRCommon} can be converted into tasks.";
 $lang->story->successToTask    = "Converted to task.";
 $lang->story->storyRound       = '%s time estimation';

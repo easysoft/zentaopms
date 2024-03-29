@@ -904,8 +904,8 @@ class story extends control
                 continue;
             }
 
-            if($story->parent == -1)       $skippedStory[] = $story->id;
-            if($story->status == 'closed') $closedStory[]  = $story->id;
+            if($story->parent == -1)       $skippedStory[] = '#' . $story->id;
+            if($story->status == 'closed') $closedStory[]  = '#' . $story->id;
             if($story->parent == -1 || $story->status == 'closed') unset($stories[$story->id]);
 
             if(!empty($story->twins))
@@ -922,8 +922,8 @@ class story extends control
         if($storyCount == count($closedStory)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->notice->closed, 'locate' => $this->session->storyList)));
 
         $errorTips = '';
-        if($closedStory)  $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
-        if($skippedStory) $errorTips .= sprintf($this->lang->story->skipStory,   implode(',', $skippedStory));
+        if($closedStory)  $errorTips .= sprintf($this->lang->story->closedStory, implode(' ', $closedStory));
+        if($skippedStory) $errorTips .= sprintf($this->lang->story->skipStory,   implode(' ', $skippedStory));
 
         $this->view->productID  = $productID;
         $this->view->stories    = $stories;

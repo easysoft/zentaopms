@@ -96,8 +96,8 @@ $lang->story->deleteAction    = "删除{$lang->SRCommon}";
 $lang->story->exportAction    = "导出{$lang->SRCommon}";
 $lang->story->reportAction    = "统计报表";
 
-$lang->story->skipStory        = '需求：%s 为父需求，将不会被关闭。';
-$lang->story->closedStory      = '需求：%s 已关闭，将不会被关闭。';
+$lang->story->skipStory        = "{$lang->SRCommon} %s 为父需求，本次操作已被过滤。";
+$lang->story->closedStory      = "{$lang->SRCommon} %s 已关闭，本次操作已被过滤。";
 $lang->story->batchToTaskTips  = "只有激活状态的{$lang->SRCommon}才能转为任务。";
 $lang->story->successToTask    = '批量转任务成功';
 $lang->story->storyRound       = '第 %s 轮估算';

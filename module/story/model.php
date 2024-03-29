@@ -3761,6 +3761,8 @@ class storyModel extends model
 
         $storyLang->notice->closed           = str_replace($SRCommon, $URCommon, $storyLang->notice->closed);
         $storyLang->notice->reviewerNotEmpty = str_replace($SRCommon, $URCommon, $storyLang->notice->reviewerNotEmpty);
+        $storyLang->skipStory                = str_replace($SRCommon, $URCommon, $storyLang->skipStory);
+        $storyLang->closedStory              = str_replace($SRCommon, $URCommon, $storyLang->closedStory);
 
         $storyLang->report->charts['storiesPerProduct'] = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storiesPerProduct']);
         $storyLang->report->charts['storiesPerModule']  = str_replace($SRCommon, $URCommon, $storyLang->report->charts['storiesPerModule']);
