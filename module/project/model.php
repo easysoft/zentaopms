@@ -629,7 +629,7 @@ class projectModel extends model
             {
                 if($method == 'create')
                 {
-                    $link = helper::createLink($module, $method, "productID=0&branch=0&extras=projectID=%s");
+                    $link = helper::createLink($module, $method, "productID=0&branch=0&extras=projectID=%s") . "#app={$this->app->tab}";
                 }
                 elseif($method == 'edit')
                 {
