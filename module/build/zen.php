@@ -233,6 +233,31 @@ class buildZen extends build
     }
 
     /**
+     * 获取版本不可关联的需求ID列表。
+     * Get the story ID list that cannot be linked to the build.
+     *
+     * @param  object    $build
+     * @access protected
+     * @return array
+     */
+    public function getExcludeStoryIdList(object $build)
+    {
+        $parentIdList = $this->dao->select('id')->from(TABLE_STORY)
+            ->where('product')->eq($build->product)
+            ->andWhere('type')->eq('story')
+            ->andWhere('isParent')->eq('1')
+            ->fetchPairs();
+
+        foreach(explode(',', $build->allStories) as $storyID)
+        {
+            if(!$storyID) continue;
+            if(!isset($parentIdList[$storyID])) $parentIdList[$storyID] = $storyID;
+        }
+
+        return $parentIdList;
+    }
+
+    /**
      * 生成关联需求的搜索表单数据。
      * Generate the search form data for the build view page.
      *

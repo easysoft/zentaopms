@@ -445,13 +445,14 @@ class build extends control
 
         $this->loadModel('story');
         $executionID = $build->execution ? (int)$build->execution : (int)$build->project;
+        $excludeStoryIdList = $this->buildZen->getExcludeStoryIdList($build);
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($build->product, $build->branch, (int)$param, $orderBy, $executionID, 'story', $build->allStories, '', $pager);
+            $allStories = $this->story->getBySearch($build->product, $build->branch, (int)$param, $orderBy, $executionID, 'story', $excludeStoryIdList, '', $pager);
         }
         else
         {
-            $allStories = $this->story->getExecutionStories($executionID, $build->product, $orderBy, 'byBranch', $build->branch, 'story', $build->allStories, $pager);
+            $allStories = $this->story->getExecutionStories($executionID, $build->product, $orderBy, 'byBranch', $build->branch, 'story', $excludeStoryIdList, $pager);
         }
 
         $checkedRows = array();
