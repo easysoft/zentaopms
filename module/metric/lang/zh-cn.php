@@ -386,7 +386,7 @@ $lang->metric->tips->click2InsertData        = "点击 <span class='ke-icon-hold
 $lang->metric->tips->noticeUnchangeable      = '[范围]、[对象]、[目的]、[时间属性]、[代号]会影响度量值的获取，创建后不可变更。';
 $lang->metric->tips->noticeCode              = "代号必须是英文字母、数字或下划线的组合。";
 $lang->metric->tips->noticeRecalculate       = "更新数据中，请勿操作度量数据。";
-$lang->metric->tips->noticeRecalculateConfig = "系统会默认重新计算已发布度量项中，非定时任务采集的历史数据。";
+$lang->metric->tips->noticeRecalculateConfig = "系统会默认重新计算已发布度量项中，非定时任务采集的历史数据，若存在多次发布情况，则从最后一次发布时间之前开始重算。";
 $lang->metric->tips->noticeRewriteHistoryLib = "(勾选后，系统会基于历史数据重新计算已发布且有时间属性的度量项，并覆盖已存在的全部度量值)";
 $lang->metric->tips->banRecalculate          = "该度量项尚未发布或无时间属性。";
 
