@@ -91,6 +91,7 @@ class job extends control
         if($_POST)
         {
             if($this->post->engine == 'gitfox') $this->config->job->form->create['gitfoxpipeline']['required'] = true;
+            if($this->post->useZentao == '1')   $this->config->job->form->create['triggerType']['required']    = true;
             $job = form::data($this->config->job->form->create)
                 ->setIF($this->post->useZentao != '1', 'triggerType', '')
                 ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'commit', 'comment', '')
@@ -131,7 +132,8 @@ class job extends control
         $job = $this->job->getByID($jobID);
         if($_POST)
         {
-            if($job->engine == 'gitfox') $this->config->job->form->edit['gitfoxpipeline']['required'] = true;
+            if($job->engine == 'gitfox')      $this->config->job->form->edit['gitfoxpipeline']['required'] = true;
+            if($this->post->useZentao == '1') $this->config->job->form->edit['triggerType']['required']    = true;
             $job = form::data($this->config->job->form->edit)
                 ->setIF($this->post->useZentao != '1', 'triggerType', '')
                 ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'commit', 'comment', '')
