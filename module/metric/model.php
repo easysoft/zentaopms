@@ -88,6 +88,10 @@ class metricModel extends model
             }
             $row->value = is_numeric($record['value']) ? round((float)$record['value'], 2) : $record['value'];
 
+            $calcInfo = $this->getRecordCalcInfo($record['id']);
+            $row->calcType     = $calcInfo->calcType;
+            $row->calculatedBy = !empty($calcInfo->calculatedBy) ? $calcInfo->calculatedBy : 'system';
+
             $tableData[] = $row;
         }
 
@@ -163,9 +167,10 @@ class metricModel extends model
         $groupHeader[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'align' => 'center', 'width' => 68);
         $groupData   = array();
 
+        $users = $this->loadModel('user')->getPairs('noletter');
         foreach($data as $dataInfo)
         {
-            $value       = $withCalcTime ? array($dataInfo->value, $dataInfo->calcTime) : $dataInfo->value;
+            $value       = $withCalcTime ? array($dataInfo->value, $dataInfo->calcTime, $dataInfo->calcType, zget($users, $dataInfo->calculatedBy)) : $dataInfo->value;
             $dataSeries  = array('date' => $dataInfo->date, 'value' => $value);
             $groupData[] = $dataSeries;
         }
@@ -207,16 +212,19 @@ class metricModel extends model
 
         $times     = array();
         $objects   = array();
+        $users = $this->loadModel('user')->getPairs('noletter');
         foreach($data as $dataInfo)
         {
-            $time     = substr($dataInfo->$dateField, 0, 10);
-            $calcTime = $dataInfo->calcTime;
-            $object = $dataInfo->scope;
-            $value  = $dataInfo->value;
+            $time         = substr($dataInfo->$dateField, 0, 10);
+            $calcTime     = $dataInfo->calcTime;
+            $object       = $dataInfo->scope;
+            $value        = $dataInfo->value;
+            $calcType     = $dataInfo->calcType;
+            $calculatedBy = zget($users, $dataInfo->calculatedBy);
 
             if(!isset($times[$time]))     $times[$time]     = $time;
             if(!isset($objects[$object])) $objects[$object] = array();
-            $objects[$object][$time] = $withCalcTime ? array($value, $calcTime) : $value;
+            $objects[$object][$time] = $withCalcTime ? array($value, $calcTime, $calcType, $calculatedBy) : $value;
         }
         /* e.g $times = array('2023-10-14', '2023-10-15'), $objects = array('object1' => array('2023-10-14' => 2, '2023-10-15 => 3)) */
 
@@ -415,6 +423,19 @@ class metricModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('stage')->eq('released')
             ->fetchPairs();
+    }
+
+    /**
+     * 获取度量库数据的收集方式和采集人。
+     * Get calculate type and calculate people by metric record id.
+     *
+     * @param  int    $recordID
+     * @access public
+     * @return object|false
+     */
+    public function getRecordCalcInfo($recordID)
+    {
+        return $this->dao->select('calcType, calculatedBy')->from(TABLE_METRICLIB)->where('id')->eq($recordID)->fetch();
     }
 
     /**
@@ -900,6 +921,7 @@ class metricModel extends model
                 if(empty($record)) continue;
 
                 $record->calcType = $calcType;
+                $record->calculatedBy = $calcType == 'inference' ? $this->app->user->account : 'system';
                 $this->dao->insert(TABLE_METRICLIB)
                     ->data($record)
                     ->exec();

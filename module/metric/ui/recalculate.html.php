@@ -16,6 +16,7 @@ jsVar('code', $code);
 jsVar('dateType', $dateType);
 jsVar('calcType', $calcType);
 jsVar('calcRange', $calcRange);
+jsVar('noticeDeduplication', $lang->metric->tips->noticeDeduplication);
 if($calcRange == 'single') 
 {
     jsVar('recalculateLogText', "$metric->name {$lang->metric->recalculateLog}");
@@ -60,6 +61,7 @@ panel
     (
         div
         (
+            setClass('p-3'),
             setID('recalculate-log'),
             setClass('recalculate-log'),
         )

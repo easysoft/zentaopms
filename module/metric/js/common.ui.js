@@ -19,7 +19,12 @@ window.renderDTableCell = function(result, {row, col})
     if(Array.isArray(row.data[col.name]))
     {
         var value = row.data[col.name][0];
-        var title = updateTimeTip.replace('%s', row.data[col.name][1]);
+
+        var calculatedDate = row.data[col.name][1];
+        var calcType       = row.data[col.name][2];
+        var calculatedBy   = row.data[col.name][3];
+        var title = calcTitleList[calcType].replace('%user%', calculatedBy);
+        title = title.replace('%date%', calculatedDate);
     }
     else
     {

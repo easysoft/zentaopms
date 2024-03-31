@@ -25,10 +25,9 @@ detailHeader
 );
 div
 (
-    setClass('alert secondary'),
+    setClass('alert secondary-pale'),
     div
     (
-        setClass('alert text bg-secondary'),
         $lang->metric->tips->noticeRecalculateConfig,
     )
 );
@@ -47,6 +46,7 @@ formPanel
         ),
         div
         (
+            setClass('state-500'),
             $lang->metric->tips->noticeRewriteHistoryLib
         )
     ),

@@ -86,6 +86,14 @@ $lang->metric->placeholder->program   = "All Program Sets";
 $lang->metric->query = new stdclass();
 $lang->metric->query->action = 'Query';
 
+$lang->metric->calcTypeList = array();
+$lang->metric->calcTypeList['cron']      = 'Snapshot';
+$lang->metric->calcTypeList['inference'] = 'Recalculate';
+
+$lang->metric->calcTitleList = array();
+$lang->metric->calcTitleList['cron']      = '%user% take snapshot at %date%';
+$lang->metric->calcTitleList['inference'] = '%user% recalculate at %date%';
+
 $lang->metric->query->scope = array();
 $lang->metric->query->scope['project']   = 'Project';
 $lang->metric->query->scope['product']   = 'Product';
@@ -387,8 +395,10 @@ $lang->metric->tips->noticeUnchangeable      = "[Scope], [Object], [Purpose], [D
 $lang->metric->tips->noticeCode              = "The code must be a combination of English letters, numbers or underscores.";
 $lang->metric->tips->noticeRecalculate       = "Updating data..., please do not manipulate metric data.";
 $lang->metric->tips->noticeRecalculateConfig = "The system will recalculate the historical data collected by non-scheduled tasks in published metrics by default.";
+$lang->metric->tips->noticeRepublish         = "If there are multiple releases, recalculate from before the last release time.";
 $lang->metric->tips->noticeRewriteHistoryLib = "(When checked, the system will recalculate published metric with date type  based on historical data and overwrite all existing metric records)";
 $lang->metric->tips->banRecalculate          = "The metric has not been published or has no date type";
+$lang->metric->tips->noticeDeduplication     = "Deduplication...";
 
 $lang->metric->recalculateLog = "%s has been calculated";
 

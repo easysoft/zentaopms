@@ -67,7 +67,7 @@ $lang->metric->recalculateHistory = '重算历史数据';
 $lang->metric->startRecalculate   = '开始重算';
 $lang->metric->recalculateAction  = '重算度量项';
 $lang->metric->recalculateBtnText = '重新计算';
-$lang->metric->exit               = '退出';
+$lang->metric->exit               = '完成';
 
 $lang->metric->yearFormat     = '%s年';
 $lang->metric->weekFormat     = '%s周';
@@ -85,6 +85,14 @@ $lang->metric->placeholder->program   = "全部项目集";
 
 $lang->metric->query = new stdclass();
 $lang->metric->query->action = '查询';
+
+$lang->metric->calcTypeList = array();
+$lang->metric->calcTypeList['cron']      = '快照采集';
+$lang->metric->calcTypeList['inference'] = '重新计算';
+
+$lang->metric->calcTitleList = array();
+$lang->metric->calcTitleList['cron']      = '%user%于%date%进行快照采集';
+$lang->metric->calcTitleList['inference'] = '%user%于%date%进行重新计算';
 
 $lang->metric->query->scope = array();
 $lang->metric->query->scope['project']   = '项目';
@@ -386,9 +394,11 @@ $lang->metric->tips->click2InsertData        = "点击 <span class='ke-icon-hold
 $lang->metric->tips->noticeUnchangeable      = '[范围]、[对象]、[目的]、[时间属性]、[代号]会影响度量值的获取，创建后不可变更。';
 $lang->metric->tips->noticeCode              = "代号必须是英文字母、数字或下划线的组合。";
 $lang->metric->tips->noticeRecalculate       = "更新数据中，请勿操作度量数据。";
-$lang->metric->tips->noticeRecalculateConfig = "系统会默认重新计算已发布度量项中，非定时任务采集的历史数据，若存在多次发布情况，则从最后一次发布时间之前开始重算。";
+$lang->metric->tips->noticeRecalculateConfig = "系统会默认重新计算已发布度量项中，非定时任务采集的历史数据。";
+$lang->metric->tips->noticeRepublish         = "若存在多次发布情况，则从最后一次发布时间之前开始重算。";
 $lang->metric->tips->noticeRewriteHistoryLib = "(勾选后，系统会基于历史数据重新计算已发布且有时间属性的度量项，并覆盖已存在的全部度量值)";
 $lang->metric->tips->banRecalculate          = "该度量项尚未发布或无时间属性。";
+$lang->metric->tips->noticeDeduplication     = "去除重复数据中...";
 
 $lang->metric->recalculateLog = "%s计算完成";
 

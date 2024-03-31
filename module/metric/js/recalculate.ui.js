@@ -17,6 +17,8 @@ function recalculateAll(startDate, endDate)
     {
         if(index >= dateRange.length) 
         {
+            $('.recalculate-log').append(`<p>${noticeDeduplication}</p>`);
+
             var deduplication = $.createLink('metric', 'ajaxDeduplicateRecord');
             $.get(deduplication, function(result)
             {
@@ -45,6 +47,8 @@ function recalculateSingle(code, dateType, startDate, endDate)
     {
         if(index >= dateRange.length) 
         {
+            $('.recalculate-log').append(`<p>${noticeDeduplication}</p>`);
+
             var deduplication = $.createLink('metric', 'ajaxDeduplicateRecord');
             $.get(deduplication, function(result)
             {
