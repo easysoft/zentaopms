@@ -93,19 +93,25 @@ featureBar
     li(searchToggle(set::open($browseType == 'bySearch')))
 );
 
-$canCreate = hasPriv('product', 'create');
+$canCreate     = hasPriv('product', 'create');
+$canExport     = hasPriv('product', 'export');
+$canManageLine = in_array($this->config->systemMode, array('ALM', 'PLM')) && hasPriv('product', 'manageLine');
 toolbar
 (
-    hasPriv('product', 'export') ? btn
+    $canExport ? btn
     (
-        set::className('ghost text-darker'),
+        set::className('ghost text-darker pr-0'),
         set::icon('export'),
         toggle::modal(array('url' => createLink('product', 'export', "programID=$programID&status=$browseType&orderBy=$orderBy&param=$param"))),
         $lang->export
     ) : null,
-    in_array($this->config->systemMode, array('ALM', 'PLM')) && hasPriv('product', 'manageLine') ? btn
+    $canExport && $canManageLine ? div
     (
-        set::className('ghost text-primary'),
+        setClass('divider')
+    ) : null,
+    $canManageLine ? btn
+    (
+        set::className('ghost text-primary pl-0'),
         set::icon('edit'),
         toggle::modal(array('url' => createLink('product', 'manageLine', $browseType), 'id' => 'manageLineModal')),
         $lang->product->line
