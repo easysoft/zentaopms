@@ -48,15 +48,6 @@ formPanel
             set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
         )
     ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("projects[]"),
-        set::label($lang->repo->projects),
-        set::control(array("control" => "picker","multiple" => true)),
-        set::items($projects),
-        set::value(empty($relatedProjects) ? '' : implode(',', array_values($relatedProjects)))
-    ),
     formRow
     (
         setClass('service hide'),

@@ -35,15 +35,6 @@ formPanel
         set::items($products),
         set::value($repo->product)
     ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("projects[]"),
-        set::label($lang->repo->projects),
-        set::control(array("control" => "picker","multiple" => true)),
-        set::items($relatedProjects),
-        set::value($repo->projects)
-    ),
     formRow
     (
         formGroup
