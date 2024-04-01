@@ -102,15 +102,6 @@ formPanel
             set::value($repo->path)
         )
     ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("encoding"),
-        set::label($lang->repo->encoding),
-        set::required(true),
-        set::value($repo->encoding),
-        set::placeholder($lang->repo->encodingsTips)
-    ),
     formRow
     (
         ($config->inContainer || $config->inQuickon) ? setClass('hidden') : setClass('hide-service'),

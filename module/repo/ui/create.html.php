@@ -112,15 +112,6 @@ formPanel
             set::placeholder($lang->repo->example->path->git)
         )
     ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("encoding"),
-        set::label($lang->repo->encoding),
-        set::required(true),
-        set::value("utf-8"),
-        set::placeholder($lang->repo->encodingsTips)
-    ),
     formRow
     (
         ($config->inContainer || $config->inQuickon) ? setClass('hidden') : setClass('hide-service'),

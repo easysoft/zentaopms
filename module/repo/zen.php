@@ -242,7 +242,7 @@ class repoZen extends repo
         $client   = $this->post->client;
         $account  = $this->post->account;
         $password = $this->post->password;
-        $encoding = strtoupper($this->post->encoding);
+        $encoding = strtoupper($this->post->encoding ?: 'UTF-8');
         $path     = $this->post->path;
         if($encoding != 'UTF8' and $encoding != 'UTF-8') $path = helper::convertEncoding($path, 'utf-8', $encoding);
 

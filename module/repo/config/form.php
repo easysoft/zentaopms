@@ -11,7 +11,7 @@ $config->repo->form->create['serviceHost']    = array('required' => false, 'type
 $config->repo->form->create['serviceProject'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->create['name']           = array('required' => true,  'type' => 'string', 'filter' => 'trim');
 $config->repo->form->create['path']           = array('required' => false, 'type' => 'string', 'default' => '');
-$config->repo->form->create['encoding']       = array('required' => true,  'type' => 'string');
+$config->repo->form->create['encoding']       = array('required' => false, 'type' => 'string', 'default' => 'utf-8');
 $config->repo->form->create['client']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->create['account']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->create['password']       = array('required' => false, 'type' => 'string', 'default' => '');
@@ -26,7 +26,7 @@ $config->repo->form->edit['serviceHost']    = array('required' => false, 'type' 
 $config->repo->form->edit['serviceProject'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->edit['name']           = array('required' => true,  'type' => 'string', 'filter' => 'trim');
 $config->repo->form->edit['path']           = array('required' => false, 'type' => 'string', 'default' => '');
-$config->repo->form->edit['encoding']       = array('required' => true,  'type' => 'string');
+$config->repo->form->edit['encoding']       = array('required' => false, 'type' => 'string', 'default' => 'utf-8');
 $config->repo->form->edit['client']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->edit['account']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->edit['password']       = array('required' => false, 'type' => 'string', 'default' => '');
