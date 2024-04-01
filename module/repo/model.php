@@ -1963,8 +1963,8 @@ class repoModel extends model
             $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitService, $repo->project);
             if(isset($project->id))
             {
-                $url->http = $project->http_url_to_repo;
-                $url->ssh  = $project->ssh_url_to_repo;
+                $url->http = $project->http_url_to_repo ?? '';
+                $url->ssh  = $project->ssh_url_to_repo ?? '';
             }
         }
         elseif($repo->SCM == 'Gitea')
