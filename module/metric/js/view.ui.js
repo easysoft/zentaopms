@@ -134,7 +134,7 @@ window.confirmDelist = function(metricID, metricName)
 
 window.confirmRecalculate = function(calcRange= 'all', code = '')
 {
-    zui.Modal.confirm(confirmRecalculate).then((res)=> 
+    zui.Modal.confirm({message: confirmRecalculate, icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res)=> 
     {
         if(res) zui.Modal.open({url: $.createLink('metric', 'recalculateSetting', 'calcRange=' + calcRange + '&code=' + code)});
     });
