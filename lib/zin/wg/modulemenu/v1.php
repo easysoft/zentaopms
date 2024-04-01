@@ -21,6 +21,8 @@ class moduleMenu extends wg
         'titleShow?: bool=true',
         'app?: string=""',
         'checkbox?: bool',
+        'preserve?: string|bool',
+        'tree?: array',
         'checkOnClick?: bool|string',
         'onCheck?: function'
     );
@@ -243,11 +245,12 @@ class moduleMenu extends wg
         global $app;
         $this->setMenuTreeProps();
 
-        $title       = $this->getTitle();
-        $treeProps   = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck'));
-        $preserve    = $app->getModuleName() . '-' . $app->getMethodName();
-        $isInSidebar = $this->parent instanceof sidebar;
-        $titleShow   = $this->prop('titleShow');
+        $title         = $this->getTitle();
+        $userTreeProps = $this->prop('tree');
+        $treeProps     = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck'));
+        $preserve      = $this->prop('preserve', $app->getModuleName() . '-' . $app->getMethodName());
+        $isInSidebar   = $this->parent instanceof sidebar;
+        $titleShow     = $this->prop('titleShow');
 
         $header = $titleShow ? h::header
         (
@@ -276,7 +279,8 @@ class moduleMenu extends wg
                     set::defaultNestedShow(true),
                     set::hover(true),
                     set::preserve($preserve),
-                    set($treeProps)
+                    set($treeProps),
+                    set($userTreeProps)
                 ),
                 $this->buildActions(),
                 $this->block('footer'),
