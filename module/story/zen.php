@@ -673,7 +673,6 @@ class storyZen extends story
         $stories   = $this->story->getParentStoryPairs($productID);
         $grades    = $this->story->getGradePairs($storyType);
 
-        $storyTypes = strpos($product->vision, 'or') !== false ? 'launched' : 'active';
         /* 追加字段的label属性。 */
         foreach($fields as $field => $attr)
         {
