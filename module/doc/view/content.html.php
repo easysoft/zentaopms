@@ -296,7 +296,7 @@
 <?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
 <?php
     $markdownText = preg_replace("/(\r\n)+|\r+|\n+/", "\n", $doc->content);
-    js::set('markdownText', htmlspecialchars($markdownText));
+    js::set('markdownText', $markdownText);
 ?>
 <script>
 $(function()
