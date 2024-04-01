@@ -80,32 +80,32 @@ $app->loadLang('product');
 if(!isset($config->product->all)) $config->product->all = new stdclass();
 $config->product->all->search['module']                = 'product';
 $config->product->all->search['fields']['name']        = $lang->product->name;
+$config->product->all->search['fields']['QD']          = $lang->product->QD;
+$config->product->all->search['fields']['reviewer']    = $lang->product->reviewer;
+$config->product->all->search['fields']['PO']          = $lang->product->PO;
+$config->product->all->search['fields']['RD']          = $lang->product->RD;
+$config->product->all->search['fields']['desc']        = $lang->product->desc;
+$config->product->all->search['fields']['type']        = $lang->product->type;
+$config->product->all->search['fields']['id']          = $lang->productCommon . $lang->product->id;
 $config->product->all->search['fields']['code']        = $lang->product->code;
-$config->product->all->search['fields']['id']          = $lang->product->id;
 $config->product->all->search['fields']['program']     = $lang->product->program;
 $config->product->all->search['fields']['line']        = $lang->product->line;
-$config->product->all->search['fields']['desc']        = $lang->product->desc;
-$config->product->all->search['fields']['PO']          = $lang->product->PO;
-$config->product->all->search['fields']['QD']          = $lang->product->QD;
-$config->product->all->search['fields']['RD']          = $lang->product->RD;
-$config->product->all->search['fields']['reviewer']    = $lang->product->reviewer;
-$config->product->all->search['fields']['type']        = $lang->product->type;
 $config->product->all->search['fields']['createdDate'] = $lang->product->createdDate;
 $config->product->all->search['fields']['createdBy']   = $lang->product->createdBy;
 
 $config->product->all->search['params']['name']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->product->all->search['params']['code']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->product->all->search['params']['id']          = array('operator' => '=',       'control' => 'input',  'values' => '');
-$config->product->all->search['params']['program']     = array('operator' => '=', 'control' => 'select', 'values' => '');
-$config->product->all->search['params']['line']        = array('operator' => '=', 'control' => 'select', 'values' => '');
-$config->product->all->search['params']['desc']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->all->search['params']['PO']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['QD']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['RD']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['reviewer']    = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
+$config->product->all->search['params']['desc']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->all->search['params']['type']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->product->typeList);
-$config->product->all->search['params']['createdDate'] = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->product->all->search['params']['id']          = array('operator' => '=',       'control' => 'input',  'values' => '');
+$config->product->all->search['params']['code']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->product->all->search['params']['program']     = array('operator' => '=', 'control' => 'select', 'values' => '');
+$config->product->all->search['params']['line']        = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->product->all->search['params']['createdBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+$config->product->all->search['params']['createdDate'] = array('operator' => '=',       'control' => 'date',  'values' => '');
 
 if(empty($config->setCode))
 {
