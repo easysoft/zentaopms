@@ -2103,6 +2103,10 @@ class storyModel extends model
                 $child = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq('0')->fetch('id');
                 if(empty($linkedBranches) && empty($story->plan) && empty($child)) $this->dao->update(TABLE_STORY)->set('stage')->eq('defining')->where('id')->eq($storyID)->exec();
             }
+            elseif($story->stage == 'closed')
+            {
+                return $this->storyTao->setStageToClosed($storyID, $linkedBranches, $linkedProjects);
+            }
             return false;
         }
 
