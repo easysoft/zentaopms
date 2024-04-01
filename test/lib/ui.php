@@ -30,7 +30,6 @@ include __DIR__ . '/result.class.php';
 
 /* 初始化php-webdriver类 */
 include __DIR__ . '/webdriver/webdriver.class.php';
-$webdriver = new webdriver($config->uitest->chrome);
 
 /* 初始化页面元素 */
 include 'page.class.php';
@@ -181,62 +180,19 @@ function e()
 {
 }
 
-/**
- * Set success result.
- *
- * @access public
- * @return object
- */
-function success()
-{
-    global $result;
-    $result->status = 'SUCCESS';
-
-    return $result;
-}
-
-/**
- * Set failure result.
- *
- * @param  string    $message
- * @access public
- * @return object
- */
-function failed($message)
-{
-    global $result;
-    $result->status  = 'FAILED';
-    $result->message = $message;
-    if(!empty($result->page)) $result->page->getErrors();
-
-    return $result;
-}
-
-/**
- * Close the Browser.
- *
- * @access public
- * @return void
- */
-function closeBrowser()
-{
-    global $driver;
-    $driver->closeBrowser();
-}
-
-class tester
+class tester extends result
 {
     public $page;
     public $config;
-    public $result;
+    public $lang;
     public $cookieFile;
 
     public function __construct()
     {
-        global $webdriver, $config, $result;
+        global $config, $lang;
         $this->config = $config;
-        $this->page   = new Page($webdriver);
-        $this->result = $result;
+        $this->lang   = $lang;
+        $this->page   = new Page($config->uitest->chrome);
         $this->cookieFile = CONFIG_ROOT . DS . 'cookie' . DS . 'cookie';
     }
 
@@ -257,7 +213,7 @@ class tester
         $this->page->deleteCookie();
 
         $this->page->openURL($webRoot);
-        $this->page->getErrors();
+        $this->checkError();
         $this->page->account->setValue($account);
         $this->page->password->setValue($password);
         $this->page->submit->click();
@@ -280,8 +236,8 @@ class tester
     public function openURL($module, $method, $params = array(), $iframeID = '')
     {
         if(!$module || !$method) return;
-        $this->result->module = $module;
-        $this->result->method = $method;
+        $this->module = $module;
+        $this->method = $method;
         $webRoot = rtrim($this->config->uitest->webRoot, '/') . '/';
         $cookies = json_decode(file_get_contents($this->cookieFile), true);
 
@@ -316,14 +272,14 @@ class tester
      */
     public function initPage($module = '', $method = '')
     {
-        if($this->result->module && !$module) $module = $this->result->module;
-        if($this->result->method && !$method) $method = $this->result->method;
+        if($this->module && !$module) $module = $this->module;
+        if($this->method && !$method) $method = $this->method;
 
         $pageClass = "{$method}Page";
         if(!class_exists($pageClass)) include dirname(__FILE__, 3). "/module/$module/test/ui/page/$method.php";
 
         $methodPage = new $pageClass();
-        $this->result->setPage($methodPage);
+        $this->setPage($methodPage);
         return $methodPage;
     }
 
@@ -349,10 +305,73 @@ class tester
      * @access public
      * @return void
      */
-   public function parseCurrentUrl()
+    public function parseCurrentUrl()
     {
-        if(empty($this->result->pageObject)) return;
+        if(empty($this->pageObject)) return;
 
-        return $this->result->pageObject->getUrl();
+        $url = $this->pageObject->getPageUrl();
+        $this->url = $url;
+
+        $url = parse_url($url);
+        if(isset($url['query']))
+        {
+            $query = $url['query'];
+            parse_str($query, $queryParams);
+            $this->module = $queryParams['m'];
+            $this->method = $queryParams['f'];
+        }
+        else
+        {
+            $path      = $url['path'];
+            $pathParts = explode('-', trim($path, '/'));
+
+            $this->module = str_replace('.html', '', $pathParts[0]);
+            $this->method = str_replace('.html', '', $pathParts[1]);
+        }
+
+        return $this->pageObject->getUrl();
+    }
+
+    /**
+     * Screenshoot in page.
+     *
+     * @param  string $imageFile
+     * @access public
+     * @return object
+     */
+    public function screenshot($imageFile = '')
+    {
+        if(!$imageFile) $imageFile = $this->config->uitest->captureRoot;
+        return $this->page->capture($imageFile);
+    }
+
+    /**
+     * Check errors in page.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkError()
+    {
+        $errors = $this->page->getErrorsInPage();
+        if(!empty($errors))
+        {
+            $this->errors = $errors;
+            $this->screenshot();
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Close the Browser.
+     *
+     * @access public
+     * @return void
+     */
+    function closeBrowser()
+    {
+        global $driver;
+        $driver->closeBrowser();
     }
 }
