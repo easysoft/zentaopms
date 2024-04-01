@@ -1830,6 +1830,8 @@ class commonModel extends model
         commonModel::$requestErrors = array();
 
         $requestType = 'GET';
+        if(func_num_args() >= 6 ) $requestType = $method; /* Specify $method parameter explicitly. */
+
         if(!is_array($headers)) $headers = (array)$headers;
 
         $headers[] = 'API-RemoteIP: ' . helper::getRemoteIp(); /* Real IP of real user. */
