@@ -5082,7 +5082,7 @@ class storyModel extends model
         if($storyType == 'epic')
         {
             $items = array();
-            $gradePairs = $this->getGradePairs('epic');
+            $gradePairs = $this->getGradePairs('epic', 'all');
             foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => "epic{$grade}");
             $menu[] = array('text' => $this->lang->preview . $this->lang->ERCommon, 'value' => 'epic', 'items' => $items);
         }
@@ -5090,13 +5090,13 @@ class storyModel extends model
         if($storyType == 'requirement' || $storyType == 'epic')
         {
             $items = array();
-            $gradePairs = $this->getGradePairs('requirement');
+            $gradePairs = $this->getGradePairs('requirement', 'all');
             foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => "requirement{$grade}");
             $menu[] = array('text' => $this->lang->preview . $this->lang->URCommon, 'value' => 'requirement', 'items' => $items);
         }
 
         $items = array();
-        $gradePairs = $this->getGradePairs('story');
+        $gradePairs = $this->getGradePairs('story', 'all');
         foreach($gradePairs as $grade => $name) $items[] = array('text' => $name, 'value' => "story{$grade}");
         $menu[] = array('text' => $this->lang->preview . $this->lang->SRCommon, 'value' => 'story', 'items' => $items);
 
