@@ -299,6 +299,18 @@ class requirement extends control
     }
 
     /**
+     * Batch change grade.
+     *
+     * @param  int    $grade
+     * @access public
+     * @return void
+     */
+    public function batchChangeGrade(int $grade)
+    {
+        echo $this->fetch('story', 'batchChangeGrade', "grade=$grade&storyType=requirement");
+    }
+
+    /**
      * Batch assign to.
      *
      * @param  string $storyType story|requirement
@@ -320,6 +332,19 @@ class requirement extends control
     public function batchChangeModule(int $moduleID)
     {
         echo $this->fetch('story', 'batchChangeModule', "moduleID=$moduleID&storyType=requirement");
+    }
+
+    /**
+     * Batch change plan.
+     *
+     * @param  int    $planID
+     * @param  int    $oldPlanID
+     * @access public
+     * @return void
+     */
+    public function batchChangePlan(int $planID, int $oldPlanID = 0)
+    {
+        echo $this->fetch('story', 'batchChangePlan', "planID=$planID&oldPlanID=$oldPlanID&storyType=epic");
     }
 
     /**

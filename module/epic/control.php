@@ -329,4 +329,42 @@ class epic extends control
     {
         echo $this->fetch('story', 'batchChangeModule', "moduleID=$moduleID&storyType=epic");
     }
+
+    /**
+     * Batch change parent.
+     *
+     * @param  int    $productID
+     * @param  string $storyType
+     * @access public
+     * @return void
+     */
+    public function batchChangeParent(int $productID = 0, string $storyType = 'epic')
+    {
+        echo $this->fetch('story', 'batchChangeParent', "productID=$productID&storyType=epic");
+    }
+
+    /**
+     * Batch change grade.
+     *
+     * @param  int    $grade
+     * @access public
+     * @return void
+     */
+    public function batchChangeGrade(int $grade)
+    {
+        echo $this->fetch('story', 'batchChangeGrade', "grade=$grade&storyType=requirement");
+    }
+
+    /**
+     * Batch change plan.
+     *
+     * @param  int    $planID
+     * @param  int    $oldPlanID
+     * @access public
+     * @return void
+     */
+    public function batchChangePlan(int $planID, int $oldPlanID = 0)
+    {
+        echo $this->fetch('story', 'batchChangePlan', "planID=$planID&oldPlanID=$oldPlanID&storyType=epic");
+    }
 }
