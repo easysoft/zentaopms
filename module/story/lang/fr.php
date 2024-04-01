@@ -118,6 +118,7 @@ $lang->story->batchEditTip        = "{$lang->SRCommon} %sis twin stories, and th
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';
+$lang->story->isParent         = 'Is Parent';
 $lang->story->grade            = 'Grade';
 $lang->story->gradeName        = 'Grade Name';
 $lang->story->path             = 'Path';

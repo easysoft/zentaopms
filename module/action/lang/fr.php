@@ -436,6 +436,7 @@ $lang->action->label->unlinkchildrenstory     = "a décroché de la sous-story";
 $lang->action->label->linkparentstory         = "a raccroché à une story parent";
 $lang->action->label->unlinkparentstory       = "a décroché de la story parent";
 $lang->action->label->deletechildrenstory     = "a supprimé la sous-story";
+$lang->action->label->syncgrade               = 'synced grade';
 $lang->action->label->tracked                 = 'tracked';
 $lang->action->label->hangup                  = 'hangup';
 $lang->action->label->run                     = 'run';

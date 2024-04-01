@@ -794,7 +794,11 @@ class storyModel extends model
         $parentChanged = $story->parent != $oldStory->parent;
         if($parentChanged) $this->doChangeParent($storyID, $story, $oldStory);
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, !$parentChanged);
-        if($story->parent > 0) $this->updateParentStatus($storyID, $story->parent, !$parentChanged);
+        if($story->parent > 0)
+        {
+            $this->updateParentStatus($storyID, $story->parent, !$parentChanged);
+            $this->setStage($storyID);
+        }
 
         /* Set new stage and update story sort of plan when story plan has changed. */
         if($oldStory->plan != $story->plan)
@@ -1682,6 +1686,7 @@ class storyModel extends model
         $gradeErrorStories  = array();
         $parentErrorStories = array();
 
+        $this->loadModel('action');
         foreach($stories as $storyID => $story)
         {
             if($story->parent == $parentID) continue;
@@ -1724,6 +1729,8 @@ class storyModel extends model
                  ->autoCheck()
                  ->where('id')->eq($story->id)
                  ->exec();
+
+            $this->action->create('story', $story->id, 'syncGrade', '', $story->grade);
 
             $story->parent = $parentID;
             $this->doChangeParent($story->id, $story, $oldStory);

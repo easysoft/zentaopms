@@ -118,6 +118,7 @@ $lang->story->batchEditTip        = "{$lang->SRCommon} %s为孪生需求，本�
 
 $lang->story->id               = '编号';
 $lang->story->parent           = '父需求';
+$lang->story->isParent         = '是父需求';
 $lang->story->grade            = '需求层级';
 $lang->story->gradeName        = '层级名称';
 $lang->story->path             = '路径';

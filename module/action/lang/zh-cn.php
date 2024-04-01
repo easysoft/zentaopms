@@ -436,6 +436,7 @@ $lang->action->label->unlinkchildrenstory     = "取消关联了子需求";
 $lang->action->label->linkparentstory         = "关联到了父需求";
 $lang->action->label->unlinkparentstory       = "从父需求取消关联了";
 $lang->action->label->deletechildrenstory     = "删除了子需求";
+$lang->action->label->syncgrade               = '同步了层级';
 $lang->action->label->tracked                 = '跟踪了';
 $lang->action->label->hangup                  = '挂起了';
 $lang->action->label->run                     = '执行了';

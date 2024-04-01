@@ -436,6 +436,7 @@ $lang->action->label->unlinkchildrenstory     = "unlinked a child story";
 $lang->action->label->linkparentstory         = "linked a parent story";
 $lang->action->label->unlinkparentstory       = "unlink from parent story";
 $lang->action->label->deletechildrenstory     = "delete children story";
+$lang->action->label->syncgrade               = 'synced grade';
 $lang->action->label->tracked                 = 'tracked';
 $lang->action->label->hangup                  = 'hangup';
 $lang->action->label->run                     = 'run';
