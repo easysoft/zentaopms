@@ -670,7 +670,7 @@ class storyZen extends story
         $plans     = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' or empty($branch)) ? '' : $branch, 'unexpired|noclosed', true);
         $reviewers = $this->story->getProductReviewers($productID);
         $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
-        $stories   = $this->story->getParentStoryPairs($productID);
+        $stories   = $this->story->getParentStoryPairs($productID, '', $storyType);
         $grades    = $this->story->getGradePairs($storyType);
 
         /* 追加字段的label属性。 */
