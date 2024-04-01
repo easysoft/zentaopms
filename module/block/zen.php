@@ -1048,6 +1048,8 @@ class blockZen extends block
 
             foreach($groups as $group)
             {
+                if(strtotime($group) < strtotime(substr($product->createdDate, 0, 7))) continue;
+
                 $product->monthFinish[$group]  = 0;
                 $product->monthCreated[$group] = 0;
                 if(!empty($monthFinish))
