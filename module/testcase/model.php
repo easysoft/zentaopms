@@ -1133,7 +1133,7 @@ class testcaseModel extends model
 
         $action = strtolower($action);
 
-        if($action == 'runcase')            return (!$case->lib || !empty($case->product)) && $case->auto == 'no' && $case->status != 'wait';
+        if($action == 'runcase')            return (empty($case->lib) || !empty($case->product)) && $case->auto == 'no' && $case->status != 'wait';
         if($action == 'runresult')          return !$case->lib || !empty($case->product);
         if($action == 'importtolib')        return !$case->lib || !empty($case->product);
         if($action == 'ztfrun')             return $case->auto == 'auto';
