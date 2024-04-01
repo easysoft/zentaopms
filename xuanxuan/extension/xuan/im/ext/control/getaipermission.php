@@ -10,15 +10,15 @@ class myIm extends im {
         $app->user = $user;
 
         $aiChatPermission = commonModel::hasPriv('ai', 'chat');
-        $hasModelsAvailable = $this->loadModel('ai')->hasModelsAvailable();
+        $models = $this->loadModel('ai')->getLanguageModels();
 
         $chats = array();
-        if($hasModelsAvailable)
+        if($models)
         {
-
-            $models = $this->ai->getLanguageModels('', true);
             foreach($models as $model)
             {
+                if($model->enabled == '0') continue;
+
                 $chat = $this->im->chat->getByGid("$userID&ai-{$model->id}");
                 if($chat) continue;
 
@@ -36,7 +36,7 @@ class myIm extends im {
 
         $output->data = new stdclass();
         $output->data->hasAiChatPermission = $aiChatPermission;
-        $output->data->hasModelsAvailable  = $hasModelsAvailable;
+        $output->data->hasModelsAvailable  = !empty($models);
         $output->data->needToCreateChat    = $chats;
 
         return $this->im->sendOutput($output, 'getaipermissionResponse');
