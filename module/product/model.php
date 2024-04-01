@@ -75,7 +75,7 @@ class productModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
+            ->beginIF($this->config->vision != 'or')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
     }

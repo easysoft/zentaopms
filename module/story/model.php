@@ -2015,6 +2015,7 @@ class storyModel extends model
             ->beginIF(!$hasParent or $hasParent == 'false')->andWhere('t1.parent')->ge(0)->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF($type != 'full' || $type != 'all')->andWhere('t1.type')->eq($storyType)->fi()
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($order)
             ->fetchAll();
