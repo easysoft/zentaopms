@@ -270,7 +270,7 @@ class testsuite extends control
         /* Check user access rights. */
         $this->testsuiteZen->checkTestsuiteAccess($suiteID);
 
-        $this->testsuite->deleteSuiteByID($suiteID);
+        $this->testsuite->delete(TABLE_TESTSUITE, $suiteID);
         $message = $this->executeHooks($suiteID) ? : '';
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

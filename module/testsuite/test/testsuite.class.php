@@ -235,23 +235,6 @@ class testsuiteTest
     }
 
     /**
-     * Test delete suite and library.
-     *
-     * @param  int    $suiteID
-     * @param  string $table
-     * @access public
-     * @return int
-     */
-    public function deleteSuiteByIDTest($suiteID, $table = '')
-    {
-        $objects = $this->objectModel->deleteSuiteByID($suiteID, $table);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * 测试判断操作是否可以点击。
      * Test judge an action is clickable or not.
      *
