@@ -131,8 +131,8 @@ class repo extends control
     }
 
     /**
-     * 创建版本库。
-     * Create a repo.
+     * 创建版本库（关联代码库）。
+     * Create a repo(Associate with an existing repo).
      *
      * @param  int    $objectID  projectID|executionID
      * @access public
