@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 jsVar('updateTimeTip', $lang->metric->updateTimeTip);
+jsVar('calcTitleList', $lang->metric->calcTitleList);
 
 div
 (
