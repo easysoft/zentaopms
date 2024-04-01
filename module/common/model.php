@@ -1907,7 +1907,7 @@ class commonModel extends model
             if($app->config->debug)
             {
                 $saasLog .= 'request  header: ' . json_encode($headers) . PHP_EOL;
-                $saasLog .= 'response header: ' . json_encode($newHeader) . PHP_EOL;
+                if(isset($newHeader)) $saasLog .= 'response header: ' . json_encode($newHeader) . PHP_EOL;
             }
 
             if(!empty($data)) $saasLog .= 'data:   ' . print_r($data, true) . "\n";
