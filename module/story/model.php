@@ -797,7 +797,7 @@ class storyModel extends model
         if($story->parent > 0)
         {
             $this->updateParentStatus($storyID, $story->parent, !$parentChanged);
-            $this->setStage($storyID);
+            $this->storyTao->computeParentStage($story);
         }
 
         /* Set new stage and update story sort of plan when story plan has changed. */
