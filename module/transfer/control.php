@@ -147,7 +147,11 @@ class transfer extends control
         /* Get the import field data of the module. */
         $this->loadModel($module);
         $importFields = !empty($_SESSION[$module . 'TemplateFields']) ? $_SESSION[$module . 'TemplateFields'] : $this->config->$module->templateFields;
-        if($module == 'testcase' and !empty($_SESSION[$module . 'TemplateFields']) and is_array($importFields)) $this->config->$module->templateFields = implode(',', $importFields);
+        if($module == 'testcase' and !empty($_SESSION[$module . 'TemplateFields']) and is_array($importFields))
+        {
+            $this->config->$module->templateFields = implode(',', $importFields);
+            $this->config->testcase->datatable->fieldList['branch']['dataSource']['params'] = '$productID&active';
+        }
 
         /* 初始化字段列表。*/
         /* Init field list. */
