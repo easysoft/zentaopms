@@ -50,7 +50,7 @@ class backBtn extends btn
             'testsuite'      => 'testsuite-browse,testsuite-view,',
             'testtask'       => 'testtask-browse,testtask-cases,qa-index,testcase-browse,',
             'testreport'     => 'testreport-browse,project-testreport,execution-testreport,execution-testtask',
-            'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story,host-browse,execution-story,feedback-admin,',
+            'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story,host-browse,execution-story,feedback-admin,testcase-browse,caselib-browse',
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view,execution-doc',
             'design'         => 'design-browse',
             'release'        => 'release-browse,release-view,product-roadmap,kanban-view',
@@ -77,16 +77,18 @@ class backBtn extends btn
             'ai'             => 'ai-models'
         );
 
-        $props = parent::getProps();
-        $back = $this->prop('back');
+        $props  = parent::getProps();
+        $back   = $this->prop('back');
+        $module = $app->getModuleName();
+        $method = $app->getMethodName();
         if($back != 'APP')
         {
             $props['data-back'] = $back;
         }
-        elseif(isset($backs[$app->rawModule]))
+        elseif(isset($backs[$module]))
         {
-            $backList = explode(',', $backs[$app->rawModule]);
-            $backList = array_diff($backList, array("$app->rawModule-$app->rawMethod"));
+            $backList = explode(',', $backs[$module]);
+            $backList = array_diff($backList, array("$module-$method"));
 
             $props['data-back'] = implode(',', $backList);
         }
