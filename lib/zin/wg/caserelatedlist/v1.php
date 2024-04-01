@@ -22,7 +22,7 @@ class caseRelatedList extends relatedList
         $data['linkBugs'] = array
         (
             'title' => $lang->testcase->legendLinkBugs,
-            'items' => array_filter(array_merge($case->toBugs, array($case->fromBug))),
+            'items' => array_filter(array_merge($case->toBugs, array($case->fromBugData))),
             'url'   => hasPriv('bug', 'view') ? createLink('bug', 'view', 'bugID={id}') : false
         );
 

@@ -201,7 +201,7 @@ class testcaseModel extends model
             $case->storyStatus        = $story->status;
             $case->latestStoryVersion = $story->version;
         }
-        if($case->fromBug) $case->fromBugData = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title, severity, openedDate')->fetch();
+        if($case->fromBug) $case->fromBugData = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('id, title, severity, openedDate')->fetch();
         if($case->linkCase || $case->fromCaseID) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->orWhere('id')->eq($case->fromCaseID)->fetchPairs();
 
         $case->currentVersion = $version ? $version : $case->version;
