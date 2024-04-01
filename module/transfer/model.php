@@ -445,9 +445,9 @@ class transferModel extends model
         foreach($fieldList as $key => $field)
         {
             $exportDatas['fields'][$key] = $field['title'];
-            if($field['values'])
+            if($field['values'] || $field['items'])
             {
-                $exportDatas[$key] = $field['values'];
+                $exportDatas[$key] = $field['items'] ? $field['items'] : $field['values'];
                 $dataSourceList[]  = $key;
             }
         }
@@ -464,8 +464,8 @@ class transferModel extends model
                 {
                     /* 处理下拉框数据。*/
                     /* Deal dropdown values. */
-                    if($fieldList[$field]['control'] == 'select') $rows[$id]->$field = isset($exportDatas[$field][$value]) ? $exportDatas[$field][$value] : $value; // 单选下拉
-                    if($fieldList[$field]['control'] == 'multiple') // 多选下拉
+                    if($fieldList[$field]['control'] == 'select' || $fieldList[$field]['control'] == 'picker') $rows[$id]->$field = isset($exportDatas[$field][$value]) ? $exportDatas[$field][$value] : $value; // 单选下拉
+                    if($fieldList[$field]['control'] == 'multiple' || $fieldList[$field]['multiple'] == true) // 多选下拉
                     {
                         $separator    = $field == 'mailto' ? ',' : "\n";
                         $multipleLsit = explode(',', (string) $value);
