@@ -180,6 +180,7 @@ row
         (
             setID('importAction'),
             set::arrow(true),
+            set::caret(false),
             btn(set::type('link'), set::icon('import'), $lang->import),
             set::items(array
             (
@@ -191,6 +192,7 @@ row
         (
             setClass('kanbanSetting mr-2'),
             btn(set::type('link'), icon('ellipsis-v')),
+            set::caret(false),
             set::items(array
             (
                 common::hasPriv('execution', 'setKanban') ? array('text' => $lang->execution->setKanban, 'url' => createLink('execution', 'setKanban', "executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'sm') : null,
