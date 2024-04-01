@@ -286,10 +286,8 @@ UPDATE `zt_stage` SET `name` = '生命周期' WHERE `type` = 'lifecycle' AND `pr
 
 ALTER TABLE `zt_metriclib` ADD COLUMN `calcType` ENUM('cron', 'inference') NOT NULL DEFAULT 'cron';
 ALTER TABLE `zt_metriclib` ADD COLUMN `calculatedBy` varchar(30) NOT NULL DEFAULT '';
-<<<<<<< Updated upstream
 
 UPDATE `zt_workflowfield` SET `control` = 'input', `options` = '' WHERE `module` = 'task' AND `field` = 'parent';
-=======
+
 ALTER TABLE `zt_relationoftasks` DROP INDEX `relationoftasks`;
 ALTER TABLE `zt_relationoftasks` ADD INDEX `relationoftasks`(`execution` ASC, `task` ASC);
->>>>>>> Stashed changes
