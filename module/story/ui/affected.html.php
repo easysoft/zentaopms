@@ -15,16 +15,17 @@ $getAffectedTabs = function($story, $users)
             foreach($story->teams[$executionID] as $member) $teams .= zget($users, $member->account) . ' ';
         }
 
-        $affectedTaskCount += count(zget($story->tasks, $executionID, array()));
+        $executionTasks     = array_values(zget($story->tasks, $executionID, array()));
+        $affectedTaskCount += count($executionTasks);
         $affectedProjects[] = h6
         (
             $execution->name,
             $teams ? h::small(icon('group'), $teams) : null
         );
-        $affectedProjects[] = dtable
+        $affectedProjects[] = empty($executionTasks) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
         (
             set::cols($config->story->affect->projects->fields),
-            set::data(array_values(zget($story->tasks, $executionID, array())))
+            set::data($executionTasks)
         );
     }
 
@@ -49,7 +50,7 @@ $getAffectedTabs = function($story, $users)
                 to::suffix(label(count($story->bugs))),
                 set::key('affectedBugs'),
                 set::title($lang->story->affectedBugs),
-                dtable
+                empty($story->bugs) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
                 (
                     set::cols($config->story->affect->bugs->fields),
                     set::data(array_values($story->bugs)),
@@ -61,7 +62,7 @@ $getAffectedTabs = function($story, $users)
                 to::suffix(label(count($story->cases))),
                 set::key('affectedCases'),
                 set::title($lang->story->affectedCases),
-                dtable
+                empty($story->cases) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
                 (
                     set::cols($config->story->affect->cases->fields),
                     set::data(array_values($story->cases)),
@@ -73,7 +74,7 @@ $getAffectedTabs = function($story, $users)
                 to::suffix(label(count($story->twins))),
                 set::key('affectedTwins'),
                 set::title($lang->story->affectedTwins),
-                dtable
+                empty($story->twins) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : dtable
                 (
                     set::cols($config->story->affect->twins->fields),
                     set::data(array_values($story->twins)),
