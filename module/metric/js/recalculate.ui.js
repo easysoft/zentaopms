@@ -129,6 +129,19 @@ function getDateRange(startDate, endDate, dateType = 'day')
         dateRange.push(end);
     }
 
+    if(dateType == 'week')
+    {
+        let current = new Date(start);
+        current.setDate(current.getDate() + (6 - current.getDay()));
+        while(current <= end) 
+        {
+            dateRange.push(new Date(current));
+            current.setDate(current.getDate() + 7);
+        }
+        dateRange.pop();
+        dateRange.push(end);
+    }
+
     return dateRange;
 }
 
