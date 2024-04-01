@@ -67,7 +67,7 @@ class webdriver
      *
      * @param  string  $url
      * @access public
-     * @return void
+     * @return object
      */
     public function openURL($url)
     {
@@ -186,37 +186,6 @@ class webdriver
     }
 
     /**
-     * Switch to Url.
-     *
-     * @param  string $url
-     * @param  bool   $loginFlag
-     * @param  string $cookieFile
-     * @access public
-     * @return void
-     */
-    public function switchToUrl($url, $loginFlag = false, $cookieFile = '')
-    {
-        $url = trim($url);
-        if(substr($this->config->uitest->webRoot, -1) !== '/') $this->config->uitest->webRoot .= '/';
-        if(!preg_match('/^http:|^https:/', $url)) $url = $this->config->uitest->webRoot . $url;
-
-        if($loginFlag == true)
-        {
-            if(!$cookieFile) $cookieFile = $this->cookieFile;
-            $cookies = json_decode(file_get_contents($cookieFile), true);
-        }
-        else
-        {
-            sleep(2);
-            $cookies = $this->driver->manage()->getCookies();
-        }
-        $this->driver->get($this->config->uitest->webRoot);
-        $this->driver->manage()->deleteAllCookies();
-        foreach($cookies as $cookie) if($cookie["name"] == "zentaosid")  $this->driver->manage()->addCookie($cookie);
-        $this->driver->get($url);
-    }
-
-    /**
      * Find elements.
      *
      * @param  string $selector
@@ -255,15 +224,15 @@ class webdriver
      * @access public
      * @return object
      */
-    public function capture($imageFile)
+    public function capture($imageFile, $withElement = false)
     {
-        if(empty($this->pageElement))
+        if($withElement)
         {
-            $this->driver->takeScreenshot($imageFile);
+            $this->pageElement->takeElementScreenshot($imageFile);
         }
         else
         {
-            $this->pageElement->takeElementScreenshot($imageFile);
+            $this->driver->takeScreenshot($imageFile);
         }
 
         return $this;
@@ -446,14 +415,10 @@ class webdriver
     {
         $errors = array();
         $errors['zinbar'] = array();
+        $errors['alert']  = array();
 
         $this->driver->switchTo()->defaultContent();
-        $alerts = $this->driver->findElements(WebDriverBy::cssSelector('pre.alert'));
-        foreach($alerts as $alert)
-        {
-            $alertInput      = $alert->findElement(WebDriverBy::tagName('input'))->getAttribute('value');
-            $errors[]  = $alert->getText() . $alertInput;
-        }
+        $errors['alert'][]  = $this->getErrorsInAlert();
         $errors['zinbar'][] = $this->getErrorsInZinBar();
 
         $hasException = false;
@@ -470,22 +435,16 @@ class webdriver
 
             if($hasException == false)
             {
-                $alerts = $this->driver->findElements(WebDriverBy::cssSelector('pre.alert'));
-                foreach($alerts as $alert)
-                {
-                    $alertInput      = $alert->findElement(WebDriverBy::tagName('input'))->getAttribute('value');
-                    $errors[]  = $alert->getText() . $alertInput;
-                }
+                $errors['alert'][]  = $this->getErrorsInAlert();
                 $errors['zinbar'][] = $this->getErrorsInZinBar();
             }
         }
 
         $this->driver->switchTo()->defaultContent();
         if(!empty($iframe)) $this->switchToIframe($iframe);
+        if(empty($errors)) return;
 
-        if(empty($errors)) return true;
-
-        return $this;
+        return $errors;
     }
 
     /**
@@ -518,6 +477,19 @@ class webdriver
         {
             return $errors;
         }
+    }
+
+    public function getErrorsInAlert()
+    {
+        $errors = array();
+        $alerts = $this->driver->findElements(WebDriverBy::cssSelector('pre.alert'));
+        foreach($alerts as $alert)
+        {
+            $alertInput = $alert->findElement(WebDriverBy::tagName('input'))->getAttribute('value');
+            $errors[]   = $alert->getText() . $alertInput;
+        }
+
+        return $errors;
     }
 
     /**
@@ -651,34 +623,12 @@ class webdriver
      * Get url of current page.
      *
      * @access public
-     * @return object
+     * @return string
      */
     public function getPageUrl()
     {
         $url = $this->driver->getCurrentURL();
-
-        $parseURL = parse_url($url);
-        if(isset($parseURL['query']))
-        {
-            $query = $parseURL['query'];
-            parse_str($query, $queryParams);
-            $module = $queryParams['m'];
-            $method = $queryParams['f'];
-        }
-        else
-        {
-            $path = $parseURL['path'];
-            $pathParts = explode('-', trim($path, '/'));
-
-            $module = str_replace('.html', '', $pathParts[0]);
-            $method = str_replace('.html', '', $pathParts[1]);
-        }
-
-        $this->result->url    = $url;
-        $this->result->module = $module;
-        $this->result->method = $method;
-
-        return $this->result;
+        return $url;
     }
 
     /**
