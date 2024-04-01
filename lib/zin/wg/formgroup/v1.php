@@ -4,6 +4,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'formlabel' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'control' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'content' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
 
 /**
@@ -28,6 +29,7 @@ class formGroup extends wg
         'labelActions?: array',                 // 标签的操作按钮。
         'labelActionsClass?: string',           // 标签的操作按钮 class 属性。
         'labelActionsProps?: array',            // 标签的操作按钮其它属性。
+        'labelControl?: array',                 // 自定义标签控件。
         'checkbox?: bool|array',                // 标签的复选框属性定义。
         'required?:bool|string="auto"',         // 是否必填。
         'requiredFields?: string',              // 必填字段列表，例如 `'product,branch'`。
@@ -68,9 +70,10 @@ class formGroup extends wg
 
     protected function buildLabel(): node|set
     {
-        list($name, $label, $labelFor, $labelClass, $labelProps, $labelHint, $labelHintClass, $labelHintProps, $labelHintIcon, $labelActions, $labelActionsClass, $labelActionsProps, $checkbox, $required, $strong) = $this->prop(array('name', 'label', 'labelFor', 'labelClass', 'labelProps', 'labelHint', 'labelHintClass', 'labelHintProps', 'labelHintIcon', 'labelActions', 'labelActionsClass', 'labelActionsProps', 'checkbox', 'required', 'strong'));
+        list($name, $label, $labelFor, $labelClass, $labelProps, $labelHint, $labelHintClass, $labelHintProps, $labelHintIcon, $labelActions, $labelActionsClass, $labelActionsProps, $checkbox, $required, $strong, $labelControl) = $this->prop(array('name', 'label', 'labelFor', 'labelClass', 'labelProps', 'labelHint', 'labelHintClass', 'labelHintProps', 'labelHintIcon', 'labelActions', 'labelActionsClass', 'labelActionsProps', 'checkbox', 'required', 'strong', 'labelControl'));
 
         if(is_null($label) || $label === false) return setClass('no-label');
+        if($labelControl instanceof setting) $labelControl = $labelControl->toArray();
 
         return new formLabel
         (
@@ -86,7 +89,8 @@ class formGroup extends wg
             set::checkbox($checkbox),
             set::text($label),
             set('for', is_null($labelFor) ? $name : $labelFor),
-            set($labelProps)
+            set($labelProps),
+            $labelControl ? new content(is_array($labelControl) ? set($labelControl) : $labelControl) : null
         );
     }
 
