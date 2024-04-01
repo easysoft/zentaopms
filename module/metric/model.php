@@ -2237,14 +2237,14 @@ class metricModel extends model
      * @access public
      * @return object|array
      */
-    public function parseDateStr($date, $dateType = 'all')
+    public function parseDateStr($date, $dateType = 'all', $isWeekWithYear = true)
     {
         $timestamp = strtotime($date);
 
         $year  = date('Y', $timestamp);
         $month = date('m', $timestamp);
         $day   = date('d', $timestamp);
-        $week  = date('oW', $timestamp);
+        $week  = $isWeekWithYear ? date('oW', $timestamp) : date('W', $timestamp);
         $week  = substr($week, -2);
 
         $dateValues = new stdClass();
@@ -2390,6 +2390,39 @@ class metricModel extends model
             if(isset($firstRecord->$exclude)) return false;
         }
         return true;
+    }
+
+    public function isCalcByCron($code, $date, $dateType)
+    {
+        $parsedDate = $this->parseDateStr($date, $dateType, false);
+        if($dateType == 'year')
+        {
+            $startDate = "{$parsedDate['year']}-01-01 00:00:00";
+            $endDate   = "{$parsedDate['year']}-12-31 23:59:59";
+        }
+        if($dateType == 'month')
+        {
+            $startDate = "{$parsedDate['year']}-{$parsedDate['month']}-01 00:00:00";
+
+            $nextMonth = date('Y-m-01', strtotime("$startDate +1 month"));
+            $endDate   = date('Y-m-d', strtotime("$nextMonth -1 day"));
+            $endDate   = "{$endDate} 23:59:59";
+        }
+        if($dateType == 'day')
+        {
+            $startDate = "{$parsedDate['year']}-{$parsedDate['month']}-{$parsedDate['day']} 00:00:00";
+            $endDate   = "{$parsedDate['year']}-{$parsedDate['month']}-{$parsedDate['day']} 23:59:59";
+        }
+
+        $record = $this->dao->select('id')->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->andWhere('calcType')->eq('cron')
+            ->andWhere('date')->ge($startDate)
+            ->andWhere('date')->le($endDate)
+            ->limit(1)
+            ->fetch();
+
+        return !empty($record) ? true : false;
     }
 
     /**

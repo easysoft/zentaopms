@@ -170,13 +170,19 @@ class metric extends control
     public function ajaxUpdateSingleMetricLib($code, $date)
     {
         $date = str_replace('_', '-', $date);
+        $dateType = $this->metric->getDateTypeByCode($code);
 
-        $calc = $this->metric->calculateMetricByCode($code);
-        $record = $this->metricZen->getRecordByCodeAndDate($code, $calc, $date);
+        $isCalcByCron = $this->metric->isCalcByCron($code, $date, $dateType);
 
-        $records = array();
-        $records[$code] = $record;
-        $this->metric->insertMetricLib($records, 'inference');
+        if(!$isCalcByCron)
+        {
+            $calc   = $this->metric->calculateMetricByCode($code);
+            $record = $this->metricZen->getRecordByCodeAndDate($code, $calc, $date);
+
+            $records = array();
+            $records[$code] = $record;
+            $this->metric->insertMetricLib($records, 'inference');
+        }
     }
 
     /**
@@ -194,14 +200,18 @@ class metric extends control
         $calcList = $this->metric->getCalcInstanceList();
 
         $classifiedCalcGroup = json_decode(file_get_contents($this->app->getTmpRoot() . 'calc'));
-        if($calcType == 'inference') $lastInferenceDateList = json_decode(file_get_contents($this->app->getTmpRoot() . 'inferencelist'));
 
         $records = array();
         foreach($classifiedCalcGroup as $calcGroup)
         {
             foreach($calcGroup->calcList as $code => $calc) 
             {
-                if($calcType == 'inference' && !empty($lastInferenceDateList) && $lastInferenceDateList->$code < $date) continue;
+                if($calcType == 'inference')
+                {
+                    $dateType = $this->metric->getDateTypeByCode($code);
+                    $isCalcByCron = $this->metric->isCalcByCron($code, $date, $dateType);
+                    if($isCalcByCron) continue;
+                }
 
                 $calcObj = $calcList[$code];
                 $calcObj->result = json_decode(json_encode($calc->result), true);
@@ -496,17 +506,8 @@ class metric extends control
         $metric   = !empty($code) ? $this->metric->getByCode($code) : '';
         $dateType = !empty($code) ? $this->metric->getDateTypeByCode($code) : '';
 
-        if($calcRange == 'single')
-        {
-            if($calcType == 'inference') $endDate = $this->metric->getInferenceEndDate($code, $dateType);
-            if($calcType == 'all' )      $endDate = helper::now();
-        }
-        else
-        {
-            $endDate = helper::now();
-        }
-
         $startDate = $this->metric->getInstallDate();
+        $endDate   = helper::now();
 
         $this->view->code      = $code;
         $this->view->metric    = $metric;
