@@ -263,7 +263,6 @@ $('.copy-btn').on('click', function()
     copyText[0].selectionStart = copyText[0].selectionEnd;
     copyText[0].blur();
 
-    $(that).tooltip('show');
     var that = this;
     setTimeout(function()
     {

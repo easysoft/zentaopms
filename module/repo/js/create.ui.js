@@ -82,7 +82,7 @@ function onScmChange()
 
     (scm == 'Git') ? $('.tips-git').removeClass('hidden') : $('.tips-git').addClass('hidden');
 
-    if(scm == 'Git' || scm == 'Gitea' || scm == 'Gogs')
+    if(scm != 'Subversion')
     {
         $('.account-fields').addClass('hidden');
         $('#path').attr('placeholder', pathGitTip);

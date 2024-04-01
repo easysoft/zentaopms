@@ -29,6 +29,7 @@ if($config->inQuickon) $lang->space->featureBar['browse']['stopped']  = '已关�
 if($config->inQuickon) $lang->space->featureBar['browse']['abnormal'] = '异常';
 
 $lang->space->appType['gitlab']    = 'GitLab';
+$lang->space->appType['gitfox']    = 'GitFox';
 $lang->space->appType['gitea']     = 'Gitea';
 $lang->space->appType['gogs']      = 'Gogs';
 $lang->space->appType['jenkins']   = 'Jenkins';

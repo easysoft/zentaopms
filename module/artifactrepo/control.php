@@ -56,12 +56,7 @@ class artifactrepo extends control
     {
         if($_POST)
         {
-            $repo = form::data($this->config->artifactrepo->form->create)
-                ->join('products', ',')
-                ->add('editedBy',  $this->app->user->account)
-                ->add('createdBy', $this->app->user->account)
-                ->add('createdDate', helper::now())
-                ->get();
+            $repo = form::data($this->config->artifactrepo->form->create)->get();
             if($repo->products) $repo->products = ',' . $repo->products . ',';
 
             $repoID = $this->artifactrepo->create($repo);
@@ -71,9 +66,9 @@ class artifactrepo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
         }
 
-        $this->view->title     = $this->lang->artifactrepo->create;
-        $this->view->nexusList = $this->loadModel('pipeline')->getPairs('nexus');
-        $this->view->products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $this->view->title    = $this->lang->artifactrepo->create;
+        $this->view->servers  = $this->loadModel('pipeline')->getList('nexus,gitfox');
+        $this->view->products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->display();
     }
@@ -90,14 +85,10 @@ class artifactrepo extends control
     {
         if($_POST)
         {
-            $repo = form::data($this->config->artifactrepo->form->edit)
-                ->join('products', ',')
-                ->add('editedBy', $this->app->user->account)
-                ->add('editedDate', helper::now())
-                ->get();
+            $repo = form::data($this->config->artifactrepo->form->edit)->get();
             if($repo->products) $repo->products = ',' . $repo->products . ',';
 
-            $changes = $this->artifactrepo->update($repo, $artifactRepoID);
+            $this->artifactrepo->update($repo, $artifactRepoID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
@@ -163,15 +154,12 @@ class artifactrepo extends control
     {
         $artifactRepos = $this->artifactrepo->getList();
         $serverRepos   = array();
+        $hasUpdate     = false;
         foreach($artifactRepos as $repo)
         {
+            $deletedRepo = true;
             if(!isset($serverRepos[$repo->serverID])) $serverRepos[$repo->serverID] = $this->artifactrepo->getServerRepos($repo->serverID);
-        }
 
-        $hasUpdate = false;
-        foreach($artifactRepos as $repo)
-        {
-            if(!isset($serverRepos[$repo->serverID])) continue;
             foreach($serverRepos[$repo->serverID]['data'] as $serverRepo)
             {
                 $serverRepo->onlineStatus = $serverRepo->online ? 'online' : 'offline';
@@ -180,6 +168,14 @@ class artifactrepo extends control
                     $this->artifactrepo->updateStatus($repo->id, $serverRepo->onlineStatus);
                     $hasUpdate = true;
                 }
+
+                if($serverRepo->name == $repo->repoName) $deletedRepo = false;
+            }
+
+            if($deletedRepo && $repo->status != 'offline')
+            {
+                $hasUpdate = true;
+                $this->artifactrepo->updateStatus($repo->id, 'offline');
             }
         }
 

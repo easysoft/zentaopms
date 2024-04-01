@@ -57,6 +57,7 @@ $config->repo->logDtable->fieldList['revision']['checkbox'] = jsRaw('(rowID) => 
 
 $config->repo->logDtable->fieldList['revision']['link'] = array('module' => 'repo', 'method' => 'revision', 'params' => "repoID={$repoID}&objectID={$objectID}&revision={revision}");
 
+if(in_array($repo->SCM, $config->repo->notSyncSCM)) unset($config->repo->logDtable->fieldList['commit']);
 $logs = initTableData($logs, $config->repo->logDtable->fieldList);
 
 $footToolbar['items'][] = array('text' => $lang->repo->diff, 'className' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));

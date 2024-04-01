@@ -14,6 +14,7 @@ dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 
 foreach($MRList as $MR)
 {
+    $MR->canEdit   = '';
     $MR->canDelete = ($app->user->admin or (isset($openIDList[$MR->hostID]) and isset($projects[$MR->hostID][$MR->sourceProject]->owner->id) and $projects[$MR->hostID][$MR->sourceProject]->owner->id == $openIDList[$MR->hostID])) ? '' : 'disabled';
     if($repo->SCM == 'Gitlab')
     {

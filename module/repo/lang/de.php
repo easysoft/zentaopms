@@ -173,6 +173,7 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
+$lang->repo->scmList['GitFox']     = 'GitFox';
 $lang->repo->scmList['Gogs']       = 'Gogs';
 if(!$config->inQuickon) $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
@@ -226,6 +227,7 @@ $lang->repo->error->comment           = 'Please enter content!';
 $lang->repo->error->title             = 'Please enter title!';
 $lang->repo->error->accessDenied      = 'You do not have the privilege to access the repository.';
 $lang->repo->error->noFound           = 'The repo is not found.';
+$lang->repo->error->empty             = 'Repo is empty, cannot sync logs.';
 $lang->repo->error->noFile            = '%s does not exist.';
 $lang->repo->error->noPriv            = 'The program does not have the privilege  to switch to %s';
 $lang->repo->error->output            = "The command is: %s\nThe error is(%s): %s\n";
@@ -267,3 +269,15 @@ $lang->repo->typeList['redundancy']  = 'Redundancy';
 $lang->repo->typeList['logicError']  = 'Logic Error';
 
 $lang->repo->featureBar['maintain']['all'] = 'All';
+
+$lang->repo->errorLang[0] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
+$lang->repo->errorLang[1] = 'Branch is exists';
+$lang->repo->errorLang[2] = 'branch .* already exists';
+$lang->repo->errorLang[3] = 'Forbidden';
+$lang->repo->errorLang[4] = 'cannot have ASCII control characters';
+
+$lang->repo->apiError[0] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
+$lang->repo->apiError[1] = 'Branch is exists';
+$lang->repo->apiError[2] = 'branch .* already exists';
+$lang->repo->apiError[3] = 'Forbidden';
+$lang->repo->apiError[4] = 'cannot have ASCII control characters';

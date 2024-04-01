@@ -173,6 +173,7 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
+$lang->repo->scmList['GitFox']     = 'GitFox';
 $lang->repo->scmList['Gogs']       = 'Gogs';
 if(!$config->inQuickon) $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = '本地 Git';
@@ -226,6 +227,7 @@ $lang->repo->error->comment           = '请填写内容';
 $lang->repo->error->title             = '请填写标题';
 $lang->repo->error->accessDenied      = '你没有权限访问该代码库';
 $lang->repo->error->noFound           = '你访问的代码库不存在';
+$lang->repo->error->empty             = '代码库内容为空，无法同步';
 $lang->repo->error->noFile            = '目录 %s 不存在';
 $lang->repo->error->noPriv            = '程序没有权限切换到目录 %s';
 $lang->repo->error->output            = "执行命令：%s\n错误结果(%s)： %s\n";
@@ -267,3 +269,15 @@ $lang->repo->typeList['redundancy']  = '冗余';
 $lang->repo->typeList['logicError']  = '逻辑错误';
 
 $lang->repo->featureBar['maintain']['all'] = '全部';
+
+$lang->repo->errorLang[0] = "只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。";
+$lang->repo->errorLang[1] = '分支名已存在。';
+$lang->repo->errorLang[2] = '分支名已存在。';
+$lang->repo->errorLang[3] = '权限不足。';
+$lang->repo->errorLang[4] = "分支名不能包含 ' ', '~', '^'或':'。";
+
+$lang->repo->apiError[0] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
+$lang->repo->apiError[1] = 'Branch is exists';
+$lang->repo->apiError[2] = 'branch .* already exists';
+$lang->repo->apiError[3] = 'Forbidden';
+$lang->repo->apiError[4] = 'cannot have ASCII control characters';

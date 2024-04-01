@@ -209,7 +209,7 @@ panel
                         h::a
                         (
                             setClass('font-normal ml-2 mr-2'),
-                            set::href($sourceBranch ? zget($sourceBranch, 'web_url', '') : ''),
+                            set::href($sourceBranch),
                             set::target('_blank'),
                             set::disabled($sourceDisabled),
                             $sourceProject->name_with_namespace . ':' . $MR->sourceBranch
@@ -218,7 +218,7 @@ panel
                         h::a
                         (
                             setClass('font-normal ml-2 mr-2'),
-                            set::href($targetBranch ? zget($targetBranch, 'web_url', '') : ''),
+                            set::href($targetBranch),
                             set::target('_blank'),
                             $targetProject->name_with_namespace . ':' . $MR->targetBranch
                         )

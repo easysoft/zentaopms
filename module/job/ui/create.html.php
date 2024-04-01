@@ -11,8 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('frameList', $lang->job->frameList);
-jsVar('repoPairs', $repoPairs);
-jsVar('gitlabRepos', $gitlabRepos);
+jsVar('triggerList', $lang->job->triggerTypeList);
+jsVar('repoList', $repoList);
 jsVar('dirChange', $lang->job->dirChange);
 jsVar('buildTag', $lang->job->buildTag);
 
@@ -25,10 +25,12 @@ if($this->session->repoID)
 formPanel
 (
     set::title($lang->job->create),
+    setClass('job-form'),
     set::labelWidth('10em'),
     on::click('.add-param', 'addItem'),
     on::click('.delete-param', 'deleteItem'),
     on::click('.custom', 'setValueInput'),
+    on::click('select.paramValue', 'changeCustomField'),
     set::actionsClass('w-2/3'),
     formGroup
     (
@@ -47,7 +49,7 @@ formPanel
             set::required(true),
             set::items(array('' => '') + $lang->job->engineList),
             set::value(''),
-            on::change('changeEngine')
+            on::change('window.changeEngine')
         ),
         h::span
         (
@@ -63,9 +65,9 @@ formPanel
             set::label($lang->job->repo),
             set::required(true),
             set::name('repo'),
-            set::items($repoPairs),
+            set::items(array()),
             set::width('1/2'),
-            on::change('changeRepo')
+            on::change('window.changeRepo')
         ),
         formGroup
         (
@@ -77,6 +79,15 @@ formPanel
             set::width('1/2'),
             set::items(array())
         )
+    ),
+    formGroup
+    (
+        setClass('gitfox-pipeline hidden'),
+        set::label($lang->job->gitfoxpipeline),
+        set::required(true),
+        set::name('gitfoxpipeline'),
+        set::items(array()),
+        set::width('1/2')
     ),
     formGroup
     (
@@ -93,26 +104,34 @@ formPanel
         set::width('1/2'),
         on::change('changeFrame')
     ),
-    formRow
+    formGroup
     (
-        formGroup
-        (
-            set::name('triggerType'),
-            set::width('1/2'),
-            set::label($lang->job->triggerType),
-            set::items($lang->job->triggerTypeList),
-            on::change('changeTriggerType')
-        )
+        set::name('useZentao'),
+        set::label($lang->job->useZentao),
+        set::control('radioListInline'),
+        set::items($lang->job->zentaoTrigger),
+        set::value('1'),
+        set::width('1/2'),
+        on::change('window.changeTrigger')
+    ),
+    formGroup
+    (
+        set::name('triggerType'),
+        set::width('1/2'),
+        set::required(true),
+        set::label($lang->job->triggerType),
+        set::items($lang->job->triggerTypeList),
+        on::change('window.changeTriggerType')
     ),
     formRow
     (
         setClass('svn-fields hidden'),
         formGroup
         (
-            set::id('svnDirBox'),
+            set::name('svnDir[]'),
             set::width('1/2'),
             set::label($lang->job->svnDir),
-            set::control('static'),
+            set::items(array())
         )
     ),
     formRow

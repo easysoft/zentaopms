@@ -70,10 +70,11 @@ $config->mr->actionList['delete']['className']    = 'ajax-submit';
 $config->mr->actionList['delete']['data-app']     = $app->tab;
 
 $config->mr->actionList['accept'] = array();
-$config->mr->actionList['accept']['icon']     = 'flow';
-$config->mr->actionList['accept']['text']     = $lang->mr->acceptMR;
-$config->mr->actionList['accept']['url']      = helper::createLink('mr', 'accept', "MRID={id}");
-$config->mr->actionList['accept']['data-app'] = $app->tab;
+$config->mr->actionList['accept']['icon']      = 'flow';
+$config->mr->actionList['accept']['text']      = $lang->mr->acceptMR;
+$config->mr->actionList['accept']['url']       = helper::createLink('mr', 'accept', "MRID={id}");
+$config->mr->actionList['accept']['data-app']  = $app->tab;
+$config->mr->actionList['accept']['className'] = 'ajax-submit';
 
 $config->mr->actionList['approval'] = array();
 $config->mr->actionList['approval']['icon']        = 'ok';

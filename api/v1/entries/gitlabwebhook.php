@@ -27,12 +27,12 @@ class gitlabWebhookEntry extends baseEntry
         $repoID = $this->param('repoID');
         if(empty($repoID)) return;
 
-        $repo = $this->loadModel('repo')->getByID($repoID);
-        if(empty($repo)) return;
-
         $this->app->user = new stdclass();
         $this->app->user->account = '';
         $this->app->user->admin   = false;
+        $repo = $this->loadModel('repo')->getByID($repoID);
+        if(empty($repo)) return;
+
         $this->repo->handleWebhook($event, $this->requestBody, $repo);
     }
 }

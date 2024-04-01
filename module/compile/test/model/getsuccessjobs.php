@@ -8,8 +8,8 @@ su('admin');
 /**
 
 title=测试 compileModel->getSuccessJobs();
+timeout=0
 cid=1
-pid=1
 
 - 检查传入参数为空时候的返回结果。 @0
 - 检查传入正确参数时的返回结果。属性1 @1

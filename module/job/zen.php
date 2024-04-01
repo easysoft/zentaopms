@@ -57,6 +57,10 @@ class jobZen extends job
             {
                 if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
             }
+            elseif($job->engine == 'gitfox')
+            {
+                $job->pipeline = $job->repoName;
+            }
 
             $job->lastExec    = $job->lastExec ? $job->lastExec : '';
             $job->triggerType = $this->job->getTriggerConfig($job);
@@ -105,34 +109,6 @@ class jobZen extends job
         }
 
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', 'repoID=' . ($repoID ? $repoID : $this->post->repo)));
-    }
-
-    /**
-     * 获取版本库列表。
-     * Get repo list.
-     *
-     * @param  int       $projectID
-     * @param  object    $repo
-     * @access protected
-     * @return array
-     */
-    protected function getRepoList(int $projectID, object $repo = null): array
-    {
-        $repoList    = $this->loadModel('repo')->getList($projectID);
-        $repoPairs   = $repo ? array($repo->id => $repo->name) : array();
-        $gitlabRepos = array();
-        $repoTypes   = $repo ? array($repo->id => $repo->SCM) : array();
-
-        foreach($repoList as $repo)
-        {
-            if(empty($repo->synced)) continue;
-
-            $repoPairs[$repo->id] = "[{$repo->SCM}] " . $repo->name;
-            $repoTypes[$repo->id] = $repo->SCM;
-            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = "[{$repo->SCM}] " . $repo->name;
-        }
-
-        return array($repoPairs, $gitlabRepos, $repoTypes);
     }
 
     /**

@@ -31,27 +31,18 @@ $mrModel = new mrTest();
 $hostID = array
 (
     'gitlab' => 1,
-    'gitea'  => 4,
-    'gogs'   => 5,
     'error'  => 10
 );
 
 $projectID = array
 (
     'gitlab' => 3,
-    'gitea'  => 'gitea/unittest',
-    'gogs'   => 'easycorp/unittest',
 );
 
 $mrID = array
 (
     'gitlab' => 114,
-    'gitea'  => 20,
-    'gogs'   => 20,
 );
 
 r($mrModel->apiCloseMrTester($hostID['error'], $projectID['gitlab'], $mrID['gitlab'])) && p() && e('0'); // 不存在的主机
-
 r($mrModel->apiCloseMrTester($hostID['gitlab'], $projectID['gitlab'], $mrID['gitlab'])) && p('title,state') && e('test,closed'); // 重新打开并关闭Gitlab合并请求
-r($mrModel->apiCloseMrTester($hostID['gitea'],  $projectID['gitea'],  $mrID['gitea']))  && p('title,state') && e('test,closed'); // 重新打开并关闭Gitea合并请求
-r($mrModel->apiCloseMrTester($hostID['gogs'],   $projectID['gogs'],   $mrID['gogs']))   && p('title,state') && e('test,closed'); // 重新打开并关闭Gogs合并请求

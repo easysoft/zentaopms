@@ -88,7 +88,7 @@ class pipelineModel extends model
         $type = strtolower($type);
         return $this->dao->select('id,name')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->beginIF($type)->AndWhere('type')->eq($type)->fi()
+            ->beginIF($type)->AndWhere('type')->in($type)->fi()
             ->orderBy('id')->fetchPairs('id', 'name');
     }
 
@@ -163,7 +163,7 @@ class pipelineModel extends model
      */
     public function deleteByObject(int $id, string $type = 'gitlab'): int|bool
     {
-        if(in_array($type, array('gitlab', 'gitea', 'gogs')))
+        if(in_array($type, array('gitlab', 'gitea', 'gogs', 'gitfox')))
         {
             $repo = $this->dao->select('*')->from(TABLE_REPO)
                 ->where('deleted')->eq('0')

@@ -173,6 +173,7 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
+$lang->repo->scmList['GitFox']     = 'GitFox';
 $lang->repo->scmList['Gogs']       = 'Gogs';
 if(!$config->inQuickon) $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
@@ -226,6 +227,7 @@ $lang->repo->error->comment           = 'Veuillez entrer le contenu du commentai
 $lang->repo->error->title             = 'Veuillez saisir un titre !';
 $lang->repo->error->accessDenied      = "Vous n'avez pas les privilèges d'accéder au référentiel.";
 $lang->repo->error->noFound           = 'Le référentiel est non trouvé.';
+$lang->repo->error->empty             = 'Repo is empty, cannot sync logs.';
 $lang->repo->error->noFile            = "%s n'existe pas.";
 $lang->repo->error->noPriv            = "Le programme n'a pas les privilèges pour basculer vers %s";
 $lang->repo->error->output            = "La commande est: %s\nL'erreur est (%s): %s\n";
@@ -267,3 +269,15 @@ $lang->repo->typeList['redundancy']  = 'Redondance';
 $lang->repo->typeList['logicError']  = 'Erreur Logique';
 
 $lang->repo->featureBar['maintain']['all'] = 'All';
+
+$lang->repo->errorLang[0] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
+$lang->repo->errorLang[1] = 'Branch is exists';
+$lang->repo->errorLang[2] = 'branch .* already exists';
+$lang->repo->errorLang[3] = 'Forbidden';
+$lang->repo->errorLang[4] = 'cannot have ASCII control characters';
+
+$lang->repo->apiError[0] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
+$lang->repo->apiError[1] = 'Branch is exists';
+$lang->repo->apiError[2] = 'branch .* already exists';
+$lang->repo->apiError[3] = 'Forbidden';
+$lang->repo->apiError[4] = 'cannot have ASCII control characters';

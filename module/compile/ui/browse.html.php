@@ -22,7 +22,8 @@ if($repoID)
 featureBar
 (
     set::current('compile'),
-    set::link($this->createLink('{key}', 'browse', "repoID=$repoID"))
+    set::link(createLink('{key}', 'browse', "repoID=$repoID")),
+    set::itemLink(array('compile' => createLink('compile', 'browse', "repoID=$repoID&jobID=$jobID")))
 );
 
 /* zin: Define the toolbar on main menu. */

@@ -80,19 +80,6 @@ formPanel
         set::items($repoGroups),
         set::control("picker")
     ),
-    formRow
-    (
-        ($config->inContainer || $config->inQuickon) ? setClass('hidden') : setClass('hide-service'),
-        set::style(array('display' => $server && $server->type == 'gitlab' ? 'none' : 'flex')),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("client"),
-            set::label($lang->repo->client),
-            set::required(true),
-            set::placeholder($lang->repo->example->client->git)
-        )
-    ),
     formGroup
     (
         set::width('1/2'),

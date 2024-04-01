@@ -151,18 +151,18 @@ class repo extends control
             if($repo) $repoID = $this->repo->create($repo, $isPipelineServer);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($this->post->SCM == 'Gitlab')
+            if(in_array($this->post->SCM, $this->config->repo->notSyncSCM))
             {
                 /* Add webhook. */
                 $repo = $this->repo->getByID($repoID);
-                $this->loadModel('gitlab')->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->loadModel($this->post->SCM)->updateCodePath($repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
                 $this->repo->updateCommitDate($repoID);
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
-            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false) . '#app=' . $this->app->tab;
+            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
@@ -190,11 +190,11 @@ class repo extends control
             if($repo) $repoID = $this->repo->createRepo($repo);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($formData->SCM == 'Gitlab')
+            if(in_array($formData->SCM, $this->config->repo->notSyncSCM))
             {
                 /* Add webhook. */
                 $repo = $this->repo->getByID($repoID);
-                $this->loadModel('gitlab')->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->loadModel($formData->SCM)->updateCodePath($repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
                 $this->repo->updateCommitDate($repoID);
             }
 
@@ -231,7 +231,7 @@ class repo extends control
         {
             $branch = form::data($this->config->repo->form->createBranch)->get();
             $result = $this->scm->createBranch($branch->name, $branch->from);
-            if($result['result'] == 'fail') return $this->sendError($this->lang->repo->error->createdFail . ': ' . $result['message']);
+            if($result['result'] == 'fail') return $this->sendError($this->lang->repo->error->createdFail . ': ' . $this->repoZen->parseErrorContent($result['message']));
 
             $this->repo->saveTaskRelation((int)$repoID, $taskID, $branch->name);
             $this->loadModel('action')->create('task', $taskID, 'createRepoBranch', '', $branch->name);
@@ -458,22 +458,23 @@ class repo extends control
         /* Synchronous commit only in root path. */
         if(in_array($repo->SCM, $this->config->repo->gitTypeList) && $repo->SCM != 'Gitlab' && empty($path) && $infos && empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
 
-        $this->view->title       = $this->lang->repo->common;
-        $this->view->repo        = $repo;
-        $this->view->revisions   = $revisions;
-        $this->view->revision    = $revision;
-        $this->view->infos       = $infos;
-        $this->view->repoID      = $repoID;
-        $this->view->branches    = $branches;
-        $this->view->tags        = $tags;
-        $this->view->branchID    = $branchID;
-        $this->view->objectID    = $objectID;
-        $this->view->pager       = $pager;
-        $this->view->path        = urldecode($path);
-        $this->view->logType     = $type;
-        $this->view->cloneUrl    = $this->repo->getCloneUrl($repo);
-        $this->view->repoPairs   = $this->repo->getRepoPairs($this->app->tab, $objectID);
-        $this->view->branchOrTag = $branchOrTag;
+        $this->view->title        = $this->lang->repo->common;
+        $this->view->repo         = $repo;
+        $this->view->revisions    = $revisions;
+        $this->view->revision     = $revision;
+        $this->view->lastRevision = $lastRevision;
+        $this->view->infos        = $infos;
+        $this->view->repoID       = $repoID;
+        $this->view->branches     = $branches;
+        $this->view->tags         = $tags;
+        $this->view->branchID     = $branchID;
+        $this->view->objectID     = $objectID;
+        $this->view->pager        = $pager;
+        $this->view->path         = urldecode($path);
+        $this->view->logType      = $type;
+        $this->view->cloneUrl     = $this->repo->getCloneUrl($repo);
+        $this->view->repoPairs    = $this->repo->getRepoPairs($this->app->tab, $objectID);
+        $this->view->branchOrTag  = $branchOrTag;
         $this->display();
     }
 
@@ -553,10 +554,9 @@ class repo extends control
         $repo = $this->repo->getByID($repoID);
 
         $this->scm->setEngine($repo);
-        $log = $this->scm->log('', $revision, $revision);
-
+        $log      = $this->scm->log('', $revision, $revision);
         $revision = !empty($log[0]) ? $this->repo->getHistoryRevision($repoID, (string)$log[0]->revision) : '';
-        if($revision)
+        if($revision && $repo->SCM != 'GitFox')
         {
             if(in_array($repo->SCM, $this->config->repo->gitTypeList))
             {
@@ -983,18 +983,18 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
         }
 
-        $gitlabList = $this->loadModel('gitlab')->getList();
-        $gitlab     = empty($server) ? array_shift($gitlabList) : $this->gitlab->getById($server);
+        $serverList    = $this->loadModel('gitlab')->getList() + $this->loadModel('gitfox')->getList();
+        $defaultServer = empty($server) ? array_shift($serverList) : $this->loadModel('pipeline')->getById($server);
 
-        $repoList = $gitlab ? $this->repoZen->getGitlabNotExistRepos($gitlab) : array();
+        $repoList = $defaultServer ? $this->repoZen->getNotExistRepos($defaultServer) : array();
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
-        $this->view->gitlabPairs = $this->gitlab->getPairs();
-        $this->view->products    = $products;
-        $this->view->projects    = $this->product->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->gitlab      = $gitlab;
-        $this->view->repoList    = array_values($repoList);
+        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
+        $this->view->servers       = $this->gitlab->getPairs() + $this->gitfox->getPairs();
+        $this->view->products      = $products;
+        $this->view->projects      = $this->product->getProjectPairsByProductIDList(array_keys($products));
+        $this->view->defaultServer = $defaultServer;
+        $this->view->repoList      = array_values($repoList);
         $this->display();
     }
 
@@ -1139,6 +1139,8 @@ class repo extends control
         if(in_array($repo->SCM, $this->config->repo->gitTypeList) && !$this->cookie->syncBranch)
         {
             $branches = $this->scm->branch();
+            if(empty($branches)) return print($this->lang->repo->error->empty);
+
             $branchID = current($branches);
         }
 
@@ -1146,7 +1148,7 @@ class repo extends control
 
         $logs    = array();
         $version = 1;
-        if($repo->SCM != 'Gitlab')
+        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM))
         {
             $latestInDB = $this->repo->getLatestCommit($repoID, false);
 
@@ -1413,6 +1415,33 @@ class repo extends control
         {
             if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
             $options[] = array('text' => $project->name_with_namespace, 'value' => $project->id);
+        }
+        return print(json_encode($options));
+    }
+
+    /**
+     * 获取Gitfox项目。
+     * Ajax get gitfox projects.
+     *
+     * @param  string $gitfoxID
+     * @param  array $projectIdList
+     * @param  array $filter
+     * @access public
+     * @return void
+     */
+    public function ajaxGetGitfoxProjects(int $gitfoxID, string $projectIdList = '', string $filter = '')
+    {
+        $projects = $this->repo->getGitfoxProjects($gitfoxID, $filter);
+
+        if(!$projects) return print('[]');
+        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
+
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
+        foreach($projects as $project)
+        {
+            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
+            $options[] = array('text' => $project->path, 'value' => $project->id);
         }
         return print(json_encode($options));
     }

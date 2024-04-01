@@ -61,16 +61,17 @@ function arrowTabs(domID, shift, hideRightBtn)
 {
     if($('#' + domID).html() == '') return;
 
-    var hasParent = $('#' + domID + ' .btn-left').length;
-    var $leftBtn  = hasParent ? $('#' + domID + ' .btn-left')  : $('.btn-left');
-    var $rightBtn = hasParent ? $('#' + domID + ' .btn-right') : $('.btn-right');
+    var hasParent = $('#' + domID + ' > .btn-left').length;
+    var $leftBtn  = hasParent ? $('#' + domID + ' > .btn-left')  : $('.btn-left');
+    var $rightBtn = hasParent ? $('#' + domID + ' > .btn-right') : $('.btn-right');
 
     $leftBtn.show();
     $rightBtn.show();
     if(hideRightBtn) $rightBtn.hide();
 
     var tabItemWidth = 0;
-    if($('#' + domID + ' > .nav-tabs')[0]) tabItemWidth = $('#' + domID + ' > .nav-tabs')[0].clientWidth;
+    const $tabs = $('#' + domID + ' > .tabs-header > .nav-tabs')[0];
+    if($tabs) tabItemWidth = $tabs.clientWidth;
     var tabsWidth    = $('#' + domID)[0].clientWidth;
     if($('#' + domID + ' .close-bugs').length) tabsWidth = tabsWidth * 0.7;
 
@@ -78,7 +79,7 @@ function arrowTabs(domID, shift, hideRightBtn)
     {
         $leftBtn.hide();
         $rightBtn.hide();
-        $('#' + domID + ' > .nav-tabs')[0].style.transform = 'translateX(0px)';
+        $tabs.style.transform = 'translateX(0px)';
         return;
     }
 
@@ -97,7 +98,7 @@ function arrowTabs(domID, shift, hideRightBtn)
 
     if(domID == 'monacoTabs' && distance < -60) distance = distance + 60;
 
-    $('#' + domID + ' > .nav-tabs')[0].style.transform = 'translateX('+ distance +'px)';
+    $tabs.style.transform = 'translateX('+ distance +'px)';
 }
 
 /**

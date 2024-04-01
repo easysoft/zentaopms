@@ -135,6 +135,7 @@ $relatedWg = div
         tabs
         (
             set::id('relationTabs'),
+            setClass('mt-1 ml-2'),
             tabPane
             (
                 set::key('tab1'),

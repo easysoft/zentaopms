@@ -292,7 +292,7 @@ class design extends control
     {
         if($_POST)
         {
-            $this->design->linkCommit($designID, $repoID, $_POST['revision']);
+            $this->design->linkCommit($designID, $repoID, $this->post->revision);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 

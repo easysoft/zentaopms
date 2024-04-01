@@ -8,11 +8,11 @@ su('admin');
 /**
 
 title=测试 compileModel->getByQueue();
+timeout=0
 cid=1
-pid=1
 
-检查当queue存在的时候是否能拿到数据 >> 构建1
-检查当queue不存在的时候返回的结果 >> 0
+- 检查当queue存在的时候是否能拿到数据属性name @构建1
+- 检查当queue不存在的时候返回的结果属性name @0
 
 */
 

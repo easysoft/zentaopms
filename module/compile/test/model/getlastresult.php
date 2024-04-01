@@ -10,11 +10,11 @@ su('admin');
 /**
 
 title=测试 compileModel->getLastResult();
+timeout=0
 cid=1
-pid=1
 
-检查id存在的时候是否能拿到数据 >> admin
-检查id不存在的时候返回的结果 >> 0
+- 检查id存在的时候是否能拿到数据属性createdBy @admin
+- 检查id不存在的时候返回的结果属性createdBy @0
 
 */
 

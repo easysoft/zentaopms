@@ -118,7 +118,7 @@ function openTab(titleObj)
     .replace('{href}', '#related-' + eleId)
     .replace('{prefixIcon}', prefixIcon);
 
-    $('#relationTabs>ul').append(tabHtml);
+    $('#relationTabs > .tabs-header > ul').append(tabHtml);
 
     var height = getRelationTabHeight();
 

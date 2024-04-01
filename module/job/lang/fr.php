@@ -27,8 +27,10 @@ $lang->job->buildSpec       = 'Build Target'; // 'pipeline@server'
 $lang->job->engine          = 'Engine';
 $lang->job->server          = 'Serveur';
 $lang->job->pipeline        = 'Pipeline';
+$lang->job->gitfoxpipeline  = 'Pipeline';
 $lang->job->buildType       = 'Type Build';
 $lang->job->frame           = 'Cadre';
+$lang->job->useZentao       = 'Trigger by ZenTao';
 $lang->job->triggerType     = 'D閏lencheur';
 $lang->job->atDay           = 'Jours Person.';
 $lang->job->atTime          = 'heure';
@@ -51,6 +53,7 @@ $lang->job->projectKey      = 'SonarQube Project';
 
 $lang->job->lblBasic = 'Infos de Base';
 
+$lang->job->auto           = 'Auto';
 $lang->job->example        = 'ex.';
 $lang->job->commitEx       = "Utilis pour faire correspondre les mots cl閟 utilis閟 pour cr閑r une compilation. Plusieurs mots cl閟 sont s閜ar閟 par ','";
 $lang->job->cronSample     = 'ex: 0 0 2 * * 2-6/1 signifie 2:00 a.m. chaque jour de la semaine.';
@@ -66,6 +69,9 @@ $lang->job->selectPipeline = 'Please select a pipeline';
 $lang->job->buildTypeList['build']          = 'Seulement Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build et D閜loiement';
 $lang->job->buildTypeList['buildAndTest']   = 'Build et Test';
+
+$lang->job->zentaoTrigger['1'] = 'Yes';
+$lang->job->zentaoTrigger['0'] = 'No';
 
 $lang->job->triggerTypeList['tag']      = 'Tag';
 $lang->job->triggerTypeList['commit']   = 'Code Commit';
@@ -91,6 +97,7 @@ $lang->job->paramValueList['$zentao_repopath'] = 'Current version library path';
 $lang->job->engineList = array();
 $lang->job->engineList['']        = '';
 $lang->job->engineList['gitlab']  = 'GitLab';
+$lang->job->engineList['gitfox']  = 'GitFox';
 $lang->job->engineList['jenkins'] = 'Jenkins';
 
 $lang->job->engineTips = new stdclass;

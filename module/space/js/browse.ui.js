@@ -84,7 +84,7 @@ window.onPageUnmount = function()
 
 window.bindUser = function(externalID, appName)
 {
-    openUrl($.createLink(appName.toLowerCase(), 'bindUser', 'id=' + externalID));
+    loadPage($.createLink(appName.toLowerCase(), 'bindUser', 'id=' + externalID));
 }
 
 window.editApp = function(externalID, appName)

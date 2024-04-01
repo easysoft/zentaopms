@@ -90,6 +90,7 @@ class history extends wg
 
         $className = $this->props->class->toStr();
         if($panel && empty($className)) $className = 'canvas py-1 px-2 overflow-visible';
+        $className .= ' break-all';
 
         return zui::historyPanel
         (

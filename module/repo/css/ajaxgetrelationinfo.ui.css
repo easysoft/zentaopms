@@ -1,4 +1,3 @@
+body {background: var(--color-canvas-rgb);}
 #mainNavbar {display: none;}
-#main {background-color: white;}
-
 .detail-body .bug .entity-title {display: none;}

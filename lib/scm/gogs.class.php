@@ -1,5 +1,5 @@
 <?php
-class Gogs
+class gogsRepo
 {
     public $client;
     public $root;
@@ -822,5 +822,77 @@ class Gogs
         }
 
         return $lists;
+    }
+
+    /**
+     * 通过API创建合并请求。
+     * Create mr by api.
+     *
+     *  @param object $MR
+     *  @param string $openID
+     *  @param string $assignee
+     *  @access public
+     *  @return object|null
+     */
+    public function createMR(object $MR, string $openID, string $assignee): object|null
+    {
+        $MRObject = new stdclass();
+        $MRObject->title = $MR->title;
+        $MRObject->head  = $MR->sourceBranch;
+        $MRObject->base  = $MR->targetBranch;
+        $MRObject->body  = $MR->description;
+        if(!empty($assignee)) $MRObject->assignee = $assignee;
+
+        global $app;
+        $url = sprintf($app->control->loadModel('gogs')->getApiRoot($MR->hostID), "/repos/{$MR->sourceProject}/pulls");
+        $MR  = json_decode(commonModel::http($url, $MRObject));
+        if(isset($MR->number)) $MR->iid = $MR->number;
+        if(isset($MR->mergeable))
+        {
+            if($MR->mergeable)  $MR->merge_status = 'can_be_merged';
+            if(!$MR->mergeable) $MR->merge_status = 'cannot_be_merged';
+        }
+        if(isset($MR->state)  && $MR->state == 'open') $MR->state = 'opened';
+        if(isset($MR->merged) && $MR->merged)          $MR->state = 'merged';
+        return $MR;
+    }
+
+    /**
+     * Get a mr by api.
+     *
+     * @param  int    $MRID
+     * @access public
+     * @return array
+     */
+    public function getSingleMR(int $MRID): null|object
+    {
+        $hostID    = $this->repo->serviceHost;
+        $projectID = $this->repo->serviceProject;
+
+        global $app;
+        $apiRoot = $app->control->loadModel('gogs')->getApiRoot($hostID);
+        $url     = sprintf($apiRoot, "/repos/{$projectID}/pulls/$MRID");
+        $MR      = json_decode(commonModel::http($url));
+        if(!$MR || isset($MR->message) || isset($MR->errors)) return null;
+
+        if(isset($MR->url) || isset($MR->html_url))
+        {
+            $diff = common::http(sprintf($apiRoot, "/repos/$projectID/pulls/$MRID.diff"));
+
+            $MR->web_url = $MR->html_url;
+            $MR->iid     = $MR->id;
+            $MR->state   = $MR->state == 'open' ? 'opened' : $MR->state;
+            if($MR->merged) $MR->state = 'merged';
+
+            $MR->merge_status      = $MR->mergeable ? 'can_be_merged' : 'cannot_be_merged';
+            $MR->changes_count     = empty($diff) ? 0 : 1;
+            $MR->description       = $MR->body;
+            $MR->target_branch     = $MR->base_branch;
+            $MR->source_branch     = $MR->head_branch;
+            $MR->source_project_id = $projectID;
+            $MR->target_project_id = $projectID;
+            $MR->has_conflicts     = empty($diff) ? true : false;
+        }
+        return $MR;
     }
 }
