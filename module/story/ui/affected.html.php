@@ -52,7 +52,8 @@ $getAffectedTabs = function($story, $users)
                 dtable
                 (
                     set::cols($config->story->affect->bugs->fields),
-                    set::data(array_values($story->bugs))
+                    set::data(array_values($story->bugs)),
+                    set::style(array('min-width' => '100%'))
                 )
             ),
             tabPane
@@ -63,7 +64,8 @@ $getAffectedTabs = function($story, $users)
                 dtable
                 (
                     set::cols($config->story->affect->cases->fields),
-                    set::data(array_values($story->cases))
+                    set::data(array_values($story->cases)),
+                    set::style(array('min-width' => '100%'))
                 )
             ),
             empty($story->twins) ? null : tabPane
@@ -74,7 +76,8 @@ $getAffectedTabs = function($story, $users)
                 dtable
                 (
                     set::cols($config->story->affect->twins->fields),
-                    set::data(array_values($story->twins))
+                    set::data(array_values($story->twins)),
+                    set::style(array('min-width' => '100%'))
                 )
             )
         )
