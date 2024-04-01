@@ -34,43 +34,47 @@ formPanel
         formGroup
         (
             set::label($lang->kanban->columnWidth),
-            radioList
-            (
-                set::name('fluidBoard'),
-                set::items(array('0' => $lang->kanbancolumn->fluidBoardList[0])),
-                set::value($kanban->fluidBoard)
-            ),
             div
             (
-                set::className('flex items-center ml-8 py-1'),
-                set::style(array('padding-left' => '1px')),
-                span($lang->kanban->colWidth),
-                input(set::type('number'), set::min($config->colWidth), set::name('colWidth'), set::className('w-16 size-sm mx-1'), set::value($kanban->colWidth ? $kanban->colWidth : $config->colWidth)),
-                span('px')
-            )
-        )
-    ),
-    formRow
-    (
-        set::style(array('margin-top' => '0px')),
-        formGroup
-        (
-            set::label(''),
-            radioList
-            (
-                set::name('fluidBoard'),
-                set::items(array(1 => $lang->kanbancolumn->fluidBoardList[1])),
-                set::value($kanban->fluidBoard)
-            ),
-            div
-            (
-                set::className('flex items-center ml-5 py-1'),
-                span($lang->kanban->colWidth),
-                input(set::type('number'), set::min($config->minColWidth), set::name('minColWidth'), set::className('w-16 size-sm mx-1'), set::value($kanban->minColWidth ? $kanban->minColWidth : $config->minColWidth)),
-                span('px'),
-                span('~', set::className('mx-1')),
-                input(set::type('number'), set::min($config->maxColWidth), set::name('maxColWidth'), set::className('w-16 size-sm mx-1'), set::value($kanban->maxColWidth ? $kanban->maxColWidth : $config->maxColWidth)),
-                span('px')
+                setClass('w-full'),
+                div
+                (
+                    setClass('flex'),
+                    radioList
+                    (
+                        set::name('fluidBoard'),
+                        set::items(array('0' => $lang->kanbancolumn->fluidBoardList[0])),
+                        set::value($kanban->fluidBoard)
+                    ),
+                    div
+                    (
+                        set::className('flex items-center ml-8 py-1'),
+                        set::style(array('padding-left' => '1px')),
+                        span($lang->kanban->colWidth),
+                        input(set::type('number'), set::min($config->colWidth), set::name('colWidth'), set::className('w-16 size-sm mx-1'), set::value($kanban->colWidth ? $kanban->colWidth : $config->colWidth)),
+                        span('px')
+                    )
+                ),
+                div
+                (
+                    setClass('flex'),
+                    radioList
+                    (
+                        set::name('fluidBoard'),
+                        set::items(array(1 => $lang->kanbancolumn->fluidBoardList[1])),
+                        set::value($kanban->fluidBoard)
+                    ),
+                    div
+                    (
+                        set::className('flex items-center ml-5 py-1'),
+                        span($lang->kanban->colWidth),
+                        input(set::type('number'), set::min($config->minColWidth), set::name('minColWidth'), set::className('w-16 size-sm mx-1'), set::value($kanban->minColWidth ? $kanban->minColWidth : $config->minColWidth)),
+                        span('px'),
+                        span('~', set::className('mx-1')),
+                        input(set::type('number'), set::min($config->maxColWidth), set::name('maxColWidth'), set::className('w-16 size-sm mx-1'), set::value($kanban->maxColWidth ? $kanban->maxColWidth : $config->maxColWidth)),
+                        span('px')
+                    )
+                )
             )
         )
     ),
