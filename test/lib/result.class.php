@@ -23,6 +23,35 @@ class result
     }
 
     /**
+     * Set success result.
+     *
+     * @access public
+     * @return object
+     */
+    function success()
+    {
+        $this->status = 'SUCCESS';
+
+        return $this;
+    }
+
+    /**
+     * Set failure result.
+     *
+     * @param  string    $message
+     * @access public
+     * @return object
+     */
+    function failed($message)
+    {
+        $this->status  = 'FAILED';
+        $this->message = $message;
+        if(!empty($this->pageObject)) $this->pageObject->getErrors();
+
+        return $this;
+    }
+
+    /**
      * Get results of the case.
      *
      * @access public
