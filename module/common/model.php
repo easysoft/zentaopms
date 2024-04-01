@@ -1903,6 +1903,13 @@ class commonModel extends model
 
             $saasLog  = date('Ymd H:i:s') . ': ' . $app->getURI() . "\n";
             $saasLog .= "{$requestType} url:    {$url}\n";
+
+            if($app->config->debug)
+            {
+                $saasLog .= 'request  header: ' . json_encode($headers) . PHP_EOL;
+                $saasLog .= 'response header: ' . json_encode($newHeader) . PHP_EOL;
+            }
+
             if(!empty($data)) $saasLog .= 'data:   ' . print_r($data, true) . "\n";
             $saasLog .= 'results:' . print_r($response, true) . "\n";
 
