@@ -64,7 +64,7 @@ class jobZen extends job
 
             $job->lastExec    = $job->lastExec ? $job->lastExec : '';
             $job->triggerType = $this->job->getTriggerConfig($job);
-            $job->buildSpec   = urldecode($job->pipeline) . '@' . $job->jenkinsName;
+            $job->buildSpec   = !empty($job->pipeline) ? urldecode($job->pipeline) . '@' . $job->jenkinsName : $job->jenkinsName;
             $job->engine      = zget($this->lang->job->engineList, $job->engine);
             $job->frame       = zget($this->lang->job->frameList, $job->frame);
             $job->productName = zget($products, $job->product, '');
