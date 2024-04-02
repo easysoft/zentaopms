@@ -61,7 +61,7 @@ blockPanel
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mr-4')),
+                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -111,7 +111,7 @@ blockPanel
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mr-4')),
+                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -170,7 +170,7 @@ blockPanel
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mr-4')),
+                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -220,7 +220,7 @@ blockPanel
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mr-4')),
+                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -279,7 +279,7 @@ blockPanel
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mr-4')),
+                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -324,7 +324,7 @@ blockPanel
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mr-4')),
+                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-success text-sm'),
