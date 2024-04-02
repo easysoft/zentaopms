@@ -3,3 +3,6 @@
 .teamachievement-block .item-row .item-task .item-icon {background: url(static/svg/block-task.svg) center no-repeat;}
 .teamachievement-block .item-row .item-bug .item-icon {background: url(static/svg/block-bug.svg) center no-repeat;}
 .teamachievement-block .item-row .item-hour .item-icon {background: url(static/svg/block-hour.svg) center no-repeat;}
+.teamachievement-block .item-row .item-story .item-icon {background: url(static/svg/block-story.svg) center no-repeat;}
+.teamachievement-block .item-row .item-case .item-icon {background: url(static/svg/block-case.svg) center no-repeat;}
+.teamachievement-block .item-row .item-workload .item-icon {background: url(static/svg/block-workload.svg) center no-repeat;}

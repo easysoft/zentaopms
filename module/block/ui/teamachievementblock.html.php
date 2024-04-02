@@ -36,15 +36,15 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('text-gray'),
+                        setClass('text-gray pl-1'),
                         $lang->block->teamachievement->finishedTasks
                     ),
                     div
                     (
-                        setClass('mt-3 flex flex-nowrap items-center'),
+                        setClass('mt-3 flex flex-nowrap items-center pl-1'),
                         row
                         (
-                            $comparedTasks > 0 ? width('1/2') : width('full'),
+                            $comparedTasks > 0 ? width('1/3') : width('full'),
                             setClass('items-center'),
                             span
                             (
@@ -59,8 +59,9 @@ blockPanel
                         ),
                         $comparedTasks > 0 ? row
                         (
-                            width('1/2'),
+                            width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mr-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -77,18 +78,23 @@ blockPanel
                 cell
                 (
                     set::width('50%'),
-                    setClass('pl-4'),
+                    setClass('item-story pl-8'),
                     div
                     (
-                        setClass('text-gray'),
+                        setClass('h-0 w-0'),
+                        div(setClass('item-icon h-9 w-9'))
+                    ),
+                    div
+                    (
+                        setClass('text-gray pl-1'),
                         $lang->block->teamachievement->createdStories
                     ),
                     div
                     (
-                        setClass('mt-3 flex flex-nowrap items-center'),
+                        setClass('mt-3 flex flex-nowrap items-center pl-1'),
                         row
                         (
-                            $comparedStories > 0 ? width('1/2') : width('full'),
+                            $comparedStories > 0 ? width('1/3') : width('full'),
                             setClass('items-center'),
                             span
                             (
@@ -103,8 +109,9 @@ blockPanel
                         ),
                         $comparedStories > 0 ? row
                         (
-                            width('1/2'),
+                            width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mr-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -138,15 +145,15 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('text-gray'),
+                        setClass('text-gray pl-1'),
                         $lang->block->teamachievement->closedBugs
                     ),
                     div
                     (
-                        setClass('mt-3 flex flex-nowrap items-center'),
+                        setClass('mt-3 flex flex-nowrap items-center pl-1'),
                         row
                         (
-                            $comparedBugs > 0 ? width('1/2') : width('full'),
+                            $comparedBugs > 0 ? width('1/3') : width('full'),
                             setClass('items-center'),
                             span
                             (
@@ -161,8 +168,9 @@ blockPanel
                         ),
                         $comparedBugs > 0 ? row
                         (
-                            width('1/2'),
+                            width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mr-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -179,18 +187,23 @@ blockPanel
                 cell
                 (
                     set::width('50%'),
-                    setClass('pl-4'),
+                    setClass('item-case pl-8'),
                     div
                     (
-                        setClass('text-gray'),
+                        setClass('h-0 w-0'),
+                        div(setClass('item-icon h-9 w-9'))
+                    ),
+                    div
+                    (
+                        setClass('text-gray pl-1'),
                         $lang->block->teamachievement->runCases
                     ),
                     div
                     (
-                        setClass('mt-3 flex flex-nowrap items-center'),
+                        setClass('mt-3 flex flex-nowrap items-center pl-1'),
                         row
                         (
-                            $comparedCases > 0 ? width('1/2') : width('full'),
+                            $comparedCases > 0 ? width('1/3') : width('full'),
                             setClass('items-center'),
                             span
                             (
@@ -205,8 +218,9 @@ blockPanel
                         ),
                         $comparedCases > 0 ? row
                         (
-                            width('1/2'),
+                            width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mr-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -240,15 +254,15 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('text-gray'),
+                        setClass('text-gray pl-1'),
                         $lang->block->teamachievement->consumedHours . ' / ' . $lang->block->projectstatistic->hour
                     ),
                     div
                     (
-                        setClass('mt-3 flex flex-nowrap items-center'),
+                        setClass('mt-3 flex flex-nowrap items-center pl-1'),
                         row
                         (
-                            $comparedHours > 0 ? width('1/2') : width('full'),
+                            $comparedHours > 0 ? width('1/3') : width('full'),
                             setClass('items-center'),
                             span
                             (
@@ -263,8 +277,9 @@ blockPanel
                         ),
                         $comparedHours > 0 ? row
                         (
-                            width('1/2'),
+                            width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mr-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -281,10 +296,15 @@ blockPanel
                 cell
                 (
                     set::width('50%'),
-                    setClass('pl-4'),
+                    setClass('item-workload pl-8'),
                     div
                     (
-                        setClass('text-gray'),
+                        setClass('h-0 w-0'),
+                        div(setClass('item-icon h-9 w-9'))
+                    ),
+                    div
+                    (
+                        setClass('text-gray  pl-1'),
                         $lang->block->teamachievement->totalWorkload . ' / ' . $lang->block->projectstatistic->personDay
                     ),
                     div
@@ -292,7 +312,7 @@ blockPanel
                         setClass('mt-3 flex flex-nowrap items-center'),
                         row
                         (
-                            $todayWorkload > 0 ? width('1/2') : width('full'),
+                            $todayWorkload > 0 ? width('1/3') : width('full'),
                             setClass('items-center'),
                             span
                             (
@@ -302,11 +322,12 @@ blockPanel
                         ),
                         $todayWorkload > 0 ? row
                         (
-                            width('1/2'),
+                            width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mr-4')),
                             span
                             (
-                                setClass('text-gray text-sm'),
+                                setClass('text-success text-sm'),
                                 $lang->today
                             ),
                             span
