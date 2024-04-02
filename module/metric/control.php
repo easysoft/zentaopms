@@ -205,7 +205,7 @@ class metric extends control
         $records = array();
         foreach($classifiedCalcGroup as $calcGroup)
         {
-            foreach($calcGroup->calcList as $code => $calc) 
+            foreach($calcGroup->calcList as $code => $calc)
             {
                 if($calcType == 'inference')
                 {
