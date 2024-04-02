@@ -9,6 +9,7 @@ $config->repo->dtable->fieldList['name']['name']  = 'name';
 $config->repo->dtable->fieldList['name']['title'] = $lang->repo->name;
 $config->repo->dtable->fieldList['name']['type']  = 'title';
 $config->repo->dtable->fieldList['name']['width'] = '0.2';
+$config->repo->dtable->fieldList['name']['hint']  = '{desc}';
 
 $config->repo->dtable->fieldList['product']['name']     = 'productNames';
 $config->repo->dtable->fieldList['product']['title']    = $lang->repo->product;
