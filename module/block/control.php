@@ -269,7 +269,7 @@ class block extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $this->loadModel('score')->create('block', 'set'); // 设置区块后的积分奖励操作。
 
-        return $this->send(array('result' => 'success'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
