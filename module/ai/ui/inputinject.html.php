@@ -98,9 +98,9 @@ $auditInject = function() use($module, $method)
             {
                 e.preventDefault();
 
-                const promptId = publishButton.dataset.promptId;
+                const promptId = publishButton.dataset.promptid;
                 const publishLink = document.createElement('a');
-                publishLink.href = createLink('ai', 'promptPublish', 'promptId=' + promptId + '&backToTestingLocation=true') + '#app=admin';
+                publishLink.href = $.createLink('ai', 'promptPublish', 'promptId=' + promptId + '&backToTestingLocation=true') + '#app=admin';
                 publishLink.style.display = 'none';
                 document.body.appendChild(publishLink);
                 publishLink.click();
@@ -116,8 +116,9 @@ $auditInject = function() use($module, $method)
             {
                 e.preventDefault();
 
+                const promptId = publishButton.dataset.promptid;
                 const exitLink = document.createElement('a');
-                exitLink.href = createLink('ai', 'promptAudit', 'promptId=' + promptId + '&objectId=0' + '&exit=true') + '#app=admin';
+                exitLink.href = $.createLink('ai', 'promptAudit', 'promptId=' + promptId + '&objectId=0' + '&exit=true') + '#app=admin';
                 exitLink.style.display = 'none';
                 document.body.appendChild(exitLink);
                 exitLink.click();
