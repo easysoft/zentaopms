@@ -2,7 +2,7 @@
 global $config;
 
 $lang->repo->common          = '代码库';
-$lang->repo->codeRepo        = '代码库';
+$lang->repo->codeRepo        = '仓库名称';
 $lang->repo->browse          = '浏览';
 $lang->repo->viewRevision    = '查看修订';
 $lang->repo->product         = '所属' . $lang->productCommon;
@@ -38,6 +38,9 @@ $lang->repo->descPlaceholder = '一句话描述';
 $lang->repo->namespace       = '命名空间';
 $lang->repo->branchName      = '分支名称';
 $lang->repo->branchFrom      = '创建自';
+$lang->repo->codeBranch      = '代码分支';
+$lang->repo->createdBranch   = '已创建分支';
+$lang->repo->unlink          = '解除关联';
 
 $lang->repo->createBranchAction = '创建分支';
 $lang->repo->browseAction       = '浏览代码库';
