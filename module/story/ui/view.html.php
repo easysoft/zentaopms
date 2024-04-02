@@ -171,7 +171,7 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
 )) : null;
 
 $hasRepo    = $this->loadModel('repo')->getListByProduct($story->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
-$actions    = $story->deleted || $isInModal ? array() : $this->loadModel('common')->buildOperateMenu($story);
+$actions    = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story);
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
 foreach($actions as $key => $action)

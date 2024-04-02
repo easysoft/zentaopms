@@ -3182,7 +3182,7 @@ class storyModel extends model
         }
 
         $disabledFeatures = ",{$config->disabledFeatures},";
-        if($action == 'importToLib') return in_array($config->edition, array('max', 'ipd')) && $app->tab == 'project' && common::hasPriv('story', 'importToLib') && strpos($disabledFeatures, ',assetlibStorylib,') === false && strpos($disabledFeatures, ',assetlib,') === false;
+        if($action == 'importtolib') return in_array($config->edition, array('max', 'ipd')) && $app->tab == 'project' && common::hasPriv('story', 'importToLib') && strpos($disabledFeatures, ',assetlibStorylib,') === false && strpos($disabledFeatures, ',assetlib,') === false;
 
         static $shadowProducts = array();
         static $taskGroups     = array();
