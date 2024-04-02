@@ -268,7 +268,7 @@ $checkObject->execution = $execution->id;
 $canBatchEdit        = common::hasPriv('story', 'batchEdit');
 $canBatchClose       = common::hasPriv('story', 'batchClose') && $storyType != 'requirement';
 $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage') && $storyType != 'requirement';
-$canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
+$canBatchUnlink      = $canLinkStory && common::hasPriv('execution', 'batchUnlinkStory');
 $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject) && $storyType != 'requirement';
 $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 $canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));
