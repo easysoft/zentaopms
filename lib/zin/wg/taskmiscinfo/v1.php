@@ -20,15 +20,7 @@ class taskMiscInfo extends wg
         $task = $this->prop('task', data('task'));
         if(!$task) return array();
 
-        $items = array();
-        if($task->linkedBranch)
-        {
-            $items[$lang->task->relatedBranch] = array(
-                'control' => 'list',
-                'items'   => array_values($task->linkedBranch)
-            );
-        }
-
+        $items        = array();
         $linkMRTitles = $this->prop('linkMRTitles', data('linkMRTitles'));
         $mrItems      = array();
         $canViewMR    = common::hasPriv('mr', 'view');
