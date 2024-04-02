@@ -404,23 +404,24 @@ $lang->story->action->changedbycharter      = array('main' => '$date, launched b
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();
-$lang->story->report->common = 'Rapport';
-$lang->story->report->select = 'Choix Type de Rapport';
-$lang->story->report->create = 'Créer Rapport';
-$lang->story->report->value  = 'Rapports';
+$lang->story->report->common = 'Report';
+$lang->story->report->select = 'Select Report Type';
+$lang->story->report->create = 'Create Report';
+$lang->story->report->value  = 'Reports';
 
-$lang->story->report->charts['storiesPerProduct']      = 'Regroupé par ' . $lang->productCommon . ' Story';
-$lang->story->report->charts['storiesPerModule']       = 'Regroupé par Module Story';
-$lang->story->report->charts['storiesPerSource']       = 'Regroupé par Source';
-$lang->story->report->charts['storiesPerPlan']         = 'Regroupé par Plan';
-$lang->story->report->charts['storiesPerStatus']       = 'Regroupé par Statut';
-$lang->story->report->charts['storiesPerStage']        = 'Regroupé par Phase';
-$lang->story->report->charts['storiesPerPri']          = 'Regroupé par Priorité';
-$lang->story->report->charts['storiesPerEstimate']     = 'Regroupé par Estimés';
-$lang->story->report->charts['storiesPerOpenedBy']     = 'Regroupé par Créateur';
-$lang->story->report->charts['storiesPerAssignedTo']   = 'Regroupé par Détenteur';
-$lang->story->report->charts['storiesPerClosedReason'] = 'Par Raison de Fermeture';
-$lang->story->report->charts['storiesPerChange']       = 'Regroupé par Modif de Story';
+$lang->story->report->charts['storiesPerProduct']      = 'Group by ' . $lang->productCommon . ' Story';
+$lang->story->report->charts['storiesPerModule']       = 'Group by Module Story';
+$lang->story->report->charts['storiesPerSource']       = 'Group by Story Source';
+$lang->story->report->charts['storiesPerPlan']         = 'Group by Plan';
+$lang->story->report->charts['storiesPerStatus']       = 'Group by Status';
+$lang->story->report->charts['storiesPerStage']        = 'Group by Phase';
+$lang->story->report->charts['storiesPerPri']          = 'Group by Priority';
+$lang->story->report->charts['storiesPerEstimate']     = 'Group by Estimates';
+$lang->story->report->charts['storiesPerOpenedBy']     = 'Group by CreatedBy';
+$lang->story->report->charts['storiesPerAssignedTo']   = 'Group by AssignedTo';
+$lang->story->report->charts['storiesPerClosedReason'] = 'Group by Closed Reason';
+$lang->story->report->charts['storiesPerChange']       = 'Group by Changed Story';
+$lang->story->report->charts['storiesPerGrade']        = 'Group by Story Grade';
 
 $lang->story->report->options = new stdclass();
 $lang->story->report->options->graph  = new stdclass();
@@ -440,19 +441,21 @@ $lang->story->report->storiesPerAssignedTo   = new stdclass();
 $lang->story->report->storiesPerClosedReason = new stdclass();
 $lang->story->report->storiesPerEstimate     = new stdclass();
 $lang->story->report->storiesPerChange       = new stdclass();
+$lang->story->report->storiesPerGrade        = new stdclass();
 
 $lang->story->report->storiesPerProduct->item      = $lang->productCommon;
 $lang->story->report->storiesPerModule->item       = 'Module';
 $lang->story->report->storiesPerSource->item       = 'Source';
 $lang->story->report->storiesPerPlan->item         = 'Plan';
-$lang->story->report->storiesPerStatus->item       = 'Statut';
+$lang->story->report->storiesPerStatus->item       = 'Status';
 $lang->story->report->storiesPerStage->item        = 'Phase';
-$lang->story->report->storiesPerPri->item          = 'Priorité';
-$lang->story->report->storiesPerOpenedBy->item     = 'Créateur';
-$lang->story->report->storiesPerAssignedTo->item   = 'Détenteur';
-$lang->story->report->storiesPerClosedReason->item = 'Raison';
-$lang->story->report->storiesPerEstimate->item     = 'Estimation';
-$lang->story->report->storiesPerChange->item       = 'Chang. Story';
+$lang->story->report->storiesPerPri->item          = 'Priority';
+$lang->story->report->storiesPerOpenedBy->item     = 'OpenedBy';
+$lang->story->report->storiesPerAssignedTo->item   = 'AssignedTo';
+$lang->story->report->storiesPerClosedReason->item = 'Reason';
+$lang->story->report->storiesPerEstimate->item     = 'Estimates';
+$lang->story->report->storiesPerChange->item       = 'Changed Story';
+$lang->story->report->storiesPerGrade->item        = 'Grade';
 
 $lang->story->report->storiesPerProduct->graph      = new stdclass();
 $lang->story->report->storiesPerModule->graph       = new stdclass();
@@ -466,19 +469,21 @@ $lang->story->report->storiesPerAssignedTo->graph   = new stdclass();
 $lang->story->report->storiesPerClosedReason->graph = new stdclass();
 $lang->story->report->storiesPerEstimate->graph     = new stdclass();
 $lang->story->report->storiesPerChange->graph       = new stdclass();
+$lang->story->report->storiesPerGrade->graph        = new stdclass();
 
 $lang->story->report->storiesPerProduct->graph->xAxisName      = $lang->productCommon;
 $lang->story->report->storiesPerModule->graph->xAxisName       = 'Module';
 $lang->story->report->storiesPerSource->graph->xAxisName       = 'Source';
 $lang->story->report->storiesPerPlan->graph->xAxisName         = 'Plan';
-$lang->story->report->storiesPerStatus->graph->xAxisName       = 'Statut';
+$lang->story->report->storiesPerStatus->graph->xAxisName       = 'Status';
 $lang->story->report->storiesPerStage->graph->xAxisName        = 'Phase';
-$lang->story->report->storiesPerPri->graph->xAxisName          = 'Priorité';
-$lang->story->report->storiesPerOpenedBy->graph->xAxisName     = 'Créateur';
-$lang->story->report->storiesPerAssignedTo->graph->xAxisName   = 'Détenteur';
-$lang->story->report->storiesPerClosedReason->graph->xAxisName = 'Raison Fermeture';
-$lang->story->report->storiesPerEstimate->graph->xAxisName     = 'Estimattion ';
+$lang->story->report->storiesPerPri->graph->xAxisName          = 'Priority';
+$lang->story->report->storiesPerOpenedBy->graph->xAxisName     = 'CreatedBy';
+$lang->story->report->storiesPerAssignedTo->graph->xAxisName   = 'AssignedTo';
+$lang->story->report->storiesPerClosedReason->graph->xAxisName = 'Close Reason';
+$lang->story->report->storiesPerEstimate->graph->xAxisName     = 'Estimates ';
 $lang->story->report->storiesPerChange->graph->xAxisName       = 'Change Times';
+$lang->story->report->storiesPerGrade->graph->xAxisName        = 'Change Times';
 
 $lang->story->placeholder = new stdclass();
 $lang->story->placeholder->estimate = $lang->story->hour;

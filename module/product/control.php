@@ -162,7 +162,10 @@ class product extends control
         $stories  = $this->productZen->getStories($projectID, $productID, $branchID, $moduleID, $param, $storyType, $browseType, $orderBy, $pager);
 
         /* Process the sql, get the condition partition, save it to session. */
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', (strpos('bysearch,reviewbyme,bymodule', $browseType) === false && !$isProjectStory));
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), $storyType, (strpos('bysearch,reviewbyme,bymodule', $browseType) === false && !$isProjectStory));
+
+        /* Append children. */
+        if($storyType != 'story') $stories = $this->loadModel('story')->appendChildren($productID, $stories, $storyType);
 
         /* Save session. */
         $this->productZen->saveSession4Browse($product, $storyType, $browseType, $isProjectStory);

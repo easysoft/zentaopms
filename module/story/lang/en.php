@@ -421,6 +421,7 @@ $lang->story->report->charts['storiesPerOpenedBy']     = 'Group by CreatedBy';
 $lang->story->report->charts['storiesPerAssignedTo']   = 'Group by AssignedTo';
 $lang->story->report->charts['storiesPerClosedReason'] = 'Group by Closed Reason';
 $lang->story->report->charts['storiesPerChange']       = 'Group by Changed Story';
+$lang->story->report->charts['storiesPerGrade']        = 'Group by Story Grade';
 
 $lang->story->report->options = new stdclass();
 $lang->story->report->options->graph  = new stdclass();
@@ -440,6 +441,7 @@ $lang->story->report->storiesPerAssignedTo   = new stdclass();
 $lang->story->report->storiesPerClosedReason = new stdclass();
 $lang->story->report->storiesPerEstimate     = new stdclass();
 $lang->story->report->storiesPerChange       = new stdclass();
+$lang->story->report->storiesPerGrade        = new stdclass();
 
 $lang->story->report->storiesPerProduct->item      = $lang->productCommon;
 $lang->story->report->storiesPerModule->item       = 'Module';
@@ -453,6 +455,7 @@ $lang->story->report->storiesPerAssignedTo->item   = 'AssignedTo';
 $lang->story->report->storiesPerClosedReason->item = 'Reason';
 $lang->story->report->storiesPerEstimate->item     = 'Estimates';
 $lang->story->report->storiesPerChange->item       = 'Changed Story';
+$lang->story->report->storiesPerGrade->item        = 'Grade';
 
 $lang->story->report->storiesPerProduct->graph      = new stdclass();
 $lang->story->report->storiesPerModule->graph       = new stdclass();
@@ -466,6 +469,7 @@ $lang->story->report->storiesPerAssignedTo->graph   = new stdclass();
 $lang->story->report->storiesPerClosedReason->graph = new stdclass();
 $lang->story->report->storiesPerEstimate->graph     = new stdclass();
 $lang->story->report->storiesPerChange->graph       = new stdclass();
+$lang->story->report->storiesPerGrade->graph        = new stdclass();
 
 $lang->story->report->storiesPerProduct->graph->xAxisName      = $lang->productCommon;
 $lang->story->report->storiesPerModule->graph->xAxisName       = 'Module';
@@ -479,6 +483,7 @@ $lang->story->report->storiesPerAssignedTo->graph->xAxisName   = 'AssignedTo';
 $lang->story->report->storiesPerClosedReason->graph->xAxisName = 'Close Reason';
 $lang->story->report->storiesPerEstimate->graph->xAxisName     = 'Estimates ';
 $lang->story->report->storiesPerChange->graph->xAxisName       = 'Change Times';
+$lang->story->report->storiesPerGrade->graph->xAxisName        = 'Change Times';
 
 $lang->story->placeholder = new stdclass();
 $lang->story->placeholder->estimate = $lang->story->hour;

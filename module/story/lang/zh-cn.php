@@ -409,18 +409,19 @@ $lang->story->report->select = '请选择报表类型';
 $lang->story->report->create = '生成报表';
 $lang->story->report->value  = "需求数";
 
-$lang->story->report->charts['storiesPerProduct']        = $lang->productCommon . "{$lang->SRCommon}数量";
-$lang->story->report->charts['storiesPerModule']         = "模块{$lang->SRCommon}数量";
-$lang->story->report->charts['storiesPerSource']         = "按{$lang->SRCommon}来源统计";
-$lang->story->report->charts['storiesPerPlan']           = "按计划进行统计";
-$lang->story->report->charts['storiesPerStatus']         = '按状态进行统计';
-$lang->story->report->charts['storiesPerStage']          = '按所处阶段进行统计';
-$lang->story->report->charts['storiesPerPri']            = '按优先级进行统计';
-$lang->story->report->charts['storiesPerEstimate']       = "按预计{$lang->hourCommon}进行统计";
-$lang->story->report->charts['storiesPerOpenedBy']       = '按由谁创建来进行统计';
-$lang->story->report->charts['storiesPerAssignedTo']     = '按当前指派来进行统计';
-$lang->story->report->charts['storiesPerClosedReason']   = '按关闭原因来进行统计';
-$lang->story->report->charts['storiesPerChange']         = '按变更次数来进行统计';
+$lang->story->report->charts['storiesPerProduct']      = $lang->productCommon . "{$lang->SRCommon}数量";
+$lang->story->report->charts['storiesPerModule']       = "模块{$lang->SRCommon}数量";
+$lang->story->report->charts['storiesPerSource']       = "按{$lang->SRCommon}来源统计";
+$lang->story->report->charts['storiesPerPlan']         = "按计划进行统计";
+$lang->story->report->charts['storiesPerStatus']       = '按状态进行统计';
+$lang->story->report->charts['storiesPerStage']        = '按所处阶段进行统计';
+$lang->story->report->charts['storiesPerPri']          = '按优先级进行统计';
+$lang->story->report->charts['storiesPerEstimate']     = "按预计{$lang->hourCommon}进行统计";
+$lang->story->report->charts['storiesPerOpenedBy']     = '按由谁创建来进行统计';
+$lang->story->report->charts['storiesPerAssignedTo']   = '按当前指派来进行统计';
+$lang->story->report->charts['storiesPerClosedReason'] = '按关闭原因来进行统计';
+$lang->story->report->charts['storiesPerChange']       = '按变更次数来进行统计';
+$lang->story->report->charts['storiesPerGrade']        = '按层级来进行统计';
 
 $lang->story->report->options = new stdclass();
 $lang->story->report->options->graph  = new stdclass();
@@ -440,6 +441,7 @@ $lang->story->report->storiesPerAssignedTo   = new stdclass();
 $lang->story->report->storiesPerClosedReason = new stdclass();
 $lang->story->report->storiesPerEstimate     = new stdclass();
 $lang->story->report->storiesPerChange       = new stdclass();
+$lang->story->report->storiesPerGrade        = new stdclass();
 
 $lang->story->report->storiesPerProduct->item      = $lang->productCommon;
 $lang->story->report->storiesPerModule->item       = '模块';
@@ -453,6 +455,7 @@ $lang->story->report->storiesPerAssignedTo->item   = '指派给';
 $lang->story->report->storiesPerClosedReason->item = '原因';
 $lang->story->report->storiesPerEstimate->item     = "预计{$lang->hourCommon}";
 $lang->story->report->storiesPerChange->item       = '变更次数';
+$lang->story->report->storiesPerGrade->item        = '层级';
 
 $lang->story->report->storiesPerProduct->graph      = new stdclass();
 $lang->story->report->storiesPerModule->graph       = new stdclass();
@@ -466,6 +469,7 @@ $lang->story->report->storiesPerAssignedTo->graph   = new stdclass();
 $lang->story->report->storiesPerClosedReason->graph = new stdclass();
 $lang->story->report->storiesPerEstimate->graph     = new stdclass();
 $lang->story->report->storiesPerChange->graph       = new stdclass();
+$lang->story->report->storiesPerGrade->graph        = new stdclass();
 
 $lang->story->report->storiesPerProduct->graph->xAxisName      = $lang->productCommon;
 $lang->story->report->storiesPerModule->graph->xAxisName       = '模块';
@@ -479,6 +483,7 @@ $lang->story->report->storiesPerAssignedTo->graph->xAxisName   = '当前指派';
 $lang->story->report->storiesPerClosedReason->graph->xAxisName = '关闭原因';
 $lang->story->report->storiesPerEstimate->graph->xAxisName     = '预计时间';
 $lang->story->report->storiesPerChange->graph->xAxisName       = '变更次数';
+$lang->story->report->storiesPerGrade->graph->xAxisName        = '层级';
 
 $lang->story->placeholder = new stdclass();
 $lang->story->placeholder->estimate = $lang->story->hour;

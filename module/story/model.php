@@ -3227,13 +3227,14 @@ class storyModel extends model
      * 获取产品软件需求数量的数据。
      * Get report data of stories per product.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerProduct(): array
+    public function getDataOfStoriesPerProduct(string $storyType): array
     {
         $datas = $this->dao->select('product as name, count(product) as value')->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('product')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -3246,14 +3247,15 @@ class storyModel extends model
      * 获取按模块软件需求数量的统计数据。
      * Get report data of stories per module.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerModule(): array
+    public function getDataOfStoriesPerModule(string $storyType): array
     {
         $datas = $this->dao->select('module as name, count(module) as value, product, branch')
             ->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('module,product,branch')
             ->orderBy('value DESC')
             ->fetchAll('name');
@@ -3287,13 +3289,14 @@ class storyModel extends model
      * 获取按需求来源统计的数据。
      * Get report data of stories per source.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerSource(): array
+    public function getDataOfStoriesPerSource(string $storyType): array
     {
         $datas = $this->dao->select('source as name, count(source) as value')->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('source')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -3308,13 +3311,14 @@ class storyModel extends model
      * 获取按计划进行统计的数据。
      * Get report data of stories per plan.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerPlan(): array
+    public function getDataOfStoriesPerPlan(string $storyType): array
     {
         $datas = $this->dao->select('plan as name, count(plan) as value')->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('plan')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -3361,13 +3365,14 @@ class storyModel extends model
      * 获取按状态进行统计的数据。
      * Get report data of stories per status.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerStatus(): array
+    public function getDataOfStoriesPerStatus(string $storyType): array
     {
         $datas = $this->dao->select('status as name, count(status) as value')->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('status')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -3381,13 +3386,14 @@ class storyModel extends model
      * 获取按所处阶段进行统计的数据。
      * Get report data of stories per stage.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerStage(): array
+    public function getDataOfStoriesPerStage(string $storyType): array
     {
         $datas = $this->dao->select('stage as name, count(stage) as value')->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('stage')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -3399,13 +3405,14 @@ class storyModel extends model
      * 获取按优先级进行统计的数据。
      * Get report data of stories per pri.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerPri(): array
+    public function getDataOfStoriesPerPri(string $storyType): array
     {
         $datas = $this->dao->select('pri as name, count(pri) as value')->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('pri')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -3425,13 +3432,14 @@ class storyModel extends model
      * 获取按照预计工时进行统计的数据。
      * Get report data of stories per estimate.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerEstimate(): array
+    public function getDataOfStoriesPerEstimate(string $storyType): array
     {
         return $this->dao->select('estimate as name, count(estimate) as value')->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('estimate')->orderBy('value')
             ->fetchAll();
     }
@@ -3440,13 +3448,14 @@ class storyModel extends model
      * 获取按由谁创建来进行统计的数据。
      * Get report data of stories per openedBy.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerOpenedBy(): array
+    public function getDataOfStoriesPerOpenedBy(string $storyType): array
     {
         $datas = $this->dao->select('openedBy as name, count(openedBy) as value')->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('openedBy')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -3459,13 +3468,14 @@ class storyModel extends model
      * 获取按当前指派给来进行统计的数据。
      * Get report data of stories per assignedTo.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerAssignedTo(): array
+    public function getDataOfStoriesPerAssignedTo(string $storyType): array
     {
         $datas = $this->dao->select('assignedTo as name, count(assignedTo) as value')->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('assignedTo')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -3478,13 +3488,14 @@ class storyModel extends model
      * 获取按关闭原因来进行统计的数据。
      * Get report data of stories per closedReason.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerClosedReason(): array
+    public function getDataOfStoriesPerClosedReason(string $storyType): array
     {
         $datas = $this->dao->select('closedReason as name, count(closedReason) as value')->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('closedReason')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -3498,15 +3509,37 @@ class storyModel extends model
      * 获取按变更次数来进行统计的数据。
      * Get report data of stories per change.
      *
+     * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getDataOfStoriesPerChange(): array
+    public function getDataOfStoriesPerChange(string $storyType): array
     {
         return $this->dao->select('(version-1) as name, count(*) as value')->from(TABLE_STORY)
-            ->where($this->reportCondition())
+            ->where($this->reportCondition($storyType))
             ->groupBy('version')->orderBy('value')
             ->fetchAll();
+    }
+
+    /**
+     * 获取按需求层级来进行统计的数据。
+     * Get report data of stories per grade.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getDataOfStoriesPerGrade(string $storyType): array
+    {
+        $datas = $this->dao->select('grade as name, count(*) as value')->from(TABLE_STORY)
+            ->where($this->reportCondition($storyType))
+            ->groupBy('grade')->orderBy('value')
+            ->fetchAll();
+
+        $moduleName = $this->app->rawModule;
+        $gradePairs = $this->getGradePairs($moduleName, 'all');
+        foreach($datas as $data) $data->name = zget($gradePairs, $data->name, $this->lang->report->undefined);
+        return $datas;
     }
 
     /**
@@ -3807,7 +3840,7 @@ class storyModel extends model
         }
 
         $rootIdList = array();
-        foreach($stories as $story) $rootIdList[] = $story->root;
+        foreach($stories as $story) $rootIdList[$story->root] = $story->root;
         $children = $this->dao->select('*')->from(TABLE_STORY)
             ->where('root')->in($rootIdList)
             ->andWhere('product')->eq($productID)
@@ -3839,20 +3872,23 @@ class storyModel extends model
     /**
      * Set report condition.
      *
+     * @param  string $storyType
      * @access public
      * @return string
      */
-    public function reportCondition(): string
+    public function reportCondition(string $storyType): string
     {
-        if(isset($_SESSION['storyQueryCondition']))
+        $queryCondition = $storyType . 'QueryCondition';
+        $onlyCondition  = $storyType . 'OnlyCondition';
+        if(isset($_SESSION[$queryCondition]))
         {
-            if(!$this->session->storyOnlyCondition)
+            if(!$this->session->{$onlyCondition})
             {
-                preg_match_all('/[`"]' . trim(TABLE_STORY, '`') .'[`"] AS ([\w]+) /', $this->session->storyQueryCondition, $matches);
+                preg_match_all('/[`"]' . trim(TABLE_STORY, '`') .'[`"] AS ([\w]+) /', $this->session->{$queryCondition}, $matches);
                 $tableAlias = isset($matches[1][0]) ? $matches[1][0] . '.' : '';
-                return 'id in (' . preg_replace('/SELECT .* FROM/', "SELECT $tableAlias" . "id FROM", $this->session->storyQueryCondition) . ')';
+                return 'id in (' . preg_replace('/SELECT .* FROM/', "SELECT $tableAlias" . "id FROM", $this->session->{$queryCondition}) . ')';
             }
-            return $this->session->storyQueryCondition;
+            return $this->session->{$queryCondition};
         }
         return '1=1';
     }

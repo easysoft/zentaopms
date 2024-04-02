@@ -1745,7 +1745,7 @@ class story extends control
             foreach($this->post->charts as $chart)
             {
                 $chartFunc   = 'getDataOf' . $chart;
-                $chartData   = $this->story->$chartFunc();
+                $chartData   = $this->story->$chartFunc($storyType);
                 $chartOption = $this->lang->story->report->$chart;
                 if(!empty($chartType)) $chartOption->type = $chartType;
                 $this->story->mergeChartOption($chart);
@@ -1781,12 +1781,6 @@ class story extends control
         else
         {
             $this->product->setMenu($productID, $branchID);
-        }
-
-        if($storyType != 'story')
-        {
-            unset($this->lang->story->report->charts['storiesPerPlan']);
-            unset($this->lang->story->report->charts['storiesPerStage']);
         }
 
         $this->view->title         = $product->name . $this->lang->colon . $this->lang->story->reportChart;

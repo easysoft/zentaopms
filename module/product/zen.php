@@ -990,8 +990,7 @@ class productZen extends product
             $stories = $this->product->getStories($productID, $branchID, $browseType, (int)$queryID, $moduleID, $storyType, $sort, $pager);
         }
 
-        if($storyType != 'story') $stories = $this->story->appendChildren($productID, $stories, $storyType);
-        if(!empty($stories))      $stories = $this->story->mergeReviewer($stories);
+        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
         return $stories;
     }
