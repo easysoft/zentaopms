@@ -45,7 +45,11 @@ $config->repo->dtable->fieldList['actions']['name']  = 'actions';
 $config->repo->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->repo->dtable->fieldList['actions']['type']  = 'actions';
 $config->repo->dtable->fieldList['actions']['width'] = '132';
-$config->repo->dtable->fieldList['actions']['menu']  = array('execJob', 'reportView', 'edit', 'delete');
+$config->repo->dtable->fieldList['actions']['menu']  = array('visit', 'execJob', 'reportView', 'edit', 'delete');
+
+$config->repo->dtable->fieldList['actions']['list']['visit']['icon']   = 'menu-my';
+$config->repo->dtable->fieldList['actions']['list']['visit']['hint']   = $lang->repo->visit;
+$config->repo->dtable->fieldList['actions']['list']['visit']['target'] = '_blank';
 
 $config->repo->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->repo->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;

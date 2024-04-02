@@ -50,8 +50,24 @@ foreach($repoList as $repo)
 $config->repo->dtable->fieldList['name']['link']                   = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
 $config->repo->dtable->fieldList['actions']['list']['edit']['url'] = $this->createLink('repo', 'edit', "repoID={id}&objectID={$objectID}");
 
+if(empty($config->repo->maintain->hideRepoPath))
+{
+    unset($config->repo->dtable->fieldList['path']);
+    $config->repo->dtable->fieldList['product']['width']    = '0.2';
+    $config->repo->dtable->fieldList['scm']['width']        = '0.2';
+    $config->repo->dtable->fieldList['lastSubmit']['width'] = '0.2';
+}
+
 $repos         = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
 $queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
+
+/* Process data which the function initTableData() not provided. */
+foreach($repos as $repo)
+{
+    /* Set the url and check status for visiting the repo. */
+    $repo->actions[0]['disabled'] = strpos($repo->path, 'http') === false;
+    $repo->actions[0]['url'] = $repo->path;
+}
 
 \zin\featureBar
 (
