@@ -41,6 +41,7 @@ $lang->repo->branchFrom      = '创建自';
 $lang->repo->codeBranch      = '代码分支';
 $lang->repo->createdBranch   = '已创建分支';
 $lang->repo->unlink          = '解除关联';
+$lang->repo->visit           = '访问';
 
 $lang->repo->createBranchAction = '创建分支';
 $lang->repo->browseAction       = '浏览代码库';

@@ -29,6 +29,7 @@ $lang->repo->addWebHook      = 'Add Webhook';
 $lang->repo->apiGetRepoByUrl = 'API: Get repo by URL';
 $lang->repo->blamTmpl        = '%time %name commited %version %comment';
 $lang->repo->notRelated      = 'There is currently no related ZenTao object';
+$lang->repo->visit           = 'Visit';
 
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Create Repo';

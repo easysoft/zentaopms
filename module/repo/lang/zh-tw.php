@@ -27,6 +27,7 @@ $lang->repo->branch          = '分支';
 $lang->repo->tag             = '標簽';
 $lang->repo->addWebHook      = '添加Webhook';
 $lang->repo->apiGetRepoByUrl = '介面：通過URL獲取版本庫';
+$lang->repo->visit           = '訪問';
 
 $lang->repo->browseAction    = '瀏覽版本庫';
 $lang->repo->createAction    = '創建版本庫';

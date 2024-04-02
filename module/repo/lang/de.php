@@ -41,6 +41,7 @@ $lang->repo->branchFrom      = 'Create from';
 $lang->repo->codeBranch      = 'Code branch';
 $lang->repo->createdBranch   = 'Created branch';
 $lang->repo->unlink          = 'Unlink';
+$lang->repo->visit           = 'Visit';
 
 $lang->repo->createBranchAction = 'Create Branch';
 $lang->repo->browseAction       = 'Browse Repo';
