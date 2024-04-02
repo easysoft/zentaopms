@@ -68,6 +68,7 @@ $lang->metric->startRecalculate   = '开始重算';
 $lang->metric->recalculateAction  = '重算度量项';
 $lang->metric->recalculateBtnText = '重新计算';
 $lang->metric->exit               = '完成';
+$lang->metric->zentaoPath         = '【禅道目录】';
 
 $lang->metric->yearFormat     = '%s年';
 $lang->metric->weekFormat     = '%s周';

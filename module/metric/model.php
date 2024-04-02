@@ -679,7 +679,7 @@ class metricModel extends model
     }
 
     /**
-     * 根据代号计算度量项。 
+     * 根据代号计算度量项。
      * Calculate metric by code.
      *
      * @param  string $code
@@ -1500,7 +1500,7 @@ class metricModel extends model
                     $isClick = $metric->canDelist;
                     if(!$isClick && $metric->builtin == '1') $metric->actions[$key]['hint'] = $this->lang->metric->builtinMetric;
                 }
-                if($action['name'] == 'recalculate') 
+                if($action['name'] == 'recalculate')
                 {
                     $isClick = $metric->canRecalculate;
                     if($metric->stage != 'released' || (!empty($metric->dateType) && $metric->dateType == 'nodate')) $metric->actions[$key]['hint'] = $this->lang->metric->tips->banRecalculate;
@@ -1687,7 +1687,7 @@ class metricModel extends model
      */
     public function processImplementTips(string $code): void
     {
-        $tmpRoot = $this->app->getTmpRoot();
+        $tmpRoot = $this->lang->metric->zentaoPath . '/tmp/';
 
         $instructionTips = $this->lang->metric->implement->instructionTips;
 

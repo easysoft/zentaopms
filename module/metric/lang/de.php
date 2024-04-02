@@ -68,6 +68,7 @@ $lang->metric->startRecalculate   = 'Start';
 $lang->metric->recalculateAction  = 'Recalculate';
 $lang->metric->recalculateBtnText = 'Recalculate';
 $lang->metric->exit               = 'Exit';
+$lang->metric->zentaoPath         = '[Zentao Path]';
 
 $lang->metric->yearFormat     = 'Year %s';
 $lang->metric->weekFormat     = 'Week %s';
