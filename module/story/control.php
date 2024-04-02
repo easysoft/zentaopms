@@ -195,7 +195,9 @@ class story extends control
             $this->view->storyTitle = isset($story->title) ? $story->title : '';
 
             /* Check can subdivide or not. */
-            if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return $this->send(array('result' => 'fail', 'message' => $this->lang->story->errorNotSubdivide, 'load' => array('alert' => $this->lang->story->errorNotSubdivide)));
+            if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->errorNotSubdivide)));
+
+            if(!$this->story->checkCanSplit($story)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->errorCannotSplit)));
         }
 
         $this->view->title        = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);

@@ -291,7 +291,7 @@ class storyTao extends storyModel
      *
      * @param  int|array|string $productID
      * @param  array            $stories
-     * @param  string           $type          story|requirement
+     * @param  string           $type      story|requirement
      *
      * @access protected
      * @return array
@@ -309,6 +309,15 @@ class storyTao extends storyModel
         $parents = $this->extractParents($stories);
         if($parents) $parents = $this->dao->select('id,title,status,version,type')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
 
+        if($type != 'story')
+        {
+            $sameTypeChildren = $this->dao->select('parent, id')->from(TABLE_STORY)
+                 ->where('parent')->in(array_keys($stories))
+                 ->andWhere('type')->eq($type)
+                 ->andWhere('deleted')->eq(0)
+                 ->fetchPairs();
+        }
+
         $mainID  = $type == 'story' ? 'BID' : 'AID';
         $countID = $type == 'story' ? 'AID' : 'BID';
 
@@ -321,11 +330,14 @@ class storyTao extends storyModel
 
         foreach($stories as $story)
         {
-            /* Merge parent story title. */
+            /* Judge parent story has changed. */
             if($story->parent > 0 and isset($parents[$story->parent]))
             {
                 if($parents[$story->parent]->version > $story->parentVersion && $story->parentVersion > 0 && $parents[$story->parent]->status == 'active') $story->parentChanged = true;
             }
+
+            /* Judge parent story if has same type child. */
+            if($story->type != 'story' && $story->isParent == '1' && !empty($sameTypeChildren[$story->id])) $story->cannotSplit = true;
 
             /* Merge plan title. */
             $story->planTitle = '';
@@ -1056,11 +1068,31 @@ class storyTao extends storyModel
     protected function checkCanSubdivide($story, $isShadowProduct): bool
     {
         if($this->config->vision == 'lite') return true;
+        if($story->type != 'story') return true;
 
         if(!in_array($story->status, array('launched', 'developing', 'active'))) return false;
         if(!$isShadowProduct && $story->stage != 'wait')                         return false;
         if($isShadowProduct && $story->stage != 'projected')                     return false;
-        if($story->parent > 0)                                                   return false;
+
+        return true;
+    }
+
+    /**
+     * Check whether a story can be split.
+     *
+     * @param  object    $story
+     * @access protected
+     * @return bool
+     */
+    protected function checkCanSplit($story): bool
+    {
+        $sameTypeChild = $this->dao->select('id')->from(TABLE_STORY)
+             ->where('parent')->eq($story->id)
+             ->andWhere('type')->eq($story->type)
+             ->andWhere('deleted')->eq(0)
+             ->fetch('id');
+
+        if($sameTypeChild) return false;
 
         return true;
     }
@@ -1705,10 +1737,11 @@ class storyTao extends storyModel
      * @param  string    $params
      * @param  string    $storyType story|requirement
      * @param  object    $execution
+     * @param  int       $maxGrade
      * @access protected
      * @return array
      */
-    protected function buildBrowseActionBtnList(object $story, string $params = '', string $storyType = 'story', object $execution = null): array
+    protected function buildBrowseActionBtnList(object $story, string $params = '', string $storyType = 'story', object $execution = null, int $maxGrade = 0): array
     {
         global $lang;
 
@@ -1739,7 +1772,7 @@ class storyTao extends storyModel
         $submitReviewLink        = helper::createLink($story->type, 'submitReview', "storyID=$story->id");
         $reviewLink              = helper::createLink($story->type, 'review', $params . "&from=$story->from") . ($this->app->tab == 'project' ? '#app=project' : '');
         $recallLink              = helper::createLink($story->type, 'recall', $params . "&from=list&confirm=no");
-        $batchCreateStoryLink    = helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0");
+        $batchCreateStoryLink    = helper::createLink($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0");
         $editLink                = helper::createLink($story->type, 'edit', $params . "&kanbanGroup=default") . ($this->app->tab == 'project' ? '#app=project' : '');
         $createCaseLink          = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
 
@@ -1819,7 +1852,7 @@ class storyTao extends storyModel
 
         /* Batch create button. */
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
-        $canBatchCreateStory = $this->isClickable($story, 'batchcreate');
+        $canBatchCreateStory = $this->isClickable($story, 'batchcreate') && $story->grade < $maxGrade;
         if($this->app->rawModule != 'projectstory' || $this->config->vision == 'lite' || $shadow)
         {
             if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
@@ -1830,11 +1863,26 @@ class storyTao extends storyModel
                 if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
                 if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                 if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
-                if($story->parent > 0)    $title = $this->lang->story->subDivideTip['subStory'];
                 if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
+                if($story->grade >= $maxGrade) $title = $this->lang->story->errorMaxGradeSubdivide;
             }
 
             $actions[] = array('name' => 'batchCreate', 'url' => $canBatchCreateStory ? $batchCreateStoryLink : null, 'hint' => $title, 'disabled' => !$canBatchCreateStory);
+
+            /* Split requirement and story btn. */
+            $disabled = $story->status != 'active' || !empty($story->cannotSplit);
+            if($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate'))
+            {
+                $title = $this->lang->story->split . $lang->URCommon;
+                if(!empty($story->cannotSplit)) $title = $this->lang->story->errorCannotSplit;
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $title, 'disabled' => $disabled, 'icon' => 'tree');
+            }
+            elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate'))
+            {
+                $title = $this->lang->story->split . $lang->URCommon;
+                if(!empty($story->cannotSplit)) $title = $this->lang->story->errorCannotSplit;
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $title, 'disabled' => $story->status != 'active', 'icon' => 'tree');
+            }
         }
 
         if(!empty($execution))

@@ -3597,10 +3597,12 @@ class storyModel extends model
         if($action == 'close')      return $story->status != 'closed';
         if($action == 'activate')   return $story->status == 'closed';
         if($action == 'assignto')   return $story->status != 'closed';
-        if($action == 'batchcreate' and $story->parent > 0) return false;
-        if($action == 'batchcreate' and !empty($story->twins)) return false;
-        if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'submitreview' and strpos('draft,changing', $story->status) === false) return false;
+        if($action == 'batchcreate')
+        {
+            if(!empty($story->twins))      return false;
+            if($story->status != 'active') return false;
+        }
 
         static $shadowProducts = array();
         static $taskGroups     = array();
@@ -3620,9 +3622,9 @@ class storyModel extends model
         {
             if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
 
-            if($story->status != 'active' || !empty($story->plan)) return false;
+            if($story->status != 'active' || (!empty($story->plan) && $story->type == 'story')) return false;
             if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]) || $story->stage != 'projected')) return false;
-            if(!isset($shadowProducts[$story->product]) && $story->stage != 'wait') return false;
+            if(!isset($shadowProducts[$story->product]) && $story->stage != 'wait' && $story->type == 'story') return false;
         }
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
@@ -3665,6 +3667,16 @@ class storyModel extends model
             if(!helper::isAjaxRequest('modal') && $this->config->vision != 'lite')
             {
                 $mainMenu[] = commonModel::buildActionItem('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'split', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
+
+                $disabled = $story->status != 'active' || !$this->checkCanSplit($story);
+                if($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate'))
+                {
+                    if(!$disabled) $mainMenu[] = commonModel::buildActionItem('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'tree', 'text' => $this->lang->story->split, 'data-app' => $this->app->tab));
+                }
+                elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate'))
+                {
+                    if(!$disabled) $mainMenu[] = commonModel::buildActionItem('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'tree', 'text' => $this->lang->story->split, 'data-app' => $this->app->tab));
+                }
             }
 
             $mainMenu[] = commonModel::buildActionItem($story->type, 'assignTo', $params . "&kanbanGroup=default&from=", $story, array('icon' => 'hand-right', 'text' => $this->lang->story->assignTo, 'data-toggle' => 'modal'));
@@ -4874,14 +4886,15 @@ class storyModel extends model
      * @param  string $type
      * @param  object $execution
      * @param  string $storyType story|requirement
+     * @param  int    $maxGrade
      * @access public
      * @return array
      */
-    public function buildActionButtonList(object $story, $type = 'browse', object|null $execution = null, $storyType = 'story'): array
+    public function buildActionButtonList(object $story, $type = 'browse', object|null $execution = null, $storyType = 'story', int $maxGrade = 0): array
     {
         $params = "storyID=$story->id";
 
-        if($type == 'browse') return $this->storyTao->buildBrowseActionBtnList($story, $params, $storyType, $execution);
+        if($type == 'browse') return $this->storyTao->buildBrowseActionBtnList($story, $params, $storyType, $execution, $maxGrade);
         return array();
     }
 
@@ -4895,9 +4908,9 @@ class storyModel extends model
      * @access public
      * @return object
      */
-    public function formatStoryForList(object $story, array $options = array(), string $storyType = 'story'): object
+    public function formatStoryForList(object $story, array $options = array(), string $storyType = 'story', int $maxGrade = 0): object
     {
-        $story->actions  = $this->buildActionButtonList($story, 'browse', zget($options, 'execution', null), $storyType);
+        $story->actions  = $this->buildActionButtonList($story, 'browse', zget($options, 'execution', null), $storyType, $maxGrade);
         $story->estimate = $story->estimate . $this->config->hourUnit;
 
         $story->taskCount = zget(zget($options, 'storyTasks', array()), $story->id, 0);
@@ -5138,6 +5151,22 @@ class storyModel extends model
         }
 
         return $gradeOptions;
+    }
+
+    /**
+     * 根据需求类型获取最大的层级。
+     * Get max grade by story type.
+     *
+     * @param  string $storyType
+     * @access public
+     * @return int
+     */
+    public function getMaxGrade(string $storyType)
+    {
+        return $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORYGRADE)
+            ->where('type')->eq($storyType)
+            ->andWhere('status')->eq('enable')
+            ->fetch('maxGrade');
     }
 
     /**
