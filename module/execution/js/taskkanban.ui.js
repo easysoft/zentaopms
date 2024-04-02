@@ -1,4 +1,4 @@
-$('#kanbanList').on('enterFullscreen', () => {$('#kanbanList > div').css('height', '100%')});
+$('#kanbanList').on('enterFullscreen', () => {$('#kanbanList > div').css('height', '100%'); window.hideAllAction();});
 $('#kanbanList').on('exitFullscreen', () => {$('#kanbanList > div').css('height', 'calc(100vh - 120px)')});
 
 searchValue = '';
@@ -434,6 +434,19 @@ function exitFullScreen()
 {
     $('.btn').show();
     $.cookie.set('isFullScreen', 0, {expires:config.cookieLife, path:config.webRoot});
+    $('#kanbanList .card-heading a').each(function(){restoreDiv($(this));});
+    $('#kanbanList .avatar').closest('a').each(function(){restoreDiv($(this));});
+}
+
+function restoreDiv(obj)
+{
+    const $this      = $(obj);
+    const relatedDiv = $this.data('relatedDiv');
+    if(relatedDiv)
+    {
+        relatedDiv.remove();
+        $this.show().removeData('relatedDiv');
+    }
 }
 
 document.addEventListener('fullscreenchange', function (e)
@@ -459,6 +472,15 @@ document.addEventListener('msfullscreenChange', function (e)
 window.hideAllAction = function()
 {
     $('.btn').hide();
+    $('#kanbanList .card-heading a').each(function(){replaceDiv($(this));});
+    $('#kanbanList .avatar').closest('a').each(function(){replaceDiv($(this));});
+}
+
+function replaceDiv(obj)
+{
+    var $this  = $(obj);
+    var newDiv = $('<div></div>').addClass($this.attr('class')).html($this.html());
+    $this.data('relatedDiv', newDiv).before(newDiv).hide();
 }
 
 /**
