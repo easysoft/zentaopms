@@ -57,7 +57,7 @@ blockPanel
                                 $finishedTasks
                             )
                         ),
-                        $comparedTasks > 0 ? div(setClass('divider mx-4')) : null,
+                        $comparedTasks > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $comparedTasks > 0 ? row
                         (
                             width('2/3'),
@@ -107,7 +107,7 @@ blockPanel
                                 $createdStories
                             )
                         ),
-                        $comparedStories > 0 ? div(setClass('divider mx-4')) : null,
+                        $comparedStories > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $comparedStories > 0 ? row
                         (
                             width('2/3'),
@@ -166,7 +166,7 @@ blockPanel
                                 $closedBugs
                             )
                         ),
-                        $comparedBugs > 0 ? div(setClass('divider mx-4')) : null,
+                        $comparedBugs > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $comparedBugs > 0 ? row
                         (
                             width('2/3'),
@@ -216,7 +216,7 @@ blockPanel
                                 $runCases
                             )
                         ),
-                        $comparedCases > 0 ? div(setClass('divider mx-4')) : null,
+                        $comparedCases > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $comparedCases > 0 ? row
                         (
                             width('2/3'),
@@ -275,7 +275,7 @@ blockPanel
                                 $consumedHours
                             )
                         ),
-                        $comparedHours > 0 ? div(setClass('divider mx-4')) : null,
+                        $comparedHours > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $comparedHours > 0 ? row
                         (
                             width('2/3'),
@@ -320,7 +320,7 @@ blockPanel
                                 $totalWorkload
                             )
                         ),
-                        $todayWorkload > 0 ? div(setClass('divider mx-4')) : null,
+                        $todayWorkload > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $todayWorkload > 0 ? row
                         (
                             width('2/3'),
