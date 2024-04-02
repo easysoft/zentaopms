@@ -277,6 +277,7 @@ $lang->action->desc->online               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->offline              = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
 $lang->action->desc->linkhost             = '$date, 由 <strong>$actor</strong> 关联主机。' . "\n";
 $lang->action->desc->createrepobranch     = '$date, 由 <strong>$actor</strong> 创建了代码分支 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkrepobranch     = '$date, 由 <strong>$actor</strong> 取消关联了代码分支 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->changedprogram       = '$date, 由 <strong>$actor</strong> 调整了所属项目集。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
@@ -518,6 +519,7 @@ $lang->action->label->offline                 = '下架了';
 $lang->action->label->linkhost                = '主机关联到';
 $lang->action->label->delist                  = '下架了';
 $lang->action->label->createrepobranch        = '创建了分支从';
+$lang->action->label->unlinkrepobranch        = '取消关联了分支从';
 $lang->action->label->communicate             = '沟通了';
 $lang->action->label->changedprogram          = '调整了项目集';
 
