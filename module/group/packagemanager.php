@@ -718,6 +718,8 @@ $config->group->package->manageStory->privs['story-linkStories']        = array(
 $config->group->package->manageStory->privs['story-relieved']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('story-view'), 'recommend' => array('story-activate', 'story-assignTo', 'story-change', 'story-close', 'story-create', 'story-edit', 'story-linkStories', 'story-linkStory', 'story-processStoryChange', 'story-recall', 'story-submitReview'));
 $config->group->package->manageStory->privs['story-batchEdit']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('product-browse'), 'recommend' => array('story-edit'));
 $config->group->package->manageStory->privs['story-relation']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 19, 'depend' => array('story-view'), 'recommend' => array());
+$config->group->package->manageStory->privs['story-createBranch']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('story-view'), 'recommend' => array('story-unlinkBranch'));
+$config->group->package->manageStory->privs['story-unlinkBranch']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('story-view', 'story-createBranch'), 'recommend' => array());
 
 $config->group->package->importStory = new stdclass();
 $config->group->package->importStory->order  = 20;
@@ -1036,6 +1038,8 @@ $config->group->package->manageTask->privs['task-deleteWorkhour']         = arra
 $config->group->package->manageTask->privs['task-batchChangeModule']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 23, 'depend' => array('execution-task'), 'recommend' => array('task-edit'));
 $config->group->package->manageTask->privs['task-batchCancel']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 11, 'depend' => array('execution-task'), 'recommend' => array('task-cancel'));
 $config->group->package->manageTask->privs['task-confirmdesignchange']    = array('edition' => 'max,ipd',          'vision' => 'rnd',      'order' => 19, 'depend' => array('execution-task'), 'recommend' => array('task-edit'));
+$config->group->package->manageTask->privs['task-createBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('task-view'), 'recommend' => array('task-unlinkBranch'));
+$config->group->package->manageTask->privs['task-unlinkBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('task-view', 'task-createBranch'), 'recommend' => array());
 
 $config->group->package->deleteTask = new stdclass();
 $config->group->package->deleteTask->order  = 20;
@@ -1765,6 +1769,8 @@ $config->group->package->manageBug->privs['bug-linkBugs']           = array('edi
 $config->group->package->manageBug->privs['bug-batchChangeModule']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 16, 'depend' => array(), 'recommend' => array('bug-edit'));
 $config->group->package->manageBug->privs['bug-batchChangeBranch']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 17, 'depend' => array(), 'recommend' => array('bug-edit'));
 $config->group->package->manageBug->privs['bug-batchChangePlan']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 18, 'depend' => array(), 'recommend' => array('bug-edit'));
+$config->group->package->manageBug->privs['bug-createBranch']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('bug-view'), 'recommend' => array('bug-unlinkBranch'));
+$config->group->package->manageBug->privs['bug-unlinkBranch']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('bug-view', 'bug-createBranch'), 'recommend' => array());
 
 $config->group->package->deleteBug = new stdclass();
 $config->group->package->deleteBug->order  = 20;

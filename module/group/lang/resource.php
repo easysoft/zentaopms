@@ -530,6 +530,8 @@ $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->processStoryChange = 'processStoryChange';
 $lang->resource->story->linkStories        = 'linkStoriesAB';
 $lang->resource->story->relieved           = 'relievedTwins';
+$lang->resource->story->createBranch       = 'codeBranch';
+$lang->resource->story->unlinkBranch       = 'unlinkBranch';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
@@ -560,6 +562,8 @@ $lang->story->methodOrder[125] = 'batchToTask';
 $lang->story->methodOrder[130] = 'processStoryChange';
 $lang->story->methodOrder[135] = 'linkStories';
 $lang->story->methodOrder[140] = 'relieved';
+$lang->story->methodOrder[145] = 'createBranch';
+$lang->story->methodOrder[150] = 'unlinkBranch';
 
 /* Requirement. */
 $lang->resource->requirement = new stdclass();
@@ -913,6 +917,8 @@ $lang->resource->task->recordWorkhour     = 'recordWorkhourAction';
 $lang->resource->task->editEffort         = 'editEffort';
 $lang->resource->task->deleteWorkhour     = 'deleteWorkhour';
 $lang->resource->task->report             = 'reportChart';
+$lang->resource->task->createBranch       = 'codeBranch';
+$lang->resource->task->unlinkBranch       = 'unlinkBranch';
 
 $lang->task->methodOrder[5]   = 'create';
 $lang->task->methodOrder[10]  = 'batchCreate';
@@ -937,6 +943,8 @@ $lang->task->methodOrder[100] = 'editEffort';
 $lang->task->methodOrder[105] = 'deleteWorkhour';
 $lang->task->methodOrder[110] = 'report';
 $lang->task->methodOrder[115] = 'batchChangeModule';
+$lang->task->methodOrder[120] = 'codeBranch';
+$lang->task->methodOrder[125] = 'unlinkBranch';
 
 /* Build. */
 $lang->resource->build = new stdclass();
@@ -996,6 +1004,8 @@ $lang->resource->bug->delete             = 'deleteAction';
 $lang->resource->bug->batchChangeModule  = 'batchChangeModule';
 $lang->resource->bug->batchChangeBranch  = 'batchChangeBranch';
 $lang->resource->bug->batchChangePlan    = 'batchChangePlan';
+$lang->resource->bug->createBranch       = 'codeBranch';
+$lang->resource->bug->unlinkBranch       = 'unlinkBranch';
 
 $lang->bug->methodOrder[0]   = 'index';
 $lang->bug->methodOrder[5]   = 'browse';
@@ -1021,6 +1031,8 @@ $lang->bug->methodOrder[95]  = 'delete';
 $lang->bug->methodOrder[100] = 'linkBugs';
 $lang->bug->methodOrder[105] = 'batchChangeModule';
 $lang->bug->methodOrder[110] = 'batchChangeBranch';
+$lang->bug->methodOrder[115] = 'codeBranch';
+$lang->bug->methodOrder[120] = 'unlinkBranch';
 
 /* Test case. */
 $lang->resource->testcase = new stdclass();
