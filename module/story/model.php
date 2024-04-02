@@ -1585,7 +1585,6 @@ class storyModel extends model
             if($oldStory->branch != BRANCH_MAIN and $plan->branch != BRANCH_MAIN and !in_array($oldStory->branch, explode(',', $plan->branch))) continue;
 
             /* Ignore closed story and story linked to this plan already. */
-            if($oldStory->parent < 0) continue;
             if($oldStory->status == 'closed') continue;
             if(strpos(",{$oldStory->plan},", ",$planID,") !== false) continue;
 
@@ -1610,7 +1609,8 @@ class storyModel extends model
             /* Change stage. */
             if($planID)
             {
-                if($oldStory->stage == 'wait') $story->stage = 'planned';
+                if($oldStory->stage == 'wait')     $story->stage = 'planned';
+                if($oldStory->stage == 'defining') $story->stage = 'planning';
                 if($productType != 'normal' and $oldStory->branch == 0)
                 {
                     if(!empty($oldPlanID)) $story->plan = trim("{$story->plan},{$planID}", ',');
@@ -1631,7 +1631,12 @@ class storyModel extends model
             /* Update story and recompute stage. */
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
 
-            if(!$planID) $this->setStage($storyID);
+            if(!$planID) $this->setStage((int)$storyID);
+            if(isset($story->stage) && $story->stage != $oldStory->stage && $oldStory->parent > 0)
+            {
+                $story->parent = $oldStory->parent;
+                $this->storyTao->computeParentStage($story);
+            }
             if(!dao::isError())
             {
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
