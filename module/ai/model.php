@@ -365,6 +365,11 @@ class aiModel extends model
             ->where('gid')->like( "%&ai-$modelID")
             ->exec();
 
+        $this->dao->update(TABLE_AI_ASSISTANT)
+            ->set('deleted')->eq('1')
+            ->where('modelId')->eq($modelID)
+            ->exec();
+
         return !dao::isError();
     }
 
