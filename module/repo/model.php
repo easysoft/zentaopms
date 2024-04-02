@@ -73,6 +73,7 @@ class repoModel extends model
         if($repoID)
         {
             $repo = $this->getByID($repoID);
+            if(!$repo || !$this->checkPriv($repo)) $repoID = 0;
             if(!$repo || !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
         }
 

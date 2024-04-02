@@ -732,15 +732,15 @@ class repoTest
         return $result;
     }
 
-    public function saveTaskRelationTest(int $repoID, int $taskID, string $branch)
+    public function saveBranchRelationTest(int $repoID, string $branch, int $objectID, string $objectType)
     {
-        $this->objectModel->saveTaskRelation($repoID, $taskID, $branch);
+        $this->objectModel->saveBranchRelation($repoID, $branch, $objectID, $objectType);
 
         if(dao::isError()) return dao::getError();
 
         return $this->objectModel->dao->select('*')->from(TABLE_RELATION)
-            ->where('AType')->eq('task')
-            ->andWhere('AID')->eq($taskID)
+            ->where('AType')->eq($objectType)
+            ->andWhere('AID')->eq($objectID)
             ->andWhere('BID')->eq($repoID)
             ->andWhere('relation')->eq('linkrepobranch')
             ->andWhere('BType')->eq('repobranch')
