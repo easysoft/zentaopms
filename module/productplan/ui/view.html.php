@@ -33,9 +33,14 @@ jsVar('confirmLang', $confirmLang);
 jsVar('unlinkURL',   $unlinkURL);
 jsVar('childrenAB',  $lang->story->childrenAB);
 
-$bugCols     = array();
-$storyCols   = array();
-foreach($config->productplan->defaultFields['story'] as $field) $storyCols[$field] = zget($config->story->dtable->fieldList, $field, array());
+$bugCols   = array();
+$storyCols = array();
+foreach($config->productplan->defaultFields['story'] as $field)
+{
+    if($field == 'branch' && $product->type == 'normal') continue;
+    $storyCols[$field] = zget($config->story->dtable->fieldList, $field, array());
+}
+if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;
 foreach($config->productplan->defaultFields['bug'] as $field)   $bugCols[$field]   = zget($config->bug->dtable->fieldList, $field, array());
 
 $storyCols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");

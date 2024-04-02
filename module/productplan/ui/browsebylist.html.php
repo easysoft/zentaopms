@@ -37,7 +37,8 @@ toolbar
     $canCreatePlan ? item(set(array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->productplan->create, 'url' => createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}")))) : null
 );
 
-$cols      = $this->loadModel('datatable')->getSetting('productplan');
+$cols = $this->loadModel('datatable')->getSetting('productplan');
+$cols['title']['data-app'] = $app->tab;
 $tableData = initTableData($plans, $cols, $this->productplan);
 foreach($tableData as $plan)
 {

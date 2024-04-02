@@ -17,7 +17,7 @@ $config->productplan->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#F
 $config->productplan->future = '2030-01-01';
 
 global $app, $lang;
-$config->productplan->defaultFields['story']     = array('id', 'title', 'module', 'pri', 'status', 'openedBy', 'assignedTo', 'estimate', 'stage', 'actions');
+$config->productplan->defaultFields['story']     = array('id', 'title', 'pri', 'branch', 'module', 'status', 'openedBy', 'estimate', 'stage', 'assignedTo', 'actions');
 $config->productplan->defaultFields['bug']       = array('id', 'title', 'pri', 'status', 'openedBy', 'assignedTo', 'actions');
 $config->productplan->defaultFields['linkStory'] = array('id', 'pri', 'plan', 'module', 'title', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage');
 $config->productplan->defaultFields['linkBug']   = array('id', 'pri', 'title', 'openedBy', 'assignedTo', 'status');

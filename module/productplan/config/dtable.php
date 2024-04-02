@@ -20,7 +20,6 @@ $config->productplan->dtable->fieldList['title']['sortType']     = true;
 $config->productplan->dtable->fieldList['title']['align']        = 'left';
 $config->productplan->dtable->fieldList['title']['nestedToggle'] = true;
 $config->productplan->dtable->fieldList['title']['group']        = 'g1';
-$config->productplan->dtable->fieldList['title']['data-app']     = $app->tab;
 
 $config->productplan->dtable->fieldList['status']['name']      = 'status';
 $config->productplan->dtable->fieldList['status']['title']     = $lang->productplan->status;
