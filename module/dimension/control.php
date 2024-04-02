@@ -29,13 +29,12 @@ class dimension extends control
         {
             /* 构造 1.5 级导航的数据。*/
             /* Build the data of 1.5 level navigation. */
-            $items[] = array
-            (
-                'id'    => $dimension->id,
-                'text'  => $dimension->name,
-                'keys'  => zget(common::convert2Pinyin(array($dimension->name)), $dimension->name, ''),
-            );
+            $items[] = array();
+            $items['id']   = $dimension->id;
+            $items['text'] = $dimension->name;
+            $items['keys'] = zget(common::convert2Pinyin(array($dimension->name)), $dimension->name, '');
         }
+
         $this->view->link        = $this->createLink($module, $method, 'dimensionID={id}');
         $this->view->items       = $items;
         $this->view->dimensionID = $dimensionID;
