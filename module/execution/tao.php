@@ -266,10 +266,10 @@ class executionTao extends executionModel
      * 设置看板执行的菜单。
      * Set kanban menu.
      *
-     * @access protected
+     * @access public
      * @return void
      */
-    protected function setKanbanMenu()
+    public function setKanbanMenu()
     {
         global $lang;
         $lang->executionCommon = $lang->execution->kanban;
