@@ -399,6 +399,7 @@ $lang->metric->tips->noticeRepublish         = "If there are multiple releases, 
 $lang->metric->tips->noticeRewriteHistoryLib = "(When checked, the system will recalculate published metric with date type  based on historical data and overwrite all existing metric records)";
 $lang->metric->tips->banRecalculate          = "The metric has not been published or has no date type";
 $lang->metric->tips->noticeDeduplication     = "Deduplication...";
+$lang->metric->tips->noticeDoneDeduplication = "Deduplication done";
 
 $lang->metric->recalculateLog = "%s has been calculated";
 
