@@ -1715,7 +1715,11 @@ class storyZen extends story
         if($storyID)
         {
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('projectstory', 'view', "storyID=$storyID&projectID={$this->app->project}");
-            if($this->app->tab == 'product') $locateLink = $this->inlink('view', "storyID=$storyID&version=0&param=0&storyType=$storyType");
+            if($this->app->tab == 'product')
+            {
+                $story = $this->story->fetchById($storyID);
+                $locateLink = $this->createLink($story->type, 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType");
+            }
             return $locateLink;
         }
 
