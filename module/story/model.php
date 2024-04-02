@@ -3213,15 +3213,6 @@ class storyModel extends model
 
         if($action == 'change') return (($isSuperReviewer !== false || count($story->reviewer) == 0 || count($story->notReview) == 0) && $story->status == 'active');
         if($action == 'review') return (($isSuperReviewer !== false || in_array($app->user->account, $story->notReview)) && $story->status == 'reviewing');
-        if($action == 'createbranch')
-        {
-            global $dao;
-            return (bool)$dao->select('id')->from(TABLE_REPO)
-                ->where('deleted')->eq('0')
-                ->andWhere("FIND_IN_SET({$story->product}, `product`)")
-                ->andWhere('SCM')->in(array('Gitlab', 'Gitea', 'Gogs', 'GitFox'))
-                ->fetch('id');
-        }
 
         return true;
     }

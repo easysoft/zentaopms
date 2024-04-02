@@ -170,11 +170,24 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
     set::items($versions)
 )) : null;
 
+$hasRepo    = $this->loadModel('repo')->getListByProduct($story->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
 $actions    = $story->deleted || $isInModal ? array() : $this->loadModel('common')->buildOperateMenu($story);
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
 foreach($actions as $key => $action)
 {
+    if(!$hasDivider && isset($action['type']) && $action['type'] == 'divider')
+    {
+        unset($actions[$key]);
+        continue;
+    }
+
+    if(!$hasRepo && isset($action['icon']) && $action['icon'] == 'treemap')
+    {
+        unset($actions[$key]);
+        continue;
+    }
+
     if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}'), array($story->id, $story->type, $story->product, $story->branch, $story->module), $action['url']);
     if(isset($action['items']))
     {
@@ -184,14 +197,14 @@ foreach($actions as $key => $action)
         }
     }
 }
-if(!$hasDivider) unset($actions['type']);
+
 detail
 (
     set::objectType('story'),
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
-    set::actions($actions),
+    set::actions(array_values($actions)),
     $parentTitle,
     $parentUrl,
     $versionBtn,

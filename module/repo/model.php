@@ -3035,6 +3035,16 @@ class repoModel extends model
         return !dao::isError();
     }
 
+    /**
+     * 通过产品ID和代码库类型获取代码库列表。
+     * Get repo list by product id.
+     *
+     * @param  int    $productID
+     * @param  string $scm
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
     public function getListByProduct(int $productID, string $scm = '', int $limit = 0): array
     {
         return $this->dao->select('*')->from(TABLE_REPO)

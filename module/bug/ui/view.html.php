@@ -55,6 +55,16 @@ if(!$bug->deleted)
     /* Construct common actions for bug. */
     $actions = $operateList['mainActions'];
     if(!empty($operateList['suffixActions'])) $actions = array_merge($actions, array(array('type' => 'divider')), $operateList['suffixActions']);
+
+    $hasRepo = $this->loadModel('repo')->getListByProduct($bug->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
+    foreach($actions as $key => $action)
+    {
+        if(!$hasRepo && isset($action['icon']) && $action['icon'] == 'treemap')
+        {
+            unset($actions[$key]);
+            continue;
+        }
+    }
 }
 
 /* 初始化主栏内容。Init sections in main column. */
@@ -107,7 +117,7 @@ detail
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
-    set::actions($actions)
+    set::actions(array_values($actions))
 );
 
 modal
