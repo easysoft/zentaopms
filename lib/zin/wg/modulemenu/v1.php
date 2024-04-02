@@ -73,7 +73,7 @@ class moduleMenu extends wg
             /* Remove the rendered module. */
             if(isset(static::$filterMap["{$module->parent}-{$module->id}"])) return false;
 
-            if($module->parent != $id) return false;
+            if((string)$module->parent != (string)$id) return false;
 
             static::$filterMap["{$module->parent}-{$module->id}"] = true;
             return true;
