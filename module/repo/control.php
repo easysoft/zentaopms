@@ -8,6 +8,7 @@ declare(strict_types=1);
  * @author      Yidong Wang, Jinyong Zhu
  * @package     repo
  * @link        https://www.zentao.net
+ * @property    repoModel $repo
  */
 class repo extends control
 {
