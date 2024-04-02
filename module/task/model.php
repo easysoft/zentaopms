@@ -3169,24 +3169,6 @@ class taskModel extends model
     }
 
     /**
-     * 获取任务关联的代码分支。
-     * Get linked branch of task.
-     *
-     * @param  int    $taskID
-     * @access public
-     * @return array
-     */
-    public function getLinkedBranch(int $taskID): array
-    {
-        return $this->dao->select('BID,extra')->from(TABLE_RELATION)
-            ->where('AType')->eq('task')
-            ->andWhere('BType')->eq('repobranch')
-            ->andWhere('relation')->eq('linkrepobranch')
-            ->andWhere('AID')->eq($taskID)
-            ->fetchPairs();
-    }
-
-    /**
      * 通过任务ID获取任务团队信息。
      * Get the task team information through the task ID.
      *
