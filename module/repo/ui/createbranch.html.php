@@ -13,8 +13,69 @@ namespace zin;
 to::header(false);
 to::main(false);
 
-jsVar('linkParams', "taskID={$taskID}&executionID={$executionID}&repoID=%s");
-formPanel
+jsVar('module', $objectType);
+jsVar('linkParams', "objectID={$objectID}&repoID=%s");
+modalHeader
+(
+    set::title($lang->repo->codeBranch),
+    set::titleClass('panel-title text-lg')
+);
+
+$branchDom = array();
+foreach($linkedBranches as $branchRepo => $branchName)
+{
+    $branchDom[] = h::tr
+    (
+        h::td(zget($repoPairs, $branchRepo, '')),
+        h::td($branchName),
+        common::hasPriv($objectType, 'unlinkBranch') ? h::td(
+            a
+            (
+                setClass('btn ghost toolbar-item square size-sm text-primary ajax-submit'),
+                setData(array(
+                    'url'     => createLink($objectType, 'unlinkBranch', "objectID={$objectID}&repoID={$branchRepo}&branch=" . helper::safe64Encode($branchName)),
+                    'confirm' => sprintf($lang->repo->notice->unlinkBranch, $lang->{$objectType}->common)
+                )),
+                set::title($lang->repo->unlink),
+                icon('unlink')
+            )
+        ) : null
+    );
+}
+empty($linkedBranches) ? null : div
+(
+    div
+    (
+        setClass('panel-title text-lg'),
+        $lang->repo->createdBranch
+    ),
+
+    h::table
+    (
+        setClass('table condensed bordered mb-4 mt-2 text-center'),
+        h::tr
+        (
+            h::th
+            (
+                width('100px'),
+                $lang->repo->codeRepo
+            ),
+            h::th
+            (
+                width('150px'),
+                $lang->repo->branchName
+            ),
+            common::hasPriv($objectType, 'unlinkBranch') ? h::th
+            (
+                width('60px'),
+                $lang->actions
+            ) : null
+        ),
+        $branchDom
+    )
+);
+
+$canCreate ? formPanel
 (
     set::title($lang->repo->createBranchAction),
     formGroup
@@ -25,7 +86,7 @@ formPanel
         picker
         (
             set::required(true),
-            set::name('repoID'),
+            set::name('codeRepo'),
             set::items($repoPairs),
             set::value($repoID),
             set::popPlacement('bottom'),
@@ -36,9 +97,10 @@ formPanel
     (
         set::id('from'),
         set::label($lang->repo->branchFrom),
+        set::required(true),
         picker
         (
-            set::name('from'),
+            set::name('branchFrom'),
             set::required(true),
             set::popPlacement('bottom'),
             set::items($branches)
@@ -46,9 +108,9 @@ formPanel
     ),
     formGroup
     (
-        set::name('name'),
+        set::name('branchName'),
         set::label($lang->repo->branchName),
         set::required(true)
     ),
     set::actions(array('submit'))
-);
+) : null;

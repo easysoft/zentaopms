@@ -2523,30 +2523,6 @@ class repoModel extends model
         return false;
     }
 
-    /*
-     * 保存任务和分支的关联关系。
-     * Save task and branch relation.
-     *
-     * @param  int    $repoID
-     * @param  int    $taskID
-     * @param  string $branch
-     * @access public
-     * @return bool
-     */
-    public function saveTaskRelation(int $repoID, int $taskID, string $branch): bool
-    {
-        $relation = new stdclass();
-        $relation->AType    = 'task';
-        $relation->AID      = $taskID;
-        $relation->BType    = 'repobranch';
-        $relation->BID      = $repoID;
-        $relation->relation = 'linkrepobranch';
-        $relation->extra    = $branch;
-        $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-
-        return !dao::isError();
-    }
-
     /**
      * 根据路径获取gitlab文件列表。
      * Get gitlab files by path.
@@ -2957,10 +2933,10 @@ class repoModel extends model
      * Get appose diff.
      *
      * @param  array     $diffs
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function getApposeDiff(array $diffs): array
+    public function getApposeDiff(array $diffs): array
     {
         foreach($diffs as $diffFile)
         {
@@ -2989,10 +2965,10 @@ class repoModel extends model
      * @param  string    $SCM
      * @param  string    $orderBy
      * @param  object    $pager
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function getListByCondition(string $repoQuery, string $SCM, string $orderBy = 'id_desc', object $pager = null): array
+    public function getListByCondition(string $repoQuery, string $SCM, string $orderBy = 'id_desc', object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
@@ -3001,5 +2977,73 @@ class repoModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+    }
+
+    /*
+     * 保存对象和分支的关联关系。
+     * Save object and branch relation.
+     *
+     * @param  int    $repoID
+     * @param  string $branch
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return bool
+     */
+    public function saveBranchRelation(int $repoID, string $branch, int $objectID, string $objectType): bool
+    {
+        $relation = new stdclass();
+        $relation->AType    = $objectType;
+        $relation->AID      = $objectID;
+        $relation->BType    = 'repobranch';
+        $relation->BID      = $repoID;
+        $relation->relation = 'linkrepobranch';
+        $relation->extra    = $branch;
+        $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * 获取对象关联的代码分支。
+     * Get linked branch of object.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function getLinkedBranch(int $objectID, string $objectType): array
+    {
+        return $this->dao->select('BID,extra')->from(TABLE_RELATION)
+            ->where('AType')->eq($objectType)
+            ->andWhere('BType')->eq('repobranch')
+            ->andWhere('relation')->eq('linkrepobranch')
+            ->andWhere('AID')->eq($objectID)
+            ->fetchPairs();
+    }
+
+    /**
+     * 移除对象关联的代码分支。
+     * Get linked branch of object.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  int    $repoID
+     * @param  string $branch
+     * @access public
+     * @return array
+     */
+    public function unlinkObjectBranch(int $objectID, string $objectType, int $repoID, string $branch): bool
+    {
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('AType')->eq($objectType)
+            ->andWhere('BType')->eq('repobranch')
+            ->andWhere('relation')->eq('linkrepobranch')
+            ->andWhere('AID')->eq($objectID)
+            ->andWhere('BID')->eq($repoID)
+            ->andWhere('extra')->eq($branch)
+            ->exec();
+        return !dao::isError();
     }
 }

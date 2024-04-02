@@ -47,6 +47,6 @@ $config->repo->form->createRepo['encoding']    = array('required' => false, 'typ
 $config->repo->form->createRepo['encrypt']     = array('required' => false, 'type' => 'string', 'default' => 'plain');
 
 $config->repo->form->createBranch = array();
-$config->repo->form->createBranch['repoID'] = array('required' => true, 'type' => 'int');
-$config->repo->form->createBranch['from']   = array('required' => true, 'type' => 'string', 'filter' => 'trim');
-$config->repo->form->createBranch['name']   = array('required' => true, 'type' => 'string', 'filter' => 'trim');
+$config->repo->form->createBranch['codeRepo']   = array('required' => true, 'type' => 'int');
+$config->repo->form->createBranch['branchFrom'] = array('required' => true, 'type' => 'string', 'filter' => 'trim');
+$config->repo->form->createBranch['branchName'] = array('required' => true, 'type' => 'string', 'filter' => 'trim');

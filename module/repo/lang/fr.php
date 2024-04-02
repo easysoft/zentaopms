@@ -208,6 +208,7 @@ $lang->repo->notice->deleteReview   = 'Do you want to delete this review?';
 $lang->repo->notice->deleteBug      = 'Êtes-vous sûr de vouloir supprimer ce bug ?';
 $lang->repo->notice->deleteComment  = 'Êtes-vous certain de vouloir supprimer ce commentaire ?';
 $lang->repo->notice->lastSyncTime   = 'Dern Sync:';
+$lang->repo->notice->unlinkBranch   = 'Are you sure to disassociate the branch from %s?';
 
 $lang->repo->rules = new stdclass();
 $lang->repo->rules->exampleLabel = "Comment Exemple";

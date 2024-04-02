@@ -212,41 +212,76 @@ class repo extends control
      * 根据任务和执行创建分支。
      * Create a branch by task and execution.
      *
-     * @param  int    $taskID
-     * @param  int    $executionID
+     * @param  int    $objectID
      * @param  int    $repoID
      * @access public
      * @return void
      */
-    public function createBranch(int $taskID, int $executionID, int $repoID = 0)
+    public function createBranch(int $objectID, int $repoID = 0)
     {
-        $repoList = $this->repo->getList($executionID, implode(',', $this->config->repo->gitServiceTypeList));
-        if(!$repoList) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
+        $objectType = $this->app->rawModule;
+        $object     = $this->loadModel($objectType)->fetchByID($objectID);
+        $productIds = array(zget($object, 'product', 0));
+        if($objectType == 'task') $productIds = $this->loadModel('product')->getProductIDByProject($object->execution, false);
 
-        if(!$repoID) $repoID = $this->post->repoID;
-        if(!$repoID || !isset($repoList[$repoID])) $repoID = key($repoList);
+        $repoList  = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList), 'haspriv');
+        $repoPairs = array();
+        foreach($repoList as $repo)
+        {
+            $linkedProducts = explode(',', $repo->product);
+            foreach($productIds as $productID)
+            {
+                if(in_array($productID, $linkedProducts)) $repoPairs[$repo->id] = $repo->name;
+            }
+        }
+        if(!$repoPairs) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
+
+        if(!$repoID) $repoID = $this->post->codeRepo;
+        if(!$repoID || !isset($repoPairs[$repoID])) $repoID = key($repoPairs);
+
         $this->scm->setEngine($repoList[$repoID]);
-
         if(!empty($_POST))
         {
             $branch = form::data($this->config->repo->form->createBranch)->get();
-            $result = $this->scm->createBranch($branch->name, $branch->from);
+            $result = $this->scm->createBranch($branch->branchName, $branch->branchFrom);
             if($result['result'] == 'fail') return $this->sendError($this->lang->repo->error->createdFail . ': ' . $this->repoZen->parseErrorContent($result['message']));
 
-            $this->repo->saveTaskRelation((int)$repoID, $taskID, $branch->name);
-            $this->loadModel('action')->create('task', $taskID, 'createRepoBranch', '', $branch->name);
-            $this->sendSuccess(array('closeModal' => true, 'load' => true));
+            $this->repo->saveBranchRelation($repoID, $branch->branchName, $objectID, $objectType);
+            $this->loadModel('action')->create($objectType, $objectID, 'createRepoBranch', '', $branch->branchName);
+            $this->sendSuccess(array('callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
         }
 
-        $repoPairs = array();
-        foreach($repoList as $repo) $repoPairs[$repo->id] = $repo->name;
-
-        $this->view->repoPairs   = $repoPairs;
-        $this->view->repoID      = $repoID;
-        $this->view->taskID      = $taskID;
-        $this->view->branches    = $this->scm->branch();
-        $this->view->executionID = $executionID;
+        $canCreate = $object->status == 'active';
+        if($objectType == 'task') $canCreate = $object->status == 'wait' || $object->status == 'doing';
+        $this->view->linkedBranches = $this->repo->getLinkedBranch($objectID, $objectType);
+        $this->view->repoPairs      = $repoPairs;
+        $this->view->repoID         = $repoID;
+        $this->view->objectID       = $objectID;
+        $this->view->branches       = $this->scm->branch();
+        $this->view->objectType     = $objectType;
+        $this->view->canCreate      = $canCreate;
         $this->display();
+    }
+
+    /**
+     * 取消代码分支的关联。
+     * Unlink code branch.
+     *
+     * @param  int    $objectID
+     * @param  int    $repoID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function unlinkBranch(int $objectID, int $repoID, string $branch)
+    {
+        $objectType = $this->app->rawModule;
+        $branch     = helper::safe64Decode($branch);
+        $this->repo->unlinkObjectBranch($objectID, $objectType, $repoID, $branch);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        $this->loadModel('action')->create($objectType, $objectID, 'unlinkRepoBranch', '', $branch);
+        $this->sendSuccess(array('callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
     }
 
     /**
