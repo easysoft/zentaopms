@@ -325,8 +325,8 @@ $config->block->size['doc']['docrecentupdate'] = array(2 => 4, 1 => 4);
 $config->block->size['doc']['productdoc']      = array(2 => 6, 1 => 6);
 $config->block->size['doc']['projectdoc']      = array(2 => 6, 1 => 6);
 $config->block->size['doc']['docdynamic']      = array(1 => 8);
-$config->block->size['doc']['docviewlist']     = array(1 => 4);
-$config->block->size['doc']['doccollectlist']  = array(1 => 4);
+$config->block->size['doc']['docviewlist']     = array(1 => 5);
+$config->block->size['doc']['doccollectlist']  = array(1 => 5);
 
 $config->block->size['welcome']['welcome']                 = array(2 => 3);
 $config->block->size['guide']['guide']                     = array(2 => 6);
