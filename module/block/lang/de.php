@@ -663,7 +663,7 @@ $lang->block->sprint->thisYear       = 'This Year';
 $lang->block->sprint->statusCount    = "Status of {$lang->executionCommon}";
 
 $lang->block->zentaodynamic = new stdclass();
-$lang->block->zentaodynamic->zentaosalon  = 'ZenTao China Travel';
+$lang->block->zentaodynamic->zentaosalon  = 'ZenTao · China Travel';
 $lang->block->zentaodynamic->publicclass  = 'ZenTao Webinar';
 $lang->block->zentaodynamic->release      = 'Latest Release';
 $lang->block->zentaodynamic->registration = 'Registration';

@@ -367,9 +367,11 @@ class blockZen extends block
             {
                 foreach($data->release as $release)
                 {
+                    $releaseLength      = strpos($release->content, '发布');
                     $release->title     = $this->lang->block->zentaodynamic->release;
-                    $release->label     = formatTime($release->time, DT_DATE4) . ' ' . $this->lang->datepicker->dayNames[date('w', strtotime($release->time))];
+                    $release->label     = $releaseLength > 0 && $releaseLength <= 30 ? mb_strcut($release->content, 0, $releaseLength + 8) : formatTime($release->time, DT_DATE4) . ' ' . $this->lang->datepicker->dayNames[date('w', strtotime($release->time))];
                     $release->linklabel = false;
+
                     $dynamics[] = $release;
                 }
             }

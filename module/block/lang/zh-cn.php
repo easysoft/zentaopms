@@ -663,7 +663,7 @@ $lang->block->sprint->thisYear       = '今年完成';
 $lang->block->sprint->statusCount    = "{$lang->executionCommon}状态分布";
 
 $lang->block->zentaodynamic = new stdclass();
-$lang->block->zentaodynamic->zentaosalon  = '禅道中国行';
+$lang->block->zentaodynamic->zentaosalon  = '禅道·中国行';
 $lang->block->zentaodynamic->publicclass  = '禅道公开课';
 $lang->block->zentaodynamic->release      = '最新发布';
 $lang->block->zentaodynamic->registration = '立即报名';
