@@ -57,11 +57,11 @@ blockPanel
                                 $finishedTasks
                             )
                         ),
+                        $comparedTasks > 0 ? div(setClass('divider mx-4')) : null,
                         $comparedTasks > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -107,11 +107,11 @@ blockPanel
                                 $createdStories
                             )
                         ),
+                        $comparedStories > 0 ? div(setClass('divider mx-4')) : null,
                         $comparedStories > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -166,11 +166,11 @@ blockPanel
                                 $closedBugs
                             )
                         ),
+                        $comparedBugs > 0 ? div(setClass('divider mx-4')) : null,
                         $comparedBugs > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -216,11 +216,11 @@ blockPanel
                                 $runCases
                             )
                         ),
+                        $comparedCases > 0 ? div(setClass('divider mx-4')) : null,
                         $comparedCases > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -275,11 +275,11 @@ blockPanel
                                 $consumedHours
                             )
                         ),
+                        $comparedHours > 0 ? div(setClass('divider mx-4')) : null,
                         $comparedHours > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -320,11 +320,11 @@ blockPanel
                                 $totalWorkload
                             )
                         ),
+                        $todayWorkload > 0 ? div(setClass('divider mx-4')) : null,
                         $todayWorkload > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
-                            div(setClass('divider mx-4')),
                             span
                             (
                                 setClass('text-success text-sm'),
