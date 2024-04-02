@@ -85,6 +85,7 @@ $lang->bug->linkMR           = 'Related MRs';
 $lang->bug->linkCommit       = 'Related Commits';
 $lang->bug->productplan      = $lang->bug->plan;
 $lang->bug->codeBranch       = 'Code branch';
+$lang->bug->unlinkBranch     = 'Unlink code branch';
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = 'Module';

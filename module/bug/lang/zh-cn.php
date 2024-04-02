@@ -85,6 +85,7 @@ $lang->bug->linkMR           = '相关合并请求';
 $lang->bug->linkCommit       = '相关代码版本';
 $lang->bug->productplan      = $lang->bug->plan;
 $lang->bug->codeBranch       = '代码分支';
+$lang->bug->unlinkBranch     = '解除关联代码分支';
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = '模块';

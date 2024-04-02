@@ -85,6 +85,7 @@ $lang->story->relievedTwins      = 'Relieved Twins';
 $lang->story->loadAllStories     = 'All';
 $lang->story->hasDividedTask     = 'has divided task';
 $lang->story->codeBranch         = 'Code branch';
+$lang->story->unlinkBranch       = 'Unlink code branch';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Changer Story";

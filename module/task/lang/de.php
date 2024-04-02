@@ -67,6 +67,7 @@ $lang->task->unfoldEffort        = 'Unfold Effort';
 $lang->task->foldEffort          = 'Fold Effort';
 $lang->task->addEffort           = 'Add Effort';
 $lang->task->codeBranch          = 'Code Branch';
+$lang->task->unlinkBranch        = 'Unlink code branch';
 $lang->task->relatedBranch       = 'Related Branch';
 $lang->task->keywords            = 'Tags';
 $lang->task->syncStory           = 'Sync to task';

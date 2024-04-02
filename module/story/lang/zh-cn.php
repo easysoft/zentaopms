@@ -85,6 +85,7 @@ $lang->story->relievedTwins      = '解除孪生需求';
 $lang->story->loadAllStories     = '所有';
 $lang->story->hasDividedTask     = '已经分解任务';
 $lang->story->codeBranch         = '代码分支';
+$lang->story->unlinkBranch       = '解除关联代码分支';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";
