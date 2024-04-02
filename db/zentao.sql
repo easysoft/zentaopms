@@ -16109,7 +16109,6 @@ CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
   `createdDate` datetime NOT NULL,
   `publishedDate` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  UNIQUE (`modelId`, `name`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -2736,7 +2736,7 @@ class aiModel extends model
     public function getAssistants($pager = null, $orderBy = 'id_desc')
     {
         return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
-            ->where('deleted')->eq(0)
+            ->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -2746,7 +2746,7 @@ class aiModel extends model
     {
         return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
             ->where('modelId')->eq($modelId)
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->fetchAll();
     }
 
@@ -2880,13 +2880,14 @@ class aiModel extends model
         return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
             ->where('name')->eq($AssistantName)
             ->andWhere('modelId')->eq($modelId)
+            ->andWhere('deleted')->eq('0')
             ->fetch();
     }
 
     public function deleteAssistant($assistantId)
     {
         $this->dao->update(TABLE_AI_ASSISTANT)
-            ->set('deleted')->eq(1)
+            ->set('deleted')->eq('1')
             ->where('id')->eq($assistantId)
             ->exec();
         if(dao::isError()) return false;
