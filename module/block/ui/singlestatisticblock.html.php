@@ -75,7 +75,7 @@ panel
                                         array
                                         (
                                             'title'     => $lang->block->tooltips['deliveryRate'],
-                                            'placement' => 'bottom',
+                                            'placement' => 'bottom-end',
                                             'type'      => 'white',
                                             'className' => 'text-dark border border-light leading-5'
                                         )
