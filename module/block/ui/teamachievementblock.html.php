@@ -28,7 +28,7 @@ blockPanel
                 cell
                 (
                     set::width('50%'),
-                    setClass('item-task px-1'),
+                    setClass('item-task px-1 w-1/2'),
                     div
                     (
                         setClass('h-0 w-0'),
@@ -41,7 +41,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-2 flex flex-nowrap items-center pl-1'),
+                        setClass('mt-2 flex flex-wrap items-center pl-1'),
                         row
                         (
                             $comparedTasks > 0 ? width('1/3') : width('full'),
@@ -57,11 +57,11 @@ blockPanel
                                 $finishedTasks
                             )
                         ),
-                        $comparedTasks > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $comparedTasks > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mx-2 my-auto h-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -78,7 +78,7 @@ blockPanel
                 cell
                 (
                     set::width('50%'),
-                    setClass('item-story pl-8'),
+                    setClass('item-story pl-8 w-1/2'),
                     div
                     (
                         setClass('h-0 w-0'),
@@ -91,7 +91,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-2 flex flex-nowrap items-center pl-1'),
+                        setClass('mt-2 flex flex-wrap items-center pl-1'),
                         row
                         (
                             $comparedStories > 0 ? width('1/3') : width('full'),
@@ -107,11 +107,11 @@ blockPanel
                                 $createdStories
                             )
                         ),
-                        $comparedStories > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $comparedStories > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mx-2 my-auto h-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -137,7 +137,7 @@ blockPanel
                 cell
                 (
                     set::width('50%'),
-                    setClass('item-bug px-1'),
+                    setClass('item-bug px-1 w-1/2'),
                     div
                     (
                         setClass('h-0 w-0'),
@@ -150,7 +150,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-2 flex flex-nowrap items-center pl-1'),
+                        setClass('mt-2 flex flex-wrap items-center pl-1'),
                         row
                         (
                             $comparedBugs > 0 ? width('1/3') : width('full'),
@@ -166,11 +166,11 @@ blockPanel
                                 $closedBugs
                             )
                         ),
-                        $comparedBugs > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $comparedBugs > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mx-2 my-auto h-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -187,7 +187,7 @@ blockPanel
                 cell
                 (
                     set::width('50%'),
-                    setClass('item-case pl-8'),
+                    setClass('item-case pl-8 w-1/2'),
                     div
                     (
                         setClass('h-0 w-0'),
@@ -200,7 +200,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-2 flex flex-nowrap items-center pl-1'),
+                        setClass('mt-2 flex flex-wrap items-center pl-1'),
                         row
                         (
                             $comparedCases > 0 ? width('1/3') : width('full'),
@@ -216,11 +216,11 @@ blockPanel
                                 $runCases
                             )
                         ),
-                        $comparedCases > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $comparedCases > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mx-2 my-auto h-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -246,7 +246,7 @@ blockPanel
                 cell
                 (
                     set::width('50%'),
-                    setClass('item-hour px-1'),
+                    setClass('item-hour px-1 w-1/2'),
                     div
                     (
                         setClass('h-0 w-0'),
@@ -259,7 +259,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-2 flex flex-nowrap items-center pl-1'),
+                        setClass('mt-2 flex flex-wrap items-center pl-1'),
                         row
                         (
                             $comparedHours > 0 ? width('1/3') : width('full'),
@@ -275,11 +275,11 @@ blockPanel
                                 $consumedHours
                             )
                         ),
-                        $comparedHours > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $comparedHours > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mx-2 my-auto h-4')),
                             span
                             (
                                 setClass('text-sm text-success'),
@@ -296,7 +296,7 @@ blockPanel
                 cell
                 (
                     set::width('50%'),
-                    setClass('item-workload pl-8'),
+                    setClass('item-workload pl-8 w-1/2'),
                     div
                     (
                         setClass('h-0 w-0'),
@@ -309,7 +309,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-2 flex flex-nowrap items-center'),
+                        setClass('mt-2 flex flex-wrap items-center'),
                         row
                         (
                             $todayWorkload > 0 ? width('1/3') : width('full'),
@@ -320,11 +320,11 @@ blockPanel
                                 $totalWorkload
                             )
                         ),
-                        $todayWorkload > 0 ? div(setClass('divider mx-1 my-auto h-4')) : null,
                         $todayWorkload > 0 ? row
                         (
                             width('2/3'),
                             setClass('items-center'),
+                            div(setClass('divider mx-2 my-auto h-4')),
                             span
                             (
                                 setClass('text-success text-sm'),
