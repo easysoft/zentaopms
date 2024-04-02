@@ -1822,7 +1822,7 @@ class bugModel extends model
         if($module == 'bug' && $action == 'confirm')  return $object->status == 'active' && $object->confirmed == 0;
         /* 如果bug不是关闭状态，这个bug可以被指派。 */
         /* If the status isn't closed, the bug can be assginTo. */
-        if($module == 'bug' && $action == 'assignTo') return $object->status != 'closed';
+        if($module == 'bug' && $action == 'assignto') return $object->status != 'closed';
         /* 如果bug是激活状态，这个bug可以被解决。 */
         /* If the status is active, the bug can be resolve. */
         if($module == 'bug' && $action == 'resolve')  return $object->status == 'active';
@@ -1835,6 +1835,9 @@ class bugModel extends model
         /* 如果bug是激活状态，这个bug可以被转为需求。 */
         /* If the status is active, the bug can be toStory. */
         if($module == 'bug' && $action == 'tostory')  return $object->status == 'active';
+        /* 如果bug是激活状态，这个bug可以创建分支。 */
+        /* If the status is active, the bug can be create code branch. */
+        if($module == 'bug' && $action == 'createbranch')  return $object->status == 'active';
 
         return true;
     }

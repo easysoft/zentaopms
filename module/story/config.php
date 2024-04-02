@@ -166,7 +166,13 @@ $config->story->actionList['delete']['hint']      = $lang->task->delete;
 $config->story->actionList['delete']['url']       = array('module' => 'story', 'method' => 'delete', 'params' => 'storyID={id}');
 $config->story->actionList['delete']['className'] = 'ajax-submit';
 
+$config->story->actionList['createBranch']['icon']        = 'treemap';
+$config->story->actionList['createBranch']['hint']        = $lang->story->codeBranch;
+$config->story->actionList['createBranch']['text']        = $lang->story->codeBranch;
+$config->story->actionList['createBranch']['url']         = helper::createLink('story', 'createBranch', 'storyID={id}');
+$config->story->actionList['createBranch']['data-toggle'] = 'modal';
+
 $config->story->actions = new stdclass();
 $config->story->actions->view = array();
-$config->story->actions->view['mainActions']   = array('change', 'submitReview', 'recall', 'recallChange', 'review', 'subdivide', 'assignTo', 'close', 'activate', 'importToLib', 'testcase', 'createTask');
+$config->story->actions->view['mainActions']   = array('change', 'submitReview', 'recall', 'recallChange', 'review', 'subdivide', 'createBranch', 'assignTo', 'close', 'activate', 'importToLib', 'testcase', 'createTask');
 $config->story->actions->view['suffixActions'] = array('edit', 'copy', 'delete');

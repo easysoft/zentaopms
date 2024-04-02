@@ -2020,4 +2020,33 @@ class story extends control
         }
         return print(json_encode($items));
     }
+
+    /**
+     * 创建代码分支。
+     * Create repo branch.
+     *
+     * @param  int    $storyID
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function createBranch(int $storyID, int $repoID = 0)
+    {
+        return print($this->fetch('repo', 'createBranch', array('objectID' => $storyID, 'repoID' => $repoID)));
+    }
+
+    /**
+     * 取消代码分支的关联。
+     * Unlink code branch.
+     *
+     * @param  int    $storyID
+     * @param  int    $repoID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function unlinkBranch(int $storyID, int $repoID, string $branch)
+    {
+        return print($this->fetch('repo', 'unlinkBranch', array('objectID' => $storyID, 'repoID' => $repoID, 'branch' => $branch)));
+    }
 }

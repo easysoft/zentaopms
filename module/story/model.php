@@ -3159,6 +3159,7 @@ class storyModel extends model
         global $app, $config;
         $action = strtolower($action);
 
+        if($action == 'createbranch') return $story->status == 'active';
         if($action == 'recallchange') return $story->status == 'changing';
         if($action == 'recall')       return $story->status == 'reviewing';
         if($action == 'close')        return $story->status != 'closed';
