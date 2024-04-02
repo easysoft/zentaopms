@@ -73,19 +73,7 @@ class repoModel extends model
         if($repoID)
         {
             $repo = $this->getByID($repoID);
-            if(empty($repo))
-            {
-                echo(js::alert($this->lang->repo->error->noFound));
-                return print(js::locate('back'));
-            }
-
-            if(!$this->checkPriv($repo))
-            {
-                echo(js::alert($this->lang->repo->error->accessDenied));
-                return print(js::locate('back'));
-            }
-
-            if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
+            if(!$repo || !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
         }
 
         if(!in_array($this->app->methodName, array('maintain', 'create', 'createrepo', 'edit','import'))) common::setMenuVars('devops', $repoID);
@@ -3045,5 +3033,15 @@ class repoModel extends model
             ->andWhere('extra')->eq($branch)
             ->exec();
         return !dao::isError();
+    }
+
+    public function getListByProduct(int $productID, string $scm = '', int $limit = 0): array
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq('0')
+            ->andWhere("FIND_IN_SET({$productID}, `product`)")
+            ->beginIF($scm)->andWhere('SCM')->in($scm)->fi()
+            ->beginIF($limit)->limit($limit)->fi()
+            ->fetchAll('id');
     }
 }

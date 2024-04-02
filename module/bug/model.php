@@ -1835,9 +1835,17 @@ class bugModel extends model
         /* 如果bug是激活状态，这个bug可以被转为需求。 */
         /* If the status is active, the bug can be toStory. */
         if($module == 'bug' && $action == 'tostory')  return $object->status == 'active';
-        /* 如果bug是激活状态，这个bug可以创建分支。 */
-        /* If the status is active, the bug can be create code branch. */
-        if($module == 'bug' && $action == 'createbranch')  return $object->status == 'active';
+        /* 如果bug的产品有代码库，这个bug可以创建分支。 */
+        /* If bug's product has repo, the bug can be create code branch. */
+        if($module == 'bug' && $action == 'createbranch')
+        {
+            global $dao;
+            return (bool)$dao->select('id')->from(TABLE_REPO)
+                ->where('deleted')->eq('0')
+                ->andWhere("FIND_IN_SET({$object->product}, `product`)")
+                ->andWhere('SCM')->in(array('Gitlab', 'Gitea', 'Gogs', 'GitFox'))
+                ->fetch('id');
+        }
 
         return true;
     }
