@@ -54,7 +54,7 @@ class ai extends control
         if(commonModel::hasPriv('ai', 'models')) return $this->locate($this->createLink('ai', 'models'));
 
         /* User has no priv, deny access. */
-        return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'locate' => $this->createLink('admin', 'index')));
+        return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'locate' => 'back'));
     }
 
     /**
