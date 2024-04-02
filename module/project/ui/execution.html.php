@@ -124,7 +124,7 @@ featureBar
 $createLink = $isStage ? createLink('programplan', 'create', "projectID={$projectID}&productID={$productID}") : createLink('execution', 'create', "projectID={$projectID}");
 toolbar
 (
-    in_array($project->model, array('waterfall', 'waterfallplus')) && $this->config->edition == 'max' ? btnGroup
+    in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && in_array($this->config->edition, array('max', 'ipd')) ? btnGroup
     (
         a(setClass('btn square'), icon('gantt-alt'), set::title($lang->programplan->gantt), set::href(createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"))),
         a(setClass('btn square text-primary'), icon('list'), set::title($lang->project->bylist))
