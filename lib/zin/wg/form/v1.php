@@ -66,7 +66,6 @@ class form extends formBase
 
             $defaultProps = array();
             $defaultProps['submitBtnText'] = $text;
-            $defaultProps['class']         = 'px-3 pb-4';
             $this->setDefaultProps($defaultProps);
         }
 
