@@ -375,7 +375,6 @@ class task extends control
             $task->storyTitle  = !empty($story) ? $story->title : '';
         }
 
-        $task->linkedBranch = $this->task->getLinkedBranch($taskID);
         if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
 
         /* Execute workflow hooks if edition is not open. */

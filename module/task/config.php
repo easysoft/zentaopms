@@ -187,9 +187,9 @@ $config->task->actionList['assignTo']['url']         = helper::createLink('task'
 $config->task->actionList['assignTo']['data-toggle'] = 'modal';
 
 $config->task->actionList['createBranch']['icon']        = 'treemap';
-$config->task->actionList['createBranch']['hint']        = $lang->task->createBranch;
-$config->task->actionList['createBranch']['text']        = $lang->task->createBranch;
-$config->task->actionList['createBranch']['url']         = helper::createLink('repo', 'createBranch', 'taskID={id}&execution={execution}');
+$config->task->actionList['createBranch']['hint']        = $lang->task->codeBranch;
+$config->task->actionList['createBranch']['text']        = $lang->task->codeBranch;
+$config->task->actionList['createBranch']['url']         = helper::createLink('repo', 'createBranch', 'objectID={id}&objectType=task');
 $config->task->actionList['createBranch']['data-toggle'] = 'modal';
 
 $config->task->actions = new stdclass();
