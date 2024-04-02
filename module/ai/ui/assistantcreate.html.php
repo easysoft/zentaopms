@@ -20,17 +20,6 @@ formPanel
     ),
     formGroup
     (
-        set::label($lang->ai->assistants->name),
-        set::width('1/2'),
-        set::required(true),
-        input
-        (
-            set::name('name'),
-            set('maxlength', 20)
-        )
-    ),
-    formGroup
-    (
         set::label($lang->ai->models->common),
         set::width('1/2'),
         set::required(true),
@@ -40,6 +29,17 @@ formPanel
             set::items($models),
             set::value(array_key_first($models)),
             set::required(true)
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->ai->assistants->name),
+        set::width('1/2'),
+        set::required(true),
+        input
+        (
+            set::name('name'),
+            set('maxlength', 20)
         )
     ),
     formGroup
