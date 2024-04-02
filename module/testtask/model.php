@@ -1684,7 +1684,7 @@ class testtaskModel extends model
         $file     = $files[0];
         $filePath = $this->file->savePath . $this->file->getSaveName($file['pathname']);
         move_uploaded_file($file['tmpname'], $filePath);
-        $parsedXML = simplexml_load_file($filePath);
+        $parsedXML = simplexml_load_file($filePath, null, LIBXML_NOERROR);
         if($parsedXML === false)
         {
             dao::$errors['resultFile'][] = $this->lang->testtask->cannotBeParsed;
