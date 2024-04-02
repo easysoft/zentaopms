@@ -47,10 +47,10 @@ $auditInject = function() use($module, $method)
 
             $auditScript .= <<< JAVASCRIPT
             const actionContainerStyles = JSON.parse('$actionContainerStyles');
-            const injectHTML = `$publishBtn`;
-            $(`$targetContainer`)[`$injectMethod`](injectHTML);
-            $(`$targetContainer`).css(actionContainerStyles);
-            $('#mainContent #headerBox td:first-child').html(`$exitAuditButton`);
+            $('#mainContent .titleBox').children('button,a').remove()
+            $('#mainContent .titleBox').append(`$publishBtn`);
+            $('#mainContent .titleBox').css(actionContainerStyles);
+            $('#mainContent .titleBox').prepend(`$exitAuditButton`);
             JAVASCRIPT;
         }
         else
