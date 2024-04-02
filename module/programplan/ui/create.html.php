@@ -259,5 +259,4 @@ formBatchPanel
     set::items($fnGenerateFields()),
     set::data($fnGenerateDefaultData()),
     $project->model == 'ipd' ? set::maxRows(count($fnGenerateDefaultData())) : null,
-    $project->model == 'ipd' ? set::mode('edit') : null
 );

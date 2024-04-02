@@ -5,6 +5,8 @@ window.onRenderRow = function(row, rowIdx, data)
 
     if(project.model == 'ipd')
     {
+        $('thead [data-name="ACTIONS"]').css('display', 'none');
+        row.find('[data-name="ACTIONS"]').css('display', 'none');
         row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
         {
             let $attributePicker = info[0];

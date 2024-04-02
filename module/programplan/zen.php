@@ -48,6 +48,7 @@ class programplanZen extends programplan
     {
         $project = $this->loadModel('project')->getByID($projectID);
         if($parentID) $parentStage = $this->programplan->getByID($parentID);
+        if(!$parentID) $oldPlans   = $this->programplan->getStage($projectID);
 
         $fields = $this->config->programplan->form->create;
         foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
@@ -62,6 +63,7 @@ class programplanZen extends programplan
         $orders = $this->programplan->computeOrders(array(), $plans);
         foreach($plans as $rowID => $plan)
         {
+            if(empty($parentID) and empty($oldPlans)) $plan->id = '';
             $plan->days       = helper::diffDate($plan->end, $plan->begin) + 1;
             $plan->project    = $projectID;
             $plan->parent     = $parentID ? $parentID : $projectID;
