@@ -95,7 +95,7 @@ if($project)
                 $project->executions[0]->name
             )
         )
-    ) : div();
+    ) : null;
 
     $cells = array();
     if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
@@ -422,7 +422,7 @@ statisticBlock
         div
         (
             setClass('flex bg-white leading-6 px-2 py-1 mt-1 mx-3 items-center gap-x-2 gap-y-1 justify-between' . ($longBlock ? ' h-10 my-3 flex-nowrap' : ' h-14 mb-1 flex-wrap')),
-            $lastestExecution,
+            !empty($lastestExecution) || !$longBlock ? $lastestExecution : div(),
             div(setClass('flex justify-end gap-x-2 nowrap'), $projectOverview)
         ),
         div
