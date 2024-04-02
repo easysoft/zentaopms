@@ -36,11 +36,11 @@ if($project)
         setClass('text-left'),
         $project->status != 'closed' && $project->end != LONG_TIME ? span
         (
-            setClass('text-gray'),
+            setClass('text-gray block'),
             $remainingDays >= 0 ? $lang->block->projectstatistic->leftDaysPre : $lang->block->projectstatistic->delayDaysPre,
             span
             (
-                setClass('font-bold text-black px-1'),
+                setClass('font-bold text-gray-950 px-1'),
                 abs($remainingDays)
             ),
             $lang->block->projectstatistic->day
@@ -50,17 +50,17 @@ if($project)
             $project->status == 'closed' ? $lang->block->projectstatistic->projectClosed : $lang->block->projectstatistic->longTimeProject
         )
     );
+    $projectOverview[] = $config->edition != 'open' ? div(setClass('divider mx-1 my-auto h-4')) : null;
     $projectOverview[] = $config->edition != 'open' ? cell
     (
-        setClass('flex-1 text-left' . (!$longBlock ? ' w-full' : '')),
-        icon('bullhorn text-warning'),
+        setClass('flex-0 text-left' . (!$longBlock ? ' w-full' : '')),
         span
         (
-            setClass('text-gray mr-5'),
+            setClass('text-gray mr-4'),
             $lang->block->projectstatistic->existRisks,
             span
             (
-                setClass('font-bold text-warning'),
+                setClass('font-bold ml-2 text-danger'),
                 $project->risks
             )
         ),
@@ -70,7 +70,7 @@ if($project)
             $lang->block->projectstatistic->existIssues,
             span
             (
-                setClass('font-bold text-warning'),
+                setClass('font-bold ml-2 text-gray-950'),
                 $project->issues
             )
         )
@@ -78,7 +78,7 @@ if($project)
 
     $lastestExecution = !empty($project->executions) && $project->multiple ? cell
     (
-        setClass('flex flex-1 overflow-hidden whitespace-nowrap clip w-full' . (!$longBlock ? ' text-left w-full' : '')),
+        setClass('flex overflow-hidden whitespace-nowrap clip w-full' . (!$longBlock ? ' flex-0 text-left w-full' : ' flex-1')),
         span
         (
             setClass('text-gray'),
@@ -95,7 +95,7 @@ if($project)
                 $project->executions[0]->name
             )
         )
-    ) : null;
+    ) : div();
 
     $cells = array();
     if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
@@ -148,14 +148,13 @@ if($project)
             }
             $cells[] = cell
             (
-                setClass('flex-1 overflow-hidden whitespace-nowrap project-statistic-table scrum' . (($module != 'cost' && $longBlock) || ($module != 'task' && $module != 'cost' && !$longBlock) ? ' border-l pl-4 ' : ' ml-4') . (!$longBlock && $module != 'cost' && $module != 'story'? ' border-t' : '')),
-                set::width($longBlock ? ($module == 'cost' ? 'calc(25% - 1rem)' : '25%') : 'calc(50% - 1rem)'),
+                setClass('flex-1 overflow-hidden whitespace-nowrap project-statistic-table scrum bg-gray-50 border border-1 pt-2 px-1'),
+                set::width($longBlock ? '25%' : 'calc(50% - 1rem)'),
                 div
                 (
-                    setClass('pt-1'),
                     span
                     (
-                        setClass('font-bold'),
+                        setClass('font-bold ml-3'),
                         $lang->block->projectstatistic->{$module}
                     )
                 ),
@@ -208,14 +207,14 @@ if($project)
         );
         $cells[] = cell
         (
-            setClass('project-statistic-table waterfall pl-4' . ($longBlock ? ' border-l' : ' mt-4')),
-            set::width($longBlock ? '32%' : '50%'),
+            setClass('project-statistic-table waterfall bg-gray-50 border border-1 pt-2 px-1'),
+            set::width($longBlock ? '32%' : 'calc(50% - 0.25rem)'),
             div
             (
                 setClass('w-full'),
                 span
                 (
-                    setClass('font-bold'),
+                    setClass('font-bold ml-3'),
                     $lang->project->progress
                 )
             ),
@@ -309,14 +308,14 @@ if($project)
         );
         $cells[] = cell
         (
-            setClass('project-statistic-table waterfall pl-4 border-l' . (!$longBlock ? ' mt-3' : '')),
-            set::width($longBlock ? '32%' : '50%'),
+            setClass('project-statistic-table waterfall bg-gray-50 border border-1 pt-2 px-1'),
+            set::width($longBlock ? '32%' : 'calc(50% - 0.25rem)'),
             div
             (
                 setClass('w-full'),
                 span
                 (
-                    setClass('font-bold'),
+                    setClass('font-bold ml-3'),
                     $lang->block->projectstatistic->currentCost
                 )
             ),
@@ -422,13 +421,13 @@ statisticBlock
     (
         div
         (
-            setClass('flex bg-white leading-6 px-2 py-1 mt-1 mx-3 items-center gap-x-2 justify-between' . ($longBlock ? ' h-10 mb-6 flex-nowrap' : 'h-20 mb-4 flex-wrap')),
-            $projectOverview,
-            $lastestExecution
+            setClass('flex bg-white leading-6 px-2 py-1 mt-1 mx-3 items-center gap-x-2 gap-y-1 justify-between' . ($longBlock ? ' h-10 my-3 flex-nowrap' : ' h-14 mb-1 flex-wrap')),
+            $lastestExecution,
+            div(setClass('flex justify-end gap-x-2 nowrap'), $projectOverview)
         ),
         div
         (
-            setClass('flex' . (!$longBlock ? ' flex-wrap' : '')),
+            setClass('flex gap-2 p-3 pt-1' . (!$longBlock ? ' flex-wrap gap-y-3' : ' pt-0')),
             $cells
         )
     ) : null
