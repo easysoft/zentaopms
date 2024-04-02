@@ -41,7 +41,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-3 flex flex-nowrap items-center pl-1'),
+                        setClass('mt-2 flex flex-nowrap items-center pl-1'),
                         row
                         (
                             $comparedTasks > 0 ? width('1/3') : width('full'),
@@ -91,7 +91,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-3 flex flex-nowrap items-center pl-1'),
+                        setClass('mt-2 flex flex-nowrap items-center pl-1'),
                         row
                         (
                             $comparedStories > 0 ? width('1/3') : width('full'),
@@ -150,7 +150,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-3 flex flex-nowrap items-center pl-1'),
+                        setClass('mt-2 flex flex-nowrap items-center pl-1'),
                         row
                         (
                             $comparedBugs > 0 ? width('1/3') : width('full'),
@@ -200,7 +200,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-3 flex flex-nowrap items-center pl-1'),
+                        setClass('mt-2 flex flex-nowrap items-center pl-1'),
                         row
                         (
                             $comparedCases > 0 ? width('1/3') : width('full'),
@@ -259,7 +259,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-3 flex flex-nowrap items-center pl-1'),
+                        setClass('mt-2 flex flex-nowrap items-center pl-1'),
                         row
                         (
                             $comparedHours > 0 ? width('1/3') : width('full'),
@@ -309,7 +309,7 @@ blockPanel
                     ),
                     div
                     (
-                        setClass('mt-3 flex flex-nowrap items-center'),
+                        setClass('mt-2 flex flex-nowrap items-center'),
                         row
                         (
                             $todayWorkload > 0 ? width('1/3') : width('full'),
