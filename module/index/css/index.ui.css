@@ -18,11 +18,12 @@
 #menu .nav > li > a.active {background: var(--zt-menu-active-bg, rgba(var(--color-primary-400-rgb), .7));}
 #menu .nav > li > a > .text {white-space: nowrap;}
 #menu .nav > li > a > .icon {font-size: 18px; display: inline-flex; align-items: center; justify-content: center;}
-.show-menu .menu-tooltip {display: none;}
+.show-menu #menuNav [data-hint]::before, .show-menu #menuNav [data-hint]::after {display: none;}
 
 #menuNav {padding: 6px 0; position: absolute; left: 0; right: 0; top: 0; bottom: 46px;}
 #menuMainNav a {cursor: pointer;}
 #menuFooter {position: absolute; bottom: 0; left: 0; right: 0;}
+.show-menu #menuFooter [data-hint]::after {content: attr(data-collapse-text)}
 
 #menuMoreNav {display: none;}
 .show-more-nav #menuMoreNav {display: block;}

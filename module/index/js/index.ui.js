@@ -649,11 +649,10 @@ function initAppsMenu(items)
         if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
         apps.map[item.code] = item;
 
-
-        $('<li></li>').attr('data-app', item.code)
-        .attr({'data-toggle': 'tooltip', 'data-placement': 'right', 'data-title': item.text, 'data-class-name': 'menu-tooltip'})
-        .append($link)
-        .appendTo($menuMainNav);
+        $('<li class="hint-right"></li>')
+            .attr({'data-app': item.code, 'data-hint': item.text})
+            .append($link)
+            .appendTo($menuMainNav);
 
         if(!apps.defaultCode) apps.defaultCode = item.code;
     });

@@ -74,10 +74,11 @@ div
             li
             (
                 setID('menuToggleMenu'),
+                setClass('hint-right'),
+                setData(array('collapse-text' => $lang->collapseMenu, 'hint' => $lang->unfoldMenu)),
                 a
                 (
                     setClass('menu-toggle justify-center cursor-pointer'),
-                    toggle::tooltip(array('placement' => 'right', 'collapse-text' => $lang->collapseMenu, 'unfold-text' => $lang->unfoldMenu)),
                     icon('menu-arrow-left icon-sm')
                 )
             )
