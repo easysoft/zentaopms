@@ -44,8 +44,10 @@ include 'yaml.class.php';
  * @access public
  * @return bool true
  */
-function r()
+function r($testResult)
 {
+    global $_result;
+    $_result = $testResult;
     return true;
 }
 
@@ -59,9 +61,7 @@ function r()
  */
 function p($keys = '', $delimiter = ',')
 {
-    global $result;
-
-    $_result = $result->get();
+    global $_result;
 
     if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
 
@@ -182,17 +182,26 @@ function e()
 
 class tester extends result
 {
+    public $webdriver;
     public $page;
     public $config;
     public $lang;
     public $cookieFile;
 
+    /**
+     * Initialize the basic configuration of the ui test framework.
+     *
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         global $config, $lang;
         $this->config = $config;
         $this->lang   = $lang;
-        $this->page   = new Page($config->uitest->chrome);
+
+        $this->webdriver  = new webdriver($config->uitest->chrome);
+        $this->page       = new page($this->webdriver);
         $this->cookieFile = CONFIG_ROOT . DS . 'cookie' . DS . 'cookie';
     }
 
@@ -210,13 +219,13 @@ class tester extends result
         if(!$password) $password = $this->config->uitest->defaultPassword;
         $webRoot = rtrim($this->config->uitest->webRoot, '/') . '/';
 
-        $this->page->deleteCookie();
+        if(!empty($this->webdriver->driver)) $this->page->deleteCookie();
 
         $this->page->openURL($webRoot);
         $this->checkError();
-        $this->page->account->setValue($account);
-        $this->page->password->setValue($password);
-        $this->page->submit->click();
+        $this->page->dom->account->setValue($account);
+        $this->page->dom->password->setValue($password);
+        $this->page->dom->submit->click();
 
         $this->page->saveCookie($this->cookieFile);
 
@@ -255,9 +264,11 @@ class tester extends result
 
         $this->page->openURL($webRoot)->deleteCookie();
         foreach($cookies as $cookie) if($cookie["name"] == "zentaosid")  $this->page->addCookie($cookie);
+        $this->page->openURL($webRoot . $url);
 
         $appIframeID = $iframeID ? $iframeID : "appIframe-{$module}";
-        $this->page->wait(1)->getErrors($appIframeID);
+        $this->page->dom->wait(1);
+        $this->checkError($appIframeID);
 
         return $this;
     }
@@ -278,8 +289,9 @@ class tester extends result
         $pageClass = "{$method}Page";
         if(!class_exists($pageClass)) include dirname(__FILE__, 3). "/module/$module/test/ui/page/$method.php";
 
-        $methodPage = new $pageClass();
-        $this->setPage($methodPage);
+        $methodPage = new $pageClass($this->webdriver);
+        $this->pageObject = $methodPage;
+
         return $methodPage;
     }
 
@@ -329,7 +341,7 @@ class tester extends result
             $this->method = str_replace('.html', '', $pathParts[1]);
         }
 
-        return $this->pageObject->getUrl();
+        return $this->response();
     }
 
     /**
@@ -351,9 +363,9 @@ class tester extends result
      * @access public
      * @return void
      */
-    public function checkError()
+    public function checkError($iframeID = '')
     {
-        $errors = $this->page->getErrorsInPage();
+        $errors = $this->page->dom->getErrorsInPage($iframeID);
         if(!empty($errors))
         {
             $this->errors = $errors;
@@ -371,7 +383,6 @@ class tester extends result
      */
     function closeBrowser()
     {
-        global $driver;
-        $driver->closeBrowser();
+        $this->page->closeBrowser();
     }
 }
