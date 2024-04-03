@@ -30,9 +30,11 @@ function loadProductLines(e)
     const $currentRow = $target.closest('tr');
     const programID   = $currentRow.find('input[name^=program]').val();
     const productID   = $currentRow.find('input[name^=productIdList]').val();
+    const lineID      = $currentRow.find('input[name^=line]').val();
     const link        = $.createLink('product', 'ajaxGetLine', 'programID=' + programID + '&productID=' + productID);
     $.getJSON(link, function(lines)
     {
         $currentRow.find('input[name^="line"]').zui('picker').render({items: lines.items});
+        $currentRow.find('input[name^="line"]').zui('picker').$.setValue(lineID);
     });
 }
