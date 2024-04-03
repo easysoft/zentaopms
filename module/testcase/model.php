@@ -65,6 +65,7 @@ class testcaseModel extends model
 
         /* 新增操作后清除仅自动化的cookie。 */
         /* remove onlyAutoCase cookie after add case. */
+        ob_start();
         setcookie('onlyAutoCase', '', 1);
 
         if(dao::isError()) return false;
