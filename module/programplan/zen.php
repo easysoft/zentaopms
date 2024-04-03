@@ -107,7 +107,7 @@ class programplanZen extends programplan
     public function buildCreateView(object $viewData)
     {
         /* Compute fields for create view. */
-        list($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields) = $this->computeFieldsCreateView($viewData->executionType);
+        list($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields) = $this->computeFieldsCreateView($viewData);
 
         if($viewData->project->model == 'ipd')
         {
@@ -258,17 +258,17 @@ class programplanZen extends programplan
      * 计算创建视图的可见字段字段和必填字段。
      * Compute visibleFields and requiredFields for create view.
      *
-     * @param  string $executionType
+     * @param  object     $viewData
      * @access protected
      * @return array
      */
-    protected function computeFieldsCreateView(string $executionType): array
+    protected function computeFieldsCreateView(object $viewData): array
     {
         $visibleFields      = array();
         $requiredFields     = array();
         $customFields       = array();
-        $custom             = $executionType == 'stage' ? 'custom' : 'customAgilePlus';
-        $customCreateFields = $executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
+        $custom             = $viewData->executionType == 'stage' ? 'custom' : 'customAgilePlus';
+        $customCreateFields = $viewData->executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
         $defaultFields      = $this->config->programplan->$custom->defaultFields;
 
         foreach(explode(',', $this->config->programplan->list->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->{$field};
@@ -279,7 +279,9 @@ class programplanZen extends programplan
             if($field) $visibleFields[$field] = '';
         }
 
-        foreach(explode(',', $this->config->execution->create->requiredFields) as $field)
+        $createRequiredFields = $this->config->execution->create->requiredFields;
+        if($viewData->project->model == 'ipd' && $viewData->executionType == 'stage') $createRequiredFields = 'enabled,' . trim($createRequiredFields, ',');
+        foreach(explode(',', $createRequiredFields) as $field)
         {
             if($field)
             {

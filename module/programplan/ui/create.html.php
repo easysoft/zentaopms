@@ -162,6 +162,7 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
             $field['items']  = $lang->execution->typeList;
         }
         if($name == 'milestone') $field['width'] = '100px';
+        if($name == 'enabled')   $field['width'] = '80px';
 
         $items[] = $field;
     }
@@ -258,5 +259,6 @@ formBatchPanel
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),
     set::items($fnGenerateFields()),
     set::data($fnGenerateDefaultData()),
+    on::change('[name^="enabled"]', 'changeEnabled'),
     $project->model == 'ipd' ? set::maxRows(count($fnGenerateDefaultData())) : null,
 );

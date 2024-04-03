@@ -5,6 +5,7 @@ $app->loadLang('execution');
 $app->loadLang('stage');
 $config->programplan->form = new stdClass();
 $config->programplan->form->create = array();
+$config->programplan->form->create['enabled']    = array('label' => $lang->programplan->enabled,   'type' => 'string', 'control' => array('control' => 'switcher', 'checked' => true), 'required' => true,  'options' => $lang->programplan->enabledList);
 $config->programplan->form->create['id']         = array('label' => '',                            'type' => 'int',    'control' => 'text',     'required' => false, 'default' => 0);
 $config->programplan->form->create['order']      = array('label' => '',                            'type' => 'int',    'control' => 'text',     'required' => false, 'default' => 0);
 $config->programplan->form->create['type']       = array('label' => $lang->execution->method,      'type' => 'string', 'control' => 'picker',   'required' => true,  'default' => 'stage', 'options' => $lang->execution->typeList);

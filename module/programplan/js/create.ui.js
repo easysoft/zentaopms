@@ -113,3 +113,61 @@ window.waitDom('td[data-name=milestone]', function()
         if($(this).find('input[type=radio]:checked').length == 0) $(this).find('input[type=radio]').eq(1).prop('checked', true);
     })
 })
+
+window.changeEnabled = function()
+{
+    const $target = $(this);
+    const tdItems = $target.closest('tr').find('td');
+
+    if($(this).prop('checked'))
+    {
+        for(let item = 0; item < tdItems.length; item++)
+        {
+            if($(tdItems[item]).data('name') == 'enabled') continue;
+            if($(tdItems[item]).data('name') == 'attribute') continue;
+
+            if($(tdItems[item]).find('[data-zui-datepicker]').length)
+            {
+                $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render({disabled: false});
+            }
+            else if($(tdItems[item]).find('[data-zui-picker]').length)
+            {
+                $(tdItems[item]).find('[data-zui-picker]').zui('picker').render({disabled: false});
+            }
+            else if($(tdItems[item]).find('.radio-primary').length)
+            {
+                $(tdItems[item]).find('.radio-primary').parent().removeAttr('disabled');
+            }
+            else if($(tdItems[item]).find('input[type=text]').length)
+            {
+                $(tdItems[item]).find('input[type=text]').removeAttr('readonly');
+            }
+        }
+    }
+    else
+    {
+        for(let item = 0; item < tdItems.length; item++)
+        {
+            if($(tdItems[item]).data('name') == 'enabled') continue;
+            if($(tdItems[item]).data('name') == 'attribute') continue;
+
+            if($(tdItems[item]).find('[data-zui-datepicker]').length)
+            {
+                $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render({disabled: true});
+            }
+            else if($(tdItems[item]).find('[data-zui-picker]').length)
+            {
+                $(tdItems[item]).find('[data-zui-picker]').zui('picker').render({disabled: true});
+            }
+            else if($(tdItems[item]).find('.radio-primary').length)
+            {
+                $(tdItems[item]).find('.radio-primary').parent().attr('disabled', 'disabled');
+            }
+            else if($(tdItems[item]).find('input[type=text]').length)
+            {
+                $(tdItems[item]).find('input[type=text]').attr('readonly', 'readonly');
+            }
+        }
+    }
+
+}

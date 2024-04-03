@@ -69,6 +69,7 @@ $lang->programplan->settingGantt     = '设置甘特图';
 $lang->programplan->viewSetting      = '显示设置';
 $lang->programplan->desc             = '描述';
 $lang->programplan->wait             = '待提交';
+$lang->programplan->enabled          = '启用阶段';
 
 $lang->programplan->errorBegin       = "阶段的开始时间不能小于所属{$lang->projectCommon}的开始时间%s";
 $lang->programplan->errorEnd         = "阶段的结束时间不能大于所属{$lang->projectCommon}的结束时间%s";
@@ -84,6 +85,10 @@ $lang->programplan->milestoneList[0] = '否';
 $lang->programplan->delayList = array();
 $lang->programplan->delayList[1] = '是';
 $lang->programplan->delayList[0] = '否';
+
+$lang->programplan->enabledList = array();
+$lang->programplan->enabledList[1] = '启用';
+$lang->programplan->enabledList[0] = '停用';
 
 $lang->programplan->typeList = array();
 $lang->programplan->typeList['stage']     = '阶段';

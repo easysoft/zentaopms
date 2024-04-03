@@ -69,6 +69,7 @@ $lang->programplan->settingGantt     = 'Gantt Setting';
 $lang->programplan->viewSetting      = 'Setting';
 $lang->programplan->desc             = 'Description';
 $lang->programplan->wait             = 'Wait';
+$lang->programplan->enabled          = 'Enabling Stage';
 
 $lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
 $lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";
@@ -84,6 +85,10 @@ $lang->programplan->milestoneList[0] = 'No';
 $lang->programplan->delayList = array();
 $lang->programplan->delayList[1] = 'Yes';
 $lang->programplan->delayList[0] = 'No';
+
+$lang->programplan->enabledList = array();
+$lang->programplan->enabledList[1] = 'On';
+$lang->programplan->enabledList[0] = 'Off';
 
 $lang->programplan->typeList = array();
 $lang->programplan->typeList['stage']     = 'Stage';
