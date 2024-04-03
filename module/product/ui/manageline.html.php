@@ -113,7 +113,7 @@ for($i = 0; $i <= 5; $i ++)
             set::width('100px'),
             formGroup
             (
-                setClass('ml-2 pl-2 flex self-center'),
+                setClass('ml-5 pl-2 flex self-center'),
                 btn
                 (
                     setClass('btn btn-link text-gray addLine'),
@@ -155,7 +155,6 @@ div
         form
         (
             set::submitBtnText($lang->save),
-            set::actionsClass('justify-start'),
             set::className('border-b-0'),
             $formRowList
         )
