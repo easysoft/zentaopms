@@ -514,6 +514,9 @@ class control extends baseControl
     public function printViewFile($viewFile)
     {
         if(!file_exists($viewFile)) return false;
+        if(strpos($viewFile, '..') !== false) return false;
+        if(strpos($viewFile, '/view/') === false) return false;
+        if(strpos($viewFile, $this->app->getModuleRoot()) !== 0 && strpos($viewFile, $this->app->getExtensionRoot()) !== 0) return false;
 
         $currentPWD = getcwd();
         chdir(dirname($viewFile));
