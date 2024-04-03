@@ -12,7 +12,7 @@ $config->product->edit->requiredFields   = 'name';
 
 $config->product->browse = new stdclass();
 $config->product->custom = new stdclass();
-$config->product->custom->batchEditFields = 'PO,QD,RD,status,type,acl';
+$config->product->custom->batchEditFields = 'line,PO,QD,RD,status,type,acl';
 if($config->systemMode == 'ALM' || $config->systemMode == 'PLM') $config->product->custom->batchEditFields .= ',program';
 
 /* Export fields of product list page. */

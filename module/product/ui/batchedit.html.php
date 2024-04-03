@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('lines', $lines);
+
 $items = array();
 $items['productIdList'] = array('name' => 'productIdList', 'label' => '', 'control' => 'hidden', 'hidden' => true);
 $items['id']            = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '60px');
@@ -43,11 +45,13 @@ foreach($products as $product)
 
 formBatchPanel
 (
+    on::change('[data-name="program"]', 'loadProductLines'),
     set::title($lang->product->batchEdit),
     set::mode('edit'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     set::items($items),
-    set::data(array_values($productData))
+    set::data(array_values($productData)),
+    set::onRenderRow(jsRaw('renderRowData'))
 );
 
 render();

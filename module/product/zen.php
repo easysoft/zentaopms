@@ -382,7 +382,7 @@ class productZen extends product
         /* Collect product lines of program lines. */
         $linePairs = array();
         foreach($programIdList as $programID) $linePairs[$programID] = array();
-        foreach($productLines as $programID => $line) $linePairs[$programID][$line->id] = $line->name;
+        foreach($productLines as $line) $linePairs[$line->root][$line->id] = $line->name;
 
         return array($productLines, $linePairs);
     }
