@@ -12,8 +12,8 @@ class createProductTester extends tester
     {
         $this->login();
         $formPage = $this->formPage('product', 'create');
-        $formPage->name->setValue($name);
-        $formPage->submit();
+        $formPage->dom->name->setValue($name);
+        $formPage->dom->btn($this->lang->save)->click();
         return $this->parseCurrentUrl();
     }
 
@@ -30,21 +30,22 @@ class createProductTester extends tester
         $this->login();
         $formPage = $this->formPage('product', 'create');
         $formPage->dom->name->setValue($name);
-        $formPage->submit();
+        $formPage->dom->btn($this->lang->save)->click();
+        $formPage->dom->wait(1);
 
         $this->parseCurrentUrl();
-        if($this->result->method != 'browse') return failed($formPage->getFormTips());
+        if($this->method != 'browse') return $this->failed($formPage->dom->getFormTips());
 
         /* 跳转到产品需求页面，点击设置菜单查看产品设置页面。 */
         $browsePage = $this->initPage('product', 'browse');
-        $browsePage->settings->click();
+        $browsePage->dom->settings->click();
 
         $viewPage = $this->initPage('product', 'view');
-        if($viewPage->productName->getText() != $name) return failed('名称错误');
-        if($viewPage->type->getText() != '正常') return failed('类型错误');
-        if($viewPage->acl->getText() != '公开') return failed('权限错误');
+        if($viewPage->dom->productName->getText() != $name) return $this->failed('名称错误');
+        if($viewPage->dom->type->getText() != '正常') return $this->failed('类型错误');
+        if($viewPage->dom->acl->getText() != '公开') return $this->failed('权限错误');
 
-        return success();
+        return $this->success();
     }
 
     /**
@@ -59,22 +60,23 @@ class createProductTester extends tester
         /* 提交表单。 */
         $this->login();
         $formPage = $this->formPage('product', 'create');
-        $formPage->name->setValue($name);
-        $formPage->type->picker('多分支');
-        $formPage->submit();
+        $formPage->dom->name->setValue($name);
+        $formPage->dom->type->picker('多分支');
+        $formPage->dom->btn($this->lang->save)->click();
+        $formPage->dom->wait(1);
 
         $this->parseCurrentUrl();
-        if($this->result->method != 'browse') return failed($formPage->getFormTips());
+        if($this->method != 'browse') return $this->failed($formPage->dom->getFormTips());
 
         /* 跳转到产品需求页面，点击设置菜单查看产品设置页面。 */
         $browsePage = $this->initPage('product', 'browse');
-        $browsePage->settings->click();
+        $browsePage->dom->settings->click();
 
         $viewPage = $this->initPage('product', 'view');
-        if($viewPage->productName->getText() != $name) return failed('名称错误');
-        if($viewPage->type->getText() != '多分支') return failed('类型错误');
-        if($viewPage->branchProductACL->getText() != '公开') return failed('权限错误');
+        if($viewPage->dom->productName->getText() != $name) return $this->failed('名称错误');
+        if($viewPage->dom->type->getText() != '多分支') return $this->failed('类型错误');
+        if($viewPage->dom->branchProductACL->getText() != '公开') return $this->failed('权限错误');
 
-        return success();
+        return $this->success();
     }
 }
