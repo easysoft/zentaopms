@@ -50,6 +50,8 @@ $lang->metric->verifyFile         = '校验文件';
 $lang->metric->verifyResult       = '校验结果';
 $lang->metric->publish            = '发布';
 $lang->metric->moveFailTip        = '移动度量项文件失败';
+$lang->metric->checkFile          = '检查运行目录下度量项文件是否存在';
+$lang->metric->deleteFile         = '请联系管理员删除';
 $lang->metric->selectCount        = '已选<span class="font-medium checked-count">%s</span>项';
 $lang->metric->testMetric         = '测试度量';
 $lang->metric->calcTime           = '采集时间';

@@ -16,6 +16,10 @@ jsVar('verifyCustomMethods', $verifyCustom);
 jsVar('from',         $from);
 jsVar('isVerify',     $isVerify);
 
+jsVar('isModuleCalcExist', $isModuleCalcExist);
+jsVar('moduleCalcTip',     $moduleCalcTip);
+jsVar('checkModuleFile',   $this->lang->metric->checkFile);
+
 detailHeader
 (
     to::title

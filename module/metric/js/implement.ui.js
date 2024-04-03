@@ -1,7 +1,18 @@
 var methods = [];
 $(document).ready(function()
 {
-    if(!isVerify) verify();
+    if(!isVerify)
+    {
+        if(isModuleCalcExist)
+        {
+            var $html = genVerifyResult(checkModuleFile, false, moduleCalcTip);
+            $('.verify-content').append($html);
+        }
+        else
+        {
+            verify();
+        }
+    }
 });
 
 function verify(method)
@@ -53,7 +64,7 @@ function genVerifyResult(tip, status, error)
     var html = '<p class="verify-sentence ' + sentenceClass + '">';
     html += tip;
     html += '<i class="icon icon-' + iconClass + '"></i>';
-    if(error && error.length) html += '<input class="bg-danger ml-5 ellipsis w-96" value="' + error  + '"/>';
+    if(error && error.length) html += '<input class="bg-danger ml-5 ellipsis w-96" title="' + error  + '" value="' + error  + '"/>';
     html += '</p>';
     return $(html);
 }
