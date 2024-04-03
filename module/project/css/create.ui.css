@@ -1,6 +1,5 @@
 #copyProjectModal .copy-title {min-width: 120px;}
-#copyProjectModal #projectName {width: 32%;}
-#copyProjectModal .project-block {flex: 0 1 30%; padding: 20px 10px; margin: 4px 12px; overflow: hidden;}
+#copyProjectModal .project-block {flex: 0 1 calc(50% - 0.5rem); padding: 20px 10px; overflow: hidden;}
 #copyProjectModal .project-block > span {width: 'auto'; overflow: hidden;}
 #copyProjectModal .project-block.btn.primary-outline span {width: calc(100% - 45px);}
 #copyProjects .btn:hover {--tw-ring-color: var(--color-primary-500);}

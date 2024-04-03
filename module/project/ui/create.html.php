@@ -75,12 +75,12 @@ formGridPanel
         (
             set::icon('copy'),
             setClass('primary-ghost size-md'),
-            toggle::modal(array('target' => '#copyProjectModal', 'destoryOnHide' => true)),
+            toggle::modal(array('target' => '#copyProjectModal', 'destoryOnHide' => true, 'size' => 'sm')),
             $lang->project->copy
         ),
         divider(setClass('h-4 mr-4 ml-2 self-center'))
     ),
-    on::click('[name=name], [name=code], [data-name=begin] .has-warning *, [name=days], [data-name="parent"] .pick *', 'removeTips'),
+    on::click('[name=name], [name=code], [data-name=begin] .has-warning *, [name=days], [data-name="parent"] .picker-box *', 'removeTips'),
     on::click('[type=submit]', 'removeAllTips'),
     on::click('[name=multiple]', $toggleLongTime),
     on::change('[name=parent]')->toggleClass('.productsBox .linkProduct .form-label', 'required', "\$(target).val() > 0"),
@@ -139,17 +139,26 @@ modal
                 set::className('copy-title'),
                 $lang->project->copyTitle
             )
-        ),
-        input
+        )
+    ),
+    div
+    (
+        setClass('pb-4 mb-4 border-b border-b-1'),
+        inputControl
         (
-            set::name('projectName'),
-            set::placeholder($lang->project->searchByName)
+            to::suffix(icon('search')),
+            set::suffixWidth('sm'),
+            input
+            (
+                set::name('projectName'),
+                set::placeholder($lang->project->searchByName)
+            )
         )
     ),
     div
     (
         set::id('copyProjects'),
-        setClass('flex items-center flex-wrap'),
+        setClass('flex items-center flex-wrap gap-4'),
         $copyProjectsBox
     )
 );
