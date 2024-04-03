@@ -42,7 +42,7 @@ class bugBasicInfo extends wg
         $bug = $this->prop('bug', data('bug'));
         if(!$bug) return array();
 
-        $canViewProduct = common::hasPriv('project', 'view');
+        $canViewProduct = common::hasPriv('product', 'view');
         $canBrowseBug   = common::hasPriv('bug', 'browse');
         $canViewPlan    = common::hasPriv('productplan', 'view');
         $canViewCase    = common::hasPriv('testcase', 'view');
