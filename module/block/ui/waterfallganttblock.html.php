@@ -45,10 +45,11 @@ panel
         empty($plans['data']) ? div(setClass('gantt-product-tips'), $lang->block->selectProduct) : div
         (
             setClass('gantt clearfix'),
-            div(setClass('gantt-plans pull-left')),
+            div(setClass('gantt-plans pull-left'), setID('ganttPlans')),
             div
             (
                 setClass('gantt-container scrollbar-hover'),
+                setID('ganttContainer'),
                 div
                 (
                     setClass('gantt-canvas'),
