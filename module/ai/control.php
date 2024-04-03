@@ -390,7 +390,7 @@ class ai extends control
             return $this->send(array('result' => 'success', 'locate' => helper::createLink('ai', 'assistants')));
         }
 
-        $models = $this->ai->getLanguageModels('', false);
+        $models = $this->ai->getLanguageModels('', true);
         $models = array_reduce($models, function($acc, $model)
         {
             $acc[$model->id] = $model->name;
@@ -448,7 +448,7 @@ class ai extends control
             return $this->send(array('result' => 'success', 'locate' => helper::createLink('ai', 'assistants')));
         }
 
-        $models = $this->ai->getLanguageModels('', false);
+        $models = $this->ai->getLanguageModels('', true);
         $models = array_reduce($models, function($acc, $model)
         {
             $acc[$model->id] = $model->name;
