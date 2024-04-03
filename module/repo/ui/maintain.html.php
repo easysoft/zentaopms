@@ -50,7 +50,7 @@ foreach($repoList as $repo)
 $config->repo->dtable->fieldList['name']['link']                   = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
 $config->repo->dtable->fieldList['actions']['list']['edit']['url'] = $this->createLink('repo', 'edit', "repoID={id}&objectID={$objectID}");
 
-if(empty($config->repo->maintain->hideRepoPath))
+if(empty($config->repo->maintain->showRepoPath))
 {
     unset($config->repo->dtable->fieldList['path']);
     $config->repo->dtable->fieldList['product']['width']    = '0.2';
