@@ -379,24 +379,6 @@ class router extends baseRouter
     }
 
     /**
-     * Save any message with any type to the php log file which prefix with 'php.<today>'.
-     * A debug helper.
-     *
-     * @param  mixed  $message
-     * @param  string $file
-     * @param  int    $line
-     * @return void
-     */
-    public function debug($message = '', $file = 'undefined', $line = 0)
-    {
-        if(!is_string($message)) $message = (string)json_encode($message, JSON_PRETTY_PRINT);
-
-        if(empty($file) || $file == 'undefined') $message .= (new Exception())->getTraceAsString();
-
-        $this->saveError(E_USER_WARNING, $message, $file, $line);
-    }
-
-    /**
      * 企业版部分功能是从然之合并过来的。然之代码中调用loadModuleConfig方法时传递了一个非空的appName，在禅道中会导致错误。
      * 把appName设置为空来避免这个错误。
      * Some codes merged from ranzhi called the function loadModuleConfig with a non-empty appName which causes an error in zentao.
