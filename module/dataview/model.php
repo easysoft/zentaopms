@@ -200,7 +200,7 @@ class dataviewModel extends model
             {
                 if(strpos($moduleName, 'flow_') !== false) $moduleName = substr($moduleName, 5);
 
-                if(isset($this->lang->$moduleName) and isset($this->lang->$moduleName->$field))
+                if(isset($this->lang->$moduleName) and isset($this->lang->$moduleName->$field) and is_string($this->lang->$moduleName->$field))
                 {
                     $mergeFields[$field]   = $this->lang->$moduleName->$field;
                     $relatedObject[$field] = $moduleName;
