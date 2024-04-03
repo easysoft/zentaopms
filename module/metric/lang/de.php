@@ -77,6 +77,14 @@ $lang->metric->weekFormat     = 'Week %s';
 $lang->metric->monthDayFormat = '%s-%s';
 $lang->metric->yearMonthFormat = '%s-%s';
 
+$lang->metric->tableHeader = array();
+$lang->metric->tableHeader['project']   = 'Project';
+$lang->metric->tableHeader['product']   = 'Product';
+$lang->metric->tableHeader['execution'] = 'Execution';
+$lang->metric->tableHeader['dept']      = 'Dept';
+$lang->metric->tableHeader['user']      = 'Name';
+$lang->metric->tableHeader['program']   = 'Program';
+
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "Please select";
 $lang->metric->placeholder->project   = "All Projects";

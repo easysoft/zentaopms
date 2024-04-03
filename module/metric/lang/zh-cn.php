@@ -77,6 +77,14 @@ $lang->metric->weekFormat     = '%s周';
 $lang->metric->monthDayFormat = '%s-%s';
 $lang->metric->yearMonthFormat = '%s-%s';
 
+$lang->metric->tableHeader = array();
+$lang->metric->tableHeader['project']   = '项目名称';
+$lang->metric->tableHeader['product']   = '产品名称';
+$lang->metric->tableHeader['execution'] = '执行名称';
+$lang->metric->tableHeader['dept']      = '团队名称';
+$lang->metric->tableHeader['user']      = '姓名';
+$lang->metric->tableHeader['program']   = '项目集名称';
+
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "请选择";
 $lang->metric->placeholder->project   = "全部项目";
