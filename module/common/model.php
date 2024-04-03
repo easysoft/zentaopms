@@ -2375,10 +2375,10 @@ class commonModel extends model
      * @param  string     $moduleName
      * @param  object     $data
      * @param  object     $menu
-     * @access public
+     * @access protected
      * @return array|bool
      */
-    private function checkPrivForOperateAction(array $actionData, string $action, string $moduleName, object $data, string $menu): array|bool
+    protected function checkPrivForOperateAction(array $actionData, string $action, string $moduleName, object $data, string $menu): array|bool
     {
         if(!empty($actionData['url']) && is_array($actionData['url']))
         {
@@ -2405,6 +2405,7 @@ class commonModel extends model
         if(!empty($actionData['hint']) && !isset($actionData['text'])) $actionData['text'] = $actionData['hint'];
 
         if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';
+        if(isset($actionData['data-app']) && $actionData['data-app'] == 'my') $actionData['data-app'] = $this->app->tab;
         return $actionData;
     }
 
