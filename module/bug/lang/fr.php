@@ -86,6 +86,9 @@ $lang->bug->linkCommit       = 'Related Commits';
 $lang->bug->productplan      = $lang->bug->plan;
 $lang->bug->codeBranch       = 'Code branch';
 $lang->bug->unlinkBranch     = 'Unlink code branch';
+$lang->bug->branchName       = 'Branch Name';
+$lang->bug->branchFrom       = 'Create from';
+$lang->bug->codeRepo         = 'Code Library';
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = 'Module';

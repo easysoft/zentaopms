@@ -86,6 +86,9 @@ $lang->story->loadAllStories     = 'All';
 $lang->story->hasDividedTask     = 'has divided task';
 $lang->story->codeBranch         = 'Code branch';
 $lang->story->unlinkBranch       = 'Unlink code branch';
+$lang->story->branchName         = 'Branch Name';
+$lang->story->branchFrom         = 'Create from';
+$lang->story->codeRepo           = 'Code Library';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Change {$lang->SRCommon}";

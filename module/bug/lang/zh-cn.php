@@ -86,6 +86,9 @@ $lang->bug->linkCommit       = '相关代码版本';
 $lang->bug->productplan      = $lang->bug->plan;
 $lang->bug->codeBranch       = '代码分支';
 $lang->bug->unlinkBranch     = '解除关联代码分支';
+$lang->bug->branchName       = '分支名称';
+$lang->bug->branchFrom       = '创建自';
+$lang->bug->codeRepo         = '仓库名称';
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = '模块';
