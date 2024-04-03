@@ -6810,7 +6810,7 @@ class storyModel extends model
         foreach($setting as $key => $set)
         {
             if($storyType == 'requirement' and in_array($set->id, array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount'))) $set->show = false;
-            if($storyType == 'story' and in_array($set->id, array('roadmap'))) $set->show = false;
+            if(($this->config->edition != 'ipd' || ($this->config->edition == 'ipd' && $storyType == 'story')) && in_array($set->id, array('roadmap'))) $set->show = false;
             if($viewType == 'xhtml' and !in_array($set->id, array('title', 'id', 'pri', 'status'))) $set->show = false;
             if(empty($set->show)) continue;
 
