@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package     repo
  * @link        https://www.zentao.net
  * @property    repoModel $repo
+ * @property    repoZen   $repoZen
  */
 class repo extends control
 {
@@ -1165,7 +1166,7 @@ class repo extends control
         if(in_array($repo->SCM, array('Gitea', 'Gogs')))
         {
             $syncLog = $this->repoZen->syncLocalCommit($repo);
-            if($syncLog) return print($syncLog);
+            if($syncLog) return print(trim($syncLog));
         }
 
         $this->commonAction($repoID);
