@@ -64,6 +64,10 @@ class aiModel extends model
         {
             if($object->enabled == '0') return false;
         }
+        elseif (strtolower($action) === 'assistantedit')
+        {
+            if($object->enabled == '1') return false;
+        }
 
         return true;
     }
