@@ -260,6 +260,7 @@ class productsBox extends wg
                                 set::items($productItems),
                                 set::last($product->id),
                                 set::disabled($disabledProduct),
+                                $i === 0 ? set::placeholder($this->prop('selectTip')) : null,
                                 $hasBranch ? set::lastBranch(empty($product->branches) ? 0 : implode(',', $product->branches)) : null,
                                 $disabledProduct ? formHidden("products[$i]", $product->id) : null
                             )
