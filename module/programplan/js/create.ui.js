@@ -123,51 +123,77 @@ window.changeEnabled = function()
     {
         for(let item = 0; item < tdItems.length; item++)
         {
-            if($(tdItems[item]).data('name') == 'enabled') continue;
             if($(tdItems[item]).data('name') == 'attribute') continue;
 
             if($(tdItems[item]).find('[data-zui-datepicker]').length)
             {
+                $(tdItems[item]).find("input.hidden").last().remove();
+
                 $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render({disabled: false});
             }
             else if($(tdItems[item]).find('[data-zui-picker]').length)
             {
+                $(tdItems[item]).find("input.hidden").last().remove();
+
                 $(tdItems[item]).find('[data-zui-picker]').zui('picker').render({disabled: false});
             }
             else if($(tdItems[item]).find('.radio-primary').length)
             {
+                $(tdItems[item]).find("input.hidden").last().remove();
+
                 $(tdItems[item]).find('.radio-primary').parent().removeAttr('disabled');
             }
             else if($(tdItems[item]).find('input[type=text]').length)
             {
                 $(tdItems[item]).find('input[type=text]').removeAttr('readonly');
             }
+            else if($(tdItems[item]).data('name') == 'enabled')
+            {
+                $(tdItems[item]).find("input.hidden").last().remove();
+            }
         }
     }
     else
     {
+        let itemValue = '';
+        let itemName  = '';
         for(let item = 0; item < tdItems.length; item++)
         {
-            if($(tdItems[item]).data('name') == 'enabled') continue;
             if($(tdItems[item]).data('name') == 'attribute') continue;
 
             if($(tdItems[item]).find('[data-zui-datepicker]').length)
             {
+                itemValue = $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').$.value;
+                itemName  = $(tdItems[item]).find('input.pick-value').attr('name');
+                $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
+
                 $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render({disabled: true});
             }
             else if($(tdItems[item]).find('[data-zui-picker]').length)
             {
+                itemValue = $(tdItems[item]).find('input').zui('picker').$.value;
+                itemName  = $(tdItems[item]).find('input').attr('name');
+                $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
+
                 $(tdItems[item]).find('[data-zui-picker]').zui('picker').render({disabled: true});
             }
             else if($(tdItems[item]).find('.radio-primary').length)
             {
+                itemValue = $(tdItems[item]).find('input[type=radio]:checked').val();
+                itemName  = $(tdItems[item]).find('input[type=radio]:checked').attr('name');
+                $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
+
                 $(tdItems[item]).find('.radio-primary').parent().attr('disabled', 'disabled');
             }
             else if($(tdItems[item]).find('input[type=text]').length)
             {
                 $(tdItems[item]).find('input[type=text]').attr('readonly', 'readonly');
             }
+            else if($(tdItems[item]).data('name') == 'enabled')
+            {
+                itemName = $(tdItems[item]).find('input').attr('name');
+                $(tdItems[item]).append("<input name='" + itemName + "' value='off' class='hidden'/>")
+            }
         }
     }
-
 }

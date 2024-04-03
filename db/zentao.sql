@@ -1477,7 +1477,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
   `multiple` enum('0','1') NOT NULL DEFAULT '1',
   `parallel` mediumint(9) NOT NULL DEFAULT '0',
-  `enabled` enum('0','1') NOT NULL DEFAULT '1',
+  `enabled` enum('on','off') NOT NULL DEFAULT 'on',
   `colWidth` smallint(6) NOT NULL DEFAULT '264',
   `minColWidth` smallint(6) NOT NULL DEFAULT '200',
   `maxColWidth` smallint(6) NOT NULL DEFAULT '384',
