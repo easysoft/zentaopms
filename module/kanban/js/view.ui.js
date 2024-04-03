@@ -226,7 +226,7 @@ window.renderGeneralItem = function(info)
 window.renderExecutionItem = function(info)
 {
     info.item.icon       = 'run';
-    info.item.titleUrl   = $.createLink('execution', 'task', `id=${info.item.fromID}`);
+    info.item.titleUrl   = canViewExecution ? $.createLink('execution', 'task', `id=${info.item.fromID}`) : null;
     info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
     if(info.item.delay)
     {
@@ -252,7 +252,7 @@ window.renderExecutionItem = function(info)
 window.renderReleaseItem = function(info)
 {
     info.item.icon       = 'publish';
-    info.item.titleUrl   = $.createLink('release', 'view', `id=${info.item.fromID}`);
+    info.item.titleUrl   = canViewRelease ? $.createLink('release', 'view', `id=${info.item.fromID}`) : '';
     info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
     if(info.item.deleted == '0')
@@ -269,7 +269,7 @@ window.renderReleaseItem = function(info)
 window.renderBuildItem = function(info)
 {
     info.item.icon       = 'ver';
-    info.item.titleUrl   = $.createLink('build', 'view', `id=${info.item.fromID}`);
+    info.item.titleUrl   = canViewBuild ? $.createLink('build', 'view', `id=${info.item.fromID}`) : '';
     info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
     const date = '<span class="label gray-pale">' + info.item.date + '</span>';
@@ -278,7 +278,7 @@ window.renderBuildItem = function(info)
 window.renderProductplanItem = function(info)
 {
     info.item.icon       = 'delay';
-    info.item.titleUrl   = $.createLink('productplan', 'view', `id=${info.item.fromID}`);
+    info.item.titleUrl   = canViewPlan ? $.createLink('productplan', 'view', `id=${info.item.fromID}`) : '';
     info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
     if(info.item.deleted == '0')
