@@ -739,3 +739,22 @@ function getVisions(): array
     $visionList = $lang->visionList;
     return array_intersect_key($visionList, $visions);
 }
+
+/**
+ * Save any message with any type to the php log file which prefix with 'php.<today>'.
+ * A debug helper.
+ *
+ * @param  mixed  $message
+ * @param  string $file
+ * @param  int    $line
+ * @return void
+ */
+function debug($message = '', $file = 'undefined', $line = 0)
+{
+    if(!is_string($message)) $message = (string)json_encode($message, JSON_PRETTY_PRINT);
+
+    if(empty($file) || $file == 'undefined') $message .= (new Exception())->getTraceAsString();
+
+    global $app;
+    $app->saveError(E_USER_WARNING, $message, $file, $line);
+}
