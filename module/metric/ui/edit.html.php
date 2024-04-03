@@ -213,6 +213,6 @@ formPanel
         set::placeholder($lang->metric->definitionTip),
         set::disabled($isDisabled)
     ),
-    $afterEdit,
+    $viewType == 'browse' ? $afterEdit : null,
     set::submitBtnText($lang->save)
 );
