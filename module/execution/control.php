@@ -2749,6 +2749,9 @@ class execution extends control
     public function taskKanban($executionID, $browseType = 'all', $orderBy = 'order_asc', $groupBy = '')
     {
         if(!$this->loadModel('common')->checkPrivByObject('execution', $executionID)) return print(js::error($this->lang->execution->accessDenied) . js::locate($this->createLink('execution', 'all')));
+        $this->execution->setMenu($executionID);
+        $execution = $this->execution->getById($executionID);
+        if($execution->type == 'kanban' and $this->config->vision != 'lite' and $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
         if(empty($groupBy)) $groupBy = 'default';
 
         /* Save to session. */
@@ -2766,8 +2769,6 @@ class execution extends control
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $this->execution->setMenu($executionID);
-        $execution = $this->execution->getById($executionID);
         if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
         {
             $browseType = 'task';
