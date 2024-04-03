@@ -102,7 +102,7 @@
               <div class="checkbox-primary checkbox-inline checkbox-left check-all">
                 <input type='checkbox' id='allChecker<?php echo $subsetName;?>' value='1' <?php if($subset->selectCount != 0 && $subset->selectCount == $subset->allCount) echo 'checked';?>>
                 <?php $subsetTitle = isset($lang->$subsetName) && isset($lang->$subsetName->common) ? $lang->$subsetName->common : $subsetName;?>
-                <label class='text-left <?php if($subset->selectCount != 0 && $subset->selectCount == $subset->allCount) echo 'checkbox-indeterminate-block';?>' for='allChecker<?php echo $moduleName;?>'><?php echo $subsetTitle;?></label>
+                <label class='text-left <?php if($subset->selectCount != 0 && $subset->selectCount != $subset->allCount) echo 'checkbox-indeterminate-block';?>' for='allChecker<?php echo $moduleName;?>'><?php echo $subsetTitle;?></label>
               </div>
             </th>
             <?php endif;?>
