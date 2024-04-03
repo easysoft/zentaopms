@@ -32,6 +32,39 @@ class visionSwitcher extends wg
         return isset($this->icons[$vision]) ? $this->icons[$vision] : 'bars';
     }
 
+    protected function buildVisionTips(): ?node
+    {
+        global $config, $lang;
+        if(!empty($config->global->hideVisionTips)) return null;
+
+        return div
+        (
+            setClass('vision-tips primary rounded-lg w-72 p-4 absolute left-0 z-100 flex items-center'),
+            style::bottom(60),
+            div(setClass('flex-auto'), $lang->visionTips),
+            btn
+            (
+                set::type('light-outline'),
+                on::click()->do
+                (
+                    '$this.closest(".vision-tips").remove()',
+                    '$.post($.createLink("my", "ajaxSaveVisionTips"), {fields: 1})'
+                ),
+                $lang->IKnow
+            ),
+            div
+            (
+                setClass('bg-inherit w-0.5 h-8 absolute'),
+                style::bottom(-31)->left(64),
+                div
+                (
+                    setClass('w-2.5 h-2.5 rounded-full border-2 relative border-primary bg-canvas'),
+                    style::left(-4)->top(32)
+                )
+            )
+        );
+    }
+
     protected function build()
     {
         global $lang, $app, $config;
@@ -78,7 +111,7 @@ class visionSwitcher extends wg
             );
         }
 
-        return new dropdown
+        $dropdown = new dropdown
         (
             new btn
             (
@@ -95,5 +128,8 @@ class visionSwitcher extends wg
             set::arrow(true),
             set::items($items)
         );
+
+        $tips = $this->buildVisionTips();
+        return $tips ? array($dropdown, $tips) : $dropdown;
     }
 }

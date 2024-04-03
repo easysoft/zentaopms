@@ -92,28 +92,8 @@ div(setID('apps'));
 div
 (
     setID('appsBar'),
-    div(
-        setID('visionSwitcher'),
-        visionSwitcher(),
-        (count(explode(',', $this->app->user->visions)) > 1 && empty($config->global->hideVisionTips)) ?
-        div(
-            setID('visionTips'),
-            div(
-                setClass('inner bg-primary'),
-                span($lang->visionTips),
-                button(setClass('btn btn-primary'), on::click('hideVisionTips'), $lang->IKnow),
-                div(
-                    setClass('line bg-primary pannel-primary'),
-                    div(setClass('circle alert-primary-inverse'))
-                )
-            ),
-        ) : null,
-    ),
-    ul
-    (
-        setID('appTabs'),
-        setClass('nav')
-    ),
+    div(setID('visionSwitcher'), visionSwitcher()),
+    ul(setID('appTabs'), setClass('nav')),
     toolbar
     (
         setID('appsToolbar'),
