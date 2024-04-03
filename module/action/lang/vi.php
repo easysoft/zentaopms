@@ -372,6 +372,7 @@ $lang->action->label->unlinkedrepo            = 'Unlinked Code Repo';
 $lang->action->label->online                  = 'online';
 $lang->action->label->offline                 = 'offline';
 $lang->action->label->linkhost                = 'link hosts to';
+$lang->action->label->aiassistant             = 'AI Assistant';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;

@@ -997,3 +997,6 @@ $lang->ai->assistants->statusList['0']   = '未发布';
 $lang->ai->assistants->statusList['off'] = '未发布';
 $lang->ai->assistants->statusList['1']   = '已发布';
 $lang->ai->assistants->statusList['on']  = '已发布';
+
+// for render action changes.
+$lang->aiassistant = $lang->ai->assistants;
