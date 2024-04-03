@@ -313,9 +313,9 @@ class ai extends control
         }, $assistants);
 
         $this->view->assistants = $assistants;
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
-        $this->view->title   = $this->lang->ai->assistants->title;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->title      = $this->lang->ai->assistants->title;
         $this->display();
     }
 
