@@ -97,6 +97,27 @@ formGridPanel
     set::loadUrl($loadUrl)
 );
 
+$toggleActiveProject = jsCallback()->do(<<<'JS'
+    if($this.hasClass('primary-outline'))
+    {
+        $this.removeClass('primary-outline');
+    }
+    else
+    {
+        $('#copyProjects button.project-block.primary-outline').removeClass('primary-outline');
+        $this.addClass('primary-outline');
+    }
+JS
+);
+
+$copySelectedProject = jsCallback()->const('model', $model)->do(<<<'JS'
+    const copyProjectID = $('#copyProjects button.project-block.primary-outline').length == 1 ? $('#copyProjects button.project-block.primary-outline').data('id') : 0;
+    const programID     = $('[name=parent]').val();
+    loadPage($.createLink('project', 'create', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + copyProjectID));
+    zui.Modal.hide();
+JS
+);
+
 $copyProjectsBox = array();
 if(!empty($copyProjects))
 {
@@ -109,6 +130,7 @@ if(!empty($copyProjects))
             set('data-id', $id),
             set('data-pinyin', zget($copyPinyinList, $name, '')),
             icon(setClass('text-gray'), !empty($model) ? ($model == 'scrum' ? 'sprint' : $model) : $lang->icons['project']),
+            on::click($toggleActiveProject),
             span($name, set::title($name), setClass('text-left'))
         );
     }
@@ -138,6 +160,20 @@ modal
             (
                 set::className('copy-title'),
                 $lang->project->copyTitle
+            )
+        )
+    ),
+    to::footer
+    (
+        div
+        (
+            setClass('flex mt-4 w-full justify-center'),
+            btn
+            (
+                setClass('px-6'),
+                set::type('primary'),
+                on::click($copySelectedProject),
+                $lang->confirm
             )
         )
     ),
