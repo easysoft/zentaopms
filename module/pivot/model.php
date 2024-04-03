@@ -30,7 +30,7 @@ class pivotModel extends model
      * @access public
      * @return object
      */
-    public function getByID($pivotID)
+    public function getByID($pivotID, $processDateVar = false)
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
         if(!$pivot) return false;
@@ -53,7 +53,7 @@ class pivotModel extends model
             foreach($filters as $key => $filter)
             {
                 if(empty($filter['default'])) continue;
-                //$filters[$key]['default'] = $this->processDateVar($filter['default']);
+                if($processDateVar) $filters[$key]['default'] = $this->processDateVar($filter['default']);
             }
             $pivot->filters = $filters;
         }
@@ -2763,7 +2763,7 @@ class pivotModel extends model
 
         if($pivotTree) $pivotTree = "<ul id='pivotGroups' class='tree' data-ride='tree'>$pivotTree</ul>";
 
-        $pivot = $pivotID ? $this->getByID($pivotID) : array();
+        $pivot = $pivotID ? $this->getByID($pivotID, true) : array();
 
         return array($pivotTree, $pivot, $groupID);
     }

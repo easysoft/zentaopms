@@ -242,8 +242,8 @@ function initQueryControl(container, filter, object, field)
     control.val(filter.default);
     control.parent('.default-block').removeClass('hidden');
 
-    if(type == 'date')     setDateField('.form-date');
-    if(type == 'datetime') setDateField('.form-datetime');
+    if(type == 'date')     setDateField(control);
+    if(type == 'datetime') setDateField(control);
     if(type == 'select')
     {
         var picker = control.data('zui.picker');
