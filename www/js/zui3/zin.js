@@ -437,7 +437,7 @@
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
         const ajaxOptions =
         {
-            url:         url,
+            url:         url + (url.includes('?') ? '&zin=1' : '?zin=1'),
             headers:     {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode},
             type:        options.method || 'GET',
             data:        options.data,
@@ -481,7 +481,7 @@
                 }
                 if(Array.isArray(data))
                 {
-                    if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? response.url : url;
+                    if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? (response.url.split('?zin=')[0].split('&zin=')[0]) : url;
                     data.forEach((item, idx) => item.selector = selectors[idx]);
                     updatePerfInfo(options, 'renderBegin');
                     renderPage(data, options);
