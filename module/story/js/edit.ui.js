@@ -13,38 +13,19 @@ window.loadProduct = function()
         }
     }
 
-    if(productID != oldProductID)
+    if(isParent == '1')
     {
-        if(!confirm(changeProductTips))
-        {
-            $product.$.setValue(oldProductID.toString());
-            return false;
-        }
-    }
-
-    if(parentStory)
-    {
-        confirmLoadProduct = confirm(moveChildrenTips);
-        if(!confirmLoadProduct)
-        {
-            $product.$.setValue(oldProductID.toString());
-            return false;
-        }
+        zui.Modal.confirm(moveChildrenTips).then((result) => {
+            if(!result)
+            {
+                $product.$.setValue(oldProductID.toString(), true);
+                return false;
+            }
+        });
     }
 
     loadProductBranches(productID);
     loadProductReviewers(productID);
-    loadURS();
-
-    if(storyType == 'story')
-    {
-        var storyLink = $.createLink('story', 'ajaxGetParentStory', 'productID=' + productID);
-        var $parent   = $('#parent').zui('picker');
-        $.get(storyLink, function(data)
-        {
-            $parent.render({items: JSON.parse(data)});
-        });
-    }
 }
 
 window.linkStories = function(e)

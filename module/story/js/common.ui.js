@@ -44,43 +44,6 @@ window.toggleFeedback = function(obj)
     $('.feedbackBox').toggleClass('hidden', !feedbackSource.includes(source));
 }
 
-window.loadURS = function(e)
-{
-    const eventType = typeof e == 'undefined' ? '' : e.type;
-    const productID = $('[name=product]').val();
-
-    let requirementList = $('[name=URS]').val();
-    requirementList = requirementList ? encodeURIComponent(requirementList.join(',')) : '';
-
-    let moduleID = 0;
-    if(eventType == 'change') moduleID = $('[name=module]').val();
-    if(eventType == 'click' && !$(e.target).prop('checked')) moduleID = $('[name=module]').val();
-    if($('#loadURS').prop('checked')) moduleID = 0;
-
-    let branchID  = 0;
-    let $branches = $('input[name^=branches]');
-    if($branches.length > 0)
-    {
-        branchIdList = [];
-        $branches.each(function()
-        {
-            var currentBranch = $(this).val();
-            if(currentBranch == '') currentBranch = 0;
-            if(!branchIdList.includes(currentBranch)) branchIdList.push(currentBranch);
-        })
-        branchID = branchIdList.join(',');
-    }
-
-    var link = $.createLink('story', 'ajaxGetURS', 'productID=' + productID + '&branchID=' + branchID + '&moduleID=' + moduleID + '&requirementList=' + requirementList);
-    $.get(link, function(data)
-    {
-        data = JSON.parse(data);
-        $URS = $('#URS').zui('picker');
-        $URS.render({items: data.items});
-        $URS.$.setValue($URS.$.value);
-    })
-};
-
 window.loadGrade = function(e)
 {
     const parent = e.target.value;
@@ -144,5 +107,4 @@ window.loadBranch = function()
     if(typeof(branch) == 'undefined') branch = 0;
 
     window.loadProductPlans(productID, branch);
-    window.loadURS();
 };

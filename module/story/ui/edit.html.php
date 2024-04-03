@@ -42,14 +42,14 @@ data('activeMenuID', $story->type);
 jsVar('storyType', $story->type);
 jsVar('storyID', $story->id);
 jsVar('storyStatus', $story->status);
+jsVar('isParent', $story->isParent);
+jsVar('oldProductID', $story->product);
 jsVar('lastReviewer', explode(',', $lastReviewer));
 jsVar('storyReviewers', $storyReviewers);
 jsVar('reviewerNotEmpty', $lang->story->notice->reviewerNotEmpty);
-jsVar('oldProductID', $story->product);
 jsVar('twins', $story->twins);
 jsVar('relievedTwinsTip', $lang->story->relievedTwinsTip);
 jsVar('changeProductTips', $lang->story->changeProductTips);
-jsVar('parentStory', !empty($story->children));
 jsVar('moveChildrenTips', $lang->story->moveChildrenTips);
 jsVar('executionID', isset($objectID) ? $objectID : 0);
 jsVar('langTreeManage', $lang->tree->manage);
@@ -200,7 +200,7 @@ detailBody
         (
             setClass('mt-5'),
             set::title($lang->story->legendBasicInfo),
-            $story->parent <= 0 ? item
+            item
             (
                 set::trClass(zget($fields['product'], 'className', '')),
                 set::name($lang->story->product),
@@ -228,7 +228,7 @@ detailBody
                         ) : null
                     )
                 )
-            ) : null,
+            ),
             $story->parent > 0 && $product->type != 'normal' ? item
             (
                 set::name(sprintf($lang->product->branch, $lang->product->branchName[$product->type])),

@@ -1259,6 +1259,13 @@ class storyZen extends story
         if($this->post->linkStories)      $storyData->linkStories      = implode(',', array_unique($this->post->linkStories));
         if($this->post->linkRequirements) $storyData->linkRequirements = implode(',', array_unique($this->post->linkRequirements));
 
+        if($oldStory->product != $storyData->product)
+        {
+            $storyData->root   = $storyID;
+            $storyData->parent = 0;
+            $storyData->module = 0;
+        }
+
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 

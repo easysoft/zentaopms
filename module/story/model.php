@@ -788,7 +788,11 @@ class storyModel extends model
         if($story->product != $oldStory->product)
         {
             $childStories = $this->getAllChildId($storyID, false);
-            foreach($childStories as $childStoryID) $this->updateStoryProduct($childStoryID, $story->product);
+            $story->id    = $storyID;
+            foreach($childStories as $childStoryID)
+            {
+                $this->updateStoryProduct($childStoryID, $story, $story->product);
+            }
         }
         if($story->grade != $oldStory->grade) $this->syncGrade($oldStory, $story);
         $parentChanged = $story->parent != $oldStory->parent;
@@ -843,13 +847,30 @@ class storyModel extends model
      * Update story product.
      *
      * @param  int    $storyID
+     * @param  object $parentID
      * @param  int    $productID
      * @access public
      * @return void
      */
-    public function updateStoryProduct(int $storyID, int $productID): void
+    public function updateStoryProduct(int $storyID, object $parent, int $productID): void
     {
-        $this->dao->update(TABLE_STORY)->set('product')->eq($productID)->where('id')->eq($storyID)->exec();
+        if($parent->id != $storyID)
+        {
+            $childPath = $this->dao->select('path')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch('path');
+            $childPath = strstr($childPath, ",{$parent->id},");
+            $this->dao->update(TABLE_STORY)
+                 ->set('product')->eq($parent->product)
+                 ->set('module')->eq(0)
+                 ->set('root')->eq($parent->root)
+                 ->set('path')->eq($childPath)
+                 ->where('id')->eq($storyID)
+                 ->exec();
+        }
+        else
+        {
+            $this->dao->update(TABLE_STORY)->set('path')->eq(",{$storyID},")->where('id')->eq($storyID)->exec();
+        }
+
         $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($productID)->where('story')->eq($storyID)->exec();
         $storyProjects  = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->orderBy('project')->fetchPairs('project', 'project');
         $linkedProjects = $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('project')->in($storyProjects)->andWhere('product')->eq($productID)->orderBy('project')->fetchPairs('project','project');

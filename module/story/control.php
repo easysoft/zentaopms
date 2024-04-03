@@ -2017,32 +2017,6 @@ class story extends control
     }
 
     /**
-     * AJAX: Get user requirements.
-     *
-     * @param  int    $productID
-     * @param  int    $branchID
-     * @param  int    $moduleID
-     * @param  string $requirementList
-     * @access public
-     * @return void
-     */
-    public function ajaxGetURS(int $productID, string $branchID = '0', int $moduleID = 0, string $requirementList = '0')
-    {
-        $moduleIdList = $this->loadModel('tree')->getAllChildId($moduleID);
-
-        $URS = $this->story->getProductStoryPairs($productID, $branchID, $moduleIdList, 'active', 'id_desc', 0, '', 'requirement');
-
-        $items = array();
-        foreach($URS as $URID => $URTitle)
-        {
-            if(empty($URID)) continue;
-            $items[] = array('text' => $URTitle, 'value' => $URID);
-        }
-
-        return print(json_encode(array('name' => 'URS[]', 'multiple' => true, 'defaultValue' => $requirementList, 'items' => $items)));
-    }
-
-    /**
      * 移除需求的孪生需求。
      * AJAX: Deleted story twin.
      *
