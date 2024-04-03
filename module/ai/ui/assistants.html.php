@@ -7,7 +7,7 @@ jsVar('confirmPublishTip', $lang->ai->assistants->confirmPublishTip);
 jsVar('confirmWithdrawTip', $lang->ai->assistants->confirmWithdrawTip);
 
 featureBar();
-if(empty($model))
+if(!$hasModalAvailable)
 {
     panel
     (

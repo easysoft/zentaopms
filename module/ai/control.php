@@ -312,10 +312,13 @@ class ai extends control
             return $assistant;
         }, $assistants);
 
-        $this->view->assistants = $assistants;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->title      = $this->lang->ai->assistants->title;
+        $hasModalAvailable = $this->ai->hasModelsAvailable();
+
+        $this->view->hasModalAvailable = $hasModalAvailable;
+        $this->view->assistants        = $assistants;
+        $this->view->orderBy           = $orderBy;
+        $this->view->pager             = $pager;
+        $this->view->title             = $this->lang->ai->assistants->title;
         $this->display();
     }
 
