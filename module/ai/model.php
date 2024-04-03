@@ -2797,6 +2797,10 @@ class aiModel extends model
         if (dao::isError()) return false;
         $assistantId = $this->dao->lastInsertID();
         $this->loadModel('action')->create('aiAssistant', $assistantId, 'created');
+        if($publish)
+        {
+            $this->loadModel('action')->create('aiAssistant', $assistantId, 'published');
+        }
         return true;
     }
 
@@ -2870,9 +2874,8 @@ class aiModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $actionType = $assistant->status == '0' ? 'unpublished' : 'published';
-        $actionId = $this->loadModel('action')->create('aiAssistant', $assistant->id, $actionType);
-        $this->action->logHistory($actionId, $changes);
+        $actionType = $enabled ? 'published' : 'unpublished';
+        $this->loadModel('action')->create('aiAssistant', $assistantId, $actionType);
 
         return true;
     }
