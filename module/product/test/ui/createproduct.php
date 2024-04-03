@@ -29,4 +29,4 @@ r($createTester->createDefault('默认产品'))           && p('message:nameTip'
 r($createTester->checkLocatePage('正常产品'))         && p('module,method') && e('product,browse');                             // 创建正常产品后的跳转链接检查
 r($createTester->createMultiBranch('多分支产品产品')) && p('status')            && e('SUCCESS');                                    // 创建正常产品成功
 
-closeBrowser();
+$createTester->closeBrowser();

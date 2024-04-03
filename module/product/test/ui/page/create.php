@@ -1,20 +1,11 @@
 <?php
-class createPage extends Page
+class createPage extends page
 {
-    public function __construct()
+    public function __construct($webdriver)
     {
-        parent::__construct();
-
-        $doms = array(
+        parent::__construct($webdriver);
+        $xpath = array(
         );
-        $this->doms = array_merge($this->doms, $doms);
-    }
-
-    public function submit()
-    {
-        $this->btn($this->lang->save)->click();
-        sleep(1);
-
-        return $this;
+        $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
 }
