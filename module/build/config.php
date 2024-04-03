@@ -51,10 +51,11 @@ $config->build->actionList['bugList']['url']  = helper::createLink('build', 'vie
 $config->build->actionList['projectBugList'] = $config->build->actionList['bugList'];
 $config->build->actionList['projectBugList']['url']  = helper::createLink('projectbuild', 'view', 'buildID={id}&type=generatedBug');
 
-$config->build->actionList['buildEdit']['icon'] = 'edit';
-$config->build->actionList['buildEdit']['text'] = $lang->edit;
-$config->build->actionList['buildEdit']['hint'] = $lang->build->edit;
-$config->build->actionList['buildEdit']['url']  = helper::createLink('build', 'edit', 'buildID={id}');
+$config->build->actionList['buildEdit']['icon']     = 'edit';
+$config->build->actionList['buildEdit']['text']     = $lang->edit;
+$config->build->actionList['buildEdit']['hint']     = $lang->build->edit;
+$config->build->actionList['buildEdit']['url']      = helper::createLink('build', 'edit', 'buildID={id}');
+$config->build->actionList['buildEdit']['data-app'] = $app->tab;
 
 $config->build->actionList['projectbuildEdit'] = $config->build->actionList['buildEdit'];
 $config->build->actionList['projectbuildEdit']['url'] = helper::createLink('projectbuild', 'edit', 'buildID={id}');

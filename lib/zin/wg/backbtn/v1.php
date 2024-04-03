@@ -58,7 +58,7 @@ class backBtn extends btn
             'programplan'    => 'project-execution',
             'projectrelease' => 'projectrelease-browse',
             'projectstory'   => 'projectstory-story',
-            'build'          => 'execution-build,build-view,project-index,kanban-view',
+            'build'          => 'execution-build,build-view,project-index,kanban-view,testtask-browse',
             'projectbuild'   => 'projectbuild-browse,projectbuild-view,project-index',
             'mr'             => 'mr-browse',
             'repo'           => 'repo-log,repo-browse,repo-view',
