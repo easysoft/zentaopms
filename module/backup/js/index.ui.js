@@ -2,14 +2,13 @@ window.backup = function(e)
 {
     if(backupError)
     {
-        alert(backupError);
+        zui.Modal.alert(backupError);
         return;
     }
     var backupBtn = $('#actionBar .backup');
     backupBtn.toggleClass('loading');
     backupBtn.text(getSpaceLoading);
-    link = $.createLink('backup', 'ajaxGetDiskSpace');
-    $.get(link, function(data)
+    $.get($.createLink('backup', 'ajaxGetDiskSpace'), function(data)
     {
         backupBtn.toggleClass('loading');
         backupBtn.text(startBackup);
@@ -38,37 +37,20 @@ window.getCellSpan = function(cell)
 function backupData()
 {
     var timeID = null;
-    $.ajax({
+    $.ajax(
+    {
         url: $('.backup').attr('data-link'),
-        success: function(data)
+        success: function (data)
         {
-            if (data.needSpace > data.freeSpace)
-            {
-                var tips = alertTips.replace('NEED_SPACE', (data.needSpace / (1024 * 1024 * 1024)).toFixed(2));
-                zui.Modal.alert({message: tips});
-            }
-            else
-            {
-                backupData();
-            }
-        }
-    }, 'json');
-}
-
-function backupData() {
-    var timeID = null;
-    $.ajax({
-        url: $('.backup').attr('data-link'),
-        success: function (data) {
             clearInterval(timeID);
             $('#message').append(data);
-            setTimeout(function(){return location.reload();}, 2000);
+            setTimeout(function(){return location.href = $.createLink('backup', 'index');}, 2000);
         },
         error: function(request, textstatus, error)
         {
             clearInterval(timeID);
             if(textstatus == 'timeout') $('#message').append("<p class='text-danger'>" + backupTimeout + '</p>');
-            setTimeout(function(){return location.reload();}, 2000);
+            setTimeout(function(){return location.href = $.createLink('backup', 'index');}, 2000);
         }
     });
 
@@ -117,4 +99,13 @@ $(document).off('click', '.rmPHPHeader').on('click', '.rmPHPHeader', function(da
     $('#waiting').addClass('show');
     $('#waiting .modal-body #backupType').html(rmPHPHeaderLang);
     $('#waiting .modal-body #message').empty();
+});
+
+let deleting = false;
+$(document).off('click', '[data-confirm]').on('click', '[data-confirm]', function(){deleting = true;});
+$(document).off('click', '.modal [z-key="cancel"]').on('click', '.modal [z-key="cancel"]', function(){deleting = false;});
+$(document).off('click', '.modal [data-dismiss="modal"]').on('click', '.modal [data-dismiss="modal"]', function(){deleting = false;});
+$(document).off('click', '.modal [z-key="confirm"]').on('click', '.modal [z-key="confirm"]', function()
+{
+    if(deleting) $('#main').addClass('loading');
 });
