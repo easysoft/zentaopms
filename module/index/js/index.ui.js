@@ -529,9 +529,6 @@ function toggleMenu(toggle)
     if (toggle === undefined) toggle = $body.hasClass('hide-menu');
     $body.toggleClass('hide-menu', !toggle).toggleClass('show-menu', !!toggle);
 
-    const $toggle = $('#menuToggleMenu .menu-toggle');
-    $toggle.attr('data-title', $toggle.data(toggle ? 'collapseText' : 'unfoldText'));
-
     $.cookie.set('hideMenu', String(!toggle), {expires: config.cookieLife, path: config.webRoot});
     return toggle;
 }
