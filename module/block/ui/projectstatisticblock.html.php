@@ -112,8 +112,7 @@ if($project)
                 (
                     set::name
                     (
-                        $lang->block->projectstatistic->{$field},
-                        !isset($lang->block->tooltips[$field]) ? ':' : null
+                        $lang->block->projectstatistic->{$field}
                     ),
                     to::suffixName
                     (
@@ -130,8 +129,7 @@ if($project)
                                     'className' => 'text-dark border border-light leading-5'
                                 )
                             ),
-                            'help',
-                            ':'
+                            'help'
                         ) : null
                     ),
                     span
