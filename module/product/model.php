@@ -75,7 +75,7 @@ class productModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->beginIF($this->config->vision != 'or')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
+            ->beginIF($this->config->vision != 'or')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
     }
@@ -129,7 +129,7 @@ class productModel extends model
             ->where('t3.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in($this->app->user->view->products)->fi()
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t3.vision)")
-            ->beginIF($model != 'all')->andWhere('t2.model')->eq($model)
+            ->beginIF($model != 'all')->andWhere('t2.model')->eq($model)->fi()
             ->fetchPairs('id', 'name');
     }
 
