@@ -742,7 +742,6 @@ function getVisions(): array
 
 /**
  * Save any message with any type to the php log file which prefix with 'php.<today>'.
- * A debug helper.
  *
  * @param  mixed  $message
  * @param  string $file
