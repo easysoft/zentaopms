@@ -12,10 +12,9 @@ declare(strict_types=1);
 
 namespace zin;
 
-require_once __DIR__ . DS . 'setting.class.php';
-require_once __DIR__ . DS . 'directive.class.php';
+require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 
-class style extends setting implements iDirective
+class style extends \zin\utils\dataset implements iDirective
 {
     /**
      * Method for sub class to hook on setting it.
@@ -27,15 +26,32 @@ class style extends setting implements iDirective
      */
     protected function setVal(string $name, mixed $value): style
     {
-        $name   = static::formatStyleName($name);
-        $value = static::formatStyleValue($name, $value);
+        $name = static::formatStyleName($name);
+        if($value === null)
+        {
+            $this->storedData[$name] = $value;
+            return $this;
+        }
+
+        if(!is_bool($value)) $value = static::formatStyleValue($name, $value);
+
         $this->storedData[$name] = $value;
         return $this;
     }
 
     public function apply(node $node, string $blockName): void
     {
-        $node->setProp('style', $this->toArray());
+        $style = array();
+        $class = array();
+
+        foreach ($this->storedData as $name => $value)
+        {
+            if(is_bool($value)) $class[$name] = $value;
+            else                $style[$name] = $value;
+        }
+
+        if($style) $node->setProp('style', $style);
+        if($class) $node->setProp('class', $class);
     }
 
     /**
@@ -49,8 +65,8 @@ class style extends setting implements iDirective
     public static function __callStatic($name, $args): style
     {
         $style = new style();
-        if(count($args) === 1) $style->setVal($name, $args[0]);
-        else                   $style->setVal($name, $args);
+        $value = empty($args) ? true : (count($args) === 1 ? $args[0] : $args);
+        $style->$name($value);
         return $style;
     }
 
