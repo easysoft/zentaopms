@@ -836,7 +836,8 @@ $.apps = $.extend(apps,
     updateAppsMenu:    updateAppsMenu,
     changeAppsLang:    changeAppsLang,
     changeAppsTheme:   changeAppsTheme,
-    updateUserToolbar: updateUserToolbar
+    updateUserToolbar: updateUserToolbar,
+    closeApp:          closeApp,
 });
 
 window.notifyMessage = function(data)
