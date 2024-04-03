@@ -68,6 +68,7 @@ class bugBasicInfo extends wg
                 'control'  => 'link',
                 'url'      => $productLink,
                 'text'     => $product->name,
+                'title'    => $product->name,
                 'data-app' => 'product'
             ) : $product->name;
         }
