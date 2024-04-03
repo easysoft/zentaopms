@@ -24,24 +24,17 @@ require_once('vendor/autoload.php');
 class webdriver
 {
     public $driver;
-    public $pageElement;
 
+    /**
+     * Initialize webdriver.
+     *
+     * @param  array  $chromeOptions
+     * @access public
+     * @return void
+     */
     public function __construct($chromeOptions)
     {
         $this->driver = $this->initBrowser($chromeOptions);
-    }
-
-    /**
-     * If exception to close browser.
-     *
-     * @param  Throwable $exception
-     * @access public
-     * @return mixed
-     */
-    public function resetException(Throwable $exception)
-    {
-        echo "Exception: " , $exception->getMessage();
-        $this->closeBrowser();
     }
 
     /**
@@ -78,6 +71,29 @@ class webdriver
     }
 
     /**
+     * Get title of current page.
+     *
+     * @access public
+     * @return string
+     */
+    public function getPageTitle()
+    {
+        return $this->driver->getTitle();
+    }
+
+    /**
+     * Get url of current page.
+     *
+     * @access public
+     * @return string
+     */
+    public function getPageUrl()
+    {
+        $url = $this->driver->getCurrentURL();
+        return $url;
+    }
+
+    /**
      * Set browser language.
      *
      * @access public
@@ -111,6 +127,18 @@ class webdriver
     public function setWindowSize($width, $height)
     {
         $this->driver->manage()->window()->setSize(new WebDriverDimension($width, $height));
+    }
+
+    /**
+     * Screenshot in page.
+     *
+     * @param  string  $imageFile
+     * @access public
+     * @return void
+     */
+    public function screenshot($imageFile)
+    {
+        $this->driver->takeScreenshot($imageFile);
     }
 
     /**
@@ -185,6 +213,217 @@ class webdriver
         return $this->driver->manage()->deleteAllCookies();
     }
 
+
+    /**
+     * Close browser.
+     *
+     * @access public
+     * @return void
+     */
+    public function closeBrowser()
+    {
+        $this->driver->quit();
+    }
+
+    /**
+     * Close the window.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function closeWindow()
+    {
+        $this->driver->close();
+    }
+
+
+    /**
+     * Get page source.
+     *
+     * @access public
+     * @return string
+     */
+    public function getPageSource()
+    {
+        return $this->driver->getPageSource();
+    }
+
+    /**
+     * Get window handles.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getWindowHandles()
+    {
+        return $this->driver->getWindowHandles();
+    }
+
+    /**
+     * Try to open new window/tab.
+     *
+     * @param  string $type 'tab'|'window'|''
+     * @access public
+     * @return object $driver
+     */
+    public function newWindow($type = '')
+    {
+        if($type == 'tab')
+        {
+            $this->driver->switchTo()->newWindow(WebDriverTargetLocator::WINDOW_TYPE_TAB);
+        }
+        elseif($type == 'window')
+        {
+            $this->driver->switchTo()->newWindow(WebDriverTargetLocator::WINDOW_TYPE_WINDOW);
+        }
+        else
+        {
+            $this->driver->switchTo()->newWindow();
+        }
+
+        return $this->driver;
+    }
+
+    /**
+     * Refresh page.
+     *
+     * @access public
+     * @return object
+     */
+    public function refresh()
+    {
+        $this->driver->navigate()->refresh();
+        return $this;
+    }
+
+}
+
+class dom
+{
+    public $driver;
+    public $element;
+    public $xpath = array();
+
+    /**
+     * Get the driver of the page.
+     *
+     * @param  object    $driver
+     * @access public
+     * @return void
+     */
+    public function __construct($driver)
+    {
+        $this->driver = $driver;
+    }
+
+    /**
+     * Assemble xpath for element.
+     *
+     * @param  string    $name
+     * @access public
+     * @return object
+     */
+    public function __get($name)
+    {
+        $xpathList = array('//*[@name="' . $name . '"]',
+            '//*[@id="' . $name . '"]',
+            '//*[@name="' . $name . '[]' . '"]'
+        );
+
+        if(!empty($this->xpath)) $xpathNameList = array_keys($this->xpath);
+        if(in_array($name, $xpathNameList))
+        {
+            $xpath = $this->xpath[$name];
+            $this->waitElement($xpath)->getElement($xpath);
+        }
+        else
+        {
+            foreach($xpathList as $xpath)
+            {
+                try
+                {
+                    $this->waitElement($xpath)->getElement($xpath);
+                    $this->xpath[$name] = $xpath;
+                    break;
+                }
+                catch (Exception $e)
+                {
+                    $this->xpath[$name] = '';
+                }
+            }
+        }
+
+        if(!$this->xpath[$name]) echo 'Not found element';
+        return $this;
+    }
+
+    /**
+     * Open a app tab.
+     *
+     * @param  string $app
+     * @access public
+     * @return object
+     */
+    public function openAppTab($appTab)
+    {
+        $xpath = "//li[@data-app='$appTab']/a";
+        $this->waitElement($xpath)->getElement($xpath)->click();
+        $this->wait(1)->switchToIframe("appIframe-{$appTab}");
+
+        return $this;
+    }
+
+    /**
+     * open a navbar.
+     *
+     * @param  string $nav
+     * @access public
+     * @return object
+     */
+    public function openNavbar($nav)
+    {
+        $xpath = "//a[@data-id='$nav']";
+        $this->waitElement($xpath)->getElement($xpath)->click();
+
+        return $this;
+    }
+
+    /**
+     * Get element of a button.
+     *
+     * @param  string $value
+     * @param  string $type
+     * @access public
+     * @return object
+     */
+    public function btn($value, $type = 'text')
+    {
+        $xpath = $type == 'text' ? "//*[text()='$value']" : $value;
+        $this->waitElement($xpath)->getElement($xpath);
+
+        return $this;
+    }
+
+    /**
+     * Get tips in page form.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFormTips()
+    {
+        $this->wait(1)->getElementList('//div[contains(@class, "form-tip")]');
+
+        $tips = array();
+        foreach($this->element as $element)
+        {
+            $id = $element->getAttribute('id');
+            $tips[$id] = $element->getText();
+        }
+
+        return $tips;
+    }
+
     /**
      * Find elements.
      *
@@ -192,11 +431,11 @@ class webdriver
      * @access public
      * @return object
      */
-    public function getElementListInPage($selector = '')
+    public function getElementList($selector = '')
     {
-        if(!$selector) return $this->pageElement;
+        if(!$selector) return $this->element;
 
-        $this->pageElement = $this->driver->findElements(WebDriverBy::xpath($selector));
+        $this->element = $this->driver->findElements(WebDriverBy::xpath($selector));
 
         return $this;
     }
@@ -210,9 +449,9 @@ class webdriver
      */
     public function getElement($selector = '')
     {
-        if(!$selector) return $this->pageElement;
+        if(!$selector) return $this->element;
 
-        $this->pageElement = $this->driver->findElement(WebDriverBy::xpath($selector));
+        $this->element = $this->driver->findElement(WebDriverBy::xpath($selector));
 
         return $this;
     }
@@ -224,16 +463,9 @@ class webdriver
      * @access public
      * @return object
      */
-    public function capture($imageFile, $withElement = false)
+    public function screenshotByElement($imageFile)
     {
-        if($withElement)
-        {
-            $this->pageElement->takeElementScreenshot($imageFile);
-        }
-        else
-        {
-            $this->driver->takeScreenshot($imageFile);
-        }
+        $this->element->takeElementScreenshot($imageFile);
 
         return $this;
     }
@@ -257,7 +489,7 @@ class webdriver
         }
         else
         {
-            $frame = $this->driver->findElement(WebDriverBy::xpath($selector));
+            $frame = $this->driver->findElement(WebDriverBy::id($selector));
             $this->driver->switchTo()->frame($frame);
         }
 
@@ -286,7 +518,7 @@ class webdriver
      */
     public function getValue()
     {
-        return $this->pageElement->getAttribute('value');
+        return $this->element->getAttribute('value');
     }
 
     /**
@@ -301,11 +533,11 @@ class webdriver
         try
         {
             $this->clear();
-            $this->pageElement->sendKeys($value);
+            $this->element->sendKeys($value);
         }
         catch(Exception $e)
         {
-            $this->driver->executeScript("arguments[0].defaultValue='{$value}';", array($this->pageElement));
+            $this->driver->executeScript("arguments[0].defaultValue='{$value}';", array($this->element));
         }
 
         return $this;
@@ -321,7 +553,7 @@ class webdriver
      */
     public function attr($attribute)
     {
-        return $this->pageElement->getAttribute($attribute);
+        return $this->element->getAttribute($attribute);
     }
 
     /**
@@ -332,7 +564,7 @@ class webdriver
      */
     public function getText()
     {
-        $text = $this->pageElement->getText();
+        $text = $this->element->getText();
         return $text;
     }
 
@@ -346,11 +578,11 @@ class webdriver
     {
         try
         {
-            $this->pageElement->click();
+            $this->element->click();
         }
         catch(Exception $e)
         {
-            $this->driver->executeScript("arguments[0].click();", array($this->pageElement));
+            $this->driver->executeScript("arguments[0].click();", array($this->element));
         }
 
         return $this;
@@ -368,11 +600,11 @@ class webdriver
         $action = new WebDriverActions($this->driver);
         if($isDouble)
         {
-            $action->moveToElement($this->pageElement)->click()->perform();
+            $action->moveToElement($this->element)->click()->perform();
         }
         else
         {
-            $action->moveToElement($this->pageElement)->doubleClick()->perform();
+            $action->moveToElement($this->element)->doubleClick()->perform();
         }
 
         return $this;
@@ -386,7 +618,7 @@ class webdriver
      */
     public function clear()
     {
-        $this->pageElement->clear();
+        $this->element->clear();
         return $this;
     }
 
@@ -398,7 +630,7 @@ class webdriver
      */
     public function hover()
     {
-        $coordinates = $this->pageElement->getCoordinates();
+        $coordinates = $this->element->getCoordinates();
         $this->driver->getMouse()->mouseMove($coordinates);
 
         return $this;
@@ -414,12 +646,10 @@ class webdriver
     public function getErrorsInPage($iframe = '')
     {
         $errors = array();
-        $errors['zinbar'] = array();
-        $errors['alert']  = array();
 
         $this->driver->switchTo()->defaultContent();
-        $errors['alert'][]  = $this->getErrorsInAlert();
-        $errors['zinbar'][] = $this->getErrorsInZinBar();
+        if(!empty($this->getErrorsInAlert())) $errors[] = $this->getErrorsInAlert();
+        if(!empty($this->getErrorsInZinBar())) $errors[] = $this->getErrorsInZinBar();
 
         $hasException = false;
         for($identifier = 0; $identifier < 10, $hasException == false; $identifier++)
@@ -435,8 +665,8 @@ class webdriver
 
             if($hasException == false)
             {
-                $errors['alert'][]  = $this->getErrorsInAlert();
-                $errors['zinbar'][] = $this->getErrorsInZinBar();
+                if(!empty($this->getErrorsInAlert())) $errors[] = $this->getErrorsInAlert();
+                if(!empty($this->getErrorsInZinBar())) $errors[] = $this->getErrorsInZinBar();
             }
         }
 
@@ -451,7 +681,7 @@ class webdriver
      * Get errors in zinbar.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getErrorsInZinBar()
     {
@@ -459,9 +689,8 @@ class webdriver
 
         try
         {
-            $this->getElement('//*[@id="zinbar"]/div/div[@data-hint="PHP errors"]');
-            $this->getElement('//*[@id="zinbar"]/div/div[3]');
-            $errorDivs = $this->pageElement->findElements(WebDriverBy::tagName('div'));
+            $parentDiv = $this->driver->findElement(WebDriverBy::xpath('//*[@id="zinbar"]/div/div[3]'));
+            $errorDivs = $parentDiv->findElements(WebDriverBy::tagName('div'));
 
             foreach($errorDivs as $errorDiv)
             {
@@ -479,6 +708,12 @@ class webdriver
         }
     }
 
+    /**
+     * Get errors in page alert.
+     *
+     * @access public
+     * @return array
+     */
     public function getErrorsInAlert()
     {
         $errors = array();
@@ -533,7 +768,7 @@ class webdriver
      * @access public
      * @return object
      */
-    public function waitElement($selector, $seconds = 5, $type = 'normal')
+    public function waitElement($selector, $seconds = 2, $type = 'normal')
     {
         if($type == 'implicit')
         {
@@ -573,11 +808,11 @@ class webdriver
     {
         if($type == 'text')
         {
-            return $this->driver->executeScript("return arguments[0].innerText;", [$this->pageElement]);
+            return $this->driver->executeScript("return arguments[0].innerText;", [$this->element]);
         }
         elseif($type == 'sendKeys')
         {
-            return $this->driver->executeScript("arguments[0].sendKeys('$value');", [$this->pageElement]);
+            return $this->driver->executeScript("arguments[0].sendKeys('$value');", [$this->element]);
         }
         else
         {
@@ -608,28 +843,6 @@ class webdriver
         }
     }
 
-    /**
-     * Get title of current page.
-     *
-     * @access public
-     * @return string
-     */
-    public function getPageTitle()
-    {
-        return $this->driver->getTitle();
-    }
-
-    /**
-     * Get url of current page.
-     *
-     * @access public
-     * @return string
-     */
-    public function getPageUrl()
-    {
-        $url = $this->driver->getCurrentURL();
-        return $url;
-    }
 
     /**
      * Get element's coordinate on page.
@@ -639,31 +852,9 @@ class webdriver
      */
     public function getElementCoordinate()
     {
-        $x = $this->pageElement->getCoordinates()->onPage()->getX();
-        $y = $this->pageElement->getCoordinates()->onPage()->getY();
+        $x = $this->element->getCoordinates()->onPage()->getX();
+        $y = $this->element->getCoordinates()->onPage()->getY();
         return array($x, $y);
-    }
-
-    /**
-     * Close browser.
-     *
-     * @access public
-     * @return void
-     */
-    public function closeBrowser()
-    {
-        $this->driver->quit();
-    }
-
-    /**
-     * Close the window.
-     *
-     * @access public
-     * @return mixed
-     */
-    public function closeWindow()
-    {
-        $this->driver->close();
     }
 
     /**
@@ -676,7 +867,7 @@ class webdriver
      */
     public function select($type, $value)
     {
-        $select = new WebDriverSelect($this->pageElement);
+        $select = new WebDriverSelect($this->element);
 
         if($type == 'value') $select->selectByValue($value);
         if($type == 'index') $select->selectByIndex($value);
@@ -693,7 +884,7 @@ class webdriver
      */
     public function getSelect($type = '')
     {
-        $select = new WebDriverSelect($this->pageElement);
+        $select = new WebDriverSelect($this->element);
 
         if($type == 'value') return $select->getFirstSelectedOption()->getAttribute('value');
         return $select->getFirstSelectedOption()->getText();
@@ -722,7 +913,7 @@ class webdriver
     public function scrollToElement()
     {
         $js = "arguments[0].scrollIntoView(false);";
-        $arguments = array($this->pageElement);
+        $arguments = array($this->element);
 
         $this->driver->executeScript($js, $arguments);
     }
@@ -736,23 +927,24 @@ class webdriver
      */
     public function picker($value)
     {
-        $this->click();
+        $picker = $this->element->findElement(WebDriverBy::xpath('parent::div'));
+        $picker->click();
         $this->wait(1);
 
         try
         {
-            $pickerInput = $this->pageElement->findElement(WebDriverBy::xpath('//*[@class="picker-search"]/input'));
+            $pickerInput = $picker->findElement(WebDriverBy::xpath('//*[@class="picker-search"]/input'));
         }
         catch (Exception $selectionException)
         {
-            $pickerInput = $this->pageElement->findElement(WebDriverBy::xpath('//*[@class="picker-selections"]/input'));
+            $pickerInput = $picker->findElement(WebDriverBy::xpath('//*[@class="picker-selections"]/input'));
         }
         $pickerInput->click();
         $pickerInput->sendKeys(trim($value));
 
         $this->wait(1);
 
-        $pickerID = substr($pickerInput->getAttribute('id'), 5);
+        $pickerID = substr($picker->getAttribute('id'), 5);
         $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
 
         return $this;
@@ -767,17 +959,18 @@ class webdriver
      */
     public function multiPicker($values)
     {
-        $this->click();
+        $picker = $this->element->findElement(WebDriverBy::xpath('parent::div'));
+        $picker->click();
         $this->wait(1);
 
         foreach($values as $value)
         {
-            $pickerInput = $this->pageElement->findElement(WebDriverBy::xpath('//*[@class="picker-multi-selections"]//input'));
+            $pickerInput = $picker->findElement(WebDriverBy::xpath('//*[@class="picker-multi-selections"]//input'));
             $pickerInput->click();
             $pickerInput->sendKeys(trim($value));
             $this->wait(1);
 
-            $pickerID = substr($pickerInput->getAttribute('id'), 5);
+            $pickerID = substr($picker->getAttribute('id'), 5);
             $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
         }
     }
@@ -792,7 +985,7 @@ class webdriver
      */
     public function noSearchPicker($value, $type = '')
     {
-        $picker = $this->pageElement->findElement(WebDriverBy::xpath('/parent::div'));
+        $picker = $this->element->findElement(WebDriverBy::xpath('/parent::div'));
         $picker->click();
 
         $pickerID = $picker->getAttribute('id');
@@ -859,13 +1052,13 @@ class webdriver
 
             $this->getElement($fieldXpath)->picker($field);
             $this->wait(1)->getElement($operatorXpath)->click();
-            $operatorID = $this->pageElement->getAttribute('id');
+            $operatorID = $this->element->getAttribute('id');
             $operatorID = substr($operatorID, 5);
             $this->getElement("//*[@id='pick-pop-$operatorID']/menu/menu//*[contains(text(), '$operator')]")->click();
             $this->wait(1);
 
             $this->getElement($valueXpath . '/*[1]')->getTagName();
-            $valueTage = $this->pageElement->getTagName();
+            $valueTage = $this->element->getTagName();
 
             if($valueTage == 'input')
             {
@@ -881,65 +1074,6 @@ class webdriver
     }
 
     /**
-     * Get page source.
-     *
-     * @access public
-     * @return string
-     */
-    public function getPageSource()
-    {
-        return $this->driver->getPageSource();
-    }
-
-    /**
-     * Get window handles.
-     *
-     * @access public
-     * @return mixed
-     */
-    public function getWindowHandles()
-    {
-        return $this->driver->getWindowHandles();
-    }
-
-    /**
-     * Try to open new window/tab.
-     *
-     * @param  string $type 'tab'|'window'|''
-     * @access public
-     * @return object $driver
-     */
-    public function newWindow($type = '')
-    {
-        if($type == 'tab')
-        {
-            $this->driver->switchTo()->newWindow(WebDriverTargetLocator::WINDOW_TYPE_TAB);
-        }
-        elseif($type == 'window')
-        {
-            $this->driver->switchTo()->newWindow(WebDriverTargetLocator::WINDOW_TYPE_WINDOW);
-        }
-        else
-        {
-            $this->driver->switchTo()->newWindow();
-        }
-
-        return $this->driver;
-    }
-
-    /**
-     * Refresh page.
-     *
-     * @access public
-     * @return object
-     */
-    public function refresh()
-    {
-        $this->driver->navigate()->refresh();
-        return $this;
-    }
-
-    /**
      * Set date in datePicker.
      *
      * @param  string    $value
@@ -948,7 +1082,7 @@ class webdriver
      */
     public function datePicker($value)
     {
-        $name = $this->pageElement->attribute('name');
+        $name = $this->element->attribute('name');
         if(!$name) return false;
 
         $this->driver->executeScript("return $('[name={$name}]').zui('datePicker').$.setValue('$value')");
