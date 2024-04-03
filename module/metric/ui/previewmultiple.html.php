@@ -132,7 +132,7 @@ toolbar
         set::url(helper::createLink('metric', 'preview', "scope=$exchangeScope&viewType=single&metricID={$current->id}")),
         $lang->metric->viewType->single
     ),
-    common::hasPriv('metric', 'browse') ? btn
+    ($this->config->edition !== 'open' && common::hasPriv('metric', 'browse')) ? btn
     (
         setClass('btn primary'),
         set::url(helper::createLink('metric', 'browse')),
