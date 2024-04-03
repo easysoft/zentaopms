@@ -78,11 +78,11 @@ if(!empty($needProcess['updateFile']))
 div
 (
     setID('main'),
-    setClass('pt-8'),
+    setClass('flex'),
     div
     (
         setID('mainContent'),
-        setClass('canvas px-1 mt-8 mx-auto pb-8'),
+        setClass('canvas px-1 mx-auto pb-8 self-center'),
         width('800px'),
         col
         (
