@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The style class file of zin of ZenTaoPMS.
+ * The style setting class file of zin of ZenTaoPMS.
  *
  * @copyright   Copyright 2023 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @author      Hao Sun <sunhao@easycorp.ltd>
@@ -20,14 +20,14 @@ require_once __DIR__ . DS . 'dataset.class.php';
  * Example:
  *
  *     // Create a style object an convert to css string
- *     $style = style::create(array('color' => 'red'));
+ *     $style = static::create(array('color' => 'red'));
  *     echo $style(); // Output "color:red"
  *
  *     // Above example same as:
- *     echo style::css(array('color' => 'red'));
+ *     echo static::css(array('color' => 'red'));
  *
  *     // Modifier style
- *     $style = style::create(array('color' => 'red'));
+ *     $style = static::create(array('color' => 'red'));
  *     $style->set('background', 'green');
  *
  *     // Modifier style with property name directly
@@ -41,7 +41,7 @@ require_once __DIR__ . DS . 'dataset.class.php';
  *
  * @todo @sunhao: Validate style properties on modifying
  */
-class style extends dataset
+class styleset extends dataset
 {
     /**
      * Format CSS variable name with prefix "--"
@@ -84,14 +84,14 @@ class style extends dataset
      * @access public
      * @param array|string $name  - Variable name or variables list
      * @param string|null  $value - Property value
-     * @return style|array|string
+     * @return styleset|array|string
      */
-    public function cssVar(array|string $name = '', ?string $value = null): style|array|string
+    public function cssVar(array|string $name = '', ?string $value = null): styleset|array|string
     {
         /* Support for setting multiple variables by an array */
         if(is_array($name))
         {
-            foreach($name as $n => $value) $this->set(style::formatVarName($n), $value);
+            foreach($name as $n => $value) $this->set(static::formatVarName($n), $value);
             return $this;
         }
 
@@ -107,7 +107,7 @@ class style extends dataset
             return $vars;
         }
 
-        $varName = style::formatVarName($name);
+        $varName = static::formatVarName($name);
 
         /* Return the specific variable value by name */
         if($value === null) return $this->get($varName);
