@@ -71,10 +71,13 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function responseAfterEdit($scope)
+    protected function responseAfterEdit($metricID, $afterEdit, $location)
     {
-        $location = $this->createLink('metric', 'browse', "scope=$scope");
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
+        if($afterEdit == 'back' && $location) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
+
+        $location = $this->createLink('metric', 'implement', "metricID=$metricID");
+        $callback = array('name' => 'loadImplement', 'params' => $location);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => $callback);
     }
 
     /**
