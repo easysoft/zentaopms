@@ -174,6 +174,7 @@ detailBody
                 set::active(true),
                 tableData
                 (
+                    set::tdClass('break-all'),
                     $buildItems($legendBasic)
                 )
             ),
