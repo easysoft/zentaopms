@@ -1,145 +1,23 @@
 <?php
-class page extends webDriver
+class page
 {
-    public $doms;
-    public $xpathName;
-    public $timeout = 5;
+    public $xpath = array(
+        'menuMoreNav' => '//*[@id="menuMoreNav"]/li[2]/a'
+    );
+    public $dom;
+    public $webdriver;
 
-    public function __construct()
+    public function __construct($webdriver)
     {
-        $this->doms      = array(
-            'menuMoreNav' => '//*[@id="menuMoreNav"]/li[2]/a'
-        );
+        $this->webdriver = $webdriver;
+        $this->dom = new dom($webdriver->driver);
+        $this->dom->xpath = array_merge($this->dom->xpath, $this->xpath);
     }
 
-    /**
-     * Open a app tab.
-     *
-     * @param  string $app
-     * @access public
-     * @return object
-     */
-    public function openAppTab($appTab)
+    public function __call($method, $params = array())
     {
-        $xpath = "//li[@data-app='$appTab']/a";
-        $this->waitElement($xpath, $this->timeout)->getElement($xpath)->click();
-        $this->wait(1)->switchToIframe("appIframe-{$appTab}");
+        if(method_exists($this->webdriver, $method)) return call_user_func_array(array($this->webdriver, $method), $params);
 
-        return $this;
-    }
-
-    /**
-     * open a navbar.
-     *
-     * @param  string $nav
-     * @access public
-     * @return object
-     */
-    public function openNavbar($nav)
-    {
-        $xpath = "//a[@data-id='$nav']";
-        $this->waitElement($xpath, $this->timeout)->getElement($xpath)->click();
-
-        return $this;
-    }
-
-    /**
-     * Get element of a button.
-     *
-     * @param  string $value
-     * @param  string $type
-     * @access public
-     * @return object
-     */
-    public function btn($value, $type = 'text')
-    {
-        $xpath = $type == 'text' ? "//*[text()='$value']" : $value;
-        $this->waitElement($xpath, $this->timeout)->getElement($xpath);
-
-        return $this;
-    }
-
-    /**
-     * Convert incoming page elements to xpath.
-     *
-     * @param  string $name
-     * @access public
-     * @return void
-     */
-    public function __get($name)
-    {
-        if($name == 'dom') return $this;
-
-        $this->xpathName = $name;
-        if(isset($this->doms[$name]))
-        {
-            $xpath = $this->doms[$name];
-        }
-        else
-        {
-            $xpath = $this->generateXPath($name);
-        }
-
-        $this->waitElement($xpath, $this->timeout)->getElement($xpath);
-        return $this;
-    }
-
-    /**
-     * Get xpath of an element.
-     *
-     * @param  string    $name
-     * @access public
-     * @return void
-     */
-    public function generateXPath($name)
-    {
-        $element = '//*[@name="' . $name . '"]';
-
-        try
-        {
-            $this->getElement($element);
-        }
-        catch (Exception $e)
-        {
-            try
-            {
-                $element = '//*[@name="' . $name . '[]' . '"]';
-                $this->getElement($element);
-            }
-            catch (Exception $e)
-            {
-                $element = '//*[@id="' . $name . '"]';
-                try
-                {
-                    $this->getElement($element);
-                }
-                catch (Exception $e)
-                {
-                    $element = $name;
-                }
-            }
-        }
-
-        return $element;
-    }
-
-    /**
-     * Get tips in page form.
-     *
-     * @access public
-     * @return array
-     */
-    public function getFormTips()
-    {
-        $elements = $this->getElementListInPage('xpath://div[contains(@class, "form-tip")]');
-
-        $tips = array();
-        foreach($elements as $element)
-        {
-            $id = $element->getAttribute('id');
-            $tips[$id] = $element->getText();
-        }
-
-        return $tips;
+        return false;
     }
 }
