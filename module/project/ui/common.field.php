@@ -81,6 +81,7 @@ $fields->field('productsBox')
         'hasNewProduct'     => data('app.rawMethod') == 'create',
         'isStage'           => data('isStage'),
         'errorSameProducts' => $lang->project->errorSameProducts,
+        'selectTip'         => $lang->project->selectProductTip
     ));
 
 if($model == 'waterfall' || $model == 'waterfallplus')

@@ -24,7 +24,8 @@ class productsBox extends wg
         'isStage?: bool',               // 是否是阶段类型。
         'hasNewProduct?: bool=false',   // 是否有新产品。
         'errorSameProducts?: string',   // 选择同一个产品的提示。
-        'required?: bool=false'         // 是否是必填。
+        'required?: bool=false',        // 是否是必填。
+        'selectTip?: string=""'         // 产品下拉提示。
     );
 
     public static function getPageCSS(): ?string
@@ -105,6 +106,7 @@ class productsBox extends wg
                     set::name('products[0]'),
                     set::items($productItems),
                     !empty($project) && empty($project->hasProduct) ? set::value(current(array_keys($productItems))) : null,
+                    set::placeholder($this->prop('selectTip'))
                 ),
             ),
             formGroup
