@@ -40,7 +40,7 @@ $buildItems = function($items): array
     return $itemList;
 };
 
-$oldMetricTabs = $metric->fromID === 0 ? '' : tabs
+$oldMetricTabs = (string)$metric->fromID === '0' ? '' : tabs
 (
     set::collapse(true),
     tabPane
