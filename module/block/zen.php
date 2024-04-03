@@ -730,12 +730,12 @@ class blockZen extends block
         /* 获取最近六个月的年月数组。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
         /* 从度量项获取所有产品的月度发布次数的数据。 */
@@ -746,14 +746,14 @@ class blockZen extends block
         $productIdList = array_keys($products);
         $releaseGroup  = $this->metric->getResultByCode('count_of_annual_created_release_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')));
 
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $releaseData[$group]  = 0;
+            $releaseData[$date]  = 0;
             if(!empty($monthRelease))
             {
                 foreach($monthRelease as $release)
                 {
-                    if($group == "{$release['year']}-{$release['month']}") $releaseData[$group] = $release['value'];
+                    if($date == "{$release['year']}-{$release['month']}") $releaseData[$date] = $release['value'];
                 }
             }
         }
@@ -996,12 +996,12 @@ class blockZen extends block
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
         $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
         $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)));
@@ -1048,24 +1048,24 @@ class blockZen extends block
             $product->newExecution      = isset($newExecution[$productID][$productID]) ? $newExecution[$productID][$productID] : '';
             $product->newRelease        = isset($newRelease[$productID][$productID]) ? $newRelease[$productID][$productID] : '';
 
-            foreach($groups as $group)
+            foreach($dates as $date)
             {
-                if(strtotime($group) < strtotime(substr($product->createdDate, 0, 7))) continue;
+                if(strtotime($date) < strtotime(substr($product->createdDate, 0, 7))) continue;
 
-                $product->monthFinish[$group]  = 0;
-                $product->monthCreated[$group] = 0;
+                $product->monthFinish[$date]  = 0;
+                $product->monthCreated[$date] = 0;
                 if(!empty($monthFinish))
                 {
                     foreach($monthFinish as $story)
                     {
-                        if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthFinish[$group] = $story['value'];
+                        if($date == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthFinish[$date] = $story['value'];
                     }
                 }
                 if(!empty($monthCreated))
                 {
                     foreach($monthCreated as $story)
                     {
-                        if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthCreated[$group] = $story['value'];
+                        if($date == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthCreated[$date] = $story['value'];
                     }
                 }
             }
@@ -2488,12 +2488,12 @@ class blockZen extends block
         /* 获取最近6个月的年月数组组合。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
         $this->loadModel('metric');
@@ -2504,19 +2504,19 @@ class blockZen extends block
         $monthFinishedBug   = $this->metric->getResultByCode('count_of_monthly_fixed_bug',      array('year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取月度解决Bug数。
 
         /* 重新组装度量项数据为年月和数据的数组。 */
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $doneStoryEstimate[$group] = 0;
-            $doneStoryCount[$group]    = 0;
-            $createStoryCount[$group]  = 0;
-            $fixedBugCount[$group]     = 0;
-            $createBugCount[$group]    = 0;
+            $doneStoryEstimate[$date] = 0;
+            $doneStoryCount[$date]    = 0;
+            $createStoryCount[$date]  = 0;
+            $fixedBugCount[$date]     = 0;
+            $createBugCount[$date]    = 0;
 
             if(!empty($monthFinishedScale))
             {
                 foreach($monthFinishedScale as $scale)
                 {
-                    if($group == "{$scale['year']}-{$scale['month']}") $doneStoryEstimate[$group] = $scale['value'];
+                    if($date == "{$scale['year']}-{$scale['month']}") $doneStoryEstimate[$date] = $scale['value'];
                 }
             }
 
@@ -2524,7 +2524,7 @@ class blockZen extends block
             {
                 foreach($monthCreatedStory as $story)
                 {
-                    if($group == "{$story['year']}-{$story['month']}") $doneStoryCount[$group] = $story['value'];
+                    if($date == "{$story['year']}-{$story['month']}") $doneStoryCount[$date] = $story['value'];
                 }
             }
 
@@ -2532,7 +2532,7 @@ class blockZen extends block
             {
                 foreach($monthFinishedStory as $story)
                 {
-                    if($group == "{$story['year']}-{$story['month']}") $createStoryCount[$group] = $story['value'];
+                    if($date == "{$story['year']}-{$story['month']}") $createStoryCount[$date] = $story['value'];
                 }
             }
 
@@ -2540,7 +2540,7 @@ class blockZen extends block
             {
                 foreach($monthCreatedBug as $bug)
                 {
-                    if($group == "{$bug['year']}-{$bug['month']}") $fixedBugCount[$group] = $bug['value'];
+                    if($date == "{$bug['year']}-{$bug['month']}") $fixedBugCount[$date] = $bug['value'];
                 }
             }
 
@@ -2548,7 +2548,7 @@ class blockZen extends block
             {
                 foreach($monthFinishedBug as $bug)
                 {
-                    if($group == "{$bug['year']}-{$bug['month']}") $createBugCount[$group] = $bug['value'];
+                    if($date == "{$bug['year']}-{$bug['month']}") $createBugCount[$date] = $bug['value'];
                 }
             }
         }
@@ -2642,12 +2642,12 @@ class blockZen extends block
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
         $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
@@ -2658,17 +2658,17 @@ class blockZen extends block
         $unresovledBugs = isset($activatedBugGroup[$productID]['value']) ? $activatedBugGroup[$productID]['value']  : 0;
         $totalBugs      = isset($effectiveBugGroup[$productID]['value']) ? $effectiveBugGroup[$productID]['value']  : 0;
         $resolvedRate   = isset($bugFixedRate[$productID]['value'])      ? $bugFixedRate[$productID]['value'] * 100 : 0;
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $activateBugs[$group] = 0;
-            $resolveBugs[$group]  = 0;
-            $closeBugs[$group]    = 0;
+            $activateBugs[$date] = 0;
+            $resolveBugs[$date]  = 0;
+            $closeBugs[$date]    = 0;
 
             if(!empty($monthCreatedBugGroup))
             {
                 foreach($monthCreatedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $activateBugs[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $activateBugs[$date] = $data['value'];
                 }
             }
 
@@ -2676,7 +2676,7 @@ class blockZen extends block
             {
                 foreach($monthClosedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $closeBugs[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $closeBugs[$date] = $data['value'];
                 }
             }
         }
@@ -2841,12 +2841,12 @@ class blockZen extends block
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
         $monthFinish  = $this->metric->getResultByCode('count_of_monthly_finished_story_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
         $monthCreated = $this->metric->getResultByCode('count_of_monthly_created_story_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)));
@@ -2893,22 +2893,22 @@ class blockZen extends block
 
         /* 将按照产品分组的统计数据放入产品列表中。 */
         /* Place statistical data grouped by product into the product list. */
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $product->monthFinish[$group]  = 0;
-            $product->monthCreated[$group] = 0;
+            $product->monthFinish[$date]  = 0;
+            $product->monthCreated[$date] = 0;
             if(!empty($monthFinish))
             {
                 foreach($monthFinish as $story)
                 {
-                    if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthFinish[$group] = $story['value'];
+                    if($date == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthFinish[$date] = $story['value'];
                 }
             }
             if(!empty($monthCreated))
             {
                 foreach($monthCreated as $story)
                 {
-                    if($group == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthCreated[$group] = $story['value'];
+                    if($date == "{$story['year']}-{$story['month']}" && $productID == $story['product']) $product->monthCreated[$date] = $story['value'];
                 }
             }
         }
@@ -2946,12 +2946,12 @@ class blockZen extends block
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
         $monthCreatedBugGroup = $this->metric->getResultByCode('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months))); // 从度量项获取每月的激活Bug数。
@@ -2965,17 +2965,17 @@ class blockZen extends block
         $unresovledBugs = isset($activatedBugGroup[$productID]['value']) ? $activatedBugGroup[$productID]['value']  : 0;
         $totalBugs      = isset($effectiveBugGroup[$productID]['value']) ? $effectiveBugGroup[$productID]['value']  : 0;
         $resolvedRate   = isset($bugFixedRate[$productID]['value'])      ? $bugFixedRate[$productID]['value'] * 100 : 0;
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $activateBugs[$group] = 0;
-            $resolveBugs[$group]  = 0;
-            $closeBugs[$group]    = 0;
+            $activateBugs[$date] = 0;
+            $resolveBugs[$date]  = 0;
+            $closeBugs[$date]    = 0;
 
             if(!empty($monthCreatedBugGroup))
             {
                 foreach($monthCreatedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $activateBugs[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $activateBugs[$date] = $data['value'];
                 }
             }
 
@@ -2983,7 +2983,7 @@ class blockZen extends block
             {
                 foreach($monthClosedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $closeBugs[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $closeBugs[$date] = $data['value'];
                 }
             }
         }
@@ -3102,12 +3102,12 @@ class blockZen extends block
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
         $months = array();
-        $groups = array();
+        $dates  = array();
         for($i = 5; $i >= 0; $i --)
         {
             $years[]  = date('Y',   strtotime("first day of -{$i} month"));
             $months[] = date('m',   strtotime("first day of -{$i} month"));
-            $groups[] = date('Y-m', strtotime("first day of -{$i} month"));
+            $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
         $this->loadModel('metric');
@@ -3125,20 +3125,20 @@ class blockZen extends block
         $fixedBugCount     = array();
         $createBugCount    = array();
         $releaseCount      = array();
-        foreach($groups as $group)
+        foreach($dates as $date)
         {
-            $doneStoryEstimate[$group] = 0;
-            $doneStoryCount[$group]    = 0;
-            $createStoryCount[$group]  = 0;
-            $fixedBugCount[$group]     = 0;
-            $createBugCount[$group]    = 0;
-            $releaseCount[$group]      = 0;
+            $doneStoryEstimate[$date] = 0;
+            $doneStoryCount[$date]    = 0;
+            $createStoryCount[$date]  = 0;
+            $fixedBugCount[$date]     = 0;
+            $createBugCount[$date]    = 0;
+            $releaseCount[$date]      = 0;
 
             if(!empty($monthStroyScaleGroup))
             {
                 foreach($monthStroyScaleGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $doneStoryEstimate[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $doneStoryEstimate[$date] = $data['value'];
                 }
             }
 
@@ -3146,35 +3146,35 @@ class blockZen extends block
             {
                 foreach($monthCreatedStroyGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $createStoryCount[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $createStoryCount[$date] = $data['value'];
                 }
             }
             if(!empty($monthFinishedStoryGroup))
             {
                 foreach($monthFinishedStoryGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $doneStoryCount[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $doneStoryCount[$date] = $data['value'];
                 }
             }
             if(!empty($monthCreatedBugGroup))
             {
                 foreach($monthCreatedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $createBugCount[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $createBugCount[$date] = $data['value'];
                 }
             }
             if(!empty($monthFixedBugGroup))
             {
                 foreach($monthFixedBugGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $fixedBugCount[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $fixedBugCount[$date] = $data['value'];
                 }
             }
             if(!empty($monthCreatedReleaseGroup))
             {
                 foreach($monthCreatedReleaseGroup as $data)
                 {
-                    if($group == "{$data['year']}-{$data['month']}") $releaseCount[$group] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}") $releaseCount[$date] = $data['value'];
                 }
             }
         }

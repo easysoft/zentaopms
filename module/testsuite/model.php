@@ -268,21 +268,6 @@ class testsuiteModel extends model
     }
 
     /**
-     * 删除套件和所有的关联用例。
-     * Delete suite and all assiociated use cases.
-     *
-     * @param  int    $suiteID
-     * @access public
-     * @return bool
-     */
-    public function deleteSuiteByID(int $suiteID): bool
-    {
-        parent::delete(TABLE_TESTSUITE, $suiteID);
-        $this->dao->delete()->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->exec();
-        return !dao::isError();
-    }
-
-    /**
      * 判断操作是否可以点击。
      * Judge an action is clickable or not.
      *
