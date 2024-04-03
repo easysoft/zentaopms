@@ -2337,6 +2337,13 @@ class commonModel extends model
                 $actionData = $config->{$moduleName}->actionList[$action];
                 if($isInModal && !empty($actionData['notInModal'])) continue;
 
+                if(isset($actionData['data-app']) && $actionData['data-app'] == 'my') $actionData['data-app'] = $this->app->tab;
+                if($isInModal && !isset($actionData['data-target']) && isset($actionData['data-toggle']) && $actionData['data-toggle'] == 'modal')
+                {
+                    $actionData['data-load'] = 'modal';
+                    unset($actionData['data-toggle']);
+                }
+
                 if(isset($actionData['items']) && is_array($actionData['items']))
                 {
                     foreach($actionData['items'] as $key => $itemAction)

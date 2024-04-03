@@ -13,11 +13,12 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
-jsVar('bugID',     $bug->id);
-jsVar('productID', $bug->product);
-jsVar('branchID',  $bug->branch);
+jsVar('bugID',            $bug->id);
+jsVar('productID',        $bug->product);
+jsVar('branchID',         $bug->branch);
 jsVar('errorNoExecution', $lang->bug->noExecution);
 jsVar('errorNoProject',   $lang->bug->noProject);
+jsVar('isInModal',        isInModal());
 
 $isInModal    = isInModal();
 $canCreateBug = hasPriv('bug', 'create');

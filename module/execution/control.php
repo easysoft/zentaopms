@@ -1723,6 +1723,7 @@ class execution extends control
         $uri     = $this->app->getURI(true);
         $groupBy = empty($groupBy) ? 'default' : $groupBy;
         $this->session->set('taskList', $uri, 'execution');
+        $this->session->set('storyList', $uri, 'storyList');
         $this->session->set('bugList',  $uri, 'qa');
         $this->session->set('taskSearchValue', '');
         $this->session->set('execGroupBy', $groupBy);

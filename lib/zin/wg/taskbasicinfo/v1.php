@@ -20,17 +20,24 @@ class taskBasicInfo extends wg
 
     protected function getModuleItems(object $task, null|bool|object $product): array
     {
-        $modulePath = $this->prop('modulePath', data('modulePath'));
-        $items      = array();
+        $isInModal        = isInModal();
+        $canBrowseProduct = !$isInModal && common::hasPriv('product', 'browse');
+        $canViewTasks     = !$isInModal && common::hasPriv('execution', 'task');
+        $modulePath       = $this->prop('modulePath', data('modulePath'));
+        $items            = array();
         if($modulePath)
         {
             if($product)
             {
-                $items[] = array('text' => $product->name, 'url' => createLink('product', 'browse', "productID=$product->id"));
+                $item = array('text' => $product->name);
+                if($canBrowseProduct) $item['url'] = createLink('product', 'browse', "productID=$product->id");
+                $items[] = $item;
             }
             foreach($modulePath as $key => $module)
             {
-                $items[] = array('text' => $module->name, 'url' => createLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id"));
+                $item = array('text' => $module->name);
+                if($canBrowseProduct) $item['url'] = createLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id");
+                $items[] = $item;
             }
         }
         if(!$items) $items = array('/');
@@ -46,20 +53,19 @@ class taskBasicInfo extends wg
 
         $product    = $this->prop('product', data('product'));
         $execution  = $this->prop('execution', data('execution'));
-        $users   = $this->prop('users', data('users'));
-        $fromBug = $this->prop('fromBug', data('fromBug'));
+        $users      = $this->prop('users', data('users'));
+        $fromBug    = $this->prop('fromBug', data('fromBug'));
         $statusText = $this->prop('statusText', $task->status);
 
-        $items      = array();
-
+        $items = array();
         if($execution->multiple)
         {
-            $items[$lang->task->execution] = array
-            (
-                'control' => 'link',
-                'url' => createLink('execution', 'view', "executionID=$execution->id"),
-                'text' => $execution->name
-            );
+            $items[$lang->task->execution] = array('control' => 'text', 'text' => $execution->name, 'title' => $execution->name);
+            if(!isInModal())
+            {
+                $items[$lang->task->execution]['control'] = 'link';
+                $items[$lang->task->execution]['url']     = createLink('execution', 'view', "executionID=$execution->id");
+            }
         }
 
         $items[$lang->task->module] = array

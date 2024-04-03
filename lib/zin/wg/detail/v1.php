@@ -51,6 +51,9 @@ class detail extends wg
         /* 父级标题链接。 */
         'parentUrl'  => '?string',
 
+        /* 父级标题属性。 */
+        'parentTitleProps'  => '?array',
+
         /* 标题，如果不指定则尝试使用当前页面上的 `${$objectType}->title` 或 `${$objectType}->name` 的值，例如 `$story->title`、`$task->name` 。 */
         'title'      => '?string',
 
@@ -186,7 +189,7 @@ CSS;
 
     protected function buildTitle()
     {
-        list($object, $objectID, $title, $color, $objectType, $parent, $parentID, $parentUrl, $parentTitle, $parentType) = $this->prop(array('object', 'objectID', 'title', 'color', 'objectType', 'parent', 'parentID', 'parentUrl', 'parentTitle', 'parentType'));
+        list($object, $objectID, $title, $color, $objectType, $parent, $parentID, $parentUrl, $parentTitle, $parentType, $parentTitleProps) = $this->prop(array('object', 'objectID', 'title', 'color', 'objectType', 'parent', 'parentID', 'parentUrl', 'parentTitle', 'parentType', 'parentTitleProps'));
         $titleBlock = $this->block('title');
 
         return new entityTitle
@@ -204,6 +207,7 @@ CSS;
             set::parentUrl($parentUrl),
             set::parentTitle($parentTitle),
             set::parentType($parentType),
+            set::parentTitleProps($parentTitleProps),
             set::joinerClass('text-lg'),
             $titleBlock
         );

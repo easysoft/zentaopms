@@ -161,6 +161,7 @@ $config->task->actionList['view']['hint']     = $lang->task->parent;
 $config->task->actionList['view']['text']     = $lang->task->parent;
 $config->task->actionList['view']['url']      = helper::createLink('task', 'view', 'taskID={parent}');
 $config->task->actionList['view']['showText'] = true;
+$config->task->actionList['view']['data-app'] = $app->tab;
 
 $config->task->actionList['cancel']['icon']        = 'ban-circle';
 $config->task->actionList['cancel']['hint']        = $lang->task->cancel;

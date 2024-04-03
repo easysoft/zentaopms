@@ -31,7 +31,7 @@ if(!$isInModal && hasPriv('task', 'create', $task))
 $config->task->actionList['batchCreate']['hint'] = $config->task->actionList['batchCreate']['text'] = $lang->task->children;
 $actions    = !$task->deleted ? $this->loadModel('common')->buildOperateMenu($task) : array();
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
-if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
+if(!empty($actions)) $actions = array_merge($actions['mainActions'], array('type' => 'divider'), $actions['suffixActions']);
 if(!$hasDivider) unset($actions['type']);
 foreach($actions as $key => $action)
 {
@@ -154,6 +154,7 @@ detail
     (
         set::parentTitle($task->parentName),
         set::parentUrl(createLink('task', 'view', "taskID={$task->parent}")),
+        set::parentTitleProps(array('data-load' => 'modal')),
         to::title(to::leading(label(setClass('gray-pale rounded-full'), $lang->task->childrenAB)))
     ) : null,
     set::urlFormatter(array('{id}' => $task->id, '{parent}' => $task->parent, '{execution}' => $task->execution)),
