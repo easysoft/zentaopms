@@ -66,7 +66,16 @@ foreach($repos as $repo)
 {
     /* Set the url and check status for visiting the repo. */
     $repo->actions[0]['disabled'] = strpos($repo->path, 'http') === false;
-    $repo->actions[0]['url'] = $repo->path;
+    $repo->actions[0]['url']      = $repo->path;
+    if(in_array($repo->SCM, array('Gogs', 'Gitea')))
+    {
+        $resp = $this->loadModel('pipeline')->getByID((int)$repo->serviceHost);
+        if(!empty($resp->url))
+        {
+            $repo->actions[0]['disabled'] = false;
+            $repo->actions[0]['url']      = $resp->url . '/' . $repo->serviceProject;
+        }
+    }
 }
 
 \zin\featureBar
