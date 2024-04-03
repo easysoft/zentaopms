@@ -236,7 +236,7 @@ class control extends baseControl
         if(!class_exists($extensionClass)) return false;
 
         /* 实例化扩展类。Create an instance of the extension class and return it. */
-        $extensionObject = new $extensionClass;
+        $extensionObject = new $extensionClass();
         if($type == 'model') $extensionClass = str_replace(ucfirst($type), '', $extensionClass);
         $this->$extensionClass = $extensionObject;
         $this->$extensionClass->view = $this->view;
