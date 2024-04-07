@@ -943,7 +943,7 @@ $lang->task->methodOrder[100] = 'editEffort';
 $lang->task->methodOrder[105] = 'deleteWorkhour';
 $lang->task->methodOrder[110] = 'report';
 $lang->task->methodOrder[115] = 'batchChangeModule';
-$lang->task->methodOrder[120] = 'codeBranch';
+$lang->task->methodOrder[120] = 'createBranch';
 $lang->task->methodOrder[125] = 'unlinkBranch';
 
 /* Build. */
@@ -1031,7 +1031,7 @@ $lang->bug->methodOrder[95]  = 'delete';
 $lang->bug->methodOrder[100] = 'linkBugs';
 $lang->bug->methodOrder[105] = 'batchChangeModule';
 $lang->bug->methodOrder[110] = 'batchChangeBranch';
-$lang->bug->methodOrder[115] = 'codeBranch';
+$lang->bug->methodOrder[115] = 'createBranch';
 $lang->bug->methodOrder[120] = 'unlinkBranch';
 
 /* Test case. */
@@ -1317,7 +1317,6 @@ $lang->resource->repo->linkTask        = 'linkTask';
 $lang->resource->repo->unlink          = 'unlink';
 $lang->resource->repo->import          = 'importAction';
 $lang->resource->repo->createRepo      = 'createRepoAction';
-$lang->resource->repo->createBranch    = 'createBranchAction';
 
 $lang->repo->methodOrder[5]   = 'create';
 $lang->repo->methodOrder[10]  = 'edit';
@@ -1339,7 +1338,6 @@ $lang->repo->methodOrder[90]  = 'linkTask';
 $lang->repo->methodOrder[95]  = 'unlink';
 $lang->repo->methodOrder[100] = 'import';
 $lang->repo->methodOrder[105] = 'createRepo';
-$lang->repo->methodOrder[110] = 'createBranch';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';
