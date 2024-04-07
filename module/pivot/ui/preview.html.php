@@ -68,7 +68,7 @@ sidebar
         set::titleShow(false),
         to::footer
         (
-            $config->edition == 'open' ? div
+            $this->config->edition == 'open' ? div
             (
                 set::width(240),
                 setClass('bg-canvas px-4 py-2 module-menu shadow'),

@@ -78,7 +78,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                     set::text($lang->pivot->showPivot),
                     on::click("toggleShowMode('group')"),
                 ),
-                $config->edition != 'open' ? array(
+                $this->config->edition != 'open' ? array(
                 (hasPriv('pivot', 'design') && $clickable) ? item(set(array
                 (
                     'text'  => $lang->pivot->designAB,
