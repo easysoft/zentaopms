@@ -280,9 +280,11 @@ $lang->repo->errorLang[1] = '分支名已存在。';
 $lang->repo->errorLang[2] = '分支名已存在。';
 $lang->repo->errorLang[3] = '权限不足。';
 $lang->repo->errorLang[4] = "分支名不能包含 ' ', '~', '^'或':'。";
+$lang->repo->errorLang[5] = '分支创建失败';
 
 $lang->repo->apiError[0] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
 $lang->repo->apiError[1] = 'Branch is exists';
 $lang->repo->apiError[2] = 'branch .* already exists';
 $lang->repo->apiError[3] = 'Forbidden';
 $lang->repo->apiError[4] = 'cannot have ASCII control characters';
+$lang->repo->apiError[5] = 'Created fail';

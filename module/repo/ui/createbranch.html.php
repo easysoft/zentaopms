@@ -10,9 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-to::header(false);
-to::main(false);
-
 jsVar('module', $objectType);
 jsVar('linkParams', "objectID={$objectID}&repoID=%s");
 modalHeader
@@ -74,6 +71,23 @@ empty($linkedBranches) ? null : div
         $branchDom
     )
 );
+
+if(empty($linkedBranches) && !$canCreate)
+{
+    div
+    (
+        setClass('canvas text-center py-2'),
+        p
+        (
+            setClass('py-2 my-2'),
+            span
+            (
+                setClass('text-gray'),
+                $lang->noData
+            )
+        )
+    );
+}
 
 $canCreate ? formPanel
 (
