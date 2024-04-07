@@ -58,6 +58,9 @@ if(empty($config->repo->maintain->showRepoPath))
     $config->repo->dtable->fieldList['lastSubmit']['width'] = '0.2';
 }
 
+/* Set 'repo-visit' action as one open method, so any user can use it. */
+if(empty($config->repo->maintain->disableVisit)) $config->openMethods[] = 'repo.visit';
+
 $repos         = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
 $queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
 
