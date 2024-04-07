@@ -13,3 +13,5 @@ $lang->screen->globalFilter  = '全局筛选器';
 
 $lang->screen->belong    = '所属';
 $lang->screen->dateRange = '日期范围';
+
+$lang->screen->noMetricData = '度量项已下架或删除';
