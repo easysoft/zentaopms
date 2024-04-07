@@ -99,7 +99,7 @@ $fields->field('desc')
 
 $fields->field('PO')->foldable()->required(strpos($requiredFields, ",PO,") !== false)->items(data('poUsers'))->value(data('execution.PO'));
 $fields->field('QD')->foldable()->required(strpos($requiredFields, ",QD,") !== false)->items(data('qdUsers'))->value(data('execution.QD'));
-$fields->field('PM')->foldable()->required(strpos($requiredFields, ",PM,") !== false)->items(data('pmUsers'))->value(data('execution.PM'));
+$fields->field('PM')->foldable()->required(strpos($requiredFields, ",PM,") !== false)->items(data('pmUsers'))->value(data('execution.PM'))->label($showExecutionExec ? $lang->execution->execPM : $lang->execution->PM);
 $fields->field('RD')->foldable()->required(strpos($requiredFields, ",RD,") !== false)->items(data('rdUsers'))->value(data('execution.RD'));
 
 $fields->field('teamName')
