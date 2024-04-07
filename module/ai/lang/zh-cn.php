@@ -560,7 +560,7 @@ $lang->ai->models->concealTip     = '完整信息在编辑时可见';
 $lang->ai->models->upgradeBiz     = '更多AI功能，尽在<a target="_blank" href="https://www.zentao.net/page/enterprise.html" class="text-blue">企业版</a>！';
 $lang->ai->models->noModelError   = '暂无可用的语言模型，请联系管理员配置。';
 $lang->ai->models->noModels       = '暂时没有语言模型，添加模型并配置相关参数后可以使用 AI 相关功能。';
-$lang->ai->models->confirmDelete  = '您确认要删除该语言模型吗？';
+$lang->ai->models->confirmDelete  = '删除模型后，关联的AI提词、小程序及AI会话将会无法使用，是否确认删除？';
 $lang->ai->models->confirmDisable = '您确认要禁用该语言模型吗？';
 $lang->ai->models->default        = '默认';
 $lang->ai->models->defaultTip     = '默认语言模型（第一个可用的语言模型）将会用于运行未指定语言模型的提词、小程序，也将会用于聊天。';
