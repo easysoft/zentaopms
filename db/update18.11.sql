@@ -292,5 +292,5 @@ UPDATE `zt_workflowfield` SET `control` = 'input', `options` = '' WHERE `module`
 ALTER TABLE `zt_relationoftasks` DROP INDEX `relationoftasks`;
 ALTER TABLE `zt_relationoftasks` ADD INDEX `relationoftasks`(`execution` ASC, `task` ASC);
 
-UPDATE `zt_metric` SET `unit` = 'count' WHERE `code` = 'count_of_pending_issue';
-update `zt_metric` set `definition` = '项目的执行个数求和\r\n状态为已关闭\r\n过滤已删除的执行\r\n过滤已删除的项目' where `code` = 'count_of_closed_execution_in_project';
+UPDATE `zt_metric` SET `unit` = 'count' WHERE `code` IN ('count_of_pipeline','count_of_artifactrepo','count_of_node','count_of_application','count_of_pending_issue','count_of_pending_mergeRequest','count_of_pending_deployment');
+UPDATE `zt_metric` SET `definition` = '项目的执行个数求和\r\n状态为已关闭\r\n过滤已删除的执行\r\n过滤已删除的项目' WHERE `code` = 'count_of_closed_execution_in_project';
