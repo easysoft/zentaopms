@@ -13,8 +13,9 @@ namespace zin;
 $isCustomUnit = !isset($this->lang->metric->unitList[$metric->unit]);
 $isDisabled   = $metric->stage == 'wait' && $metric->builtin === '1' && !$this->metric->isOldMetric($metric);
 $hasImplementPriv = hasPriv('metric', 'implement');
+$showAfterEdit = $viewType == 'browse' && !$isDisabled && $hasImplementPriv;
 
-$afterEdit = $isDisabled || !$hasImplementPriv ? '' : formGroup
+$afterEdit = $showAfterEdit ? formGroup
 (
     set::width('1/2'),
     set::name('afterEdit'),
@@ -22,7 +23,7 @@ $afterEdit = $isDisabled || !$hasImplementPriv ? '' : formGroup
     set::control(array('type' => 'radioList', 'inline' => true)),
     set::items($lang->metric->afterCreateList),
     set::value('implement')
-);
+) : null;
 
 formPanel
 (
@@ -213,6 +214,6 @@ formPanel
         set::placeholder($lang->metric->definitionTip),
         set::disabled($isDisabled)
     ),
-    $viewType == 'browse' ? $afterEdit : null,
+    $afterEdit,
     set::submitBtnText($lang->save)
 );
