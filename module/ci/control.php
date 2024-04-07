@@ -152,8 +152,8 @@ class ci extends control
             $testtask->product     = $productID;
             $testtask->name        = !empty($post->name) ? $post->name : sprintf($this->lang->testtask->titleOfAuto, date('Y-m-d H:i:s'));
             $testtask->owner       = $this->app->user->account;
-            $testtask->project     = $lastProject->project;
-            $testtask->execution   = $lastProject->id;
+            $testtask->project     = $lastProject ? $lastProject->project : 0;
+            $testtask->execution   = $lastProject ? $lastProject->id : 0;
             $testtask->build       = 'trunk';
             $testtask->auto        = strtolower($testType);
             $testtask->begin       = date('Y-m-d');
