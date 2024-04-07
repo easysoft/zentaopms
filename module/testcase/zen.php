@@ -675,15 +675,35 @@ class testcaseZen extends testcase
         $cases = array();
         foreach($scenes as $scene)
         {
-            $scene->hasCase = !empty($scene->cases);
+            $scene->hasCase = false;
 
-            $cases[] = $scene;
+            if(!empty($scene->children))
+            {
+                $cases = array_merge($cases, $this->preProcessScenesForBrowse($scene->children));
+                foreach($scene->children as $child)
+                {
+                    /*
+                     * 如果子场景有用例，那么父场景也有用例。
+                     * If the child scene has a use case, the parent scene also has a use case.
+                     */
+                    if($child->hasCase)
+                    {
+                        $scene->hasCase = true;
+                        break;
+                    }
+                }
+            }
+            if(!empty($scene->cases))
+            {
+                $cases = array_merge($cases, $scene->cases);
 
-            if(!empty($scene->children)) $cases = array_merge($cases, $this->preProcessScenesForBrowse($scene->children));
-            if(!empty($scene->cases))    $cases = array_merge($cases, $this->preProcessScenesForBrowse($scene->cases));
+                $scene->hasCase = true;
+            }
 
             unset($scene->children);
             unset($scene->cases);
+
+            $cases[] = $scene;
         }
         return $cases;
     }
