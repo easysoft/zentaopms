@@ -324,7 +324,23 @@ class installZen extends install
         \$config->db->prefix    = getenv('ZT_DB_PREFIX');
         \$config->webRoot       = getWebRoot();
         \$config->default->lang = getenv('ZT_DEFAULT_LANG');
-        EOT;
+
+        \$hasSlaveDB = (string)getenv('ENABLE_DB_SLAVE');
+        if(\$hasSlaveDB)
+        {
+            \$slaveDB = new stdclass();
+            \$slaveDB->host        = getenv('ZT_SLAVE_DB_HOST');
+            \$slaveDB->port        = getenv('ZT_SLAVE_DB_PORT');
+            \$slaveDB->name        = getenv('ZT_SLAVE_DB_NAME');
+            \$slaveDB->user        = getenv('ZT_SLAVE_DB_USER');
+            \$slaveDB->password    = getenv('ZT_SLAVE_DB_PASSWORD');
+            \$slaveDB->driver      = getenv('ZT_DB_DRIVER');
+            \$slaveDB->encoding    = getenv('ZT_DB_ENCODING');
+            \$slaveDB->prefix      = getenv('ZT_DB_PREFIX');
+            \$slaveDB->persistant  = $this->config->db->persistant;
+            \$slaveDB->strictMode  = $this->config->db->strictMode;
+            \$config->slaveDBList  = array(\$slaveDB);
+ EOT;
 
         if($customSession) $configContent .= "\n\$config->customSession = true;";
 
