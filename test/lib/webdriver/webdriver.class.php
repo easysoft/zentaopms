@@ -213,6 +213,19 @@ class webdriver
         return $this->driver->manage()->deleteAllCookies();
     }
 
+    /**
+     * Wait.
+     *
+     * @param  int    $seconds
+     * @access public
+     * @return object
+     */
+    public function wait($seconds = 3)
+    {
+        sleep($seconds);
+
+        return $this;
+    }
 
     /**
      * Close browser.
@@ -368,7 +381,8 @@ class dom
     {
         $xpath = "//li[@data-app='$appTab']/a";
         $this->waitElement($xpath)->getElement($xpath)->click();
-        $this->wait(1)->switchToIframe("appIframe-{$appTab}");
+        sleep(1);
+        $this->switchToIframe("appIframe-{$appTab}");
 
         return $this;
     }
@@ -408,11 +422,13 @@ class dom
      * Get tips in page form.
      *
      * @access public
+     * @param  int     waitTime
      * @return array
      */
-    public function getFormTips()
+    public function getFormTips($waitTime = 1)
     {
-        $this->wait(1)->getElementList('//div[contains(@class, "form-tip")]');
+        sleep($waitTime);
+        $this->getElementList('//div[contains(@class, "form-tip")]');
 
         $tips = array();
         foreach($this->element as $element)
@@ -783,20 +799,6 @@ class dom
     }
 
     /**
-     * Wait.
-     *
-     * @param  int    $seconds
-     * @access public
-     * @return object
-     */
-    public function wait($seconds = 3)
-    {
-        sleep($seconds);
-
-        return $this;
-    }
-
-    /**
      * Operate element in modal.
      *
      * @param  string    $type
@@ -929,7 +931,7 @@ class dom
     {
         $picker = $this->element->findElement(WebDriverBy::xpath('parent::div'));
         $picker->click();
-        $this->wait(1);
+        sleep(1);
 
         try
         {
@@ -942,7 +944,7 @@ class dom
         $pickerInput->click();
         $pickerInput->sendKeys(trim($value));
 
-        $this->wait(1);
+        sleep(1);
 
         $pickerID = substr($picker->getAttribute('id'), 5);
         $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
@@ -961,14 +963,14 @@ class dom
     {
         $picker = $this->element->findElement(WebDriverBy::xpath('parent::div'));
         $picker->click();
-        $this->wait(1);
+        sleep(1);
 
         foreach($values as $value)
         {
             $pickerInput = $picker->findElement(WebDriverBy::xpath('//*[@class="picker-multi-selections"]//input'));
             $pickerInput->click();
             $pickerInput->sendKeys(trim($value));
-            $this->wait(1);
+            sleep(1);
 
             $pickerID = substr($picker->getAttribute('id'), 5);
             $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
@@ -992,7 +994,7 @@ class dom
 
         if($type == 'date')
         {
-            $this->wait(1);
+            sleep(1);
             return $picker->findElement(WebDriverBy::xpath('/input'))->sendKeys($value);
         }
         elseif($type == 'menu')
@@ -1051,11 +1053,12 @@ class dom
             $valueXpath    = $index % 2 === 0 ? $rightSearchGroup . "/tr[$trIndex]/td[4]" : $leftSearchGroup . "/tr[$trIndex]/td[4]";
 
             $this->getElement($fieldXpath)->picker($field);
-            $this->wait(1)->getElement($operatorXpath)->click();
+            sleep(1);
+            $this->getElement($operatorXpath)->click();
             $operatorID = $this->element->getAttribute('id');
             $operatorID = substr($operatorID, 5);
             $this->getElement("//*[@id='pick-pop-$operatorID']/menu/menu//*[contains(text(), '$operator')]")->click();
-            $this->wait(1);
+            sleep(1);
 
             $this->getElement($valueXpath . '/*[1]')->getTagName();
             $valueTage = $this->element->getTagName();
