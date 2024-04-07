@@ -1535,10 +1535,9 @@ class pivotModel extends model
     public function filterWithSelectFields($fieldSettings, $selectFields)
     {
         $selectFieldSettings = array();
-        foreach($fieldSettings as $fieldSetting)
+        foreach($fieldSettings as $key => $fieldSetting)
         {
-            $field = zget($fieldSetting, 'field', '');
-            if(in_array($field, $selectFields)) $selectFieldSettings[$field] = $fieldSetting;
+            if(in_array($key, $selectFields)) $selectFieldSettings[$key] = $fieldSetting;
         }
 
         return $selectFieldSettings;
