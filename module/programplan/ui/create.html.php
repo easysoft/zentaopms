@@ -207,6 +207,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $item->name         = $plan->name;
         $item->code         = $plan->code;
         $item->PM           = $plan->PM;
+        $item->status       = $plan->status;
         $item->percent      = $plan->percent;
         $item->attribute    = $plan->attribute;
         $item->acl          = $plan->acl;
@@ -230,11 +231,12 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
 };
 
 /* ZIN: layout. */
-jsVar('projectID', $project->id);
-jsVar('productID', $productID);
-jsVar('planID',    $planID);
-jsVar('type',      $executionType);
-jsVar('project',   $project);
+jsVar('projectID',    $project->id);
+jsVar('productID',    $productID);
+jsVar('planID',       $planID);
+jsVar('type',         $executionType);
+jsVar('project',      $project);
+jsVar('cropStageTip', $lang->programplan->cropStageTip);
 
 featureBar(li
 (

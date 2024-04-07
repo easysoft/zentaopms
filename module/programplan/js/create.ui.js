@@ -13,6 +13,12 @@ window.onRenderRow = function(row, rowIdx, data)
             $attributePicker.render({disabled: true});
         });
 
+        if(data.hasOwnProperty('status') && data.status != 'wait')
+        {
+            row.find('[data-name=enabled] input').attr('disabled', 'disabled');
+            row.find('[data-name=enabled]').attr('title', cropStageTip);
+        }
+
         if(data.enabled == 'off')
         {
             /* 需要等该行所有input元素加载完再执行changeEnabled方法 */

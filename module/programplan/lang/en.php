@@ -78,6 +78,7 @@ $lang->programplan->emptyEnd         = '『End』should not be blank';
 $lang->programplan->checkBegin       = '『Begin』should be valid date';
 $lang->programplan->checkEnd         = '『End』should be valid date';
 $lang->programplan->methodTip        = "You can choose to continue creating stages or {$lang->executionCommon}/Kanban for work in this stage. It's not supported to further split the {$lang->executionCommon}/Kanban.";
+$lang->programplan->cropStageTip     = "Stages that have already started cannot be cropped";
 
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';

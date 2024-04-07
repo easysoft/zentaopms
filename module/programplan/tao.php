@@ -30,7 +30,7 @@ class programplanTao extends programplanModel
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('1 = 1')
             ->beginIF(!in_array($projectModel, array('waterfallplus', 'ipd')))->andWhere('t1.type')->eq('stage')->fi()
-            ->beginIF($projectModel == 'ipd')->andWhere('t1.enabled')->eq('on')->fi()
+            ->beginIF($projectModel == 'ipd' && $this->app->rawMethod != 'create')->andWhere('t1.enabled')->eq('on')->fi()
             ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($browseType == 'all' || $browseType == 'leaf')->andWhere('t1.project')->eq($executionID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
