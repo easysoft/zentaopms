@@ -16,9 +16,9 @@ $config->program->search['fields']['desc']           = $lang->program->desc;
 
 /* This is an ordered array. */
 $config->program->search['params']['name']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
-$config->program->search['params']['status']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->program->statusList);
 $config->program->search['params']['PM']             = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->program->search['params']['openedDate']     = array('operator' => '=',       'control' => 'date',   'values' => '');
+$config->program->search['params']['status']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->program->statusList);
 $config->program->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->program->search['params']['begin']          = array('operator' => '=',       'control' => 'date',   'values' => '');
 $config->program->search['params']['end']            = array('operator' => '=',       'control' => 'date',   'values' => '');
