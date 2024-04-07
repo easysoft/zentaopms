@@ -300,7 +300,7 @@ class ai extends control
         $models = $this->ai->getLanguageModels('', false);
         $assistants = array_map(function ($assistant) use ($models)
         {
-            $assistant->model = current(array_filter($models, function ($model) use ($assistant)
+            $assistant->modelId = current(array_filter($models, function ($model) use ($assistant)
             {
                 return $model->id == $assistant->modelId;
             }))->name;
