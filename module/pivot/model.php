@@ -2231,21 +2231,6 @@ class pivotModel extends model
     }
 
     /**
-     * Adjust the action is clickable.
-     *
-     * @param  object $pivot
-     * @param  string $action
-     * @static
-     * @access public
-     * @return bool
-     */
-    public static function isClickable($pivot, $action)
-    {
-        if($pivot->builtin) return false;
-        return true;
-    }
-
-    /**
      * Get field options.
      *
      * @param  array  $fieldSettings
