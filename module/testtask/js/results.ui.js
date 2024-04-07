@@ -9,7 +9,7 @@ $(function()
  * @access public
  * @return void
  */
-function setFileModalHeight()
+window.setFileModalHeight = function()
 {
     $($(this).attr('href')).find('.modal-body').css('max-height', ($(this).closest('.modal-content').height() - 35) + 'px');
 }
