@@ -32,6 +32,14 @@ $fnGetTableFieldList = function() use ($config)
 };
 $cols = $fnGetTableFieldList();
 
+$storyCountGroup = array();
+foreach($cols as $field => $col)
+{
+    if(!str_contains($col['group'], 'Count')) continue;
+    $key = str_replace('Count', '', $col['group']);
+    $storyCountGroup[$key][] = $field;
+}
+
 /* Closure function for generating table data. */
 $productStats = initTableData($productStats, $cols, $this->product);
 $fnGenerateTableData = function($productList) use($users)
@@ -70,6 +78,8 @@ $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseTy
 };
 
 jsVar('langSummary', $lang->product->pageSummary);
+jsVar('storyCountGroup', $storyCountGroup);
+jsVar('storyTypeLang', array('epic' => $lang->ERCommon, 'story' => $lang->SRCommon, 'requirement' => $lang->URCommon));
 
 /* ====== Define the page structure with zin widgets ====== */
 featureBar
@@ -128,9 +138,11 @@ dtable
     set::data($fnGenerateTableData($productStats)),
     set::userMap($users),
     set::customCols(true),
+    set::headerHeight(50),
     set::checkable($canBatchEdit),
     set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::orderBy($orderBy),
+    set::onRenderHeaderCell(jsRaw('onRenderHeaderCell')),
     $canBatchEdit ? set::footToolbar
     (
         item

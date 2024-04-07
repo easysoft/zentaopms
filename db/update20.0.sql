@@ -41,3 +41,21 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'enableER', '0');
 
 UPDATE `zt_config` SET `value` = CONCAT(`value`, ',productER') WHERE `key` = 'closedFeatures' AND module = 'common';
+
+ALTER TABLE `zt_product`
+ADD `draftRequirements` mediumint(8) NOT NULL DEFAULT '0' AFTER `reviewer`,
+ADD `activeRequirements` mediumint(8) NOT NULL DEFAULT '0' AFTER `draftRequirements`,
+ADD `changingRequirements` mediumint(8) NOT NULL DEFAULT '0' AFTER `activeRequirements`,
+ADD `reviewingRequirements` mediumint(8) NOT NULL DEFAULT '0' AFTER `changingRequirements`,
+ADD `finishedRequirements` mediumint NOT NULL DEFAULT '0' AFTER `reviewingRequirements`,
+ADD `closedRequirements` mediumint(8) NOT NULL DEFAULT '0' AFTER `finishedRequirements`,
+ADD `totalRequirements` mediumint(8) NOT NULL DEFAULT '0' AFTER `closedRequirements`;
+
+ALTER TABLE `zt_product`
+ADD `draftEpics` mediumint(8) NOT NULL DEFAULT '0' AFTER `reviewer`,
+ADD `activeEpics` mediumint(8) NOT NULL DEFAULT '0' AFTER `draftEpics`,
+ADD `changingEpics` mediumint(8) NOT NULL DEFAULT '0' AFTER `activeEpics`,
+ADD `reviewingEpics` mediumint(8) NOT NULL DEFAULT '0' AFTER `changingEpics`,
+ADD `finishedEpics` mediumint NOT NULL DEFAULT '0' AFTER `reviewingEpics`,
+ADD `closedEpics` mediumint(8) NOT NULL DEFAULT '0' AFTER `finishedEpics`,
+ADD `totalEpics` mediumint(8) NOT NULL DEFAULT '0' AFTER `closedEpics`;

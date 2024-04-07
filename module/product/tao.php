@@ -851,13 +851,29 @@ class productTao extends productModel
         {
             $product = new stdclass();
 
-            $product->draftStories     = isset($productStories[$productID]) ? $productStories[$productID]['draft']     : 0;
-            $product->activeStories    = isset($productStories[$productID]) ? $productStories[$productID]['active']    : 0;
-            $product->changingStories  = isset($productStories[$productID]) ? $productStories[$productID]['changing']  : 0;
-            $product->reviewingStories = isset($productStories[$productID]) ? $productStories[$productID]['reviewing'] : 0;
-            $product->closedStories    = isset($productStories[$productID]) ? $productStories[$productID]['closed']    : 0;
-            $product->finishedStories  = isset($productStories[$productID]) ? $productStories[$productID]['finished']  : 0;
-            $product->totalStories     = isset($productStories[$productID]) ? $productStories[$productID]['total']     : 0;
+            $product->draftEpics       = isset($productStories[$productID]['epic']) ? $productStories[$productID]['epic']['draft']     : 0;
+            $product->activeEpics      = isset($productStories[$productID]['epic']) ? $productStories[$productID]['epic']['active']    : 0;
+            $product->changingEpics    = isset($productStories[$productID]['epic']) ? $productStories[$productID]['epic']['changing']  : 0;
+            $product->reviewingEpics   = isset($productStories[$productID]['epic']) ? $productStories[$productID]['epic']['reviewing'] : 0;
+            $product->closedEpics      = isset($productStories[$productID]['epic']) ? $productStories[$productID]['epic']['closed']    : 0;
+            $product->finishedEpics    = isset($productStories[$productID]['epic']) ? $productStories[$productID]['epic']['finished']  : 0;
+            $product->totalEpics       = isset($productStories[$productID]['epic']) ? $productStories[$productID]['epic']['total']     : 0;
+
+            $product->draftRequirements     = isset($productStories[$productID]['requirement']) ? $productStories[$productID]['requirement']['draft']     : 0;
+            $product->activeRequirements    = isset($productStories[$productID]['requirement']) ? $productStories[$productID]['requirement']['active']    : 0;
+            $product->changingRequirements  = isset($productStories[$productID]['requirement']) ? $productStories[$productID]['requirement']['changing']  : 0;
+            $product->reviewingRequirements = isset($productStories[$productID]['requirement']) ? $productStories[$productID]['requirement']['reviewing'] : 0;
+            $product->closedRequirements    = isset($productStories[$productID]['requirement']) ? $productStories[$productID]['requirement']['closed']    : 0;
+            $product->finishedRequirements  = isset($productStories[$productID]['requirement']) ? $productStories[$productID]['requirement']['finished']  : 0;
+            $product->totalRequirements     = isset($productStories[$productID]['requirement']) ? $productStories[$productID]['requirement']['total']     : 0;
+
+            $product->draftStories     = isset($productStories[$productID]['story']) ? $productStories[$productID]['story']['draft']     : 0;
+            $product->activeStories    = isset($productStories[$productID]['story']) ? $productStories[$productID]['story']['active']    : 0;
+            $product->changingStories  = isset($productStories[$productID]['story']) ? $productStories[$productID]['story']['changing']  : 0;
+            $product->reviewingStories = isset($productStories[$productID]['story']) ? $productStories[$productID]['story']['reviewing'] : 0;
+            $product->closedStories    = isset($productStories[$productID]['story']) ? $productStories[$productID]['story']['closed']    : 0;
+            $product->finishedStories  = isset($productStories[$productID]['story']) ? $productStories[$productID]['story']['finished']  : 0;
+            $product->totalStories     = isset($productStories[$productID]['story']) ? $productStories[$productID]['story']['total']     : 0;
 
             $product->unresolvedBugs = isset($productBugs[$productID]) ? $productBugs[$productID]['unresolved'] : 0;
             $product->closedBugs     = isset($productBugs[$productID]) ? $productBugs[$productID]['closed']     : 0;
@@ -883,26 +899,25 @@ class productTao extends productModel
      */
     protected function getStoryStats(array $productIdList): array
     {
-        $stories = $this->dao->select('product, status, `closedReason`, count(id) AS c')
+        $stories = $this->dao->select('product, status, `closedReason`, count(id) AS c, type')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->beginIF(!empty($productIdList))->andWhere('product')->in($productIdList)->fi()
-            ->andWhere('type')->eq('story')
-            ->groupBy('product, status, `closedReason`')
+            ->groupBy('product, status, `closedReason`, type')
             ->fetchAll();
 
         $productStories = array();
         foreach($stories as $story)
         {
-            if(!isset($productStories[$story->product])) $productStories[$story->product] = array('draft' => 0, 'active' => 0, 'changing' => 0, 'reviewing' => 0, 'finished' => 0, 'closed' => 0, 'total' => 0);
-            if($story->status == 'draft')     $productStories[$story->product]['draft']     += $story->c;
-            if($story->status == 'active')    $productStories[$story->product]['active']    += $story->c;
-            if($story->status == 'changing')  $productStories[$story->product]['changing']  += $story->c;
-            if($story->status == 'reviewing') $productStories[$story->product]['reviewing'] += $story->c;
-            if($story->status == 'closed')    $productStories[$story->product]['closed']    += $story->c;
-            $productStories[$story->product]['total'] += $story->c;
+            if(!isset($productStories[$story->product][$story->type])) $productStories[$story->product][$story->type] = array('draft' => 0, 'active' => 0, 'changing' => 0, 'reviewing' => 0, 'finished' => 0, 'closed' => 0, 'total' => 0);
+            if($story->status == 'draft')     $productStories[$story->product][$story->type]['draft']     += $story->c;
+            if($story->status == 'active')    $productStories[$story->product][$story->type]['active']    += $story->c;
+            if($story->status == 'changing')  $productStories[$story->product][$story->type]['changing']  += $story->c;
+            if($story->status == 'reviewing') $productStories[$story->product][$story->type]['reviewing'] += $story->c;
+            if($story->status == 'closed')    $productStories[$story->product][$story->type]['closed']    += $story->c;
+            $productStories[$story->product][$story->type]['total'] += $story->c;
 
-            if($story->status == 'closed' && $story->closedReason == 'done') $productStories[$story->product]['finished'] += $story->c;
+            if($story->status == 'closed' && $story->closedReason == 'done') $productStories[$story->product][$story->type]['finished'] += $story->c;
         }
 
         return $productStories;

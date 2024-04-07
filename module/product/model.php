@@ -1467,12 +1467,14 @@ class productModel extends model
      */
     public function formatDataForList(object $product, array $users): object
     {
-         $product->type               = 'product';
-         $product->productLine        = $product->lineName;
-         $product->PO                 = !empty($product->PO) ? zget($users, $product->PO) : '';
-         $product->testCaseCoverage   = $product->coverage;
-         $product->storyCompleteRate  = $product->totalStories == 0 ? 0 : round($product->finishedStories / $product->totalStories, 3) * 100;
-         $product->bugFixedRate       = ($product->unresolvedBugs + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unresolvedBugs + $product->fixedBugs), 3) * 100;
+         $product->type                    = 'product';
+         $product->productLine             = $product->lineName;
+         $product->PO                      = !empty($product->PO) ? zget($users, $product->PO) : '';
+         $product->testCaseCoverage        = $product->coverage;
+         $product->epicCompleteRate        = $product->totalEpics == 0 ? 0 : round($product->finishedEpics / $product->totalEpics, 3) * 100;
+         $product->requirementCompleteRate = $product->totalRequirements == 0 ? 0 : round($product->finishedRequirements / $product->totalRequirements, 3) * 100;
+         $product->storyCompleteRate       = $product->totalStories == 0 ? 0 : round($product->finishedStories / $product->totalStories, 3) * 100;
+         $product->bugFixedRate            = ($product->unresolvedBugs + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unresolvedBugs + $product->fixedBugs), 3) * 100;
 
         return $product;
     }
