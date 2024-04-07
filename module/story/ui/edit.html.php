@@ -304,7 +304,7 @@ detailBody
             item
             (
                 set::name($lang->story->estimate),
-                $story->parent >= 0 ? input(set::name('estimate'), set::value($story->estimate)) : $story->estimate
+                $story->isParent == '0' ? input(set::name('estimate'), set::value($story->estimate)) : $story->estimate
             ),
             item
             (

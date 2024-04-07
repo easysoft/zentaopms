@@ -50,11 +50,14 @@ window.renderRowData = function($row, index, story)
         $picker.render(options);
     });
 
-    var $title  = $row.find('.form-batch-input[data-name="title"]');
-    var $module = $row.find('.form-batch-control[data-name="module"]');
-    var $plan   = $row.find('.form-batch-control[data-name="plan"]');
-    var $branch = $row.find('.form-batch-control[data-name="branch"]');
-    var $stage  = $row.find('.form-batch-control[data-name="stage"]');
+    var $title    = $row.find('.form-batch-input[data-name="title"]');
+    var $module   = $row.find('.form-batch-control[data-name="module"]');
+    var $plan     = $row.find('.form-batch-control[data-name="plan"]');
+    var $branch   = $row.find('.form-batch-control[data-name="branch"]');
+    var $stage    = $row.find('.form-batch-control[data-name="stage"]');
+    var $estimate = $row.find('.form-batch-control[data-name="estimate"]');
+
+    if($estimate.length > 0 && story.isParent == '1') $estimate.find('input.form-control').attr('readonly', 'readonly');
 
     if($stage.length > 0)
     {

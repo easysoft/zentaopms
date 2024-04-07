@@ -903,13 +903,14 @@ class storyModel extends model
         if(empty($childrenStatus)) return true;
 
         $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
-        if(isset($oldParentStory->type) && $childStory->type != $oldParentStory->type) return false;
         if(empty($oldParentStory))
         {
             $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($storyID)->exec();
             return true;
         }
         $this->computeEstimate($parentID);
+
+        if(isset($oldParentStory->type) && $childStory->type != $oldParentStory->type) return false;
 
         $status = $oldParentStory->status;
         if(count($childrenStatus) == 1 and current($childrenStatus) == 'closed') $status = current($childrenStatus); // Close parent story.
