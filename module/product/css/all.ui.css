@@ -1,6 +1,1 @@
-[data-col$=Stories] .dtable-cell-content { padding-left: 0; padding-right: 0}
-[data-col$=Epics] .dtable-cell-content { padding-left: 0; padding-right: 0}
-[data-col$=Requirements] .dtable-cell-content { padding-left: 0; padding-right: 0}
-[data-col$=CompleteRate] .dtable-cell-content { padding-left: 0; padding-right: 0}
-#products .absolute {margin: 0px}
-#products .absolute .my-1 {display:none}
+.dtable-header-group { border-left: 1px solid #efefef}
