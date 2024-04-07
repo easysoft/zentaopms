@@ -915,7 +915,7 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/repository/branches");
-        return json_decode(commonModel::http($url, $branch));
+        return json_decode(commonModel::http($url, $branch, array(), array(), 'json'));
     }
 
     /**
