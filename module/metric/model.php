@@ -27,21 +27,12 @@ class metricModel extends model
     public function getViewTableHeader($metric)
     {
         $dataFields = $this->getMetricRecordDateField($metric);
+        $dateType   = $metric->dateType;
 
-        $dataFieldStr = implode(', ', $dataFields);
-        if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
-
-        $result = $this->dao->select("id, {$dataFieldStr} value, date")
-            ->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($metric->code)
-            ->limit(1)
-            ->fetch();
-
-        if(!$result) return array
-        (
-            array('name' => 'value', 'title' => $this->lang->metric->value, 'width' => 96),
-            array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 150)
-        );
+        $dataFields[] = 'id';
+        $dataFields[] = 'value';
+        $dataFields[] = 'date';
+        $dataFieldStr = implode(',', $dataFields);
 
         $fieldList = array_keys((array)$result);
         $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
@@ -49,10 +40,15 @@ class metricModel extends model
         $scope     = current($scopeList);
 
         $header = array();
-        if(!empty($scopeList)) $header[] = array('name' => 'scope', 'title' => $this->lang->metric->tableHeader[$scope], 'width' => 159);
-        if(!empty($dateList))  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date, 'width' => 96);
+        if($metric->scope != 'system')
+        {
+            $scope = $metric->scope;
+            $header[] = array('name' => 'scope', 'title' => $this->lang->metric->tableHeader[$scope], 'width' => 159);
+        }
+
+        if($dateType != 'nodate')  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date, 'width' => 96);
         $header[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'width' => 96);
-        if(in_array('date', $fieldList)) $header[] = array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 128);
+        $header[] = array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 128);
 
         return $header;
     }
@@ -742,7 +738,15 @@ class metricModel extends model
         $rows = $statement->fetchAll();
 
         foreach($rows as $row) $calculator->calculate($row);
-        return $calculator->getResult($options);
+        $records = $calculator->getResult($options);
+
+        $time = helper::now();
+        foreach($records as $index => $record)
+        {
+            $records[$index]['calcTime'] = $time;
+        }
+
+        return $records;
     }
 
     /**
