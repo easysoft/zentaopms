@@ -193,6 +193,7 @@ formBatchPanel
         set::label($lang->task->type),
         set::control('picker'),
         set::items($lang->task->typeList),
+        set::value('devel'),
         set::width('160px'),
         set::ditto(true)
     ),
