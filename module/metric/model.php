@@ -407,21 +407,6 @@ class metricModel extends model
     }
 
     /**
-     * 获取已发布的度量项列表。
-     * Get metric code pairs of released.
-     *
-     * @access public
-     * @return array|false
-     */
-    public function getReleasedCodePairs()
-    {
-        return $this->dao->select('code')->from(TABLE_METRIC)
-            ->where('deleted')->eq(0)
-            ->andWhere('stage')->eq('released')
-            ->fetchPairs();
-    }
-
-    /**
      * 获取度量库数据的收集方式和采集人。
      * Get calculate type and calculate people by metric record id.
      *
@@ -2396,17 +2381,38 @@ class metricModel extends model
         return true;
     }
 
+    /**
+     * 获取某一周的第一天和最后一天的日期。
+     * Get the first and last day of a week.
+     *
+     * @param  int|string $year
+     * @param  int|string $week
+     * @access public
+     * @return bool
+     */
     public function getStartAndEndOfWeek($year, $week)
     {
         $firstDayOfYear = date('Y-01-01', strtotime("$year-01-01"));
         $firstDayOfWeek = date('N', strtotime($firstDayOfYear));
+
         $offsetDays = ($week - 1) * 7 - ($firstDayOfWeek - 1);
+
         $firstDayOfWeek = date('Y-m-d', strtotime("$firstDayOfYear +$offsetDays days"));
-        $lastDayOfWeek = date('Y-m-d', strtotime("$firstDayOfWeek +6 days"));
+        $lastDayOfWeek  = date('Y-m-d', strtotime("$firstDayOfWeek +6 days"));
 
         return array("$firstDayOfWeek 00:00:00", "$lastDayOfWeek 23:59:59");
     }
 
+    /**
+     * 判断某个度量项在某天是否被定时任务执行过。
+     * Determine whether a metric has been executed by scheduled task on a certain day.
+     *
+     * @param  string $code
+     * @param  string $date
+     * @param  string $dateType
+     * @access public
+     * @return bool
+     */
     public function isCalcByCron($code, $date, $dateType)
     {
         $startDate = '';
@@ -2524,32 +2530,20 @@ class metricModel extends model
     }
 
     /**
-     * 获取所有已发布度量项的最后推算时间。
-     * Get last inference date of all released metrics.
+     * 检查某个度量项在某个日期中是否被推算过。
+     * Check whether a metric has been inferenced on a date
      *
+     * @param  string $code
+     * @param  string $dateType
+     * @param  string $date
      * @access public
-     * @return string
+     * @return bool
      */
-    public function getLastInferenceDateList()
-    {
-        $codeList = $this->getReleasedCodePairs();
-
-        $inferenceDateList = array();
-        foreach($codeList as $code)
-        {
-            $dateType = $this->getDateTypeByCode($code);
-            $inferenceDateList[$code] = $this->getInferenceEndDate($code, $dateType);
-        }
-
-        return $inferenceDateList;
-    }
-
     public function checkHasInferenceOfDate($code, $dateType, $date)
     {
         if($dateType == 'day' || $dateType == 'nodate') return false;
 
         $date = $this->parseDateStr($date, $dateType);
-
         $records = $this->dao->select('id')->from(TABLE_METRICLIB)
            ->where('metricCode')->eq($code)
            ->andWhere('calcType')->eq('inference')
@@ -2557,111 +2551,59 @@ class metricModel extends model
            ->beginIF($dateType == 'month')->andWhere('year')->eq($date['year'])->andWhere('month')->eq($date['month'])->fi()
            ->beginIF($dateType == 'week')->andWhere('year')->eq($date['year'])->andWhere('week')->eq($date['week'])->fi()
            ->fetch();
+
         return !empty($records);
     }
 
-    public function getMaxInferenceDate($code)
-    {
-        $maxInferenceTime = $this->dao->select('date')->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->andWhere('calcType')->eq('inference')
-            ->orderBy('date_desc')
-            ->limit(1)
-            ->fetch('date');
-
-        if(empty($maxInferenceTime)) return false;
-        return substr($maxInferenceTime, 0, 10);
-    }
-
-    public function getInferenceEndDate($code, $dateType)
-    {
-        $metric = $this->getByCode($code);
-        if($metric->builtin == '1')
-        {
-            return $this->getBuiltinInferenceEndDate($code, $dateType);
-        }
-        else
-        {
-            return $this->getCustomInferenceEndDate($metric);
-        }
-    }
-
-    public function getCustomInferenceEndDate($metric)
-    {
-        $maxInferenceDate = $this->getMaxInferenceDate($metric->code);
-
-        return (!empty($maxInferenceDate) && $maxInferenceDate > $metric->implementedDate) ? $maxInferenceDate : $metric->implementedDate;
-    }
-
-    public function getBuiltinInferenceEndDate($code, $dateType)
-    {
-        $isFirstInference = $this->isFirstInference($code);
-
-        if($isFirstInference)
-        {
-            $date = $this->getFirstCronDate($code);
-        }
-        else
-        {
-            $hasCronRecord = $this->checkCronRecordExists($code);
-
-            if($hasCronRecord)
-            {
-                $date = $this->getFirstCronDate($code);
-            }
-            else
-            {
-                $time = $this->dao->select('date')->from(TABLE_METRICLIB)
-                    ->where('metricCode')->eq($code)
-                    ->andWhere('calcType')->eq('inference')
-                    ->orderBy('date_desc')
-                    ->limit(1)
-                    ->fetch('date');
-                $date = substr($time, 0, 10);
-            }
-        }
-
-        if(!$isFirstInference && !$hasCronRecord)
-        {
-            return $date;
-        }
-        else
-        {
-            if($dateType == 'year')  return date('Y-12-31', strtotime('-1 year', strtotime($date)));
-            if($dateType == 'month') return date('Y-m-t', strtotime('-1 month', strtotime($date)));
-            return date('Y-m-d', strtotime('-1 days', strtotime($date)));
-        }
-    }
-
-    public function getFirstCronDate($code)
-    {
-        $time = $this->dao->select('date')->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->andWhere('calcType')->eq('cron')
-            ->orderBy('date_asc')
-            ->limit(1)
-            ->fetch('date');
-        return substr($time, 0, 10);
-    }
-
-    public function checkCronRecordExists($code)
-    {
-        $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_METRICLIB)
-            ->where('calcType')->eq('cron')
-            ->andWhere('metricCode')->eq($code)
-            ->fetch('count');
-
-        return $count == 0 ? true : false;
-    }
-
-    public function isFirstInference($code)
+    /**
+     * 检查是否是第一次执行重算。
+     * Check if this is the first time inference record.
+     *
+     * @param  string|array|null $codes
+     * @access public
+     * @return bool
+     */
+    public function isFirstInference($codes = null)
     {
         $inferenceRecordCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_METRICLIB)
             ->where('calcType')->eq('inference')
-            ->beginIF($code != null)->andWhere('metricCode')->eq($code)->fi()
+            ->beginIF($codes != null && !is_array($codes))->andWhere('metricCode')->eq($codes)->fi()
+            ->beginIF($codes != null && is_array($codes))->andWhere('metricCode')->in($codes)->fi()
             ->fetch('count');
 
-        return $inferenceRecordCount == 0 ? true : false;
+        return $inferenceRecordCount == 0;
+    }
+
+    /**
+     * 将传入的度量项分为两组，一组为有重算记录的，另一组为没有重算记录的。
+     * Divide the metric list into two groups, has inference records or not.
+     *
+     * @param  array  $codeList
+     * @access public
+     * @return bool
+     */
+    public function classifyMetricsByCalcType($codeList)
+    {
+        $inferencedMetrics = array();
+        $otherMetrics      = array();
+        foreach($codeList as $code)
+        {
+            $recordCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_METRICLIB)
+                ->where('calcType')->eq('inference')
+                ->andWhere('metricCode')->eq($codes)
+                ->fetch('count');
+
+            if($recordCount > 0) 
+            {
+                $inferencedMetrics[] = $code;
+            }
+            else
+            {
+                $otherMetrics[] = $code;
+            }
+        }
+
+        return array('inference' => $inferencedMetrics, 'cron' => $otherMetrics);
     }
 
     /**

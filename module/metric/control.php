@@ -261,7 +261,6 @@ class metric extends control
         }
 
         file_put_contents($this->app->getTmpRoot() . 'calc', json_encode($classifiedCalcGroup));
-        file_put_contents($this->app->getTmpRoot() . 'inferencelist', json_encode($this->metric->getLastInferenceDateList()));
     }
 
     /**
