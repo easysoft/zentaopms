@@ -17,8 +17,7 @@ if(empty($executions))
 {
     $executionsBox[] = div
         (
-            setClass('inline-flex items-center'),
-            setClass('alert with-icon w-full'),
+            setClass('inline-flex items-center with-icon w-full bg-gray-100 py-4'),
             icon('exclamation-sign text-gray icon-2x pl-2 text-warning'),
             span
             (

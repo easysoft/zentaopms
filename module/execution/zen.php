@@ -1919,7 +1919,7 @@ class executionZen extends execution
     protected function correctExecutionCommonLang(object $project, string $type): bool
     {
         if(empty($project)) return false;
-        if($project->model == 'kanban' or ($project->model == 'agileplus' and $type == 'kanban'))
+        if($project->model == 'kanban')
         {
             global $lang;
             $executionLang           = $lang->execution->common;
