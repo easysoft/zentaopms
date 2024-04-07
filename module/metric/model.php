@@ -2590,7 +2590,7 @@ class metricModel extends model
         {
             $recordCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_METRICLIB)
                 ->where('calcType')->eq('inference')
-                ->andWhere('metricCode')->eq($codes)
+                ->andWhere('metricCode')->eq($code)
                 ->fetch('count');
 
             if($recordCount > 0) 
