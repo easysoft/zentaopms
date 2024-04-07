@@ -132,8 +132,6 @@ $lang->custom->story->fields['statusList']       = 'Statut';
 $lang->custom->story->fields['reviewRules']      = 'Review Rules';
 $lang->custom->story->fields['reviewResultList'] = 'Valider Résultats';
 $lang->custom->story->fields['review']           = 'Validation Requise';
-$lang->custom->story->fields['grade']            = 'Grade Setting';
-$lang->custom->story->fields['gradeRule']        = 'Grade Rule';
 
 $lang->custom->epic        = clone $lang->custom->story;
 $lang->custom->requirement = clone $lang->custom->story;

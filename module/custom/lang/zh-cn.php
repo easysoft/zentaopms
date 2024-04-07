@@ -132,8 +132,6 @@ $lang->custom->story->fields['statusList']       = '状态';
 $lang->custom->story->fields['reviewRules']      = '评审规则';
 $lang->custom->story->fields['reviewResultList'] = '评审结果';
 $lang->custom->story->fields['review']           = '评审流程';
-$lang->custom->story->fields['grade']            = '层级设置';
-$lang->custom->story->fields['gradeRule']        = '细分流程';
 
 $lang->custom->epic        = clone $lang->custom->story;
 $lang->custom->requirement = clone $lang->custom->story;
