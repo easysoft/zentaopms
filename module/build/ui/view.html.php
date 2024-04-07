@@ -17,9 +17,10 @@ $decodeParam  = helper::safe64Decode($param);
 $buildItems = array();
 foreach($buildPairs as $id => $name)
 {
-    $buildItem['text']   = $name;
-    $buildItem['url']    = helper::createLink($buildModule, 'view', "buildID=$id");
-    $buildItem['active'] = $id == $build->id;
+    $buildItem['text']     = $name;
+    $buildItem['url']      = helper::createLink($buildModule, 'view', "buildID=$id");
+    $buildItem['data-app'] = $app->tab;
+    $buildItem['active']   = $id == $build->id;
 
     $buildItems[] = $buildItem;
 }
