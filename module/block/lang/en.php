@@ -691,6 +691,7 @@ $lang->block->teamachievement->runCases       = 'Run Cases';
 $lang->block->teamachievement->consumedHours  = 'Consumed Hours';
 $lang->block->teamachievement->totalWorkload  = 'Total Workload';
 $lang->block->teamachievement->vs             = 'VS';
+$lang->block->teamachievement->accrued        = 'Accrued';
 
 $lang->block->estimate = new stdclass();
 $lang->block->estimate->costs    = 'Costs';

@@ -691,6 +691,7 @@ $lang->block->teamachievement->runCases       = '执行的用例数';
 $lang->block->teamachievement->consumedHours  = '消耗工时';
 $lang->block->teamachievement->totalWorkload  = '累计工作量';
 $lang->block->teamachievement->vs             = '较昨日';
+$lang->block->teamachievement->accrued        = '累计';
 
 $lang->block->estimate = new stdclass();
 $lang->block->estimate->costs    = '人工';
