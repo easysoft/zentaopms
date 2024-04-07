@@ -46,6 +46,7 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data($data),
+    set::checkboxLabel($lang->selectAll),
     set::footToolbar(array('items' => array(array('text' => $lang->save, 'btnType' => 'primary', 'className' => 'size-sm', 'data-on' => 'click', 'data-call' => 'fnLinkStories', 'data-params' => 'event')))),
     set::footer(array('checkbox', 'toolbar'))
 );
