@@ -47,9 +47,11 @@ window.confirmEdit = function(metricID, isOldMetric)
     }
 }
 
-window.confirmDelist = function(metricID, metricName)
+window.confirmDelist = function(metricID, metricName, isUsed = false)
 {
-    zui.Modal.confirm(confirmDelist.replace('%s', metricName)).then((res) =>
+    var text = isUsed ? confirmDelistInUsed : confirmDelist;
+  console.log(isUsed)
+    zui.Modal.confirm(text.replace('%s', metricName)).then((res) =>
     {
         if(res) $.ajaxSubmit({url: $.createLink('metric', 'delist', 'metricID=' + metricID)});
     });
@@ -74,8 +76,11 @@ window.loadImplement = function(link)
 
 window.confirmRecalculate = function(calcRange= 'all', code = '')
 {
-    zui.Modal.confirm({message: confirmRecalculate, icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res)=> 
-    {
-        if(res) zui.Modal.open({url: $.createLink('metric', 'recalculateSetting', 'calcRange=' + calcRange + '&code=' + code)});
-    });
+    zui.Modal.confirm({
+      message: confirmRecalculate,
+      icon: 'icon-exclamation-sign',
+      iconClass: 'warning-pale rounded-full icon-2x'}).then((res)=>
+        {
+            if(res) zui.Modal.open({url: $.createLink('metric', 'recalculateSetting', 'calcRange=' + calcRange + '&code=' + code)});
+        });
 }

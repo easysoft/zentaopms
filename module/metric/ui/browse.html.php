@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('confirmDelist', $lang->metric->confirmDelist);
+jsVar('confirmDelistInUsed', $lang->metric->confirmDelistInUsed);
 jsVar('upgradeTip', $lang->metric->upgradeTip);
 jsVar('scope', $scope);
 jsVar('metricSql', $lang->metric->oldMetric->sql);
