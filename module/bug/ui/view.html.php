@@ -57,9 +57,11 @@ if(!$bug->deleted)
     $actions = $operateList['mainActions'];
     if(!empty($operateList['suffixActions'])) $actions = array_merge($actions, array(array('type' => 'divider')), $operateList['suffixActions']);
 
-    $hasRepo = $this->loadModel('repo')->getListByProduct($bug->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
+    $hasRepo        = $this->loadModel('repo')->getListByProduct($bug->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
+    $isExecutionTab = $app->tab == 'execution';
     foreach($actions as $key => $action)
     {
+        if($isExecutionTab && !empty($action['data-app'])) unset($actions[$key]['data-app']);
         if(!$hasRepo && isset($action['icon']) && $action['icon'] == 'treemap')
         {
             unset($actions[$key]);
