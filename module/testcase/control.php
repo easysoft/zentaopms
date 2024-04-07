@@ -1157,8 +1157,8 @@ class testcase extends control
                 $libraries = $this->loadModel('caselib')->getLibraries();
 
                 /* Remove story custom fields from caselib */
-                $this->config->testcase->customBatchEditFields   = str_replace(',story', '', $this->config->testcase->customBatchEditFields);
-                $this->config->testcase->custom->batchEditFields = str_replace(',story', '', $this->config->testcase->custom->batchEditFields);
+                $this->config->testcase->customBatchEditFields   = str_replace(array(',story', ',scene,'), ',', $this->config->testcase->customBatchEditFields);
+                $this->config->testcase->custom->batchEditFields = str_replace(array(',story', ',scene,'), ',', $this->config->testcase->custom->batchEditFields);
 
                 /* Set caselib menu. */
                 $this->caselib->setLibMenu($libraries, $libID);
@@ -1254,7 +1254,7 @@ class testcase extends control
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
-        $this->view->customFields = $customFields;
+        $this->view->customFields = array_filter($customFields);
         $this->view->showFields   = $this->config->testcase->custom->batchEditFields;
 
         /* Append module when change product type. */
