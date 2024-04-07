@@ -20,6 +20,12 @@ $(function()
 });
 </script>
 <?php else:?>
+<style>
+#mainContent form {overflow: auto;}
+.c-pri {width: 100px;}
+.c-title {width: 200px;}
+.c-precondition {width: 200px;}
+</style>
 <div id="mainContent" class="main-content">
   <div class="main-header clearfix">
     <h2><?php echo $lang->caselib->import;?></h2>
@@ -37,7 +43,6 @@ $(function()
           <th class='c-text        <?php if(strpos(",$requiredFields,", ',text,')         !== false) echo 'required';?>' id='keywords'>    <?php echo $lang->testcase->keywords?></th>
           <th class='c-precondition <?php if(strpos(",$requiredFields,", ',precondition,') !== false) echo 'required';?>' id='precondition'><?php echo $lang->testcase->precondition?></th>
           <th class='c-case-step    <?php if(strpos(",$requiredFields,", ',step,')         !== false) echo 'required';?> col-content'>
-          <th class='c-case-step col-content'>
             <table class='w-p100 table-borderless'>
               <tr>
                 <th><?php echo $lang->testcase->stepDesc?></th>
