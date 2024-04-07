@@ -238,7 +238,7 @@ class repo extends control
         }
         if(!$repoPairs) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
 
-        if(!$repoID) $repoID = $this->post->codeRepo;
+        if(!$repoID) $repoID = (int)$this->post->codeRepo;
         if(!$repoID || !isset($repoPairs[$repoID])) $repoID = key($repoPairs);
 
         $this->scm->setEngine($repoList[$repoID]);
@@ -250,7 +250,7 @@ class repo extends control
 
             $this->repo->saveBranchRelation($repoID, $branch->branchName, $objectID, $objectType);
             $this->loadModel('action')->create($objectType, $objectID, 'createRepoBranch', '', $branch->branchName);
-            $this->sendSuccess(array('callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
         }
 
         $canCreate = $object->status == 'active';
@@ -283,7 +283,7 @@ class repo extends control
         if(dao::isError()) return $this->sendError(dao::getError());
 
         $this->loadModel('action')->create($objectType, $objectID, 'unlinkRepoBranch', '', $branch);
-        $this->sendSuccess(array('callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadModal("' . $this->createLink($objectType, 'createBranch', "objectID={$objectID}") . '")'));
     }
 
     /**
