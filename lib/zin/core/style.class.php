@@ -17,6 +17,20 @@ require_once dirname(__DIR__) . DS . 'utils' . DS . 'dataset.class.php';
 class style extends \zin\utils\dataset implements iDirective
 {
     /**
+     * Magic method for setting style.
+     *
+     * @access public
+     * @param  string $name - Property name.
+     * @param  array  $args - Property values.
+     * @return style
+     */
+    public function __call(string $name, array $args): style
+    {
+        $value = empty($args) ? true : (count($args) === 1 ? $args[0] : $args);
+        return $this->setVal($name, $value);;
+    }
+
+    /**
      * Method for sub class to hook on setting it.
      *
      * @access protected
@@ -65,8 +79,9 @@ class style extends \zin\utils\dataset implements iDirective
     public static function __callStatic($name, $args): style
     {
         $style = new style();
-        $value = empty($args) ? true : (count($args) === 1 ? $args[0] : $args);
-        $style->$name($value);
+
+        $style->$name(...$args);
+
         return $style;
     }
 
