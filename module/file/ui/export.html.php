@@ -115,11 +115,16 @@ if($isCustomExport)
     );
 }
 
+$isNotZh = strpos($app->getClientLang(), 'zh-') === false;
 formPanel
 (
     setID('exportPanel'),
     css('.form-horz .form-label.required:after{content:""}'), // Remove required tag.
     css('.modal-content{padding-top: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; padding-bottom: 1.25rem;}'),
+    $isNotZh ? css('#exportPanel .form-label{width: 70px}') : null,
+    $isNotZh ? css('#exportPanel .form-group{padding-left: 70px}') : null,
+    $isNotZh ? css('#exportPanel .customFieldsBox .form-label{width: 100px}') : null,
+    $isNotZh ? css('#exportPanel .customFieldsBox .form-group{padding-left: 100px}') : null,
     setCssVar('--form-horz-label-width', '4rem'),
     set::target('_self'),
     set::actions(array()),
