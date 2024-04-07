@@ -814,7 +814,7 @@ class gitlabRepo
                 $results = commonModel::http($api . "&page=1", null, array(), array(), 'data', 'GET', 30, true, false);
                 if(empty($results['header']['X-Total-Pages']) && empty($results['header']['x-total-pages'])) return array();
 
-                $totalPages = isset($results['header']['X-Total-Pages']) ? isset($results['header']['X-Total-Pages']) : $results['header']['x-total-pages']);
+                $totalPages = isset($results['header']['X-Total-Pages']) ? isset($results['header']['X-Total-Pages']) : $results['header']['x-total-pages'];
                 if($totalPages == 1)
                 {
                     $allResults = json_decode($results['body']);
