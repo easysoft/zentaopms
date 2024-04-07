@@ -404,6 +404,9 @@ class productZen extends product
         $fieldPairs = array();
         foreach($fields as $fieldName)
         {
+            if(str_contains(strtolower($fieldName), 'epic') && !$this->config->enableER) continue;
+            if(str_contains(strtolower($fieldName), 'requirement') && !$this->config->URAndSR) continue;
+
             $fieldName = trim($fieldName);
             $fieldPairs[$fieldName] = zget($productLang, $fieldName);
 

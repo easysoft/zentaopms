@@ -16,7 +16,7 @@ if($config->systemMode == 'ALM' || $config->systemMode == 'PLM') $config->produc
 
 /* Export fields of product list page. */
 $config->product->list = new stdclass();
-$config->product->list->exportFields          = 'id,program,line,name,manager,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,unResolvedBugs,bugFixedRate,plans,releases';
+$config->product->list->exportFields          = 'id,program,line,name,manager,draftEpics,activeEpics,changedEpics,reviewingEpics,closedEpics,epicCompleteRate,draftRequirements,activeRequirements,changedRequirements,reviewingRequirements,closedRequirements,requirementCompleteRate,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,unResolvedBugs,bugFixedRate,plans,releases';
 $config->product->list->customCreateFields    = 'PO,RD,acl';
 $config->product->list->customBatchEditFields = 'PO,QD,RD,status,type,acl';
 if($config->systemMode == 'ALM' || $config->systemMode == 'PLM') $config->product->list->customBatchEditFields   .= ',program';
