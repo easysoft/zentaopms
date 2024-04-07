@@ -1378,7 +1378,7 @@ class repoZen extends repo
                 elseif($this->strposAry($lastLine, $this->config->repo->repoSyncLog->total) !== false)
                 {
                     $logContent = file_get_contents($logFile);
-                    if($this->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
+                    if($this->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
                     {
                         @unlink($logFile);
                     }
