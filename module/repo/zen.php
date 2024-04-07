@@ -1633,7 +1633,7 @@ class repoZen extends repo
     {
         foreach($this->lang->repo->apiError as $key => $pattern)
         {
-            if(preg_match("/$pattern/", $message))
+            if(preg_match("/$pattern/i", $message))
             {
                 $message = zget($this->lang->repo->errorLang, $key);
                 break;
