@@ -59,36 +59,6 @@ $fnGenerateInstructions = function() use($lang)
     return $instructions;
 };
 
-$fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metric)
-{
-    if(empty($resultData)) return null;
-    if(count($resultData) == 1 && count((array)$resultData[0]) == 1) return div
-        (
-            set::className('card-data'),
-            center
-            (
-                p
-                (
-                    set::className('card-digit'),
-                    $resultData[0]->value
-                ),
-                p
-                (
-                    set::className('card-title'),
-                    $lang->metric->objectList[$metric->object]
-                )
-            )
-
-        );
-
-    return dtable
-        (
-            set::height(400),
-            set::cols($resultHeader),
-            set::data($resultData)
-        );
-};
-
 panel
 (
     setClass('clear-shadow'),
@@ -126,10 +96,18 @@ panel
                 setClass('gray-pale text-md font-bold')
             )
         ),
-        empty($result) ? div
+        div
         (
             setClass('verify-content'),
-        ) : $fnGenerateDataDisplay(),
+            div
+            (
+                setClass('verify-result')
+            ),
+            div
+            (
+                setClass('metric-result')
+            )
+        )
     ),
 
     set::footerClass('footer-actions'),

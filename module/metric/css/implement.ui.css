@@ -3,7 +3,7 @@
 .margin-top24 {margin-top: 24px;}
 .margin-left8 {margin-left: 8px;}
 .detail-header .gap-x-4 {gap: 0 !important;}
-.verify-content {height: 300px; border: solid 1px var(--color-gray-300);}
+.verify-content {height: 340px; border: solid 1px var(--color-gray-300);}
 
 .verify-sentence {padding-top: 12px; padding-left: 24px;}
 .verify-sentence i {margin-left: 8px;}
