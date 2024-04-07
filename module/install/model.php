@@ -660,7 +660,24 @@ class installModel extends model
         \$config->db->prefix      = '{$this->config->db->prefix}';
         \$config->webRoot         = getWebRoot();
         \$config->default->lang   = '$defaultLang';
-        EOT;
+
+        \$hasSlaveDB = (string)getenv('ENABLE_DB_SLAVE');
+        if(\$hasSlaveDB)
+        {
+            \$slaveDB = new stdclass();
+            \$slaveDB->host        = getenv('ZT_SLAVE_DB_HOST');
+            \$slaveDB->port        = getenv('ZT_SLAVE_DB_PORT');
+            \$slaveDB->name        = getenv('ZT_SLAVE_DB_NAME');
+            \$slaveDB->user        = getenv('ZT_SLAVE_DB_USER');
+            \$slaveDB->password    = getenv('ZT_SLAVE_DB_PASSWORD');
+            \$slaveDB->driver      = '{$this->config->db->driver}';
+            \$slaveDB->encoding    = '{$this->config->db->encoding}';
+            \$slaveDB->prefix      = '{$this->config->db->prefix}';
+            \$slaveDB->persistant  = $this->config->db->persistant;
+            \$slaveDB->strictMode  = $this->config->db->strictMode;
+            \$config->slaveDBList  = array(\$slaveDB);
+        }
+EOT;
 
         if($customSession) $configContent .= "\n\$config->customSession = true;";
 
