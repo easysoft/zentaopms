@@ -17,6 +17,7 @@ include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 $isInModal     = isInModal();
 $isRequirement = $story->type == 'requirement';
 $isStoryType   = $story->type == 'story';
+if(!isset($executionID)) $executionID = 0;
 
 /* 版本列表。Version list. */
 $versions = array();
