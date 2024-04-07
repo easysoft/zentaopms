@@ -660,7 +660,7 @@ class story extends control
         $response = array();
         $response['result'] = 'success';
         $response['load']   = false;
-        if($message) $response['callback'] = "zui.Modal.alert('{$message}').then((res) => {loadCurrentPage()});";
+        if($message) $response['callback'] = "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x', message: '{$message}'}).then((res) => {loadCurrentPage()});";
         if(empty($message)) $response['load'] = true;
         return $this->send($response);
     }
@@ -1125,7 +1125,7 @@ class story extends control
         $response = array();
         $response['result'] = 'success';
         $response['load']   = false;
-        if($message) $response['callback'] = "zui.Modal.alert('{$message}').then((res) => {loadCurrentPage()});";
+        if($message) $response['callback'] = "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x', message: '{$message}'}).then((res) => {loadCurrentPage()});";
         if(empty($message)) $response['load'] = true;
         return $this->send($response);
 
