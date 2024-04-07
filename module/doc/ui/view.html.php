@@ -45,7 +45,7 @@ toolbar
 $versionList = array();
 for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
 {
-    $versionList[] = array('text' => "V$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"));
+    $versionList[] = array('text' => "V$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'active' => $itemVersion == $version);
 }
 
 $star        = strpos($doc->collector, ',' . $app->user->account . ',') !== false ? 'star' : 'star-empty';
@@ -142,8 +142,8 @@ $contentDom = div
             (
                 btn
                 (
-                    setClass('ghost btn square btn-default selelct-version inline-flex ml-2'),
-                    'V' . ($version ? $version : $doc->version)
+                    setClass('ghost btn square btn-default selelct-version inline-flex ml-1'),
+                    span(setClass('pl-1'), 'V' . ($version ? $version : $doc->version))
                 ),
                 set::items($versionList)
             ) : null
