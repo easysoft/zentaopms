@@ -318,6 +318,13 @@ function initResultControl(container, filter, object, field)
 
 function exportData()
 {
+    if(typeof pivot == 'undefined')
+    {
+        const $domObj = $(".table-condensed")[0];
+        exportFile($domObj);
+        return;
+    }
+
     var pivotInfo = getQueryInfo();
     var exportRange  = $('#range').val();
     if(exportRange == 'current')
