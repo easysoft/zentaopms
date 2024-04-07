@@ -479,7 +479,7 @@ class screenModel extends model
             {
                 $object = new stdclass();
                 $object->label = $objectTitle;
-                $object->value = $objectID;
+                $object->value = (string)$objectID;
                 return $object;
             }, array_keys($objectPairs), array_values($objectPairs));
         }
