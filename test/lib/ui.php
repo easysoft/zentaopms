@@ -1,5 +1,6 @@
 <?php
 /* Set the error reporting. */
+
 error_reporting(E_ALL);
 
 /* 设置常量和常用目录路径 */
@@ -54,108 +55,61 @@ function r($testResult)
 /**
  * Print value or properties.
  *
- * @param  string    $key
+ * @param  string    $index
  * @param  string    $delimiter
  * @access public
  * @return void
  */
-function p($keys = '', $delimiter = ',')
+function p($index = '', $delimiter = ',')
 {
     global $_result;
 
-    if(empty($_result)) return print(implode("\n", array_fill(0, substr_count($keys, $delimiter) + 1, 0)) . "\n");
-
     /* Print $_result. */
-    if($keys === '' && is_array($_result)) return print_r($_result) . "\n";
+    if($index === '') return print_r($_result) . "\n";
 
-    $parts  = explode(';', $keys);
-    foreach($parts as $part)
+    $keywords  = explode(';', $index);
+    foreach($keywords as $keyword)
     {
-        $values = getValues($_result, $part, $delimiter);
-        if(!is_array($values)) continue;
+        $resultList = getValuesByKeyword($_result, $keyword, $delimiter);
+        if(!is_array($resultList)) continue;
 
-        foreach($values as $value) echo $value . "\n";
+        foreach($resultList as $result) echo $result . "\n";
     }
 
     return true;
 }
 
 /**
- * Get webdriver page attr.
+ * Get values by keyword.
  *
- * @param  string $arrKey
- * @param  array  $keys
- * @access public
- * @return object
- */
-function getPageAttr($arrKey, $keys)
-{
-    global $result;
-    $value  = new stdclass();
-    $page   = $result->get('page');
-    $method = 'get' . ucfirst($arrKey);
-    foreach($keys as $key)
-    {
-        if(in_array($arrKey, array('text', 'attr', 'value')))
-        {
-            if(strpos($key, '-') === false)
-            {
-                $value->$key = $page->{$key}->$method();
-            }
-            else
-            {
-                $pos     = strpos($key, '-');
-                $element = substr($key, 0, $pos);
-                $attr    = substr($key, $pos + 1);
-                $value->$key = $page->{$element}->$method($attr);
-            }
-        }
-        else
-        {
-            $value->$key = $page->$method();
-        }
-    }
-
-    return $value;
-}
-
-/**
- * Get values
- *
- * @param mixed  $value
- * @param string $keys
+ * @param mixed  $result
+ * @param string $keyword
  * @param string $delimiter
  * @access public
- * @return void
+ * @return int|array
  */
-function getValues($value, $keys, $delimiter)
+function getValuesByKeyword($result, $keyword, $delimiter)
 {
     $index  = -1;
-    $pos    = strpos($keys, ':');
+    $pos    = strpos($keyword, ':');
     if($pos)
     {
-        $arrKey = substr($keys, 0, $pos);
-        $keys   = substr($keys, $pos + 1);
-
-        $index = $arrKey;
+        $index   = substr($keyword, 0, $pos);
+        $keyword = substr($keyword, $pos + 1);
     }
 
-    $keys = explode($delimiter, $keys);
+    $keys = explode($delimiter, $keyword);
     if($index != -1)
     {
-        if(in_array($arrKey, array('text', 'attr', 'title', 'value')))
+        if(is_array($result))
         {
-            $value = getPageAttr($arrKey, $keys);
+            if(!isset($result[$index])) return print("Error: Cannot get index $index.\n");
+            $result = $result[$index];
         }
-        elseif(is_array($value))
+        else if(is_object($result))
         {
-            if(!isset($value[$index])) return print("Error: Cannot get index $index.\n");
-            $value = $value[$index];
-        }
-        else if(is_object($value))
-        {
-            if(!isset($value->$index)) return print("Error: Cannot get index $index.\n");
-            $value = $value->$index;
+            if(!isset($result->$index)) return print("Error: Cannot get index $index.\n");
+            $result = $result->$index;
         }
         else
         {
@@ -164,7 +118,7 @@ function getValues($value, $keys, $delimiter)
     }
 
     $values = array();
-    foreach($keys as $key) $values[] = zget($value, $key, '');
+    foreach($keys as $key) $values[] = zget($result, $key, '');
 
     return $values;
 }
@@ -180,11 +134,42 @@ function e()
 {
 }
 
+function getLangData($langPath)
+{
+    global $app, $lang;
+    if(strpos($langPath, 'lang') != false)
+    {
+        $langData = $lang;
+        $langList = explode('.', substr($langPath, 6));
+        foreach($langList as $index => $langName)
+        {
+            if(isset($langData->$langName))
+            {
+                $langData = $langData->$langName;
+            }
+            elseif($index == 1)
+            {
+                $app->loadLang($langList[0]);
+                if(!isset($langData->$langName)) return $langPath;
+                $langData = $langData->$langName;
+            }
+            else
+            {
+                return $langPath;
+            }
+
+        }
+        return $langData;
+    }
+
+}
+
 class tester extends result
 {
     public $webdriver;
     public $page;
     public $config;
+    public $app;
     public $lang;
     public $cookieFile;
 
@@ -196,8 +181,9 @@ class tester extends result
      */
     public function __construct()
     {
-        global $config, $lang;
+        global $config, $app, $lang;
         $this->config = $config;
+        $this->app    = $app;
         $this->lang   = $lang;
 
         $this->webdriver  = new webdriver($config->uitest->chrome);
@@ -267,7 +253,7 @@ class tester extends result
         $this->page->openURL($webRoot . $url);
 
         $appIframeID = $iframeID ? $iframeID : "appIframe-{$module}";
-        $this->page->dom->wait(1);
+        $this->page->wait(1);
         $this->checkError($appIframeID);
 
         return $this;
@@ -305,43 +291,10 @@ class tester extends result
      * @access public
      * @return object
      */
-    public function formPage($module, $method, $params = array(), $iframeID = '')
+    public function initForm($module, $method, $params = array(), $iframeID = '')
     {
         $this->openURL($module, $method, $params, $iframeID);
         return $this->initPage();
-    }
-
-    /**
-     * Parsing the current page's URL.
-     *
-     * @access public
-     * @return void
-     */
-    public function parseCurrentUrl()
-    {
-        if(empty($this->pageObject)) return;
-
-        $url = $this->pageObject->getPageUrl();
-        $this->url = $url;
-
-        $url = parse_url($url);
-        if(isset($url['query']))
-        {
-            $query = $url['query'];
-            parse_str($query, $queryParams);
-            $this->module = $queryParams['m'];
-            $this->method = $queryParams['f'];
-        }
-        else
-        {
-            $path      = $url['path'];
-            $pathParts = explode('-', trim($path, '/'));
-
-            $this->module = str_replace('.html', '', $pathParts[0]);
-            $this->method = str_replace('.html', '', $pathParts[1]);
-        }
-
-        return $this->response();
     }
 
     /**
