@@ -1,7 +1,6 @@
 #copyExecutionModal .modal-dialog {max-height: unset;}
 #copyExecutionModal .copy-title {min-width: 130px;}
-#copyExecutionModal .pickerProject {flex: 0 1 30%;}
-#copyExecutionModal .execution-block {flex: 0 1 30%; padding: 20px 10px; margin: 4px 12px; overflow: hidden;}
+#copyExecutionModal .execution-block {flex: 0 1 calc(50% - 0.5rem); padding: 20px 10px; overflow: hidden;}
 #copyExecutions div.bg-gray-100 {width: 100%;}
 #copyExecutions .btn:hover {--tw-ring-color: var(--color-primary-500);}
 #copyExecutions .btn:before {background: none;}
