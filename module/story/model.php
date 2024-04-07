@@ -1457,7 +1457,8 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         /* Update parent story status and stage. */
-        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+        if($oldStory->parent > 0)      $this->updateParentStatus($storyID, $oldStory->parent);
+        if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
         if(!dao::isError())
         {
             $this->setStage($storyID);
@@ -1499,6 +1500,7 @@ class storyModel extends model
             if(empty($story->closedReason)) continue;
 
             $oldStory = $oldStories[$storyID];
+            if(isset($stories[$oldStory->parent])) continue;
 
             $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()
                 ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
@@ -1512,7 +1514,8 @@ class storyModel extends model
             }
 
             /* Update parent story status. */
-            if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+            if($oldStory->parent > 0)      $this->updateParentStatus($storyID, $oldStory->parent);
+            if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
             $this->setStage($storyID);
 
             $changes = common::createChanges($oldStory, $story);
@@ -2299,15 +2302,39 @@ class storyModel extends model
     }
 
     /**
+     * 关闭父需求的所有子需求。
+     * Close all children of a story.
+     *
+     * @param  int    $storyID
+     * @param  string closedReason
+     * @access public
+     * @return void
+     */
+    public function closeAllChildren(int $storyID, string $closedReason)
+    {
+        $childIdList = $this->getAllChildId($storyID, false, true);
+        $this->dao->update(TABLE_STORY)
+             ->set('status')->eq('closed')
+             ->set('stage')->eq('closed')
+             ->set('closedReason')->eq($closedReason)
+             ->where('id')->in($childIdList)
+             ->exec();
+
+        $this->loadModel('action');
+        foreach($childIdList as $childID) $this->action->create('story', $childID, 'closedbyparent');
+    }
+
+    /**
      * 获取需求的所有子需求ID。
      * Get all child stories of a story.
      *
      * @param  int    $storyID
      * @param  bool   $includeSelf
+     * @param  bool   $sameType true|false
      * @access public
      * @return array
      */
-    public function getAllChildId(int $storyID, bool $includeSelf = true): array
+    public function getAllChildId(int $storyID, bool $includeSelf = true, bool $sameType = false): array
     {
         if($storyID == 0) return array();
 
@@ -2318,6 +2345,7 @@ class storyModel extends model
             ->where('path')->like($story->path . '%')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$includeSelf)->andWhere('id')->ne($storyID)->fi()
+            ->beginIF($sameType)->andWhere('type')->eq($story->type)->fi()
             ->fetchPairs();
 
         return array_keys($children);
@@ -3683,7 +3711,7 @@ class storyModel extends model
 
             if($story->status != 'active' || (!empty($story->plan) && $story->type == 'story')) return false;
             if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]) || $story->stage != 'projected')) return false;
-            if(!isset($shadowProducts[$story->product]) && $story->stage != 'wait' && $story->type == 'story') return false;
+            if(!isset($shadowProducts[$story->product]) && $story->stage != 'wait' && $story->type == 'story' && $story->isParent == '0') return false;
         }
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();

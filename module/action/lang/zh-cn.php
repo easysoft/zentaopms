@@ -195,6 +195,7 @@ $lang->action->desc->edited               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->assigned             = '$date, 由 <strong>$actor</strong> 指派给 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->closed               = '$date, 由 <strong>$actor</strong> 关闭。' . "\n";
 $lang->action->desc->closedbysystem       = '$date, 由系统关闭。' . "\n";
+$lang->action->desc->closedbyparent       = '$date, 由系统关闭。' . "\n";
 $lang->action->desc->deleted              = '$date, 由 <strong>$actor</strong> 删除。' . "\n";
 $lang->action->desc->deletedfile          = '$date, 由 <strong>$actor</strong> 删除了附件：<strong><i>$extra</i></strong>。' . "\n";
 $lang->action->desc->editfile             = '$date, 由 <strong>$actor</strong> 编辑了附件：<strong><i>$extra</i></strong>。' . "\n";

@@ -195,6 +195,7 @@ $lang->action->desc->edited               = '$date, edited by <strong>$actor</st
 $lang->action->desc->assigned             = '$date, <strong>$actor</strong> assigned to <strong>$extra</strong>.' . "\n";
 $lang->action->desc->closed               = '$date, closed by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->closedbysystem       = '$date, closed by system.' . "\n";
+$lang->action->desc->closedbyparent       = '$date, closed by system.' . "\n";
 $lang->action->desc->deleted              = '$date, deleted by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->deletedfile          = '$date, <strong>$actor</strong> deleted <strong><i>$extra</i></strong>.' . "\n";
 $lang->action->desc->editfile             = '$date, <strong>$actor</strong> edited <strong><i>$extra</i></strong>.' . "\n";
