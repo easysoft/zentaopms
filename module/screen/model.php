@@ -435,6 +435,27 @@ class screenModel extends model
     }
 
     /**
+     * 生成已下架或者已删除度量项的参数。
+     * Generate delist or deleted metric options.
+     *
+     * @param  object    $component
+     * @access public
+     * @return object
+     */
+    public function genDelistOrDeletedMetricOption($component)
+    {
+        if(empty($component)) $component = new stdclass();
+
+        if(!isset($component->option)) $component->option = new stdclass();
+        if(!isset($component->option->title)) $component->option->title = new stdclass();
+
+        $component->option->title->notFoundText = $this->lang->screen->noMetricData;
+        $component->option->isDeleted = true;
+
+        return $component;
+    }
+
+    /**
      * 删除component的已删除标记。
      * Unset component option isDeleted.
      *
@@ -509,6 +530,7 @@ class screenModel extends model
     public function genMetricComponent($metric, $component = null, $filterParams = array())
     {
         $this->loadModel('metric');
+        if($metric->deleted == '1' || $metric->stage == 'wait') return $this->genDelistOrDeletedMetricOption($component);
 
         $pagination = $this->getMetricPagination($component);
         $filters    = $this->processMetricFilter($filterParams, $metric->dateType);
