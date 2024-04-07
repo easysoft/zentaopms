@@ -105,3 +105,17 @@ window.toggleCopyTeam = function(e)
     }
     $('[data-name=team]').hasClass('is-pinned') && !$('[data-name=teams]').hasClass('hidden') ? $('[data-name=teams]').addClass('is-pinned') : $('[data-name=teams]').removeClass('is-pinned');
 }
+
+/**
+ * Toggle ops tip.
+ *
+ * @access public
+ * @return void
+ */
+function toggleOpsTip()
+{
+    if($(this).val() == 'ops')
+    {
+        $(this).closest('.form-group').append('<div class="form-tip">' + typeDesc + '</div>');
+    }
+}

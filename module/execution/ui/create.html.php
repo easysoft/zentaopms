@@ -46,6 +46,7 @@ jsVar('weekend', $config->execution->weekend);
 jsVar('isStage', $isStage);
 jsVar('copyExecutionID', $copyExecutionID);
 jsVar('executionID', isset($executionID) ? $executionID : 0);
+jsVar('typeDesc', $lang->execution->typeDesc);
 
 $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc');
 
@@ -92,6 +93,7 @@ formGridPanel
     on::change('[name=begin],[name=end]', $handleBeginEndChange),
     on::change('[name=teams]', 'loadMembers'),
     on::change('#copyTeam', 'toggleCopyTeam'),
+    on::click('[name=lifetime]', 'toggleOpsTip'),
     set::fields($fields)
 );
 
