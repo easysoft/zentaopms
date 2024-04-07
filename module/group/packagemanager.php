@@ -3866,6 +3866,7 @@ $config->group->package->browseRepo->subset = 'repo';
 $config->group->package->browseRepo->privs  = array();
 $config->group->package->browseRepo->privs['repo-maintain'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('repo-browse', 'repo-create', 'repo-edit'));
 $config->group->package->browseRepo->privs['repo-browse']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('repo-maintain'), 'recommend' => array('repo-create', 'repo-edit'));
+$config->group->package->browseRepo->privs['repo-visit']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('repo-maintain'), 'recommend' => array());
 
 $config->group->package->manageRepo = new stdclass();
 $config->group->package->manageRepo->order  = 2440;
