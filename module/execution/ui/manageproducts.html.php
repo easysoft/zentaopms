@@ -29,12 +29,13 @@ foreach($allProducts as $productID => $productName)
             setClass('product-block modal-content center-row justify-start items-center text-left'),
             checkbox
             (
+                set::rootClass('w-full p-4 pl-0'),
+                setClass('linked-product cursor-pointer'),
                 set::name("products[{$index}]"),
                 set::text($productName),
                 set::checked(true),
                 set::value($productID),
-                on::click('checkUnlink'),
-                setClass('linked-product')
+                on::click('checkUnlink')
             ),
             isset($allBranches[$productID][$branchID]) ? picker
             (
@@ -66,6 +67,8 @@ if($execution->grade == 1 || $execution->grade == 2)
                 setClass('product-block modal-content center-row justify-start items-center text-left'),
                 checkbox
                 (
+                    set::rootClass('w-full p-4 pl-0'),
+                    setClass('cursor-pointer'),
                     set::name("products[{$index}]"),
                     set::text($productName),
                     set::value($productID)
