@@ -134,20 +134,21 @@ $contentDom = div
             setClass('flex-1 w-0'),
             div
             (
-                setClass('title clip'),
+                setClass('title clip inline-flex'),
+                set::title($doc->title),
                 $doc->title
-            )
+            ),
+            $doc->status != 'draft' ? dropdown
+            (
+                btn
+                (
+                    setClass('ghost btn square btn-default selelct-version inline-flex ml-2'),
+                    'V' . ($version ? $version : $doc->version)
+                ),
+                set::items($versionList)
+            ) : null
         ),
         $doc->deleted ? span(setClass('label danger'), $lang->doc->deleted) : null,
-        $doc->status != 'draft' ? dropdown
-        (
-            btn
-            (
-                setClass('ghost btn square btn-default selelct-version'),
-                'V' . ($version ? $version : $doc->version)
-            ),
-            set::items($versionList)
-        ) : null,
         div
         (
             setClass('panel-actions flex'),
