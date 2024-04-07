@@ -201,6 +201,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $item = new stdClass();
 
         $item->disabled     = !isset($plan->setMilestone);
+        $item->enabled      = $plan->enabled;
         $item->id           = $plan->id;
         $item->type         = $plan->type;
         $item->name         = $plan->name;
@@ -259,6 +260,6 @@ formBatchPanel
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),
     set::items($fnGenerateFields()),
     set::data($fnGenerateDefaultData()),
-    on::change('[name^="enabled"]', 'changeEnabled'),
+    on::change('[name^="enabled"]', 'changeEnabled(e.target)'),
     $project->model == 'ipd' ? set::maxRows(count($fnGenerateDefaultData())) : null,
 );

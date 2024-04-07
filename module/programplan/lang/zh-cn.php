@@ -87,8 +87,8 @@ $lang->programplan->delayList[1] = '是';
 $lang->programplan->delayList[0] = '否';
 
 $lang->programplan->enabledList = array();
-$lang->programplan->enabledList[1] = '启用';
-$lang->programplan->enabledList[0] = '停用';
+$lang->programplan->enabledList['on']  = '启用';
+$lang->programplan->enabledList['off'] = '停用';
 
 $lang->programplan->typeList = array();
 $lang->programplan->typeList['stage']     = '阶段';

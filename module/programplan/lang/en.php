@@ -87,8 +87,8 @@ $lang->programplan->delayList[1] = 'Yes';
 $lang->programplan->delayList[0] = 'No';
 
 $lang->programplan->enabledList = array();
-$lang->programplan->enabledList[1] = 'On';
-$lang->programplan->enabledList[0] = 'Off';
+$lang->programplan->enabledList['on']  = 'On';
+$lang->programplan->enabledList['off'] = 'Off';
 
 $lang->programplan->typeList = array();
 $lang->programplan->typeList['stage']     = 'Stage';

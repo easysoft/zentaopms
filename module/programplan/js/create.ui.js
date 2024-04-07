@@ -12,6 +12,12 @@ window.onRenderRow = function(row, rowIdx, data)
             let $attributePicker = info[0];
             $attributePicker.render({disabled: true});
         });
+
+        if(data.enabled == 'off')
+        {
+            /* 需要等该行所有input元素加载完再执行changeEnabled方法 */
+            window.waitDom("tr[data-index='" + rowIdx + "'] [data-name='PM'] input", function(){changeEnabled(row.find('[data-name=enabled] [name^=enabled]'));});
+        }
     }
 
     if(data != undefined)
@@ -114,12 +120,12 @@ window.waitDom('td[data-name=milestone]', function()
     })
 })
 
-window.changeEnabled = function()
+window.changeEnabled = function(obj)
 {
-    const $target = $(this);
+    const $target = $(obj);
     const tdItems = $target.closest('tr').find('td');
 
-    if($(this).prop('checked'))
+    if($target.prop('checked'))
     {
         for(let item = 0; item < tdItems.length; item++)
         {
