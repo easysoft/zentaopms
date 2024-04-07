@@ -239,7 +239,6 @@ if($project)
                             'help'
                         ),
                     ),
-                    span(setClass('px-1'), ':'),
                     span
                     (
                         setClass('font-bold text-black mr-1'),
@@ -267,7 +266,6 @@ if($project)
                             'help'
                         ),
                     ),
-                    span(setClass('px-1'), ':'),
                     span
                     (
                         setClass('font-bold text-black mr-1'),
@@ -295,7 +293,6 @@ if($project)
                             'help'
                         ),
                     ),
-                    span(setClass('px-1'), ':'),
                     span
                     (
                         setClass('font-bold text-black mr-1'),
@@ -340,7 +337,6 @@ if($project)
                             'help'
                         ),
                     ),
-                    span(setClass('px-1'), ':'),
                     span
                     (
                         setClass('font-bold text-black mr-1'),
@@ -368,7 +364,6 @@ if($project)
                             'help'
                         ),
                     ),
-                    span(setClass('px-1'), ':'),
                     span
                     (
                         setClass('font-bold text-black mr-1'),
@@ -396,7 +391,6 @@ if($project)
                             'help'
                         ),
                     ),
-                    span(setClass('px-1'), ':'),
                     span
                     (
                         setClass('font-bold text-black mr-1'),
