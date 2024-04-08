@@ -541,12 +541,14 @@ class metricZen extends metric
      */
     protected function prepareActionPriv(array $metrics): array
     {
+        $this->loadModel('screen');
         foreach($metrics as $metric)
         {
-            $metric->canEdit      = $metric->stage == 'wait';
-            $metric->canImplement = ($metric->stage == 'wait' && !$this->metric->isOldMetric($metric) && $metric->builtin === '0');
-            $metric->canDelist    = $metric->stage == 'released' && $metric->builtin === '0';
-            $metric->isUsed       = $this->loadModel('screen')->checkIFChartInUse($metric->id, 'metric');
+            $metric->canEdit        = $metric->stage == 'wait';
+            $metric->canImplement   = ($metric->stage == 'wait' && !$this->metric->isOldMetric($metric) && $metric->builtin === '0');
+            $metric->canDelist      = $metric->stage == 'released' && $metric->builtin === '0';
+            $metric->canRecalculate = $metric->stage == 'released' && !empty($metric->dateType) && $metric->dateType != 'nodate';
+            $metric->isUsed         = $this->screen->checkIFChartInUse($metric->id, 'metric');
         }
         return $metrics;
     }
