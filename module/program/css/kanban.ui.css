@@ -7,4 +7,4 @@
 .card-prefix {position: absolute; right: 10px}
 .card-suffix {min-width: 46px;}
 
-#mainContent div.kanban-list {overflow-x: hidden}
+#mainContent > div.kanban-list > div.kanban-region {padding: unset;}

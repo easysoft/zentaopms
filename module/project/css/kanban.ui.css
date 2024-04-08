@@ -9,4 +9,4 @@
 
 .card-heading .text-black {max-width: 90%}
 
-#mainContent div.kanban-list {overflow-x: hidden}
+#mainContent > div.kanban-list > div.kanban-region {padding: unset;}
