@@ -157,7 +157,6 @@ function getDateRange(startDate, endDate, dateType = 'day')
             dateRange.push(new Date(current));
             current.setDate(current.getDate() + 7);
         }
-        dateRange.pop();
         dateRange.push(end);
     }
 

@@ -139,10 +139,24 @@ class metricModel extends model
      */
     public function getTimeTable($data, $dateType = 'day', $withCalcTime = true)
     {
-        usort($data, function($a, $b)
+        usort($data, function($a, $b) use ($dateType)
         {
-            $dateA = strtotime($a->dateString);
-            $dateB = strtotime($b->dateString);
+            if($dateType == 'week')
+            {
+                list($yearA, $weekA) = explode('-', $a->dateString);
+                list($yearB, $weekB) = explode('-', $b->dateString);
+
+                list($firstDayOfWeekA, $lastDayOfWeekA) = $this->getStartAndEndOfWeek($yearA, $weekA, 'date');
+                list($firstDayOfWeekB, $lastDayOfWeekB) = $this->getStartAndEndOfWeek($yearB, $weekB, 'date');
+
+                $dateA = strtotime($firstDayOfWeekA);
+                $dateB = strtotime($firstDayOfWeekB);
+            }
+            else
+            {
+                $dateA = strtotime($a->dateString);
+                $dateB = strtotime($b->dateString);
+            }
 
             if ($dateA == $dateB) {
                 return 0;
@@ -2383,10 +2397,11 @@ class metricModel extends model
      *
      * @param  int|string $year
      * @param  int|string $week
+     * @param  string     $type date|datetime
      * @access public
      * @return bool
      */
-    public function getStartAndEndOfWeek($year, $week)
+    public function getStartAndEndOfWeek($year, $week, $type = 'datetime')
     {
         $firstDayOfYear = date('Y-01-01', strtotime("$year-01-01"));
         $firstDayOfWeek = date('N', strtotime($firstDayOfYear));
@@ -2396,7 +2411,8 @@ class metricModel extends model
         $firstDayOfWeek = date('Y-m-d', strtotime("$firstDayOfYear +$offsetDays days"));
         $lastDayOfWeek  = date('Y-m-d', strtotime("$firstDayOfWeek +6 days"));
 
-        return array("$firstDayOfWeek 00:00:00", "$lastDayOfWeek 23:59:59");
+        if($type == 'datetime') return array("$firstDayOfWeek 00:00:00", "$lastDayOfWeek 23:59:59");
+        if($type == 'date')     return array($firstDayOfWeek, $lastDayOfWeek);
     }
 
     /**
