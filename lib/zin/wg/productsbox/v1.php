@@ -25,6 +25,7 @@ class productsBox extends wg
         'hasNewProduct?: bool=false',   // 是否有新产品。
         'errorSameProducts?: string',   // 选择同一个产品的提示。
         'required?: bool=false',        // 是否是必填。
+        'from?: string=project',        // 来源类型。
         'selectTip?: string=""'         // 产品下拉提示。
     );
 
@@ -165,14 +166,11 @@ class productsBox extends wg
     protected function buildOnlyLinkPlans(array $productItems): array
     {
         global $lang;
-        list($currentPlan, $productPlans, $project) = $this->prop(array('currentPlan', 'productPlans', 'project'));
+        list($currentPlan, $productPlans, $from) = $this->prop(array('currentPlan', 'productPlans', 'from'));
 
         $planProductID = current(array_keys($productItems));
-        $productPlans  = isset($productPlans[$planProductID]) && isset($productPlans[$planProductID][0]) ? $productPlans[$planProductID][0] : array();
-        if(empty($project->hasProduct) && empty($currentPlan) && !empty($productPlans)) $currentPlan = key($productPlans);
-
-        $productsBox = array();
-        $productsBox[] = div
+        $productsBox   = array();
+        $productsBox[] = $from == 'execution' ? div
         (
             set::className('productBox noProductBox'),
             formGroup
@@ -189,7 +187,14 @@ class productsBox extends wg
                     formHidden("products[{$planProductID}]", $planProductID),
                     formHidden("branch[{$planProductID}][0]", 0)
                 )
-            )
+            ),
+            formHidden("products[{$planProductID}]", $planProductID),
+            formHidden("branch[{$planProductID}][0]", 0)
+        ) : div
+        (
+            set::className('productBox'),
+            formHidden("products[{$planProductID}]", $planProductID),
+            formHidden("branch[{$planProductID}][0]", 0)
         );
 
         return $productsBox;
