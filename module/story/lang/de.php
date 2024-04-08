@@ -330,6 +330,8 @@ $lang->story->affectedTwins          = 'Zwillinge';
 
 $lang->story->specTemplate           = "Als ein < type of user >, möchte ich < some goal > dass < some reason >.";
 $lang->story->needNotReview          = 'Keine Prüfung';
+$lang->story->childStoryTitle        = 'Contains %s sub-requirements, of which %s have been finished';
+$lang->story->childTaskTitle         = 'Contains %s tasks, of which %s have been finished';
 $lang->story->successSaved           = "Story wurde gespeichrt!";
 $lang->story->confirmDelete          = "Möchten Sie diese Story löschen?";
 $lang->story->confirmRecall          = "Do you want to recall this story?";

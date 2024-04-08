@@ -309,6 +309,8 @@ class storyTao extends storyModel
         $parents = $this->extractParents($stories);
         if($parents) $parents = $this->dao->select('id,title,status,version,type')->from(TABLE_STORY)->where('id')->in($parents)->andWhere('deleted')->eq(0)->fetchAll('id');
 
+        $childItems = $this->getChildItems($stories);
+
         if($type != 'story')
         {
             $sameTypeChildren = $this->dao->select('parent, id')->from(TABLE_STORY)
@@ -350,6 +352,12 @@ class storyTao extends storyModel
                 if($type == 'requirement') $story->SRS = $relations[$story->id]->count;
             }
 
+            if(isset($childItems[$story->id]))
+            {
+                $story->childItem      = $childItems[$story->id]['finished'] . ' / ' . $childItems[$story->id]['total'];
+                $story->childItemTitle = $childItems[$story->id]['title'];
+            }
+
             $story->parent = array();
             foreach(explode(',', trim($story->path, ',')) as $parentID)
             {
@@ -380,6 +388,45 @@ class storyTao extends storyModel
             return false;
         }, $stories);
         return array_values(array_unique(array_filter($parent)));
+    }
+
+    /**
+     * 获取需求的子项，统计已完成/总数。
+     * Get child items of stories, and count the finished/total.
+     *
+     * @param  array     $stories
+     * @access protected
+     * @return array
+     */
+    protected function getChildItems(array $stories): array
+    {
+        $childItems = array();
+
+        $childStories = $this->dao->select('id, parent, status')->from(TABLE_STORY)
+            ->where('parent')->in(array_keys($stories))
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('parent');
+
+        foreach($childStories as $parentID => $childStory)
+        {
+            $childItems[$parentID]['total']    = count($childStory);
+            $childItems[$parentID]['finished'] = count(array_filter($childStory, function($story){return $story->status == 'closed';}));
+            $childItems[$parentID]['title']    = sprintf($this->lang->story->childStoryTitle, $childItems[$parentID]['total'], $childItems[$parentID]['finished']);
+        }
+
+        $childTasks = $this->dao->select('id, story, status')->from(TABLE_TASK)
+            ->where('story')->in(array_keys($stories))
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('story');
+
+        foreach($childTasks as $parentID => $childTask)
+        {
+            $childItems[$parentID]['total']    = count($childTask);
+            $childItems[$parentID]['finished'] = count(array_filter($childTask, function($task){return in_array($task->status, array('done', 'closed', 'cancel'));}));
+            $childItems[$parentID]['title']    = sprintf($this->lang->story->childTaskTitle, $childItems[$parentID]['total'], $childItems[$parentID]['finished']);
+        }
+
+        return $childItems;
     }
 
     /**

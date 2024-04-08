@@ -95,6 +95,10 @@ window.renderCell = function(result, info)
         delete result[0]['props']['href'];
         result[0]['props']['className'] += ' disabled';
     }
+    if(info.col.name == 'childItem')
+    {
+        result[1]['attrs']['title'] = info.row.data?.childItemTitle;
+    }
     return result;
 };
 

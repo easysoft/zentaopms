@@ -330,6 +330,8 @@ $lang->story->affectedTwins        = '影响的孪生需求';
 
 $lang->story->specTemplate           = "建议参考的模板：作为一名<某种类型的用户>，我希望<达成某些目的>，这样可以<开发的价值>。";
 $lang->story->needNotReview          = '不需要评审';
+$lang->story->childStoryTitle        = '包含%s个子需求，其中%s个已完成';
+$lang->story->childTaskTitle         = '包含%s个子任务，其中%s个已完成';
 $lang->story->successSaved           = "{$lang->SRCommon}成功添加，";
 $lang->story->confirmDelete          = "您确认删除该{$lang->SRCommon}吗?";
 $lang->story->confirmRecall          = "您确认撤销该{$lang->SRCommon}吗?";
