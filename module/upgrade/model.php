@@ -5861,9 +5861,10 @@ class upgradeModel extends model
 
         foreach($data->files as $file)
         {
+            if(!preg_match('/[a-z]/', $file[0])) continue;
+
             $fromPath = $this->app->getModuleRoot() . $file;
             if(!is_file($fromPath)) continue;
-            if(!preg_match('/[a-z]/', $file[0])) continue;
 
             $dirRoot = $customRoot . DS . dirname($file);
             $toPath  = $dirRoot . DS . basename($file);
