@@ -50,7 +50,13 @@ class datatable extends control
             $account = $this->app->user->account;
             if($account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest.'));
 
-            $this->loadModel('setting')->setItem($account . '.' . $this->post->currentModule . '.' . $this->post->currentMethod . '.showModule', $this->post->value);
+            $module = $this->post->currentModule;
+            $method = $this->post->currentMethod;
+
+            $this->app->checkModuleName($module);
+            $this->app->checkMethodName($method);
+
+            $this->loadModel('setting')->setItem($account . '.' . $module . '.' . $method . '.showModule', $this->post->value);
             if($this->post->allModule !== false) $this->setting->setItem("$account.execution.task.allModule", $this->post->allModule);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
