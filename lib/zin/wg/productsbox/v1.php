@@ -168,10 +168,13 @@ class productsBox extends wg
         list($currentPlan, $productPlans, $project) = $this->prop(array('currentPlan', 'productPlans', 'project'));
 
         $planProductID = current(array_keys($productItems));
-        $productsBox   = array();
-        $productsBox[] = !empty($project->hasProduct) ? div
+        $productPlans  = isset($productPlans[$planProductID]) && isset($productPlans[$planProductID][0]) ? $productPlans[$planProductID][0] : array();
+        if(empty($project->hasProduct) && empty($currentPlan) && !empty($productPlans)) $currentPlan = key($productPlans);
+
+        $productsBox = array();
+        $productsBox[] = div
         (
-            set::className('productBox'),
+            set::className('productBox noProductBox'),
             formGroup
             (
                 set::width('1/2'),
@@ -187,11 +190,6 @@ class productsBox extends wg
                     formHidden("branch[{$planProductID}][0]", 0)
                 )
             )
-        ) : div
-        (
-            set::className('productBox'),
-            formHidden("products[{$planProductID}]", $planProductID),
-            formHidden("branch[{$planProductID}][0]", 0)
         );
 
         return $productsBox;
