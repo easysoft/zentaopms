@@ -357,4 +357,47 @@ class repoTao extends repoModel
 
         return array();
     }
+
+    /**
+     * Set hidden projects of the server for the user.
+     *
+     * @param  string|int   $server
+     * @param  string|array $projects
+     * @param  string       $user
+     * @param  bool         $override
+     * @return bool
+     */
+    protected function setHiddenProjects(string|int $server, string|array $projects, string $user = '', bool $override = true)
+    {
+        if(empty($user)) $user = 'system';
+
+        $hiddenProjects = $this->getHiddenProjects($user);
+
+        if(is_string($projects) && strpos($projects, ',') !== false) $projects = explode(',', $projects);
+
+        $server = (string) $server;
+        if(isset($hiddenProjects[$server]) || !empty($hiddenProjects))
+        {
+            $hiddenProjects[$server] = $override ? $projects : array_unique(array_merge($hiddenProjects[$server], $projects));
+
+            $this->dao->update(TABLE_CONFIG)->set('`value`')->eq(json_encode($hiddenProjects))
+            ->where('module')->eq('repo')
+            ->beginIF($user)->andWhere('owner')->eq($user)->fi()
+            ->andWhere('`key`')->eq('hiddenProjects')
+            ->exec();
+        }
+        else
+        {
+            $hiddenProjects[$server] = $projects;
+            $hiddenProjectData = new stdclass;
+            $hiddenProjectData->vision = $this->config->vision;
+            $hiddenProjectData->owner  = $user;
+            $hiddenProjectData->module = 'repo';
+            $hiddenProjectData->key    = 'hiddenProjects';
+            $hiddenProjectData->value  = json_encode($hiddenProjects);
+            $this->dao->insert(TABLE_CONFIG)->data($hiddenProjectData)->autoCheck()->exec();
+        }
+
+        return !dao::isError();
+    }
 }
