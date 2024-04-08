@@ -421,8 +421,6 @@ class ai extends control
             $data = fixer::input('post')->get();
             if(isset($data->togglePromptStatus) && isset($data->promptId))
             {
-                if(!$this->ai->hasModelsAvailable()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
-
                 $this->ai->togglePromptStatus($data->promptId);
 
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
