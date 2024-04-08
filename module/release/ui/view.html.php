@@ -184,6 +184,7 @@ if($canBeChanged)
 
 detailBody
 (
+    setClass('release-view-body'),
     sectionList(
         tabs
         (
