@@ -43,7 +43,7 @@ empty($linkedBranches) ? null : div
 (
     div
     (
-        setClass('panel-title text-lg'),
+        setClass('panel-title text-md'),
         $lang->repo->createdBranch
     ),
 
@@ -92,6 +92,7 @@ if(empty($linkedBranches) && !$canCreate)
 $canCreate ? formPanel
 (
     set::title($lang->repo->createBranchAction),
+    set::titleClass('panel-title text-md'),
     formGroup
     (
         setID('repoID'),
