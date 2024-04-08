@@ -4,7 +4,7 @@
     input.name = "publish";
     input.value = "true";
 
-    const form = document.getElementById('assistant-form');
+    const form = document.querySelector('#assistant-form form');
 
     const submitButton = document.getElementById('save-assistant-button');
     const publishButton = document.getElementById('save-publish-assistant-button');

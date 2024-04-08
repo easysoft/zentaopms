@@ -11,6 +11,13 @@ formPanel
 (
     set::title($lang->ai->assistants->edit),
     set::id('assistant-form'),
+    set::actions(
+        array(
+            array('text' => $lang->ai->prompts->action->publish, 'id' => 'save-publish-assistant-button', 'class' => 'btn primary'),
+            array('text' => $lang->save, 'class' => 'btn secondary', 'id' => 'save-assistant-button', 'btnType' => 'submit'),
+            'cancel'
+        )
+    ),
     formGroup
     (
         set::label($lang->ai->models->common),

@@ -445,7 +445,16 @@ class ai extends control
             $assistant->icon = "$assistant->iconName-$assistant->iconTheme";
             unset($assistant->iconName, $assistant->iconTheme);
 
-            $this->ai->updateAssistant($assistant);
+            if(empty($assistant->publish))
+            {
+                $this->ai->updateAssistant($assistant);
+            }
+            else
+            {
+                unset($assistant->publish);
+                $assistant->id = $this->ai->updateAssistant($assistant);
+                $this->ai->toggleAssistant($assistantId, true);
+            }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'locate' => helper::createLink('ai', 'assistants')));
