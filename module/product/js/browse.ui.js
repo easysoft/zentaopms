@@ -103,7 +103,6 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
     if(checkedIdList == undefined || checkedIdList.length == 0) return {html: pageSummary};
 
     let total     = 0;
-    let SRTotal   = 0;
     let estimate  = 0;
     let rate      = '0%';
     let hasCase   = 0;
@@ -115,24 +114,23 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
         {
             const story = row.data;
             if(story.type != storyType) return;
-            estimate   += parseFloat(story.estimate);
+            if(story?.needSummaryEstimate) estimate += parseFloat(story.estimate);
             if(story.caseCount > 0)
             {
                 hasCase += 1;
             }
-            else if(typeof story.isParent != 'undefined' && story.isParent)
+            else if(typeof story.isParent != 'undefined' && story.isParent == '1')
             {
                 rateCount -= 1;
             }
 
             if(storyType == story.type) total += 1;
-            if(storyType == 'requirement' && story.type == 'story') SRTotal += 1;
         }
     })
 
     if(rateCount) rate = Math.round(hasCase / rateCount * 10000 / 100) + '' + '%';
 
-    return {html: checkedSummary.replace('%total%', total).replace('%estimate%', estimate).replace('%rate%', rate).replace('%SRTotal%', SRTotal)};
+    return {html: checkedSummary.replace('%total%', total).replace('%estimate%', estimate).replace('%rate%', rate)};
 };
 
 window.setShowGrades = function()

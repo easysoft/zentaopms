@@ -1206,9 +1206,13 @@ class productModel extends model
             if($story->type == 'requirement') $URTotal += 1;
             if($story->type == 'epic')        $ERTotal += 1;
 
-            /* 如果是父需求，并且子需求与父需求类型一致，则不统计工时。 */
+            /* 仅统计叶子需求、子需求类型和父需求不一样的父需求工时。 */
             $isLeafStory = !isset($childTypes[$story->id]) || (isset($childTypes[$story->id]) && !isset($childTypes[$story->id][$story->type]));
-            if($storyType == $story->type && $isLeafStory) $totalEstimate += $story->estimate;
+            if($storyType == $story->type && $isLeafStory)
+            {
+                $totalEstimate += $story->estimate;
+                $story->needSummaryEstimate = true;
+            }
 
             if($story->type != 'story') continue;
             if($story->isParent == '0' && ($story->status != 'closed' || in_array($story->closedReason, array('done', 'postponed'))))
