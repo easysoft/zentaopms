@@ -15,7 +15,7 @@ namespace zin;
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
 $fields         = $this->config->programplan->form->create;
-$enabledPoints  = isset($enabledPoints) ? $enabledPoints : new stdclass();
+$enabledPoints  = isset($enabledPoints)  ? $enabledPoints  : new stdclass();
 $reviewedPoints = isset($reviewedPoints) ? $reviewedPoints : array();
 
 /* Generate title that is tailored to specific situation. */
@@ -184,8 +184,8 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         foreach($stages as $stage)
         {
             $points = !empty($enabledPoints->{$stage->type}) ? $enabledPoints->{$stage->type} : array();
-            $item   = new stdClass();
 
+            $item            = new stdClass();
             $item->name      = $stage->name;
             $item->code      = isset($stage->code) ? $stage->code : '';
             $item->percent   = $stage->percent;
@@ -204,8 +204,8 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
     foreach($plans as $plan)
     {
         $points = !empty($enabledPoints->{$plan->attribute}) ? $enabledPoints->{$plan->attribute} : array();
-        $item   = new stdClass();
 
+        $item               = new stdClass();
         $item->disabled     = !isset($plan->setMilestone);
         $item->enabled      = $plan->enabled;
         $item->id           = $plan->id;
@@ -237,16 +237,16 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
 };
 
 /* ZIN: layout. */
-jsVar('projectID',     $project->id);
-jsVar('productID',     $productID);
-jsVar('planID',        $planID);
-jsVar('type',          $executionType);
-jsVar('project',       $project);
-jsVar('cropStageTip',  $lang->programplan->cropStageTip);
-jsVar('ipdStagePoint', $config->review->ipdReviewPoint);
-jsVar('attributeList', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
-jsVar('plans',         $plans);
-jsvar('reviewedPoints', $reviewedPoints);
+jsVar('projectID',        $project->id);
+jsVar('productID',        $productID);
+jsVar('planID',           $planID);
+jsVar('type',             $executionType);
+jsVar('project',          $project);
+jsVar('cropStageTip',     $lang->programplan->cropStageTip);
+jsVar('ipdStagePoint',    $config->review->ipdReviewPoint);
+jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
+jsVar('plans',            $plans);
+jsvar('reviewedPoints',   $reviewedPoints);
 jsVar('reviewedPointTip', $lang->programplan->reviewedPointTip);
 
 featureBar(li
