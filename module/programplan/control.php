@@ -79,6 +79,7 @@ class programplan extends control
      */
     public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage')
     {
+        $this->loadModel('review');
         $this->productID = $this->commonAction($projectID, $productID);
         if($_POST)
         {

@@ -10,15 +10,25 @@ window.onRenderRow = function(row, rowIdx, data)
 
         $point.find('.picker-box').on('inited', function(e, info)
         {
-            let $picker      = info[0];
-            let options      = $picker.options;
-            let items        = [{text: '', value: ''}];
+            let $picker = info[0];
+            let options = $picker.options;
+            let items   = [{text: '', value: ''}];
             for(let point in ipdStagePoint[$attribute])
             {
-                let $value = ipdStagePoint[$attribute][point];
-                items.push({text: $value, value: $value}); 
+                let disabled = false
+                let $value   = ipdStagePoint[$attribute][point];
+                let hint     = $value;
+
+                /* 如果已经评审过，则置灰不能选。*/
+                if(reviewedPoints[$value] !== undefined && reviewedPoints[$value].result)
+                {
+                    disabled = true;
+                    hint     = reviewedPointTip;
+                }
+
+                items.push({text: $value, value: $value, disabled: disabled, hint: hint}); 
             }
-            options.items = items;
+            options.items = items; 
 
             $picker.render(options);
         });
@@ -42,6 +52,22 @@ window.onRenderRow = function(row, rowIdx, data)
             /* 需要等该行所有input元素加载完再执行changeEnabled方法 */
             window.waitDom("tr[data-index='" + rowIdx + "'] [data-name='PM'] input", function(){changeEnabled(row.find('[data-name=enabled] [name^=enabled]'));});
         }
+
+        window.waitDom("div.picker-multi-selection", function()
+        {
+            let selection = row.find('div.picker-multi-selection');
+            selection.each(function(index, element) {
+                /* 获取title。*/
+                let $title = $(element).attr('title');
+
+                /* 如果该评审点以提交评审，则不能取消选择。*/
+                if(reviewedPoints[$title] !== undefined && reviewedPoints[$title].result)
+                {
+                    $(element).attr('title', reviewedPointTip); // 修改title
+                    $(element).find(".picker-deselect-btn").remove(); // 禁用点击事件
+                }
+            });
+        });
     }
 
     if(data != undefined)
@@ -89,6 +115,12 @@ window.onRenderRow = function(row, rowIdx, data)
         row.children('[data-name=milestone]').append(inputEle);
     }
 };
+
+window.checkDeselect = function(point, obj)
+{
+    console.log(point);
+    console.log(obj.value);
+}
 
 window.onChangeExecutionType = function(event)
 {
@@ -146,16 +178,8 @@ window.waitDom('td[data-name=milestone]', function()
 
 window.changeEnabled = function(obj)
 {
-    const $target    = $(obj);
-    const $row       = $target.closest('tr');
-    const tdItems    = $row.find('td');
-    const stageID    = $row.find('input[name^=id]').val();
-    const stageAttr  = $row.find('input[name^=attribute]').val();
-    const defaultVal = {
-            'name' : stageID ? plans[stageID].name  : attributeList[stageAttr],
-            'begin': stageID ? plans[stageID].begin : project.begin,
-            'end'  : stageID ? plans[stageID].end   : project.end
-        }
+    const $target = $(obj);
+    const tdItems = $target.closest('tr').find('td');
 
     if($target.prop('checked'))
     {
@@ -201,11 +225,6 @@ window.changeEnabled = function(obj)
 
             if($(tdItems[item]).find('[data-zui-datepicker]').length)
             {
-                if($(tdItems[item]).find('input[name^=begin]').length) $(tdItems[item]).find('input[name^=begin]').zui('datePicker').$.setValue(defaultVal.begin);
-                if($(tdItems[item]).find('input[name^=end]').length)   $(tdItems[item]).find('input[name^=end]').zui('datePicker').$.setValue(defaultVal.end);
-
-                $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render();
-
                 itemValue = $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').$.value;
                 itemName  = $(tdItems[item]).find('input.pick-value').attr('name');
                 $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
@@ -230,8 +249,6 @@ window.changeEnabled = function(obj)
             }
             else if($(tdItems[item]).find('input[type=text]').length)
             {
-                if($(tdItems[item]).find('input[name^=name]').length) $(tdItems[item]).find('input[name^=name]').val(defaultVal.name);
-
                 $(tdItems[item]).find('input[type=text]').attr('readonly', 'readonly');
             }
             else if($(tdItems[item]).data('name') == 'enabled')

@@ -80,6 +80,7 @@ $lang->programplan->checkBegin       = '『计划开始』应当为合法的日�
 $lang->programplan->checkEnd         = '『计划完成』应当为合法的日期';
 $lang->programplan->methodTip        = "您可以在该阶段下选择继续创建阶段或创建{$lang->executionCommon}/看板进行工作。{$lang->executionCommon}/看板不支持继续拆分。";
 $lang->programplan->cropStageTip     = "已经开始了的阶段不能再裁剪";
+$lang->programplan->reviewedPointTip = "该评审点已提交评审不能再操作";
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';

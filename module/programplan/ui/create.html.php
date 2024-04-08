@@ -14,8 +14,9 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
-$fields        = $this->config->programplan->form->create;
-$enabledPoints = isset($enabledPoints) ? $enabledPoints : new stdclass();
+$fields         = $this->config->programplan->form->create;
+$enabledPoints  = isset($enabledPoints) ? $enabledPoints : new stdclass();
+$reviewedPoints = isset($reviewedPoints) ? $reviewedPoints : array();
 
 /* Generate title that is tailored to specific situation. */
 $title = $lang->programplan->create;
@@ -245,6 +246,8 @@ jsVar('cropStageTip',  $lang->programplan->cropStageTip);
 jsVar('ipdStagePoint', $config->review->ipdReviewPoint);
 jsVar('attributeList', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
 jsVar('plans',         $plans);
+jsvar('reviewedPoints', $reviewedPoints);
+jsVar('reviewedPointTip', $lang->programplan->reviewedPointTip);
 
 featureBar(li
 (
