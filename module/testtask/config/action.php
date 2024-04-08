@@ -20,6 +20,7 @@ $config->testtask->actionList['block']['text']        = $lang->testtask->block;
 $config->testtask->actionList['block']['hint']        = $lang->testtask->block;
 $config->testtask->actionList['block']['url']         = array('module' => 'testtask', 'method' => 'block', 'params' => 'taskID={id}');
 $config->testtask->actionList['block']['data-toggle'] = 'modal';
+$config->testtask->actionList['block']['data-size']   = 'md';
 
 $config->testtask->actionList['activate']['icon']        = 'magic';
 $config->testtask->actionList['activate']['text']        = $lang->testtask->activate;
