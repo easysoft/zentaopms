@@ -101,6 +101,7 @@ $lang->action->dynamic->search     = 'Suche';
 
 $lang->action->objectTypes['product']          = $lang->productCommon;
 $lang->action->objectTypes['branch']           = 'Branch';
+$lang->action->objectTypes['epic']             = $lang->ERCommon;
 $lang->action->objectTypes['story']            = $lang->SRCommon;
 $lang->action->objectTypes['requirement']      = $lang->URCommon;
 $lang->action->objectTypes['design']           = 'Design';

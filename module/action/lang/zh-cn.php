@@ -101,6 +101,7 @@ $lang->action->dynamic->search     = '搜索';
 
 $lang->action->objectTypes['product']          = $lang->productCommon;
 $lang->action->objectTypes['branch']           = '分支';
+$lang->action->objectTypes['epic']             = $lang->ERCommon;
 $lang->action->objectTypes['story']            = $lang->SRCommon;
 $lang->action->objectTypes['requirement']      = $lang->URCommon;
 $lang->action->objectTypes['design']           = '设计';
