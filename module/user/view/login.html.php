@@ -52,7 +52,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
                   <td class='captchaBox'>
                     <div class='input-group'>
                       <?php echo html::input('captcha', '', "class='form-control'");?>
-                      <span class='input-group-addon'><img src="<?php echo $this->createLink('misc', 'captcha', "sessionVar=captcha");?>" /></span>
+                      <span class='input-group-addon'><img src="<?php echo $this->createLink('misc', 'captcha');?>" /></span>
                     </div>
                   </td>
                 </tr>

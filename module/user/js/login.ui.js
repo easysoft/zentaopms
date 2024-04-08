@@ -8,7 +8,7 @@ window.adjustPanelPos = function()
 window.refreshCaptcha = function(obj)
 {
     let $this = $(obj)
-    let captchaLink = $.createLink('misc', 'captcha', "sessionVar=captcha");
+    let captchaLink = $.createLink('misc', 'captcha');
     captchaLink += captchaLink.indexOf('?') < 0 ? '?' : '&';
     captchaLink += 's=' + Math.random();
 

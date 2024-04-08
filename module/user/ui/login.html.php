@@ -140,7 +140,7 @@ div
                                 inputGroup
                                 (
                                     input(set::name('captcha')),
-                                    span(setClass('input-group-addon'), h::img(set::src($this->createLink('misc', 'captcha', "sessionVar=captcha")), on::click('refreshCaptcha(e.target)'), set::style(array('height' => '2.1rem'))))
+                                    span(setClass('input-group-addon'), h::img(set::src($this->createLink('misc', 'captcha')), on::click('refreshCaptcha(e.target)'), set::style(array('height' => '2.1rem'))))
                                 )
                             )
                         ) : null,
