@@ -178,6 +178,7 @@ $lang->story->plan             = 'Linked Plan';
 $lang->story->planAB           = 'Plan';
 $lang->story->comment          = 'Comment';
 $lang->story->children         = "Child {$lang->SRCommon}";
+$lang->story->childItem        = "Child Item";
 $lang->story->childrenAB       = "C";
 $lang->story->linkStories      = 'Linked Story';
 $lang->story->linkRequirements = "Linked {$lang->URCommon}";

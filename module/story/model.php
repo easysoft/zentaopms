@@ -4998,6 +4998,7 @@ class storyModel extends model
      * @param  object $story
      * @param  array  $options
      * @param  string $storyType sting|requirement
+     * @param  int    $maxGrade
      * @access public
      * @return object
      */

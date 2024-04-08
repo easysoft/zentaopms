@@ -171,6 +171,12 @@ $config->story->dtable->fieldList['caseCount']['link']        = "RAWJS<function(
 $config->story->dtable->fieldList['caseCount']['data-toggle'] = 'modal';
 $config->story->dtable->fieldList['caseCount']['group']       = 7;
 
+$config->story->dtable->fieldList['childItem']['name']     = 'childItem';
+$config->story->dtable->fieldList['childItem']['title']    = $lang->story->childItem;
+$config->story->dtable->fieldList['childItem']['sortType'] = false;
+$config->story->dtable->fieldList['childItem']['type']     = 'text';
+$config->story->dtable->fieldList['childItem']['group']    = 6;
+
 $config->story->dtable->fieldList['URS']['name']        = 'URS';
 $config->story->dtable->fieldList['URS']['title']       = 'UR';
 $config->story->dtable->fieldList['URS']['sortType']    = false;

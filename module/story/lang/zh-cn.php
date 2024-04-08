@@ -178,6 +178,7 @@ $lang->story->plan             = "所属计划";
 $lang->story->planAB           = '计划';
 $lang->story->comment          = '备注';
 $lang->story->children         = "子需求";
+$lang->story->childItem        = "子项";
 $lang->story->childrenAB       = "子";
 $lang->story->linkStories      = "相关{$lang->SRCommon}";
 $lang->story->linkRequirements = "相关{$lang->URCommon}";
