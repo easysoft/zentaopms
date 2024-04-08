@@ -503,7 +503,7 @@ class programModel extends model
             $query = str_replace('`id`','t1.id', $this->session->projectQuery);
         }
 
-        $stmt = $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1');
+        $stmt = $this->dao->select('DISTINCT t1.*, CAST(t1.budget AS UNSIGNED) AS budget')->from(TABLE_PROJECT)->alias('t1');
         if($this->cookie->involved) $stmt->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID');
         $stmt->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
