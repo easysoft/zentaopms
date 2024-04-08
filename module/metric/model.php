@@ -79,9 +79,8 @@ class metricModel extends model
             }
             $row->value = is_numeric($record['value']) ? round((float)$record['value'], 2) : $record['value'];
 
-            $calcInfo = $this->getRecordCalcInfo($record['id']);
-            $row->calcType     = $calcInfo->calcType;
-            $row->calculatedBy = !empty($calcInfo->calculatedBy) ? $calcInfo->calculatedBy : 'system';
+            $row->calcType     = $record['calcType'];
+            $row->calculatedBy = $record['calculatedBy'];
 
             $tableData[] = $row;
         }
@@ -723,7 +722,9 @@ class metricModel extends model
         $time = helper::now();
         foreach($records as $index => $record)
         {
-            $records[$index]['calcTime'] = $time;
+            $records[$index]['date']         = $time;
+            $records[$index]['calcType']     = 'cron';
+            $records[$index]['calculatedBy'] = 'system';
         }
 
         return $records;
