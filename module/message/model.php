@@ -82,6 +82,13 @@ class messageModel extends model
         $messageSetting = $this->config->message->setting;
         if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
 
+        /* 如果是业需和用需，则使用它们的发信配置。*/
+        if($objectType == 'story')
+        {
+            $story      = $this->loadModel('story')->fetchByID($objectID);
+            $objectType = $story->type;
+        }
+
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
@@ -212,10 +219,10 @@ class messageModel extends model
 
         if($toList == 'closed') $toList = '';
         if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
-        if($objectType == 'story' && $actionID)
+        if(in_array($objectType, array('story', 'epic', 'requirement')) && $actionID)
         {
             $action = $this->loadModel('action')->getById($actionID);
-            list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
+            list($toList, $ccList) = $this->loadModel('story')->getToAndCcList($object, $action->action);
             $toList = $toList . $ccList;
         }
 

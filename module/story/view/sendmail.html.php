@@ -10,7 +10,7 @@
  * @link        https://www.zentao.net
  */
 ?>
-<?php $mailTitle = 'STORY #' . $object->id . ' ' . $object->title;?>
+<?php $mailTitle = strtoupper($object->type) . ' #' . $object->id . ' ' . $object->title;?>
 <?php include $this->app->getModuleRoot() . 'common/view/mail.header.html.php';?>
 <tr>
   <td>
@@ -18,7 +18,7 @@
       <tr>
         <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'>
           <?php $color = empty($object->color) ? '#333' : $object->color;?>
-          <?php echo html::a($domain . helper::createLink('story', 'view', "storyID=$object->id", 'html'), $mailTitle, '', "style='color: {$color}; text-decoration: underline;'");?>
+          <?php echo html::a($domain . helper::createLink($object->type, 'view', "storyID=$object->id", 'html'), $mailTitle, '', "style='color: {$color}; text-decoration: underline;'");?>
         </td>
       </tr>
     </table>

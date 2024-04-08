@@ -650,6 +650,8 @@ class mailModel extends model
         if($objectType == 'story' or $objectType == 'bug') $suffix = empty($object->product) ? '' : ' - ' . $this->loadModel('product')->getById($object->product)->name;
         if($objectType == 'task') $suffix = empty($object->execution) ? '' : ' - ' . $this->loadModel('execution')->getById($object->execution)->name;
 
+        if($objectType == 'story') $objectType = $object->type; // 业务需求和用户需求的邮件标题不同。
+
         return strtoupper($objectType) . ' #' . $object->id . ' ' . $title . $suffix;
     }
 

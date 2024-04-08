@@ -3629,7 +3629,7 @@ class storyModel extends model
         $ccList = isset($story->mailto) ? str_replace(' ', '', trim($story->mailto, ',')) : '';
 
         /* If the action is changed or reviewed, mail to the project or execution team. */
-        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed')
+        if((strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed') && $story->type == 'story')
         {
             $teamMembers = $this->getTeamMembers($story->id, $actionType);
             if($teamMembers)
