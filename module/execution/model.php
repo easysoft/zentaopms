@@ -4505,7 +4505,7 @@ class executionModel extends model
             $branchQuery .= "FIND_IN_SET('0', branch)";
         }
 
-        $branchQuery .= ')';
+        $branchQuery .= " OR branch = '')";
 
         $plans = $this->dao->select('t1.id,t1.title,t1.product,t1.parent,t1.begin,t1.end,t1.branch,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')

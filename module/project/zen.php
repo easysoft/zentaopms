@@ -372,6 +372,11 @@ class projectZen extends project
             foreach($projectBranches[$productID] as $branchID => $branch) $linkedBranches[$productID][$branchID] = $branchID;
             if(!empty($plans[$productID]))
             {
+                if(isset($plans[$productID]['']) && !isset($plans[$productID][0]))
+                {
+                    $plans[$productID][0] = $plans[$productID][''];
+                    unset($plans[$productID]['']);
+                }
                 foreach($plans[$productID] as $branchID => $branchPlans)
                 {
                     if(isset($branchPlans['']))
@@ -384,7 +389,6 @@ class projectZen extends project
                         {
                             $branchPlans[0] = $branchPlans[''];
                         }
-                        unset($plans[$productID]['']);
                         unset($branchPlans['']);
                     }
                 }
