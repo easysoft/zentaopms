@@ -53,7 +53,7 @@ class backBtn extends btn
             'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story,host-browse,execution-story,feedback-admin,testcase-browse,caselib-browse',
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view,execution-doc',
             'design'         => 'design-browse',
-            'release'        => 'release-browse,release-view,product-roadmap,kanban-view',
+            'release'        => 'release-browse,release-view,product-roadmap,kanban-view,projectrelease-browse',
             'productplan'    => 'productplan-browse,kanban-view',
             'programplan'    => 'project-execution',
             'projectrelease' => 'projectrelease-browse',
