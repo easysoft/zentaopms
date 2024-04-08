@@ -490,6 +490,7 @@ class storyModel extends model
         if(!empty($story->parent))
         {
             $this->subdivide($story->parent, array($storyID));
+            $this->updateParentStatus($storyID, $story->parent, false);
         }
         else
         {
@@ -625,6 +626,7 @@ class storyModel extends model
             if(!empty($story->parent))
             {
                 $this->subdivide($story->parent, array($storyID));
+                $this->updateParentStatus($storyID, $story->parent, false);
             }
             else
             {
