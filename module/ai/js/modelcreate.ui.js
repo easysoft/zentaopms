@@ -57,35 +57,4 @@ $(() =>
     $('select[name="type"]').on('change', handleModelTypeChange);
     $('select[name="vendor"]').on('change', handleVendorChange);
     $('select[name="proxyType"]').on('change', handleProxyTypeChange);
-    $('button[type="submit"]]').on('click', e =>
-    {
-        $('button[type="submit"]').attr('disabled', 'disabled');
-        $('#test-conn-btn').attr('disabled', 'disabled');
-        e.preventDefault();
-
-        $.ajax(
-        {
-            type: 'POST',
-            url: $.createLink('ai', 'modelcreate'),
-            data: $('#model-form').serialize(),
-            dataType: 'json',
-            success: data =>
-            {
-                if(data.result == 'success')
-                {
-                    zui.Messager.show({content: data.message, type: 'success'});
-                    window.location.href = $.createLink('ai', 'models');
-                }
-                else
-                {
-                    zui.Messager.show({content: data.message, type: 'danger'});
-                }
-            },
-            complete: () =>
-            {
-                $('button[type="submit"]').removeAttr('disabled');
-                $('#test-conn-btn').removeAttr('disabled');
-            }
-        });
-    });
 });
