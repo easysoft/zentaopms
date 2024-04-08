@@ -1595,7 +1595,11 @@ class commonModel extends model
     public function checkEntry()
     {
         /* if the API is new version, goto checkNewEntry. */
-        if($this->app->version) return $this->checkNewEntry();
+        if($this->app->version)
+        {
+            if(!$this->checkNewEntry()) $this->response('INVALID_TOKEN');
+            return true;
+        }
 
         /* Old version. */
         if(!isset($_GET[$this->config->moduleVar]) or !isset($_GET[$this->config->methodVar])) $this->response('EMPTY_ENTRY');
