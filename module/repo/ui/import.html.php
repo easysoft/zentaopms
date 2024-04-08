@@ -57,6 +57,7 @@ formBatchPanel
     set::back('repo-maintain'),
     set::mode(count($repoList) == 0 ? 'edit' : 'add'),
     set::addRowIcon('false'),
+    set::deleteRowIcon('icon-eye-off'),
     set::items($items),
     set::data($repoList),
     set::maxRows(count($repoList)),
