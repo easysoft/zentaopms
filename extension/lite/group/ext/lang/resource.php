@@ -921,11 +921,17 @@ $lang->cron->methodOrder[25] = 'toggle';
 $lang->cron->methodOrder[30] = 'delete';
 $lang->cron->methodOrder[35] = 'openProcess';
 
+/* AI methods. */
 $lang->resource->ai = new stdclass();
-$lang->resource->ai->models         = 'modelBrowse';
-$lang->resource->ai->editModel      = 'modelEdit';
-$lang->resource->ai->testConnection = 'modelTestConnection';
-$lang->resource->ai->chat           = 'chat';
+$lang->resource->ai->models                 = 'modelBrowse';
+$lang->resource->ai->modelView              = 'modelView';
+$lang->resource->ai->modelCreate            = 'modelCreate';
+$lang->resource->ai->modelEdit              = 'modelEdit';
+$lang->resource->ai->modelEnable            = 'modelEnable';
+$lang->resource->ai->modelDisable           = 'modelDisable';
+$lang->resource->ai->modelDelete            = 'modelDelete';
+$lang->resource->ai->modelTestConnection    = 'modelTestConnection';
+$lang->resource->ai->chat                   = 'chat';
 
 $lang->resource->contact            = new stdclass();
 $lang->resource->programstakeholder = new stdclass();
