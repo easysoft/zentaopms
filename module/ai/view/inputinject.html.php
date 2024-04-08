@@ -191,7 +191,7 @@
         function injectAuditToolbar()
         {
           <?php
-          $htmlStr = html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"');
+          $htmlStr = html::a(helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId#app=$app->tab"), '<i class="icon icon-refresh muted"></i> ' . $lang->ai->audit->regenerate, '', 'id="promptRegenerate" class="btn btn-link"');
           if($isAudit)
           {
             $htmlStr = $htmlStr . html::a(helper::createLink('ai', 'promptaudit', "promptId=$prompt->id&objectId=$objectId"), $lang->ai->audit->designPrompt, '', 'id="promptAudit" class="btn btn-info iframe"');
