@@ -5150,10 +5150,13 @@ class upgradeModel extends model
 
         foreach($data->files as $file => $check)
         {
-            $dirRoot  = $customRoot . DS . dirname($file);
-            $fileName = basename($file);
+            if(!preg_match('/[a-z]/', $file[0])) continue;
+
             $fromPath = $this->app->getModuleRoot() . $file;
-            $toPath   = $dirRoot . DS . $fileName;
+            if(!is_file($fromPath)) continue;
+
+            $dirRoot = $customRoot . DS . dirname($file);
+            $toPath  = $dirRoot . DS . basename($file);
             /* If the directory doesn't exist and there is no permission to create the directory, set the response and return it. */
             if(!is_dir($dirRoot))
             {
