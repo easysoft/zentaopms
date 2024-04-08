@@ -114,6 +114,7 @@ window.toggleCopyTeam = function(e)
  */
 function toggleOpsTip()
 {
+    $(this).closest('.form-group').find('.form-tip').remove();
     if($(this).val() == 'ops')
     {
         $(this).closest('.form-group').append('<div class="form-tip">' + typeDesc + '</div>');
