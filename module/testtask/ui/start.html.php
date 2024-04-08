@@ -14,6 +14,7 @@ modalHeader();
 
 form
 (
+    setClass('testtask-start-form'),
     formGroup
     (
         set::label($lang->comment),
