@@ -122,11 +122,17 @@ panel
         [
             'type' => 'primary',
             'text' => $lang->metric->publish,
-            'class' => 'ajax-submit',
+            'class' => 'ajax-submit publish-btn-disabled',
             'btnType' => 'submit',
-            'disabled' => !$isVerify,
-            'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}&from={$from}")
+            'disabled' => true
         ],
+        [
+            'type' => 'primary',
+            'text' => $lang->metric->publish,
+            'class' => 'ajax-submit publish-btn hidden',
+            'btnType' => 'submit',
+            'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}&from={$from}")
+        ]
     ])
 );
 

@@ -31,9 +31,9 @@ function verify(method)
         {
             var url = $.createLink('metric', 'ajaxgetmetricresult', 'metricID=' + metricId + '&from=' + from);
             loadTarget(url, '.metric-result')
-            //setTimeout(function(){
-            //    openUrl(url, {load: 'modal', target: modalId});
-            //}, 1000);
+            $('.publish-btn-disabled').hide();
+            $('.publish-btn').removeClass('hidden');
+
             return;
         }
 
