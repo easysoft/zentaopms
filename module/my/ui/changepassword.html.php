@@ -15,6 +15,7 @@ $reason = $app->user->modifyPasswordReason;
 formPanel
 (
     set::size('sm'),
+    setClass('pt-4 mt-4'),
     to::heading
     (
         div(setClass('panel-title text-lg'), $lang->my->changePassword)
