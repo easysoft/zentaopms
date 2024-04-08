@@ -144,10 +144,12 @@ $fields->field('productsBox')
         'planGroups'        => data('productPlans'),
         'linkedProducts'    => data('linkedProducts'),
         'linkedBranches'    => data('linkedBranches'),
-        'productPlans'      => data('productPlans'),
+        'productPlans'      => data('productPlan'),
+        'currentPlan'       => data('currentPlan'),
         'project'           => data('project'),
         'isStage'           => isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')),
         'errorSameProducts' => $lang->execution->errorSameProducts,
+        'from'              => 'execution'
     ));
 
 $fields->field('PO')

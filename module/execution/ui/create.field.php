@@ -89,6 +89,7 @@ $fields->field('productsBox')
         'project'           => data('project'),
         'isStage'           => data('isStage'),
         'errorSameProducts' => $lang->execution->errorSameProducts,
+        'from'              => 'execution'
     ));
 
 $fields->field('desc')

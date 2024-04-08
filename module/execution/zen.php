@@ -2154,6 +2154,13 @@ class executionZen extends execution
             }
         }
 
+        $productPlan = array();
+        if(!empty($planID))
+        {
+            $plan        = $this->productplan->fetchByID((int)$planID);
+            $productPlan = $this->productplan->getPairs($plan->product, $plan->branch, 'unexpired|withMainPlan', true);
+        }
+
         $productPlansOrder = array();
         foreach($productPlans as $productID => $branchPlans)
         {
@@ -2171,6 +2178,8 @@ class executionZen extends execution
         }
 
         $linkedObjects = new stdclass();
+        $linkedObjects->currentPlan          = $planID;
+        $linkedObjects->productPlan          = $productPlan;
         $linkedObjects->allProducts          = $allProducts;
         $linkedObjects->linkedProducts       = $linkedProducts;
         $linkedObjects->productPlans         = array_filter($productPlansOrder);

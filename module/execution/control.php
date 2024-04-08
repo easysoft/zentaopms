@@ -1200,6 +1200,8 @@ class execution extends control
         $this->view->unmodifiableProducts = $linkedObjects->unmodifiableProducts;
         $this->view->unmodifiableBranches = $linkedObjects->unmodifiableBranches;
         $this->view->productPlans         = $linkedObjects->productPlans;
+        $this->view->productPlan          = $linkedObjects->productPlan;
+        $this->view->currentPlan          = $linkedObjects->currentPlan;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedObjects->linkedProducts), $execution->project, 'noclosed', $linkedObjects->linkedBranchList);
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
         $this->view->allProjects          = $this->project->getPairsByModel($project->model, 'noclosed', $project->id);
