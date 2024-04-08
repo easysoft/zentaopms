@@ -14,7 +14,8 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
-$fields = $this->config->programplan->form->create;
+$fields        = $this->config->programplan->form->create;
+$enabledPoints = isset($enabledPoints) ? $enabledPoints : new stdclass();
 
 /* Generate title that is tailored to specific situation. */
 $title = $lang->programplan->create;
@@ -163,6 +164,7 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
         }
         if($name == 'milestone') $field['width'] = '100px';
         if($name == 'enabled')   $field['width'] = '80px';
+        if($name == 'point')     $field['width'] = '200px';
 
         $items[] = $field;
     }
@@ -171,7 +173,7 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
 };
 
 /* Generate default rendering data. */
-$fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $executionType)
+$fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $executionType, $enabledPoints)
 {
     $items = array();
 
@@ -180,7 +182,8 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
     {
         foreach($stages as $stage)
         {
-            $item = new stdClass();
+            $points = !empty($enabledPoints->{$stage->type}) ? $enabledPoints->{$stage->type} : array();
+            $item   = new stdClass();
 
             $item->name      = $stage->name;
             $item->code      = isset($stage->code) ? $stage->code : '';
@@ -188,6 +191,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
             $item->attribute = $stage->type;
             $item->acl       = 'open';
             $item->milestone = 0;
+            $item->point     = implode(',', $points);
 
             $items[] = $item;
         }
@@ -198,7 +202,8 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
     /* Create stages for exist project. */
     foreach($plans as $plan)
     {
-        $item = new stdClass();
+        $points = !empty($enabledPoints->{$plan->attribute}) ? $enabledPoints->{$plan->attribute} : array();
+        $item   = new stdClass();
 
         $item->disabled     = !isset($plan->setMilestone);
         $item->enabled      = $plan->enabled;
@@ -219,11 +224,11 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $item->desc         = $plan->desc;
         $item->setMilestone = isset($plan->setMilestone) ? $plan->setMilestone : false;
         $item->order        = $plan->order;
+        $item->point        = implode(',', $points);
         if(in_array($config->edition, array('max', 'ipd')) && $executionType == 'stage')
         {
             $item->output = empty($plan->output) ? 0 : explode(',', $plan->output);
         }
-
         $items[] = $item;
     }
 
@@ -237,6 +242,7 @@ jsVar('planID',       $planID);
 jsVar('type',         $executionType);
 jsVar('project',      $project);
 jsVar('cropStageTip', $lang->programplan->cropStageTip);
+jsVar('ipdStagePoint', $config->review->ipdReviewPoint);
 
 featureBar(li
 (

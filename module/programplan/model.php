@@ -329,8 +329,10 @@ class programplanModel extends model
         /* Set each plans. */
         $updateUserViewIdList = array();
         $milestone            = 0;
+        $enabledPoints        = array();
         foreach($plans as $plan)
         {
+            if(!empty($plan->point)) $enabledPoints = array_merge($enabledPoints, $plan->point); 
             if($plan->milestone) $milestone = 1;
             if($plan->id)
             {
@@ -360,9 +362,11 @@ class programplanModel extends model
                 if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
             }
         }
+
         /* If child plans has milestone, update parent plan set milestone eq 0 . */
         if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
         if($updateUserViewIdList) $this->loadModel('user')->updateUserView($updateUserViewIdList, 'sprint');
+        if($enabledPoints) $this->programplanTao->updatePoint($projectID, $enabledPoints);
         return true;
     }
 

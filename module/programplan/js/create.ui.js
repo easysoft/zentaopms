@@ -5,6 +5,24 @@ window.onRenderRow = function(row, rowIdx, data)
 
     if(project.model == 'ipd')
     {
+        var $attribute = data.attribute;
+        var $point     = row.find('[data-name="point"]');
+
+        $point.find('.picker-box').on('inited', function(e, info)
+        {
+            let $picker      = info[0];
+            let options      = $picker.options;
+            let items        = [{text: '', value: ''}];
+            for(let point in ipdStagePoint[$attribute])
+            {
+                let $value = ipdStagePoint[$attribute][point];
+                items.push({text: $value, value: $value}); 
+            }
+            options.items = items;
+
+            $picker.render(options);
+        });
+
         $('thead [data-name="ACTIONS"]').css('display', 'none');
         row.find('[data-name="ACTIONS"]').css('display', 'none');
         row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
@@ -183,8 +201,8 @@ window.changeEnabled = function(obj)
             }
             else if($(tdItems[item]).find('[data-zui-picker]').length)
             {
-                itemValue = $(tdItems[item]).find('input').zui('picker').$.value;
-                itemName  = $(tdItems[item]).find('input').attr('name');
+                itemValue = $(tdItems[item]).find('input, select').zui('picker').$.value;
+                itemName  = $(tdItems[item]).find('input, select').attr('name');
                 $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
 
                 $(tdItems[item]).find('[data-zui-picker]').zui('picker').render({disabled: true});

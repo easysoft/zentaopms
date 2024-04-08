@@ -68,7 +68,7 @@ class programplanTao extends programplanModel
         $this->lang->project->name = $this->lang->programplan->name;
         $this->lang->project->code = $this->lang->execution->code;
 
-        $this->dao->update(TABLE_PROJECT)->data($plan)->autoCheck()
+        $this->dao->update(TABLE_PROJECT)->data($plan, 'point')->autoCheck()
             ->checkIF(!empty($plan->name) && $getName, 'name', 'unique', "id in ({$relatedIdList}) and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
             ->checkIF(!empty($plan->code) && $setCode, 'code', 'unique', "id != {$planID} and type in ('sprint','stage','kanban') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
             ->where('id')->eq($planID)
@@ -428,7 +428,6 @@ class programplanTao extends programplanModel
         if($this->config->edition != 'ipd') return $datas;
 
         $this->loadModel('review');
-        $this->app->loadConfig('stage');
         $reviewPoints = $this->dao->select('t1.*, t2.status, t2.lastReviewedDate,t2.id as reviewID')->from(TABLE_OBJECT)->alias('t1')
             ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
             ->where('t1.deleted')->eq('0')
@@ -442,10 +441,10 @@ class programplanTao extends programplanModel
 
             foreach($reviewPoints as $id => $point)
             {
-                if(!isset($this->config->stage->ipdReviewPoint->{$plan->attribute})) continue;
+                if(!isset($this->config->review->ipdReviewPoint->{$plan->attribute})) continue;
                 if(!isset($point->status)) $point->status = '';
 
-                $categories = $this->config->stage->ipdReviewPoint->{$plan->attribute};
+                $categories = $this->config->review->ipdReviewPoint->{$plan->attribute};
                 if(!in_array($point->category, $categories)) continue;
 
                 $dataID = "{$plan->id}-{$point->category}-{$point->id}";
@@ -515,7 +514,7 @@ class programplanTao extends programplanModel
         $plan->openedDate    = helper::now();
         $plan->openedVersion = $this->config->version;
         if(!isset($plan->acl)) $plan->acl = $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('acl');
-        $this->dao->insert(TABLE_PROJECT)->data($plan)->exec();
+        $this->dao->insert(TABLE_PROJECT)->data($plan, 'point')->exec();
 
         if(dao::isError()) return false;
 

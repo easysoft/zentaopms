@@ -32,9 +32,9 @@ $project->gen(10);
 global $tester;
 $tester->loadModel('programplan');
 
-$tester->programplan->app->loadConfig('stage');
-$tester->programplan->config->stage->ipdReviewPoint = new stdclass();
-$tester->programplan->config->stage->ipdReviewPoint->devel = array('PP');
+$tester->programplan->app->loadConfig('review');
+$tester->programplan->config->review->ipdReviewPoint = new stdclass();
+$tester->programplan->config->review->ipdReviewPoint->devel = array('PP');
 
 $plans = $tester->programplan->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('stage')->fetchAll('id');
 $plans = $tester->programplan->processPlans($plans);
