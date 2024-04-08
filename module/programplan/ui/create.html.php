@@ -236,13 +236,15 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
 };
 
 /* ZIN: layout. */
-jsVar('projectID',    $project->id);
-jsVar('productID',    $productID);
-jsVar('planID',       $planID);
-jsVar('type',         $executionType);
-jsVar('project',      $project);
-jsVar('cropStageTip', $lang->programplan->cropStageTip);
+jsVar('projectID',     $project->id);
+jsVar('productID',     $productID);
+jsVar('planID',        $planID);
+jsVar('type',          $executionType);
+jsVar('project',       $project);
+jsVar('cropStageTip',  $lang->programplan->cropStageTip);
 jsVar('ipdStagePoint', $config->review->ipdReviewPoint);
+jsVar('attributeList', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
+jsVar('plans',         $plans);
 
 featureBar(li
 (

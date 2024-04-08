@@ -146,8 +146,16 @@ window.waitDom('td[data-name=milestone]', function()
 
 window.changeEnabled = function(obj)
 {
-    const $target = $(obj);
-    const tdItems = $target.closest('tr').find('td');
+    const $target    = $(obj);
+    const $row       = $target.closest('tr');
+    const tdItems    = $row.find('td');
+    const stageID    = $row.find('input[name^=id]').val();
+    const stageAttr  = $row.find('input[name^=attribute]').val();
+    const defaultVal = {
+            'name' : stageID ? plans[stageID].name  : attributeList[stageAttr],
+            'begin': stageID ? plans[stageID].begin : project.begin,
+            'end'  : stageID ? plans[stageID].end   : project.end
+        }
 
     if($target.prop('checked'))
     {
@@ -193,6 +201,11 @@ window.changeEnabled = function(obj)
 
             if($(tdItems[item]).find('[data-zui-datepicker]').length)
             {
+                if($(tdItems[item]).find('input[name^=begin]').length) $(tdItems[item]).find('input[name^=begin]').zui('datePicker').$.setValue(defaultVal.begin);
+                if($(tdItems[item]).find('input[name^=end]').length)   $(tdItems[item]).find('input[name^=end]').zui('datePicker').$.setValue(defaultVal.end);
+
+                $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render();
+
                 itemValue = $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').$.value;
                 itemName  = $(tdItems[item]).find('input.pick-value').attr('name');
                 $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
@@ -217,6 +230,8 @@ window.changeEnabled = function(obj)
             }
             else if($(tdItems[item]).find('input[type=text]').length)
             {
+                if($(tdItems[item]).find('input[name^=name]').length) $(tdItems[item]).find('input[name^=name]').val(defaultVal.name);
+
                 $(tdItems[item]).find('input[type=text]').attr('readonly', 'readonly');
             }
             else if($(tdItems[item]).data('name') == 'enabled')
