@@ -124,9 +124,10 @@ function loadOptionsList(optionsType, selectControl)
     });
 }
 
-window.confirmDelist = function(metricID, metricName)
+window.confirmDelist = function(metricID, metricName, isUsed = false)
 {
-    zui.Modal.confirm(confirmDelist.replace('%s', metricName)).then((res) =>
+    var text = isUsed ? confirmDelistInUsed : confirmDelist;
+    zui.Modal.confirm(text.replace('%s', metricName)).then((res) =>
     {
         if(res) $.ajaxSubmit({url: $.createLink('metric', 'delist', 'metricID=' + metricID)});
     });
@@ -134,7 +135,7 @@ window.confirmDelist = function(metricID, metricName)
 
 window.confirmRecalculate = function(calcRange= 'all', code = '')
 {
-    zui.Modal.confirm({message: confirmRecalculate, icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res)=> 
+    zui.Modal.confirm({message: confirmRecalculate, icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res)=>
     {
         if(res) zui.Modal.open({url: $.createLink('metric', 'recalculateSetting', 'calcRange=' + calcRange + '&code=' + code)});
     });

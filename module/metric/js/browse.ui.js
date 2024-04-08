@@ -50,7 +50,6 @@ window.confirmEdit = function(metricID, isOldMetric)
 window.confirmDelist = function(metricID, metricName, isUsed = false)
 {
     var text = isUsed ? confirmDelistInUsed : confirmDelist;
-  console.log(isUsed)
     zui.Modal.confirm(text.replace('%s', metricName)).then((res) =>
     {
         if(res) $.ajaxSubmit({url: $.createLink('metric', 'delist', 'metricID=' + metricID)});
