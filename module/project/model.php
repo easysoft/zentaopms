@@ -261,6 +261,7 @@ class projectModel extends model
         $storySummary  = $this->projectTao->getTotalStoriesByProject($projectIdList);
 
         /* Set project attribute. */
+        $today = helper::today();
         foreach($projects as $projectID => $project)
         {
             $project->leftBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->leftBugs             : 0;
@@ -275,6 +276,13 @@ class projectModel extends model
             $project->doingTasks    = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doingTasks          : 0;
             $project->rndDoneTasks  = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->doneTasks           : 0;
             $project->liteDoneTasks = isset($taskSummary[$projectID])  ? $taskSummary[$projectID]->litedoneTasks       : 0;
+
+            /* Judge whether the project is delayed. */
+            if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended')
+            {
+                $delay = helper::diffDate($today, $project->end);
+                if($delay > 0) $project->delay = $delay;
+            }
         }
 
         return $projects;

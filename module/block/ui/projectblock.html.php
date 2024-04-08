@@ -27,7 +27,7 @@ if(!$longBlock)
 
 blockPanel
 (
-    setClass('list-block'),
+    setClass('list-block project-list-block'),
     dtable
     (
         setID('project'),
