@@ -12,11 +12,14 @@ jsVar('remainingBudgetLang', $lang->program->remainingBudget);
 jsVar('langManDay',          $lang->program->manDay);
 
 $this->loadModel('project');
-$cols    = $this->loadModel('datatable')->getSetting('program');
-$data    = array();
-$parents = array();
+$cols         = $this->loadModel('datatable')->getSetting('program');
+$data         = array();
+$parents      = array();
+$showCheckbox = false;
 foreach($programs as $program)
 {
+    if($program->type == 'project') $showCheckbox = true;
+
     if(empty($program->parent)) $program->parent = 0;
 
     /* Delay status. */
@@ -202,12 +205,14 @@ dtable
             $canBatchEdit ? array
             (
                 'text'      => $lang->edit,
-                'className' => 'secondary size-sm batch-btn',
+                'type'      => 'secondary',
+                'className' => 'size-sm batch-btn',
                 'data-page' => 'batch',
                 'data-formaction' => $this->createLink('project', 'batchEdit')
             ) : null
         )
     )),
+    set::footer(array($showCheckbox ? 'checkbox' : null, 'toolbar', 'checkedInfo', 'flex', 'pager')),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(this, checkedIDList);}")),
     set::emptyTip($lang->program->noProgram),
     set::createTip($lang->program->create),
