@@ -208,7 +208,7 @@ class blockZen extends block
             $module = $block->module;
             if($module == 'scrumproject' || $module == 'waterfallproject') $module = 'project';
             if($module == 'singleproduct') $module = 'product';
-            if(!empty($module) && $module != 'todo' && !empty($acls['views']) && !isset($acls['views'][$module]))
+            if(!empty($module) && !in_array($module, array('welcome', 'guide', 'assigntome', 'zentaodynamic', 'teamachievement', 'dynamic')) && !empty($acls['views']) && !isset($acls['views'][$module]))
             {
                 unset($blocks[$key]);
                 continue;
