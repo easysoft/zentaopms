@@ -336,4 +336,25 @@ class repoTao extends repoModel
             $this->dao->insert(TABLE_REPOFILES)->data($copyFile)->exec();
         }
     }
+
+    /**
+     * Get the hidden projects for the user.
+     *
+     * @param  string $user
+     * @return array
+     */
+    protected function getHiddenProjects(string $user = '')
+    {
+        if(empty($user)) $user = 'system';
+
+        $hiddenProjects = $this->dao->select('`value`')->from(TABLE_CONFIG)
+            ->where('module')->eq('repo')
+            ->beginIF($user)->andWhere('owner')->eq($user)->fi()
+            ->andWhere('`key`')->eq('hiddenProjects')
+            ->fetch('value');
+
+        if($hiddenProjects) return json_decode($hiddenProjects, true);
+
+        return array();
+    }
 }
