@@ -923,6 +923,7 @@ class story extends control
 
         $errorTips = '';
         if($closedStory)  $errorTips .= sprintf($this->lang->story->closedStory, implode(' ', $closedStory));
+        if($errorTips)    $errorTips .= '\n';
         if($skippedStory) $errorTips .= sprintf($this->lang->story->skipStory,   implode(' ', $skippedStory));
 
         $this->view->productID  = $productID;
