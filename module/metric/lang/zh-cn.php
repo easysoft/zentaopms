@@ -340,7 +340,7 @@ $lang->metric->verifyCustom->checkCustomCalcSyntax['error']      = '语法错误
 
 $lang->metric->verifyCustom->checkCustomCalcClassName = array();
 $lang->metric->verifyCustom->checkCustomCalcClassName['text']    = '检查度量项类名是否正确';
-$lang->metric->verifyCustom->checkCustomCalcClassName['error']   = '度量项类名错误';
+$lang->metric->verifyCustom->checkCustomCalcClassName['error']   = '度量项类名错误，必须与度量项代号保持一致';
 
 $lang->metric->verifyCustom->checkCustomCalcClassMethod = array();
 $lang->metric->verifyCustom->checkCustomCalcClassMethod['text']  = '检查度量项是否定义了必须的方法';
