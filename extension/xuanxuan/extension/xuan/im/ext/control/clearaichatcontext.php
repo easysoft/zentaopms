@@ -3,7 +3,7 @@ helper::import('../../control.php');
 
 class myIm extends im
 {
-    public function clearAiChatContext($modelId, $assistantId, $userID = 0, $version = '', $device = 'desktop')
+    public function clearAiChatContext($modelId, $assistantId, $explicitSwitchAssistant, $userID = 0, $version = '', $device = 'desktop')
     {
         $user = $this->im->user->getByID($userID);
         $user->rights = $this->loadModel('user')->authorize($user->account);
@@ -18,35 +18,30 @@ class myIm extends im
         if(!$aiModel || $aiModel->enabled == 0) return false;
 
         $chatGid = "$userID&ai-{$modelId}";
+        $assistant = empty($assistantId)
+            ? (object) array('name'=> $this->lang->ai->assistants->defaultAssistant)
+            : $this->ai->getAssistantById($assistantId);
 
-        if(empty($assistantId))
+        if($explicitSwitchAssistant)
         {
-            $broadcast = new stdclass();
-            $broadcast->gid         = imModel::createGID();
-            $broadcast->cgid        = $chatGid;
-            $broadcast->user        = "ai-{$modelId}";
-            $broadcast->content     = $this->lang->ai->miniPrograms->clearContext;
-            $broadcast->type        = 'broadcast';
-            $broadcast->contentType = 'text';
-            $broadcast->data        = json_encode(array('reminders' => array()));
-
-            $broadcastMessage = $this->im->messageCreate(array($broadcast), $userID);
+            $broadcast          = new stdclass();
+            $broadcast->gid     = imModel::createGID();
+            $broadcast->cgid    = $chatGid;
+            $broadcast->user    = "ai-{$modelId}";
+            $broadcast->content = sprintf($this->lang->ai->assistants->switchAndClearContext, $assistant->name);
         }
         else
         {
-            $assistant = $this->ai->getAssistantById($assistantId);
-
-            $broadcast = new stdclass();
-            $broadcast->gid         = imModel::createGID();
-            $broadcast->cgid        = $chatGid;
-            $broadcast->user        = "ai-{$modelId}";
-            $broadcast->content     = sprintf($this->lang->ai->assistants->switchAndClearContext, $assistant->name);
-            $broadcast->type        = 'broadcast';
-            $broadcast->contentType = 'text';
-            $broadcast->data        = json_encode(array('reminders' => array()));
-
-            $broadcastMessage = $this->im->messageCreate(array($broadcast), $userID);
+            $broadcast          = new stdclass();
+            $broadcast->gid     = imModel::createGID();
+            $broadcast->cgid    = $chatGid;
+            $broadcast->user    = "ai-{$modelId}";
+            $broadcast->content = $this->lang->ai->miniPrograms->clearContext;
         }
+        $broadcast->type        = 'broadcast';
+        $broadcast->contentType = 'text';
+        $broadcast->data        = json_encode(array('reminders' => array()));
+        $broadcastMessage       = $this->im->messageCreate(array($broadcast), $userID);
 
         $output = new stdclass();
         $output->result = 'success';
@@ -55,8 +50,8 @@ class myIm extends im
         $output->data   = $broadcastMessage;
 
         $outputs = array($output);
-        
-        if(!empty($assistant))
+
+        if(!empty($assistant->greetings))
         {
             $replyMessage = new stdclass();
             $replyMessage->gid         = imModel::createGID();

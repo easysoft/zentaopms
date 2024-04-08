@@ -991,6 +991,7 @@ $lang->ai->assistants->duplicateTip             = 'Assistant names in the same l
 $lang->ai->assistants->confirmDeleteTip         = 'Do you want to confirm the deletion? ';
 $lang->ai->assistants->switchAndClearContext    = 'Switch assistant %s, context has been cleared';
 $lang->ai->assistants->noLlm                    = 'No language model is available, please create a language model first.';
+$lang->ai->assistants->defaultAssistant         = 'Omni Assistant';
 
 $lang->ai->assistants->statusList = array();
 $lang->ai->assistants->statusList['0']   = 'Unpublished';
