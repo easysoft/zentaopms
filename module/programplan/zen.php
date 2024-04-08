@@ -78,6 +78,9 @@ class programplanZen extends programplan
                 $plan->realDuration = $this->programplan->getDuration((string)$plan->realBegan, (string)$plan->realEnd);
             }
 
+            /* 阶段停用和删除是一样的效果，方便控制相关数据的展示。 */
+            if($project->model == 'ipd') $plan->deleted = $plan->enabled == 'off' ? '1' : '0';
+
             /* Check duplicated names to avoid to save same names. */
             if(in_array($plan->name, $names)) dao::$errors["name[{$rowID}]"] = empty($plan->type) ? $this->lang->programplan->error->sameName : str_replace($this->lang->execution->stage, '', $this->lang->programplan->error->sameName);
             if(isset($plan->code))
