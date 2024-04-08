@@ -593,6 +593,7 @@ define('TABLE_SQLITE_QUEUE', '`' . $config->db->prefix . 'sqlite_queue`');
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
 $config->objectTables['productplan']    = TABLE_PRODUCTPLAN;
+$config->objectTables['epic']           = TABLE_STORY;
 $config->objectTables['story']          = TABLE_STORY;
 $config->objectTables['requirement']    = TABLE_STORY;
 $config->objectTables['release']        = TABLE_RELEASE;
