@@ -158,7 +158,7 @@ else
                 (
                     set::cols($viewCols),
                     set::data($viewDatas),
-                    set::footPager(usePager())
+                    set::footPager(usePager(array('linkCreator' => createLink('dataview', 'browse', "type={$type}&table={$table}") . '?page={page}&recPerPage={recPerPage}')))
                 )
             ),
             tabPane
