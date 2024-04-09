@@ -88,7 +88,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = '', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
+    public function browse(int $productID = 0, string $branch = '', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'sort_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
     {
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
@@ -1591,47 +1591,18 @@ class testcase extends control
      */
     public function updateOrder()
     {
-        $type     = $this->post->type;
-        $sourceID = $this->post->sourceID;
-        $targetID = $this->post->targetID;
-        $dataList = $this->post->dataList;
-        if(!$type || !$sourceID || !$targetID || !$dataList) return false;
-        if($sourceID == $targetID) return false;
+        $sourceID    = $this->post->sourceID;
+        $sourceOrder = $this->post->sourceOrder;
+        $targetID    = $this->post->targetID;
+        $targetOrder = $this->post->targetOrder;
+        $type        = $this->post->type;
 
-        $idList      = array_map(function($data){return $data['id'];},    $dataList);
-        $orderList   = array_map(function($data){return $data['order'];}, $dataList);
-        $sourceIndex = array_search($sourceID, $idList);
-        $targetIndex = array_search($targetID, $idList);
+        if($type == 'after')  $this->dao->update(TABLE_CASE)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->lt($targetID)->exec();
+        if($type == 'before') $this->dao->update(TABLE_CASE)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->le($targetID)->exec();
 
-        if($sourceIndex === false || $targetIndex === false) return false;
+        $this->dao->update(TABLE_CASE)->set('sort')->eq($type == 'after' ? ($targetOrder + 1) : $targetOrder)->where('id')->eq($sourceID)->exec();
 
-        if($sourceIndex > $targetIndex)
-        {
-            $idList    = array_slice($idList,    $targetIndex, $sourceIndex - $targetIndex + 1);
-            $orderList = array_slice($orderList, $targetIndex, $sourceIndex - $targetIndex + 1);
-            array_unshift($idList, array_pop($idList));
-        }
-        else
-        {
-            $idList    = array_slice($idList,    $sourceIndex, $targetIndex - $sourceIndex + 1);
-            $orderList = array_slice($orderList, $sourceIndex, $targetIndex - $sourceIndex + 1);
-            if(count($idList) == 2)
-            {
-                $idList = array_reverse($idList);
-            }
-            else
-            {
-                array_splice($idList, -1, 0, array_shift($idList));
-            }
-        }
-
-        $table = $type == 'case' ? TABLE_CASE : TABLE_SCENE;
-
-        foreach($idList as $key => $id)
-        {
-            if(!isset($orderList[$key])) continue;
-            $this->dao->update($table)->set('sort')->eq($orderList[$key])->where('id')->eq($id)->exec();
-        }
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**

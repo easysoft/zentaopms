@@ -132,6 +132,9 @@ div(
     on::click('[data-col="actions"] .ztf-case', 'window.checkZtf'),
     dtable
     (
+        set::plugins(array('sortable')),
+        set::sortable(strpos($orderBy, 'sort_asc') !== false),
+        set::onSortEnd(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.onSortEnd') : null),
         set::customCols(!$isOnlyScene),
         set::userMap($users),
         set::cols($cols),

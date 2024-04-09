@@ -30,6 +30,21 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     }
 });
 
+window.onSortEnd = function(from, to, type)
+{
+    if(!from || !to) return false;
+
+    const url  = $.createLink('testcase', 'updateOrder');
+    const form = new FormData();
+
+    form.append('sourceID',    from.data.caseID);
+    form.append('sourceOrder', from.data.sort);
+    form.append('targetID',    to.data.caseID);
+    form.append('targetOrder', to.data.sort);
+    form.append('type', type);
+    $.ajaxSubmit({url, data:form});
+}
+
 /**
  * 切换显示所有用例和自动化用例。
  * Toggles between displaying all cases and automation cases.
