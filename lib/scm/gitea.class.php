@@ -195,7 +195,7 @@ class giteaRepo
         $param = new stdclass();
         $param->old_branch_name = $ref;
         $param->new_branch_name = $branchName;
-        $result = json_decode(commonModel::http($url, $param));
+        $result = json_decode(commonModel::http($url, $param, array(), array(), 'json'));
 
         return array('result' => empty($result->name) ? 'fail' : 'success', 'message' => zget($result, 'message', 'Error'));
     }
