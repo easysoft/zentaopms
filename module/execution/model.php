@@ -2830,6 +2830,8 @@ class executionModel extends model
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['stage']['values']   = array('' => '') + $this->lang->story->stageList;
 
+        if($this->config->edition != 'ipd' || ($this->config->edition == 'ipd' && $storyType == 'story')) unset($this->config->product->search['fields']['roadmap']);
+
         $this->loadModel('productplan');
         $plans     = array();
         $planPairs = array('' => '');
