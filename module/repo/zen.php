@@ -1001,6 +1001,7 @@ class repoZen extends repo
         }
         else
         {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
             $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
             $this->config->product->search['params']['branch']['values'] = $productBranches;
         }
@@ -1103,6 +1104,7 @@ class repoZen extends repo
         }
         else
         {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
             $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
             $this->config->bug->search['params']['branch']['values'] = $productBranches;
         }
