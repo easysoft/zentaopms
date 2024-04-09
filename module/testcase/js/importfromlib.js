@@ -26,11 +26,10 @@ $(function()
 /**
  * Reload.
  *
- * @param  int   $libID
  * @access public
  * @return void
  */
-function reload(libID)
+function reload()
 {
     link = createLink(rawModule,'importFromLib','productID='+ productID + '&branch=' + branch + '&libID='+libID);
     location.href = link;
@@ -49,7 +48,7 @@ function updateModules(productID, branch, caseID)
 {
     if(typeof(branch) == 'undefined') branch = 0;
 
-    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
+    var moduleLink = createLink('testcase', 'ajaxGetCanImportedModules', 'productID=' + productID + '&branch=' + branch + '&libID=' + libID + '&caseID=' + caseID);
     var tr = $('#module' + caseID).closest('tr');
     if(branch !== 'ditto')
     {
@@ -76,8 +75,8 @@ function updateModules(productID, branch, caseID)
                 return false;
             }
         });
-        link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
-        loadModules(tr, caseID, link, true, branchID);
+        var moduleLink = createLink('testcase', 'ajaxGetCanImportedModules', 'productID=' + productID + '&branch=' + branchID + '&libID=' + libID + '&caseID=' + caseID);
+        loadModules(tr, caseID, moduleLink, true, branchID);
         tr.nextAll().each(function()
         {
             var nextCaseID = $(this).attr('id');
