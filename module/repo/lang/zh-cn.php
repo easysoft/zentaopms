@@ -63,6 +63,9 @@ $lang->repo->importAction       = '导入代码库';
 $lang->repo->import             = '导入';
 $lang->repo->importName         = '导入后的名称';
 $lang->repo->importServer       = '请选择服务器';
+$lang->repo->hide               = '隐藏';
+$lang->repo->show               = '显示';
+$lang->repo->showHidden         = '显示隐藏的代码库';
 $lang->repo->gitlabList         = 'Gitlab代码库';
 $lang->repo->batchCreate        = '批量关联代码库';
 

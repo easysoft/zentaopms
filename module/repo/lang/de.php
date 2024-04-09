@@ -63,6 +63,9 @@ $lang->repo->importAction       = 'Import Repo';
 $lang->repo->import             = 'Import';
 $lang->repo->importName         = 'Name after import';
 $lang->repo->importServer       = 'Please select a server';
+$lang->repo->hide               = 'hide';
+$lang->repo->show               = 'show';
+$lang->repo->showHidden         = 'Show hidden repositories';
 $lang->repo->gitlabList         = 'Gitlab Repo';
 $lang->repo->batchCreate        = 'Batch link repo';
 
