@@ -1513,6 +1513,7 @@ class execution extends control
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        if($execution->type == 'kanban' and $this->config->vision != 'lite' and $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
         $this->loadModel('kanban');
         $this->app->loadClass('date');
