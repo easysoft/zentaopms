@@ -36,6 +36,9 @@ $config->sessionVar  = 'zentaosid';               // 请求类型为GET：sessio
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
 $config->visions     = ',rnd,lite,or,';           // 支持的界面类型。                       Supported vision formats.
 
+/* ZIN 设置。 ZIN settings. */
+$config->zin = new stdclass();
+
 /* 支持的主题和语言。Supported themes and languages. */
 $config->themes['default'] = 'default';
 $config->langs['zh-cn']    = '简体';
