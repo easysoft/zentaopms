@@ -1006,7 +1006,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function import(int $server = 0)
+    public function import(int $server = 0, int $showHiddenRepo = 0)
     {
         if($this->viewType !== 'json') $this->commonAction();
 
@@ -1022,9 +1022,15 @@ class repo extends control
 
         $serverList    = $this->loadModel('gitlab')->getList() + $this->loadModel('gitfox')->getList();
         $defaultServer = empty($server) ? array_shift($serverList) : $this->loadModel('pipeline')->getById($server);
+        $hiddenRepos   = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $defaultServer->id);
+        $hiddenRepos   = explode(',', $hiddenRepos);
 
         $repoList = $defaultServer ? $this->repoZen->getNotExistRepos($defaultServer) : array();
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        if(!$showHiddenRepo)
+        {
+            foreach($repoList as $key => $repo) if(in_array($repo->id, $hiddenRepos)) unset($repoList[$key]);
+        }
 
         $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
         $this->view->servers       = $this->gitlab->getPairs() + $this->gitfox->getPairs();
@@ -1032,6 +1038,7 @@ class repo extends control
         $this->view->projects      = $this->product->getProjectPairsByProductIDList(array_keys($products));
         $this->view->defaultServer = $defaultServer;
         $this->view->repoList      = array_values($repoList);
+        $this->view->hiddenRepos   = $hiddenRepos;
         $this->display();
     }
 
@@ -1705,6 +1712,27 @@ class repo extends control
         if(!in_array($repoID, $repoIDList)) $reposID .= ",{$repoID}";
 
         $this->setting->setItem('system.repo.hiddenRepo.' . $serverID, $reposID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * 在批量导入代码库页面显示代码库。
+     * Show repo in import page.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxShowRepo()
+    {
+        $repoID   = $this->post->repoID;
+        $serverID = $this->post->serverID;
+
+        $reposID = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $serverID);
+        $reposID = str_replace(",{$repoID},", "", ",{$reposID},");
+
+        $this->setting->setItem('system.repo.hiddenRepo.' . $serverID, trim($reposID, ','));
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success'));
