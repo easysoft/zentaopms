@@ -5,7 +5,8 @@ $.zui.Picker.DEFAULTS.onChange = function(event)
     if(!picker.$formItem.is('[name^=accounts]')) return;
 
     var select  = picker.$formItem[0];
-    var newItem = event.value.length ? $.extend({}, picker.getListItem(event.value), {disabled: true}) : $.extend({}, picker.getListItem(event.oldValue), {disabled: false});
+    var newItem = event.value.length ? $.extend({}, picker.getListItem(event.value), {disabled: true}) : {};
+    var oldItem = $.extend({}, picker.getListItem(event.oldValue), {disabled: false});
 
     $('.picker-select[name^=accounts]').each(function()
     {
@@ -14,7 +15,12 @@ $.zui.Picker.DEFAULTS.onChange = function(event)
         var $select      = $(this);
         var selectPicker = $select.data('zui.picker');
 
-        if(selectPicker) selectPicker.updateOptionList([$.extend({}, newItem)]);
+        const changeItems = [
+            {...newItem},
+            {...oldItem}
+        ];
+
+        if(selectPicker) selectPicker.updateOptionList(changeItems);
     });
 }
 
