@@ -150,7 +150,7 @@ panel
             dtable
             (
                 set::cols($viewCols),
-                set::data($datas),
+                set::data($viewDatas),
                 set::footPager(usePager())
             )
         ),
