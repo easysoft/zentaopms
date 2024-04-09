@@ -2184,7 +2184,7 @@ class productModel extends model
             }
         }
 
-        $cases = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
+        $cases = empty($storyIdList) ? array() : $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
         $rate  = count($stories) == 0 || $rateCount == 0 ? 0 : round(count($cases) / $rateCount, 2);
 
         $storyCommon = $this->lang->SRCommon;

@@ -2555,6 +2555,8 @@ class testcaseModel extends model
     public function appendData($cases, $type = 'case', $caseIdlist = array())
     {
         if(empty($caseIdlist)) $caseIdList = array_keys($cases);
+        $caseIdList = array_filter($caseIdList);
+
         if($type == 'case')
         {
             $caseBugs   = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`case`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');

@@ -106,18 +106,6 @@ function loadModules(tr, caseID, link, isAddDitto, branch)
 
     $('#module' + caseID).parent('td').load(link, function(data)
     {
-        if(canImportModules[branch][caseID] != undefined && Object.keys(canImportModules[branch][caseID]).length > 0)
-        {
-            $('tr select#module').children().each(function()
-            {
-                moduleID = $(this).val();
-                if(canImportModules[branch][caseID][moduleID] == undefined)
-                {
-                    $(this).remove();
-                }
-            })
-        }
-
         tr.find('#module').chosen();
         tr.find('#module').attr({"id": 'module' + caseID, "name": 'module[' + caseID + ']'});
         tr.find('#module' + caseID).removeAttr('onchange');
