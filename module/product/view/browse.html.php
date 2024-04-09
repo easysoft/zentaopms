@@ -338,7 +338,7 @@ js::set('pageSummary',       $summary);
     </div>
   </div>
   <div class="main-col">
-    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='story'></div>
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='<?php echo $config->product->search['module'];?>'></div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>
