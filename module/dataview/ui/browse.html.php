@@ -86,7 +86,7 @@ if($selectedTable && isset($dataview))
 {
     $headingActions[] = hasPriv('dataview', 'query')  && $type == 'view' ? array('icon' => 'design', 'text' => $lang->dataview->design, 'class' => 'query-view ghost') : null;
     $headingActions[] = hasPriv('dataview', 'edit')   && $type == 'view' ? array('icon' => 'edit',   'text' => $lang->dataview->edit,   'class' => 'ghost', 'url' => createLink('dataview', 'edit',"id=$selectedTable"), 'data-toggle' => 'modal') : null;
-    $headingActions[] = hasPriv('dataview', 'delete') && $type == 'view' ? array('icon' => 'trash',  'text' => $lang->dataview->delete, 'class' => 'ajax-submit query-delete ghost', 'url' => createLink('dataview', 'delete', "id=$selectedTable")) : null;
+    $headingActions[] = hasPriv('dataview', 'delete') && $type == 'view' ? array('icon' => 'trash',  'text' => $lang->dataview->delete, 'data-confirm' => $lang->dataview->confirmDelete,  'class' => 'ajax-submit query-delete ghost', 'url' => createLink('dataview', 'delete', "id=$selectedTable")) : null;
 }
 
 $viewCols = array();
