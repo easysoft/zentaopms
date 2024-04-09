@@ -743,7 +743,7 @@ class repoTest
             ->andWhere('AID')->eq($objectID)
             ->andWhere('BID')->eq($repoID)
             ->andWhere('relation')->eq('linkrepobranch')
-            ->andWhere('BType')->eq('repobranch')
+            ->andWhere('BType')->eq($branch)
             ->fetch();
     }
 
