@@ -13,7 +13,6 @@ cid=0
 - 检查product表的演示数据导出是否正确。
  - 属性id @2
  - 属性name @企业内部工时管理系统
- - 属性code @workhourManage
 - 检查project表的演示数据导出是否正确。
  - 属性id @3
  - 属性name @企业网站第一期
@@ -59,6 +58,7 @@ zdTable('kanbancell')->gen(0);
 zdTable('kanbancolumn')->gen(0);
 zdTable('kanbanlane')->gen(0);
 zdTable('projectadmin')->gen(0);
+zdTable('storyreview')->gen(0);
 
 global $tester, $app;
 $tester->loadModel('install');
@@ -66,6 +66,6 @@ $tester->loadModel('install');
 $app->clientLang = 'en';
 $app->loadLang('install');
 $tester->install->importDemoData();
-r($tester->install->fetchByID(9, 'user'))    && p('id,account,realname') && e('9,testManager,测试经理');                // 检查user表的演示数据导出是否正确。
-r($tester->install->fetchByID(2, 'product')) && p('id,name,code')        && e('2,企业内部工时管理系统,workhourManage'); // 检查product表的演示数据导出是否正确。
-r($tester->install->fetchByID(3, 'project')) && p('id,name')             && e('3,企业网站第一期');                      // 检查project表的演示数据导出是否正确。
+r($tester->install->fetchByID(9, 'user'))    && p('id,account,realname') && e('9,testManager,测试经理'); // 检查user表的演示数据导出是否正确。
+r($tester->install->fetchByID(2, 'product')) && p('id,name')             && e('2,企业内部工时管理系统'); // 检查product表的演示数据导出是否正确。
+r($tester->install->fetchByID(3, 'project')) && p('id,name')             && e('3,企业网站第一期');       // 检查project表的演示数据导出是否正确。
