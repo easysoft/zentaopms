@@ -14,6 +14,7 @@ featureBar
 (
     detailHeader
     (
+        to::prefix(backBtn(set::icon('back'), set::className('btn secondary'), $lang->goback)),
         to::title
         (
             entityLabel(set(array('entityID' => $suite->id, 'level' => 3, 'text' => $suite->name))),
