@@ -452,8 +452,8 @@ class ai extends control
             else
             {
                 unset($assistant->publish);
+                $assistant->status = '1';
                 $assistant->id = $this->ai->updateAssistant($assistant);
-                $this->ai->toggleAssistant($assistantId, true);
             }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

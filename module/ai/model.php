@@ -2799,7 +2799,7 @@ class aiModel extends model
         $this->loadModel('action')->create('aiAssistant', $assistantId, 'created');
         if($publish)
         {
-            $this->loadModel('action')->create('aiAssistant', $assistantId, 'published');
+            $this->loadModel('action')->create('aiAssistant', $assistantId, 'online');
         }
         return true;
     }
@@ -2826,7 +2826,7 @@ class aiModel extends model
 
             if(count($changedFields) == 1 && current($changedFields) == 'status')
             {
-                $actionType = $assistant->status == '0' ? 'unpublished' : 'published';
+                $actionType = $assistant->enabled == '0' ? 'offline' : 'online';
             }
             else
             {
@@ -2874,7 +2874,7 @@ class aiModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $actionType = $enabled ? 'published' : 'unpublished';
+        $actionType = $enabled ? 'online' : 'offline';
         $this->loadModel('action')->create('aiAssistant', $assistantId, $actionType);
 
         return true;
