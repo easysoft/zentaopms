@@ -2985,10 +2985,9 @@ class repoModel extends model
         $relation = new stdclass();
         $relation->AType    = $objectType;
         $relation->AID      = $objectID;
-        $relation->BType    = 'repobranch';
+        $relation->BType    = $branch;
         $relation->BID      = $repoID;
         $relation->relation = 'linkrepobranch';
-        $relation->extra    = $branch;
         $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
         return !dao::isError();
@@ -3005,12 +3004,11 @@ class repoModel extends model
      */
     public function getLinkedBranch(int $objectID, string $objectType): array
     {
-        return $this->dao->select('BID,extra')->from(TABLE_RELATION)
+        return $this->dao->select('BID,BType')->from(TABLE_RELATION)
             ->where('AType')->eq($objectType)
-            ->andWhere('BType')->eq('repobranch')
             ->andWhere('relation')->eq('linkrepobranch')
             ->andWhere('AID')->eq($objectID)
-            ->fetchPairs();
+            ->fetchAll();
     }
 
     /**
@@ -3028,11 +3026,10 @@ class repoModel extends model
     {
         $this->dao->delete()->from(TABLE_RELATION)
             ->where('AType')->eq($objectType)
-            ->andWhere('BType')->eq('repobranch')
             ->andWhere('relation')->eq('linkrepobranch')
             ->andWhere('AID')->eq($objectID)
             ->andWhere('BID')->eq($repoID)
-            ->andWhere('extra')->eq($branch)
+            ->andWhere('BType')->eq($branch)
             ->exec();
         return !dao::isError();
     }

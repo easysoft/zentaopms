@@ -19,18 +19,18 @@ modalHeader
 );
 
 $branchDom = array();
-foreach($linkedBranches as $branchRepo => $branchName)
+foreach($linkedBranches as $branch)
 {
     $branchDom[] = h::tr
     (
-        h::td(zget($repoPairs, $branchRepo, '')),
-        h::td($branchName),
+        h::td(zget($repoPairs, $branch->BID, '')),
+        h::td($branch->BType),
         common::hasPriv($objectType, 'unlinkBranch') ? h::td(
             a
             (
                 setClass('btn ghost toolbar-item square size-sm text-primary ajax-submit'),
                 setData(array(
-                    'url'     => createLink($objectType, 'unlinkBranch', "objectID={$objectID}&repoID={$branchRepo}&branch=" . helper::safe64Encode($branchName)),
+                    'url'     => createLink($objectType, 'unlinkBranch', "objectID={$objectID}&repoID={$branch->BID}&branch=" . helper::safe64Encode($branch->BType)),
                     'confirm' => sprintf($lang->repo->notice->unlinkBranch, $lang->{$objectType}->common)
                 )),
                 set::title($lang->repo->unlink),
