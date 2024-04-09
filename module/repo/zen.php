@@ -973,6 +973,10 @@ class repoZen extends repo
         $storyStatusList = $this->lang->story->statusList;
 
         unset($this->config->product->search['fields']['product']);
+        unset($this->config->product->search['params']['product']);
+        unset($this->config->product->search['fields']['roadmap']);
+        unset($this->config->product->search['params']['roadmap']);
+
         $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['style']                       = 'simple';
