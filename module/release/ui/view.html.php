@@ -16,7 +16,7 @@ $releaseModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'relea
 
 jsVar('initLink', $link);
 jsVar('type', $type);
-jsVar('loadFileUrl', createLink('release', 'view', "releaseID={$release->id}&type=releaseInfo"));
+jsVar('loadFileUrl', createLink($releaseModule, 'view', "releaseID={$release->id}&type=releaseInfo"));
 $canBeChanged = common::canBeChanged($releaseModule, $release);
 $actions      = $this->loadModel('common')->buildOperateMenu($release);
 foreach($actions as $actionType => $typeActions)
