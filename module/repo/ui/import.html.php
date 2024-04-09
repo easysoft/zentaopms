@@ -10,12 +10,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$this->app->loadLang('action');
 $items = array();
 $items[] = array('name' => 'no', 'label' => $lang->user->abbr->id, 'control' => 'static', 'width' => '32px', 'class' => 'no');
 $items[] = array('name' => 'serviceProject', 'label' => '', 'hidden' => true);
 $items[] = array('name' => $defaultServer->type == 'gitlab' ? 'name_with_namespace' : 'path', 'label' => $lang->repo->repo, 'control' => 'static', 'width' => '264px');
 $items[] = array('name' => $defaultServer->type == 'gitlab' ? 'name' : 'identifier', 'label' => $lang->repo->importName);
 $items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $products);
+$items[] = array('name' => 'actions', 'label' => $lang->actions, 'control' => array('control' => 'btn', 'className' => 'ghost hiddenRepo', 'icon'  => 'eye-off', 'hint'  => $this->lang->action->hideOne));
 
 $no = 1;
 foreach($repoList as $repo)
@@ -45,6 +47,7 @@ foreach($repoList as $repo)
     )
 );
 
+jsVar('serverID', $defaultServer->id);
 formBatchPanel
 (
     h::input
@@ -55,13 +58,13 @@ formBatchPanel
     ),
     set::id('repoList'),
     set::back('repo-maintain'),
-    set::mode(count($repoList) == 0 ? 'edit' : 'add'),
+    set::mode('edit'),
     set::addRowIcon('false'),
     set::deleteRowIcon('icon-eye-off'),
     set::items($items),
     set::data($repoList),
     set::maxRows(count($repoList)),
-    on::change('[data-name="product"]', 'loadProductProjects')
+    on::click('.hiddenRepo', 'window.hiddenRepo'),
 );
 
 render();
