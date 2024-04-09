@@ -48,6 +48,8 @@ function checkScript()
 
 window.readScriptContent = function(object)
 {
+    if(object.file == undefined) return false;
+
     $uploadBtnLabel = $('[name=scriptFile]').siblings().first();
     $uploadBtnLabel.toggle($('[name=scriptFile]').siblings().first().parents('td').find('.file-list').length < 1);
     $uploadBtnLabel.hide();
