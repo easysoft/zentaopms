@@ -99,9 +99,12 @@ foreach($fields as $key => $field)
         if(!empty($langs)) $fieldName = $langs[$key][$clientLang] ? $langs[$key][$clientLang] : $fieldName;
     }
 
+    if(strpos($field['type'], 'int') !== false) $field['type'] = 'int';
+    $fieldType = zget($config->dataview->fieldTypes, $field['type'], 'text');
+
     $viewCols[$key]['name']  = $key;
     $viewCols[$key]['title'] = $fieldName;
-    $viewCols[$key]['type']  = 'text';
+    $viewCols[$key]['type']  = $fieldType;
 }
 
 $viewDatas = array();
@@ -112,12 +115,6 @@ foreach($data as $value)
     $viewDatas[] = $dataRow;
 }
 
-$config->dataview->schema->dtable->fieldList['id']['title']     = $lang->dev->fields['id'];
-$config->dataview->schema->dtable->fieldList['name']['title']   = $lang->dev->fields['name'];
-$config->dataview->schema->dtable->fieldList['desc']['title']   = $lang->dev->fields['desc'];
-$config->dataview->schema->dtable->fieldList['type']['title']   = $lang->dev->fields['type'];
-$config->dataview->schema->dtable->fieldList['length']['title'] = $lang->dev->fields['length'];
-$config->dataview->schema->dtable->fieldList['null']['title']   = $lang->dev->fields['null'];
 if(strpos($selectedTable, $this->config->db->prefix) === false) unset($config->dataview->schema->datable->fieldList['desc']);
 
 $i = 1;
