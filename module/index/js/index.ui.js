@@ -907,7 +907,7 @@ window.browserNotify = function()
                     placement: 'bottom-right',
                     time: 0,
                     icon: 'envelope-o',
-                    className: 'primary-pale'
+                    className: 'bg-secondary-50 text-secondary-600'
                 });
             }
             else
