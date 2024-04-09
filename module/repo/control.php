@@ -1709,4 +1709,23 @@ class repo extends control
 
         return $this->send(array('result' => 'success'));
     }
+
+    /**
+     * 通过ajax获取代码库的分支和标签列表。
+     * Ajax: Get branches and tags.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetBranchesAndTags(int $repoID)
+    {
+        $repo = $this->repo->getByID($repoID);
+        $scm  = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $branches = $scm->branch();
+        $tags     = $scm->tags();
+        echo json_encode(array('branches' => $branches, 'tags' => $tags));
+    }
 }
