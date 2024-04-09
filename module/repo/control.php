@@ -1685,4 +1685,28 @@ class repo extends control
         $commit->comment = $this->repo->replaceCommentLink($commit->message);
         echo json_encode($commit);
     }
+
+    /**
+     * 在批量导入代码库页面隐藏代码库。
+     * Hidden repo in import page.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxHiddenRepo()
+    {
+        $repoID   = $this->post->repoID;
+        $serverID = $this->post->serverID;
+
+        $reposID = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $serverID);
+        if(!$reposID) $reposID = $repoID;
+
+        $repoIDList = explode(',', $reposID);
+        if(!in_array($repoID, $repoIDList)) $reposID .= ",{$repoID}";
+
+        $this->setting->setItem('system.repo.hiddenRepo.' . $serverID, $reposID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success'));
+    }
 }
