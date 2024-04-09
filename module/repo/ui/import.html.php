@@ -10,14 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$this->app->loadLang('action');
 $items = array();
 $items[] = array('name' => 'no', 'label' => $lang->user->abbr->id, 'control' => 'static', 'width' => '32px', 'class' => 'no');
 $items[] = array('name' => 'serviceProject', 'label' => '', 'hidden' => true);
 $items[] = array('name' => $defaultServer->type == 'gitlab' ? 'name_with_namespace' : 'path', 'label' => $lang->repo->repo, 'control' => 'static', 'width' => '264px');
 $items[] = array('name' => $defaultServer->type == 'gitlab' ? 'name' : 'identifier', 'label' => $lang->repo->importName);
 $items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $products);
-$items[] = array('name' => 'actions', 'label' => $lang->actions, 'control' => array('control' => 'btn', 'className' => 'ghost hiddenRepo', 'icon'  => 'eye-off', 'hint'  => $this->lang->action->hideOne));
+$items[] = array('name' => 'actions', 'label' => $lang->actions, 'control' => array('control' => 'btn', 'className' => 'ghost hideRepo', 'icon'  => 'eye-off', 'hint'  => $this->lang->repo->hide));
 
 $no = 1;
 foreach($repoList as $repo)
@@ -44,10 +43,21 @@ foreach($repoList as $repo)
         set::placeholder($lang->repo->importServer),
         set::items(array('' => '') + $servers),
         set::value($defaultServer->id)
+    ),
+    li(
+        setClass('ml-2'),
+        checkbox
+        (
+            on::change('window.toggleShowRepo'),
+            $this->lang->repo->showHidden
+        )
     )
 );
 
 jsVar('serverID', $defaultServer->id);
+jsVar('hiddenRepos', $hiddenRepos);
+jsVar('hideLang', $this->lang->repo->hide);
+jsVar('showLang', $this->lang->repo->show);
 formBatchPanel
 (
     h::input
@@ -64,7 +74,9 @@ formBatchPanel
     set::items($items),
     set::data($repoList),
     set::maxRows(count($repoList)),
-    on::click('.hiddenRepo', 'window.hiddenRepo'),
+    set::onRenderRowCol(jsRaw('window.onRenderRowCol')),
+    on::click('.hideRepo', 'window.hideRepo'),
+    on::click('.showRepo', 'window.showRepo'),
 );
 
 render();
