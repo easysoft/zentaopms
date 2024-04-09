@@ -1478,16 +1478,16 @@ class testcase extends control
             if($oldCase->scene == $sceneID) return false;
 
             $this->dao->update(TABLE_CASE)->set('scene')->eq($sceneID)->where('id')->eq($caseID)->exec();
-            if(dao::isError()) return false;
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $newCase = new stdclass();
             $newCase->scene = $sceneID;
 
             $changes  = common::createChanges($oldCase, $newCase);
-            $actionID = $this->loadModel('action')->create('case', $caseID, 'edited');
+            $actionID = $this->loadModel('action')->create('case', (int)$caseID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            return !dao::isError();
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $oldScene      = $this->testcase->getSceneByID($sourceID);
@@ -1504,7 +1504,7 @@ class testcase extends control
             ->where('path')->like("{$oldScene->path}%")
             ->exec();
 
-        return !dao::isError();
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
@@ -1596,11 +1596,13 @@ class testcase extends control
         $targetID    = $this->post->targetID;
         $targetOrder = $this->post->targetOrder;
         $type        = $this->post->type;
+        $module      = $this->post->module;
 
-        if($type == 'after')  $this->dao->update(TABLE_CASE)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->lt($targetID)->exec();
-        if($type == 'before') $this->dao->update(TABLE_CASE)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->le($targetID)->exec();
+        $table = $module == 'case' ? TABLE_CASE : TABLE_SCENE;
+        if($type == 'after')  $this->dao->update($table)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->lt($targetID)->exec();
+        if($type == 'before') $this->dao->update($table)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->le($targetID)->exec();
 
-        $this->dao->update(TABLE_CASE)->set('sort')->eq($type == 'after' ? ($targetOrder + 1) : $targetOrder)->where('id')->eq($sourceID)->exec();
+        $this->dao->update($table)->set('sort')->eq($type == 'after' ? ($targetOrder + 1) : $targetOrder)->where('id')->eq($sourceID)->exec();
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }

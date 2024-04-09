@@ -34,15 +34,55 @@ window.onSortEnd = function(from, to, type)
 {
     if(!from || !to) return false;
 
-    const url  = $.createLink('testcase', 'updateOrder');
-    const form = new FormData();
+    if(!from.data.isScene && !to.data.isScene)
+    {
+        if(from.data.parent != to.data.parent)
+        {
+            let url  = $.createLink('testcase', 'changeScene');
+            let form = new FormData();
+            form.append('sourceID', from.data.id);
+            form.append('targetID', to.data.parent);
+            $.ajaxSubmit({url, data:form});
+        }
+        let url  = $.createLink('testcase', 'updateOrder');
+        let form = new FormData();
+        form.append('sourceID',    from.data.caseID);
+        form.append('sourceOrder', from.data.sort);
+        form.append('targetID',    to.data.caseID);
+        form.append('targetOrder', to.data.sort);
+        form.append('type', type);
+        form.append('module', 'case');
+        $.ajaxSubmit({url, data:form});
+    }
+    else if(from.data.isScene && to.data.isScene)
+    {
+        const url  = $.createLink('testcase', 'updateOrder');
+        const form = new FormData();
+        form.append('sourceID',    from.data.id);
+        form.append('sourceOrder', from.data.sort);
+        form.append('targetID',    to.data.id);
+        form.append('targetOrder', to.data.sort);
+        form.append('type', type);
+        form.append('module', 'scene');
+        $.ajaxSubmit({url, data:form});
+    }
+    else if(!from.data.isScene && to.data.isScene)
+    {
+        const url  = $.createLink('testcase', 'changeScene');
+        const form = new FormData();
+        form.append('sourceID', from.data.id);
+        form.append('targetID', to.data.id);
+        $.ajaxSubmit({url, data:form});
+    }
 
-    form.append('sourceID',    from.data.caseID);
-    form.append('sourceOrder', from.data.sort);
-    form.append('targetID',    to.data.caseID);
-    form.append('targetOrder', to.data.sort);
-    form.append('type', type);
-    $.ajaxSubmit({url, data:form});
+    return false;
+}
+
+window.canSortTo = function(from, to)
+{
+    if(!from || !to) return false;
+    if(from.data.isScene && !to.data.isScene) return false;
+    return true;
 }
 
 /**

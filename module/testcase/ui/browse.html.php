@@ -135,6 +135,7 @@ div(
         set::plugins(array('sortable')),
         set::sortable(strpos($orderBy, 'sort_asc') !== false),
         set::onSortEnd(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.onSortEnd') : null),
+        set::canSortTo(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.canSortTo') : null),
         set::customCols(!$isOnlyScene),
         set::userMap($users),
         set::cols($cols),
