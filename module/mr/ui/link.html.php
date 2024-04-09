@@ -65,6 +65,7 @@ $taskCols['actions']['list']['unlink']['url']          = $this->createLink('mr',
 
 $tasks = initTableData($tasks, $taskCols);
 
+$linkStoryBtn = $linkBugBtn = $linkTaskBtn = null;
 if(common::hasPriv('mr', 'linkStory'))
 {
     $linkStoryBtn = btn(set(array(
