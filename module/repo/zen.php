@@ -993,6 +993,9 @@ class repoZen extends repo
         $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
         $this->config->product->search['params']['product']['values'] = helper::arrayColumn($products, 'name', 'id');
 
+        unset($this->config->product->search['fields']['roadmap']);
+        unset($this->config->product->search['params']['roadmap']);
+
         $productBranches = $this->getLinkBranches($products);
         if(empty($productBranches))
         {
