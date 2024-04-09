@@ -390,6 +390,7 @@ class task extends control
         $this->view->modulePath   = $this->tree->getParents($task->module);
         $this->view->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($taskID, 'task');
         $this->view->linkCommits  = $this->loadModel('repo')->getCommitsByObject($taskID, 'task');
+        $this->view->hasGitRepo   = $this->taskZen->checkGitRepo($execution->id);
         $this->display();
     }
 

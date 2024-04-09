@@ -1909,4 +1909,29 @@ class taskZen extends task
 
         return $executionID;
     }
+
+    /**
+     * 检查是否有gitlab, gitea, gogs, gitfox 代码库。
+     * Check gitlab, gitea, gogs, gitfox repo for execution.
+     *
+     * @param  int       $executionID
+     * @access protected
+     * @return bool
+     */
+    protected function checkGitRepo(int $executionID): bool
+    {
+        $this->loadModel('repo');
+        $repoList   = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList), 'haspriv');
+        $productIds = $this->loadModel('product')->getProductIDByProject($executionID, false);
+        foreach($repoList as $repo)
+        {
+            $linkedProducts = explode(',', $repo->product);
+            foreach($productIds as $productID)
+            {
+                if(in_array($productID, $linkedProducts)) return true;
+            }
+        }
+
+        return false;
+    }
 }

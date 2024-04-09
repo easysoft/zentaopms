@@ -35,11 +35,7 @@ if(!empty($actions)) $actions = array_merge($actions['mainActions'], array('type
 if(!$hasDivider) unset($actions['type']);
 foreach($actions as $key => $action)
 {
-    if(isset($action['url']) && strpos($action['url'], 'createBranch') !== false)
-    {
-        $hasRepo = $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
-        if(empty($hasRepo)) unset($actions[$key]);
-    }
+    if(isset($action['url']) && strpos($action['url'], 'createBranch') !== false && empty($hasGitRepo)) unset($actions[$key]);
     if(isset($action['url']) && strpos($action['url'], 'view') !== false && $task->parent == 0) unset($actions[$key]);
     if(isset($actions[$key]['url']))
     {
