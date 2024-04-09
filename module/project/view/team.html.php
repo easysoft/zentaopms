@@ -31,7 +31,7 @@
         }
         else
         {
-            if(!empty($app->user->admin) or empty($app->user->rights['rights']['my']['limited'])) common::printLink('project', 'manageMembers', "projectID=$projectID", "<i class='icon icon-persons'></i> " . $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+            if((!empty($app->user->admin) || empty($app->user->rights['rights']['my']['limited'])) && !isonlybody()) common::printLink('project', 'manageMembers', "projectID=$projectID", "<i class='icon icon-persons'></i> " . $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
         }
     }
     ?>
