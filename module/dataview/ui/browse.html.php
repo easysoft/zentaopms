@@ -137,67 +137,78 @@ foreach($fields as $key => $field)
     $i++;
 }
 
-panel
-(
-    set::title($dataTitle . ($type == 'table' ? " {$selectedTable}" : '')),
-    set::headingActions($headingActions),
-    tabs
+if(!$selectedTable)
+{
+    panel
     (
-        tabPane
+        setClass('dtable-empty-tip text-gray'),
+        $lang->dataview->notSelect
+    );
+}
+else
+{
+    panel
+    (
+        set::title($dataTitle . ($type == 'table' ? " {$selectedTable}" : '')),
+        set::headingActions($headingActions),
+        tabs
         (
-            set::key('data'),
-            set::title($lang->dataview->data),
-            dtable
+            tabPane
             (
-                set::cols($viewCols),
-                set::data($viewDatas),
-                set::footPager(usePager())
-            )
-        ),
-        tabPane
-        (
-            set::key('schema'),
-            set::title($lang->dataview->schema),
-            dtable
-            (
-                set::cols($config->dataview->schema->dtable->fieldList),
-                set::data($schemaDatas)
-            )
-        ),
-        !empty($dataview) ? tabPane
-        (
-            set::key('details'),
-            set::title($lang->dataview->details),
-            tableData
-            (
-                item
+                set::key('data'),
+                set::title($lang->dataview->data),
+                dtable
                 (
-                    set::name($lang->dataview->name),
-                    $dataview->name
-                ),
-                item
-                (
-                    set::name($lang->dataview->code),
-                    $dataview->code
-                ),
-                item
-                (
-                    set::name($lang->dataview->view),
-                    empty($dataview->sql) ? '' :$dataview->view
-                ),
-                item
-                (
-                    set::name($lang->dataview->group),
-                    zget($groups, $dataview->group)
-                ),
-                item
-                (
-                    set::name($lang->dataview->sql),
-                    $dataview->sql
+                    set::cols($viewCols),
+                    set::data($viewDatas),
+                    set::footPager(usePager())
                 )
-            )
-        ) : null
-    )
-);
+            ),
+            tabPane
+            (
+                set::key('schema'),
+                set::title($lang->dataview->schema),
+                dtable
+                (
+                    set::cols($config->dataview->schema->dtable->fieldList),
+                    set::data($schemaDatas)
+                )
+            ),
+            !empty($dataview) ? tabPane
+            (
+                set::key('details'),
+                set::title($lang->dataview->details),
+                tableData
+                (
+                    item
+                    (
+                        set::name($lang->dataview->name),
+                        $dataview->name
+                    ),
+                    item
+                    (
+                        set::name($lang->dataview->code),
+                        $dataview->code
+                    ),
+                    item
+                    (
+                        set::name($lang->dataview->view),
+                        empty($dataview->sql) ? '' :$dataview->view
+                    ),
+                    item
+                    (
+                        set::name($lang->dataview->group),
+                        zget($groups, $dataview->group)
+                    ),
+                    item
+                    (
+                        set::name($lang->dataview->sql),
+                        $dataview->sql
+                    )
+                )
+            ) : null
+        )
+    );
+}
 
 render();
