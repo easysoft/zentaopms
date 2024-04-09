@@ -37,8 +37,8 @@ foreach($actions as $key => $action)
 {
     if(isset($action['url']) && strpos($action['url'], 'createBranch') !== false)
     {
-        $hasRepo = common::hasPriv('repo', 'createBranch') && $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
-        if(empty($hasRepo) || !common::hasPriv('repo', 'createBranch') || !common::canModify('execution', $execution)) unset($actions[$key]);
+        $hasRepo = $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
+        if(empty($hasRepo)) unset($actions[$key]);
     }
     if(isset($action['url']) && strpos($action['url'], 'view') !== false && $task->parent == 0) unset($actions[$key]);
     if(isset($actions[$key]['url']))
