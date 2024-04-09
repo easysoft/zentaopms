@@ -2,6 +2,8 @@ $(function()
 {
     onScmChange();
     $('div.service-project .form-label').addClass('required');
+
+    if(!hasProduct) zui.Modal.alert(noProductTip);
 });
 
 function onProductChange(event)

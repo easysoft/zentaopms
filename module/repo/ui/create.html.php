@@ -25,6 +25,8 @@ jsVar('pathSvnTip', $lang->repo->example->path->svn);
 jsVar('clientGitTip', $lang->repo->example->client->git);
 jsVar('clientSvnTip', $lang->repo->example->client->svn);
 jsVar('scmList', $lang->repo->scmList);
+jsVar('noProductTip', $lang->repo->error->noProduct);
+jsVar('hasProduct', !empty($products));
 
 formPanel
 (
