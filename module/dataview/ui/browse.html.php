@@ -62,7 +62,8 @@ sidebar
                 'titleShow'   => false,
                 'showDisplay' => false,
                 'modules'     => array(),
-                'activeKey'   => $table
+                'activeKey'   => $table,
+                'settingLink' => $settingLink
             )))
         ),
         tabpane
