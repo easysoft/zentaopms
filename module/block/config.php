@@ -334,6 +334,7 @@ $config->block->size['assigntome']['assigntome']           = array(2 => 6, 1 => 
 $config->block->size['dynamic']['dynamic']                 = array(1 => 8);
 $config->block->size['zentaodynamic']['zentaodynamic']     = array(1 => 4);
 $config->block->size['teamachievement']['teamachievement'] = array(1 => 6);
+$config->block->size['html']['html']                       = array(2 => 5, 1 => 5);
 
 $config->block->size['singleproduct']['singlestatistic']       = array(2 => 5, 1 => 11);
 $config->block->size['singleproduct']['singlebugstatistic']    = array(2 => 5, 1 => 8);
