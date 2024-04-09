@@ -16097,6 +16097,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramstar` (
 
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
 
+-- DROP TABLE IF EXISTS `zt_ai_assistant`;
 CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
