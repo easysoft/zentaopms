@@ -2231,7 +2231,7 @@ CREATE TABLE `zt_metriclib` (
   PRIMARY KEY (`id`),
   KEY `metricID` (`metricID`),
   KEY `metricCode` (`metricCode`),
-  KEY `date` (`date`) USING BTREE
+  KEY `date` (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_module` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
