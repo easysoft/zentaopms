@@ -439,14 +439,14 @@ class programplanTao extends programplanModel
             ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.project')->eq($projectID)
-            ->andWhere('t1.product')->eq($productID)
+            ->andWhere('t1.enabled')->eq(1)
             ->fetchAll('id');
 
         foreach($datas['data'] as $plan)
         {
             if($plan->type != 'plan') continue;
 
-            foreach($reviewPoints as $id => $point)
+            foreach($reviewPoints as $point)
             {
                 if(!isset($this->config->review->ipdReviewPoint->{$plan->attribute})) continue;
                 if(!isset($point->status)) $point->status = '';
