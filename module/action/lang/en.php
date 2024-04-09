@@ -834,7 +834,7 @@ $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
 $lang->action->label->release     = 'Release|release|view|productID=%s';
 $lang->action->label->story       = 'Story|story|view|storyID=%s';
 $lang->action->label->program     = "Program|program|product|programID=%s";
-$lang->action->label->project     = "{$lang->projectCommon}|project|index|projectID=%s";
+$lang->action->label->project     = "{$lang->projectCommon}|project|view|projectID=%s";
 $lang->action->label->execution   = "Execution|execution|task|executionID=%s";
 
 $lang->action->label->task         = 'Task|task|view|taskID=%s';
