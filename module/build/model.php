@@ -244,6 +244,7 @@ class buildModel extends model
      */
     public function getBuildPairs($products, $branch = 'all', $params = 'noterminate, nodone', $objectID = 0, $objectType = 'execution', $buildIdList = '', $replace = true)
     {
+        $branch         = trim($branch, ',');
         $sysBuilds      = array();
         $selectedBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
