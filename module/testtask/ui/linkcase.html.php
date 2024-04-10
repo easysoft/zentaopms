@@ -89,6 +89,7 @@ div
 
 dtable
 (
+    set::extraHeight('+28'),
     set::userMap($users),
     set::data(array_values($cases)),
     set::cols($config->testtask->linkcase->dtable->fieldList),
