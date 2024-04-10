@@ -714,14 +714,6 @@ class storyModel extends model
                 }
             }
 
-            /* IF is story and has changed, update its relation version to new. */
-            if($oldStory->type == 'story')
-            {
-                $newStory = $this->fetchById($storyID);
-                $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($oldStory->id)->exec();
-                $this->updateStoryVersion($newStory);
-            }
-
             if($story->reviewerHasChanged)
             {
                 $oldStoryReviewers   = $this->getReviewerPairs($storyID, $oldStory->version);
@@ -954,32 +946,6 @@ class storyModel extends model
 
         if($newParentStory->parent) return $this->updateParentStatus($parentID, $newParentStory->parent, true);
         return true;
-    }
-
-    /**
-     * 如果软件需求变更了，则更新软件需求和用户需求关系表中的版本。
-     * If the story changed, update the version filed of the requirement in relation table.
-     *
-     * @param  object $story
-     * @access public
-     * @return void
-     */
-    public function updateStoryVersion(object $story): void
-    {
-        $changedStories = $this->getChangedStories($story);
-        if(empty($changedStories)) return;
-
-        foreach($changedStories as $changedStory)
-        {
-            $this->dao->update(TABLE_RELATION)
-                ->set('AVersion')->eq($changedStory->version)
-                ->where('AType')->eq('requirement')
-                ->andWhere('BType')->eq('story')
-                ->andWhere('relation')->eq('subdivideinto')
-                ->andWhere('AID')->eq($changedStory->id)
-                ->andWhere('BID')->eq($story->id)
-                ->exec();
-        }
     }
 
     /**
@@ -3072,37 +3038,6 @@ class storyModel extends model
         $casedStories = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('story')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('story');
         $allStories   = $this->getProductStories($productID, $branchID, '', 'all', 'story', $orderBy, false, array_keys($casedStories), $pager);
         return $allStories;
-    }
-
-    /**
-     * 根据变更了的软件需求查找对应的用户需求。
-     * Get the requirements by the changed stories.
-     *
-     * @param  object $story
-     * @access public
-     * @return array
-     */
-    public function getChangedStories(object $story): array
-    {
-        if($story->type == 'requirement') return array();
-
-        $relations = $this->dao->select('*')->from(TABLE_RELATION)
-            ->where('AType')->eq('requirement')
-            ->andWhere('BType')->eq('story')
-            ->andWhere('relation')->eq('subdivideinto')
-            ->andWhere('BID')->eq($story->id)
-            ->fetchAll('AID');
-
-        if(empty($relations)) return array();
-
-        $stories = $this->getByList(array_keys($relations));
-        foreach($stories as $id => $story)
-        {
-            $version = $relations[$story->id]->AVersion;
-            if($version > $story->version) unset($stories[$id]);
-        }
-
-        return $stories;
     }
 
     /**
