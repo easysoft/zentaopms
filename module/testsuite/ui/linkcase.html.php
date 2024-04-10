@@ -44,6 +44,7 @@ $cases = initTableData($cases, $config->testsuite->linkcase->dtable->fieldList, 
 $data  = array_values($cases);
 dtable
 (
+    set::extraHeight('+32'),
     set::userMap($users),
     set::data($data),
     set::cols($config->testsuite->linkcase->dtable->fieldList),
