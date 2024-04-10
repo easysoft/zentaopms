@@ -277,21 +277,22 @@ class programplanTao extends programplanModel
             if($task->mode == 'multi' && !empty($taskTeams[$task->id])) $data->owner_id = implode(',', array_map(function($assignedTo) use($users){return zget($users, $assignedTo);}, array_keys($taskTeams[$task->id])));
 
             if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
+            $isParent = $task->parent == -1;
             foreach($stageIndex as $index => $stage)
             {
                 if($stage['planID'] != $task->execution) continue;
                 if(!isset($stageIndex[$index])) continue;
 
-                $stageIndex[$index]['totalEstimate'] += $task->estimate;
-                $stageIndex[$index]['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
-                $stageIndex[$index]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
+                $stageIndex[$index]['totalEstimate'] += $isParent ? 0 : $task->estimate;
+                $stageIndex[$index]['totalConsumed'] += $isParent ? 0 : $task->consumed;
+                $stageIndex[$index]['totalReal']     += $isParent ? 0 : ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
 
                 $parent = $stage['parent'];
                 if(!isset($stageIndex[$parent])) continue;
 
-                $stageIndex[$parent]['totalEstimate'] += $task->estimate;
-                $stageIndex[$parent]['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
-                $stageIndex[$parent]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
+                $stageIndex[$parent]['totalEstimate'] += $isParent ? 0 : $task->estimate;
+                $stageIndex[$parent]['totalConsumed'] += $isParent ? 0 : $task->consumed;
+                $stageIndex[$parent]['totalReal']     += $isParent ? 0 : ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
             }
         }
         return array('datas' => $datas, 'stageIndex' => $stageIndex);
