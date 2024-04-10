@@ -21,3 +21,8 @@ window.onRepoChange = function()
         $('#branchCreateForm [type=submit]').removeClass('disabled');
     });
 }
+
+$(document).on('click', '.modal-actions > button', function()
+{
+    loadCurrentPage();
+})
