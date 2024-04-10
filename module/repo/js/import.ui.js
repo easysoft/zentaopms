@@ -81,27 +81,43 @@ window.toggleShowRepo = function(event)
  */
 window.setRepoState = function(event)
 {
-    const elem   = $(event.target);
+    let elem = $(event.target);
+    if(elem.find('.icon').length > 0) elem = elem.find('.icon');
+
     const trElem = elem.closest('tr');
     const repoID = trElem.find('input[data-name="serviceProject"]').val();
 
+    const postData = {
+        "serverID": serverID,
+        "repoID":   repoID
+    };
     if(trElem.hasClass('hide-repo'))
     {
-        elem.find('.icon').removeClass('icon-eye').addClass('icon-eye-off');
-        elem.find('button').attr('title', hideLang);
-        $.post($.createLink('repo', 'ajaxShowRepo'), {'serverID': serverID, 'repoID': repoID}, function(response){
-            if(response.result == 'fail') return zui.Modal.alert(response.message);
+        $.post($.createLink('repo', 'ajaxShowRepo'), postData, function(response)
+        {
+            const {result, message} = JSON.parse(response);
+            if(result == 'fail') {return zui.Modal.alert(message);}
+
             trElem.removeClass('hide-repo');
+            elem.removeClass('icon-eye').addClass('icon-eye-off');
+            elem.parent().attr('title', hideLang);
         });
     }
     else
     {
-        if(!$('.show-all-repo').prop('checked')) trElem.addClass('hidden');
-        elem.find('.icon').removeClass('icon-eye-off').addClass('icon-eye');
-        elem.find('button').attr('title', showLang);
-        $.post($.createLink('repo', 'ajaxHiddenRepo'), {'serverID': serverID, 'repoID': repoID}, function(response){
-            if(response.result == 'fail') return zui.Modal.alert(response.message);
+        $.post($.createLink('repo', 'ajaxHiddenRepo'), postData, function(response)
+        {
+            const {result, message} = JSON.parse(response);
+            if(result == 'fail') {return zui.Modal.alert(message);}
+
             trElem.addClass('hide-repo');
+            if(!$('.show-all-repo').prop('checked')) trElem.addClass('hidden');
+
+            elem.removeClass('icon-eye-off').addClass('icon-eye');
+            elem.parent().attr('title', showLang);
+
+            const productDom = $('#product_' + trElem.data('index')).zui('picker');
+            if(productDom) productDom.$.setValue('');
         });
     }
 }
