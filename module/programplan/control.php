@@ -121,6 +121,9 @@ class programplan extends control
         /* Set programplan typeList. */
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
 
+        /* Unset percent for create IPD project.*/
+        if($project->model == 'ipd') $this->config->programplan->list->customCreateFields = str_replace(',percent', '', $this->config->programplan->list->customCreateFields); 
+
         $viewData = new stdclass();
         $viewData->productID     = $productID;
         $viewData->planID        = $planID;

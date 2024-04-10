@@ -71,11 +71,7 @@ $config->programplan->list->customCreateFields = 'PM,attribute,acl,milestone,rea
 
 $config->programplan->custom = new stdclass();
 $config->programplan->custom->createFields = 'code,PM,attribute,milestone';
-if(!empty($config->setPercent))
-{
-    $config->programplan->custom->createFields     .= ',percent';
-    $config->programplan->list->customCreateFields .= ',percent';
-}
+if(!empty($config->setPercent)) $config->programplan->list->customCreateFields .= ',percent';
 if(!empty($config->setCode))
 {
     $config->programplan->custom->createFields     .= ',code';
