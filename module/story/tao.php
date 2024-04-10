@@ -68,29 +68,31 @@ class storyTao extends storyModel
     }
 
     /**
-     * 获取用户需求细分的研发需求，或者研发需求关联的用户需求。
-     * Get associated requirements.
+     * 获取需求主动关联、被动关联的需求。
+     * Get linked stories.
      *
      * @param  int     $storyID
      * @param  string  $storyType
-     * @param  array   $fields
      * @access public
      * @return array
      */
-    public function getRelation(int $storyID, string $storyType, array $fields = array()): array
+    public function getRelation(int $storyID, string $storyType): array
     {
-        /* 初始化查询条件变量。*/
-        $BType       = $storyType == 'story' ? 'requirement' : 'story';
-        $relation    = $storyType == 'story' ? 'subdividedfrom' : 'subdivideinto';
-        $queryFields = empty($fields) ? 'id,title' : implode(',', $fields);
-
-        /* 获取对应的关联数据。*/
-        return $this->dao->select('BID')->from(TABLE_RELATION)
+        /* 主动关联。*/
+        $linkedToList = $this->dao->select('BID')->from(TABLE_RELATION)
             ->where('AType')->eq($storyType)
-            ->andWhere('BType')->eq($BType)
-            ->andWhere('relation')->eq($relation)
             ->andWhere('AID')->eq($storyID)
+            ->andWhere('relation')->eq('linkedto')
             ->fetchPairs();
+
+        /* 被动关联。*/
+        $linkedFromList = $this->dao->select('AID')->from(TABLE_RELATION)
+            ->where('BType')->eq($storyType)
+            ->andWhere('BID')->eq($storyID)
+            ->andWhere('relation')->eq('linkedto')
+            ->fetchPairs();
+
+        return $linkedToList + $linkedFromList;
     }
 
     /**
