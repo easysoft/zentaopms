@@ -1235,7 +1235,6 @@ class blockZen extends block
             if(isset($plans[$metric['execution']])) $plans[$metric['execution']]->taskProgress = ($metric['value'] * 100) . '%';
         }
 
-
         $this->view->plans     = $plans;
         $this->view->products  = $products;
         $this->view->productID = $productID;
