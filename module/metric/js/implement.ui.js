@@ -13,6 +13,9 @@ $(document).ready(function()
             verify();
         }
     }
+
+    var htmlHeight = $('html').height();
+    $('.verify-content').height(htmlHeight - 490);
 });
 
 function verify(method)
