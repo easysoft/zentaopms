@@ -8643,4 +8643,161 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 禅道20版本之前，用需和软需是关联关系，多对多，现改为父子关系，一对多。
+     * Before ZenTao 20, the relationship between use requirements and story is a many-to-many relationship, now changed to a parent-child relationship, a one-to-many relationship.
+     *
+     * @access public
+     * @return void
+     */
+    public function processStoryRelation()
+    {
+        $this->loadModel('story');
+        $relations = $this->dao->select('t1.*, t2.parent as BParent, t2.isParent')->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.BID = t2.id')
+            ->where('AType')->eq('requirement')
+            ->andWhere('BType')->eq('story')
+            ->andWhere('relation')->eq('subdivideinto')
+            ->orderBy('AID asc')
+            ->fetchGroup('AID', 'BID');
+
+        $processd = array(); // 记录已处理的软件需求，一个软件需求只能有一个父需求。
+        foreach($relations as $AID => $storyList)
+        {
+            $hasChild    = false;
+            $lastChildID = 0;
+
+            foreach($storyList as $BID => $story)
+            {
+                if($story->BParent > 0) continue; // 如果已经是子需求，无需处理。
+
+                if(!isset($processd[$BID])) // 没有被其它用需变为子需求，才处理。
+                {
+                    $processd[$BID] = $BID;
+
+                    $hasChild    = true;
+                    $lastChildID = $BID;
+
+                    /* 当软件需求变为子需求后，需要更改这些字段。 */
+                    $child = new stdclass();
+                    $child->parent        = $AID;
+                    $child->parentVersion = $story->AVersion;
+                    $child->path          = ',' . $AID . ',' . $BID . ',';
+                    $child->root          = $AID;
+
+                    $this->dao->update(TABLE_STORY)->data($child)->where('id')->eq($BID)->exec();
+
+                    /* 如果该软件需求本身就是父需求，则将root和path同步给它的子需求。 */
+                    if($story->isParent == '1')
+                    {
+                        $this->dao->update(TABLE_STORY)
+                             ->set('root')->eq($AID)
+                             ->set("path = concat(',', {$AID}, path)")
+                             ->where('parent')->eq($BID)
+                             ->exec();
+                    }
+
+                    /* 将用需软需的关联关系去掉，它们现在是父子关系了。 */
+                    $this->dao->delete()->from(TABLE_RELATION)->where('AID')->eq($BID)->andWhere('BID')->eq($AID)->exec();
+                    $this->dao->delete()->from(TABLE_RELATION)->where('AID')->eq($AID)->andWhere('BID')->eq($BID)->exec();
+                }
+            }
+
+            if($hasChild)
+            {
+                /* 如果用需成为了父需求，则需要通过它最后一个子需求计算它的阶段、工时、状态等信息。 */
+                $this->dao->update(TABLE_STORY)->set('isParent')->eq('1')->where('id')->eq($AID)->exec();
+                $this->story->setStage($lastChildID);
+                $this->story->updateParentStatus($lastChildID, $AID, false);
+            }
+        }
+
+        /* 其它没被处理成父子关系的细分关系，变成关联关系。 */
+        $this->dao->update(TABLE_RELATION)->set('relation')->eq('linkedto')->where('relation')->eq('subdivideinto')->exec();
+        $this->dao->update(TABLE_RELATION)->set('relation')->eq('linkedfrom')->where('relation')->eq('subdividedfrom')->exec();
+    }
+
+    /**
+     * 禅道20版本前，软需关联软需，用需关联用需，是以字符串形式记录在story表的linkStories字段中，现迁移到relation表中。
+     * Before ZenTao 20, the relationship between stories and stories, and the relationship between requirements and requirements, are recorded in the linkStories field of the story table in string form, and now migrated to the relation table.
+     *
+     * @access public
+     * @return void
+     */
+    public function processLinkStories()
+    {
+        $doProcess = function($stories, $storyType)
+        {
+            foreach($stories as $storyID => $linkStories)
+            {
+                $linkStories = explode(',', trim($linkStories, ','));
+                foreach($linkStories as $linkStoryID)
+                {
+                    if(!$linkStoryID) continue;
+
+                    $relation = new stdclass();
+                    $relation->AType    = $storyType;
+                    $relation->AID      = $storyID;
+                    $relation->BType    = $storyType;
+                    $relation->BID      = $linkStoryID;
+                    $relation->relation = 'linkedto';
+
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+
+                    $relation->AType    = $storyType;
+                    $relation->AID      = $linkStoryID;
+                    $relation->BType    = $storyType;
+                    $relation->BID      = $storyID;
+                    $relation->relation = 'linkedfrom';
+
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
+            }
+        };
+
+        $stories = $this->dao->select('id, linkStories')->from(TABLE_STORY)
+            ->where('linkStories')->ne('')
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
+
+        $requirements = $this->dao->select('id, linkRequirements')->from(TABLE_STORY)
+            ->where('linkRequirements')->ne('')
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
+
+        $doProcess($stories, 'story');
+        $doProcess($requirements, 'requirement');
+    }
+
+    /**
+     * 如果用户自定义过需求概念，则追加默认的业需概念。
+     * If the user has customized the concept of demand, append the default concept of business demand.
+     *
+     * @access public
+     * @return void
+     */
+    public function addERName()
+    {
+        $lang = $this->app->getClientLang();
+
+        $URSRList = $this->dao->select('*')->from(TABLE_LANG)
+              ->where('lang')->eq($lang)
+              ->andWhere('module')->eq('custom')
+              ->andWhere('section')->eq('URSRList')
+              ->fetchAll();
+
+        foreach($URSRList as $URSR)
+        {
+            $value = json_decode($URSR->value);
+            if(isset($value->ERName)) continue;
+
+            $value->ERName = $this->lang->defaultERName;
+
+            $this->dao->update(TABLE_LANG)
+                 ->set('value')->eq(json_encode($value))
+                 ->where('id')->eq($URSR->id)
+                 ->exec();
+        }
+    }
 }
