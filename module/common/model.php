@@ -3023,29 +3023,6 @@ EOF;
     }
 
     /**
-     * Check an entry of new API.
-     *
-     * @access public
-     * @return void
-     */
-    private function checkNewEntry()
-    {
-        $entry = $this->loadModel('entry')->getByKey(session_id());
-        if(!$entry or !$entry->account or !$this->checkIP($entry->ip)) return false;
-
-        $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->andWhere('deleted')->eq(0)->fetch();
-        if(!$user) return false;
-
-        $user->last   = time();
-        $user->rights = $this->loadModel('user')->authorize($user->account);
-        $user->groups = $this->user->getGroups($user->account);
-        $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
-        $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
-        $this->session->set('user', $user);
-        $this->app->user = $user;
-    }
-
-    /**
      * Check an entry.
      *
      * @access public
@@ -3053,13 +3030,6 @@ EOF;
      */
     public function checkEntry()
     {
-        /* if the API is new version, goto checkNewEntry. */
-        if($this->app->version)
-        {
-            if(!$this->checkNewEntry()) $this->response('INVALID_TOKEN');
-            return true;
-        }
-
         /* Old version. */
         if(!isset($_GET[$this->config->moduleVar]) or !isset($_GET[$this->config->methodVar])) $this->response('EMPTY_ENTRY');
         if($this->isOpenMethod($_GET[$this->config->moduleVar], $_GET[$this->config->methodVar])) return true;
