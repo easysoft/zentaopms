@@ -1218,6 +1218,7 @@
     function changeAppLang(lang)
     {
         if($('html').attr('lang') === lang) return;
+        zui.i18n.setCode(lang);
         reloadPage();
         $('html').attr('lang', lang);
     }

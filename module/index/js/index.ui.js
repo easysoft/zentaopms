@@ -702,6 +702,7 @@ function updateAppsMenu(includeAppsBar)
 function changeAppsLang(lang)
 {
     $('html').attr('lang', lang);
+    zui.i18n.setCode(lang);
     $.each(apps.openedMap, function(_code, app)
     {
         if(app.iframe && app.iframe.contentWindow && app.iframe.contentWindow.changeAppLang)
