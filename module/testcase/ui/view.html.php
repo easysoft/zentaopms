@@ -98,11 +98,19 @@ $stepsTable = !empty($case->steps) ? div
     ) : div
     (
         setID('stepsView'),
+        setClass('relative'),
         mindmap
         (
             set::data($case->mindMapSteps),
             set::readonly(true)
-        )
+        ),
+        btn
+        (
+            setClass('ghost absolute z-1 top-1 right-1'),
+            set::icon('fullscreen'),
+            on::click()->call('zui.toggleFullscreen', '#stepsView')
+        ),
+        h::css('.is-in-fullscreen > .mindmap-iframe {height: 100%!important}')
     )
 ) : div
 (
