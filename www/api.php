@@ -33,15 +33,18 @@ $app = router::createApp('pms', dirname(dirname(__FILE__)), 'api');
 /* Run the app. */
 $common = $app->loadCommon();
 
-try
+if(!$app->version)
 {
-    /* Check entry. */
-    $common->checkEntry();
-}
-catch (EndResponseException $endResponseException)
-{
-    echo $endResponseException->getContent();
-    return print(helper::removeUTF8Bom(ob_get_clean()));
+    try
+    {
+        /* Check entry. */
+        $common->checkEntry();
+    }
+    catch (EndResponseException $endResponseException)
+    {
+        echo $endResponseException->getContent();
+        return print(helper::removeUTF8Bom(ob_get_clean()));
+    }
 }
 
 $common->loadConfigFromDB();

@@ -20,7 +20,7 @@ class entry extends baseEntry
 
         if($this->app->action == 'options') throw EndResponseException::create($this->send(204));
 
-        if(!isset($this->app->user) or $this->app->user->account == 'guest') throw EndResponseException::create($this->sendError(401, 'Unauthorized'));
+        if(!isset($this->app->user->account) or $this->app->user->account == 'guest') throw EndResponseException::create($this->sendError(401, 'Unauthorized'));
 
         $this->dao = $this->loadModel('common')->dao;
     }
@@ -708,7 +708,7 @@ class baseEntry
         $method = $this->app->getMethodName();
         if($module and $method and !$this->loadModel('common')->isOpenMethod($module, $method) and !commonModel::hasPriv($module, $method))
         {
-            return $this->send(403, array('error' => 'Access not allowed'));
+            die($this->send(403, array('error' => 'Access not allowed')));
         }
     }
 
