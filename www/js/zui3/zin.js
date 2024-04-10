@@ -30,7 +30,7 @@
     const isIndexPage = config.currentModule === 'index' && config.currentMethod === 'index';
 
     const DEBUG       = config.debug;
-    const currentCode = window.name.split('-')[1];
+    const currentCode = (window.frameElement ? window.frameElement.name : window.name).split('-')[1];
     const isInAppTab  = parent.window !== window;
     const fetchTasks  = new Map();
     const startTime   = performance.now();
