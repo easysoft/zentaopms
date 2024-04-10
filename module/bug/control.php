@@ -1905,7 +1905,7 @@ class bug extends control
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
             $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
-            $actionID = $this->action->create('bug', $bugID, 'Resolved', $fileAction . $this->post->comment, $this->post->resolution . ($this->post->duplicateBug ? ':' . (int)$this->post->duplicateBug : ''));
+            $actionID = $this->action->create('bug', $bugID, 'Resolved', $fileAction . $this->post->comment, $this->post->resolution . ($this->post->duplicateBug ? ':' . filter_var($this->post->duplicateBug, FILTER_SANITIZE_NUMBER_INT) : ''));
             $this->action->logHistory($actionID, $changes);
 
             $bug = $this->bug->getById($bugID);
