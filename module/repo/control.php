@@ -238,7 +238,7 @@ class repo extends control
         }
         if(!$repoPairs) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
 
-        if(!$repoID) $repoID = (int)$this->post->codeRepo;
+        if(!empty($_POST)) $repoID = (int)$this->post->codeRepo;
         if(!$repoID || !isset($repoPairs[$repoID])) $repoID = key($repoPairs);
 
         $this->scm->setEngine($repoList[$repoID]);

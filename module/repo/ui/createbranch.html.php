@@ -91,6 +91,7 @@ if(empty($linkedBranches) && !$canCreate)
 
 $canCreate ? formPanel
 (
+    setID('branchCreateForm'),
     set::title($lang->repo->createBranchAction),
     set::titleClass('panel-title text-md'),
     formGroup
@@ -110,7 +111,7 @@ $canCreate ? formPanel
     ),
     formGroup
     (
-        set::id('from'),
+        setID('branchFrom'),
         set::label($lang->repo->branchFrom),
         set::required(true),
         picker
