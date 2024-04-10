@@ -147,10 +147,6 @@ $config->repo->logDtable->fieldList['revision']['checkbox']     = true;
 $config->repo->logDtable->fieldList['revision']['nestedToggle'] = false;
 $config->repo->logDtable->fieldList['revision']['data-app']     = $app->tab;
 
-$config->repo->logDtable->fieldList['commit']['type']     = 'number';
-$config->repo->logDtable->fieldList['commit']['width']    = '50';
-$config->repo->logDtable->fieldList['commit']['sortType'] = false;
-
 $config->repo->logDtable->fieldList['date']['name']     = 'time';
 $config->repo->logDtable->fieldList['date']['type']     = 'datetime';
 $config->repo->logDtable->fieldList['date']['sortType'] = false;
