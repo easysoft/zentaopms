@@ -2049,24 +2049,27 @@ class bugModel extends model
      * @param  int|string $branch
      * @param  string     $search
      * @param  int        $limit
+     * @param  string     $range    single|all
      * @access public
      * @return void
      */
-    public function getProductBugPairs($productID, $branch = '', $search = '', $limit = 0)
+    public function getProductBugPairs($productID, $branch = '', $search = '', $limit = 0, $range = 'single')
     {
-        $bugs = $this->dao->select("id, CONCAT(id, ':', title) AS title")->from(TABLE_BUG)
-            ->where('product')->eq((int)$productID)
+        $productID = (int)$productID;
+        $bugs = $this->dao->select("id, CONCAT(IF(product = $productID, '', CONCAT('{$this->lang->product->common}#', product, '@')), id, ':', title) AS title, IF(product = $productID, 0, product) AS `order`")->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->beginIF($range == 'single')->andWhere('product')->eq($productID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
+            ->beginIF($range == 'all' && !$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in($branch)->fi()
             ->beginIF(strlen(trim($search)))
             ->andWhere('id', true)->like('%' . $search . '%')
             ->orWhere('title')->like('%' . $search . '%')
             ->markRight(1)
             ->fi()
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')
+            ->orderBy('`order`, id desc')
             ->beginIF($limit)->limit($limit)->fi()
-            ->fetchPairs();
+            ->fetchPairs('id', 'title');
 
         return array('' => '') + $bugs;
     }

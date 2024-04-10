@@ -2643,7 +2643,7 @@ class bug extends control
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
-        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit);
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit, 'all');
 
         unset($productBugs[$bugID]);
 
