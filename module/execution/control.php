@@ -235,31 +235,32 @@ class execution extends control
         if($this->config->edition == 'ipd') $tasks = $this->loadModel('story')->getAffectObject($tasks, 'task');
 
         /* Assign. */
-        $this->view->tasks        = $tasks;
-        $this->view->hasTasks     = !empty($tasks) || !empty($this->task->getExecutionTasks($executionID));
-        $this->view->summary      = $this->execution->summary($tasks);
-        $this->view->tabID        = 'task';
-        $this->view->pager        = $pager;
-        $this->view->recTotal     = $pager->recTotal;
-        $this->view->recPerPage   = $pager->recPerPage;
-        $this->view->orderBy      = $orderBy;
-        $this->view->browseType   = $browseType;
-        $this->view->status       = $status;
-        $this->view->users        = $this->user->getPairs('noletter|all');
-        $this->view->param        = $param;
-        $this->view->executionID  = $executionID;
-        $this->view->execution    = $execution;
-        $this->view->productID    = $productID;
-        $this->view->product      = $product;
-        $this->view->modules      = $modules;
-        $this->view->moduleID     = $moduleID;
-        $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
-        $this->view->memberPairs  = $memberPairs;
-        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->view->setModule    = !$execution->multiple ? false : true;
-        $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
-        $this->view->showBranch   = $showBranch;
-        $this->view->projectName  = $this->loadModel('project')->getById($execution->project)->name . ' / ' . $execution->name;
+        $this->view->tasks         = $tasks;
+        $this->view->hasTasks      = !empty($tasks) || !empty($this->task->getExecutionTasks($executionID));
+        $this->view->summary       = $this->execution->summary($tasks);
+        $this->view->tabID         = 'task';
+        $this->view->pager         = $pager;
+        $this->view->recTotal      = $pager->recTotal;
+        $this->view->recPerPage    = $pager->recPerPage;
+        $this->view->orderBy       = $orderBy;
+        $this->view->browseType    = $browseType;
+        $this->view->status        = $status;
+        $this->view->users         = $this->user->getPairs('noletter|all');
+        $this->view->param         = $param;
+        $this->view->executionID   = $executionID;
+        $this->view->execution     = $execution;
+        $this->view->productID     = $productID;
+        $this->view->product       = $product;
+        $this->view->modules       = $modules;
+        $this->view->moduleID      = $moduleID;
+        $this->view->moduleTree    = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
+        $this->view->memberPairs   = $memberPairs;
+        $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $this->view->setModule     = true;
+        $this->view->showAllModule = !$execution->multiple && !$execution->hasProduct ? false : true;
+        $this->view->canBeChanged  = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->showBranch    = $showBranch;
+        $this->view->projectName   = $this->loadModel('project')->getById($execution->project)->name . ' / ' . $execution->name;
 
         $this->display();
     }
