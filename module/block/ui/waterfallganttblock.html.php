@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace zin;
 $waterfallGanttID = uniqid('wg');
 jsVar('waterfallGanttID', $waterfallGanttID);
-jsVar('ganttPlans', $plans);
-jsVar('taskLang', $lang->programplan->task);
+jsVar('ganttPlans', array_values($plans));
+jsVar('progressLang', $lang->programplan->progress);
 
 $productItems = array();
 foreach($products as $id => $productName)
@@ -42,7 +42,7 @@ panel
     div
     (
         set::className('waterfall-gantt'),
-        empty($plans['data']) ? div(setClass('gantt-product-tips'), $lang->block->selectProduct) : div
+        empty($plans) ? div(setClass('gantt-product-tips'), $lang->block->selectProduct) : div
         (
             setClass('gantt clearfix'),
             div(setClass('gantt-plans pull-left'), setID('ganttPlans')),

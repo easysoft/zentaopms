@@ -1224,7 +1224,19 @@ class blockZen extends block
         $productID = isset($products[$productID]) ? $productID : key($products);
         $productID = !empty($productID) ? $productID : 0;
 
-        $this->view->plans     = $this->loadModel('programplan')->getDataForGantt($this->session->project, $productID, 0, 'task', false);
+        /* Get program plans. */
+        $plans         = $this->loadModel('programplan')->getStage($this->session->project, $productID, 'all', 'order');
+        $plans         = $this->programplan->initGanttPlans($plans);
+        $plansProgress = $this->loadModel('metric')->getResultByCode('progress_of_task_in_execution', array('execution' => implode(',', $plans['planIdList']))); // Get plan progress by metric.
+        $plans         = $plans['datas']['data'];
+        /* Set progress from metric. */
+        foreach($plansProgress as $metric)
+        {
+            if(isset($plans[$metric['execution']])) $plans[$metric['execution']]->taskProgress = ($metric['value'] * 100) . '%';
+        }
+
+
+        $this->view->plans     = $plans;
         $this->view->products  = $products;
         $this->view->productID = $productID;
     }

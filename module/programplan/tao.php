@@ -630,6 +630,9 @@ class programplanTao extends programplanModel
         $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
         $data->textColor     = $this->lang->execution->gantt->stage->textColor;
         $data->bar_height    = $this->lang->execution->gantt->bar_height;
+        /* Set default progress from database. */
+        $data->progress      = $plan->progress / 100;
+        $data->taskProgress  = $plan->progress . '%';
 
         if(!empty($this->config->setPercent)) $data->percent = $plan->percent;
         if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
