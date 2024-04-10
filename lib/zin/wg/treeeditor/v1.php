@@ -11,6 +11,7 @@ class treeEditor extends wg
         'icon?: string',
         'class?: string',
         'sortable?: array',
+        'itemProps?: array',
         'onSort?: function',
         'selected?: string',
         'canUpdateOrder?: bool=false',
@@ -22,7 +23,7 @@ class treeEditor extends wg
     protected function build()
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
-        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'onSort'));
+        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'itemProps', 'onSort'));
         $id = $this->prop('id');
 
         if(empty($id))
@@ -30,10 +31,12 @@ class treeEditor extends wg
             global $app;
             $id = "treeEditor-{$app->rawModule}-{$app->rawMethod}";
         }
+
+        $treeType = ($treeProps['onSort'] || $treeProps['sortable']) ? 'sortableTree' : 'tree';
         return div
         (
             setStyle('--menu-selected-bg', 'none'),
-            zui::tree
+            zui::$treeType
             (
                 set::_id($id),
                 set::_tag('menu'),
