@@ -424,7 +424,8 @@ $lang->admin->tableEngine = 'Table Engine';
 
 $lang->convert->importJira = 'Import Jira';
 
-$lang->storyConcept = 'Story Concpet';
+$lang->storyConcept  = 'Story Concpet';
+$lang->defaultERName = 'Epic';
 
 $lang->searchTips = '';
 $lang->searchAB   = 'Search';

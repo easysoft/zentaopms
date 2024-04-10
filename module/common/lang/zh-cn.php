@@ -424,7 +424,8 @@ $lang->admin->tableEngine = '表引擎';
 
 $lang->convert->importJira = '导入Jira数据';
 
-$lang->storyConcept = '需求概念';
+$lang->storyConcept  = '需求概念';
+$lang->defaultERName = '业务需求';
 
 $lang->searchTips = '';
 $lang->searchAB   = '搜索';
