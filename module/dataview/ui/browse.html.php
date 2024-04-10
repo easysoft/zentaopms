@@ -18,7 +18,7 @@ featureBar();
 
 toolbar
 (
-    item
+    hasPriv('dataview', 'export') && $table ? item
     (
         set
         (
@@ -27,12 +27,12 @@ toolbar
                 'icon'  => 'export',
                 'text'  => $lang->dataview->export,
                 'class' => 'ghost pull-right',
-                'url'   => createLink('dataview', 'export', "type=$type&tale=$selectedTable"),
+                'url'   => createLink('dataview', 'export', "type=$type&tale=$table"),
                 'data-toggle' => 'modal'
             )
         )
-    ),
-    item
+    ) : null,
+    hasPriv('dataview', 'create') ? item
     (
         set
         (
@@ -44,7 +44,7 @@ toolbar
                 'url'   => createLink('dataview', 'create'),
             )
         )
-    )
+    ) : null
 );
 
 $settingLink = hasPriv('tree', 'browsegroup') ? createLink('tree', 'browsegroup', "dimensionID=0&groupID=0&type=dataview") : '';
@@ -83,11 +83,11 @@ sidebar
 );
 
 $headingActions = array();
-if($selectedTable && isset($dataview))
+if($table && isset($dataview))
 {
     $headingActions[] = hasPriv('dataview', 'query')  && $type == 'view' ? array('icon' => 'design', 'text' => $lang->dataview->design, 'class' => 'query-view ghost') : null;
-    $headingActions[] = hasPriv('dataview', 'edit')   && $type == 'view' ? array('icon' => 'edit',   'text' => $lang->dataview->edit,   'class' => 'ghost', 'url' => createLink('dataview', 'edit',"id=$selectedTable"), 'data-toggle' => 'modal') : null;
-    $headingActions[] = hasPriv('dataview', 'delete') && $type == 'view' ? array('icon' => 'trash',  'text' => $lang->dataview->delete, 'data-confirm' => $lang->dataview->confirmDelete,  'class' => 'ajax-submit query-delete ghost', 'url' => createLink('dataview', 'delete', "id=$selectedTable")) : null;
+    $headingActions[] = hasPriv('dataview', 'edit')   && $type == 'view' ? array('icon' => 'edit',   'text' => $lang->dataview->edit,   'class' => 'ghost', 'url' => createLink('dataview', 'edit',"id=$table"), 'data-toggle' => 'modal') : null;
+    $headingActions[] = hasPriv('dataview', 'delete') && $type == 'view' ? array('icon' => 'trash',  'text' => $lang->dataview->delete, 'data-confirm' => $lang->dataview->confirmDelete,  'class' => 'ajax-submit query-delete ghost', 'url' => createLink('dataview', 'delete', "id=$table")) : null;
 }
 
 $viewCols = array();
@@ -116,7 +116,7 @@ foreach($data as $value)
     $viewDatas[] = $dataRow;
 }
 
-if(strpos($selectedTable, $this->config->db->prefix) === false) unset($config->dataview->schema->datable->fieldList['desc']);
+if(strpos($table, $this->config->db->prefix) === false) unset($config->dataview->schema->datable->fieldList['desc']);
 
 $i = 1;
 $schemaDatas = array();
@@ -128,14 +128,14 @@ foreach($fields as $key => $field)
     $schemaData->type   = $field['type'];
     $schemaData->length = isset($field['options']['max']) ? $field['options']['max'] : '';
     $schemaData->null   = $field['null'];
-    if(strpos($selectedTable, $this->config->db->prefix) !== false) $schemaData->desc = $field['name'];
+    if(strpos($table, $this->config->db->prefix) !== false) $schemaData->desc = $field['name'];
 
     $schemaDatas[] = $schemaData;
 
     $i++;
 }
 
-if(!$selectedTable)
+if(!$table)
 {
     panel
     (
@@ -159,7 +159,7 @@ else
                 (
                     set::cols($viewCols),
                     set::data($viewDatas),
-                    set::footPager(usePager(array('linkCreator' => createLink('dataview', 'browse', "type={$type}&table={$table}") . '?page={page}&recPerPage={recPerPage}')))
+                    set::footPager(usePager())
                 )
             ),
             tabPane
