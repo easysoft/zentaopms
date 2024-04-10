@@ -131,7 +131,7 @@
                 width: plan.progress + '%',
                 background: themeColor,
             }).appendTo($bar);
-            $bar.append('<div class="gantt-task-info text-muted small"><?php echo $lang->programplan->task;?> ' + plan.completeTasks.length + '/' + plan.tasks.length + '</div>').attr('title', $.zui.formatDate(plan.startDatetime, 'yyyy-MM-dd') + '~' + $.zui.formatDate(plan.endDatetime, 'yyyy-MM-dd'));
+            $bar.append('<div class="gantt-task-info text-muted small"><?php echo $lang->programplan->progress;?> ' + plan.taskProgress + '</div>').attr('title', $.zui.formatDate(plan.startDatetime, 'yyyy-MM-dd') + '~' + $.zui.formatDate(plan.endDatetime, 'yyyy-MM-dd'));
             var $row = $('<div class="gantt-row" data-id="' + plan.id + '"></div>').append($bar);
             $ganttCanvas.append($row);
         });

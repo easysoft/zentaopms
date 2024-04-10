@@ -361,16 +361,18 @@ class programplanModel extends model
             {
                 if($stage['planID'] == $task->execution)
                 {
-                    $stageIndex[$index]['progress']['totalEstimate'] += $task->estimate;
-                    $stageIndex[$index]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
-                    $stageIndex[$index]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
+                    $isParent = $task->parent == -1;
+
+                    $stageIndex[$index]['progress']['totalEstimate'] += $isParent ? 0 : $task->estimate;
+                    $stageIndex[$index]['progress']['totalConsumed'] += $isParent ? 0 : $task->consumed;
+                    $stageIndex[$index]['progress']['totalReal']     += $isParent ? 0 : ((($task->status == 'closed' || $task->status == 'cancel' || $isParent) ? 0 : $task->left) + $task->consumed);
 
                     $parent = $stage['parent'];
                     if(isset($stageIndex[$parent]))
                     {
-                        $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
-                        $stageIndex[$parent]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
-                        $stageIndex[$parent]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
+                        $stageIndex[$parent]['progress']['totalEstimate'] += $isParent ? 0 : $task->estimate;
+                        $stageIndex[$parent]['progress']['totalConsumed'] += $isParent ? 0 : $task->consumed;
+                        $stageIndex[$parent]['progress']['totalReal']     += $isParent ? 0 : ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
                     }
                 }
             }
