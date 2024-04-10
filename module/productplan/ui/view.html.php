@@ -239,6 +239,7 @@ detailBody
                 dtable
                 (
                     setID('storyDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::bordered(true),
                     set::cols($storyCols),
@@ -281,6 +282,7 @@ detailBody
                 dtable
                 (
                     setID('bugDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::bordered(true),
                     set::cols($bugCols),

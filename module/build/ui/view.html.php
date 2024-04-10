@@ -148,6 +148,7 @@ detailBody
                 dtable
                 (
                     setID('linkStoryDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->build->story->dtable->fieldList)),
                     set::data($stories),
@@ -185,6 +186,7 @@ detailBody
                 dtable
                 (
                     setID('bugDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->build->bug->dtable->fieldList)),
                     set::data($bugs),
@@ -210,6 +212,7 @@ detailBody
                 set::active($type == 'generatedBug'),
                 dtable
                 (
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->build->generatedBug->dtable->fieldList)),
                     set::data(array_values($generatedBugs)),

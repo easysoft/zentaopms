@@ -208,6 +208,7 @@ detailBody
                 dtable
                 (
                     setID('finishedStoryDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::cols(array_values($config->release->dtable->story->fieldList)),
                     set::data($storyTableData),
                     set::userMap($users),
@@ -237,6 +238,7 @@ detailBody
                 dtable
                 (
                     setID('resolvedBugDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->bug->fieldList)),
                     set::data($bugTableData),
@@ -265,6 +267,7 @@ detailBody
                 dtable
                 (
                     setID('leftBugDTable'),
+                    set::style(array('min-width' => '100%')),
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->leftBug->fieldList)),
                     set::data($leftBugTableData),
