@@ -242,6 +242,7 @@ $lang->repo->error->output            = "执行命令：%s\n错误结果(%s)： 
 $lang->repo->error->clientVersion     = "客户端版本过低，请升级或更换SVN客户端";
 $lang->repo->error->encoding          = "编码可能错误，请更换编码重试。";
 $lang->repo->error->deleted           = "删除代码库失败，当前代码库有提交记录与设计关联";
+$lang->repo->error->linkedBranch      = "删除代码库失败，当前代码库有分支与%s关联";
 $lang->repo->error->linkedJob         = "删除代码库失败，当前代码库与构建有关联，请取消关联或删除构建。";
 $lang->repo->error->clientPath        = "客户端安装目录不能有空格和特殊字符！";
 $lang->repo->error->notFound          = "代码库『%s』路径 %s 不存在，请确认此代码库是否已在本地服务器被删除";

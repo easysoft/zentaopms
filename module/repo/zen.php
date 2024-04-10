@@ -1317,8 +1317,20 @@ class repoZen extends repo
             ->where('extra')->eq($repoID)
             ->andWhere('AType')->eq('design')
             ->fetch();
-        $error      = $relationID ? $this->lang->repo->error->deleted : '';
+        $error = $relationID ? $this->lang->repo->error->deleted : '';
 
+        $linkBranchs = $this->repo->getLinkedBranch(0, '', $repoID);
+        if(!empty($linkBranchs))
+        {
+            $error .= $error ? '\n' : '';
+            $linkType = array_unique(array_column($linkBranchs, 'AType'));
+            foreach($linkType as $type) $error .= sprintf($this->lang->repo->error->linkedBranch, $this->lang->$type->common) . '\n';
+        }
+
+        $relationID = $this->dao->select('id')->from(TABLE_RELATION)
+            ->where('extra')->eq($repoID)
+            ->andWhere('AType')->eq('design')
+            ->fetch();
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
         if($jobs) $error .= ($error ? '\n' : '') . $this->lang->repo->error->linkedJob;
 

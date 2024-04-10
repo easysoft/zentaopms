@@ -3002,12 +3002,13 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getLinkedBranch(int $objectID, string $objectType): array
+    public function getLinkedBranch(int $objectID = 0, string $objectType = '', int $repoID = 0): array
     {
-        return $this->dao->select('BID,BType')->from(TABLE_RELATION)
-            ->where('AType')->eq($objectType)
-            ->andWhere('relation')->eq('linkrepobranch')
-            ->andWhere('AID')->eq($objectID)
+        return $this->dao->select('BID,BType,AType')->from(TABLE_RELATION)
+            ->where('relation')->eq('linkrepobranch')
+            ->beginIF($objectType)->andWhere('AType')->eq($objectType)->fi()
+            ->beginIF($repoID)->andWhere('BID')->eq($repoID)->fi()
+            ->beginIF($objectID)->andWhere('AID')->eq($objectID)->fi()
             ->fetchAll();
     }
 

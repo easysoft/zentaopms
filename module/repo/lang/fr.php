@@ -242,6 +242,7 @@ $lang->repo->error->output            = "La commande est: %s\nL'erreur est (%s):
 $lang->repo->error->clientVersion     = "La version du client est trop ancienne, veuillez mettre à niveau ou changer le client SVN";
 $lang->repo->error->encoding          = "L'encodage est peut-être erroné. Veuillez modifier l'encodage et réessayer.";
 $lang->repo->error->deleted           = "Deletion of the repository failed. The current repository has a commit record associated with the design.";
+$lang->repo->error->linkedBranch      = "Deletion of the repository failed. The current repository has a branch associated with %s.";
 $lang->repo->error->linkedJob         = "Deletion of the repository failed. The current repository has associated with the Compile.";
 $lang->repo->error->clientPath        = "The client installation directory cannot have spaces!";
 $lang->repo->error->notFound          = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
