@@ -30,57 +30,71 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     }
 });
 
+/**
+ * 拖拽用例或者场景。
+ * Drag case or scene.
+ *
+ * @param  from   被拿起的元素
+ * @param  to     放下时的目标元素
+ * @param  type   放在目标元素的上方还是下方
+ * @access public
+ * @return bool
+ */
 window.onSortEnd = function(from, to, type)
 {
     if(!from || !to) return false;
 
     if(!from.data.isScene && !to.data.isScene)
     {
-        if(from.data.parent != to.data.parent)
-        {
-            let url  = $.createLink('testcase', 'changeScene');
-            let form = new FormData();
-            form.append('sourceID', from.data.id);
-            form.append('targetID', to.data.parent);
-            $.ajaxSubmit({url, data:form});
-        }
-        let url  = $.createLink('testcase', 'updateOrder');
-        let form = new FormData();
-        form.append('sourceID',    from.data.caseID);
-        form.append('sourceOrder', from.data.sort);
-        form.append('targetID',    to.data.caseID);
-        form.append('targetOrder', to.data.sort);
-        form.append('type', type);
-        form.append('module', 'case');
-        $.ajaxSubmit({url, data:form});
+        if(from.data.parent != to.data.parent) changeScene(from.data.id, to.data.parent);
+        changeOrder(from.data.caseID, from.data.sort, to.data.caseID, to.data.sort, type, 'case');
     }
     else if(from.data.isScene && to.data.isScene)
     {
-        const url  = $.createLink('testcase', 'updateOrder');
-        const form = new FormData();
-        form.append('sourceID',    from.data.id);
-        form.append('sourceOrder', from.data.sort);
-        form.append('targetID',    to.data.id);
-        form.append('targetOrder', to.data.sort);
-        form.append('type', type);
-        form.append('module', 'scene');
-        $.ajaxSubmit({url, data:form});
+        changeOrder(from.data.id, from.data.sort, to.data.id, to.data.sort, type, 'scene');
     }
     else if(!from.data.isScene && to.data.isScene)
     {
-        const url  = $.createLink('testcase', 'changeScene');
-        const form = new FormData();
-        form.append('sourceID', from.data.id);
-        form.append('targetID', to.data.id);
-        $.ajaxSubmit({url, data:form});
+        changeScene(from.data.id, to.data.id);
     }
-
-    return false;
+    return true;
 }
 
+function changeScene(caseID, sceneID)
+{
+    const url  = $.createLink('testcase', 'changeScene');
+    const form = new FormData();
+    form.append('sourceID', caseID);
+    form.append('targetID', sceneID);
+    $.ajaxSubmit({url, data:form});
+}
+
+function changeOrder(sourceID, sourceOrder, targetID, targetOrder, type, module)
+{
+    const url  = $.createLink('testcase', 'updateOrder');
+    const form = new FormData();
+    form.append('sourceID',    sourceID);
+    form.append('sourceOrder', sourceOrder);
+    form.append('targetID',    targetID);
+    form.append('targetOrder', targetOrder);
+    form.append('type', type);
+    form.append('module', module);
+    $.ajaxSubmit({url, data:form});
+}
+
+/**
+ * 拖拽的用例或者场景是否允许放下。
+ * Is it allowed to drop the dragged case or scene.
+ *
+ * @param  from   被拿起的元素
+ * @param  to     放下时的目标元素
+ * @access public
+ * @return bool
+ */
 window.canSortTo = function(from, to)
 {
     if(!from || !to) return false;
+    if(!from.data.isScene && !to.data.isScene && from.data.parent != 0 && from.data.parent != to.data.parent) return false;
     if(from.data.isScene && !to.data.isScene) return false;
     return true;
 }
