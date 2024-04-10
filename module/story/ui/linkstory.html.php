@@ -47,8 +47,21 @@ dtable
     set::cols($cols),
     set::data($data),
     set::checkboxLabel($lang->selectAll),
-    set::footToolbar(array('items' => array(array('text' => $lang->save, 'btnType' => 'primary', 'className' => 'size-sm', 'data-on' => 'click', 'data-call' => 'fnLinkStories', 'data-params' => 'event')))),
     set::footer(array('checkbox', 'toolbar'))
+);
+
+div
+(
+    setClass('flex justify-center gap-4 p-4'),
+    btn
+    (
+        setClass('px-6'),
+        set::type('primary'),
+        set::btnType('button'),
+        set::text($lang->save),
+        setData(array('on' => 'click', 'call' => 'fnLinkStories', 'params' => 'event')),
+    ),
+    isInModal() ? null : backBtn(setClass('px-6'))
 );
 
 h::js
@@ -56,7 +69,7 @@ h::js
 <<<EOD
 window.fnLinkStories = function(e)
 {
-    const dtable      = zui.DTable.query(e.target);
+    const dtable      = zui.DTable.query('#linkStories');
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 

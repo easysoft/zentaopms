@@ -41,9 +41,23 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data($data),
+    set::checkboxLabel($lang->selectAll),
     set::footPager(usePager()),
-    set::footToolbar(array('items' => array(array('text' => $lang->save, 'btnType' => 'primary', 'className' => 'size-sm', 'data-on' => 'click', 'data-call' => 'fnLinkStories', 'data-params' => 'event')))),
-    set::footer(array('checkbox', 'toolbar', 'flex', 'pager'))
+    set::footer(array('checkbox', 'toolbar', 'flex', 'pager')),
+);
+
+div
+(
+    setClass('flex justify-center gap-4 p-4'),
+    btn
+    (
+        setClass('px-6'),
+        set::type('primary'),
+        set::btnType('button'),
+        set::text($lang->save),
+        setData(array('on' => 'click', 'call' => 'fnLinkStories', 'params' => 'event')),
+    ),
+    isInModal() ? null : backBtn(setClass('px-6'))
 );
 
 h::js
@@ -51,7 +65,7 @@ h::js
 <<<EOD
 window.fnLinkStories = function(e)
 {
-    let dtable      = zui.DTable.query(e.target);
+    let dtable      = zui.DTable.query('#linkStories');
     let checkedList = dtable.$.getChecks();
     let itemBoxHtml = '';
     let index       = $('#linkStoriesBox > div').length;
