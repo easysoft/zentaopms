@@ -23,21 +23,25 @@ $relation->gen(24);
 /**
 
 title=测试 storyModel->getStories2Link();
+timeout=0
 cid=1
-pid=1
 
-获取需求1可关联的需求数量 >> 2
-获取需求2可关联的需求数量 >> 2
-获取需求1可关联的需求id、product >> story,1
-获取需求2可关联的需求id、product >> requirement,1
+- 获取需求1可关联的需求数量 @19
+- 获取需求2可关联的需求数量 @19
+- 获取需求12可关联的需求id、product
+ - 第12条的type属性 @story
+ - 第12条的product属性 @1
+- 获取需求3可关联的需求id、product
+ - 第3条的type属性 @requirement
+ - 第3条的product属性 @1
 
 */
 
 global $tester;
-$stories1 = $tester->loadModel('story')->getStories2Link(1, 'linkStories', 'bySearch', 0, 'requirement');
+$stories1 = $tester->loadModel('story')->getStories2Link(1, 'bySearch', 0);
 $stories2 = $tester->loadModel('story')->getStories2Link(2);
 
-r(count($stories1)) && p()                 && e('9');             // 获取需求1可关联的需求数量
-r(count($stories2)) && p()                 && e('3');             // 获取需求2可关联的需求数量
-r($stories1)        && p('12:type,product') && e('story,1');       // 获取需求1可关联的需求id、product
-r($stories2)        && p('2:type,product') && e('requirement,1'); // 获取需求2可关联的需求id、product
+r(count($stories1)) && p()                  && e('19');             // 获取需求1可关联的需求数量
+r(count($stories2)) && p()                  && e('19');             // 获取需求2可关联的需求数量
+r($stories1)        && p('12:type,product') && e('story,1');        // 获取需求12可关联的需求id、product
+r($stories2)        && p('3:type,product')  && e('requirement,1');  // 获取需求3可关联的需求id、product
