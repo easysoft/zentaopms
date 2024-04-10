@@ -5993,6 +5993,12 @@ class executionModel extends model
         $_POST['hasProduct']  = $project->hasProduct;
         if($project->code) $_POST['code'] = $project->code;
 
+        if($project->model == 'kanban')
+        {
+            $teamMembers = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->eq($projectID)->fetchPairs('account', 'account');
+            $_POST['teamMembers'] = array_values($teamMembers);
+        }
+
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)
         {
