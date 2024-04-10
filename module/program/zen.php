@@ -330,6 +330,7 @@ class programZen extends program
                 (
                     'id'    => $program->id,
                     'text'  => $program->name,
+                    'label' => false,
                     'keys'  => zget(common::convert2Pinyin(array($program->name)), $program->name, ''),
                     'items' => $this->buildTree($programs, $program->id)
                 );
