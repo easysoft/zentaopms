@@ -471,7 +471,7 @@ detailBody
                 h::ul
                 (
                     $relationLi,
-                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), setData(array('toggle' => 'modal', 'size' => 'lg')), setID('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->linkStory))
+                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), setData(array('toggle' => 'modal', 'size' => 'lg')), setID('linkButton'), setClass('btn secondary size-sm'), icon('link'), $lang->story->linkStory))
                 )
             ) : null,
             $story->type == 'story' && common::hasPriv('story', 'tasks') ? tabPane
