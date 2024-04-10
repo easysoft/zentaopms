@@ -354,7 +354,7 @@ modal
             (
                 setClass('primary'),
                 setID('batchCreateStoryButton'),
-                set::url(createLink('story', 'batchCreate', 'productID=' . key($productNames) . '&branch=moduleID=0&storyID=0&executionID=' . $executionID)),
+                set::url(createLink('story', 'batchCreate', 'productID=' . key($productNames) . '&branch=0&moduleID=0&storyID=0&executionID=' . $executionID)),
                 set('data-toggle', 'modal'),
                 set('data-dismiss', 'modal'),
                 set('data-size', 'lg'),

@@ -690,7 +690,7 @@ window.searchCards = function(value, order)
 window.changeStoryProduct = function()
 {
     const productID = $('#batchCreateStory [name=productName]').val();
-    if(productID) $('#batchCreateStoryButton').attr('href', $.createLink('story', 'batchCreate', 'productID=' + productID + '&branch=&moduleID=0&storyID=0&executionID=' + executionID));
+    if(productID) $('#batchCreateStoryButton').attr('href', $.createLink('story', 'batchCreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID));
 };
 
 window.changeBugProduct = function()

@@ -519,12 +519,14 @@ class story extends control
             $projectID = $param ? $param : $this->session->project;
             $this->loadModel('project')->setMenu((int)$projectID);
             $this->view->projectID = $projectID;
+            $this->view->project   = $this->project->fetchByID($projectID);
         }
         elseif($this->app->tab == 'execution')
         {
             $executionID = $param ? $param : $this->session->execution;
             $this->loadModel('execution')->setMenu($executionID);
             $this->view->executionID = $executionID;
+            $this->view->execution   = $this->execution->fetchByID($executionID);
         }
         elseif($this->app->tab == 'qa')
         {
@@ -539,7 +541,6 @@ class story extends control
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->executions = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->view->project    = $this->project->fetchByID($param);
         $this->view->version    = $version;
         $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
         $this->view->builds     = $this->loadModel('build')->getStoryBuilds($storyID);

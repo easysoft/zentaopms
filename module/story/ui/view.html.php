@@ -171,9 +171,10 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
     set::items($versions)
 )) : null;
 
-$hasRepo    = $this->loadModel('repo')->getListByProduct($story->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
-$actions    = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story);
-$hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
+$hasRepo        = $this->loadModel('repo')->getListByProduct($story->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
+$actions        = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story);
+$hasDivider     = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
+$setToggleModal = $isInModal && (($app->tab == 'project' && !empty($project->type) && $project->model == 'kanban') || ($app->tab == 'execution' && !empty($execution->type) && $execution->type == 'kanban'));
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
 foreach($actions as $key => $action)
 {
@@ -196,6 +197,12 @@ foreach($actions as $key => $action)
         {
             if(isset($itemAction['url'])) $actions[$key]['items'][$itemKey]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, $executionID), $itemAction['url']);
         }
+    }
+
+    if($setToggleModal && !isset($actions[$key]['data-toggle']) && !isset($actions[$key]['data-load']))
+    {
+        $actions[$key]['data-load'] = 'modal';
+        $actions[$key]['data-size'] = 'lg';
     }
 }
 
