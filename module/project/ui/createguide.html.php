@@ -55,7 +55,7 @@ div
     setID('modelList'),
     setClass('flex items-center flex-wrap'),
     $itemList,
-    div
+    $config->edition != 'ipd' ? div
     (
         setClass('model-block more-model'),
         div
@@ -63,7 +63,7 @@ div
             setClass('border text-gray text-center'),
             $lang->project->moreModelTitle
         )
-    )
+    ) : null
 );
 
 render();
