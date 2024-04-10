@@ -4762,6 +4762,8 @@ class storyModel extends model
 
                 $isClick = $this->isClickable($story, 'batchcreate');
                 $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
+                $parent  = $story->parent;
+                if($storyType == 'requirement' && $story->type == 'story') $story->parent = 0;
                 if(!$isClick and $story->status != 'closed')
                 {
                     if($story->parent > 0)
@@ -4782,6 +4784,7 @@ class storyModel extends model
 
                 $executionID = empty($execution) ? 0 : $execution->id;
                 if($this->config->vision != 'or') $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=$storyType", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
+                $story->parent = $parent;
             }
 
             if(($this->app->rawModule == 'projectstory' or ($this->app->tab != 'product' and $storyType == 'requirement')) and $this->config->vision != 'lite')
