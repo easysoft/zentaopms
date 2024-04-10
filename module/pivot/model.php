@@ -3118,10 +3118,8 @@ class pivotModel extends model
         $cols = array();
         $clientLang = $this->app->getClientLang();
         /* Build cols. */
-        foreach($fields as $field)
+        foreach($fields as $key => $field)
         {
-            $key = $field['field'];
-
             $col = new stdclass();
             $col->name    = $key;
             $col->isGroup = true;
