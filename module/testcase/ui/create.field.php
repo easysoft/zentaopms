@@ -34,7 +34,7 @@ $fields->field('scene')
     ->value(data('currentSceneID'));
 
 $fields->field('type')
-    ->checkbox(array('id' => 'auto', 'name' => 'auto', 'text' => $lang->testcase->automated, 'checked' => data('case.auto') == 'auto'))
+    ->checkbox(array('id' => 'auto', 'name' => 'auto', 'text' => $lang->testcase->automated, 'checked' => data('case.auto') == 'auto' || data('onlyAutoCase')))
     ->items($lang->testcase->typeList)
     ->value(data('case.type'));
 

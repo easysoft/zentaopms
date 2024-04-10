@@ -277,11 +277,12 @@ class testcase extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
 
-        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->create;
-        $this->view->productID  = $productID;
-        $this->view->users      = $this->user->getPairs('noletter|noclosed|nodeleted');
-        $this->view->gobackLink = isset($output['from']) && $output['from'] == 'global' ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
-        $this->view->needReview = $this->testcase->forceNotReview() == true ? 0 : 1;
+        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->create;
+        $this->view->productID    = $productID;
+        $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
+        $this->view->gobackLink   = isset($output['from']) && $output['from'] == 'global' ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
+        $this->view->needReview   = $this->testcase->forceNotReview() == true ? 0 : 1;
+        $this->view->onlyAutoCase = $this->cookie->onlyAutoCase;
         $this->display();
     }
 

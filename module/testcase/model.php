@@ -63,10 +63,8 @@ class testcaseModel extends model
         /* Insert testcase steps. */
         $this->testcaseTao->insertSteps($caseID, $case->steps, $case->expects, $case->stepType);
 
-        /* 新增操作后清除仅自动化的cookie。 */
-        /* remove onlyAutoCase cookie after add case. */
         ob_start();
-        setcookie('onlyAutoCase', '', 1);
+        setcookie('onlyAutoCase', $case->auto == 'auto' ? '1' : '0');
 
         if(dao::isError()) return false;
         return $caseID;
