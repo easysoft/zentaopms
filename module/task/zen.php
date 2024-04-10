@@ -1585,8 +1585,13 @@ class taskZen extends task
         $response['message']    = $this->lang->saveSuccess;
         $response['closeModal'] = $this->app->rawMethod != 'recordworkhour' || $from == 'edittask';
 
-        $execution = $this->loadModel('execution')->getByID((int)$task->execution);
+        if($this->app->rawMethod == 'recordworkhour')
+        {
+            $response['callback'] = $from == 'edittask' ? "refreshConsumed('{$task->consumed}');" : "loadModal('" . inLink('recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
+            return $response;
+        }
 
+        $execution    = $this->loadModel('execution')->getByID((int)$task->execution);
         $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
         if((($this->app->tab == 'execution' || $inLiteKanban) && $execution->type == 'kanban') || $from == 'taskkanban')
         {
@@ -1594,21 +1599,7 @@ class taskZen extends task
             return $response;
         }
 
-        if($this->app->rawMethod == 'recordworkhour')
-        {
-            if($from == 'edittask')
-            {
-                $response['callback'] = "refreshConsumed('{$task->consumed}');";
-            }
-            else
-            {
-                $response['callback'] = "loadModal('" . inLink('recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
-            }
-        }
-        else
-        {
-            $response['load'] =  $from != 'edittask';
-        }
+        $response['load'] = $from != 'edittask';
         return $response;
     }
 
