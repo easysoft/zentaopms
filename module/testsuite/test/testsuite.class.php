@@ -216,18 +216,19 @@ class testsuiteTest
      * Test get unlinked cases for suite.
      *
      * @param  int    $suiteID
+     * @param  string $browseType
      * @param  int    $param
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getUnlinkedCasesTest($suiteID, $param = 0, $pager = null)
+    public function getUnlinkedCasesTest($suiteID, $browseType = 'all', $param = 0, $pager = null)
     {
         global $tester;
         $tester->session->set('testsuiteQuery', null);
 
         $suite   = $this->objectModel->getById($suiteID);
-        $objects = $this->objectModel->getUnlinkedCases($suite, $param, $pager);
+        $objects = $this->objectModel->getUnlinkedCases($suite, $browseType, $param, $pager);
 
         if(dao::isError()) return dao::getError();
 
