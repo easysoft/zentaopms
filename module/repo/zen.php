@@ -540,7 +540,7 @@ class repoZen extends repo
         $repoList = array();
         if(!empty($server))
         {
-            $repoList      = $server->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetProjects($server->id) : $this->loadModel('gitfox')->apiGetRepos($server->id);
+            $repoList      = $server->type == 'gitlab' ? $this->getGitlabProjectsByApi($server) : $this->loadModel('gitfox')->apiGetRepos($server->id);
             $type = $server->type == 'gitlab' ? 'Gitlab' : 'GitFox';
             $existRepoList = $this->dao->select('serviceProject,name')->from(TABLE_REPO)
                 ->where('SCM')->eq($type)
@@ -550,6 +550,39 @@ class repoZen extends repo
             {
                 if(isset($existRepoList[$repo->id])) unset($repoList[$key]);
             }
+        }
+        return $repoList;
+    }
+
+    /**
+     * 通过Graphql获取GitLab项目列表。
+     * Get GitLab projects by Graphql.
+     *
+     * @param  object $server
+     * @access public
+     * @return array
+     */
+    protected function getGitlabProjectsByApi(object $server): array
+    {
+        $repoList    = array();
+        $endCursor   = '';
+        $hasNextPage = true;
+        $url = rtrim($server->url, '/') . '/api/graphql' . "?private_token={$server->token}";
+        while($hasNextPage)
+        {
+            $query    = 'query { projects(after: "' . $endCursor . '") {pageInfo {endCursor hasNextPage} nodes {nameWithNamespace id}}}';
+            $response = json_decode(commonModel::http($url, array('query' => $query), array(CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1)));
+            if(!$endCursor && !isset($response->data->projects->nodes)) return array();
+
+            foreach($response->data->projects->nodes as $project)
+            {
+                preg_match('/\d+/', $project->id, $projectID);
+                $project->id                  = $projectID ? $projectID[0] : $project->id;
+                $project->name_with_namespace = $project->nameWithNamespace;
+                $repoList[]  = $project;
+            }
+            $hasNextPage = $response->data->projects->pageInfo->hasNextPage;
+            $endCursor   = $response->data->projects->pageInfo->endCursor;
         }
         return $repoList;
     }
