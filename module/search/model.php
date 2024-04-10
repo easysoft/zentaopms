@@ -546,7 +546,7 @@ class searchModel extends model
         if(empty($results)) return $results;
 
         /* Reset pager total and get this page data. */
-        if($pager) $this->searchTao->setResultsInPage($results, $pager);
+        if($pager) $results = $this->searchTao->setResultsInPage($results, $pager);
 
         $objectList = $this->searchTao->getobjectList($idListGroup);
         return $this->processResults($results, $objectList, $words);
