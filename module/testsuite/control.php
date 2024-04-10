@@ -339,14 +339,15 @@ class testsuite extends control
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
-        $this->view->title     = $suite->name . $this->lang->colon . $this->lang->testsuite->linkCase;
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->cases     = $this->testsuite->getUnlinkedCases($suite, $browseType, $param, $pager);
-        $this->view->suiteID   = $suiteID;
-        $this->view->param     = $param;
-        $this->view->pager     = $pager;
-        $this->view->suite     = $suite;
-        $this->view->productID = $productID;
+        $this->view->title      = $suite->name . $this->lang->colon . $this->lang->testsuite->linkCase;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->cases      = $this->testsuite->getUnlinkedCases($suite, $browseType, $param, $pager);
+        $this->view->suiteID    = $suiteID;
+        $this->view->param      = $param;
+        $this->view->pager      = $pager;
+        $this->view->suite      = $suite;
+        $this->view->productID  = $productID;
+        $this->view->browseType = $browseType;
         $this->display();
     }
 
