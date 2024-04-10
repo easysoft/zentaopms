@@ -907,7 +907,7 @@ window.browserNotify = function()
                     placement: 'bottom-right',
                     time: 0,
                     icon: 'envelope-o',
-                    className: 'bg-secondary-50 text-secondary-600'
+                    className: 'bg-secondary-50 text-secondary-600 messager-notice'
                 });
             }
             else
@@ -932,4 +932,4 @@ window.startCron = function(restart)
 
 turnon ? browserNotify() : ping();
 if(runnable) startCron();
-if(scoreNotice) zui.Messager.show({ content: {html: scoreNotice}, placement: 'bottom-right', time: 0, icon: 'diamond', className: 'text-primary bg-primary-100 bg-opacity-90' });
+if(scoreNotice) zui.Messager.show({ content: {html: scoreNotice}, placement: 'bottom-right', time: 0, icon: 'diamond', className: 'bg-secondary-50 text-secondary-600 score-notice'});
