@@ -6,6 +6,7 @@ include dirname(__FILE__, 2) . '/search.class.php';
 su('admin');
 
 zdTable('module')->gen(5);
+zdTable('dept')->gen(5);
 zdTable('scene')->gen(1);
 
 /**
