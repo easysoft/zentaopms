@@ -13,20 +13,13 @@ namespace zin;
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
 $confirmDelete = $this->lang->story->confirmDelete;
-if($story->type == 'requirement')
-{
-    $confirmDelete = str_replace($lang->SRCommon, $lang->URCommon, $confirmDelete);
-    $lang->story->unlinkStory = str_replace($lang->URCommon, $lang->SRCommon, $lang->story->unlinkStory);
-}
+if($story->type == 'requirement') $confirmDelete = str_replace($lang->SRCommon, $lang->URCommon, $confirmDelete);
 
-$isInModal     = isInModal();
-$relationTitle = $lang->SRCommon;
-if($story->type == 'epic' || $story->type == 'story') $relationTitle = $lang->story->requirement;
+$isInModal = isInModal();
 
 data('branchID', $story->branch);
 data('activeMenuID', $story->type);
 jsVar('relievedTip', $lang->story->relievedTip);
-jsVar('unlinkStoryTip', $story->type == 'story' ? str_replace($lang->SRCommon, $lang->URCommon, $lang->story->unlinkStory) : $lang->story->unlinkStory);
 jsVar('confirmDeleteTip', $confirmDelete);
 jsVar('storyType', $story->type);
 jsVar('storyID', $story->id);
@@ -147,6 +140,33 @@ if($story->type == 'story')
             (
                 set::title($execution->name),
                 ($execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executions[$executionID]) : a(set::href($this->createLink('execution', 'view', "executionID=$executionID")), setClass('muted title'), $executions[$executionID])
+            );
+        }
+    }
+}
+
+$relationLi = array();
+if($config->vision != 'or')
+{
+    $canLinkStory = common::hasPriv($story->type, 'linkStory');
+    foreach($relations as $type => $storyList)
+    {
+        $canViewStory = common::hasPriv($type, 'view');
+        $relationLi[] = h::li
+        (
+            setClass('text-gray-500'),
+            $lang->{$type}->common
+        );
+
+        foreach($storyList as $relation)
+        {
+            $relationLi[] = h::li
+            (
+                setClass('relateStories'),
+                set::title($relation->title),
+                label(setClass('circle size-sm'), $relation->id),
+                $canViewStory ? a(set::href(helper::createLink($relation->type, 'view', "id={$relation->id}")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), $relation->title) : span(setClass('title'), $relation->title),
+                $canLinkStory ? a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}")), setClass('unlink unlinkStory hidden ajax-submit'), icon('unlink'), set(array('data-confirm' => $lang->story->unlinkStory))) : null
             );
         }
     }
@@ -444,28 +464,14 @@ detailBody
                     }, $twins))
                 )
             ) : null,
-            ($this->config->URAndSR && !$hiddenURS && $config->vision != 'or') ? tabPane
+            ($config->vision != 'or') ? tabPane
             (
-                set::title($relationTitle),
+                set::title($lang->story->linkStories),
                 set::active(empty($twins)),
                 h::ul
                 (
-                    array_values(array_map(function($relation) use($story)
-                    {
-                        $relationType = $story->type == 'requirement' ? 'story' : 'requirement';
-                        $canViewStory = common::hasPriv($relationType, 'view', null, "storyType=$relationType");
-                        $canLinkStory = common::hasPriv($story->type, 'linkStory');
-
-                        return h::li
-                        (
-                            setClass('relateStories'),
-                            set::title($relation->title),
-                            label(setClass('circle size-sm'), $relation->id),
-                            $canViewStory ? a(set::href(helper::createLink($relationType, 'view', "id={$relation->id}&version=0&param=0&storyType=$relationType")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), $relation->title) : span(setClass('title'), $relation->title),
-                            $canLinkStory ? a(set('url', helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}&browseType=&queryID=0&storyType=$story->type")), setClass('unlink unlinkStory hidden'), icon('unlink')) : null
-                        );
-                    }, $relations)),
-                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), setData(array('toggle' => 'modal', 'size' => 'lg')), setID('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->link . $relationTitle))
+                    $relationLi,
+                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), setData(array('toggle' => 'modal', 'size' => 'lg')), setID('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->linkStory))
                 )
             ) : null,
             $story->type == 'story' && common::hasPriv('story', 'tasks') ? tabPane
@@ -568,25 +574,6 @@ detailBody
                             }, $releases))
                         )
                     ) : null,
-                    item
-                    (
-                        set::collapse(true),
-                        set::name($lang->story->linkStories),
-                        empty($story->linkStoryTitles) ? null : h::ul
-                        (
-                            array_values(array_map(function($storyID, $storyTitle) use($storyProducts, $story)
-                            {
-                                global $app;
-                                $hasPriv = ($app->user->admin || str_contains(",{$app->user->view->products},", ",{$storyProducts[$storyID]},"));
-                                return h::li
-                                (
-                                    set::title($storyTitle),
-                                    label(setClass('circle size-sm'), $storyID),
-                                    $hasPriv ? a(set::href(helper::createLink($story->type, 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type")), setClass('title'), setData(array('toggle' => 'modal', 'size' => 'lg')), set::title($storyTitle), $storyTitle) : span(setClass('title'), $storyTitle)
-                                );
-                            }, array_keys($story->linkStoryTitles), array_values($story->linkStoryTitles)))
-                        )
-                    ),
                     $story->type == 'story' && helper::hasFeature('devops') ? item
                     (
                         set::collapse(true),
