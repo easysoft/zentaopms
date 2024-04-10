@@ -36,7 +36,15 @@ if(!$hasDivider) unset($actions['type']);
 foreach($actions as $key => $action)
 {
     if(isset($action['url']) && strpos($action['url'], 'createBranch') !== false && empty($hasGitRepo)) unset($actions[$key]);
-    if(isset($action['url']) && strpos($action['url'], 'view') !== false && $task->parent == 0) unset($actions[$key]);
+    if(isset($action['url']) && strpos($action['url'], 'view') !== false)
+    {
+        if($isInModal)
+        {
+            $actions[$key]['data-toggle'] = 'modal';
+            $actions[$key]['data-size']   = 'lg';
+        }
+        if($task->parent == 0) unset($actions[$key]);
+    }
     if(isset($actions[$key]['url']))
     {
         $actions[$key]['url'] = str_replace(array('{story}', '{module}', '{parent}', '{execution}'), array($task->story, $task->module, $task->parent, $task->execution), $action['url']);
