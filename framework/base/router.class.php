@@ -1195,8 +1195,8 @@ class baseRouter
             $tab     = '';
 
             if(isset($_SERVER['HTTP_X_ZIN_APP'])) $tab = $_SERVER['HTTP_X_ZIN_APP'];
-            elseif(isset($this->lang->navGroup)) $tab = zget($this->lang->navGroup, $module, 'my');
             elseif(isset($_COOKIE['tab']) && $_COOKIE['tab'] && preg_match('/^\w+$/', $_COOKIE['tab'])) $tab = $_COOKIE['tab'];
+            elseif(isset($this->lang->navGroup)) $tab = zget($this->lang->navGroup, $module, 'my');
 
             if(!isset($this->lang->mainNav->{$tab}) && !isset($_SERVER['HTTP_X_ZIN_APP'])) $tab = '';
             $this->tab = empty($tab) ? 'my' : $tab;
