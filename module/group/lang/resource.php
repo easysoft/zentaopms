@@ -531,12 +531,12 @@ $lang->resource->story->batchChangeModule  = 'batchChangeModule';
 $lang->resource->story->batchChangeParent  = 'batchChangeParent';
 $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->processStoryChange = 'processStoryChange';
-$lang->resource->story->linkStories        = 'linkStoriesAB';
 $lang->resource->story->relieved           = 'relievedTwins';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
 $lang->story->methodOrder[15]  = 'edit';
+$lang->story->methodOrder[17]  = 'batchEdit';
 $lang->story->methodOrder[20]  = 'export';
 $lang->story->methodOrder[25]  = 'delete';
 $lang->story->methodOrder[30]  = 'view';
@@ -562,8 +562,7 @@ $lang->story->methodOrder[120] = 'batchChangeModule';
 $lang->story->methodOrder[125] = 'batchChangeParent';
 $lang->story->methodOrder[130] = 'batchToTask';
 $lang->story->methodOrder[135] = 'processStoryChange';
-$lang->story->methodOrder[140] = 'linkStories';
-$lang->story->methodOrder[145] = 'relieved';
+$lang->story->methodOrder[140] = 'relieved';
 
 /* Requirement. */
 $lang->resource->requirement = new stdclass();
@@ -591,7 +590,6 @@ $lang->resource->requirement->batchChangeModule = 'batchChangeModule';
 $lang->resource->requirement->batchChangeParent = 'batchChangeParent';
 $lang->resource->requirement->batchChangeGrade  = 'batchChangeGrade';
 $lang->resource->requirement->batchChangePlan   = 'batchChangePlan';
-$lang->resource->requirement->linkRequirements  = 'linkRequirementsAB';
 
 $lang->requirement->methodOrder[5]   = 'create';
 $lang->requirement->methodOrder[10]  = 'batchCreate';
@@ -616,7 +614,6 @@ $lang->requirement->methodOrder[95]  = 'batchChangeModule';
 $lang->requirement->methodOrder[100] = 'batchChangeParent';
 $lang->requirement->methodOrder[105] = 'batchChangeGrade';
 $lang->requirement->methodOrder[110] = 'batchChangePlan';
-$lang->requirement->methodOrder[115] = 'linkRequirements';
 
 /* Epic. */
 $lang->resource->epic = new stdclass();
@@ -624,6 +621,7 @@ $lang->resource->epic->create            = 'create';
 $lang->resource->epic->batchCreate       = 'batchCreate';
 $lang->resource->epic->edit              = 'editAction';
 $lang->resource->epic->batchEdit         = 'batchEdit';
+$lang->resource->epic->linkStory         = 'linkStory';
 $lang->resource->epic->export            = 'exportAction';
 $lang->resource->epic->delete            = 'deleteAction';
 $lang->resource->epic->view              = 'view';
@@ -647,6 +645,8 @@ $lang->resource->epic->batchChangePlan   = 'batchChangePlan';
 $lang->epic->methodOrder[5]   = 'create';
 $lang->epic->methodOrder[10]  = 'batchCreate';
 $lang->epic->methodOrder[15]  = 'edit';
+$lang->epic->methodOrder[16]  = 'batchEdit';
+$lang->epic->methodOrder[17]  = 'linkStory';
 $lang->epic->methodOrder[20]  = 'export';
 $lang->epic->methodOrder[25]  = 'delete';
 $lang->epic->methodOrder[30]  = 'view';
