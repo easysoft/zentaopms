@@ -357,12 +357,11 @@ class programplanModel extends model
             if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
 
             if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
+            $isParent = $task->parent == -1;
             foreach($stageIndex as $index => $stage)
             {
                 if($stage['planID'] == $task->execution)
                 {
-                    $isParent = $task->parent == -1;
-
                     $stageIndex[$index]['progress']['totalEstimate'] += $isParent ? 0 : $task->estimate;
                     $stageIndex[$index]['progress']['totalConsumed'] += $isParent ? 0 : $task->consumed;
                     $stageIndex[$index]['progress']['totalReal']     += $isParent ? 0 : ((($task->status == 'closed' || $task->status == 'cancel' || $isParent) ? 0 : $task->left) + $task->consumed);
