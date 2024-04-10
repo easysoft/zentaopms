@@ -13,10 +13,10 @@ namespace zin;
 $items = array();
 $items[] = array('name' => 'no', 'label' => $lang->user->abbr->id, 'control' => 'static', 'width' => '32px', 'class' => 'no');
 $items[] = array('name' => 'serviceProject', 'label' => '', 'hidden' => true);
-$items[] = array('name' => $defaultServer->type == 'gitlab' ? 'name_with_namespace' : 'path', 'label' => $lang->repo->repo, 'control' => 'static', 'width' => '264px');
-$items[] = array('name' => $defaultServer->type == 'gitlab' ? 'name' : 'identifier', 'label' => $lang->repo->importName);
-$items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $products);
-$items[] = array('name' => 'actions', 'label' => $lang->actions, 'control' => array('control' => 'btn', 'className' => 'ghost hideRepo', 'icon'  => 'eye-off', 'hint'  => $this->lang->repo->hide));
+$items[] = array('name' => $server->type == 'gitlab' ? 'name_with_namespace' : 'path', 'label' => $lang->repo->repo, 'control' => 'static');
+$items[] = array('name' => $server->type == 'gitlab' ? 'name' : 'identifier', 'label' => $lang->repo->importName, 'className' => 'w-1/3');
+$items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $products, 'className' => 'w-1/4');
+$items[] = array('name' => 'actions', 'label' => $lang->actions, 'control' => array('control' => 'btn', 'className' => 'ghost repo-action'), 'width' => '60px');
 
 $no = 1;
 foreach($repoList as $repo)
@@ -42,19 +42,20 @@ foreach($repoList as $repo)
         set::id('servers'),
         set::placeholder($lang->repo->importServer),
         set::items(array('' => '') + $servers),
-        set::value($defaultServer->id)
+        set::value($server->id)
     ),
     li(
         setClass('ml-2'),
         checkbox
         (
-            on::change('window.toggleShowRepo'),
+            on::click('window.toggleShowRepo'),
+            setClass('show-all-repo'),
             $this->lang->repo->showHidden
         )
     )
 );
 
-jsVar('serverID', $defaultServer->id);
+jsVar('serverID', $server->id);
 jsVar('hiddenRepos', $hiddenRepos);
 jsVar('hideLang', $this->lang->repo->hide);
 jsVar('showLang', $this->lang->repo->show);
@@ -64,7 +65,7 @@ formBatchPanel
     (
         set::type('hidden'),
         set::name('serviceHost'),
-        set::value($defaultServer->id)
+        set::value($server->id)
     ),
     set::id('repoList'),
     set::back('repo-maintain'),
@@ -75,8 +76,7 @@ formBatchPanel
     set::data($repoList),
     set::maxRows(count($repoList)),
     set::onRenderRowCol(jsRaw('window.onRenderRowCol')),
-    on::click('.hideRepo', 'window.hideRepo'),
-    on::click('.showRepo', 'window.showRepo'),
+    on::click('.repo-action', 'window.setRepoState'),
 );
 
 render();

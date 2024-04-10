@@ -1002,11 +1002,11 @@ class repo extends control
      * 导入版本库。
      * Import repos.
      *
-     * @param  int    $server
+     * @param  int    $serverID
      * @access public
      * @return void
      */
-    public function import(int $server = 0, int $showHiddenRepo = 0)
+    public function import(int $serverID = 0)
     {
         if($this->viewType !== 'json') $this->commonAction();
 
@@ -1020,25 +1020,22 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
         }
 
-        $serverList    = $this->loadModel('gitlab')->getList() + $this->loadModel('gitfox')->getList();
-        $defaultServer = empty($server) ? array_shift($serverList) : $this->loadModel('pipeline')->getById($server);
-        $hiddenRepos   = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $defaultServer->id);
-        $hiddenRepos   = explode(',', $hiddenRepos);
+        $serverList = $this->loadModel('pipeline')->getPairs('gitlab,gitfox');
+        if(!$serverID) $serverID = key($serverList);
 
-        $repoList = $defaultServer ? $this->repoZen->getNotExistRepos($defaultServer) : array();
+        $server      = $this->pipeline->getByID($serverID);
+        $hiddenRepos = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $serverID);
+
+        $repoList = $server ? $this->repoZen->getNotExistRepos($server) : array();
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        if(!$showHiddenRepo)
-        {
-            foreach($repoList as $key => $repo) if(in_array($repo->id, $hiddenRepos)) unset($repoList[$key]);
-        }
 
-        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
-        $this->view->servers       = $this->gitlab->getPairs() + $this->gitfox->getPairs();
-        $this->view->products      = $products;
-        $this->view->projects      = $this->product->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->defaultServer = $defaultServer;
-        $this->view->repoList      = array_values($repoList);
-        $this->view->hiddenRepos   = $hiddenRepos;
+        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
+        $this->view->servers     = $serverList;
+        $this->view->products    = $products;
+        $this->view->projects    = $this->product->getProjectPairsByProductIDList(array_keys($products));
+        $this->view->server      = $server;
+        $this->view->repoList    = array_values($repoList);
+        $this->view->hiddenRepos = explode(',', $hiddenRepos);
         $this->display();
     }
 
