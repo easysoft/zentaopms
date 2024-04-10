@@ -1336,29 +1336,29 @@ class story extends control
     }
 
     /**
-     * 关联需求。
-     * Link story and requirement.
-     *
-     * 引用1：软件需求列表页，关联用户需求，将软件需求关联到用户需求。
-     * 引用2：用户需求列表页，关联软件需求，将用户需求关联到软件需求。
+     * 需求详情页关联需求。
+     * Link story in view.
      *
      * @param  int    $storyID
-     * @param  string $type          linkStories|linkRelateUR|linkRelateSR
+     * @param  string $type          link|remove
      * @param  int    $linkedStoryID
      * @param  string $browseType    ''|bySearch
      * @param  int    $queryID       0|
-     * @param  string $storyType     story|requirement
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkStory(int $storyID, string $type = 'linkStories', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0, string $storyType = 'story')
+    public function linkStory(int $storyID, string $type = 'link', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->commonAction($storyID);
+        $story = $this->story->getById($storyID);
 
         if($type == 'remove')
         {
             $this->story->unlinkStory($storyID, $linkedStoryID);
-            helper::end();
+            return $this->send(array('result' => 'success', 'load' => true));
         }
 
         if($_POST)
@@ -1370,99 +1370,25 @@ class story extends control
         }
 
         /* Get story, product, products, and queryID. */
-        $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs('', 0, '', 'all');
 
-        /* Change for requirement story title. */
-        if($story->type == 'requirement')
-        {
-            $this->lang->story->title     = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->title);
-            $this->lang->story->linkStory = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->linkStory);
-        }
-        elseif($story->type == 'epic')
-        {
-            $this->lang->story->title     = str_replace($this->lang->epic->common, $this->lang->URCommon, $this->lang->story->title);
-            $this->lang->story->linkStory = str_replace($this->lang->epic->common, $this->lang->URCommon, $this->lang->story->linkStory);
-        }
-
         /* Build search form. */
-        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
-        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, $story->type == 'requirement' ? 'story' : 'requirement', (string)$story->branch);
+        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, 'all', (string)$story->branch);
 
         /* Get stories to link. */
-        $stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type);
-
-        /* Assign. */
-        $this->view->title        = $this->lang->story->linkStory . "STORY" . $this->lang->colon .$this->lang->story->linkStory;
-        $this->view->type         = $type;
-        $this->view->stories2Link = $stories2Link;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-
-        $this->display();
-    }
-
-    /**
-     * 关联软件需求。
-     * Link related stories.
-     *
-     * @param  int    $storyID
-     * @param  string $browseType
-     * @param  string $excludeStories
-     * @param  int    $param
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function linkStories(int $storyID, string $browseType = '', string $excludeStories = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
-    {
-        /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        /* Get story, product, products, and queryID. */
-        $story    = $this->story->getById($storyID);
-        $products = $this->product->getPairs('', 0, '', 'all');
-        $queryID  = ($browseType == 'bySearch') ? $param : 0;
-        $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
-        $method   = $story->type == 'story' ? 'linkStories'  : 'linkRequirements';
+        $stories2Link = $this->story->getStories2Link($storyID, $browseType, $queryID, $pager);
 
-        /* Build search form. */
-        $actionURL = $this->createLink('story', $method, "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID");
-        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, $story->type);
-
-        $this->view->story        = $story;
-        $this->view->stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type, $pager, $excludeStories);
-        $this->view->products     = $products;
-        $this->view->users        = $this->user->getPairs('noletter');
+        /* Assign. */
+        $this->view->stories2Link = $stories2Link;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager        = $pager;
+        $this->view->story        = $story;
 
         $this->display();
-    }
-
-    /**
-     * 关联用户需求。
-     * Link related requirements.
-     *
-     * @param  int    $storyID
-     * @param  string $browseType
-     * @param  string $excludeStories
-     * @param  int    $param
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function linkRequirements(int $storyID, string $browseType = '', string $excludeStories = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
-    {
-        $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
-        $this->config->product->search['fields']['title'] = $this->lang->story->title;
-        unset($this->config->product->search['fields']['plan']);
-        unset($this->config->product->search['fields']['stage']);
-
-        echo $this->fetch('story', 'linkStories', "storyID=$storyID&browseType=$browseType&excludeStories=$excludeStories&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
