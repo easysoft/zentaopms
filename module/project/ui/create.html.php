@@ -69,6 +69,7 @@ JS);
 formGridPanel
 (
     to::titleSuffix($modeDropdown),
+    set::ajax(array('submitDisabledValue' => false)),
     to::headingActions
     (
         btn
