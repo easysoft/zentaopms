@@ -372,56 +372,16 @@ detailBody
                 picker(setID('closedReason'), set::name('closedReason'), set::items($fields['closedReason']['options']), set::value($fields['closedReason']['default']), on::change('setStory'))
             ) : null,
         ),
-        tableData
+        $story->status == 'closed' ? tableData
         (
             set::title($lang->story->legendMisc),
-            $story->status == 'closed' ? item
+            item
             (
                 set::trClass('duplicateStoryBox'),
                 set::name($lang->story->duplicateStory),
                 picker(setID('duplicateStory'), set::name('duplicateStory'), set::items($fields['duplicateStory']['options']), set::value($fields['duplicateStory']['default']), set::placeholder($lang->bug->placeholder->duplicate))
-            ) : null,
-            item
-            (
-                set::name($lang->{$story->type}->linkStory),
-                ($story->type == 'story' && common::hasPriv('story', 'linkStories')) ? btn
-                (
-                    setClass('secondary'),
-                    setID('linkStoriesLink'),
-                    setData(array('toggle' => 'modal', 'size' => 'lg')),
-                    on::click('linkStories'),
-                    $lang->story->linkStoriesAB
-                ) : null,
-                ($story->type == 'requirement' && common::hasPriv('requirement', 'linkRequirements')) ? btn
-                (
-                    setClass('secondary'),
-                    setID('linkStoriesLink'),
-                    setData(array('toggle' => 'modal', 'size' => 'lg')),
-                    on::click('linkStories'),
-                    $lang->story->linkRequirementsAB
-                ) : null
             ),
-            item
-            (
-                set::name(' '),
-                !empty($story->linkStoryTitles) ? h::ul
-                (
-                    setID('linkedStories'),
-                    array_values(array_map(function($linkStoryID, $linkStoryTitle) use($story)
-                    {
-                        $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
-                        return h::li
-                        (
-                            set::title($linkStoryTitle),
-                            checkbox(set::name($linkStoryField . '[]'), set::rootClass('inline'), set::value($linkStoryID), set::checked(true)),
-                            label(setClass('circle size-sm'), $linkStoryID),
-                            span(setClass('linkStoryTitle'), $linkStoryTitle)
-                        );
-                    }, array_keys($story->linkStoryTitles), array_values($story->linkStoryTitles)))
-                ) : null,
-                div(setID('linkStoriesBox'))
-            )
-        )
+        ) : null
     )
 );
 

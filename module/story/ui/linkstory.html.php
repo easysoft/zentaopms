@@ -14,14 +14,14 @@ namespace zin;
 
 $pageParams = http_build_query($app->getParams());
 
-$config->story->dtable->fieldList['title']['title'] = $lang->story->title;
+$config->story->dtable->fieldList['title']['title'] = $lang->story->name;
 
 $cols = array();
-$cols['id']     = $config->story->dtable->fieldList['id'];
-$cols['title']  = $config->story->dtable->fieldList['title'];
-$cols['pri']    = $config->story->dtable->fieldList['pri'];
-$cols['status'] = $config->story->dtable->fieldList['status'];
-if($story->type == 'requirement') $cols['stage'] = $config->story->dtable->fieldList['stage'];
+$cols['id']       = $config->story->dtable->fieldList['id'];
+$cols['title']    = $config->story->dtable->fieldList['title'];
+$cols['pri']      = $config->story->dtable->fieldList['pri'];
+$cols['status']   = $config->story->dtable->fieldList['status'];
+$cols['stage']    = $config->story->dtable->fieldList['stage'];
 $cols['openedBy'] = $config->story->dtable->fieldList['openedBy'];
 $cols['estimate'] = $config->story->dtable->fieldList['estimate'];
 $cols['title']['nestedToggle'] = false;
@@ -31,7 +31,7 @@ $cols = array_map(function($col){unset($col['sortType']); return $col;}, $cols);
 $data = array();
 foreach($stories2Link as $linkStory) $data[] = $this->story->formatStoryForList($linkStory);
 
-modalHeader(set::title($lang->story->link . ($story->type == 'requirement' ? $lang->story->story: $lang->story->requirement)));
+modalHeader(set::title($lang->story->linkStory));
 
 searchForm
 (
@@ -46,8 +46,8 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data($data),
+    set::footPager(usePager()),
     set::footToolbar(array('items' => array(array('text' => $lang->save, 'btnType' => 'primary', 'className' => 'size-sm', 'data-on' => 'click', 'data-call' => 'fnLinkStories', 'data-params' => 'event')))),
-    set::footer(array('checkbox', 'toolbar'))
 );
 
 h::js
