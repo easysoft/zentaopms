@@ -958,23 +958,6 @@ class storyTest
     }
 
     /**
-     * 测试 updateStoryVersion 方法
-     * Test updateStoryVersion method
-     *
-     * @param  int    $storyID
-     * @access public
-     * @return object
-     */
-    public function updateStoryVersionTest(int $storyID): object
-    {
-        $story = $this->objectModel->fetchByID($storyID);
-        $this->objectModel->dao->update(TABLE_STORY)->set('version')->eq(2)->where('id')->eq(3)->exec();
-        $this->objectModel->updateStoryVersion($story);
-
-        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('AType')->eq('requirement')->andWhere('BType')->eq('story')->andWhere('relation')->eq('subdivideinto')->andWhere('AID')->eq(3)->andWhere('BID')->eq($storyID)->fetch();
-    }
-
-    /**
      * 测试 syncTwins 方法。
      * Test syncTwins method
      *
