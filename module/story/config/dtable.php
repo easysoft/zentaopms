@@ -177,24 +177,6 @@ $config->story->dtable->fieldList['childItem']['sortType'] = false;
 $config->story->dtable->fieldList['childItem']['type']     = 'text';
 $config->story->dtable->fieldList['childItem']['group']    = 6;
 
-$config->story->dtable->fieldList['URS']['name']        = 'URS';
-$config->story->dtable->fieldList['URS']['title']       = 'UR';
-$config->story->dtable->fieldList['URS']['sortType']    = false;
-$config->story->dtable->fieldList['URS']['width']       = '50';
-$config->story->dtable->fieldList['URS']['type']        = 'text';
-$config->story->dtable->fieldList['URS']['link']        = $config->edition != 'open' ? helper::createLink('story', 'relation', 'storyID={id}&storyType={type}') : '';
-$config->story->dtable->fieldList['URS']['data-toggle'] = 'modal';
-$config->story->dtable->fieldList['URS']['group']       = 6;
-
-$config->story->dtable->fieldList['SRS']['name']        = 'SRS';
-$config->story->dtable->fieldList['SRS']['title']       = 'SR';
-$config->story->dtable->fieldList['SRS']['sortType']    = false;
-$config->story->dtable->fieldList['SRS']['width']       = '50';
-$config->story->dtable->fieldList['SRS']['type']        = 'text';
-$config->story->dtable->fieldList['SRS']['link']        = $config->edition != 'open' ? helper::createLink('story', 'relation', 'storyID={id}&storyType={type}') : '';
-$config->story->dtable->fieldList['SRS']['data-toggle'] = 'modal';
-$config->story->dtable->fieldList['SRS']['group']       = 6;
-
 $config->story->dtable->fieldList['closedBy']['name']     = 'closedBy';
 $config->story->dtable->fieldList['closedBy']['title']    = $lang->story->closedBy;
 $config->story->dtable->fieldList['closedBy']['sortType'] = true;

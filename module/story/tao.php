@@ -322,16 +322,6 @@ class storyTao extends storyModel
                  ->fetchPairs();
         }
 
-        $mainID  = $type == 'story' ? 'BID' : 'AID';
-        $countID = $type == 'story' ? 'AID' : 'BID';
-
-        $relations = $this->dao->select("$mainID, count($countID) as count")->from(TABLE_RELATION)
-            ->where('AType')->eq('requirement')
-            ->andWhere('BType')->eq('story')
-            ->andWhere('relation')->eq('subdivideinto')
-            ->groupBy($mainID)
-            ->fetchAll($mainID);
-
         foreach($stories as $story)
         {
             /* Judge parent story has changed. */
@@ -347,12 +337,6 @@ class storyTao extends storyModel
             $story->planTitle = '';
             $storyPlans       = explode(',', trim($story->plan, ','));
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
-
-            if(isset($relations[$story->id]))
-            {
-                if($type == 'story')       $story->URS = $relations[$story->id]->count;
-                if($type == 'requirement') $story->SRS = $relations[$story->id]->count;
-            }
 
             if(isset($childItems[$story->id]))
             {
@@ -705,7 +689,7 @@ class storyTao extends storyModel
     protected function doCreateStory(object $story): int|false
     {
         $module = $this->app->rawModule;
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,URS,region,lane,branches,plans,modules,uploadImage')
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,region,lane,branches,plans,modules,uploadImage')
             ->autoCheck()
             ->checkIF(!empty($story->notifyEmail), 'notifyEmail', 'email')
             ->batchCheck($this->config->{$module}->create->requiredFields, 'notempty')

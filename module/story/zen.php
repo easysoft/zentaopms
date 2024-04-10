@@ -1011,20 +1011,11 @@ class storyZen extends story
      */
     protected function removeFormFieldsForCreate(array $fields, string $storyType = 'story'): array
     {
-        $productID = $this->view->productID;
-        $branch    = $this->view->branch;
-        $objectID  = $this->view->objectID;
+        $objectID = $this->view->objectID;
 
         /* Hidden some fields of projects without products. */
         $hiddenProduct = $hiddenParent = $hiddenPlan = false;
-        $teamUsers     = $URS = array();
-
-        if($storyType == 'story')
-        {
-            $moduleIdList = $this->tree->getAllChildId($this->view->moduleID);
-            $URS          = $this->story->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch, $moduleIdList, 'active', 'id_desc', 0, '', 'requirement');
-        }
-        $fields['URS']['options'] = $URS;
+        $teamUsers     = array();
 
         if($this->app->tab === 'project' || $this->app->tab === 'execution')
         {
@@ -1068,10 +1059,9 @@ class storyZen extends story
      */
     protected function hiddenFormFieldsForEdit(array $fields): array
     {
-        $story   = $this->view->story;
         $product = $this->view->product;
 
-        $hiddenProduct = $hiddenParent = $hiddenPlan = $hiddenURS = false;
+        $hiddenProduct = $hiddenParent = $hiddenPlan = false;
         $teamUsers     = array();
         if($product->shadow)
         {
@@ -1087,7 +1077,6 @@ class storyZen extends story
                 $hiddenPlan = true;
                 unset($this->lang->story->stageList[''], $this->lang->story->stageList['wait'], $this->lang->story->stageList['planned']);
             }
-            if($project->model === 'kanban') $hiddenURS  = true;
         }
 
         if($hiddenProduct)
@@ -1949,7 +1938,7 @@ class storyZen extends story
     }
 
     /**
-     * Set hidden fields for view. like: hiddenPlan,hiddenURS.
+     * Set hidden fields for view. like: hiddenPlan.
      *
      * @param  object    $product
      * @access protected
@@ -1958,7 +1947,6 @@ class storyZen extends story
     protected function setHiddenFieldsForView(object $product)
     {
         $this->view->hiddenPlan = false;
-        $this->view->hiddenURS  = false;
         if(empty($product->shadow)) return;
 
         $projectInfo = $this->dao->select('t2.model, t2.multiple')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -1968,11 +1956,7 @@ class storyZen extends story
             ->fetch();
 
         if($projectInfo->model == 'waterfall') $this->view->hiddenPlan = true;
-        if($projectInfo->model == 'kanban')
-        {
-            $this->view->hiddenPlan = true;
-            $this->view->hiddenURS  = true;
-        }
-        if(!$projectInfo->multiple) $this->view->hiddenPlan = true;
+        if($projectInfo->model == 'kanban')    $this->view->hiddenPlan = true;
+        if(!$projectInfo->multiple)            $this->view->hiddenPlan = true;
     }
 }
