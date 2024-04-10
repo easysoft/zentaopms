@@ -1167,13 +1167,6 @@ class storyModel extends model
             if($actionID) $this->action->logHistory($actionID, $changes);
         }
 
-        if($story->result == 'pass' && $oldStory->type == 'requirement')
-        {
-            /* IF is requirement changed, notify its relation. */
-            $relations = $this->storyTao->getRelation($storyID, 'requirement');
-            $this->dao->update(TABLE_STORY)->set('URChanged')->eq(1)->where('id')->in($relations)->exec();
-        }
-
         if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Reviewed');
 
         return true;
@@ -1329,13 +1322,6 @@ class storyModel extends model
         /* Delete versions that is after this version. */
         $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->in($twinsIdList)->andWHere('version')->eq($oldStory->version)->exec();
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->in($twinsIdList)->andWhere('version')->eq($oldStory->version)->exec();
-
-        /* If is requirement recall change, revert its relation. */
-        if($oldStory->type == 'requirement')
-        {
-            $relations = $this->storyTao->getRelation($storyID, 'requirement');
-            $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->in($relations)->exec();
-        }
 
         $changes = common::createChanges($oldStory, $story);
         if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'recalledChange');
@@ -2178,47 +2164,24 @@ class storyModel extends model
      * Get the stories to link.
      *
      * @param  int     $storyID
-     * @param  string  $type           linkStories|linkRelateSR|linkRelateUR
-     * @param  string  $browseType     bySearch
+     * @param  string  $browseType bySearch
      * @param  int     $queryID
-     * @param  string  $storyType      story|requirement
      * @param  object  $pager
-     * @param  string  $excludeStories
      * @access public
      * @return array
      */
-    public function getStories2Link(int $storyID, string $type = 'linkStories', string $browseType = 'bySearch', int $queryID = 0, string $storyType = 'story', object $pager = null, string $excludeStories = ''): array
+    public function getStories2Link(int $storyID, string $browseType = 'bySearch', int $queryID = 0, object $pager = null): array
     {
-        $story         = $this->getById($storyID);
-        $tmpStoryType  = $storyType == 'requirement' ? 'story' : 'requirement';
-        $stories2Link  = array();
-        if($type == 'linkRelateSR' or $type == 'linkRelateUR')
-        {
-            $tmpStoryType   = $story->type;
-            $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
-            $storyIDList    = $story->id . ',' . $excludeStories . ',' . $story->{$linkStoryField};
-        }
-        else
-        {
-            $storyIDList = $this->storyTao->getRelation($storyID, $story->type);
-        }
+        $story    = $this->getById($storyID);
+        $excludes = $this->storyTao->getRelation($storyID, $story->type);
 
+        /* 自身不能关联自身。 */
+        $excludes[$storyID] = $storyID;
+
+        $stories2Link = array();
         if($browseType == 'bySearch')
         {
-            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', 0, $tmpStoryType, $storyIDList, '', $pager);
-        }
-        elseif($type != 'linkRelateSR' and $type != 'linkRelateUR')
-        {
-            $status = $storyType == 'story' ? 'active' : 'all';
-            $stories2Link = $this->getProductStories($story->product, $story->branch, '', $status, $tmpStoryType, 'id_desc', true, $storyIDList, $pager);
-        }
-
-        if($type != 'linkRelateSR' and $type != 'linkRelateUR')
-        {
-            foreach($stories2Link as $id => $story)
-            {
-                if($storyType == 'story' and $story->status != 'active') unset($stories2Link[$id]);
-            }
+            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', 0, 'all', $excludes, '', $pager);
         }
 
         return $stories2Link;
@@ -4112,35 +4075,25 @@ class storyModel extends model
     }
 
     /**
-     * 通过关系表查询UR关联的SR或SR关联的UR。
-     * Get SR or UR with the relationship between UR and SR.
+     * 获取需求关联的需求列表。
+     * Get story relation.
      *
      * @param  int    $storyID
      * @param  string $storyType story|requirement
-     * @param  array  $fields
      * @access public
      * @return array
      */
-    public function getStoryRelation(int $storyID, string $storyType = 'story', array $fields = array()): array
+    public function getStoryRelation(int $storyID, string $storyType = 'story'): array
     {
-        $conditionField = $storyType == 'story' ? 'BID' : 'AID';
-        $storyType      = $storyType == 'story' ? 'AID' : 'BID';
-
-        $relations = $this->dao->select($storyType)->from(TABLE_RELATION)
-            ->where('AType')->eq('requirement')
-            ->andWhere('BType')->eq('story')
-            ->andWhere('relation')->eq('subdivideinto')
-            ->andWhere($conditionField)->eq($storyID)
-            ->fetchPairs();
+        $relations = $this->storyTao->getRelation($storyID, $storyType);
 
         if(empty($relations)) return array();
 
-        $fields = empty($fields) ? '*' : implode(',', $fields);
-        return $this->dao->select($fields)->from(TABLE_STORY)
+        return $this->dao->select('*')->from(TABLE_STORY)
             ->where('id')->in($relations)
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
-            ->fetchAll();
+            ->fetchGroup('type', 'id');
     }
 
     /**
@@ -4167,8 +4120,8 @@ class storyModel extends model
     }
 
     /**
-     * 关联软件需求和用户需求。
-     * Create a relationship between the story and the requirement.
+     * 需求关联需求。
+     * Story link story.
      *
      * @param  int          $storyID
      * @param  array|object storyList  postedData
@@ -4177,36 +4130,39 @@ class storyModel extends model
      */
     public function linkStories(int $storyID, array|object $storyList = array()): void
     {
-        $story   = $this->getByID($storyID);
-        $stories = empty($storyList) ? $this->post->stories : $storyList;
-        $isStory = ($story->type == 'story');
+        $story       = $this->getByID($storyID);
+        $linkStories = $this->getByList($storyList);
 
-        foreach($stories as $id)
+        $this->loadModel('action');
+        foreach($linkStories as $id => $linkStory)
         {
-            $requirement = $this->getByID((int)$id);
             $data = new stdclass();
-            $data->AType    = 'requirement';
-            $data->BType    = 'story';
+            $data->AType    = $story->type;
+            $data->BType    = $linkStory->type;
             $data->product  = $story->product;
-            $data->relation = 'subdivideinto';
-            $data->AID      = $isStory ? $id : $storyID;
-            $data->BID      = $isStory ? $storyID : $id;
-            $data->AVersion = $isStory ? $requirement->version : $story->version;
-            $data->BVersion = $isStory ? $story->version : $requirement->version;
+            $data->relation = 'linkedto';
+            $data->AID      = $storyID;
+            $data->BID      = $id;
+            $data->AVersion = $story->version;
+            $data->BVersion = $linkStory->version;
 
             $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
 
-            $data->AType    = 'story';
-            $data->BType    = 'requirement';
-            $data->relation = 'subdividedfrom';
-            $data->product  = $story->product;
-            $data->AID      = $isStory ? $storyID : $id;
-            $data->BID      = $isStory ? $id : $storyID;
-            $data->AVersion = $isStory ? $story->version : $requirement->version;
-            $data->BVersion = $isStory ? $requirement->version : $story->version;
+            $data->AType    = $linkStory->type;
+            $data->BType    = $story->type;
+            $data->product  = $linkStory->product;
+            $data->relation = 'linkedfrom';
+            $data->AID      = $id;
+            $data->BID      = $storyID;
+            $data->AVersion = $linkStory->version;
+            $data->BVersion = $story->version;
 
             $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
+
+            $this->action->create('story', $id, 'linkrelatedstory', '', $storyID);
         }
+
+        $this->action->create('story', $storyID, 'linkrelatedstory', '', implode(',', array_keys($linkStories)));
     }
 
     /**
@@ -4222,12 +4178,15 @@ class storyModel extends model
         $idList = "$storyID,$linkedStoryID";
 
         $this->dao->delete()->from(TABLE_RELATION)
-            ->where('AType')->in('story,requirement')
-            ->andWhere('BType')->in('story,requirement')
-            ->andWhere('relation')->in('subdivideinto,subdividedfrom')
+            ->where('AType')->in('story,requirement,epic')
+            ->andWhere('BType')->in('story,requirement,epic')
+            ->andWhere('relation')->in('linkedto,linkedfrom')
             ->andWhere('AID')->in($idList)
             ->andWhere('BID')->in($idList)
             ->exec();
+
+        $this->loadModel('action')->create('story', $storyID, 'unlinkrelatedstory', '', $linkedStoryID);
+        $this->loadModel('action')->create('story', $linkedStoryID, 'unlinkrelatedstory', '', $storyID);
 
         return !dao::isError();
     }
