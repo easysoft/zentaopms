@@ -462,11 +462,11 @@ class commonModel extends model
      */
     public function deny(string $module, string $method, bool $reload = true)
     {
-        if($reload)
+        if($reload && $this->loadModel('user')->isLogon())
         {
             /* Get authorize again. */
             $user = $this->app->user;
-            $user->rights = $this->loadModel('user')->authorize($user->account);
+            $user->rights = $this->user->authorize($user->account);
             $user->groups = $this->user->getGroups($user->account);
             $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
             $this->session->set('user', $user);
