@@ -706,7 +706,7 @@ class bugModel extends model
         $now = helper::now();
         $bug = fixer::input('post')
             ->add('id', $bugID)
-            ->cleanInt('product,module,severity,project,execution,story,task,branch')
+            ->cleanInt('product,module,severity,project,execution,story,task,branch,duplicateBug')
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('module,execution,story,task,duplicateBug,branch', 0)
             ->setDefault('product', $oldBug->product)
@@ -878,7 +878,7 @@ class bugModel extends model
                 $bug->os             = implode(',', $os);
                 $bug->browser        = implode(',', $browsers);
                 $bug->resolution     = $data->resolutions[$bugID];
-                $bug->duplicateBug   = ($bug->resolution  != '' and $bug->resolution != 'duplicate') ? 0 : $duplicateBug;
+                $bug->duplicateBug   = ($bug->resolution  != '' and $bug->resolution != 'duplicate') ? 0 : filter_var($duplicateBug, FILTER_SANITIZE_NUMBER_INT);
 
                 if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
                 if($bug->resolution != '') $bug->confirmed = 1;
@@ -1155,6 +1155,7 @@ class bugModel extends model
             ->setDefault('duplicateBug',   0)
             ->removeIF($this->post->resolution != 'duplicate', 'duplicateBug')
             ->stripTags($this->config->bug->editor->resolve['id'], $this->config->allowedTags)
+            ->cleanInt('duplicateBug')
             ->remove('files,labels')
             ->get();
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $this->post->uid);

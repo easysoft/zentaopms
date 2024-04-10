@@ -2647,7 +2647,17 @@ class bug extends control
 
         unset($productBugs[$bugID]);
 
-        if($type == 'json') return print(helper::jsonEncode($productBugs));
+        if($type == 'json')
+        {
+            /* Keep raw sort in picker. When key is number then change to number sort in picker. */
+            $pairs = array('' => '');
+            foreach($productBugs as $id => $title)
+            {
+                if(empty($id)) continue;
+                $pairs["bugID{$id}"] = $title;
+            }
+            return print(helper::jsonEncode($pairs));
+        }
         return print(html::select('duplicateBug', $productBugs, '', "class='form-control' placeholder='{$this->lang->bug->duplicateTip}'"));
     }
 
