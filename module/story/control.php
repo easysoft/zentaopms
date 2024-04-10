@@ -1768,6 +1768,8 @@ class story extends control
             $this->fetch('transfer', 'export', 'model=story');
         }
 
+        $this->story->replaceURLang($storyType);
+
         $fileName = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->SRCommon;
         $project  = null;
         if($executionID)
@@ -1813,7 +1815,6 @@ class story extends control
             if($product->type != 'normal') $hasBranch = true;
         }
         if(!$hasBranch) $this->config->story->exportFields = str_replace(', branch', '', $this->config->story->exportFields);
-
 
         $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->story->exportFields;
