@@ -166,7 +166,9 @@ $lang->upgrade->upgradingTip = '系统正在升级中，请耐心等待...';
 $lang->upgrade->addTraincoursePrivTips = '为了帮助大家更好的学习项目管理相关知识，默认给所有权限分组分配了学堂的课程和实践库权限，便于大家都能访问。如果您不需要该功能，可以到后台功能开关中关闭该功能。';
 
 $lang->upgrade->storyStageList['']           = '';
+$lang->upgrade->storyStageList['defining']   = '定义中';
 $lang->upgrade->storyStageList['wait']       = '未开始';
+$lang->upgrade->storyStageList['planning']   = '规划中';
 $lang->upgrade->storyStageList['planned']    = "已计划";
 $lang->upgrade->storyStageList['projected']  = '已立项';
 $lang->upgrade->storyStageList['designing']  = '设计中';
@@ -177,6 +179,7 @@ $lang->upgrade->storyStageList['testing']    = '测试中';
 $lang->upgrade->storyStageList['tested']     = '测试完毕';
 $lang->upgrade->storyStageList['verified']   = '已验收';
 $lang->upgrade->storyStageList['rejected']   = '验收失败';
+$lang->upgrade->storyStageList['delivering'] = '交付中';
 $lang->upgrade->storyStageList['pending']    = '待发布';
 $lang->upgrade->storyStageList['released']   = '已发布';
 $lang->upgrade->storyStageList['closed']     = '已关闭';
