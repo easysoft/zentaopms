@@ -1672,7 +1672,7 @@ class taskZen extends task
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
 
-        if(helper::isAjaxRequest('modal') && ($this->app->tab == 'execution' || $this->config->vision == 'lite'))
+        if(helper::isAjaxRequest('modal') && (($execution->multiple && $this->app->tab == 'execution') || (!$execution->multiple && $this->app->tab == 'project') || $this->config->vision == 'lite'))
         {
             $response['closeModal'] = true;
             $response['callback']   = "refreshKanban()";
