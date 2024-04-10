@@ -285,7 +285,7 @@ row
                         )
                     )
                 ),
-                div(setClass('flex mt-4'), div(setClass('clip programBox'), $programDom)),
+                div(setClass('flex mt-4 program'), div(setClass('clip programBox'), $programDom)),
                 div(set::className('detail-content mt-4'), html($project->desc))
             )
         ),
@@ -326,6 +326,7 @@ row
                             ),
                             h::th
                             (
+                                setClass('th-plan'),
                                 span
                                 (
                                     setClass('flex'),

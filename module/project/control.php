@@ -585,6 +585,14 @@ class project extends control
             }
         }
 
+        if($this->config->edition == 'ipd')
+        {
+            $charter = $this->loadModel('charter')->getByID($project->charter);
+
+            $this->view->charter = $charter;
+            $this->view->roadmap = !empty($charter) ? $this->loadModel('roadmap')->getByID($charter->roadmap) : new stdclass();
+        }
+
         $this->executeHooks($projectID);
         list($userPairs, $userList) = $this->projectZen->buildUsers();
 
