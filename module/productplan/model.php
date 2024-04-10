@@ -660,7 +660,6 @@ class productplanModel extends model
             $maxEnd     = $plan->end;
             foreach($childPlans as $childID => $childPlan)
             {
-                $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
                 if($childPlan->begin < $minBegin) $minBegin = $childPlan->begin;
                 if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
             }
