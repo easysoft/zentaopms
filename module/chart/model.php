@@ -317,7 +317,6 @@ class chartModel extends model
         {
             $other = array_sum(array_slice($stat, $maxCount));
             $stat  = array_slice($stat, 0, $maxCount);
-            a($stat);
             $stat[$this->lang->chart->other] = $other;
         }
 
