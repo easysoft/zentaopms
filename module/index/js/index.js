@@ -144,7 +144,7 @@
             if(methodLowerCase === 'batchedit') return 'program';
             var moduleGroup = link.params.moduleGroup ? link.params.moduleGroup : link.params.$2;
             if(methodLowerCase === 'showerrornone' && link.params.$1 == 'project') return 'project';
-            if(methodLowerCase === 'showerrornone' && (moduleGroup || moduleGroup)) return moduleGroup;
+            if(methodLowerCase === 'showerrornone' && moduleGroup) return moduleGroup;
         }
         if(moduleName === 'stakeholder')
         {
