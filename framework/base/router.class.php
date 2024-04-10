@@ -414,11 +414,14 @@ class baseRouter
      *
      * @param string $appName   the name of the app
      * @param string $appRoot   the root path of the app
+     * @param string $mode      the mode of the app running|installing|upgrading
      * @access public
      * @return void
      */
-    public function __construct(string $appName = 'demo', string $appRoot = '')
+    public function __construct(string $appName = 'demo', string $appRoot = '', string $mode = 'running')
     {
+        if($mode != 'running') $this->{$mode} = true;
+
         $this->setPathFix();
         $this->setBasePath();
         $this->setFrameRoot();
@@ -489,14 +492,15 @@ class baseRouter
      * @param string $appName   应用名称。  The name of the app.
      * @param string $appRoot   应用根路径。The root path of the app.
      * @param string $className 应用类名，如果对router类做了扩展，需要指定类名。When extends router class, you should pass in the child router class name.
+     * @param string $mode      应用模式。  The mode of the app. running|installing|upgrading
      * @static
      * @access public
      * @return static   the app object
      */
-    public static function createApp(string $appName = 'demo', string $appRoot = '', string $className = '')
+    public static function createApp(string $appName = 'demo', string $appRoot = '', string $className = '', string $mode = 'running')
     {
         if(empty($className)) $className = self::class;
-        return new $className($appName, $appRoot);
+        return new $className($appName, $appRoot, $mode);
     }
 
     /**
