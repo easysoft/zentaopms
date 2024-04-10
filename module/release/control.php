@@ -519,7 +519,7 @@ class release extends control
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
         $searchModules = array();
-        $moduleGroups  = $this->loadModel('tree')->getOptionMenu($release->product, 'story', 0, explode(',', $release->branch));;
+        $moduleGroups  = $this->loadModel('tree')->getOptionMenu($release->product, 'story', 0, explode(',', $release->branch));
         foreach($moduleGroups as $modules) $searchModules += $modules;
         $this->config->product->search['params']['module']['values'] = $searchModules;
 
