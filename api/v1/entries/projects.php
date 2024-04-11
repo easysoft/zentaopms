@@ -75,7 +75,7 @@ class projectsEntry extends entry
      */
     public function post()
     {
-        $fields = 'name,begin,end,products,desc,hasProduct';
+        $fields = 'name,begin,end,products,branch,desc,hasProduct';
         $this->batchSetPost($fields);
         if(isset($_POST['products']) and !isset($_POST['hasProduct'])) $_POST['hasProduct'] = true;
 
@@ -88,6 +88,17 @@ class projectsEntry extends entry
         $this->setPost('PM', $this->request('PM', ''));
         $this->setPost('model', $this->request('model', 'scrum'));
         $this->setPost('parent', $this->request('parent', 0));
+
+        if(isset($_POST['branch']))
+        {
+            $branches = $_POST['branch'];
+            foreach($branches as $key => $branch)
+            {
+                if(empty($branch)) unset($branches[$key]);
+            }
+
+            $this->setPost('branch', $branches);
+        }
 
         $control = $this->loadController('project', 'create');
 
