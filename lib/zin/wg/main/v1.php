@@ -102,6 +102,7 @@ class main extends wg
                 div
                 (
                     $children,
+                    setID('mainContentCell'),
                     setClass('main-content-cell')
                 ),
                 $rightSides
