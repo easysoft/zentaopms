@@ -1834,7 +1834,7 @@ class blockZen extends block
 
         /* 通过度量项获取今年完成的迭代数量。 */
         $finishedExecution      = 0;
-        $finishedExecutionGroup = $project ? $this->metric->getResultByCode('count_annual_finished_execution_in_project', array('project' => $project, 'year' => date('Y'))) : $this->metric->getResultByCode('count_of_annual_finished_execution', array('year' => date('Y')));
+        $finishedExecutionGroup = $project ? $this->metric->getResultByCode('count_of_annual_finished_execution_in_project', array('project' => $project, 'year' => date('Y'))) : $this->metric->getResultByCode('count_of_annual_finished_execution', array('year' => date('Y')));
         if(!empty($finishedExecutionGroup))
         {
             $finishedExecutionGroup = reset($finishedExecutionGroup);
