@@ -570,7 +570,7 @@ class repoZen extends repo
         $url = rtrim($server->url, '/') . '/api/graphql' . "?private_token={$server->token}";
         while($hasNextPage)
         {
-            $query    = 'query { projects(after: "' . $endCursor . '") {pageInfo {endCursor hasNextPage} nodes {nameWithNamespace id}}}';
+            $query    = 'query { projects(after: "' . $endCursor . '") {pageInfo {endCursor hasNextPage} nodes {nameWithNamespace id name}}}';
             $response = json_decode(commonModel::http($url, array('query' => $query), array(CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1)));
             if(!$endCursor && !isset($response->data->projects->nodes)) return array();
 

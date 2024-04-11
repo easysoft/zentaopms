@@ -880,26 +880,4 @@ class repoTest
     {
         return $this->objectModel->buildTree($files);
     }
-
-    /**
-     * Test::Set hidden projects of the server for the user.
-     *
-     * @param  string|int   $server
-     * @param  string|array $projects
-     * @param  string       $user
-     * @param  bool         $override
-     * @return bool
-     */
-    public function setHiddenProjectsTest(string|int $server, string|array $projects, string $user = '', bool $override = true)
-    {
-        $created = $this->objectModel->setHiddenProjects($server, $projects, $user, $override);
-        if(!$created) return false;
-
-        $hiddenProjects = $this->objectModel->getHiddenProjects($user);
-
-        if(is_string($projects)) $projects = array_map('intval', explode(',', $projects));
-        if(empty(array_diff($projects, $hiddenProjects[$server], ))) return true;
-
-        return false;
-    }
 }
