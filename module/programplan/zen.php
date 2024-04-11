@@ -283,7 +283,7 @@ class programplanZen extends programplan
         }
 
         $createRequiredFields = $this->config->execution->create->requiredFields;
-        if($viewData->project->model == 'ipd' && $viewData->executionType == 'stage') $createRequiredFields = 'enabled,point,' . trim($createRequiredFields, ',');
+        if($viewData->project->model == 'ipd' && $viewData->executionType == 'stage' && !$viewData->planID) $createRequiredFields = 'enabled,point,' . trim($createRequiredFields, ',');
         foreach(explode(',', $createRequiredFields) as $field)
         {
             if($field)
