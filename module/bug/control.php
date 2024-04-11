@@ -1596,14 +1596,11 @@ class bug extends control
      * 取消代码分支的关联。
      * Unlink code branch.
      *
-     * @param  int    $bugID
-     * @param  int    $repoID
-     * @param  string $branch
      * @access public
      * @return void
      */
-    public function unlinkBranch(int $bugID, int $repoID, string $branch)
+    public function unlinkBranch()
     {
-        return print($this->fetch('repo', 'unlinkBranch', array('objectID' => $bugID, 'repoID' => $repoID, 'branch' => $branch)));
+        return print($this->fetch('repo', 'unlinkBranch'));
     }
 }

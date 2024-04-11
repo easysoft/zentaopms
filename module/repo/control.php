@@ -269,16 +269,15 @@ class repo extends control
      * 取消代码分支的关联。
      * Unlink code branch.
      *
-     * @param  int    $objectID
-     * @param  int    $repoID
-     * @param  string $branch
      * @access public
      * @return void
      */
-    public function unlinkBranch(int $objectID, int $repoID, string $branch)
+    public function unlinkBranch()
     {
         $objectType = $this->app->rawModule;
-        $branch     = helper::safe64Decode($branch);
+        $branch     = $this->post->branch;
+        $objectID   = (int)$this->post->objectID;
+        $repoID     = (int)$this->post->repoID;
         $this->repo->unlinkObjectBranch($objectID, $objectType, $repoID, $branch);
         if(dao::isError()) return $this->sendError(dao::getError());
 

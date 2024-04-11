@@ -2042,14 +2042,11 @@ class story extends control
      * 取消代码分支的关联。
      * Unlink code branch.
      *
-     * @param  int    $storyID
-     * @param  int    $repoID
-     * @param  string $branch
      * @access public
      * @return void
      */
-    public function unlinkBranch(int $storyID, int $repoID, string $branch)
+    public function unlinkBranch()
     {
-        return print($this->fetch('repo', 'unlinkBranch', array('objectID' => $storyID, 'repoID' => $repoID, 'branch' => $branch)));
+        return print($this->fetch('repo', 'unlinkBranch'));
     }
 }

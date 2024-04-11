@@ -30,7 +30,8 @@ foreach($linkedBranches as $branch)
             (
                 setClass('btn ghost toolbar-item square size-sm text-primary ajax-submit'),
                 setData(array(
-                    'url'     => createLink($objectType, 'unlinkBranch', "objectID={$objectID}&repoID={$branch->BID}&branch=" . helper::safe64Encode($branch->BType)),
+                    'url'     => createLink($objectType, 'unlinkBranch'),
+                    'data'    => "{\"branch\": \"$branch->BType\", \"objectID\": $objectID, \"repoID\": $repoID}",
                     'confirm' => sprintf($lang->repo->notice->unlinkBranch, $lang->{$objectType}->common)
                 )),
                 set::title($lang->repo->unlink),
