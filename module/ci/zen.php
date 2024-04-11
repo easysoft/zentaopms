@@ -77,7 +77,7 @@ class ciZen extends ci
             $data = $this->testtask->parseZTFFuncResult($post->funcResult, $frame, $productID, $jobID, $compileID);
         }
 
-        $this->testtask->processAutoResult($taskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles'], $testType);
+        $this->testtask->importDataOfUnitResult($taskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles'], $testType);
         return !dao::isError();
     }
 }

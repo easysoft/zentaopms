@@ -383,9 +383,9 @@ class ciModel extends model
      * @param  int    $taskID
      * @param  string $name
      * @access public
-     * @return bool
+     * @return int|bool
      */
-    public function saveTestTaskForZtf(string $testType = 'unit', int $productID = 0, int $compileID = 0, int $taskID = 0, string $name = ''): bool
+    public function saveTestTaskForZtf(string $testType = 'unit', int $productID = 0, int $compileID = 0, int $taskID = 0, string $name = ''): int|bool
     {
         $this->loadModel('testtask');
         if(!empty($taskID))
@@ -428,6 +428,7 @@ class ciModel extends model
         }
 
         if($compileID) $this->dao->update(TABLE_COMPILE)->set('testtask')->eq($taskID)->where('id')->eq($compileID)->exec();
-        return !dao::isError();
+        if(dao::isError()) return dao::isError();
+        return $taskID;
     }
 }
