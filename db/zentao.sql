@@ -1842,6 +1842,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `product` ON `zt_story` (`product`);
+CREATE INDEX `root` ON `zt_story` (`root`);
 CREATE INDEX `status` ON `zt_story` (`status`);
 CREATE INDEX `assignedTo` ON `zt_story` (`assignedTo`);
 
