@@ -67,6 +67,13 @@ $lang->ai->deleteMiniProgram       = 'Delete AI Mini Program';
 $lang->ai->exportMiniProgram       = 'Export AI Mini Program';
 $lang->ai->importMiniProgram       = 'Import AI Mini Program';
 $lang->ai->editMiniProgramCategory = 'Manage group';
+$lang->ai->assistantBrowse         = 'Browse Assistants';
+$lang->ai->assistantView           = 'View Assistant';
+$lang->ai->assistantCreate         = 'Create Assistant';
+$lang->ai->assistantEdit           = 'Edit Assistant';
+$lang->ai->assistantPublish        = 'Publish Assistant';
+$lang->ai->assistantWithdraw       = 'Withdraw Assistant';
+$lang->ai->assistantDelete         = 'Delete Assistant';
 
 $lang->ai->store                  = 'Store';
 $lang->ai->export                 = 'Export';

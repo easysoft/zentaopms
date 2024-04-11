@@ -570,6 +570,7 @@ $lang->group->package->publishMiniProgram    = 'Publish and Unpublish AI Mini Pr
 $lang->group->package->deleteMiniProgram     = 'Delete AI Mini Programs';
 $lang->group->package->impAndExpMiniProgram  = 'Import and Export Mini Programs';
 $lang->group->package->dashboard             = 'Dashboard';
+$lang->group->package->aiAssistant           = 'AI Assistant';
 $lang->group->package->resource              = 'Resource';
 $lang->group->package->manageServiceProvider = 'Provider';
 $lang->group->package->manageCity            = 'City';
