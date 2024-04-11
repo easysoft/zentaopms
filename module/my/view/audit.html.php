@@ -83,7 +83,8 @@
           {
               $class = "class='iframe' data-width='90%'";
               if(strpos(",{$config->my->oaObjectType},", ",{$type},") !== false) $class = "data-toggle='modal'";
-              $titleHtml = html::a($this->createLink($type, 'view', "objectID=$review->id", 'html', true), $review->title, '', $class);
+              if($type == 'review') $class = 'data-app=my';
+              $titleHtml = html::a($this->createLink($type, 'view', "objectID=$review->id", 'html', $type == 'review' ? false : true), $review->title, '', $class);
           }
           echo $titleHtml;
           ?>
