@@ -1880,6 +1880,8 @@ $lang->resource->ai->assistantCreate         = 'assistantCreate';
 $lang->resource->ai->assistantEdit           = 'assistantEdit';
 $lang->resource->ai->assistantDelete         = 'assistantDelete';
 $lang->resource->ai->assistantView           = 'assistantView';
+$lang->resource->ai->assistantPublish        = 'assistantPublish';
+$lang->resource->ai->assistantWithdraw       = 'assistantWithdraw';
 
 $lang->resource->aiapp = new stdclass();
 $lang->resource->aiapp->square                  = 'miniProgramSquare';
