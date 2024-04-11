@@ -118,7 +118,7 @@ window.query = function(callback)
         resp = JSON.parse(resp);
 
         $('.query').removeClass('disabled');
-        $('#querying').addClass('hidden');
+        $('.querying').addClass('hidden');
 
         if(resp.result !== 'success')
         {
@@ -126,13 +126,15 @@ window.query = function(callback)
 
             var message = resp.message.errorInfo ? resp.message.errorInfo[2] : resp.message;
             $('.error').removeClass('hidden');
-            $('.error td').html(message);
+            $('.error').html(message);
 
-            drawTable([], []);
+            $('#resultTable').addClass('hidden');
         }
         else
         {
             $('#exportDataview').removeClass('hidden');
+            $('#resultTable').removeClass('hidden');
+            $('.error').addClass('hidden');
 
             DataStorage.fields        = resp.fields;
             DataStorage.columns       = resp.columns;
