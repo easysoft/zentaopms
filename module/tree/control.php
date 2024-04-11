@@ -261,7 +261,6 @@ class tree extends control
         {
             $this->tree->updateOrder($_POST['orders']);
             if($viewType == 'story' and !empty($rootID) and !empty($moduleID)) $this->loadModel('action')->create('module', $rootID, 'moved', '', $moduleID);
-            die(js::reload('parent'));
         }
     }
 

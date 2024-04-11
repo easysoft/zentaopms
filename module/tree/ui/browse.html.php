@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('rootID', $root->id);
+jsVar('viewType', $viewType);
+
 $manageTitle = $lang->tree->manageChild;
 if(strpos($viewType, 'doc') !== false)
 {
@@ -214,11 +217,14 @@ div
             ) : null,
             treeEditor
             (
-                set('selected', $currentModuleID),
-                set('type', $viewType),
-                set('items', $tree),
-                set('canEdit', common::hasPriv('tree', 'edit') && $canBeChanged),
-                set('canDelete', common::hasPriv('tree', 'delete') && $canBeChanged)
+                set::selected($currentModuleID),
+                set::type($viewType),
+                set::items($tree),
+                set::canEdit(common::hasPriv('tree', 'edit') && $canBeChanged),
+                set::canDelete(common::hasPriv('tree', 'delete') && $canBeChanged),
+                set::itemProps(array('icon' => 'move muted')),
+                set::sortable(array('handle' => '.icon-move')),
+                set::onSort(jsRaw('function(event, orders){return window.updateOrder(event, orders);}'))
             )
         )
     ),

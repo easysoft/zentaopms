@@ -1728,7 +1728,7 @@ class treeModel extends model
         asort($orders);
         $orderInfo = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($orders))->andWhere('deleted')->eq(0)->fetchAll('id');
         $newOrders = array();
-        foreach($orders as $moduleID => $order)
+        foreach(array_keys($orders) as $moduleID)
         {
             $parent = $orderInfo[$moduleID]->parent;
             $grade  = $orderInfo[$moduleID]->grade;
