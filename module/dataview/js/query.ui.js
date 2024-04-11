@@ -178,8 +178,16 @@ function drawTable(fields, rows)
             return;
         }
 
-        const resultTable = document.getElementById('resultTable');
         const options     = {cols: fields, data: rows};
-        new zui.DTable(resultTable, options);
+        const resultTable = $('#resultTable').zui();
+
+        if(resultTable)
+        {
+            resultTable.render(options);
+        }
+        else
+        {
+            new zui.DTable(document.getElementById('resultTable'), options);
+        }
     });
 }
