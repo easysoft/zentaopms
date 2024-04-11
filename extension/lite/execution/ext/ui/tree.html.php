@@ -39,28 +39,28 @@ toolbar
 (
     hasPriv('task', 'report') ? item(set(array
     (
+        'class' => 'btn ghost',
         'icon'  => 'bar-chart',
-        'text'  => $lang->task->reportChart,
-        'class' => 'ghost',
+        'text'  => $lang->task->report->common,
         'url'   => createLink('task', 'report', "execution={$executionID}&browseType={$browseType}")
+    ))) : null,
+    hasPriv('task', 'export') ? item(set(array
+    (
+        'class'       => 'btn ghost',
+        'icon'        => 'export',
+        'text'        => $lang->export,
+        'url'         => createLink('task', 'export', "execution={$executionID}&orderBy={$orderBy}&type=tree"),
+        'data-toggle' => 'modal'
     ))) : null,
     !empty($importTaskItem) ? dropdown(
         btn(
-            setClass('ghost btn square btn-default'),
+            setClass('btn ghost'),
             set::icon('import'),
-            set::text($lang->import)
+            $lang->import
         ),
         set::items(array_filter(array($importTaskItem))),
         set::placement('bottom-end')
     ) : null,
-    hasPriv('task', 'export') ? item(set(array
-    (
-        'icon'        => 'export',
-        'text'        => $lang->export,
-        'class'       => 'ghost',
-        'url'         => createLink('task', 'export', "execution={$executionID}&orderBy={$orderBy}&type=tree"),
-        'data-toggle' => 'modal'
-    ))) : null,
     hasPriv('task', 'create') ? item(set(array
     (
         'icon' => 'plus',

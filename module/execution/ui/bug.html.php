@@ -26,7 +26,7 @@ if($canExportBug) $exportItem = array
 (
     'icon' => 'export',
     'class' => 'ghost',
-    'text' => $lang->bug->export,
+    'text' => $lang->export,
     'data-toggle' => 'modal',
     'url' => $this->createLink('bug', 'export', "productID={$productID}&browseType=&executionID={$execution->id}")
 );

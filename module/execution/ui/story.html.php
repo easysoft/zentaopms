@@ -121,7 +121,7 @@ $product ? toolbar
     ))) : null,
     hasPriv('story', 'export') ? item(set(array
     (
-        'text'        => $lang->story->export,
+        'text'        => $lang->export,
         'icon'        => 'export',
         'class'       => 'ghost',
         'url'         => createLink('story', 'export', "productID={$product->id}&orderBy=$orderBy&executionID=$execution->id&browseType=$type&storyType=$storyType"),

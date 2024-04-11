@@ -70,7 +70,7 @@ if(!isonlybody())
         ))) : null,
         hasPriv('bug', 'export') ? item(set(array
         (
-            'text'  => $lang->bug->export,
+            'text'  => $lang->export,
             'icon'  => 'export',
             'class' => 'ghost',
             'url'   => createLink('bug', 'export', "productID={$product->id}&browseType={$browseType}"),
