@@ -161,3 +161,25 @@ window.query = function(callback)
         }
     });
 }
+
+function drawTable(fields, rows)
+{
+    $.post($.createLink('dataview', 'ajaxGetFieldName'), {fields: JSON.stringify(fields), fieldSettings: JSON.stringify(DataStorage.fieldSettings)}, function(resp)
+    {
+        resp = JSON.parse(resp);
+        if(resp.result == 'success') fields = resp.fields ? resp.fields : fields;
+
+        $('.table-empty-tip').addClass('hidden');
+
+        if(rows.length == 0)
+        {
+            $('.table-empty-tip').removeClass('hidden');
+            $('table.result').empty();
+            return;
+        }
+
+        const resultTable = document.getElementById('resultTable');
+        const options     = {cols: fields, data: rows};
+        new zui.DTable(resultTable, options);
+    });
+}
