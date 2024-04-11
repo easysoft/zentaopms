@@ -23,7 +23,7 @@ foreach($products as $id => $productName)
 }
 panel
 (
-    to::titleSuffix
+    $productItems ? to::titleSuffix
     (
         dropdown
         (
@@ -35,7 +35,7 @@ panel
             ),
             set::items($productItems)
         )
-    ),
+    ) : null,
     setID($waterfallGanttID),
     set('headingClass', 'border-b'),
     set::title($block->title),
