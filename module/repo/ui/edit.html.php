@@ -40,13 +40,11 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name("SCM"),
             set::label($lang->product->typeAB),
-            set::required(true),
-            set::value($repo->SCM),
-            set::control("picker"),
-            set::items($lang->repo->scmList)
+            set::control("static"),
+            set::value(zget($lang->repo->scmList, $repo->SCM, ''))
         ),
+        formHidden('SCM', $repo->SCM),
         h::span
         (
             setClass('tips-git leading-8 ml-2'),
@@ -59,13 +57,11 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name("serviceHost"),
             set::label($lang->repo->serviceHost),
-            set::required(true),
-            set::value(isset($repo->gitService) ? $repo->gitService : ''),
-            set::control("picker"),
-            set::items(!empty($serviceHosts) ? $serviceHosts : array())
-        )
+            set::value(zget($serviceHosts, $repo->serviceHost, '')),
+            set::control("static")
+        ),
+        formHidden('serviceHost', $repo->serviceHost)
     ),
     formRow
     (
@@ -73,13 +69,11 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::name("serviceProject"),
             set::label($lang->repo->serviceProject),
-            set::required(true),
-            set::control("picker"),
-            set::items(!empty($projects) ? $projects : array()),
-            set::value(isset($repo->project) ? $repo->project : '')
-        )
+            set::control("static"),
+            set::value(!empty($project) ? $project->name_with_namespace : '')
+        ),
+        formHidden('serviceProject', $repo->serviceProject)
     ),
     formGroup
     (

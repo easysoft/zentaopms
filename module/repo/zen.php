@@ -456,25 +456,17 @@ class repoZen extends repo
         if(in_array($scm, $this->config->repo->gitServiceList))
         {
             $serviceID = isset($repo->gitService) ? $repo->gitService : 0;
+            $projectID = in_array($repo->SCM, $this->config->repo->notSyncSCM) ? (int)$repo->serviceProject : $repo->serviceProject;
             if($scm == 'gitfox')
             {
-                $projects  = $this->loadModel($scm)->apiGetRepos($serviceID);
+                $project  = $this->loadModel($scm)->apiGetSingleRepo($serviceID, $projectID);
             }
             else
             {
-                $projects  = $this->loadModel($scm)->apiGetProjects($serviceID);
+                $project  = $this->loadModel($scm)->apiGetSingleProject($serviceID, $projectID);
             }
 
-            $options   = array();
-            foreach($projects as $project)
-            {
-                if($scm == 'gitlab') $options[$project->id] = $project->name_with_namespace;
-                if($scm == 'gitfox') $options[$project->id] = $project->path;
-                if($scm == 'gitea')  $options[$project->full_name] = $project->full_name;
-                if($scm == 'gogs')   $options[$project->full_name] = $project->full_name;
-            }
-
-            $this->view->projects = $options;
+            $this->view->project = $project;
         }
 
         $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
