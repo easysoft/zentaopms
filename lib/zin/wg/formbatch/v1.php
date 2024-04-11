@@ -126,11 +126,11 @@ class formBatch extends formBase
         return array(
             div
             (
-                setClass('form-batch-container'),
+                setClass('form-batch-container relative'),
                 h::table
                 (
                     setClass('table form-batch-table'),
-                    h::thead(h::tr($headItems)),
+                    h::thead(setClass('sticky top-0 bg-canvas z-10'), h::tr($headItems)),
                     h::tbody(),
                 )
             ),
