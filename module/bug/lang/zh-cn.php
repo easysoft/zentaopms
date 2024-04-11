@@ -437,6 +437,7 @@ $lang->bug->notice->productDitto          = "该 bug 与上一 bug 不属于同�
 $lang->bug->notice->noBug                 = '暂时没有 Bug。';
 $lang->bug->notice->noModule              = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
 $lang->bug->notice->delayWarning          = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->bug->notice->skipNotActive         = "Bug %s 已解决或已关闭，不再修改。";
 
 $lang->bug->error = new stdclass();
 $lang->bug->error->notExist       = 'Bug不存在。';

@@ -1118,14 +1118,19 @@ class bug extends control
 
             list($modules, $productQD) = $this->bugZen->getBatchResolveVars($bugs);
 
-            $users = $this->loadModel('user')->getPairs();
-            $now   = helper::now();
+            $users       = $this->loadModel('user')->getPairs();
+            $now         = helper::now();
+            $skipBugList = array();
             foreach($bugIdList as $bugID)
             {
                 /* 只有激活的bug或者解决方案不为已解决的bug可以解决。 */
                 /* Only active bugs or bugs whose resolution is not fixed can be resolve. */
                 $oldBug = $bugs[$bugID];
-                if($oldBug->resolution == 'fixed' || $oldBug->status != 'active') continue;
+                if($oldBug->resolution == 'fixed' || $oldBug->status != 'active')
+                {
+                    $skipBugList[] = '#' . $bugID;
+                    continue;
+                }
 
                 /* 获取 bug 的指派给人员。 */
                 /* Get bug assignedTo. */
@@ -1170,6 +1175,7 @@ class bug extends control
 
         /* 返回批量解决 bugs 后的响应。 */
         /* Return response after batch resolving bugs. */
+        if(!empty($skipBugList)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->bug->notice->skipNotActive, implode(', ', $skipBugList)), 'load' => true));
         if(empty($message)) $message = $this->lang->saveSuccess;
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
     }

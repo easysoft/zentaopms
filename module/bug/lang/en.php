@@ -437,6 +437,7 @@ $lang->bug->notice->productDitto          = "This bug is not linked to the same 
 $lang->bug->notice->noBug                 = 'No bugs yet.';
 $lang->bug->notice->noModule              = '<div>You have no modules.</div><div>Manage now</div>';
 $lang->bug->notice->delayWarning          = " <strong class='text-danger'> Delay %s days </strong>";
+$lang->bug->notice->skipNotActive         = "Bug %s has/have been resolved or closed, it won't be changed again";
 
 $lang->bug->error = new stdclass();
 $lang->bug->error->notExist       = "Bug doesn't exist.";
