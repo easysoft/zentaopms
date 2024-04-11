@@ -353,11 +353,49 @@ class commonModel extends model
         $this->config->system   = isset($config['system']) ? $config['system'] : array();
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
+        $this->updateDBWebRoot($this->config->system);
+
         /* Overide the items defined in config/config.php and config/my.php. */
         if(isset($this->config->system->common))   $this->app->mergeConfig($this->config->system->common, 'common');
         if(isset($this->config->personal->common)) $this->app->mergeConfig($this->config->personal->common, 'common');
 
         $this->config->disabledFeatures = $this->config->disabledFeatures . ',' . $this->config->closedFeatures;
+    }
+
+    /**
+     * Check and update webRoot config in DB.
+     *
+     * @param  object    $dbConfig
+     * @access public
+     * @return void
+     */
+    public function updateDBWebRoot($dbConfig)
+    {
+        if(PHP_SAPI == 'cli') return;
+
+        global $config;
+        /* Check config webRoot right or not. */
+        if($config->webRoot[0] != '/') return;
+        if($config->webRoot[strlen($config->webRoot) - 1] != '/') return;
+
+        /* Get webRoot config in db. */
+        $webRootConfig = null;
+        foreach($dbConfig->common as $commonConfig)
+        {
+            if($commonConfig->key == 'webRoot')
+            {
+                $webRootConfig = $commonConfig;
+                break;
+            }
+        }
+
+        /* Init db webRoot config. */
+        if(empty($webRootConfig)) return $this->loadModel('setting')->setItem('system.common.webRoot', $config->webRoot);
+        if($config->webRoot == $webRootConfig->value) return;
+
+        /* Update db webRoot. */
+        $webRootConfig->value = $config->webRoot;
+        $this->loadModel('setting')->setItem('system.common.webRoot', $config->webRoot);
     }
 
     /**
