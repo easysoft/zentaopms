@@ -1491,8 +1491,8 @@ class testcase extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $oldScene      = $this->testcase->getSceneByID($sourceID);
-        $newScene      = $this->testcase->getSceneByID($sceneID);
+        $oldScene      = $this->testcase->getSceneByID((int)$sourceID);
+        $newScene      = $this->testcase->getSceneByID((int)$sceneID);
         $oldParentPath = substr($oldScene->path, 0, strpos($oldScene->path, ",{$oldScene->id},") + strlen(",{$oldScene->id},"));
 
         $this->dao->update(TABLE_SCENE)->set('parent')->eq($sceneID)->where('id')->eq($oldScene->id)->exec();

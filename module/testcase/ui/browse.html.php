@@ -13,6 +13,7 @@ namespace zin;
 include 'header.html.php';
 
 jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
+jsVar('dragModalMessage', $lang->testcase->dragModalMessage);
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 

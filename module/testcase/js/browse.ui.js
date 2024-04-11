@@ -51,7 +51,24 @@ window.onSortEnd = function(from, to, type)
     }
     else if(from.data.isScene && to.data.isScene)
     {
-        changeOrder(from.data.id, from.data.sort, to.data.id, to.data.sort, type, 'scene');
+        if(from.data.parent == to.data.parent)
+        {
+            zui.Modal.confirm({message: dragModalMessage, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((confirmed) =>
+            {
+                if(confirmed)
+                {
+                    changeScene(from.data.id, to.data.id);
+                }
+                else
+                {
+                    changeOrder(from.data.id, from.data.sort, to.data.id, to.data.sort, type, 'scene');
+                }
+            });
+        }
+        else
+        {
+            changeScene(from.data.id, to.data.id);
+        }
     }
     else if(!from.data.isScene && to.data.isScene)
     {

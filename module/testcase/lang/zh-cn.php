@@ -359,7 +359,7 @@ $lang->testcase->normal             = '正常';
 
 /* Translation for drag modal message box. */
 $lang->testcase->dragModalTitle       = '拖拽操作选择';
-$lang->testcase->dragModalMessage     = '<p>当前操作有两种可能的情况: </p><p>1) 调整排序<br/> 2) 更改所属场景，所属模块同时变更为目标场景的模块</p><p>请选择您要执行的操作</p>';
+$lang->testcase->dragModalMessage     = '您确定要更改目标的所属场景吗? 点击取消仅调整排序。';
 $lang->testcase->dragModalChangeScene = '更改所属场景';
 $lang->testcase->dragModalChangeOrder = '调整排序';
 
