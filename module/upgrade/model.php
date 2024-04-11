@@ -951,7 +951,7 @@ class upgradeModel extends model
         preg_match_all('/ENGINE=(\w+) /', $createFoot, $out);
         $stdEngine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
 
-        preg_match_all('/CREATE TABLE `([^`]*)`/', $createHead, $out);
+        preg_match_all('/CREATE TABLE [^`]*`([^`]*)`/', $createHead, $out);
         if(!isset($out[1][0])) return $changes;
 
         $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
