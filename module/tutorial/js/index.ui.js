@@ -530,7 +530,7 @@ $(function()
             requiredFields = requiredFields.split(',');
             $.each(requiredFields, function(_, requiredId)
             {
-                var $required = $$('#' + requiredId);
+                var $required = $$('[name^=' + requiredId);
                 var $authBlock = !$required.is('input') ? $required.find('input').last() : $required;
                 if($authBlock.length)
                 {
