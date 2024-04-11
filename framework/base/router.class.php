@@ -847,7 +847,7 @@ class baseRouter
 
         $vision = $vision ? $vision : $defaultVision;
         if($this->config->tabSession && empty($_SESSION['vision'])) $this->session->set('vision', $vision);
-        setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+        if(validater::checkAccount($account)) setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
 
         $this->config->vision = $vision;
     }
