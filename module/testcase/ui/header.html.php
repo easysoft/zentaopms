@@ -261,7 +261,7 @@ toolbar
     $canAutomation ? btn
     (
         setClass('ghost square'),
-        set::icon('wrench'),
+        set::icon('backend'),
         set::hint($lang->testcase->automation),
         set::url(inlink('automation', "productID={$productID}")),
         set('data-toggle', 'modal'),
