@@ -23,7 +23,7 @@ foreach($linkedBranches as $branch)
 {
     $branchDom[] = h::tr
     (
-        h::td(zget($repoPairs, $branch->BID, '')),
+        h::td(zget($allRepos, $branch->BID, '')),
         h::td($branch->BType),
         common::hasPriv($objectType, 'unlinkBranch') ? h::td(
             a
@@ -31,7 +31,7 @@ foreach($linkedBranches as $branch)
                 setClass('btn ghost toolbar-item square size-sm text-primary ajax-submit'),
                 setData(array(
                     'url'     => createLink($objectType, 'unlinkBranch'),
-                    'data'    => "{\"branch\": \"$branch->BType\", \"objectID\": $objectID, \"repoID\": $repoID}",
+                    'data'    => "{\"branch\": \"$branch->BType\", \"objectID\": $objectID, \"repoID\": $branch->BID}",
                     'confirm' => sprintf($lang->repo->notice->unlinkBranch, $lang->{$objectType}->common)
                 )),
                 set::title($lang->repo->unlink),

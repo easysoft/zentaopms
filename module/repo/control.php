@@ -257,6 +257,7 @@ class repo extends control
         if($objectType == 'task') $canCreate = $object->status == 'wait' || $object->status == 'doing';
         $this->view->linkedBranches = $this->repo->getLinkedBranch($objectID, $objectType);
         $this->view->repoPairs      = $repoPairs;
+        $this->view->allRepos       = $this->repo->getRepoPairs('repo', 0, false);
         $this->view->repoID         = $repoID;
         $this->view->objectID       = $objectID;
         $this->view->branches       = $this->scm->branch();
@@ -275,7 +276,7 @@ class repo extends control
     public function unlinkBranch()
     {
         $objectType = $this->app->rawModule;
-        $branch     = $this->post->branch;
+        $branch     = (string)$this->post->branch;
         $objectID   = (int)$this->post->objectID;
         $repoID     = (int)$this->post->repoID;
         $this->repo->unlinkObjectBranch($objectID, $objectType, $repoID, $branch);
