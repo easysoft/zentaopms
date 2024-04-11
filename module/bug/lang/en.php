@@ -371,7 +371,7 @@ $lang->bug->report->openedBugsPerUser->graph->xAxisName   = 'User';
 $lang->bug->report->resolvedBugsPerUser->graph->xAxisName = 'User';
 $lang->bug->report->closedBugsPerUser->graph->xAxisName   = 'User';
 
-$lang->bug->report->bugsPerSeverity->graph->xAxisName       = 'Priority';
+$lang->bug->report->bugsPerSeverity->graph->xAxisName       = 'Severity';
 $lang->bug->report->bugsPerResolution->graph->xAxisName     = 'Resolution';
 $lang->bug->report->bugsPerStatus->graph->xAxisName         = 'Status';
 $lang->bug->report->bugsPerActivatedCount->graph->xAxisName = 'Activation Times';
