@@ -630,6 +630,31 @@ $(function()
     if(showFields.indexOf('delay') != -1) gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60});
     if(showFields.indexOf('delayDays') != -1) gantt.config.columns.push({name: 'delayDays', align: 'center', resize: false, width: 60});
 
+    gantt.config.layout =
+    {
+        css: "gantt_container",
+        cols:
+        [
+            {
+                width:600,
+                rows:
+                [
+                    {view: "grid", scrollX: "gridScroll", scrollable: true, scrollY: "scrollVer"},
+                    {view: "scrollbar", id: "gridScroll", group:"horizontal"}
+                ]
+            },
+            {resizer: true, width: 1},
+            {
+                rows:
+                [
+                    {view: "timeline", scrollX: "scrollHor", scrollY: "scrollVer"},
+                    {view: "scrollbar", id: "scrollHor", group:"horizontal"}
+                ]
+            },
+            {view: "scrollbar", id: "scrollVer"}
+        ]
+    };
+
     function getDeadlineBtn(task)
     {
         var date = task.deadline;
