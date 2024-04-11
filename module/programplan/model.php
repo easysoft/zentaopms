@@ -357,21 +357,21 @@ class programplanModel extends model
             if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
 
             if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
-            $isParent = $task->parent == -1;
+            if($task->parent == -1) continue;
             foreach($stageIndex as $index => $stage)
             {
                 if($stage['planID'] == $task->execution)
                 {
-                    $stageIndex[$index]['progress']['totalEstimate'] += $isParent ? 0 : $task->estimate;
-                    $stageIndex[$index]['progress']['totalConsumed'] += $isParent ? 0 : $task->consumed;
-                    $stageIndex[$index]['progress']['totalReal']     += $isParent ? 0 : ((($task->status == 'closed' || $task->status == 'cancel' || $isParent) ? 0 : $task->left) + $task->consumed);
+                    $stageIndex[$index]['progress']['totalEstimate'] += $task->estimate;
+                    $stageIndex[$index]['progress']['totalConsumed'] += $task->consumed;
+                    $stageIndex[$index]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel' || $isParent) ? 0 : $task->left) + $task->consumed);
 
                     $parent = $stage['parent'];
                     if(isset($stageIndex[$parent]))
                     {
-                        $stageIndex[$parent]['progress']['totalEstimate'] += $isParent ? 0 : $task->estimate;
-                        $stageIndex[$parent]['progress']['totalConsumed'] += $isParent ? 0 : $task->consumed;
-                        $stageIndex[$parent]['progress']['totalReal']     += $isParent ? 0 : ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
+                        $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
+                        $stageIndex[$parent]['progress']['totalConsumed'] += $task->consumed;
+                        $stageIndex[$parent]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
                     }
                 }
             }
