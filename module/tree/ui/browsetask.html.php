@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('rootID', $root->id);
+jsVar('viewType', 'task');
+
 $maxOrder = 0;
 
 /* Generate module rows. */
@@ -180,11 +183,14 @@ div
             set::title($title),
             treeEditor
             (
-                set('selected', $currentModuleID),
-                set('type', 'task'),
-                set('items', $tree),
-                set('canEdit', common::hasPriv('tree', 'edit') && $canBeChanged),
-                set('canDelete', common::hasPriv('tree', 'delete') && $canBeChanged)
+                set::selected($currentModuleID),
+                set::type('task'),
+                set::items($tree),
+                set::canEdit(common::hasPriv('tree', 'edit') && $canBeChanged),
+                set::canDelete(common::hasPriv('tree', 'delete') && $canBeChanged),
+                set::itemProps(array('trailingIcon' => 'move muted')),
+                set::sortable(array('handle' => '.icon-move')),
+                set::onSort(jsRaw('function(event, orders){return window.updateOrder(event, orders);}'))
             )
         )
     ),
