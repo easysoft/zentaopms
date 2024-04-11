@@ -1913,7 +1913,7 @@ class storyTao extends storyModel
             }
             elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate'))
             {
-                $title = $this->lang->story->split . $lang->URCommon;
+                $title = $this->lang->story->split . $lang->SRCommon;
                 if(!empty($story->cannotSplit)) $title = $this->lang->story->errorCannotSplit;
                 $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $title, 'disabled' => $story->status != 'active', 'icon' => 'tree');
             }

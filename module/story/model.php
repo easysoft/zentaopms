@@ -4281,7 +4281,6 @@ class storyModel extends model
         $storyLang->zeroCase           = str_replace($SRCommon, $replacement, $storyLang->zeroCase);
         $storyLang->zeroTask           = str_replace($SRCommon, $replacement, $storyLang->zeroTask);
         $storyLang->copyTitle          = str_replace($SRCommon, $replacement, $storyLang->copyTitle);
-        $storyLang->common             = str_replace($SRCommon, $replacement, $storyLang->common);
         $storyLang->title              = str_replace($SRCommon, $replacement, $storyLang->title);
         $storyLang->spec               = str_replace($SRCommon, $replacement, $storyLang->spec);
         $storyLang->children           = str_replace($SRCommon, $replacement, $storyLang->children);

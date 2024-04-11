@@ -23,6 +23,12 @@ CREATE TABLE `zt_storygrade` (
   `status` char(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO `zt_storygrade` (`type`, `grade`, `name`, `status`) VALUES
+('requirement', 1,    '用需', 'enable'),
+('epic',        1,    '业需', 'enable'),
+('story',       1,    '父',   'enable'),
+('story',       2,    '子',   'enable');
+
 ALTER TABLE `zt_story` ADD `isParent` enum('0','1') NOT NULL DEFAULT '0' AFTER `parent`;
 ALTER TABLE `zt_story` ADD `root` mediumint NOT NULL DEFAULT '0' AFTER `isParent`;
 ALTER TABLE `zt_story` ADD `path` text NULL AFTER `root`;
