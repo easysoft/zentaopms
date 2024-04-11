@@ -3824,7 +3824,7 @@ $config->group->package->aiAssistant = new stdclass();
 $config->group->package->aiAssistant->order  = 2192;
 $config->group->package->aiAssistant->subset = 'ai';
 $config->group->package->aiAssistant->privs  = array();
-$config->group->package->aiAssistant->privs['ai-assistantBrowse']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index'), 'recommend' => array());
+$config->group->package->aiAssistant->privs['ai-assistants']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->aiAssistant->privs['ai-assistantView']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->aiAssistant->privs['ai-assistantCreate']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->aiAssistant->privs['ai-assistantEdit']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('admin-index'), 'recommend' => array());

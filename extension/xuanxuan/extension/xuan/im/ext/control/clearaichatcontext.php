@@ -19,7 +19,7 @@ class myIm extends im
 
         $chatGid = "$userID&ai-{$modelId}";
         $assistant = empty($assistantId)
-            ? (object) array('name'=> $this->lang->ai->assistants->defaultAssistant)
+            ? (object) array('name'=> $this->lang->ai->assistant->defaultAssistant)
             : $this->ai->getAssistantById($assistantId);
 
         if($explicitSwitchAssistant)
@@ -28,7 +28,7 @@ class myIm extends im
             $broadcast->gid     = imModel::createGID();
             $broadcast->cgid    = $chatGid;
             $broadcast->user    = "ai-{$modelId}";
-            $broadcast->content = sprintf($this->lang->ai->assistants->switchAndClearContext, $assistant->name);
+            $broadcast->content = sprintf($this->lang->ai->assistant->switchAndClearContext, $assistant->name);
         }
         else
         {
