@@ -139,7 +139,6 @@ $lang->pivot->execution     = $lang->execution->common;
 $lang->pivot->product       = $lang->productCommon;
 $lang->pivot->user          = '姓名';
 $lang->pivot->bugTotal      = 'Bug';
-$lang->pivot->bug           = 'Bug';
 $lang->pivot->task          = '任务数';
 $lang->pivot->estimate      = '总预计';
 $lang->pivot->consumed      = '总消耗';

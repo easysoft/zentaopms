@@ -20,7 +20,7 @@ class entry extends baseEntry
 
         if($this->app->action == 'options') throw EndResponseException::create($this->send(204));
 
-        if(!isset($this->app->user->account) or $this->app->user->account == 'guest') throw EndResponseException::create($this->sendError(401, 'Unauthorized'));
+        if(!$this->loadModel('user')->isLogon()) throw EndResponseException::create($this->sendError(401, 'Unauthorized'));
 
         $this->dao = $this->loadModel('common')->dao;
     }
