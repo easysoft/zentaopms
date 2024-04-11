@@ -236,13 +236,16 @@ if($config->vision != 'or')
 {
     $lang->admin->menuList->ai['subMenu']['prompts']      = array('link' => "{$lang->admin->ai->prompt}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize,promptedit');
     $lang->admin->menuList->ai['subMenu']['miniPrograms'] = array('link' => "{$lang->admin->ai->miniPrograms}|ai|miniPrograms|", 'alias' => 'miniprograms,createminiprogram,editminiprogram,configuredminiprogram,editminiprogramcategory,miniprogramview');
-    $lang->admin->menuList->ai['subMenu']['assistants']   = array('link' => "{$lang->admin->ai->assistant}|ai|assistants|", 'alias' => 'assistantview,assistantcreate,assistantedit');
 
     $lang->admin->menuList->ai['menuOrder']['10'] = 'prompts';
     $lang->admin->menuList->ai['menuOrder']['15'] = 'miniPrograms';
-    $lang->admin->menuList->ai['menuOrder']['20'] = 'assistants';
 
     $lang->admin->menuList->ai['dividerMenu'] = ',prompts,';
+}
+
+if($config->edition != 'open') {
+    $lang->admin->menuList->ai['subMenu']['assistants'] = array('link' => "{$lang->admin->ai->assistant}|ai|assistants|", 'alias' => 'assistantview,assistantcreate,assistantedit');
+    $lang->admin->menuList->ai['menuOrder']['20']       = 'assistants';
 }
 
 if($config->edition != 'max' and $config->edition != 'ipd')
