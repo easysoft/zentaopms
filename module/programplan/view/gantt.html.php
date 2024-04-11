@@ -86,6 +86,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 #mainContent > .pull-right > .button-group  .text{margin-left: 0px;}
 .pull-right .icon-plus.icon-sm:before{vertical-align: 4%;}
 #ganttView .gantt_resizer{min-width: unset !important;}
+div.delayed {background: #FFEBEB; color: #FB2B2B;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -627,7 +628,14 @@ $(function()
     if(showFields.indexOf('realBegan') != -1) gantt.config.columns.push({name: 'realBegan', align: 'center', resize: true, width: 80});
     if(showFields.indexOf('realEnd') != -1) gantt.config.columns.push({name: 'realEnd', align: 'center', resize: true, width: 80});
     if(showFields.indexOf('consumed') != -1) gantt.config.columns.push({name: 'consumed', align: 'center', resize: true, width: 60});
-    if(showFields.indexOf('delay') != -1) gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60});
+    if(showFields.indexOf('delay') != -1)
+    {
+        gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60, template:function(item)
+        {
+            if(item.delayDays > 0) return "<div class='delayed'>" + item.delay + "</div>";
+            return item.delay;
+        }});
+    }
     if(showFields.indexOf('delayDays') != -1) gantt.config.columns.push({name: 'delayDays', align: 'center', resize: false, width: 60});
 
     gantt.config.layout =
