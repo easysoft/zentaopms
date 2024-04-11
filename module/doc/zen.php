@@ -174,7 +174,6 @@ class docZen extends doc
         if(!$libID && !$moduleID) return array();
 
         $prefix = $objectType == 'mine' ? "0:" : '';
-        $prefix = $executionID ? "{$executionID}:" : $prefix;
         if($libID && !$moduleID) return array("{$prefix}{$libID}" => true);
 
         $module = $this->loadModel('tree')->getByID($moduleID);
