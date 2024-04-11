@@ -82,3 +82,82 @@ window.DataStorage = initStorage(
     fieldSettings: Array.isArray(fieldSettings) || typeof fieldSettings != 'object' ? {} : fieldSettings,
     objectFields: objectFields
 }, true);
+
+window.query = function(callback) 
+{
+    DataStorage.isInsert = false;
+
+    var pivot = DataStorage.pivot;
+
+    var filters = '';
+    if(pivot)
+    {
+        if(!setVarFrom()) return false;
+
+        filters = DataStorage.pivot.filters;
+
+        filters.forEach(function(filter, index)
+        {
+            if(filter.from == 'query')
+            {
+                var find = $('#queryFilters').find('.filter-item-' + index + ' .form-' + filter.type);
+                if(find.length != 0) filter.default = find.val();
+            }
+        });
+    }
+
+    DataStorage.fields  = {};
+    DataStorage.columns = {};
+    DataStorage.rows    = [];
+
+    $('.query').addClass('disabled');
+    $('.querying').removeClass('hidden');
+
+    $.post($.createLink('dataview', 'ajaxQuery'), {sql: $('#sql').val(), filters: filters}, function(resp)
+    {
+        resp = JSON.parse(resp);
+
+        $('.query').removeClass('disabled');
+        $('#querying').addClass('hidden');
+
+        if(resp.result !== 'success')
+        {
+            $('#exportDataview').addClass('hidden');
+
+            var message = resp.message.errorInfo ? resp.message.errorInfo[2] : resp.message;
+            $('.error').removeClass('hidden');
+            $('.error td').html(message);
+
+            drawTable([], []);
+        }
+        else
+        {
+            $('#exportDataview').removeClass('hidden');
+
+            DataStorage.fields        = resp.fields;
+            DataStorage.columns       = resp.columns;
+            DataStorage.rows          = resp.rows;
+            vars                      = resp.vars;
+            DataStorage.relatedObject = resp.relatedObject;
+
+            if(resp.filters.length)
+            {
+                pivot.filters = resp.filters;
+                DataStorage.pivot = pivot;
+
+                resp.filters.forEach(function(filter, index)
+                {
+                    if(filter.from != 'query') return;
+                    if(filter.type != 'date' && filter.type != 'datetime') return;
+
+                    var find = $('#queryFilters').find('.filter-item-' + index + ' .form-' + filter.type);
+                    find.val(filter.default);
+                });
+            }
+
+            drawTable(resp.fields, resp.rows);
+
+            if(typeof callback == 'function') callback();
+        }
+    });
+}
