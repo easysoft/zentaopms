@@ -1251,7 +1251,7 @@ class execution extends control
             $this->project->setMenu($projectID);
             $this->view->project = $project;
             if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->lang->execution->common = $this->lang->execution->stage;
-            if($project->model == 'ipd') $this->config->execution->list->customBatchEditFields = 'days,teamname,desc,PO,QD,PM,RD';
+            if($project->model == 'ipd') $this->config->execution->list->customBatchEditFields = 'days,team,desc,PO,QD,PM,RD';
         }
         else
         {
