@@ -168,7 +168,12 @@
           <td class='c-stage'><?php echo zget($lang->story->stageList, $child->stage);?></td>
           <td class='c-actions'>
             <?php
-            if($canBeChanged)
+            if(!empty($child->confirmeObject))
+            {
+                $method = $child->confirmeObject['type'] == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+                common::printIcon('story', $method, "objectID=$child->id&object=story&extra={$child->confirmeObject['id']}", $child, 'browse', 'search', '', 'iframe', true);
+            }
+            else if($canBeChanged)
             {
                 $vars = "story={$child->id}";
                 common::printIcon('story', 'change', $vars, $child, 'list', 'alter', '', 'iframe', true);
