@@ -582,12 +582,6 @@ class fileModel extends model
         if($objectType == 'release')
         {
             $release = $this->dao->select('project,product')->from(TABLE_RELEASE)->where('id')->eq($objectID)->fetch();
-
-            if(!empty($release->project))
-            {
-                $projectIdList = array_filter(explode(',', $release->project));
-                return $this->loadModel('project')->checkPriv(current($projectIdList));
-            }
             return $this->loadModel('product')->checkPriv($release->product);
         }
 
