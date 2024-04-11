@@ -3639,8 +3639,8 @@ class storyModel extends model
                 {
                     if($this->app->rawModule == 'projectstory')
                     {
-                        $this->session->set('storyQuery', $query->sql);
-                        $this->session->set('storyForm', $query->form);
+                        $this->session->set('projectstoryQuery', $query->sql);
+                        $this->session->set('projectstoryForm', $query->form);
                     }
                     else
                     {
@@ -3650,7 +3650,7 @@ class storyModel extends model
                 }
             }
 
-            if($this->app->rawModule == 'projectstory') $this->session->executionStoryQuery = $this->session->storyQuery;
+            if($this->app->rawModule == 'projectstory') $this->session->executionStoryQuery = $this->session->projectstoryQuery;
 
             $allProduct = "`product` = 'all'";
             $storyQuery = $this->session->executionStoryQuery;
@@ -3680,11 +3680,11 @@ class storyModel extends model
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
                 ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
-                ->where($storyQuery)
+                ->where('t2.type')->eq($storyType)
+                ->andWhere("($storyQuery)")
                 ->andWhere('t1.project')->in($executionID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
-                ->andWhere('t2.type')->eq($storyType)
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->orderBy($orderBy)
                 ->page($pager, 't2.id')
