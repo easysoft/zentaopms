@@ -43,7 +43,27 @@ statisticBlock
             set::width($longBlock ? '30%' : '100%'),
             div
             (
-                setClass('flex justify-center w-full'),
+                setClass('flex justify-center w-full col'),
+                div
+                (
+                    setClass('row text-sm items-center font-bold gap-1 pl-5 pb-1'),
+                    $lang->block->qastatistic->fixBugRate,
+                    icon
+                    (
+                        setClass('text-light text-sm'),
+                        toggle::tooltip
+                        (
+                            array
+                            (
+                                'title'     => $lang->block->tooltips['resolvedRate'],
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
+                        ),
+                        'help'
+                    )
+                ),
                 progressCircle
                 (
                     set::percent($resolvedRate),
@@ -51,26 +71,6 @@ statisticBlock
                     set::text(false),
                     set::circleWidth('0.06'),
                     div(span(setClass('text-2xl font-bold'), $resolvedRate), '%'),
-                    div
-                    (
-                        setClass('row text-sm text-gray items-center gap-1'),
-                        $lang->block->qastatistic->fixBugRate,
-                        icon
-                        (
-                            setClass('text-light text-sm'),
-                            toggle::tooltip
-                            (
-                                array
-                                (
-                                    'title'     => $lang->block->tooltips['resolvedRate'],
-                                    'placement' => 'bottom',
-                                    'type'      => 'white',
-                                    'className' => 'text-dark border border-light leading-5'
-                                )
-                            ),
-                            'help'
-                        )
-                    )
                 )
             ),
             cell
