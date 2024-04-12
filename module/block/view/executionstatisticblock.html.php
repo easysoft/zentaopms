@@ -166,11 +166,11 @@ $(function()
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->story->total;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->totalStories) ? 0 : html::a($this->createLink('execution', 'story', "executionID={$execution->id}&orderBy=order_desc&type=all"), $execution->totalStories);?></td>
+                      <td class='text-left'><?php echo empty($execution->totalStories) ? 0 : html::a($this->createLink('execution', 'story', "executionID={$execution->id}&storyType=story&orderBy=order_desc&type=all"), $execution->totalStories);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->story->unclosed;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->unclosedStories) ? 0 : html::a($this->createLink('execution', 'story', "executionID={$execution->id}&orderBy=order_desc&type=unclosed"), $execution->unclosedStories);?></td>
+                      <td class='text-left'><?php echo empty($execution->unclosedStories) ? 0 : html::a($this->createLink('execution', 'story', "executionID={$execution->id}&storyType=story&orderBy=order_desc&type=unclosed"), $execution->unclosedStories);?></td>
                     </tr>
                   </table>
                 </div>
