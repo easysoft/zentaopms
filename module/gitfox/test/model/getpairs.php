@@ -10,7 +10,7 @@ title=测试gitfoxModel->gitPairs();
 timeout=0
 cid=1
 
-- 获取GitFox id为1的名字。属性1 @GitFox服务器
+- 获取GitFox id为1的名字。属性7 @GitFox服务器
 - 获取GitFox 列表数量。 @1
 
 */

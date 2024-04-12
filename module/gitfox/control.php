@@ -47,14 +47,14 @@ class gitfox extends control
      */
     public function edit(int $gitfoxID)
     {
-        $oldGitFox = $this->gitfox->getByID($gitfoxID);
+        $oldGitFox = $this->gitfox->fetchByID($gitfoxID);
 
         if($_POST)
         {
             $gitfox = form::data($this->config->gitfox->form->edit)->get();
             $this->checkToken($gitfox, $gitfoxID);
             $this->loadModel('pipeline')->update($gitfoxID, $gitfox);
-            $gitFox = $this->gitfox->getByID($gitfoxID);
+            $gitFox = $this->gitfox->fetchByID($gitfoxID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action');
@@ -80,7 +80,7 @@ class gitfox extends control
      */
     public function delete(int $gitfoxID)
     {
-        $oldGitFox = $this->loadModel('pipeline')->getByID($gitfoxID);
+        $oldGitFox = $this->gitfox->fetchByID($gitfoxID);
         $actionID  = $this->pipeline->deleteByObject($gitfoxID, 'gitfox');
         if(!$actionID)
         {
@@ -90,7 +90,7 @@ class gitfox extends control
             return $this->send($response);
         }
 
-        $gitFox   = $this->gitfox->getByID($gitfoxID);
+        $gitFox   = $this->gitfox->fetchByID($gitfoxID);
         $changes  = common::createChanges($oldGitFox, $gitFox);
         $this->loadModel('action')->logHistory($actionID, $changes);
 

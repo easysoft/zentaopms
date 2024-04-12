@@ -14,35 +14,6 @@ class gitfoxModel extends model
     protected $repos = array();
 
     /**
-     * 获取gitfox根据id。
-     * Get a gitfox by id.
-     *
-     * @param  int $id
-     * @access public
-     * @return object|false
-     */
-    public function getByID(int $id): object|false
-    {
-        return $this->loadModel('pipeline')->getByID($id);
-    }
-
-    /**
-     * 获取gitfox列表。
-     * Get gitfox list.
-     *
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function getList(string $orderBy = 'id_desc', object $pager = null): array
-    {
-        $gitfoxList = $this->loadModel('pipeline')->getList('gitfox', $orderBy, $pager);
-
-        return $gitfoxList;
-    }
-
-    /**
      * 获取gitfox id name 键值对。
      * Get gitfox pairs.
      *
