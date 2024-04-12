@@ -759,12 +759,19 @@ class projectModel extends model
      * 获取项目与执行的键值对
      * Get project and execution pairs.
      *
+     * @param  string $status
      * @access public
      * @return array
      */
-    public function getProjectExecutionPairs(): array
+    public function getProjectExecutionPairs(string $status = 'all'): array
     {
-        return $this->dao->select('project, id')->from(TABLE_PROJECT)->where('multiple')->eq('0')->andWhere('deleted')->eq('0')->fetchPairs();
+        return $this->dao->select('project, id')->from(TABLE_PROJECT)
+            ->where('multiple')->eq('0')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->beginIF(!in_array($status, array('all', 'undone')))->andWhere('status')->eq($status)->fi()
+            ->beginIF($status == 'done')->andWhere('status')->notIN('done,closed')->fi()
+            ->fetchPairs();
     }
 
     /**
