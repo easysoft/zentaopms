@@ -153,22 +153,22 @@ statisticBlock
     set::items($items),
     $product ? div
     (
-        setClass($longBlock ? 'row' : 'col gap-3', 'h-full overflow-hidden items-stretch px-2 py-3'),
+        setClass('h-full overflow-hidden items-stretch px-2', $longBlock ? 'row py-3' : 'col gap-2 pt-1'),
         center
         (
-            setClass('gap-4 px-5', $testTasksView ? 'flex-none' : 'flex-1'),
+            setClass('gap-2 px-5', $testTasksView ? 'flex-none' : 'flex-1'),
+            div
+            (
+                setClass('w-full'),
+                $lang->block->qastatistic->fixBugRate
+            ),
             progressCircle
             (
                 set::percent($product->fixedBugRate),
                 set::size(112),
                 set::text(false),
                 set::circleWidth(0.06),
-                div(span(setClass('text-2xl font-bold'), $product->fixedBugRate), '%'),
-                div
-                (
-                    setClass('row text-gray items-center gap-1'),
-                    $lang->block->qastatistic->fixBugRate
-                )
+                div(span(setClass('text-2xl font-bold'), $product->fixedBugRate), '%')
             ),
             row
             (
