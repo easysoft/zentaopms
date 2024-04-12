@@ -3088,15 +3088,6 @@ class storyModel extends model
         $cols = $this->config->execution->storyKanbanCols;
 
         $kanbanData = array();
-        foreach($cols as $index => $stage)
-        {
-            $col = new stdclass();
-            $col->name  = $index + 1;
-            $col->title = $this->lang->story->stageList[$stage];
-            $col->key   = $stage;
-            $kanbanData['cols'][] = $col;
-        }
-
         $storyGroup = array();
         foreach($stories as $story)
         {
@@ -3105,6 +3096,18 @@ class storyModel extends model
 
             $story->statusLabel = zget($this->lang->story->statusList, $story->status, '');
             $storyGroup[$index][] = $story;
+        }
+
+        foreach($cols as $index => $stage)
+        {
+            $index ++;
+            $count = isset($storyGroup[$index]) ? count($storyGroup[$index]) : 0;
+
+            $col = new stdclass();
+            $col->name  = $index;
+            $col->title = $this->lang->story->stageList[$stage] . ' (' . $count . ')';
+            $col->key   = $stage;
+            $kanbanData['cols'][] = $col;
         }
 
         $lane = new stdclass();
