@@ -21,10 +21,18 @@ modalHeader
 $branchDom = array();
 foreach($linkedBranches as $branch)
 {
+    $branchName = helper::safe64Encode(base64_encode($branch->BType));
     $branchDom[] = h::tr
     (
-        h::td(zget($allRepos, $branch->BID, '')),
-        h::td($branch->BType),
+        h::td(a
+        (
+            set::href(createLink('repo', 'browse', "repoID={$branch->BID}")),
+            zget($allRepos, $branch->BID, '')
+        )),
+        h::td(a(
+            set::href(createLink('repo', 'browse', "repoID={$branch->BID}&branch={$branchName}")),
+            $branch->BType
+        )),
         common::hasPriv($objectType, 'unlinkBranch') ? h::td(
             a
             (
