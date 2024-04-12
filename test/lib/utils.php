@@ -26,8 +26,6 @@ include LIB_ROOT . 'init.php';
  */
 function getVersionType($version)
 {
-    global $config;
-
     if(strpos($version, 'max') !== false) return 'max';
     if(strpos($version, 'biz') !== false) return 'biz';
     if(strpos($version, 'pro') !== false) return 'pro';
@@ -97,7 +95,7 @@ function ztfExtract($dir)
  * Get to the directory of test cases.
  *
  * @access public
- * @return void
+ * @return array
  */
 function getCaseModelDir()
 {
