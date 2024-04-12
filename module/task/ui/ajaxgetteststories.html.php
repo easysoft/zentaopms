@@ -31,6 +31,7 @@ formBatch
     set::actions(false),
     set::data($formData),
     set::minRows(1),
+    set::maxRows(count($formData)),
     formBatchItem
     (
         set::name('testStory'),
@@ -55,7 +56,7 @@ formBatch
         set::label($lang->task->estStarted),
         set::required(isset($requiredFields['estStarted'])),
         set::control('date'),
-        set::width('140px'),
+        set::width('160px'),
         set::ditto(true),
         set::defaultDitto('off'),
         set::value(empty($task->estStarted) ? '' : $task->estStarted)
@@ -66,7 +67,7 @@ formBatch
         set::label($lang->task->deadline),
         set::required(isset($requiredFields['deadline'])),
         set::control('date'),
-        set::width('140px'),
+        set::width('160px'),
         set::ditto(true),
         set::defaultDitto('off'),
         set::value(empty($task->deadline) ? '' : $task->deadline)
@@ -76,7 +77,7 @@ formBatch
         set::name('testAssignedTo'),
         set::label($lang->task->assignedTo),
         set::control('picker'),
-        set::items(array()),
+        set::items($members),
         set::width('128px'),
         set::ditto(true),
         set::defaultDitto('off')
