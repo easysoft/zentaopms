@@ -273,6 +273,7 @@ formBatchPanel
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),
     set::items($fnGenerateFields()),
     set::data($fnGenerateDefaultData()),
+    $app->session->projectPlanList ? set::actions(array('submit', array('text' => $lang->cancel, 'url' => $app->session->projectPlanList))) : null,
     on::change('[name^="enabled"]', 'changeEnabled(e.target)'),
     ($project->model == 'ipd' && !$planID) ? set::maxRows(count($fnGenerateDefaultData())) : null,
 );
