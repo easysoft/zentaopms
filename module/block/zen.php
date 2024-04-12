@@ -1093,12 +1093,14 @@ class blockZen extends block
         /* Get projects. */
         $projectID = $block->dashboard == 'my' ? 0 : (int)$this->session->project;
         if(isset($params['project'])) $projectID = (int)$params['project'];
-        $executions  = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
+
+        $executions    = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
+        $projectIdList = $this->loadModel('project')->getProjectExecutionPairs('1', $status);
         if(empty($executions))
         {
             $this->view->chartData        = array('labels' => array(), 'baseLine' => array(), 'burnLine' => array());
             $this->view->executions       = array();
-            $this->view->projects         = $this->loadModel('project')->getPairs();
+            $this->view->projects         = $this->project->getPairsByIdList(array_keys($projectIdList));
             $this->view->currentProjectID = $projectID;
             return;
         }
@@ -1156,7 +1158,7 @@ class blockZen extends block
 
         $this->view->chartData        = $this->execution->buildBurnData($executionID, $dateList, 'left', $execution->end);
         $this->view->executions       = $executions;
-        $this->view->projects         = $this->loadModel('project')->getPairsByProgram(0);
+        $this->view->projects         = $this->project->getPairsByIdList(array_keys($projectIdList));
         $this->view->currentProjectID = $projectID;
     }
 

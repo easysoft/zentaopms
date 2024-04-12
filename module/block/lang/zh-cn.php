@@ -101,6 +101,7 @@ $lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span c
 $lang->block->cannotPlaceInLeft  = '此区块无法放置在左侧。';
 $lang->block->cannotPlaceInRight = '此区块无法放置在右侧。';
 $lang->block->tutorial           = '进入新手教程';
+$lang->block->filterProject      = "{$lang->projectCommon}筛选";
 
 $lang->block->productName   = $lang->productCommon . '名称';
 $lang->block->totalStory    = '总' . $lang->SRCommon;

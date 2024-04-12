@@ -101,6 +101,7 @@ $lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span c
 $lang->block->cannotPlaceInLeft  = 'Cannot place the block at left side.';
 $lang->block->cannotPlaceInRight = 'Cannot place the block at right side.';
 $lang->block->tutorial           = 'Enter the tutorial';
+$lang->block->filterProject      = "Filter {$lang->projectCommon}";
 
 $lang->block->productName   = $lang->productCommon . ' Name';
 $lang->block->totalStory    = 'Total Story';

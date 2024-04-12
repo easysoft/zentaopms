@@ -35,11 +35,11 @@ foreach($executions as $executionItem)
 }
 
 $projectItems = array();
-$projectItems[] = array('text' => $lang->block->executionstatistic->allProject, 'data-url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("module={$block->module}")), 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
+$projectItems[] = array('value' => '0', 'text' => $lang->block->executionstatistic->allProject, 'data-url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("module={$block->module}")), 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
 foreach($projects as $projectID => $projectName)
 {
     $url = createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("module={$block->module}&project={$projectID}"));
-    $projectItems[] = array('text' => $projectName, 'data-url' => $url, 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
+    $projectItems[] = array('value' => $projectID, 'text' => $projectName, 'data-url' => $url, 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
 }
 
 /* 燃尽图。Burn chart. */
@@ -242,15 +242,14 @@ statisticBlock
 (
     to::titleSuffix
     (
-        dropdown
+        picker
         (
-            btn
-            (
-                setClass('font-normal rounded-full gray-400-outline size-sm ml-3 text-sm'),
-                set::caret(true),
-                isset($projects[$currentProjectID]) ? $projects[$currentProjectID] : $lang->block->executionstatistic->allProject,
-            ),
-            set::items($projectItems)
+            setClass('font-normal gray-400-outline ml-3 text-base circle filter-project-pricker'),
+            set::width('120px'),
+            set::placeholder($lang->block->filterProject),
+            set::name('project'),
+            set::items($projectItems),
+            set::value(isset($projects[$currentProjectID]) ? $currentProjectID : 0)
         )
     ),
     set::block($block),
