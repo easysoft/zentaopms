@@ -1,14 +1,12 @@
 <?php
 /* Set the error reporting. */
-
 error_reporting(E_ALL);
 
 /* 设置常量和常用目录路径 */
 define('RUN_MODE', 'test');
 $zentaoRoot    = dirname(__FILE__, 3) . '/';
-$testPath      = $zentaoRoot . 'test' . '/';
+$configRoot    = $zentaoRoot . 'test/config/';
 $frameworkRoot = $zentaoRoot . 'framework' . '/';
-
 
 /* Load the framework. */
 include $frameworkRoot . 'router.class.php';
@@ -16,27 +14,18 @@ include $frameworkRoot . 'control.class.php';
 include $frameworkRoot . 'model.class.php';
 include $frameworkRoot . 'helper.class.php';
 
-
 /* 初始化禅道框架 */
 $app      = router::createApp('pms', dirname(__FILE__, 3), 'router');
 $uiTester = $app->loadCommon();
 
 /* 加载框架配置项 */
-define('CONFIG_ROOT', $testPath . 'config' . '/');
-include CONFIG_ROOT . 'config.php';
+include $configRoot . 'config.php';
 
-
-/* 加载用例执行结果处理类 */
-include __DIR__ . '/result.class.php';
-
-/* 初始化php-webdriver类 */
-include __DIR__ . '/webdriver/webdriver.class.php';
-
-/* 初始化页面元素 */
-include 'page.class.php';
-
-/* 加载测试数据处理类，初始化测试数据 */
-include 'yaml.class.php';
+/* 加载框架基础类 */
+include 'result.class.php';              // 加载用例执行结果处理类
+include 'page.class.php';                // 加载页面元素类
+include 'yaml.class.php';                // 加载测试数据处理类
+include 'webdriver/webdriver.class.php'; // 加载php-webdriver类
 
 /**
  * Save variable to $_result.
@@ -161,7 +150,6 @@ function getLangData($langPath)
         }
         return $langData;
     }
-
 }
 
 class tester extends result
@@ -188,7 +176,7 @@ class tester extends result
 
         $this->webdriver  = new webdriver($config->uitest->chrome);
         $this->page       = new page($this->webdriver);
-        $this->cookieFile = CONFIG_ROOT . DS . 'cookie' . DS . 'cookie';
+        $this->cookieFile = '/tmp/cookie';
     }
 
     /**
@@ -205,10 +193,18 @@ class tester extends result
         if(!$password) $password = $this->config->uitest->defaultPassword;
         $webRoot = rtrim($this->config->uitest->webRoot, '/') . '/';
 
-        if(!empty($this->webdriver->driver)) $this->page->deleteCookie();
+        $this->page->openURL($webRoot)->deleteCookie();
+
+        if($this->config->uitest->langClient == 'en')
+        {
+            $cookie = array();
+            $cookie['lang']  = 'en';
+            $this->addCookie($webRoot, $cookie);
+        }
 
         $this->page->openURL($webRoot);
         $this->checkError();
+
         $this->page->dom->account->setValue($account);
         $this->page->dom->password->setValue($password);
         $this->page->dom->submit->click();
@@ -216,6 +212,35 @@ class tester extends result
         $this->page->saveCookie($this->cookieFile);
 
         return $this->page;
+    }
+
+    /**
+     * Add a cookie in test site.
+     *
+     * @param  string  $webRoot
+     * @param  array   $cookie
+     * @param  bool    $clear
+     * @access public
+     * @return bool|object
+     */
+    public function addCookie($webRoot, $cookie, $clear = true)
+    {
+        if($clear) $this->page->openURL($webRoot)->deleteCookie();
+        if(is_array($cookie) && !empty($cookie))
+        {
+            $cookieList = array();
+            foreach($cookie as $name => $value)
+            {
+                $cookieList['name']   = $name;
+                $cookieList['value']  = $value;
+                $cookieList['path']   = '/';
+                $cookieList['domain'] = parse_url($webRoot, PHP_URL_HOST);
+                $cookieList['secure'] = false;
+            }
+            $this->page->addCookie($cookieList);
+            return $this;
+        }
+        return false;
     }
 
     /**
@@ -267,7 +292,7 @@ class tester extends result
      * @access public
      * @return object
      */
-    public function initPage($module = '', $method = '')
+    public function loadPage($module = '', $method = '')
     {
         if($this->module && !$module) $module = $this->module;
         if($this->method && !$method) $method = $this->method;
@@ -294,7 +319,7 @@ class tester extends result
     public function initForm($module, $method, $params = array(), $iframeID = '')
     {
         $this->openURL($module, $method, $params, $iframeID);
-        return $this->initPage();
+        return $this->loadPage();
     }
 
     /**
