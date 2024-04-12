@@ -223,7 +223,7 @@ div
                 set::canEdit(common::hasPriv('tree', 'edit') && $canBeChanged),
                 set::canDelete(common::hasPriv('tree', 'delete') && $canBeChanged),
                 set::sortable(array('handle' => '.icon-move')),
-                set::onSort(jsRaw('function(event, orders){return window.updateOrder(event, orders);}'))
+                set::onSort(jsRaw('window.updateOrder'))
             )
         )
     ),
