@@ -1020,7 +1020,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
         }
 
-        $serverList = $this->loadModel('pipeline')->getPairs('gitlab,gitfox');
+        $serverList = $this->loadModel('pipeline')->getPairs('gitfox') + $this->loadModel('pipeline')->getPairs('gitlab');
         if(!$serverID) $serverID = key($serverList);
 
         $server      = $this->pipeline->getByID($serverID);

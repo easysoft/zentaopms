@@ -415,7 +415,7 @@ class repoZen extends repo
 
         $gitlabHosts  = $this->loadModel('gitlab')->getPairs();
         $gitfoxHosts  = $this->loadModel('gitfox')->getPairs();
-        $serviceHosts = $gitlabHosts + $gitfoxHosts;
+        $serviceHosts = $gitfoxHosts + $gitlabHosts;
 
         $repoGroups   = array();
 
