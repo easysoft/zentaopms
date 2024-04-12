@@ -36,4 +36,3 @@ $config->index->oldPages[] = 'api-debug';
 $config->index->oldPages[] = 'misc-downloadclient';
 $config->index->oldPages[] = 'datatable-ajaxoldcustom';
 $config->index->oldPages[] = 'weekly-index';
-$config->index->oldPages[] = 'execution-storykanban';
