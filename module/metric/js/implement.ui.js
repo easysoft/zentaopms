@@ -1,7 +1,21 @@
 var methods = [];
 $(document).ready(function()
 {
-    if(!isVerify) verify();
+    if(!isVerify)
+    {
+        if(isModuleCalcExist)
+        {
+            var $html = genVerifyResult(checkModuleFile, false, moduleCalcTip);
+            $('.verify-result').append($html);
+        }
+        else
+        {
+            verify();
+        }
+    }
+
+    var htmlHeight = $('html').height();
+    $('.verify-content').height(htmlHeight - 490);
 });
 
 function verify(method)
@@ -9,7 +23,7 @@ function verify(method)
     if(!method)
     {
         methods = Object.keys(verifyCustomMethods);
-        $('.verify-content').empty();
+        $('.verify-result').empty();
         method = methods.shift();
     }
 
@@ -18,12 +32,11 @@ function verify(method)
 
         if(methods.length == 0)
         {
-            var url = $.createLink('metric', 'implement', 'metricID=' + metricId + '&from=' + from + '&isVerify=true');
-            var modal = $('.verify-content').closest('.modal');
-            modalId = modal.attr('id');
-            setTimeout(function(){
-                openUrl(url, {load: 'modal', target: modalId});
-            }, 1000);
+            var url = $.createLink('metric', 'ajaxgetmetricresult', 'metricID=' + metricId + '&from=' + from);
+            loadTarget(url, '.metric-result')
+            $('.publish-btn-disabled').hide();
+            $('.publish-btn').removeClass('hidden');
+
             return;
         }
 
@@ -41,7 +54,7 @@ function verifyStep(step, callback)
         var error  = resp[1];
 
         var $html = genVerifyResult(verifyCustomMethods[step].text, status, error);
-        $('.verify-content').append($html);
+        $('.verify-result').append($html);
         if(typeof callback == 'function') callback(status, error);
     });
 }
@@ -53,7 +66,7 @@ function genVerifyResult(tip, status, error)
     var html = '<p class="verify-sentence ' + sentenceClass + '">';
     html += tip;
     html += '<i class="icon icon-' + iconClass + '"></i>';
-    if(error && error.length) html += '<input class="bg-danger ml-5 ellipsis w-96" value="' + error  + '"/>';
+    if(error && error.length) html += '<input class="bg-danger ml-5 ellipsis w-96" title="' + error  + '" value="' + error  + '"/>';
     html += '</p>';
     return $(html);
 }

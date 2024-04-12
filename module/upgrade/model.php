@@ -951,7 +951,7 @@ class upgradeModel extends model
         preg_match_all('/ENGINE=(\w+) /', $createFoot, $out);
         $stdEngine = isset($out[1][0]) ? $out[1][0] : 'InnoDB';
 
-        preg_match_all('/CREATE TABLE `([^`]*)`/', $createHead, $out);
+        preg_match_all('/CREATE TABLE [^`]*`([^`]*)`/', $createHead, $out);
         if(!isset($out[1][0])) return $changes;
 
         $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
@@ -5861,10 +5861,13 @@ class upgradeModel extends model
 
         foreach($data->files as $file)
         {
-            $dirRoot  = $customRoot . DS . dirname($file);
-            $fileName = basename($file);
+            if(!preg_match('/[a-z]/', $file[0])) continue;
+
             $fromPath = $this->app->getModuleRoot() . $file;
-            $toPath   = $dirRoot . DS . $fileName;
+            if(!is_file($fromPath)) continue;
+
+            $dirRoot = $customRoot . DS . dirname($file);
+            $toPath  = $dirRoot . DS . basename($file);
             if(!is_dir($dirRoot))
             {
                 if(!mkdir($dirRoot, 0777, true))

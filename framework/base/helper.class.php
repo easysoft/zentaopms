@@ -743,6 +743,7 @@ class baseHelper
      */
     public static function restartSession($sessionID = '')
     {
+        if(!preg_match('/^\w+$/', $sessionID)) $sessionID = '';
         if(empty($sessionID)) $sessionID = sha1(mt_rand());
 
         session_write_close();

@@ -43,7 +43,7 @@ class release extends control
      */
     public function browse($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->commonAction($productID, $branch);
 
@@ -189,7 +189,7 @@ class release extends control
         $this->loadModel('bug');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
 
         $sort = common::appendOrder($orderBy);
@@ -319,8 +319,8 @@ class release extends control
             $this->release->delete(TABLE_RELEASE, $releaseID);
 
             $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
-            $build   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$release->build)->fetch();
-            $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->shadow)->exec();
+            $builds  = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+            $this->loadModel('build')->delete(TABLE_BUILD, $release->shadow);
             foreach($builds as $build)
             {
                 if(empty($build->execution) and $build->createdDate == $release->createdDate) $this->build->delete(TABLE_BUILD, $build->id);
@@ -341,7 +341,6 @@ class release extends control
                 {
                     $response['result']  = 'success';
                     $response['message'] = '';
-                    $release = $this->release->getById($releaseID);
                 }
 
                 return $this->send($response);
@@ -505,7 +504,7 @@ class release extends control
         $this->loadModel('product');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
@@ -520,7 +519,7 @@ class release extends control
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
         $searchModules = array();
-        $moduleGroups  = $this->loadModel('tree')->getOptionMenu($release->product, 'story', 0, explode(',', $release->branch));;
+        $moduleGroups  = $this->loadModel('tree')->getOptionMenu($release->product, 'story', 0, explode(',', $release->branch));
         foreach($moduleGroups as $modules) $searchModules += $modules;
         $this->config->product->search['params']['module']['values'] = $searchModules;
 
@@ -635,7 +634,7 @@ class release extends control
         $this->commonAction($release->product);
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
@@ -650,7 +649,7 @@ class release extends control
 
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairsForStory($release->product, $release->branch, 'skipParent|withMainPlan');
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, $release->branch);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, $branch = 'all', 'releasetag');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         $searchModules = array();
@@ -761,7 +760,7 @@ class release extends control
     {
         $this->release->changeStatus($releaseID, $status);
         if(dao::isError()) return print(js::error(dao::getError()));
-        $actionID = $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
+        $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
         echo js::reload('parent');
     }
 }

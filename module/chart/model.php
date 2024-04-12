@@ -313,8 +313,13 @@ class chartModel extends model
         $maxCount = 50;
         if(empty($date)) arsort($stat);
 
-        $other = array_sum(array_splice($stat, $maxCount));
-        $stat[$this->lang->chart->other] = $other;
+        if(count($stat) > $maxCount)
+        {
+            $other = array_sum(array_slice($stat, $maxCount));
+            $stat  = array_slice($stat, 0, $maxCount);
+            $stat[$this->lang->chart->other] = $other;
+        }
+
         if(empty($date)) arsort($stat);
 
         $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);

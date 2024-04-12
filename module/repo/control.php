@@ -511,7 +511,11 @@ class repo extends control
 
         if($repo && substr($repo->path, 0, 4) == 'http')
         {
-            if(!$this->loadModel('admin')->checkInternet($repo->path)) return print(js::error($this->lang->repo->error->connect) . js::locate(inLink('maintain')));
+            $repoUrl = '';
+            if(empty($repoUrl) && isset($repo->path)    && substr($repo->path, 0, 4) == 'http')    $repoUrl = $repo->path;
+            if(empty($repoUrl) && isset($repo->client)  && substr($repo->client, 0, 4) == 'http')  $repoUrl = $repo->client;
+            if(empty($repoUrl) && isset($repo->apiPath) && substr($repo->apiPath, 0, 4) == 'http') $repoUrl = $repo->apiPath;
+            if(!$this->loadModel('admin')->checkInternet($repoUrl, 3)) return print(js::error($this->lang->repo->error->connect) . js::locate(inLink('maintain')));
         }
 
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));

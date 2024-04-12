@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('confirmDelist', $lang->metric->confirmDelist);
+jsVar('confirmDelistInUsed', $lang->metric->confirmDelistInUsed);
 
 if($isOldMetric)
 {

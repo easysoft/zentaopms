@@ -624,15 +624,16 @@ class adminModel extends model
     /**
      * Check internet.
      *
+     * @param  string $url
+     * @param  int    $timeout
      * @access public
      * @return bool
      */
-    public function checkInternet($url = '')
+    public function checkInternet($url = '', $timeout = 1)
     {
         if(empty($url)) $url = $this->config->admin->apiSite;
 
-        $timeout = 1;
-        $curl    = curl_init();
+        $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);

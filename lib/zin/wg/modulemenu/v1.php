@@ -35,7 +35,7 @@ class moduleMenu extends wg
         $children = $this->getChildModule($parentID);
         if(count($children) === 0) return [];
 
-        $activeKey  = $this->prop('activeKey');
+        $activeKey  = (string)$this->prop('activeKey');
         $treeItems  = array();
         $tab        = $this->prop('app');
         $titleAttrs = array('data-app' => $tab);
@@ -91,7 +91,7 @@ class moduleMenu extends wg
         if($this->prop('title')) return $this->prop('title');
 
         global $lang;
-        $activeKey = $this->prop('activeKey');
+        $activeKey = (string)$this->prop('activeKey');
 
         if(empty($activeKey))
         {

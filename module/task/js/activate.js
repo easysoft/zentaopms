@@ -109,7 +109,7 @@ $(function()
                 }
             }
 
-            var estimate = parseInt($('#left').val());
+            var estimate = parseFloat($('#left').val());
             if(isNaN(estimate) || estimate <= 0)
             {
                 bootbox.alert(multiple ? teamLeftEmpty : leftNotEmpty);

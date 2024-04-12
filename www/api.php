@@ -34,7 +34,7 @@ $app = router::createApp('pms', dirname(dirname(__FILE__)), 'api');
 $common = $app->loadCommon();
 
 /* Check entry. */
-$common->checkEntry();
+if(!$app->version) $common->checkEntry();
 $common->loadConfigFromDB();
 
 /* Set default params. */

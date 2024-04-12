@@ -17,19 +17,21 @@ function recalculateAll(startDate, endDate)
     {
         if(index >= dateRange.length) 
         {
-            $('.recalculate-log').append(`<p>${noticeDeduplication}</p>`);
+            $('.recalculate-log').append(`<p class="deduplication">${noticeDeduplication}</p>`);
+            scrollLog();
 
             var deduplication = $.createLink('metric', 'ajaxDeduplicateRecord');
             $.get(deduplication, function(result)
             {
                 displayExitButton();
                 hideRecalculateNotice();
+                deduplicationLog();
             });
             return;
         }
         
         var date = dateToString(dateRange[index]);
-        var $html = recalculateLog(date);
+        var $html = getRecalculateLog(date);
 
         var link = $.createLink('metric', 'ajaxUpdateHistoryMetricLib', 'date=' + date + '&calcType=' + calcType);
         $.get(link, function(result){
@@ -47,19 +49,21 @@ function recalculateSingle(code, dateType, startDate, endDate)
     {
         if(index >= dateRange.length) 
         {
-            $('.recalculate-log').append(`<p>${noticeDeduplication}</p>`);
+            $('.recalculate-log').append(`<p class="deduplication">${noticeDeduplication}</p>`);
+            scrollLog();
 
             var deduplication = $.createLink('metric', 'ajaxDeduplicateRecord');
             $.get(deduplication, function(result)
             {
                 displayExitButton();
                 hideRecalculateNotice();
+                deduplicationLog();
             });
             return;
         }
 
         var date = dateToString(dateRange[index]);
-        var $html = recalculateLog(date);
+        var $html = getRecalculateLog(date);
 
         var link = $.createLink('metric', 'ajaxUpdateSingleMetricLib', 'code=' + code + '&date=' + date + '&calcType=' + calcType);
         $.get(link, function(result){
@@ -69,7 +73,7 @@ function recalculateSingle(code, dateType, startDate, endDate)
     }
 }
 
-function recalculateLog(date)
+function getRecalculateLog(date)
 {
     var dateStr = date.split('_').join('-');
 
@@ -78,10 +82,25 @@ function recalculateLog(date)
     html += '  <i class="icon icon-check success"></i>';
     html += '</p>';
 
-    var logContainer = document.getElementById('recalculate-log');
-    logContainer.scrollTop = logContainer.scrollHeight;
+    scrollLog();
 
     return html;
+}
+
+function deduplicationLog()
+{
+    $('.deduplication').remove();
+
+    var html = `<p>${noticeDoneDeduplication} <i class="icon icon-check success"></i></p>`;
+    $('.recalculate-log').append(html);
+
+    scrollLog();
+}
+
+function scrollLog()
+{
+    var logContainer = document.getElementById('recalculate-log');
+    logContainer.scrollTop = logContainer.scrollHeight;
 }
 
 function getDateRange(startDate, endDate, dateType = 'day')
@@ -138,7 +157,6 @@ function getDateRange(startDate, endDate, dateType = 'day')
             dateRange.push(new Date(current));
             current.setDate(current.getDate() + 7);
         }
-        dateRange.pop();
         dateRange.push(end);
     }
 

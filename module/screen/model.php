@@ -497,6 +497,27 @@ class screenModel extends model
     }
 
     /**
+     * 生成已下架或者已删除度量项的参数。
+     * Generate delist or deleted metric options.
+     *
+     * @param  object    $component
+     * @access public
+     * @return object
+     */
+    public function genDelistOrDeletedMetricOption($component)
+    {
+        if(empty($component)) $component = new stdclass();
+
+        if(!isset($component->option)) $component->option = new stdclass();
+        if(!isset($component->option->title)) $component->option->title = new stdclass();
+
+        $component->option->title->notFoundText = $this->lang->screen->noMetricData;
+        $component->option->isDeleted = true;
+
+        return $component;
+    }
+
+    /**
      * 删除component的已删除标记。
      * Unset component option isDeleted.
      *
@@ -541,7 +562,7 @@ class screenModel extends model
             {
                 $object = new stdclass();
                 $object->label = $objectTitle;
-                $object->value = $objectID;
+                $object->value = (string)$objectID;
                 return $object;
             }, array_keys($objectPairs), array_values($objectPairs));
         }
@@ -571,6 +592,7 @@ class screenModel extends model
     public function genMetricComponent($metric, $component = null, $filterParams = array())
     {
         $this->loadModel('metric');
+        if($metric->deleted == '1' || $metric->stage == 'wait') return $this->genDelistOrDeletedMetricOption($component);
 
         $pagination = $this->getMetricPagination($component);
         $filters    = $this->processMetricFilter($filterParams, $metric->dateType);
@@ -2600,7 +2622,8 @@ class screenModel extends model
                         if(!isset($groupComponent->chartConfig)) continue;
 
                         $sourceID   = zget($groupComponent->chartConfig, 'sourceID', '');
-                        $sourceType = zget($groupComponent->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
+                        $package    = zget($groupComponent->chartConfig, 'package', '');
+                        $sourceType = $this->getChartType($package);
 
                         if($chartID == $sourceID and $type == $sourceType) return true;
                     }
@@ -2610,7 +2633,9 @@ class screenModel extends model
                     if(!isset($component->chartConfig)) continue;
 
                     $sourceID   = zget($component->chartConfig, 'sourceID', '');
-                    $sourceType = zget($component->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
+                    $package    = zget($component->chartConfig, 'package', '');
+                    $sourceType = $this->getChartType($package);
+
                     if($chartID == $sourceID and $type == $sourceType) return true;
                 }
 

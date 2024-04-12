@@ -386,7 +386,7 @@ $lang->bug->report->openedBugsPerUser->graph->xAxisName   = 'Benutzer';
 $lang->bug->report->resolvedBugsPerUser->graph->xAxisName = 'Benutzer';
 $lang->bug->report->closedBugsPerUser->graph->xAxisName   = 'Benutzer';
 
-$lang->bug->report->bugsPerSeverity->graph->xAxisName       = 'Prorität';
+$lang->bug->report->bugsPerSeverity->graph->xAxisName       = 'Schwere(S)';
 $lang->bug->report->bugsPerResolution->graph->xAxisName     = 'Lösung';
 $lang->bug->report->bugsPerStatus->graph->xAxisName         = 'Status';
 $lang->bug->report->bugsPerActivatedCount->graph->xAxisName = 'Aktivitätszähler';

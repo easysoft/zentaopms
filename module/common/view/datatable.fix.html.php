@@ -120,7 +120,7 @@ $(function()
               <td class='w-160px'><?php echo $lang->datatable->showModule;?></td>
               <td><?php echo html::radio('showModule', $lang->datatable->showModuleList, isset($config->datatable->$datatableId->showModule) ? $config->datatable->$datatableId->showModule : '0');?></td>
             </tr>
-            <?php if($app->moduleName == 'execution' and $app->methodName == 'task' and $this->config->vision != 'lite'):?>
+            <?php if($app->moduleName == 'execution' and $app->methodName == 'task' and $this->config->vision != 'lite' && !empty($showAllModule)):?>
             <tr>
               <td><?php echo $lang->datatable->showAllModule;?></td>
               <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->execution->task->allModule) ? $config->execution->task->allModule : 0);?></td>

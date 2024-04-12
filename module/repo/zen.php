@@ -973,6 +973,10 @@ class repoZen extends repo
         $storyStatusList = $this->lang->story->statusList;
 
         unset($this->config->product->search['fields']['product']);
+        unset($this->config->product->search['params']['product']);
+        unset($this->config->product->search['fields']['roadmap']);
+        unset($this->config->product->search['params']['roadmap']);
+
         $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['style']                       = 'simple';
@@ -987,6 +991,7 @@ class repoZen extends repo
         }
         else
         {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
             $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             $this->config->product->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
         }
@@ -1059,6 +1064,7 @@ class repoZen extends repo
         }
         else
         {
+            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
             $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
             $this->config->bug->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
         }

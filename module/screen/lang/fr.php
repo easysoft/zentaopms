@@ -13,3 +13,5 @@ $lang->screen->globalFilter  = 'Global Filter';
 
 $lang->screen->belong    = '';
 $lang->screen->dateRange = 'Date';
+
+$lang->screen->noMetricData = 'The metric item has been taken down or deleted';

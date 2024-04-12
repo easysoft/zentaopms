@@ -2970,6 +2970,7 @@ class story extends control
 
                 $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
+            $this->config->story->datatable->fieldList['closedReason']['dataSource'] = array('lang' => 'reasonList');
 
             $this->post->set('rows', $this->story->getExportStories($executionID, $orderBy, $storyType));
             $this->fetch('transfer', 'export', 'model=story');

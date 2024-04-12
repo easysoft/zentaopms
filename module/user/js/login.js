@@ -85,7 +85,7 @@ $(document).ready(function()
      */
     $('.captchaBox .input-group .input-group-addon img').click(function()
     {
-        var captchaLink = createLink('misc', 'captcha', "sessionVar=captcha");
+        var captchaLink = createLink('misc', 'captcha');
         captchaLink += captchaLink.indexOf('?') < 0 ? '?' : '&';
         captchaLink += 's=' + Math.random();
 

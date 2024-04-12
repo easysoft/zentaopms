@@ -9,6 +9,11 @@ window.afterPageUpdate = function($target, info, options)
     }
     window.filterChecked = {};
 
+    if(viewType == 'single')
+    {
+      var metricCurrent = $('.metric-tree .metric-current');
+      if(metricCurrent.length) metricCurrent[0].scrollIntoView({block: 'center', inline: 'start' })
+    }
     if(viewType == 'multiple')
     {
         window.renderCheckedLabel();
@@ -394,8 +399,12 @@ window.handleQueryClick = function(id, viewType = 'single')
     if(!check) return;
 
     var formData = window.getFormData($form);
+    var scopeValue = formData.get('scope') === null     ? '' : formData.get('scope');
+    var dateLabel  = formData.get('dateLabel') === null ? '' : formData.get('dateLabel');
+    var dateBegin  = formData.get('dateBegin') === null ? '' : formData.get('dateBegin').replace(/-/g, '_');
+    var dateEnd    = formData.get('dateEnd') === null   ? '' : formData.get('dateEnd').replace(/-/g, '_');
 
-    $.post($.createLink('metric', 'ajaxGetTableAndCharts', 'metricID=' + id + '&viewType=' + viewType), formData, function(resp)
+    $.post($.createLink('metric', 'ajaxGetTableAndCharts', 'metricID=' + id + '&scope=' + scopeValue + '&dateLabel=' + dateLabel + '&dateBegin=' + dateBegin + '&dateEnd=' + dateEnd + '&viewType=' + viewType), formData, function(resp)
     {
         if(viewType == 'multiple')
         {

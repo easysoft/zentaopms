@@ -90,7 +90,8 @@ class build extends control
             $projectID     = $execution ? $execution->project : 0;
         }
 
-        $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter|leaf|order_asc');
+        $noClosedParam = (isset($this->config->CRExecution) && $this->config->CRExecution == 0) ? '|noclosed' : '';
+        $executions    = $this->execution->getPairs($projectID, 'all', 'stagefilter|leaf|order_asc' . $noClosedParam);
         $executionID   = empty($executionID) ? key($executions) : $executionID;
         $productGroups = $executionID ? $this->product->getProducts($executionID, $status) : array();
         $branchGroups  = $executionID ? $this->project->getBranchesByProject($executionID) : array();

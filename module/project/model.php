@@ -1518,7 +1518,7 @@ class projectModel extends model
 
             if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
 
-            if(empty($project->multiple) and $project->model != 'waterfall' and $project->model != 'waterfallplus') $this->loadModel('execution')->createDefaultSprint($projectID);
+            if(empty($project->multiple) && !in_array($project->model, array('waterfall', 'waterfallplus'))) $this->loadModel('execution')->createDefaultSprint($projectID);
 
             return $projectID;
         }
@@ -1711,7 +1711,7 @@ class projectModel extends model
                 if($project->status == 'closed') $this->product->close($productID);
             }
 
-            if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
+            if(empty($project->multiple) && !in_array($oldProject->model, array('waterfall', 'waterfallplus'))) $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 
             return common::createChanges($oldProject, $project);
         }

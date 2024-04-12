@@ -3215,4 +3215,21 @@ class testcase extends control
 
         $this->display();
     }
+
+    /**
+     * Ajax get can imported modules.
+     *
+     * @param  int    $productID
+     * @param  int    $intID
+     * @param  int    $branch
+     * @param  int    $caseID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetCanImportedModules($productID, $libID, $branch, $caseID)
+    {
+        $canImportedModules = $this->loadModel('testsuite')->getCanImportModules($productID, $libID, $branch, 0, $caseID);
+        $canImportedModules = zget($canImportedModules, $caseID, array());
+        return print(html::select('module', $canImportedModules, 0, "class='form-control'"));
+    }
 }

@@ -236,7 +236,7 @@ class control extends baseControl
         if(!class_exists($extensionClass)) return false;
 
         /* 实例化扩展类。Create an instance of the extension class and return it. */
-        $extensionObject = new $extensionClass;
+        $extensionObject = new $extensionClass();
         if($type == 'model') $extensionClass = str_replace(ucfirst($type), '', $extensionClass);
         $this->$extensionClass = $extensionObject;
         $this->$extensionClass->view = $this->view;
@@ -514,6 +514,10 @@ class control extends baseControl
     public function printViewFile($viewFile)
     {
         if(!file_exists($viewFile)) return false;
+        if(substr($viewFile, -4) != '.php') return false;
+        if(strpos($viewFile, '..') !== false) return false;
+        if(strpos($viewFile, '/view/') === false) return false;
+        if(strpos($viewFile, $this->app->getModuleRoot()) !== 0 && strpos($viewFile, $this->app->getExtensionRoot()) !== 0) return false;
 
         $currentPWD = getcwd();
         chdir(dirname($viewFile));

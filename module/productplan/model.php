@@ -133,7 +133,7 @@ class productplanModel extends model
         if(!empty($plans))
         {
             $plans        = $this->reorder4Children($plans);
-            $planIdList   = array_keys($plans);
+            $planIdList   = array_filter(array_keys($plans));
             $planProjects = array();
 
             foreach($planIdList as $planID)
@@ -159,7 +159,7 @@ class productplanModel extends model
                     ->fetchGroup('plan', 'id');
             }
 
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where("plan")->in($planIdList)->andWhere('deleted')->eq(0)->fetchGroup('plan', 'id');
+            $bugs = $this->dao->select('id,plan')->from(TABLE_BUG)->where("plan")->in($planIdList)->andWhere('deleted')->eq(0)->fetchGroup('plan', 'id');
             $parentStories = $parentBugs = $parentHour = array();
             foreach($plans as $plan)
             {
@@ -660,7 +660,6 @@ class productplanModel extends model
             $maxEnd     = $plan->end;
             foreach($childPlans as $childID => $childPlan)
             {
-                $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
                 if($childPlan->begin < $minBegin) $minBegin = $childPlan->begin;
                 if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
             }

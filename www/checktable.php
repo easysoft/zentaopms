@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(0);
 date_default_timezone_set('Asia/Shanghai');
 $config = new stdclass();
 
@@ -114,7 +114,7 @@ else
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-  <meta name="renderer" content="webkit"> 
+  <meta name="renderer" content="webkit">
   <link rel='stylesheet' href='<?php echo $themeRoot . 'zui/css/min.css'?>' type='text/css' media='screen' />
 </head>
 <body>

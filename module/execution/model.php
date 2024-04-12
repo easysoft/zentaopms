@@ -2830,6 +2830,8 @@ class executionModel extends model
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->config->product->search['params']['stage']['values']   = array('' => '') + $this->lang->story->stageList;
 
+        if($this->config->edition != 'ipd' || ($this->config->edition == 'ipd' && $storyType == 'story')) unset($this->config->product->search['fields']['roadmap']);
+
         $this->loadModel('productplan');
         $plans     = array();
         $planPairs = array('' => '');
@@ -5990,6 +5992,12 @@ class executionModel extends model
         $_POST['multiple']    = '0';
         $_POST['hasProduct']  = $project->hasProduct;
         if($project->code) $_POST['code'] = $project->code;
+
+        if($project->model == 'kanban')
+        {
+            $teamMembers = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('root')->eq($projectID)->fetchPairs('account', 'account');
+            $_POST['teamMembers'] = array_values($teamMembers);
+        }
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
         foreach($projectProducts as $projectProduct)

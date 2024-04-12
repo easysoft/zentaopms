@@ -674,6 +674,9 @@ class custom extends control
      */
     public function ajaxSaveCustomFields($module, $section, $key)
     {
+        if(!isset($this->config->custom->customFields[$module][$section])) return;
+        if(!in_array($key, $this->config->custom->customFields[$module][$section])) return;
+
         $account = $this->app->user->account;
         if($this->server->request_method == 'POST')
         {

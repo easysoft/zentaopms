@@ -102,12 +102,15 @@ $config->story->datatable->fieldList['plan']['required']   = 'no';
 $config->story->datatable->fieldList['plan']['control']    = 'select';
 $config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
 
-$config->story->datatable->fieldList['roadmap']['title']    = 'roadmap';
-$config->story->datatable->fieldList['roadmap']['fixed']    = 'no';
-$config->story->datatable->fieldList['roadmap']['required'] = 'no';
-$config->story->datatable->fieldList['roadmap']['type']     = 'html';
-$config->story->datatable->fieldList['roadmap']['display']  = 'yes';
-$config->story->datatable->fieldList['roadmap']['sortType'] = true;
+if($config->edition == 'ipd')
+{
+    $config->story->datatable->fieldList['roadmap']['title']    = 'roadmap';
+    $config->story->datatable->fieldList['roadmap']['fixed']    = 'no';
+    $config->story->datatable->fieldList['roadmap']['required'] = 'no';
+    $config->story->datatable->fieldList['roadmap']['type']     = 'html';
+    $config->story->datatable->fieldList['roadmap']['display']  = 'yes';
+    $config->story->datatable->fieldList['roadmap']['sortType'] = true;
+}
 
 $config->story->datatable->fieldList['status']['title']    = 'statusAB';
 $config->story->datatable->fieldList['status']['fixed']    = 'no';

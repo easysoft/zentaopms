@@ -3639,8 +3639,8 @@ class storyModel extends model
                 {
                     if($this->app->rawModule == 'projectstory')
                     {
-                        $this->session->set('storyQuery', $query->sql);
-                        $this->session->set('storyForm', $query->form);
+                        $this->session->set('projectstoryQuery', $query->sql);
+                        $this->session->set('projectstoryForm', $query->form);
                     }
                     else
                     {
@@ -3650,7 +3650,7 @@ class storyModel extends model
                 }
             }
 
-            if($this->app->rawModule == 'projectstory') $this->session->executionStoryQuery = $this->session->storyQuery;
+            if($this->app->rawModule == 'projectstory') $this->session->executionStoryQuery = $this->session->projectstoryQuery;
 
             $allProduct = "`product` = 'all'";
             $storyQuery = $this->session->executionStoryQuery;
@@ -3680,11 +3680,11 @@ class storyModel extends model
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
                 ->beginIF(strpos($storyQuery, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t4')->on('t2.id = t4.story and t2.version = t4.version')->fi()
-                ->where($storyQuery)
+                ->where('t2.type')->eq($storyType)
+                ->andWhere("($storyQuery)")
                 ->andWhere('t1.project')->in($executionID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
-                ->andWhere('t2.type')->eq($storyType)
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->orderBy($orderBy)
                 ->page($pager, 't2.id')
@@ -4762,6 +4762,8 @@ class storyModel extends model
 
                 $isClick = $this->isClickable($story, 'batchcreate');
                 $title   = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
+                $parent  = $story->parent;
+                if($storyType == 'requirement' && $story->type == 'story') $story->parent = 0;
                 if(!$isClick and $story->status != 'closed')
                 {
                     if($story->parent > 0)
@@ -4782,6 +4784,7 @@ class storyModel extends model
 
                 $executionID = empty($execution) ? 0 : $execution->id;
                 if($this->config->vision != 'or') $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0&storyType=$storyType", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
+                $story->parent = $parent;
             }
 
             if(($this->app->rawModule == 'projectstory' or ($this->app->tab != 'product' and $storyType == 'requirement')) and $this->config->vision != 'lite')
@@ -4856,7 +4859,7 @@ class storyModel extends model
 
             $moreActions      = '';
             $disabledFeatures = ",{$this->config->disabledFeatures},";
-            if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib') and strpos($disabledFeatures, ',assetlibStorylib,') === false and strpos($disabledFeatures, ',assetlib,') === false)
+            if($story->type != 'requirement' and ($this->config->edition == 'max' or $this->config->edition == 'ipd') and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib') and strpos($disabledFeatures, ',assetlibStorylib,') === false and strpos($disabledFeatures, ',assetlib,') === false)
             {
                 $moreActions .= '<li>' . html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"') . '</li>';
             }
@@ -6810,7 +6813,7 @@ class storyModel extends model
         foreach($setting as $key => $set)
         {
             if($storyType == 'requirement' and in_array($set->id, array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount'))) $set->show = false;
-            if($storyType == 'story' and in_array($set->id, array('roadmap'))) $set->show = false;
+            if(($this->config->edition != 'ipd' || ($this->config->edition == 'ipd' && $storyType == 'story')) && in_array($set->id, array('roadmap'))) $set->show = false;
             if($viewType == 'xhtml' and !in_array($set->id, array('title', 'id', 'pri', 'status'))) $set->show = false;
             if(empty($set->show)) continue;
 

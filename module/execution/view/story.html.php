@@ -254,6 +254,8 @@
           <?php
           foreach($setting as $key => $value)
           {
+              if($value->id == 'roadmap' && ($config->edition != 'ipd' || ($config->edition == 'ipd' && $storyType == 'story'))) continue;
+
               if(!$execution->hasProduct and $value->id == 'branch') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
               if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'stage') continue;
@@ -276,6 +278,8 @@
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
           <?php foreach($setting as $key => $value)
           {
+              if($value->id == 'roadmap' && ($config->edition != 'ipd' || ($config->edition == 'ipd' && $storyType == 'story'))) continue;
+
               if(!$execution->hasProduct and $value->id == 'branch') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
               if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'stage') continue;
@@ -293,6 +297,8 @@
           <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
           <?php foreach($setting as $key => $value)
           {
+              if($value->id == 'roadmap' && ($config->edition != 'ipd' || ($config->edition == 'ipd' && $storyType == 'story'))) continue;
+
               if(!$execution->hasProduct and $value->id == 'branch') continue;
               if(!$execution->hasProduct and !$execution->multiple and $value->id == 'plan') continue;
               if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value->id == 'stage') continue;

@@ -1905,7 +1905,7 @@ class bug extends control
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
             $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
-            $actionID = $this->action->create('bug', $bugID, 'Resolved', $fileAction . $this->post->comment, $this->post->resolution . ($this->post->duplicateBug ? ':' . (int)$this->post->duplicateBug : ''));
+            $actionID = $this->action->create('bug', $bugID, 'Resolved', $fileAction . $this->post->comment, $this->post->resolution . ($this->post->duplicateBug ? ':' . filter_var($this->post->duplicateBug, FILTER_SANITIZE_NUMBER_INT) : ''));
             $this->action->logHistory($actionID, $changes);
 
             $bug = $this->bug->getById($bugID);
@@ -2643,11 +2643,21 @@ class bug extends control
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
         $branch      = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
-        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit);
+        $productBugs = $this->bug->getProductBugPairs($productID, $branch, $search, $limit, 'all');
 
         unset($productBugs[$bugID]);
 
-        if($type == 'json') return print(helper::jsonEncode($productBugs));
+        if($type == 'json')
+        {
+            /* Keep raw sort in picker. When key is number then change to number sort in picker. */
+            $pairs = array('' => '');
+            foreach($productBugs as $id => $title)
+            {
+                if(empty($id)) continue;
+                $pairs["bugID{$id}"] = $title;
+            }
+            return print(helper::jsonEncode($pairs));
+        }
         return print(html::select('duplicateBug', $productBugs, '', "class='form-control' placeholder='{$this->lang->bug->duplicateTip}'"));
     }
 

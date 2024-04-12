@@ -50,6 +50,8 @@ $lang->metric->verifyFile         = 'Verify File';
 $lang->metric->verifyResult       = 'Verify Result';
 $lang->metric->publish            = 'Publish';
 $lang->metric->moveFailTip        = 'Failed to move the metric file.';
+$lang->metric->checkFile          = 'Check if the running dir metric file exists';
+$lang->metric->deleteFile         = 'Please contact administrator remove';
 $lang->metric->selectCount        = '%s metrics';
 $lang->metric->testMetric         = 'Test Metric';
 $lang->metric->calcTime           = 'Calculate Time';
@@ -68,11 +70,20 @@ $lang->metric->startRecalculate   = 'Start';
 $lang->metric->recalculateAction  = 'Recalculate';
 $lang->metric->recalculateBtnText = 'Recalculate';
 $lang->metric->exit               = 'Exit';
+$lang->metric->zentaoPath         = '[Zentao Path]';
 
 $lang->metric->yearFormat     = 'Year %s';
 $lang->metric->weekFormat     = 'Week %s';
 $lang->metric->monthDayFormat = '%s-%s';
 $lang->metric->yearMonthFormat = '%s-%s';
+
+$lang->metric->tableHeader = array();
+$lang->metric->tableHeader['project']   = 'Project';
+$lang->metric->tableHeader['product']   = 'Product';
+$lang->metric->tableHeader['execution'] = 'Execution';
+$lang->metric->tableHeader['dept']      = 'Dept';
+$lang->metric->tableHeader['user']      = 'Name';
+$lang->metric->tableHeader['program']   = 'Program';
 
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "Please select";
@@ -159,10 +170,12 @@ $lang->metric->noDataAfterCollect  = "No data is available after the time for da
 $lang->metric->legendBasicInfo  = 'Basic Information';
 $lang->metric->legendCreateInfo = 'Creation and Editing Information';
 
-$lang->metric->confirmDelete      = "Are you sure you want to delete?";
-$lang->metric->confirmDelist      = "Are you sure you want to delist?";
-$lang->metric->confirmRecalculate = "Recalculation results may overwrite existing metric records. Do you want to continue?";
-$lang->metric->notExist           = "The measure does not exist";
+$lang->metric->confirmDelete       = "Are you sure you want to delete?";
+$lang->metric->confirmDeleteInUsed = "This metric has been referenced by the large screen. Are you sure you want to delete it?";
+$lang->metric->confirmDelist       = "Are you sure you want to delist?";
+$lang->metric->confirmDelistInUsed = "This metric has been referenced by the large screen. Are you sure you want to take it down?";
+$lang->metric->confirmRecalculate  = "Recalculation results may overwrite existing metric records. Do you want to continue?";
+$lang->metric->notExist            = "The measure does not exist";
 
 $lang->metric->browse          = 'Browse Metrics';
 $lang->metric->browseAction    = 'Metric List';
@@ -184,9 +197,9 @@ $lang->metric->featureBar['browse']['released'] = 'Released';
 $lang->metric->featureBar['preview']['project']   = 'Project';
 $lang->metric->featureBar['preview']['product']   = 'Product';
 $lang->metric->featureBar['preview']['execution'] = 'Execution';
-$lang->metric->featureBar['preview']['dept']      = 'Team';
+//$lang->metric->featureBar['preview']['dept']      = 'Team';
 $lang->metric->featureBar['preview']['user']      = 'Individual';
-$lang->metric->featureBar['preview']['program']   = 'Program';
+//$lang->metric->featureBar['preview']['program']   = 'Program';
 $lang->metric->featureBar['preview']['system']    = 'System';
 // $lang->metric->featureBar['preview']['code']      = 'Code Repository';
 // $lang->metric->featureBar['preview']['pipeline']  = 'Pipeline';
@@ -316,7 +329,6 @@ $lang->metric->implement->downloadPHP = "Download Metric Template";
 $lang->metric->implement->instructionTips = array();
 $lang->metric->implement->instructionTips[] = '1.Download the measurement template file and perform coding and development operations on the file. For details, see the operation manual.<a class="btn text-primary ghost" target="_blank" href="https://www.zentao.net/book/zentaopms/1103.html">Manual>></a>';
 $lang->metric->implement->instructionTips[] = '2.Please put the developed file in the following directory,<strong>Keep the file name consistent with the measurement code</strong>。<br/> <span class="label code-slate">{tmpRoot}metric</span>';
-$lang->metric->implement->instructionTips[] = '3.Execute commands to grant executable permissions to files:<p><span class="label code-slate">chmod 777 {tmpRoot}metric</span></p><p><span class="label code-slate">chmod 777 {tmpRoot}metric/{code}.php</span></p>';
 
 $lang->metric->verifyCustom = new stdclass();
 $lang->metric->verifyCustom->checkCustomCalcExists = array();
@@ -399,6 +411,7 @@ $lang->metric->tips->noticeRepublish         = "If there are multiple releases, 
 $lang->metric->tips->noticeRewriteHistoryLib = "(When checked, the system will recalculate published metric with date type  based on historical data and overwrite all existing metric records)";
 $lang->metric->tips->banRecalculate          = "The metric has not been published or has no date type";
 $lang->metric->tips->noticeDeduplication     = "Deduplication...";
+$lang->metric->tips->noticeDoneDeduplication = "Deduplication done";
 
 $lang->metric->recalculateLog = "%s has been calculated";
 

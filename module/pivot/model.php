@@ -30,7 +30,7 @@ class pivotModel extends model
      * @access public
      * @return object
      */
-    public function getByID($pivotID)
+    public function getByID($pivotID, $processDateVar = false)
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
         if(!$pivot) return false;
@@ -53,7 +53,7 @@ class pivotModel extends model
             foreach($filters as $key => $filter)
             {
                 if(empty($filter['default'])) continue;
-                //$filters[$key]['default'] = $this->processDateVar($filter['default']);
+                if($processDateVar) $filters[$key]['default'] = $this->processDateVar($filter['default']);
             }
             $pivot->filters = $filters;
         }
@@ -1535,10 +1535,9 @@ class pivotModel extends model
     public function filterWithSelectFields($fieldSettings, $selectFields)
     {
         $selectFieldSettings = array();
-        foreach($fieldSettings as $fieldSetting)
+        foreach($fieldSettings as $key => $fieldSetting)
         {
-            $field = zget($fieldSetting, 'field', '');
-            if(in_array($field, $selectFields)) $selectFieldSettings[$field] = $fieldSetting;
+            if(in_array($key, $selectFields)) $selectFieldSettings[$key] = $fieldSetting;
         }
 
         return $selectFieldSettings;
@@ -2763,7 +2762,7 @@ class pivotModel extends model
 
         if($pivotTree) $pivotTree = "<ul id='pivotGroups' class='tree' data-ride='tree'>$pivotTree</ul>";
 
-        $pivot = $pivotID ? $this->getByID($pivotID) : array();
+        $pivot = $pivotID ? $this->getByID($pivotID, true) : array();
 
         return array($pivotTree, $pivot, $groupID);
     }
@@ -3119,10 +3118,8 @@ class pivotModel extends model
         $cols = array();
         $clientLang = $this->app->getClientLang();
         /* Build cols. */
-        foreach($fields as $field)
+        foreach($fields as $key => $field)
         {
-            $key = $field['field'];
-
             $col = new stdclass();
             $col->name    = $key;
             $col->isGroup = true;

@@ -377,10 +377,11 @@ class testsuiteModel extends model
      * @param  int    $libID
      * @param  int    $branch
      * @param  int    $toLib
+     * @param  int    $caseID
      * @access public
      * @return array
      */
-    public function getCanImportModules($productID, $libID, $branch, $toLib = 0)
+    public function getCanImportModules($productID, $libID, $branch, $toLib = 0, $caseID = 0)
     {
         $importedModules = $this->dao->select('fromCaseID,module')->from(TABLE_CASE)
             ->where('product')->eq($productID)
@@ -388,6 +389,7 @@ class testsuiteModel extends model
             ->andWhere('branch')->eq($branch)
             ->andWhere('fromCaseID')->ne('')
             ->andWhere('deleted')->eq(0)
+            ->beginIF($caseID)->andWhere('fromCaseID')->eq($caseID)->fi()
             ->fetchGroup('fromCaseID', 'module');
         foreach($importedModules as $fromCaseID => $modules) $importedModules[$fromCaseID] = array_combine(array_keys($modules), array_keys($modules));
 

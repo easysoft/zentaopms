@@ -353,11 +353,49 @@ class commonModel extends model
         $this->config->system   = isset($config['system']) ? $config['system'] : array();
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
+        $this->updateDBWebRoot($this->config->system);
+
         /* Overide the items defined in config/config.php and config/my.php. */
         if(isset($this->config->system->common))   $this->app->mergeConfig($this->config->system->common, 'common');
         if(isset($this->config->personal->common)) $this->app->mergeConfig($this->config->personal->common, 'common');
 
         $this->config->disabledFeatures = $this->config->disabledFeatures . ',' . $this->config->closedFeatures;
+    }
+
+    /**
+     * Check and update webRoot config in DB.
+     *
+     * @param  object    $dbConfig
+     * @access public
+     * @return void
+     */
+    public function updateDBWebRoot($dbConfig)
+    {
+        if(PHP_SAPI == 'cli') return;
+
+        global $config;
+        /* Check config webRoot right or not. */
+        if($config->webRoot[0] != '/') return;
+        if($config->webRoot[strlen($config->webRoot) - 1] != '/') return;
+
+        /* Get webRoot config in db. */
+        $webRootConfig = null;
+        foreach($dbConfig->common as $commonConfig)
+        {
+            if($commonConfig->key == 'webRoot')
+            {
+                $webRootConfig = $commonConfig;
+                break;
+            }
+        }
+
+        /* Init db webRoot config. */
+        if(empty($webRootConfig)) return $this->loadModel('setting')->setItem('system.common.webRoot', $config->webRoot);
+        if($config->webRoot == $webRootConfig->value) return;
+
+        /* Update db webRoot. */
+        $webRootConfig->value = $config->webRoot;
+        $this->loadModel('setting')->setItem('system.common.webRoot', $config->webRoot);
     }
 
     /**
@@ -397,7 +435,7 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
-            if($module == 'block') return true;
+            if($module == 'block' && stripos(',admin,set,delete,sort,resize,dashboard,dynamic,welcome,contribute,printblock,main,guide,close,', ",{$method},") !== false) return true;
             if($module == 'my' and $method == 'guidechangetheme') return true;
             if($module == 'misc' and $method == 'downloadclient') return true;
             if($module == 'misc' and $method == 'changelog')  return true;
@@ -421,11 +459,11 @@ class commonModel extends model
      */
     public function deny($module, $method, $reload = true)
     {
-        if($reload)
+        if($reload && $this->loadModel('user')->isLogon())
         {
             /* Get authorize again. */
             $user = $this->app->user;
-            $user->rights = $this->loadModel('user')->authorize($user->account);
+            $user->rights = $this->user->authorize($user->account);
             $user->groups = $this->user->getGroups($user->account);
             $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
             $this->session->set('user', $user);
@@ -3023,29 +3061,6 @@ EOF;
     }
 
     /**
-     * Check an entry of new API.
-     *
-     * @access public
-     * @return void
-     */
-    private function checkNewEntry()
-    {
-        $entry = $this->loadModel('entry')->getByKey(session_id());
-        if(!$entry or !$entry->account or !$this->checkIP($entry->ip)) return false;
-
-        $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->andWhere('deleted')->eq(0)->fetch();
-        if(!$user) return false;
-
-        $user->last   = time();
-        $user->rights = $this->loadModel('user')->authorize($user->account);
-        $user->groups = $this->user->getGroups($user->account);
-        $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
-        $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
-        $this->session->set('user', $user);
-        $this->app->user = $user;
-    }
-
-    /**
      * Check an entry.
      *
      * @access public
@@ -3053,9 +3068,6 @@ EOF;
      */
     public function checkEntry()
     {
-        /* if the API is new version, goto checkNewEntry. */
-        if($this->app->version) return $this->checkNewEntry();
-
         /* Old version. */
         if(!isset($_GET[$this->config->moduleVar]) or !isset($_GET[$this->config->methodVar])) $this->response('EMPTY_ENTRY');
         if($this->isOpenMethod($_GET[$this->config->moduleVar], $_GET[$this->config->methodVar])) return true;

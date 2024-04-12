@@ -292,7 +292,7 @@ class metricTao extends metricModel
         $scopeKey    = $metric->scope;
         $objectList  = $this->getObjectsWithPager($code, $scopeKey, $pager, $scopeValue);
 
-        $fieldList = array_merge($fieldList, array('id', 'value', 'date'));
+        $fieldList = array_merge($fieldList, array('id', 'value', 'date', 'calcType', 'calculatedBy'));
         $wrapFields = array_map(fn($value) => "`$value`", $fieldList);
         $dataFieldStr = implode(',', $wrapFields);
 
@@ -432,7 +432,7 @@ class metricTao extends metricModel
         $fields = array();
         foreach(array_keys((array)$record) as $field)
         {
-            if(in_array($field, array('id', 'metricID', 'metricCode', 'value', 'date', 'calcType'))) continue;
+            if(in_array($field, array('id', 'metricID', 'metricCode', 'value', 'date', 'calcType', 'calculatedBy'))) continue;
             if(!empty($record->$field)) $fields[] = $field;
         }
 

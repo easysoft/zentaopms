@@ -17,6 +17,7 @@ jsVar('dateType', $dateType);
 jsVar('calcType', $calcType);
 jsVar('calcRange', $calcRange);
 jsVar('noticeDeduplication', $lang->metric->tips->noticeDeduplication);
+jsVar('noticeDoneDeduplication', $lang->metric->tips->noticeDoneDeduplication);
 if($calcRange == 'single') 
 {
     jsVar('recalculateLogText', "$metric->name {$lang->metric->recalculateLog}");

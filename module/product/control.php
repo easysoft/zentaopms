@@ -350,7 +350,8 @@ class product extends control
         $params    = $isProjectStory ? "projectID=$projectID&" : '';
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
 
-        if($this->app->rawModule == 'product') $this->config->product->search['onMenuBar'] = 'yes';
+        $this->config->product->search['onMenuBar'] = 'yes';
+        if($this->app->rawModule != 'product') $this->config->product->search['module'] = $this->app->rawModule;
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $branch, $projectID);
 
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';

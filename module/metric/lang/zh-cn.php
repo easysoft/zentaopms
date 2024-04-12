@@ -50,6 +50,8 @@ $lang->metric->verifyFile         = '校验文件';
 $lang->metric->verifyResult       = '校验结果';
 $lang->metric->publish            = '发布';
 $lang->metric->moveFailTip        = '移动度量项文件失败';
+$lang->metric->checkFile          = '检查运行目录下度量项文件是否存在';
+$lang->metric->deleteFile         = '请联系管理员删除';
 $lang->metric->selectCount        = '已选<span class="font-medium checked-count">%s</span>项';
 $lang->metric->testMetric         = '测试度量';
 $lang->metric->calcTime           = '采集时间';
@@ -68,11 +70,20 @@ $lang->metric->startRecalculate   = '开始重算';
 $lang->metric->recalculateAction  = '重算度量项';
 $lang->metric->recalculateBtnText = '重新计算';
 $lang->metric->exit               = '完成';
+$lang->metric->zentaoPath         = '【禅道目录】';
 
 $lang->metric->yearFormat     = '%s年';
 $lang->metric->weekFormat     = '%s周';
 $lang->metric->monthDayFormat = '%s-%s';
 $lang->metric->yearMonthFormat = '%s-%s';
+
+$lang->metric->tableHeader = array();
+$lang->metric->tableHeader['project']   = '项目名称';
+$lang->metric->tableHeader['product']   = '产品名称';
+$lang->metric->tableHeader['execution'] = '执行名称';
+$lang->metric->tableHeader['dept']      = '团队名称';
+$lang->metric->tableHeader['user']      = '姓名';
+$lang->metric->tableHeader['program']   = '项目集名称';
 
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "请选择";
@@ -159,10 +170,12 @@ $lang->metric->noDataAfterCollect  = "度量范围内未产生数据，暂无数
 $lang->metric->legendBasicInfo  = '基本信息';
 $lang->metric->legendCreateInfo = '创建编辑信息';
 
-$lang->metric->confirmDelete      = "确认要删除吗？";
-$lang->metric->confirmDelist      = "确认要下架吗？";
-$lang->metric->confirmRecalculate = "重算结果可能会覆盖已存在的度量值，是否继续？";
-$lang->metric->notExist           = "度量项不存在";
+$lang->metric->confirmDelete       = "确认要删除吗？";
+$lang->metric->confirmDeleteInUsed = "该度量项已被大屏引用，确认要删除吗？";
+$lang->metric->confirmDelist       = "确认要下架吗？";
+$lang->metric->confirmDelistInUsed = "该度量项已被大屏引用，确认要下架吗？";
+$lang->metric->confirmRecalculate  = "重算结果可能会覆盖已存在的度量值，是否继续？";
+$lang->metric->notExist            = "度量项不存在";
 
 $lang->metric->browse          = '浏览度量项';
 $lang->metric->browseAction    = '度量项列表';
@@ -184,9 +197,9 @@ $lang->metric->featureBar['browse']['released'] = '已发布';
 $lang->metric->featureBar['preview']['project']   = '项目';
 $lang->metric->featureBar['preview']['product']   = '产品';
 $lang->metric->featureBar['preview']['execution'] = '执行';
-$lang->metric->featureBar['preview']['dept']      = '团队';
+//$lang->metric->featureBar['preview']['dept']      = '团队';
 $lang->metric->featureBar['preview']['user']      = '个人';
-$lang->metric->featureBar['preview']['program']   = '项目集';
+//$lang->metric->featureBar['preview']['program']   = '项目集';
 $lang->metric->featureBar['preview']['system']    = '系统';
 // $lang->metric->featureBar['preview']['code']      = '代码库';
 // $lang->metric->featureBar['preview']['pipeline']  = '流水线';
@@ -316,7 +329,6 @@ $lang->metric->implement->downloadPHP = "下载度量模板";
 $lang->metric->implement->instructionTips = array();
 $lang->metric->implement->instructionTips[] = '1.下载度量项模板文件，对文件进行编码开发操作，操作参考手册。<a class="btn text-primary ghost" target="_blank" href="https://www.zentao.net/book/zentaopms/1103.html">查看参考手册>></a>';
 $lang->metric->implement->instructionTips[] = '2.请将开发后的文件放到下方目录，<strong>需保持文件名称与度量代号一致</strong>。<br/> <span class="label code-slate">{tmpRoot}metric</span>';
-$lang->metric->implement->instructionTips[] = '3.执行命令赋予文件可执行权限：<p><span class="label code-slate">chmod 777 {tmpRoot}metric</span></p><p><span class="label code-slate">chmod 777 {tmpRoot}metric/{code}.php</span></p>';
 
 $lang->metric->verifyCustom = new stdclass();
 $lang->metric->verifyCustom->checkCustomCalcExists = array();
@@ -329,7 +341,7 @@ $lang->metric->verifyCustom->checkCustomCalcSyntax['error']      = '语法错误
 
 $lang->metric->verifyCustom->checkCustomCalcClassName = array();
 $lang->metric->verifyCustom->checkCustomCalcClassName['text']    = '检查度量项类名是否正确';
-$lang->metric->verifyCustom->checkCustomCalcClassName['error']   = '度量项类名错误';
+$lang->metric->verifyCustom->checkCustomCalcClassName['error']   = '度量项类名错误，必须与度量项代号保持一致';
 
 $lang->metric->verifyCustom->checkCustomCalcClassMethod = array();
 $lang->metric->verifyCustom->checkCustomCalcClassMethod['text']  = '检查度量项是否定义了必须的方法';
@@ -394,11 +406,12 @@ $lang->metric->tips->click2InsertData        = "点击 <span class='ke-icon-hold
 $lang->metric->tips->noticeUnchangeable      = '[范围]、[对象]、[目的]、[时间属性]、[代号]会影响度量值的获取，创建后不可变更。';
 $lang->metric->tips->noticeCode              = "代号必须是英文字母、数字或下划线的组合。";
 $lang->metric->tips->noticeRecalculate       = "更新数据中，请勿操作度量数据。";
-$lang->metric->tips->noticeRecalculateConfig = "系统会默认重新计算已发布度量项中，非定时任务采集的历史数据。";
+$lang->metric->tips->noticeRecalculateConfig = "系统会默认重新计算已发布且有时间属性的度量项中，非定时任务采集的历史数据。";
 $lang->metric->tips->noticeRepublish         = "若存在多次发布情况，则从最后一次发布时间之前开始重算。";
 $lang->metric->tips->noticeRewriteHistoryLib = "(勾选后，系统会基于历史数据重新计算已发布且有时间属性的度量项，并覆盖已存在的全部度量值)";
 $lang->metric->tips->banRecalculate          = "该度量项尚未发布或无时间属性。";
 $lang->metric->tips->noticeDeduplication     = "去除重复数据中...";
+$lang->metric->tips->noticeDoneDeduplication = "去除重复数据完成";
 
 $lang->metric->recalculateLog = "%s计算完成";
 

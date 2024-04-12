@@ -242,8 +242,8 @@ function initQueryControl(container, filter, object, field)
     control.val(filter.default);
     control.parent('.default-block').removeClass('hidden');
 
-    if(type == 'date')     setDateField('.form-date');
-    if(type == 'datetime') setDateField('.form-datetime');
+    if(type == 'date')     setDateField(control);
+    if(type == 'datetime') setDateField(control);
     if(type == 'select')
     {
         var picker = control.data('zui.picker');
@@ -318,6 +318,13 @@ function initResultControl(container, filter, object, field)
 
 function exportData()
 {
+    if(typeof pivot == 'undefined')
+    {
+        const $domObj = $(".table-condensed")[0];
+        exportFile($domObj);
+        return;
+    }
+
     var pivotInfo = getQueryInfo();
     var exportRange  = $('#range').val();
     if(exportRange == 'current')

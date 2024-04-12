@@ -235,31 +235,32 @@ class execution extends control
         if($this->config->edition == 'ipd') $tasks = $this->loadModel('story')->getAffectObject($tasks, 'task');
 
         /* Assign. */
-        $this->view->tasks        = $tasks;
-        $this->view->hasTasks     = !empty($tasks) || !empty($this->task->getExecutionTasks($executionID));
-        $this->view->summary      = $this->execution->summary($tasks);
-        $this->view->tabID        = 'task';
-        $this->view->pager        = $pager;
-        $this->view->recTotal     = $pager->recTotal;
-        $this->view->recPerPage   = $pager->recPerPage;
-        $this->view->orderBy      = $orderBy;
-        $this->view->browseType   = $browseType;
-        $this->view->status       = $status;
-        $this->view->users        = $this->user->getPairs('noletter|all');
-        $this->view->param        = $param;
-        $this->view->executionID  = $executionID;
-        $this->view->execution    = $execution;
-        $this->view->productID    = $productID;
-        $this->view->product      = $product;
-        $this->view->modules      = $modules;
-        $this->view->moduleID     = $moduleID;
-        $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
-        $this->view->memberPairs  = $memberPairs;
-        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->view->setModule    = !$execution->multiple ? false : true;
-        $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
-        $this->view->showBranch   = $showBranch;
-        $this->view->projectName  = $this->loadModel('project')->getById($execution->project)->name . ' / ' . $execution->name;
+        $this->view->tasks         = $tasks;
+        $this->view->hasTasks      = !empty($tasks) || !empty($this->task->getExecutionTasks($executionID));
+        $this->view->summary       = $this->execution->summary($tasks);
+        $this->view->tabID         = 'task';
+        $this->view->pager         = $pager;
+        $this->view->recTotal      = $pager->recTotal;
+        $this->view->recPerPage    = $pager->recPerPage;
+        $this->view->orderBy       = $orderBy;
+        $this->view->browseType    = $browseType;
+        $this->view->status        = $status;
+        $this->view->users         = $this->user->getPairs('noletter|all');
+        $this->view->param         = $param;
+        $this->view->executionID   = $executionID;
+        $this->view->execution     = $execution;
+        $this->view->productID     = $productID;
+        $this->view->product       = $product;
+        $this->view->modules       = $modules;
+        $this->view->moduleID      = $moduleID;
+        $this->view->moduleTree    = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
+        $this->view->memberPairs   = $memberPairs;
+        $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $this->view->setModule     = true;
+        $this->view->showAllModule = !$execution->multiple && !$execution->hasProduct ? false : true;
+        $this->view->canBeChanged  = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->showBranch    = $showBranch;
+        $this->view->projectName   = $this->loadModel('project')->getById($execution->project)->name . ' / ' . $execution->name;
 
         $this->display();
     }
@@ -1513,6 +1514,7 @@ class execution extends control
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        if($execution->type == 'kanban' and $this->config->vision != 'lite' and $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
         $this->loadModel('kanban');
         $this->app->loadClass('date');
@@ -2749,6 +2751,9 @@ class execution extends control
     public function taskKanban($executionID, $browseType = 'all', $orderBy = 'order_asc', $groupBy = '')
     {
         if(!$this->loadModel('common')->checkPrivByObject('execution', $executionID)) return print(js::error($this->lang->execution->accessDenied) . js::locate($this->createLink('execution', 'all')));
+        $this->execution->setMenu($executionID);
+        $execution = $this->execution->getById($executionID);
+        if($execution->type == 'kanban' and $this->config->vision != 'lite' and $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
         if(empty($groupBy)) $groupBy = 'default';
 
         /* Save to session. */
@@ -2766,8 +2771,6 @@ class execution extends control
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $this->execution->setMenu($executionID);
-        $execution = $this->execution->getById($executionID);
         if($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review')))
         {
             $browseType = 'task';

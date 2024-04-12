@@ -1511,7 +1511,7 @@ class actionModel extends model
         $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
 
         $efforts = $this->dao->select('id')->from(TABLE_EFFORT)
-            ->where($condition)
+            ->where("($condition)")
             ->beginIF($period != 'all')
             ->beginIF(isset($begin))->andWhere('date')->gt($begin)->fi()
             ->beginIF(isset($end))->andWhere('date')->lt($end)->fi()

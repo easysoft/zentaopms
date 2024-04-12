@@ -13,8 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('flow', $config->global->flow);?>
 <?php js::set('ditto', $lang->testcase->ditto);?>
-<?php js::set('canImportModules', $canImportModules);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
+<?php js::set('libID', $libID);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class='input-group w-300px'>
