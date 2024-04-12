@@ -95,30 +95,28 @@ $buildProgressBars = function(object $product, bool $longBlock): node
 $buildTesttasks = function(object $product, bool $longBlock): node|null
 {
     global $lang;
-    $notClosedTesttasks = array();
-    if(!empty($product->notClosedTesttasks))
+    $unclosedTesttasks = array();
+    if(!empty($product->unclosedTesttasks))
     {
-        foreach($product->notClosedTesttasks as $waitTesttask)
+        foreach($product->unclosedTesttasks as $waitTesttask)
         {
-            $notClosedTesttasks[] = div
+            $unclosedTesttasks[] = div
             (
                 setClass('clip', $longBlock ? 'py-1' : 'py-0.5'),
                 hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$waitTesttask->id}")), $waitTesttask->name) : span($waitTesttask->name)
             );
-            if(count($notClosedTesttasks) >= 2) break;
+            if(count($unclosedTesttasks) >= 4) break;
         }
     }
 
-    if(empty($notClosedTesttasks) && empty($doingTesttasks)) return null;
-
-    return $notClosedTesttasks ? col
+    return $unclosedTesttasks ? col
     (
         setClass('min-w-0 flex-1 gap-1.5 px-3 pt-2 border-l'),
-        div(setClass('font-bold'), $lang->block->qastatistic->notClosedTesttasks),
+        div(setClass('font-bold'), $lang->block->qastatistic->unclosedTesttasks),
         div
         (
             setClass($longBlock ? 'py-2' : 'pt-2'),
-            $notClosedTesttasks
+            $unclosedTesttasks
         ),
     ) : null;
 };
