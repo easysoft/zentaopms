@@ -196,7 +196,7 @@ $lang->block->default['full']['my'][] = array('title' => "最新动态",        
 $lang->block->default['full']['my'][] = array('title' => "团队成就",                               'module' => 'teamachievement', 'code' => 'teamachievement', 'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->productCommon}总览",             'module' => 'product',         'code' => 'overview',        'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon}总览",             'module' => 'project',         'code' => 'overview',        'width' => '1');
-$lang->block->default['full']['my'][] = array('title' => "{$lang->executionCommon}总览",           'module' => 'execution',       'code' => 'overview',        'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "{$lang->execution->common}总览",         'module' => 'execution',       'code' => 'overview',        'width' => '1');
 
 $lang->block->default['doc'][] = array('title' => '文档统计',                   'module' => 'doc', 'code' => 'docstatistic',    'width' => '2');
 $lang->block->default['doc'][] = array('title' => '我收藏的文档',               'module' => 'doc', 'code' => 'docmycollection', 'width' => '2');
@@ -218,7 +218,7 @@ $lang->block->availableBlocks['case']        = '用例';
 $lang->block->availableBlocks['story']       = "{$lang->SRCommon}";
 $lang->block->availableBlocks['requirement'] = "{$lang->URCommon}";
 $lang->block->availableBlocks['product']     = $lang->productCommon . '列表';
-$lang->block->availableBlocks['execution']   = $lang->executionCommon . '列表';
+$lang->block->availableBlocks['execution']   = $lang->execution->common . '列表';
 $lang->block->availableBlocks['plan']        = "计划列表";
 $lang->block->availableBlocks['release']     = '发布列表';
 $lang->block->availableBlocks['build']       = '版本列表';
@@ -633,9 +633,9 @@ $lang->block->executionstatistic->undoneTask        = '未完成';
 $lang->block->executionstatistic->yesterdayDoneTask = '昨日完成';
 
 $lang->block->executionoverview = new stdclass();
-$lang->block->executionoverview->totalExecution = "{$lang->executionCommon}总量";
+$lang->block->executionoverview->totalExecution = "{$lang->execution->common}总量";
 $lang->block->executionoverview->thisYear       = '今年完成';
-$lang->block->executionoverview->statusCount    = "未关闭{$lang->executionCommon}状态分布";
+$lang->block->executionoverview->statusCount    = "未关闭{$lang->execution->common}状态分布";
 
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->overview                = '总览数据';

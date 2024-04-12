@@ -196,7 +196,7 @@ $lang->block->default['full']['my'][] = array('title' => 'Dynamic',             
 $lang->block->default['full']['my'][] = array('title' => "Team",                                            'module' => 'teamachievement', 'code' => 'teamachievement', 'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->productCommon} Overview",                 'module' => 'product',         'code' => 'overview',        'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon} Overview",                 'module' => 'project',         'code' => 'overview',        'width' => '1');
-$lang->block->default['full']['my'][] = array('title' => "{$lang->executionCommon} Overview",               'module' => 'execution',       'code' => 'overview',        'width' => '1');
+$lang->block->default['full']['my'][] = array('title' => "{$lang->execution->common} Overview",             'module' => 'execution',       'code' => 'overview',        'width' => '1');
 
 $lang->block->default['doc'][] = array('title' => 'Statistic',                       'module' => 'doc', 'code' => 'docstatistic',    'width' => '2');
 $lang->block->default['doc'][] = array('title' => 'My Collection Document',          'module' => 'doc', 'code' => 'docmycollection', 'width' => '2');
@@ -218,7 +218,7 @@ $lang->block->availableBlocks['case']        = 'Cases';
 $lang->block->availableBlocks['story']       = 'Stories';
 $lang->block->availableBlocks['requirement'] = 'Requirements';
 $lang->block->availableBlocks['product']     = $lang->productCommon . 's';
-$lang->block->availableBlocks['execution']   = $lang->executionCommon . 's';
+$lang->block->availableBlocks['execution']   = $lang->execution->common . 's';
 $lang->block->availableBlocks['plan']        = 'Plans';
 $lang->block->availableBlocks['release']     = 'Releases';
 $lang->block->availableBlocks['build']       = 'Builds';
@@ -635,7 +635,7 @@ $lang->block->executionstatistic->yesterdayDoneTask = 'Complated Yesterday';
 $lang->block->executionoverview = new stdclass();
 $lang->block->executionoverview->totalExecution = 'Total';
 $lang->block->executionoverview->thisYear       = 'This Year';
-$lang->block->executionoverview->statusCount    = "Status of unclosed {$lang->executionCommon}";
+$lang->block->executionoverview->statusCount    = "Status of unclosed {$lang->execution->common}";
 
 $lang->block->productoverview = new stdclass();
 $lang->block->productoverview->overview                = 'Total Overview';
