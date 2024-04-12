@@ -523,7 +523,7 @@ class control extends baseControl
         if(!$flow) return $fields;
 
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
-        if(!$action) return $fields;
+        if(!$action || $action->extensionType != 'extend') return $fields;
 
         $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList);
@@ -549,7 +549,7 @@ class control extends baseControl
         if(!$flow) return '';
 
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
-        if(!$action) return '';
+        if(!$action || $action->extensionType != 'extend') return '';
 
         $fieldList = $this->workflowaction->getFields($flow->module, !empty($action->action) ? $action->action: '');
 
@@ -592,7 +592,7 @@ class control extends baseControl
         if(!$flow) return array();
 
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
-        if(!$action) return array();
+        if(!$action || $action->extensionType != 'extend') return array();
 
         $wrapControl  = array('textarea', 'richtext', 'file');
         $fieldList    = $this->workflowaction->getFields($flow->module, $action->action);
