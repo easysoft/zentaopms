@@ -9,7 +9,11 @@ window.afterPageUpdate = function($target, info, options)
     }
     window.filterChecked = {};
 
-    if(viewType == 'single') $('.metric-tree .metric-current')[0].scrollIntoView({block: 'center', inline: 'start' })
+    if(viewType == 'single')
+    {
+      var metricCurrent = $('.metric-tree .metric-current');
+      if(metricCurrent.length) metricCurrent[0].scrollIntoView({block: 'center', inline: 'start' })
+    }
     if(viewType == 'multiple')
     {
         window.renderCheckedLabel();
