@@ -58,7 +58,6 @@ formBatch
         set::control('date'),
         set::width('160px'),
         set::ditto(true),
-        set::defaultDitto('off'),
         set::value(empty($task->estStarted) ? '' : $task->estStarted)
     ),
     formBatchItem
@@ -69,7 +68,6 @@ formBatch
         set::control('date'),
         set::width('160px'),
         set::ditto(true),
-        set::defaultDitto('off'),
         set::value(empty($task->deadline) ? '' : $task->deadline)
     ),
     formBatchItem
@@ -80,7 +78,6 @@ formBatch
         set::items($members),
         set::width('160px'),
         set::ditto(true),
-        set::defaultDitto('off')
     ),
     formBatchItem
     (
