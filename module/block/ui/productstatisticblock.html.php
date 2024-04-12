@@ -65,10 +65,30 @@ statisticBlock
     set::items($items),
     $product ? div
     (
-        setClass($longBlock ? 'row' : 'col gap-3', 'h-full overflow-hidden items-stretch p-2'),
-        center
+        setClass($longBlock ? 'row' : 'col gap-3 pl-3', 'h-full overflow-hidden items-stretch p-2'),
+        div
         (
             setClass('flex-1 gap-4'),
+            div
+            (
+                setClass('row items-center gap-1', $longBlock ? 'py-2' : ''),
+                $lang->block->productstatistic->deliveryRate,
+                icon
+                (
+                    setClass('text-light text-sm'),
+                    toggle::tooltip
+                    (
+                        array
+                        (
+                            'title'     => $lang->block->tooltips['deliveryRate'],
+                            'placement' => 'bottom',
+                            'type'      => 'white',
+                            'className' => 'text-dark border border-light leading-5'
+                        )
+                    ),
+                    'help'
+                )
+            ),
             progressCircle
             (
                 set::percent($product->storyDeliveryRate),
@@ -76,30 +96,10 @@ statisticBlock
                 set::text(false),
                 set::circleWidth(0.06),
                 div(span(setClass('text-2xl font-bold'), $product->storyDeliveryRate), '%'),
-                div
-                (
-                    setClass('row text-sm text-gray items-center gap-1'),
-                    $lang->block->productstatistic->deliveryRate,
-                    icon
-                    (
-                        setClass('text-light text-sm'),
-                        toggle::tooltip
-                        (
-                            array
-                            (
-                                'title'     => $lang->block->tooltips['deliveryRate'],
-                                'placement' => 'bottom',
-                                'type'      => 'white',
-                                'className' => 'text-dark border border-light leading-5'
-                            )
-                        ),
-                        'help'
-                    )
-                )
             ),
             row
             (
-                setClass('justify-center items-center gap-4'),
+                setClass('justify-center items-center gap-4 mt-4'),
                 center
                 (
                     div
