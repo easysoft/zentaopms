@@ -123,43 +123,13 @@ function e()
 {
 }
 
-function getLangData($langPath)
-{
-    global $app, $lang;
-    if(strpos($langPath, 'lang') != false)
-    {
-        $langData = $lang;
-        $langList = explode('.', substr($langPath, 6));
-        foreach($langList as $index => $langName)
-        {
-            if(isset($langData->$langName))
-            {
-                $langData = $langData->$langName;
-            }
-            elseif($index == 1)
-            {
-                $app->loadLang($langList[0]);
-                if(!isset($langData->$langName)) return $langPath;
-                $langData = $langData->$langName;
-            }
-            else
-            {
-                return $langPath;
-            }
-
-        }
-        return $langData;
-    }
-}
-
 class tester extends result
 {
     public $webdriver;
     public $page;
     public $config;
-    public $app;
-    public $lang;
     public $cookieFile;
+    public $langFile;
 
     /**
      * Initialize the basic configuration of the ui test framework.
@@ -169,10 +139,8 @@ class tester extends result
      */
     public function __construct()
     {
-        global $config, $app, $lang;
+        global $config;
         $this->config = $config;
-        $this->app    = $app;
-        $this->lang   = $lang;
 
         $this->webdriver  = new webdriver($config->uitest->chrome);
         $this->page       = new page($this->webdriver);
@@ -191,7 +159,7 @@ class tester extends result
     {
         if(!$account)  $account  = $this->config->uitest->defaultAccount;
         if(!$password) $password = $this->config->uitest->defaultPassword;
-        $webRoot = rtrim($this->config->uitest->webRoot, '/') . '/';
+        $webRoot = $this->getWebRoot();
 
         $this->page->openURL($webRoot)->deleteCookie();
 
@@ -210,6 +178,10 @@ class tester extends result
         $this->page->dom->submit->click();
 
         $this->page->saveCookie($this->cookieFile);
+
+        sleep(1);
+        $this->langFile = '/tmp/lang_' . str_replace('.', '_', parse_url($webRoot, PHP_URL_HOST));
+        if(!file_exists($this->langFile)) $this->initLang();
 
         return $this->page;
     }
@@ -244,6 +216,23 @@ class tester extends result
     }
 
     /**
+     * Get cookie value in cookie file.
+     *
+     * @param  string    $cookieName
+     * @access public
+     * @return bool|string
+     */
+    public function getCookieValueFromFile($cookieName)
+    {
+        if(!file_exists($this->cookieFile)) return false;
+
+        $cookies = json_decode(file_get_contents($this->cookieFile), true);
+        if(empty($cookies)) return false;
+
+        foreach($cookies as $cookie) if($cookie['name'] == $cookieName) return $cookie['value'];
+    }
+
+    /**
      * Open a test URL.
      *
      * @param  string $module
@@ -258,7 +247,7 @@ class tester extends result
         if(!$module || !$method) return;
         $this->module = $module;
         $this->method = $method;
-        $webRoot = rtrim($this->config->uitest->webRoot, '/') . '/';
+        $webRoot = $this->getWebRoot();
         $cookies = json_decode(file_get_contents($this->cookieFile), true);
 
         if($this->config->requestType == 'GET')
@@ -351,6 +340,43 @@ class tester extends result
         }
 
         return $errors;
+    }
+
+    /**
+     * Get web root in test site.
+     *
+     * @access public
+     * @return string
+     */
+    public function getWebRoot()
+    {
+        return rtrim($this->config->uitest->webRoot, '/') . '/';
+    }
+
+    /**
+     * Init langage file on login test site.
+     *
+     * @access public
+     * @return bool
+     */
+    public function initLang()
+    {
+        $webRoot = $this->getWebRoot();
+        if(!$webRoot) return false;
+        if(!$this->config->uitest->langClient) return false;
+
+        $zentaosid = $this->getCookieValueFromFile('zentaosid');
+        if($zentaosid)
+        {
+            $url = $webRoot . "api.php/v1/langs?modules=all&lang={$this->config->uitest->langClient}&zentaosid={$zentaosid}";
+            $response = common::http($url);
+            if(empty($response)) return false;
+
+            file_put_contents(json_encode($response), $this->langFile);
+            return true;
+        }
+
+        return false;
     }
 
     /**

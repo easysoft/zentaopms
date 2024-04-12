@@ -2,6 +2,7 @@
 /** * Config 主文件
  */
 $config->uitest = new stdclass();
+$config->uitest->langClient = 'zh-cn';
 
 $config->uitest->baseRoot = dirname(__FILE__, 2);
 
