@@ -45,12 +45,11 @@ foreach($projects as $projectID => $projectName)
 /* 燃尽图。Burn chart. */
 $burn = div
 (
-    setClass('h-28'),
     div(setClass('font-bold mb-2'), $lang->block->executionstatistic->burn),
     burn
     (
         set::responsive(false),
-        set::height(80),
+        set::height(112),
         set::referenceLine(true),
         set::lineSize(3),
         set::data($chartData['burnLine'])
@@ -58,17 +57,12 @@ $burn = div
 );
 
 /* 进度环。Progress circle. */
-$progressCircle = progressCircle
+$progressCircle = div
 (
-    setClass('relative w-28 h-28 hide-before-init opacity-0 transition-opacity'),
-    set::percent($execution->progress),
-    set::size(112),
-    set::text(false),
-    set::circleWidth(0.06),
-    div(span(setClass('text-2xl font-bold'), $execution->progress), '%'),
+    setClass('w-full'),
     row
     (
-        setClass('text-gray items-center gap-1'),
+        setClass('font-bold items-center gap-1 mb-2'),
         $lang->block->executionstatistic->progress,
         icon
         (
@@ -84,13 +78,26 @@ $progressCircle = progressCircle
                 'className' => 'leading-5'
             ))
         )
+    ),
+    div
+    (
+        setClass('w-full center'),
+        progressCircle
+        (
+            setClass('relative w-28 h-28 hide-before-init opacity-0 transition-opacity'),
+            set::percent($execution->progress),
+            set::size(112),
+            set::text(false),
+            set::circleWidth(0.06),
+            div(span(setClass('text-2xl font-bold'), $execution->progress), '%')
+        )
     )
 );
 
 /* 工时信息。 Hours info. */
 $hoursInfo = row
 (
-    setClass('justify-evenly w-full'),
+    setClass('justify-evenly w-full py-1'),
     cell
     (
         setClass('flex-1 text-center'),
