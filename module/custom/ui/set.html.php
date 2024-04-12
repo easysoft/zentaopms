@@ -549,15 +549,23 @@ div
     (
         set::formID('settingForm'),
         set::headingClass('justify-start'),
-        to::headingActions($headingTips),
         setClass('flex-auto'),
         setClass(!empty($sidebarMenu) ? 'ml-0.5' : null),
         set::actionsClass($actionWidth),
         set::actions($formActions),
-        span
+        div
         (
-            setClass('text-md font-bold'),
-            $lang->custom->$module->fields[$field]
+            setClass('flex items-center'),
+            span
+            (
+                setClass('text-md font-bold'),
+                $lang->custom->$module->fields[$field]
+            ),
+            span
+            (
+                setClass('ml-2'),
+                $headingTips
+            )
         ),
         $formItems
     )
