@@ -6,5 +6,7 @@ window.onRenderProjectNameCell = function(result, info)
         result.push(html);
     }
 
+    if(info.col.name === 'end' && info.row.data.end == LONG_TIME) result[0] = longTimeText;
+
     return result;
 }

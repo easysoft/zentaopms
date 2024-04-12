@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('delayInfo', $lang->project->delayInfo);
+jsVar('LONG_TIME', LONG_TIME);
+jsVar('longTimeText', $lang->project->longTime);
 
 foreach($projects as $project) $project->consumed .= $lang->execution->workHourUnit;
 if(!$longBlock)
