@@ -65,7 +65,7 @@ statisticBlock
     set::items($items),
     $product ? div
     (
-        setClass($longBlock ? 'row' : 'col gap-3 pl-3', 'h-full overflow-hidden items-stretch p-2'),
+        setClass($longBlock ? 'row' : 'col gap-3 pl-3 pt-1', 'h-full overflow-hidden items-stretch p-2'),
         div
         (
             setClass('flex-1 gap-4'),
@@ -95,7 +95,7 @@ statisticBlock
                 set::size(112),
                 set::text(false),
                 set::circleWidth(0.06),
-                div(span(setClass('text-2xl font-bold'), $product->storyDeliveryRate), '%'),
+                div(span(setClass('text-2xl font-bold'), $product->storyDeliveryRate), '%')
             ),
             row
             (
@@ -181,7 +181,7 @@ statisticBlock
         ),
         col
         (
-            setClass('flex-1 gap-1.5 pr-3 py-2', $longBlock ? '' : 'pl-3'),
+            setClass('flex-1 gap-1.5 pr-3 ', $longBlock ? 'py-2' : 'pl-3'),
             div($lang->block->productstatistic->storyStatistics),
             row
             (
@@ -221,7 +221,7 @@ statisticBlock
         ),
         ($product->newPlan || $product->newExecution || $product->newRelease) ? col
         (
-            setClass('flex-1 gap-4 pr-3 py-2', $longBlock ? 'border-l pl-4' : 'pl-3'),
+            setClass('flex-1 gap-3 pr-3 ', $longBlock ? 'border-l pl-4 py-2' : 'pl-3 pt-2'),
             div($lang->block->productstatistic->news),
             $product->newPlan ? div
             (
