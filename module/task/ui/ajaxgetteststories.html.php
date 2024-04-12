@@ -78,7 +78,7 @@ formBatch
         set::label($lang->task->assignedTo),
         set::control('picker'),
         set::items($members),
-        set::width('128px'),
+        set::width('160px'),
         set::ditto(true),
         set::defaultDitto('off')
     ),
