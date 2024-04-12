@@ -1,7 +1,1 @@
-#kanban {
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 120px);
-    overflow: auto;
-}
+#kanban { display: flex; flex-direction: column; height: calc(100vh - 120px); overflow: auto; }

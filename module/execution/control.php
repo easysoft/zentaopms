@@ -1981,14 +1981,14 @@ class execution extends control
 
         $this->app->session->set('executionStoryList', $this->app->getURI(true), 'execution');
 
-        $this->view->title       = $this->lang->execution->storyKanban;
-        $this->view->kanbanData  = $this->story->getKanbanGroupData($stories);
-        $this->view->realnames   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->executionID = $executionID;
-        $this->view->execution   = $execution;
-        $this->view->productID   = $productID;
-        $this->view->total       = count($stories);
-        $this->view->product     = $this->product->getByID($productID);
+        $this->view->title        = $this->lang->execution->storyKanban;
+        $this->view->kanbanData   = $this->story->getKanbanGroupData($stories);
+        $this->view->realnames    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->executionID  = $executionID;
+        $this->view->execution    = $execution;
+        $this->view->productID    = $productID;
+        $this->view->total        = count($stories);
+        $this->view->product      = $this->product->getByID($productID);
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
