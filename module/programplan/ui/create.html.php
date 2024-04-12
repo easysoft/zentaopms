@@ -242,12 +242,12 @@ jsVar('productID',        $productID);
 jsVar('planID',           $planID);
 jsVar('type',             $executionType);
 jsVar('project',          $project);
-jsVar('cropStageTip',     $lang->programplan->cropStageTip);
-jsVar('ipdStagePoint',    $config->review->ipdReviewPoint);
-jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
 jsVar('plans',            $plans);
-jsvar('reviewedPoints',   $reviewedPoints);
-jsVar('reviewedPointTip', $lang->programplan->reviewedPointTip);
+jsVar('cropStageTip',     $lang->programplan->cropStageTip);
+jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewPoint : array());
+jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
+jsvar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
+jsVar('reviewedPointTip', $project->model == 'ipd' ? $lang->programplan->reviewedPointTip : '');
 
 featureBar(li
 (
