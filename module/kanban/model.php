@@ -744,8 +744,9 @@ class kanbanModel extends model
             $regionData = array();
 
             $heading = new stdclass();
-            $heading->title   = zget($regions, $regionID, '');
-            $heading->actions = $this->getRegionActions($kanbanID, $regionID, count($regions));
+            $heading->title       = new stdClass();
+            $heading->title->html = zget($regions, $regionID, '') . '<span class="icon icon-angle-top"></span>';
+            $heading->actions     = $this->getRegionActions($kanbanID, $regionID, count($regions));
 
             $regionData['key']               = "region{$regionID}";
             $regionData['id']                = $regionID;
@@ -930,9 +931,10 @@ class kanbanModel extends model
         {
             $regionData = array();
 
-            $heading = new stdclass();
-            $heading->title   = $regionName;
-            $heading->actions = $this->getRDRegionActions($executionID, $regionID);
+            $heading              = new stdclass();
+            $heading->title       = new stdClass();
+            $heading->title->html = $regionName . '<span class="icon icon-angle-top"></span>';
+            $heading->actions     = $this->getRDRegionActions($executionID, $regionID);
 
             $regionData['key']               = "region{$regionID}";
             $regionData['id']                = $regionID;

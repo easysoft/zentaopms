@@ -1,3 +1,4 @@
 .card-title { color: var(--color-black-rgb); }
 .kanban-header-title .text-danger {color:rgb(255, 93, 93); opacity: 1;}
 .as-subtitle {opacity: 0.5; text-wrap: nowrap; font-weight: 700;}
+.is-collapsed .icon-angle-top:before { content: "\e313"; }

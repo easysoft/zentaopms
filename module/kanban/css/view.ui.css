@@ -35,3 +35,4 @@
 #kanbanList.is-in-fullscreen {background: var(--color-canvas);}
 #kanbanList.is-in-fullscreen .kanban-list {height: 100%}
 #kanbanList.is-in-fullscreen .btn {display: none;}
+.is-collapsed .icon-angle-top:before { content: "\e313"; }
