@@ -32,11 +32,12 @@ $config->repo->dtable->fieldList['path']['hint']  = true;
 $config->repo->dtable->fieldList['path']['width'] = '260';
 $config->repo->dtable->fieldList['path']['group'] = 1;
 
-$config->repo->dtable->fieldList['lastSubmit']['name']     = 'lastSubmitTime';
-$config->repo->dtable->fieldList['lastSubmit']['title']    = $lang->repo->lastSubmitTime;
-$config->repo->dtable->fieldList['lastSubmit']['type']     = 'datetime';
-$config->repo->dtable->fieldList['lastSubmit']['sortType'] = false;
-$config->repo->dtable->fieldList['lastSubmit']['width']    = '128';
+$config->repo->dtable->fieldList['lastSubmit']['name']       = 'lastSubmitTime';
+$config->repo->dtable->fieldList['lastSubmit']['title']      = $lang->repo->lastSubmitTime;
+$config->repo->dtable->fieldList['lastSubmit']['type']       = 'datetime';
+$config->repo->dtable->fieldList['lastSubmit']['formatDate'] = 'MM-dd hh:mm';
+$config->repo->dtable->fieldList['lastSubmit']['sortType']   = false;
+$config->repo->dtable->fieldList['lastSubmit']['width']      = '100';
 
 $config->repo->dtable->fieldList['job']['name']  = 'job';
 $config->repo->dtable->fieldList['job']['hidden'] = true;
