@@ -268,7 +268,6 @@ class holidayTest
      */
     public function isHolidayTest(string $date): string|array
     {
-        $date = date('Y-m-d', strtotime($date));
         $objects = $this->objectModel->isHoliday($date);
 
         if(dao::isError()) return dao::getError();
