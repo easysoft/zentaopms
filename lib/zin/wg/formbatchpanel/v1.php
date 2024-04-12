@@ -46,7 +46,7 @@ class formBatchPanel extends formPanel
     public static function getPageCSS(): ?string
     {
         return <<<'CSS'
-        .panel-form-batch {margin: 0; padding-bottom: 0}
+        .panel-form-batch {margin: 0 auto; padding-bottom: 0}
         .panel-form-batch > .panel-heading {padding-left: 0; padding-right: 0}
         .panel-form-batch > .panel-body {position: relative; padding: 0; margin: 0 -16px}
         .panel-form-batch .form {gap: 0}

@@ -25,7 +25,7 @@ if(empty($gitlabIssues))
 {
     panel
     (
-        setStyle('--zt-page-form-max-width', 'auto'),
+        setStyle('--zt-panel-form-max-width', 'auto'),
         setClass('panel-form'),
         set::size('lg'),
         set::title($lang->gitlab->importIssue),

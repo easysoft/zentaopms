@@ -291,8 +291,8 @@ class formPanel extends panel
         $props = parent::buildProps();
         $props[] = setClass("is-$defaultMode");
 
-        if($width)     $props[] = setCssVar('--zt-page-form-max-width', $width);
-        elseif($batch) $props[] = setCssVar('--zt-page-form-max-width', 'auto');
+        if($width)     $props[] = setCssVar('--zt-panel-form-max-width', $width);
+        elseif($batch) $props[] = setCssVar('--zt-panel-form-max-width', 'auto');
         if($shadow)    $props[] = setClass('shadow');
 
         return $props;
