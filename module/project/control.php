@@ -751,7 +751,8 @@ class project extends control
         $this->loadModel('task');
         $this->loadModel('programplan');
         $this->loadModel('product');
-        $this->session->set('executionList', $this->app->getURI(true), 'project');
+        $this->session->set('executionList',   $this->app->getURI(true), 'project');
+        $this->session->set('projectPlanList', $this->app->getURI(true), 'project');
 
         if($this->cookie->showTask) $this->session->set('taskList', $this->app->getURI(true), 'project');
 

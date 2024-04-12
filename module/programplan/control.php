@@ -94,7 +94,7 @@ class programplan extends control
                 if(!isset($errors['message'])) $this->send(array('result' => 'fail', 'callback' => array('name' => 'addRowErrors', 'params' => array($errors))));
             }
 
-            $locate = $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
+            $locate = $this->session->projectPlanList ? $this->session->projectPlanList : $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
@@ -122,7 +122,7 @@ class programplan extends control
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
 
         /* Unset percent for create IPD project.*/
-        if($project->model == 'ipd') $this->config->programplan->list->customCreateFields = str_replace(',percent', '', $this->config->programplan->list->customCreateFields); 
+        if($project->model == 'ipd') $this->config->programplan->list->customCreateFields = str_replace(',percent', '', $this->config->programplan->list->customCreateFields);
 
         $viewData = new stdclass();
         $viewData->productID     = $productID;
