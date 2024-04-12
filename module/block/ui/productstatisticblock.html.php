@@ -71,7 +71,7 @@ statisticBlock
             setClass('flex-1 gap-4'),
             div
             (
-                setClass('row items-center gap-1', $longBlock ? 'py-2' : ''),
+                setClass('row items-center gap-1 font-bold', $longBlock ? 'py-2' : ''),
                 $lang->block->productstatistic->deliveryRate,
                 icon
                 (
@@ -182,7 +182,7 @@ statisticBlock
         col
         (
             setClass('flex-1 gap-1.5 pr-3 ', $longBlock ? 'py-2' : 'pl-3'),
-            div($lang->block->productstatistic->storyStatistics),
+            div(setClass('font-bold'), $lang->block->productstatistic->storyStatistics),
             row
             (
                 setClass('text-sm text-gray gap-2'),
@@ -222,7 +222,7 @@ statisticBlock
         ($product->newPlan || $product->newExecution || $product->newRelease) ? col
         (
             setClass('flex-1 gap-3 pr-3 ', $longBlock ? 'border-l pl-4 py-2' : 'pl-3 pt-2'),
-            div($lang->block->productstatistic->news),
+            div(setClass('font-bold'), $lang->block->productstatistic->news),
             $product->newPlan ? div
             (
                 setClass($longBlock ? 'col' : 'row', 'gap-2'),

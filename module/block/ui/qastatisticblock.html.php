@@ -128,7 +128,7 @@ $buildTesttasks = function(object $product, bool $longBlock): node|null
     return col
     (
         setClass('min-w-0 flex-1 gap-1.5 px-3 pt-2 border-l'),
-        div($lang->block->qastatistic->latestTesttask),
+        div(setClass('font-bold'), $lang->block->qastatistic->latestTesttask),
         empty($doingTesttasks) ? null : div
         (
             setClass($longBlock ? 'py-2' : 'pt-2'),
@@ -156,10 +156,10 @@ statisticBlock
         setClass('h-full overflow-hidden items-stretch px-2', $longBlock ? 'row py-3' : 'col gap-2 pt-1'),
         center
         (
-            setClass('gap-2 px-5', $testTasksView ? 'flex-none' : 'flex-1'),
+            setClass('gap-2 px-5 justify-start ', $testTasksView ? 'flex-none' : 'flex-1', $longBlock ? ' py-2' : ''),
             div
             (
-                setClass('w-full'),
+                setClass('w-full font-bold'),
                 $lang->block->qastatistic->fixBugRate
             ),
             progressCircle
@@ -208,7 +208,7 @@ statisticBlock
             col
             (
                 setClass('flex-1 gap-1.5 px-3 py-2'),
-                div($lang->block->qastatistic->bugStatistics),
+                div(setClass('font-bold'), $lang->block->qastatistic->bugStatistics),
                 !empty($product) ? $buildProgressBars($product, $longBlock) : null
             ),
             $testTasksView
