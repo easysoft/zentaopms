@@ -152,7 +152,6 @@ $lang->pivot->manhourTotal  = "总工时";
 $lang->pivot->validRate     = "有效率";
 $lang->pivot->validRateTips = "方案为已解决或延期/状态为已解决或已关闭";
 $lang->pivot->unplanned     = "未计划";
-$lang->pivot->workhour      = '每天工时';
 $lang->pivot->workday       = '每天工时';
 $lang->pivot->diffDays      = '工作日天数';
 
