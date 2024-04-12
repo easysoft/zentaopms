@@ -3084,10 +3084,37 @@ class storyModel extends model
      */
     public function getKanbanGroupData(array $stories): array
     {
-        $storyGroup = array();
-        foreach($stories as $story) $storyGroup[$story->stage][$story->id] = $story;
+        $this->app->loadConfig('execution');
+        $cols = $this->config->execution->storyKanbanCols;
 
-        return $storyGroup;
+        $kanbanData = array();
+        foreach($cols as $index => $stage)
+        {
+            $col = new stdclass();
+            $col->name  = $index + 1;
+            $col->title = $this->lang->story->stageList[$stage];
+            $col->key   = $stage;
+            $kanbanData['cols'][] = $col;
+        }
+
+        $storyGroup = array();
+        foreach($stories as $story)
+        {
+            unset($story->deleted);
+            $index = array_search($story->stage, $cols) + 1;
+
+            $story->statusLabel = zget($this->lang->story->statusList, $story->status, '');
+            $storyGroup[$index][] = $story;
+        }
+
+        $lane = new stdclass();
+        $lane->name  = 1;
+        $lane->title = '';
+
+        $kanbanData['lanes'][]  = $lane;
+        $kanbanData['items'][1] = $storyGroup;
+
+        return $kanbanData;
     }
 
     /**
