@@ -127,7 +127,8 @@ $canCreate ? formPanel
     (
         set::name('branchName'),
         set::label($lang->repo->branchName),
-        set::required(true)
+        set::required(true),
+        set::value("{$objectType}-{$objectID}")
     ),
     set::actions(array('submit'))
 ) : null;
