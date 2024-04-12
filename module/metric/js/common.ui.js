@@ -2,9 +2,16 @@ window.addUnit = function(e)
 {
     if($(e.target).prop('checked'))
     {
-        $('#unitBox').addClass('hidden');
-        $('#addUnitBox').removeClass('hidden');
-        $("[name^='customUnit']").prop('checked', true);
+        var $picker = $('#unitBox').find('.picker').zui('picker').$;
+        if($picker.state.open) $picker.toggle();
+
+        setTimeout(function()
+        {
+          $('#unitBox').addClass('hidden');
+          $('#addUnitBox').removeClass('hidden');
+          $("[name^='customUnit']").prop('checked', true);
+
+        }, 150);
     }
     else
     {
