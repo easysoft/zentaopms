@@ -29,4 +29,4 @@ $storys = $tester->dao->select('releasedDate')->from(TABLE_STORY)->where('id')->
 
 $condition1 = ($date1 - strtotime($storys[0]->releasedDate)) < 10;
 $condition2 = ($date2 - strtotime($storys[7]->releasedDate)) < 10;
-r($condition1 && $condition2) && p('') && e(1);     //判断需求的releasedDate是否更新成功,差值在10秒内
+r($condition1 && $condition2) && p() && e(1);     //判断需求的releasedDate是否更新成功,差值在10秒内
