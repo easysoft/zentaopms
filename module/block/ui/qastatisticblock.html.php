@@ -105,7 +105,7 @@ $buildTesttasks = function(object $product, bool $longBlock): node|null
                 setClass('clip', $longBlock ? 'py-1' : 'py-0.5'),
                 hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$waitTesttask->id}")), $waitTesttask->name) : span($waitTesttask->name)
             );
-            if(count($unclosedTesttasks) >= 4) break;
+            if(count($unclosedTesttasks) >= 6) break;
         }
     }
 
