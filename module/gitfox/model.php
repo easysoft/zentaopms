@@ -35,7 +35,7 @@ class gitfoxModel extends model
      */
     public function getApiRoot(int $gitfoxID, bool $sudo = true): string|object
     {
-        $gitfox = $this->getByID($gitfoxID);
+        $gitfox = $this->fetchByID($gitfoxID);
         if(!$gitfox || $gitfox->type != 'gitfox') return '';
 
         $apiRoot = new stdclass;
