@@ -1223,6 +1223,16 @@ class execution extends control
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
 
+        if($this->app->tab == 'project')
+        {
+            $projectID   = $this->session->project;
+            $project     = $this->project->getById($projectID);
+            $this->project->setMenu($projectID);
+            $this->view->project = $project;
+            if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->lang->execution->common = $this->lang->execution->stage;
+            if($project->model == 'ipd') $this->config->execution->list->customBatchEditFields = 'days,team,desc,PO,QD,PM,RD';
+        }
+
         if($this->post->name)
         {
             $postData   = fixer::input('post')->get();
@@ -1243,20 +1253,8 @@ class execution extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->executionList));
         }
 
-        if($this->app->tab == 'project')
-        {
-            $projectID   = $this->session->project;
-            $project     = $this->project->getById($projectID);
-            $allProjects = $this->project->getPairsByModel($project->model, 'noclosed', isset($projectID) ? $projectID : 0);
-            $this->project->setMenu($projectID);
-            $this->view->project = $project;
-            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->lang->execution->common = $this->lang->execution->stage;
-            if($project->model == 'ipd') $this->config->execution->list->customBatchEditFields = 'days,team,desc,PO,QD,PM,RD';
-        }
-        else
-        {
-            $allProjects = $this->project->getPairsByModel('all', 'noclosed', isset($projectID) ? $projectID : 0);
-        }
+        $projectModel = $this->app->tab == 'project' ? $project->model : 'all';
+        $allProjects = $this->project->getPairsByModel($projectModel, 'noclosed', isset($projectID) ? $projectID : 0);
 
         if(!$this->post->executionIDList)
         {

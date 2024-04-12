@@ -534,14 +534,15 @@ class executionModel extends model
 
             /* Name check. */
             $parentID = $parents[$executionID];
-            if(isset($nameList[$executionName]))
+            if(isset($nameList[$executionName]) && !empty($executionName))
             {
                 foreach($nameList[$executionName] as $repeatID)
                 {
                     if($parentID == $parents[$repeatID])
                     {
                         $type = $oldExecution->type == 'stage' ? 'stage' : 'agileplus';
-                        dao::$errors["name[$executionID]"] = sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
+                        $repeatTip = $parentID == $projectID ? $this->lang->programplan->error->sameName : sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
+                        dao::$errors["name[$executionID]"] = $repeatTip;
                     }
                 }
             }
