@@ -45,7 +45,8 @@ formPanel
             set::name('token'),
             set::label($lang->gitlab->token),
             set::value($gitlab->token),
-            set::placeholder($lang->gitlab->placeholder->token)
+            set::placeholder($lang->gitlab->placeholder->token),
+            set::control('textarea')
         )
     )
 );

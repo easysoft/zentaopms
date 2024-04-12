@@ -52,7 +52,8 @@ formPanel
             set::name('token'),
             set::label($lang->jenkins->token),
             set::value($jenkins->token),
-            set::placeholder($lang->jenkins->tokenFirst)
+            set::placeholder($lang->jenkins->tokenFirst),
+            set::control('textarea')
         )
     ),
     formRow

@@ -227,7 +227,8 @@ formPanel
             set::label($lang->gitlab->token),
             set::name('token'),
             set::placeholder($lang->gitlab->placeholder->token),
-            set::required(true)
+            set::required(true),
+            set::control('textarea')
         )
     ),
     formRow

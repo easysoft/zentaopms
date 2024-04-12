@@ -59,7 +59,6 @@ formPanel
             set::name('SCM'),
             set::label($lang->product->typeAB),
             set::required(true),
-            set::value('Gitlab'),
             set::control('picker'),
             set::items($lang->repo->scmList)
         ),

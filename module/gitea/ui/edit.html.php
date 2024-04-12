@@ -42,7 +42,8 @@ formPanel
         (
             set::name('token'),
             set::label($lang->gitea->token),
-            set::value($gitea->token)
+            set::value($gitea->token),
+            set::control('textarea')
         )
     )
 );

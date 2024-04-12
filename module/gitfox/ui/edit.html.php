@@ -45,7 +45,8 @@ formPanel
             set::name('token'),
             set::label($lang->gitfox->token),
             set::value($gitfox->token),
-            set::placeholder($lang->gitfox->placeholder->token)
+            set::placeholder($lang->gitfox->placeholder->token),
+            set::control('textarea')
         )
     )
 );
