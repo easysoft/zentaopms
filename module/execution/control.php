@@ -1966,13 +1966,13 @@ class execution extends control
      */
     public function storyKanban(int $executionID)
     {
-        /* Compatibility IE8*/
-        if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) helper::header('X-UA-Compatible', 'IE=EmulateIE7');
-
+        $this->app->loadLang('kanban');
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getByID($executionID);
         $stories   = $this->loadModel('story')->getExecutionStories($executionID);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
+
+        $stories = array_filter($stories, function($story) {return in_array($story->stage, $this->config->execution->storyKanbanCols);});
 
         /* Get execution's product. */
         $productID = 0;
@@ -1981,12 +1981,14 @@ class execution extends control
 
         $this->app->session->set('executionStoryList', $this->app->getURI(true), 'execution');
 
-        $this->view->title        = $this->lang->execution->storyKanban;
-        $this->view->stories      = $this->story->getKanbanGroupData($stories);
-        $this->view->realnames    = $this->loadModel('user')->getPairs('noletter');
-        $this->view->executionID  = $executionID;
-        $this->view->execution    = $execution;
-        $this->view->productID    = $productID;
+        $this->view->title       = $this->lang->execution->storyKanban;
+        $this->view->kanbanData  = $this->story->getKanbanGroupData($stories);
+        $this->view->realnames   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->executionID = $executionID;
+        $this->view->execution   = $execution;
+        $this->view->productID   = $productID;
+        $this->view->total       = count($stories);
+        $this->view->product     = $this->product->getByID($productID);
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
