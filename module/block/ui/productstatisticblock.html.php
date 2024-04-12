@@ -237,7 +237,7 @@ statisticBlock
                     ) : $product->newPlan->title,
                     label
                     (
-                        setClass('gray-pale rounded-full px-1'),
+                        setClass('gray-pale rounded-full px-1 nowrap'),
                         zget($lang->productplan->statusList, $product->newPlan->status)
                     )
                 )
@@ -256,7 +256,7 @@ statisticBlock
                     ) : $product->newExecution->name,
                     label
                     (
-                        setClass('important-pale rounded-full'),
+                        setClass('important-pale rounded-full nowrap'),
                         zget($lang->execution->statusList, $product->newExecution->status)
                     )
                 )
@@ -275,7 +275,7 @@ statisticBlock
                     ) : $product->newRelease->name,
                     label
                     (
-                        setClass('rounded-full', ($product->newRelease->status == 'normal' ? 'success-pale' : 'gray-pale')),
+                        setClass('rounded-full nowrap', ($product->newRelease->status == 'normal' ? 'success-pale' : 'gray-pale')),
                         zget($lang->release->statusList, $product->newRelease->status)
                     )
                 )
