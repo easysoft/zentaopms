@@ -22,6 +22,13 @@ $menus = array();
 $moreMenus = array();
 foreach($hasViewPriv as $type => $bool)
 {
+    $data = $type == 'story' ? $stories : ${"{$type}s"};
+    if(empty($data))
+    {
+        unset($hasViewPriv[$type]);
+        continue;
+    }
+
     $selected = key($hasViewPriv);
     if(($longBlock && $count > 9 && $index >= 8) || (!$longBlock && $count > 3 && $index >= 2))
     {
@@ -76,7 +83,6 @@ foreach($hasViewPriv as $type => $bool)
 
     if(empty($config->block->{$configType}->dtable->fieldList)) continue;
     if(!$longBlock && !empty($config->block->{$configType}->dtable->short->fieldList)) $config->block->{$configType}->dtable->fieldList = $config->block->{$configType}->dtable->short->fieldList;
-    if(empty($data)) $data = array();
 
     if($type == 'review')
     {
