@@ -1225,8 +1225,8 @@ class execution extends control
 
         if($this->app->tab == 'project')
         {
-            $projectID   = $this->session->project;
-            $project     = $this->project->getById($projectID);
+            $projectID = $this->session->project;
+            $project   = $this->project->getById($projectID);
             $this->project->setMenu($projectID);
             $this->view->project = $project;
             if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->lang->execution->common = $this->lang->execution->stage;
@@ -1254,7 +1254,7 @@ class execution extends control
         }
 
         $projectModel = $this->app->tab == 'project' ? $project->model : 'all';
-        $allProjects = $this->project->getPairsByModel($projectModel, 'noclosed', isset($projectID) ? $projectID : 0);
+        $allProjects  = $this->project->getPairsByModel($projectModel, 'noclosed', isset($projectID) ? $projectID : 0);
 
         if(!$this->post->executionIDList)
         {
