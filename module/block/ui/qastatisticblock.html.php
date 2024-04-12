@@ -95,53 +95,32 @@ $buildProgressBars = function(object $product, bool $longBlock): node
 $buildTesttasks = function(object $product, bool $longBlock): node|null
 {
     global $lang;
-    $waitTesttasks = array();
-    if(!empty($product->waitTesttasks))
+    $notClosedTesttasks = array();
+    if(!empty($product->notClosedTesttasks))
     {
-        foreach($product->waitTesttasks as $waitTesttask)
+        foreach($product->notClosedTesttasks as $waitTesttask)
         {
-            $waitTesttasks[] = div
+            $notClosedTesttasks[] = div
             (
                 setClass('clip', $longBlock ? 'py-1' : 'py-0.5'),
                 hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$waitTesttask->id}")), $waitTesttask->name) : span($waitTesttask->name)
             );
-            if(count($waitTesttasks) >= 2) break;
+            if(count($notClosedTesttasks) >= 2) break;
         }
     }
 
-    $doingTesttasks = array();
-    if(!empty($product->doingTesttasks))
-    {
-        foreach($product->doingTesttasks as $doingTesttask)
-        {
-            $doingTesttasks[] = div
-            (
-                setClass('clip', $longBlock ? 'py-1' : 'py-0.5'),
-                common::hasPriv('testtask', 'cases') ? a(set('href', createLink('testtask', 'cases', "taskID={$doingTesttask->id}")), $doingTesttask->name) : span($doingTesttask->name)
-            );
-            if(count($doingTesttasks) >= 2) break;
-        }
-    }
+    if(empty($notClosedTesttasks) && empty($doingTesttasks)) return null;
 
-    if(empty($waitTesttasks) && empty($doingTesttasks)) return null;
-
-    return col
+    return $notClosedTesttasks ? col
     (
         setClass('min-w-0 flex-1 gap-1.5 px-3 pt-2 border-l'),
-        div(setClass('font-bold'), $lang->block->qastatistic->latestTesttask),
-        empty($doingTesttasks) ? null : div
+        div(setClass('font-bold'), $lang->block->qastatistic->notClosedTesttasks),
+        div
         (
             setClass($longBlock ? 'py-2' : 'pt-2'),
-            div(setClass('text-sm', $longBlock ? 'pb-2' : 'pb-1'), $lang->testtask->statusList['doing']),
-            $doingTesttasks
+            $notClosedTesttasks
         ),
-        empty($waitTesttasks) ? null : div
-        (
-            setClass($longBlock ? 'py-2' : 'pt-2'),
-            div(setClass('text-sm', $longBlock ? 'pb-2' : 'pb-1'), $lang->testtask->statusList['wait']),
-            $waitTesttasks
-        )
-    );
+    ) : null;
 };
 
 $testTasksView = !empty($product) ? $buildTesttasks($product, $longBlock) : null;
