@@ -17,6 +17,10 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 $fields         = $this->config->programplan->form->create;
 $enabledPoints  = isset($enabledPoints)  ? $enabledPoints  : new stdclass();
 $reviewedPoints = isset($reviewedPoints) ? $reviewedPoints : array();
+$customKey      = 'createFields';
+
+/* Generate custom config key by project model. */
+if(in_array($project->model, array('waterfallplus', 'ipd'))) $customKey = 'create' . ucfirst($project->model) . 'Fields';
 
 /* Generate title that is tailored to specific situation. */
 $title = $lang->programplan->create;
@@ -271,6 +275,7 @@ formBatchPanel
     set::onRenderRow(jsRaw('window.onRenderRow')),
     to::headingActions(array($fnGenerateSubPlanManageFields())),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),
+    set::customUrlParams("module=programplan&section=custom&key=$customKey"),
     set::items($fnGenerateFields()),
     set::data($fnGenerateDefaultData()),
     $app->session->projectPlanList ? set::actions(array('submit', array('text' => $lang->cancel, 'url' => $app->session->projectPlanList))) : null,

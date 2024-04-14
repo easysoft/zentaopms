@@ -90,7 +90,7 @@ $config->custom->customFields['bug']         = array('custom' => array('createFi
 $config->custom->customFields['caselib']     = array('custom' => array('createFields'));
 $config->custom->customFields['execution']   = array('custom' => array('batchEditFields'));
 $config->custom->customFields['product']     = array('custom' => array('createFields', 'batchEditFields'));
-$config->custom->customFields['programplan'] = array('custom' => array('createFields'), 'customAgilePlus' => array('createFields'));
+$config->custom->customFields['programplan'] = array('custom' => array('createWaterfallFields', 'createIpdFields', 'createWaterfallplusFields'), 'customAgilePlus' => array('createFields'));
 $config->custom->customFields['story']       = array('custom' => array('createFields', 'batchCreateFields', 'batchEditFields'));
 $config->custom->customFields['task']        = array('custom' => array('createFields', 'batchCreateFields', 'batchEditFields'));
 $config->custom->customFields['testcase']    = array('custom' => array('createFields', 'batchCreateFields', 'batchEditFields'));

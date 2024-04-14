@@ -415,6 +415,7 @@ class custom extends control
         $this->app->loadLang($module);
         $this->app->loadConfig($module);
 
+        if($module == 'programplan' && $section == 'custom') $key = 'createFields';
         $customFields = $this->config->$module->list->{'custom' . ucfirst($key)};
         $showFields   = $this->config->$module->custom->$key;
         return $this->send(array('result' => 'success', 'key' => $key, 'callback' => 'loadCurrentPage', 'customFields' => $customFields, 'showFields' => $showFields));

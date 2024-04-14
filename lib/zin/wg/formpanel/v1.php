@@ -158,7 +158,8 @@ class formPanel extends panel
 
             if($listFields && $key)
             {
-                $urlParams        = "module={$app->rawModule}&section=custom&key={$key}";
+                /* Custom button submit params. */
+                $urlParams        = $this->prop('customUrlParams') ? $this->prop('customUrlParams') : "module={$app->rawModule}&section=custom&key={$key}";
                 $headingActions[] = formSettingBtn
                 (
                     set::customFields(array('list' => $listFields, 'show' => $showFields)),
