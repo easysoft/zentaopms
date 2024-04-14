@@ -20,7 +20,7 @@ window.onRenderRow = function(row, rowIdx, data)
                 let hint     = $value;
 
                 /* 如果已经评审过，则置灰不能选。*/
-                if(reviewedPoints[$value] !== undefined && reviewedPoints[$value].result)
+                if(reviewedPoints[$value] !== undefined && reviewedPoints[$value].disabled)
                 {
                     disabled = true;
                     hint     = reviewedPointTip;
@@ -61,7 +61,7 @@ window.onRenderRow = function(row, rowIdx, data)
                 let $title = $(element).attr('title');
 
                 /* 如果该评审点以提交评审，则不能取消选择。*/
-                if(reviewedPoints[$title] !== undefined && reviewedPoints[$title].result)
+                if(reviewedPoints[$title] !== undefined && reviewedPoints[$title].disabled)
                 {
                     $(element).attr('title', reviewedPointTip); // 修改title
                     $(element).find(".picker-deselect-btn").remove(); // 禁用点击事件
