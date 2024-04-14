@@ -673,8 +673,6 @@ class installModel extends model
             \$slaveDB->driver      = '{$this->config->db->driver}';
             \$slaveDB->encoding    = '{$this->config->db->encoding}';
             \$slaveDB->prefix      = '{$this->config->db->prefix}';
-            \$slaveDB->persistant  = $this->config->db->persistant;
-            \$slaveDB->strictMode  = $this->config->db->strictMode;
             \$config->slaveDBList  = array(\$slaveDB);
         }
 EOT;
