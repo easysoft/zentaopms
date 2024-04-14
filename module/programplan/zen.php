@@ -274,7 +274,6 @@ class programplanZen extends programplan
         $createFields       = 'create' . ucfirst($customModel) . 'Fields';
         $custom             = $viewData->executionType == 'stage' ? 'custom' : 'customAgilePlus';
         $customCreateFields = $viewData->executionType == 'stage' ? 'customCreateFields' : 'customAgilePlusCreateFields';
-
         $defaultFields      = $this->config->programplan->$custom->defaultFields;
 
         foreach(explode(',', $this->config->programplan->list->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->{$field};

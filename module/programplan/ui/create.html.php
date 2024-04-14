@@ -17,6 +17,7 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 $fields         = $this->config->programplan->form->create;
 $enabledPoints  = isset($enabledPoints)  ? $enabledPoints  : new stdclass();
 $reviewedPoints = isset($reviewedPoints) ? $reviewedPoints : array();
+$canParallel    = isset($canParallel)    ? $canParallel    : false;
 $customKey      = 'createFields';
 
 /* Generate custom config key by project model. */
@@ -48,7 +49,7 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
 };
 
 /* Generate checkboxes for sub-stage management. */
-$fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $executionType)
+$fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $executionType, $canParallel)
 {
     if((empty($planID) && $project->model != 'ipd') || !in_array($project->model, array('waterfallplus', 'ipd'))) return div();
 
@@ -62,7 +63,9 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
                 set::name('parallel'),
                 set::text($value),
                 set::value($key),
-                set::checked($key == $project->parallel)
+                set::checked($key == $project->parallel),
+                set::disabled($canParallel),
+                on::change('window.onChangeParallel')
             ));
         }
 

@@ -325,13 +325,16 @@ class programplanModel extends model
         $this->loadModel('action');
         $this->loadModel('execution');
         $linkProducts = $this->programplanTao->getLinkProductsForCreate($projectID, $productID);
+        $project      = $this->fetchByID($projectID, 'project');
 
         /* Set each plans. */
         $updateUserViewIdList = array();
         $milestone            = 0;
         $enabledPoints        = array();
+        $parallel             = 0;
         foreach($plans as $plan)
         {
+            $parallel = isset($plan->parallel) ? $plan->parallel : 0;
             if(!empty($plan->point)) $enabledPoints = array_merge($enabledPoints, $plan->point); 
             if($plan->milestone) $milestone = 1;
             if($plan->id)
@@ -354,8 +357,7 @@ class programplanModel extends model
                 $stageID = $this->programplanTao->insertStage($plan, $projectID, $productID, $parentID);
                 if(dao::isError()) return false;
 
-                $project = $this->fetchByID($projectID, 'project');
-                $extra   = ($project && $project->hasProduct and !empty($linkProducts['products'])) ? implode(',', $linkProducts['products']) : '';
+                $extra = ($project && $project->hasProduct and !empty($linkProducts['products'])) ? implode(',', $linkProducts['products']) : '';
                 $this->action->create('execution', $stageID, 'opened', '', $extra);
 
                 $this->execution->updateProducts($stageID, $linkProducts);
@@ -365,6 +367,7 @@ class programplanModel extends model
 
         /* If child plans has milestone, update parent plan set milestone eq 0 . */
         if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
+        if($project && $project->model == 'ipd') $this->dao->update(TABLE_PROJECT)->set('parallel')->eq($parallel)->where('id')->eq($projectID)->exec();
         if($updateUserViewIdList) $this->loadModel('user')->updateUserView($updateUserViewIdList, 'sprint');
         if($enabledPoints) $this->programplanTao->updatePoint($projectID, $enabledPoints);
         return true;

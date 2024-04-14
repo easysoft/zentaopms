@@ -121,6 +121,12 @@ window.onChangeExecutionType = function(event)
     loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${planID}&type=` + $(event.target).val()));
 };
 
+window.onChangeParallel = function(event)
+{
+    const parallel = $(event.target).val();
+    $('input[name^="parallel"]').val(parallel);
+}
+
 /**
  * Add row errors.
  *
