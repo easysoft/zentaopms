@@ -107,7 +107,7 @@ featureBar
             set::rootClass('ml-4')
         )
     ),
-    $config->edition == 'ipd' ? li
+    $project->model == 'ipd' ? li
     (
         checkbox
         (
