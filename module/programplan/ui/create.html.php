@@ -200,6 +200,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
             $item->acl       = 'open';
             $item->milestone = 0;
             $item->point     = implode(',', $points);
+            $item->parallel  = $stage->parallel;
 
             $items[] = $item;
         }
@@ -232,6 +233,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $item->desc         = $plan->desc;
         $item->setMilestone = isset($plan->setMilestone) ? $plan->setMilestone : false;
         $item->order        = $plan->order;
+        $item->parallel     = $plan->parallel;
         $item->point        = implode(',', $points);
         if(in_array($config->edition, array('max', 'ipd')) && $executionType == 'stage')
         {
