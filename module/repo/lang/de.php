@@ -179,12 +179,15 @@ $lang->repo->logStyles['D'] = 'Delete';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['GitFox']     = 'GitFox';
-$lang->repo->scmList['Gitlab']     = 'GitLab';
-$lang->repo->scmList['Gogs']       = 'Gogs';
-if(!$config->inQuickon) $lang->repo->scmList['Gitea']      = 'Gitea';
-$lang->repo->scmList['Git']        = 'Git';
-$lang->repo->scmList['Subversion'] = 'SVN';
+$lang->repo->scmList['GitFox'] = 'GitFox';
+$lang->repo->scmList['Gitlab'] = 'GitLab';
+if(!$config->inQuickon)
+{
+    $lang->repo->scmList['Gogs']       = 'Gogs';
+    $lang->repo->scmList['Gitea']      = 'Gitea';
+    $lang->repo->scmList['Git']        = 'Git';
+    $lang->repo->scmList['Subversion'] = 'SVN';
+}
 
 $lang->repo->aclList['private'] = 'Private(The product and related project personnel can access it)';
 $lang->repo->aclList['open']    = 'Open(Users with privileges to DevOps can access it)';

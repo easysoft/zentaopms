@@ -28,10 +28,13 @@ if($config->inQuickon) $lang->space->featureBar['browse']['running']  = 'Running
 if($config->inQuickon) $lang->space->featureBar['browse']['stopped']  = 'Stopped';
 if($config->inQuickon) $lang->space->featureBar['browse']['abnormal'] = 'Abnormal';
 
-$lang->space->appType['gitfox']    = 'GitFox';
-$lang->space->appType['gitlab']    = 'GitLab';
-$lang->space->appType['gitea']     = 'Gitea';
-$lang->space->appType['gogs']      = 'Gogs';
+$lang->space->appType['gitfox'] = 'GitFox';
+$lang->space->appType['gitlab'] = 'GitLab';
+if(!$config->inQuickon)
+{
+    $lang->space->appType['gitea'] = 'Gitea';
+    $lang->space->appType['gogs']  = 'Gogs';
+}
 $lang->space->appType['jenkins']   = 'Jenkins';
 $lang->space->appType['sonarqube'] = 'SonarQube';
 $lang->space->appType['nexus']     = 'Nexus';
