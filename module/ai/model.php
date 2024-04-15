@@ -2751,11 +2751,12 @@ class aiModel extends model
             ->fetchAll();
     }
 
-    public function getAssistantsByModel($modelId)
+    public function getAssistantsByModel($modelId, $enabled = true)
     {
         return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
             ->where('modelId')->eq($modelId)
             ->andWhere('deleted')->eq('0')
+            ->andWhere('enabled')->eq($enabled ? '1' : '0')
             ->fetchAll();
     }
 
