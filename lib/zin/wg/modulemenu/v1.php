@@ -293,7 +293,7 @@ class moduleMenu extends wg
                         set::size('sm'),
                         set::icon('menu-arrow-left text-gray'),
                         set::hint($app->lang->collapse),
-                        on::click()->call('$this.closest(".sidebar").sidebar("toggle")')
+                        on::click()->do('$this.closest(".sidebar").sidebar("toggle");')
                     )
                 ),
                 $isInSidebar && !empty($header) ? on::init()->do('$("#mainContainer").addClass("has-module-menu-header")') : null
