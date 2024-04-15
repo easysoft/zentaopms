@@ -337,8 +337,6 @@ class installZen extends install
             \$slaveDB->driver      = getenv('ZT_DB_DRIVER');
             \$slaveDB->encoding    = getenv('ZT_DB_ENCODING');
             \$slaveDB->prefix      = getenv('ZT_DB_PREFIX');
-            \$slaveDB->persistant  = $this->config->db->persistant;
-            \$slaveDB->strictMode  = $this->config->db->strictMode;
             \$config->slaveDBList  = array(\$slaveDB);
  EOT;
 
