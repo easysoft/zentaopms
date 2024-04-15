@@ -862,12 +862,12 @@ class myModel extends model
     {
         $vision     = $this->config->vision;
         $reviewList = array();
-        if($browseType == 'all' || $browseType == 'demand')   $reviewList = array_merge($reviewList, $this->getReviewingDemands());
-        if($browseType == 'all' || $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
-        if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase')) $reviewList = array_merge($reviewList, $this->getReviewingCases());
-        if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
-        if($browseType == 'all' || $browseType == 'feedback') $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
-        if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))       $reviewList = array_merge($reviewList, $this->getReviewingOA());
+        if($browseType == 'all' || $browseType == 'demand')                                              $reviewList = array_merge($reviewList, $this->getReviewingDemands());
+        if($browseType == 'all' || $browseType == 'story')                                               $reviewList = array_merge($reviewList, $this->getReviewingStories());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase'))                       $reviewList = array_merge($reviewList, $this->getReviewingCases());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                        $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
+        if($browseType == 'all' || $browseType == 'feedback')                                            $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))                             $reviewList = array_merge($reviewList, $this->getReviewingOA());
         if($browseType == 'all' || !in_array($browseType, array('story', 'testcase', 'feedback', 'oa'))) $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(empty($reviewList)) return array();
 
