@@ -326,7 +326,7 @@ class installZen extends install
 \$config->default->lang = getenv('ZT_DEFAULT_LANG');
 
 \$hasSlaveDB = (string)getenv('ENABLE_DB_SLAVE');
-if(\$hasSlaveDB)
+if(\$hasSlaveDB && \$hasSlaveDB != 'false')
 {
     \$slaveDB = new stdclass();
     \$slaveDB->host        = getenv('ZT_SLAVE_DB_HOST');
