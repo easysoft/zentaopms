@@ -2010,13 +2010,14 @@ class blockZen extends block
             }
         }
 
-        if(common::hasPriv('todo',  'view'))                                                              $hasViewPriv['todo']        = true;
-        if(common::hasPriv('task',  'view'))                                                              $hasViewPriv['task']        = true;
-        if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                           $hasViewPriv['story']       = true;
-        if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite') $hasViewPriv['requirement'] = true;
-        if(common::hasPriv('bug',   'view')     && !in_array($this->config->vision, array('lite', 'or'))) $hasViewPriv['bug']         = true;
-        if(common::hasPriv('testcase', 'view')  && !in_array($this->config->vision, array('lite', 'or'))) $hasViewPriv['testcase']    = true;
-        if(common::hasPriv('testtask', 'cases') && !in_array($this->config->vision, array('lite', 'or'))) $hasViewPriv['testtask']    = true;
+        if(common::hasPriv('todo',  'view'))                                                                      $hasViewPriv['todo']        = true;
+        if(common::hasPriv('demand', 'view') && $this->config->edition == 'ipd' && $this->config->vision == 'or') $hasViewPriv['demand']      = true;
+        if(common::hasPriv('task',  'view'))                                                                      $hasViewPriv['task']        = true;
+        if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                   $hasViewPriv['story']       = true;
+        if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')         $hasViewPriv['requirement'] = true;
+        if(common::hasPriv('bug',   'view')     && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['bug']         = true;
+        if(common::hasPriv('testcase', 'view')  && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['testcase']    = true;
+        if(common::hasPriv('testtask', 'cases') && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['testtask']    = true;
         if(common::hasPriv('risk',  'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasRisk)    $hasViewPriv['risk']        = true;
         if(common::hasPriv('issue', 'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasIssue)   $hasViewPriv['issue']       = true;
         if(common::hasPriv('meeting', 'view')   && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasMeeting) $hasViewPriv['meeting']     = true;
@@ -2029,6 +2030,7 @@ class blockZen extends block
             if($hasRisk) $objectList += array('risk' => 'risks');
             if($hasIssue) $objectList += array('issue' => 'issues');
             $objectList += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
+            if($this->config->edition == 'ipd' && $this->config->vision == 'or') $objectList += array('demand' => 'demands');
         }
 
         if($this->config->edition == 'biz') $objectList += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
@@ -2046,6 +2048,7 @@ class blockZen extends block
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
                 ->beginIF($objectType == 'issue' || $objectType == 'risk')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
                 ->beginIF($objectType == 'ticket')->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')->fi()
+                ->beginIF($objectType == 'demand')->leftJoin(TABLE_DEMANDPOOL)->alias('t2')->on('t1.pool = t2.id')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
                 ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->andWhere('t1.vision')->eq($this->config->vision)->fi()
@@ -2057,6 +2060,7 @@ class blockZen extends block
                 ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()
                 ->beginIF($objectType == 'issue' || $objectType == 'risk')->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($objectType == 'ticket')->andWhere('t1.status')->in('wait,doing,done')->fi()
+                ->beginIF($objectType == 'demand')->andWhere('t2.deleted')->eq(0)->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();
