@@ -1,11 +1,11 @@
 {
   "pkg": {
     "xuanxuan": {
-      "gitVersion": "f501e962d26241befbe0b18cf770e41e0f49d7e4",
-      "version": "8.0.2"
+      "gitVersion": "43de52ba50fdb43ac1bc89e623e29e3ecdd4cce1",
+      "version": "8.0.3"
     },
     "zentaoext": {
-      "gitVersion": "master",
+      "gitVersion": "release-20.0",
       "gitRepo": "easycorp/zentaoext"
     },
     "zdoo": {
@@ -15,7 +15,7 @@
       "gitVersion": "master"
     },
     "downgrade": {
-      "gitVersion": "release-20.0.stable",
+      "gitVersion": "release-20.0",
       "gitRepo": "devops/zentaopms-downgrade"
     }
   },
