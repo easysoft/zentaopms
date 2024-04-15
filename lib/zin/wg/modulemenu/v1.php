@@ -50,7 +50,7 @@ class moduleMenu extends wg
         .module-menu-header.is-fixed .module-title {font-size: var(--font-size-base);}
         .module-menu-header.is-fixed > .btn-close {position: absolute; right: 0; font-weight: normal;}
         .module-menu-header.is-fixed > .btn-close:not(:hover) {opacity: .5;}
-        .sidebar.is-collapsed > .module-menu-header.is-fixed {display: flex;}
+        .sidebar > .module-menu-header.is-fixed {display: flex!important;}
         .sidebar-left > .module-menu {margin-right: -8px}
         .is-expanded > .module-menu ~ .sidebar-gutter > .gutter-toggle {opacity: 0}
         .has-module-menu-header .sidebar-left {transition-property: width;}
