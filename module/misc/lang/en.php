@@ -113,6 +113,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['20.0']        = '2024-04-15';
 $lang->misc->releaseDate['18.12']       = '2024-04-02';
 $lang->misc->releaseDate['20.0.beta2']  = '2024-03-15';
 $lang->misc->releaseDate['18.11']       = '2024-02-28';
@@ -225,6 +226,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['20.0'][]        = array('title' => "", 'desc' => '');
 $lang->misc->feature->all['18.12'][]       = array('title' => "To better streamline our services, we have discontinued information and associated evaluations for non-R&D users, while implementing timely reminders for impending technical service deadlines. Our latest update includes a comprehensive approach to metric management, offering customizable metrics, a robust library of foundational metrics, and the convenience of recalculating historical metric data at one click. Additionally, we are excited to introduce the demand pool matrix, enabling the removal of approved demands from roadmaps. Furthermore, our Operations Management Interface has been enhanced with the addition of feedback settings. In addition, we have introduced the 'Associated Demand Pool' search criterion, making it easier for users to search for requirements within the demand pool.", 'desc' => '');
 $lang->misc->feature->all['20.0.beta2'][]  = array('title' => 'Enhance the functionality and fine-tune the details, while addressing any known bugs.', 'desc' => '');
 $lang->misc->feature->all['18.11'][]       = array('title' => "We have successfully implemented AI mini-program functionality, integrating measurement metrics and global filtering capabilities into the large-screen display. Additionally, we have added feedback functionality to the OR interface. Furthermore, we have enabled the inclusion of keywords in the Requirement Management Hub, allowing for the redistribution of requirements in the Requirement Management Hub once a user's requirement has been withdrawn.", 'desc' => '');
