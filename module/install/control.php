@@ -286,7 +286,7 @@ class install extends control
             $this->loadModel('metric')->updateMetricDate();
 
             $skipApp = (string)getenv('ZT_SKIP_DEVOPS_INIT');
-            $link    = ($this->config->inQuickon && !$skipApp) ? inlink('app') : inlink('step6');
+            $link    = ($this->config->inQuickon && (!$skipApp || $skipApp == 'false')) ? inlink('app') : inlink('step6');
             return print(js::locate($link, 'parent'));
         }
 
