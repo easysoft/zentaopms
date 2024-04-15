@@ -2629,6 +2629,7 @@ class storyModel extends model
             if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` " . helper::dbIN((string)$branch);
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
+        $storyQuery = preg_replace_callback("/AND `grade` (=|!=) '(\w+)(\d+)'/", function($matches){return "AND `grade` {$matches[1]} '" . $matches[3] . "' AND `type` = '" . $matches[2] . "'";}, $storyQuery);
 
         return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager, $type);
     }

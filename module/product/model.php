@@ -722,9 +722,20 @@ class productModel extends model
         $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
         $searchConfig['params']['module']['values'] = $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
 
+        $gradePairs = $this->loadModel('story')->getGradePairs($storyType, 'all');
+
         if($storyType == 'all')
         {
             $searchConfig['fields']['title'] = $this->lang->story->name;
+
+            $gradePairs = array();
+            $gradeList  = $this->loadModel('story')->getGradeList('');
+            foreach($gradeList as $grade)
+            {
+                $key = (string)$grade->type . (string)$grade->grade;
+                $gradePairs[$key] = $grade->name;
+            }
+            asort($gradePairs);
         }
         elseif($storyType != 'story')
         {
@@ -734,6 +745,8 @@ class productModel extends model
             $this->lang->story->create       = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->create);
             $searchConfig['fields']['title'] = $this->lang->story->title;
         }
+
+        $searchConfig['params']['grade']['values'] = $gradePairs;
 
         /* Get product plan data. */
         $productIdList = ($this->app->tab == 'project' && empty($productID)) ? array_keys($products) : array($productID);
