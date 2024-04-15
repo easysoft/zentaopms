@@ -200,7 +200,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
             $item->acl       = 'open';
             $item->milestone = 0;
             $item->point     = implode(',', $points);
-            $item->parallel  = $stage->parallel;
+            $item->parallel  = 0;
 
             $items[] = $item;
         }
