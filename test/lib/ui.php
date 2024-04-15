@@ -129,7 +129,7 @@ class tester extends result
     public $page;
     public $config;
     public $cookieFile;
-    public $langFile;
+    public $lang;
 
     /**
      * Initialize the basic configuration of the ui test framework.
@@ -161,16 +161,17 @@ class tester extends result
         if(!$password) $password = $this->config->uitest->defaultPassword;
         $webRoot = $this->getWebRoot();
 
-        $this->page->openURL($webRoot)->deleteCookie();
+        $this->page->openURL($webRoot)->deleteCookie()->refresh();
 
         if($this->config->uitest->langClient == 'en')
         {
+            $this->page->deleteCookie('lang');
             $cookie = array();
             $cookie['lang']  = 'en';
             $this->addCookie($webRoot, $cookie);
+            $this->page->refresh()->wait(1);
         }
 
-        $this->page->openURL($webRoot);
         $this->checkError();
 
         $this->page->dom->account->setValue($account);
@@ -180,8 +181,7 @@ class tester extends result
         $this->page->saveCookie($this->cookieFile);
 
         sleep(1);
-        $this->langFile = '/tmp/lang_' . str_replace('.', '_', parse_url($webRoot, PHP_URL_HOST));
-        if(!file_exists($this->langFile)) $this->initLang();
+        if(empty($this->lang)) $this->initLang();
 
         return $this->page;
     }
@@ -248,7 +248,6 @@ class tester extends result
         $this->module = $module;
         $this->method = $method;
         $webRoot = $this->getWebRoot();
-        $cookies = json_decode(file_get_contents($this->cookieFile), true);
 
         if($this->config->requestType == 'GET')
         {
@@ -262,8 +261,12 @@ class tester extends result
             $url .= ".html";
         }
 
-        $this->page->openURL($webRoot)->deleteCookie();
-        foreach($cookies as $cookie) if($cookie["name"] == "zentaosid")  $this->page->addCookie($cookie);
+        if(!$this->page->getCookie('zentaosid'))
+        {
+            $zentaosid = $this->getCookieValueFromFile('zentaosid');
+            $this->addCookie($webRoot, array('zentaosid' => $zentaosid));
+            $this->page->refresh()->wait(1);
+        }
         $this->page->openURL($webRoot . $url);
 
         $appIframeID = $iframeID ? $iframeID : "appIframe-{$module}";
@@ -368,15 +371,51 @@ class tester extends result
         $zentaosid = $this->getCookieValueFromFile('zentaosid');
         if($zentaosid)
         {
-            $url = $webRoot . "api.php/v1/langs?modules=all&lang={$this->config->uitest->langClient}&zentaosid={$zentaosid}";
-            $response = common::http($url);
+            $url    = $webRoot . "api.php/v1/langs?modules=all&lang={$this->config->uitest->langClient}&zentaosid={$zentaosid}";
+            $header = array('Cookie: device=desktop; lang=' . $this->config->uitest->langClient . '; theme=default; zentaosid=' . $zentaosid);
+
+            $response = common::http($url, null, array(), $header);
             if(empty($response)) return false;
 
-            file_put_contents(json_encode($response), $this->langFile);
+            $this->lang = json_decode($response);
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Check fields tip in form page.
+     *
+     * @param  string  $module
+     * @access public
+     * @return void
+     */
+    public function checkFormTips($module)
+    {
+        $tips = $this->page->dom->getFormTips();
+        if(empty($tips)) return false;
+
+        foreach($tips as $field => $tip)
+        {
+            if(strpos($tip, '|') !== false) list($tip, $fieldValue) = explode('|', $tip);
+            $field = preg_replace('/Tip$/', '', $field);
+            if(!isset($this->lang->{$module}->{$field})) return false;
+
+            $field = $this->lang->{$module}->{$field};
+
+            $checkList = array();
+            $checkList[] = sprintf($this->lang->error->notempty, $field);
+            if(isset($fieldValue))
+            {
+                $checkList[] = sprintf($this->lang->error->unique, $field, $fieldValue);
+                $checkList[] = sprintf($this->lang->error->repeat, $field, $fieldValue);
+            }
+
+            if(!in_array($tip, $checkList)) return false;
+        }
+
+        return true;
     }
 
     /**

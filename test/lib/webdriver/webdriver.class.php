@@ -183,10 +183,16 @@ class webdriver
     {
         if(!$cookieFile) return;
 
-        $cookie = $this->getCookieList();
-        $isSave = file_put_contents($cookieFile, json_encode($cookie));
+        $cookies = $this->getCookie();
+        if(empty($cookie)) $cookies = $this->wait(1)->getCookie();
 
-        return $isSave ? $cookie : false;
+        $cookiesArray = array_map(function($cookie) {
+            return $cookie->toArray();
+        }, $cookies);
+
+        $isSave = file_put_contents($cookieFile, json_encode($cookiesArray));
+
+        return $isSave;
     }
 
     /**
@@ -208,9 +214,18 @@ class webdriver
      * @access public
      * @return void
      */
-    public function deleteCookie()
+    public function deleteCookie($name = '')
     {
-        return $this->driver->manage()->deleteAllCookies();
+        if($name)
+        {
+            $this->driver->manage()->deleteCookieNamed($name);
+        }
+        else
+        {
+            $this->driver->manage()->deleteAllCookies();
+        }
+
+        return $this;
     }
 
     /**
@@ -434,7 +449,9 @@ class dom
         foreach($this->element as $element)
         {
             $id = $element->getAttribute('id');
+            $value = $element->findElement(WebDriverBy::xpath('../input'))->getAttribute('value');
             $tips[$id] = $element->getText();
+            if($value) $tips[$id] .= '|' . $value;
         }
 
         return $tips;

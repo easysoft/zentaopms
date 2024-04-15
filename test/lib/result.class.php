@@ -15,9 +15,10 @@ class result
      * @access public
      * @return object
      */
-    function success()
+    function success($message = '')
     {
-        $this->status = 'SUCCESS';
+        $this->status  = 'SUCCESS';
+        $this->message = $message;
 
         return $this->response();
     }
