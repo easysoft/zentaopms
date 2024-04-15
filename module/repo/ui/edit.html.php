@@ -25,16 +25,6 @@ formPanel
     on::change('#serviceProject', 'onProjectChange'),
     set::title($lang->repo->edit),
     set::back('repo-maintain'),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("product[]"),
-        set::label($lang->story->product),
-        set::required(true),
-        set::control(array("control" => "picker","multiple" => true)),
-        set::items($products),
-        set::value($repo->product)
-    ),
     formRow
     (
         formGroup
@@ -147,6 +137,16 @@ formPanel
                 )))
             )
         )
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::name("product[]"),
+        set::label($lang->story->product),
+        set::required(true),
+        set::control(array("control" => "picker","multiple" => true)),
+        set::items($products),
+        set::value($repo->product)
     ),
     formGroup
     (

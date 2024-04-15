@@ -38,20 +38,6 @@ formPanel
     set::back('GLOBAL'),
     formRow
     (
-        $this->app->tab != 'devops' ? setClass('hidden') : null,
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("product[]"),
-            set::label($lang->story->product),
-            set::required(true),
-            set::control(array("control" => "picker","multiple" => true)),
-            set::items($products),
-            set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
-        )
-    ),
-    formRow
-    (
         formGroup
         (
             set::width('1/2'),
@@ -161,6 +147,20 @@ formPanel
                     'items' => $lang->repo->encryptList
                 )))
             )
+        )
+    ),
+    formRow
+    (
+        $this->app->tab != 'devops' ? setClass('hidden') : null,
+        formGroup
+        (
+            set::width('1/2'),
+            set::name("product[]"),
+            set::label($lang->story->product),
+            set::required(true),
+            set::control(array("control" => "picker","multiple" => true)),
+            set::items($products),
+            set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
         )
     ),
     formGroup
