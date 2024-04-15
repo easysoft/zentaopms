@@ -2014,14 +2014,14 @@ class blockZen extends block
         if(common::hasPriv('task',  'view'))                                                              $hasViewPriv['task']        = true;
         if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                           $hasViewPriv['story']       = true;
         if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite') $hasViewPriv['requirement'] = true;
-        if(common::hasPriv('bug',   'view')     && $this->config->vision != 'lite')                       $hasViewPriv['bug']         = true;
-        if(common::hasPriv('testcase', 'view')  && $this->config->vision != 'lite')                       $hasViewPriv['testcase']    = true;
-        if(common::hasPriv('testtask', 'cases') && $this->config->vision != 'lite')                       $hasViewPriv['testtask']    = true;
-        if(common::hasPriv('risk',  'view')     && in_array($this->config->edition, array('max', 'ipd')) && $this->config->vision != 'lite' && $hasRisk)    $hasViewPriv['risk']        = true;
-        if(common::hasPriv('issue', 'view')     && in_array($this->config->edition, array('max', 'ipd')) && $this->config->vision != 'lite' && $hasIssue)   $hasViewPriv['issue']       = true;
-        if(common::hasPriv('meeting', 'view')   && in_array($this->config->edition, array('max', 'ipd')) && $this->config->vision != 'lite' && $hasMeeting) $hasViewPriv['meeting']     = true;
-        if(common::hasPriv('feedback', 'view')  && in_array($this->config->edition, array('max', 'biz', 'ipd'))) $hasViewPriv['feedback'] = true;
-        if(common::hasPriv('ticket', 'view')    && in_array($this->config->edition, array('max', 'biz', 'ipd'))) $hasViewPriv['ticket']   = true;
+        if(common::hasPriv('bug',   'view')     && !in_array($this->config->vision, array('lite', 'or'))) $hasViewPriv['bug']         = true;
+        if(common::hasPriv('testcase', 'view')  && !in_array($this->config->vision, array('lite', 'or'))) $hasViewPriv['testcase']    = true;
+        if(common::hasPriv('testtask', 'cases') && !in_array($this->config->vision, array('lite', 'or'))) $hasViewPriv['testtask']    = true;
+        if(common::hasPriv('risk',  'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasRisk)    $hasViewPriv['risk']        = true;
+        if(common::hasPriv('issue', 'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasIssue)   $hasViewPriv['issue']       = true;
+        if(common::hasPriv('meeting', 'view')   && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasMeeting) $hasViewPriv['meeting']     = true;
+        if(common::hasPriv('feedback', 'view')  && in_array($this->config->edition, array('max', 'biz', 'ipd')))                                  $hasViewPriv['feedback'] = true;
+        if(common::hasPriv('ticket', 'view')    && in_array($this->config->edition, array('max', 'biz', 'ipd')) && $this->config->vision != 'or') $hasViewPriv['ticket']   = true;
 
         $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements');
         if($this->config->edition == 'max' or $this->config->edition == 'ipd')
