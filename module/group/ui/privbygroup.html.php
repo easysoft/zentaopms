@@ -332,7 +332,7 @@ else
                             )
                         )
                     ),
-                    h::body(html($privBodyHtml))
+                    h::tbody(html($privBodyHtml))
                 )
             ),
             div
