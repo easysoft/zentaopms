@@ -22,7 +22,7 @@ $moreMenus = array();
 foreach($hasViewPriv as $type => $bool)
 {
     $data = $type == 'story' ? $stories : ${"{$type}s"};
-    if(empty($data)) unset($hasViewPriv[$type]);
+    if($type != 'todo' && empty($data)) unset($hasViewPriv[$type]);
 }
 
 $count = count($hasViewPriv);
