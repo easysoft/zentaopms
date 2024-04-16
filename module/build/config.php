@@ -51,13 +51,10 @@ $config->build->actionList['bugList']['url']  = helper::createLink('build', 'vie
 $config->build->actionList['projectBugList'] = $config->build->actionList['bugList'];
 $config->build->actionList['projectBugList']['url']  = helper::createLink('projectbuild', 'view', 'buildID={id}&type=generatedBug');
 
-$config->build->actionList['buildEdit']['icon']     = 'edit';
-$config->build->actionList['buildEdit']['hint']     = $lang->build->edit;
-$config->build->actionList['buildEdit']['url']      = helper::createLink('build', 'edit', 'buildID={id}');
-$config->build->actionList['buildEdit']['data-app'] = $app->tab;
-
-$config->build->actionList['projectbuildEdit'] = $config->build->actionList['buildEdit'];
-$config->build->actionList['projectbuildEdit']['url'] = helper::createLink('projectbuild', 'edit', 'buildID={id}');
+$config->build->actionList['edit']['icon']     = 'edit';
+$config->build->actionList['edit']['hint']     = $lang->build->edit;
+$config->build->actionList['edit']['url']      = array('module' => $app->tab == 'project' ? 'projectbuild' : 'build', 'method' => 'edit', 'params' => 'buildID={id}');
+$config->build->actionList['edit']['data-app'] = $app->tab;
 
 $config->build->actionList['delete']['icon']         = 'trash';
 $config->build->actionList['delete']['hint']         = $lang->build->delete;
@@ -79,5 +76,5 @@ $config->build->actionList['unlinkStory']['data-confirm'] = $lang->build->confir
 
 $config->build->actions = new stdclass();
 $config->build->actions->view = array();
-$config->build->actions->view['mainActions']   = array($app->tab == 'project' ? 'projectbuildEdit' : 'buildEdit', 'delete');
+$config->build->actions->view['mainActions']   = array('edit', 'delete');
 $config->build->actions->view['suffixActions'] = array();

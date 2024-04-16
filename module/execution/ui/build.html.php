@@ -48,6 +48,10 @@ jsVar('confirmDelete', $lang->build->confirmDelete);
 
 $fieldList = $config->build->dtable->fieldList;
 if($execution->type == 'kanban') unset($fieldList['actions']['actionsMap']['createTest']['data-app']);
+foreach($fieldList['actions']['actionsMap'] as $key => $actionConfig)
+{
+    if(!empty($actionConfig['url']) && is_array($actionConfig['url'])) $fieldList['actions']['actionsMap'][$key]['url'] = createLink($actionConfig['url']['module'], $actionConfig['url']['method'], zget($actionConfig['url'], 'params', ''));
+}
 
 dtable
 (

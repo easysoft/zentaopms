@@ -820,7 +820,7 @@ class buildModel extends model
         if($isNotKanban && common::hasPriv('execution', 'bug', $build)) $actions[] = 'viewBug';
         if($isFromProject && common::hasPriv($module, 'view', $build))  $actions[] = $from == 'projectbuild' ? 'projectBugList' : 'bugList';
 
-        if(common::hasPriv($module, 'edit', $build))   $actions[] = $module . 'Edit';
+        if(common::hasPriv($module, 'edit', $build))   $actions[] = 'edit';
         if(common::hasPriv($module, 'delete', $build)) $actions[] = 'delete';
 
         return $actions;
