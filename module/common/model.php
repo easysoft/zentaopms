@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package     common
  * @version     $Id$
  * @link        https://www.zentao.net
+ * @property    router $app
  */
 class commonModel extends model
 {
