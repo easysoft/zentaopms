@@ -15,8 +15,7 @@ SUCCESS
 chdir(__DIR__);
 include '../lib/createproduct.ui.class.php';
 
-//zdTable('product')->config('product', false, 2)->gen(10);
-//zendata::loadYaml('product', false, 2)->createFor('product', 10);
+zendata('product')->loadYaml('product', false, 2)->gen(10);
 $tester = new createProductTester();
 $tester->login();
 
