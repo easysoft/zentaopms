@@ -1395,21 +1395,6 @@ class pivotModel extends model
     }
 
     /**
-     * Judge the action is clickable.
-     *
-     * @param  object $pivot
-     * @param  string $action
-     * @static
-     * @access public
-     * @return bool
-     */
-    public static function isClickable($pivot, $action)
-    {
-        if($pivot->builtin) return false;
-        return true;
-    }
-
-    /**
      * 通过合并单元格的数据对透视表进行分页
      * Page pivot by configs merge cell data.
      *
