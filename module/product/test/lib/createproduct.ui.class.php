@@ -1,7 +1,4 @@
 <?php
-
-use function zin\success;
-
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class createProductTester extends tester
 {
@@ -37,8 +34,8 @@ class createProductTester extends tester
         $form->wait(1);
         if($this->response('method') != 'browse')
         {
-            if($this->checkFormTips('product')) return $this->success('表单提示信息正确');
-            return $this->failed('表单提示信息不正确');
+            if($this->checkFormTips('product')) return $this->success('创建产品表单页提示信息正确');
+            return $this->failed('创建产品表单页提示信息不正确');
         }
 
         /* 跳转到产品需求页面，点击设置菜单查看产品设置页面。 */
