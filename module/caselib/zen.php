@@ -76,6 +76,8 @@ class caselibZen extends caselib
         unset($this->config->testcase->search['params']['product']);
         unset($this->config->testcase->search['fields']['branch']);
         unset($this->config->testcase->search['params']['branch']);
+        unset($this->config->testcase->search['fields']['scene']);
+        unset($this->config->testcase->search['params']['scene']);
         unset($this->config->testcase->search['fields']['lastRunner']);
         unset($this->config->testcase->search['params']['lastRunner']);
         unset($this->config->testcase->search['fields']['lastRunResult']);
