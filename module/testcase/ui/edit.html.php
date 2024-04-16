@@ -100,7 +100,7 @@ detailBody
                 )
             )
         ),
-        section
+        !$isLibCase ? section
         (
             set::title($lang->testcase->scene),
             formGroup
@@ -114,7 +114,7 @@ detailBody
                     set::required(true)
                 )
             )
-        ),
+        ) : null,
         section
         (
             set::title($lang->testcase->precondition),
