@@ -50,7 +50,6 @@ class formBatch extends formBase
      * @access protected
      */
     protected static array $defaultProps = array(
-        'minRows' => 1,
         'maxRows' => 100,
         'mode'    => 'add'
     );
