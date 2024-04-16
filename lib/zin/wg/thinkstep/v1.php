@@ -80,15 +80,22 @@ class thinkStep extends wg
         );
     }
 
-    protected function build(): wg
+    protected function buildBody(): array
+    {
+        return array(
+            $this->buildNamePanel(),
+            $this->buildDescControl(),
+            $this->block('fields')
+        );
+    }
+
+    protected function build(): wg|array
     {
         return formPanel
         (
             set::grid(false),
             set::actions(array()),
-            $this->buildNamePanel(),
-            $this->buildDescControl(),
-            $this->block('fields')
+            $this->buildBody()
         );
     }
 }
