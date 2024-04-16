@@ -118,7 +118,7 @@ class repo extends control
         $this->repoZen->buildRepoSearchForm($products, $projects, $objectID, $orderBy, $recPerPage, $pageID, $param);
 
         $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
-        $this->view->gitlabPairs   = $this->loadModel('gitlab')->getPairs();
+        $this->view->serverPairs   = $this->loadModel('pipeline')->getPairs('gitfox,gitlab');
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->objectID      = $objectID;

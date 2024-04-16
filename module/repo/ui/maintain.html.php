@@ -92,12 +92,12 @@ foreach($repos as $repo)
 
 toolBar
 (
-    hasPriv('repo', 'createRepo') && $gitlabPairs ? item(set($createRepoItem + array
+    hasPriv('repo', 'createRepo') && $serverPairs ? item(set($createRepoItem + array
     (
         'icon'  => 'plus',
         'class' => 'btn primary'
     ))) : null,
-    !hasPriv('repo', 'create') && hasPriv('repo', 'import') && $gitlabPairs ? item(set($batchCreateItem + array
+    !hasPriv('repo', 'create') && hasPriv('repo', 'import') && $serverPairs ? item(set($batchCreateItem + array
     (
         'icon'  => 'plus',
         'class' => 'btn primary'
@@ -107,16 +107,16 @@ toolBar
         'icon'  => 'plus',
         'class' => 'btn primary'
     ))) : null,
-    hasPriv('repo', 'import') && $gitlabPairs && hasPriv('repo', 'create') ? btnGroup
+    hasPriv('repo', 'import') && hasPriv('repo', 'create') ? btnGroup
     (
         btn(setClass('btn primary'), set::icon('plus'), set::url(createLink('repo', 'create')), $lang->repo->createAction),
-        dropDown
+        $serverPairs ? dropDown
         (
             btn(setClass('btn primary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::placement('bottom-end'),
             set::items(array($createItem, $batchCreateItem))
-        )
+        ) : null
     ) : null,
 );
 
