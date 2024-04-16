@@ -651,7 +651,7 @@ function initTableActions(array &$fieldList, string $actionMenu): void
             $method = $actionConfig['url']['method'];
             $params = !empty($actionConfig['url']['params']) ? $actionConfig['url']['params'] : array();
 
-            $actionConfig['url'] = helper::createLink($module, $method, $params);
+            $actionConfig['url'] = helper::createLink($module, $method, $params, '', !empty($actionConfig['url']['onlybody']));
         }
 
         $fieldList['actions']['actionsMap'][$action] = $actionConfig;
