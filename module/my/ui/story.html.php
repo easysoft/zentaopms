@@ -19,7 +19,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("mode=story&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Story')))
+    li(searchToggle(set::module($this->app->rawMethod . 'Story'), set::open($type == 'bysearch')))
 );
 
 $canBatchEdit     = common::hasPriv('story', 'batchEdit');

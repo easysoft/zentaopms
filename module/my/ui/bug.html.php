@@ -25,7 +25,7 @@ featurebar
 (
     set::current($type),
     set::linkParams($linkParam),
-    li(searchToggle(set::module($this->app->rawMethod . 'Bug')))
+    li(searchToggle(set::module($this->app->rawMethod . 'Bug'), set::open($type == 'bySearch')))
 );
 
 $canBatchEdit     = common::hasPriv('bug', 'batchEdit')    && $type == 'assignedTo';

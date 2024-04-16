@@ -21,7 +21,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("mode={$mode}&type={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Task')))
+    li(searchToggle(set::module($this->app->rawMethod . 'Task'), set::open($type == 'bySearch')))
 );
 
 $canBatchEdit  = common::hasPriv('task', 'batchEdit');
