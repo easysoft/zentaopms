@@ -25,9 +25,9 @@ class datatable extends control
      */
     public function ajaxDisplay(string $datatableID, string $moduleName, string $methodName, string $currentModule, string $currentMethod)
     {
-        $this->app->loadLang($currentModule);
-        $this->app->loadConfig($currentModule);
+        $this->loadModel($currentModule);
 
+        if($moduleName == 'execution' && $methodName == 'task' && $this->config->vision != 'lite') $this->view->execution = $this->execution->getByID($this->session->execution);
         $this->view->datatableID   = $datatableID;
         $this->view->moduleName    = $moduleName;
         $this->view->methodName    = $methodName;
