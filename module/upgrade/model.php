@@ -8598,6 +8598,8 @@ class upgradeModel extends model
      */
     public function updateWorkflowFieldDefaultValue(): bool
     {
+        if($this->config->edition == 'open') return true;
+
         $this->loadModel('workflowfield');
 
         $tables     = $this->dao->select('module, `table`')->from(TABLE_WORKFLOW)->fetchPairs();
