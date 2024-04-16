@@ -48,7 +48,7 @@ $config->build->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->build->dtable->fieldList['actions']['name']  = 'actions';
 $config->build->dtable->fieldList['actions']['type']  = 'actions';
 $config->build->dtable->fieldList['actions']['list']  = $config->build->actionList;
-$config->build->dtable->fieldList['actions']['menu']  = array('linkStory', 'createTest', 'viewBug', 'buildEdit', 'delete');
+$config->build->dtable->fieldList['actions']['menu']  = array('linkStory', 'createTest', 'viewBug', 'edit', 'delete');
 
 $config->build->story                = new stdclass();
 $config->build->bug                  = new stdclass();

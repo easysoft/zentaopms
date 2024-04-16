@@ -55,14 +55,11 @@ $config->build->actionList['bugList']['url']  = array('module' => 'build', 'meth
 $config->build->actionList['projectBugList']        = $config->build->actionList['bugList'];
 $config->build->actionList['projectBugList']['url'] = array('module' => 'projectbuild', 'method' => 'view', 'params' => 'buildID={id}&type=generatedBug');
 
-$config->build->actionList['buildEdit']['icon']     = 'edit';
-$config->build->actionList['buildEdit']['text']     = $lang->build->edit;
-$config->build->actionList['buildEdit']['hint']     = $lang->build->edit;
-$config->build->actionList['buildEdit']['url']      = array('module' => 'build', 'method' => 'edit', 'params' => 'buildID={id}');
-$config->build->actionList['buildEdit']['data-app'] = $app->tab;
-
-$config->build->actionList['projectbuildEdit']        = $config->build->actionList['buildEdit'];
-$config->build->actionList['projectbuildEdit']['url'] = array('module' => 'projectbuild', 'method' => 'edit', 'params' => 'buildID={id}');
+$config->build->actionList['edit']['icon']     = 'edit';
+$config->build->actionList['edit']['text']     = $lang->build->edit;
+$config->build->actionList['edit']['hint']     = $lang->build->edit;
+$config->build->actionList['edit']['url']      = array('module' => $app->tab == 'project' ? 'projectbuild' : 'build', 'method' => 'edit', 'params' => 'buildID={id}');
+$config->build->actionList['edit']['data-app'] = $app->tab;
 
 $config->build->actionList['delete']['icon']         = 'trash';
 $config->build->actionList['delete']['text']         = $lang->build->delete;

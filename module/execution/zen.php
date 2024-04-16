@@ -1024,7 +1024,6 @@ class executionZen extends execution
                 }
                 $build->branchName = trim($build->branchName, ',');
             }
-            $build->actions = $this->build->buildActionList($build, $executionID, 'execution');
 
             if($build->scmPath && $build->filePath)
             {
