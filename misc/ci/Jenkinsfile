@@ -111,6 +111,7 @@ pipeline {
               j.SaveHeadReport('./.head.md')
 
               // update custom envoronment here
+              env.ZT_MAIN_VER = "20"
 
               // send start msg
               def mdPath = "start.md"
