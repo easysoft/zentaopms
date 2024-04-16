@@ -1911,7 +1911,7 @@ class treeModel extends model
 
         if($self)
         {
-            if($type == 'host') $module->root = 0;
+            if($type == 'host' || !isset($module->root)) $module->root = 0;
             if($self->root && !isset($module->root)) $module->root = $self->root;
             if($self->parent != $module->parent || $self->root != $module->root)
             {
