@@ -7,4 +7,4 @@ h1{font-size: 24px;}
 .btn-start-now{min-width: 120px; height: 42px;}
 .btn-lg{padding: 11px 16px; font-size: 14px; line-height: 18px; border-radius: 4px;}
 .btn-info{color: #2e7fff; background-color: #e6f0ff; border-color: transparent;}
-.modal-dialog .modal-content .modal-body{padding: 0;}
+.tutorial-start .modal-dialog .modal-content .modal-body {padding: 0; margin-top: 0;}
