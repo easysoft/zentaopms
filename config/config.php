@@ -226,7 +226,7 @@ if($config->inContainer || $config->inQuickon)
 }
 
 /* 引用自定义的配置。 Include the custom config file. */
-$myConfigRoot = (defined('RUN_MODE') and RUN_MODE == 'test') ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);
+$myConfigRoot = (defined('RUN_MODE') and in_array(RUN_MODE, array('test', 'uitest'))) ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);
 $myConfig = $myConfigRoot . DIRECTORY_SEPARATOR . 'my.php';
 if(file_exists($myConfig)) include $myConfig;
 
