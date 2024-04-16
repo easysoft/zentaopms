@@ -27,6 +27,7 @@ jsVar('clientSvnTip', $lang->repo->example->client->svn);
 jsVar('scmList', $lang->repo->scmList);
 jsVar('noProductTip', $lang->repo->error->noProduct);
 jsVar('hasProduct', !empty($products));
+jsVar('appTab', $app->tab);
 
 formPanel
 (
@@ -161,7 +162,8 @@ formPanel
             set::control(array("control" => "picker","multiple" => true)),
             set::items($products),
             set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
-        )
+        ),
+        empty($products) ? span(setClass('leading-8 ml-2'), $lang->repo->error->noProduct) : null
     ),
     formGroup
     (
