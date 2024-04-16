@@ -3,10 +3,17 @@
 error_reporting(E_ALL);
 
 /* 设置常量和常用目录路径 */
-define('RUN_MODE', 'test');
+define('RUN_MODE', 'uitest');
 $zentaoRoot    = dirname(__FILE__, 3) . '/';
 $configRoot    = $zentaoRoot . 'test/config/';
 $frameworkRoot = $zentaoRoot . 'framework' . '/';
+
+if($argc > 1 && $argv[1] == '-extract')
+{
+    include 'parseztfstep.php';
+    printSteps();
+    exit;
+}
 
 /* Load the framework. */
 include $frameworkRoot . 'router.class.php';
@@ -190,29 +197,26 @@ class tester extends result
      * Add a cookie in test site.
      *
      * @param  string  $webRoot
-     * @param  array   $cookie
+     * @param  array   $cookie eg:array('lang' = 'zh-cn')
      * @param  bool    $clear
      * @access public
      * @return bool|object
      */
     public function addCookie($webRoot, $cookie, $clear = true)
     {
+        if(empty($cookie) || !is_array($cookie)) return false;
+
         if($clear) $this->page->openURL($webRoot)->deleteCookie();
-        if(is_array($cookie) && !empty($cookie))
-        {
-            $cookieList = array();
-            foreach($cookie as $name => $value)
-            {
-                $cookieList['name']   = $name;
-                $cookieList['value']  = $value;
-                $cookieList['path']   = '/';
-                $cookieList['domain'] = parse_url($webRoot, PHP_URL_HOST);
-                $cookieList['secure'] = false;
-            }
-            $this->page->addCookie($cookieList);
-            return $this;
-        }
-        return false;
+
+        /* Set path, domain and secure for cookie. */
+        $fullCookie['name']   = key($cookie);
+        $fullCookie['value']  = current($cookie);
+        $fullCookie['path']   = '/';
+        $fullCookie['domain'] = parse_url($webRoot, PHP_URL_HOST);
+        $fullCookie['secure'] = false;
+        $this->page->addCookie($fullCookie);
+
+        return $this;
     }
 
     /**
@@ -367,17 +371,26 @@ class tester extends result
         $webRoot = $this->getWebRoot();
         if(!$webRoot) return false;
         if(!$this->config->uitest->langClient) return false;
+        $langClient = $this->config->uitest->langClient;
+
+        $langFile  = '/tmp/lang_' . $langClient . '_' . str_replace('.', '_', parse_url($webRoot, PHP_URL_HOST));
+        if(file_exists($langFile))
+        {
+            $this->lang = json_decode(file_get_contents($langFile));
+            return true;
+        }
 
         $zentaosid = $this->getCookieValueFromFile('zentaosid');
         if($zentaosid)
         {
-            $url    = $webRoot . "api.php/v1/langs?modules=all&lang={$this->config->uitest->langClient}&zentaosid={$zentaosid}";
-            $header = array('Cookie: device=desktop; lang=' . $this->config->uitest->langClient . '; theme=default; zentaosid=' . $zentaosid);
+            $url    = $webRoot . "api.php/v1/langs?modules=all&lang={$langClient}&zentaosid={$zentaosid}";
+            $header = array('Cookie: device=desktop; lang=' . $langClient . '; theme=default; zentaosid=' . $zentaosid);
 
             $response = common::http($url, null, array(), $header);
             if(empty($response)) return false;
 
             $this->lang = json_decode($response);
+            file_put_contents($langFile, $response);
             return true;
         }
 
