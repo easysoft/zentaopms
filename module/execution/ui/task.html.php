@@ -113,7 +113,6 @@ sidebar
         set::settingLink(createLink('tree', 'browsetask', "rootID=$execution->id&productID=0")),
         set::settingApp($execution->multiple ? 'execution' : 'project'),
         set::closeLink(createLink('execution', 'task')),
-        set::showDisplay($execution->multiple),
         set::app($app->tab)
     )
 );
