@@ -74,7 +74,8 @@ class backBtn extends btn
             'zahost'         => 'zahost-browse,zahost-view',
             'stakeholder'    => 'stakeholder-browse',
             'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution',
-            'ai'             => 'ai-models'
+            'ai'             => 'ai-models',
+            'api'            => 'api-index'
         );
 
         $props  = parent::getProps();
