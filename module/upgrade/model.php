@@ -8576,6 +8576,20 @@ class upgradeModel extends model
     }
 
     /**
+     * 检查是否执行了18.11版本的SQL。
+     * Exec 18.11 sql file.
+     *
+     * @access public
+     * @return void
+     */
+    public function update18101(): void
+    {
+        /* Execute open edition. */
+        $this->saveLogs('Execute 18_11');
+        $this->execSQL($this->getUpgradeFile('18.11'));
+    }
+
+    /**
      * 更新通过工作流添加的字段的默认值。
      * Update the default value of the fields added through the workflow.
      *
