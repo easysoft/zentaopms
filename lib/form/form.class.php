@@ -108,7 +108,7 @@ class form extends fixer
     public function appendExtendFormConfig(array $configObject, string $moduleName = '', string $methodName = ''): array
     {
         global $app, $config;
-        if($config->edition == 'open') return $configObject;
+        if($config->edition == 'open' ||  !empty($app->installing)) return $configObject;
 
         $moduleName = $moduleName ? $moduleName : $app->getModuleName();
         $methodName = $methodName ? $moduleName : $app->getMethodName();
