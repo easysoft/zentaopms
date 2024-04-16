@@ -53,6 +53,9 @@ class ai extends control
         /* Redirect to models ifuser has priv. */
         if(commonModel::hasPriv('ai', 'models')) return $this->locate($this->createLink('ai', 'models'));
 
+        /* Redirect to assistants ifuser has priv. */
+        if(commonModel::hasPriv('ai', 'assistants')) return $this->locate($this->createLink('ai', 'assistants'));
+
         /* User has no priv, deny access. */
         return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'locate' => 'back'));
     }
