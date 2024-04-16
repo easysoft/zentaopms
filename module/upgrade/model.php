@@ -46,6 +46,8 @@ class upgradeModel extends model
     public function getVersionsToUpdate(string $openVersion, string $fromEdition): array
     {
         $versions = array();
+        /* pms20beta2 is a version released between pms18.11 and pms18.12, which was upgraded to pms20 and lost 18.11 upgrade sql. */
+        if($openVersion == '20_0_beta2') $versions['18_11'] = array('pro' => array(), 'biz' => array(), 'max' => array(), 'ipd' => array());
 
         /* Always update open sql. */
         foreach($this->lang->upgrade->fromVersions as $version => $versionName)
