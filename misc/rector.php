@@ -19,6 +19,7 @@ return static function (RectorConfig $rectorConfig) use ($version, $cacheDir): v
     $rectorConfig->skip([
         'test/*',
         'framework/zand',
+        '*/export2xlsx.php',
     ]);
     $rectorConfig->phpVersion(constant(PhpVersion::class . '::PHP_' . $version));
     $rectorConfig->sets([constant(DowngradeLevelSetList::class . '::DOWN_TO_PHP_' . $version)]);
