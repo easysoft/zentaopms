@@ -1406,7 +1406,29 @@ class screenModel extends model
                 for($year = date('Y'); $year >= $beginYear; $year--) $options[] = array('label' => $year, 'value' => $year);
                 $component->option->dataset = $options;
 
-                $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=' + value + '&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
+                $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=' + value + '&month=" . $this->filter->month . "&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
+                $component->option->onChange = "window.location.href = $url";
+                break;
+            case 'month':
+                $component->option->value = $this->filter->month;
+
+                $beginYear  = $this->dao->select('YEAR(MIN(date)) year')->from(TABLE_ACTION)->where('date')->notZeroDate()->fetch('year');
+                $beginMonth = $this->dao->select('MONTH(MIN(date)) month')->from(TABLE_ACTION)->where('date')->notZeroDate()->fetch('month');
+
+                $currentYear  = date('Y');
+                $currentMonth = date('n');
+
+                $options = array();
+                for($month = 12; $month >= 1; $month--)
+                {
+                    if($currentYear == $this->filter->year && $month > $currentMonth) continue;
+                    if($currentYear == $beginYear && $month < $beginMonth) continue;
+
+                    $options[] = array('label' => $month, 'value' => $month);
+                }
+                $component->option->dataset = $options;
+
+                $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=" . $this->filter->year . "&month=' + value + '&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
                 $component->option->onChange = "window.location.href = $url";
                 break;
             case 'dept':
@@ -1527,6 +1549,9 @@ class screenModel extends model
                 switch($key)
                 {
                     case 'year':
+                        $conditions[] = $field . " = '" . $this->filter->$key . "'";
+                        break;
+                    case 'month':
                         $conditions[] = $field . " = '" . $this->filter->$key . "'";
                         break;
                     case 'dept':
