@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('mode', $mode);
 jsVar('todoCount', $todoCount);
+jsVar('isIPD', $isIPD);
 jsVar('isMax', $isMax);
 jsVar('isBiz', $isBiz);
 jsVar('isOpenedURAndSR', $isOpenedURAndSR);
