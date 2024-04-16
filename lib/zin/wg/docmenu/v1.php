@@ -354,7 +354,73 @@ class docMenu extends wg
                 );
             }
         }
+        elseif(isset($item->wizard))
+        {
+            $menus = $this->getThinkwizardMenus($item);
+        }
 
+        return $menus;
+    }
+
+    private function getThinkwizardMenus($item): array
+    {
+        $menus = array();
+        if($item->grade != 4 && $item->type != 'question') $menus[] = array(
+            'key'     => 'addNode',
+            'icon'    => 'add-chapter',
+            'text'    => $this->lang->thinkwizard->designer->treeDropdown['addSameNode'],
+            'onClick' => jsRaw("() => addModule({$item->id}, 'same')")
+        );
+        if($item->grade != 3 && $item->type != 'question') $menus[] = array(
+            'key'     => 'addNode',
+            'icon'    => 'add-sub-chapter',
+            'text'    => $this->lang->thinkwizard->designer->treeDropdown['addChildNode'],
+            'onClick' => jsRaw("() => addModule({$item->id}, 'child')")
+        );
+        $menus = array_merge($menus, array(
+            array(
+                'key'  => 'editNode',
+                'icon' => 'edit',
+                'text' => $this->lang->thinkwizard->designer->treeDropdown['editNode'],
+            ),
+            array(
+                'key'  => 'deleteNode',
+                'icon' => 'trash',
+                'text' => $this->lang->thinkwizard->designer->treeDropdown['deleteNode'],
+            ),
+            array('type' => 'divider'),
+            array(
+                'key'  => 'addTransition',
+                'icon' => 'transition',
+                'text' => $this->lang->thinkwizard->designer->treeDropdown['addTransition'],
+            ),
+        ));
+        if(($item->type == 'question') || ($item->grade == 3 && $item->type !== 'question'))
+        {
+            $menus = array_merge($menus, array(
+                array('type' => 'divider'),
+                array(
+                    'key'  => 'addRadio',
+                    'icon' => 'radio',
+                    'text' => $this->lang->thinkwizard->designer->treeDropdown['addRadio'],
+                ),
+                array(
+                    'key'  => 'addCheckbox',
+                    'icon' => 'checkbox',
+                    'text' => $this->lang->thinkwizard->designer->treeDropdown['addCheckbox'],
+                ),
+                array(
+                    'key'  => 'addInput',
+                    'icon' => 'input',
+                    'text' => $this->lang->thinkwizard->designer->treeDropdown['addInput'],
+                ),
+                array(
+                    'key'  => 'addTableInput',
+                    'icon' => 'cell-input',
+                    'text' => $this->lang->thinkwizard->designer->treeDropdown['addTableInput'],
+                ),
+            ));
+        }
         return $menus;
     }
 
