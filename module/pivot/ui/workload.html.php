@@ -50,7 +50,7 @@ $generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, 
                 inputGroup
                 (
                     setClass('w-5/12'),
-                    $lang->pivot->workhour,
+                    $lang->pivot->workday,
                     input(set(array('name' => 'workhour', 'value' => $workhour, 'class' => 'text-left')))
                 ),
                 picker
