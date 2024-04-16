@@ -3,6 +3,18 @@
 class biModel extends model
 {
     /**
+     * Set sql_mode = '' before sql.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function setEmptyMode4SQL($sql)
+    {
+        return "SET @@sql_mode = ''; $sql";
+    }
+
+    /**
      * Get object options.
      *
      * @param  string $type user|product|project|execution|dept
