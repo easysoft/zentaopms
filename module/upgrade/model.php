@@ -8582,7 +8582,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function update18101(): void
+    public function update1811(): void
     {
         /* Execute open edition. */
         $this->saveLogs('Execute 18_11');
