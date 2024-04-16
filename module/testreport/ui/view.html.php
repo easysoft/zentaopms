@@ -67,6 +67,8 @@ foreach($charts as $chartType => $chartOption)
                 (
                     set::_id('chart-' . $chartType),
                     set::color($colorList),
+                    set::width('100%'),
+                    set::height('300px'),
                     set::series
                     (
                         array
@@ -78,7 +80,7 @@ foreach($charts as $chartType => $chartOption)
                             )
                         )
                     )
-                )->size('100%', 300)
+                )
             ),
             cell
             (
@@ -137,6 +139,8 @@ $bugStageChart = div
             (
                 set::_id('chart-bugStageGroups'),
                 set::color($colorList),
+                set::width('100%'),
+                set::height('300px'),
                 set::xAxis
                 (
                     array
@@ -147,7 +151,7 @@ $bugStageChart = div
                 ),
                 set::yAxis(array('type' => 'value')),
                 set::series($chartOption)
-            )->size('100%', 300)
+            )
         ),
         cell
         (
@@ -215,6 +219,8 @@ $bugHandleChart = div
             (
                 set::_id('chart-bugHandleGroups'),
                 set::color(array('#FF9800', '#2098EE', '#009688')),
+                set::width('100%'),
+                set::height('300px'),
                 set::xAxis
                 (
                     array
@@ -225,7 +231,7 @@ $bugHandleChart = div
                 ),
                 set::yAxis(array('type' => 'value')),
                 set::series($chartOption)
-            )->size('100%', 300)
+            )
         ),
         cell
         (
@@ -297,6 +303,8 @@ foreach($bugInfo as $infoKey => $infoValue)
                 (
                     set::_id('chart-' . $infoKey),
                     set::color($colorList),
+                    set::width('100%'),
+                    set::height('300px'),
                     set::series
                     (
                         array
@@ -308,7 +316,7 @@ foreach($bugInfo as $infoKey => $infoValue)
                             )
                         )
                     )
-                )->size('100%', 300)
+                )
             ),
             cell
             (
