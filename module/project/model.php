@@ -71,6 +71,7 @@ class projectModel extends model
         if($action == 'suspend')   return $project->status == 'wait' || $project->status == 'doing';
         if($action == 'activate')  return $project->status == 'done' || $project->status == 'closed';
         if($action == 'whitelist') return $project->acl != 'open';
+        if($action == 'link')      return $project->hasProduct;
 
         return true;
     }
@@ -2477,7 +2478,6 @@ class projectModel extends model
         $project->surplus     = $project->left     . $this->lang->project->workHourUnit;
         $project->progress    = $project->progress;
         $project->end         = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
-        $project->hasProduct  = zget($this->lang->project->projectTypeList, $project->hasProduct);
         $project->invested    = !empty($this->config->execution->defaultWorkhours) ? round($project->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
 
         if($project->PM)
