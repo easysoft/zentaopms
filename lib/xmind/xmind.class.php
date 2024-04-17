@@ -197,6 +197,40 @@ class xmind
     }
 
     /**
+     * 生成用例步骤节点。
+     * Create step node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $config
+     * @param  object      $parentNode
+     * @param  array       $allSteps
+     * @param  array       $steps
+     * @access private
+     * @return void
+     */
+    private function createStepNode($xmlDoc, $config, $parentNode, $allSteps, $steps)
+    {
+        foreach($steps as $step)
+        {
+            $subSteps = $this->findSubStepListByStep($step, $allSteps);
+            $suffix   = count($subSteps) > 0 ? $config['group'] : '';
+
+            $stepNode = $this->createNode($xmlDoc, $step->desc, $suffix, array('nodeType' => 'step'));
+            $parentNode->appendChild($stepNode);
+
+            if($subSteps)
+            {
+                $this->createStepNode($xmlDoc, $config, $stepNode, $allSteps, $subSteps);
+            }
+            else if(!empty($step->expect))
+            {
+                $expectNode = $this->createNode($xmlDoc, $step->expect, '', array('nodeType'=>'expect'));
+                $stepNode->appendChild($expectNode);
+            }
+        }
+    }
+
+    /**
      * Find substep list by step.
      *
      * @param  object $step
