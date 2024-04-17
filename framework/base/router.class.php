@@ -2637,7 +2637,7 @@ class baseRouter
             {
                 if($defaultItem['default'] === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, true);
 
-                $defaultParams[$key] = $defaultItem['default'];
+                $defaultParams[$key] = helper::convertType(strip_tags((string) $defaultItem['default']), $defaultItem['type']);
             }
             $i ++;
         }
