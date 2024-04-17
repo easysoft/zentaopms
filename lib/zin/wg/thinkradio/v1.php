@@ -12,42 +12,32 @@ class thinkRadio extends thinkStep
 {
     protected static array $defineProps = array
     (
-        'requiredLabel?: string',
+        'requiredName?: string="required"',
         'requiredItems?: array',
-        'optionLabel?: string',
+        'optionName?: string="options"',
+        'otherName?: string',
     );
 
     protected function buildBody(): array
     {
         $items = parent::buildBody();
 
-        list($requiredItems, $requiredLabel, $optionLabel) = $this->prop(array('requiredItems', 'requiredLabel', 'optionLabel'));
+        list($requiredItems, $requiredName, $optionName, $otherName) = $this->prop(array('requiredItems', 'requiredName', 'optionName', 'otherName'));
         if(!empty($requiredItems)) $items[] = formGroup
         (
-            set::label($requiredLabel),
+            set::label(data('lang.thinkwizard.step.label.required')),
             radioList
             (
-                set::name('contact'),
+                set::name($requiredName),
                 set::inline(true),
+                set::value(1),
                 set::items($requiredItems),
             )
         );
         $items[] = formGroup
         (
-            set::label($optionLabel),
-            stepsEditor(),
-            div
-            (
-                setClass('w-full flex justify-between items-center h-8 border px-2.5 rounded mt-1'),
-                setStyle(array('background' => 'rgba(242, 244, 247, .7)')),
-                div
-                (
-                    setClass('flex items-center'),
-                    div(setStyle(array('width' => '44px', 'color' => '#5E626D')), '其他'),
-                    div(setStyle(array('color' => '#B2B9C5')), '请输入'),
-                ),
-                checkbox(set::text('启用')),
-            )
+            set::label(data('lang.thinkwizard.step.label.option')),
+            thinkOptions(set::name($optionName), set::otherName($otherName)),
         );
         return $items;
     }
