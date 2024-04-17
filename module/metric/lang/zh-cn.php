@@ -151,9 +151,11 @@ $lang->metric->noDataAfterCollect  = "度量范围内未产生数据，暂无数
 $lang->metric->legendBasicInfo  = '基本信息';
 $lang->metric->legendCreateInfo = '创建编辑信息';
 
-$lang->metric->confirmDelete = "确认要删除吗？";
-$lang->metric->confirmDelist = "确认要下架吗？";
-$lang->metric->notExist      = "度量项不存在";
+$lang->metric->confirmDelete       = "确认要删除吗？";
+$lang->metric->confirmDelist       = "确认要下架吗？";
+$lang->metric->confirmDelistInUsed = "该度量项已被大屏引用，确认要下架吗？";
+$lang->metric->confirmRecalculate  = "重算结果可能会覆盖已存在的度量值，是否继续？";
+$lang->metric->notExist            = "度量项不存在";
 
 $lang->metric->browse          = '浏览度量项';
 $lang->metric->browseAction    = '度量项列表';

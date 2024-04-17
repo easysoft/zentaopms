@@ -40,9 +40,10 @@ window.renderDTableCell = function(result, {row, col})
  * @access public
  * @return void
  */
-window.confirmDelist = function(metricID, metricName)
+window.confirmDelist = function(metricID, metricName, isUsed = false)
 {
-    zui.Modal.confirm(confirmDelist.replace('%s', metricName)).then((res) =>
+    var text = isUsed ? confirmDelistInUsed : confirmDelist;
+    zui.Modal.confirm(text.replace('%s', metricName)).then((res) =>
     {
         if(res) $.ajaxSubmit({url: $.createLink('metric', 'delist', 'metricID=' + metricID)});
     });

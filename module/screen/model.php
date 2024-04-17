@@ -2570,7 +2570,8 @@ class screenModel extends model
                         if(!isset($groupComponent->chartConfig)) continue;
 
                         $sourceID   = zget($groupComponent->chartConfig, 'sourceID', '');
-                        $sourceType = zget($groupComponent->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
+                        $package    = zget($groupComponent->chartConfig, 'package', '');
+                        $sourceType = $this->getChartType($package);
 
                         if($chartID == $sourceID and $type == $sourceType) return true;
                     }
@@ -2580,7 +2581,8 @@ class screenModel extends model
                     if(!isset($component->chartConfig)) continue;
 
                     $sourceID   = zget($component->chartConfig, 'sourceID', '');
-                    $sourceType = zget($component->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
+                    $package    = zget($component->chartConfig, 'package', '');
+                    $sourceType = $this->getChartType($package);
                     if($chartID == $sourceID and $type == $sourceType) return true;
                 }
 

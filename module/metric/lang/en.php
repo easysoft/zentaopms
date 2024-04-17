@@ -151,9 +151,11 @@ $lang->metric->noDataAfterCollect  = "No data is available after the time for da
 $lang->metric->legendBasicInfo  = 'Basic Information';
 $lang->metric->legendCreateInfo = 'Creation and Editing Information';
 
-$lang->metric->confirmDelete = "Are you sure you want to delete?";
-$lang->metric->confirmDelist = "Are you sure you want to delist?";
-$lang->metric->notExist      = "The measure does not exist";
+$lang->metric->confirmDelete       = "Are you sure you want to delete?";
+$lang->metric->confirmDelist       = "Are you sure you want to delist?";
+$lang->metric->confirmDelistInUsed = "This metric has been referenced by the large screen. Are you sure you want to take it down?";
+$lang->metric->confirmRecalculate  = "Recalculation results may overwrite existing metric records. Do you want to continue?";
+$lang->metric->notExist            = "The measure does not exist";
 
 $lang->metric->browse          = 'Browse Metrics';
 $lang->metric->browseAction    = 'Metric List';
