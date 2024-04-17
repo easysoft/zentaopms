@@ -3468,7 +3468,7 @@ class upgradeModel extends model
             $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('execution')->where('module')->eq('project')->exec();
             foreach($projectPrivList as $projectPriv)
             {
-                if(!in_array($projectPriv->method, array('browse', 'story', 'bug', 'testtask', 'testcase', 'doc', 'build', 'index', 'create', 'edit', 'batchedit', 'start', 'activate', 'suspend', 'close', 'delete', 'export', 'manageProducts', 'manageMembers', 'team', 'unlinkMember', 'unlinkStory', 'view'))) continue;
+                if(!in_array($projectPriv->method, array('browse', 'story', 'bug', 'testtask', 'doc', 'build', 'index', 'create', 'edit', 'batchedit', 'start', 'activate', 'suspend', 'close', 'delete', 'export', 'manageProducts', 'manageMembers', 'team', 'unlinkMember', 'unlinkStory', 'view'))) continue;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($projectPriv)->exec();
             }
         }
