@@ -15,7 +15,7 @@ namespace zin\utils;
 /**
  * Manage dataset properties for html element and widgets.
  */
-class dataset
+class dataset implements \JsonSerializable
 {
     /**
      * Store dataset properties list in an array.
@@ -146,6 +146,18 @@ class dataset
     public function toJSON(): array
     {
         return $this->storedData;
+    }
+
+    /**
+     * Serialized to JSON.
+     * 序列化为 JSON。
+     *
+     * @access public
+     * @return mixed
+     */
+    public function jsonSerialize(): mixed
+    {
+        return $this->toArray();
     }
 
     /**
