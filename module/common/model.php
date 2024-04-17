@@ -395,6 +395,8 @@ class commonModel extends model
         $this->config->system   = isset($config['system']) ? $config['system'] : array();
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
+        $this->commonTao->updateDBWebRoot($this->config->system);
+
         /* Override the items defined in config/config.php and config/my.php. */
         if(isset($this->config->system->common))   $this->app->mergeConfig($this->config->system->common, 'common');
         if(isset($this->config->personal->common)) $this->app->mergeConfig($this->config->personal->common, 'common');
