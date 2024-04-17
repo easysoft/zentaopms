@@ -13,15 +13,18 @@ declare(strict_types=1);
 namespace zin;
 
 /**
- * 思引师表格填空题类型表单。
- * thinmory form fill in the blank question type form.
+ * 思引师基础表单。
+ * thinmory basic forms.
  *
  * @author Yu Zhang
  */
 
+require_once dirname(__DIR__) . DS . 'thinktablecompletion' . DS . 'v1.php';
+
 class thinkStep extends wg
 {
     protected static array $defineProps = array(
+        'type?: string',     // 节点或者题型类型
         'title?: string',    // 标题
         'titleName: string', // 标题对应的name
         'desc?: string',     // 描述
@@ -80,11 +83,17 @@ class thinkStep extends wg
         );
     }
 
+    protected function buildThinkTableCompletionControl()
+    {
+        return new thinkTableCompletion;
+    }
+
     protected function buildBody(): array
     {
         return array(
             $this->buildNamePanel(),
             $this->buildDescControl(),
+            $this->buildThinkTableCompletionControl(),
             $this->block('fields')
         );
     }
