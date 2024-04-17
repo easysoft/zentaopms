@@ -56,7 +56,6 @@ class render
             if(!isset($this->filteredMap[$name])) $this->filteredMap[$name] = array();
             $filteredNodes = $this->filteredMap[$name];
 
-            if(($selector->id || $selector->first) && $filteredNodes) continue;
             if(!$node->isMatch($selector)) continue;
             if($node instanceof h && $node->parent)
             {
@@ -64,6 +63,7 @@ class render
                 if($node->parent->parent && $node->parent->parent instanceof wg && $node->parent->parent->isMatch($selector)) continue;
             }
 
+            if($selector->id || $selector->first) $filteredNodes = array();
             $filteredNodes[$node->gid] = $node;
             $this->filteredMap[$name] = $filteredNodes;
         }
