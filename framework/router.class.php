@@ -750,4 +750,21 @@ class router extends baseRouter
 
         return isset($this->config->installed) && $this->config->installed;
     }
+
+    /**
+     * 获取禅道版本在不同语言下的显示名称。
+     * Get the display name of the ZenTaoPMS version in different language.
+     *
+     * @param  string $version 20.0|biz9.0|max5.0|ipd2.0
+     * @return string
+     */
+    public function getVersionName($version = '')
+    {
+        global $config, $lang;
+        $editionName = $config->edition === 'open' ? $lang->pmsName : $lang->{$config->edition . 'Name'};
+        $versionName = empty($version) ? $config->version : $version;
+        $versionName = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $versionName);
+        $versionName = ($config->inQuickon ? $lang->devopsPrefix : '') . $versionName;
+        return $versionName;
+    }
 }
