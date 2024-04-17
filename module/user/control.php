@@ -794,7 +794,7 @@ class user extends control
 
         if($this->app->getViewType() == 'json') return $this->send(array('status' => 'success'));
 
-        return $this->send(array('result' => 'success', 'load' => inlink('login', !empty($referer) ? "referer=$referer" : '')));
+        return $this->send(array('result' => 'success', 'locate' => inlink('login', !empty($referer) ? "referer=$referer" : '')));
     }
 
     /**
