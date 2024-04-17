@@ -3462,7 +3462,16 @@ class upgradeModel extends model
     public function adjustPriv15_0()
     {
         $executionPriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('execution')->limit(1)->fetch();
-        if(empty($executionPriv)) $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('execution')->where('module')->eq('project')->exec();
+        if(empty($executionPriv))
+        {
+            $projectPrivList = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->fetchAll();
+            $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('execution')->where('module')->eq('project')->exec();
+            foreach($projectPrivList as $projectPriv)
+            {
+                if(!in_array($projectPriv->method, array('browse', 'story', 'bug', 'testtask', 'build', 'index', 'create', 'edit', 'batchedit', 'start', 'activate', 'suspend', 'close', 'delete', 'export', 'manageProducts', 'manageMembers', 'team', 'unlinkMember', 'unlinkStory', 'view'))) continue;
+                $this->dao->replace(TABLE_GROUPPRIV)->data($projectPriv)->exec();
+            }
+        }
 
         $groups = $this->dao->select('id')->from(TABLE_GROUP)->fetchPairs('id', 'id');
         foreach($groups as $groupID)
