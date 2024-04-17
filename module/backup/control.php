@@ -114,11 +114,15 @@ class backup extends control
                 printf($result['message']);
             }
 
-            $result = $this->backupZen->backupCode($fileName, $reload);
-            if($result['result'] == 'fail')
+            global $app;
+            if(!$this->app->isContainer())
             {
-                if($reload == 'yes') return print($result['message']);
-                printf($result['message']);
+                $result = $this->backupZen->backupCode($fileName, $reload);
+                if($result['result'] == 'fail')
+                {
+                    if($reload == 'yes') return print($result['message']);
+                    printf($result['message']);
+                }
             }
         }
 
