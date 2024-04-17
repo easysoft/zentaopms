@@ -299,7 +299,6 @@ $lang->metric->implement->downloadPHP = "Download Metric Template";
 $lang->metric->implement->instructionTips = array();
 $lang->metric->implement->instructionTips[] = '1.Download the measurement template file and perform coding and development operations on the file. For details, see the operation manual.<a class="btn text-primary ghost" target="_blank" href="https://www.zentao.net/book/zentaopms/1103.html">Manual>></a>';
 $lang->metric->implement->instructionTips[] = '2.Please put the developed file in the following directory,<strong>Keep the file name consistent with the measurement code</strong>。<br/> <span class="label code-slate">{tmpRoot}metric</span>';
-$lang->metric->implement->instructionTips[] = '3.Execute commands to grant executable permissions to files:<p><span class="label code-slate">chmod 777 {tmpRoot}metric</span></p><p><span class="label code-slate">chmod 777 {tmpRoot}metric/{code}.php</span></p>';
 
 $lang->metric->verifyCustom = new stdclass();
 $lang->metric->verifyCustom->checkCustomCalcExists = array();
