@@ -1,0 +1,54 @@
+.think-options {width: 100%}
+.think-options-header {padding-right: 24px; color: var(--color-gray-700);}
+.think-options-row {position: relative; display: flex; border-radius: var(--radius); align-items: stretch; min-height: 32px; --tw-ring-color: rgba(var(--color-gray-300-rgb), .7); box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color); margin-top: 1px; z-index: 1;}
+.think-options-row.is-focus {z-index: 100;}
+.think-options-header .think-options-row {border-radius: 2px 2px 0 0; background-color: var(--color-gray-100);}
+.think-options-col {flex: none; display: flex; align-items: stretch;}
+.think-options-header .think-options-col {padding: 0 12px; align-items: center;}
+.think-options-col-step {width: 80%;}
+.think-options-col-add {width: 20%; border-left: 1px solid rgba(var(--color-gray-300-rgb), .7); align-items: center; padding: 0!important;}
+.think-options-col-add > div {flex: 1; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; border-right: 1px solid rgba(var(--color-gray-300-rgb), .7); background: rgba(242, 244, 247, .7)}
+.think-options-col-add > div:last-child {border-right: 0;}
+.think-options-col-step.form-control {padding: 0; border-radius: 0; height: auto; z-index: 100; border-bottom-left-radius: var(--radius); border-top-left-radius: var(--radius)}
+.think-options-step-name {width: 44px; padding: 6px 0; text-align: center; flex: none; opacity: .5; position: relative; background: rgba(242, 244, 247, .7)}
+.think-options-step-text {padding: 6px 12px 6px 10px;; flex: auto; border: none; min-height: 32px; background: none; border-radius: 0; resize: none}
+.think-options-step-text {outline: none;}
+.think-options .btn-action {color: var(--color-gray-600);}
+.think-options .btn-action:hover {color: var(--color-primary-500);}
+.think-options-col-delete {width: 24px; height: 100%; display: flex; align-items: center; justify-content: center; position: absolute; right: 0; top: 0}
+.think-options-row .form-control {background: inherit;}
+.think-options-row {background: var(--color-canvas);}
+.think-options-row[data-level="1"] {margin-top: 4px;}
+.think-options-body > .think-options-row:first-child {margin-top: 1px;}
+.think-options-step-move {color: var(--color-gray-600); width: 24px; display: flex; justify-content: center; align-items: center; cursor: move;}
+.think-options-drag-ghost {position: absolute; left: 0; top: 0; bottom: 0; opacity: 0; right: 0; pointer-events: none;}
+.think-options-step-move:hover {color: var(--color-primary-500)}
+.think-options-col-step::before {display: block; content: ' '; position: absolute; left: -90px; top: 0; bottom: 0; width: 90px;}
+.has-dragging .think-options-step-move > .icon-move {display: none;}
+.think-options-row.move-hover {background-color: rgba(var(--color-primary-100-rgb),.2);}
+.think-options-row.is-dragging {background-color: rgba(var(--color-primary-100-rgb),.4);}
+.think-options-row.is-sub-dragging {background-color: rgba(var(--color-primary-100-rgb),.2);}
+.think-options-row.is-dropping {z-index: 5;}
+.think-options-row.is-dropping::before,
+.think-options-row.is-dropping::after {content: ' '; display: block; position: absolute; left: 24px; z-index: 110;}
+.think-options-row.is-dropping::after {transform: translateX(-2px);}
+.think-options-row.is-dropping[data-drop-level="2"]::before,
+.think-options-row.is-dropping[data-drop-level="2"]::after {left: 46px;}
+.think-options-row.is-dropping[data-drop-level="3"]::before,
+.think-options-row.is-dropping[data-drop-level="3"]::after {left: 60px;}
+.think-options-row.is-dropping::before {height: 2px; background: var(--color-primary-500); right: 0;}
+.think-options-row.is-dropping[data-drop-side="top"]::before {top: -1px;}
+.think-options-row.is-dropping[data-drop-side="bottom"]::before {bottom: -2px;}
+.think-options-row.is-dropping[data-drop-side="top"]::after {top: -5px;}
+.think-options-row.is-dropping[data-drop-side="bottom"]::after {bottom: -7px;}
+.think-options-row.is-dropping::after {width: 12px; height: 12px; border-radius: 50%; background: var(--color-primary-500); border: var(--color-primary-100) 3px solid; z-index: 120;}
+.think-options-row.is-dropping[data-level="1"][data-drop-side="top"]::before {top: -4px;}
+.think-options-row.is-dropping.no-child[data-level="1"][data-drop-side="bottom"]::before {bottom: -5px;}
+.think-options-row.is-dropping[data-level="1"][data-drop-side="top"]::after {top: -9px;}
+.think-options-row.is-dropping.no-child[data-level="1"][data-drop-side="bottom"]::after {bottom: -10px;}
+.think-options-row.is-invalid-drop-level.is-dropping::before,
+.think-options-row.is-invalid-drop-level.is-dropping::after {filter: grayscale(1); opacity: .5;}
+.think-options-row.is-invalid-drop-level.is-dropping .think-options-step-name {opacity: 1;}
+.think-options-row.is-invalid-drop-level.is-dropping .think-options-step-name::before {content: attr(data-invalid-nested); display: block; position: absolute; left: calc(var(--name-indent) + 12px); top: 0; white-space: nowrap; background: var(--color-gray-100); padding: 1px 6px; border: 1px solid var(--color-border); color: var(--color-gray-500)}
+.think-options-row.is-invalid-drop-level.is-dropping[data-drop-side="top"] .think-options-step-name::before {top: -30px;}
+.think-options-row.is-invalid-drop-level.is-dropping[data-drop-side="bottom"] .think-options-step-name::before {bottom: -30px; top: auto}
