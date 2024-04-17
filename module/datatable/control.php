@@ -128,10 +128,9 @@ class datatable extends control
         if(zget($this->config->datatable->moduleAlias, "$module-$method", $module) == 'story')
         {
             unset($cols['product'], $cols['module']);
-            if($extra != 'requirement') unset($cols['SRS']);
             if($extra != 'story')
             {
-                foreach(array('taskCount', 'bugCount', 'caseCount', 'URS') as $field) unset($cols[$field]);
+                foreach(array('taskCount', 'bugCount', 'caseCount') as $field) unset($cols[$field]);
                 $cols['title']['title'] = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
             }
         }
