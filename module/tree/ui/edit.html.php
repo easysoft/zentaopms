@@ -73,6 +73,7 @@ formPanel
     ) : null,
     formGroup
     (
+        set::className($hidden ? 'hidden' : ''),
         set::name('name'),
         set::label($name),
         set::control('input'),
@@ -80,7 +81,7 @@ formPanel
     ),
     $module->type != 'line' ? formGroup
     (
-        set::className($hidden ? 'moduleBox hidden' : 'moduleBox'),
+        set::className('moduleBox ', $hidden ? 'hidden' : ''),
         set::label(($type == 'doc' or $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent),
         picker
         (
