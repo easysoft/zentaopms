@@ -34,12 +34,15 @@ class textarea extends wg
 
     protected function build()
     {
+        $autoHeight = $this->prop('autoHeight');
+        if($autoHeight) $this->setProp('rows', null);
+
         return h::textarea
         (
             set($this->props->pick(array('name', 'id', 'class', 'placeholder', 'rows', 'cols', 'disabled'))),
             $this->prop('required') ? setClass('is-required') : null,
             $this->prop('value'),
-            $this->prop('autoHeight') ? on::init()->do('$element.autoHeight()') : null,
+            $autoHeight ? on::init()->do('$element.autoHeight()') : null,
             $this->children()
         );
     }
