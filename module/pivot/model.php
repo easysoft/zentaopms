@@ -30,10 +30,11 @@ class pivotModel extends model
      * Get pivot.
      *
      * @param  int         $pivotID
+     * @param  bool        $processDateVar
      * @access public
      * @return object|bool
      */
-    public function getByID(int $pivotID): object|bool
+    public function getByID(int $pivotID, bool $processDateVar = false): object|bool
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
         if(!$pivot) return false;
@@ -48,7 +49,7 @@ class pivotModel extends model
         if(!empty($pivot->filters))
         {
             $filters = json_decode($pivot->filters, true);
-            $pivot->filters = $this->setFilterDefault($filters);
+            $pivot->filters = $this->setFilterDefault($filters, $processDateVar);
         }
         else
         {
@@ -2253,12 +2254,12 @@ class pivotModel extends model
      * @access private
      * @return array
      */
-    public function setFilterDefault(array $filters): array
+    public function setFilterDefault(array $filters, bool $processDateVar = true): array
     {
         foreach($filters as &$filter)
         {
             if(!isset($filter['default']) || empty($filter['default'])) continue;
-            if(is_string($filter['default'])) $filter['default']= $this->processDateVar($filter['default']);
+            if($processDateVar && is_string($filter['default'])) $filter['default']= $this->processDateVar($filter['default']);
         }
 
         return $filters;
