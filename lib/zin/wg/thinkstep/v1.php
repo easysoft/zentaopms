@@ -19,8 +19,6 @@ namespace zin;
  * @author Yu Zhang
  */
 
-require_once dirname(__DIR__) . DS . 'thinktableinput' . DS . 'v1.php';
-
 class thinkStep extends wg
 {
     protected static array $defineProps = array(
