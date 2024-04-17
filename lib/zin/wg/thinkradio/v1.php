@@ -44,6 +44,8 @@ class thinkRadio extends thinkStep
             set::label(data('lang.thinkwizard.step.label.option')),
             thinkOptions(set::name($optionName), set::otherName($otherName)),
         );
+        $items[] = formHidden('type', 'radio');
+        $items[] = $this->children();
         return $items;
     }
 }
