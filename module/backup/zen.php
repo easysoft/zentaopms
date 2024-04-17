@@ -73,7 +73,6 @@ class backupZen extends backup
                 printf($this->lang->backup->error->noWritable, $this->backupPath);
             }
         }
-        
 
         if(!$nosafe) $this->backup->addFileHeader($backFileName);
         return array('result' => 'success');
