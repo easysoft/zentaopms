@@ -1115,7 +1115,7 @@ class metricModel extends model
             case 'execution':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
                     ->where('deleted')->eq(0)
-                    ->andWhere('type')->in('sprint,stage')
+                    ->andWhere('type')->in('sprint,stage,kanban')
                     ->andWhere("vision LIKE '%{$vision}%'", true)
                     ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
