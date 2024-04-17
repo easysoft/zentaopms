@@ -703,7 +703,11 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
         if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module'])
         {
             $module = $actionConfig['url']['module'];
-            if(!$notLoadModel) $model  = $app->control->loadModel($module);
+            if(!$notLoadModel)
+            {
+                $rowModule = $module == 'projectbuild' ? 'build' : $module;
+                $model = $app->control->loadModel($rowModule);
+            }
         }
 
         $method = $action;

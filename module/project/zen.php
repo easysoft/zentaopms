@@ -1356,7 +1356,6 @@ class projectZen extends project
 
                 if(empty($build->branchName) and empty($build->builds)) $build->branchName = $this->lang->branch->main;
             }
-            $build->actions = $this->build->buildActionList($build, 0, 'projectbuild');
 
             if($project->multiple && empty($build->execution))
             {
