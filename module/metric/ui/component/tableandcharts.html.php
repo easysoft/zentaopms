@@ -39,6 +39,7 @@ $fnGenerateTableAndCharts = function($metric) use($viewType, $groupHeader, $grou
         ) : null,
         $echartOptions ? div
         (
+            setStyle(array('width' => "calc(100vh - {$tableWidth}px)")),
             setClass('chart-side'),
             div
             (
