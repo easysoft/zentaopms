@@ -8510,6 +8510,8 @@ class upgradeModel extends model
         $model->createdDate = helper::now();
         $model->createdBy   = 'system';
 
+        if(empty($model->type)) return;
+
         $credentials = new stdclass();
         $credentials->key = $aiConfig->key ?: '';
 
