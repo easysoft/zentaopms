@@ -734,7 +734,7 @@ class my extends control
         $this->view->users       = $this->user->getPairs('noclosed|noletter');
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
-        $this->view->type        = $type;
+        $this->view->type        = $browseType;
         $this->view->param       = $param;
         $this->view->issues      = $type == 'assignedBy' ? $this->my->getAssignedByMe($this->app->user->account, $pager,  $orderBy, 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
@@ -793,6 +793,7 @@ class my extends control
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->type        = $type;
+        $this->view->param       = $param;
         $this->view->mode        = 'risk';
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
         $this->display();
