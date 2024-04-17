@@ -1318,7 +1318,6 @@ class pivotModel extends model
         $sql = $this->initVarFilter($filters, $sql);
         $sql = $this->trimSemicolon($sql);
         $sql = $this->appendWhereFilterToSql($sql, $filters);
-        $sql = $this->bi->setEmptyMode4SQL($sql);
 
         $records = $this->dao->query($sql)->fetchAll();
         $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql);
@@ -1474,7 +1473,6 @@ class pivotModel extends model
             $whereStr    = implode(' and ', $wheres);
             $connectSQL .= " where $whereStr";
         }
-        $sql = $this->bi->setEmptyMode4SQL($sql);
 
         $this->app->loadClass('sqlparser', true);
         $parser    = new sqlparser($sql);

@@ -77,7 +77,7 @@ class pivot extends control
     public function ajaxGetSysOptions($type, $object = '', $field = '', $saveAs = '')
     {
         $sql     = isset($_POST['sql'])     ? $_POST['sql']     : '';
-        $filters = isset($_POST['filters']) ? $_POST['filters'] : array();
+        $filters = isset($_POST['filters']) ? $_POST['filters'] : '';
 
         $sql     = $this->loadModel('chart')->parseSqlVars($sql, $filters);
         $options = $this->pivot->getSysOptions($type, $object, $field, $sql, $saveAs);
