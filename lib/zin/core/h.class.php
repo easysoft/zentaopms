@@ -218,14 +218,14 @@ class h extends node
 
     public static function globalJS(mixed ...$args): ?h
     {
-        list($code, $args) = h::splitRawCode($args);
+        list($code, $args) = h::splitRawCode($args, true);
         if(empty($code)) return null;
         return static::create('script', html(...$code), $args);
     }
 
     public static function js(mixed ...$args): ?h
     {
-        list($code, $args) = h::splitRawCode($args);
+        list($code, $args) = h::splitRawCode($args, true);
         if(empty($code)) return null;
         $code = ';(function(){' . implode("\n", $code) . '}());';
         return static::create('script', html($code), ...$args);
@@ -237,7 +237,7 @@ class h extends node
         return static::js(js()->var($name, $value), $args);
     }
 
-    public static function jsCall(string $funcName, mixed ...$args): h
+    public static function jsCall(string $funcName, mixed ...$args): ?h
     {
         $args  = func_get_args();
         $funcName  = array_shift($args);
@@ -263,14 +263,15 @@ class h extends node
         return static::js($js, $directives);
     }
 
-    protected static function splitRawCode($children)
+    protected static function splitRawCode($children, $includeJS = false)
     {
         $children = \zin\utils\flat($children);
         $code = array();
         $args = array();
         foreach($children as $child)
         {
-            if($child instanceof js) $child = $child->toJS();
+            if($includeJS && $child instanceof js) $child = $child->toJS();
+
             if(is_string($child)) $code[] = $child;
             else                  $args[] = $child;
         }
