@@ -341,7 +341,7 @@ class upgradeModel extends model
         $createHead = array_shift($lines);
         $createFoot = array_pop($lines);
 
-        preg_match_all('/CREATE TABLE `([^`]*)`/', $createHead, $out);
+        preg_match_all('/CREATE TABLE [^`]*`([^`]*)`/', $createHead, $out);
         if(!isset($out[1][0])) return $changes;
 
         $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);

@@ -432,9 +432,9 @@ class storyTao extends storyModel
     {
         /* 获取查询条件。 */
         $rawModule = $this->app->rawModule;
-        $this->loadModel('search')->setQuery($rawModule == 'projectstory' ? 'story' : 'executionStory', $queryID);
+        $this->loadModel('search')->setQuery($rawModule == 'projectstory' ? 'projectstory' : 'executionStory', $queryID);
         if(!$this->session->executionStoryQuery) $this->session->set('executionStoryQuery', ' 1 = 1');
-        if($rawModule == 'projectstory') $this->session->set('executionStoryQuery', $this->session->storyQuery);
+        if($rawModule == 'projectstory') $this->session->set('executionStoryQuery', $this->session->projectstoryQuery);
 
         /* 处理查询条件。 */
         $storyQuery = $this->replaceAllProductQuery($this->session->executionStoryQuery);

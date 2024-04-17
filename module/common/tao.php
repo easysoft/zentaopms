@@ -386,4 +386,40 @@ class commonTao extends commonModel
 
         return array($module, $method);
     }
+
+    /**
+     * Check and update webRoot config in DB.
+     *
+     * @param  object    $dbConfig
+     * @access public
+     * @return void
+     */
+    public function updateDBWebRoot($dbConfig)
+    {
+        if(PHP_SAPI == 'cli') return;
+
+        global $config;
+        /* Check config webRoot right or not. */
+        if($config->webRoot[0] != '/') return;
+        if($config->webRoot[strlen($config->webRoot) - 1] != '/') return;
+
+        /* Get webRoot config in db. */
+        $webRootConfig = null;
+        foreach($dbConfig->common as $commonConfig)
+        {
+            if($commonConfig->key == 'webRoot')
+            {
+                $webRootConfig = $commonConfig;
+                break;
+            }
+        }
+
+        /* Init db webRoot config. */
+        if(empty($webRootConfig)) return $this->loadModel('setting')->setItem('system.common.webRoot', $config->webRoot);
+        if($config->webRoot == $webRootConfig->value) return;
+
+        /* Update db webRoot. */
+        $webRootConfig->value = $config->webRoot;
+        $this->loadModel('setting')->setItem('system.common.webRoot', $config->webRoot);
+    }
 }

@@ -25,7 +25,8 @@ class buildZen extends build
     protected function assignCreateData(int $productID, int $executionID, int $projectID, string $status)
     {
         $productGroups = $branchGroups = array();
-        $executions    = $this->loadModel('execution')->getPairs($projectID, 'all', 'stagefilter|leaf|order_asc');
+        $noClosedParam = (isset($this->config->CRExecution) && $this->config->CRExecution == 0) ? '|noclosed' : '';
+        $executions    = $this->loadModel('execution')->getPairs($projectID, 'all', 'stagefilter|leaf|order_asc' . $noClosedParam);
         $executionID   = empty($executionID) && !empty($executions) ? (int)key($executions) : $executionID;
         if($executionID || $projectID)
         {
