@@ -128,3 +128,31 @@ function data()
     if(count($args) >= 2) return setPageData($args[0], $args[1]);
     return getPageData($args[0]);
 }
+
+function dv(mixed $nameOrData, mixed $data = null, $json = false)
+{
+    if(is_string($nameOrData))
+    {
+        $name = $nameOrData;
+    }
+    else
+    {
+        $name = 'dump';
+        $data = $nameOrData;
+    }
+    context::current()->addDebugData($name, $data, $json);
+}
+
+function d(mixed $nameOrData, mixed $data = null)
+{
+    if(is_string($nameOrData))
+    {
+        $name = $nameOrData;
+    }
+    else
+    {
+        $name = 'dump';
+        $data = $nameOrData;
+    }
+    context::current()->addDebugData($name, $data, true);
+}
