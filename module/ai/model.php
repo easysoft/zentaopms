@@ -169,7 +169,7 @@ class aiModel extends model
      */
     private function getDefaultLanguageModel()
     {
-        $models = $this->getLanguageModels('', true);
+        $models = $this->getLanguageModels('', true, null, 'id_asc');
         if(empty($models)) return false;
 
         return current($models);
