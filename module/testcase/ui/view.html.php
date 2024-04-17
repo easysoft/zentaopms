@@ -36,6 +36,12 @@ foreach($actions as $index => $action)
 {
     if(!isset($action['url'])) continue;
     $actions[$index]['url'] = str_replace('%executionID%', (string)$this->session->execution, $action['url']);
+
+    if($isInModal && !isset($action['data-toggle']) && !isset($action['data-load']))
+    {
+        $actions[$index]['data-load'] = 'modal';
+        $actions[$index]['data-size'] = 'lg';
+    }
 }
 
 $steps = array();
