@@ -551,6 +551,8 @@ function initTableData(array $items, array &$fieldList, object $model = null, st
 
                 $otherActionMenus = $actionMenu['other'];
                 $otherAction      = '';
+                $actionCount      = 0;
+                $disabledCount    = 0;
                 foreach($otherActionMenus as $otherActionMenu)
                 {
                     $otherActions = explode('|', $otherActionMenu);
@@ -558,22 +560,32 @@ function initTableData(array $items, array &$fieldList, object $model = null, st
                     {
                         if(in_array($otherActionName, array_column($item->actions, 'name'))) continue;
 
-                        if(method_exists($model, 'isClickable') && !$model->isClickable($item, $otherActionName)) $otherAction .= '-';
+                        $actionCount ++;
+                        if(method_exists($model, 'isClickable') && !$model->isClickable($item, $otherActionName))
+                        {
+                            $disabledCount ++;
+                            $otherAction .= '-';
+                        }
                         $otherAction .= $otherActionName . ',';
                     }
                 }
-                $item->actions[] = 'other:' . $otherAction;
+                if($otherAction && $actionCount != $disabledCount) $item->actions[] = 'other:' . $otherAction;
             }
             elseif($actionKey === 'more')
             {
-                $moreAction = '';
+                $moreAction    = '';
+                $disabledCount = 0;
                 foreach($actionMenu as $moreActionName)
                 {
-                    if(method_exists($model, 'isClickable') && !$model->isClickable($item, $moreActionName)) $moreAction .= '-';
+                    if(method_exists($model, 'isClickable') && !$model->isClickable($item, $moreActionName))
+                    {
+                        $disabledCount ++;
+                        $moreAction .= '-';
+                    }
                     $moreAction .= $moreActionName . ',';
                 }
 
-                $item->actions[] = 'more:' . $moreAction;
+               if($moreAction && count($actionMenu) != $disabledCount) $item->actions[] = 'more:' . $moreAction;
             }
             elseif(is_array($actionMenu))       // Two or more grups.
             {
