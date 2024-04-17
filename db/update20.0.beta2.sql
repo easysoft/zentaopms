@@ -1,4 +1,4 @@
-UPDATE `zt_workflowfield` SET `default` = 0 WHERE `field` = 'approva' AND `role` = 'approval' AND `default` = '';
+UPDATE `zt_workflowfield` SET `default` = 0 WHERE `field` = 'approval' AND `role` = 'approval' AND `default` = '';
 UPDATE `zt_workflowfield` SET `default` = 'wait' WHERE `field` = 'reviewStatus' AND `role` = 'approval' AND `default` = '';
 
 ALTER TABLE `zt_project` ADD COLUMN `enabled` enum('on','off') NOT NULL DEFAULT 'on' AFTER `parallel`;
