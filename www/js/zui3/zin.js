@@ -176,6 +176,16 @@
     {
         if(!DEBUG) return;
 
+        if(data.debug)
+        {
+            data.debug.forEach(dump =>
+            {
+                console.groupCollapsed('%c[ZIN]%c debug %c' + dump.name, 'color:#fff;font-weight:bold;background:#ec4899', 'color:#ec4899;font-weight:bold', 'font-weight:bold');
+                if(typeof dump.data === 'string') console.log('%c' + dump.data, 'font-family: ui-monospace,monospace; padding:0 4px; border-left:1px solid #ff0000');
+                else console.log(dump.data);
+                console.groupEnd();
+            });
+        }
         updateZinbar({id: options.id, trace: data.trace, xhprof: data.xhprof}, data.errors, data.basePath);
     }
 
