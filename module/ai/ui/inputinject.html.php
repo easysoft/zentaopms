@@ -23,6 +23,7 @@ $method = $this->app->getMethodName();
 $auditInject = function() use($module, $method)
 {
     if(!isset($_SESSION['aiPrompt']['prompt']) || empty($_SESSION['aiPrompt']['objectId'])) return;
+    if(!common::hasPriv('ai', 'promptaudit')) return;
 
     $prompt   = $_SESSION['aiPrompt']['prompt'];
     $objectId = $_SESSION['aiPrompt']['objectId'];
