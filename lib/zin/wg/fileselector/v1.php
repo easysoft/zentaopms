@@ -85,10 +85,12 @@ class fileSelector extends wg
         }
 
         /* Check file type. */
-        $checkFiles = jsCallback('file')
-            ->const('dangerFileTypes', ",{$app->config->file->dangers},")
-            ->const('dangerFile', $lang->file->dangerFile)
-            ->do(<<<'JS'
+        if(empty($this->prop('accept')))
+        {
+            $checkFiles = jsCallback('file')
+                ->const('dangerFileTypes', ",{$app->config->file->dangers},")
+                ->const('dangerFile', $lang->file->dangerFile)
+                ->do(<<<'JS'
             const typeIndex = file.name.lastIndexOf(".");
             const fileType  = file.name.slice(typeIndex + 1);
             if(dangerFileTypes.indexOf(fileType) > -1)
@@ -97,14 +99,15 @@ class fileSelector extends wg
                 return false;
             }
             JS);
-        $onAdd = $this->prop('onAdd');
-        if($onAdd)
-        {
-            $onAdd      = js::value($onAdd);
-            $checkFiles = $checkFiles->call($onAdd, jsRaw('file'));
+            $onAdd = $this->prop('onAdd');
+            if($onAdd)
+            {
+                $onAdd      = js::value($onAdd);
+                $checkFiles = $checkFiles->call($onAdd, jsRaw('file'));
+            }
+            $checkFiles = $checkFiles->do('return file');
+            $this->setProp('onAdd', $checkFiles);
         }
-        $checkFiles = $checkFiles->do('return file');
-        $this->setProp('onAdd', $checkFiles);
     }
 
     /**
