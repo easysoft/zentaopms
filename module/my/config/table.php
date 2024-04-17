@@ -1131,3 +1131,4 @@ unset($config->my->team->dtable->fieldList['actions']);
 
 $config->my->project = new stdclass();
 $config->my->project->dtable = $config->project->dtable;
+

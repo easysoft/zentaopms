@@ -1079,6 +1079,7 @@ class my extends control
         $this->view->tickets    = $tickets;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->param      = $param;
         $this->view->browseType = $browseType;
         $this->view->mode       = 'ticket';
         $this->display();
