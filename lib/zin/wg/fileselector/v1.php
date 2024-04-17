@@ -73,7 +73,8 @@ class fileSelector extends wg
         {
             global $app, $lang;
             $app->loadLang('file');
-            $this->setProp('exceededSizeTip', $lang->file->errorFileSize);
+            $maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
+            $this->setProp('exceededSizeTip', sprintf($lang->file->errorFileSize, $maxUploadSize));
         }
 
         /* Auto prepend suffix "[]" to multiple mode. */
