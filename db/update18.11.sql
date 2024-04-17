@@ -276,8 +276,8 @@ UPDATE `zt_metric` SET `alias` = '待评审反馈数'               WHERE `code`
 UPDATE `zt_metric` SET `alias` = '评审反馈数'                 WHERE `code` = 'count_of_daily_review_feedback_in_user';
 UPDATE `zt_metric` SET `alias` = '完成执行数'                 WHERE `code` = 'count_of_annual_finished_execution';
 
-UPDATE `zt_metric` SET `name` = 'count_of_actual_time_in_project' WHERE `code` = '按项目统计的实际工期';
-UPDATE `zt_metric` SET `name` = 'variance_of_time_in_project'     WHERE `code` = '按项目统计的工期偏差';
+UPDATE `zt_metric` SET `name` = '按项目统计的实际工期' WHERE `code` = 'count_of_actual_time_in_project';
+UPDATE `zt_metric` SET `name` = '按项目统计的工期偏差'     WHERE `code` = 'variance_of_time_in_project';
 UPDATE `zt_metric` SET `dateType` = 'nodate' WHERE `code` = 'count_of_feedback_in_product';
 
 ALTER TABLE `zt_story` ADD COLUMN `unlinkReason` ENUM('', 'omit', 'other') NOT NULL DEFAULT '';
