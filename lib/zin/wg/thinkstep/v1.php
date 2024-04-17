@@ -19,7 +19,7 @@ namespace zin;
  * @author Yu Zhang
  */
 
-require_once dirname(__DIR__) . DS . 'thinktablecompletion' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'thinktableinput' . DS . 'v1.php';
 
 class thinkStep extends wg
 {
@@ -83,17 +83,11 @@ class thinkStep extends wg
         );
     }
 
-    protected function buildThinkTableCompletionControl()
-    {
-        return new thinkTableCompletion;
-    }
-
     protected function buildBody(): array
     {
         return array(
             $this->buildNamePanel(),
             $this->buildDescControl(),
-            $this->buildThinkTableCompletionControl(),
             $this->block('fields')
         );
     }
