@@ -45,7 +45,7 @@ form
             set::value($showModule)
         )
     ),
-    !empty($execution->multiple) ? formGroup
+    !empty($execution->multiple) || !empty($execution->hasProduct) ? formGroup
     (
         set::label($lang->datatable->showAllModule),
         radiolist
