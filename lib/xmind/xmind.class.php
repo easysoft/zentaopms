@@ -164,36 +164,7 @@ class xmind
         $parentNode->appendChild($caseNode);
 
         $topStepList = $this->findTopStepListByCase($case, $stepList);
-
-        foreach($topStepList as $step)
-        {
-            $subStepList = $this->findSubStepListByStep($step,$stepList);
-
-            $suffix   = count($subStepList) > 0 ? $config['group'] : '';
-            $stepNode = $this->createNode($xmlDoc, $step->desc, $suffix, array('nodeType' => 'step'));
-            $caseNode->appendChild($stepNode);
-
-            if(count($subStepList))
-            {
-                foreach($subStepList as $sub)
-                {
-                    $subNode = $this->createNode($xmlDoc, $sub->desc, '', array('nodeType'=>'substep'));
-                    $stepNode->appendChild($subNode);
-
-                    if(!empty($sub->expect))
-                    {
-                        $expectNode = $this->createNode($xmlDoc, $sub->expect, '', array('nodeType'=>'expect'));
-                        $subNode->appendChild($expectNode);
-                    }
-                }
-            }
-
-            if(count($subStepList) == 0 && !empty($step->expect))
-            {
-                $expectNode = $this->createNode($xmlDoc, $step->expect, '', array('nodeType'=>'expect'));
-                $stepNode->appendChild($expectNode);
-            }
-        }
+        $this->createStepNode($xmlDoc, $config, $caseNode, $stepList, $topStepList);
     }
 
     /**
