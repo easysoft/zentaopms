@@ -195,3 +195,4 @@ function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}
 function thinkRadio(): thinkRadio{return createWg('thinkRadio', func_get_args());}
 function thinkOptions(): thinkOptions{return createWg('thinkOptions', func_get_args());}
 function thinkTableInput(): thinkTableInput {return createWg('thinkTableInput', func_get_args());}
+function thinkInput(): thinkInput {return createWg('thinkInput', func_get_args());}
