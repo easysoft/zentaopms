@@ -795,6 +795,7 @@ $config->my->testtask->dtable->fieldList['title']['type']     = 'title';
 $config->my->testtask->dtable->fieldList['title']['link']     = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
 $config->my->testtask->dtable->fieldList['title']['fixed']    = 'left';
 $config->my->testtask->dtable->fieldList['title']['sortType'] = true;
+$config->my->testtask->dtable->fieldList['title']['data-app'] = 'qa';
 
 $config->my->testtask->dtable->fieldList['build']['name']     = 'buildName';
 $config->my->testtask->dtable->fieldList['build']['title']    = $lang->testtask->build;
