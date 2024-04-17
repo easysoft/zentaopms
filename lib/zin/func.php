@@ -193,6 +193,7 @@ function caseRelatedList(): caseRelatedList {return createWg('caseRelatedList', 
 function flowSubTable(): flowSubTable {return createWg('flowSubTable', func_get_args());}
 function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}
 function thinkRadio(): thinkRadio{return createWg('thinkRadio', func_get_args());}
+function thinkCheckbox(): thinkCheckbox {return createWg('thinkCheckbox', func_get_args());}
 function thinkOptions(): thinkOptions{return createWg('thinkOptions', func_get_args());}
 function thinkTableInput(): thinkTableInput {return createWg('thinkTableInput', func_get_args());}
 function thinkInput(): thinkInput {return createWg('thinkInput', func_get_args());}
