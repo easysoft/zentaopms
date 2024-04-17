@@ -1,5 +1,5 @@
 library 'z-common@feat-231130'
-library 'z-zentaopms@feat-240104'
+library 'z-zentaopms@feat-240417'
 
 pipeline {
   agent {
@@ -33,6 +33,7 @@ pipeline {
     string description: '指定收费版全量降级 revision', name: 'fulldown_ext_version', trim: true
 
     separator(name: "other", sectionHeader: "其它")
+    booleanParam defaultValue: false, description: '制作英文版', name: 'publish_en'
     booleanParam defaultValue: false, description: '调试模式', name: 'DEBUG'
   }
 
@@ -51,6 +52,7 @@ pipeline {
     PUBLISH_ZIP = "${params.publish_zip}"
     PUBLISH_IMAGE = "${params.publish_image}"
     PUBLISH_ZBOX = "${params.publish_zbox}"
+    PUBLISH_ENGLISH = "${params.publish_en}"
   }
 
   stages {
@@ -198,7 +200,7 @@ pipeline {
                     }
 
                     script {
-                      buildPkg.uploadExtSource(["php7.0", "php7.1", "php7.2_7.4", "php8.1"])
+                      buildPkg.uploadSource("php8.1", ["php7.0", "php7.1", "php7.2_7.4"])
                       env.PLUGIN_SAFE_EXIST = sh(returnStatus: true, script: 'test -d $SRC_ZENTAOEXT_PATH/zentaopro/safe')
                     }
                   }
@@ -265,7 +267,7 @@ pipeline {
             axes {
               axis {
                 name "ZLANG"
-                values "cn", "en"
+                values "cn"
               }
               axis {
                 name "PHPVERSION"
@@ -431,10 +433,15 @@ pipeline {
                       steps {
                         container('docker') {
                           sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
-                          sh "mv `find release/zh-cn/$PMS_VERSION release/en/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$PMS_VERSION"
-                          sh "mv `find release/zh-cn/$BIZ_VERSION release/en/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$BIZ_VERSION"
-                          sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$MAX_VERSION"
-                          sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$IPD_VERSION"
+                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$PMS_VERSION"
+                          sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$BIZ_VERSION"
+                          sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$MAX_VERSION"
+                          sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$IPD_VERSION"
+                        }
+                        script {
+                          if (env.PUBLISH_ENGLISH=="true") {
+                            // do copy release/en/
+                          }
                         }
                         container('jnlp') {
                           sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
@@ -480,10 +487,15 @@ pipeline {
                       steps {
                         container('docker') {
                           sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
-                          sh "mv `find release/zh-cn/$PMS_VERSION release/en/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$PMS_VERSION"
-                          sh "mv `find release/zh-cn/$BIZ_VERSION release/en/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$BIZ_VERSION"
-                          sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$MAX_VERSION"
-                          sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$IPD_VERSION"
+                          sh "mv `find release/zh-cn/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$PMS_VERSION"
+                          sh "mv `find release/zh-cn/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$BIZ_VERSION"
+                          sh "mv `find release/zh-cn/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$MAX_VERSION"
+                          sh "mv `find release/zh-cn/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$IPD_VERSION"
+                        }
+                        script {
+                          if (env.PUBLISH_ENGLISH=="true") {
+                            // do copy release/en/
+                          }
                         }
                         container('jnlp') {
                           sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'

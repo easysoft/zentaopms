@@ -1,5 +1,5 @@
 library 'z-common@feat-231130'
-library 'z-zentaopms@feat-240104'
+library 'z-zentaopms@feat-240417'
 
 pipeline {
   agent {
@@ -63,9 +63,7 @@ pipeline {
 
               zentaopms.setupStaticEnv()
               zentaopms.setupEnvAfterCheckout()
-            }
 
-            script {
               zCheckout([
                 [name: "xuansrc", subDir: true, url: "https://${env.GIT_HOST}/easycorp/xuanxuan.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.xuanxuan_version}", "${env.XUANVERSION}"] ],
                 [name: "zentaoext", subDir: true, url: "https://${env.GIT_HOST}/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zentaoext_version}", "${env.ZENTAOEXT_VERSION}", "${env.GIT_BRANCH}"] ],
