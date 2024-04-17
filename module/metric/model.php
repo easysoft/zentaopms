@@ -1037,7 +1037,7 @@ class metricModel extends model
         {
             $editAction = $this->config->metric->actionList['edit'];
             $editAction['data-toggle'] = 'modal';
-            $editAction['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}");
+            $editAction['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}&viewType=view");
 
             $menuList['suffix']['edit'] = $editAction;
         }
