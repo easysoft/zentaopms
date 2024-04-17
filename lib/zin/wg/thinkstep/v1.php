@@ -15,18 +15,18 @@ namespace zin;
 /**
  * 思引师基础表单。
  * thinmory basic forms.
- *
- * @author Yu Zhang
  */
 
 class thinkStep extends wg
 {
     protected static array $defineProps = array(
-        'type?: string',     // 节点或者题型类型
-        'title?: string',    // 标题
-        'titleName: string', // 标题对应的name
-        'desc?: string',     // 描述
-        'descName: string',  // 描述对应的name
+        'type?: string',       // 节点或者题型类型
+        'title?: string',      // 标题
+        'titleName: string',   // 标题对应的name
+        'desc?: string',       // 描述
+        'descName: string',    // 描述对应的name
+        'isEdit?: bool=false', // 是否编辑
+        'submitUrl: string',   // 提交表单url
     );
     protected static array $defineBlocks = array(
         'fields' => array(),
@@ -92,11 +92,18 @@ class thinkStep extends wg
 
     protected function build(): wg|array
     {
+        global $lang;
+        $actions = array(array(
+            'text'    => $lang->thinkmodel->save,
+            'btnType' => 'submit',
+            'class'   => 'primary h-7 ring-0 submit-btn px-4'
+        ));
         return formPanel
         (
             set::bodyClass('think-step-form'),
+            $this->prop('submitUrl') ? set::url($this->prop('submitUrl')) : null,
             set::grid(false),
-            set::actions(array()),
+            set::actions($actions),
             $this->buildBody()
         );
     }
