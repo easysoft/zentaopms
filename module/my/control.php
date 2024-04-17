@@ -722,9 +722,8 @@ class my extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
-        $browseType = strtolower($type);
-        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
-        $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bySearch&param=myQueryID");
+        $queryID    = $type == 'bysearch' ? (int)$param : 0;
+        $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bysearch&param=myQueryID");
         $this->loadModel('issue')->buildSearchForm($actionURL, $queryID);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -734,7 +733,7 @@ class my extends control
         $this->view->users       = $this->user->getPairs('noclosed|noletter');
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
-        $this->view->type        = $browseType;
+        $this->view->type        = $type;
         $this->view->param       = $param;
         $this->view->issues      = $type == 'assignedBy' ? $this->my->getAssignedByMe($this->app->user->account, $pager,  $orderBy, 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
