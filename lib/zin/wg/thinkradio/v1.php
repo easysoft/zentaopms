@@ -14,8 +14,13 @@ class thinkRadio extends thinkStep
     (
         'requiredName?: string="required"',
         'requiredItems?: array',
-        'optionName?: string="options"',
+        'optionName?: string',
         'otherName?: string',
+    );
+
+    protected static array $defaultProps = array
+    (
+        'type' => 'radio'
     );
 
     protected function buildBody(): array

@@ -28,7 +28,7 @@ class thinkOptions extends wg
     protected static array $defineProps = array
     (
         'id?: string="$GID"',               // 组件根元素的 ID。
-        'name?: string="options"',          // 步骤输入框作为表单项的名称。
+        'name?: string="fields"',          // 步骤输入框作为表单项的名称。
         'data?: array',                     // 默认值。
         'stepText?: string',                // 步骤文本。
         'sameLevelText?: string',           // 同级文本。
