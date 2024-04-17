@@ -77,18 +77,21 @@ window.getCellSpan = function(cell)
 
 window.restore = function(name)
 {
-    zui.Modal.confirm({message: confirmRestoreLang, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    $.get($.createLink('backup', 'ajaxCheckBackupVersion', 'name=' + name), function(data)
     {
-        if(res)
+        zui.Modal.confirm({message: data.message, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
         {
-            $.ajaxSubmit({url: $.createLink('backup', 'restore', 'file=' + name)});
+            if(res && data.canRestore)
+            {
+                $.ajaxSubmit({url: $.createLink('backup', 'restore', 'file=' + name)});
 
-            zui.Modal.open({id: 'waiting', size: 'sm', backdrop: false});
-            $('#waiting').addClass('show');
-            $('#waiting .modal-body #backupType').html(restoreLang);
-            $('#waiting .modal-body #message').empty();
-        }
-    });
+                zui.Modal.open({id: 'waiting', size: 'sm', backdrop: false});
+                $('#waiting').addClass('show');
+                $('#waiting .modal-body #backupType').html(restoreLang);
+                $('#waiting .modal-body #message').empty();
+            }
+        });
+    }, 'json');
 };
 
 $(document).off('click', '.rmPHPHeader').on('click', '.rmPHPHeader', function(data)
