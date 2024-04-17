@@ -194,3 +194,4 @@ function flowSubTable(): flowSubTable {return createWg('flowSubTable', func_get_
 function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}
 function thinkRadio(): thinkRadio{return createWg('thinkRadio', func_get_args());}
 function thinkOptions(): thinkOptions{return createWg('thinkOptions', func_get_args());}
+function thinkTableCompletion(): thinkTableCompletion {return createWg('thinkTableCompletion', func_get_args());}
