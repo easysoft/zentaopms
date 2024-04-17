@@ -44,15 +44,18 @@ class storyModel extends model
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
-        $twinsIdList = $storyID . ($story->twins ? "," . trim($story->twins, ',') : '');
+        /* Get relation story ID.*/
+        $story->relationStoryID = $this->getRelationStoryID($story->id, $story->type);
+
+        $storyIdList = $storyID . ",{$story->relationStoryID}" . ($story->twins ? "," . trim($story->twins, ',') : '');
         $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
-            ->andWhere('t1.story')->in($twinsIdList)
+            ->andWhere('t1.story')->in($storyIdList)
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
 
-        $story->tasks = $this->dao->select('id,name,assignedTo,execution,project,status,consumed,`left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('story')->in($twinsIdList)->orderBy('id DESC')->fetchGroup('execution');
+        $story->tasks = $this->dao->select('id,name,assignedTo,execution,project,status,consumed,`left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('story')->in($storyIdList)->orderBy('id DESC')->fetchGroup('execution');
 
         if($story->toBug)          $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
         if($story->parent > 0)     $story->parentName = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch('title');
@@ -208,6 +211,24 @@ class storyModel extends model
         $story = $this->storyTao->getAffectedTwins($story, $users);
 
         return $story;
+    }
+
+    /**
+     * 获取用户需求细分的软件需求。
+     * Get relation story ID.
+     *
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @access public
+     * @return object
+     */
+    public function getRelationStoryID(int $storyID, string $storyType = 'requirement'): string
+    {
+        $relationStoryIdList = array();
+        $relationStoryList   = $this->getStoryRelation($storyID, $storyType);
+        foreach($relationStoryList as $relationStory) $relationStoryIdList[$relationStory->id] = $relationStory->id;
+
+        return implode(',', $relationStoryIdList);
     }
 
     /**
