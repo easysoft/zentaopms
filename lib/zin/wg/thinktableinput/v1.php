@@ -23,11 +23,6 @@ class thinkTableInput extends thinkStep
         'canAddRowsName: string="canAddRows"',      // 可添加行数对应的name
     );
 
-    public static function getPageCSS(): ?string
-    {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
-    }
-
     public static function getPageJS(): string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
