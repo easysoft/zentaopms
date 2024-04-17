@@ -27,6 +27,9 @@ $lang->backup->settingDir = 'Répertoire Backup';
 $lang->backup->settingList['nofile'] = 'Ne pas archiver fichiers et codes.';
 $lang->backup->settingList['nosafe'] = 'Ne pas prévenir du téléchargement par PHP file header.';
 
+global $app;
+if($app->isContainer()) $lang->backup->settingList['nofile'] = 'Ne pas archiver fichiers';
+
 $lang->backup->waitting         = '<span id="backupType"></span> est en cours. Patientez s´il vous plait...';
 $lang->backup->progressSQL      = '<p>SQL backup: %s est sauvegardé.</p>';
 $lang->backup->progressAttach   = '<p>SQL backup est terminé.</p><p>Les fichiers sont en cours de sauvegarde.</p>';

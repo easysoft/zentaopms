@@ -27,6 +27,9 @@ $lang->backup->settingDir = 'Backup Directory';
 $lang->backup->settingList['nofile'] = 'Do not back up files or codes.';
 $lang->backup->settingList['nosafe'] = 'Do not prevent downloading PHP file header.';
 
+global $app;
+if($app->isContainer()) $lang->backup->settingList['nofile'] = 'Do not back up files.';
+
 $lang->backup->waitting         = '<span id="backupType"></span> is ongoing. Please wait...';
 $lang->backup->progressSQL      = '<p>SQL backup: %s is backed up.</p>';
 $lang->backup->progressAttach   = '<p>SQL backup is completed.</p><p>Attachment backing up.</p>';
