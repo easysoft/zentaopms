@@ -1,3 +1,4 @@
 .panel-form, .size-lg .panel-body, .form-horz .form-group {padding: 0;}
 .form-horz .form-label {justify-content: unset; position: relative; padding: 0;}
 .form-horz .form-group {display: block;}
+.think-step-form form {gap: 12px;}

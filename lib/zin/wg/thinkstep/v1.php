@@ -94,6 +94,7 @@ class thinkStep extends wg
     {
         return formPanel
         (
+            set::bodyClass('think-step-form'),
             set::grid(false),
             set::actions(array()),
             $this->buildBody()
