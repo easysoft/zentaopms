@@ -34,11 +34,6 @@ class metricModel extends model
         $dataFields[] = 'date';
         $dataFieldStr = implode(',', $dataFields);
 
-        $fieldList = array_keys((array)$result);
-        $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
-        $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
-        $scope     = current($scopeList);
-
         $header = array();
         if($metric->scope != 'system')
         {
