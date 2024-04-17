@@ -747,7 +747,7 @@ class testtask extends control
         if($this->app->tab == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");
         if($this->app->tab == 'project')   $browseList = $this->createLink('project', 'testtask', "projectID=$task->project");
 
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->app->methodName == 'view' ? $browseList : true));
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->app->methodName == 'view' ? $browseList : true, 'closeModal' => true));
     }
 
     /**
