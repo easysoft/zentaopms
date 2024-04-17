@@ -41,7 +41,7 @@ foreach($cases as $caseID => $case)
             (
                 h::td
                 (
-                    set::width('30%'),
+                    setStyle('width', '30%'),
                     set::className('break-words'),
                     set::colspan($step->type == 'group' ? 2 : 1),
                     span
@@ -53,7 +53,7 @@ foreach($cases as $caseID => $case)
                 ),
                 $step->type != 'group' ? h::td
                 (
-                    set::width('30%'),
+                    setStyle('width', '30%'),
                     set::className('break-words'),
                     span
                     (
@@ -63,7 +63,7 @@ foreach($cases as $caseID => $case)
                 ) : null,
                 $step->type != 'group' ? h::td
                 (
-                    set::width('90px'),
+                    setStyle('width', '90px'),
                     set::className("hidden steps"),
                     picker
                     (
@@ -167,28 +167,28 @@ formPanel
             (
                 h::th
                 (
-                    set::width('60px'),
+                    setStyle('width', '60px'),
                     $lang->idAB
                 ),
                 h::th
                 (
-                    set::width('100px'),
+                    setStyle('width', '100px'),
                     $lang->testcase->module
                 ),
                 h::th
                 (
-                    set::width('200px'),
+                    setStyle('width', '200px'),
                     $lang->testcase->title
                 ),
                 h::th
                 (
-                    set::width('100px'),
+                    setStyle('width', '100px'),
                     set::className('precondition'),
                     $lang->testcase->precondition
                 ),
                 h::th
                 (
-                    set::width('100px'),
+                    setStyle('width', '100px'),
                     $lang->testcase->resultAB
                 ),
                 h::th
