@@ -63,10 +63,7 @@ class projectModel extends model
     {
         if(empty($project) || !isset($project->type)) return true;
 
-        $action     = strtolower($action);
-        $methodList = array('group' => 'team', 'perm' => 'group', 'link' => 'manageProducts');
-        $method     = zget($methodList, $action);
-        if(!common::hasPriv('project', $method)) return false;
+        $action = strtolower($action);
 
         if($action == 'close')     return $project->status != 'closed';
         if($action == 'group')     return $project->model != 'kanban';
