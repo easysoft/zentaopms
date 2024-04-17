@@ -32,6 +32,8 @@ class context extends \zin\utils\dataset
 
     public array $data = array();
 
+    public array $debugData = array();
+
     public ?\control $control = null;
 
     public bool $rendered = false;
@@ -280,6 +282,11 @@ class context extends \zin\utils\dataset
         return $js;
     }
 
+    public function addDebugData(string $name, mixed $data, bool $json = false)
+    {
+        $this->debugData[] = array('name' => $name, 'data' => $json ? $data : var_export($data, true));
+    }
+
     public function getDebugData() : ?array
     {
         global $app;
@@ -290,6 +297,7 @@ class context extends \zin\utils\dataset
             if(is_array($zinDebug))
             {
                 $zinDebug['basePath'] = $app->getBasePath();
+                $zinDebug['debug']    = $this->debugData;
                 if(isset($app->zinErrors)) $zinDebug['errors'] = $app->zinErrors;
             }
         }
@@ -335,16 +343,22 @@ class context extends \zin\utils\dataset
         $this->renderer = $renderer;
         $this->rootNode = $node;
 
+        d('includeHooks.before');
         $hookCode   = $this->includeHooks();
+        d('includeHooks.after');
         $rawContent = $this->getRawContent();
-        $zinDebug   = $this->getDebugData();
 
+        d('prebuild.before');
         $node->prebuild(true);
+        d('prebuild.after');
         $this->applyQueries($node);
+        $node->prebuild(true);
 
-        $js     = $this->getJS();
-        $css    = $this->getCSS();
-        $result = $renderer->render();
+        $js       = $this->getJS();
+        $css      = $this->getCSS();
+        $result   = $renderer->render();
+        $zinDebug = $this->getDebugData();
+
 
         if(is_object($result)) // renderType = json
         {
