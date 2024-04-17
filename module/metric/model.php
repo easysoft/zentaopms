@@ -1058,7 +1058,9 @@ class metricModel extends model
 
         if(common::haspriv('metric', 'delete'))
         {
-            $menuList['suffix']['delete'] = $this->config->metric->actionList['delete'];
+            $deleteAction = $this->config->metric->actionList['delete'];
+            if(isset($metric->isUsed) && $metric->isUsed) $deleteAction['data-confirm'] = $this->lang->metric->confirmDeleteInUsed;
+            $menuList['suffix']['delete'] = $deleteAction;
         }
 
         return $menuList;
