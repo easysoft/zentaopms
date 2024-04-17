@@ -27,7 +27,7 @@ class thinkRadio extends thinkStep
     {
         $items = parent::buildBody();
 
-        list($requiredItems, $requiredName, $optionName, $otherName) = $this->prop(array('requiredItems', 'requiredName', 'optionName', 'otherName'));
+        list($requiredItems, $requiredName, $optionName, $otherName, $type) = $this->prop(array('requiredItems', 'requiredName', 'optionName', 'otherName', 'type'));
         if(!empty($requiredItems)) $items[] = formGroup
         (
             set::label(data('lang.thinkwizard.step.label.required')),
@@ -44,7 +44,7 @@ class thinkRadio extends thinkStep
             set::label(data('lang.thinkwizard.step.label.option')),
             thinkOptions(set::name($optionName), set::otherName($otherName)),
         );
-        $items[] = formHidden('type', 'radio');
+        $items[] = formHidden('type', $type);
         $items[] = $this->children();
         return $items;
     }
