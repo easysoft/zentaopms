@@ -164,6 +164,13 @@ class bugModel extends model
         if($bug->toTask)       $bug->toTaskTitle       = $this->bugTao->getNameFromTable($bug->toTask,       TABLE_TASK,    'name');
         if($bug->relatedBug)   $bug->relatedBugTitles  = $this->bugTao->getBugPairsByList($bug->relatedBug);
 
+        if($this->config->edition == 'max')
+        {
+            $identifyList = ($bug->injection || $bug->identify) ? $this->loadModel('review')->getPairs($bug->project, $bug->product, true) : array();
+            $bug->injectionTitle = zget($identifyList, $bug->injection, '');
+            $bug->identifyTitle  = zget($identifyList, $bug->identify, '');
+        }
+
         $bug->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($bugID, 'bug');
         $bug->toCases      = $this->bugTao->getCasesFromBug($bugID);
         $bug->files        = $this->file->getByObject('bug', $bugID);
