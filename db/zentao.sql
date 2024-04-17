@@ -16178,7 +16178,7 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
 
 -- DROP TABLE IF EXISTS `zt_metriclib`;
 CREATE TABLE IF NOT EXISTS `zt_metriclib` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `metricID`   mediumint(8)    NOT NULL DEFAULT 0,
   `metricCode` varchar(100) NOT NULL DEFAULT '',
   `system`     char(30)     NOT NULL DEFAULT '0',

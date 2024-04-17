@@ -11,3 +11,5 @@ UPDATE `zt_workflowaction` SET `action` = 'confirm' WHERE `action` = 'confirmBug
 UPDATE `zt_workflowlayout` SET `action` = 'confirm' WHERE `action` = 'confirmBug' AND `module` = 'bug';
 
 UPDATE `zt_metric` SET `definition` = '所有研发需求个数求和\r\n评审人为某人\r\n评审结果为空\r\n评审状态为评审中\r\n过滤已删除的需求\r\n过滤已删除产品的需求' WHERE `code` = 'count_of_reviewing_story_in_user';
+
+ALTER TABLE zt_metriclib MODIFY id bigint AUTO_INCREMENT;
