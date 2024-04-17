@@ -249,7 +249,13 @@ class myZen extends my
             {
                 /* Get the number of demands assigned to me. */
                 $this->loadModel('demand')->getUserDemands($this->app->user->account, 'assignedTo', 'id_desc', $pager);
-                $count['demand'] = $pager->recTotal;
+                $assignedToDemandCount = $pager->recTotal;
+
+                /* Get the number of demands review by me. */
+                $this->loadModel('demand')->getUserDemands($this->app->user->account, 'reviewBy', 'id_desc', $pager);
+                $reviewByDemandCount = $pager->recTotal;
+
+                $count['demand'] = $assignedToDemandCount + $reviewByDemandCount;
             }
         }
 
