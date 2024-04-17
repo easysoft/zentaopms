@@ -405,7 +405,7 @@ class commonTao extends commonModel
 
         /* Get webRoot config in db. */
         $webRootConfig = null;
-        foreach($dbConfig as $commonConfig)
+        foreach($dbConfig->common as $commonConfig)
         {
             if($commonConfig->key == 'webRoot')
             {

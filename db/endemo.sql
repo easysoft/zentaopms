@@ -1,7 +1,7 @@
 INSERT INTO `zt_acl` (`account`, `objectType`, `objectID`, `type`, `source`) VALUES
 ('admin', 'program', 1, 'whitelist', 'add'),
 ('projectManager', 'program', 1, 'whitelist', 'add');
-INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `execution`, `actor`, `action`, `date`, `comment`, `extra`, `read`, `vision`, `efforted`) VALUES
+REPLACE INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `execution`, `actor`, `action`, `date`, `comment`, `extra`, `read`, `vision`, `efforted`) VALUES
 (1, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2024-04-02 14:13:44', '', '', '0', 'rnd', 0),
 (2, 'program', 1, ',0,', 0, 0, 'admin', 'opened', '2024-04-02 14:25:12', '', '', '0', 'rnd', 0),
 (3, 'product', 1, ',1,', 0, 0, 'admin', 'opened', '2024-04-02 14:30:13', '', '', '0', 'rnd', 0),
@@ -98,7 +98,7 @@ INSERT INTO `zt_action` (`id`, `objectType`, `objectID`, `product`, `project`, `
 (94, 'case', 3, ',1,', 2, 3, 'admin', 'run', '2024-04-02 16:30:26', '', '1', '0', 'rnd', 0),
 (95, 'case', 2, ',1,', 2, 3, 'admin', 'run', '2024-04-02 16:30:26', '', '1', '0', 'rnd', 0),
 (96, 'case', 1, ',1,', 2, 3, 'admin', 'run', '2024-04-02 16:30:26', '', '1', '0', 'rnd', 0);
-INSERT INTO `zt_actionrecent` (`id`, `objectType`, `objectID`, `product`, `project`, `execution`, `actor`, `action`, `date`, `comment`, `extra`, `read`, `vision`, `efforted`) VALUES
+REPLACE INTO `zt_actionrecent` (`id`, `objectType`, `objectID`, `product`, `project`, `execution`, `actor`, `action`, `date`, `comment`, `extra`, `read`, `vision`, `efforted`) VALUES
 (1, 'user', 1, ',0,', 0, 0, 'admin', 'login', '2024-04-02 14:13:44', '', '', '0', 'rnd', 0),
 (2, 'program', 1, ',0,', 0, 0, 'admin', 'opened', '2024-04-02 14:25:12', '', '', '0', 'rnd', 0),
 (3, 'product', 1, ',1,', 0, 0, 'admin', 'opened', '2024-04-02 14:30:13', '', '', '0', 'rnd', 0),
@@ -195,21 +195,21 @@ INSERT INTO `zt_actionrecent` (`id`, `objectType`, `objectID`, `product`, `proje
 (94, 'case', 3, ',1,', 2, 3, 'admin', 'run', '2024-04-02 16:30:26', '', '1', '0', 'rnd', 0),
 (95, 'case', 2, ',1,', 2, 3, 'admin', 'run', '2024-04-02 16:30:26', '', '1', '0', 'rnd', 0),
 (96, 'case', 1, ',1,', 2, 3, 'admin', 'run', '2024-04-02 16:30:26', '', '1', '0', 'rnd', 0);
-INSERT INTO `zt_bug` (`id`, `project`, `product`, `injection`, `identify`, `branch`, `module`, `execution`, `plan`, `story`, `storyVersion`, `task`, `toTask`, `toStory`, `title`, `keywords`, `severity`, `pri`, `type`, `os`, `browser`, `hardware`, `found`, `steps`, `status`, `subStatus`, `color`, `confirmed`, `activatedCount`, `activatedDate`, `feedbackBy`, `notifyEmail`, `mailto`, `openedBy`, `openedDate`, `openedBuild`, `assignedTo`, `assignedDate`, `deadline`, `resolvedBy`, `resolution`, `resolvedBuild`, `resolvedDate`, `closedBy`, `closedDate`, `duplicateBug`, `relatedBug`, `case`, `caseVersion`, `feedback`, `result`, `repo`, `mr`, `entry`, `lines`, `v1`, `v2`, `repoType`, `issueKey`, `testtask`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES
+REPLACE INTO `zt_bug` (`id`, `project`, `product`, `injection`, `identify`, `branch`, `module`, `execution`, `plan`, `story`, `storyVersion`, `task`, `toTask`, `toStory`, `title`, `keywords`, `severity`, `pri`, `type`, `os`, `browser`, `hardware`, `found`, `steps`, `status`, `subStatus`, `color`, `confirmed`, `activatedCount`, `activatedDate`, `feedbackBy`, `notifyEmail`, `mailto`, `openedBy`, `openedDate`, `openedBuild`, `assignedTo`, `assignedDate`, `deadline`, `resolvedBy`, `resolution`, `resolvedBuild`, `resolvedDate`, `closedBy`, `closedDate`, `duplicateBug`, `relatedBug`, `case`, `caseVersion`, `feedback`, `result`, `repo`, `mr`, `entry`, `lines`, `v1`, `v2`, `repoType`, `issueKey`, `testtask`, `lastEditedBy`, `lastEditedDate`, `deleted`) VALUES
 (1, 2, 1, 0, 0, 0, 1, 3, 0, 1, 1, 1, 0, 0, '首页页面问题',	'', 3, 1, 'codeerror', 'linux',	'chrome', '',	'', '<p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[步骤] 进入首页</span></p><p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[结果] 出现乱码</span></p><p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[期望] 正常显示</span></p>',	'active',	'', '', 0, 0, NULL, '', '', '', 'admin', '2024-04-02 16:12:08', 'trunk', 'admin', '2024-04-02 16:12:08', NULL, '', '', '', NULL, '', NULL, 0, '', 0, 0, 0, 0, 0, 0, NULL, '', '', '', '', '', 0, '', NULL, '0'),
 (2, 2, 1, 0, 0, 0, 2, 3, 0, 4, 1, 8, 0, 0, '新闻中心页面问题',	'', 3, 2, 'codeerror', '',	'',	'',	'', '<p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[步骤] 进入首页</span></p><p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[结果] 出现乱码</span></p><p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[期望] 正常显示</span></p>',	'active',	'', '', 0, 0, NULL, '', '', '', 'admin', '2024-04-02 16:13:53', 'trunk', 'admin', '2024-04-02 16:13:53', NULL, '', '', '', NULL, '', NULL, 0, '', 0, 0, 0, 0, 0, 0, NULL, '', '', '', '', '', 0, '', NULL, '0'),
 (3, 2, 1, 0, 0, 0, 4, 3, 0, 4, 1, 7, 0, 0, '成果展示页面问题',	'', 3, 1, 'codeerror', '',	'',	'',	'', '<p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[步骤] 进入首页</span></p><p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[结果] 出现乱码</span></p><p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[期望] 正常显示</span></p>',	'active',	'', '', 0, 0, NULL, '', '', '', 'admin', '2024-04-02 16:14:38', 'trunk', '', NULL, NULL, '', '', '', NULL, '', NULL, 0, '', 0, 0, 0, 0, 0, 0, NULL, '', '', '', '', '', 0, '', NULL, '0'),
 (4, 2, 1, 0, 0, 0, 4, 3, 0, 4, 1, 8, 0, 0, '售后服务页面问题',	'', 3, 1, 'codeerror', '',	'',	'',	'', '<p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[步骤] 进入售后服务</span></p><p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[结果]乱码</span></p><p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">[期望]正常显示</span></p>',	'resolved',	'', '', 1, 0, NULL, '', '', '', 'admin', '2024-04-02 16:15:52', 'trunk', 'admin', '2024-04-02 16:17:48', NULL, 'admin', 'fixed', 'trunk', '2024-04-02 00:00:00', '', NULL, 0, '', 0, 0, 0, 0, 0, 0, NULL, '', '', '', '', '', 0, 'admin', '2024-04-02 16:17:48', '0');
-INSERT INTO `zt_build` (`id`, `project`, `product`, `branch`, `execution`, `builds`, `name`, `scmPath`, `filePath`, `date`, `stories`, `bugs`, `artifactRepoID`, `builder`, `desc`, `createdBy`, `createdDate`, `deleted`) VALUES
+REPLACE INTO `zt_build` (`id`, `project`, `product`, `branch`, `execution`, `builds`, `name`, `scmPath`, `filePath`, `date`, `stories`, `bugs`, `artifactRepoID`, `builder`, `desc`, `createdBy`, `createdDate`, `deleted`) VALUES
 (1, 2, 1, '0', 3, '', '第一期版本', '', '', '2024-04-02', ',4', '', 0, 'admin', '', 'admin', '2024-04-02 16:07:17', '0');
-INSERT INTO `zt_burn` (`execution`, `product`, `task`, `date`, `estimate`, `left`, `consumed`, `storyPoint`) VALUES
+REPLACE INTO `zt_burn` (`execution`, `product`, `task`, `date`, `estimate`, `left`, `consumed`, `storyPoint`) VALUES
 (3, 0, 0, '2024-04-02', 35, 35, 19, 2);
-INSERT INTO `zt_case` (`id`, `project`, `product`, `execution`, `branch`, `lib`, `module`, `path`, `story`, `storyVersion`, `title`, `precondition`, `keywords`, `pri`, `type`, `auto`, `frame`, `stage`, `howRun`, `script`, `scriptedBy`, `scriptedDate`, `scriptStatus`, `scriptLocation`, `status`, `subStatus`, `color`, `frequency`, `order`, `openedBy`, `openedDate`, `reviewedBy`, `reviewedDate`, `lastEditedBy`, `lastEditedDate`, `version`, `linkCase`, `fromBug`, `fromCaseID`, `fromCaseVersion`, `deleted`, `lastRunner`, `lastRunDate`, `lastRunResult`, `scene`, `sort`) VALUES
+REPLACE INTO `zt_case` (`id`, `project`, `product`, `execution`, `branch`, `lib`, `module`, `path`, `story`, `storyVersion`, `title`, `precondition`, `keywords`, `pri`, `type`, `auto`, `frame`, `stage`, `howRun`, `script`, `scriptedBy`, `scriptedDate`, `scriptStatus`, `scriptLocation`, `status`, `subStatus`, `color`, `frequency`, `order`, `openedBy`, `openedDate`, `reviewedBy`, `reviewedDate`, `lastEditedBy`, `lastEditedDate`, `version`, `linkCase`, `fromBug`, `fromCaseID`, `fromCaseVersion`, `deleted`, `lastRunner`, `lastRunDate`, `lastRunResult`, `scene`, `sort`) VALUES
 (1, 0, 1, 0, 0, 0, 0, 0, 4, 1, '售后服务的测试用例', '', '', 1, 'feature', 'no', '', 'feature', '', '', '', NULL, '', '', 'normal', '', '', '1', 0, 'admin', '2024-04-02 16:20:31', '', NULL, 'admin', '2024-04-02 16:23:55', 2, '', 0, 0, 1, '0', 'admin', '2024-04-02 16:30:26', 'pass', 0, 0),
 (2, 0, 1, 0, 0, 0, 0, 0, 1, 1, '首页的测试用例', '', '', 3, 'feature', 'no', '', 'feature', '', '', '', NULL, '', '', 'normal', '', '', '1', 0, 'admin', '2024-04-02 16:23:33', '', NULL, '', NULL, 1, '', 0, 0, 1, '0', 'admin', '2024-04-02 16:30:26', 'pass', 0, 0),
 (3, 0, 1, 0, 0, 0, 0, 0, 2, 1, '新闻中心的测试用例', '', '', 3, 'feature', 'no', '', 'feature', '', '', '', NULL, '', '', 'normal', '', '', '1', 0, 'admin', '2024-04-02 16:24:38', '', NULL, '', NULL, 1, '', 0, 0, 1, '0', 'admin', '2024-04-02 16:30:26', 'pass', 0, 0),
 (4, 0, 1, 0, 0, 0, 0, 0, 3, 1, '成果展示测试用例', '', '', 3, 'feature', 'no', '', 'feature', '', '', '', NULL, '', '', 'normal', '', '', '1', 0, 'admin', '2024-04-02 16:25:09', '', NULL, '', NULL, 1, '', 0, 0, 1, '0', 'admin', '2024-04-02 16:30:26', 'pass', 0, 0);
-INSERT INTO `zt_casestep` (`id`, `parent`, `case`, `version`, `type`, `desc`, `expect`) VALUES
+REPLACE INTO `zt_casestep` (`id`, `parent`, `case`, `version`, `type`, `desc`, `expect`) VALUES
 (1, 0, 1, 1, 'step', '进入首页', '正常显示'),
 (2, 0, 1, 2, 'item', '进入首页', '正常显示'),
 (3, 0, 2, 1, 'step', '进入首页', '正常显示'),
@@ -217,7 +217,7 @@ INSERT INTO `zt_casestep` (`id`, `parent`, `case`, `version`, `type`, `desc`, `e
 (5, 4, 2, 1, 'step', '点击新闻中心', '进入新闻中心'),
 (6, 0, 3, 1, 'step', '进入新闻中心', '正常显示'),
 (7, 0, 4, 1, 'step', '进入成果展示', '正常显示');
-INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES
+REPLACE INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES
 (1, '经理', 0, ',1,', 1, 0, '', '', ''),
 (2, '开发', 0, ',2,', 1, 0, '', '', ''),
 (3, '测试', 0, ',3,', 1, 0, '', '', ''),
@@ -226,17 +226,17 @@ INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `positi
 (6, '项目', 1, ',1,6,', 2, 0, '', '', ''),
 (7, '编程', 2, ',2,7,', 2, 0, '', '', ''),
 (8, '美工', 2, ',2,8,', 2, 0, '', '', '');
-INSERT INTO `zt_doclib` (`id`, `type`, `vision`, `product`, `project`, `execution`, `name`, `baseUrl`, `acl`, `groups`, `users`, `main`, `collector`, `desc`, `order`, `addedBy`, `addedDate`, `deleted`) VALUES
+REPLACE INTO `zt_doclib` (`id`, `type`, `vision`, `product`, `project`, `execution`, `name`, `baseUrl`, `acl`, `groups`, `users`, `main`, `collector`, `desc`, `order`, `addedBy`, `addedDate`, `deleted`) VALUES
 (1, 'product', 'rnd', 1, 0, 0, '产品主库', '', 'default', '', NULL, '1', NULL, NULL, 0, 'admin', '2024-04-02 14:30:13', '0'),
 (2, 'product', 'rnd', 2, 0, 0, '产品主库', '', 'default', '', NULL, '1', NULL, NULL, 0, 'admin', '2024-04-02 14:30:55', '0'),
 (3, 'project', 'rnd', 0, 2, 0, '项目主库', '', 'default', '', ',,', '1', NULL, NULL, 0, 'admin', '2024-04-02 14:34:13', '0'),
 (4, 'execution', 'rnd', 0, 2, 3, '迭代主库', '', 'default', '', NULL, '1', NULL, NULL, 0, 'admin', '2024-04-02 14:35:32', '0'),
 (5, 'execution', 'rnd', 0, 2, 4, '迭代主库', '', 'default', '', NULL, '1', NULL, NULL, 0, 'admin', '2024-04-02 14:36:20', '0');
-INSERT INTO `zt_effort` (`id`, `objectType`, `objectID`, `product`, `project`, `execution`, `account`, `work`, `vision`, `date`, `left`, `consumed`, `begin`, `end`, `extra`, `order`, `deleted`) VALUES
+REPLACE INTO `zt_effort` (`id`, `objectType`, `objectID`, `product`, `project`, `execution`, `account`, `work`, `vision`, `date`, `left`, `consumed`, `begin`, `end`, `extra`, `order`, `deleted`) VALUES
 (1, 'task', 1, ',1,', 2, 3, 'projectManager', '', 'rnd', '2024-04-02', 0, 8, 0000, 0000, NULL, 0, '0'),
 (2, 'task', 8, ',1,', 2, 3, 'admin', '', 'rnd', '2024-04-02', 0, 5, 0000, 0000, NULL, 0, '0'),
 (3, 'task', 7, ',1,', 2, 3, 'admin', '', 'rnd', '2024-04-02', 0, 6, 0000, 0000, NULL, 0, '0');
-INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES
+REPLACE INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES
 (1, 44, 'assignedTo', '', 'projectManager', ''),
 (2, 45, 'assignedTo', '', 'projectManager', ''),
 (3, 46, 'assignedTo', '', 'projectManager', ''),
@@ -287,7 +287,7 @@ INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES
 (48, 77, 'story', '1', '4', ''),
 (49, 77, 'version', '1', '2', ''),
 (50, 81, 'stage', '', 'feature', '');
-INSERT INTO `zt_kanbancell` (`id`, `kanban`, `lane`, `column`, `type`, `cards`) VALUES
+REPLACE INTO `zt_kanbancell` (`id`, `kanban`, `lane`, `column`, `type`, `cards`) VALUES
 (1, 3, 1, 1, 'story', ',1,2,3,4,'),
 (2, 3, 1, 2, 'story', ''),
 (3, 3, 1, 3, 'story', ''),
@@ -342,7 +342,7 @@ INSERT INTO `zt_kanbancell` (`id`, `kanban`, `lane`, `column`, `type`, `cards`) 
 (52, 4, 6, 52, 'task', ''),
 (53, 4, 6, 53, 'task', ''),
 (54, 4, 6, 54, 'task', '');
-INSERT INTO `zt_kanbancolumn` (`id`, `parent`, `type`, `region`, `group`, `name`, `color`, `limit`, `order`, `archived`, `deleted`) VALUES
+REPLACE INTO `zt_kanbancolumn` (`id`, `parent`, `type`, `region`, `group`, `name`, `color`, `limit`, `order`, `archived`, `deleted`) VALUES
 (1, 0, 'backlog', 0, 0, 'Backlog', '#333', -1, 0, '0', '0'),
 (2, 0, 'ready', 0, 0, '准备好', '#333', -1, 0, '0', '0'),
 (3, -1, 'develop', 0, 0, '开发', '#333', -1, 0, '0', '0'),
@@ -397,14 +397,14 @@ INSERT INTO `zt_kanbancolumn` (`id`, `parent`, `type`, `region`, `group`, `name`
 (52, 0, 'pause', 0, 0, '已暂停', '#333', -1, 0, '0', '0'),
 (53, 0, 'canceled', 0, 0, '已取消', '#333', -1, 0, '0', '0'),
 (54, 0, 'closed', 0, 0, '已关闭', '#333', -1, 0, '0', '0');
-INSERT INTO `zt_kanbanlane` (`id`, `execution`, `type`, `region`, `group`, `groupby`, `extra`, `name`, `color`, `order`, `lastEditedTime`, `deleted`) VALUES
+REPLACE INTO `zt_kanbanlane` (`id`, `execution`, `type`, `region`, `group`, `groupby`, `extra`, `name`, `color`, `order`, `lastEditedTime`, `deleted`) VALUES
 (1, 3, 'story', 0, 0, '', '', '研发需求', '#7ec5ff', 5, '2024-04-02 15:49:22', '0'),
 (2, 3, 'bug', 0, 0, '', '', 'Bug', '#ba55d3', 10, '2024-04-02 16:17:49', '0'),
 (3, 3, 'task', 0, 0, '', '', '任务', '#4169e1', 15, '2024-04-02 16:01:05', '0'),
 (4, 4, 'story', 0, 0, '', '', '研发需求', '#7ec5ff', 5, NULL, '0'),
 (5, 4, 'bug', 0, 0, '', '', 'Bug', '#ba55d3', 10, NULL, '0'),
 (6, 4, 'task', 0, 0, '', '', '任务', '#4169e1', 15, NULL, '0');
-INSERT INTO `zt_module` (`id`, `root`, `branch`, `name`, `parent`, `path`, `grade`, `order`, `type`, `from`, `owner`, `collector`, `short`, `deleted`) VALUES
+REPLACE INTO `zt_module` (`id`, `root`, `branch`, `name`, `parent`, `path`, `grade`, `order`, `type`, `from`, `owner`, `collector`, `short`, `deleted`) VALUES
 (1, 1, 0, '首页', 0, ',1,', 1, 10, 'story', 0, '', '', '', '0'),
 (2, 1, 0, '新闻中心', 0, ',2,', 1, 20, 'story', 0, '', '', '', '0'),
 (3, 1, 0, '成果展示', 0, ',3,', 1, 30, 'story', 0, '', '', '', '0'),
@@ -413,19 +413,19 @@ INSERT INTO `zt_module` (`id`, `root`, `branch`, `name`, `parent`, `path`, `grad
 (6, 1, 0, '合作洽谈', 0, ',6,', 1, 60, 'story', 0, '', '', '', '0'),
 (7, 1, 0, '关于我们', 0, ',7,', 1, 70, 'story', 0, '', '', '', '0'),
 (8, 1, 0, '企业管理', 0, ',8,', 1, 0, 'line', 0, '', '', '', '0');
-INSERT INTO `zt_product` (`id`, `program`, `name`, `code`, `shadow`, `bind`, `line`, `type`, `status`, `subStatus`, `desc`, `PO`, `QD`, `RD`, `feedback`, `ticket`, `acl`, `groups`, `whitelist`, `reviewer`, `PMT`, `draftStories`, `activeStories`, `changingStories`, `reviewingStories`, `finishedStories`, `closedStories`, `totalStories`, `unresolvedBugs`, `closedBugs`, `fixedBugs`, `totalBugs`, `plans`, `releases`, `createdBy`, `createdDate`, `createdVersion`, `closedDate`, `order`, `vision`, `deleted`) VALUES
+REPLACE INTO `zt_product` (`id`, `program`, `name`, `code`, `shadow`, `bind`, `line`, `type`, `status`, `subStatus`, `desc`, `PO`, `QD`, `RD`, `feedback`, `ticket`, `acl`, `groups`, `whitelist`, `reviewer`, `PMT`, `draftStories`, `activeStories`, `changingStories`, `reviewingStories`, `finishedStories`, `closedStories`, `totalStories`, `unresolvedBugs`, `closedBugs`, `fixedBugs`, `totalBugs`, `plans`, `releases`, `createdBy`, `createdDate`, `createdVersion`, `closedDate`, `order`, `vision`, `deleted`) VALUES
 (1, 1, '公司企业网站建设', '', 0, '0', 0, 'normal', 'normal', '', '<p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">建立公司企业网站，可以更好对外展示。</span></p>', 'productManager', '', 'projectManager', '', '', 'open', '', '', '', NULL, 0, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0, 1, 0, 'admin', '2024-04-02 14:30:12', '20.0.beta2', NULL, 5, 'rnd', '0'),
 (2, 1, '企业内部工时管理系统', '', 0, '0', 0, 'normal', 'normal', '', '', 'productManager', '', 'productManager', '', '', 'open', '', '', '', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'admin', '2024-04-02 14:30:55', '20.0.beta2', NULL, 10, 'rnd', '0');
-INSERT INTO `zt_productplan` (`id`, `product`, `branch`, `parent`, `title`, `status`, `desc`, `begin`, `end`, `finishedDate`, `closedDate`, `order`, `closedReason`, `createdBy`, `createdDate`, `deleted`) VALUES
+REPLACE INTO `zt_productplan` (`id`, `product`, `branch`, `parent`, `title`, `status`, `desc`, `begin`, `end`, `finishedDate`, `closedDate`, `order`, `closedReason`, `createdBy`, `createdDate`, `deleted`) VALUES
 (1, 1, '0', 0, '1.0版本', 'wait', '<p><span style=\"font-size:13px;font-family:\'Source Han Sans CN\', PingFangSC, \'Microsoft YaHei\', HiraginoSansGB, Roboto, Helvetica, Tahoma, sans-serif;\">开发出企业网站1.0版本。</span></p>', '2030-01-01', '2030-01-01', NULL, NULL, '0', '', 'admin', '2024-04-02 14:42:47', '0');
-INSERT INTO `zt_project` (`id`, `project`, `charter`, `model`, `type`, `category`, `lifetime`, `budget`, `budgetUnit`, `attribute`, `percent`, `milestone`, `output`, `auth`, `parent`, `path`, `grade`, `name`, `code`, `hasProduct`, `begin`, `end`, `firstEnd`, `realBegan`, `realEnd`, `days`, `status`, `subStatus`, `pri`, `desc`, `version`, `parentVersion`, `planDuration`, `realDuration`, `progress`, `estimate`, `left`, `consumed`, `teamCount`, `market`, `openedBy`, `openedDate`, `openedVersion`, `lastEditedBy`, `lastEditedDate`, `closedBy`, `closedDate`, `closedReason`, `canceledBy`, `canceledDate`, `suspendedDate`, `PO`, `PM`, `QD`, `RD`, `team`, `acl`, `whitelist`, `order`, `vision`, `stageBy`, `displayCards`, `fluidBoard`, `multiple`, `parallel`, `colWidth`, `minColWidth`, `maxColWidth`, `deleted`) VALUES
+REPLACE INTO `zt_project` (`id`, `project`, `charter`, `model`, `type`, `category`, `lifetime`, `budget`, `budgetUnit`, `attribute`, `percent`, `milestone`, `output`, `auth`, `parent`, `path`, `grade`, `name`, `code`, `hasProduct`, `begin`, `end`, `firstEnd`, `realBegan`, `realEnd`, `days`, `status`, `subStatus`, `pri`, `desc`, `version`, `parentVersion`, `planDuration`, `realDuration`, `progress`, `estimate`, `left`, `consumed`, `teamCount`, `market`, `openedBy`, `openedDate`, `openedVersion`, `lastEditedBy`, `lastEditedDate`, `closedBy`, `closedDate`, `closedReason`, `canceledBy`, `canceledDate`, `suspendedDate`, `PO`, `PM`, `QD`, `RD`, `team`, `acl`, `whitelist`, `order`, `vision`, `stageBy`, `displayCards`, `fluidBoard`, `multiple`, `parallel`, `colWidth`, `minColWidth`, `maxColWidth`, `deleted`) VALUES
 (1, 0, 0, '', 'program', '', '', '', 'CNY', '', 0, '0', NULL, '', 0, ',1,', 1, '企业管理', '', 1, '2024-04-02', '2059-12-31', NULL, '2024-04-02', NULL, 0, 'doing', '', '1', '', 0, 0, 0, 0, 0.00, 0, 0, 0, 0, 0, 'admin', '2024-04-02 14:25:12', '', '', NULL, '', NULL, '', '', NULL, NULL, '', '0', '', '', '', 'open', 'admin,projectManager', 5, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0'),
 (2, 0, 0, 'scrum', 'project', '', '', '', 'CNY', '', 0, '0', NULL, 'extend', 1, ',1,2,', 2, '企业管理系统', '', 1, '2024-04-02', '2059-12-31', '2059-12-31', '2024-04-02', NULL, 0, 'doing', '', '1', '', 0, 0, 0, 0, 24.50, 52, 40, 13, 3, 0, 'admin', '2024-04-02 14:34:13', '', 'admin', '2024-04-02 14:34:13', '', NULL, '', '', NULL, NULL, '', 'projectManager', '', '', '企业管理系统', 'open', '', 10, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0'),
 (3, 2, 0, '', 'sprint', '', 'long', '0', 'CNY', '', 0, '0', NULL, '', 2, ',2,3,', 1, '企业网站第一期', '', 1, '2024-04-02', '2024-04-15', '2024-04-15', '2024-04-02', NULL, 10, 'doing', '', '1', '', 0, 0, 0, 0, 24.50, 52, 40, 13, 0, 0, 'admin', '2024-04-02 14:35:31', '20.0.beta2', 'admin', '2024-04-02 14:35:31', '', NULL, '', '', NULL, NULL, 'productManager', 'projectManager', '', 'productManager', '企业网站第一期 ', 'open', '', 15, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0'),
 (4, 2, 0, '', 'sprint', '', 'long', '0', 'CNY', '', 0, '0', NULL, '', 2, ',2,4,', 1, '企业网站第二期', '', 1, '2024-04-02', '2024-05-02', NULL, NULL, NULL, 23, 'wait', '', '1', '', 0, 0, 0, 0, 0.00, 0, 0, 0, 0, 0, 'admin', '2024-04-02 14:36:20', '20.0.beta2', 'admin', '2024-04-02 14:36:20', '', NULL, '', '', NULL, NULL, 'productManager', 'projectManager', 'admin', 'productManager', '企业网站第二期', 'open', '', 20, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0');
-INSERT INTO `zt_projectadmin` (`group`, `account`, `programs`, `projects`, `products`, `executions`) VALUES
+REPLACE INTO `zt_projectadmin` (`group`, `account`, `programs`, `projects`, `products`, `executions`) VALUES
 (1, 'admin', NULL, '2', NULL, NULL);
-INSERT INTO `zt_projectcase` (`project`, `product`, `case`, `count`, `version`, `order`) VALUES
+REPLACE INTO `zt_projectcase` (`project`, `product`, `case`, `count`, `version`, `order`) VALUES
 (2, 1, 1, 1, 1, 1),
 (2, 1, 2, 1, 1, 2),
 (2, 1, 3, 1, 1, 3),
@@ -434,12 +434,12 @@ INSERT INTO `zt_projectcase` (`project`, `product`, `case`, `count`, `version`, 
 (3, 1, 2, 1, 1, 2),
 (3, 1, 3, 1, 1, 3),
 (3, 1, 4, 1, 1, 4);
-INSERT INTO `zt_projectproduct` (`project`, `product`, `branch`, `plan`) VALUES
+REPLACE INTO `zt_projectproduct` (`project`, `product`, `branch`, `plan`) VALUES
 (2, 1, 0, '0'),
 (2, 2, 0, '0'),
 (3, 1, 0, '0'),
 (4, 1, 0, '0');
-INSERT INTO `zt_projectstory` (`project`, `product`, `branch`, `story`, `version`, `order`) VALUES
+REPLACE INTO `zt_projectstory` (`project`, `product`, `branch`, `story`, `version`, `order`) VALUES
 (2, 1, 0, 1, 1, 1),
 (2, 1, 0, 2, 1, 2),
 (2, 1, 0, 3, 1, 3),
@@ -448,7 +448,7 @@ INSERT INTO `zt_projectstory` (`project`, `product`, `branch`, `story`, `version
 (3, 1, 0, 2, 1, 2),
 (3, 1, 0, 3, 1, 3),
 (3, 1, 0, 4, 1, 4);
-INSERT INTO `zt_searchdict` (`key`, `value`) VALUES
+REPLACE INTO `zt_searchdict` (`key`, `value`) VALUES
 (12289, '、'),
 (12290, '。'),
 (19968, '一'),
@@ -577,7 +577,7 @@ INSERT INTO `zt_searchdict` (`key`, `value`) VALUES
 (39564, '验'),
 (39588, '骤'),
 (65292, '，');
-INSERT INTO `zt_searchindex` (`id`, `vision`, `objectType`, `objectID`, `title`, `content`, `addedDate`, `editedDate`) VALUES
+REPLACE INTO `zt_searchindex` (`id`, `vision`, `objectType`, `objectID`, `title`, `content`, `addedDate`, `editedDate`) VALUES
 (1, 'rnd', 'program', 1, ' 20225 19994 31649 29702', '', '2024-04-02 14:25:12', '2024-04-02 14:25:12'),
 (2, 'rnd', 'product', 1, ' 20844 21496 20225 19994 32593 31449 24314 35774', ' 24314 31435 20844 21496 20225 19994 32593 31449 65292 21487 20197 26356 22909 23545 22806 23637 31034 12290', '2024-04-02 14:30:13', '2024-04-02 14:30:13'),
 (3, 'rnd', 'product', 2, ' 20225 19994 20869 37096 24037 26102 31649 29702 31995 32479', '', '2024-04-02 14:30:55', '2024-04-02 14:30:55'),
@@ -610,7 +610,7 @@ INSERT INTO `zt_searchindex` (`id`, `vision`, `objectType`, `objectID`, `title`,
 (33, 'rnd', 'case', 3, ' 26032 38395 20013 24515 30340 27979 35797 29992 20363', '', '2024-04-02 16:24:38', '2024-04-02 16:24:38'),
 (34, 'rnd', 'case', 4, ' 25104 26524 23637 31034 27979 35797 29992 20363', '', '2024-04-02 16:25:09', '2024-04-02 16:25:09'),
 (35, 'rnd', 'testtask', 1, ' 20225 19994 32593 31449 31532 19968 26399 27979 35797 20219 21153', '', '2024-04-02 16:26:35', '2024-04-02 16:26:35');
-INSERT INTO `zt_story` (`id`, `vision`, `parent`, `product`, `branch`, `module`, `plan`, `source`, `sourceNote`, `fromBug`, `feedback`, `title`, `keywords`, `type`, `category`, `pri`, `estimate`, `status`, `subStatus`, `color`, `stage`, `stagedBy`, `mailto`, `lib`, `fromStory`, `fromVersion`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `approvedDate`, `lastEditedBy`, `lastEditedDate`, `changedBy`, `changedDate`, `reviewedBy`, `reviewedDate`, `releasedDate`, `closedBy`, `closedDate`, `closedReason`, `activatedDate`, `toBug`, `childStories`, `linkStories`, `linkRequirements`, `twins`, `duplicateStory`, `version`, `storyChanged`, `feedbackBy`, `notifyEmail`, `BSA`, `duration`, `demand`, `submitedBy`, `roadmap`, `URChanged`, `retractedReason`, `retractedBy`, `retractedDate`, `deleted`) VALUES
+REPLACE INTO `zt_story` (`id`, `vision`, `parent`, `product`, `branch`, `module`, `plan`, `source`, `sourceNote`, `fromBug`, `feedback`, `title`, `keywords`, `type`, `category`, `pri`, `estimate`, `status`, `subStatus`, `color`, `stage`, `stagedBy`, `mailto`, `lib`, `fromStory`, `fromVersion`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `approvedDate`, `lastEditedBy`, `lastEditedDate`, `changedBy`, `changedDate`, `reviewedBy`, `reviewedDate`, `releasedDate`, `closedBy`, `closedDate`, `closedReason`, `activatedDate`, `toBug`, `childStories`, `linkStories`, `linkRequirements`, `twins`, `duplicateStory`, `version`, `storyChanged`, `feedbackBy`, `notifyEmail`, `BSA`, `duration`, `demand`, `submitedBy`, `roadmap`, `URChanged`, `retractedReason`, `retractedBy`, `retractedDate`, `deleted`) VALUES
 (1, 'rnd', 0, 1, 0, 1, '1', '', '', 0, 0, '首页设计和开发', '', 'story', 'feature', 1, 1, 'active', '', '', 'developing', '', '', 0, 0, 1, 'admin', '2024-04-02 15:01:20', '', NULL, NULL, 'productManager', '2024-04-02 15:04:35', '', NULL, ',productManager', '2024-04-02 15:04:35', NULL, '', NULL, '', NULL, 0, '', '', '', '', 0, 1, '0', '', '', '', '', 0, '', '', '0', '', '', NULL, '0'),
 (2, 'rnd', 0, 1, 0, 2, '1', '', '', 0, 0, '新闻中心的设计和开发。', '', 'story', 'feature', 1, 1, 'active', '', '', 'projected', '', '', 0, 0, 1, 'admin', '2024-04-02 15:01:20', '', NULL, NULL, 'productManager', '2024-04-02 15:04:35', '', NULL, ',productManager', '2024-04-02 15:04:35', NULL, '', NULL, '', NULL, 0, '', '', '', '', 0, 1, '0', '', '', '', '', 0, '', '', '0', '', '', NULL, '0'),
 (3, 'rnd', 0, 1, 0, 3, '1', '', '', 0, 0, '成果展示的设计和开发', '', 'story', 'feature', 1, 0, 'active', '', '', 'developing', '', '', 0, 0, 1, 'admin', '2024-04-02 15:01:20', '', NULL, NULL, 'productManager', '2024-04-02 15:04:35', '', NULL, ',productManager', '2024-04-02 15:04:35', NULL, '', NULL, '', NULL, 0, '', '', '', '', 0, 1, '0', '', '', '', '', 0, '', '', '0', '', '', NULL, '0'),
@@ -618,7 +618,7 @@ INSERT INTO `zt_story` (`id`, `vision`, `parent`, `product`, `branch`, `module`,
 (5, 'rnd', 0, 1, 0, 5, '1', '', '', 0, 0, '诚聘英才的设计和开发', '', 'story', 'feature', 1, 1, 'reviewing', '', '', 'planned', '', '', 0, 0, 1, 'admin', '2024-04-02 15:01:20', '', NULL, NULL, '', NULL, '', NULL, '', NULL, NULL, '', NULL, '', NULL, 0, '', '', '', '', 0, 1, '0', '', '', '', '', 0, '', '', '0', '', '', NULL, '0'),
 (6, 'rnd', 0, 1, 0, 6, '1', '', '', 0, 0, '合作洽谈的设计和开发', '', 'story', 'feature', 1, 1, 'reviewing', '', '', 'planned', '', '', 0, 0, 1, 'admin', '2024-04-02 15:01:20', '', NULL, NULL, '', NULL, '', NULL, '', NULL, NULL, '', NULL, '', NULL, 0, '', '', '', '', 0, 1, '0', '', '', '', '', 0, '', '', '0', '', '', NULL, '0'),
 (7, 'rnd', 0, 1, 0, 7, '1', '', '', 0, 0, '关于我们的设计和开发', '', 'story', 'feature', 1, 1, 'reviewing', '', '', 'planned', '', '', 0, 0, 1, 'admin', '2024-04-02 15:01:20', '', NULL, NULL, '', NULL, '', NULL, '', NULL, NULL, '', NULL, '', NULL, 0, '', '', '', '', 0, 1, '0', '', '', '', '', 0, '', '', '0', '', '', NULL, '0');
-INSERT INTO `zt_storyreview` (`story`, `version`, `reviewer`, `result`, `reviewDate`) VALUES
+REPLACE INTO `zt_storyreview` (`story`, `version`, `reviewer`, `result`, `reviewDate`) VALUES
 (1, 1, 'productManager', 'pass', '2024-04-02 15:04:35'),
 (2, 1, 'productManager', 'pass', '2024-04-02 15:04:35'),
 (3, 1, 'productManager', 'pass', '2024-04-02 15:04:35'),
@@ -626,7 +626,7 @@ INSERT INTO `zt_storyreview` (`story`, `version`, `reviewer`, `result`, `reviewD
 (5, 1, 'productManager', '', NULL),
 (6, 1, 'productManager', '', NULL),
 (7, 1, 'productManager', '', NULL);
-INSERT INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`, `files`) VALUES
+REPLACE INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`, `files`) VALUES
 (1, 1, '首页设计和开发', '首页设计和开发&#039;, &#039;作为一名本公司的用户，我希望可以在首页看到该公司网站的基本内容，例如最新动态、部分成果展示、联系信息、工商信息等。&lt;br /&gt;', '开发并通过验收&lt;br /&gt;', ''),
 (2, 1, '新闻中心的设计和开发。', '新闻中心的设计和开发。\', \'作为一名本公司的用户，我希望可以在新闻中心看到该公司网站的企业新闻，这样可以通过新闻了解企业的最新动态。<br />', '', ''),
 (3, 1, '成果展示的设计和开发', '成果展示的设计和开发\', \'&nbsp;作为一名本公司的用户，我希望可以在成果展示看到该公司网站的企业新闻，这样可以方便我进行了解该公司的产品并进行购买。&nbsp;<br />', '', ''),
@@ -634,7 +634,7 @@ INSERT INTO `zt_storyspec` (`story`, `version`, `title`, `spec`, `verify`, `file
 (5, 1, '诚聘英才的设计和开发', '诚聘英才的设计和开发\', \'作为一名求职者，我希望可以在诚聘英才里看到该公司的招聘信息，这样可以方便我应聘该公司。&nbsp;<br />', '', ''),
 (6, 1, '合作洽谈的设计和开发', '合作洽谈的设计和开发\', \'作为一名合作商，我希望可以在合作洽谈里看到该公司对外的合作内容，这样可以方便我和该公司进行合作洽谈。&nbsp;<br />', '', ''),
 (7, 1, '关于我们的设计和开发', '关于我们的设计和开发\', \'我希望可以在关于我们里看到该公司的基本信息，这样可以方便我了解该公司。<br />', '', '');
-INSERT INTO `zt_task` (`id`, `project`, `parent`, `execution`, `module`, `design`, `story`, `storyVersion`, `designVersion`, `fromBug`, `feedback`, `fromIssue`, `name`, `type`, `mode`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `subStatus`, `color`, `mailto`, `keywords`, `desc`, `version`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `estStarted`, `realStarted`, `finishedBy`, `finishedDate`, `finishedList`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `planDuration`, `realDuration`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `activatedDate`, `order`, `repo`, `mr`, `entry`, `lines`, `v1`, `v2`, `deleted`, `vision`) VALUES
+REPLACE INTO `zt_task` (`id`, `project`, `parent`, `execution`, `module`, `design`, `story`, `storyVersion`, `designVersion`, `fromBug`, `feedback`, `fromIssue`, `name`, `type`, `mode`, `pri`, `estimate`, `consumed`, `left`, `deadline`, `status`, `subStatus`, `color`, `mailto`, `keywords`, `desc`, `version`, `openedBy`, `openedDate`, `assignedTo`, `assignedDate`, `estStarted`, `realStarted`, `finishedBy`, `finishedDate`, `finishedList`, `canceledBy`, `canceledDate`, `closedBy`, `closedDate`, `planDuration`, `realDuration`, `closedReason`, `lastEditedBy`, `lastEditedDate`, `activatedDate`, `order`, `repo`, `mr`, `entry`, `lines`, `v1`, `v2`, `deleted`, `vision`) VALUES
 (1, 2, 0, 3, 1, 0, 1, 1, 1, 0, 0, 0, '首页页面的设计', 'design', '', 1, 7, 8, 0, NULL, 'done', '', '', NULL, '', '首页页面的设计', 1, 'admin', '2024-04-02 15:57:16', 'admin', '2024-04-02 15:58:53', NULL, '2024-04-02 15:58:00', 'projectManager', '2024-04-02 15:58:00', NULL, '', NULL, '', NULL, 0, 0, '', 'projectManager', '2024-04-02 15:58:53', NULL, 0, 0, 0, '', '', '', '', '0', 'rnd'),
 (2, 2, 0, 3, 1, 0, 1, 1, 1, 0, 0, 0, '首页页面的开发', 'devel', '', 3, 8, 0, 8, NULL, 'doing', '', '', NULL, '', '首页页面的开发', 1, 'admin', '2024-04-02 15:57:16', 'projectManager', '2024-04-02 15:58:26', NULL, '2024-04-02 15:59:00', '', NULL, NULL, '', NULL, '', NULL, 0, 0, '', 'projectManager', '2024-04-02 15:59:19', NULL, 0, 0, 0, '', '', '', '', '0', 'rnd'),
 (3, 2, 0, 3, 2, 0, 2, 1, 1, 0, 0, 0, '新闻中心的设计', 'design', '', 3, 7, 0, 7, NULL, 'wait', '', '', NULL, '', '新闻中心的设计', 1, 'admin', '2024-04-02 15:57:16', 'projectManager', '2024-04-02 15:58:26', NULL, NULL, '', NULL, NULL, '', NULL, '', NULL, 0, 0, '', 'projectManager', '2024-04-02 15:58:26', NULL, 0, 0, 0, '', '', '', '', '0', 'rnd'),
@@ -643,7 +643,7 @@ INSERT INTO `zt_task` (`id`, `project`, `parent`, `execution`, `module`, `design
 (6, 2, 0, 3, 3, 0, 3, 1, 1, 0, 0, 0, '成果展示的开发', 'devel', '', 3, 7, 0, 7, NULL, 'doing', '', '', NULL, '', '成果展示的开发', 1, 'admin', '2024-04-02 15:57:16', 'admin', '2024-04-02 15:58:39', NULL, '2024-04-02 16:01:00', '', NULL, NULL, '', NULL, '', NULL, 0, 0, '', 'admin', '2024-04-02 16:01:05', NULL, 0, 0, 0, '', '', '', '', '0', 'rnd'),
 (7, 2, 0, 3, 4, 0, 4, 1, 1, 0, 0, 0, '售后服务的设计', 'design', '', 3, 5, 6, 0, NULL, 'done', '', '', NULL, '', '售后服务的设计', 1, 'admin', '2024-04-02 15:57:16', 'admin', '2024-04-02 16:00:49', NULL, '2024-04-02 16:00:00', 'admin', '2024-04-02 16:00:00', NULL, '', NULL, '', NULL, 0, 0, '', 'admin', '2024-04-02 16:00:49', NULL, 0, 0, 0, '', '', '', '', '0', 'rnd'),
 (8, 2, 0, 3, 4, 0, 4, 1, 1, 0, 0, 0, '售后服务的开发', 'devel', '', 3, 5, 5, 0, NULL, 'done', '', '', NULL, '', '售后服务的开发', 1, 'admin', '2024-04-02 15:57:16', 'admin', '2024-04-02 16:00:18', NULL, '2024-04-02 15:00:00', 'admin', '2024-04-02 15:59:00', NULL, '', NULL, '', NULL, 0, 0, '', 'admin', '2024-04-02 16:00:18', NULL, 0, 0, 0, '', '', '', '', '0', 'rnd');
-INSERT INTO `zt_taskspec` (`task`, `version`, `name`, `estStarted`, `deadline`) VALUES
+REPLACE INTO `zt_taskspec` (`task`, `version`, `name`, `estStarted`, `deadline`) VALUES
 (1, 1, '首页页面的设计', NULL, NULL),
 (2, 1, '首页页面的开发', NULL, NULL),
 (3, 1, '新闻中心的设计', NULL, NULL),
@@ -652,7 +652,7 @@ INSERT INTO `zt_taskspec` (`task`, `version`, `name`, `estStarted`, `deadline`) 
 (6, 1, '成果展示的开发', NULL, NULL),
 (7, 1, '售后服务的设计', NULL, NULL),
 (8, 1, '售后服务的开发', NULL, NULL);
-INSERT INTO `zt_team` (`id`, `root`, `type`, `account`, `role`, `position`, `limited`, `join`, `days`, `hours`, `estimate`, `consumed`, `left`, `order`) VALUES
+REPLACE INTO `zt_team` (`id`, `root`, `type`, `account`, `role`, `position`, `limited`, `join`, `days`, `hours`, `estimate`, `consumed`, `left`, `order`) VALUES
 (1, 2, 'project', 'admin', '', '', 'no', '2024-04-02', 0, 7.0, 0.00, 0.00, 0.00, 0),
 (2, 2, 'project', 'projectManager', '项目经理', '', 'no', '2024-04-02', 0, 7.0, 0.00, 0.00, 0.00, 0),
 (3, 3, 'execution', 'admin', '', '', 'no', '2024-04-02', 10, 7.0, 0.00, 0.00, 0.00, 0),
@@ -662,17 +662,17 @@ INSERT INTO `zt_team` (`id`, `root`, `type`, `account`, `role`, `position`, `lim
 (7, 4, 'execution', 'admin', '', '', 'no', '2024-04-02', 23, 7.0, 0.00, 0.00, 0.00, 0),
 (8, 4, 'execution', 'productManager', '产品经理', '', 'no', '2024-04-02', 23, 7.0, 0.00, 0.00, 0.00, 0),
 (9, 4, 'execution', 'projectManager', '项目经理', '', 'no', '2024-04-02', 23, 7.0, 0.00, 0.00, 0.00, 0);
-INSERT INTO `zt_testresult` (`id`, `run`, `case`, `version`, `job`, `compile`, `caseResult`, `stepResults`, `ZTFResult`, `node`, `lastRunner`, `date`, `duration`, `xml`, `deploy`) VALUES
+REPLACE INTO `zt_testresult` (`id`, `run`, `case`, `version`, `job`, `compile`, `caseResult`, `stepResults`, `ZTFResult`, `node`, `lastRunner`, `date`, `duration`, `xml`, `deploy`) VALUES
 (1, 4, 4, 1, 0, 0, 'pass', 'a:1:{i:7;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}', NULL, 0, 'admin', '2024-04-02 16:30:26', 0, NULL, 0),
 (2, 3, 3, 1, 0, 0, 'pass', 'a:1:{i:6;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}', NULL, 0, 'admin', '2024-04-02 16:30:26', 0, NULL, 0),
 (3, 2, 2, 1, 0, 0, 'pass', 'a:2:{i:3;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}i:5;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}', NULL, 0, 'admin', '2024-04-02 16:30:26', 0, NULL, 0),
 (4, 1, 1, 2, 0, 0, 'pass', 'a:1:{i:2;a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}', NULL, 0, 'admin', '2024-04-02 16:30:26', 0, NULL, 0);
-INSERT INTO `zt_testrun` (`id`, `task`, `case`, `version`, `assignedTo`, `lastRunner`, `lastRunDate`, `lastRunResult`, `status`) VALUES
+REPLACE INTO `zt_testrun` (`id`, `task`, `case`, `version`, `assignedTo`, `lastRunner`, `lastRunDate`, `lastRunResult`, `status`) VALUES
 (1, 1, 1, 2, '', 'admin', '2024-04-02 16:30:26', 'pass', 'normal'),
 (2, 1, 2, 1, '', 'admin', '2024-04-02 16:30:26', 'pass', 'normal'),
 (3, 1, 3, 1, '', 'admin', '2024-04-02 16:30:26', 'pass', 'normal'),
 (4, 1, 4, 1, '', 'admin', '2024-04-02 16:30:26', 'pass', 'normal');
-INSERT INTO `zt_testtask` (`id`, `project`, `product`, `name`, `execution`, `build`, `type`, `owner`, `pri`, `begin`, `end`, `realBegan`, `realFinishedDate`, `mailto`, `desc`, `report`, `status`, `testreport`, `auto`, `subStatus`, `createdBy`, `createdDate`, `deleted`, `members`) VALUES
+REPLACE INTO `zt_testtask` (`id`, `project`, `product`, `name`, `execution`, `build`, `type`, `owner`, `pri`, `begin`, `end`, `realBegan`, `realFinishedDate`, `mailto`, `desc`, `report`, `status`, `testreport`, `auto`, `subStatus`, `createdBy`, `createdDate`, `deleted`, `members`) VALUES
 (1, 2, 1, '企业网站第一期测试任务', 3, '1', 'integrate', 'admin', 1, '2024-04-02', '2024-04-05', NULL, NULL, '', '', NULL, 'wait', 0, 'no', '', 'admin', '2024-04-02 16:26:35', '0', '');
 REPLACE INTO `zt_user` (`company`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `mobile`, `phone`, `weixin`, `dingding`, `slack`, `whatsapp`, `address`, `zipcode`, `nature`, `analysis`, `strategy`, `join`, `visits`, `ip`, `last`, `fails`, `locked`, `ranzhi`, `score`, `scoreLevel`, `deleted`) VALUES
 (0, 5, 'productManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'po', '产品经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '192.168.0.8', 1338866083, 0, null, '', 0, 0, '0'),
@@ -684,7 +684,7 @@ REPLACE INTO `zt_user` (`company`, `dept`, `account`, `type`, `password`, `role`
 (0, 3, 'tester2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试乙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '192.168.0.8', 1338865450, 0, null, '', 0, 0, '1'),
 (0, 3, 'tester3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试丙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 1, '192.168.0.8', 1338865125, 0, null, '', 0, 0, '1'),
 (0, 1, 'testManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qd', '测试经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 6, '192.168.0.8', 1338865842, 0, null, '', 0, 0, '1');
-INSERT INTO `zt_usergroup` (`account`, `group`, `project`) VALUES
+REPLACE INTO `zt_usergroup` (`account`, `group`, `project`) VALUES
 ('productManager', 5, ''),
 ('projectManager', 4, ''),
 ('dev1', 2, ''),
