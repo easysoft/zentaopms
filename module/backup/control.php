@@ -96,7 +96,7 @@ class backup extends control
 
         set_time_limit(0);
 
-        $fileName = date('YmdHis') . mt_rand(0, 9);
+        $fileName = date('YmdHis') . mt_rand(0, 9) . str_replace('.', '_', $this->config->version);
         $result   = $this->backupZen->backupSQL($fileName, $reload);
         if($result['result'] == 'fail')
         {
@@ -318,5 +318,39 @@ class backup extends control
         }
 
         return print($message);
+    }
+
+    /**
+     * AJAX: Check the version of the backup.
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function ajaxCheckBackupVersion($name)
+    {
+        if(!$this->app->isContainer()) $this->send(array('result' => 'success', 'message' => $this->lang->backup->confirmRestore, 'canRestore' => true));
+
+        $matched = preg_match('/\d{15}(.*)$/', $name, $matches);
+        if ($matched == 1 && !empty($matches[1]))
+        {
+            $backupVersion = str_replace('_', '.', $matches[1]);
+            $compareResult = version_compare($backupVersion, $this->config->version);
+            switch($compareResult)
+            {
+                case -1:
+                    $message = $this->lang->backup->notice->lowerVersion;
+                    break;
+                case  1:
+                    $message = sprintf($this->lang->backup->notice->higherVersion, $this->app->getVersionName($backupVersion));
+                    break;
+                default:
+                    $message = $this->lang->backup->confirmRestore;
+            }
+
+            $canRestore = $compareResult == 1 ? false : true;
+            $this->send(array('result' => 'success', 'message' => $message, 'canRestore' => $canRestore));
+        }
+        else
+            $this->send(array('result' => 'fail', 'message' => $this->lang->backup->notice->unknownVersion));
     }
 }
