@@ -12,7 +12,8 @@ class textarea extends wg
         'placeholder?: string',
         'rows?: int',
         'cols?: int',
-        'value?: string'
+        'value?: string',
+        'autoHeight?: bool'
     );
 
     protected static array $defaultProps = array(
@@ -38,6 +39,7 @@ class textarea extends wg
             set($this->props->pick(array('name', 'id', 'class', 'placeholder', 'rows', 'cols', 'disabled'))),
             $this->prop('required') ? setClass('is-required') : null,
             $this->prop('value'),
+            $this->prop('autoHeight') ? on::init()->do('$element.autoHeight()') : null,
             $this->children()
         );
     }
