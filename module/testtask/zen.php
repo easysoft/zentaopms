@@ -541,6 +541,7 @@ class testtaskZen extends testtask
         $this->setMenu($productID, 0, (int)$this->session->project, (int)$this->session->execution);
         $this->lang->qa->menu->{$from}['subModule'] .= ',testtask';
 
+        $orderBy = str_replace('caseID_', 'id_', $orderBy);
         $cases = $this->dao->select('*')->from(TABLE_CASE)
             ->where('id')->in($caseIdList)
             ->beginIF($confirm == 'yes')->andWhere('auto')->ne('auto')->fi()
