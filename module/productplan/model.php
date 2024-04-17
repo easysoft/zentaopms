@@ -109,7 +109,7 @@ class productplanModel extends model
         if(empty($plans)) return array();
 
         $plans        = $this->reorder4Children($plans);
-        $planIdList   = array_keys($plans);
+        $planIdList   = array_filter(array_keys($plans));
         $planProjects = $this->productplanTao->getPlanProjects($planIdList, strpos($param, 'noproduct') === false || $productID ? $productID : null);
 
         $product = $this->loadModel('product')->getById($productID);

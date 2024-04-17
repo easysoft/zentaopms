@@ -1029,27 +1029,26 @@ class bugModel extends model
      * @param  int|string $branch
      * @param  string     $search
      * @param  int        $limit
+     * @param  string     $range    single|all
      * @access public
      * @return array
      */
-    public function getProductBugPairs(int $productID, int|string $branch = '', string $search = '', int $limit = 0): array
+    public function getProductBugPairs(int $productID, int|string $branch = '', string $search = '', int $limit = 0, string $range = 'single'): array
     {
         /* 获取产品的bugs。 */
         /* Get product bugs. */
-        $data = $this->dao->select('id, title')->from(TABLE_BUG)
-            ->where('product')->eq((int)$productID)
+        $productID = (int)$productID;
+        return $this->dao->select("id, CONCAT(IF(product = $productID, '', CONCAT('{$this->lang->product->common}#', product, '@')), id, ':', title) AS title, IF(product = $productID, 0, product) AS `order`")->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->beginIF($range == 'single')->andWhere('product')->eq($productID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
+            ->beginIF($range == 'all' && !$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in($branch)->fi()
             ->beginIF(strlen(trim($search)))->andWhere('title')->like('%' . $search . '%')->fi()
             ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')
+            ->orderBy('`order`, id desc')
             ->beginIF($limit)->limit($limit)->fi()
-            ->fetchAll();
-        /* 将bugs转为bug键对。 */
-        /* Convert bugs to bug pairs. */
-        $bugs = array();
-        foreach($data as $bug) $bugs[$bug->id] = $bug->id . ':' . $bug->title;
-        return $bugs;
+            ->fetchPairs('id', 'title');
     }
 
     /**

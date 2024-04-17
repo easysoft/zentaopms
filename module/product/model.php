@@ -819,7 +819,7 @@ class productModel extends model
      * @param  int    $productID
      * @param  string $branch        'all'|''|int
      * @param  int    $appendProject
-     * @param  string $status        all|noclosed
+     * @param  string $status        all|noclosed|closed
      * @param  string $param         multiple|
      * @access public
      * @return array
@@ -836,6 +836,7 @@ class productModel extends model
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($status == 'noclosed')->andWhere('t2.status')->ne('closed')->fi()
+            ->beginIF($status == 'closed')->andWhere('t2.status')->eq('closed')->fi()
             ->beginIF(strpos($param, 'multiple') !== false)->andWhere('t2.multiple')->ne('0')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->beginIF($product->type != 'normal' and $branch !== '' and $branch != 'all')->andWhere('t1.branch')->in($branch)->fi()

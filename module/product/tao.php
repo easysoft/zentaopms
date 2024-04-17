@@ -440,6 +440,7 @@ class productTao extends productModel
      */
     protected function filterNoCasesStory(array $storyIDList): array
     {
+        if(empty($storyIDList)) return array();
         return $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIDList)->andWhere('deleted')->eq(0)->fetchAll('story');
     }
 

@@ -1089,14 +1089,26 @@ class myModel extends model
         while($object = $stmt->fetch()) $objectIdList[$object->objectType][$object->objectID] = $object->objectID;
         if($checkExists) return array_keys($objectIdList);
 
+        $this->loadModel('flow');
+        $this->loadModel('workflowaction');
         $flows       = $this->dao->select('module,`table`,name,titleField')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('buildin')->eq(0)->fetchAll('module');
         $objectGroup = array();
         foreach($objectIdList as $objectType => $idList)
         {
             $table = zget($this->config->objectTables, $objectType, '');
             if(empty($table) && isset($flows[$objectType])) $table = $flows[$objectType]->table;
+            if(empty($table)) continue;
 
-            if(!empty($table)) $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
+            $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
+
+            $action = $this->workflowaction->getByModuleAndAction($objectType, 'approvalreview');
+            if($action)
+            {
+                foreach($objectGroup[$objectType] as $objectID => $object)
+                {
+                    if(!$this->flow->checkConditions($action->conditions, $object)) unset($objectIdList[$objectType][$objectID], $objectGroup[$objectType][$objectID]);
+                }
+            }
         }
 
         $this->app->loadConfig('action');
