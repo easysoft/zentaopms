@@ -16,6 +16,8 @@ $releases = initTableData($releases, $config->api->dtable->release->fieldList, $
 
 dtable
 (
+    setStyle('overflow-y', 'hidden'),
+    set::extraHeight('+144'),
     set::cols(array_values($config->api->dtable->release->fieldList)),
     set::data(array_values($releases)),
     set::userMap($users),
