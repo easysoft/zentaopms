@@ -754,6 +754,7 @@ class productplanModel extends model
         {
             $plan->closedDate   = $now;
             $plan->closedReason = $closedReason;
+            if($closedReason == 'done') $plan->finishedDate = $now;
         }
 
         return $plan;
