@@ -120,6 +120,10 @@ $lang->dev->tableList['jenkins']          = 'Jenkins';
 $lang->dev->tableList['job']              = 'Job';
 $lang->dev->tableList['searchdict']       = 'Search dict';
 $lang->dev->tableList['searchindex']      = 'Search index';
+$lang->dev->tableList['dataview']         = 'Dataview';
+$lang->dev->tableList['dimension']        = 'Dimension';
+$lang->dev->tableList['metric']           = 'Metric';
+$lang->dev->tableList['pivot']            = 'Pivot';
 
 $lang->dev->groupList['my']        = 'Dashboard';
 $lang->dev->groupList['program']   = 'Program';
