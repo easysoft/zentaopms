@@ -69,3 +69,15 @@ $(document).on('keyup', '#projectName', function()
         if($(this).text().includes(name) || $(this).data('pinyin').includes(name)) $(this).show();
     });
 });
+
+window.toggleStoryType = function(e)
+{
+    if(e.target.value == 'requirement' && !e.target.checked)
+    {
+        $('input[value=epic]').prop('checked', false);
+    }
+    else if(e.target.value == 'epic' && e.target.checked)
+    {
+        $('input[value=requirement]').prop('checked', true);
+    }
+}
