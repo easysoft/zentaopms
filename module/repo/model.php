@@ -2332,6 +2332,9 @@ class repoModel extends model
             }
         }
 
+        $importedProjects = $this->getImportedProjects($gitlabID);
+        $projects         =  array_filter($projects, function($project) use ($importedProjects) { return !in_array($project->id, $importedProjects); });
+
         return $projects;
     }
 
@@ -2360,6 +2363,9 @@ class repoModel extends model
             $groups      = $this->gitfox->apiGetGroups($gitfoxID, 'name_asc');
             foreach($groups as $group) $groupIDList[] = $group->id;
         }
+
+        $importedProjects = $this->getImportedProjects($gitfoxID);
+        $projects         =  array_filter($projects, function($project) use ($importedProjects) { return !in_array($project->id, $importedProjects); });
 
         return $projects;
     }
