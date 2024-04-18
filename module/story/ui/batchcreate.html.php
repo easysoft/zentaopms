@@ -14,7 +14,7 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
-data('activeMenuID', $type);
+if($app->tab == 'product') data('activeMenuID', $type);
 data('storyType', $type);
 jsVar('storyType', $type);
 jsVar('productID', $productID);

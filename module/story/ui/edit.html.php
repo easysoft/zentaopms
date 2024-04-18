@@ -38,7 +38,7 @@ unset($fields['stage']['options']['defining']);
 unset($fields['stage']['options']['planning']);
 unset($fields['stage']['options']['delivering']);
 
-data('activeMenuID', $story->type);
+if($app->tab == 'product') data('activeMenuID', $story->type);
 jsVar('storyType', $story->type);
 jsVar('storyID', $story->id);
 jsVar('storyStatus', $story->status);

@@ -15,7 +15,7 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
 data('storyType', $type);
 data('gradeRule', $gradeRule);
-data('activeMenuID', $type);
+if($app->tab == 'product') data('activeMenuID', $type);
 
 $forceReview  = $this->story->checkForceReview();
 $createFields = useFields('story.create');

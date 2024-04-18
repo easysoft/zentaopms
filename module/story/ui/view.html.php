@@ -18,7 +18,7 @@ if($story->type == 'requirement') $confirmDelete = str_replace($lang->SRCommon, 
 $isInModal = isInModal();
 
 data('branchID', $story->branch);
-data('activeMenuID', $story->type);
+if($app->tab == 'product') data('activeMenuID', $story->type);
 jsVar('relievedTip', $lang->story->relievedTip);
 jsVar('confirmDeleteTip', $confirmDelete);
 jsVar('storyType', $story->type);
