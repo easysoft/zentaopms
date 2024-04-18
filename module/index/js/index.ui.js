@@ -688,7 +688,7 @@ function updateAppsMenu(includeAppsBar)
 {
     loadCurrentPage(
     {
-        selector: (includeAppsBar ? '#appsToolbar>*,#visionSwitcher>*,' : '') + 'appsItems()',
+        selector: (includeAppsBar ? '#menuMoreBtn>*,#appsToolbar>*,#visionSwitcher>*,' : '') + 'appsItems()',
         onRender: function(info)
         {
             if(info.name === 'appsItems')
