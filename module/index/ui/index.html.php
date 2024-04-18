@@ -55,6 +55,7 @@ div
             (
                 a
                 (
+                    setID('menuMoreBtn'),
                     set::title($lang->more),
                     set::href('#menuMoreList'),
                     icon('more-circle'),
