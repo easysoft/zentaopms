@@ -2,7 +2,7 @@
 global $app;
 $app->loadLang('story');
 $config->product->search['module']             = 'story';
-$config->product->search['fields']['title']    = $lang->story->title;
+$config->product->search['fields']['title']    = $lang->story->name;
 $config->product->search['fields']['id']       = $lang->story->id;
 $config->product->search['fields']['keywords'] = $lang->story->keywords;
 $config->product->search['fields']['status']   = $lang->story->status;

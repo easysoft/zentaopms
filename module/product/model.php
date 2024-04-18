@@ -720,14 +720,13 @@ class productModel extends model
 
         /* Get module data. */
         $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
+        if($projectID) $this->lang->story->title = $this->lang->story->name;
         $searchConfig['params']['module']['values'] = $this->productTao->getModulesForSearchForm($productID, $products, $branch, $projectID);
 
         $gradePairs = $this->loadModel('story')->getGradePairs($storyType, 'all');
 
         if($storyType == 'all')
         {
-            $searchConfig['fields']['title'] = $this->lang->story->name;
-
             $gradePairs = array();
             $gradeList  = $this->loadModel('story')->getGradeList('');
             foreach($gradeList as $grade)
