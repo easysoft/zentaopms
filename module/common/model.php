@@ -940,13 +940,13 @@ class commonModel extends model
             $queryCondition = substr($sql, strpos($sql, ' WHERE ') + 7);
             if($queryCondition)
             {
-                $queryCondition = substr($queryCondition, 0, strpos($queryCondition, ' ORDER BY '));
+                if(strpos($queryCondition, ' ORDER BY') !== false) $queryCondition = substr($queryCondition, 0, strpos($queryCondition, ' ORDER BY '));
                 $queryCondition = str_replace('t1.', '', $queryCondition);
             }
         }
         else
         {
-            $queryCondition = substr($sql, 0, strpos($sql, ' ORDER BY '));
+            if(strpos($sql, ' ORDER BY') !== false) $queryCondition = substr($sql, 0, strpos($sql, ' ORDER BY '));
         }
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
