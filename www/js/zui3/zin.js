@@ -451,10 +451,13 @@
         if(DEBUG) console.log('[APP]', 'request', options);
         if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
+        if(options.modal === undefined) options.modal = $(target[0] !== '#' && target[0] !== '.' ? `#${target}` : target).closest('.modal').length;
+        const headers = {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode};
+        if(options.modal) headers['X-Zui-Modal'] = 'true';
         const ajaxOptions =
         {
             url:         url + (url.includes('?') ? '&zin=1' : '?zin=1'),
-            headers:     {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode},
+            headers:     headers,
             type:        options.method || 'GET',
             data:        options.data,
             contentType: options.contentType,
@@ -721,7 +724,11 @@
         const $target = $(target);
         if(!$target.length) return loadPage({url: options.url, id: target});
 
-        if($target.closest('.modal').length && options.partial === undefined) options.partial = true;
+        if($target.closest('.modal').length)
+        {
+            if(options.modal === undefined)   options.modal = true;
+            if(options.partial === undefined) options.partial = true;
+        }
         if(!options.selector)
         {
             let name = options.component;
@@ -754,15 +761,17 @@
         }
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         let selector = `dtable/${target}:component`;
+        options
         if(options.selector && options.selector !== 'dtable') selector = options.selector;
-        if(!$(target).closest('.modal').length && !options.selector)
+        const isInModal = $(target).closest('.modal').length;
+        if(!isInModal && !options.selector)
         {
             selector += ',#mainMenu>*,pageJS/.zin-page-js,hookCode()';
             if($('#moduleMenu').length) selector += ',#moduleMenu,.module-menu-header';
             if($('#docDropmenu').length) selector += ',#docDropmenu,.module-menu';
         }
         delete options.selector;
-        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: selector}, options));
+        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: selector, modal: isInModal}, options));
     }
 
     /**
