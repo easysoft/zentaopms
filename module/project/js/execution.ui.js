@@ -42,12 +42,16 @@ window.onRenderCell = function(result, {col, row})
         const executionLink = $.createLink('execution', 'task', `executionID=${row.data.rawID}`);
         const executionType = typeList[row.data.type];
         let executionName   = '';
+        if(typeof executionType != 'undefined') executionName += `<span class='label secondary-pale flex-none'>${executionType}</span> `;
 
-        if(typeof executionType != 'undefined') executionName += `<span class='label secondary-pale'>${executionType}</span> `;
+        executionName += '<div class="ml-1 clip" style="width: max-content;">';
         executionName += (!row.data.isParent) ? `<a href="${executionLink}" class="text-primary">${row.data.name}</a>` : row.data.name;
-        executionName += (row.data.end != '' && today > row.data.end) ? `<span class="label danger-pale ml-1">${delayed}</span>` : '';
+        executionName += '</div>';
+        executionName += (row.data.end != '' && today > row.data.end) ? `<span class="label danger-pale ml-1 flex-none">${delayed}</span>` : '';
+        executionName += row.data.milestone ? `<i class='icon icon-flag ml-1' style='color: rgba(var(--color-danger-400-rgb));'></i>` : '';
+        console.log(row.data.milestone);
 
-        result[result.length] = {html: executionName};
+        result.push({html: executionName, className: 'w-full flex items-center'});
         return result;
     }
     if(col.name == 'rawID' && row.data.parent) result[0] = '';
