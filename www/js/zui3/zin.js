@@ -180,9 +180,15 @@
         {
             data.debug.forEach(dump =>
             {
-                console.groupCollapsed('%c[ZIN]%c debug %c' + dump.name, 'color:#fff;font-weight:bold;background:#ec4899', 'color:#ec4899;font-weight:bold', 'font-weight:bold');
-                if(typeof dump.data === 'string') console.log('%c' + dump.data, 'font-family: ui-monospace,monospace; padding:0 4px; border-left:1px solid #ff0000');
-                else console.log(dump.data);
+                console.groupCollapsed('%c ZIN %c debug %c' + dump.name, 'color:#fff;font-weight:bold;background:#ec4899', 'color:#ec4899;font-weight:bold', 'font-weight:bold');
+                dump.data.forEach(item =>
+                {
+                    if(typeof item === 'string') console.log('%c' + item, 'font-family:ui-monospace,monospace; padding:0 4px;border-left:1px solid #ff0000;opacity:0.8');
+                    else console.log(item);
+                });
+                console.groupCollapsed('trace');
+                console.log('%c' + dump.trace, 'font-family: ui-monospace,monospace; padding:0 4px;');
+                console.groupEnd();
                 console.groupEnd();
             });
         }
