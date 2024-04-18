@@ -3054,4 +3054,23 @@ class repoModel extends model
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
     }
+
+    /**
+     * 获取代码库服务器已经导入的项目/代码库。
+     * Get the imported projects/repositories by service host id.
+     *
+     * @param  int   $hostID
+     * @return array
+     */
+    public function getImportedProjects(int $hostID)
+    {
+        $importedProjects = $this->dao->select('serviceProject')->from(TABLE_REPO)
+            ->where('serviceHost')->eq($hostID)
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('serviceProject');
+
+        if(dao::isError()) return array();
+
+        return $importedProjects;
+    }
 }
