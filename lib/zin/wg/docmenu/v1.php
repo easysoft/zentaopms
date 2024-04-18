@@ -22,7 +22,8 @@ class docMenu extends wg
         'spaceType?: string',
         'objectType?: string',
         'objectID?: int=0',
-        'hover?: bool=true'
+        'hover?: bool=true',
+        'isThinmory?: bool=false',
     );
 
     public static function getPageCSS(): ?string
@@ -139,6 +140,13 @@ class docMenu extends wg
                 'selected'    => zget($setting, 'active', $selected),
                 'actions'     => $this->getActions($setting)
             );
+
+            if($this->prop('isThinmory')) $item = array_merge($item, array(
+                'data-wizard' => $setting->wizard,
+                'data-order'  => $setting->order,
+                'data-grade'  => $setting->grade,
+                'data-path'   => $setting->path,
+            ));
 
             $children = zget($setting, 'children', array());
             if(!empty($children))
@@ -258,7 +266,7 @@ class docMenu extends wg
                     'type'     => 'dropdown',
                     'caret'    => false,
                     'dropdown' => array(
-                        'placement' => 'bottom-end',
+                        'placement' => $this->prop('isThinmory') ? 'bottom-start' : 'bottom-end',
                         'items'     => $actions
                     )
                 );
@@ -369,13 +377,13 @@ class docMenu extends wg
             'key'     => 'addNode',
             'icon'    => 'add-chapter',
             'text'    => $this->lang->thinkwizard->designer->treeDropdown['addSameNode'],
-            'onClick' => jsRaw("() => addModule({$item->id}, 'same')")
+            'onClick' => jsRaw("() => addStep({$item->id}, 'same')")
         );
         if($item->grade != 3 && $item->type != 'question') $menus[] = array(
             'key'     => 'addNode',
             'icon'    => 'add-sub-chapter',
             'text'    => $this->lang->thinkwizard->designer->treeDropdown['addChildNode'],
-            'onClick' => jsRaw("() => addModule({$item->id}, 'child')")
+            'onClick' => jsRaw("() => addStep({$item->id}, 'child')")
         );
         $menus = array_merge($menus, array(
             array(
@@ -384,9 +392,12 @@ class docMenu extends wg
                 'text' => $this->lang->thinkwizard->designer->treeDropdown['editNode'],
             ),
             array(
-                'key'  => 'deleteNode',
-                'icon' => 'trash',
-                'text' => $this->lang->thinkwizard->designer->treeDropdown['deleteNode'],
+                'key'          => 'deleteNode',
+                'icon'         => 'trash',
+                'text'         => $this->lang->thinkwizard->designer->treeDropdown['deleteNode'],
+                'innerClass'   => 'ajax-submit',
+                'data-url'     => createLink('thinkwizard', 'deleteStep', "stepID={$item->id}"),
+                'data-confirm' => $this->lang->thinkwizard->step->confirmDelete
             ),
             array('type' => 'divider'),
             array(
