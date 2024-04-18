@@ -148,7 +148,26 @@ div(
     )
 );
 
-if($diffs) include 'diffeditor.html.php';
+if($diffs)
+{
+    include 'diffeditor.html.php';
+}
+else
+{
+    div
+    (
+        setClass('dtable-empty-tip'),
+        div
+        (
+            setClass('row gap-4 items-center'),
+            span
+            (
+                setClass('text-gray'),
+                $lang->repo->notice->noChanges
+            )
+        )
+    );
+}
 
 jsVar('oldRevision', $oldRevision);
 jsVar('newRevision', $newRevision);
