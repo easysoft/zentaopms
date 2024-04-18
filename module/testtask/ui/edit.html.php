@@ -12,6 +12,7 @@ namespace zin;
 
 formPanel
 (
+    set::title($lang->testtask->edit),
     on::change('#execution', 'loadExecutionRelated'),
     input
     (
