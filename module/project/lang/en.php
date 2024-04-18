@@ -77,6 +77,7 @@ $lang->project->manageRepo          = 'Manage Repo';
 $lang->project->linkedRepo          = 'Link Repo';
 $lang->project->unlinkedRepo        = 'Unlink Repo';
 $lang->project->executionCount      = 'Total Executions';
+$lang->project->storyType           = 'Link Story Concept';
 $lang->project->storyCount          = 'Story Count';
 $lang->project->storyPoints         = 'Story Points';
 $lang->project->invested            = 'Invested';

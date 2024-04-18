@@ -77,6 +77,7 @@ $lang->project->manageRepo          = '关联代码库';
 $lang->project->linkedRepo          = '已关联代码库';
 $lang->project->unlinkedRepo        = '未关联代码库';
 $lang->project->executionCount      = '执行数';
+$lang->project->storyType           = '关联需求概念';
 $lang->project->storyCount          = '需求条目数';
 $lang->project->storyPoints         = '需求规模';
 $lang->project->invested            = '已投入';
