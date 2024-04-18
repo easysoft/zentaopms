@@ -1395,7 +1395,7 @@ class repo extends control
      * 获取Gitea项目。
      * Ajax get gitea projects.
      *
-     * @param  string $giteaID
+     * @param  int $giteaID
      * @access public
      * @return void
      */
@@ -1403,10 +1403,13 @@ class repo extends control
     {
         $projects = $this->loadModel('gitea')->apiGetProjects($giteaID);
 
+        $importedProjects = $this->repo->getImportedProjects($giteaID);
+
         $options = array();
         $options[] = array('text' => '', 'value' => '');;
         foreach($projects as $project)
         {
+            if(in_array($project->full_name, array_keys($importedProjects))) continue;
             $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
         }
         return print(json_encode($options));
@@ -1424,10 +1427,13 @@ class repo extends control
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($gogsID);
 
+        $importedProjects = $this->repo->getImportedProjects($gogsID);
+
         $options = array();
         $options[] = array('text' => '', 'value' => '');;
         foreach($projects as $project)
         {
+            if(in_array($project->full_name, array_keys($importedProjects))) continue;
             $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
         }
         return print(json_encode($options));
