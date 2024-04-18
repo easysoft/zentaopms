@@ -5352,10 +5352,10 @@ class storyModel extends model
                 }
                 $titleHtml = '';
                 if($storyType == 'requirement' and $story->type == 'story') $titleHtml .= '<span class="label label-badge label-light">SR</span> ';
-                if($story->parent > 0 and isset($story->parentName)) $titleHtml .= "{$story->parentName} / ";
                 if(isset($branches[$story->branch]) and $showBranch and $this->config->vision != 'lite') $titleHtml .= "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
                 if($story->module and isset($modulePairs[$story->module])) $titleHtml .= "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                 if($story->parent > 0) $titleHtml .= '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
+                if($story->parent > 0 and isset($story->parentName)) $titleHtml .= "{$story->parentName} / ";
                 echo $canView ? html::a($storyLink, $titleHtml . $story->title, '', "title='$story->title' style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$titleHtml}{$story->title}</span>";
                 if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-right"></i></a>';
                 break;
