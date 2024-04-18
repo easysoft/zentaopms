@@ -46,22 +46,22 @@ class entityTitle extends wg
         $object = $this->prop('object');
         if($object)
         {
-            if(!$this->hasProp('id'))      $this->setProp('id', $object->id);
-            if(!$this->hasProp('title'))   $this->setProp('title', isset($object->title) ? $object->title : $object->name);
-            if(!$this->hasProp('color'))   $this->setProp('color', $object->color);
-            if(!$this->hasProp('url') && isset($object->url)) $this->setProp('url', $object->url);
+            if(!$this->hasProp('id') && isset($object->id))                                 $this->setProp('id', $object->id);
+            if(!$this->hasProp('title') && (isset($object->title) or isset($object->name))) $this->setProp('title', isset($object->title) ? $object->title : $object->name);
+            if(!$this->hasProp('color') && isset($object->color))                           $this->setProp('color', $object->color);
+            if(!$this->hasProp('url') && isset($object->url))                               $this->setProp('url', $object->url);
 
             if(!$this->hasProp('deleted') && isset($object->deleted)) $this->setProp('deleted', $object->deleted);
-            if(!$this->hasProp('parent') && isset($object->parent))  $this->setProp('parent', $object->parent);
+            if(!$this->hasProp('parent') && isset($object->parent))   $this->setProp('parent', $object->parent);
         }
 
         $parent = $this->prop('parent');
         if($parent)
         {
-            if(!$this->hasProp('parentId'))    $this->setProp('parentId', $parent->id);
-            if(!$this->hasProp('parentTitle')) $this->setProp('parentTitle', isset($parent->title) ? $parent->title : $parent->name);
-            if(!$this->hasProp('parentUrl'))   $this->setProp('parentUrl', $parent->url);
-            if(!$this->hasProp('parentColor')) $this->setProp('parentColor', $parent->color);
+            if(!$this->hasProp('parentId') && isset($parent->id))                                 $this->setProp('parentId', $parent->id);
+            if(!$this->hasProp('parentTitle') && (isset($parent->title) or isset($parent->name))) $this->setProp('parentTitle', isset($parent->title) ? $parent->title : $parent->name);
+            if(!$this->hasProp('parentUrl') && isset($parent->url))                               $this->setProp('parentUrl', $parent->url);
+            if(!$this->hasProp('parentColor') && isset($parent->color))                           $this->setProp('parentColor', $parent->color);
         }
     }
 
