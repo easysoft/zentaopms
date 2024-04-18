@@ -880,4 +880,13 @@ class repoTest
     {
         return $this->objectModel->buildTree($files);
     }
+
+    public function getImportedProjectsTest($hostID)
+    {
+        $importedProjects = $this->objectModel->getImportedProjects($hostID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $importedProjects;
+    }
 }
