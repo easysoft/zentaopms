@@ -1847,6 +1847,14 @@ CREATE INDEX `root` ON `zt_story` (`root`);
 CREATE INDEX `status` ON `zt_story` (`status`);
 CREATE INDEX `assignedTo` ON `zt_story` (`assignedTo`);
 
+-- DROP TABLE IF EXISTS `zt_storygrade`;
+CREATE TABLE `zt_storygrade` (
+  `type` enum('story','requirement','epic') NOT NULL,
+  `grade` smallint NOT NULL,
+  `name` char(30) NOT NULL,
+  `status` char(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_storyreview`;
 CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `story` mediumint(9) NOT NULL DEFAULT '0',
@@ -2376,6 +2384,12 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 ('zh-tw', 'custom', 'URSRList', '3', '{\"ERName\":\"\\u696d\\u9700\",\"SRName\":\"\\u8edf\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '0', 'rnd'),
 ('zh-tw', 'custom', 'URSRList', '4', '{\"ERName\":\"\\u53f2\\u8a69\",\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u7279\\u6027\"}', '0', 'rnd'),
 ('zh-tw', 'custom', 'URSRList', '5', '{\"ERName\":\"\\u696d\\u52d9\\u9700\\u6c42\",\"SRName\":\"\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6236\\u9700\\u6c42\"}', '0', 'rnd');
+
+INSERT INTO `zt_storygrade` (`type`, `grade`, `name`, `status`) VALUES
+('requirement', 1,    'BR', 'enable'),
+('epic',        1,    'UR', 'enable'),
+('story',       1,    'SR', 'enable'),
+('story',       2,    '子', 'enable');
 
 REPLACE INTO `zt_stage` (`name`,`percent`,`type`,`projectType`,`createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES
 ('需求','10','request','waterfall','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
