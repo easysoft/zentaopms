@@ -93,7 +93,7 @@ class storyRelatedList extends relatedList
         $data['story'] = array
         (
             'title'      => $lang->story->linkStories,
-            'items'      => $story->linkStoryList,
+            'items'      => isset($story->linkStoryList) ? $story->linkStoryList : array(),
             'url'        => false,
             'statusList' => $lang->story->statusList,
             'onRender' => function($item, $linkedStory) use($storyProducts, $story, $app)
