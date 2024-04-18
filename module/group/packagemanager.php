@@ -3450,21 +3450,19 @@ $config->group->package->browseMetric->order  = 5;
 $config->group->package->browseMetric->subset = 'metric';
 $config->group->package->browseMetric->privs  = array();
 $config->group->package->browseMetric->privs['metric-preview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseMetric->privs['metric-details'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('metric-preview'), 'recommend' => array());
+$config->group->package->browseMetric->privs['metric-details'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('metric-preview'), 'recommend' => array());
 
-/*
 $config->group->package->manageMetric = new stdclass();
 $config->group->package->manageMetric->order  = 10;
 $config->group->package->manageMetric->subset = 'metric';
 $config->group->package->manageMetric->privs  = array();
-$config->group->package->manageMetric->privs['metric-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-$config->group->package->manageMetric->privs['metric-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-$config->group->package->manageMetric->privs['metric-edit'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-$config->group->package->manageMetric->privs['metric-view'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-$config->group->package->manageMetric->privs['metric-implement'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-$config->group->package->manageMetric->privs['metric-delist'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-$config->group->package->manageMetric->privs['metric-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
- */
+$config->group->package->manageMetric->privs['metric-browse']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageMetric->privs['metric-create']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageMetric->privs['metric-edit']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('metric-browse'), 'recommend' => array());
+$config->group->package->manageMetric->privs['metric-view']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('metric-browse'), 'recommend' => array());
+$config->group->package->manageMetric->privs['metric-implement'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('metric-browse'), 'recommend' => array());
+$config->group->package->manageMetric->privs['metric-delist']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('metric-browse'), 'recommend' => array());
+$config->group->package->manageMetric->privs['metric-delete']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('metric-browse'), 'recommend' => array());
 
 $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;
