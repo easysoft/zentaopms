@@ -79,7 +79,7 @@ window.restore = function(name)
 {
     $.get($.createLink('backup', 'ajaxCheckBackupVersion', 'name=' + name), function(data)
     {
-        zui.Modal.confirm({message: data.message, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+        zui.Modal.alert({message: data.message, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
         {
             if(res && data.canRestore)
             {
