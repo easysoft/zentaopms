@@ -250,6 +250,7 @@ $lang->block->modules['waterfallproject']->availableBlocks['projectdynamic'] = '
 
 $lang->block->modules['agileplus']     = $lang->block->modules['scrumproject'];
 $lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject'];
+$lang->block->modules['ipdproject']    = $lang->block->modules['waterfallproject'];
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks['overview']         = "{$lang->productCommon}总览";
