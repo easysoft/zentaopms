@@ -313,16 +313,10 @@ jsVar('modulePairs',    $modulePairs);
 jsVar('storyType',      $storyType);
 jsVar('checkedSummary', $checkedSummary);
 
-if($isProjectStory and $storyType == 'requirement')
-{
-    unset($lang->projectstory->featureBar['story']['linkedexecution']);
-    unset($lang->projectstory->featureBar['story']['unlinkedexecution']);
-}
-
 $queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}");
 featureBar
 (
-    ($showGrade || $storyType != 'story') ? to::leading
+    ($showGrade || $storyType != 'story' || $isProjectStory) ? to::leading
     (
         picker
         (

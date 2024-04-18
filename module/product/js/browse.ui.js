@@ -141,7 +141,8 @@ window.setShowGrades = function()
     const showGrades = $('[name^=showGrades]').zui('picker').$.state.value;
     if(oldShowGrades == showGrades) return;
 
-    const link = $.createLink('product', 'ajaxSetShowGrades', 'storyType=' + storyType + '&showGrades=' + showGrades);
+    const module = tab == 'product' ? storyType : tab;
+    const link   = $.createLink('product', 'ajaxSetShowGrades', 'module=' + module + '&showGrades=' + showGrades);
     $.get(link, function()
     {
         loadCurrentPage();

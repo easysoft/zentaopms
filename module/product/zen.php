@@ -1471,9 +1471,8 @@ class productZen extends product
         $this->view->stories         = $stories;
         $this->view->gradeGroup      = $gradeGroup;
         $this->view->showGrade       = count($gradeGroup[$storyType]) > 2;
-        $this->view->gradeMenu       = $this->loadModel('story')->getGradeMenu($storyType);
+        $this->view->gradeMenu       = $this->loadModel('story')->getGradeMenu($storyType, $project);
         $this->view->gradePairs      = $this->story->getGradePairs($storyType);
-        $this->view->showGrades      = isset($this->config->{$storyType}->showGrades) ? $this->config->{$storyType}->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
         $this->view->maxGrade        = $this->story->getMaxGrade($storyType);
         $this->view->storyType       = $storyType;
         $this->view->browseType      = $browseType;
@@ -1484,6 +1483,9 @@ class productZen extends product
         $this->view->branchOptions   = (empty($product) && $isProjectStory) ? $this->getBranchOptions($projectProducts, $projectID) : array($productID => $branchOpt);
         $this->view->branchTagOption = $branchTagOpt;
         $this->view->projectProducts = $projectProducts;
+
+        $module = $this->app->tab == 'product' ? $storyType : $this->app->tab;
+        $this->view->showGrades = isset($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
 
         $storyType = $isProjectStory ? 'all' : $storyType;
         $this->view->summary    = $this->product->summary($stories, $storyType);

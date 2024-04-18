@@ -5073,13 +5073,18 @@ class storyModel extends model
      * Get grade menu in story list.
      *
      * @param  string $storyType
+     * @param  object $project
      * @access public
      * @return array
      */
-    public function getGradeMenu(string $storyType): array
+    public function getGradeMenu(string $storyType, object $project = null): array
     {
+        $storyTypes      = isset($project->storyType) ? explode(',', $project->storyType) : array();
+        $showEpic        = $storyType == 'epic' || in_array('epic', $storyTypes);
+        $showRequirement = $showEpic || $storyType == 'requirement' || in_array('requirement', $storyTypes);
+
         $menu = array();
-        if($storyType == 'epic')
+        if($showEpic)
         {
             $items = array();
             $gradePairs = $this->getGradePairs('epic', 'all');
@@ -5087,7 +5092,7 @@ class storyModel extends model
             $menu[] = array('text' => $this->lang->preview . $this->lang->ERCommon, 'value' => 'epic', 'items' => $items);
         }
 
-        if($storyType == 'requirement' || $storyType == 'epic')
+        if($showRequirement)
         {
             $items = array();
             $gradePairs = $this->getGradePairs('requirement', 'all');

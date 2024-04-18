@@ -843,12 +843,14 @@ class product extends control
      * 设置需求列表展示的需求等级。
      * Ajax set show grades.
      *
+     * @param  string $module
+     * @param  string $showGrades
      * @access public
      * @return void
      */
-    public function ajaxSetShowGrades(string $storyType, string $showGrades)
+    public function ajaxSetShowGrades(string $module, string $showGrades)
     {
-        if($showGrades) $this->loadModel('setting')->updateItem("{$this->app->user->account}.$storyType.showGrades", $showGrades);
+        if($showGrades) $this->loadModel('setting')->updateItem("{$this->app->user->account}.$module.showGrades", $showGrades);
     }
 
     /**
