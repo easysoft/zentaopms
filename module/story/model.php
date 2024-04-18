@@ -220,7 +220,7 @@ class storyModel extends model
      * @param  int    $storyID
      * @param  string $storyType
      * @access public
-     * @return object
+     * @return string
      */
     public function getRelationStoryID(int $storyID, string $storyType = 'requirement'): string
     {
