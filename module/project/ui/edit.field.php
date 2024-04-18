@@ -19,3 +19,4 @@ if(strpos($config->project->edit->requiredFields, 'budget') === false) $fields->
 $fields->field('budget')->value(data('project.budget') !== null && data('project.budget') == 0 ? '' : data('project.budget'));
 
 $fields->field('acl')->control(array('control' => 'aclBox', 'aclItems' => data('programID') ? $lang->project->subAclList : $lang->project->aclList, 'aclValue' => data('project.acl'), 'whitelistLabel' => $lang->project->whitelist, 'userValue' => data('project.whitelist')));
+$fields->field('storyType')->foldable()->value(data('project.storyType'));

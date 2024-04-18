@@ -80,6 +80,7 @@ formGridPanel
         ),
         divider(setClass('h-4 mr-4 ml-2 self-center'))
     ),
+    formHidden('storyType[]', 'story'),
     on::click('[name=name], [name=code], [data-name=begin] .has-warning *, [name=days], [data-name="parent"] .pick *', 'removeTips'),
     on::click('[type=submit]', 'removeAllTips'),
     on::click('[name=multiple]', $toggleLongTime),
@@ -90,6 +91,7 @@ formGridPanel
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
     on::change('[name^=products]', 'toggleStageBy'),
     on::change('[name=parent], [name=budget]', 'checkBudget'),
+    on::change('[name^=storyType]', 'toggleStoryType'),
     on::init()->do('setTimeout(() => $element.find("[name=longTime]").trigger("change"), 500)'),
     set::title($lang->project->create),
     set::fullModeOrders(array('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin')),

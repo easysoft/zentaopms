@@ -51,3 +51,6 @@ $fields->field('acl')
        ->control(array('control' => 'aclBox', 'aclItems' => data('programID') ? $lang->project->subAclList : $lang->project->aclList, 'aclValue' => $copyProject ? data('copyProject.acl') : 'open', 'whitelistLabel' => $lang->project->whitelist, 'userValue' => data('copyProjectID') ? data('copyProject.whitelist') : ''));
 
 $fields->field('auth')->foldable()->value($copyProject ? data('copyProject.auth') : 'extend');
+
+$storyType = in_array($model, array('waterfall', 'waterfallplus', 'ipd')) ? 'story,requirement' : 'story';
+$fields->field('storyType')->foldable()->value($storyType);

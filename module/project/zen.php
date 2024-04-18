@@ -36,6 +36,7 @@ class projectZen extends project
             ->add('type', 'project')
             ->join('whitelist', ',')
             ->join('auth', ',')
+            ->join('storyType', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
             ->get();
 
@@ -89,6 +90,7 @@ class projectZen extends project
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
             ->join('whitelist', ',')
             ->join('auth', ',')
+            ->join('storyType', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
             ->remove('products,plans,branch')
             ->get();
