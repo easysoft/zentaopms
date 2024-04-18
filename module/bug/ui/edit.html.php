@@ -20,6 +20,7 @@ jsVar('tab',                   $this->app->tab);
 jsVar('released',              $lang->build->released);
 jsVar('confirmUnlinkBuild',    sprintf($lang->bug->notice->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
 jsVar('projectExecutionPairs', $projectExecutionPairs);
+jsVar('edition',               $config->edition);
 
 detailHeader
 (
@@ -324,6 +325,7 @@ detailBody
             ),
             item
             (
+                set::trClass('browserTR'),
                 set::name($lang->bug->browser),
                 set::required(strpos(",{$config->bug->edit->requiredFields},", ',browser,') !== false),
                 formGroup

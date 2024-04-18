@@ -1137,6 +1137,7 @@ class bugZen extends bug
         /* Get branch options. */
         $branchTagOption = array();
         if($product->type != 'normal') $branchTagOption = $this->getBranchOptions($product->id);
+        if($this->config->edition == 'max') $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->project, $bug->product, true);
 
         $this->assignVarsForEdit($bug);
 

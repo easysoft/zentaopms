@@ -33,6 +33,7 @@ function changeProduct(event)
         loadProductBuilds(productID);
         loadProductPlans(productID);
         loadProductStories(productID, bug.storyID);
+        if(config.currentMethod == 'edit' && edition == 'max') loadIdentify();
     }
 }
 
@@ -57,6 +58,7 @@ function changeProject(event)
     loadExecutionLabel(projectID);
     loadExecutions(productID, projectID);
     loadAssignedTo(productID, projectID);
+    if(config.currentMethod == 'edit' && edition == 'max') loadIdentify();
 }
 
 function changeExecution(event)
