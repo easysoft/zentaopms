@@ -9,9 +9,9 @@ title=测试 gitlabModel::getGitlabProjects();
 timeout=0
 cid=1
 
-- 使用正确的gitlabID,空的filter查询群组属性name @Monitoring
+- 使用正确的gitlabID,空的filter查询群组属性name @testHtml
 - 普通用户使用正确的gitlabID,IS_DEVELOPER filter查询群组属性name @testHtml
-- 普通用户使用正确的gitlabID,filter查询群组属性name @Monitoring
+- 普通用户使用正确的gitlabID,filter查询群组属性name @testHtml
 
 */
 
@@ -24,9 +24,9 @@ $gitlabID       = 1;
 $projectFilters = array('IS_DEVELOPER', 'ALL');
 
 $result = $repo->getGitlabProjects($gitlabID, '');
-r(end($result)) && p('name') && e('Monitoring'); //使用正确的gitlabID,空的filter查询群组
+r(end($result)) && p('name') && e('testHtml'); //使用正确的gitlabID,空的filter查询群组
 su('user6');
 $result = $repo->getGitlabProjects($gitlabID, $projectFilters[0]);
 r(end($result)) && p('name') && e('testHtml'); //普通用户使用正确的gitlabID,IS_DEVELOPER filter查询群组
 $result = $repo->getGitlabProjects($gitlabID, $projectFilters[1]);
-r(end($result)) && p('name') && e('Monitoring'); //普通用户使用正确的gitlabID,filter查询群组
+r(end($result)) && p('name') && e('testHtml'); //普通用户使用正确的gitlabID,filter查询群组
