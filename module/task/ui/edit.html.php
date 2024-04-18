@@ -337,8 +337,8 @@ detailBody
                         setClass('text-left'),
                         h::th(),
                         h::th($lang->task->teamMember),
-                        h::th($lang->task->estimate),
-                        h::th($lang->task->consumedAB),
+                        !empty($task->team) ? h::th($lang->task->estimate) : null,
+                        !empty($task->team) ? h::th($lang->task->consumedAB) : null,
                         h::th($lang->task->left)
                     ),
                     $teamForm,
