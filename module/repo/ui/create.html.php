@@ -26,6 +26,7 @@ jsVar('clientGitTip', $lang->repo->example->client->git);
 jsVar('clientSvnTip', $lang->repo->example->client->svn);
 jsVar('scmList', $lang->repo->scmList);
 jsVar('noProductTip', $lang->repo->error->noProduct);
+jsVar('noRepoLeft', $lang->repo->notice->noRepoLeft);
 jsVar('hasProduct', !empty($products));
 jsVar('appTab', $app->tab);
 

@@ -36,6 +36,8 @@ function onHostChange()
     $.get(url, function(response)
     {
         var data = JSON.parse(response);
+        if(Object.keys(data).length <= 1) zui.Modal.alert({message: noRepoLeft, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});
+
         $project.render({items: data});
         $project.$.clear();
         toggleLoading('#serviceProject', false);
