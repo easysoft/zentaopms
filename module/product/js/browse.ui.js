@@ -73,7 +73,7 @@ window.renderCell = function(result, info)
         if(story.parent > 0) if($.cookie.get('tab') == 'project') html += story.parentName + ' / ';
 
         let gradeLabel = gradeGroup[story.type][story.grade];
-        if(!showGrade && story.grade < 2 && storyType == story.type) gradeLabel = '';
+        if(!showGrade && story.grade < 2 && storyType == story.type && tab == 'product') gradeLabel = '';
         if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
         if(story.color) result[0].props.style = 'color: ' + story.color;
         if(html) result.unshift({html});

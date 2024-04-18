@@ -19,6 +19,7 @@ jsVar('gradeGroup', $gradeGroup);
 jsVar('showGrade', $showGrade);
 jsVar('oldShowGrades', $showGrades);
 jsVar('storyType', $storyType);
+jsVar('tab', $app->tab);
 
 $storyCommon       = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;
 $isProjectStory    = $this->app->rawModule == 'projectstory';
