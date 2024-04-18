@@ -224,6 +224,7 @@ else
                         setClass('w-full check-list'),
                         inputGroup
                         (
+                            setClass('w-full'),
                             $lang->doc->groups,
                             picker
                             (
@@ -232,7 +233,11 @@ else
                                 set::multiple(true)
                             )
                         ),
-                        users(set::label($lang->doc->users), set::items($users))
+                        div
+                        (
+                            setClass('w-full'),
+                            users(set::label($lang->doc->users), set::items($users))
+                        )
                     )
                 ),
                 formRow
