@@ -187,7 +187,7 @@
                     else console.log(item);
                 });
                 console.groupCollapsed('trace');
-                console.log('%c' + dump.trace, 'font-family: ui-monospace,monospace; padding:0 4px;');
+                console.log('%c' + dump.trace.join('\n'), 'font-family: ui-monospace,monospace; padding:0 4px;');
                 console.groupEnd();
                 console.groupEnd();
             });
