@@ -1080,6 +1080,7 @@ class actionModel extends model
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
 
+            if($action->objectType == 'module') return $action;
             if(in_array($action->objectType, array('program', 'project', 'product', 'execution')))
             {
                 $objectTable   = zget($this->config->objectTables, $action->objectType);
