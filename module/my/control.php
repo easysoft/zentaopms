@@ -869,6 +869,7 @@ class my extends control
      */
     public function auditplan(string $browseType = 'myChecking', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        if(!$browseType) $browseType = 'myChecking';
         /* Set session. */
         $this->session->set('auditplanList', $this->app->getURI(true));
 
@@ -915,6 +916,7 @@ class my extends control
      */
     public function nc(string $browseType = 'assignedToMe', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        if(!$browseType) $browseType = 'assignedToMe';
         /* Set session. */
         $this->session->set('ncList', $this->app->getURI(true));
 
