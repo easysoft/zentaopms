@@ -12,8 +12,8 @@ class thinkCheckbox extends thinkRadio
 {
     protected static array $defineProps = array
     (
-        'minCountName?: string',
-        'maxCountName?: string',
+        'minCountName?: string="minCount"',
+        'maxCountName?: string="maxCount"',
         'minCount?: string',
         'maxCount?: string',
     );
@@ -27,28 +27,31 @@ class thinkCheckbox extends thinkRadio
     {
         $items = parent::buildBody();
 
-        list($minCount, $maxCount, $maxCountName, $minCountName) = $this->prop(array('minCountName', 'minCount', 'maxCountName', 'maxCount'));
+        list($minCountName, $minCount, $maxCountName, $maxCount) = $this->prop(array('minCountName', 'minCount', 'maxCountName', 'maxCount'));
         $items[] = formRow
         (
             setClass('gap-4'),
             formGroup
             (
                 set::label(data('lang.thinkwizard.step.label.minCount')),
-                set::placeholder(data('lang.thinkwizard.step.inputContent')),
-                set::control('input'),
-                set::name($minCountName),
-                set::value($minCount),
+                input
+                (
+                    set::placeholder(data('lang.thinkwizard.step.inputContent')),
+                    set::name($minCountName),
+                    set::value($minCount),
+                ),
             ),
             formGroup
             (
                 set::label(data('lang.thinkwizard.step.label.maxCount')),
-                set::placeholder(data('lang.thinkwizard.step.inputContent')),
-                set::control('input'),
-                set::name($maxCountName),
-                set::value($maxCount)
+                input
+                (
+                    set::placeholder(data('lang.thinkwizard.step.inputContent')),
+                    set::name($maxCountName),
+                    set::value($maxCount)
+                )
             )
         );
-        $items[] = $this->children();
         return $items;
     }
 }
