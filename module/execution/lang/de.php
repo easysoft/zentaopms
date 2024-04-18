@@ -410,7 +410,6 @@ $lang->execution->accessDenied                 = "Zugriff zu {$lang->executionCo
 $lang->execution->tips                         = 'Hinweis';
 $lang->execution->afterInfo                    = "%s wurde erstellt. Als nächstes können Sie ";
 $lang->execution->setTeam                      = 'Team setzen';
-$lang->execution->linkStory                    = 'Link Stories';
 $lang->execution->createTask                   = 'Aufgaben erstellen';
 $lang->execution->goback                       = "Zurückkehren";
 $lang->execution->gobackExecution              = "Go Back {$lang->execution->common} List";

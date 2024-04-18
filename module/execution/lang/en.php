@@ -410,7 +410,6 @@ $lang->execution->accessDenied                 = "Your access to {$lang->executi
 $lang->execution->tips                         = 'Note';
 $lang->execution->afterInfo                    = "%s is created. Next you can ";
 $lang->execution->setTeam                      = 'Set Team';
-$lang->execution->linkStory                    = 'Link Story';
 $lang->execution->createTask                   = 'Create Task';
 $lang->execution->goback                       = "Go Back Task List";
 $lang->execution->gobackExecution              = "Go Back {$lang->execution->common} List";
