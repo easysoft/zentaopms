@@ -139,10 +139,24 @@ class metricModel extends model
      */
     public function getTimeTable($data, $dateType = 'day', $withCalcTime = true)
     {
-        usort($data, function($a, $b)
+        usort($data, function($a, $b) use ($dateType)
         {
-            $dateA = strtotime($a->dateString);
-            $dateB = strtotime($b->dateString);
+            if($dateType == 'week')
+            {
+                list($yearA, $weekA) = explode('-', $a->dateString);
+                list($yearB, $weekB) = explode('-', $b->dateString);
+
+                list($firstDayOfWeekA, $lastDayOfWeekA) = $this->getStartAndEndOfWeek($yearA, $weekA, 'date');
+                list($firstDayOfWeekB, $lastDayOfWeekB) = $this->getStartAndEndOfWeek($yearB, $weekB, 'date');
+
+                $dateA = strtotime($firstDayOfWeekA);
+                $dateB = strtotime($firstDayOfWeekB);
+            }
+            else
+            {
+                $dateA = strtotime($a->dateString);
+                $dateB = strtotime($b->dateString);
+            }
 
             if ($dateA == $dateB) {
                 return 0;
@@ -2311,5 +2325,29 @@ class metricModel extends model
         if(!empty($todayData) && empty($dataWithCode)) return $this->lang->metric->noDataAfterCollect;
 
         return $this->lang->metric->noData;
+    }
+
+    /**
+     * 获取某一周的第一天和最后一天的日期。
+     * Get the first and last day of a week.
+     *
+     * @param  int|string $year
+     * @param  int|string $week
+     * @param  string     $type date|datetime
+     * @access public
+     * @return bool
+     */
+    public function getStartAndEndOfWeek($year, $week, $type = 'datetime')
+    {
+        $firstDayOfYear = date('Y-01-01', strtotime("$year-01-01"));
+        $firstDayOfWeek = date('N', strtotime($firstDayOfYear));
+
+        $offsetDays = ($week - 1) * 7 - ($firstDayOfWeek - 1);
+
+        $firstDayOfWeek = date('Y-m-d', strtotime("$firstDayOfYear +$offsetDays days"));
+        $lastDayOfWeek  = date('Y-m-d', strtotime("$firstDayOfWeek +6 days"));
+
+        if($type == 'datetime') return array("$firstDayOfWeek 00:00:00", "$lastDayOfWeek 23:59:59");
+        if($type == 'date')     return array($firstDayOfWeek, $lastDayOfWeek);
     }
 }
