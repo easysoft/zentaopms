@@ -112,7 +112,7 @@ unset($lang->doc->menu->api);
 unset($lang->feedback->menu->ticket);
 unset($lang->feedback->menu->faq);
 
-$lang->my->menu->work = array('link' => "{$lang->my->work}|my|work|mode=requirement", 'subModule' => 'task');
+$lang->my->menu->work = array('link' => "{$lang->my->work}|my|work|mode=demand", 'subModule' => 'task');
 
 $lang->my->menu->work['subMenu'] = new stdclass();
 $lang->my->menu->work['subMenu']->demand      = "需求池需求|my|work|mode=demand";
