@@ -48,8 +48,6 @@ window.onRenderCell = function(result, {col, row})
         executionName += (!row.data.isParent) ? `<a href="${executionLink}" class="text-primary">${row.data.name}</a>` : row.data.name;
         executionName += '</div>';
         executionName += (row.data.end != '' && today > row.data.end) ? `<span class="label danger-pale ml-1 flex-none">${delayed}</span>` : '';
-        executionName += row.data.milestone ? `<i class='icon icon-flag ml-1' style='color: rgba(var(--color-danger-400-rgb));'></i>` : '';
-        console.log(row.data.milestone);
 
         result.push({html: executionName, className: 'w-full flex items-center'});
         return result;
