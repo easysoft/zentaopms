@@ -20,13 +20,13 @@ namespace zin;
 class thinkStep extends wg
 {
     protected static array $defineProps = array(
-        'type?: string',       // 节点或者题型类型
-        'title?: string',      // 标题
-        'titleName: string',   // 标题对应的name
-        'desc?: string',       // 描述
-        'descName: string',    // 描述对应的name
-        'isEdit?: bool=false', // 是否编辑
-        'submitUrl: string',   // 提交表单url
+        'type?: string="transition"', // 节点或者题型类型
+        'title?: string',             // 标题
+        'titleName: string',          // 标题对应的name
+        'desc?: string',              // 描述
+        'descName: string',           // 描述对应的name
+        'isEdit?: bool=false',        // 是否编辑
+        'submitUrl: string',          // 提交表单url
     );
     protected static array $defineBlocks = array(
         'fields' => array(),
@@ -46,14 +46,14 @@ class thinkStep extends wg
             formGroup
             (
                 set::width('full'),
-                set::label($lang->thinkmodel->title),
+                set::label($lang->thinkwizard->step->label->title),
                 set::labelClass('required'),
                 input
                 (
                     setClass('is-required'),
                     set::value($title ? $title : ''),
                     set::name($titleName),
-                    set::placeholder($lang->thinkmodel->titlePlaceholder),
+                    set::placeholder($lang->thinkwizard->step->inputContent),
                 )
             )
         );
@@ -68,16 +68,17 @@ class thinkStep extends wg
             formGroup
             (
                 set::width('full'),
-                set::label($lang->thinkmodel->desc),
+                set::label($lang->thinkwizard->step->label->desc),
                 editor
                 (
                     setClass('desc'),
                     set::name($descName),
-                    set::placeholder($lang->thinkmodel->descPlaceholder),
+                    set::placeholder($lang->thinkwizard->step->pleaseInput),
                     set::value($desc ? strip_tags(html_entity_decode($desc)) : ''),
                     set::rows(5)
                 )
-            )
+            ),
+            formHidden('type', $this->prop('type')),
         );
     }
 
