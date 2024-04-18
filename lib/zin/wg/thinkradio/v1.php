@@ -18,11 +18,6 @@ class thinkRadio extends thinkStep
         'otherName?: string',
     );
 
-    protected static array $defaultProps = array
-    (
-        'type' => 'radio'
-    );
-
     protected function buildBody(): array
     {
         $items = parent::buildBody();
@@ -44,7 +39,6 @@ class thinkRadio extends thinkStep
             set::label(data('lang.thinkwizard.step.label.option')),
             thinkOptions(set::name($optionName), set::otherName($otherName)),
         );
-        $items[] = formHidden('type', $type);
         $items[] = $this->children();
         return $items;
     }
