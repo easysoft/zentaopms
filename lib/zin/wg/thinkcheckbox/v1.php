@@ -18,11 +18,6 @@ class thinkCheckbox extends thinkRadio
         'maxCount?: string',
     );
 
-    protected static array $defaultProps = array
-    (
-        'type' => 'checkbox'
-    );
-
     protected function buildBody(): array
     {
         $items = parent::buildBody();
