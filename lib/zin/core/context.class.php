@@ -343,16 +343,11 @@ class context extends \zin\utils\dataset
         $this->renderer = $renderer;
         $this->rootNode = $node;
 
-        d('includeHooks.before');
         $hookCode   = $this->includeHooks();
-        d('includeHooks.after');
         $rawContent = $this->getRawContent();
 
-        d('prebuild.before');
         $node->prebuild(true);
-        d('prebuild.after');
         $this->applyQueries($node);
-        $node->prebuild(true);
 
         $js       = $this->getJS();
         $css      = $this->getCSS();
