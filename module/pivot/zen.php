@@ -158,6 +158,7 @@ class pivotZen extends pivot
         }
 
         $this->view->pivotName    = $pivot->name;
+        $this->view->title        = $pivot->name;
         $this->view->currentMenu  = $groupID . '_' . $pivot->id;
         $this->view->currentGroup = $groupID;
         $this->view->pivot        = $pivot;
