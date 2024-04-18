@@ -13,6 +13,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->testtask->edit),
+    set::submitBtnText($lang->save),
     on::change('#execution', 'loadExecutionRelated'),
     input
     (
