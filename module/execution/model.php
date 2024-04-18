@@ -2804,10 +2804,12 @@ class executionModel extends model
         $versions         = $this->loadModel('story')->getVersions($stories);
         $linkedStories    = $this->dao->select('story,`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder        = (int)reset($linkedStories);
-        $storyList        = $this->dao->select('id, status, branch, product')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
+        $storyList        = $this->dao->select('id, status, branch, product, type')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
         $execution        = $this->fetchByID($executionID);
         $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
         $laneID           = isset($output['laneID']) ? $output['laneID'] : 0;
+
+        $project = $execution->type == 'project' ? $execution : $this->loadModel('project')->fetchById($execution->project);
 
         foreach($stories as $storyID)
         {
@@ -2817,6 +2819,7 @@ class executionModel extends model
             $storyID = (int)$storyID;
             $story   = zget($storyList, $storyID, '');
             if(empty($story)) continue;
+            if(strpos($project->storyType, "$story->type") === false) continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
 
             $columnID = $this->kanban->getColumnIDByLaneID((int)$laneID, 'backlog');
