@@ -1434,14 +1434,16 @@ class testcaseModel extends model
         {
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchPairs();
         }
-        elseif($this->app->tab == 'project' && empty($case->story))
+        elseif($this->app->tab == 'project' && empty($case->story) && empty($case->project))
         {
             $projects = array($this->session->project);
         }
-        elseif($this->app->tab == 'execution' && empty($case->story))
+        elseif($this->app->tab == 'execution' && empty($case->story) && empty($case->execution))
         {
             $projects = array($this->session->execution);
         }
+        if(!empty($case->project))   $projects[] = $case->project;
+        if(!empty($case->execution)) $projects[] = $case->project;
         if(empty($projects)) return false;
 
         $this->loadModel('action');

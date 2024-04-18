@@ -1357,15 +1357,24 @@ class testcaseZen extends testcase
     {
         $status = $this->getStatusForCreate();
 
-        return form::data($this->config->testcase->form->create)
+        $case = form::data($this->config->testcase->form->create)
             ->add('status', $status)
             ->setIF($from == 'bug', 'fromBug', $param)
+            ->setIF($from == 'project' && $param, 'project', $param)
+            ->setIF($from == 'execution' && $param, 'execution', $param)
+            ->setIF($from != 'project' && $this->app->tab == 'project',   'project',   $this->session->project)
+            ->setIF($from != 'execution' && $this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->auto, 'auto', 'auto')
             ->setIF($this->post->auto && $this->post->script, 'script', $this->post->script ? htmlentities($this->post->script) : '')
-            ->setIF($this->app->tab == 'project',   'project',   $this->session->project)
-            ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->get();
+
+        if(!empty($case->project))
+        {
+            $project = $this->loadModel('project')->fetchByID($case->project);
+            if(!$project->multiple) $case->execution = $this->loadModel('execution')->getNoMultipleID($case->project);
+        }
+        return $case;
     }
 
     /**
