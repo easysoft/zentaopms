@@ -1,0 +1,4 @@
+#editForm .form-horz .form-label {width: 7rem;}
+#editForm .form-horz .form-group {padding-left: 7rem;}
+[lang^=zh] #editForm .form-horz .form-label {width: var(--form-horz-label-width);}
+[lang^=zh] #editForm .form-horz .form-group {padding-left: var(--form-horz-label-width);}
