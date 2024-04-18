@@ -24,8 +24,8 @@ CREATE TABLE `zt_storygrade` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `zt_storygrade` (`type`, `grade`, `name`, `status`) VALUES
-('requirement', 1,    'BR', 'enable'),
-('epic',        1,    'UR', 'enable'),
+('requirement', 1,    'UR', 'enable'),
+('epic',        1,    'BR', 'enable'),
 ('story',       1,    'SR', 'enable'),
 ('story',       2,    '子', 'enable');
 

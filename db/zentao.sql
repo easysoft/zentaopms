@@ -2386,8 +2386,8 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 ('zh-tw', 'custom', 'URSRList', '5', '{\"ERName\":\"\\u696d\\u52d9\\u9700\\u6c42\",\"SRName\":\"\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6236\\u9700\\u6c42\"}', '0', 'rnd');
 
 INSERT INTO `zt_storygrade` (`type`, `grade`, `name`, `status`) VALUES
-('requirement', 1,    'BR', 'enable'),
-('epic',        1,    'UR', 'enable'),
+('requirement', 1,    'UR', 'enable'),
+('epic',        1,    'BR', 'enable'),
 ('story',       1,    'SR', 'enable'),
 ('story',       2,    '子', 'enable');
 
