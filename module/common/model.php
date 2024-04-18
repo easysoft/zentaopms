@@ -938,18 +938,16 @@ class commonModel extends model
         /* Set the query condition session. */
         if($onlyCondition)
         {
-            $queryCondition = explode(' WHERE ', $sql);
-            $queryCondition = isset($queryCondition[1]) ? $queryCondition[1] : '';
+            $queryCondition = substr($sql, strpos($sql, ' WHERE ') + 7);
             if($queryCondition)
             {
-                $queryCondition = explode(' ORDER BY ', $queryCondition);
-                $queryCondition = str_replace('t1.', '', $queryCondition[0]);
+                $queryCondition = substr($queryCondition, 0, strpos($queryCondition, ' ORDER BY '));
+                $queryCondition = str_replace('t1.', '', $queryCondition);
             }
         }
         else
         {
-            $queryCondition = explode(' ORDER BY ', $sql);
-            $queryCondition = $queryCondition[0];
+            $queryCondition = substr($sql, 0, strpos($sql, ' ORDER BY '));
         }
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
