@@ -148,7 +148,6 @@ $lang->repo->openedBy   = 'CreatedBy';
 $lang->repo->assignedTo = 'AssignedTo';
 $lang->repo->openedDate = 'CreatedDate';
 
-$lang->repo->latestRevision = 'Latest Revision';
 $lang->repo->actionInfo     = "Add by %s in %s";
 $lang->repo->changes        = "Change Log";
 $lang->repo->reviewLocation = "File: %s@%s, Line: %s - %s";
@@ -254,8 +253,6 @@ $lang->repo->error->noWritable        = '%s is not writable! Please check the pr
 $lang->repo->error->noCloneAddr       = 'The repository clone address was not found';
 $lang->repo->error->differentVersions = 'The criterion and contrast cannot be the same';
 $lang->repo->error->needTwoVersion    = 'Two branches or tags must be selected.';
-$lang->repo->error->emptyVersion      = 'Version cannot be empty';
-$lang->repo->error->versionError      = 'Wrong version format!';
 $lang->repo->error->projectUnique     = $lang->repo->serviceProject . " exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 $lang->repo->error->repoNameInvalid   = 'The name should contain only alphanumeric numbers, dashes, underscores, and dots.';
 $lang->repo->error->createdFail       = 'Create failed';
