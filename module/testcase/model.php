@@ -195,7 +195,9 @@ class testcaseModel extends model
 
         /* Set related variables. */
         $toBugs       = $this->dao->select('id, title, severity, openedDate')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
-        $case->toBugs = array();
+        $case->toBugs         = array();
+        $case->fromBugData    = array();
+        $case->linkCaseTitles = array();
         foreach($toBugs as $toBug) $case->toBugs[$toBug->id] = $toBug;
         if($case->story)
         {
