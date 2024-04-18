@@ -1390,7 +1390,7 @@ class my extends control
 
         /* Append id for second sort. */
         $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
         $actions    = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
