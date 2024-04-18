@@ -177,12 +177,9 @@ $lang->metric->featureBar['browse']['released'] = 'Released';
 $lang->metric->featureBar['preview']['project']   = 'Project';
 $lang->metric->featureBar['preview']['product']   = 'Product';
 $lang->metric->featureBar['preview']['execution'] = 'Execution';
-$lang->metric->featureBar['preview']['dept']      = 'Team';
 $lang->metric->featureBar['preview']['user']      = 'Individual';
 $lang->metric->featureBar['preview']['program']   = 'Program';
 $lang->metric->featureBar['preview']['system']    = 'System';
-// $lang->metric->featureBar['preview']['code']      = 'Code Repository';
-// $lang->metric->featureBar['preview']['pipeline']  = 'Pipeline';
 
 $lang->metric->more        = 'More';
 $lang->metric->collect     = 'My Collect';
@@ -231,9 +228,6 @@ $lang->metric->scopeList['user']      = "Individual";
 $lang->metric->scopeList['system']    = "System";
 $lang->metric->scopeList['other']     = "Other";
 $lang->metric->scopeList['program']   = "Program";
-// $lang->metric->scopeList['dept']      = "Team";
-// $lang->metric->scopeList['code']      = "Code Repository";
-// $lang->metric->scopeList['pipeline']  = "Pipeline";
 
 global $config;
 $lang->metric->objectList = array();

@@ -177,12 +177,9 @@ $lang->metric->featureBar['browse']['released'] = '已发布';
 $lang->metric->featureBar['preview']['project']   = '项目';
 $lang->metric->featureBar['preview']['product']   = '产品';
 $lang->metric->featureBar['preview']['execution'] = '执行';
-$lang->metric->featureBar['preview']['dept']      = '团队';
 $lang->metric->featureBar['preview']['user']      = '个人';
 $lang->metric->featureBar['preview']['program']   = '项目集';
 $lang->metric->featureBar['preview']['system']    = '系统';
-// $lang->metric->featureBar['preview']['code']      = '代码库';
-// $lang->metric->featureBar['preview']['pipeline']  = '流水线';
 
 $lang->metric->more        = '更多';
 $lang->metric->collect     = '我收藏的';
@@ -231,9 +228,6 @@ $lang->metric->scopeList['user']      = "个人";
 $lang->metric->scopeList['system']    = "系统";
 $lang->metric->scopeList['other']     = "其他";
 $lang->metric->scopeList['program']   = "项目集";
-// $lang->metric->scopeList['dept']      = "团队";
-// $lang->metric->scopeList['code']      = "代码库";
-// $lang->metric->scopeList['pipeline']  = "流水线";
 
 global $config;
 $lang->metric->objectList = array();
