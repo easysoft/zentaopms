@@ -15,7 +15,7 @@ namespace zin;
 featureBar(li
 (
     setClass('nav-item'),
-    a(setClass('active'), $lang->execution->linkStory),
+    a(setClass('active'), $lang->execution->linkStory)
 ));
 
 searchForm

@@ -2241,8 +2241,11 @@ class execution extends control
         $queryID      = ($browseType == 'bySearch') ? (int)$param : 0;
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object);
 
-        if($browseType == 'bySearch') $allStories = $this->story->getBySearch(implode(',', array_keys($products)), '', $queryID, $orderBy, $objectID);
-        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', 'story', $orderBy, false, '', null);
+        $project = $object;
+        if(strpos('sprint,stage,kanban', $object->type) !== false) $project = $this->loadModel('project')->getByID($object->project);
+
+        if($browseType == 'bySearch') $allStories = $this->story->getBySearch(implode(',', array_keys($products)), '', $queryID, $orderBy, $objectID, $project->storyType);
+        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active', $project->storyType, $orderBy, false, '', null);
         $linkedStories = $this->story->getExecutionStoryPairs($objectID);
         foreach($allStories as $id => $story)
         {
@@ -2263,9 +2266,6 @@ class execution extends control
         $this->app->loadClass('pager', true);
         $pager      = new pager(count($allStories), $recPerPage, $pageID);
         $allStories = array_chunk($allStories, $pager->recPerPage);
-
-        $project = $object;
-        if(strpos('sprint,stage,kanban', $object->type) !== false) $project = $this->loadModel('project')->getByID($object->project);
 
         $productPairs = array();
         foreach($products as $id => $product) $productPairs[$id] = $product->name;
