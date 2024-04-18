@@ -296,7 +296,9 @@ class context extends \zin\utils\dataset
             $statement = $stack[0];
             if(str_contains($stack[0], '): zin\d('))
             {
-                $finalName = explode(',', explode('): zin\d(', $statement)[1])[0];
+                $statement = explode('): zin\d(', $statement)[1];
+                if(str_contains($statement, ',')) $finalName = explode(',', $statement)[0];
+                else                              $finalName = explode(')', $statement)[0];
             }
             else
             {
