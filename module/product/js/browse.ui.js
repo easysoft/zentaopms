@@ -70,7 +70,6 @@ window.renderCell = function(result, info)
         const story = info.row.data;
         let html = '';
         if(typeof modulePairs[story.rawModule] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.rawModule] + "</span> ";
-        if(story.parent > 0) if($.cookie.get('tab') == 'project') html += story.parentName + ' / ';
 
         let gradeLabel = gradeGroup[story.type][story.grade];
         if(!showGrade && story.grade < 2 && storyType == story.type && tab == 'product') gradeLabel = '';
