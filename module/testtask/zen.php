@@ -653,20 +653,20 @@ class testtaskZen extends testtask
     {
         /* 如果要执行的测试用例是自动化测试用例，并且设置了自动化测试的参数配置，并且用户尚未确认，则弹窗让用户确认。*/
         /* If the test case to be executed is an automated test case, and the parameter configuration of the automated test is set, and the user has not confirmed it, a pop-up window will pop up for the user to confirm. */
+        $cancelURL  = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=no");
         $automation = $this->loadModel('zanode')->getAutomationByProduct($run->case->product);
         if($run->case->auto == 'auto' && $confirm == '')
         {
-            $cancelURL = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=no");
-            if(!$automation) return $this->send(array('load' => $cancelURL));
-
+            if(!$automation) $this->locate($cancelURL);
             $confirmURL = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=yes");
-            return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->zanode->runCaseConfirm, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
+            return print(js::start() . "zui.Modal.hide($(document).find('.modal')); zui.Modal.confirm('{$this->lang->zanode->runCaseConfirm}').then((res) => {if(res){ openUrl({url: '{$confirmURL}', load: 'modal', size: 'lg'});}else{ openUrl({url: '{$cancelURL}', load: 'modal', size: 'lg'});}});" . js::end());
         }
 
         /* 用户确认后执行自动化测试的相关操作。*/
         /* Perform automated testing related operations after user confirmation. */
         if($confirm == 'yes')
         {
+            if(!$automation) $this->locate($cancelURL);
             $resultID = $this->testtask->initResultForAutomatedTest($runID, $caseID, $run->case->version, $automation->node);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'load' => $this->createLink('zanode', 'browse')));
 
