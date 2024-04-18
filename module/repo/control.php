@@ -581,7 +581,7 @@ class repo extends control
      *
      * @param int    $repoID
      * @param int    $objectID
-     * @param int    $revision
+     * @param string $revision
      * @access public
      * @return void
      */
@@ -1267,7 +1267,7 @@ class repo extends control
      * @param  int    $repoID
      * @param  string $path
      * @access public
-     * @return object
+     * @return void
      */
     public function ajaxGetSVNDirs(int $repoID, string $path = '')
     {
@@ -1298,7 +1298,8 @@ class repo extends control
      *
      * @param  int    $repoID
      * @param  string $type
-     * @param  int    $objectID
+     * @param  string $method
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1358,7 +1359,7 @@ class repo extends control
      * 获取服务器下拉列表数据。
      * Ajax get hosts.
      *
-     * @param  int    $scm
+     * @param  string    $scm
      * @access public
      * @return void
      */
@@ -1394,8 +1395,7 @@ class repo extends control
      * 获取Gitea项目。
      * Ajax get gitea projects.
      *
-     * @param  string $gitlabID
-     * @param  string $projectIdList
+     * @param  string $giteaID
      * @access public
      * @return void
      */
@@ -1416,8 +1416,7 @@ class repo extends control
      * 获取Gogs项目。
      * Ajax get gogs projects.
      *
-     * @param  string $gitlabID
-     * @param  string $projectIdList
+     * @param  int    $gogsID
      * @access public
      * @return void
      */
@@ -1438,8 +1437,9 @@ class repo extends control
      * 获取Gitlab项目。
      * Ajax get gitlab projects.
      *
-     * @param  string $gitlabID
-     * @param  string $token
+     * @param  int    $gitlabID
+     * @param  string $projectIdList
+     * @param  string $filter
      * @access public
      * @return void
      */
@@ -1464,9 +1464,9 @@ class repo extends control
      * 获取Gitfox项目。
      * Ajax get gitfox projects.
      *
-     * @param  string $gitfoxID
-     * @param  array $projectIdList
-     * @param  array $filter
+     * @param  int    $gitfoxID
+     * @param  string $projectIdList
+     * @param  string $filter
      * @access public
      * @return void
      */
@@ -1532,7 +1532,6 @@ class repo extends control
      * 根据Url获取代码库信息。
      * API: get repo by url.
      *
-     * @param  string $type  gitlab
      * @access public
      * @return void
      */
@@ -1609,7 +1608,7 @@ class repo extends control
      * @param  int    $repoID
      * @param  string $commit
      * @access public
-     * @return object
+     * @return void
      */
     public function ajaxGetCommitRelation(int $repoID, string $commit)
     {
@@ -1664,7 +1663,7 @@ class repo extends control
      * @param  string $branch
      * @param  string $path
      * @access public
-     * @return string
+     * @return void
      */
     public function ajaxGetFiles(int $repoID, string $branch = '', string $path = '')
     {
@@ -1680,7 +1679,7 @@ class repo extends control
      * Get file last commit info.
      *
      * @access public
-     * @return object
+     * @return void
      */
     public function ajaxGetFileCommitInfo()
     {
