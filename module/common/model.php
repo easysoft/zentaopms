@@ -1063,7 +1063,7 @@ class commonModel extends model
      */
     public function checkSafeFile()
     {
-        if($this->app->isContainer()) return false;
+        if($this->app->isContainer() || $this->config->inContainer) return false;
 
         if($this->app->hasValidSafeFile()) return false;
 
