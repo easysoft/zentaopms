@@ -26,8 +26,8 @@ $lang->backup->settingDir = '備份目錄';
 $lang->backup->settingList['nofile'] = '不備份附件和代碼';
 $lang->backup->settingList['nosafe'] = '不需要防下載PHP檔案頭';
 
-global $app;
-if($app->isContainer()) $lang->backup->settingList['nofile'] = '不備份附件';
+global $config;
+if($config->inContainer) $lang->backup->settingList['nofile'] = '不備份附件';
 
 $lang->backup->waitting        = '<span id="backupType"></span>正在進行中，請稍候...';
 $lang->backup->progressSQL     = '<p>SQL備份中，已備份%s</p>';

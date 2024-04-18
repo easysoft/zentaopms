@@ -114,8 +114,7 @@ class backup extends control
                 printf($result['message']);
             }
 
-            global $app;
-            if(!$this->app->isContainer())
+            if(!$this->config->inContainer)
             {
                 $result = $this->backupZen->backupCode($fileName, $reload);
                 if($result['result'] == 'fail')
@@ -328,7 +327,7 @@ class backup extends control
      */
     public function ajaxCheckBackupVersion($name)
     {
-        if(!$this->app->isContainer()) $this->send(array('result' => 'success', 'message' => $this->lang->backup->confirmRestore, 'canRestore' => true));
+        if(!$this->config->inContainer) $this->send(array('result' => 'success', 'message' => $this->lang->backup->confirmRestore, 'canRestore' => true));
 
         $matched = preg_match('/\d{15}(.*)$/', $name, $matches);
         if ($matched == 1 && !empty($matches[1]))
