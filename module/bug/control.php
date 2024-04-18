@@ -123,7 +123,9 @@ class bug extends control
 
         /* 处理列表页面的参数。*/
         /* Processing browse params. */
+        $modules = $this->tree->getOptionMenu((int)$product->id, 'bug', 0, $branch);
         list($moduleID, $queryID, $realOrderBy, $pager) = $this->bugZen->prepareBrowseParams($browseType, $param, $orderBy, $recTotal, $recPerPage, $pageID);
+        if(!isset($modules[$moduleID])) $moduleID = 0;
 
         $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID);
 
@@ -131,6 +133,7 @@ class bug extends control
         $bugs       = $this->bugZen->getBrowseBugs((int)$product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
         $this->bugZen->buildBrowseView($bugs, (object)$product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
+        $this->view->modules = $modules;
         $this->display();
     }
 
