@@ -1827,6 +1827,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `twins` varchar(255) NOT NULL DEFAULT '',
   `duplicateStory` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `version` smallint(6) NOT NULL DEFAULT '1',
+  `parentVersion` smallint(6) NOT NULL DEFAULT '0',
   `storyChanged` enum('0','1') NOT NULL DEFAULT '0',
   `feedbackBy` varchar(100) NOT NULL DEFAULT '',
   `notifyEmail` varchar(100) NOT NULL DEFAULT '',
