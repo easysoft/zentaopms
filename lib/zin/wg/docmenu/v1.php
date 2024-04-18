@@ -391,13 +391,21 @@ class docMenu extends wg
                 'icon' => 'edit',
                 'text' => $this->lang->thinkwizard->designer->treeDropdown['editNode'],
             ),
-            array(
+            !isset($item->cannotDelete) ? array(
                 'key'          => 'deleteNode',
                 'icon'         => 'trash',
                 'text'         => $this->lang->thinkwizard->designer->treeDropdown['deleteNode'],
                 'innerClass'   => 'ajax-submit',
                 'data-url'     => createLink('thinkwizard', 'deleteStep', "stepID={$item->id}"),
-                'data-confirm' => $this->lang->thinkwizard->step->confirmDelete
+                'data-confirm' => $this->lang->thinkwizard->step->confirmDeleteNode
+            ) : array(
+                'key'            => 'deleteNode',
+                'icon'           => 'trash',
+                'text'           => $this->lang->thinkwizard->designer->treeDropdown['deleteNode'],
+                'innerClass'     => 'text-gray opacity-50',
+                'data-toggle'    => 'tooltip',
+                'data-title'     => $this->lang->thinkwizard->step->cannotDeleteNode,
+                'data-placement' => 'right',
             ),
             array('type' => 'divider'),
             array(
