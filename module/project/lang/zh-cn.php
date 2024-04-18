@@ -424,15 +424,16 @@ $lang->project->programTitle['0']    = '不显示';
 $lang->project->programTitle['base'] = '只显示一级项目集';
 $lang->project->programTitle['end']  = '只显示最后一级项目集';
 
-$lang->project->accessDenied         = "您无权访问该{$lang->projectCommon}！";
-$lang->project->chooseProgramType    = "选择{$lang->projectCommon}管理方式";
-$lang->project->cannotCreateChild    = "该{$lang->projectCommon}已经有实际的内容，无法直接添加子{$lang->projectCommon}。您可以为当前{$lang->projectCommon}创建一个父{$lang->projectCommon}，然后在新的父{$lang->projectCommon}下面添加子{$lang->projectCommon}。";
-$lang->project->hasChildren          = "该{$lang->projectCommon}有子{$lang->projectCommon}存在，不能删除。";
-$lang->project->confirmDelete        = "您确定删除{$lang->projectCommon}“%s”吗？";
-$lang->project->cannotChangeToCat    = "该{$lang->projectCommon}已经有实际的内容，无法修改为父{$lang->projectCommon}";
-$lang->project->cannotCancelCat      = "该{$lang->projectCommon}下已经有子{$lang->projectCommon}，无法取消父{$lang->projectCommon}标记";
-$lang->project->parentBeginEnd       = "父{$lang->projectCommon}起止时间：%s ~ %s";
-$lang->project->parentBudget         = "父项目集预算：";
+$lang->project->accessDenied            = "您无权访问该{$lang->projectCommon}！";
+$lang->project->chooseProgramType       = "选择{$lang->projectCommon}管理方式";
+$lang->project->cannotCreateChild       = "该{$lang->projectCommon}已经有实际的内容，无法直接添加子{$lang->projectCommon}。您可以为当前{$lang->projectCommon}创建一个父{$lang->projectCommon}，然后在新的父{$lang->projectCommon}下面添加子{$lang->projectCommon}。";
+$lang->project->hasChildren             = "该{$lang->projectCommon}有子{$lang->projectCommon}存在，不能删除。";
+$lang->project->confirmDelete           = "您确定删除{$lang->projectCommon}“%s”吗？";
+$lang->project->confirmDisableStoryType = "取消后会将项目和执行内已经关联的相应概念需求全部移除，操作不可逆。";
+$lang->project->cannotChangeToCat       = "该{$lang->projectCommon}已经有实际的内容，无法修改为父{$lang->projectCommon}";
+$lang->project->cannotCancelCat         = "该{$lang->projectCommon}下已经有子{$lang->projectCommon}，无法取消父{$lang->projectCommon}标记";
+$lang->project->parentBeginEnd          = "父{$lang->projectCommon}起止时间：%s ~ %s";
+$lang->project->parentBudget            = "父项目集预算：";
 
 $lang->project->beginLessThanParent     = "{$lang->projectCommon}的开始日期小于了父项目集的开始日期：%s。";
 $lang->project->endGreatThanParent      = "{$lang->projectCommon}的完成日期大于了父项目集的完成日期：%s。";

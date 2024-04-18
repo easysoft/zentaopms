@@ -424,15 +424,16 @@ $lang->project->programTitle['0']    = 'Hidden';
 $lang->project->programTitle['base'] = "Base-level {$lang->projectCommon} only";
 $lang->project->programTitle['end']  = "End-level {$lang->projectCommon} only";
 
-$lang->project->accessDenied         = "Access denied to this {$lang->projectCommon}";
-$lang->project->chooseProgramType    = 'Select management type';
-$lang->project->cannotCreateChild    = "The {$lang->projectCommon} has contents, so you cannot add a child {$lang->projectCommon}. You can create a parent project for this one and then add a child {$lang->projectCommon} for the parent {$lang->projectCommon}.";
-$lang->project->hasChildren          = "This {$lang->projectCommon} has a child {$lang->projectCommon}, so it cannot be deleted.";
-$lang->project->confirmDelete        = 'Do you want to delete \"%s\"?';
-$lang->project->cannotChangeToCat    = "The {$lang->projectCommon} has contents, so you cannot it to a parent {$lang->projectCommon}.";
-$lang->project->cannotCancelCat      = "There are child {$lang->projectCommon}s of this {$lang->projectCommon}. You cannot cancel the parent {$lang->projectCommon} mark.";
-$lang->project->parentBeginEnd       = "The begin and end date of the parent {$lang->projectCommon}: %s ~ %s";
-$lang->project->parentBudget         = "The budget of the parent program: ";
+$lang->project->accessDenied            = "Access denied to this {$lang->projectCommon}";
+$lang->project->chooseProgramType       = 'Select management type';
+$lang->project->cannotCreateChild       = "The {$lang->projectCommon} has contents, so you cannot add a child {$lang->projectCommon}. You can create a parent project for this one and then add a child {$lang->projectCommon} for the parent {$lang->projectCommon}.";
+$lang->project->hasChildren             = "This {$lang->projectCommon} has a child {$lang->projectCommon}, so it cannot be deleted.";
+$lang->project->confirmDelete           = 'Do you want to delete \"%s\"?';
+$lang->project->confirmDisableStoryType = "After cancellation, all corresponding conceptual requirements that have been associated with the project and execution will be removed, and the operation is irreversible.";
+$lang->project->cannotChangeToCat       = "The {$lang->projectCommon} has contents, so you cannot it to a parent {$lang->projectCommon}.";
+$lang->project->cannotCancelCat         = "There are child {$lang->projectCommon}s of this {$lang->projectCommon}. You cannot cancel the parent {$lang->projectCommon} mark.";
+$lang->project->parentBeginEnd          = "The begin and end date of the parent {$lang->projectCommon}: %s ~ %s";
+$lang->project->parentBudget            = "The budget of the parent program: ";
 
 $lang->project->beginLessThanParent     = "The start date of the {$lang->projectCommon} is < the start date of the parent program: %s. ";
 $lang->project->endGreatThanParent      = "The finish date of the {$lang->projectCommon} is > the finish date of the parent program: %s. ";
