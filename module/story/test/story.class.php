@@ -680,7 +680,7 @@ class storyTest
      */
     public function getExecutionStoriesBySearchTest(int $executionID, int $queryID, int $productID, array $excludeStories = array(), object|null $pager = null): int
     {
-        $stories = $this->objectModel->getExecutionStoriesBySearch($executionID, $queryID, $productID, 't2.id_desc', 'story', $excludeStories, $pager);
+        $stories = $this->objectModel->getExecutionStoriesBySearch($executionID, $queryID, $productID, 't2.id_desc', 'story', '', $excludeStories, $pager);
         return count($stories);
     }
 

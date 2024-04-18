@@ -241,6 +241,22 @@ class storyModel extends model
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStories();
 
         if(empty($executionID)) return array();
+        $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
+
+        $sqlCondition = array();
+        $module       = $execution->type == 'project' ? 'project' : 'execution';
+        $showGrades   = isset($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : null;
+        if($showGrades)
+        {
+            $items = explode(',', $showGrades);
+            foreach($items as $item)
+            {
+                preg_match('/^([a-zA-Z]+)(\d+)$/', $item, $matches);
+                $sqlCondition[] = "(t2.type = '{$matches[1]}' and t2.grade = {$matches[2]})";
+            }
+
+            $sqlCondition = '(' . implode(' OR ', $sqlCondition) . ')';
+        }
 
         /* 格式化参数。 */
         $orderBy = str_replace('branch_', 't2.branch_', $orderBy);
@@ -248,11 +264,10 @@ class storyModel extends model
         if(is_string($excludeStories)) $excludeStories = explode(',', $excludeStories);
 
         /* 获取需求。 */
-        if($type == 'bysearch') $stories = $this->storyTao->getExecutionStoriesBySearch($executionID, (int)$param, $productID, $orderBy, $storyType, $excludeStories, $pager);
+        if($type == 'bysearch') $stories = $this->storyTao->getExecutionStoriesBySearch($executionID, (int)$param, $productID, $orderBy, $storyType, $sqlCondition, $excludeStories, $pager);
         if($type != 'bysearch')
         {
             /* 根据请求类型和参数，获取查询要用到的条件。 */
-            $execution    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
             $modules      = $this->storyTao->getModules4ExecutionStories($type, $param);
             $storyIdList  = $this->storyTao->getIdListOfExecutionsByProjectID($type, $executionID);
             $productParam = ($type == 'byproduct' and $param)        ? $param : $productID;
@@ -267,6 +282,7 @@ class storyModel extends model
                 ->andWhere('t2.type')->in($storyType)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
+                ->beginIF($sqlCondition)->andWhere($sqlCondition)->fi()
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($this->session->storyBrowseType and strpos('changing|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in($this->storyTao->getUnclosedStatusKeys())->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi();

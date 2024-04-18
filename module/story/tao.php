@@ -424,12 +424,13 @@ class storyTao extends storyModel
      * @param  int         $productID
      * @param  string      $orderBy
      * @param  string      $storyType
+     * @param  string      $sqlCondition
      * @param  array       $excludeStories
      * @param  object|null $pager
      * @access protected
      * @return array
      */
-    protected function getExecutionStoriesBySearch(int $executionID, int $queryID, int $productID, string $orderBy, string $storyType = 'story', array $excludeStories = array(), object|null $pager = null): array
+    protected function getExecutionStoriesBySearch(int $executionID, int $queryID, int $productID, string $orderBy, string $storyType = 'story', string $sqlCondition = '', array $excludeStories = array(), object|null $pager = null): array
     {
         /* 获取查询条件。 */
         $rawModule = $this->app->rawModule;
@@ -452,6 +453,7 @@ class storyTao extends storyModel
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.type')->in($storyType)
+            ->beginIF($sqlCondition)->andWhere($sqlCondition)->fi()
             ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
