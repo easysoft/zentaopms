@@ -48,7 +48,7 @@ $items[] = array('name' => 'module', 'label' => $lang->bug->module, 'control' =>
 $items[] = array('name' => 'project', 'label' => $lang->bug->project, 'control' => 'picker', 'items' => $projects, 'value' => $projectID, 'width' => '200px', 'required' => isset($requiredFields['project']), 'ditto' => true);
 
 /* Field of execution. */
-$items[] = array
+if(!empty($project->multiple)) $items[] = array
 (
     'name'     => 'execution',
     'label'    => isset($project->model) && $project->model == 'kanban' ? $lang->bug->kanban : $lang->bug->execution,
