@@ -129,7 +129,7 @@ function data()
     return getPageData($args[0]);
 }
 
-function dv(mixed $nameOrData, mixed $data = null, $json = false)
+function d(mixed $nameOrData, mixed ...$values)
 {
     if(is_string($nameOrData))
     {
@@ -137,22 +137,8 @@ function dv(mixed $nameOrData, mixed $data = null, $json = false)
     }
     else
     {
-        $name = 'dump';
-        $data = $nameOrData;
+        $name = '';
+        array_unshift($values, $nameOrData);
     }
-    context::current()->addDebugData($name, $data, $json);
-}
-
-function d(mixed $nameOrData, mixed $data = null)
-{
-    if(is_string($nameOrData))
-    {
-        $name = $nameOrData;
-    }
-    else
-    {
-        $name = 'dump';
-        $data = $nameOrData;
-    }
-    context::current()->addDebugData($name, $data, true);
+    context::current()->addDebugData($name, ...$values);
 }

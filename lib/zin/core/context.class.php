@@ -282,9 +282,38 @@ class context extends \zin\utils\dataset
         return $js;
     }
 
-    public function addDebugData(string $name, mixed $data, bool $json = false)
+    public function addDebugData(string $name, mixed ...$values)
     {
-        $this->debugData[] = array('name' => $name, 'data' => $json ? $data : var_export($data, true));
+        $e         = new \Exception();
+        $trace     = $e->getTraceAsString();
+        $trace     = str_replace($this->control->app->basePath, '', $trace);
+        $stack     = explode("\n", $trace);
+        if(str_contains($stack[0], 'lib/zin/core/context.func.php')) array_shift($stack);
+
+        $finalName = $name;
+        if(empty($finalName))
+        {
+            $statement = $stack[0];
+            if(str_contains($stack[0], '): zin\d('))
+            {
+                $finalName = explode(',', explode('): zin\d(', $statement)[1])[0];
+            }
+            else
+            {
+                $finalName = 'dump';
+            }
+        }
+
+        $isJson = $name[0] !== '$';
+        $data   = $values;
+        if($isJson)
+        {
+            $data = json_encode($values);
+            if($data === false) $isJson = false;
+            else                $data = jsRaw($data);
+        }
+        if(!$isJson) $data = array_map(function($value) {return var_export($value, true);}, $values);
+        $this->debugData[] = array('name' => $finalName, 'data' => $data, 'type' => $isJson ? 'json' : 'var', 'trace' => $stack);
     }
 
     public function getDebugData() : ?array
