@@ -1799,7 +1799,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `status` enum('','changing','active','draft','closed','reviewing','launched','developing') NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `color` char(7) NOT NULL DEFAULT '',
-  `stage` enum('','wait','planned','projected','designing','designed','developing','developed','testing','tested','verified','rejected','pending','released','closed') NOT NULL DEFAULT 'wait',
+  `stage` enum('','wait','defining','planning','planned','projected','designing','designed','developing','developed','testing','tested','verified','rejected','delivering','pending','released','closed') NOT NULL DEFAULT 'wait',
   `stagedBy` char(30) NOT NULL DEFAULT '',
   `mailto` text NULL,
   `lib` mediumint(8) unsigned NOT NULL DEFAULT '0',
