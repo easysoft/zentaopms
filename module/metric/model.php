@@ -686,15 +686,18 @@ class metricModel extends model
         $statement = $this->getDataStatement($calculator, 'statement', $vision);
         $rows = $statement->fetchAll();
 
-        foreach($rows as $row) $calculator->calculate($row);
+        if(!empty($rows)) foreach($rows as $row) $calculator->calculate($row);
         $records = $calculator->getResult($options);
 
-        $time = helper::now();
-        foreach($records as $index => $record)
+        if(!empty($records))
         {
-            $records[$index]['date']         = $time;
-            $records[$index]['calcType']     = 'cron';
-            $records[$index]['calculatedBy'] = 'system';
+            $time = helper::now();
+            foreach($records as $index => $record)
+            {
+                $records[$index]['date']         = $time;
+                $records[$index]['calcType']     = 'cron';
+                $records[$index]['calculatedBy'] = 'system';
+            }
         }
 
         return $records;
