@@ -138,5 +138,3 @@ formGridPanel
     on::change('[name=region]', 'setLane'),
     $type == 'requirement' ? on::change('[name=branch]', "loadBranchModule('{$productID}')") : null,
 );
-
-render();

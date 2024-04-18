@@ -37,6 +37,12 @@ $config->story->form->create['vision']      = array('type' => 'string',  'contro
 $config->story->form->create['version']     = array('type' => 'int',     'control' => '',             'required' => false, 'default' => 1);
 $config->story->form->create['openedBy']    = array('type' => 'string',  'control' => '',             'required' => false, 'default' => $app->user->account);
 $config->story->form->create['openedDate']  = array('type' => 'string',  'control' => '',             'required' => false, 'default' => helper::now());
+if($config->vision == 'or')
+{
+    $app->loadLang('demand');
+    $config->story->form->create['duration'] = array('type' => 'string',  'control' => 'select', 'required' => false, 'default' =>'feature', 'options' => $lang->demand->durationList);
+    $config->story->form->create['BSA']      = array('type' => 'string',  'control' => 'select', 'required' => false, 'default' =>'feature', 'options' => $lang->demand->bsaList);
+}
 
 $config->story->form->edit = array();
 $config->story->form->edit['product']        = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0,  'options' => array());
