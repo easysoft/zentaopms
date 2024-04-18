@@ -2143,6 +2143,14 @@ class metricModel extends model
         return 'nodate';
     }
 
+    /**
+     * 根据编号获取度量项的日期属性。
+     * Get date type by metric code.
+     *
+     * @param  string $code
+     * @access public
+     * @return string
+     */
     public function getDateTypeByCode(string $code)
     {
         /* Get dateType form db first. */
