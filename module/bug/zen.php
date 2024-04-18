@@ -763,11 +763,18 @@ class bugZen extends bug
         /* 获取需求和任务的 id 列表。*/
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
+        if($this->config->edition == 'max') $identifyList = $this->loadModel('review')->getPairs(0, 0, true);
         foreach($bugs as $bug)
         {
             if($bug->story)  $storyIdList[$bug->story] = $bug->story;
             if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
+
+            if(isset($identifyList))
+            {
+                $bug->injection = zget($identifyList, $bug->injection, '');
+                $bug->identify  = zget($identifyList, $bug->identify, '');
+            }
         }
 
         $showModule = !empty($this->config->bug->browse->showModule) ? $this->config->bug->browse->showModule : '';
