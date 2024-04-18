@@ -50,3 +50,5 @@ config/ext/_*.php
 config/ext/xxb*.php
 config/ext/xuan*.php
 framework/xuanxuan.class.php
+lib/phpaes/
+www/x.php
