@@ -90,7 +90,7 @@ class my extends control
     public function work(string $mode = 'task', string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if(in_array($mode, array('testcase', 'feedback')) && $type == 'assignedTo') $type = 'assigntome';
-        $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
+        $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][strtolower($mode)];
 
         echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
@@ -114,7 +114,7 @@ class my extends control
         if(($mode == 'issue' || $mode == 'risk') && $type == 'openedBy') $type = 'createdBy';
         if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
         if(($mode == 'doc' || $mode == 'testcase') && $type == 'openedBy') $type = 'openedbyme';
-        if($mode != 'nc') $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
+        $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][strtolower($mode)];
 
         echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
@@ -984,6 +984,7 @@ class my extends control
         $this->view->depts      = $this->dept->getOptionMenu();
         $this->view->users      = $this->user->getPairs('all,noletter');
         $this->view->queryID    = $queryID;
+        $this->view->param      = $param;
         $this->view->mode       = 'myMeeting';
         $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram(0, 'all', true);
         $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
