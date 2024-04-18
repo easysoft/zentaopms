@@ -41,7 +41,7 @@ class modalHeader extends wg
 
         $header = h::div
         (
-            setClass('flex items-center overflow-hidden'),
+            setClass('flex items-center overflow-hidden w-full'),
             $title ? div
             (
                 $title,
