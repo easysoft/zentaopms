@@ -477,7 +477,7 @@ detailBody
             $story->type == 'story' && common::hasPriv('story', 'tasks') ? tabPane
             (
                 set::title($lang->story->legendProjectAndTask),
-                set::active((!$this->config->URAndSR || $hiddenURS) && empty($twins)),
+                set::active((!$this->config->URAndSR) && empty($twins)),
                 h::ul(setClass('list-unstyled'), $taskItems)
             ) : null,
             tabPane
