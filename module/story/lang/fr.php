@@ -215,6 +215,10 @@ $lang->story->estimateUnit     = "(Unit: {$lang->story->hour})";
 $lang->story->ditto       = 'Idem';
 $lang->story->dittoNotice = "This story is not linked to the same {$lang->productCommon} as the last one is!";
 
+if($config->enableER) $lang->story->typeList['epic']        = $lang->ERCommon;
+if($config->URAndSR)  $lang->story->typeList['requirement'] = $lang->URCommon;
+$lang->story->typeList['story'] = $lang->SRCommon;
+
 $lang->story->needNotReviewList[0] = 'Need Review';
 $lang->story->needNotReviewList[1] = 'Need Not Review';
 

@@ -215,6 +215,10 @@ $lang->story->estimateUnit     = "（单位：{$lang->story->hour}）";
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "该{$lang->SRCommon}与上一{$lang->SRCommon}不属于同一{$lang->productCommon}！";
 
+if($config->enableER) $lang->story->typeList['epic']        = $lang->ERCommon;
+if($config->URAndSR)  $lang->story->typeList['requirement'] = $lang->URCommon;
+$lang->story->typeList['story'] = $lang->SRCommon;
+
 $lang->story->needNotReviewList[0] = '需要评审';
 $lang->story->needNotReviewList[1] = '不需要评审';
 
