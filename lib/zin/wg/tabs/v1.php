@@ -23,7 +23,6 @@ class tabs extends wg
     public static function getPageCSS(): ?string
     {
         return <<<CSS
-        .modal-dialog .modal-body.scrollbar-hover {padding-top: 0; margin-top: 1.5rem;}
         .tabs-header {position: relative; z-index: 1}
         .tabs-nav>.nav-item>a {font-size: 14px; font-weight: 800; padding: 0; padding-right: 0; color: var(--color-gray-800);}
         .tabs-nav>.nav-item>a:after {border-width: 0;}
