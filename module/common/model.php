@@ -1249,6 +1249,11 @@ class commonModel extends model
         if(empty($app->user)) return false;
         list($module, $method) = commonTao::getStoryModuleAndMethod($module, $method, $params);
 
+        /* Compatible with old search. */
+        if($module == 'search' && $method == 'buildoldform')  $method = 'buildform';
+        if($module == 'search' && $method == 'saveoldquery')  $method = 'savequery';
+        if($module == 'search' && $method == 'buildoldquery') $method = 'buildquery';
+
         /* If the user is doing a tutorial, have all tutorial privileges. */
         if(commonModel::isTutorialMode())
         {
