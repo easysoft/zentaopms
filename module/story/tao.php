@@ -451,7 +451,7 @@ class storyTao extends storyModel
             ->andWhere('t1.project')->eq($executionID)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
-            ->andWhere('t2.type')->eq($storyType)
+            ->andWhere('t2.type')->in($storyType)
             ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
