@@ -154,6 +154,12 @@ class bugBasicInfo extends wg
         foreach($browserList as $browser) $browserText .= zget($lang->bug->browserList, $browser) . ' ';
         $items[$lang->bug->browser] = trim($browserText);
 
+        if($config->edition == 'max')
+        {
+            $items[$lang->bug->injection] = $bug->injectionTitle;
+            $items[$lang->bug->identify]  = $bug->identifyTitle;
+        }
+
         $items[$lang->bug->keywords] = $bug->keywords;
 
         $mailtoList = explode(',', $bug->mailto);
