@@ -48,8 +48,8 @@ class entityTitle extends wg
         {
             if(!$this->hasProp('id'))      $this->setProp('id', $object->id);
             if(!$this->hasProp('title'))   $this->setProp('title', isset($object->title) ? $object->title : $object->name);
-            if(!$this->hasProp('url'))     $this->setProp('url', $object->url);
             if(!$this->hasProp('color'))   $this->setProp('color', $object->color);
+            if(!$this->hasProp('url') && isset($object->url)) $this->setProp('url', $object->url);
 
             if(!$this->hasProp('deleted') && isset($object->deleted)) $this->setProp('deleted', $object->deleted);
             if(!$this->hasProp('parent') && isset($object->parent))  $this->setProp('parent', $object->parent);
