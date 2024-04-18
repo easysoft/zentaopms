@@ -225,7 +225,6 @@ $lang->project->homeMenu->kanban = array('link' => "{$lang->project->kanban}|pro
 $lang->scrum->menu              = new stdclass();
 $lang->scrum->menu->index       = array('link' => "{$lang->dashboard}|project|index|project=%s");
 $lang->scrum->menu->execution   = array('link' => "$lang->executionCommon|project|execution|status=undone&projectID=%s", 'exclude' => 'execution-testreport', 'subModule' => 'task');
-$lang->scrum->menu->storyGroup  = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s&product=%s",'class' => 'dropdown dropdown-hover', 'exclude' => 'tree-browse');
 $lang->scrum->menu->story       = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story,track', 'exclude' => 'tree-browse');
 $lang->scrum->menu->projectplan = array('link' => "{$lang->productplan->shortCommon}|projectplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->scrum->menu->doc         = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s", 'subModule' => 'doc,api');
@@ -236,17 +235,12 @@ $lang->scrum->menu->release     = array('link' => "{$lang->release->common}|proj
 $lang->scrum->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->scrum->menu->settings    = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team', 'exclude' => 'tree-browsetask');
 
-$lang->scrum->menu->storyGroup['dropMenu'] = new stdclass();
-$lang->scrum->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|projectstory|story|projectID=%s&productID=%s", 'subModule' => 'tree,story');
-$lang->scrum->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|projectstory|story|projectID=%s&productID=%s&branch=0&browseType=&param=0&storyType=requirement", 'subModule' => 'tree,story');
-
 $lang->scrum->dividerMenu = ',execution,programplan,doc,settings,';
 
 /* Scrum menu order. */
 $lang->scrum->menuOrder[5]  = 'index';
 $lang->scrum->menuOrder[10] = 'execution';
 $lang->scrum->menuOrder[15] = 'story';
-$lang->scrum->menuOrder[16] = 'storyGroup';
 $lang->scrum->menuOrder[18] = 'projectplan';
 $lang->scrum->menuOrder[20] = 'qa';
 $lang->scrum->menuOrder[25] = 'devops';
@@ -276,8 +270,7 @@ $lang->scrum->menu->settings['subMenu']->module      = array('link' => "{$lang->
 $lang->waterfall->menu = new stdclass();
 $lang->waterfall->menu->index      = array('link' => "$lang->dashboard|project|index|project=%s");
 $lang->waterfall->menu->execution  = array('link' => "{$lang->stage->common}|project|execution|status=undone&projectID=%s", 'subModule' => 'programplan,task');
-$lang->waterfall->menu->storyGroup = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s",'class' => 'dropdown dropdown-hover', 'exclude' => 'tree-browse,projectstory-track');
-$lang->waterfall->menu->story      = array('link' => "$lang->SRCommon|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story', 'exclude' => 'projectstory-track,tree-browse');
+$lang->waterfall->menu->story      = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story', 'exclude' => 'projectstory-track,tree-browse');
 $lang->waterfall->menu->design     = array('link' => "{$lang->design->common}|design|browse|project=%s");
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
 $lang->waterfall->menu->doc        = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s");
@@ -289,14 +282,11 @@ $lang->waterfall->menu->dynamic    = array('link' => "$lang->dynamic|project|dyn
 $lang->waterfall->menu->settings = $lang->scrum->menu->settings;
 $lang->waterfall->dividerMenu    = ',programplan,build,dynamic,';
 
-$lang->waterfall->menu->storyGroup['dropMenu'] = $lang->scrum->menu->storyGroup['dropMenu'];
-
 /* Waterfall menu order. */
 $lang->waterfall->menuOrder[5]  = 'index';
 $lang->waterfall->menuOrder[15] = 'programplan';
 $lang->waterfall->menuOrder[20] = 'execution';
 $lang->waterfall->menuOrder[25] = 'story';
-$lang->waterfall->menuOrder[26] = 'storyGroup';
 $lang->waterfall->menuOrder[30] = 'design';
 $lang->waterfall->menuOrder[35] = 'devops';
 $lang->waterfall->menuOrder[55] = 'qa';
@@ -355,7 +345,6 @@ $lang->execution->menu->view   = array('link' => "$lang->view|execution|grouptas
 
 if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$lang->view|execution|gantt|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
 
-$lang->execution->menu->storyGroup = array('link' => "{$lang->common->story}|execution|story|executionID=%s",'class' => 'dropdown dropdown-hover', 'subModule' => 'story', 'alias' => 'batchcreate,storykanban,batchtotask');
 $lang->execution->menu->story      = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'storyview,storykanban,linkstory,batchtotask');
 $lang->execution->menu->qa         = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
 $lang->execution->menu->devops     = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr', 'alias' => 'create');
@@ -364,10 +353,6 @@ $lang->execution->menu->build      = array('link' => "{$lang->build->common}|exe
 $lang->execution->menu->action     = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
 $lang->execution->menu->settings   = array('link' => "$lang->settings|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
 $lang->execution->menu->more       = array('link' => "$lang->more|execution|more|%s");
-
-$lang->execution->menu->storyGroup['dropMenu'] = new stdclass();
-$lang->execution->menu->storyGroup['dropMenu']->story       = array('link' => "{$lang->SRCommon}|execution|story|executionID=%s", 'subModule' => 'story');
-$lang->execution->menu->storyGroup['dropMenu']->requirement = array('link' => "{$lang->URCommon}|execution|story|executionID=%s&storyType=requirement", 'subModule' => 'story');
 
 /* Execution menu order. */
 $lang->execution->menuOrder[5]  = 'task';
@@ -424,7 +409,6 @@ $lang->project->noMultiple->scrum->menu->kanban     = $lang->execution->menu->ka
 $lang->project->noMultiple->scrum->menu->burn       = $lang->execution->menu->burn;
 $lang->project->noMultiple->scrum->menu->view       = $lang->execution->menu->view;
 $lang->project->noMultiple->scrum->menu->story      = $lang->execution->menu->story;
-$lang->project->noMultiple->scrum->menu->storyGroup = $lang->execution->menu->storyGroup;
 $lang->project->noMultiple->scrum->menu->qa         = $lang->scrum->menu->qa;
 $lang->project->noMultiple->scrum->menu->devops     = $lang->scrum->menu->devops;
 $lang->project->noMultiple->scrum->menu->doc        = $lang->scrum->menu->doc;

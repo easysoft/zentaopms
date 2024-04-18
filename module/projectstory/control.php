@@ -111,7 +111,7 @@ class projectStory extends control
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
         $story = $this->loadModel('story')->getByID((int)$storyID);
-        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->project);
+        echo $this->fetch($story->type, 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->project);
     }
 
     /**

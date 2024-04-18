@@ -154,7 +154,6 @@ class executionModel extends model
 
         /* Set stroy navigation for no-product project. */
         $this->loadModel('project')->setNoMultipleMenu($executionID);
-        if(isset($this->lang->execution->menu->storyGroup)) unset($this->lang->execution->menu->storyGroup);
         if(isset($this->lang->execution->menu->story['dropMenu']) && $this->app->getMethodName() == 'storykanban')
         {
             $this->lang->execution->menu->story['link']            = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);

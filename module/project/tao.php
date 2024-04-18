@@ -1007,7 +1007,6 @@ class projectTao extends projectModel
         {
             unset($lang->project->menu->projectplan);
             unset($lang->project->menu->settings['subMenu']->module);
-            if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
             return true;
         }
 
@@ -1016,19 +1015,7 @@ class projectTao extends projectModel
 
         if(in_array($model, $this->config->project->scrumList)) $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
 
-        /* Init story dropdown for project secondary meun. */
-        if($model !== 'kanban' && !empty($this->config->URAndSR) && isset($lang->project->menu->storyGroup))
-        {
-            $lang->project->menu->story = $lang->project->menu->storyGroup;
-            $lang->project->menu->story['link'] = sprintf($lang->project->menu->storyGroup['link'], '%s', $projectProduct);
-            $lang->project->menu->story['dropMenu']->story['link']       = sprintf($lang->project->menu->storyGroup['dropMenu']->story['link'], '%s', $projectProduct);
-            $lang->project->menu->story['dropMenu']->requirement['link'] = sprintf($lang->project->menu->storyGroup['dropMenu']->requirement['link'], '%s', $projectProduct);
-            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'story') $lang->project->menu->story['dropMenu']->story['subModule'] .= ',projectstory,story';
-            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'requirement') $lang->project->menu->story['dropMenu']->requirement['subModule'] .= ',projectstory,story';
-        }
-
         unset($lang->project->menu->settings['subMenu']->products);
-        if(isset($lang->project->menu->storyGroup)) unset($lang->project->menu->storyGroup);
         if(!in_array($model, $this->config->project->scrumList)) unset($lang->project->menu->projectplan);
         return true;
     }
@@ -1046,20 +1033,6 @@ class projectTao extends projectModel
     protected function setNavGroupMenu(string $navGroup, int $executionID, object $project): bool
     {
         global $lang;
-        /* Single execution and has no product project menu. */
-        if(!$project->hasProduct && !$project->multiple && !empty($this->config->URAndSR) && isset($lang->$navGroup->menu->storyGroup))
-        {
-            $lang->$navGroup->menu->story = $lang->$navGroup->menu->storyGroup;
-            $lang->$navGroup->menu->story['link'] = sprintf($lang->$navGroup->menu->storyGroup['link'], '%s', $project->id);
-
-            $lang->$navGroup->menu->story['dropMenu']->story['link']       = sprintf($lang->$navGroup->menu->storyGroup['dropMenu']->story['link'], '%s', $project->id);
-            $lang->$navGroup->menu->story['dropMenu']->requirement['link'] = sprintf($lang->$navGroup->menu->storyGroup['dropMenu']->requirement['link'], '%s', $project->id);
-
-            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'story') $lang->$navGroup->menu->story['dropMenu']->story['subModule'] = 'story,execution';
-            if(isset($this->app->params['storyType']) && $this->app->params['storyType'] == 'requirement') $lang->$navGroup->menu->story['dropMenu']->requirement['subModule'] = 'story,execution';
-        }
-
-        if(isset($lang->$navGroup->menu->storyGroup)) unset($lang->$navGroup->menu->storyGroup);
         foreach($lang->$navGroup->menu as $label => $menu)
         {
             $objectID = 0;
