@@ -12,4 +12,4 @@ namespace zin;
 include 'component/tableandcharts.html.php';
 jsVar('updateTimeTip', $lang->metric->updateTimeTip);
 
-$fnGenerateTableAndCharts($current);
+$fnGenerateTableAndCharts($metric);

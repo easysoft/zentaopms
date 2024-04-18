@@ -586,22 +586,12 @@ class product extends control
         if($this->config->systemMode == 'light' && $orderBy == 'program_asc') $orderBy = 'order_asc';
         if(str_contains($orderBy, 'productLine')) $orderBy = str_replace('productLine', 'line', $orderBy);
 
-        if(strtolower($browseType) == 'bysearch')
-        {
-            $queryID  = ($browseType == 'bySearch' || !empty($param)) ? $param : 0;
-            $products = $this->product->getListBySearch($queryID);
-        }
-        else
-        {
-            $products = $this->product->getList($programID, $browseType);
-        }
-
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->product->refreshStats(); // Refresh stats fields of products.
 
-        $productStatList = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story', $programID);
+        $productStatList = $this->productZen->getExportData($programID, $browseType, $orderBy, $param, $pager);
 
         /* Generate root program list. */
         $rootProgramList = $this->loadModel('program')->getRootProgramList();
@@ -752,7 +742,6 @@ class product extends control
             /* 获取导出字段和数据。 */
             $fields       = $this->productZen->getExportFields();
             $productStats = $this->productZen->getExportData($programID, $status, $orderBy, $param);
-            $rowspan      = $this->productZen->getExportRowspan($productStats);
 
             /* 如果只导出选中产品，删除非选中产品。 */
             if($this->post->exportType == 'selected')
@@ -765,7 +754,6 @@ class product extends control
             }
             if($this->config->edition != 'open') list($fields, $productStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $productStats);
 
-            $this->post->set('rowspan', $rowspan);
             $this->post->set('fields', $fields);
             $this->post->set('rows', $productStats);
             $this->post->set('kind', 'product');

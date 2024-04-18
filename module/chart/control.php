@@ -41,11 +41,11 @@ class chart extends control
                 /* Select multiple charts to view. */
                 $charts = $this->getChartsToView($this->post->charts);
             }
-            else if($this->post->groupID && $this->post->chartID && $this->post->filterValues)
+            else if($this->post->groupID && $this->post->chartID)
             {
                 /* 更改一个图表的过滤条件。*/
                 /* Change filter conditions of a chart. */
-                $chart = $this->getChartToFilter((int)$this->post->groupID, (int)$this->post->chartID, $this->post->filterValues);
+                $chart = $this->getChartToFilter((int)$this->post->groupID, (int)$this->post->chartID, $this->post->filterValues ? $this->post->filterValues : array());
                 if($chart) $charts[] = $chart;
             }
         }

@@ -881,6 +881,13 @@ class bugZen extends bug
         $modules   = $this->tree->getOptionMenu($productID, 'bug', 0, ($branch === 'all' || !isset($bug->branches[$branch])) ? 'all' : $branch);
         $moduleID  = isset($modules[$moduleID]) ? $moduleID : '';
 
+        /* Get module owner. */
+        if(!empty($moduleID))
+        {
+            list($account, $realname) = $this->bug->getModuleOwner($moduleID, $productID);
+            $this->updateBug($bug, array('assignedTo' => $account));
+        }
+
         return $this->updateBug($bug, array('modules' => $modules, 'moduleID' => $moduleID));
     }
 

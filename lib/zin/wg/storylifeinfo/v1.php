@@ -25,7 +25,7 @@ class storyLifeInfo extends wg
         $items     = array();
 
         $items[$lang->story->openedBy] = zget($users, $story->openedBy) . $lang->at . $story->openedDate;
-        $items[$lang->story->assignedTo] = $story->assignedTo ? zget($users, $story->assignedTo) . $lang->at . $story->assignedDate : null;
+        $items[$lang->story->assignedTo] = $story->assignedTo ? zget($users, $story->assignedTo) . $lang->at . $story->assignedDate : '';
         $items[$lang->story->reviewers] = array
         (
             'children' => wg(div
@@ -38,7 +38,7 @@ class storyLifeInfo extends wg
             ))
         );
         $items[$lang->story->reviewedDate] = $story->reviewedDate;
-        $items[$lang->story->closedBy] = $story->closedBy ? zget($users, $story->closedBy) . $lang->at . $story->closedDate : null;
+        $items[$lang->story->closedBy] = $story->closedBy ? zget($users, $story->closedBy) . $lang->at . $story->closedDate : '';
         $items[$lang->story->closedReason] = array
         (
             'class'    => 'resolution',
@@ -48,7 +48,7 @@ class storyLifeInfo extends wg
                 isset($story->extraStories[$story->duplicateStory]) ? a(set::href(inlink('view', "storyID=$story->duplicateStory")), set::title($story->extraStories[$story->duplicateStory]), "#{$story->duplicateStory} {$story->extraStories[$story->duplicateStory]}") : null
             )
         );
-        $items[$lang->story->lastEditedBy] = $story->lastEditedBy ? zget($users, $story->lastEditedBy) . $lang->at . $story->lastEditedDate : null;
+        $items[$lang->story->lastEditedBy] = $story->lastEditedBy ? zget($users, $story->lastEditedBy) . $lang->at . $story->lastEditedDate : '';
 
         return $items;
     }

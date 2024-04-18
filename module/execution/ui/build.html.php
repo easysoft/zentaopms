@@ -35,10 +35,7 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 $canCreateBuild = hasPriv('build', 'create') && common::canModify('execution', $execution);
 if($canCreateBuild) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->build->create, 'url' => $this->createLink('build', 'create', "executionID={$execution->id}"));
-toolbar
-(
-    !empty($createItem) ? item(set($createItem)) : null,
-);
+toolbar(!empty($createItem) ? item(set($createItem)) : null);
 
 jsVar('executionID', $execution->id);
 jsVar('changeProductLink', helper::createLink('execution', 'build', "executionID={$execution->id}&type=product&param={productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
@@ -48,27 +45,20 @@ jsVar('confirmDelete', $lang->build->confirmDelete);
 
 $fieldList = $config->build->dtable->fieldList;
 if($execution->type == 'kanban') unset($fieldList['actions']['actionsMap']['createTest']['data-app']);
+$builds = initTableData($builds, $fieldList, $this->build);
 
 dtable
 (
-    set::userMap($users),
     set::cols($fieldList),
     set::data($builds),
     set::plugins(array('cellspan')),
+    set::userMap($users),
     set::onRenderCell(jsRaw('window.renderCell')),
+    set::getCellSpan(jsRaw('window.getCellSpan')),
     set::orderBy($orderBy),
     set::sortLink(createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::getCellSpan(jsRaw('window.getCellSpan')),
-    set::footPager(
-        usePager
-        (
-            array('linkCreator' => helper::createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage)
-        )
-    ),
+    set::footPager(usePager()),
     set::emptyTip($lang->build->noBuild),
     set::createTip($lang->build->create),
     set::createLink($canCreateBuild ? createLink('build', 'create', "executionID={$execution->id}") : '')
 );
-
-/* ====== Render page ====== */
-render();

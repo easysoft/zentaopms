@@ -195,17 +195,17 @@ formPanel
     formGroup
     (
         set::width($colWidth),
-        set::label($lang->gitlab->name),
+        set::label($lang->gitfox->name),
         set::name('name'),
         set::required(true)
     ),
     formGroup
     (
         set::width($colWidth),
-        set::label($lang->gitlab->url),
+        set::label($lang->gitfox->url),
         set::name('url'),
         set::required(true),
-        set::placeholder($lang->gitlab->placeholder->url)
+        set::placeholder($lang->gitfox->placeholder->url)
     ),
     formRow
     (

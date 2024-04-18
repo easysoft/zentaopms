@@ -46,6 +46,8 @@ class upgradeModel extends model
     public function getVersionsToUpdate(string $openVersion, string $fromEdition): array
     {
         $versions = array();
+        /* pms20beta2 is a version released between pms18.11 and pms18.12, which was upgraded to pms20 and lost 18.11 upgrade sql. */
+        if($openVersion == '20_0_beta2') $versions['18_11'] = array('pro' => array(), 'biz' => array(), 'max' => array(), 'ipd' => array());
 
         /* Always update open sql. */
         foreach($this->lang->upgrade->fromVersions as $version => $versionName)
@@ -3460,7 +3462,16 @@ class upgradeModel extends model
     public function adjustPriv15_0()
     {
         $executionPriv = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('execution')->limit(1)->fetch();
-        if(empty($executionPriv)) $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('execution')->where('module')->eq('project')->exec();
+        if(empty($executionPriv))
+        {
+            $projectPrivList = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->fetchAll();
+            $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('execution')->where('module')->eq('project')->exec();
+            foreach($projectPrivList as $projectPriv)
+            {
+                if(!in_array($projectPriv->method, array('browse', 'story', 'bug', 'testtask', 'doc', 'build', 'index', 'create', 'edit', 'batchedit', 'start', 'activate', 'suspend', 'close', 'delete', 'export', 'manageProducts', 'manageMembers', 'team', 'unlinkMember', 'unlinkStory', 'view'))) continue;
+                $this->dao->replace(TABLE_GROUPPRIV)->data($projectPriv)->exec();
+            }
+        }
 
         $groups = $this->dao->select('id')->from(TABLE_GROUP)->fetchPairs('id', 'id');
         foreach($groups as $groupID)
@@ -8508,6 +8519,8 @@ class upgradeModel extends model
         $model->createdDate = helper::now();
         $model->createdBy   = 'system';
 
+        if(empty($model->type)) return;
+
         $credentials = new stdclass();
         $credentials->key = $aiConfig->key ?: '';
 
@@ -8571,6 +8584,20 @@ class upgradeModel extends model
         /* Execute open edition. */
         $this->saveLogs('Execute 18_10_1');
         $this->execSQL($this->getUpgradeFile('18.10.1'));
+    }
+
+    /**
+     * 检查是否执行了18.11版本的SQL。
+     * Exec 18.11 sql file.
+     *
+     * @access public
+     * @return void
+     */
+    public function update1811(): void
+    {
+        /* Execute open edition. */
+        $this->saveLogs('Execute 18_11');
+        $this->execSQL($this->getUpgradeFile('18.11'));
     }
 
     /**

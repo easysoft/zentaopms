@@ -60,6 +60,14 @@ sidebar
     set::width(240),
     moduleMenu
     (
+        to::header
+        (
+            div
+            (
+                setClass('bg-canvas my-3 mx-5 text-xl font-semibold text-ellipsis'),
+                $groups[$groupID]
+            )
+        ),
         set::title($groups[$groupID]),
         set::activeKey($currentMenu),
         set::modules($menus),

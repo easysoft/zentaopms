@@ -2010,18 +2010,19 @@ class blockZen extends block
             }
         }
 
-        if(common::hasPriv('todo',  'view'))                                                              $hasViewPriv['todo']        = true;
-        if(common::hasPriv('task',  'view'))                                                              $hasViewPriv['task']        = true;
-        if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                           $hasViewPriv['story']       = true;
-        if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite') $hasViewPriv['requirement'] = true;
-        if(common::hasPriv('bug',   'view')     && $this->config->vision != 'lite')                       $hasViewPriv['bug']         = true;
-        if(common::hasPriv('testcase', 'view')  && $this->config->vision != 'lite')                       $hasViewPriv['testcase']    = true;
-        if(common::hasPriv('testtask', 'cases') && $this->config->vision != 'lite')                       $hasViewPriv['testtask']    = true;
-        if(common::hasPriv('risk',  'view')     && in_array($this->config->edition, array('max', 'ipd')) && $this->config->vision != 'lite' && $hasRisk)    $hasViewPriv['risk']        = true;
-        if(common::hasPriv('issue', 'view')     && in_array($this->config->edition, array('max', 'ipd')) && $this->config->vision != 'lite' && $hasIssue)   $hasViewPriv['issue']       = true;
-        if(common::hasPriv('meeting', 'view')   && in_array($this->config->edition, array('max', 'ipd')) && $this->config->vision != 'lite' && $hasMeeting) $hasViewPriv['meeting']     = true;
-        if(common::hasPriv('feedback', 'view')  && in_array($this->config->edition, array('max', 'biz', 'ipd'))) $hasViewPriv['feedback'] = true;
-        if(common::hasPriv('ticket', 'view')    && in_array($this->config->edition, array('max', 'biz', 'ipd'))) $hasViewPriv['ticket']   = true;
+        if(common::hasPriv('todo',  'view'))                                                                      $hasViewPriv['todo']        = true;
+        if(common::hasPriv('demand', 'view') && $this->config->edition == 'ipd' && $this->config->vision == 'or') $hasViewPriv['demand']      = true;
+        if(common::hasPriv('task',  'view'))                                                                      $hasViewPriv['task']        = true;
+        if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                   $hasViewPriv['story']       = true;
+        if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')         $hasViewPriv['requirement'] = true;
+        if(common::hasPriv('bug',   'view')     && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['bug']         = true;
+        if(common::hasPriv('testcase', 'view')  && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['testcase']    = true;
+        if(common::hasPriv('testtask', 'cases') && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['testtask']    = true;
+        if(common::hasPriv('risk',  'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasRisk)    $hasViewPriv['risk']        = true;
+        if(common::hasPriv('issue', 'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasIssue)   $hasViewPriv['issue']       = true;
+        if(common::hasPriv('meeting', 'view')   && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasMeeting) $hasViewPriv['meeting']     = true;
+        if(common::hasPriv('feedback', 'view')  && in_array($this->config->edition, array('max', 'biz', 'ipd')))                                  $hasViewPriv['feedback'] = true;
+        if(common::hasPriv('ticket', 'view')    && in_array($this->config->edition, array('max', 'biz', 'ipd')) && $this->config->vision != 'or') $hasViewPriv['ticket']   = true;
 
         $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements');
         if($this->config->edition == 'max' or $this->config->edition == 'ipd')
@@ -2029,6 +2030,7 @@ class blockZen extends block
             if($hasRisk) $objectList += array('risk' => 'risks');
             if($hasIssue) $objectList += array('issue' => 'issues');
             $objectList += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
+            if($this->config->edition == 'ipd' && $this->config->vision == 'or') $objectList += array('demand' => 'demands');
         }
 
         if($this->config->edition == 'biz') $objectList += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
@@ -2046,10 +2048,11 @@ class blockZen extends block
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
                 ->beginIF($objectType == 'issue' || $objectType == 'risk')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
                 ->beginIF($objectType == 'ticket')->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')->fi()
+                ->beginIF($objectType == 'demand')->leftJoin(TABLE_DEMANDPOOL)->alias('t2')->on('t1.pool = t2.id')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
                 ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->andWhere('t1.vision')->eq($this->config->vision)->fi()
-                ->beginIF($objectType == 'requirement')->andWhere('t1.type')->eq('requirement')->andWhere('t2.deleted')->eq('0')->fi()
+                ->beginIF($objectType == 'requirement')->andWhere('t1.type')->eq('requirement')->andWhere('t2.deleted')->eq('0')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
                 ->beginIF($objectType == 'bug')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'story' || $objectType == 'requirement')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
@@ -2057,6 +2060,7 @@ class blockZen extends block
                 ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()
                 ->beginIF($objectType == 'issue' || $objectType == 'risk')->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($objectType == 'ticket')->andWhere('t1.status')->in('wait,doing,done')->fi()
+                ->beginIF($objectType == 'demand')->andWhere('t2.deleted')->eq(0)->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();
@@ -3277,25 +3281,26 @@ class blockZen extends block
      */
     protected function getProjectsStatisticData(array $projectIdList): array
     {
+        $vision = $this->config->vision;
         /* 敏捷和瀑布相关目的统计信息。 */
-        $riskCountGroup  = $this->loadModel('metric')->getResultByCode('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)));
-        $issueCountGroup = $this->metric->getResultByCode('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)));
+        $riskCountGroup  = $this->loadModel('metric')->getResultByCode('count_of_opened_risk_in_project',  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $issueCountGroup = $this->metric->getResultByCode('count_of_opened_issue_in_project', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
         if($riskCountGroup)    $riskCountGroup    = array_column($riskCountGroup,    null, 'project');
         if($issueCountGroup)   $issueCountGroup   = array_column($issueCountGroup,   null, 'project');
 
         /* 敏捷项目的统计信息。 */
-        $investedGroup      = $this->metric->getResultByCode('day_of_invested_in_project',         array('project' => join(',', $projectIdList)));
-        $consumeTaskGroup   = $this->metric->getResultByCode('consume_of_task_in_project',         array('project' => join(',', $projectIdList)));
-        $leftTaskGroup      = $this->metric->getResultByCode('left_of_task_in_project',            array('project' => join(',', $projectIdList)));
-        $countStoryGroup    = $this->metric->getResultByCode('scale_of_story_in_project',          array('project' => join(',', $projectIdList)));
-        $finishedStoryGroup = $this->metric->getResultByCode('count_of_finished_story_in_project', array('project' => join(',', $projectIdList)));
-        $unclosedStoryGroup = $this->metric->getResultByCode('count_of_unclosed_story_in_project', array('project' => join(',', $projectIdList)));
-        $countTaskGroup     = $this->metric->getResultByCode('count_of_task_in_project',           array('project' => join(',', $projectIdList)));
-        $waitTaskGroup      = $this->metric->getResultByCode('count_of_wait_task_in_project',      array('project' => join(',', $projectIdList)));
-        $doingTaskGroup     = $this->metric->getResultByCode('count_of_doing_task_in_project',     array('project' => join(',', $projectIdList)));
-        $countBugGroup      = $this->metric->getResultByCode('count_of_bug_in_project',            array('project' => join(',', $projectIdList)));
-        $closedBugGroup     = $this->metric->getResultByCode('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)));
-        $activatedBugGroup  = $this->metric->getResultByCode('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)));
+        $investedGroup      = $this->metric->getResultByCode('day_of_invested_in_project',         array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $consumeTaskGroup   = $this->metric->getResultByCode('consume_of_task_in_project',         array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $leftTaskGroup      = $this->metric->getResultByCode('left_of_task_in_project',            array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $countStoryGroup    = $this->metric->getResultByCode('scale_of_story_in_project',          array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $finishedStoryGroup = $this->metric->getResultByCode('count_of_finished_story_in_project', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $unclosedStoryGroup = $this->metric->getResultByCode('count_of_unclosed_story_in_project', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $countTaskGroup     = $this->metric->getResultByCode('count_of_task_in_project',           array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $waitTaskGroup      = $this->metric->getResultByCode('count_of_wait_task_in_project',      array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $doingTaskGroup     = $this->metric->getResultByCode('count_of_doing_task_in_project',     array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $countBugGroup      = $this->metric->getResultByCode('count_of_bug_in_project',            array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $closedBugGroup     = $this->metric->getResultByCode('count_of_closed_bug_in_project ',    array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $activatedBugGroup  = $this->metric->getResultByCode('count_of_activated_bug_in_project',  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
         if($investedGroup)      $investedGroup      = array_column($investedGroup,      null, 'project');
         if($consumeTaskGroup)   $consumeTaskGroup   = array_column($consumeTaskGroup,   null, 'project');
         if($leftTaskGroup)      $leftTaskGroup      = array_column($leftTaskGroup,      null, 'project');
@@ -3310,12 +3315,12 @@ class blockZen extends block
         if($activatedBugGroup)  $activatedBugGroup  = array_column($activatedBugGroup,  null, 'project');
 
         /* 瀑布项目的统计信息。 */
-        $SVGroup           = $this->metric->getResultByCode('sv_in_waterfall',                  array('project' => join(',', $projectIdList)));
-        $PVGroup           = $this->metric->getResultByCode('pv_of_task_in_waterfall',          array('project' => join(',', $projectIdList)));
-        $EVGroup           = $this->metric->getResultByCode('ev_of_finished_task_in_waterfall', array('project' => join(',', $projectIdList)));
-        $CVGroup           = $this->metric->getResultByCode('cv_in_waterfall',                  array('project' => join(',', $projectIdList)));
-        $ACGroup           = $this->metric->getResultByCode('ac_of_all_in_waterfall',           array('project' => join(',', $projectIdList)));
-        $taskProgressGroup = $this->metric->getResultByCode('progress_of_task_in_project',      array('project' => join(',', $projectIdList)));
+        $SVGroup           = $this->metric->getResultByCode('sv_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $PVGroup           = $this->metric->getResultByCode('pv_of_task_in_waterfall',          array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $EVGroup           = $this->metric->getResultByCode('ev_of_finished_task_in_waterfall', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $CVGroup           = $this->metric->getResultByCode('cv_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $ACGroup           = $this->metric->getResultByCode('ac_of_all_in_waterfall',           array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $taskProgressGroup = $this->metric->getResultByCode('progress_of_task_in_project',      array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
         if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
         if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
         if($EVGroup)           $EVGroup           = array_column($EVGroup,           null, 'project');

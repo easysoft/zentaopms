@@ -56,6 +56,7 @@ class treeEditor extends wg
         $editType  = $this->prop('type');
         $selected  = $this->prop('selected');
         $typeList  = array('task' => 'T', 'bug' => 'B', 'case' => 'C');
+        $viewType  = data('viewType') ? data('viewType') : '';
 
         foreach($items as $key => $item)
         {
@@ -82,7 +83,7 @@ class treeEditor extends wg
                     $item['actions'] = array();
                     $item['actions']['items'] = array();
 
-                    if($canEdit)  $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . $item['type']));
+                    if($canEdit)  $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . ($viewType ? $viewType : $item['type'])));
                     if($canSplit) $item['actions']['items'][] = array('key' => 'view',  'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
                 }
                 else

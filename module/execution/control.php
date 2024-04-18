@@ -1111,6 +1111,7 @@ class execution extends control
                 ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
                 ->setDefault('team', $this->post->name)
                 ->setDefault('branch', $this->post->branch)
+                ->setDefault('attribute', $oldExecution->attribute)
                 ->get();
 
             $changes = $this->execution->update($executionID, $formData);

@@ -20,9 +20,12 @@ class storyBasicInfo extends wg
 
     protected function getModuleItems(object $story, object $product): array
     {
+        global $app, $config;
+
         $modulePath  = $this->prop('modulePath', data('modulePath'));
         $storyModule = $this->prop('storyModule', data('storyModule'));
         $items       = array();
+        $isInLite    = $config->vision == 'lite';
         if($modulePath)
         {
             if($storyModule->branch and isset($branches[$storyModule->branch]))
@@ -32,7 +35,9 @@ class storyBasicInfo extends wg
 
             foreach($modulePath as $module)
             {
-                $items[] = $product->shadow ? $module->name : array('text' => $module->name, 'url' => createLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id"));
+                $url = commonModel::hasPriv('product', 'browse') ? createLink('product', 'browse', "productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id") : '';
+                if($isInLite) $url = commonModel::hasPriv('projectstory', 'story') ? createLink('projectstory', 'story', "projectID={$app->session->project}&productID=$story->product&branch=$story->branch&browseType=byModule&param=$module->id") : '';
+                $items[] = $product->shadow || empty($url) ? $module->name : array('text' => $module->name, 'url' => $url);
             }
         }
         if(!$items) $items = array('/');
@@ -150,6 +155,17 @@ class storyBasicInfo extends wg
         }
         $items[$lang->story->keywords]      = $story->keywords;
         $items[$lang->story->legendMailto]  = joinMailtoList($story->mailto, $users);
+
+        if($config->vision == 'lite')
+        {
+            unset($items[$lang->story->product]);
+            unset($items[$lang->story->branch]);
+            unset($items[$lang->story->plan]);
+            unset($items[$lang->story->source]);
+            unset($items[$lang->story->sourceNote]);
+            unset($items[$lang->story->stage]);
+            unset($items[$lang->story->category]);
+        }
 
         return $items;
     }

@@ -31,11 +31,17 @@ if(!$isInModal && hasPriv('testcase', 'create', $case))
 
 /* 初始化底部操作栏。Init bottom actions. */
 $actions = $this->loadModel('common')->buildOperateMenu($case);
-$actions = $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
+$actions = array_merge($actions['mainActions'], !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
 foreach($actions as $index => $action)
 {
     if(!isset($action['url'])) continue;
     $actions[$index]['url'] = str_replace('%executionID%', (string)$this->session->execution, $action['url']);
+
+    if($isInModal && !isset($action['data-toggle']) && !isset($action['data-load']))
+    {
+        $actions[$index]['data-load'] = 'modal';
+        $actions[$index]['data-size'] = 'lg';
+    }
 }
 
 $steps = array();

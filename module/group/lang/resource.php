@@ -1763,21 +1763,11 @@ $lang->chart->methodOrder[2] = 'preview';
 
 /* Metric. */
 $lang->resource->metric = new stdclass();
-$lang->resource->metric->browse    = 'browseAction';
 $lang->resource->metric->preview   = 'preview';
 $lang->resource->metric->details   = 'detailsAction';
-$lang->resource->metric->view      = 'viewAction';
-$lang->resource->metric->edit      = 'editAction';
-$lang->resource->metric->implement = 'implementAction';
-$lang->resource->metric->delete    = 'deleteAction';
 
-$lang->metric->methodOrder[0]  = 'browse';
-$lang->metric->methodOrder[5]  = 'preview';
-$lang->metric->methodOrder[6]  = 'details';
-$lang->metric->methodOrder[10] = 'view';
-$lang->metric->methodOrder[15] = 'edit';
-$lang->metric->methodOrder[20] = 'implement';
-$lang->metric->methodOrder[25] = 'delete';
+$lang->metric->methodOrder[0]  = 'preview';
+$lang->metric->methodOrder[5]  = 'details';
 
 /* Report . */
 $lang->resource->report = new stdclass();

@@ -134,7 +134,7 @@ class header extends wg
                         'class'           => '800',
                         'outerClass'      => 'user-tutorial',
                         'data-width'      => 700,
-                        'data-class-name' => 'modal-inverse',
+                        'data-class-name' => 'modal-inverse tutorial-start',
                         'data-headerless' => true,
                         'data-backdrop'   => true,
                         'data-keyboard'   => true,

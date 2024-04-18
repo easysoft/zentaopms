@@ -115,7 +115,10 @@ unset($lang->feedback->menu->faq);
 $lang->my->menu->work = array('link' => "{$lang->my->work}|my|work|mode=requirement", 'subModule' => 'task');
 
 $lang->my->menu->work['subMenu'] = new stdclass();
+$lang->my->menu->work['subMenu']->demand      = "需求池需求|my|work|mode=demand";
 $lang->my->menu->work['subMenu']->requirement = "$lang->URCommon|my|work|mode=requirement";
+$lang->my->menu->work['subMenu']->task        = "调研任务|my|work|mode=task";
+$lang->my->menu->work['subMenu']->feedback    = "{$lang->feedback->common}|my|work|mode=feedback";
 
 unset($lang->createIcons['bug']);
 unset($lang->createIcons['story']);

@@ -30,10 +30,11 @@ class pivotModel extends model
      * Get pivot.
      *
      * @param  int         $pivotID
+     * @param  bool        $processDateVar
      * @access public
      * @return object|bool
      */
-    public function getByID(int $pivotID): object|bool
+    public function getByID(int $pivotID, bool $processDateVar = false): object|bool
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
         if(!$pivot) return false;
@@ -48,7 +49,7 @@ class pivotModel extends model
         if(!empty($pivot->filters))
         {
             $filters = json_decode($pivot->filters, true);
-            $pivot->filters = $this->setFilterDefault($filters);
+            $pivot->filters = $this->setFilterDefault($filters, $processDateVar);
         }
         else
         {
@@ -1395,6 +1396,57 @@ class pivotModel extends model
     }
 
     /**
+     * 通过合并单元格的数据对透视表进行分页
+     * Page pivot by configs merge cell data.
+     *
+     * @param  array $configs
+     * @param  int   $page
+     * @param  bool  $useColumnTotal
+     * @static
+     * @access public
+     * @return bool
+     */
+    public function pagePivot($configs, $page, $useColumnTotal)
+    {
+        $configs = array_values($configs);
+        // 当前在第几页
+        $nowPage   = 1;
+        // 一共多少行
+        $pageCount = 0;
+        // 当前页目前多少行
+        $nowCount  = 0;
+        // 记录当前第几个分组(项)，共有多少行
+        $itemRow   = array(0 => 0);
+        // 目标分页的起始行和结束行
+        $start = $end = -1;
+        foreach($configs as $key => $config)
+        {
+            if($nowPage == $page and $start == -1)   $start = $pageCount;
+            if($nowPage == $page + 1 and $end == -1) $end   = $pageCount;
+
+            $pageCount += $config[0];
+            $nowCount  += $config[0];
+            $itemRow[]  = $pageCount;
+            // 如果当前页超过了50行，换一页
+            if($nowCount >= $this->config->pivot->recPerPage)
+            {
+                $nowCount = 0;
+                if(isset($configs[$key + 1])) $nowPage += 1;
+            }
+        }
+        if($start == -1) $start = 0;
+        if($end == -1)   $end   = $pageCount;
+
+        // 获得当前页面有多少"项"
+        $endKey    = array_search($end, $itemRow);
+        $startKey  = array_search($start, $itemRow);
+        $itemCount = $endKey - $startKey;
+        // 如果是最后一页且使用了显示列的汇总，项数-1，
+        if($page == $nowPage and $useColumnTotal) $itemCount --;
+        return array($start, $end - 1, $itemCount, $nowPage);
+    }
+
+    /**
      * Gen sheet by origin sql.
      *
      * @param  array  $fields
@@ -2202,12 +2254,12 @@ class pivotModel extends model
      * @access private
      * @return array
      */
-    public function setFilterDefault(array $filters): array
+    public function setFilterDefault(array $filters, bool $processDateVar = true): array
     {
         foreach($filters as &$filter)
         {
             if(!isset($filter['default']) || empty($filter['default'])) continue;
-            if(is_string($filter['default'])) $filter['default']= $this->processDateVar($filter['default']);
+            if($processDateVar && is_string($filter['default'])) $filter['default']= $this->processDateVar($filter['default']);
         }
 
         return $filters;

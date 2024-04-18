@@ -71,9 +71,10 @@ $config->programplan->list->customCreateFields          = 'PM,attribute,acl,mile
 $config->programplan->list->customAgilePlusCreateFields = 'PM,milestone,acl,desc,attribute';
 
 $config->programplan->custom = new stdclass();
-$config->programplan->custom->createIpdFields           = 'code,PM,attribute,milestone';
-$config->programplan->custom->createWaterfallFields     = 'code,PM,attribute,milestone';
-$config->programplan->custom->createWaterfallplusFields = 'code,PM,attribute,milestone';
+$config->programplan->custom->createFields              = 'PM,attribute,milestone';
+$config->programplan->custom->createIpdFields           = 'PM,attribute,milestone';
+$config->programplan->custom->createWaterfallFields     = 'PM,attribute,milestone';
+$config->programplan->custom->createWaterfallplusFields = 'PM,attribute,milestone';
 if(!empty($config->setPercent)) $config->programplan->list->customCreateFields .= ',percent';
 if(!empty($config->setCode))
 {

@@ -89,7 +89,7 @@ class my extends control
      */
     public function work(string $mode = 'task', string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if($mode == 'testcase' && $type == 'assignedTo') $type = 'assigntome';
+        if(in_array($mode, array('testcase', 'feedback')) && $type == 'assignedTo') $type = 'assigntome';
         if(strpos(',auditplan,nc,mymeeting,', ",$mode,") === false) $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
 
         echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
@@ -722,9 +722,8 @@ class my extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
-        $browseType = strtolower($type);
-        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
-        $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bySearch&param=myQueryID");
+        $queryID    = $type == 'bysearch' ? (int)$param : 0;
+        $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bysearch&param=myQueryID");
         $this->loadModel('issue')->buildSearchForm($actionURL, $queryID);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -793,6 +792,7 @@ class my extends control
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->type        = $type;
+        $this->view->param       = $param;
         $this->view->mode        = 'risk';
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
         $this->display();
@@ -1024,7 +1024,7 @@ class my extends control
 
         $this->view->title       = $this->lang->my->feedback;
         $this->view->mode        = 'feedback';
-        $this->view->browseType  = $browseType;
+        $this->view->type        = $browseType;
         $this->view->feedbacks   = $feedbacks;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
@@ -1079,6 +1079,7 @@ class my extends control
         $this->view->tickets    = $tickets;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->param      = $param;
         $this->view->browseType = $browseType;
         $this->view->mode       = 'ticket';
         $this->display();

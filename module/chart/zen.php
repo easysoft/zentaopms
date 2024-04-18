@@ -36,7 +36,7 @@ class chartZen extends chart
      * @access protected
      * @return object|null
      */
-    protected function getChartToFilter(int $groupID, int $chartID, array $filterValues): object|null
+    protected function getChartToFilter(int $groupID, int $chartID, array $filterValues = array()): object|null
     {
         $chart = $this->chart->getByID($chartID);
         if(!$chart) return null;

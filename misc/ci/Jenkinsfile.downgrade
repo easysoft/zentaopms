@@ -1,5 +1,5 @@
 library 'z-common@feat-231130'
-library 'z-zentaopms@feat-231204'
+library 'z-zentaopms@feat-240417'
 
 pipeline {
   agent {
@@ -11,22 +11,37 @@ pipeline {
 
   options {
     skipDefaultCheckout()
+    parallelsAlwaysFailFast()
+    overrideIndexTriggers(false)
+    quietPeriod 900
+  }
+
+  parameters {
+    separator(name: "spec", sectionHeader: "仓库切换")
+    string description: '指定 zentaoext 分支, 也可以是 tag 或者 commit', name: 'zentaoext_version', trim: true
+    string description: '指定 xuanxuan 分支', name: 'xuanxuan_version', trim: true
+
+    separator(name: "other", sectionHeader: "其它")
+    booleanParam defaultValue: false, description: '调试模式', name: 'DEBUG'
   }
 
   environment {
     TZ="Asia/Shanghai"
 
     ZENTAO_RELEASE_PATH = "${WORKSPACE}/release"
-
+    XUANXUAN_SRC_PATH = "${WORKSPACE}/xuansrc"
+    SRC_ZDOO_PATH = "${WORKSPACE}/zdoo"
+    SRC_ZDOOEXT_PATH = "${WORKSPACE}/zdooext"
+    SRC_ZENTAOEXT_PATH = "${WORKSPACE}/zentaoext"
   }
 
   stages {
 
-    stage("全量降级") {
+    stage("Build") {
 
       agent {
         kubernetes {
-          inheritFrom "zentao-package dind xuanim"
+          inheritFrom "zentao-package build-docker xuanim"
           yamlFile 'misc/ci/basic-build.yaml'
         }
       }
@@ -35,48 +50,42 @@ pipeline {
         stage("Pull") {
           steps {
             checkout scm
-          }
-        }
-
-        stage("Setup Global Env") {
-          steps {
             script {
+              def triggeredBy = currentBuild.getBuildCauses()
+              println "Build triggered by: ${triggeredBy}"              
 
               env.GIT_URL = sh(returnStdout: true, script: 'git config --get remote.origin.url').trim()
               env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-
+              
               def j = job.newJob()
 
-              env.GIT_HOST = "git.zcorp.cc"
               env.GIT_BRANCH = j.getBranchById(env.GIT_COMMIT)
 
               zentaopms.setupStaticEnv()
               zentaopms.setupEnvAfterCheckout()
 
-            //   def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
-              env.XIM_USERS = "qishiyao,caoyanyi"
-            //   env.XIM_GROUPS = "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4"
+              zCheckout([
+                [name: "xuansrc", subDir: true, url: "https://${env.GIT_HOST}/easycorp/xuanxuan.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.xuanxuan_version}", "${env.XUANVERSION}"] ],
+                [name: "zentaoext", subDir: true, url: "https://${env.GIT_HOST}/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zentaoext_version}", "${env.ZENTAOEXT_VERSION}", "${env.GIT_BRANCH}"] ],
+                [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["downgrade/blank"] ],
+                [name: "downRepoExt", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_EXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["downgrade/blank"] ]
+              ])
             }
-
+          
           }
         }
 
-        stage("Downgrade") {
+        stage("Build") {
           stages {
-
-            stage("执行降级") {
+            stage("开源版降级") {
               steps {
-                sh 'env'
-                zCheckout([
-                  [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-zcorp-cc-jenkins-bot-http", branchs: ["downgrade/${env.GIT_BRANCH}/src"] ]
-                ])
-
                 container('package') {
                   sh 'echo ${GIT_BRANCH}'
                   sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                   sh 'make ciCommon'
+                  
                   withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http', gitToolName: 'Default')]) {
-                    sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade_v2.sh -c $PWD/misc -r $PWD/zentaopms -d downRepo -i -s -b $GIT_BRANCH -g $GIT_COMMIT -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" api extension framework lib module/*'
+                    sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade_v2.sh -c $PWD/misc -r $PWD/zentaopms -b ${GIT_BRANCH} -d downRepo -i -s -g $GIT_COMMIT -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" api extension framework lib module/*'
                   }
                   sh 'ls -l $ZENTAO_RELEASE_PATH'
                   sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
@@ -99,19 +108,62 @@ pipeline {
                     reportName: 'DowngradeReport'
                   ])
 
-                  ximNotify(title: "禅道全量降级失败", content: "[PHP语法错误报告]($BUILD_URL/DowngradeReport/)")
+                  ximNotify(title: "开源版全量降级失败", content: "[PHP语法错误报告]($BUILD_URL/DowngradeReport/)", contentHeaderFile: job.headerFileName())
+                }
+              }
+
+            }
+
+            stage("收费版降级") {
+              environment {
+                GIT_COMMIT = """${sh(returnStdout: true, script: 'cd zentaoext; git rev-parse HEAD').trim()}"""
+              }
+
+              steps {
+                container('package') {
+                  sh 'echo ${GIT_BRANCH}'
+                  sh 'cd $SRC_ZENTAOEXT_PATH;make build'
+                  
+                  withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http', gitToolName: 'Default')]) {
+                    sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade_v2.sh -c $PWD/misc -r $ZENTAO_BUILD_PATH/zentaoext -b ${GIT_BRANCH} -d downRepoExt -i -s -g $GIT_COMMIT -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" bizext biz max ipd'
+                  }
+                  sh 'ls -l $ZENTAO_RELEASE_PATH'
+                  sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
+                }
+              }
+
+              post {
+                failure {
+                  container('package') {
+                    sh 'mkdir ./report && cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html ./report'
+                  }
+
+                  publishHTML([
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: './report',
+                    reportFiles: 'downgradeReport.html',
+                    reportName: 'DowngradeReportExt'
+                  ])
+
+                  ximNotify(title: "禅道收费版全量降级失败", content: "[PHP语法错误报告]($BUILD_URL/DowngradeReport/)")
                 }
               }
 
             }
 
           }
-        } // End Downgrade
+        } // End Build
       }
     }
 
   }
 
+  post {
+    failure {
+      ximNotify(title: "禅道全量降级失败", content: "请点击查看详情")
+    }
+  }
+
 }
-
-

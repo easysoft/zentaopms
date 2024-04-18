@@ -793,40 +793,6 @@ class buildModel extends model
     }
 
     /**
-     * 根据权限生成列表中操作列按钮。
-     * Build table action menu for build browse page.
-     *
-     * @param  object $build
-     * @param  int    $executionID
-     * @param  string $from        execution|projectbuild
-     * @access public
-     * @return array
-     */
-    public function buildActionList(object $build, int $executionID = 0, string $from = 'execution'): array
-    {
-        $actions     = array();
-        $executionID = $executionID ? $executionID : (int)$build->execution;
-        $execution   = $this->loadModel('execution')->fetchByID($executionID);
-
-        $module = $from == 'projectbuild' ? 'projectbuild' : 'build';
-        $build->executionDeleted = $execution ? $execution->deleted : 0;
-
-        if(common::hasPriv($module, 'linkstory', $build)) $actions[] = $from == 'projectbuild' ? 'linkProjectStory' : 'linkStory';
-
-        if(common::hasPriv('testtask', 'create', $build)) $actions[] = $execution && $execution->deleted === '1' ? '-createTest' : 'createTest';
-
-        $isNotKanban   = $from == 'execution' && !empty($execution->type) && $execution->type != 'kanban';
-        $isFromProject = $from == 'projectbuild' || empty($execution->type) || $execution->type == 'kanban';
-        if($isNotKanban && common::hasPriv('execution', 'bug', $build)) $actions[] = 'viewBug';
-        if($isFromProject && common::hasPriv($module, 'view', $build))  $actions[] = $from == 'projectbuild' ? 'projectBugList' : 'bugList';
-
-        if(common::hasPriv($module, 'edit', $build))   $actions[] = $module . 'Edit';
-        if(common::hasPriv($module, 'delete', $build)) $actions[] = 'delete';
-
-        return $actions;
-    }
-
-    /**
      * 处理版本编辑前没有执行的情况。
      * Process build for update when the build has no execution.
      *

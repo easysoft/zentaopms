@@ -476,20 +476,4 @@ class buildTest
 
         return $objectModels;
     }
-
-    /**
-     * 根据状态和权限生成列表中操作列按钮。
-     * Build table action menu for build browse page.
-     *
-     * @param  int    $buildID
-     * @param  int    $executionID
-     * @access public
-     * @return string
-     */
-    public function buildActionListObject(int $buildID, int $executionID = 0): string
-    {
-        $build   = $this->objectModel->getByID($buildID);
-        $actions = $this->objectModel->buildActionList($build, $executionID);
-        return implode('|', $actions);
-    }
 }

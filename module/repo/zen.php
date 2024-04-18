@@ -1235,7 +1235,7 @@ class repoZen extends repo
         {
             foreach($allTasks as $key => $task)
             {
-                if($task->children)
+                if(!empty($task->children))
                 {
                     $allTasks = array_merge($task->children, $allTasks);
                     unset($task->children);

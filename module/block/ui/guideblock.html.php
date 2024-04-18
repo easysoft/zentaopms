@@ -99,7 +99,7 @@ blockPanel
         (
             set::url('tutorial', 'start'),
             set::type('warning'),
-            toggle::modal(),
+            toggle::modal(array('class-name' => 'tutorial-start')),
             $lang->block->tutorial
         ) : null
     ),

@@ -49,6 +49,12 @@ class programplan extends control
      */
     public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0)
     {
+        if($type == 'lists')
+        {
+            echo $this->fetch('project', 'execution', "status=all&projectID={$projectID}");
+            return;
+        }
+
         $this->app->loadLang('stage');
         $this->session->set('projectPlanList', $this->app->getURI(true), 'project');
         $this->commonAction($projectID, $productID);

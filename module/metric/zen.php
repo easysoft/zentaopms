@@ -71,10 +71,13 @@ class metricZen extends metric
      * @access protected
      * @return array
      */
-    protected function responseAfterEdit($scope)
+    protected function responseAfterEdit($metricID, $afterEdit, $location)
     {
-        $location = $this->createLink('metric', 'browse', "scope=$scope");
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
+        if($afterEdit == 'back' && $location) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $location);
+
+        $location = $this->createLink('metric', 'implement', "metricID=$metricID");
+        $callback = array('name' => 'loadImplement', 'params' => $location);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => $callback);
     }
 
     /**
@@ -538,11 +541,14 @@ class metricZen extends metric
      */
     protected function prepareActionPriv(array $metrics): array
     {
+        $this->loadModel('screen');
         foreach($metrics as $metric)
         {
-            $metric->canEdit      = $metric->stage == 'wait';
-            $metric->canImplement = ($metric->stage == 'wait' && !$this->metric->isOldMetric($metric) && $metric->builtin === '0');
-            $metric->canDelist    = $metric->stage == 'released' && $metric->builtin === '0';
+            $metric->canEdit        = $metric->stage == 'wait';
+            $metric->canImplement   = ($metric->stage == 'wait' && !$this->metric->isOldMetric($metric) && $metric->builtin === '0');
+            $metric->canDelist      = $metric->stage == 'released' && $metric->builtin === '0';
+            $metric->canRecalculate = $metric->stage == 'released' && !empty($metric->dateType) && $metric->dateType != 'nodate';
+            $metric->isUsed         = $this->screen->checkIFChartInUse($metric->id, 'metric');
         }
         return $metrics;
     }

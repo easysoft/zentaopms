@@ -27,32 +27,23 @@ class metricModel extends model
     public function getViewTableHeader($metric)
     {
         $dataFields = $this->getMetricRecordDateField($metric);
+        $dateType   = $metric->dateType;
 
-        $dataFieldStr = implode(', ', $dataFields);
-        if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
-
-        $result = $this->dao->select("id, {$dataFieldStr} value, date")
-            ->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($metric->code)
-            ->limit(1)
-            ->fetch();
-
-        if(!$result) return array
-        (
-            array('name' => 'value', 'title' => $this->lang->metric->value, 'width' => 96),
-            array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 150)
-        );
-
-        $fieldList = array_keys((array)$result);
-        $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
-        $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
-        $scope     = current($scopeList);
+        $dataFields[] = 'id';
+        $dataFields[] = 'value';
+        $dataFields[] = 'date';
+        $dataFieldStr = implode(',', $dataFields);
 
         $header = array();
-        if(!empty($scopeList)) $header[] = array('name' => 'scope', 'title' => $this->lang->metric->scopeList[$scope] . $this->lang->nameAB, 'width' => 160);
-        if(!empty($dateList))  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date, 'width' => 96);
+        if($metric->scope != 'system')
+        {
+            $scope = $metric->scope;
+            $header[] = array('name' => 'scope', 'title' => $this->lang->metric->tableHeader[$scope], 'width' => 159);
+        }
+
+        if($dateType != 'nodate')  $header[] = array('name' => 'date',  'title' => $this->lang->metric->date, 'width' => 96);
         $header[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'width' => 96);
-        if(in_array('date', $fieldList)) $header[] = array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 128);
+        $header[] = array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 128);
 
         return $header;
     }
@@ -87,6 +78,9 @@ class metricModel extends model
                 $row->scopeID = $record[$scope];
             }
             $row->value = is_numeric($record['value']) ? round((float)$record['value'], 2) : $record['value'];
+
+            $row->calcType     = $record['calcType'];
+            $row->calculatedBy = $record['calculatedBy'];
 
             $tableData[] = $row;
         }
@@ -145,10 +139,24 @@ class metricModel extends model
      */
     public function getTimeTable($data, $dateType = 'day', $withCalcTime = true)
     {
-        usort($data, function($a, $b)
+        usort($data, function($a, $b) use ($dateType)
         {
-            $dateA = strtotime($a->dateString);
-            $dateB = strtotime($b->dateString);
+            if($dateType == 'week')
+            {
+                list($yearA, $weekA) = explode('-', $a->dateString);
+                list($yearB, $weekB) = explode('-', $b->dateString);
+
+                list($firstDayOfWeekA, $lastDayOfWeekA) = $this->getStartAndEndOfWeek($yearA, $weekA, 'date');
+                list($firstDayOfWeekB, $lastDayOfWeekB) = $this->getStartAndEndOfWeek($yearB, $weekB, 'date');
+
+                $dateA = strtotime($firstDayOfWeekA);
+                $dateB = strtotime($firstDayOfWeekB);
+            }
+            else
+            {
+                $dateA = strtotime($a->dateString);
+                $dateB = strtotime($b->dateString);
+            }
 
             if ($dateA == $dateB) {
                 return 0;
@@ -679,7 +687,17 @@ class metricModel extends model
         $rows = $statement->fetchAll();
 
         foreach($rows as $row) $calculator->calculate($row);
-        return $calculator->getResult($options);
+        $records = $calculator->getResult($options);
+
+        $time = helper::now();
+        foreach($records as $index => $record)
+        {
+            $records[$index]['date']         = $time;
+            $records[$index]['calcType']     = 'cron';
+            $records[$index]['calculatedBy'] = 'system';
+        }
+
+        return $records;
     }
 
     /**
@@ -1037,7 +1055,7 @@ class metricModel extends model
         {
             $editAction = $this->config->metric->actionList['edit'];
             $editAction['data-toggle'] = 'modal';
-            $editAction['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}");
+            $editAction['url']         = helper::createLink('metric', 'edit', "metricID={$metric->id}&viewType=view");
 
             $menuList['suffix']['edit'] = $editAction;
         }
@@ -1054,7 +1072,9 @@ class metricModel extends model
 
         if(common::haspriv('metric', 'delete'))
         {
-            $menuList['suffix']['delete'] = $this->config->metric->actionList['delete'];
+            $deleteAction = $this->config->metric->actionList['delete'];
+            if(isset($metric->isUsed) && $metric->isUsed) $deleteAction['data-confirm'] = $this->lang->metric->confirmDeleteInUsed;
+            $menuList['suffix']['delete'] = $deleteAction;
         }
 
         return $menuList;
@@ -1115,7 +1135,7 @@ class metricModel extends model
             case 'execution':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
                     ->where('deleted')->eq(0)
-                    ->andWhere('type')->in('sprint,stage')
+                    ->andWhere('type')->in('sprint,stage,kanban')
                     ->andWhere("vision LIKE '%{$vision}%'", true)
                     ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
@@ -2305,5 +2325,29 @@ class metricModel extends model
         if(!empty($todayData) && empty($dataWithCode)) return $this->lang->metric->noDataAfterCollect;
 
         return $this->lang->metric->noData;
+    }
+
+    /**
+     * 获取某一周的第一天和最后一天的日期。
+     * Get the first and last day of a week.
+     *
+     * @param  int|string $year
+     * @param  int|string $week
+     * @param  string     $type date|datetime
+     * @access public
+     * @return bool
+     */
+    public function getStartAndEndOfWeek($year, $week, $type = 'datetime')
+    {
+        $firstDayOfYear = date('Y-01-01', strtotime("$year-01-01"));
+        $firstDayOfWeek = date('N', strtotime($firstDayOfYear));
+
+        $offsetDays = ($week - 1) * 7 - ($firstDayOfWeek - 1);
+
+        $firstDayOfWeek = date('Y-m-d', strtotime("$firstDayOfYear +$offsetDays days"));
+        $lastDayOfWeek  = date('Y-m-d', strtotime("$firstDayOfWeek +6 days"));
+
+        if($type == 'datetime') return array("$firstDayOfWeek 00:00:00", "$lastDayOfWeek 23:59:59");
+        if($type == 'date')     return array($firstDayOfWeek, $lastDayOfWeek);
     }
 }

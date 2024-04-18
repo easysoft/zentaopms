@@ -414,7 +414,7 @@ class productplanModel extends model
             return false;
         }
 
-        if($plan->parent > 0)
+        if($plan->parent > 0 && !$isFuture)
         {
             $parentPlan = $this->getByID($plan->parent);
             if($parentPlan->begin != $this->config->productplan->future && $plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLessThanParent, $parentPlan->begin);
@@ -467,8 +467,8 @@ class productplanModel extends model
         $futureTime = $this->config->productplan->future;
         if($plan->parent > 0)
         {
-            if($parentPlan->begin !== $futureTime && $plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLessThanParent, $parentPlan->begin);
-            if($parentPlan->end !== $futureTime && $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreatThanParent, $parentPlan->end);
+            if($parentPlan->begin !== $futureTime && $plan->begin !== $futureTime && $plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLessThanParent, $parentPlan->begin);
+            if($parentPlan->end !== $futureTime && $plan->end !== $futureTime && $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreatThanParent, $parentPlan->end);
         }
         elseif($oldPlan->parent == -1 && ($plan->begin != $futureTime || $plan->end != $futureTime))
         {

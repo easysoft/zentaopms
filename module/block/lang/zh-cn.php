@@ -229,6 +229,7 @@ $lang->block->availableBlocks['issue']       = '问题';
 $lang->block->availableBlocks['meeting']     = '会议';
 $lang->block->availableBlocks['feedback']    = '反馈';
 $lang->block->availableBlocks['ticket']      = '工单';
+$lang->block->availableBlocks['demand']      = '需求池需求';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks['overview']      = "{$lang->projectCommon}总览";

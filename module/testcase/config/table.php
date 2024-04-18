@@ -277,6 +277,7 @@ $config->testcase->importfromlib->dtable->fieldList['title']['type']        = 't
 $config->testcase->importfromlib->dtable->fieldList['title']['fixed']       = false;
 $config->testcase->importfromlib->dtable->fieldList['title']['link']        = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
 $config->testcase->importfromlib->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->testcase->importfromlib->dtable->fieldList['title']['data-size']   = 'lg';
 
 $config->testcase->importfromlib->dtable->fieldList['fromModule']['name']  = 'fromModule';
 $config->testcase->importfromlib->dtable->fieldList['fromModule']['title'] = $lang->testcase->fromModule;

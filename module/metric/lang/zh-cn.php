@@ -66,6 +66,14 @@ $lang->metric->weekFormat     = '%s周';
 $lang->metric->monthDayFormat = '%s-%s';
 $lang->metric->yearMonthFormat = '%s-%s';
 
+$lang->metric->tableHeader = array();
+$lang->metric->tableHeader['project']   = '项目名称';
+$lang->metric->tableHeader['product']   = '产品名称';
+$lang->metric->tableHeader['execution'] = '执行名称';
+$lang->metric->tableHeader['dept']      = '团队名称';
+$lang->metric->tableHeader['user']      = '姓名';
+$lang->metric->tableHeader['program']   = '项目集名称';
+
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "请选择";
 $lang->metric->placeholder->project   = "全部项目";
@@ -143,9 +151,11 @@ $lang->metric->noDataAfterCollect  = "度量范围内未产生数据，暂无数
 $lang->metric->legendBasicInfo  = '基本信息';
 $lang->metric->legendCreateInfo = '创建编辑信息';
 
-$lang->metric->confirmDelete = "确认要删除吗？";
-$lang->metric->confirmDelist = "确认要下架吗？";
-$lang->metric->notExist      = "度量项不存在";
+$lang->metric->confirmDelete       = "确认要删除吗？";
+$lang->metric->confirmDelist       = "确认要下架吗？";
+$lang->metric->confirmDelistInUsed = "该度量项已被大屏引用，确认要下架吗？";
+$lang->metric->confirmRecalculate  = "重算结果可能会覆盖已存在的度量值，是否继续？";
+$lang->metric->notExist            = "度量项不存在";
 
 $lang->metric->browse          = '浏览度量项';
 $lang->metric->browseAction    = '度量项列表';
@@ -299,7 +309,6 @@ $lang->metric->implement->downloadPHP = "下载度量模板";
 $lang->metric->implement->instructionTips = array();
 $lang->metric->implement->instructionTips[] = '1.下载度量项模板文件，对文件进行编码开发操作，操作参考手册。<a class="btn text-primary ghost" target="_blank" href="https://www.zentao.net/book/zentaopms/1103.html">查看参考手册>></a>';
 $lang->metric->implement->instructionTips[] = '2.请将开发后的文件放到下方目录，<strong>需保持文件名称与度量代号一致</strong>。<br/> <span class="label code-slate">{tmpRoot}metric</span>';
-$lang->metric->implement->instructionTips[] = '3.执行命令赋予文件可执行权限：<p><span class="label code-slate">chmod 777 {tmpRoot}metric</span></p><p><span class="label code-slate">chmod 777 {tmpRoot}metric/{code}.php</span></p>';
 
 $lang->metric->verifyCustom = new stdclass();
 $lang->metric->verifyCustom->checkCustomCalcExists = array();

@@ -117,6 +117,7 @@ class caseBasicInfo extends wg
                 ) : '',
                 ')'
             );
+            $story = array(div(setStyle(array('text-wrap' => 'wrap')), $story));
         }
         return $story;
     }

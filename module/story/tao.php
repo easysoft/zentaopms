@@ -1509,9 +1509,10 @@ class storyTao extends storyModel
         $this->config->story->affect->bugs->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->bug->lastEditedBy);
 
         /* Get affected bugs. */
-        $twinsIdList = $story->id . ($story->twins ? ',' . trim($story->twins, ',') : '');
+        $storyIdList  = $story->id . ($story->twins ? ',' . trim($story->twins, ',') : '');
+        $storyIdList .= isset($story->relationStoryID) ? ','. $story->relationStoryID : '';
         $story->bugs = $this->dao->select('*')->from(TABLE_BUG)->where('status')->ne('closed')
-            ->andWhere('story')->in($twinsIdList)
+            ->andWhere('story')->in($storyIdList)
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchAll();
@@ -1549,9 +1550,10 @@ class storyTao extends storyModel
         $this->config->story->affect->cases->fields[] = array('name' => 'lastEditedBy', 'title' => $this->lang->testcase->lastEditedBy);
 
         /* Get affected cases. */
-        $twinsIdList = $story->id . ($story->twins ? ',' . trim($story->twins, ',') : '');
+        $storyIdList  = $story->id . ($story->twins ? ',' . trim($story->twins, ',') : '');
+        $storyIdList .= isset($story->relationStoryID) ? ','. $story->relationStoryID : '';
         $story->cases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
-            ->andWhere('story')->in($twinsIdList)
+            ->andWhere('story')->in($storyIdList)
             ->fetchAll();
         foreach($story->cases as $case)
         {

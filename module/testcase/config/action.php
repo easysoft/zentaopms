@@ -91,12 +91,6 @@ $config->testcase->actionList['deleteScene']['hint']      = $lang->testcase->del
 $config->testcase->actionList['deleteScene']['url']       = array('module' => 'testcase', 'method' => 'deleteScene', 'params' => 'sceneID={id}');
 $config->testcase->actionList['deleteScene']['className'] = 'ajax-submit';
 
-$config->testcase->actionList['confirmStoryChange']['icon']      = 'view';
-$config->testcase->actionList['confirmStoryChange']['text']      = $lang->confirm;
-$config->testcase->actionList['confirmStoryChange']['hint']      = $lang->confirm;
-$config->testcase->actionList['confirmStoryChange']['url']       = array('module' => 'testcase', 'method' => 'confirmstorychange', 'params' => 'caseID={id}');
-$config->testcase->actionList['confirmStoryChange']['className'] = 'ajax-submit';
-
 $config->testcase->actionList['createCase']['icon']      = 'copy';
 $config->testcase->actionList['createCase']['text']      = $lang->testcase->copy;
 $config->testcase->actionList['createCase']['hint']      = $lang->testcase->copy;

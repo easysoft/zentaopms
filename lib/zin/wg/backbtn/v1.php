@@ -54,7 +54,7 @@ class backBtn extends btn
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view,execution-doc',
             'design'         => 'design-browse',
             'release'        => 'release-browse,release-view,product-roadmap,kanban-view,projectrelease-browse',
-            'productplan'    => 'productplan-browse,kanban-view',
+            'productplan'    => 'productplan-browse,kanban-view,projectplan-browse',
             'programplan'    => 'project-execution',
             'projectrelease' => 'projectrelease-browse',
             'projectstory'   => 'projectstory-story',
@@ -74,7 +74,8 @@ class backBtn extends btn
             'zahost'         => 'zahost-browse,zahost-view',
             'stakeholder'    => 'stakeholder-browse',
             'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution',
-            'ai'             => 'ai-models'
+            'ai'             => 'ai-models',
+            'api'            => 'api-index'
         );
 
         $props  = parent::getProps();

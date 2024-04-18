@@ -229,6 +229,7 @@ $lang->block->availableBlocks['issue']       = 'Issues';
 $lang->block->availableBlocks['meeting']     = 'Meetings';
 $lang->block->availableBlocks['feedback']    = 'Feedbacks';
 $lang->block->availableBlocks['ticket']      = 'Tickets';
+$lang->block->availableBlocks['demand']      = 'Demands';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks['overview']      = "{$lang->projectCommon} Overview";

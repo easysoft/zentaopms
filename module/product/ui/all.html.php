@@ -34,13 +34,6 @@ $cols = $fnGetTableFieldList();
 
 /* Closure function for generating table data. */
 $productStats = initTableData($productStats, $cols, $this->product);
-$fnGenerateTableData = function($productList) use($users)
-{
-    $data = array();
-    foreach($productList as $product) $data[] = $this->product->formatDataForList($product, $users);
-
-    return $data;
-};
 
 /* Closure function for generating program menu. */
 $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseType, $orderBy, $param, $recTotal, $recPerPage, $pageID)
@@ -131,7 +124,7 @@ dtable
 (
     set::id('products'),
     set::cols($cols),
-    set::data($fnGenerateTableData($productStats)),
+    set::data($productStats),
     set::userMap($users),
     set::customCols(true),
     set::checkable($canBatchEdit),

@@ -149,7 +149,7 @@ class myZen extends my
      * @access public
      * @return void
      */
-    protected function showWorkCount(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): void
+    public function showWorkCount(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): void
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -209,8 +209,9 @@ class myZen extends my
      */
     protected function showWorkCountNotInOpen(array $count, object $pager): array
     {
-        $isMax = in_array($this->config->edition, array('max', 'ipd')) ? 1 : 0;
         $isBiz = $this->config->edition == 'biz' ? 1 : 0;
+        $isMax = $this->config->edition == 'max' ? 1 : 0;
+        $isIPD = $this->config->edition == 'ipd' ? 1 : 0;
 
         if($this->config->edition != 'open')
         {
@@ -221,7 +222,7 @@ class myZen extends my
             $count['ticket'] = $pager->recTotal;
         }
 
-        if($isMax)
+        if($isMax || $isIPD)
         {
             /* Get the number of issues assigned to me. */
             $this->loadModel('issue')->getUserIssues('assignedTo', 0, $this->app->user->account, 'id_desc', $pager);
@@ -243,10 +244,24 @@ class myZen extends my
             /* Get the number of meetings assigned to me. */
             $this->loadModel('meeting')->getListByUser('futureMeeting', 'id_desc', 0, $pager);
             $count['meeting'] = $pager->recTotal;
+
+            if($isIPD && $this->config->vision == 'or')
+            {
+                /* Get the number of demands assigned to me. */
+                $this->loadModel('demand')->getUserDemands($this->app->user->account, 'assignedTo', 'id_desc', $pager);
+                $assignedToDemandCount = $pager->recTotal;
+
+                /* Get the number of demands review by me. */
+                $this->loadModel('demand')->getUserDemands($this->app->user->account, 'reviewBy', 'id_desc', $pager);
+                $reviewByDemandCount = $pager->recTotal;
+
+                $count['demand'] = $assignedToDemandCount + $reviewByDemandCount;
+            }
         }
 
-        $this->view->isMax = $isMax;
         $this->view->isBiz = $isBiz;
+        $this->view->isMax = $isMax;
+        $this->view->isIPD = $isIPD;
 
         return $count;
     }

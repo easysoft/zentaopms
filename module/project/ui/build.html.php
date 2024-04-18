@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$app->control->loadModel('build');
 $changeProductBox = array();
 if($project->hasProduct)
 {
@@ -49,6 +50,7 @@ jsVar('deletedTip', $lang->build->deleted);
 
 $fieldList = $config->build->dtable->fieldList;
 if($project->model == 'kanban' && $this->app->rawModule == 'projectbuild') unset($fieldList['actions']['actionsMap']['createTest']['data-app']);
+$builds = initTableData($builds, $fieldList, $app->control->build);
 
 dtable
 (

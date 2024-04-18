@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('isInModal', isInModal());
 div
 (
     setClass('modal-header justify-center font-bold'),

@@ -712,9 +712,10 @@ class story extends control
                 $params = "storyID=$storyID";
             }
             $locateLink = $this->createLink($module, $method, $params);
+            if($this->app->tab == 'qa') $locateLink = true;
         }
 
-        return $this->send(array('result' => 'success', 'load' => $locateLink));
+        return $this->send(array('result' => 'success', 'load' => $locateLink, 'closeModal' => true));
     }
 
     /**

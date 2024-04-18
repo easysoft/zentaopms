@@ -35,6 +35,14 @@ if($task->mailto)
 }
 
 $actions = $this->loadModel('common')->buildOperateMenu($task);
+$tab     = $app->tab;
+foreach($actions as $type => $typeActions)
+{
+    foreach($typeActions as $key => $typeAction)
+    {
+        if($isInModal && isset($typeAction['data-app']) && $tab == 'my') $actions[$type][$key]['data-app'] = 'qa';
+    }
+}
 detailBody
 (
     sectionList

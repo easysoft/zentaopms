@@ -60,10 +60,13 @@ $sections[] = setting()
     ->title($lang->story->legendSpec)
     ->control('html')
     ->content(empty($story->spec) ? $lang->noDesc : $story->spec);
-$sections[] = setting()
-    ->title($lang->story->legendVerify)
-    ->control('html')
-    ->content(empty($story->verify) ? $lang->noDesc : $story->verify);
+if($this->config->vision != 'lite')
+{
+    $sections[] = setting()
+        ->title($lang->story->legendVerify)
+        ->control('html')
+        ->content(empty($story->verify) ? $lang->noDesc : $story->verify);
+}
 if($story->files)
 {
     $sections[] = array
@@ -137,7 +140,7 @@ if($twins)
         ->items($twins);
 }
 
-if($this->config->URAndSR && !$hiddenURS && $config->vision != 'or')
+if($this->config->URAndSR && !$hiddenURS && !in_array($config->vision, array('lite', 'or')))
 {
     $tabs[] = setting()
         ->group('relatives')
@@ -157,10 +160,13 @@ if($isStoryType && hasPriv('story', 'tasks'))
 }
 
 /* 相关信息。 Related info. */
-$tabs[] = setting()
+if($config->vision != 'lite')
+{
+    $tabs[] = setting()
         ->group('relatives')
         ->title($lang->story->legendRelated)
         ->control('storyRelatedList');
+}
 
 $parentTitle = $story->parent > 0 ? set::parentTitle($story->parentName) : null;
 $parentUrl   = $story->parent > 0 ? set::parentUrl(createLink('story', 'view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")) : null;
@@ -174,7 +180,6 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
 $hasRepo        = $this->loadModel('repo')->getListByProduct($story->product, 'Gitlab,Gitea,Gogs,GitFox', 1);
 $actions        = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story);
 $hasDivider     = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
-$setToggleModal = $isInModal && (($app->tab == 'project' && !empty($project->type) && $project->model == 'kanban') || ($app->tab == 'execution' && !empty($execution->type) && $execution->type == 'kanban'));
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], array(array('type' => 'divider')), $actions['suffixActions']);
 foreach($actions as $key => $action)
 {
@@ -199,7 +204,7 @@ foreach($actions as $key => $action)
         }
     }
 
-    if($setToggleModal && !isset($actions[$key]['data-toggle']) && !isset($actions[$key]['data-load']))
+    if($isInModal && !isset($actions[$key]['data-toggle']) && !isset($actions[$key]['data-load']))
     {
         $actions[$key]['data-load'] = 'modal';
         $actions[$key]['data-size'] = 'lg';

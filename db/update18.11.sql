@@ -276,13 +276,23 @@ UPDATE `zt_metric` SET `alias` = '待评审反馈数'               WHERE `code`
 UPDATE `zt_metric` SET `alias` = '评审反馈数'                 WHERE `code` = 'count_of_daily_review_feedback_in_user';
 UPDATE `zt_metric` SET `alias` = '完成执行数'                 WHERE `code` = 'count_of_annual_finished_execution';
 
-UPDATE `zt_metric` SET `name` = 'count_of_actual_time_in_project' WHERE `code` = '按项目统计的实际工期';
-UPDATE `zt_metric` SET `name` = 'variance_of_time_in_project'     WHERE `code` = '按项目统计的工期偏差';
+UPDATE `zt_metric` SET `name` = '按项目统计的实际工期' WHERE `code` = 'count_of_actual_time_in_project' ;
+UPDATE `zt_metric` SET `name` = '按项目统计的工期偏差' WHERE `code` = 'variance_of_time_in_project';
 UPDATE `zt_metric` SET `dateType` = 'nodate' WHERE `code` = 'count_of_feedback_in_product';
 
 ALTER TABLE `zt_story` ADD COLUMN `unlinkReason` ENUM('', 'omit', 'other') NOT NULL DEFAULT '';
 
 UPDATE `zt_stage` SET `name` = '生命周期' WHERE `type` = 'lifecycle' AND `projectType` = 'ipd';
 
+ALTER TABLE `zt_metriclib` ADD COLUMN `calcType` ENUM('cron', 'inference') NOT NULL DEFAULT 'cron';
+ALTER TABLE `zt_metriclib` ADD COLUMN `calculatedBy` varchar(30) NOT NULL DEFAULT '';
+
+UPDATE `zt_workflowfield` SET `control` = 'input', `options` = '' WHERE `module` = 'task' AND `field` = 'parent';
+
 ALTER TABLE `zt_relationoftasks` DROP INDEX `relationoftasks`;
 ALTER TABLE `zt_relationoftasks` ADD INDEX `relationoftasks`(`execution` ASC, `task` ASC);
+
+UPDATE `zt_metric` SET `unit` = 'count' WHERE `code` IN ('count_of_pipeline','count_of_artifactrepo','count_of_node','count_of_application','count_of_pending_issue','count_of_pending_mergeRequest','count_of_pending_deployment');
+UPDATE `zt_metric` SET `definition` = '项目的执行个数求和\r\n状态为已关闭\r\n过滤已删除的执行\r\n过滤已删除的项目' WHERE `code` = 'count_of_closed_execution_in_project';
+
+UPDATE `zt_productplan` AS t1 JOIN `zt_action` AS t2 ON t2.`objectID` = t1.`id` AND t2.`action`='opened' AND t2.`objectType` = 'productplan' SET t1.`createdDate` = t2.`date`;

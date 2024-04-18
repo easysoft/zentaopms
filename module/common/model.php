@@ -2308,7 +2308,7 @@ class commonModel extends model
             $actions = array();
             foreach($actionList as $action)
             {
-                $actionData = $config->{$moduleName}->actionList[$action];
+                $actionData = !empty($config->{$moduleName}->actionList[$action]) ? $config->{$moduleName}->actionList[$action] : array();
                 if($isInModal && !empty($actionData['notInModal'])) continue;
 
                 if(isset($actionData['data-app']) && $actionData['data-app'] == 'my') $actionData['data-app'] = $this->app->tab;

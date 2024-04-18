@@ -14,7 +14,7 @@ $config->pivot->dtable->bugAssign->fieldList['productName']['title'] = $lang->pi
 $config->pivot->dtable->bugAssign->fieldList['productName']['type']  = 'html';
 $config->pivot->dtable->bugAssign->fieldList['productName']['align'] = 'center';
 
-$config->pivot->dtable->bugAssign->fieldList['bugCount']['title'] = $lang->pivot->bug;
+$config->pivot->dtable->bugAssign->fieldList['bugCount']['title'] = $lang->pivot->bugTotal;
 $config->pivot->dtable->bugAssign->fieldList['bugCount']['align'] = 'center';
 
 $config->pivot->dtable->bugAssign->fieldList['total']['title'] = $lang->pivot->total;

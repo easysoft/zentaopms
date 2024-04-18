@@ -1679,7 +1679,7 @@ class taskZen extends task
             return $response;
         }
 
-        $link = $this->createLink('execution', 'browse', "executionID={$execution->id}");
+        $link = $this->createLink('execution', 'task', "executionID={$execution->id}");
         if($this->app->tab == 'my') $link = $this->createLink('my', 'work', 'mode=task');
         if($this->app->tab == 'project' && $execution->multiple) $link = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
         $response['load'] = $link;

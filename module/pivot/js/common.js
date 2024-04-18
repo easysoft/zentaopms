@@ -438,7 +438,7 @@ function select(name, options, selected, attrib, callback)
     });
 }
 
-function setDateField(query)
+function setDateField(control)
 {
     var $period = $('#selectPeriod');
     if(!$period.length)
@@ -446,7 +446,7 @@ function setDateField(query)
         $period = $("<ul id='selectPeriod' class='dropdown-menu'><li><a href='#MONDAY'>" + datepickerText.TEXT_WEEK_MONDAY + "</a></li><li><a href='#SUNDAY'>" + datepickerText.TEXT_WEEK_SUNDAY + "</a></li><li><a href='#MONTHBEGIN'>" + datepickerText.TEXT_MONTH_BEGIN + "</a></li><li><a href='#MONTHEND'>" + datepickerText.TEXT_MONTH_END + "</a></li></ul>").appendTo('body');
         $period.find('li > a').click(function(event)
         {
-            var target = $(query).parents('table, #queryFilters, #filterItems,#filterForm').find('[data-index="' + $period.attr('data-index') + '"]').find('#default:visible');
+            var target = control.parents('table, #queryFilters, #filterItems,#filterForm').find('[data-index="' + $period.attr('data-index') + '"]').find('#default:visible');
             if(target.length)
             {
                 target.val($(this).attr('href').replace('#', '$')).trigger('change');
@@ -457,14 +457,14 @@ function setDateField(query)
         });
     }
 
-    if(query == '.form-date')     $(query).datepicker();
-    if(query == '.form-datetime') $(query).datetimepicker();
+    if(control.hasClass('form-date'))     control.datepicker();
+    if(control.hasClass('form-datetime')) control.datetimepicker();
 
-    var dateVal = $(query).val();
-    $(query).val('').datetimepicker('update').trigger('mousedown');
-    $(query).val(dateVal);
+    var dateVal = control.val();
+    control.val('').datetimepicker('update').trigger('mousedown');
+    control.val(dateVal);
 
-    $(query).on('show', function(e)
+    control.on('show', function(e)
     {
         var $e   = $(e.target);
         var ePos = $e.offset();

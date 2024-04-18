@@ -64,9 +64,10 @@ class testcaseEntry extends entry
 
                 if($step->type == 'group' && (empty($this->requestBody->steps[$key + 1]->type) || $this->requestBody->steps[$key + 1]->type != 'item')) $step->type = 'step';
 
-                $steps[]    = $step->desc;
-                $expects[]  = $step->expect;
-                $stepType[] = $step->type;
+                $stepID = zget($step, 'id', $key);
+                $steps[$stepID]    = $step->desc;
+                $expects[$stepID]  = $step->expect;
+                $stepType[$stepID] = $step->type;
             }
         }
 

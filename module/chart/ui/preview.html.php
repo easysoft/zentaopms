@@ -54,6 +54,14 @@ sidebar
     set::width(240),
     moduleMenu
     (
+        to::header
+        (
+            div
+            (
+                setClass('bg-canvas my-3 mx-5 text-xl font-semibold text-ellipsis'),
+                $groups[$groupID]
+            )
+        ),
         set::title($groups[$groupID]),
         set::modules($treeMenu),
         $charts ? set::activeKey($charts[0]->currentGroup . '_' . $charts[0]->id) : null,

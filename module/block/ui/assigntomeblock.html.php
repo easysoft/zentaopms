@@ -17,18 +17,17 @@ jsVar('yesterdayLabel', $lang->yesterday);
 $blockNavCode = 'nav-' . uniqid();
 
 $index = 0;
-$count = count($hasViewPriv);
 $menus = array();
 $moreMenus = array();
 foreach($hasViewPriv as $type => $bool)
 {
     $data = $type == 'story' ? $stories : ${"{$type}s"};
-    if(empty($data))
-    {
-        unset($hasViewPriv[$type]);
-        continue;
-    }
+    if($type != 'todo' && empty($data)) unset($hasViewPriv[$type]);
+}
 
+$count = count($hasViewPriv);
+foreach($hasViewPriv as $type => $bool)
+{
     $selected = key($hasViewPriv);
     if(($longBlock && $count > 9 && $index >= 8) || (!$longBlock && $count > 3 && $index >= 2))
     {

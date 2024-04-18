@@ -30,9 +30,9 @@ foreach($actions as $actionType => $typeActions)
 {
     foreach($typeActions as $key => $action)
     {
+        $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$build->id, $action['url']);
         $actions[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
         $actions[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
-        $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$build->id, $action['url']);
         if($action['icon'] == 'edit')  $actions[$actionType][$key]['text'] = $lang->edit;
         if($action['icon'] == 'trash') $actions[$actionType][$key]['text'] = $lang->delete;
     }
