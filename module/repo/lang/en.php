@@ -216,6 +216,7 @@ $lang->repo->notice->deleteBug      = 'Do you want to delete this bug?';
 $lang->repo->notice->deleteComment  = 'Do you want to delete this comment?';
 $lang->repo->notice->lastSyncTime   = 'Last Sync:';
 $lang->repo->notice->unlinkBranch   = 'Are you sure to disassociate the branch from %s?';
+$lang->repo->notice->noRepoLeft     = 'All repositories has been associated to ZenTaoPMS, please choose another server.';
 
 $lang->repo->rules = new stdclass();
 $lang->repo->rules->exampleLabel = "Comment Example";

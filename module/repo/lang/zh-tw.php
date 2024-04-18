@@ -164,6 +164,7 @@ $lang->repo->notice->deleteReview   = '確認刪除該評審？';
 $lang->repo->notice->deleteBug      = '確認刪除該Bug？';
 $lang->repo->notice->deleteComment  = '確認刪除該回覆？';
 $lang->repo->notice->lastSyncTime   = '最後更新于：';
+$lang->repo->notice->noRepoLeft     = '該伺服器下的所有版本庫都已經關聯到禪道了，請選擇其他伺服器。';
 
 $lang->repo->rules = new stdclass();
 $lang->repo->rules->exampleLabel = "註釋示例";

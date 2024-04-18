@@ -216,6 +216,7 @@ $lang->repo->notice->deleteBug      = '确认删除该Bug？';
 $lang->repo->notice->deleteComment  = '确认删除该回复？';
 $lang->repo->notice->lastSyncTime   = '最后更新于：';
 $lang->repo->notice->unlinkBranch   = '确认解除分支与%s的关联关系吗？';
+$lang->repo->notice->noRepoLeft     = '该服务器下的所有版本库都已经关联到禅道了，请选择其他服务器。';
 
 $lang->repo->rules = new stdclass();
 $lang->repo->rules->exampleLabel = "注释示例";
