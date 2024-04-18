@@ -1590,6 +1590,27 @@ class project extends control
     }
 
     /**
+     * 判断项目下是否有对应概念的需求。
+     * AJAX: check if the project has the concept of story.
+     *
+     * @param  string $projectID
+     * @param  string $storyType
+     * @access public
+     * @return bool
+     */
+    public function ajaxGetStoryByType($projectID, $storyType)
+    {
+        $story = $this->dao->select('t1.id')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.project')->eq($projectID)
+            ->andWhere('t1.type')->eq($storyType)
+            ->fetch('id');
+
+        return print(!empty($story));
+    }
+
+    /**
      * Ajax get product drop menu.
      *
      * @param  int    $projectID
