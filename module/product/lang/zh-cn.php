@@ -225,6 +225,8 @@ $lang->product->abbr->aclList['open']    = '公开';
 $lang->product->aclTips['open']    = "有{$lang->productCommon}视图权限，即可访问";
 $lang->product->aclTips['private'] = "{$lang->productCommon}相关负责人、所属项目集的干系人、相关联{$lang->projectCommon}的团队成员和干系人可访问";
 
+$lang->product->allSummary         = "本页共 <strong>%s</strong> 个需求，预计 <strong>%s</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%s</strong>。";
+$lang->product->checkedAllSummary  = "选中 <strong>%total%</strong> 个需求，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%rate%</strong>。";
 $lang->product->storySummary       = "本页共 <strong>%s</strong> 个{$lang->SRCommon}，预计 <strong>%s</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%s</strong>。";
 $lang->product->checkedSRSummary   = "选中 <strong>%total%</strong> 个{$lang->SRCommon}，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%rate%</strong>。";
 $lang->product->requirementSummary = "本页共 <strong>%s</strong> 个{$lang->URCommon}，预计 <strong>%s</strong> 个{$lang->hourCommon}。";

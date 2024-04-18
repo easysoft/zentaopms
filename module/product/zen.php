@@ -1485,6 +1485,7 @@ class productZen extends product
         $this->view->branchTagOption = $branchTagOpt;
         $this->view->projectProducts = $projectProducts;
 
+        $storyType = $isProjectStory ? 'all' : $storyType;
         $this->view->summary    = $this->product->summary($stories, $storyType);
         $this->view->plans      = $this->loadModel('productplan')->getPairs($productID, ($branch === 'all' || empty($branch)) ? '' : $branch, 'unexpired,noclosed', true);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');

@@ -303,6 +303,7 @@ if($app->rawModule == 'projectstory' && !empty($project)) dropmenu(set::text($pr
 $checkedSummary = $lang->product->checkedSRSummary;
 if($storyType == 'requirement') $checkedSummary = $lang->product->checkedURSummary;
 if($storyType == 'epic')        $checkedSummary = $lang->product->checkedERSummary;
+if($isProjectStory)             $checkedSummary = $lang->product->checkedAllSummary;
 
 data('storyBrowseType', $storyBrowseType);
 

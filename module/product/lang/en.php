@@ -225,6 +225,8 @@ $lang->product->abbr->aclList['open']    = 'Default';
 $lang->product->aclTips['open']    = "Users with privileges to {$lang->productCommon} can access it.";
 $lang->product->aclTips['private'] = "{$lang->executionCommon} team members only";
 
+$lang->product->allSummary         = "Total <strong>%s</strong> requirements on this page. Estimates <strong>%s</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%rate%</strong>.";
+$lang->product->checkedAllSummary  = "<strong>%total%</strong> requirements selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%rate%</strong>.";
 $lang->product->storySummary       = "Total <strong>%s</strong> {$lang->SRCommon} on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%s</strong>.";
 $lang->product->checkedSRSummary   = "<strong>%total%</strong> {$lang->SRCommon} selected, Esitmates: <strong>%estimate%</strong> ({$lang->hourCommon}), and Case Coverage: <strong>%rate%</strong>.";
 $lang->product->requirementSummary = "Total <strong>%s</strong> {$lang->URCommon} on this page. Estimates: <strong>%s</strong> ({$lang->hourCommon}).";

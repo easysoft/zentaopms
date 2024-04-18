@@ -117,7 +117,7 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
         if(checkedIdList.includes(row.id))
         {
             const story = row.data;
-            if(story.type != storyType) return;
+            if(story.type != storyType && tab == 'product') return;
             if(story?.needSummaryEstimate) estimate += parseFloat(story.estimate);
             if(story.caseCount > 0)
             {
@@ -128,7 +128,7 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
                 rateCount -= 1;
             }
 
-            if(storyType == story.type) total += 1;
+            total += 1;
         }
     })
 

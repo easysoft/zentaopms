@@ -1199,6 +1199,7 @@ class productModel extends model
         $storyIdList   = array();
 
         $rateCount = 0;
+        $total     = 0;
         $SRTotal   = 0;
         $URTotal   = 0;
         $ERTotal   = 0;
@@ -1208,13 +1209,14 @@ class productModel extends model
         $childTypes = $this->dao->select('parent, type')->from(TABLE_STORY)->where('parent')->in($idList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'type');
         foreach($stories as $story)
         {
+            $total ++;
             if($story->type == 'story')       $SRTotal += 1;
             if($story->type == 'requirement') $URTotal += 1;
             if($story->type == 'epic')        $ERTotal += 1;
 
             /* 仅统计叶子需求、子需求类型和父需求不一样的父需求工时。 */
             $isLeafStory = !isset($childTypes[$story->id]) || (isset($childTypes[$story->id]) && !isset($childTypes[$story->id][$story->type]));
-            if($storyType == $story->type && $isLeafStory)
+            if(($storyType == $story->type || $storyType == 'all') && $isLeafStory)
             {
                 $totalEstimate += $story->estimate;
                 $story->needSummaryEstimate = true;
@@ -1231,6 +1233,7 @@ class productModel extends model
         $casesCount = count($this->productTao->filterNoCasesStory($storyIdList));
         $rate       = empty($stories) || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 2);
 
+        if($storyType == 'all')         return sprintf($this->lang->product->allSummary, $total, $totalEstimate, $rate * 100 . "%");
         if($storyType == 'epic')        return sprintf($this->lang->product->epicSummary, $ERTotal, $totalEstimate);
         if($storyType == 'requirement') return sprintf($this->lang->product->requirementSummary, $URTotal, $totalEstimate);
 
