@@ -396,19 +396,20 @@ class productZen extends product
      */
     protected function getExportFields(): array
     {
-        $productLang   = $this->lang->product;
-        $productConfig = $this->config->product;
-
-        /* 获取字段语言项。 */
-        $fields     = explode(',', $productConfig->list->exportFields);
-        $fieldPairs = array();
-        foreach($fields as $fieldName)
+        $fieldList       = $this->loadModel('datatable') ->getSetting('product', 'all');
+        $extendFieldList = $this->product->getFlowExtendFields();
+        foreach($extendFieldList as $field => $name)
         {
-            $fieldName = trim($fieldName);
-            $fieldPairs[$fieldName] = zget($productLang, $fieldName);
+            $extCol = $config->product->dtable->extendField;
+            $extCol['name']  = $field;
+            $extCol['title'] = $name;
 
-            if($this->config->systemMode == 'light' && ($fieldName == 'line' or $fieldName == 'program')) unset($fieldPairs[$fieldName]);
+            $fieldList[$field] = $extCol;
         }
+
+        $fieldPairs = array();
+        foreach($fieldList as $fieldKey => $field) $fieldPairs[$fieldKey] = $field['title'];
+        if($this->config->systemMode == 'light') unset($fieldPairs['productLine'], $fieldPairs['program']);
 
         return $fieldPairs;
     }
@@ -418,66 +419,23 @@ class productZen extends product
      * Get export product data.
      *
      * @param  int       $programID
-     * @param  string    $status
+     * @param  string    $browseType
      * @param  string    $orderBy
      * @param  int       $param
+     * @param  object    $pager
      * @access protected
      * @return array
      */
-    protected function getExportData(int $programID, string $status, string $orderBy, int $param = 0): array
+    protected function getExportData(int $programID, string $browseType, string $orderBy, int $param = 0, object|null $pager = null): array
     {
-        $lines        = $this->product->getLinePairs();
         $users        = $this->user->getPairs('noletter');
-        $products     = strtolower($status) == 'bysearch' ? $this->product->getListBySearch($param) : $this->product->getList($programID, $status);
-        $productStats = $this->product->getStats(array_keys($products), $orderBy, null, $status);
+        $products     = strtolower($browseType) == 'bysearch' ? $this->product->getListBySearch((int)$param) : $this->product->getList($programID, $browseType);
+        $productStats = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story', $programID);
 
-        foreach($productStats as $product)
-        {
-            $product->line              = zget($lines, $product->line, '');
-            $product->manager           = zget($users, $product->PO, '');
-            $product->changedStories    = (int)$product->changingStories;
-            $product->storyCompleteRate = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
-            $product->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
-            $product->unResolvedBugs    = (int)$product->unresolvedBugs;
-            $product->program           = $product->programName;
-        }
+        $data = array();
+        foreach($productStats as $product) $data[] = $this->product->formatDataForList($product, $users);
 
-        return $productStats;
-    }
-
-    /**
-     * 获取导出的合并单元格信息。
-     * Get rowspan for export.
-     *
-     * @param  array $products
-     * @access protected
-     * @return array
-     */
-    protected function getExportRowspan(array $products): array
-    {
-        $lastRecord = array('program' => '', 'line' => '');
-        $colIndexs  = array('program' => 0,  'line' => 0);
-        $rowspan    = array();
-
-        foreach($products as $i => $product)
-        {
-            foreach($lastRecord as $field => $lastID)
-            {
-                if($product->{$field} !== $lastID)
-                {
-                    $rowspan[$i]['rows'][$field] = 1;
-                    $colIndexs[$field] = $i;
-                }
-                else
-                {
-                    $colIndex = $colIndexs[$field];
-                    $rowspan[$colIndex]['rows'][$field] ++;
-                }
-                $lastRecord[$field] = $product->{$field};
-            }
-        }
-
-        return $rowspan;
+        return $data;
     }
 
     /**
