@@ -127,7 +127,15 @@ class h extends node
     public static function input(mixed ...$args): h
     {
         $input = static::create('input', ...$args);
-        $input->setDefaultProps('type', 'text');
+        if($input->prop('type') === 'file')
+        {
+            $name = $input->prop('name');
+            if($name && !str_contains($name, '[')) $input->setProp('name', "{$name}[]");
+        }
+        else
+        {
+            $input->setDefaultProps('type', 'text');
+        }
         return $input;
     }
 
