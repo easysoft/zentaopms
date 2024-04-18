@@ -11,8 +11,8 @@ require_once dirname(__DIR__) . DS . 'thinkstep' . DS . 'v1.php';
 class thinkInput extends thinkStep
 {
     protected static array $defineProps = array(
-        'isRequired?: bool',                        // 是否必填
-        'isRequiredName?: string="isRequired"',     // 是否必填对应的name
+        'isRequired?: bool',                    // 是否必填
+        'isRequiredName?: string="required"',   // 是否必填对应的name
     );
 
     private function buildRequiredControl(): wg
@@ -24,12 +24,12 @@ class thinkInput extends thinkStep
             formGroup
             (
                 setClass('w-1/2'),
-                set::label($lang->thinkmodel->isRequired),
+                set::label($lang->thinkwizard->step->label->required),
                 radioList
                 (
                     set::name($isRequiredName),
                     set::inline(true),
-                    set::items($lang->thinkmodel->selectList),
+                    set::items($lang->thinkwizard->step->requiredList),
                     set::value($isRequired ? $isRequired : 0),
                 )
             ),
