@@ -57,6 +57,7 @@ class treeEditor extends wg
         $selected  = $this->prop('selected');
         $typeList  = array('task' => 'T', 'bug' => 'B', 'case' => 'C');
         $viewType  = data('viewType') ? data('viewType') : '';
+        $sortTree  = $this->prop('sortable') || $this->prop('onSort');
 
         foreach($items as $key => $item)
         {
@@ -88,7 +89,7 @@ class treeEditor extends wg
                 }
                 else
                 {
-                    $item['trailingIcon'] = 'move muted';
+                    if($sortTree) $item['trailingIcon'] = 'move muted';
 
                     $item['actions'] = array();
                     $item['actions']['items'] = array();
