@@ -52,21 +52,25 @@ class thinkNode  extends wg
         if(!$item) return array();
 
         return array(
-            $status !== 'detail' ? array(
-                div
-                (
-                    setClass('flex items-center'),
-                    setStyle(array('height' => '48px', 'padding' => '0 48px', 'color' => 'var(--color-gray-950)')),
+            div
+            (
+                setClass('relative'),
+                $status !== 'detail' ? array(
                     div
                     (
-                        setClass('font-medium'),
-                        data('lang.thinkwizard.step.nodeInfo'),
-                    )
-                ),
-                h::hr()
-            ) : null,
-            $this->buildBody(),
-            $this->children()
+                        setClass('flex items-center'),
+                        setStyle(array('height' => '48px', 'padding' => '0 48px', 'color' => 'var(--color-gray-950)')),
+                        div
+                        (
+                            setClass('font-medium'),
+                            data('lang.thinkwizard.step.nodeInfo'),
+                        )
+                    ),
+                    h::hr()
+                ) : null,
+                $this->buildBody(),
+                $this->children()
+            )
         );
     }
 }
