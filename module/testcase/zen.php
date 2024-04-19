@@ -3142,7 +3142,7 @@ class testcaseZen extends testcase
         $fileName = $this->app->user->id . '-xmind';
         $filePath = $importDir . '/' . $fileName;
         $tmpFile  = $filePath . 'tmp';
-        if(!move_uploaded_file($_FILES['file']['tmp_name'], $tmpFile)) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
+        if(!move_uploaded_file($_FILES['file']['tmp_name'][0], $tmpFile)) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         /* 删掉已经存在的当前用户的导入目录。*/
         /* Remove the file path. */
