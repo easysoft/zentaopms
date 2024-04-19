@@ -68,7 +68,7 @@ $lang->file->errorCanNotWrite = "<span class='text-red'>'%s' non inscriptible. C
 $lang->file->confirmDelete    = " Voulez-vous le supprimer ?";
 $lang->file->errorFileSize    = " Taille du fichier excédant la limite. Il ne peut être chargé !";
 $lang->file->errorFileUpload  = " Echec du chargement. La taille du fichier peut excéder la limite.";
-$lang->file->errorFileFormate = " Echec du chargement. Le format du fichier est non autorisé.";
+$lang->file->errorFileFormat  = " Echec du chargement. Le format du fichier est non autorisé.";
 $lang->file->errorFileMove    = " Echec du chargement. Une erreur est survenue lors du chargement.";
 $lang->file->errorFileCount   = " Uploading failed. Files that exceed the limit cannot be uploaded.";
 $lang->file->dangerFile       = " Le fichier n'a pas pu être chargé pour des raisons de sécurité.";

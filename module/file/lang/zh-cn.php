@@ -68,7 +68,7 @@ $lang->file->errorCanNotWrite = "<span class='text-red'>文件夹 '%s' 不可写
 $lang->file->confirmDelete    = " 您确定删除该附件吗？";
 $lang->file->errorFileSize    = " 文件大小已经超过%s，可能不能成功上传！";
 $lang->file->errorFileUpload  = " 文件上传失败，文件大小可能超出限制";
-$lang->file->errorFileFormate = " 文件上传失败，文件格式不在规定范围内";
+$lang->file->errorFileFormat  = " 文件上传失败，文件格式不在规定范围内";
 $lang->file->errorFileMove    = " 文件上传失败，移动文件时出错";
 $lang->file->errorFileCount   = " 只能上传 %s 个文件，超出数量限制的文件无法上传。";
 $lang->file->dangerFile       = " 您选择的文件存在安全风险，系统将不予上传。";

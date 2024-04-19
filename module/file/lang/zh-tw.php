@@ -61,7 +61,7 @@ $lang->file->errorCanNotWrite = "<span class='text-red'>檔案夾 '%s' 不可寫
 $lang->file->confirmDelete    = " 您確定刪除該附件嗎？";
 $lang->file->errorFileSize    = " 檔案大小已經超過%s，可能不能成功上傳！";
 $lang->file->errorFileUpload  = " 檔案上傳失敗，檔案大小可能超出限制";
-$lang->file->errorFileFormate = " 檔案上傳失敗，檔案格式不在規定範圍內";
+$lang->file->errorFileFormat  = " 檔案上傳失敗，檔案格式不在規定範圍內";
 $lang->file->errorFileMove    = " 檔案上傳失敗，移動檔案時出錯";
 $lang->file->dangerFile       = " 您選擇的檔案存在安全風險，系統將不予上傳。";
 $lang->file->errorSuffix      = '壓縮包格式錯誤，只能上傳zip壓縮包！';

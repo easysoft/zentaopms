@@ -68,7 +68,7 @@ $lang->file->errorCanNotWrite = "<span class='text-red'>'%s' ist nicht beschreib
 $lang->file->confirmDelete    = " Möchten Sie das wirklich löschen?";
 $lang->file->errorFileSize    = " Die Dateigröße übersteigt das Limit. Upload nicht möglich!";
 $lang->file->errorFileUpload  = " Upload fehlgeschlagen. Die Dateigröße übersteigt das Limit.";
-$lang->file->errorFileFormate = " Upload fehlgeschlagen, Das Dateiformat ist nicht erlaubt.";
+$lang->file->errorFileFormat  = " Upload fehlgeschlagen, Das Dateiformat ist nicht erlaubt.";
 $lang->file->errorFileMove    = " Upload fehlgeschlagen, die Datei konnte nicht verschoben werden.";
 $lang->file->errorFileCount   = " Uploading failed. Files that exceed the limit cannot be uploaded.";
 $lang->file->dangerFile       = " Die Datei wurde aus Sicherheitsgründen abgelehnt.";

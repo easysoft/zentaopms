@@ -68,7 +68,7 @@ $lang->file->errorCanNotWrite = "<span class='text-red'>'%s' is not writable. Pl
 $lang->file->confirmDelete    = " Do you want to delete it?";
 $lang->file->errorFileSize    = " File size exceeds the limit. It cannot be uploaded!";
 $lang->file->errorFileUpload  = " Uploading failed. The file size might exceeds the limit.";
-$lang->file->errorFileFormate = " Uploading failed. The file format is not in the prescribed scope.";
+$lang->file->errorFileFormat  = " Uploading failed. The file format is not in the prescribed scope.";
 $lang->file->errorFileMove    = " Uploading failed. An error prompts when moving file.";
 $lang->file->errorFileCount   = " Uploading failed. Files that exceed the limit cannot be uploaded.";
 $lang->file->dangerFile       = " The file failed to be uploaded for security reasons.";

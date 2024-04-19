@@ -63,7 +63,7 @@ class file extends control
     {
         $file = $this->file->getUpload('imgFile');
 
-        if(!isset($file[0]) or !in_array($file[0]['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
+        if(!isset($file[0]) or !in_array($file[0]['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat)));
 
         $file = $file[0];
         if($file)
@@ -399,7 +399,7 @@ class file extends control
         {
             $file = $this->file->getChunkedFile();
             if(!$file) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->error->noData)));
-            if(empty($file['extension']) or !in_array($file['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
+            if(empty($file['extension']) or !in_array($file['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat)));
 
             $imageFile = $this->file->saveChunkedFile($file, $uid);
             if(!empty($imageFile))
