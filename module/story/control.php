@@ -517,9 +517,19 @@ class story extends control
         if($this->app->tab == 'project')
         {
             $projectID = $param ? $param : $this->session->project;
-            $this->loadModel('project')->setMenu((int)$projectID);
+            $project   = $this->loadModel('project')->fetchByID($projectID);
             $this->view->projectID = $projectID;
-            $this->view->project   = $this->project->fetchByID($projectID);
+            $this->view->project   = $project;
+            if(!$project->multiple)
+            {
+                $this->project->setMenu((int)$project->project);
+                $this->view->executionID = $projectID;
+                $this->view->execution   = $project;
+            }
+            else
+            {
+                $this->project->setMenu((int)$projectID);
+            }
         }
         elseif($this->app->tab == 'execution')
         {
