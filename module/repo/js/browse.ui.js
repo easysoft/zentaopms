@@ -11,6 +11,13 @@ window.renderCell = function(result, {col, row})
         return result;
     }
 
+    if(col.name === 'revision')
+    {
+        result[0] = {html:'<a href="' + row.data.commitLink + '" data-app="' + appTab + '">' + row.data.revision + '</a>', style:{flexDirection:"column"}};
+
+        return result;
+    }
+
     if(col.name === 'originalComment')
     {
         result[0] = {html:'<span class="repo-comment">' + row.data.comment + '</span>'};
@@ -78,6 +85,7 @@ window.renderCommentCell = function(result, {col, row})
 {
     if(col.name === 'revision')
     {
+        console.log(row.data);
         result[0] = {html:'<a href="' + row.data.link + '" data-app="' + appTab + '">' + row.data.revision + '</a>', style:{flexDirection:"column"}};
 
         return result;

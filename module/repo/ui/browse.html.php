@@ -53,9 +53,8 @@ $breadcrumbItems[] = h::a
 (
     set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID")),
     set('data-app', $app->tab),
-    $repo->name
+    h::span('/', setStyle('margin', '0 5px'))
 );
-$breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
 
 $paths    = explode('/', $path);
 $fileName = array_pop($paths);
@@ -210,8 +209,9 @@ $downloadWg = div
 
 toolbar
 (
-    span(
+    a(
         set::className('last-sync-time'),
+        set::href($lastRevision->link),
         $lang->repo->notice->lastSyncTime . (isset($lastRevision->time) ? date('m-d H:i', strtotime($lastRevision->time)) : date('m-d H:i'))
     ),
     !in_array($repo->SCM, $config->repo->notSyncSCM) ? item(set($refreshItem)) : null,
