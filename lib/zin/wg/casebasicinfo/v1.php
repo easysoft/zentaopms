@@ -166,20 +166,21 @@ class caseBasicInfo extends wg
         $case = $this->prop('case', data('case'));
         if(!$case) return array();
 
-        $product     = $this->prop('product',    data('product'));
-        $branchName  = $this->prop('branchName', data('branchName'));
-        $libName     = $this->prop('libName',    data('libName'));
         $isLibCase   = $this->prop('isLibCase',  data('isLibCase'));
-        if(!empty($product->type)) $branchLabel = sprintf($lang->product->branch, $lang->product->branchName[$product->type]);
 
         $items = array();
         if($isLibCase)
         {
+            $libName = $this->prop('libName',    data('libName'));
             $items[$lang->testcase->fromCase] = array('children' => wg($this->getFromCase($case)));
             $items[$lang->testcase->lib]      = hasPriv('caselib', 'browse') ? array('control' => 'link', 'url' => createLink('caselib', 'browse', "libID={$case->lib}"), 'text' => $libName) : $libName;
         }
         else
         {
+            $product     = $this->prop('product',    data('product'));
+            $branchName  = $this->prop('branchName', data('branchName'));
+            $branchLabel = sprintf($lang->product->branch, $lang->product->branchName[$product->type]);
+
             if($case->product && !$product->shadow) $items[$lang->testcase->product] = hasPriv('product', 'view') ? array('control' => 'link', 'url' => createLink('product', 'view', "productID={$case->product}"), 'text' => $product->name) : $product->name;
             if($case->branch && $product->type != 'normal') $items[$branchLabel] = hasPriv('testcase', 'browse') ? array('control' => 'link', 'url' => createLink('testcase', 'browse', "productID={$case->product}&branch={$case->branch}"), 'text' => $branchName) : $branchName;
             $items[$lang->testcase->module] = array('children' => wg($this->getModule($case)));
