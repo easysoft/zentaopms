@@ -170,7 +170,7 @@ class caseBasicInfo extends wg
         $branchName  = $this->prop('branchName', data('branchName'));
         $libName     = $this->prop('libName',    data('libName'));
         $isLibCase   = $this->prop('isLibCase',  data('isLibCase'));
-        $branchLabel = sprintf($lang->product->branch, $lang->product->branchName[$product->type]);
+        if(!empty($product->type)) $branchLabel = sprintf($lang->product->branch, $lang->product->branchName[$product->type]);
 
         $items = array();
         if($isLibCase)
