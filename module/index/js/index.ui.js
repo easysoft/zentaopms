@@ -459,7 +459,7 @@ function goBack(target, url, startState)
     const currentState = window.history.state;
     const preState = currentState && currentState.prev;
     if(debug) console.log('[APPS] go back', {target, url, startState, currentState, preState});
-    if(target && currentState && preState)
+    if(target && startState && currentState && preState)
     {
         startState = startState.prev || (currentState && currentState.prev);
         if($.apps.openedMap[target])
