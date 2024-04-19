@@ -30,10 +30,19 @@ class thinkNode  extends wg
             if($item->type == 'question')
             {
                 $questionType = zget($item, 'questionType', 'radio');
-                if($questionType == 'radio') return thinkRadio(set($this->getRestProps()));
+                if($questionType == 'radio') return thinkRadio
+                (
+                    set::type($item->type),
+                );
                 if($questionType == 'checkbox') return thinkCheckbox(set($this->getRestProps()));
             }
-            return thinkStep(set($this->getRestProps()));
+
+            return thinkStep
+            (
+                set::type($item->type),
+                set::title($item->title),
+                set::desc($item->desc),
+            );
         }
     }
 
@@ -46,18 +55,12 @@ class thinkNode  extends wg
             $status !== 'detail' ? array(
                 div
                 (
-                    setClass('flex items-center justify-between'),
+                    setClass('flex items-center'),
                     setStyle(array('height' => '48px', 'padding' => '0 48px', 'color' => 'var(--color-gray-950)')),
                     div
                     (
                         setClass('font-medium'),
                         data('lang.thinkwizard.step.nodeInfo'),
-                    ),
-                    btn
-                    (
-                        set::type('primary'),
-                        set::btnType('submit'),
-                        data('lang.save')
                     )
                 ),
                 h::hr()
