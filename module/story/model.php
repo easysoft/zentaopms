@@ -3210,6 +3210,12 @@ class storyModel extends model
         global $app, $config;
         $action = strtolower($action);
 
+        if($action == 'subdivide')
+        {
+            if(helper::isAjaxRequest('modal') || $config->vision == 'lite') return false;
+            $action = 'batchcreate';
+        }
+
         if($action == 'recallchange') return $story->status == 'changing';
         if($action == 'recall')       return $story->status == 'reviewing';
         if($action == 'close')        return $story->status != 'closed';
@@ -3218,7 +3224,6 @@ class storyModel extends model
         if($action == 'batchcreate'  && $story->parent > 0)    return false;
         if($action == 'batchcreate'  && !empty($story->twins)) return false;
         if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
-        if($action == 'subdivide' && (!helper::isAjaxRequest('modal') || $config->vision != 'lite')) return false;
         if($action == 'batchcreate'  && $story->type == 'requirement' && $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->parent >= 0 && $story->type != 'requirement';
 
