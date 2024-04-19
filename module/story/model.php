@@ -243,19 +243,25 @@ class storyModel extends model
         if(empty($executionID)) return array();
         $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
 
-        $sqlCondition = array();
+        $sqlCondition = '';
         $module       = $execution->type == 'project' ? 'project' : 'execution';
         $showGrades   = isset($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : null;
         if($showGrades)
         {
             $items = explode(',', $showGrades);
+            $conditions = array();
             foreach($items as $item)
             {
                 preg_match('/^([a-zA-Z]+)(\d+)$/', $item, $matches);
-                $sqlCondition[] = "(t2.type = '{$matches[1]}' and t2.grade = {$matches[2]})";
+                $type  = $matches[1];
+                $grade = $matches[2];
+                $conditions[$type][] = $grade;
             }
 
-            $sqlCondition = '(' . implode(' OR ', $sqlCondition) . ')';
+            $sqlCondition = '(';
+            foreach($conditions as $type => $grades) $sqlCondition .= "(t2.type = '$type' AND t2.grade " . helper::dbIN($grades) . ") OR ";
+            $sqlCondition  = rtrim($sqlCondition, 'OR ');
+            $sqlCondition .= ')';
         }
 
         /* 格式化参数。 */
