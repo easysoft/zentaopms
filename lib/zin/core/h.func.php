@@ -32,6 +32,7 @@ function h3(mixed ...$args): h         {return h::h3(...$args);}
 function h4(mixed ...$args): h         {return h::h4(...$args);}
 function h5(mixed ...$args): h         {return h::h5(...$args);}
 function h6(mixed ...$args): h         {return h::h6(...$args);}
+function ol(mixed ...$args): h         {return h::ol(...$args);}
 function ul(mixed ...$args): h         {return h::ul(...$args);}
 function li(mixed ...$args): h         {return h::li(...$args);}
 function template(mixed ...$args): h   {return h::template(...$args);}

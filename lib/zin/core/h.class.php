@@ -18,6 +18,8 @@ require_once __DIR__ . DS . 'directive.class.php';
 
 class h extends node
 {
+    public static array $h5Tags = array('div', 'span', 'strong', 'small', 'code', 'canvas', 'br', 'a', 'p', 'img', 'button', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ol', 'ul', 'li', 'template', 'fieldset', 'legend');
+
     public static array $defineProps = array
     (
         'tagName'   => 'string',
