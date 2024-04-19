@@ -2140,7 +2140,7 @@ class bugZen extends bug
         /* Respond when delete in task kanban. */
         if($from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}")));
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}"), 'closeModal' => true));
     }
 
     /**

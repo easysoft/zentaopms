@@ -597,6 +597,9 @@ class doc extends control
         $object = $this->doc->getObjectByID($type, $objectID);
         if(empty($_POST) && !empty($searchTitle)) $this->post->title = $searchTitle;
 
+        $this->session->set('storyList', $this->app->getURI(true), 'doc');
+        $this->session->set('bugList', $this->app->getURI(true), 'doc');
+
         /* Load pager. */
         $rawMethod = $this->app->rawMethod;
         $this->app->rawMethod = 'showFiles';
