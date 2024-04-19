@@ -137,7 +137,7 @@ class docMenu extends wg
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parentID,
                 'data-module' => $moduleName,
-                'selected'    => zget($setting, 'active', $selected),
+                'selected'    => $this->prop('isThinmory') ? $selected : zget($setting, 'active', $selected),
                 'actions'     => $this->getActions($setting)
             );
 
