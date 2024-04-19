@@ -7,11 +7,12 @@ class thinkNode  extends wg
     protected static array $defineProps = array(
         'item: object',
         'status?: string="detail"',
+        'addType?: string',
     );
 
     protected function buildBody(): wg|array
     {
-        list($item, $status) = $this->prop(array('item', 'status'));
+        list($item, $status, $addType) = $this->prop(array('item', 'status', 'addType'));
 
         if($status == 'detail')
         {
@@ -28,14 +29,18 @@ class thinkNode  extends wg
             $item->options = null;
             $isEdit        = $status === 'edit' ? true : false;
 
-            if($item->type == 'question')
+            if($item->type == 'transition' || $addType == 'transition') return thinkTransition
+            (
+                set::title($item->title),
+                set::desc($item->desc),
+            );
+            if($item->type == 'question' || $addType)
             {
-                $questionType = zget($item, 'questionType', 'radio');
-                if($questionType == 'radio') return thinkRadio
+                if($addType == 'radio') return thinkRadio
                 (
-                    set::type($item->type),
+                    set::data(empty($item->fields) ? array() : $item->fields),
                 );
-                if($questionType == 'checkbox') return thinkCheckbox(set($this->getRestProps()));
+                if($addType == 'checkbox') return thinkCheckbox(set($this->getRestProps()));
             }
             return thinkStep
             (
