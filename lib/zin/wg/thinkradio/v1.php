@@ -5,7 +5,7 @@ namespace zin;
 require_once dirname(__DIR__) . DS . 'thinkstep' . DS . 'v1.php';
 
 /**
- * 单选题型（thinkRadio）部件类
+ * 单选题型部件类
  * The thinkRadio widget class
  */
 class thinkRadio extends thinkStep

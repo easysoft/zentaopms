@@ -5,7 +5,7 @@ namespace zin;
 require_once dirname(__DIR__) . DS . 'thinkradio' . DS . 'v1.php';
 
 /**
- * 多选题型（thinkCheckbox）部件类
+ * 多选题型部件类
  * The thinkCheckbox widget class
  */
 class thinkCheckbox extends thinkRadio

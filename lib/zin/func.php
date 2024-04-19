@@ -192,6 +192,7 @@ function caseTimeInfo(): caseTimeInfo {return createWg('caseTimeInfo', func_get_
 function caseRelatedList(): caseRelatedList {return createWg('caseRelatedList', func_get_args());}
 function flowSubTable(): flowSubTable {return createWg('flowSubTable', func_get_args());}
 function thumbnail(): thumbnail {return createWg('thumbnail', func_get_args());}
+function thinkNode(): thinkNode {return createWg('thinkNode', func_get_args());}
 function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}
 function thinkRadio(): thinkRadio{return createWg('thinkRadio', func_get_args());}
 function thinkCheckbox(): thinkCheckbox {return createWg('thinkCheckbox', func_get_args());}
