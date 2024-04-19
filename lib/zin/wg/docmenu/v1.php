@@ -220,6 +220,7 @@ class docMenu extends wg
 
     private function getActions($item): array|null
     {
+        if($this->prop('isThinmory') && $item->id != $this->prop('activeKey')) return array();
         $versionBtn = array();
         if(isset($item->versions) && $item->versions)
         {
@@ -385,6 +386,7 @@ class docMenu extends wg
             'text'    => $this->lang->thinkwizard->designer->treeDropdown['addChildNode'],
             'onClick' => jsRaw("() => addStep({$item->id}, 'child')")
         );
+        $levelType = $item->type == 'question' ? 'same' : 'child';
         $menus = array_merge($menus, array(
             array(
                 'key'  => 'editNode',
@@ -413,7 +415,7 @@ class docMenu extends wg
                 'key'  => 'addTransition',
                 'icon' => 'transition',
                 'text' => $this->lang->thinkwizard->designer->treeDropdown['addTransition'],
-                'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=transition")
+                'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=transition&levelType=$levelType")
             ),
         ));
         if(($item->type == 'question') || ($item->grade == 2 && $item->type !== 'question'))
@@ -424,25 +426,25 @@ class docMenu extends wg
                     'key'  => 'addRadio',
                     'icon' => 'radio',
                     'text' => $this->lang->thinkwizard->designer->treeDropdown['addRadio'],
-                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=radio")
+                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=radio&levelType=$levelType")
                 ),
                 array(
                     'key'  => 'addCheckbox',
                     'icon' => 'checkbox',
                     'text' => $this->lang->thinkwizard->designer->treeDropdown['addCheckbox'],
-                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=checkbox")
+                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=checkbox&levelType=$levelType")
                 ),
                 array(
                     'key'  => 'addInput',
                     'icon' => 'input',
                     'text' => $this->lang->thinkwizard->designer->treeDropdown['addInput'],
-                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=input")
+                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=input&levelType=$levelType")
                 ),
                 array(
                     'key'  => 'addTableInput',
                     'icon' => 'cell-input',
                     'text' => $this->lang->thinkwizard->designer->treeDropdown['addTableInput'],
-                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=tableInput")
+                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=tableInput&levelType=$levelType")
                 ),
             ));
         }
