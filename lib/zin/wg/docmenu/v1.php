@@ -373,13 +373,13 @@ class docMenu extends wg
     private function getThinkwizardMenus($item): array
     {
         $menus = array();
-        if($item->grade != 4 && $item->type != 'question') $menus[] = array(
+        if($item->grade != 3 && $item->type != 'question') $menus[] = array(
             'key'     => 'addNode',
             'icon'    => 'add-chapter',
             'text'    => $this->lang->thinkwizard->designer->treeDropdown['addSameNode'],
             'onClick' => jsRaw("() => addStep({$item->id}, 'same')")
         );
-        if($item->grade != 3 && $item->type != 'question') $menus[] = array(
+        if($item->grade != 2 && $item->type != 'question') $menus[] = array(
             'key'     => 'addNode',
             'icon'    => 'add-sub-chapter',
             'text'    => $this->lang->thinkwizard->designer->treeDropdown['addChildNode'],
@@ -391,7 +391,7 @@ class docMenu extends wg
                 'icon' => 'edit',
                 'text' => $this->lang->thinkwizard->designer->treeDropdown['editNode'],
             ),
-            !isset($item->cannotDelete) ? array(
+            !isset($item->cannotDelete) || !$item->cannotDelete ? array(
                 'key'          => 'deleteNode',
                 'icon'         => 'trash',
                 'text'         => $this->lang->thinkwizard->designer->treeDropdown['deleteNode'],
@@ -414,7 +414,7 @@ class docMenu extends wg
                 'text' => $this->lang->thinkwizard->designer->treeDropdown['addTransition'],
             ),
         ));
-        if(($item->type == 'question') || ($item->grade == 3 && $item->type !== 'question'))
+        if(($item->type == 'question') || ($item->grade == 2 && $item->type !== 'question'))
         {
             $menus = array_merge($menus, array(
                 array('type' => 'divider'),
