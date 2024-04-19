@@ -362,8 +362,16 @@ class repo extends control
     {
         $this->commonAction($repoID, $objectID);
 
-        $file     = $entry;
-        $entry    = $this->repo->decodePath($entry);
+        $file  = $entry;
+        $entry = $this->repo->decodePath($entry);
+        $lines = '';
+        if(strpos($entry, '#'))
+        {
+            $bugData = explode('#', $entry);
+            $entry   = $bugData[0];
+            $lines   = $bugData[1];
+        }
+
         $entry    = urldecode($entry);
         $pathInfo = helper::mbPathinfo($entry);
 
@@ -385,6 +393,7 @@ class repo extends control
         $this->view->repo      = $repo;
         $this->view->revision  = $revision;
         $this->view->file      = $file;
+        $this->view->lines     = $lines;
         $this->view->entry     = $entry;
         $this->view->pathInfo  = $pathInfo;
         $this->view->tree      = $this->repoZen->getViewTree($repo, '', $revision);
@@ -699,6 +708,13 @@ class repo extends control
         if($this->get->repoPath) $entry = $this->get->repoPath;
         $file  = $entry;
         $entry = $this->repo->decodePath($entry);
+        $lines = '';
+        if(strpos($entry, '#'))
+        {
+            $bugData = explode('#', $entry);
+            $entry   = $bugData[0];
+            $lines   = $bugData[1];
+        }
 
         if($repo->SCM == 'Git' && !is_dir($repo->path)) return $this->sendError(sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path), $this->repo->createLink('maintain'));
 
@@ -720,6 +736,7 @@ class repo extends control
         $this->view->entry         = urldecode($entry);
         $this->view->encoding      = str_replace('-', '_', $encoding);
         $this->view->file          = $file;
+        $this->view->lines         = $lines;
         $this->view->repoID        = $repoID;
         $this->view->branchID      = (string) $this->cookie->repoBranch;
         $this->view->objectID      = $objectID;
@@ -1111,6 +1128,14 @@ class repo extends control
         $repo     = $this->repo->getByID($repoID);
         $entry    = urldecode($this->repo->decodePath($entry));
         $revision = str_replace('*', '-', $revision);
+        $lines    = '';
+        if(strpos($entry, '#'))
+        {
+            $bugData = explode('#', $entry);
+            $entry   = $bugData[0];
+            $lines   = $bugData[1];
+            $file    = $this->repo->encodePath($entry);
+        }
 
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $revision);
@@ -1144,6 +1169,7 @@ class repo extends control
         $this->view->revision    = $revision;
         $this->view->oldRevision = '';
         $this->view->file        = $file;
+        $this->view->lines       = $lines;
         $this->view->entry       = $entry;
         $this->view->suffix      = $suffix;
         $this->view->content     = $content ? $content : '';

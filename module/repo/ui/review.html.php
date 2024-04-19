@@ -22,16 +22,19 @@ jsVar('appTab', $app->tab);
 
 foreach($bugs as $bug)
 {
-    $repo     = zget($repos, $bug->repo, $repo);
-    $objectID = $app->tab == 'execution' ? $bug->execution : 0;
+    $repo      = zget($repos, $bug->repo, $repo);
+    $objectID  = $app->tab == 'execution' ? $bug->execution : 0;
+
+    $bug->entry     = $this->repo->decodePath($bug->entry);
     $bug->revisionA = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
 
-    $lines = explode(',', trim($bug->lines, ','));
+    $lines     = trim($bug->lines, ',');
+    $fileEntry = $this->repo->encodePath("{$bug->entry}#{$bug->lines}");
     if(empty($bug->v1))
     {
         $bug->v2   = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
         $revision  = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, (int)zget($historys, $bug->v2)) : $bug->v2;
-        $bug->link = $this->repo->createLink('view', "repoID=$repoID&objectID={$objectID}&entry={$bug->entry}&revision={$bug->v2}") . "#L$lines[0]";
+        $bug->link = $this->repo->createLink('view', "repoID=$repoID&objectID={$objectID}&entry={$fileEntry}&revision={$bug->v2}");
     }
     else
     {
@@ -39,10 +42,9 @@ foreach($bugs as $bug)
         $revision .= ' : ';
         $revision .= $repo->SCM != 'Subversion' ? substr($bug->v2, 0, 10) : $bug->v2;
         if($repo->SCM != 'Subversion') $revision .= ' (' . zget($historys, $bug->v1) . ' : ' . zget($historys, $bug->v2) . ')';
-        $bug->link = $this->repo->createLink('diff', "repoID=$repoID&objectID={$objectID}&entry={$bug->entry}&oldRevision={$bug->v1}&newRevision={$bug->v2}") . "#L$lines[0]";
+        $bug->link = $this->repo->createLink('diff', "repoID=$repoID&objectID={$objectID}&entry={$fileEntry}&oldRevision={$bug->v1}&newRevision={$bug->v2}");
     }
 
-    $bug->entry = $repo->name . '/' . $this->repo->decodePath($bug->entry);
 }
 $bugs = initTableData($bugs, $config->repo->reviewDtable->fieldList);
 
