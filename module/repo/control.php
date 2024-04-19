@@ -1140,6 +1140,7 @@ class repo extends control
         $this->view->type        = 'view';
         $this->view->showBug     = $showBug;
         $this->view->repoID      = $repoID;
+        $this->view->repo        = $repo;
         $this->view->revision    = $revision;
         $this->view->oldRevision = '';
         $this->view->file        = $file;
