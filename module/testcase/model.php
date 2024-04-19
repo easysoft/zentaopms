@@ -63,8 +63,11 @@ class testcaseModel extends model
         /* Insert testcase steps. */
         $this->testcaseTao->insertSteps($caseID, $case->steps, $case->expects, $case->stepType);
 
-        ob_start();
-        setcookie('onlyAutoCase', $case->auto == 'auto' ? '1' : '0');
+        if($case->auto != 'auto')
+        {
+            ob_start();
+            setcookie('onlyAutoCase', '0');
+        }
 
         if(dao::isError()) return false;
         return $caseID;
