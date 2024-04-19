@@ -81,7 +81,7 @@ class thinkOptions extends wg
                 set::enterPlaceholder(data('lang.thinkwizard.step.pleaseInput')),
                 set($this->props->pick(array('name', 'data')))
             ),
-            $enableOther ? div
+            div
             (
                 setClass('w-full flex justify-between items-center h-8 px-2.5 rounded mt-1'),
                 setStyle(array('background' => 'rgba(242, 244, 247, .7)', '--tw-ring-color' => 'rgba(var(--color-gray-300-rgb), .7)', 'box-shadow' => 'var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)')),
@@ -91,8 +91,13 @@ class thinkOptions extends wg
                     div(setStyle(array('width' => '44px', 'color' => '#5E626D')), data('lang.other')),
                     div(setStyle(array('color' => 'var(--color-gray-400)')), data('lang.thinkwizard.step.pleaseInput')),
                 ),
-                checkbox(set::name($otherName), set::text(data('lang.thinkwizard.step.enable'))),
-            ): null
+                checkbox
+                (
+                    set::name($otherName),
+                    set::checked($enableOther),
+                    set::text(data('lang.thinkwizard.step.enable'))
+                ),
+            )
         );
     }
 }
