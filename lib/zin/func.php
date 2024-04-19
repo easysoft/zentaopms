@@ -194,6 +194,7 @@ function flowSubTable(): flowSubTable {return createWg('flowSubTable', func_get_
 function thumbnail(): thumbnail {return createWg('thumbnail', func_get_args());}
 function thinkNode(): thinkNode {return createWg('thinkNode', func_get_args());}
 function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}
+function thinkTransition(): thinkTransition {return createWg('thinkTransition', func_get_args());}
 function thinkRadio(): thinkRadio{return createWg('thinkRadio', func_get_args());}
 function thinkCheckbox(): thinkCheckbox {return createWg('thinkCheckbox', func_get_args());}
 function thinkOptions(): thinkOptions{return createWg('thinkOptions', func_get_args());}
