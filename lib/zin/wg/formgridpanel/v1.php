@@ -43,6 +43,6 @@ class formGridPanel extends formPanel
 
     public static function getPageCSS(): ?string
     {
-        return ".size-sm {--zt-panel-form-max-width: 800px;--zt-panel-form-min-width: 600px;}";
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 }
