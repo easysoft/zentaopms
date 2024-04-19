@@ -3077,6 +3077,6 @@ class repoModel extends model
 
         if(dao::isError()) return array();
 
-        return $importedProjects;
+        return array_keys($importedProjects);
     }
 }
