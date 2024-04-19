@@ -184,7 +184,7 @@ $config->repo->taskDtable = new stdclass();
 $config->repo->taskDtable->fieldList = array();
 $config->repo->taskDtable->fieldList['id']['name']     = 'id';
 $config->repo->taskDtable->fieldList['id']['title']    = $lang->idAB;
-$config->repo->taskDtable->fieldList['id']['type']     = 'id';
+$config->repo->taskDtable->fieldList['id']['type']     = 'checkID';
 $config->repo->taskDtable->fieldList['id']['checkbox'] = true;
 
 $config->repo->taskDtable->fieldList['pri']['title']    = $lang->priAB;
