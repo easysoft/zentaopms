@@ -947,6 +947,7 @@ $config->delete['18_9'][] = 'module/automation/view/browse.html.php';
 $config->delete['18_12'][] = 'extension/ipd/project/ext/model/ipd.php';
 
 $config->delete['20_0_beta1'][] = 'extension/lite/kanban/ext/model/lite.php';
+$config->delete['20_0_beta1'][] = 'extension/lite/story/ext/ui/view.html.php';
 $config->delete['20_0_beta1'][] = 'extension/biz/my/ext/model/class/effort.class.php';
 $config->delete['20_0_beta1'][] = 'extension/max/my/ext/model/class/effort.class.php';
 $config->delete['20_0_beta1'][] = 'extension/ipd/my/ext/model/class/effort.class.php';
