@@ -35,7 +35,7 @@ class thinkOptions extends wg
         'expectDisabledTip?: string',       // 预期输入框禁用提示。
         'deleteStepTip?: string',           // 有子层级禁用删除提示。
         'dragNestedTip?: string',           // 拖拽超出提示。
-        'enableOther?: boolean=true',       // 是否展示启用其他。
+        'enableOther?: bool=false',       // 是否展示启用其他。
         'otherName?: string="enableOther"', // 启用其他的 name。
     );
 

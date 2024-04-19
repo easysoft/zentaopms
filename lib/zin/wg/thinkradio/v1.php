@@ -46,7 +46,13 @@ class thinkRadio extends thinkStep
         $items[] = formGroup
         (
             set::label(data('lang.thinkwizard.step.label.option')),
-            thinkOptions(set::name($optionName), set::otherName($otherName), set::enableOther($enableOther)),
+            thinkOptions
+            (
+                set::name($optionName),
+                set::otherName($otherName),
+                set::enableOther($enableOther),
+                set::otherName('enableOther')
+            ),
         );
         $items[] = $this->children();
         return $items;
