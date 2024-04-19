@@ -11,7 +11,7 @@ require_once dirname(__DIR__) . DS . 'thinkstep' . DS . 'v1.php';
 class thinkTableInput extends thinkStep
 {
     protected static array $defineProps = array(
-        'isRequired?: bool',                        // 是否必填
+        'required?: bool',                          // 是否必填
         'isRequiredName?: string="required"',       // 是否必填对应的name
         'requiredRows?: number=1',                  // 必填行数
         'requiredRowsName?: string="requiredRows"', // 必填行数对应的name
@@ -31,7 +31,7 @@ class thinkTableInput extends thinkStep
     private function buildRequiredControl(): wg
     {
         global $lang;
-        list($isRequired, $isRequiredName, $requiredRows, $requiredRowsName) = $this->prop(array('isRequired', 'isRequiredName', 'requiredRows', 'requiredRowsName'));
+        list($isRequired, $isRequiredName, $requiredRows, $requiredRowsName) = $this->prop(array('required', 'isRequiredName', 'requiredRows', 'requiredRowsName'));
         return formRow
         (
             setClass('mb-3'),
@@ -50,7 +50,7 @@ class thinkTableInput extends thinkStep
             ),
             formGroup
             (
-                setClass('w-1/2 hidden required-rows'),
+                setClass($isRequired ? 'w-1/2 required-rows': 'w-1/2 required-rows hidden'),
                 set::label($lang->thinkwizard->step->label->requiredRows),
                 set::labelClass('required'),
                 input
@@ -87,7 +87,7 @@ class thinkTableInput extends thinkStep
             ),
             formGroup
             (
-                setClass($isSupportAdd ? 'w-1/2' : 'w-1/2 hidden can-add-rows'),
+                setClass($isSupportAdd ? 'w-1/2 can-add-rows' : 'w-1/2 hidden can-add-rows'),
                 set::label($lang->thinkwizard->step->label->canAddRows),
                 set::labelClass('required'),
                 input
