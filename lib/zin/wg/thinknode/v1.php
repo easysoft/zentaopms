@@ -48,7 +48,8 @@ class thinkNode  extends wg
                 set::title($item->title),
                 set::isEdit($isEdit),
                 set::desc($item->desc),
-                set::stepID($item->id)
+                set::stepID($item->id),
+                set::submitUrl(createLink('thinkwizard', 'design', "wizardID={$item->wizard}&&stepID={$item->id}"))
             );
         }
     }
