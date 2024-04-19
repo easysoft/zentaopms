@@ -10,13 +10,14 @@ namespace zin;
 class thinkStepDetail extends wg
 {
     protected static array $defineProps = array(
+        'item: object',
         'type?: string',       // 节点或者题型类型
         'title?: string',      // 标题
         'desc?: string',       // 描述
     );
     protected function detailHeading()
     {
-        list($title, $desc) = $this->prop(array('title', 'desc'));
+        list($item, $title, $desc) = $this->prop(array('item', 'title', 'desc'));
         return div
         (
             div
@@ -31,15 +32,23 @@ class thinkStepDetail extends wg
                 ),
                 div
                 (
-                    setClass('w-12 ml-2'),
+                    setClass('ml-2'),
                     setStyle(array('min-width' => '48px')),
-                    a
+                    btnGroup
                     (
-                        icon('edit', setClass('border-0 mr-2 w-4'))
-                    ),
-                    a
-                    (
-                        icon('trash', setClass('border-0 w-4'))
+                        btn
+                        (
+                            setClass('btn ghost text-gray w-5 h-5'),
+                            set::icon('edit'),
+                            set::url(createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=edit")),
+                        ),
+                        btn
+                        (
+                            setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
+                            set::icon('trash'),
+                            setData('url', createLink('thinkwizard', 'deleteStep', "stepID={$item->id}")),
+                            setData('confirm',  data('lang.thinkwizard.step.confirmDeleteNode'))
+                        )
                     )
                 )
             ),
@@ -66,7 +75,8 @@ class thinkStepDetail extends wg
     {
         return array
         (
-            $this->buildBody()
+            $this->buildBody(),
+            $this->children()
         );
     }
 }
