@@ -897,6 +897,11 @@
 
     function loadCurrentPage(options)
     {
+        if(options instanceof Event || options instanceof HTMLElement)
+        {
+            options = {};
+            if(DEBUG) console.warn('[APP] ', 'loadCurrentPage() should not be called with an event or element.');
+        }
         if(typeof options === 'string') options = {selector: options};
         return loadPage(options);
     }

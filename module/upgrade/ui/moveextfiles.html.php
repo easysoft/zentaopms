@@ -87,7 +87,7 @@ div
                 $lang->upgrade->moveEXTFileFail,
                 btn
                 (
-                    on::click('loadCurrentPage'),
+                    on::click('loadCurrentPage()'),
                     setClass('px-6 ml-4'),
                     set::text($lang->refresh)
                 )
