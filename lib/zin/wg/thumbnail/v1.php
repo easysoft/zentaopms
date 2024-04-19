@@ -16,7 +16,9 @@ class thumbnail extends wg
     protected static array $defineProps = array(
         'name?: string="thumbnail"',
         'src?: string',
-        'tips?: string'
+        'tips?: string',
+        'errorTips?: string',
+        'accept?: array=["jpg", "jpeg", "png", "gif"]'
     );
 
     public static function getPageJS(): ?string
@@ -24,17 +26,26 @@ class thumbnail extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
+    protected function created()
+    {
+        if(!$this->prop('errorTips')) $this->setProp('errorTips', 'Upload failed, please upload images in ' . implode(', ', $this->prop('accept')) . ' format.');
+    }
+
     protected function build()
     {
-        $name = $this->prop('name');
-        $src  = $this->prop('src');
-        $tips = $this->prop('tips');
+        $name   = $this->prop('name');
+        $src    = $this->prop('src');
+        $tips   = $this->prop('tips');
+        $accept = $this->prop('accept');
+
+        jsVar('acceptExtensions', $accept);
+        jsVar('errorTips', $this->prop('errorTips'));
 
         return array
         (
             div
             (
-                setClass('flex items-center justify-center cursor-pointer bg-gray-100 w-full h-64'),
+                setClass('flex items-center justify-center cursor-pointer bg-gray-100 w-full h-60'),
                 setData(array('on' => 'click', 'call' => 'uploadThumbnail')),
                 img
                 (
@@ -57,7 +68,7 @@ class thumbnail extends wg
                 setClass('hidden'),
                 set::type('file'),
                 set::name('files[]'),
-                set::accept('.jpg,.jpeg,.gif,.png,.bmp'),
+                set::accept('.' . implode(',.', $accept)),
                 setData(array('on' => 'change', 'call' => 'changeThumbnail'))
             )
         );
