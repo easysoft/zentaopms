@@ -39,7 +39,7 @@ else
 }
 
 jsVar('branchGroups', $branchGroups);
-
+jsVar('gradeGroup', $gradeGroup);
 
 $footToolbar['items'][] = array(
     'text'      => $lang->save,

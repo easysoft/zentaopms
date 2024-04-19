@@ -2262,6 +2262,10 @@ class execution extends control
             $story->estimate = $story->estimate . $this->config->hourUnit;
         }
 
+        $gradeGroup = array();
+        $gradeList  = $this->story->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         /* Set the pager. */
         $this->app->loadClass('pager', true);
         $pager      = new pager(count($allStories), $recPerPage, $pageID);
@@ -2276,6 +2280,7 @@ class execution extends control
         $this->view->extra        = $extra;
         $this->view->object       = $object;
         $this->view->orderBy      = $orderBy;
+        $this->view->gradeGroup   = $gradeGroup;
         $this->view->productPairs = $productPairs;
         $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];
         $this->view->pager        = $pager;
