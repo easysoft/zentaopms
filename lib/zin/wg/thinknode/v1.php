@@ -20,20 +20,20 @@ class thinkNode  extends wg
                 set::type($item->type),
                 set::title($item->title),
                 set::desc($item->desc),
+                set::item($item),
             );
         }
         else
         {
             $item->options = null;
 
-            if($item == 'node') return thinkNode(set($this->getRestProps()));
-            if($type == 'transition') return thinkTransition(set($this->getRestProps()));
-            if($type == 'question')
+            if($item->type == 'question')
             {
                 $questionType = zget($item, 'questionType', 'radio');
                 if($questionType == 'radio') return thinkRadio(set($this->getRestProps()));
                 if($questionType == 'checkbox') return thinkCheckbox(set($this->getRestProps()));
             }
+            return thinkStep(set($this->getRestProps()));
         }
     }
 
