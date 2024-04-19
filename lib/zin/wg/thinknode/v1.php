@@ -24,10 +24,6 @@ class thinkNode  extends wg
         }
         else
         {
-            $options  = json_encode($item->options, true);
-            $itemData = get_object_vars($item);
-            $item     = (object)array_merge($itemData, $options);
-
             $item->options = null;
 
             if($item == 'node') return thinkNode(set($this->getRestProps()));
