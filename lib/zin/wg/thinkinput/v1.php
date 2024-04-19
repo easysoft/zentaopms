@@ -11,14 +11,14 @@ require_once dirname(__DIR__) . DS . 'thinkstep' . DS . 'v1.php';
 class thinkInput extends thinkStep
 {
     protected static array $defineProps = array(
-        'isRequired?: bool',                    // 是否必填
+        'required?: bool',                    // 是否必填
         'isRequiredName?: string="required"',   // 是否必填对应的name
     );
 
     private function buildRequiredControl(): wg
     {
         global $lang;
-        list($isRequired, $isRequiredName) = $this->prop(array('isRequired', 'isRequiredName', 'requiredRows', 'requiredRowsName'));
+        list($required, $isRequiredName) = $this->prop(array('required', 'isRequiredName', 'requiredRows', 'requiredRowsName'));
         return formRow
         (
             formGroup
@@ -30,7 +30,7 @@ class thinkInput extends thinkStep
                     set::name($isRequiredName),
                     set::inline(true),
                     set::items($lang->thinkwizard->step->requiredList),
-                    set::value($isRequired ? $isRequired : 0),
+                    set::value($required ? $required : 0),
                 )
             ),
         );
