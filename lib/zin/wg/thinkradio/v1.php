@@ -21,7 +21,7 @@ class thinkRadio extends thinkStep
 
     protected static array $defaultProps = array
     (
-        'type' => 'radio'
+        'type' => 'question'
     );
 
     protected function buildBody(): array
