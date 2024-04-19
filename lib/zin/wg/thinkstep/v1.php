@@ -22,10 +22,11 @@ class thinkStep extends wg
     protected static array $defineProps = array(
         'type?: string="transition"', // 节点或者题型类型
         'title?: string',             // 标题
-        'titleName: string',          // 标题对应的name
+        'titleName?: string="title"', // 标题对应的name
         'desc?: string',              // 描述
-        'descName: string',           // 描述对应的name
+        'descName?: string="desc"',   // 描述对应的name
         'isEdit?: bool=false',        // 是否编辑
+        'stepID?: number=0',          // stepID
         'submitUrl: string',          // 提交表单url
     );
     protected static array $defineBlocks = array(
@@ -74,11 +75,12 @@ class thinkStep extends wg
                     setClass('desc'),
                     set::name($descName),
                     set::placeholder($lang->thinkwizard->step->pleaseInput),
-                    set::value($desc ? strip_tags(html_entity_decode($desc)) : ''),
+                    html($desc ?? ''),
                     set::rows(5)
                 )
             ),
             formHidden('type', $this->prop('type')),
+            $this->prop('isEdit') ? formHidden('stepID', $this->prop('stepID')) : null,
         );
     }
 
