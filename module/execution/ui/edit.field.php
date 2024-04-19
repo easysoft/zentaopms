@@ -123,7 +123,7 @@ $fields->field('days')
     ->value(data('execution.days'))
     ->width($hasPercent ? '1/4' : '1/2');
 
-if($hasPercent)
+if($hasPercent && $project && $project->model != 'ipd')
 {
     $fields->field('percent')
         ->label($lang->stage->percent)
