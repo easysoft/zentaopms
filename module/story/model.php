@@ -2756,7 +2756,7 @@ class storyModel extends model
             $parents = array();
             foreach($requirements as $requirement) $parents[$requirement->parent] = $requirement->parent;
 
-            $requirementPairs = array();
+            $options = array();
             foreach($requirements as $id => $requirement)
             {
                 if(isset($parents[$requirement->id]))
@@ -2765,7 +2765,14 @@ class storyModel extends model
                     continue;
                 }
 
-                $requirementPairs[$requirement->id] = isset($URGradePairs[$requirement->grade]) ? '(' . $URGradePairs[$requirement->grade] . ') ' . $requirement->title : $requirement->title;
+                if(isset($URGradePairs[$requirement->grade]))
+                {
+                    $options[] = array('value' => $requirement->id, 'text' => array('html' => '<span class="label secondary">' . $URGradePairs[$requirement->grade] . '</span> ' . $requirement->title));
+                }
+                else
+                {
+                    $options[] = array('value' => $requirement->id, 'text' => $requirement->title);
+                }
             }
 
             $childIdList = $this->getAllChildId($storyID);
@@ -2780,10 +2787,19 @@ class storyModel extends model
                 ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
                 ->fetchAll();
 
-            $storyPairs = array();
-            foreach($stories as $story) $storyPairs[$story->id] = isset($SRGradePairs[$story->grade]) ? '(' . $SRGradePairs[$story->grade] . ') ' . $story->title : $story->title;
+            foreach($stories as $story)
+            {
+                if(isset($SRGradePairs[$story->grade]))
+                {
+                    $options[] = array('value' => $story->id, 'text' => array('html' => '<span class="label secondary">' . $SRGradePairs[$story->grade] . '</span> ' . $story->title));
+                }
+                else
+                {
+                    $options[] = array('value' => $story->id, 'text' => $story->title);
+                }
+            }
 
-            return array(0 => '') + $requirementPairs + $storyPairs;
+            return $options;
         }
         elseif($storyType == 'requirement')
         {
@@ -2822,7 +2838,7 @@ class storyModel extends model
         $parents = array();
         foreach($epics as $epic) $parents[$epic->parent] = $epic->parent;
 
-        $epicPairs = array();
+        $options = array();
         foreach($epics as $id => $epic)
         {
             if(isset($parents[$epic->id]))
@@ -2831,7 +2847,14 @@ class storyModel extends model
                 continue;
             }
 
-            $epicPairs[$epic->id] = isset($ERGradePairs[$epic->grade]) ? '(' . $ERGradePairs[$epic->grade] . ') ' . $epic->title : $epic->title;
+            if(isset($ERGradePairs[$epic->grade]))
+            {
+                $options[] = array('value' => $epic->id, 'text' => array('html' => '<span class="label secondary">' . $ERGradePairs[$epic->grade] . '</span> ' . $epic->title));
+            }
+            else
+            {
+                $options[] = array('value' => $epic->id, 'text' => $epic->title);
+            }
         }
 
         $childIdList     = $this->getAllChildId($storyID);
@@ -2854,10 +2877,22 @@ class storyModel extends model
             ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
             ->fetchAll('id');
 
-        $requirementPairs = array();
-        foreach($requirements as $requirement) $requirementPairs[$requirement->id] = isset($URGradePairs[$requirement->grade]) ? '(' . $URGradePairs[$requirement->grade] . ') ' . $requirement->title : $requirement->title;
+        if($requirements)
+        {
+            foreach($requirements as $requirement)
+            {
+                if(isset($URGradePairs[$requirement->grade]))
+                {
+                    $options[] = array('value' => $requirement->id, 'text' => array('html' => '<span class="label secondary">' . $URGradePairs[$requirement->grade] . '</span> ' . $requirement->title));
+                }
+                else
+                {
+                    $options[] = array('value' => $requirement->id, 'text' => $requirement->title);
+                }
+            }
+        }
 
-        return $epicPairs + $requirementPairs;
+        return $options;
     }
 
     /**
