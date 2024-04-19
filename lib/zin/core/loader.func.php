@@ -42,6 +42,11 @@ function createWg($name, $args, ?string $fallbackWgName = null): node
     $wgVer = getWgVer($name);
     $wgName = "\\zin\\$name";
 
+    if(in_array($name, h::$h5Tags))
+    {
+        return h::$name($args);
+    }
+
     if(!class_exists($wgName))
     {
         include_once dirname(__DIR__) . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
