@@ -56,7 +56,7 @@ $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branch
 };
 
 /* Build create story button. */
-$fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $storyType, $productID, $branch, $moduleID, $projectID)
+$fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $storyType, $productID, $branch, $moduleID, $projectID, $project)
 {
     if(!common::canModify('product', $product)) return null;
 
@@ -98,7 +98,25 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
             $items[] = array('text' => $lang->story->create, 'url' => $createLink);
         }
 
-        $items[] = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
+        if($isProjectStory)
+        {
+            $items[] = array('text' => $lang->story->batchCreate . $lang->SRCommon, 'url' => $batchCreateLink);
+            if(str_contains($project->storyType, 'requirement'))
+            {
+                if(common::hasPriv('requirement', 'create'))      $items[] = array('text' => $lang->requirement->create, 'url' => createLink('requirement', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&requirementID=0&projectID=$projectID") . '#app=project');
+                if(common::hasPriv('requirement', 'batchCreate')) $items[] = array('text' => $lang->requirement->batchCreate . $lang->URCommon, 'url' => createLink('requirement', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&requirementID=0&project=$projectID") . '#app=project');
+            }
+
+            if(str_contains($project->storyType, 'epic'))
+            {
+                if(common::hasPriv('epic', 'create'))      $items[] = array('text' => $lang->epic->create, 'url' => createLink('epic', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&epicID=0&projectID=$projectID") . '#app=project');
+                if(common::hasPriv('epic', 'batchCreate')) $items[] = array('text' => $lang->epic->batchCreate . $lang->ERCommon, 'url' => createLink('epic', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&epicID=0&project=$projectID") . '#app=project');
+            }
+        }
+        else
+        {
+            $items[] = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
+        }
 
         return btnGroup
         (
