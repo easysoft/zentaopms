@@ -95,13 +95,20 @@ class thinkStep extends wg
 
     protected function build(): wg
     {
+        global $lang;
+        $actions = array(array(
+            'text'    => $lang->thinkmodel->save,
+            'btnType' => 'submit',
+            'class'   => 'primary h-7 ring-0 submit-btn px-4'
+        ));
+        
         return formPanel
         (
             setClass('think-step-panel'),
             set::bodyClass('think-step-form'),
             $this->prop('submitUrl') ? set::url($this->prop('submitUrl')) : null,
             set::grid(false),
-            set::actions(array()),
+            set::actions($actions),
             $this->buildBody()
         );
     }
