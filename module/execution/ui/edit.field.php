@@ -86,14 +86,12 @@ $fields->field('name')
     ->value(data('execution.name'))
     ->wrapAfter(empty($config->setCode) && $project->model == 'ipd');
 
-if(!empty($config->setCode))
-{
-    $fields->field('code')
-        ->label($lang->execution->code)
-        ->value(data('execution.code'))
-        ->required(in_array('code', explode(',', $config->execution->edit->requiredFields)))
-        ->width('1/4');
-}
+$fields->field('code')
+       ->label($lang->execution->code)
+       ->value(data('execution.code'))
+       ->hidden(empty($config->setCode))
+       ->required(in_array('code', explode(',', $config->execution->edit->requiredFields)))
+       ->width('1/4');
 
 if($project && $project->model != 'ipd')
 {
