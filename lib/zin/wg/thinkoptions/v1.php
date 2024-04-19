@@ -28,7 +28,7 @@ class thinkOptions extends wg
     protected static array $defineProps = array
     (
         'id?: string="$GID"',               // 组件根元素的 ID。
-        'name?: string="fields"',          // 步骤输入框作为表单项的名称。
+        'name?: string="fields"',           // 步骤输入框作为表单项的名称。
         'data?: array',                     // 默认值。
         'stepText?: string',                // 步骤文本。
         'sameLevelText?: string',           // 同级文本。
@@ -36,7 +36,7 @@ class thinkOptions extends wg
         'deleteStepTip?: string',           // 有子层级禁用删除提示。
         'dragNestedTip?: string',           // 拖拽超出提示。
         'enableOther?: boolean=true',       // 是否展示启用其他。
-        'otherName?: string="enableOther"',               // 启用其他的 name。
+        'otherName?: string="enableOther"', // 启用其他的 name。
     );
 
     public static function getPageJS(): ?string
