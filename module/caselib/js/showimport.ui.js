@@ -12,7 +12,7 @@ window.handleRenderRow = function($row, index, row)
     let stepDesc   = "<input class='hidden' type='text' name='lib[" + row.id + "]' value='" + libID + "'/>";
     let stepExpect = '';
 
-    let currentKey = index + 1;
+    let currentKey = row.id != undefined ? row.id :index + 1;
     const descs  = stepData[currentKey]['desc'];
     const expect = stepData[currentKey]['expect'];
     if(descs.length)
