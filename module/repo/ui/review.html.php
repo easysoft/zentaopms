@@ -30,7 +30,7 @@ foreach($bugs as $bug)
     if(empty($bug->v1))
     {
         $bug->v2   = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
-        $revision  = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, zget($historys, $bug->v2)) : $bug->v2;
+        $revision  = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, (int)zget($historys, $bug->v2)) : $bug->v2;
         $bug->link = $this->repo->createLink('view', "repoID=$repoID&objectID={$objectID}&entry={$bug->entry}&revision={$bug->v2}") . "#L$lines[0]";
     }
     else
@@ -48,6 +48,7 @@ $bugs = initTableData($bugs, $config->repo->reviewDtable->fieldList);
 
 \zin\featureBar
 (
+    set::current($browseType),
     set::linkParams("repoID={$repoID}&browseType={key}&objectID={$objectID}")
 );
 
