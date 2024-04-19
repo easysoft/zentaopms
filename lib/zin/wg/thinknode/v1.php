@@ -27,22 +27,33 @@ class thinkNode  extends wg
         else
         {
             $item->options = null;
-            $isEdit        = $status === 'edit' ? true : false;
+            $isEdit = $status === 'edit' ? true : false;
 
-            if($item->type == 'transition' || $addType == 'transition') return thinkTransition
+            if($addType == 'transition' || $item->type == 'transition') return thinkTransition
             (
-                set::title($item->title),
-                set::desc($item->desc),
+                set::title($isEdit ? $item->title : ''),
+                set::desc($isEdit ? $item->desc: ''),
             );
             if($item->type == 'question' || $addType)
             {
-                if($addType == 'radio') return thinkRadio
+                if($addType == 'radio' || $item->questionType == 'radio') return thinkRadio
                 (
-                    set::data(empty($item->fields) ? array() : $item->fields),
+                    set::data(!$isEdit ? array() : explode(', ', $item->fields)),
+                    set::title($isEdit ? $item->title : ''),
+                    set::desc($isEdit ? $item->desc : ''),
+                    set::enableOther($isEdit ? $item->enableOther : false),
                 );
-                if($addType == 'checkbox') return thinkCheckbox(set($this->getRestProps()));
+                if($addType == 'checkbox' || $item->questionType == 'checkbox') return thinkCheckbox
+                (
+                    set::data(!$isEdit ? array() : explode(', ', $item->fields)),
+                    set::title($isEdit ? $item->title : ''),
+                    set::desc($isEdit ? $item->desc : ''),
+                    set::enableOther($isEdit ? $item->enableOther : false),
+                    set::minCount($isEdit ? $item->minCount : ''),
+                    set::maxCount($isEdit ? $item->maxCount : ''),
+                );
             }
-            return thinkStep
+            if($isEdit) return thinkStep
             (
                 set::type($item->type),
                 set::title($item->title),

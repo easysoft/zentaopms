@@ -14,7 +14,7 @@ namespace zin;
 require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
 
 /**
- * 思引师选项（thinkOptions）部件类
+ * 思引师选项部件类
  * The thinkOptions widget class
  */
 class thinkOptions extends wg
