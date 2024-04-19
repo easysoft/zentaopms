@@ -26,6 +26,7 @@ class thinkNode  extends wg
         else
         {
             $item->options = null;
+            $isEdit        = $status === 'edit' ? true : false;
 
             if($item->type == 'question')
             {
@@ -36,12 +37,13 @@ class thinkNode  extends wg
                 );
                 if($questionType == 'checkbox') return thinkCheckbox(set($this->getRestProps()));
             }
-
             return thinkStep
             (
                 set::type($item->type),
                 set::title($item->title),
+                set::isEdit($isEdit),
                 set::desc($item->desc),
+                set::stepID($item->id)
             );
         }
     }
