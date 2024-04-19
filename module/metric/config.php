@@ -33,6 +33,11 @@ $config->metric->actionList['delete']['url']          = helper::createLink('metr
 $config->metric->actionList['delete']['class']        = 'ajax-submit';
 $config->metric->actionList['delete']['data-confirm'] = $lang->metric->confirmDelete;
 
+$config->metric->actionList['recalculate']['icon'] = 'refresh';
+$config->metric->actionList['recalculate']['text'] = $lang->metric->recalculate;
+$config->metric->actionList['recalculate']['hint'] = $lang->metric->recalculateBtnText;
+$config->metric->actionList['recalculate']['url']  = 'javascript:confirmRecalculate("single", "{code}")';
+
 $config->metric->necessaryMethodList = array('getStatement', 'calculate', 'getResult');
 
 $config->metric->oldScopeMap = array();

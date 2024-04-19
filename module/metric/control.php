@@ -159,6 +159,126 @@ class metric extends control
     }
 
     /**
+     * 计算一个度量项的历史数据。
+     * Update history metric lib of single metric.
+     *
+     * @param  string $code
+     * @param  string $date
+     * @param  string $calcType
+     * @access public
+     * @return void
+     */
+    public function ajaxUpdateSingleMetricLib($code, $date, $calcType)
+    {
+        $date = str_replace('_', '-', $date);
+        $dateType = $this->metric->getDateTypeByCode($code);
+
+        if($calcType == 'inference') $isCalcByCron = $this->metric->isCalcByCron($code, $date, $dateType);
+
+        if($calcType == 'all' || !$isCalcByCron)
+        {
+            $calc   = $this->metric->calculateMetricByCode($code);
+            $record = $this->metricZen->getRecordByCodeAndDate($code, $calc, $date);
+
+            $records = array();
+            $records[$code] = $record;
+            $this->metric->insertMetricLib($records, 'inference');
+        }
+    }
+
+    /**
+     * 计算历史数据。
+     * Update metric lib of history.
+     *
+     * @param  string $date
+     * @param  string $calcType
+     * @access public
+     * @return void
+     */
+    public function ajaxUpdateHistoryMetricLib($date, $calcType)
+    {
+        $date = str_replace('_', '-', $date);
+        $calcList = $this->metric->getCalcInstanceList();
+
+        $classifiedCalcGroup = json_decode(file_get_contents($this->app->getTmpRoot() . 'calc'));
+
+        $records = array();
+        foreach($classifiedCalcGroup as $calcGroup)
+        {
+            foreach($calcGroup->calcList as $code => $calc)
+            {
+                if($calcType == 'inference')
+                {
+                    $dateType = $this->metric->getDateTypeByCode($code);
+                    if($dateType == 'nodate') continue;
+
+                    $isCalcByCron = $this->metric->isCalcByCron($code, $date, $dateType);
+                    if($isCalcByCron) continue;
+                }
+
+                $calcObj = $calcList[$code];
+                $calcObj->result = json_decode(json_encode($calc->result), true);
+                $inferenceRecord = $this->metricZen->getRecordByCodeAndDate($code, $calcObj, $date);
+                if(!empty($inferenceRecord)) $records[$code] = $inferenceRecord;
+            }
+        }
+        $this->metric->insertMetricLib($records, 'inference');
+    }
+
+    /**
+     * 保存计算后的度量项对象。
+     * Save calculated metric to file.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveCalculatedMetrics()
+    {
+        $calcList            = $this->metric->getCalcInstanceList();
+        $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
+
+        foreach($classifiedCalcGroup as $calcGroup)
+        {
+            if($this->config->edition == 'open' and in_array($calcGroup->dataset, array('getFeedbacks', 'getIssues', 'getRisks'))) continue;
+            if($this->config->edition == 'biz' and in_array($calcGroup->dataset, array('getIssues', 'getRisks'))) continue;
+
+            try
+            {
+                $statement = $this->metricZen->prepareDataset($calcGroup);
+                if(empty($statement)) continue;
+
+                $rows = $statement->fetchAll();
+                $this->metricZen->calcMetric($rows, $calcGroup->calcList);
+
+                foreach($calcGroup->calcList as $calc) $calc->setDAO(null);
+            }
+            catch(Exception $e)
+            {
+                a($this->metricZen->formatException($e));
+            }
+            catch(Error $e)
+            {
+                a($this->metricZen->formatException($e));
+            }
+        }
+
+        file_put_contents($this->app->getTmpRoot() . 'calc', json_encode($classifiedCalcGroup));
+    }
+
+    /**
+     * 删除重复度量库数据。
+     * Delete duplication record in metric data.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxDeduplicateRecord()
+    {
+        $metrics = $this->metric->getExecutableMetric();
+        foreach($metrics as $code) $this->metric->deduplication($code);
+    }
+
+    /**
      * 计算度量项。
      * Execute metric.
      *
@@ -360,6 +480,50 @@ class metric extends control
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $allResultData);
         $this->view->noDataTip     = $this->metric->getNoDataTip($metric->code);
 
+        $this->display();
+    }
+
+    /**
+     * 重算度量项历史数据。
+     * Recalculate metric history data.
+     *
+     * @param  string $calcRange all|single
+     * @param  string $code
+     * @access public
+     * @return string
+     */
+    public function recalculateSetting($calcRange= 'all', $code = '')
+    {
+        $this->view->calcRange = $calcRange;
+        $this->view->code      = $code;
+        $this->display();
+    }
+
+    /**
+     * 重算度量项进度。
+     * Show recalculate progress.
+     *
+     * @param  string $calcType  all|inference
+     * @param  string $calcRange all|single
+     * @param  string $code
+     * @access public
+     * @return string
+     */
+    public function recalculate($calcType, $calcRange = 'all', $code = '')
+    {
+        $metric   = !empty($code) ? $this->metric->getByCode($code) : '';
+        $dateType = !empty($code) ? $this->metric->getDateTypeByCode($code) : '';
+
+        $startDate = $this->metric->getInstallDate();
+        $endDate   = helper::now();
+
+        $this->view->code      = $code;
+        $this->view->metric    = $metric;
+        $this->view->dateType  = $dateType;
+        $this->view->calcType  = $calcType;
+        $this->view->calcRange = $calcRange;
+        $this->view->startDate = substr($startDate, 0, 10);
+        $this->view->endDate   = substr($endDate, 0, 10);
         $this->display();
     }
 
