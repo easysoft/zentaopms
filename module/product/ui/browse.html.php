@@ -48,7 +48,7 @@ $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branch
             set::activeKey($isProjectStory && empty($param) && !empty($productID) && count($projectProducts) > 1 ? $productID : $moduleID),
             set::closeLink(helper::createLink($app->rawModule, $app->rawMethod, http_build_query($params))),
             $productID ? set::settingLink(helper::createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID")) : null,
-            set::settingApp($isProjectStory ? 'project' : 'product')
+            set::settingApp($isProjectStory && !$projectHasProduct ? 'project' : 'product')
         )
     );
 };
