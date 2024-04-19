@@ -1,5 +1,7 @@
-#modelList .model-block {flex: 1 1 30%; padding: 20px;}
+#modelList .model-block {flex: 1 1 30%;}
 #modelList .model-block .border {border-radius: 4px;}
 
 #modelList .model-block.more-model {min-height: 220px;}
 #modelList .model-block.more-model .border {line-height: 136px;}
+
+.modal .modal-dialog .modal-body {padding-bottom: 1rem;}
