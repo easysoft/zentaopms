@@ -85,7 +85,7 @@ if($repo->SCM != 'Subversion')
     (
         setID('source'),
         set::objectID($objectID),
-        set::text($oldRevision),
+        set::text(substr($oldRevision, 0, 10)),
         set::data(array('data' => $menuData, 'tabs' => $tabs))
     );
     $breadcrumbItems[] = span(setClass('label label-exchange mr-2'), icon('exchange'));
@@ -94,7 +94,7 @@ if($repo->SCM != 'Subversion')
     (
         setID('target'),
         set::objectID($objectID),
-        set::text($newRevision),
+        set::text(substr($newRevision, 0, 10)),
         set::data(array('data' => $menuData, 'tabs' => $tabs))
     );
     $breadcrumbItems[] = btn
