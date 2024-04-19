@@ -55,7 +55,7 @@ class thinkStepDetail extends wg
             div
             (
                 setClass('text-sm leading-6'),
-                setStyle(array('padding' => '0 48px')),
+                setStyle(array('padding' => '0 48px', 'color' => '#9EA3B0', 'font-size' => '12px', 'margin-top' => '-30px')),
                 section
                 (
                     set::content($desc),
