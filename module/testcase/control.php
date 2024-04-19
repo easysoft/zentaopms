@@ -266,7 +266,7 @@ class testcase extends control
         $productID = $this->product->checkAccess($productID, $this->products);
         if($branch === '') $branch = $this->cookie->preBranch ? : '';
 
-        $moduleID = $this->testcaseZen->assignCreateVars($productID, $branch, $moduleID, $from, $param, $storyID);
+        $this->testcaseZen->assignCreateVars($productID, $branch, $moduleID, $from, $param, $storyID);
 
         /* 设置自定义字段。 */
         /* Set custom fields. */
