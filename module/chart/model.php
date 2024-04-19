@@ -345,6 +345,7 @@ class chartModel extends model
 
         /* 若查询结果大于50条，将50条之后的结果归于其他。*/
         /* If the query results are greater than 50, the results after 50 will be classified as other. */
+        $maxCount = 50;
         if(count($stat) > $maxCount)
         {
             $other = array_sum(array_slice($stat, $maxCount));
