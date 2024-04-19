@@ -377,10 +377,12 @@ class storyModel extends model
      * @param  array|string|int $moduleIdList
      * @param  string           $type         full|short
      * @param  string           $status       all|noclosed|changing|active|draft|closed|reviewing
+     * @param  string           $storyType    story|epic|requirement
+     * @param  bool             $hasParent
      * @access public
      * @return array
      */
-    public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $type = 'full', string $status = 'all'): array
+    public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string $type = 'full', string $status = 'all', $storyType = '', $hasParent = true): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStoryPairs();
 
@@ -389,6 +391,8 @@ class storyModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq($executionID)
+            ->beginIF($storyType)->andWhere('t2.type')->in($storyType)->fi()
+            ->beginIF(!$hasParent)->andWhere('t2.isParent')->eq('0')->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($branch !== 'all')->andWhere('t2.branch')->in("0,$branch")->fi()
@@ -2243,7 +2247,7 @@ class storyModel extends model
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
-            ->beginIF(!$hasParent or $hasParent == 'false')->andWhere('t1.parent')->ge(0)->fi()
+            ->beginIF(!$hasParent or $hasParent == 'false')->andWhere('t1.isParent')->eq('0')->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF($type != 'full' || $type != 'all')->andWhere('t1.type')->eq($storyType)->fi()
             ->andWhere('t1.deleted')->eq('0')

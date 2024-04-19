@@ -1431,7 +1431,7 @@ class story extends control
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
 
-        $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type, $status);
+        $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type, $status, 'story', false);
 
         if($this->app->getViewType() === 'json')
         {

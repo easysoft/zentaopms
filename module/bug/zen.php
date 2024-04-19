@@ -1140,7 +1140,7 @@ class bugZen extends bug
 
         if($executionID)
         {
-            $stories = $this->story->getExecutionStoryPairs($executionID);
+            $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'all', 'story', false);
         }
         else
         {
@@ -1330,10 +1330,19 @@ class bugZen extends bug
 
         $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bug->id}");
 
+        if($bug->execution)
+        {
+            $stories = $this->story->getExecutionStoryPairs($bug->execution, 0, 'all', '', 'full', 'all', 'story', false);
+        }
+        else
+        {
+            $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active,closed', 'id_desc', 0, 'full', 'story', false);
+        }
+
         $this->view->openedBuilds   = $openedBuilds;
         $this->view->resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
         $this->view->plans          = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
-        $this->view->stories        = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
+        $this->view->stories        = $stories;
         $this->view->tasks          = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks      = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->cases          = $cases;
