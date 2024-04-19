@@ -53,7 +53,10 @@ formPanel
             set::label($lang->jenkins->token),
             set::value($jenkins->token),
             set::placeholder($lang->jenkins->tokenFirst),
-            set::control('textarea')
+            set::control(array(
+                'type' => 'textarea',
+                'rows' => 4
+            ))
         )
     ),
     formRow

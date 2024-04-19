@@ -228,7 +228,10 @@ formPanel
             set::name('token'),
             set::placeholder($lang->gitlab->placeholder->token),
             set::required(true),
-            set::control('textarea')
+            set::control(array(
+                'type' => 'textarea',
+                'rows' => 4
+            ))
         )
     ),
     formRow
