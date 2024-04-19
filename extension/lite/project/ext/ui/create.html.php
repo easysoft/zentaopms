@@ -156,10 +156,17 @@ $toggleActiveProject = jsCallback()->do(<<<'JS'
     }
 JS
 );
+<<<<<<< Updated upstream
 $copySelectedProject = jsCallback()->const('model', $model)->do(<<<'JS'
     const copyProjectID = $('#copyProjects button.project-block.primary-outline').length == 1 ? $('#copyProjects button.project-block.primary-outline').data('id') : 0;
     const programID     = $('[name=parent]').val();
     loadPage($.createLink('project', 'create', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + copyProjectID));
+=======
+
+$copySelectedProject = jsCallback()->const('model', $model)->do(<<<'JS'
+    const copyProjectID = $('#copyProjects button.project-block.primary-outline').length == 1 ? $('#copyProjects button.project-block.primary-outline').data('id') : 0;
+    loadPage($.createLink('project', 'create', 'model=' + model + '&programID=0' + '&copyProjectID=' + copyProjectID));
+>>>>>>> Stashed changes
     zui.Modal.hide();
 JS
 );
@@ -172,7 +179,15 @@ foreach($copyProjects as $id => $name)
         setClass($copyProjectID == $id ? 'primary-outline' : ''),
         set('data-id', $id),
         set('data-pinyin', zget($copyPinyinList, $name, '')),
+<<<<<<< Updated upstream
         icon(setClass('text-gray'), !empty($model) ? ($model == 'scrum' ? 'sprint' : $model) : $lang->icons['project']),
+=======
+        icon
+        (
+            setClass('text-gray'),
+            $lang->icons['project']
+        ),
+>>>>>>> Stashed changes
         on::click($toggleActiveProject),
         span($name, set::title($name), setClass('text-left'))
     );
@@ -232,6 +247,20 @@ modalTrigger
             set::id('copyProjects'),
             setClass('flex items-center flex-wrap gap-4'),
             $copyProjectsBox
+        ),
+        to::footer
+        (
+            div
+            (
+                setClass('flex mt-4 w-full justify-center'),
+                btn
+                (
+                    setClass('px-6'),
+                    set::type('primary'),
+                    on::click($copySelectedProject),
+                    $lang->confirm
+                )
+            )
         )
     )
 );
