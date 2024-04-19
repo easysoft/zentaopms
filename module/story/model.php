@@ -47,7 +47,7 @@ class storyModel extends model
         /* Get relation story ID.*/
         $story->relationStoryID = $this->getRelationStoryID($story->id, $story->type);
 
-        $storyIdList = $storyID . ",{$story->relationStoryID}" . ($story->twins ? "," . trim($story->twins, ',') : '');
+        $storyIdList = $storyID . ($story->relationStoryID ? "," . trim($story->relationStoryID, ',') : '') . ($story->twins ? "," . trim($story->twins, ',') : '');
         $story->executions = $this->dao->select('t1.project, t2.id, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
