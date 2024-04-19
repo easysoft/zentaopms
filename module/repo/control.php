@@ -1409,7 +1409,7 @@ class repo extends control
         $options[] = array('text' => '', 'value' => '');;
         foreach($projects as $project)
         {
-            if(in_array($project->full_name, array_keys($importedProjects))) continue;
+            if(in_array($project->full_name, $importedProjects)) continue;
             $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
         }
         return print(json_encode($options));
@@ -1433,7 +1433,7 @@ class repo extends control
         $options[] = array('text' => '', 'value' => '');;
         foreach($projects as $project)
         {
-            if(in_array($project->full_name, array_keys($importedProjects))) continue;
+            if(in_array($project->full_name, $importedProjects)) continue;
             $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
         }
         return print(json_encode($options));
