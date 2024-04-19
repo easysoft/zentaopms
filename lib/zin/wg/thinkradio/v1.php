@@ -13,31 +13,40 @@ class thinkRadio extends thinkStep
     protected static array $defineProps = array
     (
         'requiredName?: string="required"',
-        'requiredItems?: array',
         'optionName?: string',
         'otherName?: string',
+        'required?: int=1',
+        'enableOther?: bool',
+    );
+
+    protected static array $defaultProps = array
+    (
+        'type' => 'radio'
     );
 
     protected function buildBody(): array
     {
+        global $lang;
         $items = parent::buildBody();
 
-        list($requiredItems, $requiredName, $optionName, $otherName, $type) = $this->prop(array('requiredItems', 'requiredName', 'optionName', 'otherName', 'type'));
-        if(!empty($requiredItems)) $items[] = formGroup
+        list($requiredName, $optionName, $otherName, $required, $enableOther) = $this->prop(array('requiredName', 'optionName', 'otherName', 'required', 'enableOther'));
+        $requiredItems = $lang->thinkwizard->step->requiredList;
+
+        $items[] = formGroup
         (
             set::label(data('lang.thinkwizard.step.label.required')),
             radioList
             (
                 set::name($requiredName),
                 set::inline(true),
-                set::value(1),
+                set::value($required),
                 set::items($requiredItems),
             )
         );
         $items[] = formGroup
         (
             set::label(data('lang.thinkwizard.step.label.option')),
-            thinkOptions(set::name($optionName), set::otherName($otherName)),
+            thinkOptions(set::name($optionName), set::otherName($otherName), set::enableOther($enableOther)),
         );
         $items[] = $this->children();
         return $items;
