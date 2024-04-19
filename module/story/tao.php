@@ -1107,8 +1107,8 @@ class storyTao extends storyModel
 
         if(!in_array($story->status, array('launched', 'developing', 'active'))) return false;
         if($story->isParent == '1') return true;
-        if(!$isShadowProduct && $story->stage != 'wait')                         return false;
-        if($isShadowProduct && $story->stage != 'projected')                     return false;
+        if(!$isShadowProduct && !in_array($story->stage, array('wait', 'planned', 'projected'))) return false;
+        if($isShadowProduct && $story->stage != 'projected') return false;
 
         return true;
     }

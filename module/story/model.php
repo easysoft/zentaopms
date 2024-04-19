@@ -3632,9 +3632,8 @@ class storyModel extends model
         {
             if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
 
-            if($story->status != 'active' || (!empty($story->plan) && $story->type == 'story')) return false;
             if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]) || $story->stage != 'projected')) return false;
-            if(!isset($shadowProducts[$story->product]) && $story->stage != 'wait' && $story->type == 'story' && $story->isParent == '0') return false;
+            if(!isset($shadowProducts[$story->product]) && !in_array($story->stage, array('wait', 'planned', 'projected')) && $story->type == 'story' && $story->isParent == '0') return false;
         }
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
