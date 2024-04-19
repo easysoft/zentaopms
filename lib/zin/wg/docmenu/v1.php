@@ -390,6 +390,7 @@ class docMenu extends wg
                 'key'  => 'editNode',
                 'icon' => 'edit',
                 'text' => $this->lang->thinkwizard->designer->treeDropdown['editNode'],
+                'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=edit")
             ),
             !isset($item->cannotDelete) || !$item->cannotDelete ? array(
                 'key'          => 'deleteNode',
@@ -412,6 +413,7 @@ class docMenu extends wg
                 'key'  => 'addTransition',
                 'icon' => 'transition',
                 'text' => $this->lang->thinkwizard->designer->treeDropdown['addTransition'],
+                'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=transition")
             ),
         ));
         if(($item->type == 'question') || ($item->grade == 2 && $item->type !== 'question'))
@@ -422,21 +424,25 @@ class docMenu extends wg
                     'key'  => 'addRadio',
                     'icon' => 'radio',
                     'text' => $this->lang->thinkwizard->designer->treeDropdown['addRadio'],
+                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=radio")
                 ),
                 array(
                     'key'  => 'addCheckbox',
                     'icon' => 'checkbox',
                     'text' => $this->lang->thinkwizard->designer->treeDropdown['addCheckbox'],
+                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=checkbox")
                 ),
                 array(
                     'key'  => 'addInput',
                     'icon' => 'input',
                     'text' => $this->lang->thinkwizard->designer->treeDropdown['addInput'],
+                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=input")
                 ),
                 array(
                     'key'  => 'addTableInput',
                     'icon' => 'cell-input',
                     'text' => $this->lang->thinkwizard->designer->treeDropdown['addTableInput'],
+                    'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=tableInput")
                 ),
             ));
         }
