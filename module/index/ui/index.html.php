@@ -28,7 +28,7 @@ jsVar('appsItems',   $appsItems);
 jsVar('defaultOpen', !empty($open) ? $open : '');
 jsVar('manualText',  $lang->manual);
 jsVar('manualUrl',   ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
-jsVar('lang',        array_merge(array('search' => $lang->index->search, 'searchAB' => $lang->searchAB), (array)$lang->index->dock));
+jsVar('langData',     array_merge(array('search' => $lang->index->search, 'searchAB' => $lang->searchAB), (array)$lang->index->dock));
 jsVar('browserMessage', $browserMessage);
 jsVar('pollTime',    (!empty($config->message->browser->turnon) && isset($config->message->browser->pollTime)) ? $config->message->browser->pollTime : 600);
 jsVar('turnon',      empty($config->message->browser->turnon) ? 0 : 1);
