@@ -5062,7 +5062,7 @@ class storyModel extends model
             $storyTitle = is_string($stories[$story->id]) ? $stories[$story->id] : $story->title;
             if(isset($gradePairs[$story->grade]))
             {
-                $options[] = array('text' => array('html' => "<span class='label gray-pale rounded-xl'>{$gradePairs[$story->grade]->name}</span> {$storyTitle}"), 'value' => $story->id);
+                $options[] = array('text' => array('html' => "<span class='label gray-pale rounded-xl text-inherit'>{$gradePairs[$story->grade]->name}</span> {$storyTitle}"), 'value' => $story->id);
             }
             else
             {
