@@ -834,6 +834,18 @@ class metricModel extends model
     }
 
     /**
+     * 重建主键顺序。
+     * Rebuild primary key order.
+     *
+     * @access public
+     * @return void
+     */
+    public function rebuildPrimaryKey()
+    {
+        $this->metricTao->rebuildIdColumn();
+    }
+
+    /**
      * 根据度量项收集周期来清理过期的度量库数据。
      * Clear outdated metric records by cycle.
      *
