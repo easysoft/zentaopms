@@ -184,7 +184,7 @@ class file extends control
                 $output .= '"';
                 foreach($fields as $fieldName => $fieldLabel)
                 {
-                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;'), array('“', ' '), htmlspecialchars_decode(strip_tags((string)$row->$fieldName, '<img>'))) : '';
+                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;'), array('“', ' '), htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>'))) : '';
                     $output .= '","';
                 }
                 $output .= '"' . "\n";
@@ -218,7 +218,7 @@ class file extends control
             $output .= "  <row>\n";
             foreach($fields as $fieldName => $fieldLabel)
             {
-                $fieldValue = isset($row->$fieldName) ? htmlSpecialString($row->$fieldName) : '';
+                $fieldValue = isset($row->$fieldName) ? htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>')) : '';
                 $output    .= "    <$fieldName>$fieldValue</$fieldName>\n";
             }
             $output .= "  </row>\n";
