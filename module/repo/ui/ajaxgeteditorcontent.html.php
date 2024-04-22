@@ -81,7 +81,8 @@ else
         set::id('codeContainer'),
         set::options($options),
         set::action($type == 'diff' ? 'diff' : 'create'),
-        $type == 'diff' ? set::diffContent(jsRaw('parent.getDiffs(filePath)')) : null
+        $type == 'diff' ? set::diffContent(jsRaw('parent.getDiffs(filePath)')) : null,
+        set::onMouseDown('window.onMouseDown')
     );
 }
 
