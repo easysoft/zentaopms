@@ -595,6 +595,13 @@ define('TABLE_AI_MODEL',            '`' . $config->db->prefix . 'ai_model`');
 
 define('TABLE_SQLITE_QUEUE', '`' . $config->db->prefix . 'sqlite_queue`');
 
+if(!defined('TABLE_ROADMAP'))        define('TABLE_ROADMAP',        '`' . $config->db->prefix . 'roadmap`');
+if(!defined('TABLE_ROADMAPSTORY'))   define('TABLE_ROADMAPSTORY',   '`' . $config->db->prefix . 'roadmapstory`');
+if(!defined('TABLE_CHARTER'))        define('TABLE_CHARTER',        '`' . $config->db->prefix . 'charter`');
+if(!defined('TABLE_MARKET'))         define('TABLE_MARKET',         '`' . $config->db->prefix . 'market`');
+if(!defined('TABLE_MARKETREPORT'))   define('TABLE_MARKETREPORT',   '`' . $config->db->prefix . 'marketreport`');
+if(!defined('TABLE_MARKETRESEARCH')) define('TABLE_MARKETRESEARCH', '`' . $config->db->prefix . 'project`');
+
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
 $config->objectTables['productplan']    = TABLE_PRODUCTPLAN;
