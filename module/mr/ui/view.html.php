@@ -151,6 +151,16 @@ panel
                 setClass('nav-item'),
                 a
                 (
+                    $lang->mr->commitLogs,
+                    set::href(inlink('commitlogs', "MRID={$MR->id}")),
+                    set('data-app', $app->tab)
+                )
+            ),
+            li
+            (
+                setClass('nav-item'),
+                a
+                (
                     $lang->mr->viewDiff,
                     set::href(inlink('diff', "MRID={$MR->id}")),
                     set('data-app', $app->tab)
