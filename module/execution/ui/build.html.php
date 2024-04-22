@@ -44,7 +44,11 @@ jsVar('filePathTip', $lang->build->filePath);
 jsVar('confirmDelete', $lang->build->confirmDelete);
 
 $fieldList = $config->build->dtable->fieldList;
-if($execution->type == 'kanban') unset($fieldList['actions']['list']['createTest']['data-app']);
+if($execution->type == 'kanban')
+{
+    unset($fieldList['actions']['list']['createTest']['data-app']);
+    $fieldList['actions']['list']['viewBug']['url'] = $config->build->actionList['bugList']['url'];
+}
 $builds = initTableData($builds, $fieldList, $this->build);
 
 dtable

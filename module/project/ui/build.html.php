@@ -49,7 +49,11 @@ jsVar('integratedTip', $lang->build->integrated);
 jsVar('deletedTip', $lang->build->deleted);
 
 $fieldList = $config->build->dtable->fieldList;
-if($project->model == 'kanban' && $this->app->rawModule == 'projectbuild') unset($fieldList['actions']['actionsMap']['createTest']['data-app']);
+if($project->model == 'kanban' && $this->app->rawModule == 'projectbuild')
+{
+    unset($fieldList['actions']['list']['createTest']['data-app']);
+    $fieldList['actions']['list']['viewBug']['url'] = $config->build->actionList['projectBugList']['url'];
+}
 $builds = initTableData($builds, $fieldList, $app->control->build);
 
 dtable
