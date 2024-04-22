@@ -12,5 +12,5 @@ $config->task->dtable->fieldList['lane']['sortType'] = false;
 $config->task->dtable->fieldList['name']['data-toggle'] = 'modal';
 $config->task->dtable->fieldList['name']['data-size']   = 'lg';
 
-$config->task->view->operateList['main']   = array('assignTo', 'start', 'restart', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
-$config->task->view->operateList['common'] = array('edit', 'delete', 'view');
+$config->task->actions->view['mainActions']   = array('assignTo', 'start', 'restart', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
+$config->task->actions->view['suffixActions'] = array('edit', 'delete', 'view');
