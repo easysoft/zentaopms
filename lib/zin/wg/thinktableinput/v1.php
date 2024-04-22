@@ -116,9 +116,9 @@ class thinkTableInput extends thinkStep
                 thinkoptions
                 (
                     set(array(
-                        'enableOther' => false,
-                        'data'        => $rowsTitle,
-                        'name'        => $rowsTitleName,
+                        'showOther' => false,
+                        'data'      => $rowsTitle,
+                        'name'      => $rowsTitleName,
                     ))
                 ),
             )

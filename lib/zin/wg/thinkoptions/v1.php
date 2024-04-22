@@ -35,7 +35,8 @@ class thinkOptions extends wg
         'expectDisabledTip?: string',       // 预期输入框禁用提示。
         'deleteStepTip?: string',           // 有子层级禁用删除提示。
         'dragNestedTip?: string',           // 拖拽超出提示。
-        'enableOther?: bool=false',       // 是否展示启用其他。
+        'showOther?: bool=true',            // 是否展示启用其他。
+        'enableOther?: bool=false',         // 是否启用其他。
         'otherName?: string="enableOther"', // 启用其他的 name。
     );
 
@@ -62,7 +63,7 @@ class thinkOptions extends wg
         $deleteStepTip     = $this->prop('deleteStepTip', data('lang.testcase.deleteStepTip'));
         $dragNestedTip     = $this->prop('dragNestedTip', data('lang.testcase.dragNestedTip'));
 
-        list($enableOther, $otherName) = $this->prop(array('enableOther', 'otherName'));
+        list($enableOther, $otherName, $showOther) = $this->prop(array('enableOther', 'otherName', 'showOther'));
 
         return div
         (
@@ -81,7 +82,7 @@ class thinkOptions extends wg
                 set::enterPlaceholder(data('lang.thinkwizard.step.pleaseInput')),
                 set($this->props->pick(array('name', 'data')))
             ),
-            div
+            $showOther ? div
             (
                 setClass('w-full flex justify-between items-center h-8 px-2.5 rounded mt-1'),
                 setStyle(array('background' => 'rgba(242, 244, 247, .7)', '--tw-ring-color' => 'rgba(var(--color-gray-300-rgb), .7)', 'box-shadow' => 'var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)')),
@@ -97,7 +98,7 @@ class thinkOptions extends wg
                     set::checked($enableOther),
                     set::text(data('lang.thinkwizard.step.enable'))
                 ),
-            )
+            ) : null
         );
     }
 }
