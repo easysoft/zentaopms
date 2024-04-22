@@ -9,17 +9,13 @@ class monaco extends wg
         'action?:string',
         'options?:array',
         'diffContent?:array',
-        'onMouseDown?:string',
-        'onMouseMouse?:string',
         'selectedLines?:string'
     );
 
     protected static array $defaultProps = array(
-        'action'  => 'create',
-        'options' => array(),
-        'diffContent' => array(),
-        'onMouseDown' => '',
-        'onMouseMouse' => ''
+        'action'      => 'create',
+        'options'     => array(),
+        'diffContent' => array()
     );
     public static function getPageJS(): ?string
     {
@@ -35,8 +31,6 @@ class monaco extends wg
         $action        = $this->prop('action');
         $options       = $this->prop('options');
         $diffContent   = $this->prop('diffContent');
-        $onMouseDown   = $this->prop('onMouseDown');
-        $onMouseMove   = $this->prop('onMouseMove');
         $selectedLines = $this->prop('selectedLines');
 
         if(!$options) $options = new stdclass();
@@ -46,8 +40,6 @@ class monaco extends wg
             jsVar('action', $action),
             jsVar('options', $options),
             jsVar('diffContent', !$diffContent ? new stdclass() : $diffContent),
-            jsVar('onMouseDown', $onMouseDown),
-            jsVar('onMouseMove', $onMouseMove),
             jsVar('vsPath', $vsPath),
             jsVar('clientLang', $clientLang),
             jsVar('selectedLines', $selectedLines),
