@@ -100,8 +100,11 @@ class thinkNode  extends wg
 
     protected function build(): wg|array
     {
-        list($item, $status) = $this->prop(array('item', 'status'));
+        global $lang;
+        list($item, $status, $addType) = $this->prop(array('item', 'status', 'addType'));
         if(!$item) return array();
+
+        $title = isset($item->id) && !$addType ? ($item->type == 'question' ? $lang->thinkwizard->step->editTitle[$item->questionType] : $lang->thinkwizard->step->editTitle[$item->type]) : $lang->thinkwizard->step->addTitle[$addType];
 
         return array(
             div
@@ -115,7 +118,7 @@ class thinkNode  extends wg
                         div
                         (
                             setClass('font-medium'),
-                            data('lang.thinkwizard.step.nodeInfo'),
+                            $title
                         )
                     ),
                     h::hr()
