@@ -37,6 +37,7 @@ $lang->mr->changes     = '更改數';
 $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = '版本庫';
 $lang->mr->jobID       = '構建任務';
+$lang->mr->commitLogs  = '提交記錄';
 
 $lang->mr->canMerge  = "可合併";
 $lang->mr->cantMerge = "不可合併";

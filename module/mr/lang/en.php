@@ -45,6 +45,7 @@ $lang->mr->changes     = 'changes';
 $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = 'Repo';
 $lang->mr->jobID       = 'Pipeline job';
+$lang->mr->commitLogs  = 'Commit Logs';
 
 $lang->mr->canMerge  = "Can be merged";
 $lang->mr->cantMerge = "Can not be merged";
