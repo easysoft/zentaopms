@@ -46,7 +46,7 @@ class thinkNode  extends wg
             $item->options = null;
             $isEdit = $status === 'edit' ? true : false;
 
-            if($addType == 'transition' || $isEdit  && $item->type == 'transition') return thinkTransition
+            if($addType == 'transition' || $isEdit && $item->type == 'transition') return thinkTransition
             (
                 set::title($isEdit ? $item->title : ''),
                 set::desc($isEdit ? $item->desc: ''),
