@@ -71,7 +71,9 @@ class gitea extends control
     {
         if($_POST)
         {
-            $gitea  = form::data($this->config->gitea->form->create)->get();
+            $gitea  = form::data($this->config->gitea->form->create)
+                ->add('createdBy', $this->app->user->acount)
+                ->get();
             $result = $this->checkToken($gitea);
             if(is_array($result)) return $this->send($result);
 
@@ -118,7 +120,9 @@ class gitea extends control
 
         if($_POST)
         {
-            $gitea  = form::data($this->config->gitea->form->edit)->get();
+            $gitea  = form::data($this->config->gitea->form->edit)
+                ->add('editedBy', $this->app->user->acount)
+                ->get();
             $result = $this->checkToken($gitea);
             if(is_array($result)) return $this->send($result);
 
