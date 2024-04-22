@@ -201,3 +201,4 @@ function thinkOptions(): thinkOptions{return createWg('thinkOptions', func_get_a
 function thinkTableInput(): thinkTableInput {return createWg('thinkTableInput', func_get_args());}
 function thinkInput(): thinkInput {return createWg('thinkInput', func_get_args());}
 function thinkStepDetail(): thinkStepDetail {return createWg('thinkStepDetail', func_get_args());}
+function thinkInputDetail(): thinkInputDetail {return createWg('thinkInputDetail', func_get_args());}
