@@ -373,34 +373,41 @@ class docMenu extends wg
 
     private function getThinkwizardMenus($item): array
     {
+        if($item->type == 'transition') return array();
+
         $menus = array();
-        if($item->grade != 3 && $item->type != 'question') $menus[] = array(
+        if($item->type == 'node') $menus[] = array(
             'key'     => 'addNode',
             'icon'    => 'add-chapter',
             'text'    => $this->lang->thinkwizard->designer->treeDropdown['addSameNode'],
             'onClick' => jsRaw("() => addStep({$item->id}, 'same')")
         );
-        if($item->grade != 2 && $item->type != 'question') $menus[] = array(
+        if($item->grade != 3 && $item->type == 'node') $menus[] = array(
             'key'     => 'addNode',
             'icon'    => 'add-sub-chapter',
             'text'    => $this->lang->thinkwizard->designer->treeDropdown['addChildNode'],
             'onClick' => jsRaw("() => addStep({$item->id}, 'child')")
         );
         $levelType = $item->type == 'question' ? 'same' : 'child';
+
+        $editTitle   = $item->type == 'question' ? $this->lang->thinkwizard->designer->treeDropdown['editQuestion'] : $this->lang->thinkwizard->designer->treeDropdown['editNode'];
+        $deleteTitle = $item->type == 'question' ? $this->lang->thinkwizard->designer->treeDropdown['deleteQuestion'] : $this->lang->thinkwizard->designer->treeDropdown['deleteNode'];
+        $confirmTips = $this->lang->thinkwizard->step->deleteTips[$item->type];
+
         $menus = array_merge($menus, array(
             array(
                 'key'  => 'editNode',
                 'icon' => 'edit',
-                'text' => $this->lang->thinkwizard->designer->treeDropdown['editNode'],
+                'text' => $editTitle,
                 'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=edit")
             ),
             !isset($item->cannotDelete) || !$item->cannotDelete ? array(
                 'key'          => 'deleteNode',
                 'icon'         => 'trash',
-                'text'         => $this->lang->thinkwizard->designer->treeDropdown['deleteNode'],
+                'text'         => $deleteTitle,
                 'innerClass'   => 'ajax-submit',
                 'data-url'     => createLink('thinkwizard', 'deleteStep', "stepID={$item->id}"),
-                'data-confirm' => $this->lang->thinkwizard->step->confirmDeleteNode
+                'data-confirm' => $confirmTips,
             ) : array(
                 'key'            => 'deleteNode',
                 'icon'           => 'trash',
@@ -418,7 +425,7 @@ class docMenu extends wg
                 'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=transition&levelType=$levelType")
             ),
         ));
-        if(($item->type == 'question') || ($item->grade == 2 && $item->type !== 'question'))
+        if(($item->type == 'question') || ($item->grade == 3 && $item->type == 'node'))
         {
             $menus = array_merge($menus, array(
                 array('type' => 'divider'),

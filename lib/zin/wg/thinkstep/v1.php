@@ -101,7 +101,7 @@ class thinkStep extends wg
             'btnType' => 'submit',
             'class'   => 'primary h-7 ring-0 submit-btn px-4'
         ));
-        
+
         return formPanel
         (
             setClass('think-step-panel'),
