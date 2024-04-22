@@ -83,7 +83,7 @@ window.handleFilterCheck = function()
 
 window.handleFilterToggle = function($el)
 {
-    $el.toggleClass('primary-600');
+    $el.toggleClass('ring-primary');
     $('.filter-panel').toggleClass('hidden');
 }
 
@@ -274,10 +274,10 @@ window.initFilterPanel = function()
 
     $('#mainMenu').after($('.filter-panel'));
 
-    $('.filter-btn').removeClass('primary-600');
+    $('.filter-btn').removeClass('ring-primary');
     if(scope == 'filter')
     {
-        $('.filter-btn').addClass('primary-600');
+        $('.filter-btn').addClass('ring-primary');
         $('.filter-panel').removeClass('hidden');
         window.updateFilterCheck();
     }
@@ -697,7 +697,7 @@ window.genDataZoom = function(dataLength, initZoom = 10, axis = 'x')
 
 window.hideFilterPanel = function()
 {
-    $('.filter-btn').removeClass('primary-600');
+    $('.filter-btn').removeClass('ring-primary');
     $('.filter-panel').addClass('hidden');
 }
 

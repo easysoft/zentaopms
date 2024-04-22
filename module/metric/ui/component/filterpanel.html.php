@@ -44,7 +44,7 @@ $fnGenerateFilterContent = function($filterItems) use($lang, $fnGenerateFilterBl
     (
         btn
         (
-            setClass('btn ghost filter-btn'),
+            setClass('search-form-toggle rounded-full gray-300-outline size-sm btn filter-btn'),
             set::icon('search'),
             bind::click('window.handleFilterToggle($element)'),
             span
