@@ -1449,8 +1449,7 @@ class story extends control
         }
         else
         {
-            $items = array();
-            foreach($stories as $storyID => $storyName) $items[] = array('text' => $storyName, 'value' => $storyID, 'keys' => $storyName);
+            $items = $this->story->addGradeLabel($stories);
             return print(json_encode($items));
         }
     }

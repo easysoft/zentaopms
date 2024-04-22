@@ -2756,24 +2756,12 @@ class storyModel extends model
             $parents = array();
             foreach($requirements as $requirement) $parents[$requirement->parent] = $requirement->parent;
 
-            $options = array();
             foreach($requirements as $id => $requirement)
             {
-                if(isset($parents[$requirement->id]))
-                {
-                    unset($requirements[$id]);
-                    continue;
-                }
-
-                if(isset($URGradePairs[$requirement->grade]))
-                {
-                    $options[] = array('value' => $requirement->id, 'text' => array('html' => '<span class="label secondary">' . $URGradePairs[$requirement->grade] . '</span> ' . $requirement->title));
-                }
-                else
-                {
-                    $options[] = array('value' => $requirement->id, 'text' => $requirement->title);
-                }
+                if(isset($parents[$requirement->id])) unset($requirements[$id]);
             }
+
+            $options = $this->addGradeLabel($requirements);
 
             $childIdList = $this->getAllChildId($storyID);
             $stories = $this->dao->select('id, grade, title')->from(TABLE_STORY)
@@ -2787,17 +2775,7 @@ class storyModel extends model
                 ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
                 ->fetchAll();
 
-            foreach($stories as $story)
-            {
-                if(isset($SRGradePairs[$story->grade]))
-                {
-                    $options[] = array('value' => $story->id, 'text' => array('html' => '<span class="label secondary">' . $SRGradePairs[$story->grade] . '</span> ' . $story->title));
-                }
-                else
-                {
-                    $options[] = array('value' => $story->id, 'text' => $story->title);
-                }
-            }
+            $options = array_merge($options, $this->addGradeLabel($stories));
 
             return $options;
         }
@@ -2838,24 +2816,12 @@ class storyModel extends model
         $parents = array();
         foreach($epics as $epic) $parents[$epic->parent] = $epic->parent;
 
-        $options = array();
         foreach($epics as $id => $epic)
         {
-            if(isset($parents[$epic->id]))
-            {
-                unset($epics[$id]);
-                continue;
-            }
-
-            if(isset($ERGradePairs[$epic->grade]))
-            {
-                $options[] = array('value' => $epic->id, 'text' => array('html' => '<span class="label secondary">' . $ERGradePairs[$epic->grade] . '</span> ' . $epic->title));
-            }
-            else
-            {
-                $options[] = array('value' => $epic->id, 'text' => $epic->title);
-            }
+            if(isset($parents[$epic->id])) unset($epics[$id]);
         }
+
+        $options = $this->addGradeLabel($epics);
 
         $childIdList     = $this->getAllChildId($storyID);
         $allStoryParents = $this->dao->select('parent')->from(TABLE_STORY)
@@ -2877,20 +2843,7 @@ class storyModel extends model
             ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
             ->fetchAll('id');
 
-        if($requirements)
-        {
-            foreach($requirements as $requirement)
-            {
-                if(isset($URGradePairs[$requirement->grade]))
-                {
-                    $options[] = array('value' => $requirement->id, 'text' => array('html' => '<span class="label secondary">' . $URGradePairs[$requirement->grade] . '</span> ' . $requirement->title));
-                }
-                else
-                {
-                    $options[] = array('value' => $requirement->id, 'text' => $requirement->title);
-                }
-            }
-        }
+        $options = array_merge($options, $this->addGradeLabel($requirements));
 
         return $options;
     }
@@ -2930,10 +2883,7 @@ class storyModel extends model
             ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
             ->fetchAll('id');
 
-        $epicPairs = array();
-        foreach($epics as $epic) $epicPairs[$epic->id] = isset($ERGradePairs[$epic->grade]) ? '(' . $ERGradePairs[$epic->grade] . ') ' . $epic->title : $epic->title;
-
-        return $epicPairs;
+        return $this->addGradeLabel($epics);
     }
 
     /**
@@ -5090,13 +5040,47 @@ class storyModel extends model
     }
 
     /**
+     * 需求下拉列表增加层级标签。
+     * Add grade label to story options.
+     *
+     * @param  array  $stories
+     * @access public
+     * @return array
+     */
+    public function addGradeLabel(array $stories): array
+    {
+        $gradeGroup = $this->dao->select('type, grade, name')->from(TABLE_STORYGRADE)
+            ->where('status')->eq('enable')
+            ->fetchGroup('type', 'grade');
+
+        $storyList = $this->getByList(array_keys($stories));
+
+        $options = array();
+        foreach($storyList as $story)
+        {
+            $gradePairs = zget($gradeGroup, $story->type, array());
+            $storyTitle = is_string($stories[$story->id]) ? $stories[$story->id] : $story->title;
+            if(isset($gradePairs[$story->grade]))
+            {
+                $options[] = array('text' => array('html' => "<span class='label gray-pale rounded-xl'>{$gradePairs[$story->grade]->name}</span> {$storyTitle}"), 'value' => $story->id);
+            }
+            else
+            {
+                $options[] = array('text' => $stories[$story->id], 'value' => $story->id);
+            }
+        }
+
+        return $options;
+    }
+
+    /**
      * Get story grade list.
      *
      * @param  string $type story|requirement|epic
      * @access public
      * @return array
      */
-    public function getGradeList($type = 'story'): array
+    public function getGradeList(string $type = 'story'): array
     {
         return $this->dao->select('*')->from(TABLE_STORYGRADE)
             ->where('1=1')
