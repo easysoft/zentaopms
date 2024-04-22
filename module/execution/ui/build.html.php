@@ -44,7 +44,7 @@ jsVar('filePathTip', $lang->build->filePath);
 jsVar('confirmDelete', $lang->build->confirmDelete);
 
 $fieldList = $config->build->dtable->fieldList;
-if($execution->type == 'kanban') unset($fieldList['actions']['actionsMap']['createTest']['data-app']);
+if($execution->type == 'kanban') unset($fieldList['actions']['list']['createTest']['data-app']);
 $builds = initTableData($builds, $fieldList, $this->build);
 
 dtable
