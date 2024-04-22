@@ -69,8 +69,6 @@ if(isset($config->xuanxuan->turnon) && $config->xuanxuan->turnon && $xxdStatus =
 #xx-embed-container .xx-embed-body {min-height: initial!important;}
 </style>
 <?php js::import($app->getWebRoot() . 'data/xuanxuan/sdk/sdk.min.js'); ?>
-<?php jsVar('xuanConfig', $xuanConfig); ?>
-<?php global $app; jsVar('lang', $app->getClientLang()); ?>
 <script>
 /* Toggle xuan client popover */
 function toggleXuanClient()
@@ -92,20 +90,27 @@ function handleXuanRouteChange(route)
     $('#' + window.xuan.id).toggleClass('has-chat-view', hasShowChatView);
 }
 
-/* Set client global options*/
-Xuanxuan.setGlobalOptions(
+$(function()
 {
-    position:      'right',
-    width:         280,
-    preload:       true,
-    showHeader:    false,
-    onNotice:      handleXuanNoticeChange,
-    onRouteChange: handleXuanRouteChange,
-    lang:          lang
-});
+    const xuanConfig = <?php echo json_encode($xuanConfig); ?>;
+    if(typeof Xuanxuan !== 'undefined')
+    {
+        /* Set client global options*/
+        Xuanxuan.setGlobalOptions(
+        {
+            position:      'right',
+            width:         280,
+            preload:       true,
+            showHeader:    false,
+            onNotice:      handleXuanNoticeChange,
+            onRouteChange: handleXuanRouteChange,
+            lang:          '<?php echo $app->getClientLang()?>'
+        });
 
-/* Create client instance */
-window.xuan = new Xuanxuan(xuanConfig);
+        /* Create client instance */
+        window.xuan = new Xuanxuan(xuanConfig);
+    }
+})
 </script>
 <?php endif; ?>
 <?php endif; ?>
