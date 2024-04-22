@@ -267,7 +267,7 @@ div
                     span
                     (
                         setClass('text-gray'),
-                        $lang->story->common
+                        $lang->common->story
                     )
                 ),
                 div

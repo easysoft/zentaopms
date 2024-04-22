@@ -518,15 +518,11 @@ class projectModel extends model
     public function getStatData($projectID)
     {
         $executions = $this->loadModel('execution')->getPairs($projectID);
-        $storyTypeCount = $this->dao->select('count(t2.story) as storyCount,t1.type')->from(TABLE_STORY)->alias('t1')
+        $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
             ->where('t2.project')->eq($projectID)
             ->andWhere('t1.deleted')->eq(0)
-            ->groupBy('t1.type')
-            ->fetchPairs('type', 'storyCount');
-
-        $storyCount       = isset($storyTypeCount['story']) ? $storyTypeCount['story'] : 0;
-        $requirementCount = isset($storyTypeCount['requirement']) ? $storyTypeCount['requirement'] : 0;
+            ->fetch('storyCount');
 
         $bugCount = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)
              ->where('project')->in($projectID)
@@ -550,14 +546,13 @@ class projectModel extends model
             ->fetch('count');
 
         $statData = new stdclass();
-        $statData->storyCount       = $storyCount;
-        $statData->requirementCount = $requirementCount;
-        $statData->bugCount         = $bugCount;
-        $statData->taskCount        = $taskCount->count;
-        $statData->waitCount        = $taskCount->waitCount;
-        $statData->doingCount       = $taskCount->doingCount;
-        $statData->finishedCount    = $taskCount->finishedCount;
-        $statData->delayedCount     = $delayedCount;
+        $statData->storyCount    = $storyCount;
+        $statData->bugCount      = $bugCount;
+        $statData->taskCount     = $taskCount->count;
+        $statData->waitCount     = $taskCount->waitCount;
+        $statData->doingCount    = $taskCount->doingCount;
+        $statData->finishedCount = $taskCount->finishedCount;
+        $statData->delayedCount  = $delayedCount;
 
         return $statData;
     }
