@@ -326,7 +326,11 @@ class backupModel extends model
     public function getBackupDirProgress(string $backup): array
     {
         $tmpLogFile = $this->getTmpLogFile($backup);
-        if(file_exists($tmpLogFile)) return json_decode(file_get_contents($tmpLogFile), true);
+        if(file_exists($tmpLogFile))
+        {
+            $log = json_decode(file_get_contents($tmpLogFile), true);
+            return empty($log) ? array() : $log;
+        }
         return array();
     }
 
@@ -433,6 +437,7 @@ class backupModel extends model
     public function getDirSize(string $dir): int
     {
         if(!file_exists($dir)) return 0;
+        if(!is_readable($dir)) return 0;
         $totalSize = 0;
         $iterator  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS));
 
