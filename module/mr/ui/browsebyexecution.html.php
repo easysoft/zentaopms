@@ -40,13 +40,13 @@ foreach($MRList as $index => $MR)
 
     if($repo->SCM == 'Gitlab')
     {
-        $MR->sourceProject = isset($projects[$MR->hostID][$MR->sourceProject]) ? $projects[$MR->hostID][$MR->sourceProject]->name_with_namespace . ':' . $MR->sourceBranch : $MR->sourceProject . ':' . $MR->sourceBranch;
-        $MR->targetProject = isset($projects[$MR->hostID][$MR->targetProject]) ? $projects[$MR->hostID][$MR->targetProject]->name_with_namespace . ':' . $MR->targetBranch : $MR->targetProject . ':' . $MR->targetBranch;
+        $MR->sourceProject = isset($projects[$MR->hostID][$MR->sourceProject]) ? $projects[$MR->hostID][$MR->sourceProject]->name_with_namespace  : $MR->sourceProject;
+        $MR->targetProject = isset($projects[$MR->hostID][$MR->targetProject]) ? $projects[$MR->hostID][$MR->targetProject]->name_with_namespace  : $MR->targetProject;
     }
     else
     {
-        $MR->sourceProject = isset($projects[$MR->hostID][$MR->sourceProject]) ? $projects[$MR->hostID][$MR->sourceProject]->full_name . ':' . $MR->sourceBranch : $MR->sourceProject . ':' . $MR->sourceBranch;
-        $MR->targetProject = isset($projects[$MR->hostID][$MR->targetProject]) ? $projects[$MR->hostID][$MR->targetProject]->full_name . ':' . $MR->targetBranch : $MR->targetProject . ':' . $MR->targetBranch;
+        $MR->sourceProject = isset($projects[$MR->hostID][$MR->sourceProject]) ? $projects[$MR->hostID][$MR->sourceProject]->full_name : $MR->sourceProject;
+        $MR->targetProject = isset($projects[$MR->hostID][$MR->targetProject]) ? $projects[$MR->hostID][$MR->targetProject]->full_name : $MR->targetProject;
     }
 
     $MR->mergeStatus = ($MR->status == 'closed' || $MR->status == 'merged') ? zget($lang->mr->statusList, $MR->status) : zget($lang->mr->mergeStatusList, $MR->mergeStatus);
@@ -59,6 +59,19 @@ foreach($MRList as $index => $MR)
     {
         $MR->approvalStatus = empty($MR->approvalStatus) ? $lang->mr->approvalStatusList['notReviewed'] : $lang->mr->approvalStatusList[$MR->approvalStatus];
     }
+}
+
+/* Show source project column if the user browse the Merge Requests of all the repos. */
+if(empty($repoID))
+{
+    $sourceProject['sourceProject']['name']     = 'sourceProject';
+    $sourceProject['sourceProject']['title']    = $lang->mr->sourceProject;
+    $sourceProject['sourceProject']['type']     = 'text';
+    $sourceProject['sourceProject']['minWidth'] = '200';
+
+    $offset = array_search('sourceBranch', array_keys($config->mr->dtable->fieldList));
+
+    $config->mr->dtable->fieldList = array_slice($config->mr->dtable->fieldList, 0, $offset, true) + $sourceProject + array_slice($config->mr->dtable->fieldList, $offset, NULL, true);
 }
 
 $MRs = initTableData($MRList, $config->mr->dtable->fieldList, $this->mr);
