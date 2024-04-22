@@ -23,7 +23,6 @@ class thinkInputDetail extends thinkStepDetail
         (
             $required ? span(
                 setClass('text-xl absolute top-6'),
-                set::name($isRequiredName),
                 setStyle(array('color' => 'rgba(var(--color-danger-500-rgb),var(--tw-text-opacity))', 'left' => '36px')),
                 '*'
             ) : null,
@@ -31,6 +30,7 @@ class thinkInputDetail extends thinkStepDetail
             textarea
             (
                 set::rows('3'),
+                set::name($isRequiredName),
                 set::required($required),
                 set::placeholder($lang->thinkwizard->step->pleaseInput)
             )
@@ -39,7 +39,7 @@ class thinkInputDetail extends thinkStepDetail
 
     protected function buildBody(): array
     {
-        $items = parent::buildBody();
+        $items   = parent::buildBody();
         $items[] = $this->detailInputControl();
         return $items;
     }
