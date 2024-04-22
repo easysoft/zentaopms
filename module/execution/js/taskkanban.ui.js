@@ -233,7 +233,7 @@ window.getItem = function(info)
         info.item.title = info.item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>");
         info.item.title = {html: info.item.title};
     }
-    info.item.titleUrl   = $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}`);
+    info.item.titleUrl   = info.laneInfo.type == 'story' ? $.createLink('execution', 'storyView', `id=${info.item.id}&executionID=${executionID}`) : $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}`);
     info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
 
     info.item.content = {html: content};
