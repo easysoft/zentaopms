@@ -1502,8 +1502,7 @@ class story extends control
             return $this->send($storyList);
         }
 
-        $items = array();
-        foreach($stories as $storyID => $storyName) $items[] = array('text' => $storyName, 'value' => $storyID, 'keys' => $storyName);
+        $items = $this->story->addGradeLabel($stories);
         return print(json_encode($items));
     }
 

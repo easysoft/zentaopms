@@ -564,9 +564,12 @@ class testcase extends control
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
+        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
+        $stories = $this->story->addGradeLabel($stories);
+
         /* 展示变量. */
         /* Show the variables. */
-        $this->view->stories         = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
+        $this->view->stories         = $stories;
         $this->view->caseIdList      = $caseIdList;
         $this->view->productID       = $productID;
         $this->view->cases           = $cases;
