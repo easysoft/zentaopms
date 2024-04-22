@@ -1062,6 +1062,7 @@ class task extends control
         if(!$execution->multiple) unset($this->lang->task->report->charts['tasksPerExecution']);
 
         $this->execution->setMenu($executionID);
+        if($this->app->tab == 'project') $this->view->projectID = $execution->project;
 
         $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->report->common;
         $this->view->executionID   = $executionID;
