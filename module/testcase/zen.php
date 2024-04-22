@@ -406,9 +406,7 @@ class testcaseZen extends testcase
         }
         if($storyID && !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;
 
-        $stories = $this->story->addGradeLabel($stories);
-
-        $this->view->stories          = $stories;
+        $this->view->stories          = $this->story->addGradeLabel($stories);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
         $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
@@ -883,9 +881,7 @@ class testcaseZen extends testcase
 
         if(!in_array($this->app->tab, array('execution', 'project')) && empty($stories)) $stories = $this->story->getProductStoryPairs($case->product, $case->branch, 0, $storyStatus, 'id_desc', 0, 'full', 'story', false);
 
-        $stories = $this->story->addGradeLabel($stories);
-
-        $this->view->stories = $stories;
+        $this->view->stories = $this->story->addGradeLabel($stories);
     }
 
     /**
@@ -1318,14 +1314,12 @@ class testcaseZen extends testcase
         $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array();
         if($storyID && empty($moduleID)) $moduleID = $story->module;
 
-        $storyPairs = $this->story->addGradeLabel($storyPairs);
-
         $this->view->product         = $product;
         $this->view->branches        = $branches;
         $this->view->customFields    = $customFields;
         $this->view->showFields      = $showFields;
         $this->view->story           = $story;
-        $this->view->storyPairs      = $storyPairs;
+        $this->view->storyPairs      = $this->story->addGradeLabel($storyPairs);
         $this->view->sceneOptionMenu = $this->testcase->getSceneMenu($productID, $moduleID, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
         $this->view->currentModuleID = $moduleID;
     }

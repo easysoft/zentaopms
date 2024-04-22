@@ -2761,8 +2761,6 @@ class storyModel extends model
                 if(isset($parents[$requirement->id])) unset($requirements[$id]);
             }
 
-            $options = $this->addGradeLabel($requirements);
-
             $childIdList = $this->getAllChildId($storyID);
             $stories = $this->dao->select('id, grade, title')->from(TABLE_STORY)
                 ->where('deleted')->eq('0')
@@ -2773,11 +2771,9 @@ class storyModel extends model
                 ->andWhere('grade')->in(array_keys($SRGradePairs))
                 ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
                 ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
-                ->fetchAll();
+                ->fetchAll('id');
 
-            $options = array_merge($options, $this->addGradeLabel($stories));
-
-            return $options;
+            return array_merge($this->addGradeLabel($requirements), $this->addGradeLabel($stories));
         }
         elseif($storyType == 'requirement')
         {
@@ -2821,8 +2817,6 @@ class storyModel extends model
             if(isset($parents[$epic->id])) unset($epics[$id]);
         }
 
-        $options = $this->addGradeLabel($epics);
-
         $childIdList     = $this->getAllChildId($storyID);
         $allStoryParents = $this->dao->select('parent')->from(TABLE_STORY)
             ->where('deleted')->eq('0')
@@ -2843,9 +2837,7 @@ class storyModel extends model
             ->beginIF(!empty($appendedStories))->orWhere('id')->in($appendedStories)->fi()
             ->fetchAll('id');
 
-        $options = array_merge($options, $this->addGradeLabel($requirements));
-
-        return $options;
+        return array_merge($this->addGradeLabel($epics), $this->addGradeLabel($requirements));
     }
 
     /**

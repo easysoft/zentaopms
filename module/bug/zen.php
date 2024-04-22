@@ -1341,12 +1341,10 @@ class bugZen extends bug
             $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active,closed', 'id_desc', 0, 'full', 'story', false);
         }
 
-        $stories = $this->story->addGradeLabel($stories);
-
         $this->view->openedBuilds   = $openedBuilds;
         $this->view->resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
         $this->view->plans          = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
-        $this->view->stories        = $stories;
+        $this->view->stories        = $this->story->addGradeLabel($stories);
         $this->view->tasks          = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks      = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->cases          = $cases;
