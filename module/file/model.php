@@ -565,6 +565,8 @@ class fileModel extends model
      */
     public function checkPriv(object $file): bool
     {
+        if(!$file->objectType || !$file->objectID) return true;
+
         $objectType = $file->objectType;
         $objectID   = $file->objectID;
         $table      = $this->config->objectTables[$objectType];
