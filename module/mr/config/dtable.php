@@ -35,11 +35,11 @@ $config->mr->dtable->fieldList['approvalStatus']['title']    = $lang->mr->approv
 $config->mr->dtable->fieldList['approvalStatus']['type']     = 'text';
 $config->mr->dtable->fieldList['approvalStatus']['sortType'] = true;
 
-$config->mr->dtable->fieldList['approver']['name']     = 'approver';
-$config->mr->dtable->fieldList['approver']['title']    = $lang->mr->reviewer;
-$config->mr->dtable->fieldList['approver']['type']     = 'user';
-$config->mr->dtable->fieldList['approver']['sortType'] = true;
-$config->mr->dtable->fieldList['approver']['minWidth'] = '200';
+$config->mr->dtable->fieldList['assignee']['name']     = 'assignee';
+$config->mr->dtable->fieldList['assignee']['title']    = $lang->mr->reviewer;
+$config->mr->dtable->fieldList['assignee']['type']     = 'user';
+$config->mr->dtable->fieldList['assignee']['sortType'] = true;
+$config->mr->dtable->fieldList['assignee']['minWidth'] = '200';
 
 $config->mr->dtable->fieldList['createdBy']['name']     = 'createdBy';
 $config->mr->dtable->fieldList['createdBy']['title']    = $lang->mr->author;
