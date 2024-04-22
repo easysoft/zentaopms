@@ -428,6 +428,8 @@ class execution extends control
     {
         /* Load these models. */
         $this->loadModel('story');
+        $this->loadModel('requirement');
+        $this->loadModel('epic');
         $this->loadModel('product');
 
         /* Change for requirement story title. */
@@ -454,6 +456,7 @@ class execution extends control
 
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        $project     = $this->loadModel('project')->fetchById($execution->project);
 
         /* Build the search form. */
         $products  = $this->product->getProducts($executionID);
@@ -465,7 +468,7 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getExecutionStories($executionID, 0, $sort, $type, (string)$param, $storyType, '', $pager);
+        $stories = $this->story->getExecutionStories($executionID, 0, $sort, $type, (string)$param, $project->storyType, '', $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
@@ -2250,7 +2253,6 @@ class execution extends control
         foreach($allStories as $id => $story)
         {
             if(isset($linkedStories[$story->id])) unset($allStories[$id]);
-            if($story->parent < 0) unset($allStories[$id]);
 
             if(!isset($modules[$story->module]))
             {
