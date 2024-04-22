@@ -13,13 +13,15 @@ $config->mr->dtable->fieldList['title']['type']     = 'text';
 $config->mr->dtable->fieldList['title']['data-app'] = $app->tab;
 $config->mr->dtable->fieldList['title']['link']     = helper::createLink('mr', 'view', "MRID={id}");
 $config->mr->dtable->fieldList['title']['sortType'] = true;
+$config->mr->dtable->fieldList['title']['minWidth'] = '342';
 
-$config->mr->dtable->fieldList['sourceBranch']['name']     = 'sourceProject';
+
+$config->mr->dtable->fieldList['sourceBranch']['name']     = 'sourceBranch';
 $config->mr->dtable->fieldList['sourceBranch']['title']    = $lang->mr->sourceBranch;
 $config->mr->dtable->fieldList['sourceBranch']['type']     = 'text';
 $config->mr->dtable->fieldList['sourceBranch']['minWidth'] = '200';
 
-$config->mr->dtable->fieldList['targetBranch']['name']     = 'targetProject';
+$config->mr->dtable->fieldList['targetBranch']['name']     = 'targetBranch';
 $config->mr->dtable->fieldList['targetBranch']['title']    = $lang->mr->targetBranch;
 $config->mr->dtable->fieldList['targetBranch']['type']     = 'text';
 $config->mr->dtable->fieldList['targetBranch']['minWidth'] = '200';
@@ -28,6 +30,12 @@ $config->mr->dtable->fieldList['mergeStatus']['name']     = 'mergeStatus';
 $config->mr->dtable->fieldList['mergeStatus']['title']    = $lang->mr->mergeStatus;
 $config->mr->dtable->fieldList['mergeStatus']['type']     = 'text';
 $config->mr->dtable->fieldList['mergeStatus']['sortType'] = true;
+
+$config->mr->dtable->fieldList['approver']['name']     = 'approver';
+$config->mr->dtable->fieldList['approver']['title']    = $lang->mr->reviewer;
+$config->mr->dtable->fieldList['approver']['type']     = 'user';
+$config->mr->dtable->fieldList['approver']['sortType'] = true;
+$config->mr->dtable->fieldList['approver']['minWidth'] = '200';
 
 $config->mr->dtable->fieldList['approvalStatus']['name']     = 'approvalStatus';
 $config->mr->dtable->fieldList['approvalStatus']['title']    = $lang->mr->approvalStatus;
