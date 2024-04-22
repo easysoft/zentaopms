@@ -17,6 +17,8 @@ class thinkStepDetail extends wg
     );
     protected function detailHeading()
     {
+        global $lang;
+
         list($item, $title, $desc) = $this->prop(array('item', 'title', 'desc'));
         return div
         (
@@ -47,7 +49,7 @@ class thinkStepDetail extends wg
                             setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                             set::icon('trash'),
                             setData('url', createLink('thinkwizard', 'deleteStep', "stepID={$item->id}")),
-                            setData('confirm',  data('lang.thinkwizard.step.confirmDeleteNode'))
+                            setData('confirm',  $lang->thinkwizard->step->deleteTips[$item->type])
                         )
                     )
                 )
