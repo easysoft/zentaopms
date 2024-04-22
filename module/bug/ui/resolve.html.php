@@ -16,19 +16,6 @@ jsVar('page',      'resolve');
 jsVar('released',  $lang->build->released);
 jsVar('requiredFields', $config->bug->resolve->requiredFields);
 
-$buildItems = array();
-foreach($builds as $buildID => $buildName)
-{
-    $buildItem = array('value' => $buildID, 'text' => $buildName);
-    if(isset($releases[$buildID])) $buildItem['content'] = array('html' => "<div class='flex clip'>{$buildName}</div><label class='label bg-primary-50 text-primary ml-1 flex-none'>{$lang->release->common}</label>", 'class' => 'w-full flex nowrap');
-    $buildItems[$buildID] = $buildItem;
-}
-foreach($releases as $releaseID => $release)
-{
-    if(isset($buildItems[$release->shadow])) $buildItems[$release->shadow]['content'] = array('html' => "<div class='flex clip'>{$buildItems[$release->shadow]['text']}</div><label class='label bg-primary-50 text-primary ml-1 flex-none'>{$lang->release->common}</label>", 'class' => 'w-full flex nowrap');
-}
-var_dump($buildItems);
-
 $createBuild = '';
 if(common::hasPriv('build', 'create'))
 {
@@ -107,7 +94,7 @@ formPanel
             (
                 set::name('resolvedBuild'),
                 set::value(''),
-                set::items(array_values($buildItems))
+                set::items($builds)
             )
         ),
         formGroup
