@@ -11,7 +11,8 @@ class pager extends wg
         'recTotal?: int',
         'recPerPage?: int',
         'linkCreator?: string',
-        'items?: array'
+        'items?: array',
+        'sizeMenuCaret?: string'
     );
 
     protected function buildProps(string $type = 'full'): void
@@ -33,7 +34,7 @@ class pager extends wg
         $props['linkCreator'] = createLink($pager->moduleName, $pager->methodName, $params);
 
         $items = $this->prop('items');
-        $props['items']       = $items ? $items : array
+        if(!$items) $items = array
         (
             $type == 'short' ? null : array('type' => 'info', 'text' => $lang->pager->totalCountAB),
             $type == 'short' ? null : array('type' => 'size-menu', 'text' => $lang->pager->pageSizeAB),
@@ -43,6 +44,12 @@ class pager extends wg
             array('type' => 'link', 'hint' => $lang->pager->nextPage, 'page' => 'next', 'icon' => 'icon-angle-right'),
             array('type' => 'link', 'hint' => $lang->pager->lastPage, 'page' => 'last', 'icon' => 'icon-last-page')
         );
+        foreach($items as &$item)
+        {
+            if($item['type'] !== 'size-menu' || isset($item['caret'])) continue;
+            $item['caret'] = $this->prop('sizeMenuCaret');
+        }
+        $props['items'] = $items;
 
         $this->setProp($props);
     }
