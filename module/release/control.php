@@ -387,6 +387,8 @@ class release extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType = $browseType;
         $this->view->param      = $param;
+        $this->view->grades     = $this->loadModel('story')->getGradePairs('story', 'all');
+        $this->view->showGrade  = count($this->view->grades) > 2;
         $this->view->pager      = $pager;
 
         $this->display();

@@ -35,6 +35,8 @@ detailHeader
 );
 
 jsVar('releaseID', $release->id);
+jsVar('showGrade', $showGrade);
+jsVar('grades', $grades);
 
 /* Table data and setting for finished stories tab. */
 jsVar('summary', $summary);
@@ -193,6 +195,7 @@ detailBody
                     set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
                     set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
+                    set::onRenderCell(jsRaw('window.renderStoryCell')),
                     set::extraHeight('+144'),
                     set::footToolbar($storyFootToolbar),
                     set::footPager(usePager('storyPager', '', array('recPerPage' => $storyPager->recPerPage, 'recTotal' => $storyPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")))),
