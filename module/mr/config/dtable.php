@@ -15,7 +15,6 @@ $config->mr->dtable->fieldList['title']['link']     = helper::createLink('mr', '
 $config->mr->dtable->fieldList['title']['sortType'] = true;
 $config->mr->dtable->fieldList['title']['minWidth'] = '342';
 
-
 $config->mr->dtable->fieldList['sourceBranch']['name']     = 'sourceBranch';
 $config->mr->dtable->fieldList['sourceBranch']['title']    = $lang->mr->sourceBranch;
 $config->mr->dtable->fieldList['sourceBranch']['type']     = 'text';
@@ -31,16 +30,16 @@ $config->mr->dtable->fieldList['mergeStatus']['title']    = $lang->mr->mergeStat
 $config->mr->dtable->fieldList['mergeStatus']['type']     = 'text';
 $config->mr->dtable->fieldList['mergeStatus']['sortType'] = true;
 
+$config->mr->dtable->fieldList['approvalStatus']['name']     = 'approvalStatus';
+$config->mr->dtable->fieldList['approvalStatus']['title']    = $lang->mr->approvalStatus;
+$config->mr->dtable->fieldList['approvalStatus']['type']     = 'text';
+$config->mr->dtable->fieldList['approvalStatus']['sortType'] = true;
+
 $config->mr->dtable->fieldList['approver']['name']     = 'approver';
 $config->mr->dtable->fieldList['approver']['title']    = $lang->mr->reviewer;
 $config->mr->dtable->fieldList['approver']['type']     = 'user';
 $config->mr->dtable->fieldList['approver']['sortType'] = true;
 $config->mr->dtable->fieldList['approver']['minWidth'] = '200';
-
-$config->mr->dtable->fieldList['approvalStatus']['name']     = 'approvalStatus';
-$config->mr->dtable->fieldList['approvalStatus']['title']    = $lang->mr->approvalStatus;
-$config->mr->dtable->fieldList['approvalStatus']['type']     = 'text';
-$config->mr->dtable->fieldList['approvalStatus']['sortType'] = true;
 
 $config->mr->dtable->fieldList['createdBy']['name']     = 'createdBy';
 $config->mr->dtable->fieldList['createdBy']['title']    = $lang->mr->author;
