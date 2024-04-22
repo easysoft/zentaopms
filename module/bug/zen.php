@@ -1147,6 +1147,8 @@ class bugZen extends bug
             $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'active,closed', 'id_desc', 0, 'full', 'story', false);
         }
 
+        $stories = $this->story->addGradeLabel($stories);
+
         return $this->updateBug($bug, array('stories' => $stories));
     }
 
@@ -1338,6 +1340,8 @@ class bugZen extends bug
         {
             $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active,closed', 'id_desc', 0, 'full', 'story', false);
         }
+
+        $stories = $this->story->addGradeLabel($stories);
 
         $this->view->openedBuilds   = $openedBuilds;
         $this->view->resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
