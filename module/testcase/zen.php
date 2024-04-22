@@ -2104,6 +2104,19 @@ class testcaseZen extends testcase
         foreach($reverseSteps as $step)
         {
             if(empty($step->id)) continue;
+
+            if($step->type != 'group')
+            {
+                $descItem = array();
+                $descItem['id']      = 'desc_' . $step->id;
+                $descItem['text']    = $step->expect;
+                $descItem['type']    = 'node';
+                $descItem['parent']  = $step->id;
+                $descItem['subSide'] = 'right';
+
+                $parentSteps[$step->id][] = $descItem;
+            }
+
             $stepItem = array();
             $stepItem['id']      = $step->id;
             $stepItem['text']    = $step->step;
