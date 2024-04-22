@@ -16,7 +16,7 @@ cid=0
  - 属性editedBy @~~
 - 正常的合并请求，更新本地MR的标题和编辑者
  - 属性id @1
- - 属性title @test-merge（不要关闭或删除）
+ - 属性title @test-merge
  - 属性editedBy @admin
 
 */
@@ -44,4 +44,4 @@ $localMR = $mrModel->fetchByID(2);
 r($mrModel->apiSyncMR($localMR)) && p('id,editedBy') && e('2,~~'); // 本地MR，无需同步
 
 $MR = $mrModel->fetchByID(1);
-r($mrModel->apiSyncMR($MR)) && p('id,title,editedBy') && e('1,test-merge（不要关闭或删除）,admin'); //正常的合并请求，更新本地MR的标题和编辑者
+r($mrModel->apiSyncMR($MR)) && p('id,title,editedBy') && e('1,test-merge,admin'); //正常的合并请求，更新本地MR的标题和编辑者
