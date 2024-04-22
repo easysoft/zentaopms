@@ -138,6 +138,7 @@ class design extends control
         {
             $designData = form::data()
                 ->add('project', $projectID)
+                ->setDefault('createdBy', $this->app->user->account)
                 ->get();
 
             $designID = $this->design->create($designData);
@@ -247,7 +248,7 @@ class design extends control
 
         if($_POST)
         {
-            $designData = form::data()->get();
+            $designData = form::data()->setDefault('editedBy', $this->app->user->account)->get();
             $changes    = $this->design->update($designID, $designData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -482,7 +483,7 @@ class design extends control
     {
         if($_POST)
         {
-            $designData = form::data()->get();
+            $designData = form::data()->setDefault('editedBy', $this->app->user->account)->get();
             $changes    = $this->design->assign($designID, $designData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
