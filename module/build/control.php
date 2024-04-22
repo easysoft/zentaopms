@@ -186,6 +186,8 @@ class build extends control
         $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
         $this->view->link          = $link;
         $this->view->orderBy       = $orderBy;
+        $this->view->grades        = $this->loadModel('story')->getGradePairs('story', 'all');
+        $this->view->showGrade     = count($this->view->grades) > 2;
         $this->view->execution     = $this->loadModel('execution')->getByID((int)$build->execution);
         $this->view->childBuilds   = empty($build->builds) ? array() : $this->build->getByList(explode(',', $build->builds));
 
@@ -469,6 +471,8 @@ class build extends control
         $this->view->browseType   = $browseType;
         $this->view->param        = $param;
         $this->view->pager        = $pager;
+        $this->view->grades       = $this->story->getGradePairs('story', 'all');
+        $this->view->showGrade    = count($this->view->grades) > 2;
         $this->view->orderBy      = $orderBy;
         $this->display();
     }

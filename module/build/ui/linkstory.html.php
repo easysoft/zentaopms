@@ -25,6 +25,8 @@ foreach($allStories as $story)
 }
 
 jsVar('childrenAB', $lang->story->childrenAB);
+jsVar('grades', $grades);
+jsVar('showGrade', $showGrade);
 
 searchForm
 (
