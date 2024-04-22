@@ -213,7 +213,7 @@ $config->repo->taskDtable->fieldList['assignedTo']['type']        = 'user';
 $config->repo->taskDtable->fieldList['assignedTo']['sortType']    = true;
 $config->repo->taskDtable->fieldList['assignedTo']['show']        = true;
 $config->repo->taskDtable->fieldList['assignedTo']['group']       = 3;
-$config->repo->taskDtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
+$config->repo->taskDtable->fieldList['assignedTo']['currentUser'] = '';
 $config->repo->taskDtable->fieldList['assignedTo']['title']       = $lang->task->assignedTo;
 $config->repo->taskDtable->fieldList['assignedTo']['assignLink']  = array('module' => 'task', 'method' => 'assignTo', 'params' => 'executionID={execution}&taskID={id}');
 
