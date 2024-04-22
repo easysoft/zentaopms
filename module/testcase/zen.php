@@ -393,7 +393,6 @@ class testcaseZen extends testcase
             $storyModuleID   = array_key_exists($currentModuleID, $productModules) ? $currentModuleID : 0;
             $modules         = $this->tree->getStoryModule($storyModuleID);
             $modules         = $this->tree->getAllChildID($modules);
-            $currentModuleID = $storyModuleID;
         }
 
         /* 获取未关闭的需求。 */
