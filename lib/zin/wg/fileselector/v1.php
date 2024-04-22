@@ -85,29 +85,36 @@ class fileSelector extends wg
         }
 
         /* Check file type. */
-        if(empty($this->prop('accept')))
+        $acceptFileTypes = $this->prop('accept') ? ',' . str_replace('.', '', $this->prop('accept')) . ',' : '';
+        $checkFiles = jsCallback('file')
+            ->const('dangerFileTypes', ",{$app->config->file->dangers},")
+            ->const('dangerFile', $lang->file->dangerFile)
+            ->const('acceptFileTypes', $acceptFileTypes)
+            ->do(<<<'JS'
+        const typeIndex = file.name.lastIndexOf(".");
+        const fileType  = file.name.slice(typeIndex + 1);
+        if(acceptFileTypes)
         {
-            $checkFiles = jsCallback('file')
-                ->const('dangerFileTypes', ",{$app->config->file->dangers},")
-                ->const('dangerFile', $lang->file->dangerFile)
-                ->do(<<<'JS'
-            const typeIndex = file.name.lastIndexOf(".");
-            const fileType  = file.name.slice(typeIndex + 1);
-            if(dangerFileTypes.indexOf(fileType) > -1)
+            if(acceptFileTypes.indexOf(fileType) == -1)
             {
                 zui.Modal.alert(dangerFile);
                 return false;
             }
-            JS);
-            $onAdd = $this->prop('onAdd');
-            if($onAdd)
-            {
-                $onAdd      = js::value($onAdd);
-                $checkFiles = $checkFiles->call($onAdd, jsRaw('file'));
-            }
-            $checkFiles = $checkFiles->do('return file');
-            $this->setProp('onAdd', $checkFiles);
         }
+        else if(dangerFileTypes.indexOf(fileType) > -1)
+        {
+            zui.Modal.alert(dangerFile);
+            return false;
+        }
+        JS);
+        $onAdd = $this->prop('onAdd');
+        if($onAdd)
+        {
+            $onAdd      = js::value($onAdd);
+            $checkFiles = $checkFiles->call($onAdd, jsRaw('file'));
+        }
+        $checkFiles = $checkFiles->do('return file');
+        $this->setProp('onAdd', $checkFiles);
     }
 
     /**

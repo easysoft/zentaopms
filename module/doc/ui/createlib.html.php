@@ -18,7 +18,7 @@ formPanel
     (
         set::label($lang->doc->libType),
         setClass($config->vision == 'lite' ? 'hidden' : ''),
-        set::width('3/4'),
+        set::width('5/6'),
         radioList
         (
             set::name('libType'),
@@ -33,7 +33,7 @@ formPanel
         setClass('objectBox'),
         formGroup
         (
-            set::width('3/4'),
+            set::width('5/6'),
             set::label($lang->doc->{$type}),
             set::name($type),
             set::items($objects),
@@ -48,7 +48,7 @@ formPanel
         formGroup
         (
             set::label($lang->doc->execution),
-            set::width('3/4'),
+            set::width('5/6'),
             set::name('execution'),
             set::items($executionPairs),
             set::placeholder($lang->doclib->tip->selectExecution),
@@ -74,7 +74,7 @@ formPanel
         formGroup
         (
             set::label($lang->doclib->name),
-            set::width('3/4'),
+            set::width('5/6'),
             set::name('name')
         )
     ),
@@ -84,7 +84,7 @@ formPanel
         formGroup
         (
             set::label($lang->api->baseUrl),
-            set::width('3/4'),
+            set::width('5/6'),
             set::name('baseUrl'),
             set::placeholder($lang->api->baseUrlDesc)
         )
@@ -95,7 +95,7 @@ formPanel
         formGroup
         (
             set::label($lang->doclib->control),
-            set::width('3/4'),
+            set::width('5/6'),
             radioList
             (
                 set::name('acl'),
@@ -112,12 +112,13 @@ formPanel
         formGroup
         (
             set::label($lang->doc->whiteList),
-            set::width('3/4'),
+            set::width('5/6'),
             div
             (
                 setClass('w-full check-list'),
                 div
                 (
+                    setClass('w-full'),
                     inputGroup
                     (
                         $lang->doclib->group,
@@ -131,6 +132,7 @@ formPanel
                 ),
                 div
                 (
+                    setClass('w-full'),
                     users(set::label($lang->doclib->user), set::items($users))
                 )
             )

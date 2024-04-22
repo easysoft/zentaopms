@@ -171,9 +171,10 @@ class metricModel extends model
         $groupHeader[] = array('name' => 'value', 'title' => $this->lang->metric->value, 'align' => 'center', 'width' => 68);
         $groupData   = array();
 
+        $users = $this->loadModel('user')->getPairs('noletter');
         foreach($data as $dataInfo)
         {
-            $value       = $withCalcTime ? array($dataInfo->value, $dataInfo->calcTime) : $dataInfo->value;
+            $value       = $withCalcTime ? array($dataInfo->value, $dataInfo->calcTime, $dataInfo->calcType, zget($users, $dataInfo->calculatedBy)) : $dataInfo->value;
             $date        = isset($dataInfo->date) ? $dataInfo->date : $dataInfo->dateString;
             $dataSeries  = array('date' => $date, 'value' => $value);
             $groupData[] = $dataSeries;
@@ -216,16 +217,19 @@ class metricModel extends model
 
         $times     = array();
         $objects   = array();
+        $users = $this->loadModel('user')->getPairs('noletter');
         foreach($data as $dataInfo)
         {
-            $time     = substr($dataInfo->$dateField, 0, 10);
-            $calcTime = $dataInfo->calcTime;
-            $object = $dataInfo->scope;
-            $value  = $dataInfo->value;
+            $time         = substr($dataInfo->$dateField, 0, 10);
+            $calcTime     = $dataInfo->calcTime;
+            $object       = $dataInfo->scope;
+            $value        = $dataInfo->value;
+            $calcType     = $dataInfo->calcType;
+            $calculatedBy = zget($users, $dataInfo->calculatedBy);
 
             if(!isset($times[$time]))     $times[$time]     = $time;
             if(!isset($objects[$object])) $objects[$object] = array();
-            $objects[$object][$time] = $withCalcTime ? array($value, $calcTime) : $value;
+            $objects[$object][$time] = $withCalcTime ? array($value, $calcTime, $calcType, $calculatedBy) : $value;
         }
         /* e.g $times = array('2023-10-14', '2023-10-15'), $objects = array('object1' => array('2023-10-14' => 2, '2023-10-15 => 3)) */
 
@@ -409,6 +413,19 @@ class metricModel extends model
     public function getMetricsByCodeList($codeList)
     {
         return $this->metricTao->fetchMetricsByCodeList($codeList);
+    }
+
+    /**
+     * 获取度量库数据的收集方式和采集人。
+     * Get calculate type and calculate people by metric record id.
+     *
+     * @param  int    $recordID
+     * @access public
+     * @return object|false
+     */
+    public function getRecordCalcInfo($recordID)
+    {
+        return $this->dao->select('calcType, calculatedBy')->from(TABLE_METRICLIB)->where('id')->eq($recordID)->fetch();
     }
 
     /**
@@ -652,6 +669,34 @@ class metricModel extends model
     }
 
     /**
+     * 根据代号计算度量项。
+     * Calculate metric by code.
+     *
+     * @param  string $code
+     * @access public
+     * @return void
+     */
+    public function calculateMetricByCode($code)
+    {
+        $metric = $this->metricTao->fetchMetricByCode($code);
+        if(!$metric) return false;
+
+        $calcPath = $this->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
+        if(!is_file($calcPath)) return false;
+
+        include_once $this->getBaseCalcPath();
+        include_once $calcPath;
+        $calculator = new $metric->code;
+
+        $statement = $this->getDataStatement($calculator, 'statement', 'rnd');
+        $rows = $statement->fetchAll();
+
+        foreach($rows as $row) $calculator->calculate($row);
+
+        return $calculator;
+    }
+
+    /**
      * 根据代号获取计算实时度量项的结果。
      * Get result of calculate metric by code.
      *
@@ -686,15 +731,18 @@ class metricModel extends model
         $statement = $this->getDataStatement($calculator, 'statement', $vision);
         $rows = $statement->fetchAll();
 
-        foreach($rows as $row) $calculator->calculate($row);
+        if(!empty($rows)) foreach($rows as $row) $calculator->calculate($row);
         $records = $calculator->getResult($options);
 
-        $time = helper::now();
-        foreach($records as $index => $record)
+        if(!empty($records))
         {
-            $records[$index]['date']         = $time;
-            $records[$index]['calcType']     = 'cron';
-            $records[$index]['calculatedBy'] = 'system';
+            $time = helper::now();
+            foreach($records as $index => $record)
+            {
+                $records[$index]['date']         = $time;
+                $records[$index]['calcType']     = 'cron';
+                $records[$index]['calculatedBy'] = 'system';
+            }
         }
 
         return $records;
@@ -840,10 +888,11 @@ class metricModel extends model
      * Insert into metric lib.
      *
      * @param  array  $recordWithCode
+     * @param  string $calcType
      * @access public
      * @return void
      */
-    public function insertMetricLib($recordWithCode)
+    public function insertMetricLib($recordWithCode, $calcType = 'cron')
     {
         $this->dao->begin();
         foreach($recordWithCode as $code => $records)
@@ -851,6 +900,9 @@ class metricModel extends model
             foreach($records as $record)
             {
                 if(empty($record)) continue;
+
+                $record->calcType = $calcType;
+                $record->calculatedBy = $calcType == 'inference' ? $this->app->user->account : 'system';
                 $this->dao->insert(TABLE_METRICLIB)
                     ->data($record)
                     ->exec();
@@ -1047,6 +1099,13 @@ class metricModel extends model
             'suffix' => array()
         );
 
+        if($metric->stage == 'released' && !empty($metric->dateType) && $metric->dateType != 'nodate' && common::haspriv('metric', 'recalculate'))
+        {
+            $menuList['main']['recalculate'] = $this->config->metric->actionList['recalculate'];
+            $menuList['main']['recalculate']['text'] = $this->lang->metric->recalculateBtnText;
+            $menuList['main']['recalculate']['hint'] = $this->lang->metric->recalculateBtnText;
+        }
+
         if($metric->builtin === '1') return $menuList;
 
         $stage = $metric->stage;
@@ -1145,6 +1204,62 @@ class metricModel extends model
                 break;
             default:
                 $objectPairs = $this->loadModel($scope)->getPairs();
+                break;
+        }
+
+        return $objectPairs;
+    }
+
+    /**
+     * 根据范围和创建日期获取对象列表。
+     * Get object pairs by scope and createdDate.
+     *
+     * @param  string $scope
+     * @param  string $date
+     * @param  string $vision
+     * @access public
+     * @return array
+     */
+    public function getPairsByScopeAndDate($scope, $date, $vision = 'rnd')
+    {
+        $objectPairs = array();
+        switch($scope)
+        {
+            case 'product':
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_PRODUCT)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('shadow')->eq(0)
+                    ->andWhere('createdDate')->le($date)
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->fetchPairs();
+                break;
+            case 'project':
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('type')->eq('project')
+                    ->andWhere('openedDate')->le($date)
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->fetchPairs();
+                break;
+            case 'execution':
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_PROJECT)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('type')->in('sprint,stage,kanban')
+                    ->andWhere('openedDate')->le($date)
+                    ->andWhere("vision LIKE '%{$vision}%'", true)
+                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->fetchPairs();
+                break;
+            case 'user':
+                $objectPairs = $this->dao->select('account,realname')->from(TABLE_USER)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('join', true)->le(substr($date, 0, 10))
+                    ->orWhere("`join` IS NULL")->markRight(1)
+                    ->andWhere("visions LIKE '%{$vision}%'", true)
+                    ->orWhere("visions IS NULL")->markRight(1)
+                    ->fetchPairs();
                 break;
         }
 
@@ -1366,7 +1481,12 @@ class metricModel extends model
                 if($action['name'] == 'delist')
                 {
                     $isClick = $metric->canDelist;
-                    if(!$isClick and $metric->builtin == '1') $metric->actions[$key]['hint'] = $this->lang->metric->builtinMetric;
+                    if(!$isClick && $metric->builtin == '1') $metric->actions[$key]['hint'] = $this->lang->metric->builtinMetric;
+                }
+                if($action['name'] == 'recalculate')
+                {
+                    $isClick = $metric->canRecalculate;
+                    if($metric->stage != 'released' || (!empty($metric->dateType) && $metric->dateType == 'nodate')) $metric->actions[$key]['hint'] = $this->lang->metric->tips->banRecalculate;
                 }
 
                 $metric->actions[$key]['disabled'] = !$isClick;
@@ -2140,6 +2260,14 @@ class metricModel extends model
         return 'nodate';
     }
 
+    /**
+     * 根据编号获取度量项的日期属性。
+     * Get date type by metric code.
+     *
+     * @param  string $code
+     * @access public
+     * @return string
+     */
     public function getDateTypeByCode(string $code)
     {
         /* Get dateType form db first. */
@@ -2248,6 +2376,76 @@ class metricModel extends model
     }
 
     /**
+     * 获取某一周的第一天和最后一天的日期。
+     * Get the first and last day of a week.
+     *
+     * @param  int|string $year
+     * @param  int|string $week
+     * @param  string     $type date|datetime
+     * @access public
+     * @return bool
+     */
+    public function getStartAndEndOfWeek($year, $week, $type = 'datetime')
+    {
+        $firstDayOfYear = date('Y-01-01', strtotime("$year-01-01"));
+        $firstDayOfWeek = date('N', strtotime($firstDayOfYear));
+
+        $offsetDays = ($week - 1) * 7 - ($firstDayOfWeek - 1);
+
+        $firstDayOfWeek = date('Y-m-d', strtotime("$firstDayOfYear +$offsetDays days"));
+        $lastDayOfWeek  = date('Y-m-d', strtotime("$firstDayOfWeek +6 days"));
+
+        if($type == 'datetime') return array("$firstDayOfWeek 00:00:00", "$lastDayOfWeek 23:59:59");
+        if($type == 'date')     return array($firstDayOfWeek, $lastDayOfWeek);
+    }
+
+    /**
+     * 判断某个度量项在某天是否被定时任务执行过。
+     * Determine whether a metric has been executed by scheduled task on a certain day.
+     *
+     * @param  string $code
+     * @param  string $date
+     * @param  string $dateType
+     * @access public
+     * @return bool
+     */
+    public function isCalcByCron($code, $date, $dateType)
+    {
+        $startDate = '';
+        $endDate   = '';
+        $parsedDate = $this->parseDateStr($date, $dateType);
+        if($dateType == 'year')
+        {
+            $startDate = "{$parsedDate['year']}-01-01 00:00:00";
+            $endDate   = "{$parsedDate['year']}-12-31 23:59:59";
+        }
+        if($dateType == 'month')
+        {
+            $startDate = "{$parsedDate['year']}-{$parsedDate['month']}-01 00:00:00";
+
+            $nextMonth = date('Y-m-01', strtotime("$startDate +1 month"));
+            $endDate   = date('Y-m-d', strtotime("$nextMonth -1 day"));
+            $endDate   = "{$endDate} 23:59:59";
+        }
+        if($dateType == 'day')
+        {
+            $startDate = "{$parsedDate['year']}-{$parsedDate['month']}-{$parsedDate['day']} 00:00:00";
+            $endDate   = "{$parsedDate['year']}-{$parsedDate['month']}-{$parsedDate['day']} 23:59:59";
+        }
+        if($dateType == 'week') list($startDate, $endDate) = $this->getStartAndEndOfWeek($parsedDate['year'], $parsedDate['week']);
+
+        $record = $this->dao->select('id')->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->andWhere('calcType')->eq('cron')
+            ->andWhere('date')->ge($startDate)
+            ->andWhere('date')->le($endDate)
+            ->limit(1)
+            ->fetch();
+
+        return !empty($record);
+    }
+
+    /**
      * 获取度量项的收集周期。
      * Get collect cycle of metric.
      *
@@ -2328,26 +2526,94 @@ class metricModel extends model
     }
 
     /**
-     * 获取某一周的第一天和最后一天的日期。
-     * Get the first and last day of a week.
+     * 检查某个度量项在某个日期中是否被推算过。
+     * Check whether a metric has been inferenced on a date
      *
-     * @param  int|string $year
-     * @param  int|string $week
-     * @param  string     $type date|datetime
+     * @param  string $code
+     * @param  string $dateType
+     * @param  string $date
      * @access public
      * @return bool
      */
-    public function getStartAndEndOfWeek($year, $week, $type = 'datetime')
+    public function checkHasInferenceOfDate($code, $dateType, $date)
     {
-        $firstDayOfYear = date('Y-01-01', strtotime("$year-01-01"));
-        $firstDayOfWeek = date('N', strtotime($firstDayOfYear));
+        if($dateType == 'day' || $dateType == 'nodate') return false;
 
-        $offsetDays = ($week - 1) * 7 - ($firstDayOfWeek - 1);
+        $date = $this->parseDateStr($date, $dateType);
+        $records = $this->dao->select('id')->from(TABLE_METRICLIB)
+           ->where('metricCode')->eq($code)
+           ->andWhere('calcType')->eq('inference')
+           ->beginIF($dateType == 'year')->andWhere('year')->eq($date['year'])->fi()
+           ->beginIF($dateType == 'month')->andWhere('year')->eq($date['year'])->andWhere('month')->eq($date['month'])->fi()
+           ->beginIF($dateType == 'week')->andWhere('year')->eq($date['year'])->andWhere('week')->eq($date['week'])->fi()
+           ->fetch();
 
-        $firstDayOfWeek = date('Y-m-d', strtotime("$firstDayOfYear +$offsetDays days"));
-        $lastDayOfWeek  = date('Y-m-d', strtotime("$firstDayOfWeek +6 days"));
+        return !empty($records);
+    }
 
-        if($type == 'datetime') return array("$firstDayOfWeek 00:00:00", "$lastDayOfWeek 23:59:59");
-        if($type == 'date')     return array($firstDayOfWeek, $lastDayOfWeek);
+    /**
+     * 检查是否是第一次执行重算。
+     * Check if this is the first time inference record.
+     *
+     * @param  string|array|null $codes
+     * @access public
+     * @return bool
+     */
+    public function isFirstInference($codes = null)
+    {
+        $inferenceRecordCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_METRICLIB)
+            ->where('calcType')->eq('inference')
+            ->beginIF($codes != null && !is_array($codes))->andWhere('metricCode')->eq($codes)->fi()
+            ->beginIF($codes != null && is_array($codes))->andWhere('metricCode')->in($codes)->fi()
+            ->fetch('count');
+
+        return $inferenceRecordCount == 0;
+    }
+
+    /**
+     * 将传入的度量项分为两组，一组为有重算记录的，另一组为没有重算记录的。
+     * Divide the metric list into two groups, has inference records or not.
+     *
+     * @param  array  $codeList
+     * @access public
+     * @return bool
+     */
+    public function classifyMetricsByCalcType($codeList)
+    {
+        $inferencedMetrics = array();
+        $otherMetrics      = array();
+        foreach($codeList as $code)
+        {
+            $recordCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_METRICLIB)
+                ->where('calcType')->eq('inference')
+                ->andWhere('metricCode')->eq($code)
+                ->fetch('count');
+
+            if($recordCount > 0)
+            {
+                $inferencedMetrics[] = $code;
+            }
+            else
+            {
+                $otherMetrics[] = $code;
+            }
+        }
+
+        return array('inference' => $inferencedMetrics, 'cron' => $otherMetrics);
+    }
+
+    /**
+     * 根据动态获取安装禅道的大概时间。
+     * Get date of install zentao accorrading action.
+     *
+     * @access public
+     * @return string
+     */
+    public function getInstallDate()
+    {
+        return $this->dao->select('date')->from(TABLE_ACTION)
+            ->orderBy('date_asc')
+            ->limit(1)
+            ->fetch('date');
     }
 }

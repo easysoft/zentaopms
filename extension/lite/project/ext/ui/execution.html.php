@@ -98,7 +98,7 @@ $fnBuildSingleCard = function($kanban) use ($executionActions, $lang, $kanbanvie
             div
             (
                 setClass('panel-body'),
-                div(setClass('kanban-desc'), $kanban->desc),
+                div(setClass('kanban-desc'), html($kanban->desc)),
                 row
                 (
                     setClass('kanban-footer'),

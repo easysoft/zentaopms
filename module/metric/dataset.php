@@ -146,17 +146,18 @@ class dataset
         return $this->defaultWhere($stmt, 't2')->query();
     }
 
-    /*
+    /**
+     * 获取所有发布数据。
+     * Get all release data.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return PDOStatement
+     */
     public function getAllReleases($fieldList)
     {
-        return $this->dao->select($fieldList)
-            ->from(TABLE_RELEASE)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->query();
+        return $this->dao->select($fieldList)->from(TABLE_RELEASE)->alias('t1')->where('deleted')->eq(0)->query();
     }
-    */
 
     /**
      * 获取产品计划数据。

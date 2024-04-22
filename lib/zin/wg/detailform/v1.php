@@ -221,7 +221,7 @@ class detailForm extends wg
 
         return new history
         (
-            set::class('detail-form-history overflow-visible ring-0 border-t'),
+            set::className('detail-form-history overflow-visible ring-0 border-t'),
             set::objectType($this->prop('objectType')),
             set::objectID($this->prop('objectID')),
             set::commentBtn(false),

@@ -266,7 +266,7 @@ class testcase extends control
         $productID = $this->product->checkAccess($productID, $this->products);
         if($branch === '') $branch = $this->cookie->preBranch ? : '';
 
-        $moduleID = $this->testcaseZen->assignCreateVars($productID, $branch, $moduleID, $from, $param, $storyID);
+        $this->testcaseZen->assignCreateVars($productID, $branch, $moduleID, $from, $param, $storyID);
 
         /* 设置自定义字段。 */
         /* Set custom fields. */
@@ -1708,7 +1708,7 @@ class testcase extends control
     {
         if($_FILES)
         {
-            if($_FILES['file']['size'] == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
+            if($_FILES['file']['size'][0] == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileNotEmpty));
 
             /* 保存xmind配置。*/
             /* Sav xmind config. */
@@ -1718,7 +1718,7 @@ class testcase extends control
 
             /* 检查扩展名。*/
             /* Check extension name of file. */
-            $extName = trim(strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION)));
+            $extName = trim(strtolower(pathinfo($_FILES['file']['name'][0], PATHINFO_EXTENSION)));
             if($extName != 'xmind') return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorFileFormat));
 
             $result = $this->testcaseZen->parseUploadFile($productID, $branch);

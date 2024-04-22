@@ -20,7 +20,7 @@ $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status'
 
 $config->testcase->actions = new stdclass();
 $config->testcase->actions->view = array();
-$config->testcase->actions->view['mainActions']   = array('runResult', 'runCase', 'confirmStoryChange', 'review', 'importToLib', 'createBug', 'showScript');
+$config->testcase->actions->view['mainActions']   = array('runResult', 'runCase', 'ztfRun', 'confirmStoryChange', 'review', 'importToLib', 'createBug', 'showScript');
 $config->testcase->actions->view['suffixActions'] = array('edit', 'create', 'createCase', 'delete');
 
 $config->testcase->exportFields = '

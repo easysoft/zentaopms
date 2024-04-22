@@ -2021,7 +2021,7 @@ class blockZen extends block
         if(common::hasPriv('risk',  'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasRisk)    $hasViewPriv['risk']        = true;
         if(common::hasPriv('issue', 'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasIssue)   $hasViewPriv['issue']       = true;
         if(common::hasPriv('meeting', 'view')   && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasMeeting) $hasViewPriv['meeting']     = true;
-        if(common::hasPriv('feedback', 'view')  && in_array($this->config->edition, array('max', 'biz', 'ipd')))                                  $hasViewPriv['feedback'] = true;
+        if((common::hasPriv('feedback', 'view') || common::hasPriv('feedback', 'adminView')) && in_array($this->config->edition, array('max', 'biz', 'ipd')))                                  $hasViewPriv['feedback'] = true;
         if(common::hasPriv('ticket', 'view')    && in_array($this->config->edition, array('max', 'biz', 'ipd')) && $this->config->vision != 'or') $hasViewPriv['ticket']   = true;
 
         $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements');

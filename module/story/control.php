@@ -497,7 +497,7 @@ class story extends control
         $product = $this->product->getByID((int)$story->product);
 
         if($tab == 'product' and !empty($product->shadow)) return $this->send(array('result' => 'success', 'open' => array('url' => $uri, 'app' => 'project')));
-        if(!$story) return $this->send(array('result' => 'success', 'message' => $this->lang->notFound, 'load' => $this->createLink($this->config->vision == 'lite' ? 'project' : 'product', 'all')));
+        if(!$story) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink($this->config->vision == 'lite' ? 'project' : 'product', 'index'))));
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$story->product,") === false) return $this->send(array('result' => 'success', 'message' => $this->lang->product->accessDenied, 'load' => array('back' => true)));
 
         $this->session->set('productList', $uri . "#app={$tab}", 'product');
@@ -517,9 +517,19 @@ class story extends control
         if($this->app->tab == 'project')
         {
             $projectID = $param ? $param : $this->session->project;
-            $this->loadModel('project')->setMenu((int)$projectID);
+            $project   = $this->loadModel('project')->fetchByID($projectID);
             $this->view->projectID = $projectID;
-            $this->view->project   = $this->project->fetchByID($projectID);
+            $this->view->project   = $project;
+            if(!$project->multiple)
+            {
+                $this->project->setMenu((int)$project->project);
+                $this->view->executionID = $projectID;
+                $this->view->execution   = $project;
+            }
+            else
+            {
+                $this->project->setMenu((int)$projectID);
+            }
         }
         elseif($this->app->tab == 'execution')
         {
@@ -712,7 +722,7 @@ class story extends control
                 $params = "storyID=$storyID";
             }
             $locateLink = $this->createLink($module, $method, $params);
-            if($this->app->tab == 'qa') $locateLink = true;
+            if(strpos(',qa,doc,', ",{$this->app->tab},") !== false) $locateLink = true;
         }
 
         return $this->send(array('result' => 'success', 'load' => $locateLink, 'closeModal' => true));

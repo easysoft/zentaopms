@@ -90,7 +90,7 @@ class my extends control
     public function work(string $mode = 'task', string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if(in_array($mode, array('testcase', 'feedback')) && $type == 'assignedTo') $type = 'assigntome';
-        if(strpos(',auditplan,nc,mymeeting,', ",$mode,") === false) $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
+        $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][strtolower($mode)];
 
         echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
@@ -114,7 +114,7 @@ class my extends control
         if(($mode == 'issue' || $mode == 'risk') && $type == 'openedBy') $type = 'createdBy';
         if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
         if(($mode == 'doc' || $mode == 'testcase') && $type == 'openedBy') $type = 'openedbyme';
-        if($mode != 'nc') $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
+        $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][strtolower($mode)];
 
         echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
@@ -869,6 +869,7 @@ class my extends control
      */
     public function auditplan(string $browseType = 'myChecking', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        if(!$browseType) $browseType = 'myChecking';
         /* Set session. */
         $this->session->set('auditplanList', $this->app->getURI(true));
 
@@ -915,10 +916,11 @@ class my extends control
      */
     public function nc(string $browseType = 'assignedToMe', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        if(!$browseType) $browseType = 'assignedToMe';
         /* Set session. */
         $this->session->set('ncList', $this->app->getURI(true));
 
-        $this->app->loadLang('nc');
+        $this->loadModel('nc');
 
         /* Set the pager. */
         $this->app->loadClass('pager', true);
@@ -982,6 +984,7 @@ class my extends control
         $this->view->depts      = $this->dept->getOptionMenu();
         $this->view->users      = $this->user->getPairs('all,noletter');
         $this->view->queryID    = $queryID;
+        $this->view->param      = $param;
         $this->view->mode       = 'myMeeting';
         $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram(0, 'all', true);
         $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
@@ -1390,7 +1393,7 @@ class my extends control
 
         /* Append id for second sort. */
         $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
         $actions    = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();

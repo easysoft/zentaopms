@@ -57,6 +57,7 @@ $items[] = array
     'value'    => $executionID,
     'width'    => '200px',
     'required' => isset($requiredFields['execution']),
+    'hidden'   => !empty($project) && empty($project->multiple),
     'ditto'    => true
 );
 

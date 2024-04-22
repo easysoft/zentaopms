@@ -66,6 +66,7 @@ formPanel
                 setClass('w-full check-list'),
                 div
                 (
+                    setClass('w-full'),
                     inputGroup
                     (
                         $lang->doclib->group,
@@ -80,6 +81,7 @@ formPanel
                 ),
                 div
                 (
+                    setClass('w-full'),
                     inputGroup
                     (
                         $lang->doclib->user,

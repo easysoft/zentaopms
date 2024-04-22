@@ -68,7 +68,7 @@ if(isset($config->xuanxuan->turnon) && $config->xuanxuan->turnon && $xxdStatus =
 #xx-embed-container .xx-embed.has-chat-view {min-width: 1000px!important;}
 #xx-embed-container .xx-embed-body {min-height: initial!important;}
 </style>
-<?php js::import($webRoot . 'data/xuanxuan/sdk/sdk.min.js'); ?>
+<?php js::import($app->getWebRoot() . 'data/xuanxuan/sdk/sdk.min.js'); ?>
 <?php jsVar('xuanConfig', $xuanConfig); ?>
 <?php global $app; jsVar('lang', $app->getClientLang()); ?>
 <script>

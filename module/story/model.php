@@ -47,8 +47,8 @@ class storyModel extends model
         /* Get relation story ID.*/
         $story->relationStoryID = $this->getRelationStoryID($story->id, $story->type);
 
-        $storyIdList = $storyID . ",{$story->relationStoryID}" . ($story->twins ? "," . trim($story->twins, ',') : '');
-        $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $storyIdList = $storyID . ($story->relationStoryID ? "," . trim($story->relationStoryID, ',') : '') . ($story->twins ? "," . trim($story->twins, ',') : '');
+        $story->executions = $this->dao->select('t1.project, t2.id, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
             ->andWhere('t1.story')->in($storyIdList)
@@ -220,7 +220,7 @@ class storyModel extends model
      * @param  int    $storyID
      * @param  string $storyType
      * @access public
-     * @return object
+     * @return string
      */
     public function getRelationStoryID(int $storyID, string $storyType = 'requirement'): string
     {
@@ -3210,6 +3210,12 @@ class storyModel extends model
         global $app, $config;
         $action = strtolower($action);
 
+        if($action == 'subdivide')
+        {
+            if(helper::isAjaxRequest('modal') || $config->vision == 'lite') return false;
+            $action = 'batchcreate';
+        }
+
         if($action == 'recallchange') return $story->status == 'changing';
         if($action == 'recall')       return $story->status == 'reviewing';
         if($action == 'close')        return $story->status != 'closed';
@@ -3218,7 +3224,6 @@ class storyModel extends model
         if($action == 'batchcreate'  && $story->parent > 0)    return false;
         if($action == 'batchcreate'  && !empty($story->twins)) return false;
         if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
-        if($action == 'subdivide' && (!helper::isAjaxRequest('modal') || $config->vision != 'lite')) return false;
         if($action == 'batchcreate'  && $story->type == 'requirement' && $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->parent >= 0 && $story->type != 'requirement';
 
@@ -3262,7 +3267,7 @@ class storyModel extends model
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
         $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
 
-        if($action == 'change') return (($isSuperReviewer !== false || count($story->reviewer) == 0 || count($story->notReview) == 0) && $story->status == 'active');
+        if($action == 'change') return (($isSuperReviewer !== false || count($story->reviewer) == 0 || count($story->notReview) == 0) && in_array($story->status, array('active', 'launched')));
         if($action == 'review') return (($isSuperReviewer !== false || in_array($app->user->account, $story->notReview)) && $story->status == 'reviewing');
 
         return true;

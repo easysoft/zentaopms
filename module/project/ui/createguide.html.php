@@ -13,7 +13,7 @@ namespace zin;
 jsVar('isInModal', isInModal());
 div
 (
-    setClass('modal-header justify-center font-bold'),
+    setClass('modal-header justify-center font-bold p-0 pb-2'),
     h3($lang->project->chooseProgramType)
 );
 
@@ -31,17 +31,17 @@ foreach($lang->project->modelList as $model => $modelName)
     $titleKey   = "{$model}Title";
     $itemList[] = center
     (
-        setClass('model-block'),
+        setClass('model-block p-2'),
         div
         (
             setClass('model-item col items-center cursor-pointer'),
             set('data-url', sprintf($createLink, $model)),
             img
             (
-                setClass('border'),
+                setClass('border w-52'),
                 set::src("theme/default/images/main/{$model}.png")
             ),
-            h3
+            h4
             (
                 setClass('mt-2 font-bold'),
                 $lang->project->{$model}
@@ -58,7 +58,7 @@ div
     $itemList,
     $config->edition != 'ipd' ? div
     (
-        setClass('model-block more-model'),
+        setClass('model-block more-model p-2'),
         div
         (
             setClass('border text-gray text-center'),

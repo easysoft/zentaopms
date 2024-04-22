@@ -19,9 +19,15 @@ $enabledPoints  = isset($enabledPoints)  ? $enabledPoints  : new stdclass();
 $reviewedPoints = isset($reviewedPoints) ? $reviewedPoints : array();
 $canParallel    = isset($canParallel)    ? $canParallel    : false;
 $customKey      = 'createFields';
+$section        = 'custom';
 
 /* Generate custom config key by project model. */
 if(in_array($project->model, array('waterfallplus', 'ipd'))) $customKey = 'create' . ucfirst($project->model) . 'Fields';
+if($executionType == 'agileplus')
+{
+    $section   = 'customAgilePlus';
+    $customKey = 'createFields';
+}
 
 /* Generate title that is tailored to specific situation. */
 $title = $lang->programplan->create;
@@ -280,7 +286,7 @@ formBatchPanel
     set::onRenderRow(jsRaw('window.onRenderRow')),
     to::headingActions(array($fnGenerateSubPlanManageFields())),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),
-    set::customUrlParams("module=programplan&section=custom&key=$customKey"),
+    set::customUrlParams("module=programplan&section=$section&key=$customKey"),
     set::items($fnGenerateFields()),
     set::data($fnGenerateDefaultData()),
     $app->session->projectPlanList ? set::actions(array('submit', array('text' => $lang->cancel, 'url' => $app->session->projectPlanList))) : null,

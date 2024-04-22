@@ -345,9 +345,13 @@ class chartModel extends model
 
         /* 若查询结果大于50条，将50条之后的结果归于其他。*/
         /* If the query results are greater than 50, the results after 50 will be classified as other. */
-        $otherSum = array_sum(array_splice($stat, 50));
-        $stat[$this->lang->chart->other] = $otherSum;
-        if(empty($date)) arsort($stat);
+        $maxCount = 50;
+        if(count($stat) > $maxCount)
+        {
+            $other = array_sum(array_slice($stat, $maxCount));
+            $stat  = array_slice($stat, 0, $maxCount);
+            $stat[$this->lang->chart->other] = $other;
+        }
 
         $seriesData = array();
         $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);

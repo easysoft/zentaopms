@@ -70,4 +70,4 @@ $config->metric->dtable->definition->fieldList['actions']['type']     = 'actions
 $config->metric->dtable->definition->fieldList['actions']['sortType'] = false;
 $config->metric->dtable->definition->fieldList['actions']['list']     = $config->metric->actionList;
 $config->metric->dtable->definition->fieldList['actions']['fixed']    = 'right';
-$config->metric->dtable->definition->fieldList['actions']['menu']     = array('edit', 'implement', 'delist', 'delete');
+$config->metric->dtable->definition->fieldList['actions']['menu']     = array('edit', 'implement', 'delist', 'delete', 'recalculate');

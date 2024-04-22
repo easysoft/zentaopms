@@ -32,6 +32,7 @@
 <script>
 function initBurnChar()
 {
+    console.log(executions);
     Object.values(executions).forEach(function(execution)
     {
         var chartDom = document.getElementById('burn' + execution.id);
@@ -123,7 +124,7 @@ function initBurnChar()
                 "width": 2,
                 "type": "solid"
               },
-              data: JSON.parse(execution.chartData['baseLine'])
+              data: execution.chartData['baseLine']
             },
             {
               name: "<?php echo $lang->execution->charts->burn->graph->actuality;?>",
@@ -155,7 +156,7 @@ function initBurnChar()
                 "width": 2,
                 "type": "solid"
               },
-              data: JSON.parse(execution.chartData['burnLine'])
+              data: execution.chartData['burnLine']
             },
           ]
         };
@@ -173,7 +174,7 @@ function initBurnChar()
                   "width": 2,
                   "type": "solid"
                 },
-                data: JSON.parse(execution.chartData['delayLine'])
+                data: execution.chartData['delayLine']
             }
             option.title.subtext = '已延期';
             option.title.subtextStyle = {color:"red", fontSize: 15};

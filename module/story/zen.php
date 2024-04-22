@@ -918,7 +918,7 @@ class storyZen extends story
         $modules         = array($productID => $modulePairs);
         $branchTagOption = array($productID => $branchTagOption);
         $products        = array($productID => $product);
-        $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, $branches, 'unexpired', true));
+        $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, $branches, '', true));
 
         return array('branchProduct' => $branchProduct, 'modules' => $modules, 'branchTagOption' => $branchTagOption, 'products' => $products, 'plans' => $plans);
 
@@ -1222,6 +1222,9 @@ class storyZen extends story
             ->setDefault('estimate', $oldStory->estimate)
             ->setDefault('stage', $oldStory->stage)
             ->setDefault('stagedBy', $oldStory->stagedBy)
+            ->setDefault('childStories', $oldStory->childStories)
+            ->setDefault('parent', $oldStory->parent)
+            ->setDefault('plan', $oldStory->plan)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     && $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedReason && $oldStory->closedDate == '', 'closedDate', $now)

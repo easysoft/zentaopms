@@ -27,7 +27,7 @@ class heading extends wg
 
         if(!in_array($tab, array('program', 'product', 'project')))
         {
-            $nav = $lang->mainNav->$tab;
+            $nav = zget($lang->mainNav, $tab, null);
             if($nav)
             {
                 list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
@@ -41,7 +41,7 @@ class heading extends wg
             if($tab == 'product')                      $currentMethod = 'all';
         }
 
-        if(!$currentModule || !$currentMethod) return null;
+        if(empty($currentModule) || empty($currentMethod)) return null;
 
         $url = createLink($currentModule, $currentMethod);
         return item

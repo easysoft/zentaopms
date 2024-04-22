@@ -308,7 +308,7 @@ CSS;
             setClass('detail-sections canvas shadow rounded'),
             new history
             (
-                set::class('detail-section overflow-visible'),
+                set::className('detail-section overflow-visible'),
                 set::objectType($this->prop('objectType')),
                 set::objectID($this->prop('objectID')),
                 set($history)

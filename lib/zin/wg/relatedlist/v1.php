@@ -17,7 +17,9 @@ class relatedList extends wg
 
     protected function getCommonItem(string $type, array $group, object $item): array
     {
-        $title = isset($item->title) ? $item->title : $item->name;
+        $title = '';
+        if(isset($item->title)) $title = $item->title;
+        if(isset($item->name))  $title = $item->name;
         $info = array
         (
             'title'   => $title,

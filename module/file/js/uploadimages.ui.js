@@ -105,7 +105,7 @@ window.uploadImages = function(selector, options, $uploadBtn)
                 {
                     $.ajax(
                     {
-                        url: locateUrl,
+                        url: options.locateUrl,
                         headers:{'X-Zui-Modal': true},
                         dataType: 'json',
                         success: function(data)

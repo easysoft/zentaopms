@@ -91,7 +91,7 @@ $config->story->actionList['review']['data-app'] = $app->tab;
 $config->story->actionList['subdivide']['icon']     = 'split';
 $config->story->actionList['subdivide']['text']     = $lang->story->subdivide;
 $config->story->actionList['subdivide']['hint']     = $lang->story->subdivide;
-$config->story->actionList['subdivide']['url']      = array('module' => 'story', 'method' => 'batchCreate', 'params' => 'productID={product}&branch={branch}&moduleID={module}&storyID={id}&executionID={executionID}&plan=0&storyType=story');
+$config->story->actionList['subdivide']['url']      = array('module' => 'story', 'method' => 'batchCreate', 'params' => 'productID={product}&branch={branch}&moduleID={module}&storyID={id}&executionID={execution}&plan=0&storyType=story');
 $config->story->actionList['subdivide']['data-app'] = $app->tab;
 
 $config->story->actionList['assignTo']['icon']        = 'hand-right';

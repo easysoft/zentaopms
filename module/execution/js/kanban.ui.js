@@ -135,7 +135,7 @@ window.getItem = function(info)
         info.item.icon = 'product';
         if(priv.canViewStory)
         {
-            info.item.titleUrl   = $.createLink('story', 'view', `id=${info.item.id}`);
+            info.item.titleUrl   = $.createLink('execution', 'storyView', `id=${info.item.id}&executionID=${executionID}`);
             info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
         }
 

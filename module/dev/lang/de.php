@@ -176,6 +176,10 @@ $lang->dev->tableList['approval']              = 'Approval';
 $lang->dev->tableList['approvalflow']          = 'Approval Flow';
 $lang->dev->tableList['chart']                 = 'Chart';
 $lang->dev->tableList['dataset']               = 'Dataset';
+$lang->dev->tableList['dataview']              = 'Dataview';
+$lang->dev->tableList['dimension']             = 'Dimension';
+$lang->dev->tableList['metric']                = 'Metric';
+$lang->dev->tableList['pivot']                 = 'Pivot';
 
 $lang->dev->groupList['my']        = 'Dashboard';
 $lang->dev->groupList['program']   = 'Program';

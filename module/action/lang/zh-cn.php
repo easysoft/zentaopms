@@ -522,6 +522,8 @@ $lang->action->label->createrepobranch        = '创建了分支从';
 $lang->action->label->unlinkrepobranch        = '取消关联了分支从';
 $lang->action->label->communicate             = '沟通了';
 $lang->action->label->changedprogram          = '调整了项目集';
+$lang->action->label->published               = '发布了';
+$lang->action->label->unpublished             = '下架了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

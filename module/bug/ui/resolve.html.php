@@ -132,7 +132,7 @@ formPanel
         set::width('1/3'),
         set::name('assignedTo'),
         set::label($lang->bug->assignedTo),
-        set::value($bug->assignedTo),
+        set::value($assignedTo),
         set::items($users)
     ),
     formGroup

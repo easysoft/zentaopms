@@ -941,13 +941,13 @@ class commonModel extends model
             $queryCondition = substr($sql, strpos($sql, ' WHERE ') + 7);
             if($queryCondition)
             {
-                $queryCondition = substr($queryCondition, 0, strpos($queryCondition, ' ORDER BY '));
+                if(strpos($queryCondition, ' ORDER BY') !== false) $queryCondition = substr($queryCondition, 0, strpos($queryCondition, ' ORDER BY '));
                 $queryCondition = str_replace('t1.', '', $queryCondition);
             }
         }
         else
         {
-            $queryCondition = substr($sql, 0, strpos($sql, ' ORDER BY '));
+            if(strpos($sql, ' ORDER BY') !== false) $queryCondition = substr($sql, 0, strpos($sql, ' ORDER BY '));
         }
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
@@ -1249,6 +1249,11 @@ class commonModel extends model
         if($config->vision == 'or' and $module == 'story') $module = 'requirement';
         if(empty($app->user)) return false;
         list($module, $method) = commonTao::getStoryModuleAndMethod($module, $method, $params);
+
+        /* Compatible with old search. */
+        if($module == 'search' && $method == 'buildoldform')  $method = 'buildform';
+        if($module == 'search' && $method == 'saveoldquery')  $method = 'savequery';
+        if($module == 'search' && $method == 'buildoldquery') $method = 'buildquery';
 
         /* If the user is doing a tutorial, have all tutorial privileges. */
         if(commonModel::isTutorialMode())

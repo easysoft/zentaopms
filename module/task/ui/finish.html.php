@@ -143,6 +143,7 @@ else
         (
             set::width('1/2'),
             set::label($lang->project->realBeganAB),
+            set::required(true),
             datetimePicker
             (
                 set::name('realStarted'),

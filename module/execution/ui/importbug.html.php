@@ -29,7 +29,8 @@ if(!isInModal())
         'text'      => $lang->goback,
         'className' => 'btn btn-info size-sm text-gray',
         'url'       => createLink('execution', 'task', "executionID={$execution->id}"),
-        'btnType'   => 'info'
+        'btnType'   => 'info',
+        'data-app'  => $app->tab
     );
 }
 

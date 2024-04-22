@@ -123,7 +123,9 @@ class bug extends control
 
         /* 处理列表页面的参数。*/
         /* Processing browse params. */
+        $modules = $this->tree->getOptionMenu((int)$product->id, 'bug', 0, $branch);
         list($moduleID, $queryID, $realOrderBy, $pager) = $this->bugZen->prepareBrowseParams($browseType, $param, $orderBy, $recTotal, $recPerPage, $pageID);
+        if(!isset($modules[$moduleID])) $moduleID = 0;
 
         $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID);
 
@@ -131,6 +133,7 @@ class bug extends control
         $bugs       = $this->bugZen->getBrowseBugs((int)$product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
         $this->bugZen->buildBrowseView($bugs, (object)$product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
+        $this->view->modules = $modules;
         $this->display();
     }
 
@@ -454,12 +457,15 @@ class bug extends control
         /* Set menu. */
         $this->qa->setMenu($oldBug->product, $oldBug->branch);
 
+        $users = $this->loadModel('user')->getPairs('noclosed');
+
         /* 展示相关变量。 */
         /* Show the variables associated. */
         $this->view->title      = $this->lang->bug->resolve;
         $this->view->bug        = $oldBug;
         $this->view->execution  = $oldBug->execution ? $this->loadModel('execution')->getByID($oldBug->execution) : '';
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->users      = $users;
+        $this->view->assignedTo = isset($users[$oldBug->openedBy]) ? $oldBug->openedBy : $this->bug->getModuleOwner($oldBug->module, $oldBug->product);
         $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : '0', (int)$oldBug->project, 'stagefilter');
         $this->view->builds     = $this->loadModel('build')->getBuildPairs(array($oldBug->product), $oldBug->branch, 'withbranch,noreleased');
         $this->view->actions    = $this->loadModel('action')->getList('bug', $bugID);

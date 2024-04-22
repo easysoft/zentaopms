@@ -44,6 +44,7 @@ function changeTaskProjects(event)
         {
             data = JSON.parse(data);
             $executionPicker.render({items: data});
+            $executionPicker.$.setValue('');
         }
     });
 }

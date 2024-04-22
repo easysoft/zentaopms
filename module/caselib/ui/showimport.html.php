@@ -58,7 +58,6 @@ else
         'label'   => $lang->testcase->module,
         'control' => 'picker',
         'items'   => $modules,
-        'required' => true,
         'width'   => '200px'
     );
 

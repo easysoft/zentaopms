@@ -32,7 +32,7 @@ class treeEditor extends wg
             $id = "treeEditor-{$app->rawModule}-{$app->rawMethod}";
         }
 
-        $treeType = ($treeProps['onSort'] || $treeProps['sortable']) ? 'sortableTree' : 'tree';
+        $treeType = (!empty($treeProps['onSort']) || !empty($treeProps['sortable'])) ? 'sortableTree' : 'tree';
         return div
         (
             setStyle('--menu-selected-bg', 'none'),

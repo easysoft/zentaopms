@@ -162,6 +162,7 @@ form
                     setClass('w-full check-list'),
                     inputGroup
                     (
+                        setClass('w-full'),
                         $lang->doc->groups,
                         picker
                         (
@@ -171,7 +172,11 @@ form
                             set::value($doc->groups)
                         )
                     ),
-                    users(set::label($lang->doc->users), set::items($users), set::value($doc->users))
+                    div
+                    (
+                        setClass('w-full'),
+                        users(set::label($lang->doc->users), set::items($users), set::value($doc->users))
+                    )
                 )
             ) : null,
             formRow
