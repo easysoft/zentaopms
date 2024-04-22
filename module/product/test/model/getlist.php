@@ -47,11 +47,11 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('user')->gen(5);
-zdTable('team')->gen(0);
-zdTable('product')->config('product')->gen(30);
-zdTable('project')->config('program')->gen(10);
-zdTable('projectproduct')->config('projectproduct')->gen(30);
+zenData('user')->gen(5);
+zenData('team')->gen(0);
+zenData('product')->loadYaml('product')->gen(30);
+zenData('project')->loadYaml('program')->gen(10);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(30);
 su('admin');
 
 $programID  = 1;

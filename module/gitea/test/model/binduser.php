@@ -21,10 +21,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/gitea.class.php';
+include dirname(__FILE__, 2) . '/lib/gitea.unittest.class.php';
 
-zdTable('user')->gen(10);
-zdTable('oauth')->config('oauth')->gen(10);
+zenData('user')->gen(10);
+zenData('oauth')->loadYaml('oauth')->gen(10);
 su('admin');
 
 $gitea = new giteaTest();

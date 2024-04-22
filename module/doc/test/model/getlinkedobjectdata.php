@@ -38,33 +38,33 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-$storyTable = zdTable('story');
+$storyTable = zenData('story');
 $storyTable->product->range('1-5');
 $storyTable->gen(20);
 
-$planTable = zdTable('productplan');
+$planTable = zenData('productplan');
 $planTable->product->range('1-5');
 $planTable->gen(20);
 
-$releaseTable = zdTable('release');
+$releaseTable = zenData('release');
 $releaseTable->product->range('1-5');
 $releaseTable->gen(20);
 
-$caseTable = zdTable('case');
+$caseTable = zenData('case');
 $caseTable->product->range('1-5');
 $caseTable->gen(20);
 
-$projectstoryTable = zdTable('projectstory');
+$projectstoryTable = zenData('projectstory');
 $projectstoryTable->project->range('11,60,61,100,101-110');
 $projectstoryTable->gen(20);
 
-$taskTable = zdTable('task');
+$taskTable = zenData('task');
 $taskTable->execution->range('101-110');
 $taskTable->gen(20);
 
-$buildTable = zdTable('build');
+$buildTable = zenData('build');
 $buildTable->execution->range('101-110');
 $buildTable->gen(20);
 
@@ -72,21 +72,21 @@ $issuetable = zdtable('issue');
 $issuetable->project->range('11, 60, 61, 100');
 $issuetable->gen(20);
 
-$meetingTable = zdTable('meeting');
+$meetingTable = zenData('meeting');
 $meetingTable->project->range('11, 60, 61, 100');
 $meetingTable->gen(20);
 
-$reviewTable = zdTable('review');
+$reviewTable = zenData('review');
 $reviewTable->project->range('11, 60, 61, 100');
 $reviewTable->gen(20);
 
-$designTable = zdTable('design');
+$designTable = zenData('design');
 $designTable->project->range('11, 60, 61, 100');
 $designTable->gen(20);
 
-zdTable('product')->config('product')->gen(5);
-zdTable('project')->config('execution')->gen(10);
-zdTable('user')->gen(5);
+zenData('product')->loadYaml('product')->gen(5);
+zenData('project')->loadYaml('execution')->gen(10);
+zenData('user')->gen(5);
 su('admin');
 
 $types      = array('all', 'product', 'project', 'execution');

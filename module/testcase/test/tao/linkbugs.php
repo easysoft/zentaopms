@@ -1,16 +1,16 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 su('admin');
 
 function initData()
 {
-    $bugdata = zdTable('bug');
+    $bugdata = zenData('bug');
     $bugdata->id->range('1-3');
     $bugdata->case->range('0');
 
-    zdTable('case')->gen(10);
+    zenData('case')->gen(10);
     $bugdata->gen(3);
 }
 

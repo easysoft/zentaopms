@@ -63,10 +63,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+zenData('user')->gen(5);
 
-$doc = zdTable('doclib');
+$doc = zenData('doclib');
 $doc->id->range('1-5');
 $doc->product->range('0{2},1{2}');
 $doc->project->range('0,1{2},0{2}');

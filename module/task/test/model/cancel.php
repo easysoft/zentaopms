@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
 
 /**
@@ -12,7 +12,7 @@ cid=1
 
 */
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-6');
 $task->execution->range('2');
 $task->name->prefix("任务")->range('1-6');
@@ -23,11 +23,11 @@ $task->assignedTo->prefix("old")->range('1-6');
 $task->status->range("wait,doing,done,pause,cancel,closed");
 $task->gen(6);
 
-zdTable('story')->gen(1);
-zdTable('product')->gen(1);
-zdTable('kanbanlane')->config('kanbanlane', true)->gen(10);
-zdTable('kanbancolumn')->config('kanbancolumn', true)->gen(18);
-zdTable('kanbancell')->config('kanbancell', true)->gen(18);
+zenData('story')->gen(1);
+zenData('product')->gen(1);
+zenData('kanbanlane')->loadYaml('kanbanlane', true)->gen(10);
+zenData('kanbancolumn')->loadYaml('kanbancolumn', true)->gen(18);
+zenData('kanbancell')->loadYaml('kanbancell', true)->gen(18);
 
 $taskIDlist = array(1, 2, 3, 4, 5, 6);
 

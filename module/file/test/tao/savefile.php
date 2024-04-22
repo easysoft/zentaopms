@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
+include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
 
 function initData()
 {
-    zdTable('file')->gen(5);
+    zenData('file')->gen(5);
 }
 initData();
 

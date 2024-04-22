@@ -26,21 +26,21 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
-$product = zdTable('product')->config('product');
+$product = zenData('product')->loadYaml('product');
 $product->type->range('normal{3},branch{3},platform{3}');
 $product->gen(9);
 
-$branch = zdTable('branch');
+$branch = zenData('branch');
 $branch->product->range('4-9{3}');
 $branch->gen(18);
 
-$module = zdTable('module');
+$module = zenData('module');
 $module->root->range('1-9{4}');
 $module->type->range('story');
 $module->branch->range('0{12},0-3,0,4-6,0,7-9,0,10-12,0,13-15,0,16-18');
 $module->gen(36);
 
-$projectProduct = zdTable('projectproduct');
+$projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-3,4-30{2}');
 $projectProduct->product->range('1-3,4-9{2}');
 $projectProduct->branch->range('0{3},0,1,0,4,0,7,10,11,13,15,16,18');

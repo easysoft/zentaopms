@@ -27,10 +27,10 @@ cid=64
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
-zdTable('bug')->gen(140);
-zdTable('user')->gen(1);
+zenData('bug')->gen(140);
+zenData('user')->gen(1);
 
 su('admin');
 

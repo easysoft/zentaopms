@@ -1,27 +1,27 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 su('admin');
 
-zdTable('action')->config('action')->gen(25);
-zdTable('product')->config('product')->gen(2);
-zdTable('project')->config('execution')->gen(111);
-zdTable('repo')->config('repo')->gen(3);
-zdTable('pipeline')->gen(1);
-zdTable('projectproduct')->config('projectproduct')->gen(1);
-zdTable('module')->config('module')->gen(3);
-zdTable('review')->config('review')->gen(2);
-zdTable('release')->config('release')->gen(2);
-zdTable('build')->config('build')->gen(1);
-zdTable('case')->config('case')->gen(2);
-zdTable('scene')->config('scene')->gen(3);
-zdTable('doc')->config('doc')->gen(1);
-zdTable('doccontent')->config('doccontent')->gen(1);
-zdTable('file')->gen(1);
-zdTable('doclib')->config('doclib')->gen(2);
-zdTable('productplan')->config('productplan')->gen(2);
-zdTable('task')->config('task')->gen(2);
+zenData('action')->loadYaml('action')->gen(25);
+zenData('product')->loadYaml('product')->gen(2);
+zenData('project')->loadYaml('execution')->gen(111);
+zenData('repo')->loadYaml('repo')->gen(3);
+zenData('pipeline')->gen(1);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(1);
+zenData('module')->loadYaml('module')->gen(3);
+zenData('review')->loadYaml('review')->gen(2);
+zenData('release')->loadYaml('release')->gen(2);
+zenData('build')->loadYaml('build')->gen(1);
+zenData('case')->loadYaml('case')->gen(2);
+zenData('scene')->loadYaml('scene')->gen(3);
+zenData('doc')->loadYaml('doc')->gen(1);
+zenData('doccontent')->loadYaml('doccontent')->gen(1);
+zenData('file')->gen(1);
+zenData('doclib')->loadYaml('doclib')->gen(2);
+zenData('productplan')->loadYaml('productplan')->gen(2);
+zenData('task')->loadYaml('task')->gen(2);
 
 /**
 

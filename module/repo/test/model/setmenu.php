@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -16,11 +16,11 @@ cid=1
 
 */
 
-zdTable('user')->gen(20);
-zdTable('pipeline')->gen(5);
-zdTable('project')->gen(5);
-zdTable('oauth')->config('oauth')->gen(20);
-$repo = zdTable('repo')->config('repo');
+zenData('user')->gen(20);
+zenData('pipeline')->gen(5);
+zenData('project')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(20);
+$repo = zenData('repo')->loadYaml('repo');
 $repo->acl->range('[{"acl":"private"}]');
 $repo->product->range('1,1,1000');
 $repo->gen(4);

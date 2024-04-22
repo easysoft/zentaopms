@@ -12,12 +12,12 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
-zdTable('user')->config('user')->gen(5);
-zdTable('company')->gen(1);
-zdTable('group')->gen(0);
-zdTable('grouppriv')->gen(0);
+zenData('user')->loadYaml('user')->gen(5);
+zenData('company')->gen(1);
+zenData('group')->gen(0);
+zenData('grouppriv')->gen(0);
 
 su('admin');
 

@@ -40,11 +40,11 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->version->range(1);
 $story->status->range('draft,active,closed,changing,reviewing');
 $story->gen(100);
-$storyreview = zdTable('storyreview');
+$storyreview = zenData('storyreview');
 $storyreview->story->range('1-100');
 $storyreview->gen(100);
 

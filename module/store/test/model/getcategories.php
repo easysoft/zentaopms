@@ -13,9 +13,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/store.class.php';
+include dirname(__FILE__, 2) . '/lib/store.unittest.class.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $store = new storeTest();

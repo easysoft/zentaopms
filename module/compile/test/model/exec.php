@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/compile.class.php';
+include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
 
-zdTable('compile')->gen(10);
-zdTable('job')->config('job')->gen(1);
-zdTable('repo')->gen(1);
-zdTable('pipeline')->gen(1);
+zenData('compile')->gen(10);
+zenData('job')->loadYaml('job')->gen(1);
+zenData('repo')->gen(1);
+zenData('pipeline')->gen(1);
 su('admin');
 
 /**

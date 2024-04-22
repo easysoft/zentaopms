@@ -12,10 +12,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tutorial.class.php';
+include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('config')->config('config')->gen(16);
+zenData('user')->gen(5);
+zenData('config')->loadYaml('config')->gen(16);
 
 $tutorial = new tutorialTest();
 

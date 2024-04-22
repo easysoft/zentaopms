@@ -18,11 +18,11 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$taskTeam = zdTable('taskteam');
+$taskTeam = zenData('taskteam');
 $taskTeam->task->range('1');
 $taskTeam->account->range('account,user1');
 $taskTeam->gen(2);
-$task     = zdTable('task');
+$task     = zenData('task');
 $task->execution->range('1');
 $task->assignedTo->range('admin,user1,user2');
 $task->mode->range('multi,``{10}');

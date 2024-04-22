@@ -1,22 +1,22 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
+include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
-zdTable('productplan')->config('productplan')->gen(5);
-zdTable('user')->gen(5);
+zenData('productplan')->loadYaml('productplan')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
-$planstory = zdTable('planstory');
+$planstory = zenData('planstory');
 $planstory->story->range('1-5');
 $planstory->plan->range('1');
 $planstory->gen(5);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->plan->range(',1,');
 $story->gen(5);
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->plan->range('1');
 $bug->gen(5);
 

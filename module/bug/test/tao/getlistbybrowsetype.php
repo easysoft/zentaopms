@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->id->range('1-10');
 $bug->product->range('1,2');
 $bug->branch->range('0,1');
@@ -20,13 +20,13 @@ $bug->confirmed->range('0,1');
 $bug->resolution->range('postponed,fixed');
 $bug->gen(10);
 
-$productplan = zdTable('productplan');
+$productplan = zenData('productplan');
 $productplan->id->range('1');
 $productplan->product->range('1');
 $productplan->title->range('计划1');
 $productplan->gen(1);
 
-zdTable('user')->gen(1);
+zenData('user')->gen(1);
 
 su('admin');
 

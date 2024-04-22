@@ -14,12 +14,12 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/group.class.php';
+include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
 
 su('admin');
 
-zdTable('group')->gen(5);
-zdTable('grouppriv')->config('grouppriv')->gen(10);
+zenData('group')->gen(5);
+zenData('grouppriv')->loadYaml('grouppriv')->gen(10);
 
 $group = new groupTest();
 

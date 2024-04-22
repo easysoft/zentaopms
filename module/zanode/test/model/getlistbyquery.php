@@ -71,11 +71,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zanode.class.php';
+include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
 
-zdTable('host')->config('host')->gen(13);
-zdTable('image')->gen(10);
-zdTable('userquery')->config('userquery')->gen(1);
+zenData('host')->loadYaml('host')->gen(13);
+zenData('image')->gen(10);
+zenData('userquery')->loadYaml('userquery')->gen(1);
 
 $ipList = array(1, 10, 0);
 

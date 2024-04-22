@@ -14,7 +14,7 @@ pid=1
 如果存在自定义的词条lang以及默认语言为英文，优先返回自定义词条的内容。 >> BugID-en
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
 $pivot = new pivotTest();
 

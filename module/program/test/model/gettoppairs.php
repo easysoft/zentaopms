@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
-$program = zdTable('project');
+$program = zenData('project');
 $program->id->range('1-5');
 $program->name->range('1-5')->prefix('项目集');
 $program->type->range('program');

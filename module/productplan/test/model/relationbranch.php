@@ -9,10 +9,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
+include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
-zdTable('branch')->config('relationbranch_branch')->gen(20);
-zdTable('productplan')->config('relationbranch_productplan')->gen(50);
+zenData('branch')->loadYaml('relationbranch_branch')->gen(20);
+zenData('productplan')->loadYaml('relationbranch_productplan')->gen(50);
 
 $plan = new productPlan('admin');
 

@@ -58,11 +58,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-zdTable('user')->gen(1);
-zdTable('company')->gen(1);
-zdTable('usergroup')->gen(0);
+zenData('user')->gen(1);
+zenData('company')->gen(1);
+zenData('usergroup')->gen(0);
 
 su('admin');
 

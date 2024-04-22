@@ -22,7 +22,7 @@ cid=1
 */
 
 su('admin');
-zdTable('project')->config('project')->gen(6);
+zenData('project')->loadYaml('project')->gen(6);
 
 global $tester;
 $tester->loadModel('project');

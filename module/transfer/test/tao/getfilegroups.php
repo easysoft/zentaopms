@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-zdTable('file')->gen(10);
+zenData('file')->gen(10);
 su('admin');
 
 /**

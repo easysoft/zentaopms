@@ -28,12 +28,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('build')->config('build')->gen(1);
-zdTable('project')->config('execution')->gen(1);
-zdTable('project')->gen(11, false, false);
-zdTable('projectstory')->gen(5);
+zenData('build')->loadYaml('build')->gen(1);
+zenData('project')->loadYaml('execution')->gen(1);
+zenData('project')->gen(11, false, false);
+zenData('projectstory')->gen(5);
 
 $actionTest = new actionTest();
 

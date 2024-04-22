@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/search.class.php';
+include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 
 su('admin');
 
-zdTable('module')->gen(5);
-zdTable('dept')->gen(5);
-zdTable('scene')->gen(1);
+zenData('module')->gen(5);
+zenData('dept')->gen(5);
+zenData('scene')->gen(1);
 
 /**
 

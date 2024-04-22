@@ -9,9 +9,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
+include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
 
-zdTable('build')->gen(20);
+zenData('build')->gen(20);
 su('admin');
 
 $buildIDList = array('1', '11');

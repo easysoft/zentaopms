@@ -15,11 +15,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
 $actionTest = new actionTest();
 
-zdTable('review')->gen(15);
-zdTable('projectproduct')->gen(20);
+zenData('review')->gen(15);
+zenData('projectproduct')->gen(20);
 
 r($actionTest->getReviewRelated('review', 15)) && p('0:5;1') && e('5,15');   //测试当objectType为review,objectID为15时，返回的数据是否正确

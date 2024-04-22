@@ -15,13 +15,13 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-zdTable('api')->gen(0);
-zdTable('doclib')->config('doclib')->gen(30);
-zdTable('doc')->config('doc')->gen(50);
-zdTable('action')->config('action')->gen(50);
-zdTable('user')->gen(5);
+zenData('api')->gen(0);
+zenData('doclib')->loadYaml('doclib')->gen(30);
+zenData('doc')->loadYaml('doc')->gen(50);
+zenData('action')->loadYaml('action')->gen(50);
+zenData('user')->gen(5);
 
 $recPerPages = array(5, 10, 20);
 $pagerIds    = array(1, 2);

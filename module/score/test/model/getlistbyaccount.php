@@ -21,10 +21,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/score.class.php';
+include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('score')->config('score')->gen(40);
+zenData('user')->gen(5);
+zenData('score')->loadYaml('score')->gen(40);
 
 $accounts    = array('admin', 'user1');
 $recPerPages = array(5, 10, 20);

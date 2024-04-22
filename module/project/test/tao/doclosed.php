@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/project.class.php';
+include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('1-3');
 $project->type->range('project');
 $project->realBegan->range('20220427 000000:1w')->type('timestamp')->format('YYYY-MM-DD');

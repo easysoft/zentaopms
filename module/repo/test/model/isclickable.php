@@ -15,8 +15,8 @@ cid=1
 
 */
 
-zdTable('repo')->config('repo')->gen(4);
-zdTable('repohistory')->config('repohistory')->gen(3);
+zenData('repo')->loadYaml('repo')->gen(4);
+zenData('repohistory')->loadYaml('repohistory')->gen(3);
 
 $repoModel = $tester->loadModel('repo');
 

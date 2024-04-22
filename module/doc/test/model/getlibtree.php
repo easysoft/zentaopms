@@ -100,20 +100,20 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-$userqueryTable = zdTable('userquery');
+$userqueryTable = zenData('userquery');
 $userqueryTable->id->range('1-2');
 $userqueryTable->sql->range("`(( 1 AND `title` LIKE '%文档%' ) AND ( 1 ))`");
 $userqueryTable->gen(1);
 
-zdTable('project')->config('execution')->gen(10);
-zdTable('product')->config('product')->gen(5);
-zdTable('module')->config('module')->gen(3);
-zdTable('doclib')->config('doclib')->gen(30);
-zdTable('doc')->config('doc')->gen(50);
-zdTable('apilibrelease')->gen(0);
-zdTable('user')->gen(5);
+zenData('project')->loadYaml('execution')->gen(10);
+zenData('product')->loadYaml('product')->gen(5);
+zenData('module')->loadYaml('module')->gen(3);
+zenData('doclib')->loadYaml('doclib')->gen(30);
+zenData('doc')->loadYaml('doc')->gen(50);
+zenData('apilibrelease')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $libID       = 1;

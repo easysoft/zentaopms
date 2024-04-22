@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/branch.class.php';
+include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->id->range('41-45');
 $product->type->range('normal,branch,platform');
 $product->gen(5);
 
-zdTable('branch')->gen(10);
+zenData('branch')->gen(10);
 su('admin');
 
 /**

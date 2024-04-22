@@ -13,7 +13,7 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
 $pivot = new pivotTest();
 

@@ -22,10 +22,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
+include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
 su('admin');
 
-zdTable('usertpl')->gen(0);
+zenData('usertpl')->gen(0);
 $module = array('bug', 'task');
 
 $file1 = new stdclass();

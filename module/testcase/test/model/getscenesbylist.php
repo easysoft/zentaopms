@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 su('admin');
 
-zdTable('scene')->gen('4')->fixPath();
+zenData('scene')->gen('4')->fixPath();
 
 /**
 

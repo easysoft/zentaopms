@@ -101,18 +101,18 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-zdTable('user')->gen(3);
-$companyTable = zdTable('company');
+zenData('user')->gen(3);
+$companyTable = zenData('company');
 $companyTable->admins->range('`,admin,user1,`');
 $companyTable->gen(1);
 
-$viewTable = zdTable('userview');
+$viewTable = zenData('userview');
 $viewTable->account->range('user1');
 $viewTable->gen(1);
 
-$groupTable = zdTable('usergroup');
+$groupTable = zenData('usergroup');
 $groupTable->account->range('user1');
 $groupTable->group->range('1,2');
 $groupTable->gen(2);

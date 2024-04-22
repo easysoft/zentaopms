@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
 /**
 
@@ -49,8 +49,8 @@ pid=1
 
 */
 
-zdTable('product')->gen(10);
-zdTable('bug')->config('bug_product')->gen(40);
+zenData('product')->gen(10);
+zenData('bug')->loadYaml('bug_product')->gen(40);
 
 $productIdList = array('1,2,3', '4,5,6', '7,8,9', '0');
 $typeList      = array('', 'resolved', 'opened');

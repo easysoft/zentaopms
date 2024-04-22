@@ -69,10 +69,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
+include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
 su('admin');
 
-zdTable('file')->gen(30);
+zenData('file')->gen(30);
 
 $fileIDs = array('1,2,3,4,5', '6,7,8,9,10', '11,12,13,14,15', '16,17,18,19,20', '21,22,23,24,25');
 $titles  = array('title', 'extension');

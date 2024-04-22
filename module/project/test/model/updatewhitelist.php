@@ -27,15 +27,15 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/project.class.php';
+include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
 su('admin');
 
-$projectTable = zdTable('project')->config('project');
+$projectTable = zenData('project')->loadYaml('project');
 $projectTable->whitelist->range('`admin,user1`, `user1,user2`');
 $projectTable->hasProduct->range('1{3},0{3}');
 $projectTable->gen(6);
 
-$projectproductTable = zdTable('projectproduct');
+$projectproductTable = zenData('projectproduct');
 $projectproductTable->project->range('1-6');
 $projectproductTable->product->range('1-6');
 $projectproductTable->gen(6);

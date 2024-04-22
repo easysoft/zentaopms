@@ -22,14 +22,14 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('task')->gen(0);
-zdTable('taskspec')->gen(0);
-zdTable('product')->gen(20);
+zenData('task')->gen(0);
+zenData('taskspec')->gen(0);
+zenData('product')->gen(20);
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->type->range('sprint');
 $project->gen(20);
 

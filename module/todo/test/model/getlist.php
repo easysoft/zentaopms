@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/todo.class.php';
+include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 su('admin');
 
 /**
@@ -19,7 +19,7 @@ $todo = new todoTest();
 
 $thisYearDay = date('L') ? 366 : 365;
 $lastYearDay = date('L', strtotime("-1 years")) ? 366 : 365;
-zdTable('todo')->config('getlist')->gen($thisYearDay + $lastYearDay);
+zenData('todo')->loadYaml('getlist')->gen($thisYearDay + $lastYearDay);
 
 global $tester;
 $tester->loadModel('todo');

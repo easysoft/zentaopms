@@ -1,17 +1,17 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/screen.class.php';
+include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 su('admin');
 
-zdTable('user')->gen(10);
-zdTable('project')->gen(0);
-zdTable('product')->config('product')->gen(10);
-zdTable('project')->config('program')->gen(10);
-zdTable('project')->config('project')->gen(10, false, false);
-zdTable('project')->config('execution')->gen(10, false, false);
-zdTable('dept')->gen(10);
-zdTable('bug')->gen(5);
+zenData('user')->gen(10);
+zenData('project')->gen(0);
+zenData('product')->loadYaml('product')->gen(10);
+zenData('project')->loadYaml('program')->gen(10);
+zenData('project')->loadYaml('project')->gen(10, false, false);
+zenData('project')->loadYaml('execution')->gen(10, false, false);
+zenData('dept')->gen(10);
+zenData('bug')->gen(5);
 
 /**
 

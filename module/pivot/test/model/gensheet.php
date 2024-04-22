@@ -21,16 +21,16 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
-zdTable('user')->gen(20);
-zdTable('bug')->config('bug')->gen(20);
-zdTable('product')->config('product')->gen(10);
-zdTable('module')->gen(10);
-zdTable('case')->gen(10);
-zdTable('project')->config('project_gensheet')->gen(20);
-zdTable('product')->gen(10);
-zdTable('task')->gen(10);
+zenData('user')->gen(20);
+zenData('bug')->loadYaml('bug')->gen(20);
+zenData('product')->loadYaml('product')->gen(10);
+zenData('module')->gen(10);
+zenData('case')->gen(10);
+zenData('project')->loadYaml('project_gensheet')->gen(20);
+zenData('product')->gen(10);
+zenData('task')->gen(10);
 
 global $tester;
 $pivotTest = new pivotTest();

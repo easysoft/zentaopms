@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$configData = zdTable('config');
+$configData = zenData('config');
 $configData->owner->range('system');
 $configData->module->range('common');
 $configData->section->range('domain');

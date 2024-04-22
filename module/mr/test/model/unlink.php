@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 /**
 
@@ -25,8 +25,8 @@ cid=1
 
 */
 
-zdTable('action')->gen(0);
-zdTable('relation')->config('relation')->gen(30);
+zenData('action')->gen(0);
+zenData('relation')->loadYaml('relation')->gen(30);
 
 $mrModel = new mrTest();
 r($mrModel->unlinkTester(1, 'story')) && p('id,objectType,action') && e('1,story,deletemr'); // 取消关联需求

@@ -20,12 +20,12 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('story')->gen(0);
-zdTable('storyspec')->gen(0);
-zdTable('projectstory')->gen(0);
+zenData('story')->gen(0);
+zenData('storyspec')->gen(0);
+zenData('projectstory')->gen(0);
 
 $story = new storyTest();
 $story1               = new stdclass();

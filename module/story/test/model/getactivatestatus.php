@@ -19,15 +19,15 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$action = zdTable('action');
+$action = zenData('action');
 $action->action->range('open,closed,reviewrejected,closedbysystem,synctwins');
 $action->objectType->range('story');
 $action->objectID->range('1-100');
 $action->execution->range('0');
 $action->extra->range('``,2|closed,``,active,6|reviewing,``{1000}');
 $action->gen(100);
-zdTable('story')->gen(50);
-$storyreview = zdTable('storyreview');
+zenData('story')->gen(50);
+$storyreview = zenData('storyreview');
 $storyreview->story->range('1-1000');
 $storyreview->gen(100);
 

@@ -31,11 +31,11 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
+include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
-zdTable('productplan')->gen(3);
-zdTable('story')->gen(20);
-zdTable('planstory')->gen(8);
+zenData('productplan')->gen(3);
+zenData('story')->gen(20);
+zenData('planstory')->gen(8);
 
 $productplan = new productPlan('admin');
 

@@ -1,18 +1,18 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/testcase.class.php';
+include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 su('admin');
 
 function initData()
 {
-    $caseData = zdTable('case');
+    $caseData = zenData('case');
     $caseData->product->range('1-2');
     $caseData->module->range('1{5},2{5}');
 
     $caseData->gen(10);
 
-    $projectCase = zdTable('projectcase');
+    $projectCase = zenData('projectcase');
     $projectCase->project->range('1');
     $projectCase->product->range('1-2');
     $projectCase->case->range('1-10');

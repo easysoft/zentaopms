@@ -2,9 +2,9 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('job')->config('job')->gen(6);
-zdTable('compile')->gen(6);
-zdTable('pipeline')->gen(6);
+zenData('job')->loadYaml('job')->gen(6);
+zenData('compile')->gen(6);
+zenData('pipeline')->gen(6);
 su('admin');
 
 /**

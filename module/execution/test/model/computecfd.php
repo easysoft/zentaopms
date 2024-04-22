@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+zenData('user')->gen(5);
 su('admin');
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('项目集1,项目1,看板1,看板2,看板3');
 $execution->type->range('program,project,,kanban{3}');
@@ -16,7 +16,7 @@ $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
 
-$kanbanCell = zdTable('kanbancell');
+$kanbanCell = zenData('kanbancell');
 $kanbanCell->id->range('1-9');
 $kanbanCell->kanban->range('3{3},4{3},5{3}');
 $kanbanCell->lane->range('1-9');
@@ -25,13 +25,13 @@ $kanbanCell->type->range('task,bug,story');
 $kanbanCell->cards->range('`,1,2,3,`{3},`,4,5,`{3},6{3}');
 $kanbanCell->gen(9);
 
-$kanbanColumn = zdTable('kanbancolumn');
+$kanbanColumn = zenData('kanbancolumn');
 $kanbanColumn->id->range('1-9');
 $kanbanColumn->name->range('1-9')->prefix('看板列');
 $kanbanColumn->type->range('1-9')->prefix('column');
 $kanbanColumn->gen(9);
 
-$CFD = zdTable('cfd');
+$CFD = zenData('cfd');
 $CFD->id->range('1');
 $CFD->gen(0);
 

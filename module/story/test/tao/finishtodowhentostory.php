@@ -14,11 +14,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 
-zdTable('story')->gen(5);
-$feedback = zdTable('feedback')->gen(1);
-$todo = zdTable('todo');
+zenData('story')->gen(5);
+$feedback = zenData('feedback')->gen(1);
+$todo = zenData('todo');
 $todo->type->range('custom,feedback');
 $todo->objectID->range('0,1');
 $todo->gen(2);

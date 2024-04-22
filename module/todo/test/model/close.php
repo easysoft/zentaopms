@@ -13,7 +13,7 @@ cid=1
 global $tester;
 $tester->loadModel('todo');
 
-zdTable('todo')->config('close')->gen(1);
+zenData('todo')->loadYaml('close')->gen(1);
 
 r($tester->todo->getByID(1)) && p('status') && e('wait');   // 判断生成的待办的状态是等待状态
 r($tester->todo->close(1))   && p()         && e('1');      // 关闭这个待办

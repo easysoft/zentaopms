@@ -37,10 +37,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->id->range('1-100');
 $story->title->range('teststory');
 $story->product->range('1');
@@ -48,7 +48,7 @@ $story->twins->range('``{3},5,4');
 $story->version->range('1');
 $story->gen(5);
 
-$storySpec = zdTable('storyspec');
+$storySpec = zenData('storyspec');
 $storySpec->story->range('1-100');
 $storySpec->title->range('teststory');
 $storySpec->spec->range('testspec');

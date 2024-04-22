@@ -9,10 +9,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/custom.class.php';
+include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
 
-zdTable('lang')->gen(0);
-zdTable('user')->gen(5);
+zenData('lang')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $path  = array('zh-cn', 'zh-cn.story', 'zh-cn.story.categoryList', 'zh-cn.story.categoryList.feature', 'zh-cn.story.categoryList.feature.1');
@@ -28,4 +28,4 @@ r($customTester->setItemTest($path[3], $value[1])) && p('lang,module,key,value')
 r($customTester->setItemTest($path[4], $value[0])) && p('lang,module,key,value') && e('zh-cn,story,feature,功能');      // 测试path中.出现的个数为4，value正常存在，能保存
 r($customTester->setItemTest($path[4], $value[1])) && p('lang,module,key,value') && e('zh-cn,story,feature,~~');       // 测试path中.出现的个数为5，value为空，能保存
 
-zdTable('lang')->gen(0);
+zenData('lang')->gen(0);

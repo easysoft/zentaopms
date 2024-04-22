@@ -34,12 +34,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-zdTable('project')->config('execution')->gen(10);
-zdTable('product')->config('product')->gen(5);
-zdTable('doclib')->config('doclib')->gen(30);
-zdTable('user')->gen(5);
+zenData('project')->loadYaml('execution')->gen(10);
+zenData('product')->loadYaml('product')->gen(5);
+zenData('doclib')->loadYaml('doclib')->gen(30);
+zenData('user')->gen(5);
 su('admin');
 
 $types        = array('all', 'includeDeleted', 'hasApi', 'product', 'project', 'execution', 'custom', 'mine');

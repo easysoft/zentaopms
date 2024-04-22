@@ -2,11 +2,11 @@
 <?php
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
 su('admin');
 
-zdTable('project')->config('execution')->gen(9);
+zenData('project')->loadYaml('execution')->gen(9);
 
 /**
 

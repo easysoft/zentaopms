@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 su('admin');
 
-zdTable('action')->gen(5);
-zdTable('bug')->gen(1);
-zdTable('effort')->gen(1);
-zdTable('case')->gen(1);
-zdTable('casestep')->gen(1);
+zenData('action')->gen(5);
+zenData('bug')->gen(1);
+zenData('effort')->gen(1);
+zenData('case')->gen(1);
+zenData('casestep')->gen(1);
 
 /**
 

@@ -25,8 +25,8 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
-zdTable('project')->config('execution')->gen(32);
-$projectProduct = zdTable('projectproduct');
+zenData('project')->loadYaml('execution')->gen(32);
+$projectProduct = zenData('projectproduct');
 $projectProduct->project->range('101-150');
 $projectProduct->product->range('1');
 $projectProduct->gen(28);

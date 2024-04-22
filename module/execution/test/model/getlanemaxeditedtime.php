@@ -2,8 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('project')->config('project')->gen(10);
-zdTable('kanbanlane')->config('kanbanlane')->gen(10);
+zenData('project')->loadYaml('project')->gen(10);
+zenData('kanbanlane')->loadYaml('kanbanlane')->gen(10);
 
 /**
 

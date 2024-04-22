@@ -14,10 +14,10 @@ cid=1
 
 */
 
-zdTable('pipeline')->gen(5);
-zdTable('user')->gen(10);
-zdTable('repo')->config('repo')->gen(5);
-zdTable('oauth')->config('oauth')->gen(5);
+zenData('pipeline')->gen(5);
+zenData('user')->gen(10);
+zenData('repo')->loadYaml('repo')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(5);
 su('admin');
 $repo = $tester->loadModel('repo');
 

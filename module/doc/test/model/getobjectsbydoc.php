@@ -22,12 +22,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-zdTable('project')->config('execution')->gen(10);
-zdTable('product')->config('product')->gen(5);
-zdTable('doc')->config('doc')->gen(50);
-zdTable('user')->gen(5);
+zenData('project')->loadYaml('execution')->gen(10);
+zenData('product')->loadYaml('product')->gen(5);
+zenData('doc')->loadYaml('doc')->gen(50);
+zenData('user')->gen(5);
 su('admin');
 
 $docIdList[0] = array();

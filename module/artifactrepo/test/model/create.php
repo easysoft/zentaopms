@@ -19,10 +19,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/artifactrepo.class.php';
+include dirname(__FILE__, 2) . '/lib/artifactrepo.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('artifactrepo')->gen(0);
+zenData('user')->gen(5);
+zenData('artifactrepo')->gen(0);
 
 $names     = array('新建制品库1', '新建制品库2');
 $repoName  = '代码库';

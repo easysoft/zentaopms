@@ -22,14 +22,14 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range(1);
 $story->parent->range('0,`-1`,2,`-1`,0{10},`-1`,100,14,15,15,15');
 $story->type->range('story');
 $story->gen(20);
-zdTable('storyspec')->gen(60);
-zdTable('bug')->gen(10);
-zdTable('case')->gen(10);
+zenData('storyspec')->gen(60);
+zenData('bug')->gen(10);
+zenData('case')->gen(10);
 
 global $tester;
 $tester->loadModel('story');

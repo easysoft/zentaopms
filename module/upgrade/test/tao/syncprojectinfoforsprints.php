@@ -13,10 +13,10 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
-zdTable('project')->config('execution')->gen(10);
-zdTable('project')->config('project')->gen(5, false, false);
+zenData('project')->loadYaml('execution')->gen(10);
+zenData('project')->loadYaml('project')->gen(5, false, false);
 
 $upgrade = new upgradeTest();
 
@@ -61,7 +61,7 @@ foreach($sprintList as $key => $sprint)
 
 r($checkSprint) && p('') && e(1);  //检查所有的执行是否都被转移到了对应的项目中。
 
-zdTable('action')->config('action')->gen(10);
+zenData('action')->loadYaml('action')->gen(10);
 $checkSprint = true;
 $oriSprintList = $tester->dao->select('project, parent, grade, path, acl, begin, end')->from(TABLE_EXECUTION)->where('id')->in($sprintIDList[1])->fetchAll();
 $upgrade->syncProjectInfoForSprints($projectID[1], $sprintIDList[1], $programID, true);

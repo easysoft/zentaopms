@@ -23,24 +23,24 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('storystage')->gen(20);
-$plan = zdTable('productplan');
+zenData('storystage')->gen(20);
+$plan = zenData('productplan');
 $plan->branch->range('0-1');
 $plan->gen(20);
-$product = zdTable('product');
+$product = zenData('product');
 $product->type->range('normal,branch');
 $product->gen(2);
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range('1{3},2{3}');
 $story->branch->range('0{3},0-4');
 $story->plan->range('``{3},2,``,3');
 $story->status->range('draft,active,closed');
 $story->version->range('1');
 $story->gen(6);
-zdTable('storyspec')->gen(10);
+zenData('storyspec')->gen(10);
 
 $storyIdList = array(1, 2, 3, 4, 5, 6);
 $story       = new storyTest();

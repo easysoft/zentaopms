@@ -26,7 +26,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 su('admin');
 
-zdTable('account')->gen(5);
+zenData('account')->gen(5);
 
 $account = new stdclass();
 $account->name        = '测试账号';

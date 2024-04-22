@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 function initData()
 {
-    $project = zdTable('project');
+    $project = zenData('project');
     $project->id->range('11-19');
     $project->project->range('11-19');
     $project->name->prefix("项目")->range('11-19');
@@ -23,9 +23,9 @@ function initData()
     $project->openedDate->range("`2023-05-01 10:00:10`");
     $project->gen(9);
 
-    zdTable('team')->gen(10);
+    zenData('team')->gen(10);
 
-    $stakeholder = zdTable('stakeholder');
+    $stakeholder = zenData('stakeholder');
     $stakeholder->id->range('1-9');
     $stakeholder->objectID->range('11-19');
     $stakeholder->objectType->range('program,project');

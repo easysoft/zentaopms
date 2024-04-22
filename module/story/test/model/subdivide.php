@@ -29,20 +29,20 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('product')->gen(2);
-zdTable('relation')->gen(1);
+zenData('product')->gen(2);
+zenData('relation')->gen(1);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->type->range('requirement,story{10}');
 $story->parent->range('0,0,0,0,4,4');
 $story->product->range('1');
 $story->version->range('1');
 $story->gen(6);
 
-$storySpec = zdTable('storyspec');
+$storySpec = zenData('storyspec');
 $storySpec->story->range('1-6');
 $storySpec->gen(6);
 

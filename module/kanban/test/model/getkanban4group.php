@@ -1,23 +1,23 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/kanban.class.php';
+include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 
-zdTable('user')->gen(10);
-zdTable('taskteam')->gen(10);
-zdTable('module')->gen(10);
-zdTable('story')->gen(20);
-zdTable('projectstory')->gen(20);
-zdTable('product')->gen(20);
-zdTable('storyreview')->gen(20);
-zdTable('bug')->gen(20);
-zdTable('project')->config('kanbanexecution')->gen(5);
-zdTable('kanbanregion')->config('rdkanbanregion')->gen(5);
-zdTable('kanbangroup')->config('rdkanbangroup')->gen(20);
-zdTable('kanbancolumn')->gen(20);
-zdTable('kanbanlane')->config('rdkanbanlane')->gen(10);
-zdTable('kanbancell')->config('rdkanbancell')->gen(20);
-zdTable('task')->config('rdkanbantask')->gen(20);
+zenData('user')->gen(10);
+zenData('taskteam')->gen(10);
+zenData('module')->gen(10);
+zenData('story')->gen(20);
+zenData('projectstory')->gen(20);
+zenData('product')->gen(20);
+zenData('storyreview')->gen(20);
+zenData('bug')->gen(20);
+zenData('project')->loadYaml('kanbanexecution')->gen(5);
+zenData('kanbanregion')->loadYaml('rdkanbanregion')->gen(5);
+zenData('kanbangroup')->loadYaml('rdkanbangroup')->gen(20);
+zenData('kanbancolumn')->gen(20);
+zenData('kanbanlane')->loadYaml('rdkanbanlane')->gen(10);
+zenData('kanbancell')->loadYaml('rdkanbancell')->gen(20);
+zenData('task')->loadYaml('rdkanbantask')->gen(20);
 
 su('admin');
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/repo.class.php';
+include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 su('admin');
 
 /**
@@ -18,8 +18,8 @@ cid=1
 
 */
 
-zdTable('task')->gen(10);
-zdTable('repo')->config('repo')->gen(4);
+zenData('task')->gen(10);
+zenData('repo')->loadYaml('repo')->gen(4);
 
 $taskID   = 1;
 $repoRoot = '';

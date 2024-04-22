@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/program.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+zenData('user')->gen(5);
 su('admin');
 
-$program = zdTable('project')->config('program');
+$program = zenData('project')->loadYaml('program');
 $program->realEnd->range('`2023-09-11`');
 $program->status->range('closed');
 $program->gen(10);

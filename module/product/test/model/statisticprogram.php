@@ -18,16 +18,16 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
-zdTable('product')->gen(50);
-zdTable('story')->gen(50);
-zdTable('productplan')->gen(50);
-zdTable('release')->gen(50);
-zdTable('build')->gen(50);
-zdTable('case')->gen(50);
-zdTable('project')->gen(50);
-zdTable('projectproduct')->gen(50);
-zdTable('bug')->gen(50);
-zdTable('doc')->gen(50);
+zenData('product')->gen(50);
+zenData('story')->gen(50);
+zenData('productplan')->gen(50);
+zenData('release')->gen(50);
+zenData('build')->gen(50);
+zenData('case')->gen(50);
+zenData('project')->gen(50);
+zenData('projectproduct')->gen(50);
+zenData('bug')->gen(50);
+zenData('doc')->gen(50);
 
 $productIdList[0] = array();
 $productIdList[1] = range(1, 50);

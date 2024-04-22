@@ -18,18 +18,18 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
+include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
 su('admin', false);
 
-zdTable('user')->gen(5);
-zdTable('stakeholder')->gen(0);
-zdTable('product')->gen(0);
-zdTable('projectproduct')->gen(0);
-zdTable('group')->gen(0);
-zdTable('acl')->gen(0);
-zdTable('project')->config('project')->gen(15);
-zdTable('team')->config('team')->gen(10);
+zenData('user')->gen(5);
+zenData('stakeholder')->gen(0);
+zenData('product')->gen(0);
+zenData('projectproduct')->gen(0);
+zenData('group')->gen(0);
+zenData('acl')->gen(0);
+zenData('project')->loadYaml('project')->gen(15);
+zenData('team')->loadYaml('team')->gen(10);
 
 $projectID   = array(0, 11, 100);
 $accounts[0] = array();

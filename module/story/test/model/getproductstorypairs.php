@@ -16,11 +16,11 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->estimate->range('1-4');
 $story->gen(20);
 
-zdTable('product')->gen(20);
+zenData('product')->gen(20);
 
 su('admin');
 

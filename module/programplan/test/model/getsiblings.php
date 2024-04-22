@@ -13,10 +13,10 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('getsiblings')->gen(5);
+zenData('project')->loadYaml('getsiblings')->gen(5);
 $plan = new programplanTest();
 
 $topPlan      = $plan->getSiblingsTest(2);

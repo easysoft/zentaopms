@@ -17,7 +17,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$user = zdTable('user');
+$user = zenData('user');
 $user->password->range('e10adc3949ba59abbe56e057f20f883e');
 $user->gen(5);
 

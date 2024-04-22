@@ -30,10 +30,10 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 
-zdTable('project')->gen(0);
-zdTable('product')->gen(0);
+zenData('project')->gen(0);
+zenData('product')->gen(0);
 su('admin');
 
 $root        = array(1, 2, 3, 41, 42, 43, 101, 102, 103);

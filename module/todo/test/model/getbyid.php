@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/todo.class.php';
+include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 su('admin');
 
 function initData ()
 {
-    zdTable('todo')->config('getbyid')->gen(5);
+    zenData('todo')->loadYaml('getbyid')->gen(5);
 }
 
 /**

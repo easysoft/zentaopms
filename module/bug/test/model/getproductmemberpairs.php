@@ -1,17 +1,17 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
-zdTable('user')->gen(100);
-zdTable('product')->gen(10);
-zdTable('project')->gen(50);
+zenData('user')->gen(100);
+zenData('product')->gen(10);
+zenData('project')->gen(50);
 
-$projectProduct = zdTable('projectproduct');
+$projectProduct = zenData('projectproduct');
 $projectProduct->product->range('1-10');
 $projectProduct->gen(50);
 
-zdTable('team')->gen(100);
+zenData('team')->gen(100);
 
 su('admin');
 

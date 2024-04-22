@@ -19,12 +19,12 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('story')->gen(10);
-zdTable('storyspec')->gen(30);
-zdTable('product')->gen(30);
+zenData('story')->gen(10);
+zenData('storyspec')->gen(30);
+zenData('product')->gen(30);
 
 $story  = new storyTest();
 $story1 = $tester->loadModel('story')->fetchByID(2);

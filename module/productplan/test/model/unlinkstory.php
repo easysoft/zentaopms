@@ -8,10 +8,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
+include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->plan->range('1,`2,3`,4,`5,6,7,8`,9,10');
 $story->gen(10);
 

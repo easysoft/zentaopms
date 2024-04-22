@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-9');
 $task->name->setFields(array(
     array('field' => 'name1', 'range' => '父任务{3},子任务{3},普通任务{3}'),

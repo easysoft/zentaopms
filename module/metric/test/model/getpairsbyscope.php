@@ -27,14 +27,14 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/calc.class.php';
+include dirname(__FILE__, 2) . '/lib/calc.unittest.class.php';
 su('admin');
 
 $metric = new metricTest();
 
-zdTable('user')->config('user', true)->gen(30);
-zdTable('product')->config('product', true)->gen(10);
-zdTable('project')->config('project', true)->gen(40);
+zenData('user')->loadYaml('user', true)->gen(30);
+zenData('product')->loadYaml('product', true)->gen(10);
+zenData('project')->loadYaml('project', true)->gen(40);
 
 r(count($metric->getPairsByScope('user')))    && p('') && e('10'); // 测试user对象数
 r(count($metric->getPairsByScope('product'))) && p('') && e('5');  // 测试product对象数

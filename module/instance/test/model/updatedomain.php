@@ -3,10 +3,10 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('instance')->gen(5);
-zdTable('space')->gen(5);
+zenData('instance')->gen(5);
+zenData('space')->gen(5);
 
-$configData = zdTable('config');
+$configData = zenData('config');
 $configData->owner->range('system');
 $configData->module->range('common');
 $configData->section->range('domain');

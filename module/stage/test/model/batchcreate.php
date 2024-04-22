@@ -25,10 +25,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stage.class.php';
+include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('stage')->gen(0);
+zenData('user')->gen(5);
+zenData('stage')->gen(0);
 
 $name1    = array(1 => '批量创建的需求', 2 => '批量创建的设计');
 $percent1 = array(1 => 1, 2 => 2);

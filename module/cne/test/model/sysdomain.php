@@ -19,7 +19,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 global $tester, $config;
 $cneModel = $tester->loadModel('cne');
 
-zdTable('config')->gen(0);
+zenData('config')->gen(0);
 putenv('APP_DOMAIN=');
 $config->CNE->app->domain = '';
 
@@ -31,7 +31,7 @@ r($cneModel->sysDomain()) && p() && e('config.zcorp.cc'); // 配置里设置过�
 putenv('APP_DOMAIN=env.zcorp.cc');
 r($cneModel->sysDomain()) && p() && e('env.zcorp.cc'); // 环境变量里设置过的域名
 
-$config = zdTable('config');
+$config = zenData('config');
 $config->owner->range('system');
 $config->module->range('common');
 $config->section->range('domain');

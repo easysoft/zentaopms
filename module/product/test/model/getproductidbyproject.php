@@ -14,9 +14,9 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
-zdTable('project')->gen(20);
-zdTable('product')->gen(20);
-zdTable('projectproduct')->config('projectproduct')->gen(50);
+zenData('project')->gen(20);
+zenData('product')->gen(20);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(50);
 
 $projectIDList = array(11, 0, 1000001);
 

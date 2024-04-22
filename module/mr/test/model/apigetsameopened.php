@@ -23,9 +23,9 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('pipeline')->gen(1);
-zdTable('repo')->config('repo')->gen(1);
-zdTable('mr')->config('mr')->gen(1);
+zenData('pipeline')->gen(1);
+zenData('repo')->loadYaml('repo')->gen(1);
+zenData('mr')->loadYaml('mr')->gen(1);
 su('admin');
 
 global $tester;

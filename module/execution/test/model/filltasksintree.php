@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
 $execution->type->range('project{2},sprint,stage,kanban');
@@ -17,7 +17,7 @@ $execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-10');
 $task->name->range('1-10')->prefix('任务');
 $task->execution->range('3-5');
@@ -28,7 +28,7 @@ $task->left->range('1-10');
 $task->consumed->range('1-10');
 $task->gen(10);
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->id->range('1-3');
 $product->name->range('1-3')->prefix('产品');
 $product->code->range('1-3')->prefix('product');
@@ -36,7 +36,7 @@ $product->type->range('normal');
 $product->status->range('normal');
 $product->gen(3);
 
-$module = zdTable('module');
+$module = zenData('module');
 $module->id->range('1-10');
 $module->name->range('1-10')->prefix('模块');
 $module->root->range('1-3');
@@ -44,11 +44,11 @@ $module->parent->range('0,1{9}');
 $module->type->range('task');
 $module->gen(10);
 
-zdTable('team')->gen(0);
-zdTable('story')->gen(0);
-zdTable('projectstory')->gen(0);
-zdTable('projectproduct')->config('projectprocuct')->gen(10);
-zdTable('user')->gen(5);
+zenData('team')->gen(0);
+zenData('story')->gen(0);
+zenData('projectstory')->gen(0);
+zenData('projectproduct')->loadYaml('projectprocuct')->gen(10);
+zenData('user')->gen(5);
 su('admin');
 
 /**

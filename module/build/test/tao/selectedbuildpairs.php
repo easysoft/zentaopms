@@ -8,10 +8,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
+include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
 
-zdTable('build')->config('build')->gen(5);
-zdTable('user')->gen(5);
+zenData('build')->loadYaml('build')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $productIdList[0]  = array();

@@ -16,12 +16,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/svn.class.php';
+include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
 
-$repo = zdTable('repo')->config('repo');
+$repo = zenData('repo')->loadYaml('repo');
 $repo->path->range('https://svn.qc.oop.cc/svn/unittest');
 $repo->gen(3);
-zdTable('repohistory')->config('repohistory')->gen(1);
+zenData('repohistory')->loadYaml('repohistory')->gen(1);
 su('admin');
 
 $svn = new svnTest();

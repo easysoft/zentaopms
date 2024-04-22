@@ -25,10 +25,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/artifactrepo.class.php';
+include dirname(__FILE__, 2) . '/lib/artifactrepo.unittest.class.php';
 
-zdTable('user')->gen(5);
-$buildTable = zdTable('build');
+zenData('user')->gen(5);
+$buildTable = zenData('build');
 $buildTable->artifactRepoID->range('1');
 $buildTable->gen(1);
 

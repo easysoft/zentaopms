@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/webhook.class.php';
+include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
 su('admin');
 
-zdTable('webhook')->gen(10);
+zenData('webhook')->gen(10);
 
 /**
 

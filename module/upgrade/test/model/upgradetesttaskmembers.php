@@ -15,11 +15,11 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
-zdTable('testrun')->config('user_testrun')->gen(10);
-zdTable('user')->gen(10);
-zdTable('testtask')->gen(3);
+zenData('testrun')->loadYaml('user_testrun')->gen(10);
+zenData('user')->gen(10);
+zenData('testtask')->gen(3);
 
 $upgrade = new upgradeTest();
 

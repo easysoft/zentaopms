@@ -8,10 +8,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/sso.class.php';
+include dirname(__FILE__, 2) . '/lib/sso.unittest.class.php';
 su('admin');
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 
 $sso = new ssoTest();
 

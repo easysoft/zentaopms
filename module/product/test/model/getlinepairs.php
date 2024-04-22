@@ -26,9 +26,9 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 
-$module = zdTable('module');
+$module = zenData('module');
 $module->id->range('1-1000');
 $module->root->range('1-5');
 $module->name->prefix("产品线")->range('1-1000');

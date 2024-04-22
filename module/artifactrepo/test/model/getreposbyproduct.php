@@ -21,12 +21,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/artifactrepo.class.php';
+include dirname(__FILE__, 2) . '/lib/artifactrepo.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('pipeline')->config('pipeline')->gen(1);
+zenData('user')->gen(5);
+zenData('pipeline')->loadYaml('pipeline')->gen(1);
 
-$artifactrepoTable = zdTable('artifactrepo')->config('artifactrepo');
+$artifactrepoTable = zenData('artifactrepo')->loadYaml('artifactrepo');
 $artifactrepoTable->products->range('`,1,`');
 $artifactrepoTable->gen(1);
 

@@ -17,11 +17,11 @@ cid=333
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/kanban.class.php';
+include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 su('admin');
 
-zdTable('kanbancolumn')->gen(2);
-zdTable('kanbancell')->gen(0);
+zenData('kanbancolumn')->gen(2);
+zenData('kanbancell')->gen(0);
 
 $columnA = new stdclass();
 $columnA->name    = '测试创建子列A';

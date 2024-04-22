@@ -1,21 +1,21 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->id->range('1');
 $product->name->range('产品1');
 $product->gen(1);
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('1-2');
 $project->name->range('项目1,执行1');
 $project->type->range('project,sprint');
 $project->acl->range('open');
 $project->gen(2);
 
-$doclib = zdTable('doclib');
+$doclib = zenData('doclib');
 $doclib->id->range('1-5');
 $doclib->name->range('产品库1,产品接口库1,项目库1,执行库1,自定义库1');
 $doclib->type->range('product,api,project,execution,custom');
@@ -25,7 +25,7 @@ $doclib->project->range('0{2},1,0{2}');
 $doclib->execution->range('0{3},2,0');
 $doclib->gen(5);
 
-$module = zdTable('module');
+$module = zenData('module');
 $module->id->range('1-10');
 $module->name->range('第一章,第二章,第一章第一节,第一章第二节,第三章');
 $module->parent->range('0{2},1{2},0{3},6{2},0{2}');

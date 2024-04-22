@@ -35,10 +35,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stakeholder.class.php';
+include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
 
-zdTable('company')->gen(1);
-zdTable('user')->config('user')->gen(2);
+zenData('company')->gen(1);
+zenData('user')->loadYaml('user')->gen(2);
 
 $from        = array('team', 'company', 'outside');
 $account     = array('', 'user1');

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
 /**
 
@@ -35,12 +35,12 @@ cid=1
 
 */
 
-zdTable('action')->config('action')->gen(90);
-zdTable('doclib')->gen(1);
-zdTable('doc')->gen(1);
-zdTable('lang')->gen(0);
-zdTable('product')->gen(1);
-zdTable('userquery')->config('userquery')->gen(1);
+zenData('action')->loadYaml('action')->gen(90);
+zenData('doclib')->gen(1);
+zenData('doc')->gen(1);
+zenData('lang')->gen(0);
+zenData('product')->gen(1);
+zenData('userquery')->loadYaml('userquery')->gen(1);
 
 global $lang, $app;
 $lang->SRCommon = '研发需求';

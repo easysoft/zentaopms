@@ -3,11 +3,11 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('case')->config('case')->gen(20);
-zdTable('testrun')->config('testrun')->gen(20);
-zdTable('suitecase')->config('suitecase')->gen(20);
-zdTable('build')->config('build')->gen(3);
-zdTable('story')->gen(2);
+zenData('case')->loadYaml('case')->gen(20);
+zenData('testrun')->loadYaml('testrun')->gen(20);
+zenData('suitecase')->loadYaml('suitecase')->gen(20);
+zenData('build')->loadYaml('build')->gen(3);
+zenData('story')->gen(2);
 
 /**
 

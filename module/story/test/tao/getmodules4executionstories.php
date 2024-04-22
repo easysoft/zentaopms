@@ -19,7 +19,7 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$module = zdTable('module');
+$module = zenData('module');
 $module->type->range('story');
 $module->gen(50);
 

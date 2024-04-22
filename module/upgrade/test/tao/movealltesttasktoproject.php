@@ -12,11 +12,11 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
-zdTable('projectcase')->gen(0);
-zdTable('testtask')->gen(3);
-zdTable('testrun')->gen(10);
+zenData('projectcase')->gen(0);
+zenData('testtask')->gen(3);
+zenData('testrun')->gen(10);
 
 $upgrade = new upgradeTest();
 

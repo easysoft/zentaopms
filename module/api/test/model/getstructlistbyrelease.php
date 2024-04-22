@@ -3,8 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('apistruct')->gen(10);
-zdTable('apistruct_spec')->gen(10);
+zenData('apistruct')->gen(10);
+zenData('apistruct_spec')->gen(10);
 
 /**
 

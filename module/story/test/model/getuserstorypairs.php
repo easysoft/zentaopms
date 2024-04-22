@@ -14,13 +14,13 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
-$user = zdTable('user');
+$user = zenData('user');
 $user->account->range('admin,user1,user2');
 $user->gen(3);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->type->range('requirement{60},story{40}');
 $story->assignedTo->range('admin{10},user1{10},user2{80}');
 $story->deleted->range('0');
@@ -28,7 +28,7 @@ $story->status->range('active,draft');
 $story->product->range('1{10},2{5},3{5},4{70},5{10}');
 $story->gen(100);
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->gen(5);
 
 global $tester;

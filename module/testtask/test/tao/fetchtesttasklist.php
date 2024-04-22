@@ -2,13 +2,13 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('group')->gen(0);
-zdTable('userview')->gen(0);
-zdTable('product')->config('product')->gen(100);
-zdTable('project')->config('project')->gen(100);
-zdTable('project')->config('execution')->gen(300, false);
-zdTable('build')->gen(500);
-zdTable('testtask')->gen(500);
+zenData('group')->gen(0);
+zenData('userview')->gen(0);
+zenData('product')->loadYaml('product')->gen(100);
+zenData('project')->loadYaml('project')->gen(100);
+zenData('project')->loadYaml('execution')->gen(300, false);
+zenData('build')->gen(500);
+zenData('testtask')->gen(500);
 
 su('admin');
 

@@ -23,10 +23,10 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
-zdTable('user')->gen(5);
-zdTable('product')->gen(10);
-zdTable('project')->gen(20);
-zdTable('projectproduct')->gen(50);
+zenData('user')->gen(5);
+zenData('product')->gen(10);
+zenData('project')->gen(20);
+zenData('projectproduct')->gen(50);
 
 $projectIdList = array(11, 12, 13, 14, 15, 1000001);
 $statusList    = array('all', 'noclosed');

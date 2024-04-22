@@ -17,23 +17,23 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
 dao::$cache = array();
-zdTable('user')->gen(10);
-zdTable('group')->config('group')->gen(100);
-zdTable('usergroup')->config('usergroup')->gen(100);
-zdTable('grouppriv')->config('grouppriv')->gen(100);
-zdTable('userview')->config('userview')->gen(10);
-zdTable('team')->config('team')->gen(200);
-zdTable('acl')->config('acl')->gen(100);
-zdTable('stakeholder')->config('stakeholder')->gen(100);
+zenData('user')->gen(10);
+zenData('group')->loadYaml('group')->gen(100);
+zenData('usergroup')->loadYaml('usergroup')->gen(100);
+zenData('grouppriv')->loadYaml('grouppriv')->gen(100);
+zenData('userview')->loadYaml('userview')->gen(10);
+zenData('team')->loadYaml('team')->gen(200);
+zenData('acl')->loadYaml('acl')->gen(100);
+zenData('stakeholder')->loadYaml('stakeholder')->gen(100);
 
-zdTable('product')->gen(20);
-zdTable('project')->gen(0);
-zdTable('project')->gen(20);
-zdTable('project')->config('execution')->gen(20, false);
-zdTable('projectadmin')->config('projectadmin')->gen(30);
+zenData('product')->gen(20);
+zenData('project')->gen(0);
+zenData('project')->gen(20);
+zenData('project')->loadYaml('execution')->gen(20, false);
+zenData('projectadmin')->loadYaml('projectadmin')->gen(30);
 
 $user = new userTest();
 r($user->grantUserViewTest('admin')) && p('programs', '-') && e('2,3,5,6,8,9,1,4,7,10');                                    //获取admin账户最终可见的项目集列表

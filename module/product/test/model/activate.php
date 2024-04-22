@@ -40,7 +40,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
-zdTable('product')->config('product')->gen(10);
+zenData('product')->loadYaml('product')->gen(10);
 
 $normalProductIdList = array(1, 2, 3, 4, 5);
 $closedProductIdList = array(6, 7, 8, 9, 10);

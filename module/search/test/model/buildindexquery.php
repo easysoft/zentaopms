@@ -20,7 +20,7 @@ cid=1
 
 global $tester;
 $search = $tester->loadModel('search');
-zdTable('project')->gen(0);
+zenData('project')->gen(0);
 
 r($search->buildIndexQuery('program')->get())        && p() && e("SELECT t1.* FROM `zt_project` AS t1  WHERE 1=1  AND  `type`  = 'program'");                                                                                             //构建未删除项目集的sql语句
 r($search->buildIndexQuery('story')->get())          && p() && e("SELECT DISTINCT t1.*, t2.spec, t2.verify FROM `zt_story` AS t1  LEFT JOIN `zt_storyspec` AS t2  ON t1.id=t2.story  WHERE t1.deleted  = '0' AND  `type`  = 'story' AND  t1.version=t2.version");  //构建需求的sql语句

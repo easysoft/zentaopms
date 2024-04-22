@@ -12,10 +12,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/stage.class.php';
+include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('stage')->config('stage')->gen(12);
+zenData('user')->gen(5);
+zenData('stage')->loadYaml('stage')->gen(12);
 
 $stageTester = new stageTest();
 r($stageTester->getTotalPercentTest('scrum'))         && p() && e('0');  // 测试获取敏捷模型的总百分比

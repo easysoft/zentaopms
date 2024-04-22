@@ -10,11 +10,11 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$release = zdTable('release')->config('release');
+$release = zenData('release')->loadYaml('release');
 $release->stories->range('`1,2,3`, `1,2`, `3,4`, `2,3`, []');
 $release->gen(5);
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $stories = array(0, 1, 2, 3, 6);

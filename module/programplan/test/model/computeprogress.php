@@ -18,11 +18,11 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('project')->gen(13);
-zdTable('task')->config('task')->gen(13);
+zenData('project')->loadYaml('project')->gen(13);
+zenData('task')->loadYaml('task')->gen(13);
 
 $programplan = new programplanTest();
 

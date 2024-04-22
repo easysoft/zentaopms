@@ -14,10 +14,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/zahost.class.php';
+include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
 su('admin');
 
-$host = zdTable('host');
+$host = zenData('host');
 $host->id->range('1-5');
 $host->type->range('zahost{3},node{2}');
 $host->name->range('宿主机1,宿主机2,宿主机3,执行节点1,执行节点2');

@@ -8,12 +8,12 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('project')->gen(5);
-zdTable('task')->config('task')->gen(8);
-zdTable('action')->config('action')->gen(1);
+zenData('project')->loadYaml('project')->gen(5);
+zenData('task')->loadYaml('task')->gen(8);
+zenData('action')->loadYaml('action')->gen(1);
 
 $parentIdList = array(1, 3);
 

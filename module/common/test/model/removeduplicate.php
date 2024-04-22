@@ -3,27 +3,27 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->id->range('1');
 $story->title->range('teststory');
 $story->gen(1);
 
-$case = zdTable('case');
+$case = zenData('case');
 $case->id->range('1');
 $case->title->range('testcase');
 $case->gen(1);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1');
 $task->name->range('testtask');
 $task->gen(1);
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->id->range('1');
 $bug->title->range('testbug');
 $bug->gen(1);
 
-$doc = zdTable('doc');
+$doc = zenData('doc');
 $doc->id->range('1');
 $doc->title->range('testdoc');
 $doc->gen(1);

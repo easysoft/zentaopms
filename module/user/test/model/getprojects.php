@@ -38,15 +38,15 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-zdTable('user')->gen(3);
-zdTable('company')->gen(1);
+zenData('user')->gen(3);
+zenData('company')->gen(1);
 
 $yesterday = date('Y-m-d', strtotime('yesterday'));
 $tomorrow  = date('Y-m-d', strtotime('tomorrow'));
 
-$projectTable = zdTable('project');
+$projectTable = zenData('project');
 $projectTable->project->range('0-4{5}');
 $projectTable->type->range('project{5},sprint{10},stage{5},kanban{5}');
 $projectTable->end->range("`{$tomorrow}`,`{$yesterday}`{4}");
@@ -54,18 +54,18 @@ $projectTable->status->range('wait{2},doing,suspended,closed');
 $projectTable->deleted->range('0');
 $projectTable->gen(25);
 
-$teamTable = zdTable('team');
+$teamTable = zenData('team');
 $teamTable->root->range('1-25');
 $teamTable->type->range('project{5},execution{20}');
 $teamTable->account->range('admin{12},user1{6}');
 $teamTable->gen(25);
 
-$projectStory = zdTable('projectstory');
+$projectStory = zenData('projectstory');
 $projectStory->project->range('6-25{5}');
 $projectStory->story->range('1-100');
 $projectStory->gen(100);
 
-$storyTable = zdTable('story');
+$storyTable = zenData('story');
 $storyTable->estimate->range('1-9');
 $storyTable->gen(100);
 

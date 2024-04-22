@@ -20,22 +20,22 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-zdTable('company')->gen(1);
+zenData('company')->gen(1);
 
-$userTable = zdTable('user');
+$userTable = zenData('user');
 $userTable->account->range('admin,user1,user2,user3,user4,user5,user6,user7,user8,user9');
 $userTable->realname->range('admin,user1,user2,user3,user4,user5,user6,user7,~~{2}');
 $userTable->deleted->range('0{9},1');
 $userTable->gen(10);
 
-$groupTable = zdTable('usergroup');
+$groupTable = zenData('usergroup');
 $groupTable->account->range('user1,user1,user2,user2,user3,user4,user4,user5,user6,user6');
 $groupTable->group->range('1,2,2,3,3,3,4,5,6,7');
 $groupTable->gen(10);
 
-$privTable = zdTable('grouppriv');
+$privTable = zenData('grouppriv');
 $privTable->group->range('1-5{6}');
 $privTable->module->range('story{6},task{6},bug{6},story{6},story{6}');
 $privTable->method->range('create,batchCreate,edit,batchEdit,delete,batchDelete');

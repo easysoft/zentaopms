@@ -6,9 +6,9 @@ cid=1
 pid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$projectTable = zdTable('project');
+$projectTable = zenData('project');
 $projectTable->project->range('1-4{6}');
 $projectTable->type->range('sprint,stage,kanban');
 $projectTable->multiple->range('1{4},0,1');
@@ -16,12 +16,12 @@ $projectTable->vision->range('rnd{12},lite{8}');
 $projectTable->deleted->range('0{5},1');
 $projectTable->gen(20);
 
-$projectStory = zdTable('projectstory');
+$projectStory = zenData('projectstory');
 $projectStory->project->range('1-20{5}');
 $projectStory->story->range('1-100');
 $projectStory->gen(100);
 
-$storyTable = zdTable('story');
+$storyTable = zenData('story');
 $storyTable->estimate->range('1-9');
 $storyTable->gen(100);
 

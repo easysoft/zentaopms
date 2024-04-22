@@ -5,7 +5,7 @@ su('admin');
 
 function initData ()
 {
-    zdTable('todo')->config('buildcycletodo')->gen(5);
+    zenData('todo')->loadYaml('buildcycletodo')->gen(5);
 }
 
 /**

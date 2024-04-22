@@ -14,20 +14,20 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('product')->gen(10);
-zdTable('projectproduct')->gen(10);
-zdTable('projectstory')->gen(100);
-zdTable('storyspec')->gen(100);
+zenData('product')->gen(10);
+zenData('projectproduct')->gen(10);
+zenData('projectstory')->gen(100);
+zenData('storyspec')->gen(100);
 
-$userquery = zdTable('userquery');
+$userquery = zenData('userquery');
 $userquery->sql->range("`(( 1   AND `title`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'`");
 $userquery->gen(10);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->version->range(1);
 $story->gen(100);
 
-$storyreview = zdTable('storyreview');
+$storyreview = zenData('storyreview');
 $storyreview->story->range('1-100');
 $storyreview->gen(100);
 

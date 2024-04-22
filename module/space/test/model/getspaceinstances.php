@@ -211,11 +211,11 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/space.class.php';
+include dirname(__FILE__, 2) . '/lib/space.unittest.class.php';
 
-zdTable('user')->gen(5);
-zdTable('space')->config('space')->gen(5);
-zdTable('instance')->config('instance')->gen(20);
+zenData('user')->gen(5);
+zenData('space')->loadYaml('space')->gen(5);
+zenData('instance')->loadYaml('instance')->gen(20);
 
 $spaceIdList = array(0, 1, 6);
 $statusList  = array('', 'all', 'running', 'stopped', 'abnormal', 'test');

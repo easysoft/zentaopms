@@ -18,9 +18,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$user = zdTable('user');
+$user = zenData('user');
 $user->id->range('1001-1006');
 $user->account->range('1-6')->prefix("account");
 $user->realname->range('1-6')->prefix("用户名");

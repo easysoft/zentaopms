@@ -1,21 +1,21 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/branch.class.php';
+include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
 
-zdTable('product')->config('product')->gen(10);
-zdTable('branch')->config('branch')->gen(10);
-zdTable('project')->config('execution')->gen(30);
-zdTable('projectproduct')->config('projectproduct')->gen(30);
-zdTable('productplan')->config('productplan')->gen(30);
-zdTable('release')->config('release')->gen(30);
-zdTable('build')->config('build')->gen(30);
-zdTable('story')->config('story')->gen(30);
-zdTable('user')->gen(5);
-zdTable('module')->gen(0);
-zdTable('bug')->gen(0);
-zdTable('case')->gen(0);
-zdTable('projectstory')->gen(0);
+zenData('product')->loadYaml('product')->gen(10);
+zenData('branch')->loadYaml('branch')->gen(10);
+zenData('project')->loadYaml('execution')->gen(30);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(30);
+zenData('productplan')->loadYaml('productplan')->gen(30);
+zenData('release')->loadYaml('release')->gen(30);
+zenData('build')->loadYaml('build')->gen(30);
+zenData('story')->loadYaml('story')->gen(30);
+zenData('user')->gen(5);
+zenData('module')->gen(0);
+zenData('bug')->gen(0);
+zenData('case')->gen(0);
+zenData('projectstory')->gen(0);
 su('admin');
 
 /**

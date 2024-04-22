@@ -23,7 +23,7 @@ include dirname(__FILE__, 2) . '/product.class.php';
 function initData()
 {
     /* Generate product data. */
-    $product = zdTable('product');
+    $product = zenData('product');
     $product->id->range('1000-1100');
     $product->program->range('1-10');
     $product->name->prefix('product_')->range('1-10');
@@ -31,7 +31,7 @@ function initData()
     $product->gen(5);
 
     /* Generate program data. */
-    $program = zdTable('project');
+    $program = zenData('project');
     $program->id->range('1-10');
     $program->name->prefix('program_')->range('1-10');
     $program->gen(5);

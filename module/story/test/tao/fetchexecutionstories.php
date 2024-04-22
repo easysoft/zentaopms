@@ -15,21 +15,21 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 
-zdTable('product')->gen(10);
-$project = zdTable('project');
+zenData('product')->gen(10);
+$project = zenData('project');
 $project->type->range('sprint');
 $project->gen(50);
 
-$projectstory = zdTable('projectstory');
+$projectstory = zenData('projectstory');
 $projectstory->product->range('1-2');
 $projectstory->story->range('1-50');
 $projectstory->project->range('11');
 $projectstory->branch->range('0{30},1{10},2{10}');
 $projectstory->gen(50);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range('1-2');
 $story->type->range('story');
 $story->branch->range('0{30},1{10},2{10}');

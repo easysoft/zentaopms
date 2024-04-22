@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-4');
 $task->name->range('并行任务,串行任务1,串行任务2,普通任务');
 $task->mode->range('multi,linear{2},[]');
@@ -12,7 +12,7 @@ $task->assignedTo->range('admin');
 $task->openedBy->range('dev01');
 $task->gen(4);
 
-$taskTeam = zdTable('taskteam');
+$taskTeam = zenData('taskteam');
 $taskTeam->id->range('1-7');
 $taskTeam->task->range('1{2},2{3},3{2}');
 $taskTeam->account->range('admin,dev01,admin,dev01,dev02,admin,dev01');

@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/program.class.php';
+include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 
-$program = zdTable('project');
+$program = zenData('project');
 $program->id->range('1-8');
 $program->name->range('项目集1,项目集2,项目1,项目2,项目3,项目4,项目5,项目6');
 $program->type->range('program{2},project{6}');
@@ -15,7 +15,7 @@ $program->begin->range('20220112 000000:0')->type('timestamp')->format('YYYY-MM-
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $program->gen(8);
 
-$team = zdTable('team');
+$team = zenData('team');
 $team->id->range('1-5');
 $team->root->range('3-5');
 $team->type->range('project');
@@ -26,7 +26,7 @@ $team->account->setFields(array(
 ));
 $team->gen(5);
 
-$userquery = zdTable('userquery');
+$userquery = zenData('userquery');
 $userquery->id->range(1);
 $userquery->account->range('admin');
 $userquery->module->range('project');
@@ -35,7 +35,7 @@ $userquery->sql->range("`(( 1  AND `status` = 'doing' ))`");
 $userquery->form->range('``');
 $userquery->gen(1);
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 /**

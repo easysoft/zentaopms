@@ -15,9 +15,9 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/admin.class.php';
+include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
 
-zdTable('user')->config('user')->gen(6);
+zenData('user')->loadYaml('user')->gen(6);
 
 global $config;
 unset($config->safe->weak); // 防止数据库中设置的弱密码对单元测试造成影响，重置为空。

@@ -3,9 +3,9 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('doclib')->config('doclib')->gen(300);
-zdTable('project')->gen(100);
-zdTable('product')->gen(100);
+zenData('doclib')->loadYaml('doclib')->gen(300);
+zenData('project')->gen(100);
+zenData('product')->gen(100);
 
 /**
 

@@ -9,13 +9,13 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
+include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
 
-zdTable('build')->config('build')->gen(10);
-zdTable('project')->config('execution')->gen(30);
-zdTable('branch')->config('branch')->gen(5);
-zdTable('release')->config('release')->gen(10);
-zdTable('user')->gen(5);
+zenData('build')->loadYaml('build')->gen(10);
+zenData('project')->loadYaml('execution')->gen(30);
+zenData('branch')->loadYaml('branch')->gen(5);
+zenData('release')->loadYaml('release')->gen(10);
+zenData('user')->gen(5);
 su('admin');
 
 $branchIdList = array('all', '0', '1');

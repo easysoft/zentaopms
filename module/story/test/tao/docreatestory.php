@@ -14,10 +14,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('story')->gen(0);
+zenData('story')->gen(0);
 
 $data  = new stdclass();
 $data->product     = 1;

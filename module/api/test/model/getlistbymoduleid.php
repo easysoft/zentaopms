@@ -3,10 +3,10 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('module')->config('module')->gen(10);
-zdTable('api')->config('api')->gen(50);
-zdTable('apispec')->gen(100);
-zdTable('api_lib_release')->gen(10);
+zenData('module')->loadYaml('module')->gen(10);
+zenData('api')->loadYaml('api')->gen(50);
+zenData('apispec')->gen(100);
+zenData('api_lib_release')->gen(10);
 
 /**
 

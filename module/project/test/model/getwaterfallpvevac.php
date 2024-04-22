@@ -11,9 +11,9 @@ cid=1
 
 */
 
-zdTable('task')->config('task')->gen(10);
-zdTable('project')->config('execution')->gen(10);
-zdTable('effort')->config('effort')->gen(10);
+zenData('task')->loadYaml('task')->gen(10);
+zenData('project')->loadYaml('execution')->gen(10);
+zenData('effort')->loadYaml('effort')->gen(10);
 
 $projectIDList = array(0, 11, 60);
 

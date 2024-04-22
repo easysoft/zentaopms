@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
 
 /**
@@ -12,7 +12,7 @@ cid=1
 
 */
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-5');
 $task->execution->range('1-5');
 $task->name->prefix("任务")->range('1-5');
@@ -21,7 +21,7 @@ $task->estStarted->range('2022\-01\-01');
 $task->status->range("wait,doing,done,pause,cancel,closed");
 $task->gen(5);
 
-$effort = zdTable('effort');
+$effort = zenData('effort');
 $effort->id->range('1-5');
 $effort->objectID->range('1-5');
 $effort->objectType->range('task');

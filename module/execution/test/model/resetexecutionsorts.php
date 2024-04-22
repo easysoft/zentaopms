@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+zenData('user')->gen(5);
 su('admin');
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-8');
 $execution->name->range('项目集1,项目1,需求阶段1,测试阶段1,需求子阶段1,需求子阶段2,需求子阶段1的迭代1,需求子阶段1的看板1');
 $execution->model->range('[],waterfallplus,[]{6}');

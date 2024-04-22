@@ -13,13 +13,13 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
 $timestamp = time();
-$docTable = zdTable('doc')->config('doc');
+$docTable = zenData('doc')->loadYaml('doc');
 $docTable->editingDate->range("`{\"user1\": $timestamp}`,[]");
 $docTable->gen(2);
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 
 $docIds = array(0, 1, 2, 3);
 

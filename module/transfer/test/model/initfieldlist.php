@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/transfer.class.php';
-zdTable('product')->gen(10);
-$module = zdTable('module');
+include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+zenData('product')->gen(10);
+$module = zenData('module');
 $module->root->range('1');
 $module->type->range('story');
 $module->gen(10);

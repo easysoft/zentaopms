@@ -15,11 +15,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-zdTable('pipeline')->gen(5);
+zenData('pipeline')->gen(5);
 
-$mr = zdTable('mr')->config('mr');
+$mr = zenData('mr')->loadYaml('mr');
 $mr->mriid->range(45);
 $mr->gen(10);
 

@@ -18,8 +18,8 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('pipeline')->gen(5);
-zdTable('oauth')->config('oauth')->gen(5);
+zenData('pipeline')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(5);
 su('admin');
 
 global $tester;

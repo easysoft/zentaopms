@@ -21,9 +21,9 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
-zdTable('user')->config('user')->gen(5);
+zenData('user')->loadYaml('user')->gen(5);
 
 su('admin');
 

@@ -13,7 +13,7 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$action = zdTable('action');
+$action = zenData('action');
 $action->product->range('`,1,`');
 $action->action->range('reviewed');
 $action->objectType->range('story');

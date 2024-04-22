@@ -25,8 +25,8 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/product.class.php';
 
-zdTable('product')->gen(1);
-zdTable('module')->gen(1);
+zenData('product')->gen(1);
+zenData('module')->gen(1);
 
 $product = new productTest('admin');
 

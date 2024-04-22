@@ -14,7 +14,7 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('mr')->config('mr')->gen(1);
+zenData('mr')->loadYaml('mr')->gen(1);
 su('admin');
 
 $mrModel = $tester->loadModel('mr');

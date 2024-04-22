@@ -1,15 +1,15 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
-zdTable('task')->config('task_updatekanbancell')->gen(7);
-zdTable('project')->config('project_updatekanbancell')->gen(1);
+zenData('task')->loadYaml('task_updatekanbancell')->gen(7);
+zenData('project')->loadYaml('project_updatekanbancell')->gen(1);
 
-zdTable('kanbanregion')->config('kanbanregion_updatekanbancell')->gen(1);
-zdTable('kanbanlane')->config('kanbanlane_updatekanbancell')->gen(1);
-zdTable('kanbancolumn')->config('kanbancolumn_updatekanbancell')->gen(7);
-zdTable('kanbancell')->config('kanbancell_updatekanbancell')->gen(7);
+zenData('kanbanregion')->loadYaml('kanbanregion_updatekanbancell')->gen(1);
+zenData('kanbanlane')->loadYaml('kanbanlane_updatekanbancell')->gen(1);
+zenData('kanbancolumn')->loadYaml('kanbancolumn_updatekanbancell')->gen(7);
+zenData('kanbancell')->loadYaml('kanbancell_updatekanbancell')->gen(7);
 
 /**
 

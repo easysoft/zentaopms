@@ -16,12 +16,12 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/design.class.php';
+include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
 
-zdTable('design')->config('design')->gen(3);
-zdTable('file')->gen(0);
-zdTable('product')->config('product')->gen(1);
-zdTable('relation')->config('relation')->gen(5);
+zenData('design')->loadYaml('design')->gen(3);
+zenData('file')->gen(0);
+zenData('product')->loadYaml('product')->gen(1);
+zenData('relation')->loadYaml('relation')->gen(5);
 
 $idList = array(0, 3, 4);
 

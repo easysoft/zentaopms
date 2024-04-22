@@ -12,10 +12,10 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('getselfandchildrenlist')->gen(6);
+zenData('project')->loadYaml('getselfandchildrenlist')->gen(6);
 
 $plan    = new programplanTest();
 $topPlan = $plan->getSelfAndChildrenListTest(2);

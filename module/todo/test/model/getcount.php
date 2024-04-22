@@ -5,7 +5,7 @@ su('admin');
 
 function initData()
 {
-    zdTable('todo')->config('getcount')->gen(20);
+    zenData('todo')->loadYaml('getcount')->gen(20);
 }
 
 /**

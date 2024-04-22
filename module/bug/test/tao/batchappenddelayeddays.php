@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
 /**
 
@@ -18,10 +18,10 @@ pid=1
 
 */
 
-zdTable('product')->gen(40);
-zdTable('user')->gen(10);
-zdTable('project')->gen(40);
-zdTable('bug')->config('bug_product')->gen(100);
+zenData('product')->gen(40);
+zenData('user')->gen(10);
+zenData('project')->gen(40);
+zenData('bug')->loadYaml('bug_product')->gen(100);
 
 su('admin');
 

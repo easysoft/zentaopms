@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/kanban.class.php';
+include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('kanbanexecution')->gen(5);
-zdTable('kanbanlane')->config('rdkanbanlane')->gen(5);
-zdTable('kanbancell')->config('rdkanbancell')->gen(5);
+zenData('project')->loadYaml('kanbanexecution')->gen(5);
+zenData('kanbanlane')->loadYaml('rdkanbanlane')->gen(5);
+zenData('kanbancell')->loadYaml('rdkanbancell')->gen(5);
 
 /**
 

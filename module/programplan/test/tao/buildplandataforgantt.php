@@ -24,7 +24,7 @@ cid=0
 include dirname(__FILE__, 5). '/test/lib/init.php';
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->type->range('stage');
 $project->begin->range('`2023-09-28`');
 $project->percent->range('10');

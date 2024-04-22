@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/custom.class.php';
+include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
 su('admin');
 
 /**
@@ -12,7 +12,7 @@ cid=1
 
 */
 
-$lang = zdTable('lang');
+$lang = zenData('lang');
 $lang->lang->range('zh-cn');
 $lang->module->range('custom');
 $lang->vision->range('rnd');

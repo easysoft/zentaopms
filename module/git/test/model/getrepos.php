@@ -15,8 +15,8 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('pipeline')->gen(1);
-zdTable('repo')->config('repo')->gen(10);
+zenData('pipeline')->gen(1);
+zenData('repo')->loadYaml('repo')->gen(10);
 su('admin');
 
 global $tester;
@@ -26,7 +26,7 @@ $repos = $git->getRepos();
 r(count($repos)) && p() && e('8'); // 获取git代码库的数量
 r($repos) && p('1') && e('https://gitlabdev.qc.oop.cc/root/unittest11'); // 获取第一条git记录的path属性
 
-zdTable('repo')->gen(0);
+zenData('repo')->gen(0);
 dao::$cache = array();
 
 ob_start();

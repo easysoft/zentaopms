@@ -16,12 +16,12 @@ cid=0
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/report.class.php';
+include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
 
-zdTable('todo')->config('todo')->gen(50);
-zdTable('bug')->config('bug')->gen(20);
-zdTable('task')->config('task')->gen(20);
-zdTable('user')->config('user')->gen(31);
+zenData('todo')->loadYaml('todo')->gen(50);
+zenData('bug')->loadYaml('bug')->gen(20);
+zenData('task')->loadYaml('task')->gen(20);
+zenData('user')->loadYaml('user')->gen(31);
 
 su('admin');
 

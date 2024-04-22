@@ -12,7 +12,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$storyView = zdTable('storyreview');
+$storyView = zenData('storyreview');
 $storyView->story->range(1);
 $storyView->reviewer->range('admin,user1');
 $storyView->result->range('``,pass');

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 /**
 
@@ -26,8 +26,8 @@ cid=1
 
 */
 
-zdTable('mr')->config('mr')->gen(1);
-zdTable('relation')->gen(0);
+zenData('mr')->loadYaml('mr')->gen(1);
+zenData('relation')->gen(0);
 su('admin');
 
 $mrModel = new mrTest();

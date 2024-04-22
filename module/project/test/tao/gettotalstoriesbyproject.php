@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . "/test/lib/init.php";
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('11-19');
 $project->project->range('11-19');
 $project->name->prefix("项目")->range('11-19');
@@ -22,8 +22,8 @@ $project->percent->range("0-0");
 $project->openedDate->range("`2023-05-01 10:00:10`");
 $project->gen(9);
 
-zdTable('story')->gen(50);
-zdTable('projectstory')->gen(10);
+zenData('story')->gen(50);
+zenData('projectstory')->gen(10);
 
 /**
 

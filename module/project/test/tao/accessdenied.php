@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . "/test/lib/init.php";
 
 su('admin');
 
-zdTable('project')->config('project')->gen(2);
+zenData('project')->loadYaml('project')->gen(2);
 
 /**
 

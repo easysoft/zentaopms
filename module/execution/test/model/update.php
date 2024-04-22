@@ -44,9 +44,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-11');
 $execution->name->setFields(array(
     array('field' => 'name1', 'range' => '项目{2},执行{3},迭代{2},阶段{2},看板{2}'),
@@ -63,7 +63,7 @@ $execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(11);
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->id->range('1-3');
 $product->name->range('1-3')->prefix('产品');
 $product->code->range('1-3')->prefix('product');

@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('projectproduct')->config('projectproduct')->gen(20);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(20);
 su('admin');
 
 /**

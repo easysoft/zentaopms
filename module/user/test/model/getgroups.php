@@ -21,9 +21,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$table = zdTable('usergroup');
+$table = zenData('usergroup');
 $table->account->range('user1{3},user2{2},user3{2}');
 $table->group->range('1-3,2,3,3,4');
 $table->gen(7);

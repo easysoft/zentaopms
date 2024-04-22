@@ -26,14 +26,14 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/my.class.php';
+include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
-zdTable('story')->config('story')->gen('20');
-zdTable('product')->gen('10');
-zdTable('productplan')->gen('15');
-zdTable('planstory')->gen('20');
-zdTable('userquery')->config('userquery')->gen('2');
-zdTable('user')->gen('1');
+zenData('story')->loadYaml('story')->gen('20');
+zenData('product')->gen('10');
+zenData('productplan')->gen('15');
+zenData('planstory')->gen('20');
+zenData('userquery')->loadYaml('userquery')->gen('2');
+zenData('user')->gen('1');
 
 su('admin');
 

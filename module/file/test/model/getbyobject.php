@@ -46,10 +46,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
+include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
 su('admin');
 
-$file = zdTable('file');
+$file = zenData('file');
 $file->pathname->range('202305/0414225006610005,202305/0414225006610006,202305/0414225006610007,202305/0414225006610008,202305/0414225006610009,202305/0414225006610010,202305/0414225006610011');
 $file->gen(20);
 $objectType = array('traincourse', 'traincontents', 'task', 'bug', 'story', 'testcase');

@@ -8,19 +8,19 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
-zdTable('effort')->gen(0);
-zdTable('project')->config('project')->gen(6);
-zdTable('task')->config('task')->gen(9);
-zdTable('taskteam')->config('taskteam')->gen(6);
-zdTable('kanbanregion')->config('kanbanregion')->gen(1);
-zdTable('kanbanlane')->config('kanbanlane')->gen(1);
-zdTable('kanbancolumn')->config('kanbancolumn')->gen(7);
-zdTable('kanbancell')->config('kanbancell')->gen(7);
+zenData('effort')->gen(0);
+zenData('project')->loadYaml('project')->gen(6);
+zenData('task')->loadYaml('task')->gen(9);
+zenData('taskteam')->loadYaml('taskteam')->gen(6);
+zenData('kanbanregion')->loadYaml('kanbanregion')->gen(1);
+zenData('kanbanlane')->loadYaml('kanbanlane')->gen(1);
+zenData('kanbancolumn')->loadYaml('kanbancolumn')->gen(7);
+zenData('kanbancell')->loadYaml('kanbancell')->gen(7);
 
 $accountList      = array('admin', 'user1', 'user2', 'user3');
 $teamEstimateList = array(1, 2, 3, 4);
@@ -50,8 +50,8 @@ r($task->activateTest($taskIDList[4], '', $emptyTeamData)) && p('0:field,old,new
 r($task->activateTest($taskIDList[7], '', $teamData))      && p('0:field,old,new') && e('status,wait,doing');   // wait状态串行任务激活
 r($task->activateTest($taskIDList[8], '', $teamData))      && p('0:field,old,new') && e('left,8,4');            // doing状态并行任务激活
 
-zdTable('task')->config('task')->gen(9);
-zdTable('taskteam')->config('taskteam')->gen(6);
+zenData('task')->loadYaml('task')->gen(9);
+zenData('taskteam')->loadYaml('taskteam')->gen(6);
 
 r($task->activateTest($taskIDList[0], '', $emptyTeamData, $drag)) && p('0:field,old,new') && e('status,wait,doing');   // wait状态任务激活
 r($task->activateTest($taskIDList[1], '', $emptyTeamData, $drag)) && p('0:field,old,new') && e('left,1,3');            // doing状态任务激活

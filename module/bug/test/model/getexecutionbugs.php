@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 su('admin');
 
 function initData()
 {
-    $bug = zdTable('bug');
+    $bug = zenData('bug');
     $bug->id->range('1-10');
     $bug->product->range('1,2,3,4');
     $bug->branch->range('0,0,1');

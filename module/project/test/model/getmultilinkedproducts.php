@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-zdTable('project')->gen(20);
-zdTable('product')->gen(20);
+zenData('project')->gen(20);
+zenData('product')->gen(20);
 
-$relation = zdTable('projectproduct');
+$relation = zenData('projectproduct');
 $relation->project->range('11-14');
 $relation->product->range('1-3');
 $relation->branch->range('1-20');

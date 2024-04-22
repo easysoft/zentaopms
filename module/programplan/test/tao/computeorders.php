@@ -29,7 +29,7 @@ cid=0
 include dirname(__FILE__, 5). '/test/lib/init.php';
 su('admin');
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->parent->range('0,1{100}');
 $project->type->range('project,stage{100}');
 $project->milestone->range('0{3},1{100}');

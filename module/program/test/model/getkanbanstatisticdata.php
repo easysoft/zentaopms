@@ -9,17 +9,17 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/program.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+zenData('user')->gen(5);
 su('admin');
 
-zdTable('project')->config('program')->gen(30);
-zdTable('product')->config('product')->gen(30);
-zdTable('task')->gen(0);
-zdTable('projectproduct')->gen(0);
-zdTable('productplan')->gen(0);
-zdTable('release')->gen(0);
-zdTable('team')->gen(0);
+zenData('project')->loadYaml('program')->gen(30);
+zenData('product')->loadYaml('product')->gen(30);
+zenData('task')->gen(0);
+zenData('projectproduct')->gen(0);
+zenData('productplan')->gen(0);
+zenData('release')->gen(0);
+zenData('team')->gen(0);
 
 global $app;
 $app->rawModule = 'program';

@@ -3,10 +3,10 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('product')->config('product')->gen(2);
-zdTable('project')->config('project')->gen(5);
-zdTable('build')->config('build')->gen(1);
-zdTable('testtask')->config('testtask')->gen(24);
+zenData('product')->loadYaml('product')->gen(2);
+zenData('project')->loadYaml('project')->gen(5);
+zenData('build')->loadYaml('build')->gen(1);
+zenData('testtask')->loadYaml('testtask')->gen(24);
 
 /**
 

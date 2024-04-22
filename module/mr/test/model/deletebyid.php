@@ -23,12 +23,12 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 su('admin');
-zdTable('action')->gen(0);
-zdTable('relation')->config('relation')->gen(5);
-$mr = zdTable('mr')->config('mr');
+zenData('action')->gen(0);
+zenData('relation')->loadYaml('relation')->gen(5);
+$mr = zenData('mr')->loadYaml('mr');
 $mr->synced->range('0');
 $mr->gen(3);
 

@@ -4,11 +4,11 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 su('admin');
 
-zdTable('product')->config('product')->gen(2);
-zdTable('project')->config('project')->gen(4);
-zdTable('projectproduct')->config('projectproduct')->gen(2);
-zdTable('user')->config('user')->gen(2);
-zdTable('userview')->gen(0);
+zenData('product')->loadYaml('product')->gen(2);
+zenData('project')->loadYaml('project')->gen(4);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(2);
+zenData('user')->loadYaml('user')->gen(2);
+zenData('userview')->gen(0);
 
 /**
 

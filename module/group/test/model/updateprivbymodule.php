@@ -13,7 +13,7 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/group.class.php';
+include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
 
 su('admin');
 
@@ -22,8 +22,8 @@ su('admin');
  * group 1: module1-method1, module6-method6
  * group 2: module2-method2, module7-method7
  */
-zdTable('group')->config('group')->gen(5);
-zdTable('grouppriv')->config('grouppriv')->gen(10);
+zenData('group')->loadYaml('group')->gen(5);
+zenData('grouppriv')->loadYaml('grouppriv')->gen(10);
 
 $group = new groupTest();
 $module = 'my';

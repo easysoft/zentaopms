@@ -11,10 +11,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 su('admin');
 
-zdTable('user')->gen(30);
+zenData('user')->gen(30);
 
 $user = new userTest();
 $commiters = $user->getCommitersTest();

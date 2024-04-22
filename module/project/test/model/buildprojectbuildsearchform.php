@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/project.class.php';
+include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('1-5');
 $project->name->range('项目1,项目2,迭代1,迭代2,迭代3');
 $project->type->range('project{2},sprint,stage,kanban');
@@ -17,7 +17,7 @@ $project->begin->range('20230102 000000:0')->type('timestamp')->format('YYYY-MM-
 $project->end->range('20230212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $project->gen(5);
 
-$product = zdTable('product');
+$product = zenData('product');
 $product->type->range('normal,branch,platform');
 $product->gen(20);
 

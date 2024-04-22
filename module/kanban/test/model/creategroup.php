@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/kanban.class.php';
+include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 su('admin');
 
-zdTable('kanbangroup')->gen(5);
-zdTable('kanbanregion')->gen(5);
+zenData('kanbangroup')->gen(5);
+zenData('kanbanregion')->gen(5);
 
 /**
 

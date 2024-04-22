@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/caselib.class.php';
+include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
 
 su('admin');
-zdTable('case')->gen(10);
-zdTable('story')->gen(10);
+zenData('case')->gen(10);
+zenData('story')->gen(10);
 
 /**
 

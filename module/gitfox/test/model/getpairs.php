@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/gitfox.class.php';
+include dirname(__FILE__, 2) . '/lib/gitfox.unittest.class.php';
 su('admin');
 
 /**
@@ -15,7 +15,7 @@ cid=1
 
 */
 
-zdTable('pipeline')->gen(7);
+zenData('pipeline')->gen(7);
 $gitfox = new gitfoxTest();
 
 $gitfoxPairs = $gitfox->getPairs();

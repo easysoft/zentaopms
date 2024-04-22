@@ -2,10 +2,10 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('branch')->config('branch')->gen(10);
-zdTable('product')->config('product')->gen(10);
-zdTable('projectproduct')->config('projectproduct')->gen(10);
-zdTable('user')->gen(5);
+zenData('branch')->loadYaml('branch')->gen(10);
+zenData('product')->loadYaml('product')->gen(10);
+zenData('projectproduct')->loadYaml('projectproduct')->gen(10);
+zenData('user')->gen(5);
 su('admin');
 
 /**

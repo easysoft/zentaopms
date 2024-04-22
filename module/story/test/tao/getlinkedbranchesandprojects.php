@@ -22,23 +22,23 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('story')->gen(2);
-$project = zdTable('project');
+zenData('story')->gen(2);
+$project = zenData('project');
 $project->id->range('11-20');
 $project->type->range('project,project,sprint,kanban');
 $project->model->range('scrum,kanban,``{2}');
 $project->gen(4);
 
-$projectStory = zdTable('projectstory');
+$projectStory = zenData('projectstory');
 $projectStory->story->range('1');
 $projectStory->product->range('1');
 $projectStory->project->range('11-20');
 $projectStory->gen(4);
 
-$projectProduct = zdTable('projectproduct');
+$projectProduct = zenData('projectproduct');
 $projectProduct->product->range('1');
 $projectProduct->project->range('11-20');
 $projectProduct->branch->range('0{2},1,2');

@@ -28,10 +28,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/action.class.php';
+include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zdTable('projectproduct')->gen(10);
-zdTable('project')->config('execution_for_relation')->gen(1);
+zenData('projectproduct')->gen(10);
+zenData('project')->loadYaml('execution_for_relation')->gen(1);
 
 $actionTest = new actionTest();
 

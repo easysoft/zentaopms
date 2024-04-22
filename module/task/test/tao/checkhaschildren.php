@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
-zdTable('task')->config('task_checkhaschildren')->gen(12);
+zenData('task')->loadYaml('task_checkhaschildren')->gen(12);
 
 /**
 

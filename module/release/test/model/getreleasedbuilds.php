@@ -11,14 +11,14 @@ cid=1
 
 */
 
-$release = zdTable('release')->config('release');
+$release = zenData('release')->loadYaml('release');
 $release->build->range('1-5');
 $release->branch->range('1-5');
 $release->gen(5);
 
-zdTable('product')->config('product')->gen(6);
-zdTable('branch')->config('branch')->gen(5);
-zdTable('user')->gen(5);
+zenData('product')->loadYaml('product')->gen(6);
+zenData('branch')->loadYaml('branch')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $products = array(0, 1, 10);

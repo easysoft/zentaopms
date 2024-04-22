@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/execution.class.php';
+include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 su('admin');
-zdTable('burn')->config('burn')->gen(15);
+zenData('burn')->loadYaml('burn')->gen(15);
 
 /**
 

@@ -39,9 +39,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$user = zdTable('user');
+$user = zenData('user');
 $user->role->range('dev,qa,pm,po,td,pd,qd,top,others,role');
 $user->gen(10);
 

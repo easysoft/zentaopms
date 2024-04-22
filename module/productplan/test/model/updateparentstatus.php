@@ -9,9 +9,9 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/productplan.class.php';
+include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
-$plan = zdTable('productplan')->config('productplan');
+$plan = zenData('productplan')->loadYaml('productplan');
 $plan->parent->range('0,`-1`,2,`-1`,4,`-1`,6,`-1`,8');
 $plan->status->range('doing,doing,wait,doing,closed,doing,done,wait,doing');
 $plan->gen(9);

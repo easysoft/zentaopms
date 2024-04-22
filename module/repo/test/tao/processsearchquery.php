@@ -14,7 +14,7 @@ cid=1
 
 */
 
-zdTable('userquery')->gen(5);
+zenData('userquery')->gen(5);
 
 $queryID = 1;
 

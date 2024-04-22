@@ -23,9 +23,9 @@ cid=0
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('pipeline')->gen(3);
-zdTable('compile')->gen(0);
-$mrYaml = zdTable('mr')->config('mr');
+zenData('pipeline')->gen(3);
+zenData('compile')->gen(0);
+$mrYaml = zenData('mr')->loadYaml('mr');
 $mrYaml->hostID->range(1);
 $mrYaml->needCI->range('0-1');
 $mrYaml->jobID->range(1);

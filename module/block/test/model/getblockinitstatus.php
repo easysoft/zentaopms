@@ -5,7 +5,7 @@ su('admin');
 
 function initData()
 {
-    $block = zdTable('block');
+    $block = zenData('block');
     $block->id->range('2-5');
     $block->account->range('admin');
     $block->dashboard->range('my');

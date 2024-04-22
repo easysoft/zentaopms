@@ -12,17 +12,17 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 su('admin');
 
-zdTable('product')->gen(1);
-$story = zdTable('story');
+zenData('product')->gen(1);
+$story = zenData('story');
 $story->product->range(1);
 $story->version->range(1);
 $story->deleted->range('0{4},1');
 $story->gen(20);
 
-zdTable('storyspec')->gen(20);
+zenData('storyspec')->gen(20);
 
 $story = new storyTest();
 $storyIdList = array(1, 2, 3, 4, 5);

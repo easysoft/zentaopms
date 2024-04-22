@@ -3,10 +3,10 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('user')->gen(10);
-zdTable('task')->gen(1);
-zdTable('story')->gen(1);
-zdTable('bug')->gen(1);
+zenData('user')->gen(10);
+zenData('task')->gen(1);
+zenData('story')->gen(1);
+zenData('bug')->gen(1);
 
 /**
 

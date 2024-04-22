@@ -2,9 +2,9 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/message.class.php';
+include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
 
-zdTable('user')->gen(1);
+zenData('user')->gen(1);
 
 su('admin');
 

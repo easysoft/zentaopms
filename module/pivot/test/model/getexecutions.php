@@ -10,12 +10,12 @@ title=测试 pivotModel->getExecutions();
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/pivot.class.php';
+include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 su('admin');
 
-zdTable('project')->config('execution')->gen(10);
-zdTable('task')->gen(20);
-zdTable('user')->gen(2);
+zenData('project')->loadYaml('execution')->gen(10);
+zenData('task')->gen(20);
+zenData('user')->gen(2);
 
 $pivot = new pivotTest();
 

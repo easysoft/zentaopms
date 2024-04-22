@@ -22,10 +22,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/programplan.class.php';
+include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
-$programplan = zdTable('project');
+$programplan = zenData('project');
 $programplan->id->range('10-20');
 $programplan->parent->range('1-3');
 $programplan->type->range('stage{3},sprint{2},kanban{2},stage{1},sprint{2}');

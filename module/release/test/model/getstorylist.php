@@ -10,11 +10,11 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('build')->config('build')->gen(10);
-zdTable('story')->config('story')->gen(10);
-zdTable('branch')->config('branch')->gen(5);
-zdTable('storystage')->gen(0);
-zdTable('user')->gen(5);
+zenData('build')->loadYaml('build')->gen(10);
+zenData('story')->loadYaml('story')->gen(10);
+zenData('branch')->loadYaml('branch')->gen(5);
+zenData('storystage')->gen(0);
+zenData('user')->gen(5);
 su('admin');
 
 $storyIdList = array('', '1,2,3,4,5', '11,12,13,14,15');

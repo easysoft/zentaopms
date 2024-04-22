@@ -8,10 +8,10 @@ pid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/entry.class.php';
+include dirname(__FILE__, 2) . '/lib/entry.unittest.class.php';
 
-zdTable('entry')->gen(1);
-zdTable('user')->gen(5);
+zenData('entry')->gen(1);
+zenData('user')->gen(5);
 su('admin');
 
 $code = array('code1','noCode');

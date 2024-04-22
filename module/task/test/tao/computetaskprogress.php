@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-5');
 $task->name->prefix('任务')->range('1-5');
 $task->consumed->range('0,10,15,20,25');

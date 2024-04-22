@@ -13,9 +13,9 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/mr.class.php';
+include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
-$mr = zdTable('mr')->config('mr');
+$mr = zenData('mr')->loadYaml('mr');
 $mr->hostID->range('1');
 $mr->mriid->range('0,37,38');
 $mr->sourceProject->range('3');

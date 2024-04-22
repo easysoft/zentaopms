@@ -12,9 +12,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/story.class.php';
+include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range(1);
 $story->plan->range('0,1,0{100}');
 $story->duplicateStory->range('0,4,0{100}');
@@ -26,24 +26,24 @@ $story->parent->range('0{17},`-1`,0,18,0{100}');
 $story->twins->range('``{27},30,``,28');
 $story->gen(30);
 
-$storySpec = zdTable('storyspec');
+$storySpec = zenData('storyspec');
 $storySpec->story->range('1-30{3}');
 $storySpec->version->range('1-3');
 $storySpec->gen(90);
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->project->range('0{10},1-10,11-20{6}');
 $project->parent->range('0{10},1-10,11-20{6}');
 $project->type->range('program{10},project{10},sprint{60}');
 $project->gen(80)->fixPath();
 
-$projectStory = zdTable('projectstory');
+$projectStory = zenData('projectstory');
 $projectStory->project->range('11-17{6},21-40{2}');
 $projectStory->product->range('1');
 $projectStory->story->range('2-30:2');
 $projectStory->gen(80);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->story->range('2-30:2{2}');
 $task->project->range('11-17{6}');
 $task->execution->range('21-30{2}');
@@ -51,15 +51,15 @@ $task->storyVersion->range('3');
 $task->assignedTo->range('admin');
 $task->gen(60);
 
-$team = zdTable('team');
+$team = zenData('team');
 $team->account->range('admin,user1,user2,user3,user4');
 $team->root->range('11-40{3}');
 $team->type->range('execution');
 $team->gen(90);
 
-zdTable('storystage')->gen(30);
-zdTable('bug')->gen(1);
-zdTable('productplan')->gen(1);
+zenData('storystage')->gen(30);
+zenData('bug')->gen(1);
+zenData('productplan')->gen(1);
 
 $story = new storyTest();
 $affectedStory = $story->getAffectedProjectsTest(2);

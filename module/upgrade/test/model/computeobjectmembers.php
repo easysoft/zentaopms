@@ -19,30 +19,30 @@ cid=1
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/upgrade.class.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
-zdTable('user')->gen(40);
-zdTable('usergroup')->gen(20);
-zdTable('product')->gen(10);
-zdTable('projectproduct')->gen(10);
+zenData('user')->gen(40);
+zenData('usergroup')->gen(20);
+zenData('product')->gen(10);
+zenData('projectproduct')->gen(10);
 
-$project = zdTable('project');
+$project = zenData('project');
 $project->id->range('11-20,101-110');
 $project->project->range('0{10},11-20');
 $project->type->range('project{10},``{10}');
 $project->gen(20);
 
-$team = zdTable('team');
+$team = zenData('team');
 $team->root->range('11-20,101-110');
 $team->type->range('project{10},execution{10}');
 $team->gen(20);
 
-$acl = zdTable('acl');
+$acl = zenData('acl');
 $acl->objectID->range('11-20,101-110');
 $acl->objectType->range('project{10},sprint{10}');
 $acl->gen(20);
 
-$doclib = zdTable('doclib');
+$doclib = zenData('doclib');
 $doclib->main->range('1');
 $doclib->gen(110);
 

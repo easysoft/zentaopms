@@ -25,12 +25,12 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-zdTable('user')->gen(2);
-zdTable('group')->gen(3);
+zenData('user')->gen(2);
+zenData('group')->gen(3);
 
-$groupTable = zdTable('usergroup');
+$groupTable = zenData('usergroup');
 $groupTable->account->range('user1');
 $groupTable->group->range('1,2');
 $groupTable->gen(2);

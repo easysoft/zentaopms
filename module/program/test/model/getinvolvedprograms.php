@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/program.class.php';
-zdTable('user')->gen(5);
+include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+zenData('user')->gen(5);
 su('admin');
 
-$program = zdTable('project');
+$program = zenData('project');
 $program->id->range('1-3');
 $program->name->range('1-3')->prefix('项目集');
 $program->type->range('program');
@@ -16,9 +16,9 @@ $program->begin->range('20220112 000000:0')->type('timestamp')->format('YYYY-MM-
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $program->gen(3);
 
-zdTable('stakeholder')->gen(0);
-zdTable('team')->gen(0);
-zdTable('product')->gen(0);
+zenData('stakeholder')->gen(0);
+zenData('team')->gen(0);
+zenData('product')->gen(0);
 
 /**
 

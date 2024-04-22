@@ -24,11 +24,11 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->product->range('1');
 $story->gen(50);
 
-$planstory = zdTable('planstory');
+$planstory = zenData('planstory');
 $planstory->plan->range('1-10');
 $planstory->gen(50);
 

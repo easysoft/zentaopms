@@ -2,8 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('case')->config('case')->gen(5);
-zdTable('testrun')->gen(5);
+zenData('case')->loadYaml('case')->gen(5);
+zenData('testrun')->gen(5);
 
 /**
 

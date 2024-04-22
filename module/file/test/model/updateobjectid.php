@@ -33,10 +33,10 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/file.class.php';
+include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
 su('admin');
 
-zdTable('file')->gen(20);
+zenData('file')->gen(20);
 
 $uid = '98390890341';
 $albums1 = array('used' => array($uid => array('1')));

@@ -17,7 +17,7 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-$module = zdTable('action');
+$module = zenData('action');
 $module->product->range('`,1,`');
 $module->action->range('reviewed');
 $module->objectType->range('story');

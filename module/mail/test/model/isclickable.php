@@ -15,7 +15,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('notify')->gen(2);
+zenData('notify')->gen(2);
 
 global $tester;
 $mailModel = $tester->loadModel('mail');

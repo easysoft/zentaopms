@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/project.class.php';
+include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
 su('admin');
 
 function initData()
 {
-    $project = zdTable('project');
+    $project = zenData('project');
     $project->id->range('2-5');
     $project->project->range('2-5');
     $project->name->prefix("项目")->range('2-5');
@@ -14,7 +14,7 @@ function initData()
     $project->type->range("project");
     $project->gen(4);
 
-    $projectproduct = zdTable('projectproduct');
+    $projectproduct = zenData('projectproduct');
     $projectproduct->product->range('1-3');
     $projectproduct->project->range('2-4');
     $projectproduct->branch->range("0{5}");

@@ -19,9 +19,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/user.class.php';
+include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$table = zdTable('user');
+$table = zenData('user');
 $table->password->range(md5(123456));
 $table->avatar->range('/www/data/upload/1/202311/29144321062056c4');
 $table->gen(2);

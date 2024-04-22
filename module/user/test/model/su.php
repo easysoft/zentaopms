@@ -13,8 +13,8 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('user')->gen(3);
-zdTable('company')->gen(1);
+zenData('user')->gen(3);
+zenData('company')->gen(1);
 
 su('user1');
 

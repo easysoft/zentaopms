@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/bug.class.php';
+include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
-$bug = zdTable('bug');
+$bug = zenData('bug');
 $bug->id->range('1-100');
 $bug->product->range('1,2');
 $bug->branch->range('0,1');
@@ -19,7 +19,7 @@ $bug->confirmed->range('0,1,1,0');
 $bug->resolution->range('postponed,fixed');
 $bug->gen(50);
 
-zdtable('story')->config('storyconfirm')->gen(50);
+zdtable('story')->loadYaml('storyconfirm')->gen(50);
 
 zdtable('user')->gen(1);
 

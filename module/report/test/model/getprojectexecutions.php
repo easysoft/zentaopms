@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/report.class.php';
+include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
 
-zdTable('project')->config('execution')->gen(10);
-zdTable('user')->gen(1);
+zenData('project')->loadYaml('execution')->gen(10);
+zenData('user')->gen(1);
 
 su('admin');
 

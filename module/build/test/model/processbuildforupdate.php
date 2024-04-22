@@ -9,10 +9,10 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
+include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
 
-zdTable('build')->config('build')->gen(20);
-zdTable('story')->config('story')->gen(20);
+zenData('build')->loadYaml('build')->gen(20);
+zenData('story')->loadYaml('story')->gen(20);
 su('admin');
 
 $buildID = array(

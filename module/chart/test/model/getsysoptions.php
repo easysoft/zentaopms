@@ -19,11 +19,11 @@ cid=1
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('user')->gen(5);
-zdTable('product')->gen(5);
-zdTable('project')->gen(20);
-zdTable('dept')->gen(5);
-zdTable('bug')->gen(5);
+zenData('user')->gen(5);
+zenData('product')->gen(5);
+zenData('project')->gen(20);
+zenData('dept')->gen(5);
+zenData('bug')->gen(5);
 su('admin');
 
 global $tester;

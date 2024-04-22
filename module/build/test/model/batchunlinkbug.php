@@ -8,13 +8,13 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/build.class.php';
+include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
 
-$build = zdTable('build')->config('build');
+$build = zenData('build')->loadYaml('build');
 $build->bugs->range('`1,2,3`,`4,5,6`');
 $build->gen(5);
 
-zdTable('user')->gen(5);
+zenData('user')->gen(5);
 su('admin');
 
 $buildIdList  = array(0, 1, 2, 6);

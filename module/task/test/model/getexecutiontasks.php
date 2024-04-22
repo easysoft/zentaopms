@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/task.class.php';
+include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
-$execution = zdTable('project');
+$execution = zenData('project');
 $execution->id->range('1-5');
 $execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
 $execution->type->range('project{2},sprint,stage,kanban');
@@ -15,7 +15,7 @@ $execution->begin->range('20230102 000000:0')->type('timestamp')->format('YYYY-M
 $execution->end->range('20230212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $execution->gen(5);
 
-$task = zdTable('task');
+$task = zenData('task');
 $task->id->range('1-20');
 $task->name->range('1-20')->prefix('任务');
 $task->module->range('1-5');
@@ -31,7 +31,7 @@ $task->finishedBy->range('admin{10},user2{11-20}');
 $task->pri->range('1-4');
 $task->gen(20);
 
-$story = zdTable('story');
+$story = zenData('story');
 $story->id->range('1-20');
 $story->title->range('1-20')->prefix('需求');
 $story->product->range('1-20');
@@ -40,9 +40,9 @@ $story->version->range('1-2');
 $story->status->range('active{10},draft{5},reviewing{2},closed{2},changing');
 $story->gen(20);
 
-zdTable('user')->gen(30);
+zenData('user')->gen(30);
 
-$taskTeam = zdTable('taskteam');
+$taskTeam = zenData('taskteam');
 $taskTeam->id->range('1-5');
 $taskTeam->task->range('16{2},19{3}');
 $taskTeam->account->range('admin,user1,admin,user1,user2');
@@ -51,7 +51,7 @@ $taskTeam->left->range('1{2},1{3}');
 $taskTeam->status->range('wait{2},doing{3}');
 $taskTeam->gen(5);
 
-$module = zdTable('module');
+$module = zenData('module');
 $module->root->range('1-5');
 $module->type->range('story');
 $module->gen(5);

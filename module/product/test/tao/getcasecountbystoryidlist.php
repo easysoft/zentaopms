@@ -13,8 +13,8 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('case')->config('case')->gen(30);
-zdTable('user')->gen(5);
+zenData('case')->loadYaml('case')->gen(30);
+zenData('user')->gen(5);
 su('admin');
 
 $storyIdList[0] = array();

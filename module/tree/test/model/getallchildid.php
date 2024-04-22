@@ -29,10 +29,10 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/tree.class.php';
+include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 su('admin');
 
-zdTable('module')->config('module')->gen(30);
+zenData('module')->loadYaml('module')->gen(30);
 
 $moduleID = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 

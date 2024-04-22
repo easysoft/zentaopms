@@ -33,7 +33,7 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zdTable('story')->gen(20);
+zenData('story')->gen(20);
 su('admin');
 
 global $tester;
