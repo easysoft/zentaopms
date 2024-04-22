@@ -13,9 +13,18 @@ class thinkNode  extends wg
     protected function buildBody(): wg|array
     {
         list($item, $status, $addType) = $this->prop(array('item', 'status', 'addType'));
+        $itemOptions = json_decode($item->options, true);
 
         if($status == 'detail')
         {
+            if($addType === 'input') return thinkInputDetail
+            (
+                set::type($item->type),
+                set::title($item->title),
+                set::desc($item->desc),
+                set::item($item),
+                set::required($itemOptions['required'])
+            );
             return thinkStepDetail
             (
                 set::type($item->type),
@@ -51,6 +60,34 @@ class thinkNode  extends wg
                     set::enableOther($isEdit ? $item->enableOther : false),
                     set::minCount($isEdit ? $item->minCount : ''),
                     set::maxCount($isEdit ? $item->maxCount : ''),
+                );
+                if($addType === 'input' || $item->questionType === 'input') return thinkInput(
+                    set($isEdit ? array(
+                        'title'     => $item->title,
+                        'desc'      => $item->desc,
+                        'isEdit'    => true,
+                        'stepID'    => $item->id,
+                        'required'  => $itemOptions['required'],
+                        'submitUrl' => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}")
+                    ) : array (
+                        'submitUrl' => createLink('thinkwizard', 'design', "wizardID={$item->wizard}")
+                    ))
+                );
+                if($addType == 'tableInput' || $item->questionType === 'tableInput')  return thinkTableInput(
+                    set($isEdit ? array(
+                        'title'        => $item->title,
+                        'desc'         => $item->desc,
+                        'isEdit'       => true,
+                        'stepID'       => $item->id,
+                        'required'     => $itemOptions['required'],
+                        'requiredRows' => $itemOptions['requiredRows'],
+                        'isSupportAdd' => $itemOptions['isSupportAdd'],
+                        'canAddRows'   => $itemOptions['canAddRows'],
+                        'rowsTitle'    => $itemOptions['fields'],
+                        'submitUrl'    => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}")
+                    ): array(
+                        'submitUrl' => createLink('thinkwizard', 'design', "wizardID={$item->wizard}")
+                    ))
                 );
             }
             if($isEdit) return thinkStep
