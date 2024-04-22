@@ -91,8 +91,6 @@ function printSteps()
         {
             $desc .= genRowStep($part, $delimiter, $expectList[$index], $isGroup);
         }
-
-        // $desc .= "\n";
     }
 
     echo trim($desc);
@@ -129,11 +127,11 @@ function genRowStep($keys, $delimiter, $expects, $isGroup)
         {
             if(RUN_MODE == 'uitest' && $row == 'message')
             {
-                $stepDesc .= ($isGroup ? ' - ' : '') . ($row ? " 测试结果" : '') . " @{$stepExpect}\n";
+                $stepDesc .= ($isGroup ? ' - ' : '') . ($row ? "测试结果" : '') . " @{$stepExpect}\n";
             }
             elseif(RUN_MODE == 'uitest' && $row == 'status')
             {
-                $stepDesc .= ($isGroup ? ' - ' : '') . ($row ? " 最终测试状态" : '') . " @{$stepExpect}\n";
+                $stepDesc .= ($isGroup ? ' - ' : '') . ($row ? "最终测试状态" : '') . " @{$stepExpect}\n";
             }
             else
             {
