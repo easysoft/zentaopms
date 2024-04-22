@@ -686,6 +686,12 @@ $config->objectTables['design']         = TABLE_DESIGN;
 $config->objectTables['prompt']         = TABLE_AI_PROMPT;
 $config->objectTables['aiapp']          = TABLE_AI_MINIPROGRAM;
 $config->objectTables['miniprogram']    = TABLE_AI_MINIPROGRAM;
+$config->objectTables['roadmap']        = TABLE_ROADMAP;
+$config->objectTables['charter']        = TABLE_CHARTER;
+$config->objectTables['market']         = TABLE_MARKET;
+$config->objectTables['marketreport']   = TABLE_MARKETREPORT;
+$config->objectTables['marketresearch'] = TABLE_PROJECT;
+$config->objectTables['researchstage']  = TABLE_PROJECT;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
