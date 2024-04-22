@@ -68,7 +68,7 @@ class thinkTableInput extends thinkStep
     private function buildisSupportAddControl(): wg
     {
         global $lang;
-        list($isSupportAdd, $isSupportAddName, $canAddRows, $canAddRowsName) = $this->prop(array('isSupportsAdd', 'isSupportAddName', 'canAddRows', 'canAddRowsName'));
+        list($isSupportAdd, $isSupportAddName, $canAddRows, $canAddRowsName) = $this->prop(array('isSupportAdd', 'isSupportAddName', 'canAddRows', 'canAddRowsName'));
         return formRow
         (
             setClass('mb-3'),
