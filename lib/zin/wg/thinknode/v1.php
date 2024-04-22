@@ -13,17 +13,25 @@ class thinkNode  extends wg
     protected function buildBody(): wg|array
     {
         list($item, $status, $addType) = $this->prop(array('item', 'status', 'addType'));
-        $itemOptions = json_decode($item->options, true);
 
         if($status == 'detail')
         {
-            if($addType === 'input') return thinkInputDetail
+            if($item->questionType === 'input') return thinkInputDetail
             (
                 set::type($item->type),
                 set::title($item->title),
                 set::desc($item->desc),
                 set::item($item),
-                set::required($itemOptions['required'])
+                set::required($item->required)
+            );
+            if($item->questionType === 'tableInput') return thinkTableInputDetail
+            (
+                set::type($item->type),
+                set::title($item->title),
+                set::desc($item->desc),
+                set::item($item),
+                set::required($item->required),
+                set::rowsTitle( explode(', ', $item->fields)),
             );
             return thinkStepDetail
             (
@@ -61,33 +69,21 @@ class thinkNode  extends wg
                     set::minCount($isEdit ? $item->minCount : ''),
                     set::maxCount($isEdit ? $item->maxCount : ''),
                 );
-                if($addType === 'input' || $item->questionType === 'input') return thinkInput(
-                    set($isEdit ? array(
-                        'title'     => $item->title,
-                        'desc'      => $item->desc,
-                        'isEdit'    => true,
-                        'stepID'    => $item->id,
-                        'required'  => $itemOptions['required'],
-                        'submitUrl' => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}")
-                    ) : array (
-                        'submitUrl' => createLink('thinkwizard', 'design', "wizardID={$item->wizard}")
-                    ))
+                if($addType === 'input' || $item->questionType == 'input') return thinkInput(
+                    set::title($isEdit ? $item->title : ''),
+                    set::desc($isEdit ? $item->desc : ''),
+                    set::required($isEdit ? $item->required : false),
+                    set::type('question')
                 );
-                if($addType == 'tableInput' || $item->questionType === 'tableInput')  return thinkTableInput(
-                    set($isEdit ? array(
-                        'title'        => $item->title,
-                        'desc'         => $item->desc,
-                        'isEdit'       => true,
-                        'stepID'       => $item->id,
-                        'required'     => $itemOptions['required'],
-                        'requiredRows' => $itemOptions['requiredRows'],
-                        'isSupportAdd' => $itemOptions['isSupportAdd'],
-                        'canAddRows'   => $itemOptions['canAddRows'],
-                        'rowsTitle'    => $itemOptions['fields'],
-                        'submitUrl'    => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}")
-                    ): array(
-                        'submitUrl' => createLink('thinkwizard', 'design', "wizardID={$item->wizard}")
-                    ))
+                if($addType == 'tableInput' || $item->questionType == 'tableInput')  return thinkTableInput(
+                    set::title($isEdit ? $item->title : ''),
+                    set::desc($isEdit ? $item->desc : ''),
+                    set::required($isEdit ? $item->required : false),
+                    set::type('question'),
+                    set::requiredRows($isEdit ? $item->requiredRows : 1),
+                    set::isSupportAdd($isEdit ? $item->isSupportAdd : false),
+                    set::canAddRows($isEdit ? $item->canAddRows : 1),
+                    set::rowsTitle(!$isEdit ? null : explode(', ', $item->fields))
                 );
             }
             if($isEdit) return thinkStep
