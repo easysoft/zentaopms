@@ -211,7 +211,7 @@ $config->testcase->bug->dtable->fieldList['assignedTo'] = $config->bug->dtable->
 $config->testcase->bug->dtable->fieldList['resolvedBy'] = $config->bug->dtable->fieldList['resolvedBy'];
 $config->testcase->bug->dtable->fieldList['resolution'] = $config->bug->dtable->fieldList['resolution'];
 
-$config->testcase->zerocase = new stdclass();
+if(!isset($config->testcase->zerocase)) $config->testcase->zerocase = new stdclass();
 $config->testcase->zerocase->dtable = new stdclass();
 $config->testcase->zerocase->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->testcase->zerocase->dtable->fieldList['id']['type']  = 'checkID';
