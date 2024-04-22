@@ -46,21 +46,21 @@ class thinkNode  extends wg
             $item->options = null;
             $isEdit = $status === 'edit' ? true : false;
 
-            if($addType == 'transition' || $item->type == 'transition') return thinkTransition
+            if($addType == 'transition' || $isEdit  && $item->type == 'transition') return thinkTransition
             (
                 set::title($isEdit ? $item->title : ''),
                 set::desc($isEdit ? $item->desc: ''),
             );
-            if($item->type == 'question' || $addType)
+            if($isEdit && $item->type == 'question' || $addType)
             {
-                if($addType == 'radio' || $item->questionType == 'radio') return thinkRadio
+                if($addType == 'radio' || $isEdit && $item->questionType == 'radio') return thinkRadio
                 (
                     set::data(!$isEdit ? array() : explode(', ', $item->fields)),
                     set::title($isEdit ? $item->title : ''),
                     set::desc($isEdit ? $item->desc : ''),
                     set::enableOther($isEdit ? $item->enableOther : false),
                 );
-                if($addType == 'checkbox' || $item->questionType == 'checkbox') return thinkCheckbox
+                if($addType == 'checkbox' || $isEdit && $item->questionType == 'checkbox') return thinkCheckbox
                 (
                     set::data(!$isEdit ? array() : explode(', ', $item->fields)),
                     set::title($isEdit ? $item->title : ''),
@@ -69,13 +69,13 @@ class thinkNode  extends wg
                     set::minCount($isEdit ? $item->minCount : ''),
                     set::maxCount($isEdit ? $item->maxCount : ''),
                 );
-                if($addType === 'input' || $item->questionType == 'input') return thinkInput(
+                if($addType === 'input' || $isEdit && $item->questionType == 'input') return thinkInput(
                     set::title($isEdit ? $item->title : ''),
                     set::desc($isEdit ? $item->desc : ''),
                     set::required($isEdit ? $item->required : false),
                     set::type('question')
                 );
-                if($addType == 'tableInput' || $item->questionType == 'tableInput')  return thinkTableInput(
+                if($addType == 'tableInput' || $isEdit && $item->questionType == 'tableInput')  return thinkTableInput(
                     set::title($isEdit ? $item->title : ''),
                     set::desc($isEdit ? $item->desc : ''),
                     set::required($isEdit ? $item->required : false),
