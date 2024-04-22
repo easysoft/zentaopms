@@ -73,7 +73,7 @@ $config->mr->taskDtable->fieldList['pri']['show']     = true;
 
 $config->mr->taskDtable->fieldList['assignedTo']['type']        = 'desc';
 $config->mr->taskDtable->fieldList['assignedTo']['title']       = $lang->task->assignedTo;
-$config->mr->taskDtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
+$config->mr->taskDtable->fieldList['assignedTo']['currentUser'] = '';
 $config->mr->taskDtable->fieldList['assignedTo']['sortType']    = true;
 $config->mr->taskDtable->fieldList['assignedTo']['show']        = true;
 

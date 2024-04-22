@@ -56,7 +56,9 @@ class artifactrepo extends control
     {
         if($_POST)
         {
-            $repo = form::data($this->config->artifactrepo->form->create)->get();
+            $repo = form::data($this->config->artifactrepo->form->create)
+                ->add('createdBy', $this->app->user->acount)
+                ->get();
             if($repo->products) $repo->products = ',' . $repo->products . ',';
 
             $repoID = $this->artifactrepo->create($repo);
@@ -85,7 +87,9 @@ class artifactrepo extends control
     {
         if($_POST)
         {
-            $repo = form::data($this->config->artifactrepo->form->edit)->get();
+            $repo = form::data($this->config->artifactrepo->form->edit)
+                ->add('editedBy', $this->app->user->acount)
+                ->get();
             if($repo->products) $repo->products = ',' . $repo->products . ',';
 
             $this->artifactrepo->update($repo, $artifactRepoID);

@@ -63,7 +63,9 @@ class account extends control
     {
         if($_POST)
         {
-            $account = form::data($this->config->account->form->create)->get();
+            $account = form::data($this->config->account->form->create)
+                ->add('createdBy', $this->app->user->acount)
+                ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->account->create($account);
@@ -90,7 +92,9 @@ class account extends control
     {
         if($_POST)
         {
-            $account = form::data($this->config->account->form->edit)->get();
+            $account = form::data($this->config->account->form->edit)
+                ->add('editedBy', $this->app->user->acount)
+                ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->account->update($accountID, $account);
