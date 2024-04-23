@@ -17,6 +17,10 @@ window.onRenderCell = function(result, {row, col})
             delete result[0].props.items[0]['href'];
         }
     }
+    if(result && col.name == 'title' && row.data.module == 'review')
+    {
+        result[0].props['data-toggle'] = 'normal';
+    }
     return result;
 }
 
