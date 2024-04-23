@@ -28,11 +28,12 @@ class thinkOptionsDetail extends thinkStepDetail
         foreach($data as $key => $value)
         {
             $letter = '';
-
-            while ($key >= 0) {
-                $letter .= $letters[$key % 26];
-                $key     = (int)($key / 26) - 1;
-            }
+            $index = $key;
+            do {
+                $remainder = $index % 26;
+                $letter = $letters[$remainder] . $letter;
+                $index = floor($index / 26) - 1;
+            } while ($index >= 0);
 
             $optionsItems[] = div
             (
