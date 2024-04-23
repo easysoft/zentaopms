@@ -466,9 +466,6 @@ class baseRouter
      */
     public function setClient(): void
     {
-        $this->setOpenApp();
-        $this->setSuperVars();
-
         $this->startSession();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
@@ -480,6 +477,9 @@ class baseRouter
 
         if($this->config->framework->multiLanguage) $this->loadLang('common');
         if($this->config->framework->multiTheme)    $this->setClientTheme();
+
+        $this->setOpenApp();
+        $this->setSuperVars();
     }
 
     /**
