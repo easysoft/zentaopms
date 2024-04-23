@@ -54,6 +54,7 @@ $lang->task->common = '任务';
 $lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
 
 /* Feedback. */
+global $config;
 if($config->edition != 'open')
 {
     $lang->feedback->menu->ticket   = array('link' => '工单|ticket|browse|browseType=unclosed');
@@ -72,7 +73,6 @@ $lang->my->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'sub
 $lang->my->menu->task     = array('link' => "{$lang->task->common}|my|contribute|mode=task&type=assignedTo", 'subModule' => 'task');
 $lang->my->menu->contacts = array('link' => "{$lang->contact->common}|my|managecontacts|");
 
-global $config;
 if($config->edition != 'open') $lang->my->menu->effort = array('link' => '日志|effort|calendar|', 'exclude' => 'my-todo');
 
 /* My menu order. */
