@@ -1,4 +1,10 @@
 <?php
+global $config;
+
+list($productModule, $productMethod)     = explode('-', $config->productLink);
+list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
+list($executionModule, $executionMethod) = explode('-', $config->executionLink);
+
 $lang->execution->common  = '看板';
 $lang->executionCommon    = '看板';
 $lang->task->common       = '任务';
@@ -54,7 +60,6 @@ $lang->task->common = '任务';
 $lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
 
 /* Feedback. */
-global $config;
 if($config->edition != 'open')
 {
     $lang->feedback->menu->ticket   = array('link' => '工单|ticket|browse|browseType=unclosed');
@@ -195,7 +200,6 @@ $lang->createObjects['kanban']    = '通用看板';
 $lang->createIcons['execution'] = 'kanban';
 
 /* Xuan */
-global $config;
 if(isset($config->xuanxuan) && strpos($config->visions, ',rnd,') === false)
 {
     $lang->xuanxuan = new stdclass();

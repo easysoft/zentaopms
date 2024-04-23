@@ -1,4 +1,10 @@
 <?php
+global $config;
+
+list($productModule, $productMethod)     = explode('-', $config->productLink);
+list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
+list($executionModule, $executionMethod) = explode('-', $config->executionLink);
+
 $lang->execution->common  = 'Kanban';
 $lang->executionCommon    = 'Kanban';
 $lang->task->common       = 'Task';
@@ -54,7 +60,6 @@ $lang->task->common = 'Task';
 $lang->dashboard = isset($lang->dashboard->common) ? $lang->dashboard->common : $lang->dashboard;
 
 /* Feedback. */
-global $config;
 if($config->edition != 'open')
 {
     $lang->feedback->menu->ticket   = array('link' => 'Ticket|ticket|browse|browseType=unclosed');
@@ -194,7 +199,6 @@ $lang->createObjects['kanban']    = 'Kanban';
 $lang->createIcons['execution'] = 'kanban';
 
 /* Xuan */
-global $config;
 if(isset($config->xuanxuan) && strpos($config->visions, ',rnd,') === false)
 {
     $lang->xuanxuan = new stdclass();
