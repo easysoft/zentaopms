@@ -34,7 +34,7 @@ window.changeType = function(e)
     }
 }
 
-window.changFuture = function()
+window.changeFuture = function()
 {
     const isChecked = $('#futureDate[type="checkbox"]').prop('checked');
     const $todoDate = $('#todoDate').zui('datePicker');
@@ -104,5 +104,13 @@ window.initTime = function(e)
             $(this).find('[data-name="beginAndEnd"] [data-name="end"]').zui('picker').$.setValue(endValue);
             if(typeof endIndex != 'undefined') value = endIndex;
         }
+    });
+}
+
+window.togglePending = function(e)
+{
+    $(e.target).closest('.input-group').find('.time-input').each(function()
+    {
+        $(this).zui('picker').render({disabled: e.target.checked});
     });
 }
