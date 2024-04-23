@@ -4,8 +4,8 @@
 #mainContent .side {overflow-x: hidden; padding-right: 4px;}
 #mainContent .main {overflow-x: hidden;}
 
-#featureBar .nav-feature li:last-child {padding-left: 4px;}
-#featureBar .nav-feature li:nth-last-child(2):before {content: ""; position: absolute; left: 2px; top: 5px; right: 0; bottom: 5px; width: 1px; background-color: var(--color-gray-300);}
+#featureBar .nav-feature li.divider-before {padding-left: 4px;}
+#featureBar .nav-feature li.divider-before:before {content: ""; position: absolute; left: -1px; top: 5px; bottom: 5px; width: 1px; background-color: var(--color-gray-300);}
 
 .filter-btn {padding-left: 0.625rem !important; padding-right: 0.625rem !important;}
 

@@ -21,6 +21,7 @@ window.afterPageUpdate = function($target, info, options)
     }
 
     window.addTitle2Star();
+    window.addDivider();
     window.initFilterPanel();
 }
 
@@ -39,6 +40,13 @@ window.initCheckedList = function()
 window.addTitle2Star = function()
 {
     $('.metric-collect').attr('title', collectStar);
+}
+
+window.addDivider = function()
+{
+    let features = $('#featureBar .nav-feature').find('li.nav-item');
+    let lastItem = features[features.length - 1];
+    $(lastItem).addClass('divider-before');
 }
 
 /* 事件处理函数。 */
