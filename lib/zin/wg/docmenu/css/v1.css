@@ -21,6 +21,7 @@
 .doc-menu .tree .tree-item .tree-item-content .tree-actions .with-popover-show .icon {display: block;}
 .doc-menu .tree .tree-item .item-content-thinmory {position: relative; min-height: 32px;}
 .doc-menu .tree .tree-item .item-content-thinmory>.form-control {position: absolute; top: 0; left: 0; z-index: 2;}
+.doc-menu .tree .tree-item.tree-item-input .item-content-thinmory {margin-left: -20px !important;}
 
 .doc-menu-header.is-fixed {position: absolute; left: 0; top: -44px; width: 190px; height: 32px; border: 1px solid var(--color-border); justify-content: center; padding: 0 24px; border-right: 0;}
 .doc-menu-header.is-fixed::before,
