@@ -659,12 +659,12 @@ class testtaskZen extends testtask
         {
             if(!$automation)
             {
-                if(helper::isAjaxRequest()) return $this->send(array('load' => $cancelURL));
+                if(helper::isAjaxRequest() && !isInModal()) return $this->send(array('load' => $cancelURL));
                 $this->locate($cancelURL);
             }
 
             $confirmURL = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=yes");
-            if(helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->zanode->runCaseConfirm, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
+            if(helper::isAjaxRequest() && !isInModal()) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->zanode->runCaseConfirm, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
             return print(js::start() . "zui.Modal.hide($(document).find('.modal')); zui.Modal.confirm('{$this->lang->zanode->runCaseConfirm}').then((res) => {if(res){ openUrl({url: '{$confirmURL}', load: 'modal', size: 'lg'});}else{ openUrl({url: '{$cancelURL}', load: 'modal', size: 'lg'});}});" . js::end());
         }
 
