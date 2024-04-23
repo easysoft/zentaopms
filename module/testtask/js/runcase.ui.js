@@ -4,9 +4,9 @@ $(function()
     loadResult();
 });
 
-$('#runCaseModal').closest('.modal').on('hide.zui.modal', function()
+$('#runCaseModal').closest('.modal').off('hide.zui.modal').on('hide.zui.modal', function()
 {
-    if($('#casesResults').length == 0) loadCurrentPage();
+    loadCurrentPage();
 });
 
 /**
