@@ -61,7 +61,7 @@ if(!empty($case->steps) && $stepsType == 'table')
                 width('1/2'),
                 span
                 (
-                    setClass('pr-2 pl-' . (($step->grade - 1) * 2)),
+                    setClass('nowrap pr-2 pl-' . (($step->grade - 1) * 2)),
                     $step->name
                 ),
                 html(nl2br(str_replace(' ', '&nbsp;', $step->desc)))
