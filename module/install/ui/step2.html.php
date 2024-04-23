@@ -16,10 +16,12 @@ set::zui(true);
 
 div
 (
-    set::id('main'),
+    setID('main'),
+    setClass('flex justify-center'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
+        setClass('px-1 mt-2 w-full max-w-7xl'),
         panel
         (
             setClass('py-2'),
@@ -33,17 +35,13 @@ div
                     setClass('table bordered'),
                     h::tr
                     (
-                        h::th
-                        (
-                            width('1/5'),
-                            $lang->install->key
-                        ),
+                        h::th(setClass('text-right w-1/5'), $lang->install->key),
                         h::th($lang->install->value),
                         h::th()
                     ),
                     h::tr
                     (
-                        h::th($lang->install->timezone),
+                        h::th(setClass('text-right'), $lang->install->timezone),
                         h::td
                         (
                             picker
@@ -58,7 +56,7 @@ div
                     ),
                     h::tr
                     (
-                        h::th($lang->install->defaultLang),
+                        h::th(setClass('text-right'), $lang->install->defaultLang),
                         h::td
                         (
                             picker
@@ -74,7 +72,7 @@ div
                     $config->edition != 'open' ? h::tr
                     (
                         $config->inQuickon ? setClass('hidden') : null,
-                        h::th($lang->install->dbDriver),
+                        h::th(setClass('text-right'), $lang->install->dbDriver),
                         h::td
                         (
                             picker
@@ -95,7 +93,7 @@ div
                     h::tr
                     (
                         $config->inQuickon ? setClass('hidden') : null,
-                        h::th($lang->install->dbHost),
+                        h::th(setClass('text-right'), $lang->install->dbHost),
                         h::td
                         (
                             formGroup
@@ -112,7 +110,7 @@ div
                     h::tr
                     (
                         $config->inQuickon ? setClass('hidden') : null,
-                        h::th($lang->install->dbPort),
+                        h::th(setClass('text-right'), $lang->install->dbPort),
                         h::td
                         (
                             formGroup
@@ -128,7 +126,7 @@ div
                     h::tr
                     (
                         $config->inQuickon ? setClass('hidden') : null,
-                        h::th($lang->install->dbEncoding),
+                        h::th(setClass('text-right'), $lang->install->dbEncoding),
                         h::td
                         (
                             formGroup
@@ -145,7 +143,7 @@ div
                     h::tr
                     (
                         $config->inQuickon ? setClass('hidden') : null,
-                        h::th($lang->install->dbUser),
+                        h::th(setClass('text-right'), $lang->install->dbUser),
                         h::td
                         (
                             formGroup
@@ -162,7 +160,7 @@ div
                     h::tr
                     (
                         $config->inQuickon ? setClass('hidden') : null,
-                        h::th($lang->install->dbPassword),
+                        h::th(setClass('text-right'), $lang->install->dbPassword),
                         h::td
                         (
                             formGroup
@@ -178,7 +176,7 @@ div
                     ),
                     h::tr
                     (
-                        h::th($lang->install->dbName),
+                        h::th(setClass('text-right'), $lang->install->dbName),
                         h::td
                         (
                             formGroup
@@ -194,7 +192,7 @@ div
                     ),
                     h::tr
                     (
-                        h::th($lang->install->dbPrefix),
+                        h::th(setClass('text-right'), $lang->install->dbPrefix),
                         h::td
                         (
                             formGroup

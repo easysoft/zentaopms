@@ -17,11 +17,12 @@ foreach($app->config->langs as $key => $value) $langItems[] = array('text' => $v
 
 div
 (
-    set::id('main'),
+    setID('main'),
+    setClass('flex justify-center'),
     div
     (
-        set::id('mainContent'),
-        setClass('px-1 mt-2'),
+        setID('mainContent'),
+        setClass('px-1 mt-2 w-full max-w-7xl'),
         panel
         (
             setClass('p-8'),

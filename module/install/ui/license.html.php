@@ -16,11 +16,12 @@ jsVar('nextLink', $config->inQuickon ? inlink('step5') : inlink('step1'));
 
 div
 (
-    set::id('main'),
+    setID('main'),
+    setClass('flex justify-center'),
     div
     (
-        set::id('mainContent'),
-        setClass('px-1 mt-2'),
+        setID('mainContent'),
+        setClass('px-1 mt-2 w-full max-w-7xl'),
         panel
         (
             setClass('p-8'),
