@@ -1519,6 +1519,7 @@ $config->group->package->browseLiteFeedback->subset = 'feedback';
 $config->group->package->browseLiteFeedback->privs  = array();
 $config->group->package->browseLiteFeedback->privs['feedback-view']   = array('edition' => 'biz,max,ipd', 'vision' => 'lite', 'order' => 25, 'depend' => array('feedback-browse'), 'recommend' => array('feedback-create', 'feedback-edit'));
 $config->group->package->browseLiteFeedback->privs['feedback-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'lite', 'order' => 30, 'depend' => array(), 'recommend' => array('feedback-view'));
+
 $config->group->package->manageFeedback = new stdclass();
 $config->group->package->manageFeedback->order  = 10;
 $config->group->package->manageFeedback->subset = 'feedback';
