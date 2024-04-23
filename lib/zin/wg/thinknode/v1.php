@@ -68,6 +68,7 @@ class thinkNode  extends wg
                     set::data(!$isEdit ? null : explode(', ', $item->fields)),
                     set::title($isEdit ? $item->title : ''),
                     set::desc($isEdit ? $item->desc : ''),
+                    set::required($isEdit ? $item->required : 0),
                     set::enableOther($isEdit ? $item->enableOther : false),
                 );
                 if($addType == 'checkbox' || $isEdit && $item->questionType == 'checkbox') return thinkCheckbox
@@ -75,6 +76,7 @@ class thinkNode  extends wg
                     set::data(!$isEdit ? null : explode(', ', $item->fields)),
                     set::title($isEdit ? $item->title : ''),
                     set::desc($isEdit ? $item->desc : ''),
+                    set::required($isEdit ? $item->required : 0),
                     set::enableOther($isEdit ? $item->enableOther : false),
                     set::minCount($isEdit ? $item->minCount : ''),
                     set::maxCount($isEdit ? $item->maxCount : ''),
