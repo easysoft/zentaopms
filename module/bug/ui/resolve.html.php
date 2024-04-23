@@ -94,6 +94,7 @@ formPanel
             (
                 set::popWidth('auto'),
                 set::popMaxWidth('300px'),
+                set::popMinWidth('145px'),
                 set::name('resolvedBuild'),
                 set::value(''),
                 set::items($builds)
