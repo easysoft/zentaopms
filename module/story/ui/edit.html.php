@@ -394,13 +394,13 @@ detailBody
             item
             (
                 set::name(' '),
-                !empty($story->linkStoryTitles) ? h::ul
+                !empty($story->linkStoryTitles) ? div
                 (
                     setID('linkedStories'),
                     array_values(array_map(function($linkStoryID, $linkStoryTitle) use($story)
                     {
                         $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
-                        return h::li
+                        return div
                         (
                             set::title($linkStoryTitle),
                             checkbox(set::name($linkStoryField . '[]'), set::rootClass('inline'), set::value($linkStoryID), set::checked(true)),
