@@ -195,7 +195,7 @@ foreach($actions as $key => $action)
         continue;
     }
 
-    if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, $executionID), $action['url']);
+    if(isset($action['url'])) $actions[$key]['url'] = str_replace(array('{id}', '{type}', '{product}', '{branch}', '{module}', '{execution}'), array($story->id, $story->type, $story->product, $story->branch, $story->module, $projectID), $action['url']);
     if(isset($action['items']))
     {
         foreach($action['items'] as $itemKey => $itemAction)
