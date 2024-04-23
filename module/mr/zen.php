@@ -276,13 +276,13 @@ class mrZen extends mr
      * 获取代码分支的访问地址。
      * Get repo branch url.
      *
-     * @param  object $host
-     * @param  int    $projectID
-     * @param  string $branch
+     * @param  object     $host
+     * @param  int|string $projectID $projectID is an int in gitlab or gitfox and a string in gitea or gogs.
+     * @param  string     $branch
      * @access protected
      * @return string
      */
-    protected function getBranchUrl(object $host, int $projectID, string $branch): string
+    protected function getBranchUrl(object $host, int|string $projectID, string $branch): string
     {
         if($host->type == 'gitfox')
         {
@@ -292,7 +292,7 @@ class mrZen extends mr
             return rtrim($host->url, '/') . "/{$project->path}/files/{$branch}";
         }
 
-        $branch = $this->{$host->type}->apiGetSingleBranch($host->id, $projectID, $branch);
+        $branch = $this->loadModel($host->type)->apiGetSingleBranch($host->id, $projectID, $branch);
         return $branch ? zget($branch, 'web_url', '') : '';
     }
 }
