@@ -840,6 +840,7 @@ class mr extends control
         }
 
         $this->view->commitLogs  = $commitLogs;
+        $this->view->repo        = $repo;
         $this->display();
     }
 

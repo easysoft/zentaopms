@@ -114,7 +114,7 @@ panel
             )
         )
     ),
-    empty($commitLogs) ? p(setClass('detail-content'), $lang->mr->noChanges) : div(
+    empty($commitLogs) ? p(setClass('detail-content'), in_array(strtolower($repo->SCM), array('gogs')) ? $lang->mr->unsupportedFeature : $lang->mr->noChanges) : div(
         dtable
         (
             set::cols($config->mr->commitLogs->dtable->fieldList),
