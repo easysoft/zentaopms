@@ -433,7 +433,7 @@ class docMenu extends wg
                 'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=transition&levelType=$levelType")
             ),
         ));
-        $menus = array_merge($menus, array(
+        if(empty($item->children) || $item->grade == 3 && $item->type == 'node') $menus = array_merge($menus, array(
             array('type' => 'divider'),
             array(
                 'key'  => 'addRadio',
