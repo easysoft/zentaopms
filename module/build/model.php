@@ -391,9 +391,9 @@ class buildModel extends model
      * 获取关联的发布。
      * Get releated release.
      *
-     * @param  array  $productIdList
-     * @param  string $buildIdList
-     * @param  array  $shadows
+     * @param  array|int  $productIdList
+     * @param  string     $buildIdList
+     * @param  array|bool $shadows
      * @access public
      * @return array
      */
