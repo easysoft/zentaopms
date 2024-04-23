@@ -7,6 +7,20 @@ window.onMouseDown = function(obj)
     showBlameAndRelation(obj.target.position.lineNumber);
 }
 
+window.getRevision = function(blames, line)
+{
+    let blame = blames[line];
+    if(!blame) return false;
+
+    let p_line = parseInt(line);
+    while(!blame.revision)
+    {
+        p_line--;
+        blame = blames[p_line];
+    }
+    return blame;
+}
+
 /**
  * 显示关联信息弹窗。
  * Show blame info and relations.
@@ -21,16 +35,9 @@ function showBlameAndRelation(line)
 
     if(pageType == 'diff') line = diffContent.line.new[line -1];
 
-    var blame = blames[line];
-
+    const blame = window.getRevision(blames, line);
     if(!blame) return;
 
-    var p_line = parseInt(line);
-    while(!blame.revision)
-    {
-        p_line--;
-        blame = blames[p_line];
-    }
     if($('#log').data('line') == line) return;
 
     var time    = blame.time != 'unknown' ? blame.time : '';
