@@ -8681,4 +8681,46 @@ class upgradeModel extends model
         }
         return true;
     }
+
+    /**
+     * 将值为'0000-00-00'的日期类型字段值更新为NULL。
+     * Update the default value of the fields.
+     *
+     * @access public
+     * @return true
+     */
+    public function updateZeroDateToNull()
+    {
+        set_time_limit(0);
+        $this->dao->exec("SET @@sql_mode=''");
+
+        try
+        {
+            $tables = $this->dbh->query("SHOW FULL TABLES WHERE Table_type = 'BASE TABLE' AND Tables_in_{$this->config->db->name} LIKE '{$this->config->db->prefix}%'")->fetchAll();
+
+            foreach($tables as $table)
+            {
+                $tableName = reset($table);
+                $columns   = $this->dbh->query("SHOW COLUMNS FROM {$tableName}")->fetchAll();
+                foreach($columns as $column)
+                {
+                    $type = $column->Type;
+                    $name = $column->Field;
+
+                    if($type == 'date')
+                    {
+                        $this->dbh->exec("UPDATE `{$tableName}` SET `{$name}` = NULL WHERE `{$name}` = '0000-00-00'");
+                    }
+                    elseif($type == 'datetime')
+                    {
+                        $this->dbh->exec("UPDATE `{$tableName}` SET `{$name}` = NULL WHERE `{$name}` = '0000-00-00 00:00:00'");
+                    }
+                }
+            }
+        }
+        catch(PDOException $e)
+        {
+            $this->saveLogs($e->getMessage());
+        }
+    }
 }
