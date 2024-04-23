@@ -2147,6 +2147,9 @@ class blockZen extends block
             $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
         }
 
+        /* Compatible with the logic of the back button on the old page. */
+        $this->session->set('demandList', $this->createLink('my', 'index'), 'my');
+
         $this->view->users          = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->isExternalCall = $this->isExternalCall();
         $this->view->hasViewPriv    = $hasViewPriv;
