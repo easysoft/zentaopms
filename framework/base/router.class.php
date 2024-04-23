@@ -470,17 +470,16 @@ class baseRouter
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->multiLanguage) $this->setClientLang();
+        $this->setVision();
+
+        $needDetectDevice   = zget($this->config->framework->detectDevice, $this->clientLang, false);
+        $this->clientDevice = $needDetectDevice ? $this->setClientDevice() : 'desktop';
 
         if($this->config->framework->multiLanguage) $this->loadLang('common');
         if($this->config->framework->multiTheme)    $this->setClientTheme();
 
         $this->setOpenApp();
         $this->setSuperVars();
-
-        $this->setVision();
-
-        $needDetectDevice   = zget($this->config->framework->detectDevice, $this->clientLang, false);
-        $this->clientDevice = $needDetectDevice ? $this->setClientDevice() : 'desktop';
     }
 
     /**
@@ -860,7 +859,7 @@ class baseRouter
         $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
         if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
-        if(empty($account))                              $account = $this->cookie->za;
+        if(empty($account) and isset($_COOKIE['za']))    $account = $_COOKIE['za'];
 
         $vision = '';
         $sql    = new sql();
@@ -1309,8 +1308,9 @@ class baseRouter
     {
         $this->clientDevice = 'desktop';
 
-        if($this->cookie->device == 'mobile')  $this->clientDevice = 'mobile';
-        if($this->cookie->device == 'desktop') $this->clientDevice = 'desktop';
+        $cookieDevice = zget($_COOKIE, 'device', 'desktop');
+        if($cookieDevice == 'mobile')  $this->clientDevice = 'mobile';
+        if($cookieDevice == 'desktop') $this->clientDevice = 'desktop';
 
         if(empty($this->cookie->device) || !str_contains('mobile,desktop', (string) $this->cookie->device))
         {
