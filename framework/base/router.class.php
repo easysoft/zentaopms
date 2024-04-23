@@ -470,16 +470,17 @@ class baseRouter
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->multiLanguage) $this->setClientLang();
-        $this->setVision();
-
-        $needDetectDevice   = zget($this->config->framework->detectDevice, $this->clientLang, false);
-        $this->clientDevice = $needDetectDevice ? $this->setClientDevice() : 'desktop';
 
         if($this->config->framework->multiLanguage) $this->loadLang('common');
         if($this->config->framework->multiTheme)    $this->setClientTheme();
 
         $this->setOpenApp();
         $this->setSuperVars();
+
+        $this->setVision();
+
+        $needDetectDevice   = zget($this->config->framework->detectDevice, $this->clientLang, false);
+        $this->clientDevice = $needDetectDevice ? $this->setClientDevice() : 'desktop';
     }
 
     /**
