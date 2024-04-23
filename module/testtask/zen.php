@@ -674,7 +674,7 @@ class testtaskZen extends testtask
         {
             if(!$automation)
             {
-                if(helper::isAjaxRequest()) return $this->send(array('load' => $cancelURL));
+                if(helper::isAjaxRequest() && !isInModal()) return $this->send(array('load' => $cancelURL));
                 $this->locate($cancelURL);
             }
             $resultID = $this->testtask->initResultForAutomatedTest($runID, $caseID, $run->case->version, $automation->node);
