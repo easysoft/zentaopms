@@ -296,7 +296,7 @@ class router extends baseRouter
         $config->executionLink = 'execution-task';
 
         /* Get user preference. */
-        $account     = $this->session->user->account ?? '';
+        $account     = $_SESSION['user']->account ?? '';
         $userSetting = array();
         if($this->dbh and !empty($this->config->db->name) and $account)
         {
