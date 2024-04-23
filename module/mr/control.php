@@ -63,8 +63,12 @@ class mr extends control
 
             $this->loadModel('execution')->setMenu($objectID);
         }
+        elseif($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($objectID);
+        }
 
-        if($this->app->tab == 'execution' && $objectID) return print($this->fetch('mr', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
+        if(in_array($this->app->tab, array('execution', 'project')) && $objectID) return print($this->fetch('mr', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
 
         $repoList = $this->loadModel('repo')->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList));
         if(empty($repoList)) $this->locate($this->repo->createLink('create'));
@@ -116,7 +120,7 @@ class mr extends control
      * @param  int    $repoID
      * @param  string $mode
      * @param  string $param
-     * @param  int    $executionID
+     * @param  int    $projectID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -124,7 +128,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function browseByExecution(int $repoID = 0, string $mode = 'status', string $param = 'opened', int $executionID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseByExecution(int $repoID = 0, string $mode = 'status', string $param = 'opened', int $projectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($param == 'assignee' || $param == 'creator')
         {
@@ -135,8 +139,8 @@ class mr extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), $repoID, $executionID, $pager);
-        $repoList = $this->loadModel('repo')->getList($executionID);
+        $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), $repoID, $projectID, $pager);
+        $repoList = $this->loadModel('repo')->getList($projectID);
         $MRList   = $this->mr->batchSyncMR($MRList);
 
         $projects  = array();
@@ -158,6 +162,9 @@ class mr extends control
             foreach(array('gitlab', 'gitea', 'gogs') as $service) $openIDList += $this->pipeline->getProviderPairsByAccount($service);
         }
 
+        $objectName = $this->app->tab == 'project' ? 'projectID' : 'executionID';
+        $this->view->{$objectName} = $projectID;
+
         $this->view->title       = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList      = $MRList;
         $this->view->projects    = $projects;
@@ -165,8 +172,7 @@ class mr extends control
         $this->view->mode        = $mode;
         $this->view->repoID      = $repoID;
         $this->view->param       = $param;
-        $this->view->objectID    = $executionID;
-        $this->view->executionID = $executionID;
+        $this->view->objectID    = $projectID;
         $this->view->repoList    = $repoList;
         $this->view->repoPairs   = $repoPairs;
         $this->view->orderBy     = $orderBy;
@@ -809,7 +815,7 @@ class mr extends control
         }
 
         $repo = $this->loadModel('repo')->getByID($MR->repoID);
-        
+
         $commitLogs = $this->mr->apiGetMRCommits($MR->hostID, $MR->targetProject, $MR->mriid);
         foreach($commitLogs as $commitLog)
         {
