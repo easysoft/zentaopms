@@ -867,7 +867,7 @@ class groupModel extends model
                 if(isset($privs[$dependPriv]) || in_array($dependPriv, $excludes)) continue;
                 $privs[$dependPriv] = $dependPriv;
 
-                $dependPrivs = $this->processDepends($depends, $depends[$dependPriv], $excludes, $processedPrivs);
+                $dependPrivs = $this->processDepends($depends, zget($depends, $dependPriv, array()), $excludes, $processedPrivs);
 
                 foreach($dependPrivs as $depend)
                 {
