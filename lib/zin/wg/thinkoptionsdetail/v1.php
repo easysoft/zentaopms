@@ -36,7 +36,7 @@ class thinkOptionsDetail extends thinkStepDetail
 
             $optionsItems[] = div
             (
-                setClass('px-6 py-2 mt-2 leading-6 flex flex-nowrap items-center'),
+                setClass('px-6 py-2 mt-2 leading-6 flex items-center'),
                 setStyle(array('border' => '1px solid rgba(46, 127, 255, 0.4)', 'background' => '#E6F0FF', 'font-size' => '13px', 'color' => '#313C52', 'border-radius' => '2px')),
                 div
                 (
@@ -46,11 +46,11 @@ class thinkOptionsDetail extends thinkStepDetail
                 div
                 (
                     $value,
-                    setClass('min-w-max')
+                    setStyle(array('min-width' => '30px'))
                 ),
                 ($enableOther && $value === end($data)) ? input
                 (
-                    setClass('ml-6')
+                    setClass('ml-4')
                 ) : null
             );
         };
