@@ -19,7 +19,7 @@ window.onRenderCell = function(result, {row, col})
     }
     if(result && col.name == 'title' && row.data.module == 'review')
     {
-        result[0].props['data-toggle'] = 'normal';
+        result[0].props['data-toggle'] = '';
     }
     return result;
 }
