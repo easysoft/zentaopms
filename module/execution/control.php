@@ -359,6 +359,7 @@ class execution extends control
      */
     public function importBug(int $executionID = 0, string $browseType = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 30, int $pageID = 1)
     {
+        $this->session->set('bugList', $this->app->getURI(true), 'execution');
         $execution = $this->execution->getByID($executionID);
         if(!empty($_POST))
         {
