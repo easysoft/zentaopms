@@ -823,9 +823,17 @@ class mr extends control
             if(strtolower($repo->SCM) == 'gitfox')
             {
                 $commitLog->id = $commitLog->sha;
-                $commitLog->committed_date = $commitLog->committer->when;
-                $commitLog->committer_name = $commitLog->committer->identity->name;
-                $commitLog->committer_email= $commitLog->committer->identity->email;
+                $commitLog->committed_date  = $commitLog->committer->when;
+                $commitLog->committer_name  = $commitLog->committer->identity->name;
+                $commitLog->committer_email = $commitLog->committer->identity->email;
+            }
+            elseif(in_array(strtolower($repo->SCM), array('gitea', 'gogs')))
+            {
+                $commitLog->id = $commitLog->sha;
+                $commitLog->committed_date  = $commitLog->commit->committer->date;
+                $commitLog->committer_name  = $commitLog->commit->committer->name;
+                $commitLog->committer_email = $commitLog->commit->committer->email;
+                $commitLog->title           = $commitLog->commit->message;
             }
         }
 
