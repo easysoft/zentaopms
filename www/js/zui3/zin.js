@@ -139,7 +139,7 @@
         timers.interval = [];
         timers.timeout = [];
 
-        zui.Modal.getAll().forEach(m => m.hide());
+        zui.Modal.getAll().forEach(m => m.options.modal && m.hide());
         $('script.zin-page-js').replaceWith(data);
     }
 
