@@ -88,14 +88,15 @@ foreach($hasViewPriv as $type => $bool)
         $statusList = array();
         foreach($data as $review)
         {
-            $review->module = $review->type;
-
             $reviewType = $review->type;
             if($reviewType == 'projectreview') $reviewType = 'review';
+
+            $review->module = $reviewType;
 
             $typeName = '';
             if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
             if($reviewType == 'story')                $typeName = $review->storyType == 'story' ? $lang->SRCommon : $lang->URCommon;
+            if($review->type == 'projectreview')      $typeName = $lang->project->common;
 
             if(isset($lang->$reviewType->statusList)) $statusList = array_merge($statusList, $lang->$reviewType->statusList);
             if($reviewType == 'attend')               $statusList = array_merge($statusList, $lang->attend->reviewStatusList);

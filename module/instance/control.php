@@ -203,7 +203,9 @@ class instance extends control
         $this->loadModel('sonarqube');
         $this->app->loadLang('pipeline');
 
-        $externalApp = form::data($this->config->instance->form->create)->get();
+        $externalApp = form::data($this->config->instance->form->create)
+            ->add('createdBy', isset($this->app->user->account) ? $this->app->user->account : '')
+            ->get();
         $externalApp->type = $type;
         $externalApp->url  = rtrim($externalApp->url, '/');
         if(!$this->instance->checkAppNameUnique($externalApp->name)) return $this->send(array('result' => false, 'message' => array('name' => sprintf($this->lang->error->repeat, $this->lang->pipeline->name, $externalApp->name))));
@@ -231,7 +233,9 @@ class instance extends control
 
         if($_POST)
         {
-            $instance = form::data($this->config->instance->form->edit)->get();
+            $instance = form::data($this->config->instance->form->edit)
+                ->add('editedBy', isset($this->app->user->account) ? $this->app->user->account : '')
+                ->get();
             $this->pipeline->update($externalID, $instance);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

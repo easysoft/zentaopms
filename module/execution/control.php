@@ -359,6 +359,7 @@ class execution extends control
      */
     public function importBug(int $executionID = 0, string $browseType = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 30, int $pageID = 1)
     {
+        $this->session->set('bugList', $this->app->getURI(true), 'execution');
         $execution = $this->execution->getByID($executionID);
         if(!empty($_POST))
         {
@@ -1968,9 +1969,9 @@ class execution extends control
     public function storyKanban(int $executionID)
     {
         $this->app->loadLang('kanban');
-        $this->execution->setMenu($executionID);
-        $execution = $this->loadModel('execution')->getByID($executionID);
-        $stories   = $this->loadModel('story')->getExecutionStories($executionID);
+        $execution   = $this->commonAction($executionID);
+        $executionID = $execution->id;
+        $stories     = $this->loadModel('story')->getExecutionStories($executionID);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         $stories = array_filter($stories, function($story) {return in_array($story->stage, $this->config->execution->storyKanbanCols);});

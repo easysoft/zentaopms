@@ -834,6 +834,18 @@ class metricModel extends model
     }
 
     /**
+     * 重建主键顺序。
+     * Rebuild primary key order.
+     *
+     * @access public
+     * @return void
+     */
+    public function rebuildPrimaryKey()
+    {
+        $this->metricTao->rebuildIdColumn();
+    }
+
+    /**
      * 根据度量项收集周期来清理过期的度量库数据。
      * Clear outdated metric records by cycle.
      *
@@ -1230,6 +1242,7 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('shadow')->eq(0)
                     ->andWhere('createdDate')->le($date)
+                    ->andWhere("if(closedDate IS NOT NULL and YEAR(closedDate)!='0000', closedDate>='$date', true)")
                     ->andWhere("vision LIKE '%{$vision}%'", true)
                     ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
@@ -1239,6 +1252,7 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->eq('project')
                     ->andWhere('openedDate')->le($date)
+                    ->andWhere("if(closedDate IS NOT NULL and YEAR(closedDate)!='0000', closedDate>='$date', true)")
                     ->andWhere("vision LIKE '%{$vision}%'", true)
                     ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
@@ -1248,6 +1262,7 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->in('sprint,stage,kanban')
                     ->andWhere('openedDate')->le($date)
+                    ->andWhere("if(closedDate IS NOT NULL and YEAR(closedDate)!='0000', closedDate>='$date', true)")
                     ->andWhere("vision LIKE '%{$vision}%'", true)
                     ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
@@ -2611,6 +2626,14 @@ class metricModel extends model
      */
     public function getInstallDate()
     {
+        $installedDate = $this->dao->select('value')->from(TABLE_CONFIG)
+            ->where('section')->eq('global')
+            ->andWhere('key')->eq('installedDate')
+            ->limit(1)
+            ->fetch('value');
+
+        if(!empty($installedDate) && substr($installedDate, 0 ,4) == '0000') return $installedDate;
+
         return $this->dao->select('date')->from(TABLE_ACTION)
             ->orderBy('date_asc')
             ->limit(1)

@@ -137,7 +137,9 @@ class sonarqube extends control
     {
         if($_POST)
         {
-            $sonarqube = form::data($this->config->sonarqube->form->create)->get();
+            $sonarqube = form::data($this->config->sonarqube->form->create)
+                ->add('createdBy', $this->app->user->account)
+                ->get();
             $this->checkToken($sonarqube, 0);
             $sonarqubeID = $this->loadModel('pipeline')->create($sonarqube);
 
@@ -199,7 +201,9 @@ class sonarqube extends control
             $oldSonarQube->password = $this->post->password;
             $this->checkToken($oldSonarQube, $sonarqubeID);
 
-            $sonarqube = form::data($this->config->sonarqube->form->edit)->get();
+            $sonarqube = form::data($this->config->sonarqube->form->edit)
+                ->add('editedBy', $this->app->user->account)
+                ->get();
             $sonarqube->token = $oldSonarQube->token;
             $this->pipeline->update($sonarqubeID, $sonarqube);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

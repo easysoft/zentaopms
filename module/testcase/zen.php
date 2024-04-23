@@ -147,7 +147,7 @@ class testcaseZen extends testcase
      */
     protected function buildBrowseSearchForm(int $productID, string $branch, int $queryID, int $projectID): void
     {
-        $this->config->testcase->search['onMenuBar'] = 'yes';
+        if($this->app->rawModule == 'testcase') $this->config->testcase->search['onMenuBar'] = 'yes';
 
         $currentModule  = $this->app->tab == 'project' ? 'project'  : 'testcase';
         $currentMethod  = $this->app->tab == 'project' ? 'testcase' : 'browse';
@@ -393,7 +393,6 @@ class testcaseZen extends testcase
             $storyModuleID   = array_key_exists($currentModuleID, $productModules) ? $currentModuleID : 0;
             $modules         = $this->tree->getStoryModule($storyModuleID);
             $modules         = $this->tree->getAllChildID($modules);
-            $currentModuleID = $storyModuleID;
         }
 
         /* 获取未关闭的需求。 */
@@ -2105,6 +2104,19 @@ class testcaseZen extends testcase
         foreach($reverseSteps as $step)
         {
             if(empty($step->id)) continue;
+
+            if($step->type != 'group')
+            {
+                $descItem = array();
+                $descItem['id']      = 'desc_' . $step->id;
+                $descItem['text']    = $step->expect;
+                $descItem['type']    = 'node';
+                $descItem['parent']  = $step->id;
+                $descItem['subSide'] = 'right';
+
+                $parentSteps[$step->id][] = $descItem;
+            }
+
             $stepItem = array();
             $stepItem['id']      = $step->id;
             $stepItem['text']    = $step->step;

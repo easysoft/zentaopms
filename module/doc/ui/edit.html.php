@@ -34,6 +34,7 @@ form
             (
                 set::name('title'),
                 set::value($doc->title),
+                set::maxlength(100),
                 set::placeholder($lang->doc->titlePlaceholder)
             )
         ),

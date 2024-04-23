@@ -457,7 +457,8 @@ class bug extends control
         /* Set menu. */
         $this->qa->setMenu($oldBug->product, $oldBug->branch);
 
-        $users = $this->loadModel('user')->getPairs('noclosed');
+        $users  = $this->loadModel('user')->getPairs('noclosed');
+        $builds = $this->loadModel('build')->getBuildPairs(array($oldBug->product), $oldBug->branch, 'withbranch,noreleased');
 
         /* 展示相关变量。 */
         /* Show the variables associated. */
@@ -467,7 +468,7 @@ class bug extends control
         $this->view->users      = $users;
         $this->view->assignedTo = isset($users[$oldBug->openedBy]) ? $oldBug->openedBy : $this->bug->getModuleOwner($oldBug->module, $oldBug->product);
         $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($oldBug->product, $oldBug->branch ? "0,{$oldBug->branch}" : '0', (int)$oldBug->project, 'stagefilter');
-        $this->view->builds     = $this->loadModel('build')->getBuildPairs(array($oldBug->product), $oldBug->branch, 'withbranch,noreleased');
+        $this->view->builds     = $this->bugZen->addReleaseLabelForBuilds($oldBug->product, $builds);
         $this->view->actions    = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
     }

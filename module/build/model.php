@@ -263,30 +263,8 @@ class buildModel extends model
         /* if the build has been released and replace is true, replace build name with release name. */
         if($replace)
         {
-            $releases = $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
-                ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
-                ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
-                ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
-                ->where('t1.product')->in($productIdList)
-                ->beginIF(!empty($buildIdList))->andWhere('t2.id')->in($buildIdList)->fi()
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t1.shadow')->ne(0)
-                ->fetchAll('id');
-
-            /* Get the buildID under the shadow product. */
-            $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow');
-            if($shadows)
-            {
-                /* Append releases of only shadow and not link build. */
-                $releases += $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as branchName,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
-                    ->leftJoin(TABLE_BRANCH)->alias('t2')->on('FIND_IN_SET(t2.id, t1.branch)')
-                    ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
-                    ->where('t1.shadow')->in($shadows)
-                    ->andWhere('t1.build')->eq(0)
-                    ->andWhere('t1.deleted')->eq(0)
-                    ->fetchAll('id');
-            }
-            $builds = $this->replaceNameWithRelease($allBuilds, $builds, $releases, $branch, $params, $excludedReleaseIdList);
+            $releases = $this->getRelatedReleases($productIdList, $buildIdList, $shadows);
+            $builds   = $this->replaceNameWithRelease($allBuilds, $builds, $releases, $branch, $params, $excludedReleaseIdList);
         }
 
         krsort($builds);
@@ -407,6 +385,43 @@ class buildModel extends model
         }
 
         return $builds;
+    }
+
+    /**
+     * 获取关联的发布。
+     * Get releated release.
+     *
+     * @param  array|int  $productIdList
+     * @param  string     $buildIdList
+     * @param  array|bool $shadows
+     * @access public
+     * @return array
+     */
+    public function getRelatedReleases(array|int $productIdList, string $buildIdList = '', array|bool $shadows = false): array
+    {
+        $releases = $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
+            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
+            ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
+            ->where('t1.product')->in($productIdList)
+            ->beginIF(!empty($buildIdList))->andWhere('t2.id')->in($buildIdList)->fi()
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.shadow')->ne(0)
+            ->fetchAll('id');
+
+        if($shadows === false) $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow'); // Get the buildID under the shadow product.
+        if($shadows)
+        {
+            /* Append releases of only shadow and not link build. */
+            $releases += $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as branchName,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
+                ->leftJoin(TABLE_BRANCH)->alias('t2')->on('FIND_IN_SET(t2.id, t1.branch)')
+                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+                ->where('t1.shadow')->in($shadows)
+                ->andWhere('t1.build')->eq(0)
+                ->andWhere('t1.deleted')->eq(0)
+                ->fetchAll('id');
+        }
+        return $releases;
     }
 
     /**

@@ -95,7 +95,7 @@ blockPanel
     setClass('guide-block'),
     to::heading
     (
-        !commonModel::isTutorialMode() ? btn
+        !commonModel::isTutorialMode() && $config->vision == 'rnd' ? btn
         (
             set::url('tutorial', 'start'),
             set::type('warning'),

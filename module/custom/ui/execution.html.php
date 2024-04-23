@@ -25,7 +25,7 @@ div
         span
         (
             setClass('text-md font-bold'),
-            $lang->custom->$module->fields[$module]
+            $lang->custom->closedSetting
         ),
         formGroup
         (

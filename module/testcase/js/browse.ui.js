@@ -208,7 +208,7 @@ window.setStatistics = function(element, checks)
         });
     }
 
-    return element.options.customData.pageSummary;
+    return element.options.customData ? element.options.customData.pageSummary : '';
 }
 
 /**

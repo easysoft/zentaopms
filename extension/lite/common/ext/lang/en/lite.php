@@ -1,4 +1,9 @@
 <?php
+global $config;
+list($productModule, $productMethod)     = explode('-', $config->productLink);
+list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
+list($executionModule, $executionMethod) = explode('-', $config->executionLink);
+
 $lang->execution->common  = 'Kanban';
 $lang->executionCommon    = 'Kanban';
 $lang->task->common       = 'Task';
@@ -72,7 +77,6 @@ $lang->my->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'sub
 $lang->my->menu->task     = array('link' => "{$lang->task->common}|my|work|mode=task&type=assignedTo", 'subModule' => 'task');
 $lang->my->menu->contacts = array('link' => "{$lang->contact->common}|my|managecontacts|");
 
-global $config;
 if($config->edition != 'open') $lang->my->menu->effort = array('link' => 'Effort|effort|calendar|', 'exclude' => 'my-todo');
 
 /* My menu order. */
@@ -194,7 +198,6 @@ $lang->createObjects['kanban']    = 'Kanban';
 $lang->createIcons['execution'] = 'kanban';
 
 /* Xuan */
-global $config;
 if(isset($config->xuanxuan) && strpos($config->visions, ',rnd,') === false)
 {
     $lang->xuanxuan = new stdclass();

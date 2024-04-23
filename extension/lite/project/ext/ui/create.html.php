@@ -217,20 +217,6 @@ modalTrigger
             )
 
         ),
-        to::footer
-        (
-            div
-            (
-                setClass('flex mt-4 w-full justify-center'),
-                btn
-                (
-                    setClass('px-6'),
-                    set::type('primary'),
-                    on::click($copySelectedProject),
-                    $lang->confirm
-                )
-            )
-        ),
         div
         (
             set::id('copyProjects'),

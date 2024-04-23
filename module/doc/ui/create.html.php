@@ -88,6 +88,7 @@ else
                 input
                 (
                     set::name('title'),
+                    set::maxlength(100),
                     set::placeholder($lang->doc->titlePlaceholder)
                 )
             ),

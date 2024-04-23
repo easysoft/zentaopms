@@ -15,17 +15,19 @@ set::zui(true);
 jsVar('dbFinish', $lang->install->dbFinish);
 div
 (
-    set::id('main'),
+    setID('main'),
+    setClass('flex justify-center'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
+        setClass('px-1 mt-2 w-full max-w-7xl'),
         panel
         (
             setClass('py-2'),
             set::title($lang->install->dbProgress),
             form
             (
-                h::pre(setID('progress'), setClass('progress')),
+                h::pre(setID('progress'), setClass('progress block overflow-hidden h-96')),
                 set::actions(array(array('disabled' => true, 'text' => $lang->install->next, 'class' => 'primary next')))
             )
         )

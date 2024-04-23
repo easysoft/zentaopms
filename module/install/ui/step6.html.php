@@ -16,10 +16,12 @@ $joinZentao = ($installFileDeleted ? $lang->install->successLabel : $lang->insta
 
 div
 (
-    set::id('main'),
+    setID('main'),
+    setClass('flex justify-center'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
+        setClass('px-1 mt-2 w-full max-w-7xl'),
         panel
         (
             setClass('p-2'),

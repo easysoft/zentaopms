@@ -49,7 +49,7 @@ class build extends control
     {
         if(!empty($_POST))
         {
-            $build = form::data()->get();
+            $build = form::data()->setDefault('createdBy', $this->app->user->account)->get();
             if(!empty($_FILES['buildFiles'])) $_FILES['files'] = $_FILES['buildFiles'];
             unset($_FILES['buildFiles']);
             if(dao::isError()) return $this->sendError(dao::getError());

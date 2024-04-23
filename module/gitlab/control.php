@@ -75,7 +75,9 @@ class gitlab extends control
     {
         if($_POST)
         {
-            $gitlab = form::data($this->config->gitlab->form->create)->get();
+            $gitlab = form::data($this->config->gitlab->form->create)
+                ->add('createdBy', $this->app->user->account)
+                ->get();
             $this->checkToken($gitlab);
             $gitlabID = $this->loadModel('pipeline')->create($gitlab);
 
@@ -123,7 +125,9 @@ class gitlab extends control
 
         if($_POST)
         {
-            $gitlab = form::data($this->config->gitlab->form->edit)->get();
+            $gitlab = form::data($this->config->gitlab->form->edit)
+                ->add('editedBy', $this->app->user->account)
+                ->get();
             $this->checkToken($gitlab, $gitlabID);
             $this->loadModel('pipeline')->update($gitlabID, $gitlab);
             $gitLab = $this->gitlab->getByID($gitlabID);

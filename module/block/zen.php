@@ -2012,7 +2012,7 @@ class blockZen extends block
 
         if(common::hasPriv('todo',  'view'))                                                                      $hasViewPriv['todo']        = true;
         if(common::hasPriv('demand', 'view') && $this->config->edition == 'ipd' && $this->config->vision == 'or') $hasViewPriv['demand']      = true;
-        if(common::hasPriv('task',  'view'))                                                                      $hasViewPriv['task']        = true;
+        if((common::hasPriv('task',  'view') && $this->config->vision == 'rnd') || (common::hasPriv('marketresearch', 'viewTask') && $this->config->vision == 'or')) $hasViewPriv['task'] = true;
         if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                   $hasViewPriv['story']       = true;
         if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')         $hasViewPriv['requirement'] = true;
         if(common::hasPriv('bug',   'view')     && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['bug']         = true;
@@ -2146,6 +2146,9 @@ class blockZen extends block
             $this->view->meetings = $meetings;
             $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
         }
+
+        /* Compatible with the logic of the back button on the old page. */
+        $this->session->set('demandList', $this->createLink('my', 'index'), 'my');
 
         $this->view->users          = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->isExternalCall = $this->isExternalCall();

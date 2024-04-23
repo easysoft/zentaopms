@@ -59,7 +59,9 @@ $bugCols['title']['link']        = array('module' => 'bug', 'method' => 'view', 
 $bugs = initTableData($bugs, $bugCols);
 
 $taskCols = $config->mr->taskDtable->fieldList;
-$taskCols['actions']    = $actionMenu;
+$taskCols['assignedTo']['currentUser'] = $app->user->account;
+
+$taskCols['actions'] = $actionMenu;
 $taskCols['actions']['list']['unlink']['data-confirm'] = $lang->mr->confirmUnlinkTask;
 $taskCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=task&linkID={id}&confirm=yes");
 

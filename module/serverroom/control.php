@@ -62,7 +62,9 @@ class serverroom extends control
     {
         if($_POST)
         {
-            $room = form::data($this->config->serverroom->form->create)->get();
+            $room = form::data($this->config->serverroom->form->create)
+                ->add('createdBy', $this->app->user->account)
+                ->get();
             $createID = $this->serverroom->create($room);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -87,7 +89,9 @@ class serverroom extends control
     {
         if($_POST)
         {
-            $room = form::data($this->config->serverroom->form->edit)->get();
+            $room = form::data($this->config->serverroom->form->edit)
+                ->add('editedBy', $this->app->user->account)
+                ->get();
             $changes = $this->serverroom->update($roomID, $room);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

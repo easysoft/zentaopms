@@ -55,14 +55,16 @@ $product ? toolbar
         (
             set::icon('format-list-bulleted'),
             set::hint($lang->execution->list),
-            set::url(inlink('story', "executionID={$execution->id}"))
+            set::url(inlink('story', "executionID={$execution->id}")),
+            setData('app', $app->tab)
         ),
         btn
         (
             setClass('text-primary font-bold shadow-inner bg-canvas'),
             set::icon('kanban'),
             set::hint($lang->execution->kanban),
-            set::url($this->createLink('execution', 'storykanban', "executionID={$execution->id}"))
+            set::url($this->createLink('execution', 'storykanban', "executionID={$execution->id}")),
+            setData('app', $app->tab)
         ),
     ) : null,
     hasPriv('story', 'export') ? item(set(array

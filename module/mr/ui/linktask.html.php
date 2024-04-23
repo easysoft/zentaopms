@@ -46,6 +46,7 @@ div
         $lang->repo->unlinkedTasks . "({$pager->recTotal})"
     )
 );
+$config->repo->taskDtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
 $allTasks = initTableData($allTasks, $config->repo->taskDtable->fieldList);
 $data = array_values($allTasks);
 dtable

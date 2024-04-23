@@ -474,10 +474,11 @@ class metricTao extends metricModel
         $intersect = array_intersect($fields, array('year', 'month', 'week', 'day'));
         foreach($fields as $key => $field) $fields[$key] = "`$field`";
         if(empty($intersect)) $fields[] = 'left(date, 10)';
+        $table = TABLE_METRICLIB;
 
         $sql  = "INSERT INTO `metriclib_distinct` (id) ";
         $sql .= "SELECT MAX(id) AS id ";
-        $sql .= "FROM zt_metriclib WHERE metricCode = '{$code}' ";
+        $sql .= "FROM $table WHERE metricCode = '{$code}' ";
         $sql .= "GROUP BY " . implode(',', $fields);
 
         $this->dao->exec($sql);
@@ -493,7 +494,8 @@ class metricTao extends metricModel
      */
     protected function deleteDuplicationRecord(string $code): void
     {
-        $sql  = "DELETE FROM zt_metriclib ";
+        $table = TABLE_METRICLIB;
+        $sql  = "DELETE FROM $table ";
         $sql .= "WHERE id NOT IN (SELECT id FROM metriclib_distinct) ";
         $sql .= "AND metricCode = '{$code}'";
 
@@ -510,5 +512,21 @@ class metricTao extends metricModel
     protected function dropDistinctTempTable(): void
     {
         $this->dao->exec("DROP TABLE IF EXISTS `metriclib_distinct`");
+    }
+
+    /**
+     * 重建id列顺序。
+     * Rebuild id column order.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function rebuildIdColumn(): void
+    {
+        $table = TABLE_METRICLIB;
+        $tableRowCount = $this->dao->select('COUNT(id) as rowcount')->from(TABLE_METRICLIB)->fetch('rowcount');
+        $autoIncrement = $tableRowCount + 1;
+        $this->dao->exec("SET @count = 0;UPDATE $table SET `id` = @count:= @count + 1;");
+        $this->dao->exec("ALTER TABLE $table AUTO_INCREMENT = $autoIncrement");
     }
 }

@@ -21,10 +21,12 @@ if(isset($error))
 
 div
 (
-    set::id('main'),
+    setID('main'),
+    setClass('flex justify-center'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
+        setClass('px-1 mt-2 w-full max-w-7xl'),
         isset($success) ? panel
         (
             set::title($lang->install->success),
@@ -37,6 +39,7 @@ div
         (
             setClass('bg-canvas m-auto mw-auto'),
             set::title($lang->install->getPriv),
+            set::headingClass('w-96 m-auto'),
             set::formClass('w-96 m-auto'),
             set::submitBtnText(!empty($config->inQuickon) ? $lang->install->next : $lang->save),
             formRow

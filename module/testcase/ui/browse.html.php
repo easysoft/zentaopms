@@ -150,9 +150,9 @@ div(
         set::nested(true),
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
-        set::emptyTip($lang->testcase->noCase),
-        set::createTip($lang->testcase->create),
-        set::createLink($canModify && hasPriv('testcase', 'create') ? createLink('testcase', 'create', 'productID=' . zget($product, 'id', 0) . "&branch={$branch}&moduleID={$moduleID}" . ($app->tab == 'project' ? "&from=project&param={$projectID}" : '')) : ''),
+        set::emptyTip($browseType == 'onlyscene' ? $lang->testcase->noScene : $lang->testcase->noCase),
+        set::createTip($browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create),
+        set::createLink($browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '')),
         set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
     )
 );

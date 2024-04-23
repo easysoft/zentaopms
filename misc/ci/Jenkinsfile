@@ -185,6 +185,15 @@ pipeline {
                   }
                 }
 
+                stage("xuan") {
+                  steps {
+                    container('package') {
+                      sh 'cd $SRC_ZENTAOEXT_PATH && make xuan'
+                      sh 'cd $SRC_ZENTAOEXT_PATH && make encrypt-xuan UUID=`uuidgen`'
+                    }
+                  }
+                }
+
                 stage("中转") {
                   steps {
                     container('package') {

@@ -717,8 +717,8 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
             $module = $actionConfig['url']['module'];
             if(!$notLoadModel)
             {
-                $rowModule = $module == 'projectbuild' ? 'build' : $module;
-                $model = $app->control->loadModel($rowModule);
+                $rawModule = $module == 'projectbuild' ? 'build' : $module;
+                $model = $app->control->loadModel($rawModule);
             }
         }
 

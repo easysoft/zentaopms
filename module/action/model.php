@@ -319,10 +319,14 @@ class actionModel extends model
             }
         }
 
+        if(isset($typeTrashes['execution'])) $noMultipleExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('multiple')->eq('0')->andWhere('id')->in($typeTrashes['execution'])->fetchPairs();
+
         /* 将对象名称字段添加到回收站数据中。 */
         /* Add name field to the trashes. */
-        foreach($trashes as $trash)
+        foreach($trashes as $key => $trash)
         {
+            if($trash->objectType == 'execution' && isset($noMultipleExecutions[$trash->objectID])) unset($trashes[$key]);
+
             if($trash->objectType == 'pipeline' && isset($objectNames['gitlab'][$trash->objectID]))  $trash->objectType = 'gitlab';
             if($trash->objectType == 'pipeline' && isset($objectNames['jenkins'][$trash->objectID])) $trash->objectType = 'jenkins';
 
@@ -1951,6 +1955,10 @@ class actionModel extends model
                 $productID = $this->loadModel('product')->getProductIDByProject($object->id);;
                 $this->dao->update(TABLE_PRODUCT)->set('name')->eq($object->name)->set('deleted')->eq(0)->where('id')->eq($productID)->exec();
             }
+
+            /* 恢复隐藏执行。 */
+            /* Resotre hidden execution. */
+            if($action->objectType == 'project' && !$object->multiple) $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('project')->eq($object->id)->andWhere('multiple')->eq('0')->exec();
         }
         if($action->objectType == 'doc' && $object->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($object->files)->exec();
 

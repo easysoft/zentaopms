@@ -28,13 +28,14 @@ function printFlowchart()
         {
             $items[] = div
             (
-                set('class', 'flow-item flow-item-' . $index++),
+                set('class', "flow-item flow-item-$index " . ($index >= 1 ? 'flow-item-arrow' : '')),
                 div
                 (
                     set('class', 'flow-item-display'),
                     $flowItem
                 )
             );
+            $index ++;
         }
         $charts[] = div
         (

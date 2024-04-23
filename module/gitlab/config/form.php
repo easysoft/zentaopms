@@ -1,5 +1,4 @@
 <?php
-global $app;
 $config->gitlab->form = new stdclass();
 $config->gitlab->form->create = array();
 $config->gitlab->form->create['appType']     = array('type' => 'string',   'required' => true,  'default' => 'gitlab');
@@ -7,7 +6,6 @@ $config->gitlab->form->create['type']        = array('type' => 'string',   'requ
 $config->gitlab->form->create['name']        = array('type' => 'string',   'required' => true, 'default' => '', 'filter' => 'trim');
 $config->gitlab->form->create['url']         = array('type' => 'string',   'required' => true, 'default' => '', 'filter' => 'trim');
 $config->gitlab->form->create['token']       = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
-$config->gitlab->form->create['createdBy']   = array('type' => 'string',   'required' => false, 'default' => $app->user->account);
 $config->gitlab->form->create['createdDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
 $config->gitlab->form->create['private']     = array('type' => 'string',   'required' => false, 'default' => uniqid());
 
@@ -15,7 +13,6 @@ $config->gitlab->form->edit = array();
 $config->gitlab->form->edit['name']       = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
 $config->gitlab->form->edit['url']        = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
 $config->gitlab->form->edit['token']      = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
-$config->gitlab->form->edit['editedBy']   = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->gitlab->form->edit['editedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
 
 $config->gitlab->form->user = new stdclass();

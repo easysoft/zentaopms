@@ -8680,4 +8680,82 @@ class upgradeModel extends model
         }
         return true;
     }
+
+    /**
+     * 将值为'0000-00-00'的日期类型字段值更新为NULL。
+     * Update the default value of the fields.
+     *
+     * @access public
+     * @return true
+     */
+    public function updateZeroDateToNull()
+    {
+        set_time_limit(0);
+
+        if($this->config->db->driver == 'mysql')
+        {
+            try
+            {
+                $this->dao->exec("SET @@sql_mode=''");
+                $tables = $this->dao->select("c.TABLE_NAME, c.COLUMN_NAME, c.DATA_TYPE")->from('information_schema.COLUMNS')->alias('c')
+                    ->leftJoin('information_schema.TABLES')->alias('t')
+                    ->on('c.TABLE_SCHEMA = t.TABLE_SCHEMA AND c.TABLE_NAME = t.TABLE_NAME')
+                    ->where("c.TABLE_SCHEMA")->eq($this->config->db->name)
+                    ->andWhere("c.TABLE_NAME")->like($this->config->db->prefix . '%')
+                    ->andWhere("t.TABLE_TYPE")->eq('BASE TABLE')
+                    ->andWhere("c.DATA_TYPE")->in('date,datetime')
+                    ->fetchAll();
+
+                foreach($tables as $table)
+                {
+                    $tableName  = $table->TABLE_NAME;
+                    $columnName = $table->COLUMN_NAME;
+                    $columnType = $table->DATA_TYPE;
+
+                    if($columnType == 'date')
+                    {
+                        $this->dbh->exec("UPDATE `$tableName` SET `$columnName` = NULL WHERE `$columnName` = '0000-00-00'");
+                    }
+                    elseif($columnType == 'datetime')
+                    {
+                        $this->dbh->exec("UPDATE `$tableName` SET `$columnName` = NULL WHERE `$columnName` = '0000-00-00 00:00:00'");
+                    }
+                }
+            }
+            catch(PDOException $e)
+            {
+                $this->saveLogs($e->getMessage());
+            }
+        }
+        elseif($this->config->db->driver == 'dm')
+        {
+            try
+            {
+                $tables = $this->dao->select('TABLE_NAME, COLUMN_NAME, DATA_TYPE')->from('ALL_TAB_COLUMNS')
+                    ->where('OWNER')->eq($this->config->db->name)
+                    ->andWhere('DATA_TYPE')->in('DATE,DATETIME')
+                    ->fetchAll();
+
+                foreach($tables as $table)
+                {
+                    $tableName  = $table->TABLE_NAME;
+                    $columnName = $table->COLUMN_NAME;
+                    $columnType = $table->DATA_TYPE;
+
+                    if($columnType == 'DATE')
+                    {
+                        $this->dbh->exec("UPDATE $tableName SET $columnName = NULL WHERE $columnName = '0000-00-00'");
+                    }
+                    elseif($columnType == 'DATETIME')
+                    {
+                        $this->dbh->exec("UPDATE $tableName SET $columnName = NULL WHERE $columnName = '0000-00-00 00:00:00'");
+                    }
+                }
+            }
+            catch(PDOException $e)
+            {
+                $this->saveLogs($e->getMessage());
+            }
+        }
+    }
 }

@@ -1,5 +1,4 @@
 <?php
-global $app;
 $config->mr->form = new stdclass();
 $config->mr->form->create = array();
 $config->mr->form->create['hostID']             = array('type' => 'int',    'required' => true);
@@ -16,7 +15,6 @@ $config->mr->form->create['removeSourceBranch'] = array('type' => 'int',    'req
 $config->mr->form->create['squash']             = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->mr->form->create['jobID']              = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->mr->form->create['description']        = array('type' => 'string', 'required' => false, 'default' => '');
-$config->mr->form->create['createdBy']          = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->mr->form->create['createdDate']        = array('type' => 'string', 'required' => false, 'default' => helper::now());
 
 $config->mr->form->edit = array();
@@ -29,5 +27,4 @@ $config->mr->form->edit['removeSourceBranch'] = array('type' => 'int',    'requi
 $config->mr->form->edit['squash']             = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->mr->form->edit['jobID']              = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->mr->form->edit['description']        = array('type' => 'string', 'required' => false, 'default' => '');
-$config->mr->form->edit['editedBy']           = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->mr->form->edit['editedDate']         = array('type' => 'string', 'required' => false, 'default' => helper::now());

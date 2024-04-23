@@ -254,7 +254,7 @@ statisticBlock
     ),
     set::block($block),
     set::active($active),
-    set::moreLink(createLink('execution', 'all', 'status=' . $block->params->type)),
+    set::moreLink(createLink('execution', 'all', 'status=' . zget($block->params, 'type', ''))),
     set::items($items),
     $blockView,
 );

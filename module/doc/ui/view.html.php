@@ -253,6 +253,7 @@ $treeDom = isset($outlineTree) ? div
     setID('contentTree'),
     tree
     (
+        set::className('pl-4'),
         set::items($outlineTree),
         set::defaultNestedShow(true)
     )

@@ -35,10 +35,10 @@ if($rawMethod != 'contribute' || $browseType != 'reviewedbyme') unset($config->m
 
 foreach($reviewList as $review)
 {
-    $type       = $review->type == 'prejectreview' ? 'review' : $review->type;
+    $type       = $review->type == 'projectreview' ? 'review' : $review->type;
     $isOAObject =  strpos(",{$config->my->oaObjectType},", ",$type,") !== false ? true : false;
 
-    $review->module = $review->type;
+    $review->module = $type;
 
     if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
     if($type == 'story')                      $typeName = $review->storyType == 'story' ? $lang->SRCommon : $lang->URCommon;
@@ -71,23 +71,6 @@ foreach($reviewList as $review)
 
         $review->result = zget($reviewResultList, $review->result);
     }
-
-    $module = $type;
-    $method = 'review';
-    $params = "id=$review->id";
-
-    if($isOAObject) $method = 'view';
-    if(!in_array($module, array('demand', 'story', 'testcase', 'feedback'))) $method = 'approvalreview';
-
-    if($module == 'review')
-    {
-        $method  = 'assess';
-        $params .= "&from={$rawMethod}";
-
-        unset($config->my->audit->actionList['review']['data-toggle']);
-    }
-
-    $config->my->audit->actionList['review']['url'] = createLink($module, 'view', "id={$review->id}");
 }
 
 $reviewList = initTableData($reviewList, $config->my->audit->dtable->fieldList, $this->my);

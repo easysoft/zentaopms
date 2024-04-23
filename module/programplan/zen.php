@@ -89,6 +89,8 @@ class programplanZen extends programplan
                 if(!empty($this->config->setCode) && empty($plan->code) && strpos(",{$this->config->execution->create->requiredFields},", ',code,') !== false) dao::$errors["code[{$rowID}]"] = sprintf($this->lang->error->notempty, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code);
             }
 
+            if(strpos(",{$this->config->programplan->list->customCreateFields},", ',percent,') === false) $plan->percent = 0;
+
             $totalPercent += $plan->percent;
             $names[]       = $plan->name;
             if(!empty($plan->code)) $codes[] = $plan->code;

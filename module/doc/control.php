@@ -332,7 +332,11 @@ class doc extends control
             helper::setcookie('lastDocModule', $moduleID);
 
             if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-            $docData   = form::data()->get();
+            $docData = form::data()
+                ->setDefault('addedBy', $this->app->user->account)
+                ->setDefault('editedBy', $this->app->user->account)
+                ->get();
+
             $docResult = $this->doc->create($docData, $this->post->labels);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->docZen->responseAfterCreate($docData->lib, $docResult);
@@ -383,7 +387,10 @@ class doc extends control
             if($comment == false)
             {
                 if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
-                $docData = form::data()->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")->get();
+                $docData = form::data()
+                    ->setDefault('editedBy', $this->app->user->account)
+                    ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                    ->get();
                 $result  = $this->doc->update($docID, $docData);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

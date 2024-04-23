@@ -70,6 +70,9 @@ toolbar
             setClass('btn primary'),
             set::icon('plus'),
             set::url(helper::createLink('todo', 'batchCreate')),
+            setData('toggle', 'modal'),
+            setData('size', 'lg'),
+            setData('class-name', 'batchCreateTodoModal'),
             $lang->todo->batchCreate
         ),
         $canCreate && $canBatchCreate ? dropdown
@@ -78,7 +81,7 @@ toolbar
             set::items(array
             (
                 array('text' => $lang->todo->create, 'url' => helper::createLink('todo', 'create'), 'data-toggle' => 'modal'),
-                array('text' => $lang->todo->batchCreate, 'url' => helper::createLink('todo', 'batchCreate'), 'data-toggle' => 'modal', 'data-size' => 'lg')
+                array('text' => $lang->todo->batchCreate, 'url' => helper::createLink('todo', 'batchCreate'), 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-class-name' => 'batchCreateTodoModal')
             )),
             set::placement('bottom-end')
         ) : null

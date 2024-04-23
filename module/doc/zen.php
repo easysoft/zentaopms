@@ -79,7 +79,7 @@ class docZen extends doc
 
                 $item = array();
                 $item['id']    = $index;
-                $item['title'] = strip_tags($headElement[3]);
+                $item['title'] = array('html' => strip_tags($headElement[3]));
                 $item['hint']  = strip_tags($headElement[3]);
                 $item['url']   = '#anchor' . $index;
                 $item['level'] = $currentLevel;
@@ -271,6 +271,7 @@ class docZen extends doc
     {
         $this->lang->doc->name = $this->lang->doclib->name;
         $lib = form::data()
+            ->setDefault('addedBy', $this->app->user->account)
             ->setIF($this->post->type == 'product' && !empty($_POST['product']), 'product', $this->post->product)
             ->setIF($this->post->type == 'project' && !empty($_POST['project']), 'project', $this->post->project)
             ->setIF($this->post->libType != 'api' && !empty($_POST['execution']), 'execution', $this->post->execution)

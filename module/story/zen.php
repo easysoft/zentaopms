@@ -1696,6 +1696,11 @@ class storyZen extends story
             return $this->session->storyList;
         }
 
+        if($this->app->tab == 'product')
+        {
+            return $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
+        }
+
         helper::setcookie('storyModule', '0', 0);
         if($this->session->storyList) return $this->session->storyList;
         return $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");

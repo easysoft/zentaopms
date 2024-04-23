@@ -1,7 +1,6 @@
 <?php
 $now = helper::now();
 
-global $app;
 $config->job->form = new stdclass();
 
 $config->job->form->create = array();
@@ -23,7 +22,6 @@ $config->job->form->create['jkServer']        = array('type' => 'int',    'requi
 $config->job->form->create['jkTask']          = array('type' => 'string', 'required' => false, 'default' => '');
 $config->job->form->create['paramName']       = array('type' => 'array',  'required' => false, 'default' => array());
 $config->job->form->create['paramValue']      = array('type' => 'array',  'required' => false, 'default' => array());
-$config->job->form->create['createdBy']       = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->job->form->create['createdDate']     = array('type' => 'string', 'required' => false, 'default' => $now);
 
 $config->job->form->edit = array();
@@ -45,5 +43,4 @@ $config->job->form->edit['jkServer']        = array('type' => 'int',    'require
 $config->job->form->edit['jkTask']          = array('type' => 'string', 'required' => false, 'default' => '');
 $config->job->form->edit['paramName']       = array('type' => 'array',  'required' => false, 'default' => array());
 $config->job->form->edit['paramValue']      = array('type' => 'array',  'required' => false, 'default' => array());
-$config->job->form->edit['editedBy']        = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
 $config->job->form->edit['editedDate']      = array('type' => 'string', 'required' => false, 'default' => $now);

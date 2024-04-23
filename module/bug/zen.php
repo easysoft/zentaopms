@@ -995,6 +995,7 @@ class bugZen extends bug
         {
             $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
         }
+        $builds = $this->addReleaseLabelForBuilds($productID, $builds);
 
         return $this->updateBug($bug, array('builds' => $builds));
     }
@@ -1213,10 +1214,13 @@ class bugZen extends bug
             $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $case->title, $this->config->maxCount);
         }
 
+        $resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
+        $resolvedBuilds = $this->addReleaseLabelForBuilds($bug->product, $resolvedBuilds);
+
         $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bug->id}");
 
         $this->view->openedBuilds   = $openedBuilds;
-        $this->view->resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
+        $this->view->resolvedBuilds = $resolvedBuilds;
         $this->view->plans          = $this->loadModel('productplan')->getPairs($bug->product, $bug->branch, '', true);
         $this->view->stories        = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'all', 'id_desc', 0, 'full', 'story', false);
         $this->view->tasks          = $this->task->getExecutionTaskPairs($bug->execution);
@@ -2397,5 +2401,33 @@ class bugZen extends bug
         foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
 
         return $chartOption;
+    }
+
+    /**
+     * 给版本中的发布增加标识。
+     * Add label for the release in the builds.
+     *
+     * @param  int       $productID
+     * @param  array     $builds
+     * @access protected
+     * @return array
+     */
+    protected function addReleaseLabelForBuilds(int $productID, array $builds): array
+    {
+        $releases = $this->loadModel('build')->getRelatedReleases(array($productID));
+
+        $buildItems = array();
+        foreach($builds as $buildID => $buildName)
+        {
+            $buildItem = array('value' => $buildID, 'text' => $buildName);
+            if(isset($releases[$buildID])) $buildItem['content'] = array('html' => "<div class='flex clip'>{$buildName}</div><label class='label bg-primary-50 text-primary ml-1 flex-none'>{$this->lang->release->common}</label>", 'class' => 'w-full flex nowrap');
+            $buildItems[$buildID] = $buildItem;
+        }
+        foreach($releases as $release)
+        {
+            if(isset($buildItems[$release->shadow])) $buildItems[$release->shadow]['content'] = array('html' => "<div class='flex clip'>{$buildItems[$release->shadow]['text']}</div><label class='label bg-primary-50 text-primary ml-1 flex-none'>{$this->lang->release->common}</label>", 'class' => 'w-full flex nowrap');
+        }
+
+        return array_values($buildItems);
     }
 }

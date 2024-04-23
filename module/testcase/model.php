@@ -1446,7 +1446,7 @@ class testcaseModel extends model
             $projects = array($this->session->execution);
         }
         if(!empty($case->project))   $projects[] = $case->project;
-        if(!empty($case->execution)) $projects[] = $case->project;
+        if(!empty($case->execution)) $projects[] = $case->execution;
         if(empty($projects)) return false;
 
         $this->loadModel('action');

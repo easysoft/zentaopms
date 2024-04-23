@@ -667,8 +667,8 @@ function initAppsMenu(items)
         icon:       'icon-search',
         methodName: 'index',
         moduleName: 'search',
-        text:       lang.search,
-        title:      '<i class="icon icon-search"></i> ' + lang.search,
+        text:       langData.search,
+        title:      '<i class="icon icon-search"></i> ' + langData.search,
         url:        '/index.php?m=search&f=index',
         vars:       ''
     };
@@ -766,11 +766,11 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
     if(!code) return;
 
     const app   = apps.openedMap[code];
-    const items = [{text: lang.open, disabled: app && getLastAppCode() === code, onClick: function(){showApp(code)}}];
+    const items = [{text: langData.open, disabled: app && getLastAppCode() === code, onClick: function(){showApp(code)}}];
     if(app)
     {
-        items.push({text: lang.reload, onClick: function(){reloadApp(code)}});
-        if(code !== 'my') items.push({text: lang.close, onClick: function(){closeApp(code)}});
+        items.push({text: langData.reload, onClick: function(){reloadApp(code)}});
+        if(code !== 'my') items.push({text: langData.close, onClick: function(){closeApp(code)}});
     }
 
     zui.ContextMenu.show({hideOthers: true, element: $btn[0], placement: $btn.closest('#appTabs').length ? 'top-start' : 'right-start', items: items, event: event, onClickItem: function(info){info.event.preventDefault();}});

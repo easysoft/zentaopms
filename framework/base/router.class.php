@@ -288,6 +288,16 @@ class baseRouter
     static $loadedLangs = array();
 
     /**
+     * 已加载的模块.
+     * Modules loaded.
+     *
+     * @static
+     * @var array
+     * @access public
+     */
+    static $loadedModules = array();
+
+    /**
      * 全局$lang对象。
      * The global $lang object.
      *
@@ -466,9 +476,6 @@ class baseRouter
      */
     public function setClient(): void
     {
-        $this->setOpenApp();
-        $this->setSuperVars();
-
         $this->startSession();
 
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
@@ -480,6 +487,9 @@ class baseRouter
 
         if($this->config->framework->multiLanguage) $this->loadLang('common');
         if($this->config->framework->multiTheme)    $this->setClientTheme();
+
+        $this->setOpenApp();
+        $this->setSuperVars();
     }
 
     /**
@@ -859,7 +869,7 @@ class baseRouter
         $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
         if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
-        if(empty($account))                              $account = $this->cookie->za;
+        if(empty($account) and isset($_COOKIE['za']))    $account = $_COOKIE['za'];
 
         $vision = '';
         $sql    = new sql();
@@ -1308,8 +1318,9 @@ class baseRouter
     {
         $this->clientDevice = 'desktop';
 
-        if($this->cookie->device == 'mobile')  $this->clientDevice = 'mobile';
-        if($this->cookie->device == 'desktop') $this->clientDevice = 'desktop';
+        $cookieDevice = zget($_COOKIE, 'device', 'desktop');
+        if($cookieDevice == 'mobile')  $this->clientDevice = 'mobile';
+        if($cookieDevice == 'desktop') $this->clientDevice = 'desktop';
 
         if(empty($this->cookie->device) || !str_contains('mobile,desktop', (string) $this->cookie->device))
         {
@@ -2917,30 +2928,35 @@ class baseRouter
      * 加载语言文件，返回全局$lang对象。
      * Load lang and return it as the global lang object.
      *
-     * @param   string $moduleName     the module name
+     * @param   string $moduleName  the module name
      * @param   string $appName     the app name
      * @access  public
-     * @return  bool|object the lang object or false.
+     * @return  object              the lang object
      */
-    public function loadLang(string $moduleName, string $appName = ''): bool|object
+    public function loadLang(string $moduleName, string $appName = ''): object
     {
-        /* 计算最终要加载的语言文件。 Get the lang files to be loaded. */
-        $langFilesToLoad = $this->getMainAndExtFiles($moduleName, $appName, 'lang');
-        if(empty($langFilesToLoad)) return false;
-
         /* 加载语言文件。Load lang files. */
         global $lang;
         if(!is_object($lang)) $lang = new language();
         if(!isset($lang->$moduleName)) $lang->$moduleName = new stdclass();
 
+        if(isset(self::$loadedModules[$moduleName])) return $lang;
+
+        self::$loadedModules[$moduleName] = $moduleName;
+
+        /* 计算最终要加载的语言文件。 Get the lang files to be loaded. */
+        $langFilesToLoad = $this->getMainAndExtFiles($moduleName, $appName, 'lang');
+        if(empty($langFilesToLoad)) return $lang;
+
         foreach($langFilesToLoad as $langFile)
         {
-            if(in_array($langFile, self::$loadedLangs)) continue;
+            if(isset(self::$loadedLangs[$langFile])) continue;
             include $langFile;
-            self::$loadedLangs[] = $langFile;
+            self::$loadedLangs[$langFile] = $langFile;
         }
 
         $this->lang = $lang;
+
         return $lang;
     }
 
