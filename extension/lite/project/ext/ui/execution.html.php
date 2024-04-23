@@ -37,7 +37,7 @@ $fnGetKanbanTeams = function($kanbanID) use ($memberGroup, $users, $usersAvatar)
         $teamElements[] = div
         (
             set::title(zget($users, $member->account)),
-            avatar(set::src(zget($usersAvatar, $member->account)), set::text(zget($member, 'realname', '')), set::size('sm'), set::className('ml-1')),
+            avatar(set::src(zget($usersAvatar, $member->account)), set::text(zget($member, 'realname', '')), set::size('sm'), set::className('mr-1')),
         );
     }
     if(count($teams) > 4) $teamElements[] = span('… ');
