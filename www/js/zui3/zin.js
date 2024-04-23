@@ -1455,6 +1455,14 @@
                 else $(document).trigger('locate.zt', data.cancelled);
             });
         }
+        if(data.alert)
+        {
+            return zui.Modal.alert(data.alert).then(function()
+            {
+                if(data.modal)  loadModal(data.modal);
+                if(data.locate) openUrl(data.locate);
+            });
+        }
         if(data.load) return openUrl(data);
         if(data.app) return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
         loadPage(data);
