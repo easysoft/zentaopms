@@ -140,6 +140,7 @@ class my extends control
         $this->session->set('todoList',     $uri, 'my');
         $this->session->set('bugList',      $uri, 'my');
         $this->session->set('taskList',     $uri, 'my');
+        $this->session->set('storyList',    $uri, 'my');
         $this->session->set('testtaskList', $uri, 'my');
 
         /* Load pager. */
