@@ -2332,18 +2332,18 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  int    $repoID
      * @access public
-     * @return bool
+     * @return string
      */
-    public function updateCodePath(int $gitlabID, int $projectID, int $repoID): bool
+    public function updateCodePath(int $gitlabID, int $projectID, int $repoID): string
     {
         $project = $this->apiGetSingleProject($gitlabID, $projectID);
         if(is_object($project) and !empty($project->web_url))
         {
             $this->dao->update(TABLE_REPO)->set('path')->eq($project->web_url)->where('id')->eq($repoID)->exec();
-            return true;
+            return $project->web_url;
         }
 
-        return false;
+        return '';
     }
 
     /**
@@ -2417,6 +2417,7 @@ class gitlabModel extends model
         if(!$gitlab) return array();
 
         /* Compatible with HTTP and HTTPS domain. */
+        if(strpos($repo->codePath, '/api/v4/projects')) $repo->codePath = $this->updateCodePath((int)$repo->serviceHost, (int)$repo->serviceProject, $repo->id);
         $repo->client   = str_replace('https://', 'http://', $repo->client);
         $repo->codePath = str_replace('https://', 'http://', $repo->codePath);
 
