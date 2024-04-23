@@ -59,15 +59,18 @@ foreach($MRList as $index => $MR)
     {
         $MR->approvalStatus = empty($MR->approvalStatus) ? $lang->mr->approvalStatusList['notReviewed'] : $lang->mr->approvalStatusList[$MR->approvalStatus];
     }
+
+    $MR->repoName = $repo->name;
 }
 
 /* Show source project column if the user browse the Merge Requests of all the repos. */
 if(empty($repoID))
 {
-    $sourceProject['sourceProject']['name']     = 'sourceProject';
-    $sourceProject['sourceProject']['title']    = $lang->mr->sourceProject;
-    $sourceProject['sourceProject']['type']     = 'text';
-    $sourceProject['sourceProject']['minWidth'] = '200';
+    $sourceProject['repoName']['name']     = 'repoName';
+    $sourceProject['repoName']['title']    = $lang->mr->sourceProject;
+    $sourceProject['repoName']['type']     = 'text';
+    $sourceProject['repoName']['minWidth'] = '200';
+    $sourceProject['repoName']['hint']     = '{sourceProject}';
 
     $offset = array_search('sourceBranch', array_keys($config->mr->dtable->fieldList));
 
