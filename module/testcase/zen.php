@@ -147,7 +147,7 @@ class testcaseZen extends testcase
      */
     protected function buildBrowseSearchForm(int $productID, string $branch, int $queryID, int $projectID): void
     {
-        $this->config->testcase->search['onMenuBar'] = 'yes';
+        if($this->app->rawModule == 'testcase') $this->config->testcase->search['onMenuBar'] = 'yes';
 
         $currentModule  = $this->app->tab == 'project' ? 'project'  : 'testcase';
         $currentMethod  = $this->app->tab == 'project' ? 'testcase' : 'browse';
