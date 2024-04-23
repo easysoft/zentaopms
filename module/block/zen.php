@@ -2012,7 +2012,7 @@ class blockZen extends block
 
         if(common::hasPriv('todo',  'view'))                                                                      $hasViewPriv['todo']        = true;
         if(common::hasPriv('demand', 'view') && $this->config->edition == 'ipd' && $this->config->vision == 'or') $hasViewPriv['demand']      = true;
-        if(common::hasPriv('task',  'view'))                                                                      $hasViewPriv['task']        = true;
+        if((common::hasPriv('task',  'view') && $this->config->vision == 'rnd') || (common::hasPriv('marketresearch', 'viewTask') && $this->config->vision == 'or')) $hasViewPriv['task'] = true;
         if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                   $hasViewPriv['story']       = true;
         if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')         $hasViewPriv['requirement'] = true;
         if(common::hasPriv('bug',   'view')     && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['bug']         = true;
