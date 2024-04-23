@@ -331,14 +331,14 @@ class mr extends control
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
 
         $projectOwner  = false;
-        if($host->type == 'gitlab')
+        if(in_array(strtolower($host->type), array('gitlab', 'gitfox')))
         {
             $MR->sourceProject = (int)$MR->sourceProject;
             $MR->targetProject = (int)$MR->targetProject;
         }
 
         $projectMethod = $host->type == 'gitfox' ? 'apiGetSingleRepo' : 'apiGetSingleProject';
-        $sourceProject = $this->loadModel($host->type)->$projectMethod($MR->hostID, (int)$MR->sourceProject);
+        $sourceProject = $this->loadModel($host->type)->$projectMethod($MR->hostID, $MR->sourceProject);
         if(isset($MR->hostID) && !$this->app->user->admin)
         {
             $openID = $this->loadModel('pipeline')->getOpenIdByAccount($MR->hostID, $host->type, $this->app->user->account);
@@ -355,9 +355,9 @@ class mr extends control
         $this->view->projectOwner  = $projectOwner;
         $this->view->projectEdit   = $this->mrZen->checkProjectEdit($host->type, $sourceProject, $MR);
         $this->view->sourceProject = $sourceProject;
-        $this->view->targetProject = $this->{$host->type}->$projectMethod($MR->hostID, (int)$MR->targetProject);
-        $this->view->sourceBranch  = $this->mrZen->getBranchUrl($host, (int)$MR->sourceProject, $MR->sourceBranch);
-        $this->view->targetBranch  = $this->mrZen->getBranchUrl($host, (int)$MR->targetProject, $MR->targetBranch);
+        $this->view->targetProject = $this->{$host->type}->$projectMethod($MR->hostID, $MR->targetProject);
+        $this->view->sourceBranch  = $this->mrZen->getBranchUrl($host, $MR->sourceProject, $MR->sourceBranch);
+        $this->view->targetBranch  = $this->mrZen->getBranchUrl($host, $MR->targetProject, $MR->targetBranch);
         $this->display();
     }
 
