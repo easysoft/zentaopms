@@ -79,7 +79,7 @@ class docZen extends doc
 
                 $item = array();
                 $item['id']    = $index;
-                $item['title'] = strip_tags($headElement[3]);
+                $item['title'] = array('html' => strip_tags($headElement[3]));
                 $item['hint']  = strip_tags($headElement[3]);
                 $item['url']   = '#anchor' . $index;
                 $item['level'] = $currentLevel;
