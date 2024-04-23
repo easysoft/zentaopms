@@ -47,6 +47,7 @@ $lang->custom->reviewRule           = 'Review Rules';
 $lang->custom->switch               = "Switch";
 $lang->custom->oneUnit              = "One {$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "Please firstly set the conversion factor from {$lang->hourCommon} to %s";
+$lang->custom->closedSetting        = 'Close Setting';
 
 $lang->custom->execution      = 'Execution';
 $lang->custom->defaultProgram = 'Default program';
