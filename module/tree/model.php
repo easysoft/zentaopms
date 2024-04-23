@@ -1020,15 +1020,15 @@ class treeModel extends model
                     $table2 = TABLE_CASE;
                 }
 
-                $paths = $this->dao->select("t3.{$field}")->from($table1)->alias('t1')
-                    ->leftJoin($table2)->alias('t2')->on('t1.' . $linkObject . ' = t2.id')
-                    ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
-                    ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
+                $paths = $this->dao->select("t4.{$field}")->from(TABLE_PROJECT)->alias('t1')
+                    ->leftJoin($table1)->alias('t2')->on('t1.id=t2.project')
+                    ->leftJoin($table2)->alias('t3')->on("t2.{$linkObject}=t3.id")
+                    ->leftJoin(TABLE_MODULE)->alias('t4')->on('t3.module=t4.id')
                     ->where('t3.deleted')->eq(0)
-                    ->andWhere('t2.deleted')->eq(0)
-                    ->andWhere("(t1.project = '{$executionID}' OR t4.project = '{$executionID}')")
-                    ->beginIF(isset($extra['branchID']) && $branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
-                    ->fetchPairs($field, $field);
+                    ->andWhere('t4.deleted')->eq(0)
+                    ->andWhere('t1.project', true)->eq($executionID)->orWhere('t2.project')->eq($executionID)->markRight(1)
+                    ->beginIF(isset($extra['branchID']) && $branch !== 'all')->andWhere('t3.branch')->eq($branch)->fi()
+                    ->fetchPairs();
             }
             elseif($linkObject == 'bug' && str_contains(',project,execution,', ",{$this->app->tab},"))
             {
@@ -1038,7 +1038,7 @@ class treeModel extends model
                     ->andWhere('t2.deleted')->eq(0)
                     ->beginIF(isset($extra['branchID']) && $branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
                     ->andWhere("t1.{$this->app->tab}")->eq($executionID)
-                    ->fetchPairs($field, $field);
+                    ->fetchPairs();
             }
             else
             {
