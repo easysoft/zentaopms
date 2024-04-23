@@ -189,7 +189,7 @@ class mr extends control
         {
             $MR = form::data($this->config->mr->form->create)
                 ->setIF($this->post->needCI == 0, 'jobID', 0)
-                ->add('createdBy', $this->app->user->acount)
+                ->add('createdBy', $this->app->user->account)
                 ->get();
             $result = $this->mr->create($MR);
             return $this->send($result);
@@ -254,7 +254,7 @@ class mr extends control
         {
             $MR = form::data($this->config->mr->form->edit)
                 ->setIF($this->post->needCI == 0, 'jobID', 0)
-                ->add('editedBy', $this->app->user->acount)
+                ->add('editedBy', $this->app->user->account)
                 ->get();
             $result = $this->mr->update($MRID, $MR);
             return $this->send($result);

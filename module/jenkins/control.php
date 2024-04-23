@@ -39,7 +39,7 @@ class jenkins extends control
         if($_POST)
         {
             $jenkins = form::data($this->config->jenkins->form->create)
-                ->add('createdBy', $this->app->user->acount)
+                ->add('createdBy', $this->app->user->account)
                 ->get();
             $this->jenkinsZen->checkTokenAccess($jenkins->url, $jenkins->account, $jenkins->password, $jenkins->token);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -66,7 +66,7 @@ class jenkins extends control
         if($_POST)
         {
             $jenkins = form::data($this->config->jenkins->form->edit)
-                ->add('editedBy', $this->app->user->acount)
+                ->add('editedBy', $this->app->user->account)
                 ->get();
             $this->jenkinsZen->checkTokenAccess($jenkins->url, $jenkins->account, $jenkins->password, $jenkins->token);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

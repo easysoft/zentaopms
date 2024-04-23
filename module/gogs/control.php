@@ -71,7 +71,7 @@ class gogs extends control
         if($_POST)
         {
             $gogs = form::data($this->config->gogs->form->create)
-                ->add('createdBy', $this->app->user->acount)
+                ->add('createdBy', $this->app->user->account)
                 ->get();
             $priv = $this->checkToken($gogs);
             if(is_array($priv)) return $this->send($priv);
@@ -121,7 +121,7 @@ class gogs extends control
         if($_POST)
         {
             $gogs = form::data($this->config->gogs->form->edit)
-                ->add('editedBy', $this->app->user->acount)
+                ->add('editedBy', $this->app->user->account)
                 ->get();
             $this->checkToken($gogs);
             $this->loadModel('pipeline')->update($gogsID, $gogs);

@@ -1855,8 +1855,8 @@ class repoModel extends model
 
         $accountPairs  = array();
         $userList      = $this->loadModel($repo->SCM)->apiGetUsers($repo->gitService);
-        $acountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs($repo->gitService, strtolower($repo->SCM), 'openID,account');
-        foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
+        $accountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs($repo->gitService, strtolower($repo->SCM), 'openID,account');
+        foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($accountIDPairs, $gitlabUser->id, '');
 
         foreach($data->commits as $commit)
         {

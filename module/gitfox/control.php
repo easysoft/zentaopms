@@ -23,7 +23,7 @@ class gitfox extends control
         if($_POST)
         {
             $gitfox = form::data($this->config->gitfox->form->create)
-                ->add('createdBy', $this->app->user->acount)
+                ->add('createdBy', $this->app->user->account)
                 ->get();
             $this->checkToken($gitfox);
             $gitfoxID = $this->loadModel('pipeline')->create($gitfox);
@@ -54,7 +54,7 @@ class gitfox extends control
         if($_POST)
         {
             $gitfox = form::data($this->config->gitfox->form->edit)
-                ->add('editedBy', $this->app->user->acount)
+                ->add('editedBy', $this->app->user->account)
                 ->get();
             $this->checkToken($gitfox, $gitfoxID);
             $this->loadModel('pipeline')->update($gitfoxID, $gitfox);

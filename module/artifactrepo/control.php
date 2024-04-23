@@ -57,7 +57,7 @@ class artifactrepo extends control
         if($_POST)
         {
             $repo = form::data($this->config->artifactrepo->form->create)
-                ->add('createdBy', $this->app->user->acount)
+                ->add('createdBy', $this->app->user->account)
                 ->get();
             if($repo->products) $repo->products = ',' . $repo->products . ',';
 
@@ -88,7 +88,7 @@ class artifactrepo extends control
         if($_POST)
         {
             $repo = form::data($this->config->artifactrepo->form->edit)
-                ->add('editedBy', $this->app->user->acount)
+                ->add('editedBy', $this->app->user->account)
                 ->get();
             if($repo->products) $repo->products = ',' . $repo->products . ',';
 

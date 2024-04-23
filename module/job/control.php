@@ -100,7 +100,7 @@ class job extends control
                 ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'tag', 'lastTag', '')
                 ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
                 ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
-                ->add('createdBy', $this->app->user->acount)
+                ->add('createdBy', $this->app->user->account)
                 ->get();
 
             $jobID = $this->job->create($job);
@@ -143,7 +143,7 @@ class job extends control
                 ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'tag', 'lastTag', '')
                 ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
                 ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
-                ->add('editedBy', $this->app->user->acount)
+                ->add('editedBy', $this->app->user->account)
                 ->get();
 
             $this->job->update($jobID, $job);
