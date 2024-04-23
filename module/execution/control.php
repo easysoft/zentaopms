@@ -1969,9 +1969,9 @@ class execution extends control
     public function storyKanban(int $executionID)
     {
         $this->app->loadLang('kanban');
-        $this->execution->setMenu($executionID);
-        $execution = $this->loadModel('execution')->getByID($executionID);
-        $stories   = $this->loadModel('story')->getExecutionStories($executionID);
+        $execution   = $this->commonAction($executionID);
+        $executionID = $execution->id;
+        $stories     = $this->loadModel('story')->getExecutionStories($executionID);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         $stories = array_filter($stories, function($story) {return in_array($story->stage, $this->config->execution->storyKanbanCols);});
