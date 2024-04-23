@@ -40,7 +40,7 @@ formBatchPanel
 
     on::change('[data-name="type"]', 'changeType'),
     on::change('.time-input', 'initTime'),
-    on::click('.time-check', "window.togglePending"),
+    on::click('.time-check', "window.changFuture"),
     on::click('.form-batch-row-actions .btn', 'initTime'),
 
     to::heading
@@ -72,7 +72,6 @@ formBatchPanel
                         setID('futureDate'),
                         set::name('futureDate'),
                         $lang->todo->periods['future'],
-                        on::click('window.changFuture')
                     )
                 )
             )
