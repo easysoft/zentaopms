@@ -109,6 +109,7 @@ $lang->mr->createFailedFromAPI = "創建合併請求失敗。";
 $lang->mr->accessGitlabFailed  = "當前無法連接到GitLab伺服器。";
 $lang->mr->reopenSuccess       = "已重新打開合併請求。";
 $lang->mr->closeSuccess        = "已關閉合併請求。";
+$lang->mr->unsupportedFeature  = "暫不支持該功能。";
 
 $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
