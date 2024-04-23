@@ -808,8 +808,20 @@ class mr extends control
             if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
         }
 
+        $repo = $this->loadModel('repo')->getByID($MR->repoID);
+        
         $commitLogs = $this->mr->apiGetMRCommits($MR->hostID, $MR->targetProject, $MR->mriid);
-        foreach($commitLogs as $commitLog) $commitLog->repoID = $MR->repoID;
+        foreach($commitLogs as $commitLog)
+        {
+            $commitLog->repoID = $MR->repoID;
+            if(strtolower($repo->SCM) == 'gitfox')
+            {
+                $commitLog->id = $commitLog->sha;
+                $commitLog->committed_date = $commitLog->committer->when;
+                $commitLog->committer_name = $commitLog->committer->identity->name;
+                $commitLog->committer_email= $commitLog->committer->identity->email;
+            }
+        }
 
         $this->view->commitLogs  = $commitLogs;
         $this->display();
