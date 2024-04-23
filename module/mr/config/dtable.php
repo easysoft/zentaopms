@@ -94,3 +94,31 @@ $config->mr->taskDtable->fieldList['status']['type']      = 'status';
 $config->mr->taskDtable->fieldList['status']['statusMap'] = $lang->task->statusList;
 $config->mr->taskDtable->fieldList['status']['sortType']  = true;
 $config->mr->taskDtable->fieldList['status']['show']      = true;
+
+$config->mr->commitLogs = new stdclass();
+$config->mr->commitLogs->dtable = new stdclass();
+
+$app->loadLang('repo');
+
+$config->mr->commitLogs->dtable->fieldList['id']['name']     = 'id';
+$config->mr->commitLogs->dtable->fieldList['id']['title']    = $lang->repo->revisions;
+$config->mr->commitLogs->dtable->fieldList['id']['type']     = 'text';
+$config->mr->commitLogs->dtable->fieldList['id']['data-app'] = $app->tab;
+$config->mr->commitLogs->dtable->fieldList['id']['link']     = helper::createLink('repo', 'diff', "repoID={repoID}&objectID=0&entry=&oldrevision=^&newRevision={id}");
+$config->mr->commitLogs->dtable->fieldList['id']['minWidth'] = '100';
+
+$config->mr->commitLogs->dtable->fieldList['committed_date']['name']     = 'committed_date';
+$config->mr->commitLogs->dtable->fieldList['committed_date']['title']    = $lang->repo->time;
+$config->mr->commitLogs->dtable->fieldList['committed_date']['type']     = 'datetime';
+$config->mr->commitLogs->dtable->fieldList['committed_date']['sortType'] = false;
+
+$config->mr->commitLogs->dtable->fieldList['committer_name']['name']  = 'committer_name';
+$config->mr->commitLogs->dtable->fieldList['committer_name']['title'] = $lang->repo->committer;
+$config->mr->commitLogs->dtable->fieldList['committer_name']['type']  = 'text';
+$config->mr->commitLogs->dtable->fieldList['committer_name']['hint']  = '{committer_email}';
+
+$config->mr->commitLogs->dtable->fieldList['title']['name']     = 'title';
+$config->mr->commitLogs->dtable->fieldList['title']['title']    = $lang->repo->comment;
+$config->mr->commitLogs->dtable->fieldList['title']['type']     = 'text';
+$config->mr->commitLogs->dtable->fieldList['title']['minWidth'] = '342';
+$config->mr->commitLogs->dtable->fieldList['title']['hint']     = '{message}';

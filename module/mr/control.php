@@ -8,6 +8,7 @@ declare(strict_types=1);
  * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     mr
  * @link        https://www.zentao.net
+ * @property    mrModel $mr
  */
 class mr extends control
 {
@@ -787,6 +788,31 @@ class mr extends control
             $response['load']    = $link;
         }
         return $this->send($response);
+    }
+
+    /**
+     * 查看合并请求的提交记录。
+     * Show the commit logs for this Merge Request.
+     *
+     * @param  int  $MRID
+     * @return void
+     */
+    public function commitLogs(int $MRID)
+    {
+        $MR = $this->mr->fetchByID($MRID);
+        $this->view->title = $this->lang->mr->commitLogs;
+        $this->view->MR    = $MR;
+        if($MR->synced)
+        {
+            $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
+            if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
+        }
+
+        $commitLogs = $this->mr->apiGetMRCommits($MR->hostID, $MR->targetProject, $MR->mriid);
+        foreach($commitLogs as $commitLog) $commitLog->repoID = $MR->repoID;
+
+        $this->view->commitLogs  = $commitLogs;
+        $this->display();
     }
 
     /**
