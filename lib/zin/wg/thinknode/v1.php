@@ -65,14 +65,14 @@ class thinkNode  extends wg
             {
                 if($addType == 'radio' || $isEdit && $item->questionType == 'radio') return thinkRadio
                 (
-                    set::data(!$isEdit ? array() : explode(', ', $item->fields)),
+                    set::data(!$isEdit ? null : explode(', ', $item->fields)),
                     set::title($isEdit ? $item->title : ''),
                     set::desc($isEdit ? $item->desc : ''),
                     set::enableOther($isEdit ? $item->enableOther : false),
                 );
                 if($addType == 'checkbox' || $isEdit && $item->questionType == 'checkbox') return thinkCheckbox
                 (
-                    set::data(!$isEdit ? array() : explode(', ', $item->fields)),
+                    set::data(!$isEdit ? null : explode(', ', $item->fields)),
                     set::title($isEdit ? $item->title : ''),
                     set::desc($isEdit ? $item->desc : ''),
                     set::enableOther($isEdit ? $item->enableOther : false),
