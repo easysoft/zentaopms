@@ -397,7 +397,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getRelatedReleases(array $productIdList, string $buildIdList = '', array|bool $shadows = false): array
+    public function getRelatedReleases(array|int $productIdList, string $buildIdList = '', array|bool $shadows = false): array
     {
         $releases = $this->dao->select('t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('FIND_IN_SET(t2.id, t1.build)')
