@@ -439,7 +439,7 @@ class backupModel extends model
         if(!file_exists($dir)) return 0;
         if(!is_readable($dir)) return 0;
         $totalSize = 0;
-        $iterator  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS));
+        $iterator  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::LEAVES_ONLY, RecursiveIteratorIterator::CATCH_GET_CHILD);
 
         foreach($iterator as $file) $totalSize += $file->getSize();
         return $totalSize;
