@@ -17,6 +17,7 @@ class thinkRadio extends thinkStep
         'otherName?: string',
         'required?: int=1',
         'enableOther?: bool',
+        'data?: array',
     );
 
     protected static array $defaultProps = array
@@ -29,7 +30,7 @@ class thinkRadio extends thinkStep
         global $lang;
         $items = parent::buildBody();
 
-        list($requiredName, $optionName, $otherName, $required, $enableOther) = $this->prop(array('requiredName', 'optionName', 'otherName', 'required', 'enableOther'));
+        list($requiredName, $optionName, $otherName, $required, $enableOther, $data) = $this->prop(array('requiredName', 'optionName', 'otherName', 'required', 'enableOther', 'data'));
         $requiredItems = $lang->thinkwizard->step->requiredList;
 
         $items[] = formGroup
@@ -49,6 +50,7 @@ class thinkRadio extends thinkStep
             thinkOptions
             (
                 set::name($optionName),
+                set::data($data),
                 set::otherName($otherName),
                 set::enableOther($enableOther),
                 set::otherName('enableOther')
