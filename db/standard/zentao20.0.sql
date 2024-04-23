@@ -2208,8 +2208,8 @@ CREATE TABLE `zt_metric` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_metriclib` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `metricID` mediumint(8) NOT NULL DEFAULT 0,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `metricID` mediumint(9) NOT NULL DEFAULT 0,
   `metricCode` varchar(100) NOT NULL DEFAULT '',
   `system` char(30) NOT NULL DEFAULT '0',
   `program` char(30) NOT NULL DEFAULT '',
@@ -2225,11 +2225,13 @@ CREATE TABLE `zt_metriclib` (
   `week` char(2) NOT NULL DEFAULT '0',
   `day` char(2) NOT NULL DEFAULT '0',
   `value` varchar(100) NOT NULL DEFAULT '0',
+  `calcType` enum('cron','inference') NOT NULL DEFAULT 'cron',
+  `calculatedBy` varchar(30) NOT NULL DEFAULT '',
   `date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `metricID` (`metricID`),
   KEY `metricCode` (`metricCode`),
-  KEY `date` (`date`) USING BTREE
+  KEY `date` (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_module` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
