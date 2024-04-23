@@ -92,6 +92,8 @@ formPanel
             set::required(strpos(",{$config->bug->resolve->requiredFields},", ',resolvedBuild,') !== false),
             picker
             (
+                set::popWidth('auto'),
+                set::popMaxWidth('300px'),
                 set::name('resolvedBuild'),
                 set::value(''),
                 set::items($builds)
