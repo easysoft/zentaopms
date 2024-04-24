@@ -1382,4 +1382,28 @@ class programModel extends model
     {
         return !empty($programID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->programs},", ",{$programID},") !== false));
     }
+
+    /**
+     * 通过项目集ID获取子项目集和项目。
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function getChildrenPairsByID(int $programID): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->andWhere('deleted')->eq('0')->fetchPairs();
+    }
+
+    /**
+     * 通过项目集ID获取产品。
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function getProductPairsByID(int $programID): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq('0')->fetchPairs();
+    }
 }

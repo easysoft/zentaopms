@@ -394,16 +394,16 @@ class program extends control
     public function delete(int $programID)
     {
         /* The program can NOT be deleted if it has a child program. */
-        $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->andWhere('deleted')->eq('0')->fetch('count');
-        if($childrenCount)
+        $childrenPairs = $this->program->getChildrenPairsByID($programID);
+        if(count($childrenPairs))
         {
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'Can not delete the program has children.'));
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x',  message: '{$this->lang->program->hasChildren}'})"));
         }
 
         /* The program can NOT be deleted if it has a product. */
-        $productCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq('0')->fetch('count');
-        if($productCount) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->hasProduct}');"));
+        $productPairs = $this->program->getProductPairsByID($programID);
+        if(count($productPairs)) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->hasProduct}');"));
 
         /* Mark the program is deleted and record the action log. */
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('deleted')->eq('0')->fetch();
@@ -744,5 +744,31 @@ class program extends control
         $this->view->param              = $param;
 
         $this->render();
+    }
+
+    /**
+     * 获取项目集的子项目集数量。
+     *
+     * @param  int    $programID
+     * @access public
+     * @return int
+     */
+    public function ajaxGetChildrenCount(int $programID): int
+    {
+        $childrenPairs = $this->program->getChildrenPairsByID($programID);
+        return print(count($childrenPairs));
+    }
+
+    /**
+     * 获取项目集下的产品数量。
+     *
+     * @param  int    $programID
+     * @access public
+     * @return int
+     */
+    public function ajaxGetProductCount(int $programID): int
+    {
+        $productPairs = $this->program->getProductPairsByID($programID);
+        return print(count($productPairs));
     }
 }

@@ -40,13 +40,42 @@ window.renderCell = function(result, {col, row})
 
 window.confirmDelete = function(projectID, module, projectName)
 {
-    var deleteURL = $.createLink(module, 'delete', "projectID=" + projectID);
-    if(module == 'program') deleteURL = $.createLink('program', 'delete', "programID=" + projectID + '&confirm=yes');
-
-    zui.Modal.confirm({message: confirmDeleteLang[module].replace('%s', projectName), icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+    let deleteURL = $.createLink(module, 'delete', "projectID=" + projectID);
+    if(module == 'program')
     {
-        if(res) $.ajaxSubmit({url: deleteURL, load: true});
-    });
+        $.get($.createLink('program', 'ajaxGetChildrenCount', `programID=${projectID}`), function(childrenCount)
+        {
+            if(childrenCount > 0)
+            {
+                zui.Modal.alert({message: hasChildrenTip, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});
+            }
+            else
+            {
+                $.get($.createLink('program', 'ajaxGetProductCount', `programID=${projectID}`), function(productCount)
+                {
+                    if(productCount > 0)
+                    {
+                        zui.Modal.alert({message: hasProductTip, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});
+                    }
+                    else
+                    {
+                        deleteURL = $.createLink('program', 'delete', "programID=" + projectID + '&confirm=yes');
+                        zui.Modal.confirm({message: confirmDeleteLang[module].replace('%s', projectName), icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+                        {
+                            if(res) $.ajaxSubmit({url: deleteURL, load: true});
+                        });
+                    }
+                });
+            }
+        })
+    }
+    else
+    {
+        zui.Modal.confirm({message: confirmDeleteLang[module].replace('%s', projectName), icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+        {
+            if(res) $.ajaxSubmit({url: deleteURL, load: true});
+        });
+    }
 }
 
 $(document).off('click', '[data-formaction]').on('click', '[data-formaction]', function()
