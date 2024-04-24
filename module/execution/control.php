@@ -2276,6 +2276,10 @@ class execution extends control
         $productPairs = array();
         foreach($products as $id => $product) $productPairs[$id] = $product->name;
 
+        /* Set menu. */
+        if($this->app->tab == 'project')   $this->view->projectID   = $originObjectID;
+        if($this->app->tab == 'execution') $this->view->executionID = $originObjectID;
+
         $this->view->title        = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
         $this->view->objectID     = $originObjectID;
         $this->view->param        = $param;

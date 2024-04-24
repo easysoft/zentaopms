@@ -16,8 +16,7 @@ jsVar('executionID', $execution->id);
 jsVar('childrenAB', $lang->story->childrenAB);
 jsVar('modulePairs', $modulePairs);
 jsVar('oldShowGrades', $showGrades);
-jsVar('showGrade', $showGrade);
-jsVar('grades', $grades);
+jsVar('gradeGroup', $gradeGroup);
 
 /* Show feature bar. */
 featureBar

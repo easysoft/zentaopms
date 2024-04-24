@@ -79,7 +79,7 @@ window.renderStoryCell = function(result, info)
     if(info.col.name == 'title' && result)
     {
         let html = '';
-        let gradeLabel = (!showGrade && story.grade < 2) ? '' : grades[story.grade];
+        let gradeLabel = gradeGroup[story.type][story.grade];
         if(typeof modulePairs[story.moduleID] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.moduleID] + "</span> ";
         if(gradeLabel) html += "<span class='label gray-pale rounded-xl'>" + gradeLabel + "</span>";
         if(html) result.unshift({html});

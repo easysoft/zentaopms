@@ -265,6 +265,10 @@ class executionZen extends execution
 
         $this->assignModuleForStory($type, $param, $storyType, $execution, $productID);
 
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $gradeGroup = array();
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         /* Assign. */
         $this->view->title        = $execution->name . $this->lang->colon . $this->lang->execution->story;
         $this->view->storyType    = $storyType;
@@ -278,8 +282,7 @@ class executionZen extends execution
         $this->view->multiBranch  = $multiBranch;
         $this->view->execution    = $execution;
         $this->view->gradeMenu    = $this->loadModel('story')->getGradeMenu($storyType, $project);
-        $this->view->grades       = $this->story->getGradePairs('story', 'all');
-        $this->view->showGrade    = count($this->view->grades) > 2;
+        $this->view->gradeGroup   = $gradeGroup;
         $this->view->showGrades   = isset($this->config->execution->showGrades) ? $this->config->execution->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->branchPairs  = $this->loadModel('branch')->getPairs($productID, 'withClosed');
