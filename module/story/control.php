@@ -418,7 +418,6 @@ class story extends control
 
         $this->commonAction($storyID);
         $story = $this->view->story;
-        if($story->status != 'active') return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
         $this->story->getAffectedScope($story);
 
         /* Assign. */
