@@ -658,7 +658,7 @@
 
     function getLoadSelector(selector)
     {
-        if(!selector) return $('#main').length ? 'pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#main>*,hookCode(),#configJS,title>*,#heading>*,#navbar>*,#pageToolbar>*' : 'body>*,title>*,#configJS';
+        if(!selector) return $('#main').length ? '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,hookCode(),#configJS,title>*,#heading>*,#navbar>*,#pageToolbar>*' : 'body>*,title>*,#configJS';
         if(selector[0] === '+') return getLoadSelector() + ',' + selector.substring(1);
         return selector;
     }
@@ -767,7 +767,7 @@
         const isInModal = $(target).closest('.modal').length;
         if(!isInModal && !options.selector)
         {
-            selector = 'pageJS/.zin-page-js,' + selector + ',#mainMenu>*,hookCode()';
+            selector += ',#mainMenu>*,pageJS/.zin-page-js,hookCode()';
             if($('#moduleMenu').length) selector += ',#moduleMenu,.module-menu-header';
             if($('#docDropmenu').length) selector += ',#docDropmenu,.module-menu';
         }
