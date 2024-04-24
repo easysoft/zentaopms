@@ -129,6 +129,7 @@ function onScmChange()
             var $hostPicker = $('#serviceHost').zui('picker');
             $hostPicker.render({items: data});
             $hostPicker.$.clear();
+            onHostChange();
         });
     }
 }
