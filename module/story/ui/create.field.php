@@ -14,7 +14,7 @@ $fields->field('product')
     ->required()
     ->control('inputGroup')
     ->items(false)
-    ->itemBegin('product')->control('picker')->items($createFields['product']['options'])->value($createFields['product']['default'])->itemEnd()
+    ->itemBegin('product')->control('picker')->items($createFields['product']['options'])->value($createFields['product']['default'])->required(true)->itemEnd()
     ->item($isBranchUR ? field('branch')->control('picker')->boxClass('flex-none')->width('100px')->name('branch')->items($createFields['branch']['options'])->value($createFields['branch']['default']) : null);
 
 $fields->field('module')
