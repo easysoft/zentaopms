@@ -92,7 +92,7 @@ form
     (
         modal
         (
-            modalHeader(),
+            modalHeader(set::title($lang->doc->basicInfo), set::entityText(''), set::entityID(0)),
             set::id('modalBasicInfo'),
             on::change('#product',   "loadObjectModules"),
             on::change('#project',   "loadObjectModules"),
