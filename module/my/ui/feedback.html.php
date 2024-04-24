@@ -24,7 +24,8 @@ foreach($feedbacks as $feedback)
     $feedback->solution = zget($lang->feedback->solutionList, $feedback->solution, '');
 }
 
-$cols      = $this->loadModel('datatable')->getSetting($this->moduleName);
+$cols = $this->loadModel('datatable')->getSetting($this->moduleName);
+$cols['actions']['list']['edit']['data-toggle'] = 'modal';
 $feedbacks = initTableData($feedbacks, $cols, $this->feedback);
 
 if(!empty($cols['product'])) $cols['product']['map'] = $allProducts;
