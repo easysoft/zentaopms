@@ -177,9 +177,10 @@ class pivotZen extends pivot
      */
     public function convertDataForDtable(object $data, array $configs): array
     {
-        $columns  = array();
-        $rows     = array();
-        $cellSpan = array();
+        $columns      = array();
+        $rows         = array();
+        $cellSpan     = array();
+        $columnMaxLen = array();
 
         $headerRow1 = !empty($data->cols[0]) ? $data->cols[0] : array();
         $headerRow2 = !empty($data->cols[1]) ? $data->cols[1] : array();
@@ -207,6 +208,8 @@ class pivotZen extends pivot
                     $columns[$field]['minWidth'] = 128;
                     $columns[$field]['align']    = 'center';
 
+                    $columnMaxLen[$field] = mb_strlen($column->label);
+
                     /* 把被切片的字段名设置为数据表格的列配置的 headerGroup 属性。*/
                     /* Set the sliced field name as the headerGroup attribute of the column configuration of the data table. */
                     $columns[$field]['headerGroup'] = $column->label;
@@ -229,7 +232,9 @@ class pivotZen extends pivot
             $columns[$field]['minWidth'] = 128;
             $columns[$field]['align']    = 'center';
 
-            if(isset($data->groups[$index])) $columns[$field]['fixed'] = 'left';
+            $columnMaxLen[$field] = mb_strlen($column->label);
+
+            // if(isset($data->groups[$index])) $columns[$field]['fixed'] = 'left';
 
             $index++;
         }
@@ -257,6 +262,8 @@ class pivotZen extends pivot
                 /* Defind row data of the data table. */
                 $rows[$rowKey][$field] = $value;
 
+                $columnMaxLen[$field] = max($columnMaxLen[$field], mb_strlen($value));
+
                 /* 定义数据表格合并单元格的配置。*/
                 /* Define configuration to merge cell of the data table. */
                 if(isset($configs[$rowKey][$index]) && $configs[$rowKey][$index] > 1)
@@ -273,6 +280,11 @@ class pivotZen extends pivot
 
                 $index++;
             }
+        }
+
+        foreach($columns as $field => $column)
+        {
+            $columns[$field]['width'] = 16 * $columnMaxLen[$field];
         }
 
         return array($columns, $rows, $cellSpan);
