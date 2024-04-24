@@ -32,12 +32,12 @@ $(document).on('click', '#closeBtn', function()
     $('#history, #closeBtn').addClass('hidden');
 });
 
-window.toggleOutline = function()
+$(document).on('click', '#outlineToggle', function()
 {
     $('#outlineToggle .icon').toggleClass('icon-menu-arrow-left').toggleClass('icon-menu-arrow-right')
     $('#contentTree').toggleClass('hidden');
     $.cookie.set('hiddenOutline', $('#contentTree').hasClass('hidden'));
-}
+});
 
 $("#docPanel").on('enterFullscreen', () => {
     $('.right-icon').attr('id', 'right-icon').removeClass('right-icon');
