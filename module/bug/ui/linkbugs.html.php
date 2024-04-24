@@ -48,20 +48,23 @@ h::js
 <<<EOD
 window.fnLinkBugs = function(e)
 {
+    const \$relatedBugs = $('#linkBugsBox').find('.picker-box').zui('picker');
+    var linkedList = \$relatedBugs.$.valueList;
+    var linkedBugs = \$relatedBugs.options.items;
+
     const dtable      = zui.DTable.query(e.target);
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    var checkedBugs = [];
     checkedList.forEach(function(id)
     {
         var bugInfo = dtable.$.getRowInfo(id).data;
-        checkedBugs.push({text: bugInfo.title, value: bugInfo.id});
+        linkedList.push(bugInfo.id);
+        linkedBugs.push({text: bugInfo.title, value: bugInfo.id});
     });
 
-    const \$relatedBugs = $('#linkBugsBox').find('.picker-box').zui('picker');
-    \$relatedBugs.render({items: checkedBugs});
-    \$relatedBugs.$.setValue(checkedList);
+    \$relatedBugs.render({items: linkedBugs});
+    \$relatedBugs.$.setValue(linkedList);
     zui.Modal.hide('#' + $(e.target).closest('.modal').attr('id'));
 }
 EOD
