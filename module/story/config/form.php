@@ -40,8 +40,8 @@ $config->story->form->create['openedDate']  = array('type' => 'string',  'contro
 if($config->vision == 'or')
 {
     $app->loadLang('demand');
-    $config->story->form->create['duration'] = array('type' => 'string',  'control' => 'select', 'required' => false, 'default' =>'feature', 'options' => $lang->demand->durationList);
-    $config->story->form->create['BSA']      = array('type' => 'string',  'control' => 'select', 'required' => false, 'default' =>'feature', 'options' => $lang->demand->bsaList);
+    $config->story->form->create['duration'] = array('type' => 'string', 'control' => 'select', 'required' => false, 'default' => '', 'options' => $lang->demand->durationList);
+    $config->story->form->create['BSA']      = array('type' => 'string', 'control' => 'select', 'required' => false, 'default' => '', 'options' => $lang->demand->bsaList);
 }
 
 $config->story->form->edit = array();
