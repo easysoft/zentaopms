@@ -6,15 +6,15 @@ class thinkNode  extends wg
 {
     protected static array $defineProps = array(
         'item: object',
-        'status?: string="detail"',
+        'action?: string="detail"',
         'addType?: string',
     );
 
     protected function buildBody(): wg|array
     {
-        list($item, $status, $addType) = $this->prop(array('item', 'status', 'addType'));
+        list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
 
-        if($status == 'detail')
+        if($action == 'detail')
         {
             if(property_exists($item, 'questionType') && $item->questionType === 'input') return thinkInputDetail
             (
@@ -54,7 +54,7 @@ class thinkNode  extends wg
         else
         {
             $item->options = null;
-            $isEdit = $status === 'edit' ? true : false;
+            $isEdit = $action === 'edit' ? true : false;
 
             if($addType == 'transition' || $isEdit && $item->type == 'transition') return thinkTransition
             (
@@ -113,7 +113,7 @@ class thinkNode  extends wg
     protected function build(): wg|array
     {
         global $lang;
-        list($item, $status, $addType) = $this->prop(array('item', 'status', 'addType'));
+        list($item, $action, $addType) = $this->prop(array('item', 'action', 'addType'));
         if(!$item) return array();
 
         $title = isset($item->id) && !$addType ? ($item->type == 'question' ? $lang->thinkwizard->step->editTitle[$item->questionType] : $lang->thinkwizard->step->editTitle[$item->type]) : $lang->thinkwizard->step->addTitle[$addType];
@@ -122,7 +122,7 @@ class thinkNode  extends wg
             div
             (
                 setClass('relative'),
-                $status !== 'detail' ? array(
+                $action !== 'detail' ? array(
                     div
                     (
                         setClass('flex items-center'),
