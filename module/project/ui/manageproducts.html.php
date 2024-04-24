@@ -67,6 +67,7 @@ foreach($linkedProducts as $productID => $product)
             setClass('product-block modal-content center-row justify-start text-left'),
             checkbox
             (
+                set::rootClass('w-full p-4 pl-0 clip'),
                 set::name("products[{$index}]"),
                 set::text($product->name),
                 set::checked(true),
@@ -135,6 +136,7 @@ foreach($unlinkedProducts as $productID => $productName)
         setClass('product-block modal-content center-row justify-start text-left'),
         checkbox
         (
+            set::rootClass('w-full p-4 pl-0 clip'),
             set::name("products[{$index}]"),
             set::text($productName),
             set::value($productID)
