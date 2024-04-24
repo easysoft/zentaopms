@@ -19,6 +19,8 @@ blockPanel
         echarts
         (
             set::color(array('#2B80FF', '#17CE97', '#FFAF65')),
+            set::width('100%'),
+            set::height(170),
             set::grid(array('left' => '10px', 'top' => '30px', 'right' => '0', 'bottom' => '0',  'containLabel' => true)),
             set::legend(array('show' => true, 'right' => '0')),
             set::xAxis(array('type' => 'category', 'data' => array_keys($charts['pv']), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
@@ -50,6 +52,6 @@ blockPanel
                     )
                 )
             )
-        )->size('100%', 170),
+        )
     )
 );

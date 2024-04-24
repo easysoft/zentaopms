@@ -109,6 +109,8 @@ panel
             (
                 set::title(array('text' => $lang->block->qastatistic->bugStatusStat, 'textStyle' => array('fontSize' => '12'))),
                 set::color(array('#66a2ff', '#9ea3b0')),
+                set::width('100%'),
+                set::height(200),
                 set::tooltip(array('trigger' => 'axis')),
                 set::grid(array('left' => '10px', 'top' => '50px', 'right' => '0', 'bottom' => '10px',  'containLabel' => true)),
                 set::legend(array('show' => true, 'right' => '0', 'top' => '25px', 'textStyle' => array('fontSize' => '11'))),
@@ -135,7 +137,7 @@ panel
                         )
                     )
                 )
-            )->size('100%', 200),
+            )
         )
     )
 );

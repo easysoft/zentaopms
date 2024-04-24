@@ -191,6 +191,8 @@ panel
                             echarts
                             (
                                 set::color(array('#2B80FF', '#17CE97')),
+                                set::width('100%'),
+                                set::height(170),
                                 set::grid(array('left' => '10px', 'top' => '30px', 'right' => '0', 'bottom' => '30px',  'containLabel' => true)),
                                 set::legend(array('show' => true, 'right' => '0')),
                                 set::xAxis(array('type' => 'category', 'data' => array_keys($product->monthFinish), 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'))),
@@ -215,7 +217,7 @@ panel
                                         )
                                     )
                                 )
-                            )->size('100%', 170)
+                            )
                         )
                     )
                 )
