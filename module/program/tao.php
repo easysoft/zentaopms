@@ -390,8 +390,8 @@ class programTao extends programModel
 
         foreach($programProgress as $programID => $hours)
         {
-            $progress = ($hours['consumed'] + $hours['left']) ? floor($hours['consumed'] / ($hours['consumed'] + $hours['left']) * 1000) / 1000 * 100 : 0;
-            $this->dao->update(TABLE_PROJECT)->set('progress')->eq($progress)->where('id')->eq($programID)->exec();
+            $hours['progress'] = ($hours['consumed'] + $hours['left']) ? floor($hours['consumed'] / ($hours['consumed'] + $hours['left']) * 1000) / 1000 * 100 : 0;
+            $this->dao->update(TABLE_PROJECT)->data($hours)->where('id')->eq($programID)->exec();
         }
 
         return !dao::isError();
