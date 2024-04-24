@@ -19,4 +19,4 @@ $badgesOptions['isBiz']           = $isBiz;
 $badgesOptions['isOpenedURAndSR'] = $isOpenedURAndSR;
 $badgesOptions['rawMethod']       = $app->rawMethod;
 
-query('#featureBar')->append(on::init()->call('updateMainNavbarBadges', $badgesOptions));
+query('#featureBar')->append(on::init()->const('badgesOptions', $badgesOptions)->do('setTimeout(() => {updateMainNavbarBadges(badgesOptions)}, 500)'));
