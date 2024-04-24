@@ -8698,13 +8698,10 @@ class upgradeModel extends model
             try
             {
                 $this->dao->exec("SET @@sql_mode=''");
-                $tables = $this->dao->select("c.TABLE_NAME, c.COLUMN_NAME, c.DATA_TYPE")->from('information_schema.COLUMNS')->alias('c')
-                    ->leftJoin('information_schema.TABLES')->alias('t')
-                    ->on('c.TABLE_SCHEMA = t.TABLE_SCHEMA AND c.TABLE_NAME = t.TABLE_NAME')
-                    ->where("c.TABLE_SCHEMA")->eq($this->config->db->name)
-                    ->andWhere("c.TABLE_NAME")->like($this->config->db->prefix . '%')
-                    ->andWhere("t.TABLE_TYPE")->eq('BASE TABLE')
-                    ->andWhere("c.DATA_TYPE")->in('date,datetime')
+                $tables = $this->dao->select("TABLE_NAME, COLUMN_NAME, DATA_TYPE")->from('information_schema.COLUMNS')
+                    ->where("TABLE_SCHEMA")->eq($this->config->db->name)
+                    ->andWhere("TABLE_NAME")->like($this->config->db->prefix . '%')
+                    ->andWhere("DATA_TYPE")->in('date,datetime')
                     ->fetchAll();
 
                 foreach($tables as $table)
@@ -8712,6 +8709,8 @@ class upgradeModel extends model
                     $tableName  = $table->TABLE_NAME;
                     $columnName = $table->COLUMN_NAME;
                     $columnType = $table->DATA_TYPE;
+
+                    if(strpos($tableName, $this->config->db->prefix) !== 0) continue;
 
                     if($columnType == 'date')
                     {
@@ -8742,6 +8741,8 @@ class upgradeModel extends model
                     $tableName  = $table->TABLE_NAME;
                     $columnName = $table->COLUMN_NAME;
                     $columnType = $table->DATA_TYPE;
+
+                    if(strpos($tableName, $this->config->db->prefix) !== 0) continue;
 
                     if($columnType == 'DATE')
                     {
