@@ -22,7 +22,7 @@ $customKey      = 'createFields';
 $section        = 'custom';
 
 /* Generate custom config key by project model. */
-if(in_array($project->model, array('waterfallplus', 'ipd'))) $customKey = 'create' . ucfirst($project->model) . 'Fields';
+if(in_array($project->model, array('waterfallplus', 'ipd', 'waterfall'))) $customKey = 'create' . ucfirst($project->model) . 'Fields';
 if($executionType == 'agileplus')
 {
     $section   = 'customAgilePlus';
