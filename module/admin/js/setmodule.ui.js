@@ -11,7 +11,7 @@ function changeModule($target)
     }
 };
 
-function checkModule()
+function checkModule(event)
 {
     changeModule($(event.target));
 }
