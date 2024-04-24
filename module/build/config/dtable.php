@@ -26,7 +26,7 @@ $config->build->dtable->fieldList['branch']['type']  = 'desc';
 $config->build->dtable->fieldList['branch']['group'] = 1;
 
 $config->build->dtable->fieldList['execution']['title'] = $lang->build->execution;
-$config->build->dtable->fieldList['execution']['name']  = 'execution';
+$config->build->dtable->fieldList['execution']['name']  = 'executionName';
 $config->build->dtable->fieldList['execution']['type']  = 'desc';
 $config->build->dtable->fieldList['execution']['group'] = 1;
 
