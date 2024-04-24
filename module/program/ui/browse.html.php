@@ -10,6 +10,8 @@ jsVar('sumSubBudgetLang',    $lang->program->sumSubBudget);
 jsVar('exceededBudgetLang',  $lang->program->exceededBudget);
 jsVar('remainingBudgetLang', $lang->program->remainingBudget);
 jsVar('langManDay',          $lang->program->manDay);
+jsVar('hasChildrenTip',      $lang->program->hasChildren);
+jsVar('hasProductTip',       $lang->program->hasProduct);
 
 $this->loadModel('project');
 $cols         = $this->loadModel('datatable')->getSetting('program');
