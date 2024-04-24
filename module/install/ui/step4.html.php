@@ -93,6 +93,7 @@ div
             set::title($lang->install->selectMode),
             set::titleClass('text-xl'),
             set::actions(array()),
+            on::click('.selectUsageBtn', 'selectUsage'),
             to::heading
             (
                 setClass('justify-start gap-1'),
@@ -151,10 +152,9 @@ div
                         (
                             btn
                             (
-                                on::click('selectUsage'),
                                 set::id('light'),
                                 set::btnType('submit'),
-                                setClass('px-4'),
+                                setClass('px-4 selectUsageBtn'),
                                 $lang->custom->useLight
                             )
                         ),
@@ -162,10 +162,9 @@ div
                         (
                             btn
                             (
-                                on::click('selectUsage'),
                                 set::id('ALM'),
                                 set::btnType('submit'),
-                                setClass('px-4'),
+                                setClass('px-4 selectUsageBtn'),
                                 $lang->custom->useALM
                             )
                         )
