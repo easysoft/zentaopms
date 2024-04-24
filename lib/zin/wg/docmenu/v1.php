@@ -373,21 +373,19 @@ class docMenu extends wg
 
     private function getThinkwizardMenus($item): array
     {
-        $canAddChild = true;
+        $canAddChild        = true;
+        $showQuestionOfNode = true;
         if(!empty($item->children))
         {
             foreach($item->children as $child)
             {
-                if($child->type == 'question')
-                {
-                    $canAddChild = false;
-                    break;
-                }
+                if($canAddChild && $child->type == 'question')    $canAddChild        = false;
+                if($showQuestionOfNode && $child->type == 'node') $showQuestionOfNode = false;
             }
         }
 
         $menus = array();
-        if($item->type != 'question') $menus[] = array(
+        if($item->type == 'node') $menus[] = array(
             'key'     => 'addNode',
             'icon'    => 'add-chapter',
             'text'    => $this->lang->thinkwizard->designer->treeDropdown['addSameNode'],
@@ -433,7 +431,8 @@ class docMenu extends wg
                 'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=create&addType=transition&levelType=$levelType")
             ),
         ));
-        if(empty($item->children) || $item->grade == 3 && $item->type == 'node') $menus = array_merge($menus, array(
+
+        if($canAddChild && $showQuestionOfNode && $item->type == 'node' || $item->hasSameQuestion || $item->type == 'question') $menus = array_merge($menus, array(
             array('type' => 'divider'),
             array(
                 'key'  => 'addRadio',
