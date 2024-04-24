@@ -91,7 +91,8 @@ window.handleFilterCheck = function()
 
 window.handleFilterToggle = function($el)
 {
-    $el.toggleClass('ring-primary');
+    toggleSearchBtn();
+
     $('.filter-panel').toggleClass('hidden');
 }
 
@@ -282,10 +283,11 @@ window.initFilterPanel = function()
 
     $('#mainMenu').after($('.filter-panel'));
 
-    $('.filter-btn').removeClass('ring-primary');
+    toggleSearchBtn(true);
     if(scope == 'filter')
     {
-        $('.filter-btn').addClass('ring-primary');
+        toggleSearchBtn(false);
+
         $('.filter-panel').removeClass('hidden');
         window.updateFilterCheck();
     }
@@ -705,7 +707,8 @@ window.genDataZoom = function(dataLength, initZoom = 10, axis = 'x')
 
 window.hideFilterPanel = function()
 {
-    $('.filter-btn').removeClass('ring-primary');
+    toggleSearchBtn(false);
+
     $('.filter-panel').addClass('hidden');
 }
 
@@ -714,4 +717,29 @@ window.deactiveNavMenu = function()
     var itemSelector = 'menu.nav-ajax .nav-item a';
     $(itemSelector).removeClass('active');
     $(itemSelector).find('span.label').remove();
+}
+
+window.toggleSearchBtn = function(active = null)
+{
+    if(active === null)
+    {
+        $('.filter-btn').toggleClass('ring-primary');
+        $('.icon-search').toggleClass('text-primary');
+        $('.filter-btn-text').toggleClass('text-primary');
+    }
+    else
+    {
+        if(active)
+        {
+            $('.filter-btn').addClass('ring-primary');
+            $('.icon-search').addClass('text-primary');
+            $('.filter-btn-text').addClass('text-primary');
+        }
+        else
+        {
+            $('.filter-btn').removeClass('ring-primary');
+            $('.icon-search').removeClass('text-primary');
+            $('.filter-btn-text').removeClass('text-primary');
+        }
+    }
 }

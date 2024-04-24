@@ -45,11 +45,11 @@ $fnGenerateFilterContent = function($filterItems) use($lang, $fnGenerateFilterBl
         btn
         (
             setClass('search-form-toggle rounded-full gray-300-outline size-sm btn filter-btn'),
-            set::icon('search'),
+            icon('search'),
             bind::click('window.handleFilterToggle($element)'),
             span
             (
-                setClass('common'),
+                setClass('common filter-btn-text'),
                 $lang->metric->filter->common
             ),
             span
