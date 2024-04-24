@@ -81,6 +81,18 @@ class programplanTao extends programplanModel
             ->where('id')->eq($planID)
             ->exec();
 
+        /* IPD项目停/启用阶段时，子阶段同样停/启用。*/
+        if(isset($plan->enabled) && $oldPlan->enabled != $plan->enabled) 
+        {
+            $this->dao->update(TABLE_PROJECT)
+                ->set('deleted')->eq($plan->deleted)
+                ->set('enabled')->eq($plan->enabled)
+                ->where('project')->eq($projectID)
+                ->andWhere('grade')->gt(1)
+                ->andWhere("FIND_IN_SET($planID, `path`)")
+                ->exec();
+        }
+
         if($planChanged) $this->insertProjectSpec($planID, $plan);
         if(dao::isError()) return false;
         return common::createChanges($oldPlan, $plan);
