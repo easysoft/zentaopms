@@ -50,7 +50,7 @@ foreach($config->featureGroup as $group => $features)
                 setID("module{$code}"),
                 set::type('hidden'),
                 set::name("module[{$code}]"),
-                set::value(1)
+                set::value($value)
             );
         }
         $rows[] = h::tr
