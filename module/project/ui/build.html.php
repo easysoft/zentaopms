@@ -54,6 +54,7 @@ if($project->model == 'kanban' && $app->rawModule == 'projectbuild')
     unset($fieldList['actions']['list']['createTest']['data-app']);
     $fieldList['actions']['list']['viewBug']['url'] = $config->build->actionList['projectBugList']['url'];
 }
+if(!$project->multiple) unset($fieldList['execution']);
 $builds = initTableData($builds, $fieldList, $this->build);
 
 dtable
