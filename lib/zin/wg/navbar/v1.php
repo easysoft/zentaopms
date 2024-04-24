@@ -112,6 +112,7 @@ class navbar extends wg
 
         global $app, $lang;
         if($app->tab == 'admin') $app->control->loadModel('admin')->setMenu();
+        commonModel::replaceMenuLang();
         commonModel::setMainMenu();
         commonModel::checkMenuVarsReplaced();
 
@@ -127,7 +128,7 @@ class navbar extends wg
         $activeMenu   = '';
         $activeMenuID = data('activeMenuID');
         $items        = array();
-        foreach ($menu as $menuItem)
+        foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
             if(isset($menuItem->class) && strpos($menuItem->class, 'automation-menu'))

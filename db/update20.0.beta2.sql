@@ -23,3 +23,5 @@ UPDATE `zt_grouppriv` SET `method` = 'editEffort'     WHERE `module` = 'task' AN
 UPDATE `zt_grouppriv` SET `method` = 'deleteWorkhour' WHERE `module` = 'task' AND `method` = 'deleteEstimate';
 
 ALTER TABLE `zt_demandreview` CHANGE `reviewDate` `reviewDate` datetime NULL;
+
+DELETE FROM `zt_lang` where `module` = 'project' and `section` = 'menuOrder';
