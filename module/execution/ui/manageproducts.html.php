@@ -29,7 +29,7 @@ foreach($allProducts as $productID => $productName)
             setClass('product-block modal-content center-row justify-start items-center text-left'),
             checkbox
             (
-                set::rootClass('w-full p-4 pl-0'),
+                set::rootClass('w-full p-4 pl-0 clip'),
                 setClass('linked-product cursor-pointer'),
                 set::name("products[{$index}]"),
                 set::text($productName),
@@ -67,7 +67,7 @@ if($execution->grade == 1 || $execution->grade == 2)
                 setClass('product-block modal-content center-row justify-start items-center text-left'),
                 checkbox
                 (
-                    set::rootClass('w-full p-4 pl-0'),
+                    set::rootClass('w-full p-4 pl-0 clip'),
                     setClass('cursor-pointer'),
                     set::name("products[{$index}]"),
                     set::text($productName),
