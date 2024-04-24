@@ -432,7 +432,7 @@ class docMenu extends wg
             ),
         ));
 
-        if($canAddChild && $showQuestionOfNode && $item->type == 'node' || $item->hasSameQuestion || $item->type == 'question') $menus = array_merge($menus, array(
+        if(($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question') $menus = array_merge($menus, array(
             array('type' => 'divider'),
             array(
                 'key'  => 'addRadio',
