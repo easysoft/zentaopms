@@ -26,7 +26,7 @@ class sso extends control
         $this->app->loadConfig('sso');
         if(!$this->config->sso->turnon) return print($this->locate($locate));
 
-        if($type != 'return') return $this->ssoZen->locateNotifyLink($locate, $referer);
+        if($type != 'return') return $this->ssoZen->locateNotifyLink($this->config->sso->addr, $referer);
 
         $this->ssoZen->idenfyFromSSO($locate);
         return $this->locate($this->createLink('user', 'login', empty($referer) ? '' : "referer=$referer"));
