@@ -11,7 +11,7 @@ $filter->rules->orderBy    = '/^\w+_(desc|asc)$/i';
 $filter->rules->browseType = '/^by\w+$/i';
 $filter->rules->word       = '/^\w+$/';
 $filter->rules->paramName  = '/^[a-zA-Z0-9_\.]+$/';
-$filter->rules->paramValue = '/^[a-zA-Z0-9=_,`#+:\^\\\\\/\.%\*\|\x7f-\xff\-]+$/';
+$filter->rules->paramValue = '/^[a-zA-Z0-9=_,`#+\^\/\.%\*\|\x7f-\xff\-]+$/';
 
 $filter->default             = new stdclass();
 $filter->default->moduleName = 'code';
