@@ -236,7 +236,7 @@ class sso extends control
         $appConfig = json_decode($feishuConfig->secret);
         $appID     = $appConfig->appId;
 
-        $url = sprintf($this->config->sso->feishuAuthAPI, $redirectURI, $appID, $state);
+        $url = sprintf($this->config->sso->feishuAuthAPI, $redirectURI, $appID);
         $this->locate($url);
     }
 
@@ -268,7 +268,7 @@ class sso extends control
         /* Verify the identity of the logged in user. */
         $tokenResult = $this->ssoZen->getFeishuUserToken($code, $accessToken);
         if($tokenResult['result'] == 'fail') return $this->showError($tokenResult['message']);
-        $accessToken = $tokenResult['token'];
+        $userToken = $tokenResult['token'];
 
         /* Get login user information. */
         $userResult = $this->ssoZen->getBindFeishuUser($userToken, $feishuConfig);
