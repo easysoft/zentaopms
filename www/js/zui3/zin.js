@@ -985,6 +985,8 @@
                 else
                 {
                     $form.html(info.data).zuiInit();
+                    const formGrid = $form.zui();
+                    if(formGrid) formGrid.toggleMode(formGrid.mode, true);
                 }
 
                 let keep = options.keep;
