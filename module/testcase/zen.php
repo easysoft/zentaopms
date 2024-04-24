@@ -2421,12 +2421,14 @@ class testcaseZen extends testcase
         if($this->app->tab == 'project' && !$productID)
         {
             $productList = $products;
+            $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($projectID, 0, 'all', $moduleID, 'full', 'active');
         }
         else
         {
             $productList = array();
             $productList['all'] = $this->lang->all;
             if(isset($products[$productID])) $productList[$productID] = $products[$productID];
+            $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         }
 
         /* 获取模块列表。*/

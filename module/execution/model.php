@@ -4004,10 +4004,11 @@ class executionModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function buildCaseSearchForm(array $products, int $queryID, string $actionURL)
+    public function buildCaseSearchForm(array $products, int $queryID, string $actionURL, int $executionID)
     {
         $modules = array();
         foreach($products as $product)
@@ -4066,6 +4067,7 @@ class executionModel extends model
             $this->config->testcase->search['params']['branch']['values'] = $branchPairs;
         }
         $this->config->testcase->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->testcase->statusList);
+        $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID);
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
