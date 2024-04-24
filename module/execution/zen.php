@@ -211,7 +211,7 @@ class executionZen extends execution
         $this->view->storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList, $executionID);
         $this->view->storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $this->view->storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
-        $this->view->summary    = $this->loadModel('product')->summary($stories, $storyType);
+        $this->view->summary    = $this->loadModel('product')->summary($stories, 'all');
     }
 
     /**
@@ -274,6 +274,8 @@ class executionZen extends execution
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->multiBranch  = $multiBranch;
         $this->view->execution    = $execution;
+        $this->view->grades       = $this->loadModel('story')->getGradePairs('story', 'all');
+        $this->view->showGrade    = count($this->view->grades) > 2;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->branchPairs  = $this->loadModel('branch')->getPairs($productID, 'withClosed');
     }

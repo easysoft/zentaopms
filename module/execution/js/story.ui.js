@@ -54,16 +54,18 @@ window.setStatistics = function(element, checkedIdList)
     let checkedEstimate = 0;
     let checkedCase     = 0;
 
+    let rateCount = 0;
     checkedIdList.forEach((rowID) => {
-        const task = element.getRowInfo(rowID);
-        if(task)
+        const story = element.getRowInfo(rowID);
+        if(story)
         {
-            checkedEstimate += parseFloat(task.data.estimate);
+            checkedEstimate += parseFloat(story.data.estimate);
             if(cases[rowID]) checkedCase += 1;
+            if(story.data.isParent == '0') rateCount += 1;
         }
     })
 
-    const rate = Math.round(checkedCase / checkedTotal * 10000) / 100 + '' + '%';
+    const rate = rateCount ? Math.round(checkedCase / rateCount * 10000) / 100 + '' + '%' : 0 + '%';
     return {
         html: checkedSummary.replace('%total%', checkedTotal)
             .replace('%estimate%', checkedEstimate)
@@ -77,8 +79,9 @@ window.renderStoryCell = function(result, info)
     if(info.col.name == 'title' && result)
     {
         let html = '';
+        let gradeLabel = (!showGrade && story.grade < 2) ? '' : grades[story.grade];
         if(typeof modulePairs[story.moduleID] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.moduleID] + "</span> ";
-        if(story.isChild) html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+        if(gradeLabel) html += "<span class='label gray-pale rounded-xl'>" + gradeLabel + "</span>";
         if(html) result.unshift({html});
     }
     return result;

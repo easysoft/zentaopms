@@ -15,6 +15,8 @@ data('activeMenuID', $storyType);
 jsVar('executionID', $execution->id);
 jsVar('childrenAB', $lang->story->childrenAB);
 jsVar('modulePairs', $modulePairs);
+jsVar('showGrade', $showGrade);
+jsVar('grades', $grades);
 
 /* Show feature bar. */
 featureBar
@@ -394,7 +396,7 @@ foreach($stories as $story)
 
 jsVar('cases', $storyCases);
 jsVar('summary', $summary);
-jsVar('checkedSummary', $lang->product->checkedSRSummary);
+jsVar('checkedSummary', $lang->product->checkedAllSummary);
 dtable
 (
     setClass('shadow rounded'),
