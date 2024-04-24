@@ -286,7 +286,7 @@ else
         set::actions(array()),
         div
         (
-            setID('mainContainer'),
+            setID('managePrivFormContainer'),
             setClass('flex'),
             div
             (
