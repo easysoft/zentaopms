@@ -103,6 +103,8 @@ $generateData = function() use ($lang, $title, $cols, $executions, $chartData, $
             setID('pivotChart'),
             set::title($lang->pivot->deviationChart),
             set::shadow(false),
+            set::width('100%'),
+            set::height(300),
             $chartData ? null : setClass('hidden'),
             $chartData ? echarts
             (
@@ -146,7 +148,7 @@ $generateData = function() use ($lang, $title, $cols, $executions, $chartData, $
                         )
                     )
                 )
-            )->size('100%', 300) : null
+            ) : null
         )
     );
 };
