@@ -993,6 +993,7 @@ class story extends control
         foreach($stories as $story)
         {
             if(str_contains(',draft,reviewing,changing,closed,', ",{$story->status},")) continue;
+            if($story->isParent == '1') continue;
 
             $activeStories[$story->id] = $story;
             $storyPairs[$story->id]    = $story->title;

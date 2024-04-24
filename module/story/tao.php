@@ -1929,8 +1929,8 @@ class storyTao extends storyModel
                 $batchCreateTaskLink = helper::createLink('task', 'batchCreate', "executionID={$execution->id}&storyID={$story->id}");
                 $storyEstimateLink   = helper::createLink('execution', 'storyEstimate', "executionID={$execution->id}&storyID={$story->id}");
 
-                $canCreateTask      = common::hasPriv('task', 'create') && $story->status == 'active';
-                $canBatchCreateTask = common::hasPriv('task', 'batchCreate') && $story->status == 'active';
+                $canCreateTask      = common::hasPriv('task', 'create') && $story->status == 'active' && $story->isParent == '0';
+                $canBatchCreateTask = common::hasPriv('task', 'batchCreate') && $story->status == 'active' && $story->isParent == '0';
                 $canStoryEstimate   = common::hasPriv('execution', 'storyEstimate');
 
                 $actions[] = array('name' => 'createTask',      'url' => $canCreateTask      ? $createTaskLink      : null, 'disabled' => !$canCreateTask, 'className' => 'create-task-btn');

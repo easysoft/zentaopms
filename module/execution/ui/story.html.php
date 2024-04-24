@@ -400,14 +400,6 @@ foreach($stories as $story)
 {
     $story->moduleID = $story->module;
     $data[] = $this->story->formatStoryForList($story, $options, $storyType);
-    if(!isset($story->children)) continue;
-
-    /* Children. */
-    foreach($story->children as $key => $child)
-    {
-        $child->moduleID = $child->module;
-        $data[] = $this->story->formatStoryForList($child, $options, $storyType);
-    }
 }
 
 jsVar('cases', $storyCases);
