@@ -8726,37 +8726,5 @@ class upgradeModel extends model
                 $this->saveLogs($e->getMessage());
             }
         }
-        elseif($this->config->db->driver == 'dm')
-        {
-            try
-            {
-                $tables = $this->dao->select('TABLE_NAME, COLUMN_NAME, DATA_TYPE')->from('ALL_TAB_COLUMNS')
-                    ->where('OWNER')->eq($this->config->db->name)
-                    ->andWhere('DATA_TYPE')->in('DATE,DATETIME')
-                    ->fetchAll();
-
-                foreach($tables as $table)
-                {
-                    $tableName  = $table->TABLE_NAME;
-                    $columnName = $table->COLUMN_NAME;
-                    $columnType = $table->DATA_TYPE;
-
-                    if(strpos($tableName, $this->config->db->prefix) !== 0) continue;
-
-                    if($columnType == 'DATE')
-                    {
-                        $this->dbh->exec("UPDATE $tableName SET $columnName = NULL WHERE $columnName = '0000-00-00'");
-                    }
-                    elseif($columnType == 'DATETIME')
-                    {
-                        $this->dbh->exec("UPDATE $tableName SET $columnName = NULL WHERE $columnName = '0000-00-00 00:00:00'");
-                    }
-                }
-            }
-            catch(PDOException $e)
-            {
-                $this->saveLogs($e->getMessage());
-            }
-        }
     }
 }
