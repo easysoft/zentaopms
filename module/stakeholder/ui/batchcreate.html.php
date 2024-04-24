@@ -33,6 +33,7 @@ jsVar('projectID', $projectID);
 
 formBatchPanel
 (
+    set::className('batchcreate-stakeholder-panel'),
     set::width('1/2'),
     to::heading
     (
