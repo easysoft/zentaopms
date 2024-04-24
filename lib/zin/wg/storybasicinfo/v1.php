@@ -136,8 +136,9 @@ class storyBasicInfo extends wg
         {
             $items[$lang->story->stage] = array
             (
-                'class' => 'stage-line',
-                'text'  => zget($lang->story->stageList, $this->getMinStage($story, $branches), '')
+                'control' => 'text',
+                'class'   => 'stage-line',
+                'text'    => zget($lang->story->stageList, $this->getMinStage($story, $branches), '')
             );
         }
         $items[$lang->story->category] = zget($lang->story->categoryList, $story->category);
