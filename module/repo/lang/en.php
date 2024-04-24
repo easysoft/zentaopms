@@ -179,7 +179,6 @@ $lang->repo->logStyles['D'] = 'Delete';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['GitFox']     = 'GitFox';
 $lang->repo->scmList['Gitlab']     = 'GitLab';
 $lang->repo->scmList['Gogs']       = 'Gogs';
 if(!$config->inQuickon) $lang->repo->scmList['Gitea']      = 'Gitea';
