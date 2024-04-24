@@ -78,7 +78,7 @@ class pivotZen extends pivot
             {
                 $params  = helper::safe64Encode("groupID={$group->id}&pivotID={$pivot->id}");
                 $url     = inlink('preview', "dimension={$dimensionID}&group={$currentGroup->id}&method=show&params={$params}");
-                $menus[] = (object)array('id' => $group->id . '_' . $pivot->id, 'parent' => $group->id, 'name' => $pivot->name, 'url' => $url);
+                $menus[] = (object)array('id' => $group->id . '_' . $pivot->id, 'parent' => $group->grade > 1 ? $group->id : 0, 'name' => $pivot->name, 'url' => $url);
             }
         }
 
