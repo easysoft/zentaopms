@@ -95,7 +95,6 @@ $generateData = function() use ($lang, $title, $cols, $executions, $chartData, $
                 set::cols($cols),
                 set::data($executions),
                 set::emptyTip($lang->error->noData),
-                set::height(jsRaw('getHeight'))
             )
         ),
         panel
@@ -103,11 +102,11 @@ $generateData = function() use ($lang, $title, $cols, $executions, $chartData, $
             setID('pivotChart'),
             set::title($lang->pivot->deviationChart),
             set::shadow(false),
-            set::width('100%'),
-            set::height(300),
             $chartData ? null : setClass('hidden'),
             $chartData ? echarts
             (
+                set::width('100%'),
+                set::height(300),
                 set::xAxis
                 (
                     array
