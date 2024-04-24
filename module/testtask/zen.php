@@ -657,9 +657,14 @@ class testtaskZen extends testtask
         $automation = $this->loadModel('zanode')->getAutomationByProduct($run->case->product);
         if($run->case->auto == 'auto' && $confirm == '')
         {
-            if(!$automation) return $this->send(array('load' => $cancelURL));
+            if(!$automation)
+            {
+                if(helper::isAjaxRequest() && isInModal()) $this->locate($cancelURL);;
+                return $this->send(array('load' => $cancelURL));
+            }
 
             $confirmURL = inlink('runCase', "runID=$runID&caseID=$caseID&version=$version&confirm=yes");
+            if(helper::isAjaxRequest() && isInModal()) return print(js::start() . "zui.Modal.hide($(document).find('.modal')); zui.Modal.confirm('{$this->lang->zanode->runCaseConfirm}').then((res) => {if(res){ openUrl({url: '{$confirmURL}', load: 'modal', size: 'lg'});}else{ openUrl({url: '{$cancelURL}', load: 'modal', size: 'lg'});}});" . js::end());
             return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->zanode->runCaseConfirm, 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
         }
 
@@ -667,7 +672,11 @@ class testtaskZen extends testtask
         /* Perform automated testing related operations after user confirmation. */
         if($confirm == 'yes')
         {
-            if(!$automation) return $this->send(array('load' => $cancelURL));
+            if(!$automation)
+            {
+                if(helper::isAjaxRequest() && isInModal()) $this->locate($cancelURL);;
+                return $this->send(array('load' => $cancelURL));
+            }
             $resultID = $this->testtask->initResultForAutomatedTest($runID, $caseID, $run->case->version, $automation->node);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'load' => $this->createLink('zanode', 'browse')));
 
