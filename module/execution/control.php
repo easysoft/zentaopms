@@ -2933,13 +2933,15 @@ class execution extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $executionConcept = $this->lang->execution->common;
         if($this->app->tab == 'project')
         {
             $project = $this->project->getByID($this->session->project);
-            if(!empty($project->model) and $project->model == 'waterfall') $this->lang->executionCommon = $this->lang->project->stage;
+            if(!empty($project->model) && $project->model == 'waterfall') $executionConcept = $this->lang->project->stage;
+            if(!empty($project->model) && $project->model == 'scrum')     $executionConcept = $this->lang->executionCommon;
         }
 
-        $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $this->lang->execution->common;
+        $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $executionConcept;
         $this->display();
     }
 
