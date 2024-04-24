@@ -2399,7 +2399,6 @@ class testcaseZen extends testcase
         $this->config->testcase->search['params']['module']['values']  = $modules;
         $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, $branch, 0, 0, true);
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
-        $this->config->testcase->search['params']['story']['values']   = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
 
         $product = $this->loadModel('product')->fetchByID($productID);
         if((isset($product->type) && $product->type == 'normal') || $this->app->tab == 'project')
