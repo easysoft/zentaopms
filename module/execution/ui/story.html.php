@@ -15,12 +15,29 @@ data('activeMenuID', $storyType);
 jsVar('executionID', $execution->id);
 jsVar('childrenAB', $lang->story->childrenAB);
 jsVar('modulePairs', $modulePairs);
+jsVar('oldShowGrades', $showGrades);
 jsVar('showGrade', $showGrade);
 jsVar('grades', $grades);
 
 /* Show feature bar. */
 featureBar
 (
+    to::leading
+    (
+        picker
+        (
+            set::name('showGrades'),
+            set::items($gradeMenu),
+            set::search(false),
+            set::multiple(true),
+            set::width('145px'),
+            setStyle('justify-content', 'center'),
+            set::display($lang->story->viewAllGrades),
+            set::menu(array('checkbox' => true)),
+            set::value($showGrades),
+            set::onPopHidden(jsRaw('setShowGrades'))
+        )
+    ),
     set::current($this->session->storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type={key}")),
     li(searchToggle(set::module('executionStory'), set::open($type == 'bysearch')))

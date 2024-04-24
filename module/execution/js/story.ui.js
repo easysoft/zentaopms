@@ -86,3 +86,12 @@ window.renderStoryCell = function(result, info)
     }
     return result;
 };
+
+window.setShowGrades = function()
+{
+    const showGrades = $('[name^=showGrades]').zui('picker').$.state.value;
+    if(oldShowGrades == showGrades) return;
+
+    const link = $.createLink('product', 'ajaxSetShowGrades', 'module=execution&showGrades=' + showGrades);
+    $.get(link, function() { loadCurrentPage(); });
+}

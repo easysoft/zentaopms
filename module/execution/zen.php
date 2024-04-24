@@ -257,6 +257,9 @@ class executionZen extends execution
             }
         }
 
+        $project = $this->loadModel('project')->fetchByID($execution->project);
+        if(!($execution->type == 'stage' && in_array($execution->attribute, array('request', 'design')))) $project->storyType = 'story';
+
         $productPairs = $this->loadModel('product')->getProductPairsByProject($execution->id); // Get execution's product.
         if(empty($productID)) $productID = (int)key($productPairs);
 
@@ -274,8 +277,10 @@ class executionZen extends execution
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->multiBranch  = $multiBranch;
         $this->view->execution    = $execution;
-        $this->view->grades       = $this->loadModel('story')->getGradePairs('story', 'all');
+        $this->view->gradeMenu    = $this->loadModel('story')->getGradeMenu($storyType, $project);
+        $this->view->grades       = $this->story->getGradePairs('story', 'all');
         $this->view->showGrade    = count($this->view->grades) > 2;
+        $this->view->showGrades   = isset($this->config->execution->showGrades) ? $this->config->execution->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->branchPairs  = $this->loadModel('branch')->getPairs($productID, 'withClosed');
     }

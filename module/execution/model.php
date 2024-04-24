@@ -75,7 +75,6 @@ class executionModel extends model
 
                 if(in_array($execution->attribute, array('request', 'review')))
                 {
-                    $features['story'] = false;
                     $features['plan'] = false;
                 }
             }
