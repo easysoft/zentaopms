@@ -21,3 +21,5 @@ UPDATE `zt_chart` SET `sql` = 'SELECT t1.id, t1.NAME AS project, IFNULL( t2.NAME
 UPDATE `zt_grouppriv` SET `method` = 'recordWorkhour' WHERE `module` = 'task' AND `method` = 'recordEstimate';
 UPDATE `zt_grouppriv` SET `method` = 'editEffort'     WHERE `module` = 'task' AND `method` = 'editEstimate';
 UPDATE `zt_grouppriv` SET `method` = 'deleteWorkhour' WHERE `module` = 'task' AND `method` = 'deleteEstimate';
+
+ALTER TABLE `zt_demandreview` CHANGE `reviewDate` `reviewDate` datetime NULL;
