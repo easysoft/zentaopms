@@ -35,10 +35,10 @@ window.renderCell = function(result, {col, row})
         return result;
     }
 
-    if(col.name == 'execution')
+    if(col.name == 'executionName')
     {
         let executionHtml = "<span title='" + row.data.executionName + "'>" + row.data.executionName + '</span>';
-        if(row.data.executionDeleted == 1) executionHtml += " <span class='label label-danger'>" + deletedTip + '</span>';
+        if(row.data.executionDeleted == 1) executionHtml += " <span class='label danger-pale'>" + deletedTip + '</span>';
         result[0] = {html: executionHtml};
         return result;
     }
