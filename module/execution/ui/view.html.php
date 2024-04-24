@@ -210,7 +210,7 @@ div
                         setClass('text-lg font-bold'),
                         $statData->storyCount
                     ),
-                    $lang->story->common
+                    $lang->common->story
                 ) : null,
                 div
                 (
