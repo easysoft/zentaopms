@@ -104,8 +104,9 @@ class ssoZen extends sso
     {
         if($this->get->status != 'success' || md5($this->get->data) != $this->get->md5) return false;
 
-        $last = $this->server->request_time;
-        $data = json_decode(base64_decode($this->get->data));
+        $userIP = helper::getRemoteIp();
+        $last   = $this->server->request_time;
+        $data   = json_decode(base64_decode($this->get->data));
 
         if($data->auth != $this->computeAuth($data->token)) return false;
 
@@ -224,4 +225,3 @@ class ssoZen extends sso
         return md5($code . $userIP . $token . $key);
     }
 }
-
