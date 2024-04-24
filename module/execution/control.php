@@ -626,7 +626,7 @@ class execution extends control
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&type=bysearch&queryID=myQueryID&moduleID=0&orderBy=$orderBy");
-        $this->execution->buildCaseSearchForm($products, $param, $actionURL);
+        $this->execution->buildCaseSearchForm($products, $param, $actionURL, $executionID);
 
         $this->executionZen->assignTestcaseVars($executionID, $productID, $branchID, $moduleID, $orderBy, $type, $pager);
 
