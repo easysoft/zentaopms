@@ -92,7 +92,7 @@ $lang->metric->placeholder->product   = "All Products";
 $lang->metric->placeholder->execution = "All Executions";
 $lang->metric->placeholder->dept      = "All Departments";
 $lang->metric->placeholder->user      = "All Users";
-$lang->metric->placeholder->program   = "All Program Sets";
+$lang->metric->placeholder->program   = "All Program";
 
 $lang->metric->query = new stdclass();
 $lang->metric->query->action = 'Query';
