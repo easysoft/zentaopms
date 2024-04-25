@@ -31,6 +31,7 @@ class editor extends wg
         .tippy-content > div {border: 1px solid #d8dbde!important;}
         .tippy-content zen-editor-menu-item {line-height: normal;}
         .tippy-content zen-editor-menu-item .label {all: unset;}
+        .tiptap.ProseMirror p {margin:0;}
     CSS;
 
     public static function getPageCSS(): ?string
