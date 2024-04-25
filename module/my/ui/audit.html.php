@@ -16,6 +16,8 @@ foreach(array_keys($lang->my->featureBar['audit']) as $type) $reviewPrivs[$type]
 jsVar('viewLink',   createLink('{module}', 'view',   'id={id}'));
 jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
 jsVar('reviewPrivs', $reviewPrivs);
+jsVar('projectPriv', hasPriv('review', 'assess'));
+jsVar('projectReviewLink', createLink('review', 'assess', 'reviewID={id}'));
 
 $rawMethod = $app->rawMethod;
 if($rawMethod != 'audit' && isset($lang->my->featureBar[$rawMethod]['audit'])) $lang->my->featureBar[$rawMethod] = $lang->my->featureBar[$rawMethod]['audit'];
