@@ -19,6 +19,7 @@ window.loadProduct = function()
             if(!result)
             {
                 $product.$.setValue(oldProductID.toString(), true);
+                loadProductBranches(oldProductID);
                 return false;
             }
         });
