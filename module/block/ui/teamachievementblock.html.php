@@ -29,94 +29,47 @@ blockPanel
                 (
                     set::width('50%'),
                     setClass('item-task px-1 w-1/2'),
+                    div(setClass('h-0 w-0'), div(setClass('item-icon h-9 w-9'))),
+                    div(setClass('text-gray pl-1'), $lang->block->teamachievement->finishedTasks),
                     div
                     (
-                        setClass('h-0 w-0'),
-                        div(setClass('item-icon h-9 w-9'))
-                    ),
-                    div
-                    (
-                        setClass('text-gray pl-1'),
-                        $lang->block->teamachievement->finishedTasks
-                    ),
-                    div
-                    (
-                        setClass('mt-2 items-center pl-1'),
-                        div
+                        setClass('mt-2 items-center flex pl-1'),
+                        cell
                         (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-gray text-base'),
-                                $lang->today
-                            ),
-                            span
-                            (
-                                setClass('ml-0.5 text-md'),
-                                $finishedTasks
-                            )
+                            setClass('items-center text-gray border-r pr-2'),
+                            span(setClass('text-base'), $lang->yesterday),
+                            span(setClass('text-md pl-1 font-bold'), $yesterdayTasks)
                         ),
-                        $comparedTasks > 0 ? div
+                        cell
                         (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-base text-success'),
-                                $lang->block->teamachievement->vs
-                            ),
-                            span
-                            (
-                                setClass('text-success text-md pl-1'),
-                                '+' . $comparedTasks
-                            )
-                        ) : null
+                            setClass('items-center text-success pl-2'),
+                            span(setClass('text-base'), $lang->today),
+                            span(setClass('text-md pl-1 font-bold'), $finishedTasks)
+                        )
                     )
                 ),
                 cell
                 (
                     set::width('50%'),
                     setClass('item-story pl-8 w-1/2'),
+                    div(setClass('h-0 w-0'), div(setClass('item-icon h-9 w-9'))),
+                    div(setClass('h-0 w-0'), div(setClass('item-icon h-9 w-9'))),
+                    div(setClass('text-gray pl-1'), $lang->block->teamachievement->createdStories),
                     div
                     (
-                        setClass('h-0 w-0'),
-                        div(setClass('item-icon h-9 w-9'))
-                    ),
-                    div
-                    (
-                        setClass('text-gray pl-1'),
-                        $lang->block->teamachievement->createdStories
-                    ),
-                    div
-                    (
-                        setClass('mt-2 items-center pl-1'),
-                        div
+                        setClass('mt-2 items-center flex pl-1'),
+                        cell
                         (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-gray text-base'),
-                                $lang->today
-                            ),
-                            span
-                            (
-                                setClass('ml-0.5 text-md'),
-                                $createdStories
-                            )
+                            setClass('items-center text-gray border-r pr-2'),
+                            span(setClass('text-base'), $lang->yesterday),
+                            span(setClass('text-md pl-1 font-bold'), $yesterdayStories)
                         ),
-                        $comparedStories > 0 ? div
+                        cell
                         (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-base text-success'),
-                                $lang->block->teamachievement->vs
-                            ),
-                            span
-                            (
-                                setClass('text-success text-md pl-1'),
-                                '+' . $comparedStories
-                            )
-                        ) : null
+                            setClass('items-center text-success pl-2'),
+                            span(setClass('text-base'), $lang->today),
+                            span(setClass('text-md pl-1 font-bold'), $createdStories)
+                        )
                     )
                 )
             )
@@ -132,94 +85,46 @@ blockPanel
                 (
                     set::width('50%'),
                     setClass('item-bug px-1 w-1/2'),
+                    div(setClass('h-0 w-0'), div(setClass('item-icon h-9 w-9'))),
+                    div(setClass('text-gray pl-1'), $lang->block->teamachievement->closedBugs),
                     div
                     (
-                        setClass('h-0 w-0'),
-                        div(setClass('item-icon h-9 w-9'))
-                    ),
-                    div
-                    (
-                        setClass('text-gray pl-1'),
-                        $lang->block->teamachievement->closedBugs
-                    ),
-                    div
-                    (
-                        setClass('mt-2 items-center pl-1'),
-                        div
+                        setClass('mt-2 items-center flex pl-1'),
+                        cell
                         (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-gray text-base'),
-                                $lang->today
-                            ),
-                            span
-                            (
-                                setClass('ml-0.5 text-md'),
-                                $closedBugs
-                            )
+                            setClass('items-center text-gray border-r pr-2'),
+                            span(setClass('text-base'), $lang->yesterday),
+                            span(setClass('text-md pl-1 font-bold'), $yesterdayBugs)
                         ),
-                        $comparedBugs > 0 ? div
+                        cell
                         (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-base text-success'),
-                                $lang->block->teamachievement->vs
-                            ),
-                            span
-                            (
-                                setClass('text-success text-md pl-1'),
-                                '+' . $comparedBugs
-                            )
-                        ) : null
+                            setClass('items-center text-success pl-2'),
+                            span(setClass('text-base'), $lang->today),
+                            span(setClass('text-md pl-1 font-bold'), $closedBugs)
+                        )
                     )
                 ),
                 cell
                 (
                     set::width('50%'),
                     setClass('item-case pl-8 w-1/2'),
+                    div(setClass('h-0 w-0'), div(setClass('item-icon h-9 w-9'))),
+                    div(setClass('text-gray pl-1'), $lang->block->teamachievement->runCases),
                     div
                     (
-                        setClass('h-0 w-0'),
-                        div(setClass('item-icon h-9 w-9'))
-                    ),
-                    div
-                    (
-                        setClass('text-gray pl-1'),
-                        $lang->block->teamachievement->runCases
-                    ),
-                    div
-                    (
-                        setClass('mt-2 items-center pl-1'),
-                        div
+                        setClass('mt-2 items-center flex pl-1'),
+                        cell
                         (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-gray text-base'),
-                                $lang->today
-                            ),
-                            span
-                            (
-                                setClass('ml-0.5 text-md'),
-                                $runCases
-                            )
+                            setClass('items-center text-gray border-r pr-2'),
+                            span(setClass('text-base'), $lang->yesterday),
+                            span(setClass('text-md pl-1 font-bold'), $yesterdayCases)
                         ),
-                        $comparedCases > 0 ? div
+                        cell
                         (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-base text-success'),
-                                $lang->block->teamachievement->vs
-                            ),
-                            span
-                            (
-                                setClass('text-success text-md pl-1'),
-                                '+' . $comparedCases
-                            )
-                        ) : null
+                            setClass('items-center text-success pl-2'),
+                            span(setClass('text-base'), $lang->today),
+                            span(setClass('text-md pl-1 font-bold'), $runCases)
+                        )
                     )
                 )
             )
@@ -235,94 +140,23 @@ blockPanel
                 (
                     set::width('50%'),
                     setClass('item-hour px-1 w-1/2'),
+                    div(setClass('h-0 w-0'), div(setClass('item-icon h-9 w-9'))),
+                    div(setClass('text-gray pl-1'), $lang->block->teamachievement->consumedHours . ' / ' . $lang->block->projectstatistic->hour),
                     div
                     (
-                        setClass('h-0 w-0'),
-                        div(setClass('item-icon h-9 w-9'))
-                    ),
-                    div
-                    (
-                        setClass('text-gray pl-1'),
-                        $lang->block->teamachievement->consumedHours . ' / ' . $lang->block->projectstatistic->hour
-                    ),
-                    div
-                    (
-                        setClass('mt-2 items-center pl-1'),
-                        div
+                        setClass('mt-2 items-center flex pl-1'),
+                        cell
                         (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-gray text-base'),
-                                $lang->today
-                            ),
-                            span
-                            (
-                                setClass('ml-0.5 text-md'),
-                                $consumedHours
-                            )
+                            setClass('items-center text-gray border-r pr-2'),
+                            span(setClass('text-base'), $lang->yesterday),
+                            span(setClass('text-md pl-1 font-bold'), $yesterdayHours)
                         ),
-                        $comparedHours > 0 ? div
+                        cell
                         (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-base text-success'),
-                                $lang->block->teamachievement->vs
-                            ),
-                            span
-                            (
-                                setClass('text-success text-md pl-1'),
-                                '+' . $comparedHours
-                            ),
-                        ) : null
-                    )
-                ),
-                cell
-                (
-                    set::width('50%'),
-                    setClass('item-workload pl-8 w-1/2'),
-                    div
-                    (
-                        setClass('h-0 w-0'),
-                        div(setClass('item-icon h-9 w-9'))
-                    ),
-                    div
-                    (
-                        setClass('text-gray  pl-1'),
-                        $lang->block->teamachievement->totalWorkload . ' / ' . $lang->block->projectstatistic->personDay
-                    ),
-                    div
-                    (
-                        setClass('mt-2 items-center pl-1'),
-                        div
-                        (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-gray text-base'),
-                                $lang->block->teamachievement->accrued
-                            ),
-                            span
-                            (
-                                setClass('ml-0.5 text-md'),
-                                $totalWorkload
-                            )
-                        ),
-                        $todayWorkload > 0 ? div
-                        (
-                            setClass('items-center'),
-                            span
-                            (
-                                setClass('text-success text-base'),
-                                $lang->today
-                            ),
-                            span
-                            (
-                                setClass('text-success text-md pl-1'),
-                                '+' . $todayWorkload
-                            )
-                        ) : null
+                            setClass('items-center text-success pl-2'),
+                            span(setClass('text-base'), $lang->today),
+                            span(setClass('text-md pl-1 font-bold'), $consumedHours)
+                        )
                     )
                 )
             )
