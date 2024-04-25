@@ -3657,7 +3657,7 @@ class storyModel extends model
             $executionID = empty($execution) ? 0 : $execution->id;
             if(!helper::isAjaxRequest('modal') && $this->config->vision != 'lite')
             {
-                $mainMenu[] = commonModel::buildActionItem('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'split', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
+                $mainMenu[] = commonModel::buildActionItem($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'split', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
 
                 $disabled = $story->status != 'active' || !$this->checkCanSplit($story);
                 if($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate'))
