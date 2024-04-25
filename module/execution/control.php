@@ -1110,6 +1110,7 @@ class execution extends control
                 ->setIF($this->post->status == 'closed' && $oldExecution->status != 'closed', 'closedDate', helper::now())
                 ->setIF($this->post->status == 'suspended' && $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
                 ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
+                ->setDefault('project', $oldExecution->project)
                 ->setDefault('team', $this->post->name)
                 ->setDefault('branch', $this->post->branch)
                 ->setDefault('attribute', $oldExecution->attribute)

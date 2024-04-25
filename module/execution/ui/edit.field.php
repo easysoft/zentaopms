@@ -35,7 +35,7 @@ if($project)
     }
     elseif($project->model == 'agileplus')
     {
-        $fields->field('project')
+        $fields->field('type')
             ->label($lang->execution->method)
             ->disabled()
             ->value(zget($lang->execution->typeList, data('execution.type')));
