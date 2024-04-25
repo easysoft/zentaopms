@@ -55,6 +55,7 @@ class storyModel extends model
         {
             $parent = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
             $story->parentName    = $parent->title;
+            $story->parentType    = $parent->type;
             $story->parentChanged = $story->parentVersion > 0 && $parent->version > $story->parentVersion && $parent->status == 'active';
         }
 
