@@ -100,11 +100,12 @@ class storyBasicInfo extends wg
             {
                 foreach($story->planTitle as $planID => $planTitle)
                 {
-                    $planTitleItems[] = hasPriv('productplan', 'view') ? $planTitle : array
+                    $planTitleItems[] = hasPriv('productplan', 'view') ? array
                     (
-                        'url'     => createLink('plan', 'view', "planID=$planID"),
+                        'control' => 'link',
+                        'url'     => createLink('productplan', 'view', "planID=$planID"),
                         'text'    => $planTitle
-                    );
+                    ) : $planTitle;
                 }
             }
             $items[$lang->story->plan] = array
