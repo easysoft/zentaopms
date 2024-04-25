@@ -84,13 +84,21 @@ class thinkOptions extends wg
             ),
             $showOther ? div
             (
-                setClass('w-full flex justify-between items-center h-8 px-2.5 rounded mt-1'),
-                setStyle(array('background' => 'rgba(242, 244, 247, .7)', '--tw-ring-color' => 'rgba(var(--color-gray-300-rgb), .7)', 'box-shadow' => 'var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)')),
+                setClass('w-full flex justify-between items-center h-8 px-2.5 rounded mt-1 ring-opacity-70 ring-gray-300'),
+                setStyle(array('background' => 'rgba(242, 244, 247, .7)', 'box-shadow' => 'var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)')),
                 div
                 (
                     setClass('flex items-center'),
-                    div(setStyle(array('width' => '44px', 'color' => '#5E626D')), data('lang.other')),
-                    div(setStyle(array('color' => 'var(--color-gray-400)')), data('lang.thinkwizard.step.pleaseInput')),
+                    div
+                    (
+                        setClass('w-11'),
+                        data('lang.other')
+                    ),
+                    div
+                    (
+                        setClass('text-gray-400'),
+                        data('lang.thinkwizard.step.pleaseInput'),
+                    ),
                 ),
                 checkbox
                 (
