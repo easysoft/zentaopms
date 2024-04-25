@@ -1267,8 +1267,8 @@ class bugModel extends model
                 if(!isset($caseSteps[$stepId])) continue;
                 $step = $caseSteps[$stepId];
 
-                $stepDesc   = '<p>' . str_replace("\n", '</p><p>', $step->desc)   . '</p>';
-                $stepExpect = '<p>' . str_replace("\n", '</p><p>', $step->expect) . '</p>';
+                $stepDesc   = str_replace("\n", '</p><p>', $step->desc);
+                $stepExpect = str_replace("\n", '</p><p>', $step->expect);
                 $stepResult = (!isset($stepResults[$stepId]) or empty($stepResults[$stepId]['real'])) ? '' : $stepResults[$stepId]['real'];
 
                 $bugStep   .= '<p>' . $step->name . '. ' . $stepDesc   . '</p>';
@@ -1278,8 +1278,11 @@ class bugModel extends model
         }
 
         $bugSteps  = $run->case->precondition != '' ? "<p>[" . $this->lang->testcase->precondition . "]</p>" . "\n" . $run->case->precondition : '';
+        $bugSteps .= '<p></p>';
         $bugSteps .= !empty($stepResults) && !empty($bugStep)   ? str_replace(array('<br/>', '<p></p>'), '', $this->lang->bug->tplStep)   . $bugStep   : $this->lang->bug->tplStep;
+        $bugSteps .= '<p></p>';
         $bugSteps .= !empty($stepResults) && !empty($bugResult) ? str_replace(array('<br/>', '<p></p>'), '', $this->lang->bug->tplResult) . $bugResult : $this->lang->bug->tplResult;
+        $bugSteps .= '<p></p>';
         $bugSteps .= !empty($stepResults) && !empty($bugExpect) ? str_replace(array('<br/>', '<p></p>'), '', $this->lang->bug->tplExpect) . $bugExpect : $this->lang->bug->tplExpect;
 
         if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getByID($run->task);
