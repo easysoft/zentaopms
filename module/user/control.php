@@ -743,7 +743,7 @@ class user extends control
         $method = strtolower($method);
 
         $this->app->loadLang('my');
-        $this->app->loadLang($module == 'requirement' ? 'story' : $module);
+        $this->app->loadLang($module);
 
         /* 判断禁止访问的类型。*/
         /* Judge the type of deny. */
