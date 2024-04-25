@@ -55,6 +55,7 @@ class thinkTableInput extends thinkStep
                 set::labelClass('required'),
                 input
                 (
+                    set::type('number'),
                     set::name($requiredRowsName),
                     set::value($requiredRows),
                     set::placeholder($lang->thinkwizard->step->inputContent),
