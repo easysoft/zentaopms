@@ -63,7 +63,7 @@ class caseBasicInfo extends wg
                 }
                 else if($tab == 'project')
                 {
-                    $moduleItems[] = $canBrowseProjectTestCase ? a(set::href(createLink('project', 'testcase', "projectID={$this->session->project}&productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id")), $module->name) : $module->name;
+                    $moduleItems[] = $canBrowseProjectTestCase ? a(set::href(createLink('project', 'testcase', "projectID={$app->session->project}&productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id")), $module->name) : $module->name;
                 }
                 else
                 {
@@ -99,7 +99,7 @@ class caseBasicInfo extends wg
 
         $tab       = $app->tab;
         $storyText = isset($case->storyTitle) ? "#{$case->story}:{$case->storyTitle}" : '';
-        $param     = $tab == 'project' ? "&version=0&projectID={$this->session->project}" : '';
+        $param     = $tab == 'project' ? "&version=0&projectID={$app->session->project}" : '';
         $story     = array();
         $story[]   = hasPriv('story', 'view') ? a(set::href(createLink('story', 'view', "storyID={$case->story}{$param}")), setData(array('toggle' => 'modal', 'size' => 'lg')), $storyText) : $storyText;
         if($case->story && $case->storyStatus == 'active' && $case->latestStoryVersion > $case->storyVersion)
