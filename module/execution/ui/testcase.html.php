@@ -46,7 +46,7 @@ $this->config->testcase->dtable->fieldList['title']['link'] = array('module' => 
 $this->config->testcase->dtable->fieldList['bugs']['link']  = array('module' => 'testcase', 'method' => 'bugs', 'params' => "runID=0&caseID={id}");
 foreach($config->testcase->dtable->fieldList['actions']['list'] as $method => $action)
 {
-    if(isset($action['url']) && isset($action['url']['params'])) $config->testcase->dtable->fieldList['actions']['list'][$method]['url']['params'] = str_replace('{caseID}', '{id}', $action['url']['params']);
+    if(isset($action['url']) && isset($action['url']['params'])) $config->testcase->dtable->fieldList['actions']['list'][$method]['url']['params'] = str_replace(array('{caseID}', '{runID}'), array('{id}', '0'), $action['url']['params']);
 }
 
 $this->loadModel('testcase');
