@@ -41,4 +41,24 @@ class dimension extends control
         $this->view->dimensionID = $dimensionID;
         $this->display();
     }
+
+    /**
+     * Drop menu page, type is used for tree-browsegroup link.
+     *
+     * @access public
+     * @param  string currentModule
+     * @param  string currentMethod
+     * @param  int    dimensionID
+     * @param  string type          screen|pivot|chart
+     * @return void
+     */
+    public function ajaxGetOldDropMenu($currentModule, $currentMethod, $dimensionID, $type = '')
+    {
+        $this->view->currentModule = $currentModule;
+        $this->view->currentMethod = $currentMethod;
+        $this->view->dimensionID   = $dimensionID;
+        $this->view->type          = $type;
+        $this->view->dimensions    = $this->dimension->getList();
+        $this->display();
+    }
 }
