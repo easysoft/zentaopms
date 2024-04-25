@@ -46,13 +46,35 @@ foreach($projects as $projectID => $projectName)
 $burn = div
 (
     div(setClass('font-bold mb-2'), $lang->block->executionstatistic->burn),
-    burn
+    echarts
     (
-        set::responsive(false),
-        set::height(112),
-        set::referenceLine(true),
-        set::lineSize(3),
-        set::data($chartData['burnLine'])
+        set::color(array('#2B80FF', '#D2D6E5')),
+        set::width('100%'),
+        set::height(140),
+        set::grid(array('left' => '30px', 'top' => '30px', 'right' => '10px', 'bottom' => '0',  'containLabel' => true)),
+        set::legend(array('show' => true, 'right' => '0')),
+        set::xAxis(array('type' => 'category', 'data' => $chartData['labels'], 'boundaryGap' => false, 'splitLine' => array('show' => false), 'axisTick' => array('alignWithLabel' => true, 'interval' => '0'), 'axisLabel' => array('rotate' => 45))),
+        set::yAxis(array('type' => 'value', 'name' => 'H', 'minInterval' => $chartData['baseLine'][0], 'splitLine' => array('show' => false), 'axisLine' => array('show' => true, 'color' => '#DDD'))),
+        set::series
+        (
+            array
+            (
+                array
+                (
+                    'type' => 'line',
+                    'name' => $lang->block->productstatistic->done,
+                    'data' => $chartData['burnLine'],
+                    'emphasis' => array('label' => array('show' => true))
+                ),
+                array
+                (
+                    'type' => 'line',
+                    'name' => $lang->block->productstatistic->opened,
+                    'data' => $chartData['baseLine'],
+                    'emphasis' => array('label' => array('show' => true))
+                )
+            )
+        )
     )
 );
 
@@ -208,7 +230,7 @@ if($longBlock)
         ),
         col
         (
-            setClass('gap-6 flex-auto'),
+            setClass('gap-0 flex-auto'),
             $burn,
             $taskStoryInfo
         )
