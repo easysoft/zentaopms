@@ -2728,7 +2728,6 @@ class blockZen extends block
         $closedBugGroup    = $this->metric->getResultByCode('count_of_daily_closed_bug',    array('year' => join(',', $years), 'month' => join(',', $months))); // 关闭Bug数。
         $runCaseGroup      = $this->metric->getResultByCode('count_of_daily_run_case',      array('year' => join(',', $years), 'month' => join(',', $months))); // 执行用例数。
         $consumedGroup     = $this->metric->getResultByCode('hour_of_daily_effort',         array('year' => join(',', $years), 'month' => join(',', $months))); // 消耗工时。
-        $totalEffortGroup  = $this->metric->getResultByCode('day_of_daily_effort',          array('year' => join(',', $years), 'month' => join(',', $months))); // 累计工作量。
 
         /* 获取今日完成任务数和昨日完成任务数。 */
         $finishedTasks  = 0;
@@ -2795,32 +2794,16 @@ class blockZen extends block
             }
         }
 
-        /* 获取总投入的人天和今日投入的人天。 */
-        $totalWorkload = 0;
-        $todayWorkload = 0;
-        if($totalEffortGroup)
-        {
-            foreach($totalEffortGroup as $data)
-            {
-                $totalWorkload += $data['value'];
-                $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
-                if($currentDay == date('Y-m-d')) $todayWorkload = $data['value'];
-            }
-        }
-
-        $this->view->finishedTasks   = $finishedTasks;
-        $this->view->comparedTasks   = $finishedTasks - $yesterdayTasks;
-        $this->view->createdStories  = $createdStories;
-        $this->view->comparedStories = $createdStories - $yesterdayStories;
-        $this->view->closedBugs      = $closedBugs;
-        $this->view->comparedBugs    = $closedBugs - $yesterdayBugs;
-        $this->view->runCases        = $runCases;
-        $this->view->comparedCases   = $runCases - $yesterdayCases;
-        $this->view->consumedHours   = $consumedHours;
-        $this->view->comparedHours   = $consumedHours - $yesterdayHours;
-        $this->view->totalWorkload   = $totalWorkload;
-        $this->view->todayWorkload   = $todayWorkload;
-
+        $this->view->finishedTasks    = $finishedTasks;
+        $this->view->yesterdayTasks   = $yesterdayTasks;
+        $this->view->createdStories   = $createdStories;
+        $this->view->yesterdayStories = $yesterdayStories;
+        $this->view->closedBugs       = $closedBugs;
+        $this->view->yesterdayBugs    = $yesterdayBugs;
+        $this->view->runCases         = $runCases;
+        $this->view->yesterdayCases   = $yesterdayCases;
+        $this->view->consumedHours    = $consumedHours;
+        $this->view->yesterdayHours   = $yesterdayHours;
     }
 
     /**
