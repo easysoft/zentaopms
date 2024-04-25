@@ -2586,38 +2586,6 @@ class metricModel extends model
     }
 
     /**
-     * 将传入的度量项分为两组，一组为有重算记录的，另一组为没有重算记录的。
-     * Divide the metric list into two groups, has inference records or not.
-     *
-     * @param  array  $codeList
-     * @access public
-     * @return bool
-     */
-    public function classifyMetricsByCalcType($codeList)
-    {
-        $inferencedMetrics = array();
-        $otherMetrics      = array();
-        foreach($codeList as $code)
-        {
-            $recordCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_METRICLIB)
-                ->where('calcType')->eq('inference')
-                ->andWhere('metricCode')->eq($code)
-                ->fetch('count');
-
-            if($recordCount > 0)
-            {
-                $inferencedMetrics[] = $code;
-            }
-            else
-            {
-                $otherMetrics[] = $code;
-            }
-        }
-
-        return array('inference' => $inferencedMetrics, 'cron' => $otherMetrics);
-    }
-
-    /**
      * 根据动态获取安装禅道的大概时间。
      * Get date of install zentao accorrading action.
      *
