@@ -407,7 +407,7 @@ class docMenu extends wg
                 'text' => $this->lang->thinkwizard->designer->treeDropdown['edit'],
                 'url'  => createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&action=edit")
             ),
-            !$item->hasQuestion ? array(
+            !$item->existNotNode ? array(
                 'key'          => 'deleteNode',
                 'icon'         => 'trash',
                 'text'         => $this->lang->thinkwizard->designer->treeDropdown['delete'],
