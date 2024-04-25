@@ -68,6 +68,7 @@ class pageBase extends wg
         $jsConfig->zin = !empty($zinMode) ? $zinMode : true;
 
         $headImports = array();
+        $headImports[] = h::favicon($webRoot . 'favicon.ico');
         if($zui)
         {
             $headImports[] = h::importCss($zuiPath . 'zui.zentao.css', setID('zuiCSS'));

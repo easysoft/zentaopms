@@ -202,6 +202,15 @@ class h extends node
         return "$url{$mark}v={$config->version}";
     }
 
+    public static function favicon(string $url, mixed ...$args): array
+    {
+        return array
+        (
+            static::create('link', set(array('rel' => 'icon', 'href' => $url, 'type' => 'image/x-icon')), ...$args),
+            static::create('link', set(array('rel' => 'shortcut icon', 'href' => $url, 'type' => 'image/x-icon')), ...$args)
+        );
+    }
+
     public static function import(string|array $file, ?string $type = null, mixed ...$args): ?h
     {
         if(is_array($file))
