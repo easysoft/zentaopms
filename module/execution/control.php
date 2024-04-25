@@ -2597,6 +2597,7 @@ class execution extends control
 
         $projectPairs      = array(); /* 项目ID为索引，项目名称为值的数组 [projectID => projectName]。 */
         $orderedExecutions = array();
+        $parentExecutions  = array();
         foreach($projects as $project)
         {
             $executions = zget($executionGroups, $project->id, array());
@@ -2606,6 +2607,7 @@ class execution extends control
             foreach($executions as $execution)
             {
                 if($execution->grade == 1) $topExecutions[$execution->id] = $execution->id;
+                if($execution->grade > 1 && $execution->parent) $parentExecutions[$execution->parent] = $execution->parent;
             }
 
             /* 获取排序后的执行列表，并给每个执行设置团队信息。*/
@@ -2623,6 +2625,8 @@ class execution extends control
         $projectExecutions = array(); /* 项目对应的执行列表 [projectID => execution]。*/
         foreach($orderedExecutions as $execution)
         {
+            if(isset($parentExecutions[$execution->id])) continue;
+
             $execution->name = $executionNameList[$execution->id];
             $projectExecutions[$execution->project][] = $execution;
         }

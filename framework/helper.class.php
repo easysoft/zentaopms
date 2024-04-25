@@ -637,6 +637,8 @@ function setParent(array $items)
 {
     foreach($items as $item)
     {
+        if(isset($item->isParent)) continue;
+
         /* Set parent attribute. */
         $item->isParent = false;
         if(isset($item->parent) && $item->parent == -1)
