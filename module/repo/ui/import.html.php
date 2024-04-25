@@ -59,14 +59,11 @@ formBatchPanel
     ),
     set::id('repoList'),
     set::back('repo-maintain'),
-    set::mode('edit'),
+    set::mode(count($repoList) == 0 ? 'edit' : 'add'),
     set::addRowIcon('false'),
-    set::deleteRowIcon('icon-eye-off'),
     set::items($items),
     set::data($repoList),
     set::maxRows(count($repoList)),
-    set::onRenderRowCol(jsRaw('window.onRenderRowCol')),
-    on::click('.repo-action', 'window.setRepoState'),
 );
 
 render();
