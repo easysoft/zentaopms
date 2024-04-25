@@ -79,8 +79,8 @@ class thinkNode  extends wg
                     set::desc($isEdit ? $item->desc : ''),
                     set::required($isEdit ? $item->required : 0),
                     set::enableOther($isEdit ? $item->enableOther : false),
-                    set::minCount($isEdit ? $item->minCount : ''),
-                    set::maxCount($isEdit ? $item->maxCount : ''),
+                    set::minCount($isEdit && isset($item->minCount) ? $item->minCount : ''),
+                    set::maxCount($isEdit && isset($item->maxCount) ? $item->maxCount : ''),
                 );
                 if($addType === 'input' || ($isEdit && $item->questionType === 'input')) return thinkInput(
                     set::title($isEdit ? $item->title : ''),

@@ -32,6 +32,7 @@ class thinkCheckbox extends thinkRadio
                 input
                 (
                     set::placeholder(data('lang.thinkwizard.step.inputContent')),
+                    set::type('number'),
                     set::name($minCountName),
                     set::value($minCount),
                 ),
@@ -42,6 +43,7 @@ class thinkCheckbox extends thinkRadio
                 input
                 (
                     set::placeholder(data('lang.thinkwizard.step.inputContent')),
+                    set::type('number'),
                     set::name($maxCountName),
                     set::value($maxCount)
                 )
