@@ -1267,13 +1267,13 @@ class bugModel extends model
                 if(!isset($caseSteps[$stepId])) continue;
                 $step = $caseSteps[$stepId];
 
-                $stepDesc   = str_replace("\n", "<br />", $step->desc);
-                $stepExpect = str_replace("\n", "<br />", $step->expect);
+                $stepDesc   = '<p>' . str_replace("\n", '</p><p>', $step->desc)   . '</p>';
+                $stepExpect = '<p>' . str_replace("\n", '</p><p>', $step->expect) . '</p>';
                 $stepResult = (!isset($stepResults[$stepId]) or empty($stepResults[$stepId]['real'])) ? '' : $stepResults[$stepId]['real'];
 
-                $bugStep   .= $step->name . '. ' . $stepDesc . "<br />";
-                $bugResult .= $step->name . '. ' . $stepResult . "<br />";
-                $bugExpect .= $step->name . '. ' . $stepExpect . "<br />";
+                $bugStep   .= '<p>' . $step->name . '. ' . $stepDesc   . '</p>';
+                $bugResult .= '<p>' . $step->name . '. ' . $stepResult . '</p>';
+                $bugExpect .= '<p>' . $step->name . '. ' . $stepExpect . '</p>';
             }
         }
 
