@@ -605,7 +605,7 @@ class bugModel extends model
     {
         $bug = $this->getByID($bugID);
 
-        $excludeBugs .= ",{$bug->id},{$bug->relatedBug}";
+        $excludeBugs .= ",{$bug->id}";
 
         if($bySearch) return $this->getBySearch('bug', (array)$bug->product, 'all', 0, 0, $queryID, $excludeBugs, 'id desc', $pager);
 
