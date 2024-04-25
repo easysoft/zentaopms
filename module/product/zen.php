@@ -251,7 +251,7 @@ class productZen extends product
         if(isset($fields['RD']))      $fields['RD']['options']      = $rdUsers;
         if(isset($fields['groups']))  $fields['groups']['options']  = $this->loadModel('group')->getPairs();
         if(isset($fields['program'])) $fields['program']['options'] = $this->loadModel('program')->getTopPairs('noclosed');
-        if($programID and isset($fields['line'])) $fields['line']['options'] = $this->product->getLinePairs($programID);
+        if(isset($fields['line']))    $fields['line']['options'] = $this->product->getLinePairs($programID, true);
 
         return $fields;
     }

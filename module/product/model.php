@@ -1151,11 +1151,11 @@ class productModel extends model
      * @access public
      * @return string[]
      */
-    public function getLinePairs(int|array $programIdList = 0): array
+    public function getLinePairs(int|array $programIdList = 0, bool $filterRoot = false): array
     {
         return $this->dao->select('id,name')->from(TABLE_MODULE)
             ->where('type')->eq('line')
-            ->beginIF($programIdList)->andWhere('root')->in($programIdList)->fi()
+            ->beginIF($programIdList || $filterRoot)->andWhere('root')->in($programIdList)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id', 'name');
     }
