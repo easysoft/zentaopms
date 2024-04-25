@@ -2525,7 +2525,7 @@ class metricModel extends model
     {
         $today = helper::today();
 
-        $todayData = $this->metricTao->fetchMetricRecordByDate('all', $today, 1);
+        $todayData = $this->metricTao->fetchMetricRecordByDate($code, $today, 1);
         $todayDataWithCode = $this->metricTao->fetchMetricRecordByDate($code, $today, 1);
         $dataWithCode = $this->metricTao->fetchMetricRecordByDate($code, null, 1);
 
