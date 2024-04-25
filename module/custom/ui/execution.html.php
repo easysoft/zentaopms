@@ -25,7 +25,7 @@ div
         span
         (
             setClass('text-md font-bold'),
-            $lang->custom->closedSetting
+            $lang->custom->closeSetting
         ),
         formGroup
         (
