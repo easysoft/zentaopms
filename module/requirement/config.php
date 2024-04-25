@@ -13,3 +13,13 @@ $config->requirement->close->requiredFields  = 'closedReason';
 $config->requirement->review->requiredFields = '';
 
 $config->requirement->needReview = 1;
+
+$config->requirement->list = new stdclass();
+$config->requirement->list->customCreateFields      = '';
+$config->requirement->list->customBatchCreateFields = 'plan,assignedTo,spec,source,verify,pri,estimate,keywords,mailto';
+$config->requirement->list->customBatchEditFields   = 'branch,plan,estimate,pri,assignedTo,source,stage,closedBy,closedReason,keywords';
+
+$config->requirement->custom = new stdclass();
+$config->requirement->custom->createFields      = $config->requirement->list->customCreateFields;
+$config->requirement->custom->batchCreateFields = 'module,plan,spec,pri,estimate,review,%s';
+$config->requirement->custom->batchEditFields   = 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason';
