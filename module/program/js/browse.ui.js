@@ -48,38 +48,21 @@ window.confirmDelete = function(projectID, module, projectName)
     let deleteURL = $.createLink(module, 'delete', "projectID=" + projectID);
     if(module == 'program')
     {
-        $.get($.createLink('program', 'ajaxGetChildrenCount', `programID=${projectID}`), function(childrenCount)
-        {
-            if(childrenCount > 0)
+        $.ajaxSubmit(
             {
-                zui.Modal.alert({message: hasChildrenTip, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});
-            }
-            else
-            {
-                $.get($.createLink('program', 'ajaxGetProductCount', `programID=${projectID}`), function(productCount)
+                url: deleteURL,
+                onComplete: function(result)
                 {
-                    if(productCount > 0)
-                    {
-                        zui.Modal.alert({message: hasProductTip, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});
-                    }
-                    else
-                    {
-                        deleteURL = $.createLink('program', 'delete', "programID=" + projectID + '&confirm=yes');
-                        zui.Modal.confirm({message: confirmDeleteLang[module].replace('%s', projectName), icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
-                        {
-                            if(res) $.ajaxSubmit({url: deleteURL, load: true});
-                        });
-                    }
-                });
-            }
-        })
+                    if(result.result == 'success') loadCurrentPage();
+                }
+            });
     }
     else
     {
         zui.Modal.confirm({message: confirmDeleteLang[module].replace('%s', projectName), icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
-        {
-            if(res) $.ajaxSubmit({url: deleteURL, load: true});
-        });
+            {
+                if(res) $.ajaxSubmit({url: deleteURL, load: true});
+            });
     }
 }
 

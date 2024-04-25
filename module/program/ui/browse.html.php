@@ -1,7 +1,6 @@
 <?php
 namespace zin;
 
-$confirmDeleteLang['program'] = $lang->program->confirmDelete;
 $confirmDeleteLang['project'] = $lang->project->confirmDelete;
 jsVar('confirmDeleteLang',   $confirmDeleteLang);
 jsVar('programBudgetLang',   $lang->program->programBudget);
@@ -10,8 +9,6 @@ jsVar('sumSubBudgetLang',    $lang->program->sumSubBudget);
 jsVar('exceededBudgetLang',  $lang->program->exceededBudget);
 jsVar('remainingBudgetLang', $lang->program->remainingBudget);
 jsVar('langManDay',          $lang->program->manDay);
-jsVar('hasChildrenTip',      $lang->program->hasChildren);
-jsVar('hasProductTip',       $lang->program->hasProduct);
 
 $this->loadModel('project');
 $cols         = $this->loadModel('datatable')->getSetting('program');
