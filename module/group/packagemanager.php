@@ -2575,15 +2575,6 @@ $config->group->package->serverLink->subset = 'dev';
 $config->group->package->serverLink->privs  = array();
 $config->group->package->serverLink->privs['app-serverlink'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
-$config->group->package->browseMR = new stdclass();
-$config->group->package->browseMR->order  = 5;
-$config->group->package->browseMR->subset = 'mr';
-$config->group->package->browseMR->privs  = array();
-$config->group->package->browseMR->privs['mr-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array('mr-addReview', 'mr-approval', 'mr-close', 'mr-create', 'mr-diff', 'mr-edit', 'mr-link', 'mr-linkBug', 'mr-linkStory', 'mr-linkTask', 'mr-reopen', 'mr-unlink', 'mr-view'));
-$config->group->package->browseMR->privs['mr-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('mr-browse'), 'recommend' => array('mr-diff', 'mr-link'));
-$config->group->package->browseMR->privs['mr-diff']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('mr-browse'), 'recommend' => array('mr-link', 'mr-view'));
-$config->group->package->browseMR->privs['mr-link']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('mr-browse'), 'recommend' => array('mr-diff', 'mr-view'));
-
 $config->group->package->managePriv = new stdclass();
 $config->group->package->managePriv->order  = 20;
 $config->group->package->managePriv->subset = 'staffmanage';
@@ -2718,6 +2709,16 @@ $config->group->package->deleteJob->subset = 'pipeline';
 $config->group->package->deleteJob->privs  = array();
 $config->group->package->deleteJob->privs['job-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('job-browse'), 'recommend' => array('job-create', 'job-edit'));
 
+$config->group->package->browseMR = new stdclass();
+$config->group->package->browseMR->order  = 5;
+$config->group->package->browseMR->subset = 'mr';
+$config->group->package->browseMR->privs  = array();
+$config->group->package->browseMR->privs['mr-browse']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-maintain'), 'recommend' => array('mr-addReview', 'mr-approval', 'mr-close', 'mr-create', 'mr-diff', 'mr-edit', 'mr-link', 'mr-linkBug', 'mr-linkStory', 'mr-linkTask', 'mr-reopen', 'mr-unlink', 'mr-view', 'mr-commitLogs'));
+$config->group->package->browseMR->privs['mr-view']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('mr-browse'), 'recommend' => array('mr-diff', 'mr-link'));
+$config->group->package->browseMR->privs['mr-commitLogs'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('mr-view', 'mr-browse'), 'recommend' => array('mr-diff'));
+$config->group->package->browseMR->privs['mr-diff']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('mr-browse'), 'recommend' => array('mr-link', 'mr-view'));
+$config->group->package->browseMR->privs['mr-link']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('mr-browse'), 'recommend' => array('mr-diff', 'mr-view'));
+
 $config->group->package->manageMR = new stdclass();
 $config->group->package->manageMR->order  = 10;
 $config->group->package->manageMR->subset = 'mr';
@@ -2732,6 +2733,12 @@ $config->group->package->manageMR->privs['mr-unlink']    = array('edition' => 'o
 $config->group->package->manageMR->privs['mr-approval']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('mr-browse'), 'recommend' => array('mr-close', 'mr-reopen'));
 $config->group->package->manageMR->privs['mr-close']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('mr-browse'), 'recommend' => array('mr-approval', 'mr-reopen'));
 $config->group->package->manageMR->privs['mr-reopen']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('mr-browse'), 'recommend' => array('mr-approval', 'mr-close'));
+
+$config->group->package->deleteMR = new stdclass();
+$config->group->package->deleteMR->order  = 2680;
+$config->group->package->deleteMR->subset = 'mr';
+$config->group->package->deleteMR->privs  = array();
+$config->group->package->deleteMR->privs['mr-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('mr-browse'), 'recommend' => array('mr-create', 'mr-edit'));
 
 $config->group->package->backup = new stdclass();
 $config->group->package->backup->order  = 5;
@@ -3945,12 +3952,6 @@ $config->group->package->deleteCodeIssue->order  = 2640;
 $config->group->package->deleteCodeIssue->subset = 'codereview';
 $config->group->package->deleteCodeIssue->privs  = array();
 $config->group->package->deleteCodeIssue->privs['repo-deleteBug'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('repo-diff'), 'recommend' => array('repo-addBug', 'repo-addComment', 'repo-editBug', 'repo-editComment', 'repo-review'));
-
-$config->group->package->deleteMR = new stdclass();
-$config->group->package->deleteMR->order  = 2680;
-$config->group->package->deleteMR->subset = 'mr';
-$config->group->package->deleteMR->privs  = array();
-$config->group->package->deleteMR->privs['mr-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('mr-browse'), 'recommend' => array('mr-create', 'mr-edit'));
 
 $config->group->package->browseArtifactrepo = new stdclass();
 $config->group->package->browseArtifactrepo->order  = 2780;
