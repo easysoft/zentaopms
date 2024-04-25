@@ -45,7 +45,7 @@ class thinkTableInput extends thinkStep
                     set::inline(true),
                     set::items($lang->thinkwizard->step->requiredList),
                     set::value($isRequired ? $isRequired : 0),
-                    on::change('changeIsRequired')
+                    bind::change('changeIsRequired(event)')
                 )
             ),
             formGroup
@@ -83,7 +83,7 @@ class thinkTableInput extends thinkStep
                     set::inline(true),
                     set::items($lang->thinkwizard->step->requiredList),
                     set::value($isSupportAdd ? $isSupportAdd : 0),
-                    on::change('changeSupportAdd')
+                    bind::change('changeSupportAdd(event)')
                 )
             ),
             formGroup
