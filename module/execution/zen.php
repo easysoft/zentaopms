@@ -1796,6 +1796,11 @@ class executionZen extends execution
 
             $this->view->plan = $plan;
         }
+        if(isset($project->hasProduct) && empty($project->hasProduct))
+        {
+            $product  = $this->loadModel('product')->getShadowProductByProject($project->id);
+            $products = array($product->id => $product->name);
+        }
 
         return $products;
     }
