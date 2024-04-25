@@ -25,9 +25,6 @@ class thinkStep extends wg
         'titleName?: string="title"', // 标题对应的name
         'desc?: string',              // 描述
         'descName?: string="desc"',   // 描述对应的name
-        'isEdit?: bool=false',        // 是否编辑
-        'stepID?: number=0',          // stepID
-        'submitUrl: string',          // 提交表单url
     );
     protected static array $defineBlocks = array(
         'fields' => array(),
@@ -80,7 +77,6 @@ class thinkStep extends wg
                 )
             ),
             formHidden('type', $this->prop('type')),
-            $this->prop('isEdit') ? formHidden('stepID', $this->prop('stepID')) : null,
         );
     }
 
@@ -99,15 +95,15 @@ class thinkStep extends wg
         $actions = array(array(
             'text'    => $lang->thinkmodel->save,
             'btnType' => 'submit',
-            'class'   => 'primary h-7 ring-0 submit-btn px-4'
+            'class'   => 'primary h-7 ring-0 submit-btn px-4',
+            'style'   => array('min-width' => '0')
         ));
 
         return formPanel
         (
-            setClass('think-step-panel'),
+            setClass('think-step-panel py-4 px-8 mx-4'),
+            set::formClass('form-watched gap-3'),
             set::bodyClass('think-step-form'),
-            $this->prop('submitUrl') ? set::url($this->prop('submitUrl')) : null,
-            set::grid(false),
             set::actions($actions),
             $this->buildBody()
         );
