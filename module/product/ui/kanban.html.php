@@ -37,6 +37,31 @@ foreach($kanbanList as $current => $region)
 jsVar('privs',   $privs);
 jsVar('delayed', $lang->project->statusList['delay']);
 
+featureBar
+(
+    li
+    (
+        setClass('nav-item item'),
+        a
+        (
+            $browseType == 'my' ? setClass('active') : null,
+            set::href(createLink('product', 'kanban', "browseType=my")),
+            $lang->product->myProduct,
+        )
+    ),
+    li
+    (
+        setClass('nav-item item'),
+        set::active($browseType == 'other'),
+        a
+        (
+            $browseType == 'other' ? setClass('active') : null,
+            set::href(createLink('product', 'kanban', "browseType=other")),
+            $lang->product->otherProduct,
+        )
+    ),
+);
+
 if(empty($kanbanList))
 {
     panel
@@ -58,30 +83,6 @@ if(empty($kanbanList))
 }
 else
 {
-    featureBar
-    (
-        li
-        (
-            setClass('nav-item item'),
-            a
-            (
-                $browseType == 'my' ? setClass('active') : null,
-                set::href(createLink('product', 'kanban', "browseType=my")),
-                $lang->product->myProduct,
-            )
-        ),
-        li
-        (
-            setClass('nav-item item'),
-            set::active($browseType == 'other'),
-            a
-            (
-                $browseType == 'other' ? setClass('active') : null,
-                set::href(createLink('product', 'kanban', "browseType=other")),
-                $lang->product->otherProduct,
-            )
-        ),
-    );
     zui::kanbanList
     (
         set::key('kanban'),
