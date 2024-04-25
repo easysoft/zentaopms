@@ -39,6 +39,8 @@ toolbar
 
 $cols = $this->loadModel('datatable')->getSetting('productplan');
 $cols['title']['data-app'] = $app->tab;
+if($app->rawModule == 'projectplan') $cols['actions']['list']['createExecution']['url']['params'] = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID={id}";
+
 $tableData = initTableData($plans, $cols, $this->productplan);
 foreach($tableData as $plan)
 {
