@@ -527,7 +527,8 @@ $lang->block->welcome->reviewByMe = 'ReviewByMe';
 $lang->block->welcome->assignToMe = 'AssignToMe';
 
 $lang->block->welcome->reviewList = array();
-$lang->block->welcome->reviewList['story']    = 'Story';
+$lang->block->welcome->reviewList['story']      = 'Story';
+$lang->block->welcome->reviewList['reviewByMe'] = 'Review';
 
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task']        = 'Task';

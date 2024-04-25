@@ -30,12 +30,7 @@ $getMeasureItem = function($data)
                 set('class', 'text-3xl h-10'),
                 !empty($info['href']) ? a(setClass('text-primary'), set('href', $info['href']), $info['number']) : span($info['number'])
             ),
-            div(zget($welcomeLabel, $key, '')),
-            !empty($info['delay']) ? div
-            (
-                set('class', 'label danger-pale circle size-sm'),
-                $lang->block->delay . ' ' . $info['delay']
-            ) : null
+            div(zget($welcomeLabel, $key, ''))
         );
     }
     return $items;
@@ -67,7 +62,7 @@ blockPanel
     ),
     row
     (
-        setClass('h-full items-center'),
+        setClass('h-full'),
         cell
         (
             setClass('center flex-none gap-2'),
@@ -90,30 +85,17 @@ blockPanel
         divider(setClass('h-10 self-center')),
         cell
         (
-            setClass('px-8 h-full flex-auto'),
-            tabs
-            (
-                set::headerClass(array('nav-tabs' => false, 'gap-x-5' => false)),
-                empty($lang->block->welcome->reviewList) ? null : tabPane
-                (
-                    set::title($lang->block->welcome->reviewByMe),
-                    div
-                    (
-                        set::className('flex justify-around text-center'),
-                        $getMeasureItem($reviewByMe)
-                    )
-                ),
-                tabPane
-                (
-                    set::title($lang->block->welcome->assignToMe),
-                    set::active(true),
-                    div
-                    (
-                        set::className('flex justify-around text-center'),
-                        $getMeasureItem($assignToMe)
-                    )
-                )
-            )
+            setClass('col text-center py-4'),
+            set::width('16%'),
+            div(span(setClass('font-bold text-md'), $lang->block->welcome->reviewByMe)),
+            div(set::className('flex-auto center'), $getMeasureItem($reviewByMe))
+        ),
+        divider(setClass('h-10 self-center')),
+        cell
+        (
+            setClass('col flex-auto py-4'),
+            div(span(setClass('font-bold text-md ml-8'), $lang->block->welcome->assignToMe)),
+            div(setClass('flex-auto flex justify-around text-center items-center'), $getMeasureItem($assignToMe))
         )
     ),
     h::css
