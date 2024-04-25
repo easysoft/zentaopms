@@ -361,7 +361,7 @@ class upgradeModel extends model
 
                 $dbSQLLine = rtrim($dbSQLLine, ',');
                 $dbSQLLine = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $dbSQLLine);
-                $dbSQLLine = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $dbSQLLine);
+                $dbSQLLine = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/i', " DEFAULT '$1'", $dbSQLLine);
 
                 list($field) = explode(' ', $dbSQLLine);
                 $fields[$field] = rtrim($dbSQLLine, ',');
@@ -402,7 +402,7 @@ class upgradeModel extends model
 
         $line = rtrim($line, ',');
         $line = str_replace('utf8 COLLATE utf8_general_ci', 'utf8', $line);
-        $line = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/', " DEFAULT '$1'", $line);
+        $line = preg_replace('/ DEFAULT (\-?\d+\.?\d*)$/i', " DEFAULT '$1'", $line);
 
         list($field) = explode(' ', $line);
         if(isset($fields[$field]) and strpos($fields[$field], ' NULL') === false and strpos($line, ' DEFAULT NULL') !== false) $line = str_replace(' DEFAULT NULL', '', $line); // e.g. standard sql like [ `content` text DEFAULT NULL ] , but current db sql like [ `content` text ].
@@ -476,14 +476,14 @@ class upgradeModel extends model
         $defaultPos = stripos($stdField, ' DEFAULT ');
         if($defaultPos === false) return false; // No default in std, don't change.
 
-        $stdDefault = substr($stdField, $defaultPos + 9);
+        $stdDefault = str_replace("'", '', substr($stdField, $defaultPos + 9));
         if($stdDefault == 'NULL') return false; // Default is NULL, don't change.
-        if(strpos($stdField, 'text') !== false && $stdDefault == "''") return false; // Default is '' and text type, don't change.
+        if(strpos($stdField, 'text') !== false && empty($stdDefault)) return false; // Default is '' and text type, don't change.
 
         $defaultPos = stripos($dbField,  ' DEFAULT ');
         if($defaultPos === false) return true; // No default in db, change it.
 
-        $dbDefault = substr($dbField, $defaultPos + 9);
+        $dbDefault = str_replace("'", '', substr($dbField, $defaultPos + 9));
 
         return $stdDefault != $dbDefault;
     }
