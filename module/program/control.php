@@ -388,10 +388,11 @@ class program extends control
      * Delete a program.
      *
      * @param  int    $programID
+     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete(int $programID)
+    public function delete(int $programID, string $confirm = 'no')
     {
         /* The program can NOT be deleted if it has a child program. */
         $childrenPairs = $this->program->getChildrenPairsByID($programID);
@@ -403,17 +404,23 @@ class program extends control
 
         /* The program can NOT be deleted if it has a product. */
         $productPairs = $this->program->getProductPairsByID($programID);
-        if(count($productPairs)) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->hasProduct}');"));
+        if(count($productPairs)) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x',  message: '{$this->lang->program->hasProduct}'})"));
 
         /* Mark the program is deleted and record the action log. */
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->andWhere('deleted')->eq('0')->fetch();
-        if($program)
+        if($confirm == 'no')
         {
-            $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq('1')->where('id')->eq($programID)->exec();
-            $this->loadModel('action')->create('program', $programID, 'deleted', '', actionModel::CAN_UNDELETED);
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x',  message: '" . sprintf($this->lang->program->confirmDelete, $program->name) . "'}).then((res) => {if(res) $.ajaxSubmit({url: '" . $this->createLink('program', 'delete', "programID={$programID}&confirm=yes") . "'});});"));
         }
-
-        return $this->send(array('result' => 'success'));
+        else
+        {
+            if($program)
+            {
+                $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq('1')->where('id')->eq($programID)->exec();
+                $this->loadModel('action')->create('program', $programID, 'deleted', '', actionModel::CAN_UNDELETED);
+            }
+            return $this->send(array('result' => 'success', 'load' => true));
+        }
     }
 
     /**
@@ -744,31 +751,5 @@ class program extends control
         $this->view->param              = $param;
 
         $this->render();
-    }
-
-    /**
-     * 获取项目集的子项目集数量。
-     *
-     * @param  int    $programID
-     * @access public
-     * @return int
-     */
-    public function ajaxGetChildrenCount(int $programID): int
-    {
-        $childrenPairs = $this->program->getChildrenPairsByID($programID);
-        return print(count($childrenPairs));
-    }
-
-    /**
-     * 获取项目集下的产品数量。
-     *
-     * @param  int    $programID
-     * @access public
-     * @return int
-     */
-    public function ajaxGetProductCount(int $programID): int
-    {
-        $productPairs = $this->program->getProductPairsByID($programID);
-        return print(count($productPairs));
     }
 }
