@@ -17,19 +17,19 @@ featureBar
 (
     set::current('all'),
     set::linkParams("toExecution={$execution->id}"),
-    btn
+    inputGroup
     (
-        set::text($lang->execution->selectExecution),
-        setClass('ml-6')
-    ),
-    picker
-    (
-        set::width(200),
-        set::name('execution'),
-        set::items($executions),
-        set::value($fromExecution),
-        set::required(true),
-        on::change('changeExecution')
+        setClass('ml-6'),
+        $lang->execution->selectExecution,
+        picker
+        (
+            set::width(200),
+            set::name('execution'),
+            set::items($executions),
+            set::value($fromExecution),
+            set::required(true),
+            on::change('changeExecution')
+        )
     )
 );
 
