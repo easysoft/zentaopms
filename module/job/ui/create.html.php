@@ -104,6 +104,40 @@ formPanel
         set::width('1/2'),
         on::change('changeFrame')
     ),
+    formRow
+    (
+        setClass('hidden'),
+        set::id('jenkinsServerTR'),
+        formGroup
+        (
+            set::label($lang->job->jkHost),
+            set::required(true),
+            set::width('1/2'),
+            inputGroup
+            (
+                picker
+                (
+                    set::name('jkServer'),
+                    set::items($jenkinsServerList),
+                    on::change('changeJenkinsServer')
+                ),
+                $lang->job->pipeline,
+                input
+                (
+                    set::name('jkTask'),
+                    set::type('hidden')
+                ),
+                dropmenu
+                (
+                    setStyle('width', '150px'),
+                    set::id('pipelineDropmenu'),
+                    set::popPlacement('top'),
+                    set::text($lang->job->selectPipeline),
+                    set::url($this->createLink('jenkins', 'ajaxGetJenkinsTasks'))
+                )
+            )
+        )
+    ),
     formGroup
     (
         set::name('useZentao'),
@@ -201,40 +235,6 @@ formPanel
                 timePicker
                 (
                     set::name('atTime')
-                )
-            )
-        )
-    ),
-    formRow
-    (
-        setClass('hidden'),
-        set::id('jenkinsServerTR'),
-        formGroup
-        (
-            set::label($lang->job->jkHost),
-            set::required(true),
-            set::width('1/2'),
-            inputGroup
-            (
-                picker
-                (
-                    set::name('jkServer'),
-                    set::items($jenkinsServerList),
-                    on::change('changeJenkinsServer')
-                ),
-                $lang->job->pipeline,
-                input
-                (
-                    set::name('jkTask'),
-                    set::type('hidden')
-                ),
-                dropmenu
-                (
-                    setStyle('width', '150px'),
-                    set::id('pipelineDropmenu'),
-                    set::popPlacement('top'),
-                    set::text($lang->job->selectPipeline),
-                    set::url($this->createLink('jenkins', 'ajaxGetJenkinsTasks'))
                 )
             )
         )
