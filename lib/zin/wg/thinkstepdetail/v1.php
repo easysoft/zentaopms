@@ -44,12 +44,21 @@ class thinkStepDetail extends wg
                             set::icon('edit'),
                             set::url(createLink('thinkwizard', 'design', "wizardID={$item->wizard}&stepID={$item->id}&status=edit")),
                         ),
-                        btn
+                        !$item->existNotNode ? btn
                         (
                             setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                             set::icon('trash'),
                             setData('url', createLink('thinkstep', 'ajaxDelete', "stepID={$item->id}")),
                             setData('confirm',  $lang->thinkwizard->step->deleteTips[$item->type])
+                        ) : btn
+                        (
+                            set(array(
+                                'class'          => 'ghost w-5 h-5 text-gray opacity-50 ml-1',
+                                'icon'           => 'trash',
+                                'data-toggle'    => 'tooltip',
+                                'data-title'     => $lang->thinkwizard->step->cannotDeleteNode,
+                                'data-placement' => 'bottom-start',
+                            ))
                         )
                     )
                 )
