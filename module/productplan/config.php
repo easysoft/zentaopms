@@ -57,24 +57,28 @@ $config->productplan->actionList['createExecution']['data-toggle']  = 'modal';
 $config->productplan->actionList['createExecution']['url']          = array('module' => 'execution', 'method' => 'create');
 $config->productplan->actionList['createExecution']['notLoadModel'] = true;
 
-$config->productplan->actionList['linkStory']['icon'] = 'link';
-$config->productplan->actionList['linkStory']['hint'] = $lang->productplan->linkStory;
-$config->productplan->actionList['linkStory']['text'] = $lang->productplan->linkStory;
+$config->productplan->actionList['linkStory']['icon']         = 'link';
+$config->productplan->actionList['linkStory']['hint']         = $lang->productplan->linkStory;
+$config->productplan->actionList['linkStory']['text']         = $lang->productplan->linkStory;
+$config->productplan->actionList['linkStory']['notLoadModel'] = true;
 if($app->rawModule) $config->productplan->actionList['linkStory']['url']  = array('module' => $app->rawModule, 'method' => 'view', 'params' => 'planID={id}&type=story&orderBy=id_desc&link=true');
 
-$config->productplan->actionList['linkBug']['icon'] = 'bug';
-$config->productplan->actionList['linkBug']['hint'] = $lang->productplan->linkBug;
-$config->productplan->actionList['linkBug']['text'] = $lang->productplan->linkBug;
+$config->productplan->actionList['linkBug']['icon']         = 'bug';
+$config->productplan->actionList['linkBug']['hint']         = $lang->productplan->linkBug;
+$config->productplan->actionList['linkBug']['text']         = $lang->productplan->linkBug;
+$config->productplan->actionList['linkBug']['notLoadModel'] = true;
 if($app->rawModule) $config->productplan->actionList['linkBug']['url']  = array('module' => $app->rawModule, 'method' => 'view', 'params' => 'planID={id}&type=bug&orderBy=id_desc&link=true');
 
-$config->productplan->actionList['edit']['icon'] = 'edit';
-$config->productplan->actionList['edit']['hint'] = $lang->productplan->edit;
-$config->productplan->actionList['edit']['text'] = $lang->productplan->edit;
+$config->productplan->actionList['edit']['icon']         = 'edit';
+$config->productplan->actionList['edit']['hint']         = $lang->productplan->edit;
+$config->productplan->actionList['edit']['text']         = $lang->productplan->edit;
+$config->productplan->actionList['edit']['notLoadModel'] = true;
 if($app->rawModule) $config->productplan->actionList['edit']['url']  = array('module' => $app->rawModule, 'method' => 'edit', 'params' => 'planID={id}');
 
-$config->productplan->actionList['create']['icon'] = 'split';
-$config->productplan->actionList['create']['hint'] = $lang->productplan->createChildren;
-$config->productplan->actionList['create']['text'] = $lang->productplan->createChildren;
+$config->productplan->actionList['create']['icon']         = 'split';
+$config->productplan->actionList['create']['hint']         = $lang->productplan->createChildren;
+$config->productplan->actionList['create']['text']         = $lang->productplan->createChildren;
+$config->productplan->actionList['create']['notLoadModel'] = true;
 if($app->rawModule) $config->productplan->actionList['create']['url']  = array('module' => $app->rawModule, 'method' => 'create', 'params' => 'product={product}&branch={branch}&parent={id}');
 
 $config->productplan->actionList['delete']['icon']         = 'trash';
