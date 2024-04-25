@@ -1450,6 +1450,7 @@ class testcaseModel extends model
         if(empty($projects)) return false;
 
         $this->loadModel('action');
+        $projects   = array_unique($projects);
         $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
         foreach($projects as $projectID)
         {
