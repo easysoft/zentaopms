@@ -48,10 +48,37 @@ foreach($bugs as $bug)
 }
 $bugs = initTableData($bugs, $config->repo->reviewDtable->fieldList);
 
+$repoData = array(array(
+     'text'     => $lang->all,
+     'data-app' => $app->tab,
+     'url'      => createLink('repo', 'review', "repoID=0&browseType=all&objectID={$objectID}"),
+     'active'   => $allRepo
+ ));
+
+ foreach($repos as $repo)
+ {
+     if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) continue;
+
+     $repoData[] = array(
+         'text'     => $repo->name,
+         'data-app' => $app->tab,
+         'url'      => createLink('repo', 'review', "repoID={$repo->id}&browseType={$browseType}&objectID={$objectID}"),
+         'active'   =>  !$allRepo && $repo->id == $repoID
+     );
+ }
+
 \zin\featureBar
 (
     set::current($browseType),
-    set::linkParams("repoID={$repoID}&browseType={key}&objectID={$objectID}")
+    set::linkParams("repoID={$repoID}&browseType={key}&objectID={$objectID}"),
+    count($repoPairs) > 1 && $objectID ? to::leading
+    (
+        dropdown(
+            btn(setClass('dropdown-toggle ghost btn square btn-default'), $allRepo ? $lang->all : zget($repoPairs, $repoID, $lang->all)),
+            set::items($repoData),
+            set::placement('bottom-end')
+        )
+    ) : null
 );
 
 dtable
