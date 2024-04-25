@@ -68,6 +68,7 @@ if($config->edition == 'ipd')
     $config->story->dtable->fieldList['roadmap']['type']     = 'html';
     $config->story->dtable->fieldList['roadmap']['show']     = true;
     $config->story->dtable->fieldList['roadmap']['sortType'] = true;
+    $config->story->dtable->fieldList['roadmap']['width']    = '90';
 
 }
 if($config->vision == 'or')
