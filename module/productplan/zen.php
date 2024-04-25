@@ -134,6 +134,7 @@ class productplanZen extends productplan
 
             $plan->actions  = $this->buildActionsList($plan);
             $plan->projects = array_values($plan->projects);
+            $plan->desc     = strip_tags($plan->desc);
         }
 
         return $plans;
