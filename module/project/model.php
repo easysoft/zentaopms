@@ -925,10 +925,11 @@ class projectModel extends model
      * @param  string  $model all|scrum|waterfall|kanban
      * @param  string  $param noclosed
      * @param  int     $projectID
+     * @param  bool    $pairs
      * @access public
      * @return array   array(projectID => projectName, ...)
      */
-    public function getPairsByModel(string $model = 'all', string $param = '', int $projectID = 0): array
+    public function getPairsByModel(string $model = 'all', string $param = '', int $projectID = 0, bool $pairs = true): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectPairs();
 
@@ -972,7 +973,7 @@ class projectModel extends model
         $projectPairs = array();
         foreach($allProjects as $programID => $projects)
         {
-            foreach($projects as $project) $projectPairs[$project->id] = $project->name;
+            foreach($projects as $project) $projectPairs[$project->id] = $pairs ? $project->name : $project;
         }
         return $projectPairs;
     }

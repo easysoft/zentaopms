@@ -316,6 +316,10 @@ class projectZen extends project
             }
         }
 
+        /* Get copy projects. */
+        $copyProjects = $this->project->getPairsByModel($model, '', 0, false);
+        $copyProjectPairs = array_combine(array_keys($copyProjects), array_column($copyProjects, 'name'));
+
         $this->view->title               = $this->lang->project->create;
         $this->view->gobackLink          = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
         $this->view->model               = $model;
@@ -326,8 +330,8 @@ class projectZen extends project
         $this->view->branchID            = isset($output['branchID']) ? $output['branchID'] : 0;
         $this->view->allProducts         = $allProducts;
         $this->view->multiBranchProducts = $this->product->getMultiBranchPairs((int)$topProgramID);
-        $this->view->copyProjects        = $this->project->getPairsByModel($model);
-        $this->view->copyPinyinList      = common::convert2Pinyin($this->view->copyProjects);
+        $this->view->copyProjects        = $copyProjects;
+        $this->view->copyPinyinList      = common::convert2Pinyin($copyProjectPairs);
         $this->view->copyProjectID       = $copyProjectID;
         $this->view->parentProgram       = $parentProgram;
         $this->view->programList         = $this->program->getParentPairs();
