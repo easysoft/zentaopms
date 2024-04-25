@@ -412,7 +412,7 @@ class docMenu extends wg
                 'icon'         => 'trash',
                 'text'         => $this->lang->thinkwizard->designer->treeDropdown['delete'],
                 'innerClass'   => 'ajax-submit',
-                'data-url'     => createLink('thinkwizard', 'ajaxDeleteStep', "stepID={$item->id}"),
+                'data-url'     => createLink('thinkstep', 'ajaxDelete', "stepID={$item->id}"),
                 'data-confirm' => $confirmTips,
             ) : array(
                 'key'            => 'deleteNode',
