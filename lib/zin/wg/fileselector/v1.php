@@ -110,7 +110,6 @@ class fileSelector extends wg
         $onAdd = $this->prop('onAdd');
         if($onAdd)
         {
-            var_dump($onAdd);
             if(is_object($onAdd))
             {
                 $objectClass = get_class($onAdd);
