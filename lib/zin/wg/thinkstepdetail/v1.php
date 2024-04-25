@@ -21,12 +21,10 @@ class thinkStepDetail extends wg
         (
             div
             (
-                setClass('flex items-start justify-between'),
-                setStyle(array('padding' => '24px 48px 8px')),
+                setClass('flex items-start justify-between pt-6 pb-2 px-8 mx-4'),
                 div
                 (
-                    setClass('text-md leading-6 font-medium'),
-                    setStyle(array('color' => '#313C52')),
+                    setClass('text-md leading-6 font-medium text-current'),
                     $item->title
                 ),
                 div
@@ -62,8 +60,8 @@ class thinkStepDetail extends wg
             ),
             div
             (
-                setClass('text-sm leading-6'),
-                setStyle(array('padding' => '0 48px', 'color' => '#9EA3B0', 'font-size' => '12px', 'margin-top' => '-30px')),
+                setClass('text-sm leading-6 py-0 px-8 mx-4 text-opacity-60 text-fore text-sm'),
+                setStyle(array('margin-top' => '-30px')),
                 section
                 (
                     setClass(' break-words"'),

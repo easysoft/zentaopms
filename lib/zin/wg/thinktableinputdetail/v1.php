@@ -32,8 +32,8 @@ class thinkTableInputDetail extends thinkStepDetail
 
         return div(
             $required ? span(
-                setClass('text-xl absolute top-6'),
-                setStyle(array('color' => 'rgba(var(--color-danger-500-rgb),var(--tw-text-opacity))', 'left' => '36px')),
+                setClass('text-xl absolute top-6 text-danger'),
+                setStyle(array('left' => '36px')),
                 '*'
             ) : null,
             setStyle(array('margin' => '13px 48px 8px')),
