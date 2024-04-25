@@ -283,11 +283,11 @@ window.renderProductplanItem = function(info)
 
     if(info.item.deleted == '0')
     {
-        statusBox = '<span class="label label-' + info.item.objectStatus + '">' + executionLang.statusList[info.item.objectStatus] + '</span>';
+        statusBox = '<span class="label label-' + info.item.objectStatus + '">' + productplanLang.statusList[info.item.objectStatus] + '</span>';
     }
     else
     {
-        statusBox = '<span class="label label-deleted">' + executionLang.deleted + '</span>';
+        statusBox = '<span class="label label-deleted">' + productplanLang.deleted + '</span>';
     }
 
     const today     = zui.formatDate(new Date(), 'yyyy-MM-dd');
