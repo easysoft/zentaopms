@@ -733,6 +733,12 @@ class executionZen extends execution
                 return false;
             }
 
+            if(!helper::isZeroDate($task->deadline) && $task->estStarted > $task->deadline)
+            {
+                dao::$errors["deadline[{$bugID}]"] = 'ID: ' . $bugID . $this->lang->task->error->deadlineSmall;
+                return false;
+            }
+
             if(!empty($this->config->limitTaskDate))
             {
                 $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
