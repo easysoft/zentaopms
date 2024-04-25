@@ -50,7 +50,7 @@ class productsBox extends wg
         }
         elseif(!empty($project) && empty($project->hasProduct) && !in_array($project->model, array('waterfall', 'kanban', 'waterfallplus')))
         {
-            $productsBox = $this->buildOnlyLinkPlans($productItems);
+            $productsBox = $this->buildOnlyLinkPlans($linkedProducts);
         }
         else
         {
