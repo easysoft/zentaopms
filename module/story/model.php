@@ -2768,6 +2768,7 @@ class storyModel extends model
                 ->andWhere('product')->eq($productID)
                 ->andWhere('type')->eq('story')
                 ->andWhere('status')->eq('active')
+                ->andWhere('twins')->eq('')
                 ->andWhere('grade')->ne($lastGrade)
                 ->andWhere('grade')->in(array_keys($SRGradePairs))
                 ->beginIF($childIdList)->andWhere('id')->notIN($childIdList)->fi()
