@@ -37,8 +37,8 @@ class thinkOptionsDetail extends thinkStepDetail
 
             $optionsItems[] = div
             (
-                setClass('px-6 py-2 mt-2 leading-6 flex items-center'),
-                setStyle(array('border' => '1px solid rgba(46, 127, 255, 0.4)', 'background' => '#E6F0FF', 'font-size' => '13px', 'color' => '#313C52', 'border-radius' => '2px')),
+                setClass('px-6 py-2 mt-2 leading-6 flex items-center bg-primary-50 border text-fore'),
+                setStyle(array('border-color' => 'rgba(46, 127, 255, 0.4)', 'font-size' => '13px','border-radius' => '2px')),
                 div
                 (
                     $letter . '.',
@@ -58,8 +58,8 @@ class thinkOptionsDetail extends thinkStepDetail
 
         return div(
             $required ? span(
-                setClass('text-xl absolute top-6'),
-                setStyle(array('color' => 'rgba(var(--color-danger-500-rgb),var(--tw-text-opacity))', 'left' => '36px')),
+                setClass('text-xl absolute top-6 text-danger'),
+                setStyle(array('left' => '36px')),
                 '*'
             ) : null,
             setStyle(array('margin' => '13px 48px 8px')),
