@@ -2616,8 +2616,20 @@ class screenModel extends model
      */
     public function buildDataset($chartID, $sql = '')
     {
-        if(!in_array($chartID, $this->config->screen->phpChart)) return $this->dao->query($sql)->fetchAll();
+        if(in_array($chartID, $this->config->screen->phpChart)) return $this->getDatasetForUsageReport($chartID);
+        return $this->dao->query($sql)->fetchAll();
+    }
 
+    /**
+     * 获取应用健康度体检报告的数据源。
+     * Build dataset for usage report.
+     *
+     * @param  int    $chartID
+     * @access public
+     * @return array
+     */
+    public function getDatasetForUsageReport($chartID)
+    {
         $year  = $this->filter->year;
         $month = $this->filter->month;
 
@@ -3069,10 +3081,10 @@ class screenModel extends model
             ->fetchPairs();
     }
 
-        /**
+    /**
      * Get screen thumbnail.
      *
-     * @param  array    $screens
+     * @param  array  $screens
      * @access public
      * @return array
      */
@@ -3093,7 +3105,7 @@ class screenModel extends model
     /**
      * Remove scheme field of screen.
      *
-     * @param  array    $screens
+     * @param  array  $screens
      * @access public
      * @return array
      */
