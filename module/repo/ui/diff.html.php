@@ -99,11 +99,10 @@ if($repo->SCM != 'Subversion')
     );
     $breadcrumbItems[] = btn
     (
-        set::id('diffForm'),
         set::type('primary'),
         set::size('md'),
         $lang->repo->compare,
-        on::click('goDiff')
+        on::click()->call('window.goDiff')
     );
 }
 else
@@ -131,11 +130,10 @@ else
     );
     $breadcrumbItems[] = btn
     (
-        set::id('diffForm'),
         set::type('primary'),
         set::size('md'),
         $lang->repo->compare,
-        on::click('goDiff')
+        on::click()->call('window.goDiff')
     );
 }
 div(
