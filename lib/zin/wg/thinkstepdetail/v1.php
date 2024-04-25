@@ -11,15 +11,12 @@ class thinkStepDetail extends wg
 {
     protected static array $defineProps = array(
         'item: object',
-        'type?: string',       // 节点或者题型类型
-        'title?: string',      // 标题
-        'desc?: string',       // 描述
     );
     protected function detailHeading()
     {
         global $lang;
 
-        list($item, $title, $desc) = $this->prop(array('item', 'title', 'desc'));
+        $item = $this->prop('item');
         return div
         (
             div
@@ -30,7 +27,7 @@ class thinkStepDetail extends wg
                 (
                     setClass('text-md leading-6 font-medium'),
                     setStyle(array('color' => '#313C52')),
-                    $title
+                    $item->title
                 ),
                 div
                 (
@@ -69,7 +66,8 @@ class thinkStepDetail extends wg
                 setStyle(array('padding' => '0 48px', 'color' => '#9EA3B0', 'font-size' => '12px', 'margin-top' => '-30px')),
                 section
                 (
-                    set::content($desc),
+                    setClass(' break-words"'),
+                    set::content($item->desc),
                     set::useHtml(true)
                 )
             )
