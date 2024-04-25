@@ -69,7 +69,6 @@ window.changeTrigger = function(event)
     {
         useZentao = event;
     }
-    console.log(useZentao)
 
     if(useZentao === '1')
     {
@@ -77,7 +76,6 @@ window.changeTrigger = function(event)
         $('.job-form .sonarqube').show();
         $('.job-form .custom-fields').show();
         $('.job-form .comment-fields').css('display', 'flex');
-        $('.job-form #jenkinsServerTR').show();
         $('.job-form [data-name="triggerType"]').show();
     }
     else
@@ -86,7 +84,6 @@ window.changeTrigger = function(event)
         $('.job-form .sonarqube').hide();
         $('.job-form .custom-fields').hide();
         $('.job-form .comment-fields').hide();
-        $('.job-form #jenkinsServerTR').hide();
         $('.job-form [data-name="triggerType"]').hide();
     }
     $('[name=triggerType]').trigger('change');
