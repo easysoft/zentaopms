@@ -516,10 +516,10 @@ $config->group->package->browseTodo = new stdclass();
 $config->group->package->browseTodo->order  = 5;
 $config->group->package->browseTodo->subset = 'todo';
 $config->group->package->browseTodo->privs  = array();
-$config->group->package->browseTodo->privs['my-todo']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('my-calendar', 'my-index'), 'recommend' => array('todo-view'));
-$config->group->package->browseTodo->privs['my-calendar']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('my-index'), 'recommend' => array('my-todo'));
-$config->group->package->browseTodo->privs['todo-view']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('my-calendar', 'my-index'), 'recommend' => array('my-todo'));
-$config->group->package->browseTodo->privs['todo-calendar'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 85, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseTodo->privs['my-todo']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1,  'depend' => array('my-calendar', 'my-index'), 'recommend' => array('todo-view'));
+$config->group->package->browseTodo->privs['my-calendar']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0,  'depend' => array('my-index'), 'recommend' => array('my-todo'));
+$config->group->package->browseTodo->privs['todo-view']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5,  'depend' => array('my-calendar', 'my-index'), 'recommend' => array('my-todo'));
+$config->group->package->browseTodo->privs['todo-calendar'] = array('edition' => 'biz,max,ipd',      'vision' => 'rnd,lite,or', 'order' => 85, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->manageTodo = new stdclass();
 $config->group->package->manageTodo->order  = 10;
