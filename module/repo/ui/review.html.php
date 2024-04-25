@@ -74,7 +74,7 @@ $repoData = array(array(
     count($repoPairs) > 1 && $objectID ? to::leading
     (
         dropdown(
-            btn(setClass('dropdown-toggle ghost btn square btn-default'), $allRepo ? $lang->all : zget($repoPairs, $repoID, $lang->all)),
+            to('trigger', btn(setClass('ghost'), $allRepo ? $lang->all : zget($repoPairs, $repoID, $lang->all))),
             set::items($repoData),
             set::placement('bottom-end')
         )
