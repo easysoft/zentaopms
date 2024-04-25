@@ -233,6 +233,13 @@ $config->repo->reviewDtable->fieldList['title']['type']     = 'title';
 $config->repo->reviewDtable->fieldList['title']['data-app'] = $app->tab;
 $config->repo->reviewDtable->fieldList['title']['link']     = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}&from=repo');
 
+if($app->tab != 'devops')
+{
+    $config->repo->reviewDtable->fieldList['repo']['title'] = $lang->repo->common;
+    $config->repo->reviewDtable->fieldList['repo']['name']  = 'repoName';
+    $config->repo->reviewDtable->fieldList['repo']['width'] = '150';
+}
+
 $config->repo->reviewDtable->fieldList['fileLocation']['title'] = $lang->repo->codeLocation;
 $config->repo->reviewDtable->fieldList['fileLocation']['name']  = 'entry';
 $config->repo->reviewDtable->fieldList['fileLocation']['width'] = '300';

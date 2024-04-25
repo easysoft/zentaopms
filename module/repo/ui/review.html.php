@@ -22,8 +22,9 @@ jsVar('appTab', $app->tab);
 
 foreach($bugs as $bug)
 {
-    $repo      = zget($repos, $bug->repo, $repo);
-    $objectID  = $app->tab == 'execution' ? $bug->execution : 0;
+    $repo          = zget($repos, $bug->repo, $repo);
+    $bug->repoName = $repo->name;
+    $objectID      = $app->tab == 'execution' ? $bug->execution : 0;
 
     $bug->entry     = $this->repo->decodePath($bug->entry);
     $bug->revisionA = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
