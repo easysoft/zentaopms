@@ -171,7 +171,7 @@ formPanel
     $config->inQuickon ? setClass('externalPanel hidden') : setClass('externalPanel'),
     set::formID('createAppForm'),
     set::title($lang->space->install),
-    set::url($this->createLink('gitfox', 'create')),
+    set::url($this->createLink('gitlab', 'create')),
     set::actionsClass('w-2/3'),
     formGroup
     (
@@ -195,17 +195,17 @@ formPanel
     formGroup
     (
         set::width($colWidth),
-        set::label($lang->gitfox->name),
+        set::label($lang->gitlab->name),
         set::name('name'),
         set::required(true)
     ),
     formGroup
     (
         set::width($colWidth),
-        set::label($lang->gitfox->url),
+        set::label($lang->gitlab->url),
         set::name('url'),
         set::required(true),
-        set::placeholder($lang->gitfox->placeholder->url)
+        set::placeholder($lang->gitlab->placeholder->url)
     ),
     formRow
     (
