@@ -531,20 +531,21 @@ class story extends control
             $this->product->setMenu($story->product, $story->branch);
         }
 
-        $this->view->title      = "STORY #$story->id $story->title - $product->name";
-        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->executions = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->view->project    = $this->project->fetchByID($param);
-        $this->view->version    = $version;
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
-        $this->view->builds     = $this->loadModel('build')->getStoryBuilds($storyID);
-        $this->view->releases   = $this->loadModel('release')->getStoryReleases($storyID);
-        $this->view->story      = $story;
-        $this->view->product    = $product;
-        $this->view->gradePairs = $this->story->getGradePairs($story->type, 'all');
-        $this->view->showGrade  = $this->story->showGrade($story->type);
-        $this->view->actions    = $this->action->getList('story', $storyID);
+        $this->view->title         = "STORY #$story->id $story->title - $product->name";
+        $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->users         = $this->user->getPairs('noletter');
+        $this->view->executions    = $this->execution->getPairs(0, 'all', 'nocode');
+        $this->view->project       = $this->project->fetchByID($param);
+        $this->view->version       = $version;
+        $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
+        $this->view->builds        = $this->loadModel('build')->getStoryBuilds($storyID);
+        $this->view->releases      = $this->loadModel('release')->getStoryReleases($storyID);
+        $this->view->story         = $story;
+        $this->view->product       = $product;
+        $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
+        $this->view->gradePairs    = $this->story->getGradePairs($story->type, 'all');
+        $this->view->showGrade     = $this->story->showGrade($story->type);
+        $this->view->actions       = $this->action->getList('story', $storyID);
 
         $this->display();
     }

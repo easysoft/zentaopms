@@ -5198,6 +5198,21 @@ class storyModel extends model
     }
 
     /**
+     * 按照类型分组，获取需求最大层级。
+     * Get max grade group by story type.
+     *
+     * @access public
+     * @return array
+     */
+    public function getMaxGradeGroup()
+    {
+        return $this->dao->select('type, max(grade) as maxGrade')->from(TABLE_STORYGRADE)
+            ->where('status')->eq('enable')
+            ->groupBy('type')
+            ->fetchPairs();
+    }
+
+    /**
      * 检查是否展示需求层级。
      * Check if show grade.
      *
