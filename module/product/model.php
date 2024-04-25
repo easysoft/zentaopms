@@ -1148,6 +1148,7 @@ class productModel extends model
      * Get product line pairs by program.
      *
      * @param  int|array $programID
+     * @param  bool      $filterRoot
      * @access public
      * @return string[]
      */
