@@ -136,8 +136,8 @@ $config->task->actionList['edit']['data-app'] = $app->tab;
 if($config->vision != 'lite')
 {
     $config->task->actionList['batchCreate']['icon']     = 'split';
-    $config->task->actionList['batchCreate']['hint']     = $lang->task->batchCreate;
-    $config->task->actionList['batchCreate']['text']     = $lang->task->batchCreate;
+    $config->task->actionList['batchCreate']['hint']     = $lang->task->children;
+    $config->task->actionList['batchCreate']['text']     = $lang->task->children;
     $config->task->actionList['batchCreate']['url']      = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={id}');
     $config->task->actionList['batchCreate']['data-app'] = $app->tab;
 
