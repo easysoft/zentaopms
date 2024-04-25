@@ -110,8 +110,19 @@ class fileSelector extends wg
         $onAdd = $this->prop('onAdd');
         if($onAdd)
         {
-            $onAdd      = js::value($onAdd);
-            $checkFiles = $checkFiles->call($onAdd, jsRaw('file'));
+            var_dump($onAdd);
+            if(is_object($onAdd))
+            {
+                $objectClass = get_class($onAdd);
+                if($objectClass == 'zin\js')         $onAdd = $onAdd->toJS();
+                if($objectClass == 'zin\jsCallback') $onAdd = $onAdd->buildBody();
+                if(!is_object($onAdd)) $checkFiles = $checkFiles->do($onAdd);
+            }
+            else
+            {
+                $onAdd      = js::value($onAdd);
+                $checkFiles = $checkFiles->call($onAdd, jsRaw('file'));
+            }
         }
         $checkFiles = $checkFiles->do('return file');
         $this->setProp('onAdd', $checkFiles);
