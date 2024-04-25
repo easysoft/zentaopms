@@ -800,13 +800,14 @@
         if(!target || target === 'current')
         {
             const lastModal = zui.Modal.last();
-            if(!lastModal) return zui.Modal.open(options);;
+            if(!lastModal) return zui.Modal.open(options);
             target = lastModal.id;
         }
 
         if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
+        if((modal.options.url || '').toLowerCase() === (options.url || '').toLowerCase() && options.loadingClass === undefined) options.loadingClass = '';
         modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
     }
 
