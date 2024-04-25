@@ -57,12 +57,12 @@ class thinkNode  extends wg
             $isEdit = $action === 'edit' ? true : false;
 
 
-            if($addType === 'transition' || $item->type === 'transition') return thinkTransition
+            if($addType === 'transition' || $isEdit && $item->type === 'transition') return thinkTransition
             (
                 set::title($isEdit ? $item->title : ''),
                 set::desc($isEdit ? $item->desc: ''),
             );
-            if($item->type === 'question' || $addType)
+            if($isEdit && $item->type === 'question' || $addType)
             {
                 if($addType === 'radio' || ($isEdit && $item->questionType === 'radio')) return thinkRadio
                 (
