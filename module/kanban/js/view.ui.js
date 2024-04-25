@@ -295,7 +295,7 @@ window.renderProductplanItem = function(info)
 
     const date = '<span class="ml-2 label ' + labelType + '">' + info.item.begin.slice(5) + ' ' + productplanLang.to + ' ' + info.item.end.slice(5) + '</span>';
     info.item.content      = {html: info.item.desc}
-    info.item.contentClass = 'text-gray';
+    info.item.contentClass = 'text-gray clip mr-2';
     info.item.footer       = {html: statusBox + date}
 }
 window.renderTicketItem = function(info)
