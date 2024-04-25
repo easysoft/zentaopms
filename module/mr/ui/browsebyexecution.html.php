@@ -103,7 +103,7 @@ featureBar
     count($repoPairs) > 1 ? to::leading(
         dropdown
         (
-            btn(setClass('dropdown-toggle ghost btn square btn-default'), zget($repoPairs, $repoID, $lang->mr->statusList['all'])),
+            btn(setClass('ghost'), zget($repoPairs, $repoID, $lang->mr->statusList['all'])),
             set::items($repoData),
             set::placement('bottom-end')
         )
