@@ -435,7 +435,7 @@ class blockZen extends block
         /* 获取昨日解决的Bug数。 */
         $fixBug      = 0;
         $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
-        if(!empty($fixBug))
+        if(!empty($fixBugGroup))
         {
             $fixBugGroup = reset($fixBugGroup);
             $fixBug      = zget($fixBugGroup, 'value', 0);

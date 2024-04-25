@@ -663,7 +663,7 @@ class product extends control
         }
 
         $this->view->title    = $this->lang->product->manageLine;
-        $this->view->programs = $this->loadModel('program')->getTopPairs('withDeleted');
+        $this->view->programs = array(0 => $this->lang->null) + $this->loadModel('program')->getTopPairs('withDeleted');
         $this->view->lines    = $this->product->getLines();
         $this->view->fields   = $this->config->product->form->manageLine;
         $this->display();
@@ -1002,7 +1002,7 @@ class product extends control
     public function ajaxGetLine(int $programID, int $productID = 0)
     {
         $lines = array();
-        if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
+        if(empty($productID) || $programID) $lines = $this->product->getLinePairs($programID, true);
 
         $items = array();
         foreach($lines as $lineID => $lineName) $items[] = array('text' => $lineName, 'value' => $lineID);
