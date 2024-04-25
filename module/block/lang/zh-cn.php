@@ -527,7 +527,8 @@ $lang->block->welcome->reviewByMe = '待我评审';
 $lang->block->welcome->assignToMe = '指派给我';
 
 $lang->block->welcome->reviewList = array();
-$lang->block->welcome->reviewList['story'] = $lang->SRCommon . '数';
+$lang->block->welcome->reviewList['story']      = $lang->SRCommon . '数';
+$lang->block->welcome->reviewList['reviewByMe'] = '待我评审数';
 
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task']     = '任务数';

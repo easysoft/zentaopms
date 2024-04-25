@@ -469,11 +469,12 @@ class blockZen extends block
                 $assignedGroup = reset($assignedGroup);
                 $count         = zget($assignedGroup, 'value', 0);
             }
-            $assignToMe[$field] = array('number' => $count, 'delay' => 0, 'href' => helper::createLink('my', 'work', "mode=$field&type=$type"));
+            $assignToMe[$field] = array('number' => $count, 'href' => helper::createLink('my', 'work', "mode=$field&type=$type"));
         }
 
         /* 生成待我审批的数据。 */
-        $reviewByMe = array();
+        $reviewByMe['reviewByMe']['number'] = 0;
+        $reviewByMe['reviewByMe']['href']   = helper::createLink('my', 'audit');
         foreach($this->lang->block->welcome->reviewList as $field => $label)
         {
             /* 根据不同的模块生成不同的度量项查询码。 */
@@ -487,7 +488,7 @@ class blockZen extends block
                 $reviewingGroup = reset($reviewingGroup);
                 $count          = zget($reviewingGroup, 'value', 0);
             }
-            $reviewByMe[$field] = array('number' => $count, 'delay' => 0);
+            $reviewByMe['reviewByMe']['number'] += $count;
         }
 
         $this->view->todaySummary = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())]; // 当前年月日 星期几。
