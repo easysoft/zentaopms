@@ -195,6 +195,7 @@ if(!empty($story->children))
 
     $options = array('users' => $users);
     foreach($story->children as $child) $child = $this->story->formatStoryForList($child, $options, $child->type, $maxGradeGroup[$child->type]);
+    if(!common::hasPriv($child->type, 'view')) unset($cols['title']['link']);
 }
 
 detailHeader
