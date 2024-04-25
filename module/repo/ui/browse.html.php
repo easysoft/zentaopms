@@ -102,6 +102,7 @@ $refreshItem   = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' 
 
 $createItem = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create', "objectID={$objectID}"), 'data-app' => $app->tab);
 
+$config->repo->repoDtable->fieldList['revision']['link'] = inLink('revision', "repoID={$repo->id}&objectID={$objectID}&revision={revision}");
 $tableData = initTableData($infos, $config->repo->repoDtable->fieldList, $this->repo);
 
 $downloadWg = div

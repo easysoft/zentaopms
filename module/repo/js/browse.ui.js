@@ -11,13 +11,6 @@ window.renderCell = function(result, {col, row})
         return result;
     }
 
-    if(col.name === 'revision')
-    {
-        result[0] = {html:'<a href="' + row.data.commitLink + '" data-app="' + appTab + '">' + row.data.revision + '</a>', style:{flexDirection:"column"}};
-
-        return result;
-    }
-
     if(col.name === 'originalComment')
     {
         result[0] = {html:'<span class="repo-comment">' + row.data.comment + '</span>'};

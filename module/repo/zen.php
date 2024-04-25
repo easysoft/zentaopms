@@ -627,7 +627,6 @@ class repoZen extends repo
             }
         }
 
-        $pathInfo  = '&root=' . $this->repo->encodePath(empty($path) ? '/' : $path);
         foreach($infos as $info)
         {
             $info->originalComment = $info->comment;
@@ -644,7 +643,6 @@ class repoZen extends repo
                 if($repo->SCM == 'Subversion') $infoPath = $filePath . '/' . $info->name;
                 $info->link = $this->repo->createLink('view', "repoID={$repo->id}&objectID=$objectID&entry=" . $this->repo->encodePath($infoPath));
             }
-            $info->commitLink = $this->repo->createLink('revision', "repoID={$repo->id}&objectID=$objectID&revision={$info->revision}" . $pathInfo);
         }
 
         return $infos;
