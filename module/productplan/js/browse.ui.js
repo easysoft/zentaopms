@@ -142,6 +142,7 @@ $(document).on('click', '[data-target="#createExecutionModal"]', function()
     {
         const $projectPicker = $('#createExecutionModal [name=project]').zui('picker');
         $projectPicker.render({items: projects, disabled: projects.length == 0});
+        $('.projectTips').toggleClass('hidden', projects.length != 0);
         if(projects.length > 0)
         {
             $('#createExecutionModal .createExecutionBtn').attr('id', 'createExecutionButton');
