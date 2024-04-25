@@ -1604,7 +1604,7 @@ class blockZen extends block
             ->andWhere('project')->ne(0)
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
-            ->orderBy('begin_asc')
+            ->orderBy('id_desc')
             ->fetchGroup('product');
 
         /* 将获取出的度量项数据塞入产品列表数据中。 */
