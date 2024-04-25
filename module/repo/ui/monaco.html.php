@@ -105,7 +105,7 @@ $inModal ? null : sidebar
             setID('repoBranchDropMenu'),
             setClass('px-2'),
             set::objectID($dropMenus['selected']),
-            set::text($dropMenus['selected']),
+            set::text($dropMenus['selected'] ? $dropMenus['selected'] : $revision),
             set::data(array('data' => $menuData, 'tabs' => $tabs))
         )
     ),

@@ -412,7 +412,7 @@ class repo extends control
         if($repoID == 0) $repoID = $this->session->repoID;
         if($revision != 'HEAD')
         {
-            setCookie("repoBranch", $revision, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+            helper::setCookie("repoBranch", $revision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             $this->cookie->set('repoBranch', $revision);
         }
 
