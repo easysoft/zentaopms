@@ -107,7 +107,7 @@ function loadProductBranches(productID)
         if(data && data != '[]')
         {
             $branchBox.html("<div class='picker-box' id='branch'></div>").removeClass('hidden');
-            $branch = new zui.Picker('.branchIdBox #branch', {items: JSON.parse(data), name: 'branch'});
+            $branch = new zui.Picker('.branchIdBox #branch', {items: JSON.parse(data), name: 'branch', defaultValue: 0});
             branch  = $branch.$.value;
         }
     });
