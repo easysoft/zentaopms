@@ -10,27 +10,18 @@ declare(strict_types=1);
  */
 namespace zin;
 
-formPanel
+set::title($lang->holiday->importAction);
+set::condensed();
+
+form
 (
-    setClass('import-holiday-panel'),
-    set::formClass('mb-4'),
     dtable
     (
         set::cols($this->config->holiday->dtable->import->fieldList),
-        set::data($holidays)
+        set::data($holidays),
+        set::height('auto')
     ),
-    formRow
-    (
-        setClass('hidden'),
-        formGroup
-        (
-            set::label(''),
-            set::name('submit'),
-            set::control('hidden'),
-            set::value('')
-        )
-    )
+    h::formHidden('submit', '')
 );
 
 render();
-
