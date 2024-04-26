@@ -54,7 +54,9 @@ function toggleZeroTaskStory()
         const $storyTd     = $(this);
         $.getJSON(getStoryLink, function(stories)
         {
-            $storyTd.find('[name^=story]').zui('picker').render({items: stories});
+            const $storyPicker = $storyTd.find('[name^=story]').zui('picker');
+            $storyPicker.render({items: stories});
+            $storyPicker.$.setValue(0);
         });
     });
 }
@@ -87,7 +89,7 @@ function setStoryRelated(event)
             {
                 const storyInfo = data['storyInfo'];
 
-                $module.zui('picker').$.setValue(parseInt(storyInfo.moduleID));
+                $module.zui('picker').$.setValue(parseInt(storyInfo.moduleID), true);
                 $storyEstimate.val(storyInfo.estimate);
                 $storyPri.val(storyInfo.pri);
                 $storyDesc.val(storyInfo.spec);
