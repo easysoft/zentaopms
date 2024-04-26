@@ -1147,6 +1147,11 @@ class productZen extends product
             }
         }
 
+        if($this->config->edition == 'ipd' && $storyType == 'requirement')
+        {
+            $this->config->product->search['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
+        }
+
         /* Build search form. */
         $params    = $isProjectStory ? "projectID=$projectID&" : '';
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
