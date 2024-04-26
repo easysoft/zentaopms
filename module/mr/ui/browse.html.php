@@ -16,7 +16,7 @@ foreach($MRList as $MR)
 {
     $MR->canEdit   = '';
     $MR->canDelete = ($app->user->admin or (isset($openIDList[$MR->hostID]) and isset($projects[$MR->hostID][$MR->sourceProject]->owner->id) and $projects[$MR->hostID][$MR->sourceProject]->owner->id == $openIDList[$MR->hostID])) ? '' : 'disabled';
-    if($repo->SCM == 'Gitlab')
+    if(in_array($repo->SCM, array('Gitlab', 'GitFox')))
     {
         $MR->canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->isDeveloper) and $projects[$MR->hostID][$MR->sourceProject]->isDeveloper == true) ? '' : 'disabled';
     }
