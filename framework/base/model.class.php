@@ -160,7 +160,7 @@ class baseModel
 
         $this->loadDAO();
         $this->setSuperVars();
-        $this->loadCache();
+        if($this->config->cache->enable) $this->loadCache();
 
         /**
          * 读取当前模块的tao类。
