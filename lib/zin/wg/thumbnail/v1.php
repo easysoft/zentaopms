@@ -52,7 +52,7 @@ class thumbnail extends wg
                     setID('thumbnail-img'),
                     setClass('w-full h-full' . ($src ? '' : ' hidden')),
                     set::src($src),
-                    set::alt($tips)
+                    set::title($tips)
                 ),
                 $src ? null : span(setID('thumbnail-tips'), setClass('text-primary font-bold'), $tips)
             ),
