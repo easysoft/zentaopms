@@ -1370,6 +1370,7 @@ class testcase extends control
     {
         if($_POST)
         {
+            $this->lang->testcase->title = $this->lang->testcase->sceneTitle;
             $scene = form::data($this->config->testcase->form->createScene)->get();
 
             $this->testcase->createScene($scene);
