@@ -13,15 +13,17 @@ namespace zin;
 set::title($lang->holiday->importAction);
 set::condensed();
 
-form
+dtable
 (
-    dtable
-    (
-        set::cols($this->config->holiday->dtable->import->fieldList),
-        set::data($holidays),
-        set::height('auto')
-    ),
-    h::formHidden('submit', '')
+    set::cols($this->config->holiday->dtable->import->fieldList),
+    set::data($holidays),
+    set::height('auto'),
+    setClass('mb-4')
 );
 
-render();
+div
+(
+    setClass('canvas pt-4 sticky bottom-0'),
+    style::margin('1px -8px 0'),
+    form(h::formHidden('submit', ''))
+);
