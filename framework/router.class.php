@@ -432,9 +432,9 @@ class router extends baseRouter
         /* 加载每一个配置文件。Load every config file. */
         foreach($configFiles as $configFile)
         {
-            if(in_array($configFile, self::$loadedConfigs)) continue;
+            if(isset(self::$loadedConfigs[$configFile])) continue;
             if(file_exists($configFile)) include $configFile;
-            self::$loadedConfigs[] = $configFile;
+            self::$loadedConfigs[$configFile] = $configFile;
         }
 
         /* 加载数据库中与本模块相关的配置项。Merge from the db configs. */
