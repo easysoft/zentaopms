@@ -89,15 +89,7 @@ class mr extends control
 
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => $repo->serviceProject);
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
-        $MRList         = $this->mr->batchSyncMR($MRList);
         $projects       = $this->mrZen->getAllProjects($repo, $MRList);
-
-        /* Check whether Mr is linked with the product. */
-        foreach($MRList as $MR)
-        {
-            $product         = $this->mr->getMRProduct($MR);
-            $MR->linkButton  = empty($product) ? false : true;
-        }
 
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
@@ -141,7 +133,6 @@ class mr extends control
 
         $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), $repoID, $projectID, $pager);
         $repoList = $this->loadModel('repo')->getList($projectID);
-        $MRList   = $this->mr->batchSyncMR($MRList);
 
         $projects  = array();
         $repoPairs = array();
