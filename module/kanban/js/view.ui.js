@@ -182,6 +182,8 @@ window.getItem = function(info)
         renderGeneralItem(info);
     }
     if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
+
+    info.item.titleAttrs = {'class': 'card-title clip'};
 }
 
 window.renderGeneralItem = function(info)
