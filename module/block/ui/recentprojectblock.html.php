@@ -55,9 +55,9 @@ foreach($projects as $projectID => $project)
                     ),
                     $project->end == LONG_TIME ? $lang->program->longTime : $project->end
                 ),
-                ($project->multiple && $execution) ? array
+                div
                 (
-                    div
+                    $project->multiple && $execution ? div
                     (
                         span
                         (
@@ -74,8 +74,21 @@ foreach($projects as $projectID => $project)
                             setClass('label warning-pale circle ml-2'),
                             $lang->execution->statusList[$execution->status]
                         )
-                    ),
-                ) : null
+                    ) : div(setClass('h-5'))
+                ),
+                div
+                (
+                    setClass('flex items-center'),
+                    span(setClass('num mr-1'), $project->progress . '%'),
+                    progressBar
+                    (
+                        setClass('progress flex-auto'),
+                        set::height(8),
+                        set::percent($project->progress),
+                        set::color('var(--color-primary-300)'),
+                        set::background('rgba(0,0,0,0.02)')
+                    )
+                )
             )
         )
     );
