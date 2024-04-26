@@ -13,7 +13,7 @@ cid=1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/calc.class.php';
+include dirname(__FILE__, 4) . '/lib/calc.class.php';
 
 zendata('effort')->loadYaml('effort', true, 4)->gen(1000);
 
