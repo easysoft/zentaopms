@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
-include dirname(__FILE__, 4) . '/file/test/file.class.php';
+include dirname(__FILE__, 4) . '/file/test/lib/file.unittest.class.php';
 su('admin');
 
 zenData('action')->gen(2);
