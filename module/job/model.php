@@ -550,25 +550,6 @@ class jobModel extends model
     }
 
     /**
-     * 判断按钮是否可点击。
-     * Adjust the action is clickable.
-     *
-     * @param  object $object
-     * @param  string $action
-     * @param  string $module
-     * @access public
-     * @return bool
-     */
-    public static function isClickable(object $object, string $action, string $module = 'job'): bool
-    {
-        $action = strtolower($action);
-
-        if($module == 'job' && $action == 'exec') return $object->canExec;
-
-        return true;
-    }
-
-    /**
      * 检查jenkins是否启用参数构建。
      * Check if jenkins has enabled parameterized build.
      *
