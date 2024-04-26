@@ -3814,7 +3814,6 @@ class storyModel extends model
         $storyLang->legendLinkStories  = str_replace($SRCommon, $URCommon, $storyLang->legendLinkStories);
         $storyLang->legendChildStories = str_replace($SRCommon, $URCommon, $storyLang->legendChildStories);
         $storyLang->legendSpec         = str_replace($SRCommon, $URCommon, $storyLang->legendSpec);
-        $storyLang->unlinkStory        = str_replace($SRCommon, $URCommon, $storyLang->unlinkStory);
 
         $storyLang->notice->closed           = str_replace($SRCommon, $URCommon, $storyLang->notice->closed);
         $storyLang->notice->reviewerNotEmpty = str_replace($SRCommon, $URCommon, $storyLang->notice->reviewerNotEmpty);
