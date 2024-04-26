@@ -124,6 +124,15 @@ class baseModel
     public $global;
 
     /**
+     * $cache对象，用于访问缓存。
+     * The $cache object, used to access the cache.
+     *
+     * @var object
+     * @access public
+     */
+    public $cache;
+
+    /**
      * 构造方法。
      * 1. 将全局变量设为model类的成员变量，方便model的派生类调用；
      * 2. 设置$config, $lang, $dbh, $dao。
