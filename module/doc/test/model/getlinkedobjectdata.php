@@ -68,7 +68,7 @@ $buildTable = zenData('build');
 $buildTable->execution->range('101-110');
 $buildTable->gen(20);
 
-$issuetable = zdtable('issue');
+$issuetable = zendata('issue');
 $issuetable->project->range('11, 60, 61, 100');
 $issuetable->gen(20);
 

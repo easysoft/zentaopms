@@ -16,7 +16,7 @@ cid=1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/lib/calc.class.php';
+include dirname(__FILE__, 4) . '/lib/calc.unittest.class.php';
 
 zendata('story')->gen(100);
 zendata('product')->gen(100);

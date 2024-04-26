@@ -16,12 +16,12 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
-zdtable('action')->gen('100');
-zdtable('doc')->gen('0');
-zdtable('api')->gen('0');
-zdtable('doclib')->gen('0');
-zdtable('project')->gen('0');
-zdtable('product')->gen('0');
+zendata('action')->gen('100');
+zendata('doc')->gen('0');
+zendata('api')->gen('0');
+zendata('doclib')->gen('0');
+zendata('project')->gen('0');
+zendata('product')->gen('0');
 zenData('user')->gen('1');
 
 su('admin');

@@ -15,7 +15,7 @@ cid=1
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
-include dirname(__FILE__, 4) . '/lib/calc.class.php';
+include dirname(__FILE__, 4) . '/lib/calc.unittest.class.php';
 
 zendata('project')->loadYaml('project_status', true, 4)->gen(10);
 zendata('product')->loadYaml('product_shadow', true, 4)->gen(10);

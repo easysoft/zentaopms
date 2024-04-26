@@ -5,7 +5,7 @@ include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
 zenData('case')->loadYaml('modulebranchcase')->gen('200');
 zenData('projectcase')->gen('300');
-zdtable('story')->loadYaml('versionstory')->gen('200');
+zendata('story')->loadYaml('versionstory')->gen('200');
 zenData('user')->gen('1');
 
 su('admin');

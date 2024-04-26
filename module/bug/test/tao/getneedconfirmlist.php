@@ -19,9 +19,9 @@ $bug->confirmed->range('0,1,1,0');
 $bug->resolution->range('postponed,fixed');
 $bug->gen(50);
 
-zdtable('story')->loadYaml('storyconfirm')->gen(50);
+zendata('story')->loadYaml('storyconfirm')->gen(50);
 
-zdtable('user')->gen(1);
+zendata('user')->gen(1);
 
 su('admin');
 

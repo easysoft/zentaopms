@@ -25,7 +25,7 @@ $projectstoryTable = zenData('projectstory');
 $projectstoryTable->project->range('11, 60, 61, 100');
 $projectstoryTable->gen(20);
 
-$issuetable = zdtable('issue');
+$issuetable = zendata('issue');
 $issuetable->project->range('11, 60, 61, 100');
 $issuetable->gen(20);
 
