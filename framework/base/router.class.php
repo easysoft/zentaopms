@@ -288,16 +288,6 @@ class baseRouter
     static $loadedLangs = array();
 
     /**
-     * 已加载的模块.
-     * Modules loaded.
-     *
-     * @static
-     * @var array
-     * @access public
-     */
-    static $loadedModules = array();
-
-    /**
      * 已加载的目标，可能是 model，tao 或者 zen 的实例化对象。
      * Targets loaded, maybe instance of model, tao or zen.
      *
@@ -2947,9 +2937,9 @@ class baseRouter
         if(!is_object($lang)) $lang = new language();
         if(!isset($lang->$moduleName)) $lang->$moduleName = new stdclass();
 
-        if(isset(self::$loadedModules[$moduleName])) return $lang;
+        if(isset(self::$loadedLangs[$moduleName])) return $lang;
 
-        self::$loadedModules[$moduleName] = $moduleName;
+        self::$loadedLangs[$moduleName] = $moduleName;
 
         /* 计算最终要加载的语言文件。 Get the lang files to be loaded. */
         $langFilesToLoad = $this->getMainAndExtFiles($moduleName, $appName, 'lang');
