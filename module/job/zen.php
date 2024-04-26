@@ -42,22 +42,11 @@ class jobZen extends job
         $jobList  = $this->job->getList($repoID, $orderBy, $pager);
         foreach($jobList as $job)
         {
-            $job->canExec = true;
-
-            if($job->engine == 'gitlab')
-            {
-                $pipeline = json_decode($job->pipeline);
-                $branch   = $this->gitlab->apiGetSingleBranch($job->server, (int)$pipeline->project, $pipeline->reference);
-                if($branch and isset($branch->can_push) and !$branch->can_push) $job->canExec = false;
-                /* query buildSpec */
-                if(is_numeric($job->pipeline))  $job->pipeline = $this->gitlab->getProjectName($job->server, $job->pipeline);
-                if(isset($pipeline->reference)) $job->pipeline = $this->gitlab->getProjectName($job->server, (int)$pipeline->project);
-            }
-            elseif($job->engine == 'jenkins')
+            if($job->engine == 'jenkins')
             {
                 if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
             }
-            elseif($job->engine == 'gitfox')
+            else
             {
                 $job->pipeline = $job->repoName;
             }
