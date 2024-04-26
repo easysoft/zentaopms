@@ -107,11 +107,20 @@ class fileSelector extends wg
             return false;
         }
         JS);
+
+        /* Get onAdd function.*/
         $onAdd = $this->prop('onAdd');
         if($onAdd)
         {
             if(is_object($onAdd))
             {
+                /*
+                 * 获取在 ui 界面上通过 jsCallback 和 js 定义的 onAdd 函数。
+                 * eg: 1. $onAdd = jsCallbakc()..;
+                 *         fileSelector(set::onAdd($onAdd));
+                 *     2. $onAdd = js()..;
+                 *         fileSelector(set::onAdd($onAdd));
+                 */
                 $objectClass = get_class($onAdd);
                 if($objectClass == 'zin\js')         $onAdd = $onAdd->toJS();
                 if($objectClass == 'zin\jsCallback') $onAdd = $onAdd->buildBody();
@@ -119,6 +128,7 @@ class fileSelector extends wg
             }
             else
             {
+                /* 获取在 ui 界面上通过 jsRaw 定义的 onAdd 函数。 eg: fileSelector(set::onAdd(jsRaw('window.onAdd'))); */
                 $onAdd      = js::value($onAdd);
                 $checkFiles = $checkFiles->call($onAdd, jsRaw('file'));
             }
