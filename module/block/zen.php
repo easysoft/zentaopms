@@ -476,14 +476,29 @@ class blockZen extends block
         $reviewList = $this->loadModel('my')->getReviewingList('all');
         $reviewByMe['reviewByMe'] = array('number' => count($reviewList), 'href' => common::hasPriv('my', 'audit') ? helper::createLink('my', 'audit') : '');
 
-        $this->view->todaySummary = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())]; // 当前年月日 星期几。
-        $this->view->welcomeType  = $welcomeType;
-        $this->view->usageDays    = $usageDays;
-        $this->view->finishTask   = $finishTask;
-        $this->view->fixBug       = $fixBug;
-        $this->view->honorary     = $honorary;
-        $this->view->assignToMe   = $assignToMe;
-        $this->view->reviewByMe   = $reviewByMe;
+        /* 生成欢迎语。 */
+        $yesterdaySummary = '';
+        if($finishTask || $fixBug)
+        {
+            if($finishTask) $yesterdaySummary .= sprintf($this->lang->block->summary->finishTask, $finishTask) . ($fixBug ? '、' : $this->lang->comma);
+            if($fixBug)     $yesterdaySummary .= sprintf($this->lang->block->summary->fixBug, $fixBug) . $this->lang->comma;
+        }
+        else
+        {
+            $yesterdaySummary .= $this->lang->block->summary->noWork;
+        }
+        $yesterdaySummary = $this->lang->block->summary->yesterday . $yesterdaySummary;
+        $welcomeSummary   = sprintf($this->lang->block->summary->welcome, $usageDays, $yesterdaySummary);
+
+        $this->view->todaySummary   = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())]; // 当前年月日 星期几。
+        $this->view->welcomeType    = $welcomeType;
+        $this->view->usageDays      = $usageDays;
+        $this->view->finishTask     = $finishTask;
+        $this->view->fixBug         = $fixBug;
+        $this->view->honorary       = $honorary;
+        $this->view->assignToMe     = $assignToMe;
+        $this->view->reviewByMe     = $reviewByMe;
+        $this->view->welcomeSummary = $welcomeSummary;
     }
 
     /**
