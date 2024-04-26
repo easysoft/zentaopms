@@ -26,6 +26,16 @@ class baseHelper
     static $loadedDirs = array();
 
     /**
+     * 已经包含的文件.
+     * The included files.
+     *
+     * @static
+     * @var array
+     * @access public
+     */
+    static $includedFiles = array();
+
+    /**
      * 设置一个对象的成员变量。
      * Set the member's value of one object.
      * <code>
@@ -222,16 +232,13 @@ class baseHelper
     static public function import($file)
     {
         $file = realpath($file);
-        if($file === false || !is_file($file)) return false;
+        if($file === false) return false;
 
-        static $includedFiles = array();
-        if(!isset($includedFiles[$file]))
-        {
-            include $file;
-            $includedFiles[$file] = true;
-            return true;
-        }
+        if(isset(self::$includedFiles[$file])) return true;
+        if(!is_file($file)) return false;
 
+        include $file;
+        self::$includedFiles[$file] = true;
         return true;
     }
 
