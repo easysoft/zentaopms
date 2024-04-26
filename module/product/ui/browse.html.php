@@ -172,8 +172,8 @@ $fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProdu
         );
 
     }
-    if($canLinkStory && !$canlinkPlanStory) return item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'plus')));
-    if($canlinkPlanStory && !$canLinkStory) return item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'plus')));
+    if($canLinkStory && !$canlinkPlanStory) return item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link')));
+    if($canlinkPlanStory && !$canLinkStory) return item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link')));
 };
 
 /* DataTable columns. */
