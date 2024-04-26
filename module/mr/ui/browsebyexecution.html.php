@@ -10,10 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-dropmenu
-(
-    set::url(createLink('execution', 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
-);
+dropmenu(set::url(createLink('execution', 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}")));
 
 foreach($MRList as $index => $MR)
 {
@@ -62,36 +59,11 @@ foreach($MRList as $index => $MR)
 }
 
 $MRs = initTableData($MRList, $config->mr->dtable->fieldList, $this->mr);
-$repoData = array(array(
-    'text'     => $lang->mr->statusList['all'],
-    'data-app' => $app->tab,
-    'url'      => createLink('mr', 'browse', "repoID=0&mode={$mode}&param={$param}&objectID={$objectID}"),
-    'active'   => !$repoID
-));
-foreach($repoList as $repo)
-{
-    if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) continue;
-
-    $repoData[] = array(
-        'text'     => $repo->name,
-        'data-app' => $app->tab,
-        'url'      => createLink('mr', 'browse', "repoID={$repo->id}&mode={$mode}&param={$param}&objectID={$objectID}"),
-        'active'   => $repo->id == $repoID
-    );
-}
 
 featureBar
 (
     set::current($mode != 'status' ? $mode : $param),
-    set::linkParams("repoID={$repoID}&mode=status&param={key}&objectID={$objectID}"),
-    count($repoPairs) > 1 ? to::leading(
-        dropdown
-        (
-            btn(setClass('dropdown-toggle ghost btn square btn-default'), zget($repoPairs, $repoID, $lang->mr->statusList['all'])),
-            set::items($repoData),
-            set::placement('bottom-end')
-        )
-    ) : null
+    set::linkParams("repoID={$repoID}&mode=status&param={key}&objectID={$objectID}")
 );
 
 toolBar
