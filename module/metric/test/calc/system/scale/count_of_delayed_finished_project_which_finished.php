@@ -13,7 +13,7 @@ cid=1
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
-zdTable('project')->config('project_delayed',     true, 4)->gen(10);
+zendata('project')->loadYaml('project_delayed',     true, 4)->gen(10);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);

@@ -283,8 +283,8 @@ class searchTest
      */
     public function getListTest(string $keywords, string|array $type): int|array
     {
-        zdTable('searchindex')->gen(0);
-        zdTable('searchdict')->gen(0);
+        zendata('searchindex')->gen(0);
+        zendata('searchdict')->gen(0);
         $result = array();
         while(!isset($result['finished']))
         {

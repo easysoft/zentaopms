@@ -14,9 +14,9 @@ cid=1
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
-zdTable('project')->config('project', true, 4)->gen(10);
-zdTable('project')->config('sprint', true, 4)->gen(40, false);
-zdTable('effort')->config('effort', true, 4)->gen(1000);
+zendata('project')->loadYaml('project', true, 4)->gen(10);
+zendata('project')->loadYaml('sprint', true, 4)->gen(40, false);
+zendata('effort')->loadYaml('effort', true, 4)->gen(1000);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);

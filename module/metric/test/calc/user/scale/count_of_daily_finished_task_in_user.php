@@ -15,9 +15,9 @@ cid=1
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
-zdTable('project')->config('project_status', true, 4)->gen(10);
-zdTable('project')->config('execution', true, 4)->gen(20, false);
-zdTable('task')->config('task_daily_finished', true, 4)->gen(1000);
+zendata('project')->loadYaml('project_status', true, 4)->gen(10);
+zendata('project')->loadYaml('execution', true, 4)->gen(20, false);
+zendata('task')->loadYaml('task_daily_finished', true, 4)->gen(1000);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);

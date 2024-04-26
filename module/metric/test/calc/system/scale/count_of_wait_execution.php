@@ -18,17 +18,17 @@ include dirname(__FILE__, 4) . '/calc.class.php';
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-zdTable('project')->config('project_close', true, 4)->gen(10);
-zdTable('project')->config('execution', true, 4)->gen(356, false);
+zendata('project')->loadYaml('project_close', true, 4)->gen(10);
+zendata('project')->loadYaml('execution', true, 4)->gen(356, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('10'); // 测试356条数据。
 
-zdTable('project')->config('project_close', true, 4)->gen(10);
-zdTable('project')->config('execution', true, 4)->gen(652, false);
+zendata('project')->loadYaml('project_close', true, 4)->gen(10);
+zendata('project')->loadYaml('execution', true, 4)->gen(652, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('21'); // 测试652条数据。
 
-zdTable('project')->config('project_close', true, 4)->gen(10);
-zdTable('project')->config('execution', true, 4)->gen(1265, false);
+zendata('project')->loadYaml('project_close', true, 4)->gen(10);
+zendata('project')->loadYaml('execution', true, 4)->gen(1265, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('39'); // 测试1265条数据。

@@ -84,8 +84,8 @@ class testtaskTest
      */
     public function startTest(array $task): bool|array
     {
-        zdTable('history')->gen(0);
-        zdTable('action')->gen(0);
+        zendata('history')->gen(0);
+        zendata('action')->gen(0);
         $result = $this->objectModel->start((object)$task);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
@@ -107,8 +107,8 @@ class testtaskTest
      */
     public function closeTest(array $task): bool|array
     {
-        zdTable('history')->gen(0);
-        zdTable('action')->gen(0);
+        zendata('history')->gen(0);
+        zendata('action')->gen(0);
         $result = $this->objectModel->close((object)$task);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
@@ -130,8 +130,8 @@ class testtaskTest
      */
     public function blockTest(array $task): bool|array
     {
-        zdTable('history')->gen(0);
-        zdTable('action')->gen(0);
+        zendata('history')->gen(0);
+        zendata('action')->gen(0);
         $result = $this->objectModel->block((object)$task);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
@@ -153,8 +153,8 @@ class testtaskTest
      */
     public function activateTest(array $task): bool|array
     {
-        zdTable('history')->gen(0);
-        zdTable('action')->gen(0);
+        zendata('history')->gen(0);
+        zendata('action')->gen(0);
         $result = $this->objectModel->activate((object)$task);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
@@ -176,8 +176,8 @@ class testtaskTest
      */
     public function unlinkCaseTest(int $runID): bool|array
     {
-        zdTable('history')->gen(0);
-        zdTable('action')->gen(0);
+        zendata('history')->gen(0);
+        zendata('action')->gen(0);
         $result = $this->objectModel->unlinkCase($runID);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
@@ -200,8 +200,8 @@ class testtaskTest
      */
     public function batchUnlinkCasesTest(int $taskID, array $caseIdList): bool|array
     {
-        zdTable('history')->gen(0);
-        zdTable('action')->gen(0);
+        zendata('history')->gen(0);
+        zendata('action')->gen(0);
         $result = $this->objectModel->batchUnlinkCases($taskID, $caseIdList);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
@@ -224,8 +224,8 @@ class testtaskTest
      */
     public function batchAssignTest(int $taskID, string $account, array $caseIdList): bool|array
     {
-        zdTable('history')->gen(0);
-        zdTable('action')->gen(0);
+        zendata('history')->gen(0);
+        zendata('action')->gen(0);
         $result = $this->objectModel->batchAssign($taskID, $account, $caseIdList);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
@@ -248,8 +248,8 @@ class testtaskTest
      */
     public function linkCaseTest(int $taskID, string $type, array $runs): bool|array
     {
-        zdTable('history')->gen(0);
-        zdTable('action')->gen(0);
+        zendata('history')->gen(0);
+        zendata('action')->gen(0);
         $result = $this->objectModel->linkCase($taskID, $type, $runs);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
@@ -375,7 +375,7 @@ class testtaskTest
      */
     public function batchRunTest(array $cases, string $runCaseType = 'testcase', int $taskID = 0): bool|array
     {
-        zdTable('action')->gen(0);
+        zendata('action')->gen(0);
         $result = $this->objectModel->batchRun($cases, $runCaseType, $taskID);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;

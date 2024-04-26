@@ -16,8 +16,8 @@ cid=1
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
-zdTable('product')->config('product', true, 4)->gen(10);
-zdTable('case')->config('case', true, 4)->gen(1000);
+zendata('product')->loadYaml('product', true, 4)->gen(10);
+zendata('case')->loadYaml('case', true, 4)->gen(1000);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);

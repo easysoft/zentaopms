@@ -18,8 +18,8 @@ cid=1
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/calc.class.php';
 
-zdTable('story')->gen(100);
-zdTable('product')->gen(100);
+zendata('story')->gen(100);
+zendata('product')->gen(100);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);

@@ -17,14 +17,14 @@ include dirname(__FILE__, 4) . '/calc.class.php';
 
 $metric = new metricTest();
 
-zdTable('project')->config('program_closed', true, 4)->gen(356, true, false);
+zendata('project')->loadYaml('program_closed', true, 4)->gen(356, true, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('45'); // 测试356条项目集数。
 
-zdTable('project')->config('program_closed', true, 4)->gen(652, true, false);
+zendata('project')->loadYaml('program_closed', true, 4)->gen(652, true, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('82'); // 测试652条项目集数。
 
-zdTable('project')->config('program_closed', true, 4)->gen(1265, true, false);
+zendata('project')->loadYaml('program_closed', true, 4)->gen(1265, true, false);
 $calc = $metric->calcMetric(__FILE__);
 r($calc->getResult()) && p('0:value') && e('159'); // 测试1265条项目集数。
