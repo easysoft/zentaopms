@@ -837,6 +837,8 @@ class mr extends control
                 $commitLog->committer_email = $commitLog->commit->committer->email;
                 $commitLog->title           = $commitLog->commit->message;
             }
+
+            $commitLog->id = substr($commitLog->id, 0, 10);
         }
 
         $this->view->commitLogs  = $commitLogs;
