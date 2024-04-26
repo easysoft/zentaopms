@@ -2721,9 +2721,7 @@ class baseRouter
         $className = strtolower($className);
 
         /* 搜索$coreLibRoot(Search in $coreLibRoot) */
-        $classFile = $this->coreLibRoot . $className;
-        if(is_dir($classFile)) $classFile .= DS . $className;
-        $classFile .= '.class.php';
+        $classFile = $this->coreLibRoot . $className . DS . $className . '.class.php';
         if(!helper::import($classFile)) $this->triggerError("class file $classFile not found", __FILE__, __LINE__, true);
 
         /* 如果是静态调用，则返回(If static, return) */
