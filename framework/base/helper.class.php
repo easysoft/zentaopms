@@ -15,7 +15,6 @@ declare(strict_types=1);
  */
 class baseHelper
 {
-
     /**
      * 已加载的目录.
      * The loaded directories.
