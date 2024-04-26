@@ -63,8 +63,7 @@ class contactList extends wg
                 set::name($this->prop('name')),
                 set::items($items),
                 set::placeholder($this->prop('placeholder')),
-                set::onChange(jsRaw('loadContactUsers')),
-                setData('loadTarget', $target)
+                on::change()->call('loadContactUsers', "{$target}")
             ),
             a
             (

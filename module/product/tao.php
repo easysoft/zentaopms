@@ -325,7 +325,7 @@ class productTao extends productModel
      */
     protected function createLine(int $programID, string $lineName): int|false
     {
-        if($programID <= 0) return false;
+        if($programID < 0) return false;
         if(empty($lineName)) return false;
 
         $line = new stdClass();

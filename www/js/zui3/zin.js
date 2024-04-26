@@ -630,19 +630,20 @@
         {
             $page = $('<div/>')
                 .append($('<iframe />').attr({name: `app-${currentCode}-old`, frameborder: 'no', scrolling: 'auto', style: 'width:100%;height:100%;'}))
-                .attr({id: 'oldPage', class: 'canvas fixed w-full h-full top-0 left-0 load-indicator', style: 'z-index:100;'})
+                .attr({id: 'oldPage', class: 'canvas fixed w-full h-full top-0 left-0', style: 'z-index:100;'})
                 .insertAfter('body')
                 .on('oldPageLoad.app', () =>
                 {
                     const frame = window.frameElement;
                     frame.classList.remove('loading');
                     frame.classList.add('in');
+                    $page.find('iframe').removeClass('invisible');
                     $page.removeClass('loading').find('iframe').addClass('in');
                     $(document).trigger('pageload.app');
                 });
         }
         if($page.hasClass('hidden')) $page.addClass('loading').removeClass('hidden');
-        const $iframe = $page.find('iframe').removeClass('in');
+        const $iframe = $page.find('iframe').removeClass('in').addClass('invisible');
         if($iframe.attr('src') === url) $iframe[0].contentWindow.location.reload();
         else $iframe.attr('src', url);
         currentAppUrl = url;

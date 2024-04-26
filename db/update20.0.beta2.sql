@@ -25,3 +25,4 @@ UPDATE `zt_grouppriv` SET `method` = 'deleteWorkhour' WHERE `module` = 'task' AN
 ALTER TABLE `zt_demandreview` CHANGE `reviewDate` `reviewDate` datetime NULL;
 
 DELETE FROM `zt_lang` WHERE `module` = 'project' AND `section` = 'menuOrder';
+DELETE FROM `zt_config` WHERE `module` = 'bi' AND `key` IN ('update2BI','bizGuide','pmsGuide');

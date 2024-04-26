@@ -639,11 +639,6 @@ class productZen extends product
         foreach($data->modules as $id => $name)
         {
             if(empty($name)) continue;
-            if(in_array($this->config->systemMode, array('ALM', 'PLM')) and empty($data->programs[$id]))
-            {
-                dao::$errors["programs[{$id}]"] = $this->lang->product->programEmpty;
-                return false;
-            }
 
             $programID = $data->programs[$id];
             if(!isset($lines[$programID])) $lines[$programID] = array();

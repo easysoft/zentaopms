@@ -44,13 +44,13 @@ function backupData()
         {
             clearInterval(timeID);
             $('#message').append(data);
-            setTimeout(function(){return location.href = $.createLink('backup', 'index');}, 2000);
+            setTimeout(function(){return loadPage($.createLink('backup', 'index'));}, 2000);
         },
         error: function(request, textstatus, error)
         {
             clearInterval(timeID);
             if(textstatus == 'timeout') $('#message').append("<p class='text-danger'>" + backupTimeout + '</p>');
-            setTimeout(function(){return location.href = $.createLink('backup', 'index');}, 2000);
+            setTimeout(function(){return loadPage($.createLink('backup', 'index'));}, 2000);
         }
     });
 
@@ -62,6 +62,7 @@ function backupData()
     {
         $.get($.createLink('backup', 'ajaxGetProgress'), function(data)
         {
+            if(data == '') return;
             $('#message').html(data);
         });
     }, 1000);

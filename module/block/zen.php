@@ -435,7 +435,7 @@ class blockZen extends block
         /* 获取昨日解决的Bug数。 */
         $fixBug      = 0;
         $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
-        if(!empty($fixBug))
+        if(!empty($fixBugGroup))
         {
             $fixBugGroup = reset($fixBugGroup);
             $fixBug      = zget($fixBugGroup, 'value', 0);
@@ -469,27 +469,12 @@ class blockZen extends block
                 $assignedGroup = reset($assignedGroup);
                 $count         = zget($assignedGroup, 'value', 0);
             }
-            $assignToMe[$field] = array('number' => $count, 'href' => helper::createLink('my', 'work', "mode=$field&type=$type"));
+            $assignToMe[$field] = array('number' => $count, 'href' => common::hasPriv('my', 'work') ? helper::createLink('my', 'work', "mode=$field&type=$type") : '');
         }
 
         /* 生成待我审批的数据。 */
-        $reviewByMe['reviewByMe']['number'] = 0;
-        $reviewByMe['reviewByMe']['href']   = helper::createLink('my', 'audit');
-        foreach($this->lang->block->welcome->reviewList as $field => $label)
-        {
-            /* 根据不同的模块生成不同的度量项查询码。 */
-            $code = "reviewing_{$field}";
-
-            /* 查询当前指派给当前用户的不同数据。 */
-            $reviewingGroup = $this->metric->getResultByCode("count_of_{$code}_in_user", array('user' => $this->app->user->account));
-            $count = 0;
-            if(!empty($reviewingGroup))
-            {
-                $reviewingGroup = reset($reviewingGroup);
-                $count          = zget($reviewingGroup, 'value', 0);
-            }
-            $reviewByMe['reviewByMe']['number'] += $count;
-        }
+        $reviewList = $this->loadModel('my')->getReviewingList('all');
+        $reviewByMe['reviewByMe'] = array('number' => count($reviewList), 'href' => common::hasPriv('my', 'audit') ? helper::createLink('my', 'audit') : '');
 
         $this->view->todaySummary = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())]; // 当前年月日 星期几。
         $this->view->welcomeType  = $welcomeType;

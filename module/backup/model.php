@@ -193,17 +193,18 @@ class backupModel extends model
     {
         $die     = "<?php die();?" . ">\n";
         $tmpFile = $fileName . '.tmp';
+        rename($fileName, $tmpFile);
 
-        file_put_contents($tmpFile, $die);
-        $fh     = fopen($fileName, 'r');
+        file_put_contents($fileName, $die);
+        $fh     = fopen($tmpFile, 'r');
         $length = 2 * 1024 * 1024;
         while(!feof($fh))
         {
             $buff = fread($fh, $length);
-            file_put_contents($tmpFile, $buff, FILE_APPEND);
+            file_put_contents($fileName, $buff, FILE_APPEND);
         }
         fclose($fh);
-        rename($tmpFile, $fileName);
+        unlink($tmpFile);
 
         return true;
     }
@@ -331,7 +332,7 @@ class backupModel extends model
             $log = json_decode(file_get_contents($tmpLogFile), true);
             return empty($log) ? array() : $log;
         }
-        return array();
+        return array('allCount' => 0, 'count' => 0);
     }
 
     /**
@@ -401,7 +402,7 @@ class backupModel extends model
     /**
      * Get disk space.
      *
-     * @param  int    $backupPath
+     * @param  string $backupPath
      * @access public
      * @return string
      */

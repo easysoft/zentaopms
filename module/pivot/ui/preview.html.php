@@ -79,7 +79,7 @@ sidebar
             $this->config->edition == 'open' ? div
             (
                 set::width(240),
-                setClass('bg-canvas px-4 py-2 module-menu shadow'),
+                setClass('bg-canvas px-4 py-2 module-menu'),
                 html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
             ) : null
         )

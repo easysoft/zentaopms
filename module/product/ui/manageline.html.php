@@ -74,7 +74,7 @@ foreach($lines as $line)
             (
                 set::width('1/2'),
                 set::className('ml-4'),
-                set::control(array('control' => 'picker', 'id' => "programs_id{$line->id}")),
+                set::control(array('control' => 'picker', 'id' => "programs_id{$line->id}", 'required' => true)),
                 set::name("programs[id$line->id]"),
                 set::items($programs),
                 set::value($line->root),
@@ -103,9 +103,10 @@ for($i = 0; $i <= 5; $i ++)
             (
                 set::width('1/2'),
                 set::className('ml-4'),
-                set::control(array('control' => 'picker', 'id' => "programs_{$i}")),
+                set::control(array('control' => 'picker', 'id' => "programs_{$i}", 'required'=> true)),
                 set::name("programs[$i]"),
-                set::items($programs)
+                set::items($programs),
+                set::value('0')
             ) : null
         ),
         cell

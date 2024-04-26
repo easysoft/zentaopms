@@ -26,7 +26,8 @@ class screen extends control
      */
     public function browse(int $dimensionID = 0)
     {
-        $this->checkShowGuide();
+        //$this->checkShowGuide();
+        $this->view->showGuide = false;
 
         $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
 

@@ -182,6 +182,8 @@ window.getItem = function(info)
         renderGeneralItem(info);
     }
     if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
+
+    info.item.titleAttrs = {'class': 'card-title clip'};
 }
 
 window.renderGeneralItem = function(info)
@@ -283,11 +285,11 @@ window.renderProductplanItem = function(info)
 
     if(info.item.deleted == '0')
     {
-        statusBox = '<span class="label label-' + info.item.objectStatus + '">' + executionLang.statusList[info.item.objectStatus] + '</span>';
+        statusBox = '<span class="label label-' + info.item.objectStatus + '">' + productplanLang.statusList[info.item.objectStatus] + '</span>';
     }
     else
     {
-        statusBox = '<span class="label label-deleted">' + executionLang.deleted + '</span>';
+        statusBox = '<span class="label label-deleted">' + productplanLang.deleted + '</span>';
     }
 
     const today     = zui.formatDate(new Date(), 'yyyy-MM-dd');
@@ -295,7 +297,7 @@ window.renderProductplanItem = function(info)
 
     const date = '<span class="ml-2 label ' + labelType + '">' + info.item.begin.slice(5) + ' ' + productplanLang.to + ' ' + info.item.end.slice(5) + '</span>';
     info.item.content      = {html: info.item.desc}
-    info.item.contentClass = 'text-gray';
+    info.item.contentClass = 'text-gray clip mr-2';
     info.item.footer       = {html: statusBox + date}
 }
 window.renderTicketItem = function(info)

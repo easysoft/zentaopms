@@ -294,7 +294,7 @@ panel
 
 div
 (
-    setClass('flex justify-center items-center pt-6'),
+    setClass('detail-actions center sticky mt-4 bottom-4 z-10'),
     floatToolbar
     (
         set::object($MR),

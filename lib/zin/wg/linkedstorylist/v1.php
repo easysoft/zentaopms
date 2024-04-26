@@ -90,7 +90,7 @@ class linkedStoryList extends storyList
                 'data-url'    => str_replace('{id}', "$story->id", $this->unlinkUrl),
                 'data-params' => 'event',
                 'data-call'   => 'unlinkStory',
-                'hint'        => $lang->story->unlinkStory
+                'hint'        => $story->type == 'requirement' ? str_replace($lang->SRCommon, $lang->URCommon, $lang->story->unlinkStory) : $lang->story->unlinkStory
             );
 
             if(is_array($unlinkBtn)) $btn = array_merge($btn, $unlinkBtn);
