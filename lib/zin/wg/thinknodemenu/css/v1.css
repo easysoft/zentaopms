@@ -12,7 +12,7 @@
 .think-node-menu .tree .listitem:hover>.toolbar .btn {opacity: 1;}
 .think-node-menu .tree.is-nested-root>.tree-item:first-child>.tree>.tree-item {margin-top: calc(2*var(--space));}
 .think-node-menu .tree .tree-item .tree-item-inner {gap: 10px; padding-left: calc(4*var(--space));}
-.think-node-menu .tree.is-nested-root>.tree-item>.listitem {border: 1px solid #eee; border-radius: calc(4*var(--space)); width: fit-content; max-width: 100%; padding: 0 calc(3*var(--space)); background: #fff;}
+.think-node-menu .tree.is-nested-root>.tree-item>.listitem {border: 1px solid #eee; border-radius: calc(4*var(--space)); width: fit-content; max-width: 100%; padding: 0 calc(3*var(--space)); background: #fff; position: relative; z-index: 2;}
 .think-node-menu .tree.is-nested-root>.tree-item>.listitem.selected {background: rgba(var(--color-primary-50-rgb), .8);}
 .think-node-menu .tree .tree-item.is-nested {position: relative; height: 100%;}
 .think-node-menu .tree .tree-item.is-nested.is-nested-show::before {content: ''; border-left: 1px solid #eee; height: 95%; margin: 20px 0 0; position: absolute; left: calc(6*var(--space)); top: 0;}
