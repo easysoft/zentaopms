@@ -19,7 +19,7 @@ foreach($projects as $projectID => $project)
 
     $cards[] = cell
     (
-        setClass('p-2', $longBlock ? 'w-1/3' : 'w-full h-40'),
+        setClass('p-2', $longBlock ? 'w-1/3' : 'w-full h-50'),
         div
         (
             setClass('border rounded-sm h-full px-4 hover:shadow hover:border-primary cursor-pointer open-url group', $longBlock ? 'py-3' : 'py-2'),
