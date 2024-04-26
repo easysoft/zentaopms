@@ -73,7 +73,7 @@ class thinkStep extends wg
                     set::name($descName),
                     set::placeholder($lang->thinkwizard->step->pleaseInput),
                     html($desc ?? ''),
-                    set::rows(5)
+                    set::rows(3)
                 )
             ),
             formHidden('type', $this->prop('type')),
