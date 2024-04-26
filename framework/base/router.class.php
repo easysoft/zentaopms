@@ -298,6 +298,16 @@ class baseRouter
     static $loadedModules = array();
 
     /**
+     * 已加载的目标，可能是 model，tao 或者 zen 的实例化对象。
+     * Targets loaded, maybe instance of model, tao or zen.
+     *
+     * @static
+     * @var array
+     * @access public
+     */
+    static $loadedTargets = array();
+
+    /**
      * 全局$lang对象。
      * The global $lang object.
      *
@@ -2503,8 +2513,7 @@ class baseRouter
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($appName)) $appName = $this->appName;
 
-        global $loadedTargets;
-        if(isset($loadedTargets[$class][$appName][$moduleName])) return $loadedTargets[$class][$appName][$moduleName];
+        if(isset(self::$loadedTargets[$class][$appName][$moduleName])) return self::$loadedTargets[$class][$appName][$moduleName];
 
         $targetFile = $this->setTargetFile($moduleName, $appName, $class);
 
@@ -2528,14 +2537,14 @@ class baseRouter
         /**
          * 因为zen继承自control，tao继承自model，构造函数里会调用loadTarget方法，赋默认值值防止递归调用。
          */
-        if($class == 'zen' || $class == 'tao') $loadedTargets[$class][$appName][$moduleName] = false;
+        if($class == 'zen' || $class == 'tao') self::$loadedTargets[$class][$appName][$moduleName] = false;
 
         /**
          * 初始化target 对象并返回。
          * Init the target object and return it.
          */
         $target = new $targetClass($appName);
-        $loadedTargets[$class][$appName][$moduleName] = $target;
+        self::$loadedTargets[$class][$appName][$moduleName] = $target;
         return $target;
     }
 
