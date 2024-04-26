@@ -86,7 +86,7 @@ class backup extends control
     /**
      * Backup.
      *
-     * param   string $reload yes|no
+     * @param  string $reload yes|no
      * @access public
      * @return void
      */
@@ -303,6 +303,7 @@ class backup extends control
         if($attachFileName)
         {
             $log = $this->backup->getBackupDirProgress($attachFileName);
+            if(empty($log)) return print('');
             $message = sprintf($this->lang->backup->progressAttach, zget($log, 'allCount', 0), zget($log, 'count', 0));
         }
 
@@ -310,6 +311,7 @@ class backup extends control
         if($codeFileName)
         {
             $log = $this->backup->getBackupDirProgress($codeFileName);
+            if(empty($log)) return print('');
             $message = sprintf($this->lang->backup->progressCode, zget($log, 'allCount', 0), zget($log, 'count', 0));
         }
 
