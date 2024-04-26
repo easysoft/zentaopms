@@ -123,13 +123,11 @@ function onScmChange()
         }
 
         var url = $.createLink('repo', 'ajaxGetHosts', "scm=" + scm);
-        $.get(url, function(response)
+        $.getJSON(url, function(data)
         {
-            var data = JSON.parse(response);
-            var $hostPicker = $('#serviceHost').zui('picker');
+            const $hostPicker = $('#serviceHost').zui('picker');
             $hostPicker.render({items: data});
             $hostPicker.$.clear();
-            onHostChange();
         });
     }
 }
