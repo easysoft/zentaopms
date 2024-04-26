@@ -123,8 +123,7 @@ class thinkNode  extends wg
                 $action !== 'detail' ? array(
                     div
                     (
-                        setClass('flex items-center'),
-                        setStyle(array('height' => '48px', 'padding' => '0 48px', 'color' => 'var(--color-gray-950)')),
+                        setClass('flex items-center text-gray-950 h-12 py-0 px-8 mx-4'),
                         div
                         (
                             setClass('font-medium'),
