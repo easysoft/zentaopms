@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$service     = strtolower(key($lang->space->appType));
 $showVersion = getenv('ALLOW_SELECT_VERSION') && (strtolower(getenv('ALLOW_SELECT_VERSION')) == 'true' || strtolower(getenv('ALLOW_SELECT_VERSION')) == '1');
 $dbTypeItems = array();
 foreach($lang->instance->dbTypes as $type => $db) $dbTypeItems[] = array('text' => $db, 'value' => $type);
@@ -171,7 +172,7 @@ formPanel
     $config->inQuickon ? setClass('externalPanel hidden') : setClass('externalPanel'),
     set::formID('createAppForm'),
     set::title($lang->space->install),
-    set::url($this->createLink('gitlab', 'create')),
+    set::url($this->createLink($service, 'create')),
     set::actionsClass('w-2/3'),
     formGroup
     (
@@ -195,17 +196,17 @@ formPanel
     formGroup
     (
         set::width($colWidth),
-        set::label($lang->gitlab->name),
+        set::label($lang->{$service}->name),
         set::name('name'),
         set::required(true)
     ),
     formGroup
     (
         set::width($colWidth),
-        set::label($lang->gitlab->url),
+        set::label($lang->{$service}->url),
         set::name('url'),
         set::required(true),
-        set::placeholder($lang->gitlab->placeholder->url)
+        set::placeholder($lang->{$service}->placeholder->url)
     ),
     formRow
     (
@@ -224,9 +225,9 @@ formPanel
         formGroup
         (
             set::width($colWidth),
-            set::label($lang->gitlab->token),
+            set::label($lang->{$service}->token),
             set::name('token'),
-            set::placeholder($lang->gitlab->placeholder->token),
+            set::placeholder($lang->{$service}->placeholder->token),
             set::required(true),
             set::control(array(
                 'type' => 'textarea',
