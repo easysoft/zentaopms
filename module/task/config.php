@@ -29,7 +29,7 @@ $config->task->unfinishedStatus = array('wait', 'doing', 'pause');
 
 $config->task->editor = new stdclass();
 $config->task->editor->create   = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->task->editor->edit     = array('id' => 'desc,comment', 'tools' => 'simpleTools');
+$config->task->editor->edit     = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->task->editor->view     = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 $config->task->editor->assignto = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->task->editor->start    = array('id' => 'comment', 'tools' => 'simpleTools');

@@ -653,12 +653,11 @@ class testcaseZen extends testcase
             ->join('linkCase', ',')
             ->cleanInt('story,product,branch,module')
             ->skipSpecial('script')
-            ->stripTags($this->config->testcase->editor->edit['id'], $this->config->allowedTags)
             ->remove('files,labels,scriptFile,scriptName')
             ->removeIF($formData->data->auto == 'auto' && !$formData->data->script, 'script')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid);
+        return $case;
     }
 
     /**
