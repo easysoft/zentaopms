@@ -40,24 +40,24 @@ formPanel
         ),
         formGroup
         (
-            set::labelWidth('5em'),
-            set::label($lang->mr->sourceBranch),
-            set::value($MR->sourceBranch),
+            setClass('hidden'),
+            set::label($lang->mr->targetProject),
+            set::value($targetProject),
             set::control('static')
-        )
+        ),
     ),
     formRow
     (
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->mr->targetProject),
-            set::value($targetProject),
+            set::label($lang->mr->sourceBranch),
+            set::value($MR->sourceBranch),
             set::control('static')
         ),
         formGroup
         (
-            set::labelWidth('6em'),
+            set::width('1/2'),
             !$noEditBranch ? set::required(true) : null,
             set::label($lang->mr->targetBranch),
             set::value($MR->targetBranch),
