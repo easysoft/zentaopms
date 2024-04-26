@@ -105,7 +105,7 @@ $config->mr->commitLogs->dtable->fieldList['id']['title']    = $lang->repo->revi
 $config->mr->commitLogs->dtable->fieldList['id']['type']     = 'text';
 $config->mr->commitLogs->dtable->fieldList['id']['data-app'] = $app->tab;
 $config->mr->commitLogs->dtable->fieldList['id']['link']     = helper::createLink('repo', 'diff', "repoID={repoID}&objectID=0&entry=&oldrevision=^&newRevision={id}");
-$config->mr->commitLogs->dtable->fieldList['id']['minWidth'] = '100';
+$config->mr->commitLogs->dtable->fieldList['id']['minWidth'] = 40;
 
 $config->mr->commitLogs->dtable->fieldList['committed_date']['name']     = 'committed_date';
 $config->mr->commitLogs->dtable->fieldList['committed_date']['title']    = $lang->repo->time;
@@ -120,5 +120,5 @@ $config->mr->commitLogs->dtable->fieldList['committer_name']['hint']  = '{commit
 $config->mr->commitLogs->dtable->fieldList['title']['name']     = 'title';
 $config->mr->commitLogs->dtable->fieldList['title']['title']    = $lang->repo->comment;
 $config->mr->commitLogs->dtable->fieldList['title']['type']     = 'text';
-$config->mr->commitLogs->dtable->fieldList['title']['minWidth'] = '342';
+$config->mr->commitLogs->dtable->fieldList['title']['minWidth'] = 342;
 $config->mr->commitLogs->dtable->fieldList['title']['hint']     = '{message}';
