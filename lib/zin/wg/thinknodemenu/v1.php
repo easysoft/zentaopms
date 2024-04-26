@@ -35,16 +35,15 @@ class thinkNodeMenu extends wg
         {
             if(!is_object($setting)) continue;
 
-            $itemID = $setting->id ? $setting->id : $parentID;
             $item   = array(
-                'key'         => $itemID,
-                'text'        => $setting->name,
-                'hint'        => $setting->name,
+                'key'         => $setting->id,
+                'text'        => $setting->title,
+                'hint'        => $setting->title,
                 'url'         => $setting->url,
-                'data-id'     => $itemID,
+                'data-id'     => $setting->id,
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parent,
-                'selected'    => $itemID == $activeKey,
+                'selected'    => $setting->id == $activeKey,
                 'actions'     => $this->getActions($setting),
                 'data-wizard' => $setting->wizard,
             );
@@ -52,7 +51,7 @@ class thinkNodeMenu extends wg
             $children = zget($setting, 'children', array());
             if(!empty($children))
             {
-                $children = $this->buildMenuTree($children, $itemID);
+                $children = $this->buildMenuTree($children, $setting->id);
                 $item['items'] = $children;
             }
 
