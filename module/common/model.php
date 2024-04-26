@@ -946,7 +946,7 @@ class commonModel extends model
         }
         else
         {
-            if(strpos($sql, ' ORDER BY') !== false) $queryCondition = substr($sql, 0, strpos($sql, ' ORDER BY '));
+            $queryCondition = strpos($sql, ' ORDER BY') !== false ? substr($sql, 0, strpos($sql, ' ORDER BY ')) : $sql;
         }
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
