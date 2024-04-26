@@ -57,7 +57,7 @@ $config->bug->excludeCheckFields = ',severities,oses,browsers,lanes,regions,exec
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create   = array('id' => 'steps', 'tools' => 'bugTools');
-$config->bug->editor->edit     = array('id' => 'steps,comment', 'tools' => 'bugTools');
+$config->bug->editor->edit     = array('id' => 'steps', 'tools' => 'bugTools');
 $config->bug->editor->view     = array('id' => 'comment,lastComment', 'tools' => 'bugTools');
 $config->bug->editor->confirm  = array('id' => 'comment', 'tools' => 'bugTools');
 $config->bug->editor->assignto = array('id' => 'comment', 'tools' => 'bugTools');
