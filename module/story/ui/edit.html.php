@@ -81,6 +81,7 @@ detailBody
     (
         section
         (
+            set::required(true),
             set::title($lang->story->title),
             inputControl
             (
@@ -106,8 +107,9 @@ detailBody
         ),
         $canEditContent ? section
         (
+            set::required(true),
             set::title($lang->story->reviewers),
-            formRow
+            inputGroup
             (
                 picker
                 (
