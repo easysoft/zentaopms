@@ -67,7 +67,7 @@ foreach($MRList as $index => $MR)
 if(empty($repoID))
 {
     $sourceProject['repoName']['name']     = 'repoName';
-    $sourceProject['repoName']['title']    = $lang->mr->sourceProject;
+    $sourceProject['repoName']['title']    = $lang->repo->common;
     $sourceProject['repoName']['type']     = 'text';
     $sourceProject['repoName']['minWidth'] = '200';
     $sourceProject['repoName']['hint']     = '{sourceProject}';
