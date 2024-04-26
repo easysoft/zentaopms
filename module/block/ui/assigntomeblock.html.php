@@ -147,6 +147,7 @@ blockPanel
     div($contents),
     h::css
     (
+        '.block-assigntome .panel-heading .panel-title {overflow: hidden; text-overflow: clip; white-space: nowrap; width : 40%}',
         '.block-assigntome .nav > .nav-item > a {padding: 0 16px; border-radius: 4px; height: 28px; color: var(--color-gray-700)}',
         '.block-assigntome .nav > .nav-item > a.active {font-weight: bold; color: var(--color-gray-900); background: var(--color-primary-50)}'
     )
