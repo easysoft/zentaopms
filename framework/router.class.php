@@ -393,6 +393,10 @@ class router extends baseRouter
      */
     public function loadModuleConfig($moduleName, $appName = '')
     {
+        if(isset(self::$loadedConfigs[$moduleName])) return false;
+
+        self::$loadedConfigs[$moduleName] = $moduleName;
+
         $extConfigPath = array();
         global $config;
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
