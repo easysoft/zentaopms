@@ -832,9 +832,9 @@ class mr extends control
             elseif(in_array(strtolower($repo->SCM), array('gitea', 'gogs')))
             {
                 $commitLog->id = $commitLog->sha;
-                $commitLog->committed_date  = $commitLog->commit->committer->date;
-                $commitLog->committer_name  = $commitLog->commit->committer->name;
-                $commitLog->committer_email = $commitLog->commit->committer->email;
+                $commitLog->committed_date  = $commitLog->author->committer->date;
+                $commitLog->committer_name  = $commitLog->author->committer->name;
+                $commitLog->committer_email = $commitLog->author->committer->email;
                 $commitLog->title           = $commitLog->commit->message;
             }
 
