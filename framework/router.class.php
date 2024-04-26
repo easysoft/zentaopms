@@ -397,7 +397,6 @@ class router extends baseRouter
 
         self::$loadedConfigs[$moduleName] = $moduleName;
 
-        $extConfigPath = array();
         global $config;
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
 
@@ -414,6 +413,7 @@ class router extends baseRouter
         $configDirFiles = helper::ls($this->getModulePath($appName, $moduleName) . DS . 'config', '.php');
 
         /* 查找扩展配置文件。Get extension config files. */
+        $extConfigPath = array();
         if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($moduleName, 'config');
         if($config->framework->extensionLevel >= 1)
         {
