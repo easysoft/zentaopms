@@ -32,7 +32,7 @@ $(function()
 
     function resizeModal()
     {
-        const $modal = $('body>.modal-dialog>.modal-content>.modal-body,.modal-body').first();
+        const $modal = $('body>.modal-dialog>.modal-content,.modal-body').first();
         const height = $modal.outerHeight();
         $modal.closest('body').height(height);
     }
