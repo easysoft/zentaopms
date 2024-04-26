@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use function zin\wg;
+
 /**
  * The model file of action module of ZenTaoPMS.
  *
@@ -282,10 +285,19 @@ class actionModel extends model
      */
     public function getTrashes(string $objectType, string $type, string $orderBy, object $pager = null): array
     {
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('multiple')->eq('0')->andWhere('type')->in('sprint,kanban')->fetchPairs();
+
         $extra   = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $trashes = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
             ->beginIF($objectType != 'all')->andWhere('objectType')->eq($objectType)->fi()
+            ->beginIF($objectType == 'execution')->andWhere('objectID')->notIn($noMultipleExecutions)->fi()
+            ->beginIF($objectType == 'all')
+            ->andWhere('objectType', true)->ne('exection')
+            ->markLeft(1)
+            ->orWhere('objectType')->eq('exection')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->markRight(2)
+            ->fi()
             ->andWhere('extra')->eq($extra)
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
@@ -319,14 +331,10 @@ class actionModel extends model
             }
         }
 
-        if(isset($typeTrashes['execution'])) $noMultipleExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('multiple')->eq('0')->andWhere('id')->in($typeTrashes['execution'])->fetchPairs();
-
         /* 将对象名称字段添加到回收站数据中。 */
         /* Add name field to the trashes. */
         foreach($trashes as $key => $trash)
         {
-            if($trash->objectType == 'execution' && isset($noMultipleExecutions[$trash->objectID])) unset($trashes[$key]);
-
             if($trash->objectType == 'pipeline' && isset($objectNames['gitlab'][$trash->objectID]))  $trash->objectType = 'gitlab';
             if($trash->objectType == 'pipeline' && isset($objectNames['jenkins'][$trash->objectID])) $trash->objectType = 'jenkins';
 
