@@ -532,8 +532,8 @@ $lang->block->welcome->reviewList['reviewByMe'] = '待我评审数';
 
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task']     = '任务数';
-$lang->block->welcome->assignList['bug']      = 'BUG数';
-$lang->block->welcome->assignList['story']    = $lang->SRCommon . '数';
+if($config->vision != 'or') $lang->block->welcome->assignList['bug']   = 'BUG数';
+if($config->vision != 'or') $lang->block->welcome->assignList['story'] = $lang->SRCommon . '数';
 $lang->block->welcome->assignList['testcase'] = '用例数';
 
 $lang->block->customModeTip = new stdClass();
