@@ -26,11 +26,20 @@ class mr extends control
         if($this->app->getMethodName() != 'browse')
         {
             $this->loadModel('ci')->setMenu();
-            $this->view->objectID = $this->app->tab == 'execution' ? $this->session->execution : 0;
+
+            $this->view->objectID = 0;
+            if(in_array($this->app->tab, array('execution', 'project'))) $this->view->objectID = $this->session->{$this->app->tab};
+
             if($this->app->tab == 'execution')
             {
                 $this->view->executionID = $this->session->execution;
                 $this->loadModel('execution')->setMenu($this->session->execution);
+            }
+
+            if($this->app->tab == 'project')
+            {
+                $this->view->projectID   = $this->session->project;
+                $this->loadModel('project')->setMenu($this->session->project);
             }
         }
     }

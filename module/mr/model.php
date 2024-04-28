@@ -38,6 +38,9 @@ class mrModel extends model
             if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
         }
 
+        $executionIdList = $this->loadModel('execution')->fetchExecutionList($objectID, 'all');
+        if(!empty($executionIdList)) $objectID = array_keys($executionIdList);
+
         return $this->dao->select('*')->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->beginIF($mode == 'status' && $param != 'all')->andWhere('status')->eq($param)->fi()
@@ -45,7 +48,7 @@ class mrModel extends model
             ->beginIF($mode == 'creator' && $param != 'all')->andWhere('createdBy')->eq($param)->fi()
             ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
             ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
-            ->beginIF($objectID)->andWhere('executionID')->eq($objectID)->fi()
+            ->beginIF($objectID)->andWhere('executionID')->in($objectID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
