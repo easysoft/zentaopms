@@ -20,26 +20,13 @@
  */
 class pv_of_weekly_task_in_waterfall extends baseCalc
 {
+    public $dataset = 'getWaterfallTasks';
+
+    public $fieldList = array('t1.id', 't1.estStarted', 't1.deadline', 't1.estimate', 't1.status', 't1.closedReason', 't2.begin as executionBegin', 't2.end as executionEnd', 't3.id as project');
+
     public $result = array();
 
     public $rows = array();
-
-    public function getStatement()
-    {
-        $tasks = $this->dao->select('t1.id,t1.estStarted,t1.deadline,t1.estimate,t1.status,t1.closedReason,t2.begin as executionBegin,t2.end as executionEnd,t3.id as project')
-            ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
-            ->where('t1.parent')->ge(0)
-            ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t1.status')->ne('cancel')
-            ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t3.type')->eq('project')
-            ->andWhere('t3.model')->eq('waterfall')
-            ->query();
-
-        return $tasks;
-    }
 
     public function calculate($row)
     {

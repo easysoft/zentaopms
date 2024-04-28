@@ -20,22 +20,13 @@
  */
 class ac_of_weekly_all_in_waterfall extends baseCalc
 {
+    public $dataset = 'getWaterfallEfforts';
+
+    public $fieldList = array('t1.project', 't1.`date`', 't1.consumed');
+
     public $result = array();
 
     public $rows = array();
-
-    public function getStatement()
-    {
-        $efforts = $this->dao->select('t1.project,t1.`date`,t1.consumed')->from(TABLE_EFFORT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t2.model')->eq('waterfall')
-            ->andWhere('t2.type')->eq('project')
-            ->query();
-
-        return $efforts;
-    }
 
     public function calculate($row)
     {
