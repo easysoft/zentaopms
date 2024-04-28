@@ -85,7 +85,6 @@ window.handleClickBlockMenu = function(info, block)
     if(type === 'reset')  return resetBlocks(this, data, block);
 };
 
-
 /**
  * Toggle Page when the next page btn click.
  *
