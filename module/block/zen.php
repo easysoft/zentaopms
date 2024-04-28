@@ -3079,7 +3079,7 @@ class blockZen extends block
         $productID = $this->session->product;
 
         $this->view->productID = $productID;
-        $this->view->actions   = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', 30, $productID);
+        $this->view->actions   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 30, $productID);
         $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
     }
 
