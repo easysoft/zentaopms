@@ -29,7 +29,7 @@ if(!$isInModal && hasPriv('task', 'create', $task))
 
 /* 初始化底部操作栏。Init bottom actions. */
 $config->task->actionList['batchCreate']['hint'] = $config->task->actionList['batchCreate']['text'] = $lang->task->children;
-$actions    = !$task->deleted ? $this->loadModel('common')->buildOperateMenu($task) : array();
+$actions    = !$task->deleted && common::canModify('execution', $execution) ? $this->loadModel('common')->buildOperateMenu($task) : array();
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], array('type' => 'divider'), $actions['suffixActions']);
 if(!$hasDivider) unset($actions['type']);

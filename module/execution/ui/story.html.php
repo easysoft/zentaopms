@@ -375,8 +375,10 @@ if($canBatchAction)
 
 /* DataTable columns. */
 $config->story->dtable->fieldList['title']['title'] = $lang->story->title;
-$setting = $this->loadModel('datatable')->getSetting('execution', 'story', false, $storyType);
-$cols    = array();
+$cols               = array();
+$setting            = $this->loadModel('datatable')->getSetting('execution', 'story', false, $storyType);
+$canModifyExecution = common::canModify('execution', $execution);
+if(!$canModifyExecution) $setting['actions']['actionsMap'] = array();
 if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 foreach($setting as $col)
 {
@@ -389,13 +391,14 @@ foreach($setting as $col)
 }
 
 /* DataTable data. */
-$data = array();
+$data        = array();
 $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'divider', 'storyEstimate', 'testcase', 'unlink');
 if(empty($execution->hasProduct) && empty($execution->multiple))
 {
     $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'createTask', 'batchCreateTask', 'edit', 'divider', 'storyEstimate', 'testcase', 'batchCreate', 'close');
     if($storyType == 'requirement') $actionMenus = array('submitreview', 'recall', 'recalledchange', 'review', 'dropdown', 'edit', 'divider', 'batchCreate', 'close');
 }
+if(!$canModifyExecution) $actionMenus = array();
 
 $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules ?? array(), 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus, 'branches' => $branchPairs);
 foreach($stories as $story)
