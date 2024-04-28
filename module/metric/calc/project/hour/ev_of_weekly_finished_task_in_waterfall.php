@@ -22,23 +22,34 @@ class ev_of_weekly_finished_task_in_waterfall extends baseCalc
 {
     public $dataset = 'getWaterfallTasks';
 
-    public $fieldList = array('t1.id as project', 't2.estimate', 't2.consumed', 't2.left');
+    public $fieldList = array('t1.project', 't1.estimate', 't1.consumed', 't1.left', 't1.status', 't1.closedReason');
 
     public $result = array();
 
     public function calculate($row)
     {
-        $project  = $row->project;
-        $estimate = (float)$row->estimate;
-        $consumed = (float)$row->consumed;
-        $left     = (float)$row->left;
-        $total    = $consumed + $left;
+        $project      = $row->project;
+        $status       = $row->status;
+        $closedReason = $row->closedReason;
+        $estimate     = (float)$row->estimate;
+        $consumed     = (float)$row->consumed;
+        $left         = (float)$row->left;
+        $total        = $consumed + $left;
 
         if($consumed == 0) return false;
 
-        $ev = $total == 0 ? 0 : round($consumed / $total * $estimate, 2);
+        $ev = 0;
+        if($status == 'done' || $closedReason == 'done')
+        {
+            $ev = $estimate;
+        }
+        else
+        {
+            $ev = $total == 0 ? 0 : round($consumed / $total * $estimate, 2);
+        }
 
-        if(!isset($this->result[$project])) $this->result[$project] = $ev;
+        if(!isset($this->result[$project])) $this->result[$project] = 0;
+        $this->result[$project] += $ev;
     }
 
     public function getResult($options = array())
