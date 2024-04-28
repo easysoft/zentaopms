@@ -309,6 +309,8 @@ class metricTest
         if(!isset($calc->dataset))
         {
             $calc->setDAO($tester->dao);
+            $calc->setHolidays($tester->loadModel('holiday')->getList());
+            $calc->setWeekend(isset($tester->config->project->weekend) ? $tester->config->project->weekend : 2);
             return $calc->getStatement();
         }
 

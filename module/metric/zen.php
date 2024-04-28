@@ -96,6 +96,8 @@ class metricZen extends metric
         {
             $calc = current($calcList);
             $calc->setDAO($dao);
+            $calc->setHolidays($this->loadModel('holiday')->getList());
+            $calc->setWeekend(isset($this->config->project->weekend) ? $this->config->project->weekend : 2);
 
             return $calc->getStatement();
         }
