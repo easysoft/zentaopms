@@ -612,8 +612,6 @@ class metricModel extends model
             $calculator->setDAO($dao);
             $scm = $this->app->loadClass('scm');
             $calculator->setSCM($scm);
-            $calculator->setHolidays($this->loadModel('holiday')->getList());
-            $calculator->setWeekend(isset($this->config->project->weekend) ? $this->config->project->weekend : 2);
 
             $statement = $calculator->getStatement();
             $sql       = $calculator->dao->get();
@@ -689,6 +687,8 @@ class metricModel extends model
         include_once $this->getBaseCalcPath();
         include_once $calcPath;
         $calculator = new $metric->code;
+        $calculator->setHolidays($this->loadModel('holiday')->getList());
+        $calculator->setWeekend(isset($this->config->project->weekend) ? $this->config->project->weekend : 2);
 
         if($calculator->reuse)
         {
@@ -742,6 +742,8 @@ class metricModel extends model
         include_once $this->getBaseCalcPath();
         include_once $calcPath;
         $calculator = new $metric->code;
+        $calculator->setHolidays($this->loadModel('holiday')->getList());
+        $calculator->setWeekend(isset($this->config->project->weekend) ? $this->config->project->weekend : 2);
 
         if($calculator->reuse)
         {

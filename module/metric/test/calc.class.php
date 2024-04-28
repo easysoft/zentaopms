@@ -275,6 +275,7 @@ class metricTest
      */
     public function calcMetric($file)
     {
+        global $tester;
         $code    = pathinfo($file, PATHINFO_FILENAME);
         $purpose = basename(dirname($file));
         $scope   = basename(dirname($file, 2));
@@ -283,6 +284,9 @@ class metricTest
         include_once $this->objectModel->getCalcRoot() . $scope . DS . $purpose . DS . $code . '.php';
 
         $calc = new $code;
+        $calc->setHolidays($tester->loadModel('holiday')->getList());
+        $calc->setWeekend(isset($tester->config->project->weekend) ? $tester->config->project->weekend : 2);
+
         if(!$calc->reuse)
         {
             $rows = $this->prepareDataset($calc)->fetchAll();
@@ -325,8 +329,6 @@ class metricTest
         if(!isset($calc->dataset))
         {
             $calc->setDAO($tester->dao);
-            $calc->setHolidays($tester->loadModel('holiday')->getList());
-            $calc->setWeekend(isset($tester->config->project->weekend) ? $tester->config->project->weekend : 2);
             return $calc->getStatement();
         }
 

@@ -815,33 +815,29 @@ class dataset
      */
     public function getWaterfallTasks($fieldList)
     {
-        $task = $this->dao->select('t1.project, SUM(t1.estimate) as estimate, SUM(t1.consumed) as consumed, SUM(t1.`left`) as `left`')
-            ->from(TABLE_TASK)->alias('t1')
+        $stmt = $this->dao->select($fieldList)->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
+            ->where('t1.parent')->ge(0)
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.status')->ne('cancel')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t3.type')->eq('project')
+            ->andWhere('t3.model')->in('waterfall,waterfallplus');
+
+        return $this->defaultWhere($stmt, 't3')->query();
+    }
+
+    public function getWaterfallEfforts($fieldList)
+    {
+       $stmt = $this->dao->select($fieldList)->from(TABLE_EFFORT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.parent')->ne('-1')
-            ->andWhere('t1.status', true)->in('done,closed')
-            ->orWhere('t1.closedReason')->eq('done')
-            ->markRight(1);
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.model')->eq('waterfall')
+            ->andWhere('t2.type')->eq('project');
 
-        $task = $this->defaultWhere($task, 't1')->groupBy('t1.project')->get();
-
-        $effort = $this->dao->select('t3.id as project, SUM(t1.consumed) as consumed')
-            ->from(TABLE_EFFORT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-            ->where('1=1');
-
-        $effort = $this->defaultWhere($effort, 't3')->groupBy('t3.id')->get();
-
-        $stmt = $this->dao->select($fieldList)
-            ->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin("($task)")->alias('t2')->on('t1.id=t2.project')
-            ->leftJoin("($effort)")->alias('t3')->on('t1.id=t3.project')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.type')->eq('project')
-            ->andWhere('t1.model')->in('waterfall,waterfallplus');
-
-        return $this->defaultWhere($stmt, 't1')->query();
+       return $this->defaultWhere($stmt, 't2')->query();
     }
 
     /**
