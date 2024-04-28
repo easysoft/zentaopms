@@ -108,8 +108,8 @@ function toggleSelectTestStory()
         $('#form-task-create [data-name=storyBox]').removeClass('hidden');
         $('#form-task-create [data-name=datePlan]').removeClass('hidden');
         $('#form-task-create [data-name=estimate]').removeClass('hidden');
-        $('#form-task-create [name=multiple]').closest('.checkbox-primary').removeClass('hidden');
         $('#form-task-create [data-name=testStoryBox]').addClass('hidden');
+        if($('#form-task-create [name=type]').val() != 'affair') $('#form-task-create [name=multiple]').closest('.checkbox-primary').removeClass('hidden');
 
         if($('#form-task-create [data-name=execution]').hasClass('hidden'))
         {
