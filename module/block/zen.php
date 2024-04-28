@@ -3302,11 +3302,11 @@ class blockZen extends block
         if($activatedBugGroup)  $activatedBugGroup  = array_column($activatedBugGroup,  null, 'project');
 
         /* 瀑布项目的统计信息。 */
-        $SVGroup           = $this->metric->getResultByCode('sv_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $PVGroup           = $this->metric->getResultByCode('pv_of_task_in_waterfall',          array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $EVGroup           = $this->metric->getResultByCode('ev_of_finished_task_in_waterfall', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $CVGroup           = $this->metric->getResultByCode('cv_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $ACGroup           = $this->metric->getResultByCode('ac_of_all_in_waterfall',           array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $SVGroup           = $this->metric->getResultByCode('sv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $PVGroup           = $this->metric->getResultByCode('pv_of_weekly_task_in_waterfall',          array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $EVGroup           = $this->metric->getResultByCode('ev_of_weekly_finished_task_in_waterfall', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $CVGroup           = $this->metric->getResultByCode('cv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $ACGroup           = $this->metric->getResultByCode('ac_of_weekly_all_in_waterfall',           array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
         $taskProgressGroup = $this->metric->getResultByCode('progress_of_task_in_project',      array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
         if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
         if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');

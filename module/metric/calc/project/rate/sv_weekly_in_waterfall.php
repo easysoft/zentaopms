@@ -24,7 +24,7 @@ class sv_weekly_in_waterfall extends baseCalc
 
     public $reuse = true;
 
-    public $reuseMetrics = array('pv' => 'pv_of_task_in_waterfall', 'ev' => 'ev_of_finished_task_in_waterfall');
+    public $reuseMetrics = array('pv' => 'pv_of_weekly_task_in_waterfall', 'ev' => 'ev_of_weekly_finished_task_in_waterfall');
 
     public $reuseRule = '({ev} - {pv}) / {pv}';
 
