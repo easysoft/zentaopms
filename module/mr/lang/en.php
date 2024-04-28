@@ -20,9 +20,12 @@ $lang->mr->diff         = 'View diff';
 $lang->mr->viewInGit    = 'View in APP';
 $lang->mr->link         = 'Link of stories,Bugs,tasks';
 $lang->mr->createAction = '%s, <strong>%s</strong> submitted a <a href="%s">Merge Request</a>.';
-$lang->mr->editAction   = '%s, <strong>%s</strong> edited <a href="%s">Merge Request</a>。';
-$lang->mr->removeAction = '%s, <strong>%s</strong> deleted <a href="%s">Merge Request</a>。';
+$lang->mr->editAction   = '%s, <strong>%s</strong> edited <a href="%s">Merge Request</a>.';
+$lang->mr->removeAction = '%s, <strong>%s</strong> deleted <a href="%s">Merge Request</a>.';
 $lang->mr->submitType   = 'Submit type';
+
+$lang->mr->action = new stdclass();
+$lang->mr->action->synced = '$date, <strong>$actor</strong> synced this Merge Request.';
 
 $lang->mr->linkList  = 'Link List of stories,Bugs,tasks';
 $lang->mr->linkStory = 'Link Stories';
@@ -106,7 +109,7 @@ $lang->mr->noCompileJob      = 'No Pipeline Job';
 $lang->mr->compileUnexecuted = 'Compile Unexecuted';
 
 $lang->mr->notFound          = "Merge Request does not exist!";
-$lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the pipeline task succeeded.";
+$lang->mr->toCreatedMessage  = "The merge request you submitted: <a href='%s'>%s</a>, the pipeline task succeeded.";
 $lang->mr->toReviewerMessage = "You have one merge request <a href='%s'>%s</a> waiting.";
 $lang->mr->failMessage       = "Your merge request <a href='%s'>%s</a> failed. Please check its execution result. ";
 $lang->mr->storySummary      = "Total <strong>%s</strong> {$lang->SRCommon} on this page.";
