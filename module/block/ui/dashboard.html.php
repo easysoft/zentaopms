@@ -47,12 +47,4 @@ $remind ? modal
     html($remind)
 ) : null;
 
-$remind = $this->misc->getRemind();
-$remind ? modal
-(
-    set::id('annualModal'),
-    set::title($lang->misc->remind),
-    html($remind)
-) : null;
-
 render();
