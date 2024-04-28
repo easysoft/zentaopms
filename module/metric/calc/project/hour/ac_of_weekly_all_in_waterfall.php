@@ -18,7 +18,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class ac_of_all_in_waterfall extends baseCalc
+class ac_of_weekly_all_in_waterfall extends baseCalc
 {
     public $result = array();
 

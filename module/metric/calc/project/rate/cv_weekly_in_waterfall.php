@@ -1,7 +1,7 @@
 <?php
 /**
  * 按瀑布项目统计的截止本周的成本偏差率。
- * Cv in waterfall.
+ * Cv weekly in waterfall.
  *
  * 范围：project
  * 对象：task
@@ -18,7 +18,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class cv_in_waterfall extends baseCalc
+class cv_weekly_in_waterfall extends baseCalc
 {
     public $result = array();
 

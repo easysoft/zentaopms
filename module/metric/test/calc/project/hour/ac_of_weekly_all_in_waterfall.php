@@ -3,7 +3,7 @@
 
 /**
 
-title=ac_of_all_in_waterfall
+title=ac_of_weekly_all_in_waterfall
 timeout=0
 cid=1
 

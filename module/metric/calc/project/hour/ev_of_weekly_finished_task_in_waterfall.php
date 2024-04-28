@@ -18,7 +18,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class ev_of_finished_task_in_waterfall extends baseCalc
+class ev_of_weekly_finished_task_in_waterfall extends baseCalc
 {
     public $dataset = 'getWaterfallTasks';
 

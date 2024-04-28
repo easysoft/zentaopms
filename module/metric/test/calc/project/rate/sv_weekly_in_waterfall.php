@@ -3,7 +3,7 @@
 
 /**
 
-title=sv_in_waterfall
+title=sv_weekly_in_waterfall
 timeout=0
 cid=1
 

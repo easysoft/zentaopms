@@ -3,7 +3,7 @@
 
 /**
 
-title=ev_of_finished_task_in_waterfall
+title=ev_of_weekly_finished_task_in_waterfall
 timeout=0
 cid=1
 
