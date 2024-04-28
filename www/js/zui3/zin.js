@@ -1436,7 +1436,7 @@
         return name.replace(/([[\]])/g, '\\$1');
     };
 
-    function showValidateMessage()
+    function showValidateMessage(message)
     {
         let $firstControl = null;
         Object.entries(message).forEach(([name, msg]) => {
@@ -1444,39 +1444,26 @@
                 msg = msg.join('');
             }
             const nameSelector = createSelector(name);
-            const {$element} = this;
+            const $element = $('.form');
             let $control = $element.find(`#${nameSelector}`);
-            if (!$control.length) {
-                $control = $element.find(`[name="${nameSelector}"]`);
-            }
-            if (!$control.length && !name.includes('[')) {
-                $control = $element.find(`[name="${nameSelector}[]"]`);
-            }
-            if (!$control.length) {
-                zui.Modal.alert(msg);
-                return;
-            }
-            if ($control.hasClass('pick-value')) {
-                $control = $control.closest('.pick');
-            }
+            if(!$control.length) $control = $element.find(`[name="${nameSelector}"]`);
+            if(!$control.length && !name.includes('[')) $control = $element.find(`[name="${nameSelector}[]"]`);
+            if($control.hasClass('pick-value')) $control = $control.closest('.pick');
             $control.addClass('has-error');
             const $group = $control.closest('.form-group,.form-batch-control');
-            if ($group.length) {
+            if(!$group.length) return zui.Messager.show({content: msg, type: 'danger', className: 'bg-danger text-canvas gap-2 messager-success'});
+            if($group.length)
+            {
                 let $tip = $group.find(`#${nameSelector}Tip`);
-                if (!$tip.length) {
+                if(!$tip.length)
+                {
                     $tip = $(`<div class="form-tip ajax-form-tip text-danger pre-line" id="${name}Tip"></div>`).appendTo($group);
                 }
                 $tip.empty().text(msg);
-            } else {
-                zui.Modal.alert(msg);
             }
-            if (!$firstControl) {
-                $firstControl = $control;
-            }
+            if(!$firstControl) $firstControl = $control;
         });
-        if ($firstControl) {
-            $firstControl[0]?.focus();
-        }
+        if($firstControl) $firstControl[0]?.focus();
     }
 
     $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage});

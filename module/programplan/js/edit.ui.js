@@ -53,7 +53,7 @@ window.editStage = function()
                         url: formUrl,
                         data: formData,
                         onFail: (error) => {
-                            if(error?.message) showFormValidateMsg(error.message);
+                            if(error?.message) showValidateMessage(error.message);
                         }
                     });
                 }
