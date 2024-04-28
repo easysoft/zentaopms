@@ -120,7 +120,7 @@ $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
 $lang->block->summary = new stdclass();
-$lang->block->summary->welcome = 'Zentao has been with you for %s: ';
+$lang->block->summary->welcome    = 'Zentao has been with you for %s: ';
 $lang->block->summary->yesterday  = '<strong>Yesterday</strong>';
 $lang->block->summary->noWork     = 'You have not yet processed tasks and bugs,';
 $lang->block->summary->finishTask = 'finished <a href="' . helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a> tasks';
