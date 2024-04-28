@@ -25,4 +25,6 @@ body {padding-bottom: 20px;}
 #dashboard .list-block .panel-body {padding: 0; overflow: hidden;}
 
 #dashboard .dtable.shadow {box-shadow: unset;}
-#upgradeModal .learn-more-link > a {margin-top: -3rem;}
+
+#upgradeModal .modal-body {padding: 0;}
+#upgradeModal .learn-more-link > a {margin-top: -3rem; margin-right: 1.5rem; color: unset;}

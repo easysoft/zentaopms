@@ -147,7 +147,7 @@ class miscModel extends model
         if(empty($this->config->global->showUpgradeGuide))
         {
             $remind = true;
-            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.showUpgradeGuide", 1);
+//            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.showUpgradeGuide", 1);
         }
         return $remind;
     }

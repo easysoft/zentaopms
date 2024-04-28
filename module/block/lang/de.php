@@ -49,7 +49,9 @@ $lang->block->finish          = 'Finish';
 $lang->block->guide           = 'Guide';
 $lang->block->teamAchievement = 'Team Achievements';
 $lang->block->learnMore       = 'Learn More';
+$lang->block->prevPage        = 'Back';
 $lang->block->nextPage        = 'Next';
+$lang->block->experience      = 'Go';
 
 $lang->block->leftToday           = 'Arbeit für Heute';
 $lang->block->myTask              = 'Aufgaben';

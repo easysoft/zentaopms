@@ -49,7 +49,9 @@ $lang->block->finish          = '已完成';
 $lang->block->guide           = '使用帮助';
 $lang->block->teamAchievement = '团队成就';
 $lang->block->learnMore       = '了解更多';
+$lang->block->prevPage        = '上一页';
 $lang->block->nextPage        = '下一页';
+$lang->block->experience      = '开始体验';
 
 $lang->block->leftToday           = '今天剩余工作总计';
 $lang->block->myTask              = '我的任务';
