@@ -320,7 +320,16 @@ class mr extends control
         if($MR->synced && (!isset($rawMR->id) || empty($rawMR))) $this->sendError($this->lang->mr->apiError->emptyResponse, true);
 
         /* Sync MR from GitLab to ZenTaoPMS. */
-        $MR   = $this->mr->apiSyncMR($MR);
+        $oldMR = $MR;
+        $MR    = $this->mr->apiSyncMR($MR);
+
+        $changes = common::createChanges($oldMR, $MR);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('mr', $MR->id, 'synced');
+            $this->action->logHistory($actionID, $changes);
+        }
+
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
 
         $projectOwner  = false;
