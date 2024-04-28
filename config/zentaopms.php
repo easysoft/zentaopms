@@ -10,6 +10,11 @@
 * @link        http://www.zentao.net
 */
 
+$config->contactUs['phone']  = '4006-8899-23';
+$config->contactUs['email']  = 'co@zentao.net';
+$config->contactUs['qq']     = '1492153927';
+$config->contactUs['wechat'] = '13730922971';
+
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
 $config->productCommonList['zh-cn'][1] = '项目';
