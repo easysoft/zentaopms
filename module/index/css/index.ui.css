@@ -58,7 +58,8 @@
 #visionSwitcher::before {right: -10px; border-left-color: var(--color-fore); opacity: .1;}
 #versionSwitchBtn {padding: 0 6px;}
 
-.app-container {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; transition-duration: .3s; background: var(--zt-page-bg) linear-gradient(180deg, var(--zt-header-bg) 0, var(--zt-header-bg) 48px, rgba(255,0,0,0) 48px) no-repeat;}
+.app-container {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; transition-duration: .3s;}
+.app-container.loading {background: var(--zt-page-bg) linear-gradient(180deg, var(--zt-header-bg) 0, var(--zt-header-bg) 48px, rgba(255,0,0,0) 48px) no-repeat;}
 .app-container.loading:before {background-color: rgba(0,0,0,.1);}
 .app-container.loading:before, .ap p-container.loading::after {transition-delay: 3s;}
 .app-container.loading.open-from-hidden {transition-delay: 0s;}
