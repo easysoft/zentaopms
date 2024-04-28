@@ -94,7 +94,7 @@ window.changeTrigger = function(event)
  */
 window.setPipeline = function()
 {
-    $('.gitfox-pipeline').addClass('hidden');
+    if($('[name=engine]').val() != 'gitfox') $('.gitfox-pipeline').addClass('hidden');
     const $pipeline = $('[name=gitfoxpipeline]').zui('picker');
     if(!$pipeline) return;
     $pipeline.$.clear();
@@ -224,6 +224,7 @@ window.changeEngine = function(event)
     else
     {
         $('#jenkinsServerTR').addClass('hidden');
+        if(engine == 'gitfox') $('.gitfox-pipeline').removeClass('hidden');
     }
 
     const items = [];
@@ -232,8 +233,6 @@ window.changeEngine = function(event)
         if(engine == 'jenkins' || frame != 'sonarqube') items.push({'text': frameList[frame], 'value': frame});
     }
     zui.Picker.query('[name=frame]').render({items: items});
-
-    window.changeRepo();
 }
 
 window.changeRepo = function()
