@@ -6,7 +6,17 @@ fields:
 - field: id
   range: 1-10000
 - field: project
-  range: 1-10{12}
+  range: 1
+- field: execution
+  range: 11
+- field: estStarted
+  range: "20240101 000000-20250101 000000:5D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: deadline
+  range: "20240102 000000-20250201 000000:5D"
+  type: timestamp
+  format: YYYY-MM-DD
 - field: closedDate
   range: "20110101 000000-20210101 000000:10D"
   type: timestamp
