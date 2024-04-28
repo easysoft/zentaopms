@@ -560,7 +560,7 @@ window.copyStoryTitle = function(e)
     {
         $('[name=name]').val(storyTitle);
         $('[name=estimate]').val($('input[name=storyEstimate]').val());
-        $('[name=desc]').val($('input[name=storyDesc]').val());
+        $('zen-editor[name=desc]')[0].setHTML($('input[name=storyDesc]').val());
         $('input[name=pri]').zui('pripicker').$.setValue($('input[name=storyPri]').val());
     }
     else
