@@ -40,6 +40,7 @@ class formBatch extends formBase
         'addRowIcon?: string|false',    // 添加行的图标，如果设置为 `false` 则不显示图标
         'deleteRowIcon?: string|false', // 删除行的图标，如果设置为 `false` 则不显示图标
         'onRenderRow?: function',       // 渲染行时的回调函数。
+        'hiddenFields?: array',         // 被隐藏的字段。
         'onRenderRowCol?: function'     // 渲染列时的回调函数。
     );
 
@@ -91,13 +92,21 @@ class formBatch extends formBase
     protected function buildContent(): array|node
     {
         $items         = array_merge($this->prop('items', array()), $this->block('children'));
+        $hiddenFields  = $this->prop('hiddenFields', array());
         $templateItems = array();
         $headItems     = array();
         $otherItems    = array();
 
         foreach($items as $item)
         {
-            if($item instanceof item || is_array($item)) $item = $this->onBuildItem($item);
+            if($item instanceof item || is_array($item))
+            {
+                if(is_array($item) && isset($item['name']) && !isset($item['hidden']))
+                {
+                    $item['hidden'] = in_array($item['name'], $hiddenFields);
+                }
+                $item = $this->onBuildItem($item);
+            }
             if($item instanceof formBatchItem)
             {
                 list($headItem, $templateItem) = $item->build();
