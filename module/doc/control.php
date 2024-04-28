@@ -245,12 +245,13 @@ class doc extends control
         if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorMainSysLib, 'load' => array('alert' => $this->lang->doc->errorMainSysLib)));
 
         $this->doc->delete(TABLE_DOCLIB, $libID);
-        if($this->app->tab == 'doc') return $this->send(array('result' => 'success', 'load' => true, 'app' => $this->app->tab));
 
-        $objectType = $lib->type;
-        $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
         $moduleName = 'doc';
+        $objectType = $lib->type;
         $methodName = zget($this->config->doc->spaceMethod, $objectType);
+        if($this->app->tab == 'doc') return $this->send(array('result' => 'success', 'load' => $this->createLink($moduleName, $methodName), 'app' => $this->app->tab));
+
+        $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
         if($this->app->tab == 'execution' && $objectType == 'execution')
         {
             $moduleName = 'execution';
