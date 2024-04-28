@@ -1129,6 +1129,7 @@ class myModel extends model
         if(!common::hasPriv('feedback', 'review')) return array();
         if($this->config->edition == 'open') return array();
 
+        $this->session->set('feedbackProduct', 'all');
         $feedbacks  = $this->loadModel('feedback')->getList('review', $orderBy);
         $reviewList = array();
         foreach($feedbacks as $feedback)
