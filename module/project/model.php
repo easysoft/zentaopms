@@ -224,7 +224,7 @@ class projectModel extends model
         {
             $orderBy = in_array($project->model, array('waterfall', 'ipd')) ? 'id_asc' : 'id_desc';
             $pager   = in_array($project->model, array('waterfall', 'ipd')) ? null : new pager(0, 1, 1);
-            $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy, $pager);
+            $project->executions = $this->loadModel('execution')->getStatData($projectID, 'undone', 0, 0, false, '', $orderBy);
             $project->teamCount  = isset($teamCount[$projectID]) ? $teamCount[$projectID] : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
             $project->parentName = $project->parent ? $this->projectTao->getParentProgram($project->path, $project->grade) : '';
