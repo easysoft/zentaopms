@@ -332,7 +332,7 @@ class backupModel extends model
             $log = json_decode(file_get_contents($tmpLogFile), true);
             return empty($log) ? array() : $log;
         }
-        return array('allCount' => 0, 'count' => 0);
+        return array();
     }
 
     /**

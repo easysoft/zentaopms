@@ -115,19 +115,15 @@ dtable
     set::footer(array('html' => $lang->backup->restoreTip . sprintf($lang->backup->holdDays, $config->backup->holdDays), 'className' => 'text-important'))
 );
 
-modalTrigger
+modal
 (
-    set(array('data-size' => 'sm', 'backdrop' => false)),
-    modal
+    setID('waiting'),
+    html($lang->backup->waitting),
+    set::closeBtn(false),
+    div
     (
-        setID('waiting'),
-        html($lang->backup->waitting),
-        set::closeBtn(false),
-        div
-        (
-            setID('message'),
-            html(sprintf($lang->backup->progressSQL, 0))
-        )
+        setID('message'),
+        html(sprintf($lang->backup->progressSQL, 0))
     )
 );
 
