@@ -144,10 +144,10 @@ class miscModel extends model
     public function getUpgradeRemind(): bool
     {
         $remind = false;
-        if(empty($this->config->global->showUpgradeTip))
+        if(empty($this->config->global->showUpgradeGuide))
         {
             $remind = true;
-            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.showUpgradeTip", 1);
+            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.showUpgradeGuide", 1);
         }
         return $remind;
     }
