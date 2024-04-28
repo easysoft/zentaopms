@@ -101,14 +101,11 @@ class formBatch extends formBase
         {
             if($item instanceof item || is_array($item))
             {
-                if(is_array($item) && isset($item['name']) && !isset($item['hidden']))
-                {
-                    $item['hidden'] = in_array($item['name'], $hiddenFields);
-                }
                 $item = $this->onBuildItem($item);
             }
             if($item instanceof formBatchItem)
             {
+                if($item->hasProp('name') && is_null($item->prop('hidden'))) $item->setProp('hidden', in_array($item->prop('name'), $hiddenFields));
                 list($headItem, $templateItem) = $item->build();
                 $headItems[]     = $headItem;
                 $templateItems[] = $templateItem;
