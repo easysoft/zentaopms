@@ -48,6 +48,8 @@ $lang->block->contribute      = 'Personal Contribution';
 $lang->block->finish          = 'Terminé';
 $lang->block->guide           = 'Guide';
 $lang->block->teamAchievement = 'Team Achievements';
+$lang->block->learnMore       = 'Learn More';
+$lang->block->nextPage        = 'Next';
 
 $lang->block->leftToday           = 'Reste à faire';
 $lang->block->myTask              = 'Tâches';
