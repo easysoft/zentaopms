@@ -37,6 +37,8 @@ function loadBranchRelated()
 function loadModuleRelated()
 {
     const productID = $('[name=product]').val();
+    if(productID === undefined) return false;
+
     loadScenes(productID);
     if($('#story').length) loadProductStories(productID);
 }
