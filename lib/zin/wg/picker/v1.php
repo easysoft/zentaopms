@@ -51,7 +51,7 @@ class picker extends wg
         'placeholder?: string',             // 选择框上的占位文本。
         'valueSplitter?: string',           // 多个值的分隔字符串，默认为 `,`。
         'items: string|array|function',     // 列表项或表项获取方法。
-        'pinyinKeys?: bool=true',           // 启用拼音。
+        'pinyinKeys?: bool=false',          // 启用拼音。
         'menu?: array',                     // 附加的菜单选项。
         'hotkey?: boolean',                 // 是否启用快捷键。
         'search?: boolean|number',          // 是否启用搜索。
