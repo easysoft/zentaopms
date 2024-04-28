@@ -81,7 +81,7 @@ function openApp(url, code, options)
     if(!openedApp)
     {
         if(!url) url = app.url;
-        openedApp = $.extend({opened: true, url: url, zIndex: 0, currentUrl: url}, app);
+        openedApp = $.extend({opened: true, url: url, zIndex: ++apps.zIndex, currentUrl: url}, app);
         forceReload = false;
         apps.openedMap[code] = openedApp;
 
@@ -101,7 +101,7 @@ function openApp(url, code, options)
         ].join(' '));
         const iframe = $iframe[0];
         openedApp.iframe = iframe;
-        openedApp.$app = $('<div class="app-container load-indicator" id="app-' + code + '"></div>')
+        openedApp.$app = $('<div class="app-container loading" id="app-' + code + '"></div>')
             .append($iframe)
             .appendTo('#apps');
 
@@ -111,16 +111,20 @@ function openApp(url, code, options)
         });
         iframe.onload = iframe.onreadystatechange = function(e)
         {
-            const finishLoad = () => $iframe.removeClass('loading').addClass('in');
+            const finishLoad = () =>
+            {
+                openedApp.$app.removeClass('loading');
+                $iframe.removeClass('loading').addClass('in');
+            };
             try
             {
-                iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', finishLoad);
+                iframe.contentWindow.$(iframe.contentDocument).one('pageload.app', () => setTimeout(finishLoad, 150));
                 setTimeout(finishLoad, 10000);
             }
             catch(e){finishLoad()}
             triggerAppEvent(openedApp.code, 'loadapp', [openedApp, e]);
         };
-        if(!app.external) return openedApp;
+        openedApp.$app.show().css('z-index', openedApp.zIndex);
     }
     if(!url) url = openedApp.currentUrl;
 
@@ -143,7 +147,7 @@ function openApp(url, code, options)
     if(needLoad)
     {
         reloadApp(code, url, options);
-        openedApp.$app.toggleClass('open-from-hidden', openedApp.zIndex < apps.zIndex)
+        openedApp.$app.toggleClass('open-from-hidden', openedApp.zIndex < apps.zIndex);
     }
     else
     {
