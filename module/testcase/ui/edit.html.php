@@ -169,6 +169,7 @@ detailBody
                 set::name($lang->testcase->lib),
                 picker
                 (
+                    setID('lib'),
                     set::name('lib'),
                     set::items($libraries),
                     set::required(true),
