@@ -302,7 +302,9 @@
                 const $nextDropmenu = $data.filter(`#${$dropmenu.attr('id')}`);
                 if(!$nextDropmenu.length) return $dropmenu.remove();
                 if($dropmenu.data('fetcher') === $nextDropmenu.data('fetcher')) return;
-                $dropmenu.replaceWith($nextDropmenu);
+                const oldDropmenu = $dropmenu.zui('dropmenu');
+                if(oldDropmenu) oldDropmenu.render($nextDropmenu.data());
+                else $dropmenu.replaceWith($nextDropmenu);
             });
             $data.filter('[data-fetcher]').each(function()
             {

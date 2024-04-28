@@ -181,7 +181,7 @@ class dropmenu extends wg
             (
                 setID($menuID),
                 set('_id', $id),
-                set('_props', array('data-fetcher' => $url)),
+                set('_props', array('data-fetcher' => $url, 'data-text' => $text, 'data-default-value' => $objectID, 'data-cache' => $cache)),
                 set('data', $data),
                 set(array('fetcher' => $url, 'text' => $text, 'defaultValue' => $objectID, 'cache' => $cache)),
                 set($this->getRestProps())
