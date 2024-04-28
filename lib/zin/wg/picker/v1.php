@@ -100,7 +100,7 @@ class picker extends wg
                 if(!is_string($item['value'])) $item['value'] = strval($item['value']);
 
                 if($item['value'] === '0') $hasZeroValue  = true;
-                if($pinyinKeys && !isset($item['keys'])) $item['keys'] = implode(' ', common::convert2Pinyin(array($item['text'])));
+                if($pinyinKeys && !isset($item['keys']) && class_exists('common')) $item['keys'] = implode(' ', common::convert2Pinyin(array($item['text'])));
                 $pickerItems[] = $item;
             }
         }
