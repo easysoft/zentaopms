@@ -402,6 +402,7 @@ class custom extends control
             $fields = $this->post->fields;
             if(is_array($fields)) $fields = implode(',', $fields);
             if($module == 'execution' && $section == 'custom' && $key == 'createFields' && strpos(",{$fields},", ',team,') !== false) $fields .= ',teams';
+            if($module == 'task' && $section == 'custom' && $key == 'batchCreateFields' && strpos(",{$fields},", ',story,') !== false) $fields .= ',preview,copyStory';
             $this->loadModel('setting')->setItem("{$account}.{$module}.{$section}.{$key}", $fields);
             if(in_array($module, array('story', 'task', 'testcase')) && $section == 'custom' && $key == 'batchCreateFields') return;
             if($module == 'bug' && $section == 'custom' && $key == 'batchCreateFields') return;
