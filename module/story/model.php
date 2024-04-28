@@ -3270,6 +3270,8 @@ class storyModel extends model
         if($action == 'change') return (($isSuperReviewer !== false || count($story->reviewer) == 0 || count($story->notReview) == 0) && in_array($story->status, array('active', 'launched')));
         if($action == 'review') return (($isSuperReviewer !== false || in_array($app->user->account, $story->notReview)) && $story->status == 'reviewing');
 
+        if($action == 'createbranch') return $story->type == 'story';
+
         return true;
     }
 
