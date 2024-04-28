@@ -1174,6 +1174,7 @@ class repo extends control
         $this->view->suffix      = $suffix;
         $this->view->content     = $content ? $content : '';
         $this->view->pathInfo    = $pathInfo;
+        $this->view->objectID    = $objectID;
         $this->view->showEditor  = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
         $this->display();
     }
