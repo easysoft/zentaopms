@@ -27,4 +27,5 @@ body {padding-bottom: 20px;}
 #dashboard .dtable.shadow {box-shadow: unset;}
 
 #upgradeModal .modal-body {padding: 0;}
+#upgradeModal .page-block img {width: 800px; height: 460px;}
 #upgradeModal .learn-more-link > a {margin-top: -3rem; margin-right: 1.5rem; color: unset;}
