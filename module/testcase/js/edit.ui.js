@@ -7,10 +7,10 @@ function loadLibModules()
     {
         if(data)
         {
-            let $libPicker = $('[name=lib]').zui('picker');
             data = JSON.parse(data);
-            $libPicker.render({items: data});
-            $libPicker.$.changeState({value: ''});
+            const $modulePicker = $('#module').zui('picker');
+            $modulePicker.render({items: data});
+            $modulePicker.$.changeState({value: ''});
         }
     });
 }
