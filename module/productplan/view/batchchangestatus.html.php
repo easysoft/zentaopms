@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div class='main-content' id='mainContent'>
   <div class='main-header'>
-    <h2><?php echo $lang->productplan->common . $lang->colon . $lang->productplan->batchClose;?></h2>
+    <h2><?php echo $lang->productplan->common . $lang->hyphen . $lang->productplan->batchClose;?></h2>
   </div>
   <form method='post' action="<?php echo inLink('batchChangeStatus', "status=closed&productID=$productID")?>">
     <table class='table table-fixed table-form with-border'>

@@ -106,7 +106,7 @@ class story extends control
         $fields = $this->storyZen->setModuleField($fields, $moduleID);
         $fields = $this->storyZen->removeFormFieldsForCreate($fields, $storyType);
 
-        $this->view->title   = $this->view->product->name . $this->lang->colon . $this->lang->story->create;
+        $this->view->title   = $this->view->product->name . $this->lang->hyphen . $this->lang->story->create;
         $this->view->fields  = $fields;
         $this->view->blockID = $this->storyZen->getAssignMeBlockID();
         $this->view->type    = $storyType;
@@ -190,7 +190,7 @@ class story extends control
             if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return $this->send(array('result' => 'fail', 'message' => $this->lang->story->errorNotSubdivide, 'load' => array('alert' => $this->lang->story->errorNotSubdivide)));
         }
 
-        $this->view->title        = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
+        $this->view->title        = $product->name . $this->lang->hyphen . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
         $this->view->product      = $product;
@@ -308,7 +308,7 @@ class story extends control
         $fields = $this->storyZen->getFormFieldsForEdit($storyID);
         $fields = $this->storyZen->hiddenFormFieldsForEdit($fields);
 
-        $this->view->title        = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
+        $this->view->title        = $this->lang->story->edit . "STORY" . $this->lang->hyphen . $this->view->story->title;
         $this->view->story        = $story;
         $this->view->twins        = empty($story->twins) ? array() : $this->story->getByList($story->twins);
         $this->view->fields       = $fields;
@@ -422,7 +422,7 @@ class story extends control
         $this->story->getAffectedScope($story);
 
         /* Assign. */
-        $this->view->title        = $this->lang->story->change . "STORY" . $this->lang->colon . $story->title;
+        $this->view->title        = $this->lang->story->change . "STORY" . $this->lang->hyphen . $story->title;
         $this->view->users        = $this->user->getPairs('pofirst|nodeleted|noclosed', $story->assignedTo);
         $this->view->fields       = $this->storyZen->getFormFieldsForChange($storyID);
         $this->view->lastReviewer = $this->story->getLastReviewer($story->id);
@@ -474,7 +474,7 @@ class story extends control
         $this->commonAction($storyID);
 
         /* Assign. */
-        $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->colon . $this->view->story->title;
+        $this->view->title      = $this->lang->story->activate . "STORY" . $this->lang->hyphen . $this->view->story->title;
         $this->view->users      = $this->user->getPairs('pofirst|nodeleted|noclosed', $this->view->story->closedBy);
         $this->display();
     }
@@ -642,7 +642,7 @@ class story extends control
         $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $this->story->getAffectedScope($story);
 
-        $this->view->title     = $this->lang->story->review . "STORY" . $this->lang->colon . $story->title;
+        $this->view->title     = $this->lang->story->review . "STORY" . $this->lang->hyphen . $story->title;
         $this->view->fields    = $this->storyZen->getFormFieldsForReview($storyID);
         $this->view->reviewers = $reviewers;
         $this->view->isLastOne = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) <= 1;
@@ -859,7 +859,7 @@ class story extends control
         $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $storyType);
         if(isset($productStories[$storyID])) unset($productStories[$storyID]);
 
-        $this->view->title          = $this->lang->story->close . "STORY" . $this->lang->colon . $story->title;
+        $this->view->title          = $this->lang->story->close . "STORY" . $this->lang->hyphen . $story->title;
         $this->view->product        = $product;
         $this->view->story          = $story;
         $this->view->productStories = $productStories;
@@ -1172,7 +1172,7 @@ class story extends control
         $product = $this->product->getByID($story->product);
         $users   = $this->config->vision == 'lite' ? $this->user->getTeamMemberPairs($this->session->project) : $this->user->getPairs('nodeleted|noclosed|pofirst|noletter');
 
-        $this->view->title     = zget($product, 'name', $story->title) . $this->lang->colon . $this->lang->story->assign;
+        $this->view->title     = zget($product, 'name', $story->title) . $this->lang->hyphen . $this->lang->story->assign;
         $this->view->story     = $story;
         $this->view->actions   = $this->action->getList('story', $storyID);
         $this->view->users     = $users;
@@ -1350,7 +1350,7 @@ class story extends control
         $stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type);
 
         /* Assign. */
-        $this->view->title        = $this->lang->story->linkStory . "STORY" . $this->lang->colon .$this->lang->story->linkStory;
+        $this->view->title        = $this->lang->story->linkStory . "STORY" . $this->lang->hyphen .$this->lang->story->linkStory;
         $this->view->type         = $type;
         $this->view->stories2Link = $stories2Link;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
@@ -1728,7 +1728,7 @@ class story extends control
             unset($this->lang->story->report->charts['storiesPerStage']);
         }
 
-        $this->view->title         = $product->name . $this->lang->colon . $this->lang->story->reportChart;
+        $this->view->title         = $product->name . $this->lang->hyphen . $this->lang->story->reportChart;
         $this->view->productID     = $productID;
         $this->view->branchID      = $branchID;
         $this->view->browseType    = $browseType;

@@ -69,7 +69,7 @@ class compile extends control
 
         foreach($buildList as $build) $build->triggerType = $this->loadModel('job')->getTriggerConfig($build);
 
-        $this->view->title     = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->browse;
+        $this->view->title     = $this->lang->ci->job . $this->lang->hyphen . $this->lang->compile->browse;
         $this->view->repoID    = $repoID;
         $this->view->jobID     = $jobID;
         $this->view->buildList = $buildList;
@@ -103,7 +103,7 @@ class compile extends control
         $this->view->logs  = $logs;
         $this->view->build = $build;
         $this->view->job   = $job;
-        $this->view->title = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->logs;
+        $this->view->title = $this->lang->ci->job . $this->lang->hyphen . $this->lang->compile->logs;
         $this->display();
     }
 

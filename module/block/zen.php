@@ -712,7 +712,7 @@ class blockZen extends block
         $branches = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID, 'active');
 
         /* Assign view data. */
-        $this->view->title    = $product->name . $this->lang->colon . $this->lang->product->roadmap;
+        $this->view->title    = $product->name . $this->lang->hyphen . $this->lang->product->roadmap;
         $this->view->product  = $product;
         $this->view->roadmaps = $roadmaps;
         $this->view->branches = $branches;

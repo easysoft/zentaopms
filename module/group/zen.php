@@ -168,7 +168,7 @@ class groupZen extends group
         $allPrivList     = array_keys($allPrivList);
         $relatedPrivData = $this->group->getRelatedPrivs($allPrivList, $selectedPrivList);
 
-        $this->view->title            = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->managePriv;
+        $this->view->title            = $this->lang->company->common . $this->lang->hyphen . $group->name . $this->lang->hyphen . $this->lang->group->managePriv;
         $this->view->allPrivList      = $allPrivList;
         $this->view->selectedPrivList = $selectedPrivList;
         $this->view->relatedPrivData  = $relatedPrivData;
@@ -225,7 +225,7 @@ class groupZen extends group
             }
         }
 
-        $this->view->title    = $this->lang->company->common . $this->lang->colon . $this->lang->group->managePriv;
+        $this->view->title    = $this->lang->company->common . $this->lang->hyphen . $this->lang->group->managePriv;
         $this->view->groups   = $this->group->getPairs();
         $this->view->subsets  = $subsets;
         $this->view->packages = $packages;

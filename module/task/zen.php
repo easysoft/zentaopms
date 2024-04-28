@@ -59,7 +59,7 @@ class taskZen extends task
         $executionTypeLang = zget($this->lang->execution->typeList, $execution->type, '');
         $this->lang->task->noticeLinkStory = sprintf($this->lang->task->noticeLinkStory, $executionTypeLang);
 
-        $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->create;
+        $this->view->title         = $execution->name . $this->lang->hyphen . $this->lang->task->create;
         $this->view->customFields  = $customFields;
         $this->view->modulePairs   = $modulePairs;
         $this->view->showFields    = $this->config->task->custom->createFields;
@@ -185,7 +185,7 @@ class taskZen extends task
             $this->execution->setMenu($executionID);
             $execution = $this->execution->getById($executionID);
 
-            $this->view->title     = $execution->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->title     = $execution->name . $this->lang->hyphen . $this->lang->task->batchEdit;
             $this->view->execution = $execution;
             $this->view->modules   = $this->tree->getTaskOptionMenu($executionID, 0, !empty($this->config->task->allModule) ? 'allModule' : '');
         }
@@ -279,7 +279,7 @@ class taskZen extends task
             $taskMembers = $this->view->members;
         }
 
-        $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
+        $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
         $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', '', 'full', 'active');
         $this->view->tasks         = $tasks;
         $this->view->taskMembers   = $taskMembers;
@@ -314,7 +314,7 @@ class taskZen extends task
         if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
         if(isset($members['closed']) || $task->status == 'closed') $members['closed'] = 'Closed';
 
-        $this->view->title   = $this->view->execution->name . $this->lang->colon . $this->lang->task->assign;
+        $this->view->title   = $this->view->execution->name . $this->lang->hyphen . $this->lang->task->assign;
         $this->view->task    = $task;
         $this->view->members = $members;
         $this->view->users   = $this->loadModel('user')->getPairs();

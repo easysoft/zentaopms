@@ -48,7 +48,7 @@ class weeklyModel extends model
         $current = zget($weeks, $date, current($weeks));
 
         $selectHtml  = "<div class='btn-group angle-btn'>";
-        $selectHtml .= html::a('###', $this->lang->weekly->common . $this->lang->colon . $project->name, '', "class='btn'");
+        $selectHtml .= html::a('###', $this->lang->weekly->common . $this->lang->hyphen . $project->name, '', "class='btn'");
         $selectHtml .= '</div>';
 
         $selectHtml .= "<div class='btn-group angle-btn'>";

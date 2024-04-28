@@ -10,7 +10,7 @@
  * @link  https://www.zentao.net
  */
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
-$lang->colon     = '-';
+$lang->hyphen    = '-';
 $lang->comma     = ',';
 $lang->dot       = '.';
 $lang->at        = ' on ';

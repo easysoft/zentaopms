@@ -54,7 +54,7 @@ class sonarqube extends control
 
         $sonarqubeList = $this->loadModel('pipeline')->getList('sonarqube', $orderBy, $pager);
 
-        $this->view->title         = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browse;
+        $this->view->title         = $this->lang->sonarqube->common . $this->lang->hyphen . $this->lang->sonarqube->browse;
         $this->view->sonarqubeList = $sonarqubeList;
         $this->view->orderBy       = $orderBy;
         $this->view->pager         = $pager;
@@ -148,7 +148,7 @@ class sonarqube extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
-        $this->view->title = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->createServer;
+        $this->view->title = $this->lang->sonarqube->common . $this->lang->hyphen . $this->lang->sonarqube->createServer;
 
         $this->display();
     }
@@ -215,7 +215,7 @@ class sonarqube extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->title     = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->editServer;
+        $this->view->title     = $this->lang->sonarqube->common . $this->lang->hyphen . $this->lang->sonarqube->editServer;
         $this->view->sonarqube = $oldSonarQube;
 
         $this->display();
@@ -306,7 +306,7 @@ class sonarqube extends control
 
         $this->view->sonarqube            = $sonarqube;
         $this->view->keyword              = urldecode(urldecode($keyword));
-        $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
+        $this->view->title                = $this->lang->sonarqube->common . $this->lang->hyphen . $this->lang->sonarqube->browseProject;
         $this->view->sonarqubeID          = $sonarqubeID;
         $this->view->sonarqubeProjectList = (empty($sonarqubeProjectList) or empty($sonarqubeProjectList[$pageID - 1])) ? array() : $sonarqubeProjectList[$pageID - 1];
         $this->view->projectJobPairs      = $projectJobPairs;
@@ -334,7 +334,7 @@ class sonarqube extends control
             return $this->sendSuccess(array('load' => inlink('browseProject', "sonarqubeID=$sonarqubeID"), 'closeModal' => true));
         }
 
-        $this->view->title       = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->createProject;
+        $this->view->title       = $this->lang->sonarqube->common . $this->lang->hyphen . $this->lang->sonarqube->createProject;
         $this->view->sonarqubeID = $sonarqubeID;
         $this->display();
     }
@@ -411,7 +411,7 @@ class sonarqube extends control
         $this->view->projectKey         = $projectKey;
         $this->view->search             = $search;
         $this->view->keyword            = $keyword;
-        $this->view->title              = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseIssue;
+        $this->view->title              = $this->lang->sonarqube->common . $this->lang->hyphen . $this->lang->sonarqube->browseIssue;
         $this->view->sonarqubeID        = $sonarqubeID;
         $this->view->sonarqube          = $this->loadModel('pipeline')->getByID($sonarqubeID);
         $this->view->sonarqubeIssueList = (empty($sonarqubeIssueList) or empty($sonarqubeIssueList[$pageID - 1])) ? array() : $sonarqubeIssueList[$pageID - 1];

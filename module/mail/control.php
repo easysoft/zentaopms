@@ -38,7 +38,7 @@ class mail extends control
         {
             if($this->config->mail->mta == 'smtp') $this->locate(inlink('edit'));
         }
-        $this->view->title = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->index;
+        $this->view->title = $this->lang->mail->common . $this->lang->hyphen . $this->lang->mail->index;
         $this->display();
     }
 
@@ -67,7 +67,7 @@ class mail extends control
             return $this->sendSuccess($response);
         }
 
-        $this->view->title       = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->detect;
+        $this->view->title       = $this->lang->mail->common . $this->lang->hyphen . $this->lang->mail->detect;
         $this->view->fromAddress = $this->session->mailConfig ? $this->session->mailConfig->fromAddress : '';
 
         $this->display();
@@ -84,7 +84,7 @@ class mail extends control
         $mailConfig = $this->mailZen->getConfigForEdit();
         if(empty($mailConfig)) $this->locate(inlink('detect'));
 
-        $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->edit;
+        $this->view->title      = $this->lang->mail->common . $this->lang->hyphen . $this->lang->mail->edit;
         $this->view->mailExist  = $this->mail->mailExist();
         $this->view->mailConfig = $mailConfig;
         $this->view->openssl    = extension_loaded('openssl');
@@ -151,7 +151,7 @@ class mail extends control
             return $this->sendSuccess(array('load' => inLink('test'), 'message' => $this->lang->mail->noticeResend));
         }
 
-        $this->view->title = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
+        $this->view->title = $this->lang->mail->common . $this->lang->hyphen . $this->lang->mail->test;
         $this->view->users = $this->mailZen->getHasMailUserPairs();
         $this->display();
     }

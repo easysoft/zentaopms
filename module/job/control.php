@@ -71,7 +71,7 @@ class job extends control
 
         $jobList = $this->jobZen->getJobList($repoID, $orderBy, $pager);
 
-        $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
+        $this->view->title   = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->browse;
         $this->view->repoID  = $repoID;
         $this->view->jobList = $jobList;
         $this->view->orderBy = $orderBy;
@@ -112,7 +112,7 @@ class job extends control
         $this->loadModel('ci');
         $this->app->loadLang('action');
 
-        $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
+        $this->view->title               = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->create;
         $this->view->repoList            = $this->loadModel('repo')->getList($this->projectID);
         $this->view->products            = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
         $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
@@ -170,7 +170,7 @@ class job extends control
             $this->view->sonarqubeProjectPairs = $this->loadModel('sonarqube')->getProjectPairs($job->sonarqubeServer, $job->projectKey);
         }
 
-        $this->view->title               = $this->lang->job->pipeline . $this->lang->colon . $this->lang->job->edit;
+        $this->view->title               = $this->lang->job->pipeline . $this->lang->hyphen . $this->lang->job->edit;
         $this->view->repoList            = $this->loadModel('repo')->getList($this->projectID);
         $this->view->job                 = $job;
         $this->view->repo                = $repo;
@@ -222,7 +222,7 @@ class job extends control
 
         if($compile && $compile->testtask) $this->jobZen->getCompileData($compile);
 
-        $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
+        $this->view->title   = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->browse;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->job     = $job;
         $this->view->compile = $compile;

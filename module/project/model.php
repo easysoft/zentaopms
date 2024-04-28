@@ -2531,7 +2531,7 @@ class projectModel extends model
 
         if($this->app->viewType == 'mhtml' && $projectID)
         {
-            $output  = $this->lang->project->common . $this->lang->colon;
+            $output  = $this->lang->project->common . $this->lang->hyphen;
             $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '')\">{$currentProjectName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             return $output;
         }

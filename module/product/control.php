@@ -92,7 +92,7 @@ class product extends control
         $projects = $this->loadModel('project')->getPairsByProgram($product->program, 'all', false, 'order_asc', '', '', 'product');
         foreach($projectStats as $project) unset($projects[$project->id]);
 
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
+        $this->view->title        = $this->products[$productID] . $this->lang->hyphen . $this->lang->product->project;
         $this->view->projectStats = $this->productZen->processProjectListData($projectStats);
         $this->view->PMList       = $this->loadModel('user')->getListByAccounts(helper::arrayColumn($projectStats, 'PM'), 'account');
         $this->view->product      = $product;
@@ -240,7 +240,7 @@ class product extends control
 
         $product = $this->product->getByID($productID);
 
-        $this->view->title   = $this->lang->product->edit . $this->lang->colon . $product->name;
+        $this->view->title   = $this->lang->product->edit . $this->lang->hyphen . $product->name;
         $this->view->product = $product;
         $this->view->fields  = $this->productZen->getFormFields4Edit($product);
 
@@ -313,7 +313,7 @@ class product extends control
 
         $product = $this->product->getByID($productID);
 
-        $this->view->title   = $product->name . $this->lang->colon .$this->lang->close;
+        $this->view->title   = $product->name . $this->lang->hyphen .$this->lang->close;
         $this->view->product = $product;
         $this->view->actions = $this->loadModel('action')->getList('product', $productID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
@@ -346,7 +346,7 @@ class product extends control
 
         $product = $this->product->getByID($productID);
 
-        $this->view->title   = $product->name . $this->lang->colon .$this->lang->close;
+        $this->view->title   = $product->name . $this->lang->hyphen .$this->lang->close;
         $this->view->product = $product;
         $this->view->actions = $this->loadModel('action')->getList('product', $productID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
@@ -380,7 +380,7 @@ class product extends control
         /* Execute hooks. */
         $this->executeHooks($productID);
 
-        $this->view->title     = $product->name . $this->lang->colon . $this->lang->product->view;
+        $this->view->title     = $product->name . $this->lang->hyphen . $this->lang->product->view;
         $this->view->product   = $product;
         $this->view->actions   = $this->loadModel('action')->getList('product', $productID);
         $this->view->dynamics  = $this->action->getDynamic('all', 'all', 'date_desc', 50, $productID);
@@ -439,7 +439,7 @@ class product extends control
         $branches = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID);
 
         /* Assign view data. */
-        $this->view->title    = $product->name . $this->lang->colon . $this->lang->product->roadmap;
+        $this->view->title    = $product->name . $this->lang->hyphen . $this->lang->product->roadmap;
         $this->view->product  = $product;
         $this->view->roadmaps = $roadmaps;
         $this->view->branches = $branches;
@@ -484,7 +484,7 @@ class product extends control
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
 
         /* Assign. */
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
+        $this->view->title        = $this->products[$productID] . $this->lang->hyphen . $this->lang->product->dynamic;
         $this->view->userIdPairs  = $this->user->getPairs('noletter|nodeleted|noclosed|useid');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->productID    = $productID;
@@ -520,7 +520,7 @@ class product extends control
         $product = $this->product->getStatByID($productID);
         if(!$product) return $this->locate('product', 'all');
 
-        $this->view->title = $product->name . $this->lang->colon . $this->lang->product->view;
+        $this->view->title = $product->name . $this->lang->hyphen . $this->lang->product->view;
         echo $this->fetch('block', 'dashboard', 'dashboard=singleproduct');
     }
 

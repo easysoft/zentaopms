@@ -56,7 +56,7 @@ class executionZen extends execution
         $build      = !empty($build) ? $this->loadModel('build')->getById((int)$build) : null;
 
         /* Assign. */
-        $this->view->title            = $execution->name . $this->lang->colon . $this->lang->execution->bug;
+        $this->view->title            = $execution->name . $this->lang->hyphen . $this->lang->execution->bug;
         $this->view->project          = $project;
         $this->view->orderBy          = $orderBy;
         $this->view->type             = $type;
@@ -171,7 +171,7 @@ class executionZen extends execution
             }
         }
 
-        $this->view->title                = $this->lang->execution->manageProducts . $this->lang->colon . $execution->name;
+        $this->view->title                = $this->lang->execution->manageProducts . $this->lang->hyphen . $execution->name;
         $this->view->execution            = $execution;
         $this->view->linkedProducts       = $linkedProducts;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
@@ -263,7 +263,7 @@ class executionZen extends execution
         $this->assignModuleForStory($type, $param, $storyType, $execution, $productID);
 
         /* Assign. */
-        $this->view->title        = $execution->name . $this->lang->colon . $this->lang->execution->story;
+        $this->view->title        = $execution->name . $this->lang->hyphen . $this->lang->execution->story;
         $this->view->storyType    = $storyType;
         $this->view->param        = $param;
         $this->view->type         = $this->session->executionStoryBrowseType;

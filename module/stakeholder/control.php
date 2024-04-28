@@ -317,7 +317,7 @@ class stakeholder extends control
 
         if($stakeholder->objectType == 'project') $this->view->projectID = $stakeholder->objectID;
 
-        $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->view;
+        $this->view->title      = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->view;
         $this->view->user       = $stakeholder;
         $this->view->users      = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
         $this->view->expects    = $this->stakeholder->getExpectByUser($stakeholderID);
@@ -347,7 +347,7 @@ class stakeholder extends control
 
         $this->commonAction($stakeholderID, 'stakeholder');
 
-        $this->view->title = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
+        $this->view->title = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->communicate;
         $this->view->user  = $this->stakeholder->getByID($stakeholderID);
         $this->view->users = $this->loadModel('user')->getTeamMemberPairs($this->view->user->objectID, 'project', 'nodeleted');
 
@@ -381,7 +381,7 @@ class stakeholder extends control
             return $this->send(array('result' => 'success', 'closeModal' => true));
         }
 
-        $this->view->title = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
+        $this->view->title = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->communicate;
         $this->view->user  = $this->stakeholder->getByID($stakeholderID);
 
         $this->display();
@@ -413,7 +413,7 @@ class stakeholder extends control
         $this->app->loadLang('issue');
         $stakeholder = $this->stakeholder->getByID($stakeholderID);
 
-        $this->view->title       = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->communicate;
+        $this->view->title       = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->communicate;
         $this->view->stakeholder = $stakeholder;
         $this->view->projectID   = $stakeholder->objectID;
         $this->view->issueList   = $this->stakeholder->getStakeholderIssue($stakeholder->user);

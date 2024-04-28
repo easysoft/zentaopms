@@ -34,7 +34,7 @@
       <span class='label label-danger'><?php echo $lang->bug->deleted;?></span>
       <?php endif; ?>
       <?php if($bug->case):?>
-      <small><?php echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion", '', true), "<i class='icon icon-sitemap'></i> {$lang->bug->fromCase}$lang->colon$bug->case", '', isonlybody() ? '' : "data-toggle='modal' data-type='iframe' data-width='80%'");?></small>
+      <small><?php echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion", '', true), "<i class='icon icon-sitemap'></i> {$lang->bug->fromCase}$lang->hyphen$bug->case", '', isonlybody() ? '' : "data-toggle='modal' data-type='iframe' data-width='80%'");?></small>
       <?php endif;?>
     </div>
   </div>
@@ -159,7 +159,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->fromCase;?></th>
-                  <td><?php if($bug->case) echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion", '', true), "<i class='icon icon-sitemap'></i> {$lang->bug->fromCase}$lang->colon$bug->case", '', isonlybody() ? '' : "data-toggle='modal' data-type='iframe' data-width='80%'");?></td>
+                  <td><?php if($bug->case) echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion", '', true), "<i class='icon icon-sitemap'></i> {$lang->bug->fromCase}$lang->hyphen$bug->case", '', isonlybody() ? '' : "data-toggle='modal' data-type='iframe' data-width='80%'");?></td>
                 </tr>
                 <tr valign='middle' class='<?php if($product->shadow and isset($project) and empty($project->multiple)) echo 'hide'?>'>
                   <th><?php echo $lang->bug->plan;?></th>

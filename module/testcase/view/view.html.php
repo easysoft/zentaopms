@@ -25,7 +25,7 @@
       <span class='label label-id'><?php echo $case->id;?></span>
       <span class='text' title='<?php echo $case->title;?>' style='color: <?php echo $case->color; ?>'><?php echo $case->title;?></span>
       <?php if($case->fromCaseID):?>
-      <small><?php echo html::a(helper::createLink('testcase', 'view', "caseID=$case->fromCaseID"), html::icon($lang->icons['testcase']) . " {$lang->testcase->fromCase}$lang->colon$case->fromCaseID");?></small>
+      <small><?php echo html::a(helper::createLink('testcase', 'view', "caseID=$case->fromCaseID"), html::icon($lang->icons['testcase']) . " {$lang->testcase->fromCase}$lang->hyphen$case->fromCaseID");?></small>
       <?php endif;?>
 
       <?php if($case->deleted):?>

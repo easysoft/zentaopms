@@ -117,7 +117,7 @@ class repo extends control
 
         $this->repoZen->buildRepoSearchForm($products, $projects, $objectID, $orderBy, $recPerPage, $pageID, $param);
 
-        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
+        $this->view->title         = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->browse;
         $this->view->serverPairs   = $this->loadModel('pipeline')->getPairs('gitfox,gitlab');
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
@@ -374,7 +374,7 @@ class repo extends control
         if(in_array($repo->SCM, $this->config->repo->gitTypeList)) $dropMenus = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
 
         if($this->app->tab == 'execution') $this->view->executionID = $objectID;
-        $this->view->title     = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->title     = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->view;
         $this->view->dropMenus = $dropMenus;
         $this->view->type      = 'view';
         $this->view->branchID  = $this->cookie->repoBranch;
@@ -728,7 +728,7 @@ class repo extends control
         $this->view->newRevision   = $newRevision;
         $this->view->oldRevision   = $oldRevision;
         $this->view->isBranchOrTag = $isBranchOrTag;
-        $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
+        $this->view->title         = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->diff;
 
         $this->display();
     }
@@ -798,7 +798,7 @@ class repo extends control
         $this->app->loadLang('story');
         if(is_string($this->config->repo->rules)) $this->config->repo->rules = json_decode($this->config->repo->rules, true);
 
-        $this->view->title = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->setRules;
+        $this->view->title = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->setRules;
         $this->display();
     }
 
@@ -820,7 +820,7 @@ class repo extends control
         if($branch) $branch = base64_decode(helper::safe64Decode($branch));
 
         $latestInDB = $this->repo->getLatestCommit($repoID);
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->showSyncCommit;
+        $this->view->title      = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->showSyncCommit;
         $this->view->version    = $latestInDB ? (int)$latestInDB->commit : 1;
         $this->view->repoID     = $repoID;
         $this->view->repo       = $this->repo->getByID($repoID);
@@ -1029,7 +1029,7 @@ class repo extends control
         $repoList = $server ? $this->repoZen->getNotExistRepos($server) : array();
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
+        $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->importAction;
         $this->view->servers     = $serverList;
         $this->view->products    = $products;
         $this->view->projects    = $this->product->getProjectPairsByProductIDList(array_keys($products));
@@ -1071,7 +1071,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $nRevision);
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
+        $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->diff;
         $this->view->type        = 'diff';
         $this->view->encoding    = str_replace('-', '_', $encoding);
         $this->view->repoID      = $repoID;
@@ -1136,7 +1136,7 @@ class repo extends control
             $content = helper::convertEncoding($content, $encoding);
         }
 
-        $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
+        $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->view;
         $this->view->type        = 'view';
         $this->view->showBug     = $showBug;
         $this->view->repoID      = $repoID;

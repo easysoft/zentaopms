@@ -20,7 +20,7 @@
 <?php js::set('showFields', $showFields);?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
-    <h2><?php echo $lang->testcase->common . $lang->colon . $lang->testcase->batchEdit;?></h2>
+    <h2><?php echo $lang->testcase->common . $lang->hyphen . $lang->testcase->batchEdit;?></h2>
     <div class="pull-right btn-toolbar">
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=batchEditFields')?>
       <?php include '../../common/view/customfield.html.php';?>

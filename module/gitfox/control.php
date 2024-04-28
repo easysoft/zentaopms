@@ -34,7 +34,7 @@ class gitfox extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
-        $this->view->title = $this->lang->gitfox->common . $this->lang->colon . $this->lang->gitfox->lblCreate;
+        $this->view->title = $this->lang->gitfox->common . $this->lang->hyphen . $this->lang->gitfox->lblCreate;
 
         $this->display();
     }
@@ -68,7 +68,7 @@ class gitfox extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadCurrentPage()', 'closeModal' => true));
         }
 
-        $this->view->title  = $this->lang->gitfox->common . $this->lang->colon . $this->lang->gitfox->edit;
+        $this->view->title  = $this->lang->gitfox->common . $this->lang->hyphen . $this->lang->gitfox->edit;
         $this->view->gitfox = $oldGitFox;
 
         $this->display();

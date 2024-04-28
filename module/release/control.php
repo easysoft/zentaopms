@@ -76,7 +76,7 @@ class release extends control
         $releaseQuery = $type == 'bySearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
         $releases     = $this->release->getList($productID, $branch, $type, $sort, $releaseQuery, $pager);
 
-        $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
+        $this->view->title       = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
         $this->view->releases    = $this->releaseZen->processReleaseListData($releases);
         $this->view->pageSummary = $this->release->getPageSummary($releases, $type);
         $this->view->type        = $type;
@@ -127,7 +127,7 @@ class release extends control
 
         $this->commonAction($productID, $branch);
 
-        $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
+        $this->view->title       = $this->view->product->name . $this->lang->hyphen . $this->lang->release->create;
         $this->view->productID   = $productID;
         $this->view->builds      = $builds;
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
@@ -176,7 +176,7 @@ class release extends control
             if(strpos(',' . trim($release->build, ',') . ',', ",{$releasedBuild},") === false) unset($builds[$releasedBuild]);
         }
 
-        $this->view->title   = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
+        $this->view->title   = $this->view->product->name . $this->lang->hyphen . $this->lang->release->edit;
         $this->view->release = $release;
         $this->view->builds  = $builds;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');

@@ -307,7 +307,7 @@ class testcaseZen extends testcase
         /* Set menu. */
         $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $branch);
 
-        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->newScene;
+        $this->view->title    = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->newScene;
         $this->view->modules  = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? 'all' : (string)$branch);
         $this->view->scenes   = $this->testcase->getSceneMenu($productID, $moduleID, ($branch === 'all' || !isset($branches[$branch])) ? 'all' : (string)$branch);
         $this->view->moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
@@ -355,7 +355,7 @@ class testcaseZen extends testcase
         $scenes = $this->testcase->getSceneMenu($productID, $moduleID, $branchID, 0, $oldScene->id);
         if(!isset($scenes[$parentID])) $scenes += $this->testcase->getScenesName((array)$parentID);
 
-        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->editScene;
+        $this->view->title    = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->editScene;
         $this->view->products = $this->products;
         $this->view->product  = $product;
         $this->view->branches = $branches;
@@ -578,7 +578,7 @@ class testcaseZen extends testcase
         $showModule = !empty($this->config->testcase->browse->showModule) ? $this->config->testcase->browse->showModule : '';
         $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
 
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->title       = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->common;
         $this->view->projectID   = $projectID;
         $this->view->projectType = !empty($projectID) ? $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model') : '';
         $this->view->browseType  = $browseType;
@@ -835,7 +835,7 @@ class testcaseZen extends testcase
         $product = $this->product->getByID($case->product);
         if(!isset($this->products[$case->product])) $this->products[$case->product] = $product->name;
 
-        $this->view->title     = $this->products[$case->product] . $this->lang->colon . $this->lang->testcase->edit;
+        $this->view->title     = $this->products[$case->product] . $this->lang->hyphen . $this->lang->testcase->edit;
         $this->view->isLibCase = false;
         $this->view->product   = $product;
         $this->view->products  = $this->products;
@@ -1063,7 +1063,7 @@ class testcaseZen extends testcase
             /* Set caselib menu. */
             $this->caselib->setLibMenu($libraries, $libID);
 
-            $this->view->title = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
+            $this->view->title = $libraries[$libID] . $this->lang->hyphen . $this->lang->testcase->batchEdit;
         }
         /* 指派测试用例。 */
         /* Assign test cases. */
@@ -1074,7 +1074,7 @@ class testcaseZen extends testcase
 
             $this->setMenu((int)$this->session->project, (int)$this->session->execution, $productID, $branch);
 
-            $this->view->title = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
+            $this->view->title = $product->name . $this->lang->hyphen . $this->lang->testcase->batchEdit;
         }
         /* 指派地盘标签下的用例。 */
         /* Assign cases of my tab. */

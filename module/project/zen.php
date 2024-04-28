@@ -799,7 +799,7 @@ class projectZen extends project
         $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
         $taskList  = $taskIdList  ? $this->loadModel('task')->getByIdList($taskIdList) : array();
 
-        $this->view->title            = $project->name . $this->lang->colon . $this->lang->bug->common;
+        $this->view->title            = $project->name . $this->lang->hyphen . $this->lang->bug->common;
         $this->view->bugs             = $bugs;
         $this->view->build            = $this->loadModel('build')->getById($build);
         $this->view->buildID          = $this->view->build ? $this->view->build->id : 0;

@@ -23,7 +23,7 @@ if($this->config->edition != 'open')
 
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->bug->common . $lang->colon . $lang->bug->batchActivate;?></h2>
+    <h2><?php echo $lang->bug->common . $lang->hyphen . $lang->bug->batchActivate;?></h2>
   </div>
   <form class='main-form' method='post' target='hiddenwin'>
     <table class='table table-form table-fixed'>

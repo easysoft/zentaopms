@@ -5104,7 +5104,7 @@ class executionModel extends model
 
         if($this->app->viewType == 'mhtml' and $executionID)
         {
-            $output  = html::a(helper::createLink('execution', 'index'), $this->lang->executionCommon) . $this->lang->colon;
+            $output  = html::a(helper::createLink('execution', 'index'), $this->lang->executionCommon) . $this->lang->hyphen;
             $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('execution', '$executionID', '$currentModule', '$currentMethod', '')\">{$currentExecutionName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             return $output;
         }

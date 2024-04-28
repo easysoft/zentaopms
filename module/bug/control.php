@@ -686,7 +686,7 @@ class bug extends control
 
         $this->qa->setMenu($productID, $branchID);
 
-        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common . $this->lang->colon . $this->lang->bug->reportChart;
+        $this->view->title         = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->common . $this->lang->hyphen . $this->lang->bug->reportChart;
         $this->view->productID     = $productID;
         $this->view->browseType    = $browseType;
         $this->view->branchID      = $branchID;
@@ -801,7 +801,7 @@ class bug extends control
         /* Show the variables associated with the batch creation bugs. */
         $this->bugZen->assignBatchCreateVars($executionID, $product, $branch, $output, $bugImagesFile);
 
-        $this->view->title    = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchCreate;
+        $this->view->title    = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->batchCreate;
         $this->view->moduleID = $moduleID;
         $this->view->product  = $product;
         $this->display();
@@ -1288,7 +1288,7 @@ class bug extends control
         /* 展示关联的变量。 */
         /* Show the variables associated. */
         $bugIdList = array_unique($this->post->bugIdList);
-        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchActivate;
+        $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->batchActivate;
         $this->view->bugs      = $this->bug->getByIdList($bugIdList);
         $this->view->users     = $this->user->getPairs('noclosed');
         $this->view->builds    = $this->loadModel('build')->getBuildPairs(array($productID), $branch, 'noempty,noreleased');

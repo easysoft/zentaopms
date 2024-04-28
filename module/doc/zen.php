@@ -521,7 +521,7 @@ class docZen extends doc
 
         $this->setObjectsForCreate($objectType, $lib, $unclosed, $objectID);
 
-        $this->view->title            = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->uploadDoc;
+        $this->view->title            = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->uploadDoc;
         $this->view->linkType         = $objectType;
         $this->view->objectType       = $objectType;
         $this->view->objectID         = empty($lib) ? 0 : zget($lib, $lib->type, 0);
@@ -689,7 +689,7 @@ class docZen extends doc
      */
     protected function assignVarsForView(int $docID, int $version, string $type, int $objectID, int $libID, object $doc, object $object, string $objectType, array $libs, array $objectDropdown): void
     {
-        $this->view->title             = $this->lang->doc->common . $this->lang->colon . $doc->title;
+        $this->view->title             = $this->lang->doc->common . $this->lang->hyphen . $doc->title;
         $this->view->docID             = $docID;
         $this->view->type              = $type;
         $this->view->objectID          = $objectID;

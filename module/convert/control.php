@@ -35,7 +35,7 @@ class convert extends control
      */
     public function selectSource()
     {
-        $this->view->title = $this->lang->convert->common . $this->lang->colon . $this->lang->convert->start;
+        $this->view->title = $this->lang->convert->common . $this->lang->hyphen . $this->lang->convert->start;
         $this->display();
     }
 
@@ -54,7 +54,7 @@ class convert extends control
 
         list($sourceName, $version) = explode('_', $this->post->source);
         $setFunc = "set$sourceName";
-        $this->view->title   = $this->lang->convert->common . $this->lang->colon . $this->lang->convert->setting;
+        $this->view->title   = $this->lang->convert->common . $this->lang->hyphen . $this->lang->convert->setting;
         $this->view->source  = $sourceName;
         $this->view->version = $version;
         $this->view->setting = $this->fetch('convert', $setFunc, "version=$version");
@@ -106,7 +106,7 @@ class convert extends control
     public function checkConfig()
     {
         $checkFunc = 'check' . $this->post->source;
-        $this->view->title       = $this->lang->convert->common . $this->lang->colon . $this->lang->convert->checkConfig;
+        $this->view->title       = $this->lang->convert->common . $this->lang->hyphen . $this->lang->convert->checkConfig;
         $this->view->source      = $this->post->source;
         $this->view->checkResult = $this->fetch('convert', $checkFunc, "version={$this->post->version}");
         $this->display();
@@ -192,7 +192,7 @@ class convert extends control
     public function execute()
     {
         $convertFunc = 'convert' . $this->post->source;
-        $this->view->title         = $this->lang->convert->common . $this->lang->colon . $this->lang->convert->execute;
+        $this->view->title         = $this->lang->convert->common . $this->lang->hyphen . $this->lang->convert->execute;
         $this->view->source        = $this->post->source;
         $this->view->version       = $this->post->version;
         $this->view->executeResult = $this->fetch('convert', $convertFunc, "version={$this->post->version}");

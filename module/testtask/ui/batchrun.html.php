@@ -152,7 +152,7 @@ foreach($cases as $caseID => $case)
 }
 formPanel
 (
-    set::title(($from == 'testtask' ? $lang->testtask->common . $lang->colon : '') . $lang->testtask->batchRun),
+    set::title(($from == 'testtask' ? $lang->testtask->common . $lang->hyphen : '') . $lang->testtask->batchRun),
     set::width('auto'),
 
     on::click('[name^=results]', 'toggleAction'),

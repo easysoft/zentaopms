@@ -119,7 +119,7 @@ class programplanZen extends programplan
             $this->config->programplan->form->create['attribute']['options'] = $this->lang->stage->ipdTypeList;
         }
 
-        $this->view->title              = $this->lang->programplan->create . $this->lang->colon . $viewData->project->name;
+        $this->view->title              = $this->lang->programplan->create . $this->lang->hyphen . $viewData->project->name;
         $this->view->productList        = $viewData->productList;
         $this->view->project            = $viewData->project;
         $this->view->productID          = $viewData->productID ?: key($viewData->productList);

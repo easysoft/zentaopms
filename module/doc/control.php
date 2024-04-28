@@ -355,7 +355,7 @@ class doc extends control
 
         $this->docZen->setObjectsForCreate($lib->type, $lib, $unclosed, zget($lib, $lib->type, 0));
 
-        $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->create;
+        $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->create;
         $this->view->objectType       = $objectType;
         $this->view->objectID         = zget($lib, $lib->type, 0);
         $this->view->libID            = $libID;
@@ -409,7 +409,7 @@ class doc extends control
 
         $this->docZen->setObjectsForEdit($lib->type, $objectID);
 
-        $this->view->title            = $lib->name . $this->lang->colon . $this->lang->doc->edit;
+        $this->view->title            = $lib->name . $this->lang->hyphen . $this->lang->doc->edit;
         $this->view->doc              = $doc;
         $this->view->moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
         $this->view->type             = $lib->type;
@@ -752,7 +752,7 @@ class doc extends control
 
         $executionID = $type == 'project' && $lib->type == 'execution' ? $lib->execution : 0;
 
-        $this->view->title             = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
+        $this->view->title             = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->hyphen . $this->lang->doc->tableContents;
         $this->view->type              = $type;
         $this->view->objectType        = $type;
         $this->view->spaceType         = $type;

@@ -106,7 +106,7 @@ class productplan extends control
         $this->view->begin = $lastPlan ? $begin : date('Y-m-d');
         if($parent) $this->view->parentPlan = $this->productplan->getByID($parent);
 
-        $this->view->title           = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
+        $this->view->title           = $this->view->product->name . $this->lang->hyphen . $this->lang->productplan->create;
         $this->view->product         = $product;
         $this->view->lastPlan        = $lastPlan;
         $this->view->branch          = $branchID;
@@ -169,7 +169,7 @@ class productplan extends control
             }
             $this->view->branchTagOption = $branchPairs;
         }
-        $this->view->title     = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
+        $this->view->title     = $this->view->product->name . $this->lang->hyphen . $this->lang->productplan->edit;
         $this->view->productID = $plan->product;
         $this->view->oldBranch = $oldBranch;
         $this->view->plan      = $plan;
@@ -321,7 +321,7 @@ class productplan extends control
         $plans = $this->productplan->getList($productID, (string)$branch, $browseType, $pager, $sort, "", $queryID);
         $plans = $this->productplanZen->buildDataForBrowse($plans, $this->view->branchOption);
 
-        $this->view->title      = $productName . $this->lang->colon . $this->lang->productplan->browse;
+        $this->view->title      = $productName . $this->lang->hyphen . $this->lang->productplan->browse;
         $this->view->productID  = $productID;
         $this->view->branchID   = $branchID;
         $this->view->browseType = $browseType;

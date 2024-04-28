@@ -489,7 +489,7 @@ class api extends control
         $this->setMenu($libID, $space);
 
         $lib     = $this->doc->getLibByID($libID);
-        $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
+        $libName = isset($lib->name) ? $lib->name . $this->lang->hyphen : '';
 
         $this->view->title            = $libName . $this->lang->api->create;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
@@ -526,7 +526,7 @@ class api extends control
         $this->setMenu($api->lib);
         $this->getTypeOptions($api->lib);
 
-        $this->view->title            = $api->title . $this->lang->colon . $this->lang->api->edit;
+        $this->view->title            = $api->title . $this->lang->hyphen . $this->lang->api->edit;
         $this->view->api              = $api;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);

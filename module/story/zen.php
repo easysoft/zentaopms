@@ -229,7 +229,7 @@ class storyZen extends story
         {
             $this->product->setMenu($productID);
             $product = $this->product->getByID($productID);
-            $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->view->title = $product->name . $this->lang->hyphen . $this->lang->story->batchClose;
         }
         /* The stories of a execution. */
         elseif($this->app->tab == 'execution' && $executionID)
@@ -238,7 +238,7 @@ class storyZen extends story
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
             $this->execution->setMenu($executionID);
             $execution = $this->execution->getByID($executionID);
-            $this->view->title       = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->story->batchClose;
             $this->view->executionID = $executionID;
         }
         elseif($this->app->tab == 'project')
