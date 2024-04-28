@@ -7,8 +7,8 @@ title=sv_in_waterfall
 timeout=0
 cid=1
 
-- 测试分组数。 @5
-- 测试项目7。第0条的value属性 @-0.3492
+- 测试分组数。 @1
+- 测试项目7。第0条的value属性 @1.0905
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
@@ -21,6 +21,6 @@ zdTable('task')->config('task_waterfall', true, 4)->gen(1000);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r(count($calc->getResult())) && p('') && e('5'); // 测试分组数。
+r(count($metric->getReuseCalcResult($calc))) && p('') && e('1'); // 测试分组数。
 
-r($calc->getResult(array('project' => '7'))) && p('0:value') && e('-0.3492'); // 测试项目7。
+r($metric->getReuseCalcResult($calc, array('project' => '1', 'year' => '2024', 'week' => '05'))) && p('0:value') && e('1.0905'); // 测试项目7。

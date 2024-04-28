@@ -283,14 +283,30 @@ class metricTest
         include_once $this->objectModel->getCalcRoot() . $scope . DS . $purpose . DS . $code . '.php';
 
         $calc = new $code;
-        $rows = $this->prepareDataset($calc)->fetchAll();
-
-        foreach($rows as $row)
+        if(!$calc->reuse)
         {
-            $calc->calculate((object)$row);
+            $rows = $this->prepareDataset($calc)->fetchAll();
+
+            foreach($rows as $row)
+            {
+                $calc->calculate((object)$row);
+            }
         }
 
         return $calc;
+    }
+
+    public function getReuseCalcResult($calc, $options = array())
+    {
+        $reuseMetrics = array();
+        foreach($calc->reuseMetrics as $key => $reuseMetric)
+        {
+            $reuseMetrics[$key] = $this->objectModel->getResultByCode($reuseMetric, $options);
+        }
+
+        $calc->calculate($reuseMetrics);
+
+        return $calc->getResult($options);
     }
 
     /**

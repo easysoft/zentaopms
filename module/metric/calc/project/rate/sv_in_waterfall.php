@@ -20,29 +20,61 @@
  */
 class sv_in_waterfall extends baseCalc
 {
-    public $dataset = 'getWaterfallTasks';
-
-    public $fieldList = array('t1.id as project', 't2.estimate', 't2.consumed', 't2.left');
-
     public $result = array();
 
-    public function calculate($row)
+    public $reuse = true;
+
+    public $reuseMetrics = array('pv' => 'pv_of_task_in_waterfall', 'ev' => 'ev_of_finished_task_in_waterfall');
+
+    public $reuseRule = '({ev} - {pv}) / {pv}';
+
+    public function calculate($metrics)
     {
-        $project  = $row->project;
-        $estimate = (float)$row->estimate;
-        $consumed = (float)$row->consumed;
-        $left     = (float)$row->left;
-        $total    = $consumed + $left;
+        $pvs = $metrics['pv'];
+        $evs = $metrics['ev'];
+        if(empty($pvs) || empty($evs)) return false;
 
-        $ev = $total == 0 ? 0 : round($consumed / $total * $estimate, 2);
-        $sv = $estimate == 0 ? 0 : round(($ev - $estimate) / $estimate, 4);
+        $all = array_merge($pvs, $evs);
 
-        if(!isset($this->result[$project])) $this->result[$project] = $sv;
+        $projects = array_column($all, 'project', 'project');
+        $years    = array_column($all, 'year', 'year');
+        $weeks    = array_column($all, 'week', 'week');
+
+        $pvs = $this->generateUniqueKey($pvs);
+        $evs = $this->generateUniqueKey($evs);
+
+        foreach($projects as $project)
+        {
+            foreach($years as $year)
+            {
+                foreach($weeks as $week)
+                {
+                    $key = "{$project}_{$year}_{$week}";
+                    $pv  = isset($pvs[$key]) ? $pvs[$key] : 0;
+                    $ev  = isset($evs[$key]) ? $evs[$key] : 0;
+
+                    if($pv == 0) continue;
+                    $this->result[$project] = array($year => array($week => round(($ev - $pv) / $pv, 4)));
+                }
+            }
+        }
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('project', 'value'));
+        $records = $this->getRecords(array('project', 'year', 'week', 'value'));
         return $this->filterByOptions($records, $options);
+    }
+
+    public function generateUniqueKey($records)
+    {
+        $uniqueKeyRecords = array();
+        foreach($records as $record)
+        {
+            $key = "{$record['project']}_{$record['year']}_{$record['week']}";
+            $uniqueKeyRecords[$key] = $record['value'];
+        }
+
+        return $uniqueKeyRecords;
     }
 }
