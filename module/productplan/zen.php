@@ -234,11 +234,11 @@ class productplanZen extends productplan
         if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
         if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
 
-        $this->view->plan         = $plan;
-        $this->view->actions      = $this->loadModel('action')->getList('productplan', $plan->id);
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->plans        = $this->productplan->getPairs($plan->product, $plan->branch, '', true);
-        $this->view->modules      = $this->loadModel('tree')->getOptionMenu($plan->product);
+        $this->view->plan    = $plan;
+        $this->view->actions = $this->loadModel('action')->getList('productplan', $plan->id);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->plans   = $this->productplan->getPairs($plan->product, $plan->branch, '', true);
+        $this->view->modules = $this->loadModel('tree')->getOptionMenu($plan->product);
 
         if($this->app->getViewType() == 'json')
         {
