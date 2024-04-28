@@ -37,16 +37,17 @@ featureBar
     )
 );
 
-$canModifyProduct = common::canModify('product', $product);
-$canLinkStory     = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && hasPriv('execution', 'linkStory');
-$canCreate        = $canModifyProduct && hasPriv('story', 'create');
-$canBatchCreate   = $canModifyProduct && hasPriv('story', 'batchCreate');
-$createLink       = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}") . "#app={$app->tab}";
-$batchCreateLink  = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}") . "#app={$app->tab}";
-$createItem       = array('text' => $lang->story->create,      'url' => $createLink);
-$batchCreateItem  = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
-$linkStoryUrl     = createLink('execution', 'linkStory', "project={$execution->id}");
-$linkItem         = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl, 'data-app' => $app->tab);
+$canModifyProduct   = common::canModify('product', $product);
+$canModifyExecution = common::canModify('execution', $execution);
+$canLinkStory       = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && $canModifyExecution && hasPriv('execution', 'linkStory');
+$canCreate          = $canModifyProduct && $canModifyExecution && hasPriv('story', 'create');
+$canBatchCreate     = $canModifyProduct && $canModifyExecution && hasPriv('story', 'batchCreate');
+$createLink         = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}") . "#app={$app->tab}";
+$batchCreateLink    = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}") . "#app={$app->tab}";
+$createItem         = array('text' => $lang->story->create,      'url' => $createLink);
+$batchCreateItem    = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
+$linkStoryUrl       = createLink('execution', 'linkStory', "project={$execution->id}");
+$linkItem           = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl, 'data-app' => $app->tab);
 $product ? toolbar
 (
     common::hasPriv('execution', 'storykanban') ? btnGroup

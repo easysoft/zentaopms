@@ -63,11 +63,12 @@ if(!$product)
     $product = new stdclass();
     $product->id = 0;
 }
-$canModifyProduct = common::canModify('product', $product);
-$canCreate        = $canModifyProduct && hasPriv('story', 'create');
-$canBatchCreate   = $canModifyProduct && hasPriv('story', 'batchCreate');
-$createLink       = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . "#app={$app->tab}";
-$batchCreateLink  = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . "#app={$app->tab}";
+$canModifyProduct   = common::canModify('product', $product);
+$canModifyExecution = common::canModify('execution', $execution);
+$canCreate          = $canModifyProduct && $canModifyExecution && hasPriv('story', 'create');
+$canBatchCreate     = $canModifyProduct && $canModifyExecution && hasPriv('story', 'batchCreate');
+$createLink         = createLink('story', 'create', "product={$product->id}&branch=0&moduleID=0&storyID=0&objectID={$execution->id}&bugID=0&planID=0&todoID=0&extra=&storyType={$storyType}") . "#app={$app->tab}";
+$batchCreateLink    = createLink('story', 'batchCreate', "productID={$product->id}&branch=0&moduleID=0&storyID=0&executionID={$execution->id}&plan=0&storyType={$storyType}") . "#app={$app->tab}";
 
 /* Tutorial create link. */
 if(commonModel::isTutorialMode())
@@ -80,8 +81,8 @@ if(commonModel::isTutorialMode())
 $createItem      = array('text' => $lang->story->create,      'url' => $createLink);
 $batchCreateItem = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
 
-$canLinkStory     = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && hasPriv('execution', 'linkStory');
-$canlinkPlanStory = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && hasPriv('execution', 'importPlanStories') && $storyType == 'story';
+$canLinkStory     = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && $canModifyExecution && hasPriv('execution', 'linkStory');
+$canlinkPlanStory = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && $canModifyExecution && hasPriv('execution', 'importPlanStories') && $storyType == 'story';
 $linkStoryUrl     = createLink('execution', 'linkStory', "project={$execution->id}&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=&storyType=$storyType");
 
 if(commonModel::isTutorialMode())
@@ -375,9 +376,8 @@ if($canBatchAction)
 
 /* DataTable columns. */
 $config->story->dtable->fieldList['title']['title'] = $lang->story->title;
-$cols               = array();
-$setting            = $this->loadModel('datatable')->getSetting('execution', 'story', false, $storyType);
-$canModifyExecution = common::canModify('execution', $execution);
+$cols    = array();
+$setting = $this->loadModel('datatable')->getSetting('execution', 'story', false, $storyType);
 if(!$canModifyExecution) $setting['actions']['actionsMap'] = array();
 if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 foreach($setting as $col)
