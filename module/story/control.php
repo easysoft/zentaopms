@@ -201,6 +201,7 @@ class story extends control
         $this->view->executionID  = $executionID;
         $this->view->type         = $storyType;
         $this->view->fields       = $fields;
+        $this->view->planID       = $plan;
         $this->view->stories      = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
         $this->view->storyTitle   = isset($story->title) ? $story->title : '';
         $this->view->forceReview  = $this->story->checkForceReview();

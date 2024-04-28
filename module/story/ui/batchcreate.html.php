@@ -71,7 +71,7 @@ formBatchPanel
     $stories ? set::data($stories) : null,
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::title($storyID ? $storyTitle . $lang->colon . $this->lang->story->subdivide : $this->lang->story->batchCreate),
-    set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")),
+    set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan={$planID}&type=$type")),
     set::pasteField('title'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
     set::items($fnGenerateFields()),
