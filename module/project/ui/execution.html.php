@@ -86,7 +86,7 @@ foreach($productList as $key => $value) $productItems[] = array('text' => $value
 $productName = !empty($product) ? $product->name : '';
 featureBar
 (
-    $project->hasProduct ? to::leading
+    ($project->stageBy == 'product' && $project->hasProduct) ? to::leading
     (
         dropdown
         (
