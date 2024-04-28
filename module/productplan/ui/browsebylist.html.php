@@ -87,11 +87,11 @@ if($canBatchAction)
         foreach($lang->productplan->statusList as $statusKey => $statusText)
         {
             $items[$statusKey] = array
-                (
-                    'text'     => $statusText,
-                    'class'    => 'batch-btn',
-                    'data-url' => createLink('productplan', 'batchChangeStatus', "status={$statusKey}&productID={$productID}")
-                );
+            (
+                'text'     => $statusText,
+                'class'    => 'batch-btn ajax-btn not-open-url',
+                'data-url' => createLink('productplan', 'batchChangeStatus', "status={$statusKey}&productID={$productID}")
+            );
             if($statusKey == 'closed') $items[$statusKey]['data-page'] = 'batch';
         }
 
