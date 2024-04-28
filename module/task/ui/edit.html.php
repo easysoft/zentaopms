@@ -421,10 +421,9 @@ detailBody
                     ),
                     btn
                     (
-                        setClass('ghost text-primary'),
+                        setClass('ghost text-primary', !empty($task->children) ? 'disabled' : true),
                         icon('time'),
                         set::href(inlink('recordWorkhour', "id={$task->id}&from=edittask")),
-                        !empty($task->children) ? set::readonly(true) : null,
                         setData('toggle', 'modal')
                     ),
                     formHidden('consumed', $task->consumed)
