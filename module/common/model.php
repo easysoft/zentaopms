@@ -1689,7 +1689,7 @@ class commonModel extends model
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
 
-        global $app, $config;
+        global $config;
         static $productsStatus   = array();
         static $executionsStatus = array();
 
@@ -1700,7 +1700,7 @@ class commonModel extends model
         {
             if(!isset($productsStatus[$object->product]))
             {
-                $product = $commonModel->loadModel('product')->getByID($object->product);
+                $product = $commonModel->loadModel('product')->getByID((int)$object->product);
                 $productsStatus[$object->product] = $product ? $product->status : '';
             }
             if($productsStatus[$object->product] == 'closed') return false;
