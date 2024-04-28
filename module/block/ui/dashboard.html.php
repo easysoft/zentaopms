@@ -47,14 +47,6 @@ $remind ? modal
     html($remind)
 ) : null;
 
-$remind = $this->misc->getRemind();
-$remind ? modal
-(
-    setID('annualModal'),
-    set::title($lang->misc->remind),
-    html($remind)
-) : null;
-
 $upgradeRemind = $this->misc->getUpgradeRemind();
 if($upgradeRemind)
 {
