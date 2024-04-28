@@ -206,6 +206,7 @@ detailBody
                 (
                     modulePicker
                     (
+                        setID('module'),
                         set::items($moduleOptionMenu),
                         set::value($case->module),
                         set::manageLink(createLink('tree', 'browse', "rootID={$rootID}&view={$viewType}&currentModuleID=0&branch={$case->branch}"))
