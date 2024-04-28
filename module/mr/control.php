@@ -317,7 +317,7 @@ class mr extends control
         if(!$MR) return $this->locate($this->createLink('mr', 'browse'));
 
         if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
-        if($MR->synced && (!isset($rawMR->id) || empty($rawMR))) return $this->display();
+        if($MR->synced && (!isset($rawMR->id) || empty($rawMR))) $this->sendError($this->lang->mr->apiError->emptyResponse, true);
 
         /* Sync MR from GitLab to ZenTaoPMS. */
         $MR   = $this->mr->apiSyncMR($MR);
