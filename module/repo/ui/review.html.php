@@ -27,7 +27,7 @@ foreach($bugs as $bug)
     $objectID      = $app->tab == 'execution' ? $bug->execution : 0;
 
     $bug->entry     = $this->repo->decodePath($bug->entry);
-    $bug->revisionA = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
+    $bug->revisionA = substr($repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2, 0, 10);
 
     $lines     = trim($bug->lines, ',');
     $fileEntry = $this->repo->encodePath("{$bug->entry}#{$bug->lines}");
@@ -49,37 +49,10 @@ foreach($bugs as $bug)
 }
 $bugs = initTableData($bugs, $config->repo->reviewDtable->fieldList);
 
-$repoData = array(array(
-     'text'     => $lang->all,
-     'data-app' => $app->tab,
-     'url'      => createLink('repo', 'review', "repoID=0&browseType=all&objectID={$objectID}"),
-     'active'   => $allRepo
- ));
-
- foreach($repos as $repo)
- {
-     if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) continue;
-
-     $repoData[] = array(
-         'text'     => $repo->name,
-         'data-app' => $app->tab,
-         'url'      => createLink('repo', 'review', "repoID={$repo->id}&browseType={$browseType}&objectID={$objectID}"),
-         'active'   =>  !$allRepo && $repo->id == $repoID
-     );
- }
-
 \zin\featureBar
 (
     set::current($browseType),
-    set::linkParams("repoID={$repoID}&browseType={key}&objectID={$objectID}"),
-    count($repoPairs) > 1 && $objectID ? to::leading
-    (
-        dropdown(
-            to('trigger', btn(setClass('ghost'), $allRepo ? $lang->all : zget($repoPairs, $repoID, $lang->all))),
-            set::items($repoData),
-            set::placement('bottom-end')
-        )
-    ) : null
+    set::linkParams("repoID={$repoID}&browseType={key}&objectID={$objectID}")
 );
 
 dtable
