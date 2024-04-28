@@ -14,7 +14,7 @@
 .main-content-cell > .panel {max-height: calc(100vh - 110px); overflow-y: auto;}
 .main-content-cell > .panel > .doc-content {padding-right: 0;}
 
-#contentTree {background: #fff; position: sticky; height: calc(100vh - 180px)!important; overflow: auto; top: 3rem; right: 1rem; z-index: 100; flex: 0 1 30%;}
+#contentTree {background: #fff; position: sticky; height: calc(100vh - 180px)!important; overflow: auto; top: 3rem; right: 1rem; z-index: 100; flex: 0 1 30%;  min-width: 160px;}
 #contentTree .tree-item .item-content > a {white-space: nowrap; text-overflow: clip; overflow: hidden;}
 
 #docPanel::-webkit-scrollbar,
@@ -25,3 +25,4 @@
 
 #outlineToggle {display: block; position: absolute; top: 6.5rem; right: 3.5rem; z-index: 100;}
 #docPanel .panel-heading > .panel-actions {min-width: 320px;}
+#docPanel .detail-content {max-width: var(--zt-panel-form-max-width);}
