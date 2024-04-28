@@ -63,14 +63,14 @@ class pivotModel extends model
      * 时间占位符替换为实际的时间。
      * Replace time placeholder with actual time.
      *
-     * @param  string $var
+     * @param  mixed  $var
      * @param  string $type
      * @access public
      * @return string
      */
-    public function processDateVar(string $var, string $type = 'date'): string
+    public function processDateVar(mixed $var, string $type = 'date'): string
     {
-        if(empty($var)) return '';
+        if(!is_string($var) || empty($var)) return '';
 
         $format = $type == 'datetime' ? 'Y-m-d H:i:s' : 'Y-m-d';
         switch($var)
