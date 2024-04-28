@@ -36,6 +36,7 @@ toolbar
 $blocks = array();
 foreach($spaceList as $space)
 {
+    $pattern      = '/<br[^>]*>|<img[^>]*>/';
     $childActions = array();
     $childActions[] = array('icon' => 'cog-outline', 'url' => createLink('kanban', 'editSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->settingSpace, 'data-toggle' => 'modal');
     if($space->status != 'closed') $childActions[] = array('icon' => 'off',   'url' => createLink('kanban', 'closeSpace',    "spaceID={$space->id}"), 'text' => $lang->kanban->closeSpace,    'data-toggle' => 'modal');
