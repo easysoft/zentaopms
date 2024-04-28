@@ -102,8 +102,10 @@ $lang->mr->failMessage       = "您提交的合併請求：<a href='%s'>%s</a> �
 $lang->mr->storySummary      = "本頁共 <strong>%s</strong> 個" . $lang->SRCommon;
 
 $lang->mr->apiError = new stdclass;
-$lang->mr->apiError->createMR = "通過API創建合併請求失敗，失敗原因：%s";
-$lang->mr->apiError->sudo     = "無法以當前用戶綁定的GitLab賬戶進行操作，失敗原因：%s";
+$lang->mr->apiError->createMR      = "通過API創建合併請求失敗，失敗原因：%s";
+$lang->mr->apiError->sudo          = "無法以當前用戶綁定的GitLab賬戶進行操作，失敗原因：%s";
+$lang->mr->apiError->emptyResponse = "API请求的对象不存在或者API请求失败。";
+$lang->mr->apiError->notFound      = "API请求的对象不存在，可能已被服务器删除。";
 
 $lang->mr->createFailedFromAPI = "創建合併請求失敗。";
 $lang->mr->accessGitlabFailed  = "當前無法連接到GitLab伺服器。";

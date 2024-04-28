@@ -112,8 +112,10 @@ $lang->mr->failMessage       = "Your merge request <a href='%s'>%s</a> failed. P
 $lang->mr->storySummary      = "Total <strong>%s</strong> {$lang->SRCommon} on this page.";
 
 $lang->mr->apiError = new stdclass;
-$lang->mr->apiError->createMR = "Failed to create a merge request through API. Reason: %s";
-$lang->mr->apiError->sudo     = "Unable to operate with the GitLab account bound to the current user. Reason: %s";
+$lang->mr->apiError->createMR      = "Failed to create a merge request through API. Reason: %s";
+$lang->mr->apiError->sudo          = "Unable to operate with the GitLab account bound to the current user. Reason: %s";
+$lang->mr->apiError->emptyResponse = "The object requested by the API does not exist or failed.";
+$lang->mr->apiError->notFound      = "The object requested by the API does not exist, it may be deleted in API Server.";
 
 $lang->mr->createFailedFromAPI = "Failed to create Merge Request.";
 $lang->mr->hasSameOpenedMR     = "There are duplicate and unclosed merge requests: ID%u";
