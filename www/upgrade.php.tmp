@@ -52,8 +52,7 @@ include '../framework/model.class.php';
 include '../framework/helper.class.php';
 
 /* Instance the app. */
-$app = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
-$app->upgrading = true;
+$app = router::createApp('pms', dirname(dirname(__FILE__)), 'router', 'upgrading');
 
 $common = $app->loadCommon();
 
