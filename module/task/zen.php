@@ -1583,11 +1583,11 @@ class taskZen extends task
     {
         $response['result']     = 'success';
         $response['message']    = $this->lang->saveSuccess;
-        $response['closeModal'] = $this->app->rawMethod != 'recordworkhour' || $from == 'edittask';
+        $response['closeModal'] = $this->app->rawMethod != 'recordworkhour';
 
         if($this->app->rawMethod == 'recordworkhour')
         {
-            $response['callback'] = $from == 'edittask' ? "refreshConsumed('{$task->consumed}');" : "loadModal('" . inLink('recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
+            $response['callback'] = "loadModal('" . inLink('recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
             return $response;
         }
 
