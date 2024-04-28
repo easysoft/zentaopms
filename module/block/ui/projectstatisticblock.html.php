@@ -50,17 +50,17 @@ if($project)
             $project->status == 'closed' ? $lang->block->projectstatistic->projectClosed : $lang->block->projectstatistic->longTimeProject
         )
     );
-    $projectOverview[] = $config->edition != 'open' ? div(setClass('divider mx-1 my-auto h-4')) : null;
     $projectOverview[] = $config->edition != 'open' ? cell
     (
-        setClass('flex-0 text-left' . (!$longBlock ? ' w-full' : '')),
+        setClass('flex-1 text-left' . (!$longBlock ? ' w-full' : '')),
+        icon('bullhorn text-warning'),
         span
         (
-            setClass('text-gray mr-4'),
+            setClass('text-gray mr-5'),
             $lang->block->projectstatistic->existRisks,
             span
             (
-                setClass('font-bold ml-2 text-danger'),
+                setClass('font-bold text-warning'),
                 $project->risks
             )
         ),
@@ -70,7 +70,7 @@ if($project)
             $lang->block->projectstatistic->existIssues,
             span
             (
-                setClass('font-bold ml-2 text-gray-950'),
+                setClass('font-bold text-warning'),
                 $project->issues
             )
         )
@@ -269,7 +269,7 @@ if($project)
                     span
                     (
                         setClass('font-bold text-black mr-1'),
-                        (!empty($project->pv) ? $project->pv : 0) . $lang->percent
+                        !empty($project->pv) ? $project->pv : 0
                     )
                 ),
                 item
@@ -296,7 +296,7 @@ if($project)
                     span
                     (
                         setClass('font-bold text-black mr-1'),
-                        (!empty($project->ev) ? $project->ev : 0) . $lang->percent
+                        !empty($project->ev) ? $project->ev : 0
                     )
                 )
             )
@@ -367,7 +367,7 @@ if($project)
                     span
                     (
                         setClass('font-bold text-black mr-1'),
-                        (!empty($project->ev) ? $project->ev : 0) . $lang->percent
+                        !empty($project->ev) ? $project->ev : 0
                     )
                 ),
                 item
@@ -394,7 +394,7 @@ if($project)
                     span
                     (
                         setClass('font-bold text-black mr-1'),
-                        (!empty($project->ac) ? $project->ac : 0) . $lang->percent
+                        !empty($project->ac) ? $project->ac : 0
                     )
                 )
             )
