@@ -872,14 +872,13 @@ class productZen extends product
      * Get products of the project.
      *
      * @param  int       $projectID
-     * @param  string    $storyType
      * @param  bool      $isProjectStory
      * @access protected
      * @return array
      */
-    protected function getProjectProductList(int $projectID, string $storyType, bool $isProjectStory): array
+    protected function getProjectProductList(int $projectID, bool $isProjectStory): array
     {
-        if($isProjectStory && $storyType == 'story') return $this->product->getProducts($projectID);
+        if($isProjectStory) return $this->product->getProducts($projectID);
 
         return array();
     }
@@ -1374,7 +1373,7 @@ class productZen extends product
         $projectID       = $project ? (int)$project->id : 0;
         $productName     = ($isProjectStory && empty($product)) ? $this->lang->product->all : $this->products[$productID];
         $storyIdList     = $this->getStoryIdList($stories);
-        $projectProducts = $this->getProjectProductList($projectID, $storyType, $isProjectStory);
+        $projectProducts = $this->getProjectProductList($projectID, $isProjectStory);
         list($branchOpt, $branchTagOpt) = $this->getBranchAndTagOption($projectID, $product, $isProjectStory);
 
         /* Set show module by config. */

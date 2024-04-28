@@ -762,7 +762,7 @@ class treeModel extends model
         foreach($products as $id => $product)
         {
             $extra['productID']   = $id;
-            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all");
+            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all&browseType=&param=0&storyType=requirement");
             $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&storyType=story&orderBy=&type=byProduct&praram=$id");
             $link = $this->app->rawModule == 'projectstory' ? $projectProductLink : $executionProductLink;
             if($productNum > 1)
