@@ -3352,11 +3352,11 @@ class blockZen extends block
         }
         elseif(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
         {
-            $project->pv = isset($PVGroup[$projectID]['value']) ? (int)$PVGroup[$projectID]['value'] : 0;
-            $project->ev = isset($EVGroup[$projectID]['value']) ? (int)$EVGroup[$projectID]['value'] : 0;
-            $project->ac = isset($ACGroup[$projectID]['value']) ? (int)$ACGroup[$projectID]['value'] : 0;
-            $project->sv = isset($SVGroup[$projectID]['value']) ? (int)$SVGroup[$projectID]['value'] * 100 : 0;
-            $project->cv = isset($CVGroup[$projectID]['value']) ? (int)$CVGroup[$projectID]['value'] * 100 : 0;
+            $project->pv = isset($PVGroup[$projectID]['value']) ? sprintf('%.2f', $PVGroup[$projectID]['value']) : 0;
+            $project->ev = isset($EVGroup[$projectID]['value']) ? sprintf('%.2f', $EVGroup[$projectID]['value']) : 0;
+            $project->ac = isset($ACGroup[$projectID]['value']) ? sprintf('%.2f', $ACGroup[$projectID]['value']) : 0;
+            $project->sv = isset($SVGroup[$projectID]['value']) ? sprintf('%.4f', $SVGroup[$projectID]['value']) * 100 : 0;
+            $project->cv = isset($CVGroup[$projectID]['value']) ? sprintf('%.4f', $CVGroup[$projectID]['value']) * 100 : 0;
         }
         if($project->end != LONG_TIME) $project->remainingDays = helper::diffDate($project->end, helper::today());
         $project->risks  = isset($riskCountGroup[$projectID]['value']) ? (int)$riskCountGroup[$projectID]['value'] : 0;
