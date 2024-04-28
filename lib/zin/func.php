@@ -168,7 +168,7 @@ function progressCircle(): progressCircle {return createWg('progressCircle', fun
 function filter(): filter {return createWg('filter', func_get_args());}
 function resultFilter(): resultFilter {return createWg('resultFilter', func_get_args());}
 function contactList(): contactList {return createWg('contactList', func_get_args());}
-function users(): users {return createWg('users', func_get_args());}
+function userPicker(): userPicker {return createWg('userPicker', func_get_args());}
 function mailto(): mailto {return createWg('mailto', func_get_args());}
 function whitelist(): whitelist {return createWg('whitelist', func_get_args());}
 function modulePicker(): modulePicker {return createWg('modulePicker', func_get_args());}

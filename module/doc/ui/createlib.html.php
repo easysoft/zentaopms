@@ -133,7 +133,7 @@ formPanel
                 div
                 (
                     setClass('w-full'),
-                    users(set::label($lang->doclib->user), set::items($users))
+                    userPicker(set::label($lang->doclib->user), set::items($users))
                 )
             )
         )

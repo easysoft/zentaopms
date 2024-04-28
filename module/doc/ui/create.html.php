@@ -237,7 +237,7 @@ else
                         div
                         (
                             setClass('w-full'),
-                            users(set::label($lang->doc->users), set::items($users))
+                            userPicker(set::label($lang->doc->users), set::items($users))
                         )
                     )
                 ),
