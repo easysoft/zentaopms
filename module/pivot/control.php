@@ -56,6 +56,7 @@ class pivot extends control
         $this->session->set('backDimension', $dimensionID);
         $this->session->set('backGroup', $groupID);
 
+        if(!$this->view->title) $this->view->title = $this->lang->pivot->preview;
         $this->view->groups      = $this->loadModel('tree')->getGroupPairs($dimensionID, 0, 1, 'pivot');
         $this->view->menus       = $this->getSidebarMenus($dimensionID, $groupID, $method, $params);
         $this->view->dimensionID = $dimensionID;
