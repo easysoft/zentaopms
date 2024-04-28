@@ -42,17 +42,17 @@ if($project)
             $project->status == 'closed' ? $lang->block->projectstatistic->projectClosed : $lang->block->projectstatistic->longTimeProject
         )
     );
+    $projectOverview[] = $config->edition != 'open' ? div(setClass('divider mx-1 my-auto h-4')) : null;
     $projectOverview[] = $config->edition != 'open' ? cell
     (
-        setClass('flex-1 text-left' . (!$longBlock ? ' w-full' : '')),
-        icon('bullhorn text-warning'),
+        setClass('flex-0 text-left' . (!$longBlock ? ' w-full' : '')),
         span
         (
-            setClass('text-gray mr-5'),
+            setClass('text-gray mr-4'),
             $lang->block->projectstatistic->existRisks,
             span
             (
-                setClass('font-bold text-warning'),
+                setClass('font-bold ml-2 text-danger'),
                 $project->risks
             )
         ),
@@ -62,7 +62,7 @@ if($project)
             $lang->block->projectstatistic->existIssues,
             span
             (
-                setClass('font-bold text-warning'),
+                setClass('font-bold ml-2 text-danger'),
                 $project->issues
             )
         )
