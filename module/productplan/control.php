@@ -394,6 +394,7 @@ class productplan extends control
         $this->view->orderBy      = $orderBy;
         $this->view->link         = $link;
         $this->view->param        = $param;
+        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts($planStories ? array_keys($planStories) : array());
 
         if($this->viewType != 'json')
         {
