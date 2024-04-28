@@ -171,6 +171,7 @@ div
                     )
                 )
             ),
+            contactUs(),
             input
             (
                 set::name('mode'),

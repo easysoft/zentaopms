@@ -40,10 +40,10 @@ div
             setClass('bg-canvas m-auto mw-auto'),
             set::title($lang->install->getPriv),
             set::headingClass('w-96 m-auto'),
-            set::formClass('w-96 m-auto'),
             set::submitBtnText(!empty($config->inQuickon) ? $lang->install->next : $lang->save),
             formRow
             (
+                setClass('w-96 m-auto'),
                 formGroup
                 (
                     set::label($lang->install->company),
@@ -52,7 +52,7 @@ div
             ),
             formRow
             (
-                setClass('hidden'),
+                setClass('w-96 m-auto hidden'),
                 formGroup
                 (
                     set::label($lang->install->working),
@@ -63,6 +63,7 @@ div
             ),
             formRow
             (
+                setClass('w-96 m-auto'),
                 formGroup
                 (
                     set::label($lang->install->account),
@@ -71,6 +72,7 @@ div
             ),
             formRow
             (
+                setClass('w-96 m-auto'),
                 formGroup
                 (
                     set::label($lang->install->password),
@@ -83,7 +85,7 @@ div
             ),
             formRow
             (
-                setClass('importDemoDataRow'),
+                setClass('w-96 m-auto importDemoDataRow'),
                 formGroup
                 (
                     set::label(' '),
@@ -94,7 +96,8 @@ div
                         set::value(1)
                     )
                 )
-            )
+            ),
+            contactUs()
         )
     )
 );

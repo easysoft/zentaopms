@@ -77,6 +77,7 @@ div
                         set::name('hidden'),
                         set::type('hidden')
                     ),
+                    contactUs(),
                     formGroup
                     (
                         setClass('justify-center'),
