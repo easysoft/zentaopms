@@ -257,7 +257,7 @@ if($project)
                             (
                                 array
                                 (
-                                    'title'     => $lang->block->tooltips['pv'],
+                                    'title'     => array('html' => $lang->block->tooltips['pv']),
                                     'placement' => 'bottom',
                                     'type'      => 'white',
                                     'className' => 'text-dark border border-light leading-5'
@@ -382,7 +382,7 @@ if($project)
                             (
                                 array
                                 (
-                                    'title'     => $lang->block->tooltips['ac'],
+                                    'content'   => array('html' => $lang->block->tooltips['ac']),
                                     'placement' => 'bottom',
                                     'type'      => 'white',
                                     'className' => 'text-dark border border-light leading-5'
