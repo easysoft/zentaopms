@@ -1,4 +1,3 @@
 .scrumoverview-block .project-statistic-table table {width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; padding-right: 1rem;}
-.scrumoverview-block .project-statistic-table table tr:first-child {background: url(static/svg/arrow-step1-grey.svg) center no-repeat; background-size: 100%;}
 .scrumoverview-block .project-statistic-table table th {padding-right: 0px; margin-top: 1rem; font-size: 12px;}
 .scrumoverview-block .project-statistic-table table td {padding-left: 0px; margin-top: 1rem;}
