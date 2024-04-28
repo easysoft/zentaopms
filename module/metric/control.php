@@ -184,9 +184,8 @@ class metric extends control
             try
             {
                 $statement = $this->metricZen->prepareDataset($calcGroup);
-                if(empty($statement)) continue;
 
-                $rows = $statement->fetchAll();
+                $rows = !empty($statement) ? $statement->fetchAll() : array();
                 $this->metricZen->calcMetric($rows, $calcGroup->calcList);
 
                 $recordWithCode = $this->metricZen->prepareMetricRecord($calcGroup->calcList);

@@ -102,6 +102,14 @@ class baseCalc
     public $weekend = 2;
 
     /**
+     * 是否复用
+     *
+     * @var bool
+     * @access public
+     */
+    public $reuse = false;
+
+    /**
      * 设置DAO 。
      * Set DAO.
      *

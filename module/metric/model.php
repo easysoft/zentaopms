@@ -690,10 +690,23 @@ class metricModel extends model
         include_once $calcPath;
         $calculator = new $metric->code;
 
-        $statement = $this->getDataStatement($calculator, 'statement', 'rnd');
-        $rows = $statement->fetchAll();
+        if($calculator->reuse)
+        {
+            $reuseMetrics = array();
+            foreach($calculator->reuseMetrics as $key => $reuseMetric)
+            {
+                $reuseMetrics[$key] = $this->getResultByCode($reuseMetric, $options, $type, $pager, $vision);
+            }
 
-        foreach($rows as $row) $calculator->calculate($row);
+            $calculator->calculate($reuseMetrics);
+        }
+        else
+        {
+            $statement = $this->getDataStatement($calculator, 'statement', 'rnd');
+            $rows = $statement->fetchAll();
+
+            foreach($rows as $row) $calculator->calculate($row);
+        }
 
         return $calculator;
     }
@@ -730,10 +743,23 @@ class metricModel extends model
         include_once $calcPath;
         $calculator = new $metric->code;
 
-        $statement = $this->getDataStatement($calculator, 'statement', $vision);
-        $rows = $statement->fetchAll();
+        if($calculator->reuse)
+        {
+            $reuseMetrics = array();
+            foreach($calculator->reuseMetrics as $key => $reuseMetric)
+            {
+                $reuseMetrics[$key] = $this->getResultByCode($reuseMetric, $options, $type, $pager, $vision);
+            }
 
-        if(!empty($rows)) foreach($rows as $row) $calculator->calculate($row);
+            $calculator->calculate($reuseMetrics);
+        }
+        else
+        {
+            $statement = $this->getDataStatement($calculator, 'statement', $vision);
+            $rows = $statement->fetchAll();
+            if(!empty($rows)) foreach($rows as $row) $calculator->calculate($row);
+        }
+
         $records = $calculator->getResult($options);
 
         if(!empty($records))
