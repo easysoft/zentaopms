@@ -1685,7 +1685,7 @@ class storyTao extends storyModel
             $actReview = array('name' => 'review', 'url' => $canReview ? $reviewLink : null, 'hint' => $title, 'disabled' => !$canReview);
         }
 
-        $canRecall = common::hasPriv('story', 'recall') && $this->isClickable($story, 'recall');
+        $canRecall = common::hasPriv('story', 'recall') && $this->isClickable($story, $story->status == 'changing' ? 'recallchange' : 'recall');
         $title     = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
         if(!$canRecall) $title = $this->lang->story->recallTip['actived'];
         $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'url' => $canRecall ? $recallLink : null, 'hint' => $title, 'disabled' => !$canRecall);
