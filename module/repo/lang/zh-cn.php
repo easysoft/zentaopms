@@ -181,8 +181,8 @@ $lang->repo->scmList['GitFox'] = 'GitFox';
 $lang->repo->scmList['Gitlab'] = 'GitLab';
 if(!$config->inQuickon)
 {
-    $lang->repo->scmList['Gogs']       = 'Gogs';
     $lang->repo->scmList['Gitea']      = 'Gitea';
+    $lang->repo->scmList['Gogs']       = 'Gogs';
     $lang->repo->scmList['Git']        = '本地 Git';
     $lang->repo->scmList['Subversion'] = 'Subversion';
 }

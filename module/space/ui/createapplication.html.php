@@ -167,6 +167,18 @@ if($config->inQuickon)
     );
 }
 
+$typeList = array();
+foreach($lang->space->appType as $type => $typeName)
+{
+    $item = array('text' => $typeName, 'value' => $type);
+    if($type == 'gitfox')
+    {
+        $item['content'] = array('html' => "<div class='flex clip'>{$typeName}</div><label class='label bg-primary-50 text-primary ml-2 flex-none'>{$this->lang->recommend}</label>", 'class' => 'w-full flex nowrap');
+    }
+
+    $typeList[] = $item;
+}
+
 formPanel
 (
     $config->inQuickon ? setClass('externalPanel hidden') : setClass('externalPanel'),
@@ -179,7 +191,7 @@ formPanel
         set::width($colWidth),
         set::label($lang->app->common),
         set::name('appType'),
-        set::items($lang->space->appType),
+        set::items($typeList),
         set::required(true),
         on::change('onChangeAppType')
     ),

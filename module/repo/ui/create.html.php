@@ -30,6 +30,18 @@ jsVar('noRepoLeft', $lang->repo->notice->noRepoLeft);
 jsVar('hasProduct', !empty($products));
 jsVar('appTab', $app->tab);
 
+$scmList = array();
+foreach($this->lang->repo->scmList as $scm => $scmName)
+{
+    $item = array('text' => $scmName, 'value' => $scm);
+    if($scm == 'GitFox')
+    {
+        $item['content'] = array('html' => "<div class='flex clip'>{$scmName}</div><label class='label bg-primary-50 text-primary ml-2 flex-none'>{$this->lang->recommend}</label>", 'class' => 'w-full flex nowrap');
+    }
+
+    $scmList[] = $item;
+}
+
 formPanel
 (
     on::change('#product', 'onProductChange'),
@@ -48,7 +60,7 @@ formPanel
             set::label($lang->product->typeAB),
             set::required(true),
             set::control('picker'),
-            set::items($lang->repo->scmList)
+            set::items($scmList)
         ),
         h::span
         (
