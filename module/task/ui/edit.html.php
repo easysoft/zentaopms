@@ -400,7 +400,7 @@ detailBody
                         (
                             set::name('estimate'),
                             set::value($task->estimate),
-                            !empty($task->team) ? set::readonly(true) : null
+                            !empty($task->team) || !empty($task->children) ? set::readonly(true) : null
                         ),
                         to::suffix($lang->task->suffixHour),
                         set::suffixWidth(20)
@@ -424,6 +424,7 @@ detailBody
                         setClass('ghost text-primary'),
                         icon('time'),
                         set::href(inlink('recordWorkhour', "id={$task->id}&from=edittask")),
+                        !empty($task->children) ? set::readonly(true) : null,
                         setData('toggle', 'modal')
                     ),
                     formHidden('consumed', $task->consumed)
@@ -440,7 +441,7 @@ detailBody
                         (
                             set::name('left'),
                             set::value($task->left),
-                            !empty($task->team) ? set::readonly(true) : null
+                            !empty($task->team) || !empty($task->children) ? set::readonly(true) : null
                         ),
                         to::suffix($lang->task->suffixHour),
                         set::suffixWidth(20)
