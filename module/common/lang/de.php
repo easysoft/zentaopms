@@ -190,6 +190,13 @@ $lang->code         = 'Code';
 $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
 
+$lang->contactUs = new stdClass();
+$lang->contactUs->common = 'Sie können uns kontaktieren, wenn Sie Fragen haben.';
+$lang->contactUs->phone  = 'Telefon';
+$lang->contactUs->email  = 'Email';
+$lang->contactUs->qq     = 'QQ';
+$lang->contactUs->wechat = 'Wechat';
+
 $lang->common->common       = 'Standard Module';
 $lang->common->story        = 'Story';
 $lang->my->common           = 'My';

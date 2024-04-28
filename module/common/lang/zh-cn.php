@@ -190,6 +190,13 @@ $lang->code         = '代号';
 $lang->pri     = '优先级';
 $lang->delayed = '已延期';
 
+$lang->contactUs = new stdClass();
+$lang->contactUs->common = '您有任何问题都可以联系我们。';
+$lang->contactUs->phone  = '电话';
+$lang->contactUs->email  = '邮箱';
+$lang->contactUs->qq     = 'QQ';
+$lang->contactUs->wechat = '微信';
+
 $lang->common->common       = '公有模块';
 $lang->common->story        = '需求';
 $lang->my->common           = '地盘';
