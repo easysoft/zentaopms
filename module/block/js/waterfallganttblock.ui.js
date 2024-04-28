@@ -1,7 +1,7 @@
 $(function()
 {
     if(ganttPlans) initWaterfallGanttBlock();
-    $('#ganttContainer').addEventListener('scroll', function(e) {
+    $('#ganttContainer').off('scroll').on('scroll', function(e) {
         $('#ganttPlans').scrollTop = e.target.scrollTop;
     });
 });
