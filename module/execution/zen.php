@@ -2188,7 +2188,7 @@ class executionZen extends execution
         }
 
         $linkedObjects = new stdclass();
-        $linkedObjects->currentPlan          = $planID;
+        $linkedObjects->currentPlan          = !empty($planID) ? $planID : 0;
         $linkedObjects->productPlan          = $productPlan;
         $linkedObjects->allProducts          = $allProducts;
         $linkedObjects->linkedProducts       = $linkedProducts;
