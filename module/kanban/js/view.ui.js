@@ -157,6 +157,7 @@ window.buildColActions = function(col)
  */
 window.getItem = function(info)
 {
+    info.item.titleAttrs = {};
     if(info.item.fromType == 'execution')
     {
         renderExecutionItem(info);
@@ -183,7 +184,7 @@ window.getItem = function(info)
     }
     if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
 
-    info.item.titleAttrs = {'class': 'card-title clip'};
+    info.item.titleAttrs.class = 'card-title clip';
 }
 
 window.renderGeneralItem = function(info)
