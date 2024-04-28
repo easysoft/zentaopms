@@ -30,6 +30,7 @@ class history extends wg
         return <<<CSS
         .history-panel-action blockquote.original {display:none}
         .history-panel-action blockquote {padding: 5px 5px 5px 10px; margin: 5px 0 0; background: var(--color-surface)}
+        .history-panel-action .history-panel-action-comment button + div {max-width: 98%;}
         CSS;
     }
 
