@@ -1427,14 +1427,14 @@ class projectModel extends model
 
         $this->projectTao->doStart($projectID, $project);
 
-        $this->recordFirstEnd($projectID);
-
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError())
         {
             if(count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
             return false;
         }
+
+        $this->recordFirstEnd($projectID);
 
         if(!$oldProject->multiple) $this->projectTao->changeExecutionStatus($projectID, 'start');
         return common::createChanges($oldProject, $project);

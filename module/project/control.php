@@ -1278,6 +1278,7 @@ class project extends control
         {
             $postData = form::data($this->config->project->form->start);
             $postData = $this->projectZen->prepareStartExtras($postData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $changes  = $this->project->start($projectID, $postData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
