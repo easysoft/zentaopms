@@ -1339,6 +1339,7 @@ class programModel extends model
             $projects = $this->dao->select('distinct t1.project,t2.model,t2.deleted')->from(TABLE_ACTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.`date`')->ge($updateTime)
+                ->andWhere('t1.project')->ne(0)
                 ->fetchAll('project');
             if(empty($projects)) return;
         }
@@ -1347,7 +1348,7 @@ class programModel extends model
         $this->programTao->updateStats(array_keys($projects));
 
         /* 2. Update programStatsTime. */
-        $this->programTao->updateProcess();
+        $this->programTao->updateProgress();
 
         /* 3. Update projectStatsTime in config. */
         $this->loadModel('setting')->setItem('system.common.global.projectStatsTime', $now);

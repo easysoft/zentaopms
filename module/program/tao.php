@@ -366,7 +366,7 @@ class programTao extends programModel
      * @access protected
      * @return bool
      */
-    protected function updateProcess(): bool
+    protected function updateProgress(): bool
     {
         $projectList = $this->dao->select('id,progress,path,consumed,`left`')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
