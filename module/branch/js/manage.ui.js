@@ -112,4 +112,6 @@ window.checkedChange = function()
     const dtable = zui.DTable.query($(this).target);
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
+
+    $('#mergeBranch').toggleClass('hidden', checkedList.includes('0'));
 }
