@@ -49,7 +49,13 @@ window.editStage = function()
                     var $form    = $('#editForm form');
                     var formUrl  = $form.attr('action');
                     var formData = new FormData($form[0]);
-                    $.ajaxSubmit({url: formUrl, data: formData});
+                    $.ajaxSubmit({
+                        url: formUrl,
+                        data: formData,
+                        onFail: (error) => {
+                            if(error?.message) showFormValidateMsg(error.message);
+                        }
+                    });
                 }
             });
         });
