@@ -9,21 +9,19 @@ $config->mr->dtable->fieldList['id']['type']  = 'id';
 
 $config->mr->dtable->fieldList['title']['name']     = 'title';
 $config->mr->dtable->fieldList['title']['title']    = $lang->mr->title;
-$config->mr->dtable->fieldList['title']['type']     = 'text';
+$config->mr->dtable->fieldList['title']['type']     = 'title';
 $config->mr->dtable->fieldList['title']['data-app'] = $app->tab;
 $config->mr->dtable->fieldList['title']['link']     = helper::createLink('mr', 'view', "MRID={id}");
 $config->mr->dtable->fieldList['title']['sortType'] = true;
-$config->mr->dtable->fieldList['title']['minWidth'] = '342';
+$config->mr->dtable->fieldList['title']['width']    = 0.3;
 
-$config->mr->dtable->fieldList['sourceBranch']['name']     = 'sourceBranch';
-$config->mr->dtable->fieldList['sourceBranch']['title']    = $lang->mr->sourceBranch;
-$config->mr->dtable->fieldList['sourceBranch']['type']     = 'text';
-$config->mr->dtable->fieldList['sourceBranch']['minWidth'] = '200';
+$config->mr->dtable->fieldList['sourceBranch']['name']  = 'sourceBranch';
+$config->mr->dtable->fieldList['sourceBranch']['title'] = $lang->mr->sourceBranch;
+$config->mr->dtable->fieldList['sourceBranch']['type']  = 'text';
 
-$config->mr->dtable->fieldList['targetBranch']['name']     = 'targetBranch';
-$config->mr->dtable->fieldList['targetBranch']['title']    = $lang->mr->targetBranch;
-$config->mr->dtable->fieldList['targetBranch']['type']     = 'text';
-$config->mr->dtable->fieldList['targetBranch']['minWidth'] = '200';
+$config->mr->dtable->fieldList['targetBranch']['name']  = 'targetBranch';
+$config->mr->dtable->fieldList['targetBranch']['title'] = $lang->mr->targetBranch;
+$config->mr->dtable->fieldList['targetBranch']['type']  = 'text';
 
 $config->mr->dtable->fieldList['mergeStatus']['name']     = 'mergeStatus';
 $config->mr->dtable->fieldList['mergeStatus']['title']    = $lang->mr->mergeStatus;
@@ -32,14 +30,13 @@ $config->mr->dtable->fieldList['mergeStatus']['sortType'] = true;
 
 $config->mr->dtable->fieldList['approvalStatus']['name']     = 'approvalStatus';
 $config->mr->dtable->fieldList['approvalStatus']['title']    = $lang->mr->approvalStatus;
-$config->mr->dtable->fieldList['approvalStatus']['type']     = 'text';
+$config->mr->dtable->fieldList['approvalStatus']['type']     = 'type';
 $config->mr->dtable->fieldList['approvalStatus']['sortType'] = true;
 
 $config->mr->dtable->fieldList['assignee']['name']     = 'assignee';
 $config->mr->dtable->fieldList['assignee']['title']    = $lang->mr->reviewer;
 $config->mr->dtable->fieldList['assignee']['type']     = 'user';
 $config->mr->dtable->fieldList['assignee']['sortType'] = true;
-$config->mr->dtable->fieldList['assignee']['minWidth'] = '200';
 
 $config->mr->dtable->fieldList['createdBy']['name']     = 'createdBy';
 $config->mr->dtable->fieldList['createdBy']['title']    = $lang->mr->author;
