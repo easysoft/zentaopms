@@ -310,7 +310,9 @@ class projectZen extends project
                 foreach($plans as $planID => $plan)
                 {
                     if(empty($plan)) continue;
-                    $planDate = $plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future ? ' ' . $this->lang->productplan->future : " [{$plan->begin} ~ {$plan->end}]";
+                    $planBegin = $plan->begin == $this->config->productplan->future ? $this->lang->productplan->future : $plan->begin;
+                    $planEnd   = $plan->end == $this->config->productplan->future ? $this->lang->productplan->future : $plan->end;
+                    $planDate  = $plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future ? ' ' . $this->lang->productplan->future : " [{$planBegin} ~ {$planEnd}]";
                     $productPlans[$productID][$branchID][$planID] = $plan->title . $planDate;
                 }
             }

@@ -130,7 +130,8 @@ class productplanZen extends productplan
                 $plan->branchName = trim($plan->branchName, ',');
             }
 
-            if($plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future) $plan->begin = $plan->end = $this->lang->productplan->future;
+            if($plan->begin == $this->config->productplan->future) $plan->begin = $this->lang->productplan->future;
+            if($plan->end   == $this->config->productplan->future) $plan->end   = $this->lang->productplan->future;
 
             $plan->actions  = $this->buildActionsList($plan);
             $plan->projects = array_values($plan->projects);
