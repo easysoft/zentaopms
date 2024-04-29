@@ -174,7 +174,7 @@ window.getItem = function(info)
         if(priv.canViewTask)
         {
             info.item.titleUrl   = $.createLink('task', 'view', `id=${info.item.id}`);
-            info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.name};
+            info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
         }
 
         const content = `
