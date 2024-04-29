@@ -68,7 +68,7 @@ class mail extends control
         }
 
         $this->view->title       = $this->lang->mail->common . $this->lang->hyphen . $this->lang->mail->detect;
-        $this->view->fromAddress = $this->session->mailConfig ? $this->session->mailConfig->fromAddress : '';
+        $this->view->fromAddress = isset($this->session->mailConfig->fromAddress) ? $this->session->mailConfig->fromAddress : '';
 
         $this->display();
     }
