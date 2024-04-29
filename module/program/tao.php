@@ -341,7 +341,7 @@ class programTao extends programModel
         foreach($projectIdList as $projectID)
         {
             $executions = zget($executionGroup, $projectID, array());
-            foreach($executions as $executionID)
+            foreach($executions as $executionID => $execution)
             {
                 $taskCount = $this->dao->select('id')->from(TABLE_TASK)
                     ->where('deleted')->eq(0)
