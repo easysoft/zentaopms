@@ -419,13 +419,13 @@ detailBody
                         setID('consumedSpan'),
                         $task->consumed . $lang->task->suffixHour
                     ),
-                    btn
+                    common::hasPriv('task', 'recordWorkhour') ? btn
                     (
                         setClass('ghost text-primary', !empty($task->children) ? 'disabled' : true),
                         icon('time'),
                         set::href(inlink('recordWorkhour', "id={$task->id}&from=edittask")),
                         setData('toggle', 'modal')
-                    ),
+                    ) : null,
                     formHidden('consumed', $task->consumed)
                 )
             ),
