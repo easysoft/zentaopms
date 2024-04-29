@@ -112,7 +112,7 @@ class mail extends control
                 if(!extension_loaded('curl'))    return $this->sendError($this->lang->mail->noCurl);
             }
 
-            $this->session->set('mailConfig', $mailConfig->turnon);
+            $this->session->set('mailConfig', $mailConfig);
             $this->loadModel('setting')->setItems('system.mail', $mailConfig);
             if(dao::isError()) return $this->sendError(dao::getError());
 
