@@ -91,8 +91,8 @@ class treeEditor extends wg
                 {
                     if($sortTree) $item['trailingIcon'] = 'move muted';
 
-                    $item['actions'] = array();
-                    $item['actions']['items'] = array();
+                    if(!isset($item['actions']))          $item['actions']          = array();
+                    if(!isset($item['actions']['items'])) $item['actions']['items'] = array();
 
                     if($canEdit)   $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . $item['type']));
                     if($canDelete) $item['actions']['items'][] = array('key' => 'delete', 'icon' => 'trash', 'className' => 'btn ghost toolbar-item square size-sm rounded ajax-submit', 'url' => createLink('tree', 'delete', 'module=' . $item['id']));

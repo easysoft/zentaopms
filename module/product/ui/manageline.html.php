@@ -12,7 +12,7 @@ namespace zin;
 
 jsVar('changeProgramTip', $lang->product->lineChangeProgram);
 
-$lineMenuList = null;
+$tree         = array();
 $formRowList  = null;
 $formRowList[] = formRow
 (
@@ -42,21 +42,11 @@ $formRowList[] = formRow
         )
     )
 );
+
+$canDelete = common::hasPriv('product', 'ajaxDeleteLine');
 foreach($lines as $line)
 {
-    $lineMenuList[] = div
-    (
-        set::className('ml-4 line-item flex items-center'),
-        span($line->name),
-        btn
-        (
-            icon('trash'),
-            set::size('sm'),
-            setClass('ghost text-gray ajax-submit'),
-            set::url(createLink('product', 'ajaxDeleteLine', "lineID={$line->id}")),
-            set('data-confirm', $lang->product->confirmDeleteLine)
-        )
-    );
+    if($canDelete) $line->actions['items'][] = array('key' => 'delete', 'icon' => 'trash', 'className' => 'btn ghost toolbar-item square size-sm rounded ajax-submit', 'data-confirm' => $lang->product->confirmDeleteLine, 'url' => createLink('product', 'ajaxDeleteLine', 'lineID=' . $line->id));
 
     $formRowList[] = formRow
     (
@@ -142,12 +132,19 @@ div
     (
         set::width('1/3'),
         set::className('lineTree mr-1'),
-        h2(setClass('text-md font-bold'), $lang->product->line),
-        empty($lineMenuList) ? null : div
+        panel
         (
-            setClass('mt-4 mr-4 pl-5 pt-2 pt-2 pb-2'),
-            set::style(array('background' => 'var(--color-gray-100)')),
-            $lineMenuList
+            set::title($lang->product->line),
+            treeEditor
+            (
+                set::type('line'),
+                set::items($lines),
+                set::canEdit(false),
+                set::canSplit(false),
+                set::canDelete(false),
+                set::sortable(array('handle' => '.icon-move')),
+                set::onSort(jsRaw('window.updateOrder'))
+            )
         )
     ),
     cell
