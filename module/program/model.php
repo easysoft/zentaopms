@@ -1341,8 +1341,8 @@ class programModel extends model
                 ->where('t1.`date`')->ge($updateTime)
                 ->andWhere('t1.project')->ne(0)
                 ->fetchAll('project');
-            if(empty($projects)) return;
         }
+        if(empty($projects)) return;
 
         /* 1. Refresh stats to db. */
         $this->programTao->updateStats(array_keys($projects));

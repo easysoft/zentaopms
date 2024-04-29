@@ -336,10 +336,11 @@ class programTao extends programModel
      */
     protected function setNoTaskExecution(array $projectIdList): array
     {
-        $summary = array();
+        $summary        = array();
+        $executionGroup = $this->dao->select('id, project')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq(0)->fetchGroup('project', 'id');
         foreach($projectIdList as $projectID)
         {
-            $executions = $this->dao->select('id')->from(TABLE_PROJECT)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetchPairs();
+            $executions = zget($executionGroup, $projectID, array());
             foreach($executions as $executionID)
             {
                 $taskCount = $this->dao->select('id')->from(TABLE_TASK)
