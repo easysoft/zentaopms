@@ -32,7 +32,6 @@ $(function()
     /* If user navigated to this page from old page, reload. */
     if(window.name === 'app-admin-old')
     {
-        window.name = 'ai-models';
         $.apps.reloadApp('admin', $.createLink('ai', 'models'));
     }
 });
