@@ -117,7 +117,7 @@ class dataset
         $dbType = $this->config->metricDB->type;
         $stmt = $this->dao->select($fieldList)
             ->from(TABLE_RELEASE)->alias('t1')
-            ->beginIF($dbType == 'mysql')->leftJoin(TABLE_PROJECT)->alias('t2')->on("CONCAT(',', t2.id, ',') LIKE CONCAT('%', t1.project, '%')")->fi()
+            ->beginIF($dbType == 'mysql')->leftJoin(TABLE_PROJECT)->alias('t2')->on("CONCAT(',', t2.id, ',') LIKE CONCAT('%,', t1.project, ',%')")->fi()
             ->beginIF($dbType == 'sqlite')->leftJoin(TABLE_PROJECT)->alias('t2')->on("(',' || t2.id || ',') LIKE ('%' || t1.project || '%')")->fi()
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.deleted')->eq(0)
