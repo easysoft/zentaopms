@@ -1914,6 +1914,19 @@ class pivotModel extends model
     }
 
     /**
+     * Get ratio.
+     *
+     * @param  float    $value
+     * @param  float    $total
+     * @access public
+     * @return float
+     */
+    public function getRatio($value, $total)
+    {
+        return $total == 0 ? '0%' : round((float)$value / (float)$total * 100, 2) . '%';
+    }
+
+    /**
      * Process column show mode.
      *
      * @param  array   $columnRows
