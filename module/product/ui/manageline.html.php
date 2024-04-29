@@ -43,10 +43,9 @@ $formRowList[] = formRow
     )
 );
 
-$canDelete = common::hasPriv('product', 'ajaxDeleteLine');
 foreach($lines as $line)
 {
-    if($canDelete) $line->actions['items'][] = array('key' => 'delete', 'icon' => 'trash', 'className' => 'btn ghost toolbar-item square size-sm rounded ajax-submit', 'data-confirm' => $lang->product->confirmDeleteLine, 'url' => createLink('product', 'ajaxDeleteLine', 'lineID=' . $line->id));
+    $line->actions['items'][] = array('key' => 'delete', 'icon' => 'trash', 'className' => 'btn ghost toolbar-item square size-sm rounded ajax-submit', 'data-confirm' => $lang->product->confirmDeleteLine, 'url' => createLink('product', 'ajaxDeleteLine', 'lineID=' . $line->id));
 
     $formRowList[] = formRow
     (
