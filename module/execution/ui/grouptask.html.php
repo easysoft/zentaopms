@@ -279,7 +279,6 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
         foreach($groupTasks as $task)
         {
             $assignedToStyle = $task->assignedTo == $app->user->account ? "style='color:red'" : '';
-            $taskLink        = $this->createLink('task','view',"taskID=$task->id");
 
             $tbody[] = h::tr
             (
@@ -323,7 +322,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                     !empty($task->mode) ? span(setClass('label gray-pale rounded-xl'), $lang->task->multipleAB) : null,
                     $task->parent > 0  ? span(setClass('label gray-pale rounded-xl'), $lang->task->childrenAB) : null,
                     (isset($task->children) && $task->children == true) ? span(setClass('label gray-pale rounded-xl'), $lang->task->parentAB) : null,
-                    a(set::href(createLink('task', 'view', "task=$task->id")), $task->name)
+                    a(set::href(createLink('task', 'view', "task=$task->id")), $task->name, set('data-app', $app->tab))
                 ),
                 h::td
                 (
@@ -402,9 +401,10 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                         (
                             array
                             (
-                                'url'         => createLink('task', 'edit', "taskID=$task->id"),
-                                'class'       => 'btn ghost toolbar-item text-primary square size-sm',
-                                'icon'        => 'edit'
+                                'url'      => createLink('task', 'edit', "taskID=$task->id"),
+                                'class'    => 'btn ghost toolbar-item text-primary square size-sm',
+                                'icon'     => 'edit',
+                                'data-app' => $app->tab
                             )
                         )
                     ) : null,
