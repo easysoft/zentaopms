@@ -90,7 +90,7 @@ class programplanZen extends programplan
             }
 
             $customKey = 'create' . ucfirst($project->model) . 'Fields';
-            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') === false) $totalPercent += $plan->percent;
+            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false) $totalPercent += $plan->percent;
 
             $names[] = $plan->name;
             if(!empty($plan->code)) $codes[] = $plan->code;
