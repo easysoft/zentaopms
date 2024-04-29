@@ -353,6 +353,10 @@ class taskZen extends task
         $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $story ? $story->module : 0, 'short', 'active');
 
         list($customFields, $checkedFields) = $this->getCustomFields($execution, 'batchCreate');
+        if(isset($customFields['story'])) $customFields['preview'] = $customFields['copyStory'] = '';
+
+        $showFields = $this->config->task->custom->batchCreateFields;
+        if(strpos(",$showFields,", ',story,') !== false) $showFields .= ',preview,copyStory';
 
         $this->view->title         = $this->lang->task->batchCreate;
         $this->view->execution     = $execution;
@@ -368,7 +372,7 @@ class taskZen extends task
         $this->view->customFields  = $customFields;
         $this->view->checkedFields = $checkedFields;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
-        $this->view->showFields    = $this->config->task->custom->batchCreateFields;
+        $this->view->showFields    = $showFields;
 
         $this->display();
     }
