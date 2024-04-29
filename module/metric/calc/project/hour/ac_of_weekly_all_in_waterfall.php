@@ -35,6 +35,7 @@ class ac_of_weekly_all_in_waterfall extends baseCalc
 
     public function getResult($options = array())
     {
+        $result = array();
         if(isset($options['year']) && isset($options['week']))
         {
             $years = explode(',', $options['year']);
