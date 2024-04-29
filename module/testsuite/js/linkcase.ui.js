@@ -47,6 +47,7 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'version' && result[0])
     {
+        result[0].children.props.required = true;
         if(info.row.data.version == 1) return result;
         let versions = [];
         for(i = 1; i <= info.row.data.version; i++) versions.push({'text': i, 'value': i});
