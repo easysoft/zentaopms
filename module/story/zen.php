@@ -1145,6 +1145,17 @@ class storyZen extends story
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->story->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
         if($this->post->type == 'requirement') $fields['plan']['required'] = false;
+        if(!empty($_POST['modules']) && !empty($fields['module']['required']))
+        {
+            /* Check empty module in the product with multi-branches. */
+            $fields['module']['required'] = false;
+            $this->config->story->create->requiredFields = str_replace(',module,', ',', ",{$this->config->story->create->requiredFields},");
+            foreach($_POST['modules'] as $key => $moduleID)
+            {
+                if(empty($moduleID)) dao::$errors["modules[{$key}]"][] = sprintf($this->lang->error->notempty, $this->lang->story->module);
+            }
+        }
+        if(dao::isError()) return false;
 
         $storyData = form::data($fields)
             ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
