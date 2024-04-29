@@ -2317,8 +2317,7 @@ class storyModel extends model
         }
         if($excludeStatus) $storyQuery = $storyQuery . ' AND `status` NOT ' . helper::dbIN($excludeStatus);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
-        if($this->app->rawModule == 'build'   and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
-        if($this->app->rawModule == 'release' and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
+        if(in_array($this->app->moduleName, array('build', 'release', 'projectrelease')) && $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
         $allBranch = "`branch` = 'all'";
         if(!empty($executionID))
         {
