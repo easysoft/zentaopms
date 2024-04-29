@@ -608,6 +608,19 @@ pipeline {
 
         } // End Docker Image
 
+        stage("Push Version") {
+          when { environment name:'BUILD_KIND', value:'release' }
+          steps {
+            checkout scmGit(branches: [[name: "master"]],
+              extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+              userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zentao-package.git"]]
+            )
+            container('xuanimbot') {
+              sh './script/push_zentao_version.sh'
+            }
+          }
+        }
+
         stage("Upload rongpm") {
           agent {
             kubernetes {
