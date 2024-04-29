@@ -594,3 +594,75 @@ $lang->block->productlist->unclosedFeedback  = 'Number Of Feedback Not Closed';
 $lang->block->productlist->activatedStory    = 'Activate Requirements';
 $lang->block->productlist->storyCompleteRate = 'Requirement Completion Rate';
 $lang->block->productlist->activatedBug      = 'Activate Bugs';
+
+$lang->block->sprint = new stdclass();
+$lang->block->sprint->totalExecution = 'Total';
+$lang->block->sprint->thisYear       = 'This Year';
+$lang->block->sprint->statusCount    = "Status of {$lang->executionCommon}";
+
+$lang->block->zentaodynamic = new stdclass();
+$lang->block->zentaodynamic->zentaosalon  = 'ZenTao · China Travel';
+$lang->block->zentaodynamic->publicclass  = 'ZenTao Webinar';
+$lang->block->zentaodynamic->release      = 'Latest Release';
+$lang->block->zentaodynamic->registration = 'Registration';
+$lang->block->zentaodynamic->reservation  = 'Reservation';
+
+$lang->block->monthlyprogress = new stdclass();
+$lang->block->monthlyprogress->doneStoryEstimateTrendChart = "The Finished {$lang->SRCommon} Scale Trend Chart";
+$lang->block->monthlyprogress->storyTrendChart             = "The New and Finished {$lang->SRCommon} Trend Chart";
+$lang->block->monthlyprogress->bugTrendChart               = 'The New and Resolved Bugs Trend Chart';
+
+$lang->block->annualworkload = new stdclass();
+$lang->block->annualworkload->doneStoryEstimate = "Finished {$lang->SRCommon} Scale";
+$lang->block->annualworkload->doneStoryCount    = "Finished {$lang->SRCommon} Count";
+$lang->block->annualworkload->resolvedBugCount  = 'Resolved Bugs';
+
+$lang->block->releasestatistic = new stdclass();
+$lang->block->releasestatistic->monthly = 'Monthly releases trend chart';
+$lang->block->releasestatistic->annual  = "Annual release list (%s year)";
+
+$lang->block->teamachievement = new stdclass();
+$lang->block->teamachievement->finishedTasks  = 'Finished Tasks';
+$lang->block->teamachievement->createdStories = 'New Stories';
+$lang->block->teamachievement->closedBugs     = 'Closed Bugs';
+$lang->block->teamachievement->runCases       = 'Run Cases';
+$lang->block->teamachievement->consumedHours  = 'Consumed Hours';
+$lang->block->teamachievement->totalWorkload  = 'Total Workload';
+$lang->block->teamachievement->vs             = 'VS';
+$lang->block->teamachievement->accrued        = 'Accrued';
+
+$lang->block->estimate = new stdclass();
+$lang->block->estimate->costs    = 'Costs';
+$lang->block->estimate->workhour = 'Workhour';
+$lang->block->estimate->people   = 'People';
+$lang->block->estimate->expect   = 'Expect';
+$lang->block->estimate->consumed = 'Consumed';
+$lang->block->estimate->surplus  = 'Surplus';
+$lang->block->estimate->hour     = 'H';
+
+$lang->block->moduleList['product']         = $lang->productCommon;
+$lang->block->moduleList['project']         = $lang->projectCommon;
+$lang->block->moduleList['execution']       = $lang->execution->common;
+$lang->block->moduleList['qa']              = $lang->qa->common;
+$lang->block->moduleList['welcome']         = $lang->block->welcome->common;
+$lang->block->moduleList['guide']           = $lang->block->guide;
+$lang->block->moduleList['zentaodynamic']   = $lang->block->zentaoDynamic;
+$lang->block->moduleList['teamachievement'] = $lang->block->teamAchievement;
+$lang->block->moduleList['assigntome']      = $lang->block->assignToMe;
+$lang->block->moduleList['dynamic']         = $lang->block->dynamic;
+$lang->block->moduleList['html']            = $lang->block->html;
+
+$lang->block->tooltips = array();
+$lang->block->tooltips['deliveryRate']      = "Completion rate of {$lang->SRCommon} by {$lang->productCommon} = Number of {$lang->SRCommon} delivered by {$lang->productCommon} / Number of effective {$lang->SRCommon} by {$lang->productCommon} * 100%";
+$lang->block->tooltips['resolvedRate']      = "Bug repair rate by {$lang->productCommon} = number of fixed bugs by {$lang->productCommon} / number of valid bugs by {$lang->productCommon}";
+$lang->block->tooltips['effectiveStory']    = "Total number of {$lang->SRCommon} by {$lang->productCommon}: Sum the number of {$lang->SRCommon} in a {$lang->productCommon}, filter deleted {$lang->SRCommon} and filter deleted {$lang->productCommon}.";
+$lang->block->tooltips['deliveredStory']    = "Number of {$lang->SRCommon} delivered by {$lang->productCommon}: Sum the number of {$lang->SRCommon} in the {$lang->productCommon}, the stage is released or the reason for closure is done, filter the deleted {$lang->SRCommon} and filter the deleted {$lang->productCommon}.";
+$lang->block->tooltips['costs']             = "Have invested = Hours consumed / Available hours per day for admin configuration";
+$lang->block->tooltips['sv']                = "Schedule Variance = (EV - PV) / PV * 100% ";
+$lang->block->tooltips['ev']                = "The task status is done, and the estimated work hours are accumulated.<br/>The task status is closed and the reason for closing is done, and the estimated work hours areaccumulated.<br/>The task status is in doing, suspended, and the estimated work hours are accumulated * progress of task.<br/>";
+$lang->block->tooltips['pv']                = "If the task end date ≤ the end date of the week, the estimated hours are accrued.<br/>If the estimated start date of the task ≤ the end date of the week and the estimated end date ＞the end date of the week, then Cumulative Estimated Hours = (Estimated hours for task ÷ Number of days in the task's work period) x Number of days from the estimated start of the task to the end date of the week.<br/>";
+$lang->block->tooltips['cv']                = 'Cost Variance = (EV - AC) / AC * 100%';
+$lang->block->tooltips['ac']                = "The sum of all logged work hours in the waterfall {$lang->projectCommon} until the end of the week, filtering for deleted {$lang->projectCommon}.";
+$lang->block->tooltips['executionProgress'] = "<strong>Total Progress</strong> = Number of hours consumed for task by {$lang->execution->common}/(Number of hours consumed for tasks by {$lang->execution->common} + Number of hours remaining for tasks by {$lang->execution->common})<br/>
+<strong>Number of hours consumed for tasks by {$lang->execution->common}</strong>: Summarise the number of hours consumed for tasks by {$lang->execution->common}, filter deleted tasks, filter parent tasks, filter tasks in deleted {$lang->execution->common}, filter tasks in deleted {$lang->projectCommon}.<br/>
+<strong>Number of hours remaining for tasks by {$lang->execution->common}</strong>: Summarise the number of remaining hours for tasks by {$lang->execution->common}, filter deleted tasks, filter parent tasks, filter tasks in deleted {$lang->execution->common}, filter tasks in deleted {$lang->projectCommon}.";

@@ -733,13 +733,8 @@ $lang->block->tooltips['effectiveStory']    = "按{$lang->productCommon}统计�
 $lang->block->tooltips['deliveredStory']    = "按{$lang->productCommon}统计的已交付{$lang->SRCommon}数：{$lang->productCommon}中{$lang->SRCommon}个数求和，所处阶段为已发布或关闭原因为已完成，过滤已删除的{$lang->SRCommon}，过滤已删除的{$lang->productCommon}。";
 $lang->block->tooltips['costs']             = "已投入 = 已消耗工时 / 后台配置的每日可用工时";
 $lang->block->tooltips['sv']                = "进度偏差率 = (EV - PV) / PV * 100% ";
-$lang->block->tooltips['ev']                = "1)任务状态为已完成，累加预计工时。<br/>
-2)任务状态为已关闭且关闭原因为已完成，累加预计工时。<br/>
-3)任务状态为进行中、已暂停，累加（任务预计工时*任务进度）。<br/>
-条件：{$lang->projectCommon}为瀑布{$lang->projectCommon}，过滤父任务，过滤消耗工时为0的任务，过滤已删除的任务，过滤已取消的任务，过滤已删除{$lang->execution->common}下的任务，过滤已删除的{$lang->projectCommon}；任务进度=任务消耗工时数/（任务消耗工时数+任务剩余工时数）。";
-$lang->block->tooltips['pv']                = "任务截至日期小于等于本周结束日期，累加预计工时。<br/>
-任务预计开始日期小于或等于本周结束日期，预计截至日期大于本周结束日期，累加预计工时=(任务的预计工时÷任务工期天数)x 任务预计开始到本周结束日期的天数。<br/>
-条件：过滤父任务，过滤已删除的任务，过滤已取消的任务，过滤已删除的{$lang->execution->common}的任务，过滤已删除的{$lang->projectCommon}；任务未填写预计开始日期时默认取任务所属阶段的计划开始日期；任务未填写预计截至日期，预计截至日期默认取任务所属阶段的计划完成日期，时间只计算后台维护的工作日。";
+$lang->block->tooltips['ev']                = "任务状态为已完成，累加预计工时。<br/>任务状态为已关闭且关闭原因为已完成，累加预计工时。<br/>任务状态为进行中、已暂停，累加（任务预计工时*任务进度）。<br/>";
+$lang->block->tooltips['pv']                = "任务截至日期小于等于本周结束日期，累加预计工时。<br/>任务预计开始日期小于或等于本周结束日期，预计截至日期大于本周结束日期，累加预计工时=(任务的预计工时÷任务工期天数)x 任务预计开始到本周结束日期的天数。<br/>";
 $lang->block->tooltips['cv']                = "成本偏差率 = (EV - AC) / AC * 100%";
 $lang->block->tooltips['ac']                = "瀑布{$lang->projectCommon}中本周结束之前所有日志记录的工时之和，过滤已删除的{$lang->projectCommon}。";
 $lang->block->tooltips['executionProgress'] = "<strong>{$lang->execution->common}进度</strong>=按{$lang->execution->common}统计的任务消耗工时数 /（按{$lang->execution->common}统计的任务消耗工时数+按{$lang->execution->common}统计的任务剩余工时数）<br/>
