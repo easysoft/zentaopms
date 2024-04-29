@@ -23,7 +23,8 @@ if(isset($lang->execution->groupFilter[$groupBy]))
                 ($filterKey == $filter) ? set('class', 'active') : null,
                 span(setClass('text'), $name),
                 ($filterKey == $filter) ? span(setClass('label size-sm rounded-full white'), $allCount) : null,
-                set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}&filter={$filterKey}"))
+                set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}&filter={$filterKey}")),
+                set('data-app', $app->tab)
             )
         );
     }
@@ -38,7 +39,8 @@ else
             set('class', 'active'),
             span(setClass('text'), $lang->all),
             span(setClass('label size-sm rounded-full white'), $allCount),
-            set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}"))
+            set::href(createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$groupBy}")),
+            set('data-app', $app->tab)
         )
     );
 }
@@ -97,10 +99,11 @@ toolbar
 (
     hasPriv('task', 'report') ? item(set(array
     (
-        'text'  => $lang->task->report->common,
-        'icon'  => 'bar-chart',
-        'class' => 'ghost',
-        'url'   => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}")
+        'text'     => $lang->task->report->common,
+        'icon'     => 'bar-chart',
+        'class'    => 'ghost',
+        'url'      => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}"),
+        'data-app' => $app->tab
     ))) : null,
     hasPriv('task', 'export') ? item(set(array
     (
@@ -128,9 +131,11 @@ foreach($lang->execution->groups as $key => $value)
 {
     if(empty($key)) continue;
     $link = createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$key}");
-    $groupList[] = array(
-        'text' => $value,
-        'url'  => $link
+    $groupList[] = array
+    (
+        'text'     => $value,
+        'url'      => $link,
+        'data-app' => $app->tab
     );
 }
 
