@@ -58,3 +58,5 @@ UPDATE `zt_metriclib` SET `metricCode` = 'sv_weekly_in_waterfall'               
 UPDATE `zt_metriclib` SET `metricCode` = 'cv_weekly_in_waterfall'                  WHERE `metricCode` = 'cv_in_waterfall';
 
 UPDATE `zt_metric` SET `definition` = '复用：\r\n按项目统计的实际工期\r\n按项目统计的计划工期\r\n公式：\r\n按项目统计的工期偏差=按项目统计的实际工期-按项目统计的计划工期\r\n其中未开始项目工期偏差为0' WHERE `code` = 'variance_of_time_in_project';
+
+UPDATE `zt_chart` SET `sql` = 'select\r\nyear,\r\ncount(a.id) as totalBugCount,\r\nsum(a.effectivebug) as effectiveBugCount,\r\nround(sum(a.effectivebug)/count(a.id) * 100, 2) effectiveBugRate\r\nfrom(\r\nselect \r\nleft(openedDate,4) year,\r\nid,\r\n(case when  resolution in (\'fixed\',\'postponed\') or status=\'active\' then 1 else 0 end) effectivebug,\r\n(case when  resolution=\'fixed\' then 1 else 0 end) fixedBug\r\nfrom zt_bug\r\nwhere zt_bug.deleted=\'0\'\r\n) a\r\ngroup by a.year\r\norder by  a.year' WHERE `name` = '质量数据-有效Bug率年度趋势图';
