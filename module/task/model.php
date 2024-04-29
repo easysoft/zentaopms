@@ -2170,14 +2170,15 @@ class taskModel extends model
         }
 
         /* 根据状态判断是否可以点击。 Check clickable by status. */
-        if($action == 'start')    return $task->status == 'wait';
-        if($action == 'restart')  return $task->status == 'pause';
-        if($action == 'pause')    return $task->status == 'doing';
-        if($action == 'assignto') return !in_array($task->status, array('closed', 'cancel'));
-        if($action == 'close')    return $task->status == 'done' || $task->status == 'cancel';
-        if($action == 'activate') return $task->status == 'done' || $task->status == 'closed' || $task->status == 'cancel';
-        if($action == 'finish')   return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
-        if($action == 'cancel')   return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
+        if($action == 'batchcreate')        return (empty($task->team) || empty($task->children)) && !empty($task->executionInfo->type) && $task->executionInfo->type != 'kanban';
+        if($action == 'start')              return $task->status == 'wait';
+        if($action == 'restart')            return $task->status == 'pause';
+        if($action == 'pause')              return $task->status == 'doing';
+        if($action == 'assignto')           return !in_array($task->status, array('closed', 'cancel'));
+        if($action == 'close')              return $task->status == 'done' || $task->status == 'cancel';
+        if($action == 'activate')           return $task->status == 'done' || $task->status == 'closed' || $task->status == 'cancel';
+        if($action == 'finish')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
+        if($action == 'cancel')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
         if($action == 'confirmstorychange') return !in_array($task->status, array('cancel', 'closed')) && !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion;
 
         return true;
