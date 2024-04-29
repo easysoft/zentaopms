@@ -31,6 +31,15 @@ class commonModel extends model
     public static $requestErrors = array();
 
     /**
+     * 缓存用户是否有某个模块、方法的访问权限。
+     * Cache the user's access rights to a module or method.
+     *
+     * @var array
+     * @access public
+     */
+    public static $userPrivs = array();
+
+    /**
      * 设置用户配置信息。
      * Set config of user.
      *
@@ -1239,6 +1248,33 @@ class commonModel extends model
      * @return bool
      */
     public static function hasPriv(string $module, string $method, mixed $object = null, string $vars = '')
+    {
+        global $app;
+        if(empty($app->user->account)) return false;
+
+        if($object) return self::getUserPriv($module, $method, $object, $vars);
+
+        $module = strtolower($module);
+        $method = strtolower($method);
+
+        if(!isset(self::$userPrivs[$module][$method][$vars])) self::$userPrivs[$module][$method][$vars] = self::getUserPriv($module, $method, $object, $vars);
+
+        return self::$userPrivs[$module][$method][$vars];
+    }
+
+    /**
+     * 获取用户是否有某个模块、方法的访问权限。
+     * Get the user has the access permission of one module and method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  mixed  $object
+     * @param  string $vars
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function getUserPriv(string $module, string $method, mixed $object = null, string $vars = ''): bool
     {
         global $app,$config;
         $module = strtolower($module);
