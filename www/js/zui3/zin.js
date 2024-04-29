@@ -961,7 +961,7 @@
         loadPage(
         {
             url:           url,
-            selector:      `#${id}>*`,
+            selector:      `#${id}`,
             partial:       options.partial,
             loadingTarget: loadingTarget,
             loadingClass:  'pointer-events-none',
@@ -977,7 +977,7 @@
 
                 if(options.items)
                 {
-                    const $data = $(info.data).filter('.form-group[data-name]');
+                    const $data = $(info.data).children('.form-group[data-name]');
                     items.forEach(name =>
                     {
                         const $item = $data.filter(`[data-name="${name}"]`);
@@ -988,8 +988,17 @@
                 else
                 {
                     $form.html(info.data).zuiInit();
+                }
+
+                if(options.updateOrders || !options.items)
+                {
                     const formGrid = $form.zui();
-                    if(formGrid) formGrid.toggleMode(formGrid.mode, true);
+                    if(formGrid)
+                    {
+                        const orders = [];
+                        $form.find('.form-group[data-name]').each((_, element) => orders.push($(element).attr('data-name')));
+                        formGrid.updateOrders(orders, $form.data('fullModeOrders'));
+                    }
                 }
 
                 let keep = options.keep;

@@ -316,6 +316,10 @@ class form extends formBase
                 $items[$key] = new formRow($item);
             }
         }
+        else
+        {
+            $items[] = setData('fullModeOrders', $this->prop('fullModeOrders'));
+        }
 
         return $items;
     }
