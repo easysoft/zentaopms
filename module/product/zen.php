@@ -854,7 +854,7 @@ class productZen extends product
 
         /* If invoked by projectstory module and not choose product, then get the modules of project story. */
         if(!isset($this->tree)) $this->loadModel('tree');
-        $project = $projectID ? $this->project->getByID($projectID) : null;
+        $project = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         if(!empty($projectID) && !empty($project->hasProduct) && $this->app->rawModule == 'projectstory')
         {
             return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));

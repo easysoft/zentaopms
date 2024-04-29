@@ -401,7 +401,7 @@ class blockZen extends block
         else
         {
             $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
-                ->where('date')->gt('1970-01-01')
+                ->where('date')->gt('1971-01-01')
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->orderBy('date_asc')
                 ->limit('1')
