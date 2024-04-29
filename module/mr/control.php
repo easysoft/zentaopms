@@ -227,7 +227,7 @@ class mr extends control
         foreach($jobs as $job) $jobPairs[$job->id] = "[{$job->id}]{$job->name}";
 
         $repoPairs = array();
-        if($this->app->tab == 'execution' && $objectID)
+        if(in_array($this->app->tab, array('execution', 'project')) && $objectID)
         {
             $repoList = $this->loadModel('repo')->getList($objectID);
             foreach($repoList as $repoInfo)

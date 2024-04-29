@@ -38,8 +38,11 @@ class mrModel extends model
             if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
         }
 
-        $executionIdList = $this->loadModel('execution')->fetchExecutionList($objectID, 'all');
-        if(!empty($executionIdList)) $objectID = array_keys($executionIdList);
+        if($this->app->tab == 'project')
+        {
+            $executionIdList = $this->loadModel('execution')->fetchExecutionList($objectID, 'all');
+            if(!empty($executionIdList)) $objectID = array_merge(array_keys($executionIdList), array($objectID));
+        }
 
         return $this->dao->select('*')->from(TABLE_MR)
             ->where('deleted')->eq('0')

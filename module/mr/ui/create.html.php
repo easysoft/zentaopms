@@ -37,7 +37,6 @@ else
 {
     $projectItem = array($project->id => $project->name_with_namespace);
 }
-
 formPanel
 (
     set::title($lang->mr->create),
@@ -66,7 +65,8 @@ formPanel
         set::name('sourceProject'),
         set::id('sourceProject'),
         set::items($projectItem),
-        set::value($repo->id)
+        set::value($repo->id),
+        setClass(count($repoPairs) > 1 ? 'hidden' : '')
     ),
     formGroup
     (
