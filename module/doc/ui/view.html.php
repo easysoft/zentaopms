@@ -125,7 +125,6 @@ if(!empty($editors))
 $contentDom = div
 (
     setClass('flex-auto'),
-    isset($outlineTree) ? setClass('hasOutline') : null,
     setID('docPanel'),
     div
     (
