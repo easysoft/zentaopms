@@ -506,11 +506,10 @@ window.removeTeamMember = function()
     $(this).closest('.assignedToList').find('.picker-multi-selection').not(this).each(function()
     {
         const account = $(this).data('account');
-        accounts.push(account);
+        if(account && !accounts.includes(account)) accounts.push(account);
     })
 
-    let uniqueAccounts = [...new Set(accounts)];
-    if(uniqueAccounts.length == 1)
+    if(accounts.length == 1)
     {
         zui.Modal.alert(teamMemberError);
         return false;
