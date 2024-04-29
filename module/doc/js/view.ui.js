@@ -6,7 +6,7 @@ window.showHistory = function()
         $('#history, #closeBtn').removeClass('hidden');
         $('#contentTree').addClass('hidden');
         $('#outlineToggle .icon').addClass('icon-menu-arrow-left').removeClass('icon-menu-arrow-right')
-        $('#docPanel .detail-content').css('max-width', 'calc(var(--zt-panel-form-max-width) - 300px)')
+        $('#docPanel .detail-content').css('max-width', 'calc(var(--zt-panel-form-max-width) - 350px)')
     }
     else
     {

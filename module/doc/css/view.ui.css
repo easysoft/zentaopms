@@ -8,7 +8,7 @@
 
 .scrollbar-hover { overflow-y: scroll; }
 #mainContent .panel+.panel {flex: none}
-#history{ position: relative; flex: 0 1 40%; z-index: 120;}
+#history{ position: relative; flex: 0 1 40%; z-index: 120; min-width: 300px;}
 #history > #closeBtn { position: absolute; right: 0; top: 0;}
 
 .main-content-cell > .panel {max-height: calc(100vh - 110px); overflow-y: auto;}
@@ -25,4 +25,4 @@
 
 #outlineToggle {display: block; position: absolute; top: 6.5rem; right: 3.5rem; z-index: 100;}
 #docPanel .panel-heading > .panel-actions {min-width: 320px;}
-#docPanel .detail-content {max-width: var(--zt-panel-form-max-width);}
+#docPanel .detail-content {max-width: var(--zt-panel-form-max-width); overflow: hidden;}

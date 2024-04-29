@@ -194,7 +194,7 @@ $contentDom = div
     ),
     div
     (
-        setClass('info'),
+        setClass('info mb-4'),
         span
         (
             setClass('user-time text-gray mr-2'),
