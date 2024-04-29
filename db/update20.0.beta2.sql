@@ -56,3 +56,5 @@ UPDATE `zt_metriclib` SET `metricCode` = 'ev_of_weekly_finished_task_in_waterfal
 UPDATE `zt_metriclib` SET `metricCode` = 'ac_of_weekly_all_in_waterfall'           WHERE `metricCode` = 'ac_of_all_in_waterfall';
 UPDATE `zt_metriclib` SET `metricCode` = 'sv_weekly_in_waterfall'                  WHERE `metricCode` = 'sv_in_waterfall';
 UPDATE `zt_metriclib` SET `metricCode` = 'cv_weekly_in_waterfall'                  WHERE `metricCode` = 'cv_in_waterfall';
+
+UPDATE `zt_metric` SET `definition` = '复用：\r\n按项目统计的实际工期\r\n按项目统计的计划工期\r\n公式：\r\n按项目统计的工期偏差=按项目统计的实际工期-按项目统计的计划工期\r\n其中未开始项目工期偏差为0' WHERE `code` = 'variance_of_time_in_project';
