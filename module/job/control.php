@@ -83,10 +83,11 @@ class job extends control
     /**
      * Create a job.
      *
+     * @param  string $repoID
      * @access public
      * @return void
      */
-    public function create()
+    public function create(int $repoID = 0)
     {
         if($_POST)
         {
@@ -114,6 +115,8 @@ class job extends control
 
         $this->view->title               = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->create;
         $this->view->repoList            = $this->loadModel('repo')->getList($this->projectID);
+        $this->view->repoID              = $repoID;
+        $this->view->repo                = $repoID ? $this->repo->getByID($repoID) : null;
         $this->view->products            = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
         $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
         $this->view->sonarqubeServerList = $this->pipeline->getPairs('sonarqube');

@@ -13,13 +13,23 @@ namespace zin;
 jsVar('frameList', $lang->job->frameList);
 jsVar('triggerList', $lang->job->triggerTypeList);
 jsVar('repoList', $repoList);
+jsVar('pageRepoID', $repoID);
 jsVar('dirChange', $lang->job->dirChange);
 jsVar('buildTag', $lang->job->buildTag);
 
-if($this->session->repoID)
+$engine = '';
+if($repo)
 {
-    $repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($this->session->repoID)->fetch('name');
-    dropmenu(set::objectID($this->session->repoID), set::text($repoName), set::tab('repo'));
+    dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
+
+    if($repo->SCM == 'GitFox')
+    {
+        $engine = 'gitfox';
+    }
+    elseif($repo->SCM != 'Gitlab')
+    {
+        $engine = 'jenkins';
+    }
 }
 
 formPanel
@@ -47,8 +57,8 @@ formPanel
             set::width('1/2'),
             set::label($lang->job->engine),
             set::required(true),
-            set::items(array('' => '') + $lang->job->engineList),
-            set::value(''),
+            set::items($lang->job->engineList),
+            set::value($engine),
             on::change('window.changeEngine')
         ),
         h::span

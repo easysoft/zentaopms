@@ -199,23 +199,27 @@ window.changeFrame = function(event)
 
 window.changeEngine = function(event)
 {
-    const engine = $(event.target).val();
-    const repos = [];
+    const engine      = $(event.target).val();
+    const repos       = [];
+    let   checkedRepo = '';
     for(const repoID in repoList)
     {
         const repo = repoList[repoID];
         if(engine == 'jenkins')
         {
+            if(repoID == pageRepoID || !checkedRepo) checkedRepo = repoID;
             repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
-            continue;
         }
-
-        if(repo.SCM.toLowerCase() == engine) repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
+        else if(repo.SCM.toLowerCase() == engine)
+        {
+            if(repoID == pageRepoID || !checkedRepo) checkedRepo = repoID;
+            repos.push({text: `[${repo.SCM}] ${repo.name}`, value: repoID});
+        }
     }
 
     const picker = $('[name=repo]').zui('picker');
     picker.render({items: repos});
-    picker.$.setValue(repos.length > 0 ? repos[0].value : '');
+    picker.$.setValue(checkedRepo);
 
     if(engine == 'jenkins')
     {
