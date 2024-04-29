@@ -4731,6 +4731,7 @@ class executionModel extends model
                         if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
                         if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
+                        if($actionName == 'createChildStage' && $action['disabled']) $action['hint'] = $this->lang->programplan->error->createdTask;
                         if(!$action['disabled']) break;
                         if($actionName == 'close' && $execution->status != 'closed') break;
                     }
