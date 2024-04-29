@@ -2011,6 +2011,8 @@ class commonModel extends model
 
         foreach($lang->$moduleName->$menuKey as $label => $menu)
         {
+            if(!$menu) continue;
+
             $lang->$moduleName->$menuKey->$label = static::setMenuVarsEx($menu, $objectID, $params);
             if(isset($menu['subMenu']))
             {
