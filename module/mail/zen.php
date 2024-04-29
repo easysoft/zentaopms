@@ -30,7 +30,7 @@ class mailZen extends mail
             $mailConfig->charset     = zget($mailConfig, 'charset', 'utf-8');
         }
 
-        if(empty($mailConfig)) return false;
+        if(empty($mailConfig) || !is_object($mailConfig)) return false;
 
         $mailConfig->domain = isset($this->config->mail->domain) ? $this->config->mail->domain : common::getSysURL();
         return $mailConfig;
