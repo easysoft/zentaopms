@@ -530,16 +530,17 @@ class admin extends control
         {
             if($this->config->vision == 'lite' && !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
             $data[] = array(
-                'id'        => $menuKey,
-                'name'      => $menuKey,
-                'content'   => array('html' => "<div class='flex items-center my-1.5'><img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/> {$menuGroup['name']}</div>"),
-                'text'      => '',
-                'type'      => 'item',
-                'disabled'  => $menuGroup['disabled'],
-                'url'       => $menuGroup['disabled'] || $currentMenuKey == $menuKey ? '' : $menuGroup['link'],
-                'active'    => $currentMenuKey == $menuKey,
-                'rootClass' => 'admin-menu-item',
-                'attrs'     => array('disabled' => $menuGroup['disabled'])
+                'id'         => $menuKey,
+                'name'       => $menuKey,
+                'content'    => array('html' => "<div class='flex items-center my-1.5'><img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/> {$menuGroup['name']}</div>"),
+                'text'       => $menuGroup['name'],
+                'titleClass' => 'hidden',
+                'type'       => 'item',
+                'disabled'   => $menuGroup['disabled'],
+                'url'        => $menuGroup['disabled'] || $currentMenuKey == $menuKey ? '' : $menuGroup['link'],
+                'active'     => $currentMenuKey == $menuKey,
+                'rootClass'  => 'admin-menu-item',
+                'attrs'      => array('disabled' => $menuGroup['disabled'])
             );
         }
 
