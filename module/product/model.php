@@ -612,16 +612,6 @@ class productModel extends model
                     unset($line->order);
                     $this->dao->update(TABLE_MODULE)->data($line)->where('id')->eq($lineID)->exec();
                 }
-                else
-                {
-                    /* Insert product line. */
-                    $this->dao->insert(TABLE_MODULE)->data($line)->exec();
-                    $lineID = $this->dao->lastInsertID();
-
-                    /* Compute product line path and update it. */
-                    $path = ",$lineID,";
-                    $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
-                }
 
                 if(!dao::isError()) $this->productTao->syncProgramToProduct($programID, (int)$lineID);
             }
