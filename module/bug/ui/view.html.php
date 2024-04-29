@@ -67,6 +67,13 @@ if(!$bug->deleted)
             unset($actions[$key]);
             continue;
         }
+
+        if($project->type == 'project' && $project->multiple == '0' && isset($action['id']) && $action['id'] == 'toStory')
+        {
+            $action['data-app'] = 'project';
+            $action['data-tab'] = 'project';
+            $actions[$key] = $action;
+        }
     }
 }
 
