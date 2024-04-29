@@ -53,6 +53,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
             setID('pivotPanel'),
             set::title($pivotName),
             set::shadow(false),
+            set::headingClass('h-14'),
             set::bodyClass('pt-0'),
             $pivot->desc ? to::titleSuffix(
                 icon
