@@ -22,7 +22,17 @@ window.confirmDisable = function(modelID)
 $(function()
 {
     const container = window.frameElement?.closest('.load-indicator');
-    delete container.dataset.loading;
-    container.classList.remove('loading');
-    container.classList.remove('no-delay');
+    if(container)
+    {
+        delete container.dataset.loading;
+        container.classList.remove('loading');
+        container.classList.remove('no-delay');
+    }
+
+    /* If user navigated to this page from old page, reload. */
+    if(window.name === 'app-admin-old')
+    {
+        window.name = 'ai-models';
+        $.apps.reloadApp('admin', $.createLink('ai', 'models'));
+    }
 });
