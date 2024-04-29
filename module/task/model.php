@@ -2139,6 +2139,12 @@ class taskModel extends model
     public static function isClickable(object $task, string $action): bool
     {
         $action = strtolower($action);
+
+        /* 执行不可修改的话，任务也不可修改。 */
+        global $dao;
+        $execution = $dao->findById($task->execution)->from(TABLE_EXECUTION)->fetch();
+        if(!common::canModify('execution', $execution)) return false;
+
         /* 父任务只能编辑和创建子任务。 Parent task only can edit task and create children. */
         if((!empty($task->isParent) || $task->parent < 0) && !in_array($action, array('edit', 'batchcreate', 'cancel'))) return false;
 
