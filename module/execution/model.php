@@ -2133,6 +2133,9 @@ class executionModel extends model
         $execution = $this->loadModel('file')->replaceImgURL($execution, 'desc');
         if($setImgSize) $execution->desc = $this->file->setImgSize($execution->desc);
 
+        $child = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->andWhere('deleted')->eq(0)->fetch('id');
+        $execution->isParent = !empty($child) ? 1 : 0;
+
         return $execution;
     }
 
