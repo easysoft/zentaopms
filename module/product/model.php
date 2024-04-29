@@ -1834,16 +1834,7 @@ class productModel extends model
         $groupRoadmap = array();
         foreach($roadmap as $year => $branchRoadmap)
         {
-            foreach($branchRoadmap as $branch => $roadmapItems)
-            {
-                /* Split roadmap items into multiple lines. */
-                $totalData = count($roadmapItems);
-                $rows      = ceil($totalData / 8);
-                $maxPerRow = ceil($totalData / $rows);
-
-                $groupRoadmap[$year][$branch] = array_chunk($roadmapItems, (int)$maxPerRow);
-                foreach(array_keys($groupRoadmap[$year][$branch]) as $row) krsort($groupRoadmap[$year][$branch][$row]);
-            }
+            foreach($branchRoadmap as $branch => $roadmapItems) $groupRoadmap[$year][$branch][] = array_reverse($roadmapItems);
         }
 
         return array($groupRoadmap, $return);
