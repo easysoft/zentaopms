@@ -22,7 +22,7 @@ function urlencode(param)
 function getBranchPriv(project)
 {
     var sourceProject = projectNamespace ? urlencode(projectNamespace) : project;
-    var branchUrl     = $.createLink('mr', 'ajaxGetBranchPivs', "hostID=" + hostID + "&project=" + sourceProject);
+    var branchUrl     = $.createLink('mr', 'ajaxGetBranchPrivs', "hostID=" + hostID + "&project=" + sourceProject);
     $.get(branchUrl, function(response)
     {
         branchPrivs = eval('(' + response + ')');

@@ -893,14 +893,14 @@ class mr extends control
 
    /**
     * 获取分支权限。
-    * Ajax get branch pivs.
+    * Ajax get branch privileges.
     *
     * @param  int    $hostID
     * @param  string $project
     * @access public
     * @return void
     */
-   public function ajaxGetBranchPivs(int $hostID, string $project)
+   public function ajaxGetBranchPrivs(int $hostID, string $project)
    {
         $host = $this->loadModel('pipeline')->getByID($hostID);
         if(in_array($host->type, array('gitea', 'gogs')))
