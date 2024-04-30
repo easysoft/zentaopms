@@ -7,6 +7,7 @@ class content extends wg
     protected static array $defineProps = array
     (
         'control?: string|array',    // 内容类型，值可以为：html, text 以及其他部件的类型，也可以指定为包含 `control` 键值的控件属性数组。
+        'content?: string|array',    // 内容数据。
         'render?: callable|Closure'  // 自定义构建函数。
     );
 
