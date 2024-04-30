@@ -52,7 +52,7 @@ class dropmenu extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function buildDropmenu(string $menuID, string $id, string|null $url, null|string $text, null|array $data, string|int|null $defaultValue)
+    protected function buildDropmenu(string $menuID, string $id, null|string $url, null|string $text, null|array $data, string|int|null $defaultValue)
     {
         $cache = $this->prop('cache');
         return zui::dropmenu
