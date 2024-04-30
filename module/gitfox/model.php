@@ -53,7 +53,7 @@ class gitfoxModel extends model
 
     /**
      * 通过api创建一个gitfox用户。
-     * Create a gitab user by api.
+     * Create a gitlab user by api.
      *
      * @param  int    $gitfoxID
      * @param  int    $projectID

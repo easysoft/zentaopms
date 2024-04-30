@@ -585,7 +585,7 @@ class gitlabModel extends model
 
     /**
      * 通过api创建gitlab群组。
-     * Create a gitab group by api.
+     * Create a gitlab group by api.
      *
      * @param  int    $gitlabID
      * @param  object $group
@@ -672,7 +672,7 @@ class gitlabModel extends model
 
     /**
      * 通过api创建gitlab项目。
-     * Create a gitab project by api.
+     * Create a gitlab project by api.
      *
      * @param  int    $gitlabID
      * @param  object $project
@@ -690,7 +690,7 @@ class gitlabModel extends model
 
     /**
      * 通过api创建项目成员。
-     * Add a gitab project member by api.
+     * Add a gitlab project member by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -709,7 +709,7 @@ class gitlabModel extends model
 
     /**
      * 通过api更新一个项目成员。
-     * Update a gitab project member by api.
+     * Update a gitlab project member by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -728,7 +728,7 @@ class gitlabModel extends model
 
     /**
      * 通过api删除一个项目成员
-     * Delete a gitab project member by api.
+     * Delete a gitlab project member by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -745,7 +745,7 @@ class gitlabModel extends model
 
     /**
      * 通过api创建一个群组成员。
-     * Add a gitab group member by api.
+     * Add a gitlab group member by api.
      *
      * @param  int    $gitlabID
      * @param  int    $groupID
@@ -764,7 +764,7 @@ class gitlabModel extends model
 
     /**
      * 通过api更新一个gitlab群组成员。
-     * Update a gitab group member by api.
+     * Update a gitlab group member by api.
      *
      * @param  int    $gitlabID
      * @param  int    $groupID
@@ -783,7 +783,7 @@ class gitlabModel extends model
 
     /**
      * 通过api删除一个gitlab群组成员。
-     * Delete a gitab group member by api.
+     * Delete a gitlab group member by api.
      *
      * @param  int    $gitlabID
      * @param  int    $groupID
@@ -800,7 +800,7 @@ class gitlabModel extends model
 
     /**
      * 通过api创建一个gitlab用户.
-     * Create a gitab user by api.
+     * Create a gitlab user by api.
      *
      * @param  int    $gitlabID
      * @param  object $user
@@ -818,7 +818,7 @@ class gitlabModel extends model
 
     /**
      * 通过api更新一个gitlab用户。
-     * Update a gitab user by api.
+     * Update a gitlab user by api.
      *
      * @param  int    $gitlabID
      * @param  object $user
@@ -836,7 +836,7 @@ class gitlabModel extends model
 
     /**
      * 通过api更新一个gitlab群组。
-     * Update a gitab group by api.
+     * Update a gitlab group by api.
      *
      * @param  int    $gitlabID
      * @param  object $group
@@ -854,7 +854,7 @@ class gitlabModel extends model
 
     /**
      * 通过api删除一个gitlab群组。
-     * Delete a gitab group by api.
+     * Delete a gitlab group by api.
      *
      * @param  int    $gitlabID
      * @param  int    $groupID
@@ -872,7 +872,7 @@ class gitlabModel extends model
 
     /**
      * 通过api更新一个gitlab项目。
-     * Update a gitab project by api.
+     * Update a gitlab project by api.
      *
      * @param  int    $gitlabID
      * @param  object $project
@@ -890,7 +890,7 @@ class gitlabModel extends model
 
     /**
      * 通过api删除一个gitlab项目。
-     * Delete a gitab project by api.
+     * Delete a gitlab project by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -908,7 +908,7 @@ class gitlabModel extends model
 
     /**
      * 通过api删除一个gitlab用户。
-     * Delete a gitab user by api.
+     * Delete a gitlab user by api.
      *
      * @param  int    $gitlabID
      * @param  int    $userID
@@ -926,7 +926,7 @@ class gitlabModel extends model
 
     /**
      * 通过api创建一个gitlab用户。
-     * Create a gitab user by api.
+     * Create a gitlab user by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -1450,7 +1450,7 @@ class gitlabModel extends model
 
     /**
      * 通过api删除一个标签。
-     * Delete a gitab tag by api.
+     * Delete a gitlab tag by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -1499,7 +1499,7 @@ class gitlabModel extends model
 
     /**
      * 通过api删除一个gitlab项目tag。
-     * Delete a gitab protect tag by api.
+     * Delete a gitlab protect tag by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -2074,7 +2074,7 @@ class gitlabModel extends model
 
     /**
      * 通过api创建一个分支策略。
-     * Create a gitab protect branch by api.
+     * Create a gitlab protect branch by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -2094,7 +2094,7 @@ class gitlabModel extends model
 
     /**
      * 通过api删除一个保护分支。
-     * Delete a gitab protect branch by api.
+     * Delete a gitlab protect branch by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -2164,7 +2164,7 @@ class gitlabModel extends model
 
     /**
      * 通过api创建一个保护分支。
-     * Create a gitab protect tag by api.
+     * Create a gitlab protect tag by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
