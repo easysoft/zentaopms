@@ -984,21 +984,21 @@
                         $oldItems.filter(`[data-name="${name}"]`).replaceWith($item);
                         $item.zuiInit();
                     });
+
+                    if(options.updateOrders)
+                    {
+                        const formGrid = $form.zui();
+                        if(formGrid)
+                        {
+                            const orders = [];
+                            $data.each((_, element) => orders.push($(element).attr('data-name')));
+                            formGrid.updateOrders(orders, $form.data('fullModeOrders'));
+                        }
+                    }
                 }
                 else
                 {
                     $form.html(info.data).zuiInit();
-                }
-
-                if(options.updateOrders || !options.items)
-                {
-                    const formGrid = $form.zui();
-                    if(formGrid)
-                    {
-                        const orders = [];
-                        $form.find('.form-group[data-name]').each((_, element) => orders.push($(element).attr('data-name')));
-                        formGrid.updateOrders(orders, $form.data('fullModeOrders'));
-                    }
                 }
 
                 let keep = options.keep;
