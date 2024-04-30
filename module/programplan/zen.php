@@ -146,42 +146,25 @@ class programplanZen extends programplan
      * 处理编辑阶段的请求数据。
      * Processing edit request data.
      *
-     * @param  int       $planID
-     * @param  int       $projectID
+     * @param  int         $planID
+     * @param  int         $projectID
+     * @param  object      $plan
+     * @param  object|null $parentStage
      * @access protected
-     * @return object
+     * @return bool
      */
-    protected function buildPlanForEdit(int $planID, int $projectID): object
+    protected function prepareEditPlan(int $planID, int $projectID, object $plan, object|null $parentStage = null): bool
     {
-        $this->loadModel('execution');
-        if(!empty($this->config->setCode) && strpos(",{$this->config->execution->edit->requiredFields},", ',code,') !== false) $this->config->programplan->form->edit['code']['required'] = true;
-
-        $plan = form::data()->get();
-        if(empty($plan->realBegan)) $plan->realBegan = null;
-        if(empty($plan->realEnd))   $plan->realEnd   = null;
-
-        /* 设置计划和真实起始日期间隔时间。 */
-        /* Set planDuration and realDuration. */
-        if(in_array($this->config->edition, array('max', 'ipd')))
-        {
-            $plan->planDuration = $this->programplan->getDuration($plan->begin, $plan->end);
-            $plan->realDuration = $this->programplan->getDuration($plan->realBegan, $plan->realEnd);
-        }
-
         if($plan->parent)
         {
-            $parentStage = $this->programplan->getByID($plan->parent);
-            $plan->acl   = $parentStage->acl;
-            if($parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;
+            if(!empty($parentStage) && $plan->begin < $parentStage->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent,  $parentStage->begin);
+            if(!empty($parentStage) && $plan->end   > $parentStage->end)   dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
 
-            if(isset($parentStage) && $plan->begin < $parentStage->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parentStage->begin);
-            if(isset($parentStage) && $plan->end > $parentStage->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parentStage->end);
+            if(dao::isError()) return false;
         }
 
-        if(dao::isError()) return $plan;
-
-        if($projectID) $this->execution->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
-        if(dao::isError()) return $plan;
+        if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
+        if(dao::isError()) return false;
 
         if(!empty($this->config->setPercent))
         {
@@ -203,7 +186,7 @@ class programplanZen extends programplan
             }
         }
 
-        return $plan;
+        return !dao::isError();
     }
 
     /**
