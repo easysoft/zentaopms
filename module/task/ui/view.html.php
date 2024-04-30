@@ -75,6 +75,7 @@ if(!$task->fromBug && $task->story)
         'title'    => $task->storyTitle,
         'url'      => createLink('story', 'view', "storyID=$task->storyID"),
         'objectID' => $task->storyID,
+        'color'    => '',
         'toolbar'  => $task->needConfirm ? array
         (
             array('text' => $lang->task->storyChange, 'class' => 'ghost pointer-events-none'),
