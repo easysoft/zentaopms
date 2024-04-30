@@ -277,9 +277,10 @@ class moduleMenu extends wg
                 zui::tree
                 (
                     set::_tag('menu'),
-                    set::_class('tree col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
+                    set::_class('tree tree-lines col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
                     set::defaultNestedShow(true),
                     set::hover(true),
+                    set::lines(true),
                     set::preserve($preserve),
                     set($treeProps),
                     set($userTreeProps)
