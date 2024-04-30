@@ -16,7 +16,7 @@ window.clickInit = function(e)
     initReport();
 };
 
-window.handleShowReportTab = (event, name) =>
+window.handleShowReportTab = (event) =>
 {
     $(event.target).find('[data-zui-echarts]').each(function()
     {

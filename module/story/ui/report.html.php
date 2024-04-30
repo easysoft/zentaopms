@@ -34,7 +34,6 @@ function getEcharts($charts, $datas, $chartType)
 {
     global $lang;
     $echarts = array();
-    d($charts);
     foreach($charts as $type => $option)
     {
         $chartData = $datas[$type];
@@ -102,7 +101,7 @@ div
         setID('report'),
         tabs
         (
-            on::show('.tab-pane')->call('handleShowReportTab', jsRaw('event'), jsRaw('args')),
+            on::show('.tab-pane')->call('handleShowReportTab', jsRaw('event')),
             $tabItems
         )
     )

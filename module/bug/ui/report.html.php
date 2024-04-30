@@ -26,7 +26,7 @@ detailHeader
 $reports = array();
 foreach($lang->bug->report->charts as $key => $label) $reports[] = array('text' => $label, 'value' => $key);
 
-function getEcharts($charts, $datas)
+function getEcharts($charts, $datas, $chartType)
 {
     global $lang;
     $echarts = array();
@@ -36,7 +36,7 @@ function getEcharts($charts, $datas)
         $echarts[] = tableChart
             (
                 set::item('chart-' . $type),
-                set::type($option->type),
+                set::type($chartType),
                 set::title($lang->bug->report->charts[$type]),
                 set::datas((array)$chartData)
             );
@@ -56,7 +56,7 @@ foreach($lang->report->typeList as $type => $typeName)
         set::key($type),
         to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
         div(setClass('pb-4 pt-2'), span(setClass('text-gray'), html(str_replace('%tab%', $lang->bug->unclosed . $lang->bug->common, $lang->report->notice->help)))),
-        div(getEcharts($charts, $datas))
+        div(getEcharts($charts, $datas, $type))
     );
 }
 
@@ -80,28 +80,13 @@ div
         ),
         btn
         (
-            setData
-            (
-                array
-                (
-                    'on'   => 'click',
-                    'call' => 'selectAll',
-                )
-            ),
+            bind::click('selectAll'),
             $lang->selectAll
         ),
         btn
         (
             setClass('primary ml-4 inited'),
-            setData
-            (
-                array
-                (
-                    'on'     => 'click',
-                    'call'   => 'clickInit',
-                    'params' => 'event',
-                )
-            ),
+            bind::click('clickInit'),
             $lang->bug->report->create
         )
     ),
@@ -110,7 +95,11 @@ div
         set::flex('1'),
         setClass('bg-white px-4 py-2'),
         setID('report'),
-        tabs($tabItems)
+        tabs
+        (
+            on::show('.tab-pane')->call('handleShowReportTab', jsRaw('event'), jsRaw('args')),
+            $tabItems
+        )
     )
 );
 
