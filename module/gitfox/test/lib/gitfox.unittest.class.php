@@ -13,7 +13,7 @@ class gitfoxTest
     /**
      * Get gitfox pairs
      *
-     * @return string
+     * @return array
      */
     public function getPairs()
     {
