@@ -65,7 +65,7 @@ if(!$bug->deleted)
             $action['data-tab'] = $app->tab == 'execution' ? 'execution' : 'project';
             $actions[$key] = $action;
         }
-        if($project->type == 'project' && $project->multiple == '0' && isset($action['id']) && $action['id'] == 'toStory')
+        if(!empty($project) && $project->type == 'project' && $project->multiple == '0' && isset($action['id']) && $action['id'] == 'toStory')
         {
             $action['data-app'] = 'project';
             $action['data-tab'] = 'project';
