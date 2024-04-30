@@ -25,7 +25,8 @@ $lang->mr->removeAction = '%s, 由 <strong>%s</strong> 删除了 <a href="%s">�
 $lang->mr->submitType   = '提交方式';
 
 $lang->mr->action = new stdclass();
-$lang->mr->action->synced = '$date, 由 <strong>$actor</strong> 同步了合并请求。';
+$lang->mr->action->synced   = '$date, 由 <strong>$actor</strong> 同步了合并请求。';
+$lang->mr->action->imported = '$date, 由 <strong>$actor</strong> 导入了合并请求。';
 
 $lang->mr->linkList  = '浏览关联需求、Bug、任务';
 $lang->mr->linkStory = '关联需求';
