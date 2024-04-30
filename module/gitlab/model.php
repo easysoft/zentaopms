@@ -491,6 +491,31 @@ class gitlabModel extends model
     }
 
     /**
+     * API获取项目的合并请求列表。
+     * Get Merge Requests by API.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @return array
+     */
+    public function apiGetMergeRequests(int $gitlabID,  int $projectID): array
+    {
+        $apiRoot = $this->getApiRoot((int)$gitlabID);
+        $url     = sprintf($apiRoot, "/projects/$projectID/merge_requests");
+
+        $MRs = array();
+        for($page = 1; true; $page++)
+        {
+            $onePageMRs = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+            if(!is_array($onePageMRs)) break;
+            if(!empty($onePageMRs)) $MRs = array_merge($MRs, $onePageMRs);
+            if(count($onePageMRs) < 100) break;
+        }
+
+        return $MRs;
+    }
+
+    /**
      * 获取gitlab命名空间列表。
      * Get namespaces of one gitlab.
      *
