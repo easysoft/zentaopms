@@ -680,32 +680,17 @@ class metricModel extends model
         $metric = $this->metricTao->fetchMetricByCode($code);
         if(!$metric) return false;
 
-        $calcPath = $this->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
-        if(!is_file($calcPath)) return false;
+        $calculator = $this->getCalculator($metric->scope, $metric->purpose, $metric->code);
 
-        include_once $this->getBaseCalcPath();
-        include_once $calcPath;
-        $calculator = new $metric->code;
-        $calculator->setHolidays($this->loadModel('holiday')->getList());
-        $calculator->setWeekend(isset($this->config->project->weekend) ? $this->config->project->weekend : 2);
+        /* 因为是单个度量项的计算，所以需要优先查看是否支持可用的性能优化，如果有的话，使用性能优化方式计算。*/
+        /* Because this is a single metric calculation, it is important to first look to see if any performance optimizations are supported and, if so, use them. */
+        $calculated = false;
+        $calculated += $this->calculateReuseMetric($calculator, $options, $type, $pager, $vision);
+        $calculated += $this->calculateSingleMetric($calculator, $vision);
 
-        if($calculator->reuse)
-        {
-            $reuseMetrics = array();
-            foreach($calculator->reuseMetrics as $key => $reuseMetric)
-            {
-                $reuseMetrics[$key] = $this->getResultByCode($reuseMetric, $options, $type, $pager, $vision);
-            }
-
-            $calculator->calculate($reuseMetrics);
-        }
-        else
-        {
-            $statement = $this->getDataStatement($calculator, 'statement', 'rnd');
-            $rows = $statement->fetchAll();
-
-            foreach($rows as $row) $calculator->calculate($row);
-        }
+        /* 如果没有可用的性能优化方式，那么使用默认的方式计算。*/
+        /* If no optimizations are available, the default calculation is used. */
+        if(!$calculated) $this->calculateDefaultMetric($calculator, $vision);
 
         return $calculator;
     }
