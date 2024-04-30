@@ -1108,7 +1108,6 @@ class productZen extends product
 
         /* Save browse type into session for buildSearchForm. */
         if($browseType != 'bymodule' && $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
-        if(($browseType == 'bymodule' || $browseType == 'bybranch') && $this->session->storyBrowseType == 'bysearch') $this->session->set('storyBrowseType', 'unclosed');
     }
 
     /**
