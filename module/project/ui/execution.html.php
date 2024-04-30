@@ -81,7 +81,7 @@ $executions = $this->execution->generateRow($executionStats, $users, $avatarList
 
 /* zin: Define the feature bar on main menu. */
 $productItems = array();
-foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink($this->app->rawModule, $this->app->rawMethod, "status={$status}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
+foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink('project', 'execution', "status={$status}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
 
 $productName = !empty($product) ? $product->name : '';
 featureBar
