@@ -40,6 +40,10 @@ if(!$hidden)
         ) : ''
     );
 }
+else
+{
+    $productRow = formHidden('product', $build->product);
+}
 
 $executionRow = '';
 $buildRow     = '';
@@ -102,7 +106,6 @@ formPanel
 (
     set::title($lang->build->edit),
     $productRow,
-    $hidden ? formHidden('product', $build->product) : '',
     formRow
     (
         setClass(isset($product->type) && $product->type != 'normal' && !empty($build->execution) ? '' : 'hidden'),
