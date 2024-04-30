@@ -1234,7 +1234,6 @@ class storyZen extends story
             ->setDefault('stage', $oldStory->stage)
             ->setDefault('stagedBy', $oldStory->stagedBy)
             ->setDefault('childStories', $oldStory->childStories)
-            ->setIF($oldStory->parent < 0, 'parent', $oldStory->parent)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     && $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedReason && $oldStory->closedDate == '', 'closedDate', $now)

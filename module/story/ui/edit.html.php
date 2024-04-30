@@ -246,7 +246,7 @@ detailBody
                 set::trClass($app->tab == 'product' ? zget($fields['parent'], 'className', '') : 'hidden'),
                 set::name($lang->story->parent),
                 picker(setID('parent'), set::name('parent'), set::items($fields['parent']['options']), set::value($fields['parent']['default']))
-            ) : null,
+            ) : formHidden('parent', $story->parent),
             $story->type == 'story' ? item
             (
                 set::trClass(zget($fields['plan'], 'className', '')),
