@@ -1810,8 +1810,11 @@ class projectModel extends model
         /* Create actions. */
         $this->loadModel('action');
         if(!empty($needUpdate)) $this->action->create('project', $projectID, 'managed', '', implode(',', $products));
+
+        /* 如果有取消关联的产品，且项目有迭代且是非瀑布项目，记录关联产品执行到action表。*/
+        /* If there are unlinkedProducts and it is multiple project and it isn't waterfall project, record to table action. */
         $unlinkedProducts = array_diff($oldProductIdList, $products);
-        if(!empty($unlinkedProducts))
+        if(!empty($unlinkedProducts) && !empty($project) && $project->multiple && $project->model != 'waterfall' && $project->model != 'waterfallplus')
         {
             $products = $this->dao->select('name')->from(TABLE_PRODUCT)
                 ->where('id')->in($unlinkedProducts)
