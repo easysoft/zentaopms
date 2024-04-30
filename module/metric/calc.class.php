@@ -110,6 +110,30 @@ class baseCalc
     public $reuse = false;
 
     /**
+     * 是否支持独立查询
+     *
+     * @var bool
+     * @access public
+     */
+    public $supportSingleQuery = false;
+
+    /**
+     * 是否使用独立查询
+     *
+     * @var bool
+     * @access public
+     */
+    public $useSingleQuery = false;
+
+    /**
+     * 独立查询sql
+     *
+     * @var string
+     * @access public
+     */
+    public $singleSql = '';
+
+    /**
      * 设置DAO 。
      * Set DAO.
      *
@@ -185,6 +209,7 @@ class baseCalc
      */
     protected function filterByOptions($rows, $options)
     {
+
         if(empty($options)) return $rows;
 
         $rows = (array)$rows;
@@ -305,6 +330,8 @@ class baseCalc
      */
     public function getRecords($keyNames, $result = null)
     {
+        if($this->useSingleQuery) return $this->singleQuery();
+
         if(empty($result)) $result = $this->result;
 
         if(empty($keyNames)) return $result;
@@ -334,6 +361,52 @@ class baseCalc
         }
 
         return $records;
+    }
+
+    /**
+     * 独立查询。
+     *
+     * @access public
+     * @return void
+     */
+    public function singleQuery()
+    {
+        $sql = $this->singleSql;
+        return $this->dao->select('*')->from("($sql) tt")->fetchAll();
+    }
+
+    /**
+     * 设置独立查询sql语句。
+     *
+     * @param  string  $sql
+     * @access public
+     * @return void
+     */
+    public function setSingleSql($sql)
+    {
+        $this->singleSql = $sql;
+    }
+
+    /**
+     * 获取独立查询sql语句。
+     *
+     * @access public
+     * @return void
+     */
+    public function getSingleSql()
+    {
+        return "({$this->singleSql}) tt";
+    }
+
+    /**
+     * 启用独立查询。
+     *
+     * @access public
+     * @return void
+     */
+    public function enableSingleQuery()
+    {
+        $this->useSingleQuery = true;
     }
 
     /**
