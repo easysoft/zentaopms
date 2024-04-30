@@ -301,10 +301,23 @@
                 const $dropmenu = $(this);
                 const $nextDropmenu = $data.filter(`#${$dropmenu.attr('id')}`);
                 if(!$nextDropmenu.length) return $dropmenu.remove();
-                if($dropmenu.data('fetcher') === $nextDropmenu.data('fetcher')) return;
+                const options = $nextDropmenu.data();
+                const oldOptions = $dropmenu.data();
+                if([options.fetcher, options.url, options.text, options.defaultValue].join() === [oldOptions.fetcher, oldOptions.url, oldOptions.text, oldOptions.defaultValue].join()) return;
                 const oldDropmenu = $dropmenu.zui('dropmenu');
-                if(oldDropmenu) oldDropmenu.render($nextDropmenu.data());
-                else $dropmenu.replaceWith($nextDropmenu);
+                if(oldDropmenu)
+                {
+                    oldDropmenu.render(options);
+                    $dropmenu.data(options);
+                    const newState = {};
+                    if(options.defaultValue !== undefined) newState.value = options.defaultValue;
+                    if(options.text !== undefined) newState.text = options.text;
+                    oldDropmenu.$.setState(newState);
+                }
+                else
+                {
+                    $dropmenu.replaceWith($nextDropmenu);
+                }
             });
             $data.filter('[data-fetcher]').each(function()
             {
