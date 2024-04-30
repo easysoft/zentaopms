@@ -1163,7 +1163,7 @@ class kanbanModel extends model
             $item['group']  = $column->group;
             $item['parent'] = $column->parent;
             $item['color']  = $column->color;
-            $item['order']  = $column->order;
+            $item['order']  = (int)$column->order;
             if($column->parent > 0) $item['parentName'] = $column->parent;
 
             /* Judge column action priv. */
@@ -1717,7 +1717,7 @@ class kanbanModel extends model
             $lane->type       = $browseType;
             $lane->execution  = $executionID;
             $lane->name       = $objectName;
-            $lane->order      = $order;
+            $lane->order      = (int)$order;
             $lane->color      = $this->config->kanban->laneColorList[$laneColor];
             $lane->pri        = (isset($objects) && isset($objects[$objectType]->pri)) ? $objects[$objectType]->pri : '';
             $lane->assignedTo = (isset($objects) && isset($objects[$objectType]->assignedTo)) ? $objects[$objectType]->assignedTo : '';
