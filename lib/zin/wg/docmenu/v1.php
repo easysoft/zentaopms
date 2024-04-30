@@ -16,6 +16,7 @@ class docMenu extends wg
         'settingLink?: string',
         'menuLink: string',
         'title?: string',
+        'preserve?: string|bool',
         'linkParams?: string="%s"',
         'libID?: int=0',
         'moduleID?: int=0',
@@ -421,11 +422,14 @@ class docMenu extends wg
 
     protected function build(): array
     {
+        global $app;
+
         $this->setMenuTreeProps();
         $title     = $this->getTitle();
         $menuLink  = $this->prop('menuLink', '');
         $objectID  = $this->prop('objectID', 0);
         $treeProps = set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover')));
+        $preserve  = $this->prop('preserve', $app->getModuleName() . '-' . $app->getMethodName());
 
         $isInSidebar = $this->parent instanceof sidebar;
 
@@ -457,9 +461,15 @@ class docMenu extends wg
                     h::main
                     (
                         setClass($menuLink ? 'pt-3' : ''),
-                        setClass('col flex-auto overflow-y-auto overflow-x-hidden px-1 pb-2'),
+                        setClass('col scrollbar-thin scrollbar-hover  flex-auto overflow-y-auto overflow-x-hidden pl-2 pr-1 py-1'),
                         setStyle('--menu-selected-bg', 'none'),
-                        zui::tree(set::_tag('menu'), $treeProps)
+                        zui::tree
+                        (
+                            set::_tag('menu'),
+                            set::lines(),
+                            set::preserve($preserve),
+                            $treeProps
+                        )
                     ),
                     $this->buildBtns()
                 ),
