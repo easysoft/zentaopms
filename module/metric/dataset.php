@@ -44,7 +44,7 @@ class dataset
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq('0');
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -63,7 +63,7 @@ class dataset
             ->andWhere('grade')->eq('1')
             ->andWhere('deleted')->eq('0');
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -80,7 +80,7 @@ class dataset
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('project');
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -101,7 +101,7 @@ class dataset
             ->andWhere('t1.multiple')->eq('1')
             ->andWhere('t2.type')->eq('project');
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -123,7 +123,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0);
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -143,7 +143,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0);
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -156,7 +156,7 @@ class dataset
      */
     public function getAllReleases($fieldList)
     {
-        return $this->dao->select($fieldList)->from(TABLE_RELEASE)->alias('t1')->where('deleted')->eq(0)->query();
+        return $this->dao->select($fieldList)->from(TABLE_RELEASE)->alias('t1')->where('deleted')->eq(0);
     }
 
     /**
@@ -176,7 +176,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0);
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -195,7 +195,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0);
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -215,7 +215,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0);
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -234,7 +234,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0);
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -254,7 +254,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0);
 
-        return $this->defaultWhere($stmt, 't3')->query();
+        return $this->defaultWhere($stmt, 't3');
     }
 
     /**
@@ -273,7 +273,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0);
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -291,7 +291,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0);
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -310,7 +310,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0);
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -338,7 +338,7 @@ class dataset
             ->andWhere('t4.multiple')->eq('1')
             ->andWhere('t5.deleted')->eq(0); // 已删除的项目
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -362,7 +362,7 @@ class dataset
             ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t4.type')->eq('project');
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -389,7 +389,7 @@ class dataset
             ->andWhere('t1.type')->eq('story')
             ->andWhere('t2.shadow')->eq(0);
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -409,7 +409,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story');
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -431,7 +431,7 @@ class dataset
             ->orWhere('t1.closedReason')->eq('done')
             ->markRight(1);
 
-        return $this->defaultWhere($stmt, 't1')->groupBy('t1.product')->query();
+        return $this->defaultWhere($stmt, 't1')->groupBy('t1.product');
     }
 
     /**
@@ -450,7 +450,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0);
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -468,7 +468,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0);
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -489,7 +489,7 @@ class dataset
             ->where('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0');
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -507,7 +507,7 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->eq(0);
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -528,7 +528,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0);
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -548,7 +548,7 @@ class dataset
             ->andWhere('t1.type')->eq('line')
             ->andWhere('t2.type')->eq('program');
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -562,8 +562,7 @@ class dataset
     public function getUsers($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_USER)->alias('t1')
-            ->where('t1.deleted')->eq('0')
-            ->query();
+            ->where('t1.deleted')->eq('0');
     }
 
     /**
@@ -579,7 +578,7 @@ class dataset
         $stmt = $this->dao->select($fieldList)->from(TABLE_DOC)->alias('t1')
             ->where('t1.deleted')->eq('0');
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     /**
@@ -598,7 +597,7 @@ class dataset
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.type')->eq('project');
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -617,7 +616,7 @@ class dataset
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.type')->eq('project');
 
-        return $this->defaultWhere($stmt, 't2')->query();
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -631,8 +630,7 @@ class dataset
     public function getArtifactRepos($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_ARTIFACTREPO)
-            ->where('deleted')->eq('0')
-            ->query();
+            ->where('deleted')->eq('0');
     }
 
     /**
@@ -646,8 +644,7 @@ class dataset
     public function getRepos($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_REPO)
-            ->where('deleted')->eq('0')
-            ->query();
+            ->where('deleted')->eq('0');
     }
 
     /**
@@ -662,8 +659,7 @@ class dataset
     {
         return $this->dao->select($fieldList)->from(TABLE_DEPLOY)->alias('t1')
             ->leftJoin(TABLE_DEPLOYPRODUCT)->alias('t2')->on('t1.id=t2.deploy')
-            ->where('t1.deleted')->eq('0')
-            ->query();
+            ->where('t1.deleted')->eq('0');
     }
 
     /**
@@ -677,8 +673,7 @@ class dataset
     public function getPipeline($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_JOB)->alias('t1')
-            ->where('t1.deleted')->eq('0')
-            ->query();
+            ->where('t1.deleted')->eq('0');
     }
 
     /**
@@ -695,8 +690,7 @@ class dataset
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo = t2.id')
             ->where('t1.repo')->gt(0)
             ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t2.deleted')->eq('0')
-            ->query();
+            ->andWhere('t2.deleted')->eq('0');
     }
 
     /**
@@ -712,8 +706,7 @@ class dataset
         return $this->dao->select($fieldList)->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_IMAGE)->alias('t2')->on('t2.id = t1.image')
             ->where('t1.deleted')->eq(0)
-            ->andWhere("t1.type = 'node'")
-            ->query();
+            ->andWhere("t1.type = 'node'");
     }
 
     /**
@@ -729,8 +722,7 @@ class dataset
         return $this->dao->select($fieldList)->from(TABLE_MR)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.hostID = t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t2.deleted')->eq('0')
-            ->query();
+            ->andWhere('t2.deleted')->eq('0');
     }
 
     /**
@@ -751,7 +743,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0);
 
-        return $this->defaultWhere($stmt, 't3')->query();
+        return $this->defaultWhere($stmt, 't3');
     }
 
     /**
@@ -773,8 +765,7 @@ class dataset
 
         return $this->dao->select("$fieldList, $defaultHours as defaultHours")
             ->from(TABLE_EFFORT)->alias('t1')
-            ->where('t1.deleted')->eq('0')
-            ->query();
+            ->where('t1.deleted')->eq('0');
     }
 
     /**
@@ -802,7 +793,7 @@ class dataset
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t3.type')->eq('project');
 
-        return $this->defaultWhere($stmt, 't3')->query();
+        return $this->defaultWhere($stmt, 't3');
     }
 
     /**
@@ -825,7 +816,7 @@ class dataset
             ->andWhere('t3.type')->eq('project')
             ->andWhere('t3.model')->in('waterfall,waterfallplus');
 
-        return $this->defaultWhere($stmt, 't3')->query();
+        return $this->defaultWhere($stmt, 't3');
     }
 
     public function getWaterfallEfforts($fieldList)
@@ -837,7 +828,7 @@ class dataset
             ->andWhere('t2.model')->eq('waterfall')
             ->andWhere('t2.type')->eq('project');
 
-       return $this->defaultWhere($stmt, 't2')->query();
+       return $this->defaultWhere($stmt, 't2');
     }
 
     /**
@@ -857,7 +848,7 @@ class dataset
             ->where('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0');
 
-        return $this->defaultWhere($stmt, 't3')->query();
+        return $this->defaultWhere($stmt, 't3');
     }
 
     /**
@@ -877,7 +868,7 @@ class dataset
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.type')->eq('story');
 
-        return $this->defaultWhere($stmt, 't3')->query();
+        return $this->defaultWhere($stmt, 't3');
     }
 
     public function getProjectTasks($fieldList)
@@ -902,7 +893,7 @@ class dataset
             ->where('t1.type')->eq('project')
             ->andWhere('t1.deleted')->eq('0');
 
-        return $this->defaultWhere($stmt, 't1')->query();
+        return $this->defaultWhere($stmt, 't1');
     }
 
     public function getTestRuns($fieldList)
@@ -912,7 +903,6 @@ class dataset
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`case` = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t3.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->query();
+            ->andWhere('t2.deleted')->eq(0);
     }
 }
