@@ -27,15 +27,6 @@ $canViewMR    = hasPriv('mr', 'view');
 $canViewBug   = hasPriv('bug', 'view');
 $operateList  = $this->loadModel('common')->buildOperateMenu($bug);
 
-/* Handling special tags in bug descriptions. */
-$tplStep   = strip_tags(trim($lang->bug->tplStep));
-$steps     = str_replace('<p>' . $tplStep, '<p class="font-bold my-1">' . $tplStep . '</p><p>', $bug->steps);
-$tplResult = strip_tags(trim($lang->bug->tplResult));
-$steps     = str_replace('<p>' . $tplResult, '<p class="font-bold my-1">' . $tplResult . '</p><p>', $steps);
-$tplExpect = strip_tags(trim($lang->bug->tplExpect));
-$steps     = str_replace('<p>' . $tplExpect, '<p class="font-bold my-1">' . $tplExpect . '</p><p>', $steps);
-$steps     = str_replace('<p></p>', '', $steps);
-
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
 if(!$isInModal && $canCreateBug)
@@ -88,7 +79,7 @@ $sections = array();
 $sections[] = setting()
     ->title($lang->bug->legendSteps)
     ->control('html')
-    ->content($steps);
+    ->content($bug->steps);
 
 if($bug->files)
 {
