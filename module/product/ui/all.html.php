@@ -28,6 +28,10 @@ $fnGetTableFieldList = function() use ($config)
         $fieldList[$field] = $extCol;
     }
 
+    end($fieldList);
+    $endField = key($fieldList);
+    $fieldList[$endField]['align'] = 'left';
+
     return $fieldList;
 };
 $cols = $fnGetTableFieldList();

@@ -1855,10 +1855,15 @@ class productModel extends model
     {
         $total           = 0;
         $return          = false;
+        $today           = helper::today();
         $orderedReleases = array();
 
         /* Collect releases. */
-        foreach($releases as $release) $orderedReleases[$release->date][] = $release;
+        foreach($releases as $release)
+        {
+            if($release->date > $today) continue;
+            $orderedReleases[$release->date][] = $release;
+        }
 
         krsort($orderedReleases);
         foreach($orderedReleases as $releases)

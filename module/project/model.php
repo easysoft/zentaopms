@@ -1736,7 +1736,8 @@ class projectModel extends model
      */
     public function getBudgetWithUnit(float|string $budget): float|string
     {
-        $budget = (float)$budget;
+        $budget    = (float)$budget;
+        $rawBudget = $budget;
         if($budget < $this->config->project->budget->tenThousand)
         {
             $budget = round($budget, $this->config->project->budget->precision);
@@ -1753,7 +1754,7 @@ class projectModel extends model
             $unit   = $this->lang->project->hundredMillion;
         }
 
-        return in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round($budget, $this->config->project->budget->precision);
+        return !commonModel::checkNotCN() ? $budget . $unit : round($rawBudget, $this->config->project->budget->precision);
     }
 
     /**

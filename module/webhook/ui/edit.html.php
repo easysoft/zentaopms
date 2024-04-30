@@ -121,7 +121,7 @@ formPanel
         setClass('webhookType'),
         set::label($lang->webhook->type),
         formHidden('type', $webhook->type),
-        span(set::style(array('padding-left' => '20px')), zget($lang->webhook->typeList, $webhook->type))
+        span(setClass('pl-5'), zget($lang->webhook->typeList, $webhook->type))
     ),
     $formItems
 );
