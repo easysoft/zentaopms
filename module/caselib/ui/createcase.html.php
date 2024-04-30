@@ -50,9 +50,10 @@ formPanel
                     set('class', 'input-group-addon'),
                     a
                     (
-                        set('class', 'mr-2'),
-                        set('href', $this->createLink('tree', 'browse', "rootID={$libID}&view=caselib&currentModuleID=0")),
-                        set('data-toggle', 'modal'),
+                        setClass('mr-2'),
+                        set::href($this->createLink('tree', 'browse', "rootID={$libID}&view=caselib&currentModuleID=0")),
+                        setData('toggle', 'modal'),
+                        setData('size', 'lg'),
                         $lang->tree->manage
                     ),
                     a
