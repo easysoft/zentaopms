@@ -211,7 +211,7 @@ class baseDAO
      */
     public function setTable($table)
     {
-        $this->table = $table;
+        $this->table = ($table && strpos($table, '`') === false) ? "`{$table}`" : $table;
     }
 
     /**
