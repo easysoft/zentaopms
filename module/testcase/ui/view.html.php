@@ -16,6 +16,28 @@ jsVar('viewParams', "caseID={$case->id}&version={$version}&from={$from}&taskID={
 
 $isInModal = isInModal();
 
+/* 版本列表。Version list. */
+$versions = array();
+for($i = $case->version; $i >= 1; $i--)
+{
+    $versionItem = setting()
+        ->text("#{$i}")
+        ->url(inlink('view', "caseID={$case->id}&version={$i}&from={$from}&taskID={$taskID}&stepsType={$stepsType}"));
+
+    if($isInModal)
+    {
+        $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal-content'));
+    }
+
+    $versionItem->selected($version == $i);
+    $versions[] = $versionItem;
+}
+$versionBtn = count($versions) > 1 ? to::title(dropdown
+(
+    btn(set::type('ghost'), setClass('text-link font-normal text-base'), "#{$version}"),
+    set::items($versions)
+)) : null;
+
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
 if(!$isInModal && hasPriv('testcase', 'create', $case))
@@ -133,8 +155,8 @@ $stepsTable = !empty($case->steps) ? div
 );
 
 $stepsActions = array();
-$stepsActions['items'][] = array('icon' => 'table-large', 'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'table'   ? 'primary' : 'ghost', 'class' => 'mr-2', 'url' => createLink('testcase', 'view', "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=table"));
-$stepsActions['items'][] = array('icon' => 'tree',        'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'mindmap' ? 'primary' : 'ghost', 'url' => createLink('testcase', 'view', "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=mindmap"));
+$stepsActions['items'][] = array('icon' => 'table-large', 'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'table'   ? 'primary' : 'ghost', 'class' => 'mr-2', 'url' => createLink('testcase', 'view', "caseID={$case->id}&version={$version}&from={$from}&taskID={$taskID}&stepsType=table"));
+$stepsActions['items'][] = array('icon' => 'tree',        'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'mindmap' ? 'primary' : 'ghost', 'url' => createLink('testcase', 'view', "caseID={$case->id}&version={$version}&from={$from}&taskID={$taskID}&stepsType=mindmap"));
 
 /* 初始化主栏内容。Init sections in main column. */
 $sections = array();
@@ -179,5 +201,6 @@ detail
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
-    set::actions($actions)
+    set::actions($actions),
+    $versionBtn
 );
