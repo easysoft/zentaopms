@@ -18,26 +18,17 @@ class thinkNode  extends wg
         {
             if(property_exists($item, 'questionType') && $item->questionType === 'input') return thinkInputDetail
             (
-                set::type($item->type),
-                set::title($item->title),
-                set::desc($item->desc),
                 set::item($item),
                 set::required($item->required)
             );
             if(property_exists($item, 'questionType') && $item->questionType === 'tableInput') return thinkTableInputDetail
             (
-                set::type($item->type),
-                set::title($item->title),
-                set::desc($item->desc),
                 set::item($item),
                 set::required($item->required),
                 set::rowsTitle(explode(', ', $item->fields)),
             );
             if(property_exists($item, 'questionType') && ($item->questionType === 'radio' || $item->questionType === 'checkbox')) return thinkOptionsDetail
             (
-                set::type($item->type),
-                set::title($item->title),
-                set::desc($item->desc),
                 set::item($item),
                 set::required($item->required),
                 set::enableOther($item->enableOther),
@@ -45,9 +36,6 @@ class thinkNode  extends wg
             );
             return thinkStepDetail
             (
-                set::type($item->type),
-                set::title($item->title),
-                set::desc($item->desc),
                 set::item($item),
             );
         }
