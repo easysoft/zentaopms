@@ -383,10 +383,6 @@ class designModel extends model
                 $this->session->set('designQuery', $query->sql);
                 $this->session->set('designForm', $query->form);
             }
-            else
-            {
-                $this->session->set('designQuery', ' 1 = 1');
-            }
         }
         else
         {
