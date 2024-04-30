@@ -857,7 +857,7 @@ class productZen extends product
         $project = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         if(!empty($projectID) && !empty($project->hasProduct) && $this->app->rawModule == 'projectstory')
         {
-            return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
+            return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink), array('storyType' => $storyType));
         }
 
         /* Pre generate parameters. */

@@ -179,7 +179,7 @@ sidebar
         'activeKey'   => $param,
         'settingLink' => !$execution->hasProduct && !$execution->multiple ? createLink('tree', 'browse', "rootID={$product->id}&viewType=story") : null,
         'closeLink'   => $this->createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&type=byModule&param=0"),
-        'app'         => !$execution->hasProduct && !$execution->multiple ? 'project' : ''
+        'app'         => !$execution->multiple ? 'project' : $app->tab
     )))
 );
 

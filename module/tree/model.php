@@ -734,10 +734,11 @@ class treeModel extends model
      * @param  int          $rootID
      * @param  int          $startModule
      * @param  string|array $userFunc
+     * @param  array        $extra
      * @access public
      * @return array
      */
-    public function getProjectStoryTreeMenu(int $rootID, int $startModule = 0, string|array$userFunc = ''): array
+    public function getProjectStoryTreeMenu(int $rootID, int $startModule = 0, string|array$userFunc = '', array $extra = array()): array
     {
         $this->app->loadLang('branch');
 
@@ -759,11 +760,12 @@ class treeModel extends model
         $branchGroups = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $rootID);
 
         $productNum = count($products);
+        $storyType  = zget($extra, 'storyType', 'story');
         foreach($products as $id => $product)
         {
             $extra['productID']   = $id;
-            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all&browseType=&param=0&storyType=requirement");
-            $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&storyType=story&orderBy=&type=byProduct&praram=$id");
+            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all&browseType=&param=0&storyType={$storyType}");
+            $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&storyType={$storyType}&orderBy=&type=byProduct&praram=$id");
             $link = $this->app->rawModule == 'projectstory' ? $projectProductLink : $executionProductLink;
             if($productNum > 1)
             {
