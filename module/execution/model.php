@@ -228,6 +228,10 @@ class executionModel extends model
             $executionID = key($executions);
         }
 
+        /* Parent stage can't access. */
+        $childExecutions = $this->getChildExecutions($executionID);
+        if(!empty($childExecutions)) return $this->app->control->sendError($this->lang->execution->errorParentExecution, helper::createLink('execution', 'all'));
+
         /* Save session. */
         $this->executionTao->saveSession((int)$executionID);
 

@@ -406,6 +406,7 @@ $lang->execution->errorGreaterParent           = 'The end cannot be greater than
 $lang->execution->errorNameRepeat              = "Child %s of the same parent stage cannot have the same name.";
 $lang->execution->errorAttrMatch               = "Parent stage's attribute is [%s], the attribute needs to be consistent with the parent stage.";
 $lang->execution->errorLesserPlan              = "『%s』cannot be less than the plan start time『%s』。";
+$lang->execution->errorParentExecution         = "The current stage is the parent stage, and it's unaccessible.";
 $lang->execution->accessDenied                 = "Zugriff zu {$lang->executionCommon} verweigert!";
 $lang->execution->tips                         = 'Hinweis';
 $lang->execution->afterInfo                    = "%s wurde erstellt. Als nächstes können Sie ";
