@@ -258,18 +258,18 @@ class ciModel extends model
     {
         /* The value of `$compile->pipeline` is like `'{"project":"46", "name": "test", "reference":"master"}'` in current design. */
         $pipeline = json_decode($compile->pipeline);
-        $compile->project = isset($pipeline->project) ? (int)$pipeline->project : (int)$compile->pipeline;
-        $compile->pipline = zget($pipeline, 'name', '');
+        $compile->project  = isset($pipeline->project) ? (int)$pipeline->project : (int)$compile->pipeline;
+        $compile->pipeline = zget($pipeline, 'name', '');
 
         $now      = helper::now();
-        $pipeline = $this->loadModel('gitfox')->apiGetSinglePipeline($compile->server, $compile->project, $compile->pipline, $compile->queue);
+        $pipeline = $this->loadModel('gitfox')->apiGetSinglePipeline($compile->server, $compile->project, $compile->pipeline, $compile->queue);
         if(!isset($pipeline->number) || isset($pipeline->message)) /* The pipeline is not available. */
         {
             $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq('create_fail')->where('id')->eq($compile->job)->exec();
             return false;
         }
 
-        $pipeline->name = $compile->pipline;
+        $pipeline->name = $compile->pipeline;
         $logs = $this->gitfox->apiGetPipelineLogs($compile->server, $compile->project, $pipeline);
         $data = new stdclass;
         $data->status     = $pipeline->status;

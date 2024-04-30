@@ -1306,7 +1306,7 @@ class gitlabModel extends model
 
     /**
      * 通过api获取一个流水线。
-     * Get single pipline by api.
+     * Get single pipeline by api.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID

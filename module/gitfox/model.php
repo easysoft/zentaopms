@@ -553,7 +553,7 @@ class gitfoxModel extends model
 
     /**
      * 通过api获取一个流水线。
-     * Get single pipline by api.
+     * Get single pipeline by api.
      *
      * @param  int    $gitfoxID
      * @param  int    $projectID
@@ -571,7 +571,7 @@ class gitfoxModel extends model
 
     /**
      * 通过api获取一个流水线日志。
-     * Get single pipline logs by api.
+     * Get single pipeline logs by api.
      *
      * @param  int    $gitfoxID
      * @param  int    $projectID
