@@ -52,6 +52,8 @@ class moduleMenu extends wg
         .module-menu-header.is-fixed > .btn-close:not(:hover) {opacity: .5;}
         .sidebar > .module-menu-header.is-fixed {display: flex!important;}
         .sidebar-left > .module-menu {margin-right: -8px}
+        .sidebar-left.is-expanded > .module-menu ~ .sidebar-gutter {margin-left: 4px}
+        .sidebar-right.is-expanded > .module-menu ~ .sidebar-gutter {margin-right: 4px}
         .is-expanded > .module-menu ~ .sidebar-gutter > .gutter-toggle {opacity: 0}
         .has-module-menu-header .sidebar-left {transition-property: width;}
         .has-module-menu-header .module-menu {max-height: calc(100vh - 105px); }
@@ -207,7 +209,7 @@ class moduleMenu extends wg
         (
             btn
             (
-                setClass('ghost absolute right-1 top-1'),
+                setClass('ghost absolute right-1.5 top-1'),
                 set::icon('cog-outline'),
                 set::size('sm'),
                 set::caret(false)
