@@ -68,7 +68,8 @@ if(!$build->execution)
         )
     );
 }
-elseif(!empty($multipleProject))
+
+if(!empty($multipleProject))
 {
     $executionRow = formRow(
         formGroup
@@ -88,6 +89,10 @@ elseif(!empty($multipleProject))
         ) : ''
     );
 }
+else
+{
+    $executionRow = formHidden('execution', $build->execution);
+}
 
 if(empty($product)) $product = new stdclass();
 $productType     = zget($product, 'type', 'normal');
@@ -97,6 +102,7 @@ formPanel
 (
     set::title($lang->build->edit),
     $productRow,
+    $hidden ? formHidden('product', $build->product) : '',
     formRow
     (
         setClass(isset($product->type) && $product->type != 'normal' && !empty($build->execution) ? '' : 'hidden'),
