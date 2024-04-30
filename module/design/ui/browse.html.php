@@ -17,7 +17,7 @@ jsVar('productID', $productID);
 /* zin: Define the set::module('design') feature bar on main menu. */
 featureBar
 (
-    li(searchToggle(set::module('design')))
+    li(searchToggle(set::open($type == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */
