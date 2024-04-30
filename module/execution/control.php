@@ -1600,6 +1600,11 @@ class execution extends control
         $executionID = $this->execution->checkAccess((int)$executionID, $this->executions);
         $execution   = $this->execution->getByID($executionID, true);
         $type        = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
+        if($execution->type == 'stage')
+        {
+            $childExecutions = $this->execution->getChildExecutions($executionID);
+            if(!empty($childExecutions)) return $this->app->control->sendError($this->lang->execution->errorParentExecution, helper::createLink('execution', 'all'));
+        }
 
         if(empty($execution) || strpos($type, $execution->type) === false) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->config->vision == 'lite' ? $this->createLink('project', 'index') : $this->createLink('execution', 'all'))));
 
