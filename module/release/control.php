@@ -388,6 +388,8 @@ class release extends control
         $this->view->param      = $param;
         $this->view->pager      = $pager;
 
+        if($this->app->tab == 'project') $this->view->projectID = $release->project;
+
         $this->display();
     }
 
@@ -480,6 +482,9 @@ class release extends control
         $this->view->param       = $param;
         $this->view->type        = $type;
         $this->view->pager       = $pager;
+
+        if($this->app->tab == 'project') $this->view->projectID = $release->project;
+
         $this->display();
     }
 
