@@ -1310,7 +1310,7 @@ class gitlab extends control
         if(!empty($_POST))
         {
             $result = $this->gitlab->manageBranchPrivs($gitlabID, $projectID, $hasAccessBranches);
-            if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->svaeFailed, implode(', ', $result))));
+            if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->saveFailed, implode(', ', $result))));
 
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => inlink('browseProject', "gitlabID=$gitlabID")));
         }
@@ -1351,7 +1351,7 @@ class gitlab extends control
         if(!empty($_POST))
         {
             $result = $this->gitlab->manageTagPrivs($gitlabID, $projectID, $hasAccessTags);
-            if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->svaeFailed, implode(', ', $result))));
+            if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->gitlab->saveFailed, implode(', ', $result))));
 
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => inlink('browseProject', "gitlabID=$gitlabID")));
         }

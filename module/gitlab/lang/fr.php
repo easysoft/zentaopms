@@ -47,7 +47,7 @@ $lang->gitlab->zentaoProduct        = 'Zentao Product';
 $lang->gitlab->objectType           = 'Type'; // task, bug, story
 $lang->gitlab->manageProjectMembers = 'Manage project member';
 $lang->gitlab->createProject        = 'Create GitLab project';
-$lang->gitlab->editProject          = 'Eidt GitLab project';
+$lang->gitlab->editProject          = 'Edit GitLab project';
 $lang->gitlab->deleteProject        = 'Delete GitLab project';
 $lang->gitlab->createGroup          = 'Create group';
 $lang->gitlab->editGroup            = 'Edit group';
@@ -61,7 +61,7 @@ $lang->gitlab->createWebhook        = 'Create Webhook';
 $lang->gitlab->browseBranchPriv     = 'Protect branch';
 $lang->gitlab->createTag            = 'Create Tag';
 $lang->gitlab->deleteTag            = 'Delete tag';
-$lang->gitlab->svaeFailed           = '『%s』save failed';
+$lang->gitlab->saveFailed           = '『%s』save failed';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "Server Name";

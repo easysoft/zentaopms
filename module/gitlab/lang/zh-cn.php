@@ -61,7 +61,7 @@ $lang->gitlab->createWebhook        = '创建Webhook';
 $lang->gitlab->browseBranchPriv     = '分支保护管理';
 $lang->gitlab->createTag            = '创建标签';
 $lang->gitlab->deleteTag            = '删除标签';
-$lang->gitlab->svaeFailed           = '『%s』保存失败';
+$lang->gitlab->saveFailed           = '『%s』保存失败';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "应用名称";

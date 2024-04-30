@@ -47,7 +47,7 @@ $lang->gitfox->zentaoProduct        = 'Zentao Product';
 $lang->gitfox->objectType           = 'Type'; // task, bug, story
 $lang->gitfox->manageProjectMembers = 'Manage project member';
 $lang->gitfox->createProject        = 'Create GitFox project';
-$lang->gitfox->editProject          = 'Eidt GitFox project';
+$lang->gitfox->editProject          = 'Edit GitFox project';
 $lang->gitfox->deleteProject        = 'Delete GitFox project';
 $lang->gitfox->createGroup          = 'Create group';
 $lang->gitfox->editGroup            = 'Edit group';
@@ -61,7 +61,7 @@ $lang->gitfox->createWebhook        = 'Create Webhook';
 $lang->gitfox->browseBranchPriv     = 'Protect branch';
 $lang->gitfox->createTag            = 'Create Tag';
 $lang->gitfox->deleteTag            = 'Delete tag';
-$lang->gitfox->svaeFailed           = '『%s』save failed';
+$lang->gitfox->saveFailed           = '『%s』save failed';
 
 $lang->gitfox->id             = 'ID';
 $lang->gitfox->name           = "Server Name";
