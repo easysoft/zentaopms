@@ -41,20 +41,20 @@ $config->admin->plugins[198]->name     = '需求池插件';
 $config->admin->plugins[198]->abstract = '本插件为禅道需求池管理插件，包括：创建需求池 需求池权限管理 收集需求并向需求池录入需求 记录需求提出人信息 评审需求 拆分用户需求、研发需求 需求跟踪矩阵';
 $config->admin->plugins[198]->viewLink = 'https://www.zentao.net/extension-viewExt-198.html';
 
-$config->admin->plugins[27] = new stdClass();
-$config->admin->plugins[27]->name     = 'Excel导出/导入';
-$config->admin->plugins[27]->abstract = '安装该插件可以支持Excel导出和任务、需求、Bug、用例导入功能。更新提示：新增任务、需求、Bug的excel导入功能。';
-$config->admin->plugins[27]->viewLink = 'https://www.zentao.net/extension-viewExt-27.html';
+$config->admin->plugins[191] = new stdClass();
+$config->admin->plugins[191]->name     = 'Bug归因';
+$config->admin->plugins[191]->abstract = '通过Bug归因功能，可以确定Bug产生的根本原因，并追溯产生人员的责任比例，然后从根本上来解决问题。';
+$config->admin->plugins[191]->viewLink = 'https://www.zentao.net/extension-viewExt-191.html';
 
-$config->admin->plugins[26] = new stdClass();
-$config->admin->plugins[26]->name     = '甘特图';
-$config->admin->plugins[26]->abstract = '禅道甘特图插件 运用此插件可以查看甘特图，维护任务关系。';
-$config->admin->plugins[26]->viewLink = 'https://www.zentao.net/extension-viewExt-26.html';
+$config->admin->plugins[250] = new stdClass();
+$config->admin->plugins[250]->name     = '项目集甘特图';
+$config->admin->plugins[250]->abstract = '禅道甘特图插件 运用此插件可以查看甘特图，维护任务关系。';
+$config->admin->plugins[250]->viewLink = 'https://www.zentao.net/extension-viewExt-250.html';
 
-$config->admin->plugins[30] = new stdClass();
-$config->admin->plugins[30]->name     = '日志日历';
-$config->admin->plugins[30]->abstract = '运用此插件可以实现工作日志的添加、编辑、查看、删除、导出等功能，方便用户管理工作日志。';
-$config->admin->plugins[30]->viewLink = 'https://www.zentao.net/extension-viewExt-30.html';
+$config->admin->plugins[196] = new stdClass();
+$config->admin->plugins[196]->name     = '限制每天每人最大任务工时';
+$config->admin->plugins[196]->abstract = '限制每天录入录入工时上限。';
+$config->admin->plugins[196]->viewLink = 'https://www.zentao.net/extension-viewExt-196.html';
 
 $config->admin->plugins[194] = new stdClass();
 $config->admin->plugins[194]->name     = '应用巡检报告';
