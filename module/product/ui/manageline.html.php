@@ -141,7 +141,7 @@ div
                 set::canEdit(false),
                 set::canSplit(false),
                 set::canDelete(false),
-                set::sortable(array('handle' => '.icon-move')),
+                set::sortable(),
                 set::onSort(jsRaw('window.updateOrder'))
             )
         )

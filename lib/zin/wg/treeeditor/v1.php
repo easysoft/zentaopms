@@ -89,7 +89,7 @@ class treeEditor extends wg
                 }
                 else
                 {
-                    if($sortTree) $item['trailingIcon'] = 'move muted';
+                    if($sortTree) $item['trailingIcon'] = 'move muted cursor-move';
 
                     if(!isset($item['actions']))          $item['actions']          = array();
                     if(!isset($item['actions']['items'])) $item['actions']['items'] = array();

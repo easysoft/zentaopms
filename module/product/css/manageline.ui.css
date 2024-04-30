@@ -6,5 +6,4 @@
 #manageLineModal form .form-row:last-child{position: sticky; bottom: -25px; z-index: 1; background-color: rgba(var(--color-canvas-rgb), .8); padding: 1rem; margin-left:0px;}
 
 li.tree-item > div.listitem > nav.toolbar {margin-left: 0;}
-li.tree-item > div.listitem > .icon-move {cursor: pointer;}
 .lineTree .panel-body {background: var(--color-gray-100);}
