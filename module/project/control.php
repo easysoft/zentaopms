@@ -466,7 +466,7 @@ class project extends control
             if($this->post->longTime) $this->config->project->form->edit['end']['skipRequired'] = true;
 
             $postData        = form::data($this->config->project->form->edit);
-            $postProductData = form::data($this->config->project->form->edit)->get('products,plans,branch');
+            $postProductData = !empty($project->hasProduct) ? form::data($this->config->project->form->edit)->get('products,plans,branch') : new stdclass();
             $newProject      = $this->projectZen->prepareProject($postData, $project->hasProduct);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
