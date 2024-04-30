@@ -1973,7 +1973,6 @@ class productModel extends model
         if($module == 'qa'         && $method == 'index')       return helper::createLink('bug',   'browse',      "productID=%s{$branchParam}");
         if($module == 'story'      && $method == 'report')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}&extra=$extra");
         if($module == 'testcase'   && $method == 'browse')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}" . ($extra ? "&browseType=$extra" : ''));
-        if($module == 'testcase'   && $method == 'view')        return helper::createLink($module, 'browse',      "productID=%s");
         if($module == 'testreport' && $method == 'create')      return helper::createLink($module, $method,       "objectID=&objectType=testtask&extra=%s");
         if($module == 'testtask'   && $method == 'browse')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}&extra={$extra}");
         if($module == 'testsuite'  && $method != 'create')      return helper::createLink('testsuite', 'browse',  "productID=%s");
@@ -1988,6 +1987,8 @@ class productModel extends model
         if($module == 'execution'  && in_array($method, array('bug', 'testcase')))        return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");
         if($module == 'product'    && in_array($method, array('doc', 'view')))            return helper::createLink($module,    $method,  "productID=%s");
         if($module == 'product'    && in_array($method, array('create', 'showimport')))   return helper::createLink($module,    'browse', "productID=%s&type=$extra");
+        if($module == 'bug'        && in_array($method, array('edit', 'view')))           return helper::createLink($module,    'browse', "productID=%s");
+        if($module == 'testcase'   && in_array($method, array('edit', 'view')))           return helper::createLink($module,    'browse', "productID=%s");
         if($module == 'ticket'     && in_array($method, array('browse', 'view', 'edit'))) return helper::createLink('ticket',   'browse', "browseType=byProduct&productID=%s");
         if($module == 'testreport' && in_array($method, array('edit', 'browse')))         return helper::createLink($module,    'browse', "objectID=%s");
         if($module == 'feedback'   && $this->config->vision == 'lite')                    return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
