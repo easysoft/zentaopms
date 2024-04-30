@@ -34,6 +34,7 @@ formPanel
         formGroup
         (
             set::label($lang->tree->product),
+            set::width('1/2'),
             picker
             (
                 set::name('root'),
