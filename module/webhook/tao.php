@@ -115,6 +115,11 @@ class webhookTao extends webhookModel
         {
             $text = substr($data->text->content, 0, strpos($data->text->content, '(http'));
         }
+        elseif(isset($data->card->elements))
+        {
+            $text = $data->card->elements[0]->content;
+            $text = substr($text, 0, strpos($text, '(http')) ? substr($text, 0, strpos($text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+        }
         elseif(isset($data->content))
         {
             $text = $data->content->text;
