@@ -33,6 +33,7 @@ $blockMenuItems[] = array('text' => $lang->block->reset, 'className' => 'not-ope
 
 dashboard
 (
+    set::onlyLoadVisible(false),
     set::blocks(array_values($blocks)),
     set::blockMenu(array('items' => $blockMenuItems)),
     set::onClickMenu(jsRaw('handleClickBlockMenu')),
