@@ -1128,11 +1128,12 @@ class actionModel extends model
         if($action->objectType == 'story' && $this->config->vision == 'lite') list($moduleName, $methodName, $params) = array('projectstory', 'view', "storyID={$action->objectID}");
         if($action->objectType == 'review') list($moduleName, $methodName, $params) = array('review', 'view', "reviewID={$action->objectID}");
 
+        $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
+
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';
         if($this->config->vision == 'lite' && $action->objectType == 'module') $action->objectLink .= '#app=project';
 
-        $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
         return $action;
     }
 
