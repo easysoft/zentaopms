@@ -471,12 +471,12 @@ class blockZen extends block
                 $assignedGroup = reset($assignedGroup);
                 $count         = zget($assignedGroup, 'value', 0);
             }
-            $assignToMe[$field] = array('number' => $count, 'href' => common::hasPriv('my', 'work') ? helper::createLink('my', 'work', "mode=$field&type=$type") : '');
+            $assignToMe[$field] = array('number' => $count, 'href' => common::hasPriv('my', 'work') && $this->config->vision != 'lite' ? helper::createLink('my', 'work', "mode=$field&type=$type") : '');
         }
 
         /* 生成待我审批的数据。 */
         $reviewList = $this->loadModel('my')->getReviewingList('all');
-        $reviewByMe['reviewByMe'] = array('number' => count($reviewList), 'href' => common::hasPriv('my', 'audit') ? helper::createLink('my', 'audit') : '');
+        $reviewByMe['reviewByMe'] = array('number' => count($reviewList), 'href' => common::hasPriv('my', 'audit') && $this->config->vision != 'lite' ? helper::createLink('my', 'audit') : '');
 
         /* 生成欢迎语。 */
         $yesterdaySummary = '';

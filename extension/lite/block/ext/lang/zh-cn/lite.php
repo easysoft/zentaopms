@@ -39,7 +39,6 @@ $lang->block->modules['execution']->availableBlocks['task']      = '任务列表
 unset($lang->block->moduleList['product']);
 unset($lang->block->moduleList['qa']);
 
-$lang->block->welcome->reviewList = array();
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task'] = '任务数';
 
