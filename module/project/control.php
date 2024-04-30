@@ -489,7 +489,8 @@ class project extends control
 
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
 
-            $locateLink = ($this->session->projectList and $from != 'view') ? $this->session->projectList : inLink('view', "projectID=$projectID");
+            $locateLink = $this->session->projectList && $from != 'view' ? $this->session->projectList : inLink('view', "projectID=$projectID");
+            if(strpos($locateLink, 'index') > -1 && strpos($locateLink, 'app') > -1) $locateLink = inLink('view', "projectID=$projectID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
         }
 
