@@ -128,7 +128,7 @@ if($zentaoData->plugins)
 {
     foreach($zentaoData->plugins as $plugin)
     {
-        $pluginDesc = preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->abstract));
+        $pluginDesc = !empty($plugin->abstract) ? preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->abstract)) : '';
 
         $pluginItems[] = div
         (
