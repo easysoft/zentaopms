@@ -415,6 +415,8 @@ class blockZen extends block
             if(!empty($usageDateInfo->year))  $usageDays .= $usageDateInfo->year . ' ' . $this->lang->year . ' ';
             if(!empty($usageDateInfo->month)) $usageDays .= $usageDateInfo->month . ' ' . $this->lang->month . ' ';
             if(!empty($usageDateInfo->day))   $usageDays .= $usageDateInfo->day . ' ' . $this->lang->day . ' ';
+
+            if(!$usageDays) $usageDays .= "0 {$this->lang->day}";
         }
         else
         {
