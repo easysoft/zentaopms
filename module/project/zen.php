@@ -344,7 +344,6 @@ class projectZen extends project
         $this->view->productPlans        = $productPlans;
         $this->view->linkedProducts      = $linkedProducts;
         $this->view->linkedBranches      = $linkedBranches;
-        $this->view->isStage             = in_array($model, array('waterfall', 'waterfallplus', 'ipd'));
         $this->view->groups              = $this->loadModel('group')->getPairs();
         $this->display();
     }
