@@ -192,6 +192,33 @@ class gitfoxModel extends model
     }
 
     /**
+     * 通过api获取合并请求。
+     * Get Pull Requests/Merge Requests by API.
+     *
+     * @param  mixed $gitfoxID
+     * @param  mixed $repoID
+     * @return object
+     */
+    public function apiGetMergeRequests(int $gitfoxID, int $repoID): object|null
+    {
+        $apiRoot  = $this->getApiRoot($gitfoxID, false);
+        $apiPath  = "/repos/{$repoID}/pullreq";
+        $url      = sprintf($apiRoot->url, $apiPath);
+
+        $MRs = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+        foreach($MRs as $MR)
+        {
+            $MR->iid               = $MR->number;
+            $MR->source_project_id = $MR->source_repo_id;
+            $MR->target_project_id = $MR->target_repo_id;
+            $MR->work_in_progress  = $MR->is_draft;
+            $MR->draft             = $MR->is_draft;
+        }
+
+        return $MRs;
+    }
+
+    /**
      * 通过api创建hook。
      * Create hook by api.
      *
