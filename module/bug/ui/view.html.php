@@ -68,6 +68,12 @@ if(!$bug->deleted)
             continue;
         }
 
+        if(empty($project->hasProduct) && isset($action['id']) && $action['id'] == 'toStory')
+        {
+            $action['data-app'] = $app->tab == 'execution' ? 'execution' : 'project';
+            $action['data-tab'] = $app->tab == 'execution' ? 'execution' : 'project';
+            $actions[$key] = $action;
+        }
         if($project->type == 'project' && $project->multiple == '0' && isset($action['id']) && $action['id'] == 'toStory')
         {
             $action['data-app'] = 'project';
