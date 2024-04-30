@@ -81,7 +81,7 @@ if(empty($tree))
             setClass('text-gray'),
             $lang->task->noTask
         ),
-        common::hasPriv('task', 'create', $checkObject) ? btn
+        common::hasPriv('task', 'create', $execution) ? btn
         (
             set::text($lang->task->create),
             set::icon('plus'),
