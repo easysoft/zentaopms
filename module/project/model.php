@@ -774,6 +774,7 @@ class projectModel extends model
             ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!in_array($status, array('all', 'undone')))->andWhere('status')->eq($status)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', vision, ',')")->like("%,{$this->config->vision},%")->fi()
             ->fetchPairs();
     }
 
