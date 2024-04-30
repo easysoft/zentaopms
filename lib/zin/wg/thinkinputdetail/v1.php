@@ -11,7 +11,7 @@ require_once dirname(__DIR__) . DS . 'thinkstepdetail' . DS . 'v1.php';
 class thinkInputDetail extends thinkStepDetail
 {
     protected static array $defineProps = array(
-        'required?: bool ',                     // 是否必填
+        'required?: bool',                      // 是否必填
         'isRequiredName?: string="required"',   // 是否必填对应的name
     );
     protected function detailInputControl()
