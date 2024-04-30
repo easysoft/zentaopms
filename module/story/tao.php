@@ -840,8 +840,6 @@ class storyTao extends storyModel
      */
     protected function doChangeParent(int $storyID, object $story, int $oldStoryParent)
     {
-        if($story->product == $oldStoryParent) return;
-
         $this->loadModel('action');
         $this->updateStoryProduct($storyID, $story->product);
         if($oldStoryParent == '-1')
