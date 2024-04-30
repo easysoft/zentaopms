@@ -93,9 +93,9 @@ class statisticBlock extends blockPanel
                 (
                     toggle::tab(array('target' => "#blockTab_{$id}_{$item['id']}")),
                     setClass('block-statistic-nav-item flex-auto min-w-0', $item['id'] == $active ? 'active' : ''),
-                    span(setClass('text clip'), $item['text'])
+                    span(setClass('text clip'), set('title', $item['text']), $item['text'])
                 ),
-                !$longBlock ? span(setClass('block-statistic-nav-title text text-primary font-bold clip'), $item['text']) : null,
+                !$longBlock ? span(setClass('block-statistic-nav-title text text-primary font-bold clip'), set('title', $item['text']), $item['text']) : null,
                 !empty($item['url']) ? a
                 (
                     $longBlock ? setClass('block-statistic-nav-url top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity') : null,
