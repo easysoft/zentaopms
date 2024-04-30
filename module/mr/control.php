@@ -917,4 +917,65 @@ class mr extends control
         foreach($branches as $branch) $branchPrivs[$branch->name] = $branch->name;
         echo json_encode($branchPrivs);
    }
+
+   /**
+    * AJAX: sync Merge Requests from API server.
+    *
+    * @param  int  $repoID
+    * @return void
+    */
+   public function ajaxSyncMRs(int $repoID)
+   {
+        $repo   = $this->loadModel('repo')->getByID($repoID);
+        $rawMRs = $this->loadModel(strtolower($repo->SCM))->apiGetMergeRequests($repo->gitService, $repo->serviceProject);
+        if(empty($rawMRs)) $this->sendSuccess();
+
+        $MRs = $this->dao->select('`id`,`sourceProject`,`sourceBranch`,`targetProject`,`targetBranch`,`mriid`')->from(TABLE_MR)->where('repoID')->eq($repoID)->fetchAll();
+
+        $needSyncMRs = $rawMRs;
+        foreach($rawMRs as $index => $rawMR)
+        {
+            if($rawMR->state == 'merged' || $rawMR->source_project_id != $rawMR->target_project_id)
+            {
+                unset($needSyncMRs[$index]);
+                continue;
+            }
+
+            foreach($MRs as $MR)
+            {
+                if($MR->mriid == $rawMR->iid
+                && $MR->sourceProject == $rawMR->source_project_id && $MR->sourceBranch  == $rawMR->source_branch
+                && $MR->targetProject == $rawMR->target_project_id && $MR->targetBranch  == $rawMR->target_branch)
+                {
+                    unset($needSyncMRs[$index]);
+                }
+            }
+        }
+
+        foreach($needSyncMRs as $needSyncMR)
+        {
+            $MR = new stdclass();
+            $MR->hostID        = $repo->serviceHost;
+            $MR->mriid         = $needSyncMR->iid;
+            $MR->sourceProject = $needSyncMR->source_project_id;
+            $MR->sourceBranch  = $needSyncMR->source_branch;
+            $MR->targetProject = $needSyncMR->target_project_id;
+            $MR->targetBranch  = $needSyncMR->target_branch;
+            $MR->title         = $needSyncMR->title;
+            $MR->repoID        = $repoID;
+            $MR->createdBy     = $this->app->user->account;
+            $MR->createdDate   = helper::now();
+            $MR->assignee      = $MR->createdBy;
+            $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
+                ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
+                ->exec();
+            if(!dao::isError())
+            {
+                $mrID = $this->dao->lastInsertID();
+                $this->loadModel('action')->create('mr', $mrID, 'imported');
+            }
+        }
+
+        $this->sendSuccess();
+   }
 }
