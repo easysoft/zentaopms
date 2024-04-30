@@ -31,7 +31,7 @@ function resetBlocks(dashboard, data, block)
     {
         if(!result) return;
         const url = zui.formatString(data.url, block);
-        $.ajaxSubmit({url: url, method: 'GET', onSuccess: () => loadComponent('#dashboard')});
+        $.ajaxSubmit({url: url, load: false, method: 'GET', onSuccess: () => loadComponent('#dashboard')});
     });
 }
 

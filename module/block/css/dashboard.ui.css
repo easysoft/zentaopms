@@ -25,6 +25,8 @@ body {padding-bottom: 20px;}
 #dashboard .list-block .panel-body {padding: 0; overflow: hidden;}
 
 #dashboard .dtable.shadow {box-shadow: unset;}
+#dashboard .dashboard-block-header {padding-left: 16px;}
+#dashboard .has-content .dashboard-block-title {width: 0; overflow: hidden; opacity: 0; height: 1em;}
 
 #upgradeModal .modal-body {padding: 0;}
 #upgradeModal .modal-dialog, #upgradeModal .modal-content {max-height: 100vh;}

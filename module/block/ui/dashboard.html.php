@@ -15,7 +15,6 @@ foreach($blocks as $block)
 {
     $block->color = isset($block->params->color) ? $block->params->color : null;
     $block->fetch = $block->blockLink;
-    unset($block->title);
 }
 
 $blocks = json_decode(json_encode($blocks), true);
@@ -36,6 +35,7 @@ dashboard
     set::onlyLoadVisible(false),
     set::blocks(array_values($blocks)),
     set::blockMenu(array('items' => $blockMenuItems)),
+    set::emptyBlockContent(array('html' => '<div class="panel rounded bg-canvas panel-block shadow"><div class="panel-heading border-b h-12"></div></div>')),
     set::onClickMenu(jsRaw('handleClickBlockMenu')),
     set::onLayoutChange(jsRaw('handleLayoutChange'))
 );
