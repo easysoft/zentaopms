@@ -1235,6 +1235,10 @@ class execution extends control
             if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->lang->execution->common = $this->lang->execution->stage;
             if($project->model == 'ipd') $this->config->execution->list->customBatchEditFields = 'days,team,desc,PO,QD,PM,RD';
         }
+        else
+        {
+            $this->config->excludeDropmenuList[] = 'execution-batchedit';
+        }
 
         if($this->post->name)
         {
