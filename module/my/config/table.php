@@ -240,6 +240,8 @@ $config->my->task->dtable->fieldList['name']['type']         = 'title';
 $config->my->task->dtable->fieldList['name']['nestedToggle'] = true;
 $config->my->task->dtable->fieldList['name']['link']         = array('url' => array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}'), 'data-app' => 'execution');
 $config->my->task->dtable->fieldList['name']['fixed']        = 'left';
+$config->my->task->dtable->fieldList['name']['data-toggle']  = 'modal';
+$config->my->task->dtable->fieldList['name']['data-size']    = 'lg';
 $config->my->task->dtable->fieldList['name']['sortType']     = true;
 
 $config->my->task->dtable->fieldList['pri']['name']     = 'pri';
