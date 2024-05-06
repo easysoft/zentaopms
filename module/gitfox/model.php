@@ -197,9 +197,9 @@ class gitfoxModel extends model
      *
      * @param  mixed $gitfoxID
      * @param  mixed $repoID
-     * @return object
+     * @return object|array|null
      */
-    public function apiGetMergeRequests(int $gitfoxID, int $repoID): object|null
+    public function apiGetMergeRequests(int $gitfoxID, int $repoID): object|array|null
     {
         $apiRoot  = $this->getApiRoot($gitfoxID, false);
         $apiPath  = "/repos/{$repoID}/pullreq";
