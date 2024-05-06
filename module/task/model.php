@@ -2173,8 +2173,10 @@ class taskModel extends model
             }
         }
 
+        $executionInfo = zget($task, 'executionInfo', array());
+
         /* 根据状态判断是否可以点击。 Check clickable by status. */
-        if($action == 'batchcreate')        return (empty($task->team) || empty($task->children)) && !empty($task->executionInfo->type) && $task->executionInfo->type != 'kanban';
+        if($action == 'batchcreate')        return (empty($task->team) || empty($task->children)) && zget($executionInfo, 'type') != 'kanban';
         if($action == 'start')              return $task->status == 'wait';
         if($action == 'restart')            return $task->status == 'pause';
         if($action == 'pause')              return $task->status == 'doing';
