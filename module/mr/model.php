@@ -173,6 +173,8 @@ class mrModel extends model
 
             $project->full_name = $project->path;
             $projectPairs[$hostID][$project->id] = $project;
+
+            $project->isDeveloper = true;
         }
 
         return $projectPairs;
