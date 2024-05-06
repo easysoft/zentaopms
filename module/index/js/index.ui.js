@@ -443,7 +443,7 @@ function getAppCode(urlOrModuleName, defaultCode)
     if(moduleName === 'ai')
     {
         /* Match admin ai pages. */
-        if(['adminindex', 'prompts', 'promptview', 'conversations', 'models', 'modelcreate', 'modelview', 'modeledit', 'editmodel', 'promptassignrole', 'promptselectdatasource', 'promptsetpurpose', 'promptsettargetform', 'promptfinalize', 'promptedit', 'miniprograms', 'createminiprogram', 'editminiprogram', 'configuredminiprogram', 'editminiprogramcategory', 'miniprogramview'].includes(methodLowerCase)) return 'admin';
+        if(['adminindex', 'prompts', 'promptview', 'conversations', 'models', 'modelcreate', 'modelview', 'modeledit', 'editmodel', 'promptassignrole', 'promptselectdatasource', 'promptsetpurpose', 'promptsettargetform', 'promptfinalize', 'promptedit', 'miniprograms', 'createminiprogram', 'editminiprogram', 'configuredminiprogram', 'editminiprogramcategory', 'miniprogramview', 'assistants', 'assistantcreate', 'assistantview', 'assistantedit'].includes(methodLowerCase)) return 'admin';
     }
 
     code = navGroup[moduleName] || moduleName || urlOrModuleName;

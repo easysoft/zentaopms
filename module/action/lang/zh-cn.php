@@ -524,6 +524,7 @@ $lang->action->label->communicate             = '沟通了';
 $lang->action->label->changedprogram          = '调整了项目集';
 $lang->action->label->published               = '发布了';
 $lang->action->label->unpublished             = '下架了';
+$lang->action->label->aiassistant             = 'AI 助手';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

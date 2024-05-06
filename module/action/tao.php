@@ -779,6 +779,10 @@ class actionTao extends actionModel
                 $action->objectName = reset($pivotNames);
             }
         }
+        elseif($action->objectType == 'aiassistant')
+        {
+            $action->objectName = $this->dao->select('name')->from(TABLE_AI_ASSISTANT)->where('id')->eq($action->objectID)->fetch('name');
+        }
         if(empty($action->objectName) && (substr($objectType, 0, 6) == 'gitlab' || substr($objectType, 0, 6) == 'gitfox' || substr($objectType, 0, 5) == 'gitea' || substr($objectType, 0, 4) == 'gogs' || substr($objectType, 0, 2) == 'mr')) $action->objectName = $action->extra;
     }
 

@@ -67,6 +67,13 @@ $lang->ai->deleteMiniProgram       = '删除AI小程序';
 $lang->ai->exportMiniProgram       = '导出AI小程序';
 $lang->ai->importMiniProgram       = '导入AI小程序';
 $lang->ai->editMiniProgramCategory = '维护分组';
+$lang->ai->assistants              = '浏览AI助手';
+$lang->ai->assistantView           = '查看AI助手详情';
+$lang->ai->assistantCreate         = '创建AI助手';
+$lang->ai->assistantEdit           = '编辑AI助手';
+$lang->ai->assistantPublish        = '发布AI助手';
+$lang->ai->assistantWithdraw       = '停用AI助手';
+$lang->ai->assistantDelete         = '删除AI助手';
 
 $lang->ai->store                  = '商店';
 $lang->ai->export                 = '导出';
@@ -560,7 +567,7 @@ $lang->ai->models->concealTip     = '完整信息在编辑时可见';
 $lang->ai->models->upgradeBiz     = '更多AI功能，尽在<a target="_blank" href="https://www.zentao.net/page/enterprise.html" class="text-blue">企业版</a>！';
 $lang->ai->models->noModelError   = '暂无可用的语言模型，请联系管理员配置。';
 $lang->ai->models->noModels       = '暂时没有语言模型，添加模型并配置相关参数后可以使用 AI 相关功能。';
-$lang->ai->models->confirmDelete  = '您确认要删除该语言模型吗？';
+$lang->ai->models->confirmDelete  = '删除模型后，关联的AI提词、小程序及AI会话将会无法使用，是否确认删除？';
 $lang->ai->models->confirmDisable = '您确认要禁用该语言模型吗？';
 $lang->ai->models->default        = '默认';
 $lang->ai->models->defaultTip     = '默认语言模型（第一个可用的语言模型）将会用于运行未指定语言模型的提词、小程序，也将会用于聊天。';
@@ -966,3 +973,38 @@ $lang->ai->engineeredPrompts->askForFunctionCalling = array((object)array('role'
 
 $lang->ai->aiResponseException = array();
 $lang->ai->aiResponseException['notFunctionCalling'] = 'AI 提词执行返回值结构不正确，请重试（可能可以通过优化提词来解决）';
+
+$lang->ai->assistant = new stdclass();
+$lang->ai->assistant->view                     = 'AI 助手详情';
+$lang->ai->assistant->title                    = 'AI 助手';
+$lang->ai->assistant->create                   = '添加助手';
+$lang->ai->assistant->details                  = '助手详情';
+$lang->ai->assistant->edit                     = '编辑助手';
+$lang->ai->assistant->name                     = '助手名称';
+$lang->ai->assistant->refModel                 = '引用语言模型';
+$lang->ai->assistant->createdDate              = '添加时间';
+$lang->ai->assistant->publishedDate            = '发布时间';
+$lang->ai->assistant->desc                     = '简介';
+$lang->ai->assistant->descPlaceholder          = '请简述此 AI 助手的功能及可以给使用者带来的体验。';
+$lang->ai->assistant->systemMessage            = '系统内置消息';
+$lang->ai->assistant->systemMessagePlaceholder = '您可以赋予此 AI 对话“人设”，例如，“你是一个周报小助手，会根据输入的内容生成格式化的周报”。';
+$lang->ai->assistant->greetings                = '问候语';
+$lang->ai->assistant->greetingsPlaceholder     = '您可以设置此AI对话的打招呼文案，例如，“哈喽，我是你的周报小助手，还在为写周报困扰吗，试试将一周的工作发送给我试试？”';
+$lang->ai->assistant->publish                  = '发布';
+$lang->ai->assistant->withdraw                 = '停用';
+$lang->ai->assistant->confirmPublishTip        = '发布后将显示在禅道右下角 AI 对话和客户端对话中，是否确认发布？';
+$lang->ai->assistant->confirmWithdrawTip       = '停用后前台用户将无法看到此 AI 助手，是否确认停用？';
+$lang->ai->assistant->duplicateTip             = '同一语言模型下的助手名称不可重复。';
+$lang->ai->assistant->confirmDeleteTip         = '确认删除此 AI 助手？';
+$lang->ai->assistant->switchAndClearContext    = '切换助手%s，上下文关系已清除';
+$lang->ai->assistant->noLlm                    = '没有可用的语言模型，请先创建一个。';
+$lang->ai->assistant->defaultAssistant         = '全能助手';
+
+$lang->ai->assistant->statusList = array();
+$lang->ai->assistant->statusList['0']   = '未发布';
+$lang->ai->assistant->statusList['off'] = '未发布';
+$lang->ai->assistant->statusList['1']   = '已发布';
+$lang->ai->assistant->statusList['on']  = '已发布';
+
+// for render action changes.
+$lang->aiassistant = $lang->ai->assistant;

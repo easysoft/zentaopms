@@ -56,6 +56,18 @@ class aiModel extends model
         {
             if($object->enabled == '0') return false;
         }
+        elseif (strtolower($action) === 'assistantpublish')
+        {
+            if($object->enabled == '1') return false;
+        }
+        elseif (strtolower($action) === 'assistantwithdraw')
+        {
+            if($object->enabled == '0') return false;
+        }
+        elseif (strtolower($action) === 'assistantedit')
+        {
+            if($object->enabled == '1') return false;
+        }
 
         return true;
     }
@@ -300,6 +312,14 @@ class aiModel extends model
             ->where('id')->eq($modelID)
             ->exec();
 
+        if(isset($model->name))
+        {
+            $this->dao->update(TABLE_IM_CHAT)
+                ->set('name')->eq($model->name)
+                ->where('gid')->like( "%&ai-$modelID")
+                ->exec();
+        }
+
         return !dao::isError();
     }
 
@@ -320,6 +340,11 @@ class aiModel extends model
             ->where('id')->eq($modelID)
             ->exec();
 
+        $this->dao->update(TABLE_IM_CHAT)
+            ->set('archiveDate')->eq(empty($enabled) ? helper::now() : null)
+            ->where('gid')->like( "%&ai-$modelID")
+            ->exec();
+
         return !dao::isError();
     }
 
@@ -337,6 +362,16 @@ class aiModel extends model
             ->set('editedDate')->eq(helper::now())
             ->set('editedBy')->eq($this->app->user->account)
             ->where('id')->eq($modelID)
+            ->exec();
+
+        $this->dao->update(TABLE_IM_CHAT)
+            ->set('dismissDate')->eq(helper::now())
+            ->where('gid')->like( "%&ai-$modelID")
+            ->exec();
+
+        $this->dao->update(TABLE_AI_ASSISTANT)
+            ->set('deleted')->eq('1')
+            ->where('modelId')->eq($modelID)
             ->exec();
 
         return !dao::isError();
@@ -2696,6 +2731,181 @@ class aiModel extends model
             ->where('id')->eq($id)
             ->exec();
         if(dao::isError()) return false;
+
+        return true;
+    }
+
+    /**
+     * Get assistants.
+     * @param  pager    $pager
+     * @param  string   $orderBy
+     * @access public
+     * @return array
+     */
+    public function getAssistants($pager = null, $orderBy = 'id_desc')
+    {
+        return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
+            ->where('deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    public function getAssistantsByModel($modelId, $enabled = true)
+    {
+        return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
+            ->where('modelId')->eq($modelId)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('enabled')->eq($enabled ? '1' : '0')
+            ->fetchAll();
+    }
+
+    /**
+     * Get assistant by id.
+     * @param  int    $assistantId
+     * @access public
+     * @return object
+     */
+    public function getAssistantById($assistantId)
+    {
+        return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
+            ->where('id')->eq($assistantId)
+            ->fetch();
+    }
+
+    /**
+     * create an assistant.
+     * @param  object    $assistant
+     * @access public
+     * @return bool
+     */
+    public function createAssistant($assistant, $publish = false)
+    {
+        $assistant->createdDate = helper::now();
+        if($publish)
+        {
+            $assistant->publishedDate = helper::now();
+            $assistant->enabled = '1';
+        }
+        else
+        {
+            $assistant->enabled = '0';
+        }
+        $this->dao
+            ->insert(TABLE_AI_ASSISTANT)
+            ->data($assistant)
+            ->exec();
+        if (dao::isError()) return false;
+        $assistantId = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('aiAssistant', $assistantId, 'created');
+        if($publish)
+        {
+            $this->loadModel('action')->create('aiAssistant', $assistantId, 'online');
+        }
+        return true;
+    }
+
+    /**
+     * update an assistant.
+     * @param  object $assistant
+     * @access public
+     * @return bool
+     */
+    public function updateAssistant($assistant)
+    {
+        $originAssistant = $this->getAssistantById($assistant->id);
+
+        $actionType = 'edited';
+
+        if(!empty($originAssistant))
+        {
+            $changedFields = array();
+            foreach($assistant as $key => $value)
+            {
+                if($value != $originAssistant->$key) $changedFields[] = $key;
+            }
+
+            if(count($changedFields) == 1 && current($changedFields) == 'status')
+            {
+                $actionType = $assistant->enabled == '0' ? 'offline' : 'online';
+            }
+            else
+            {
+                $changes = commonModel::createChanges($originAssistant, $assistant);
+            }
+        }
+
+        foreach ($assistant as $key => $value)
+        {
+            if(isset($originAssistant->$key)) $originAssistant->$key = $value;
+        }
+        if(empty($originAssistant->publishedDate))
+        {
+            unset($originAssistant->publishedDate);
+        }
+
+        $this->dao->update(TABLE_AI_ASSISTANT)
+            ->data($originAssistant)
+            ->where('id')->eq($assistant->id)
+            ->exec();
+        if(dao::isError()) return false;
+
+        if(!empty($changes))
+        {
+            $actionId = $this->loadModel('action')->create('aiAssistant', $assistant->id, $actionType);
+            $this->action->logHistory($actionId, $changes);
+        }
+
+        return true;
+    }
+
+    /**
+     * Toggle an assistant.
+     * @param  int    $assistantId
+     * @param  bool   $enabled
+     * @access public
+     * @return bool
+     */
+    public function toggleAssistant($assistantId, $enabled)
+    {
+        $this->dao->update(TABLE_AI_ASSISTANT)
+            ->set('enabled')->eq($enabled ? '1' : '0')
+            ->set('publishedDate')->eq($enabled ? helper::now() : null)
+            ->where('id')->eq($assistantId)
+            ->exec();
+        if(dao::isError()) return false;
+
+        $actionType = $enabled ? 'online' : 'offline';
+        $this->loadModel('action')->create('aiAssistant', $assistantId, $actionType);
+
+        return true;
+    }
+
+    /**
+     * Find assistants name is duplicate.
+     * @param  string $AssistantName
+     * @param  int    $modelId
+     * @access public
+     * @return object
+     */
+    public function checkAssistantDuplicate($AssistantName, $modelId)
+    {
+        return $this->dao->select('*')->from(TABLE_AI_ASSISTANT)
+            ->where('name')->eq($AssistantName)
+            ->andWhere('modelId')->eq($modelId)
+            ->andWhere('deleted')->eq('0')
+            ->fetch();
+    }
+
+    public function deleteAssistant($assistantId)
+    {
+        $this->dao->update(TABLE_AI_ASSISTANT)
+            ->set('deleted')->eq('1')
+            ->where('id')->eq($assistantId)
+            ->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('aiAssistant', $assistantId, 'deleted');
 
         return true;
     }

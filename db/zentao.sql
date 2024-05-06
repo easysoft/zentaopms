@@ -16098,6 +16098,22 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramstar` (
 
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
 
+-- DROP TABLE IF EXISTS `zt_ai_assistant`;
+CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `modelId` mediumint(8) unsigned NOT NULL,
+  `desc` text NOT NULL,
+  `systemMessage` text NOT NULL,
+  `greetings` text NOT NULL,
+  `icon` varchar(30) DEFAULT 'coding-1' NOT NULL,
+  `enabled` enum('0', '1') NOT NULL DEFAULT '1',
+  `createdDate` datetime NOT NULL,
+  `publishedDate` datetime DEFAULT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_market`;
 CREATE TABLE IF NOT EXISTS `zt_market` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -16674,3 +16690,4 @@ UPDATE `zt_pivot` SET `editedBy` = 'system' where `editedBy` = 'admin';
 
 INSERT INTO `zt_config` ( `vision`, `owner`, `module`, `section`, `key`, `value` ) VALUES ('', 'system', 'common', '', 'closedFeatures', 'otherOA');
 INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'installedDate', CURDATE());
+

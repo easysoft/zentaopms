@@ -212,8 +212,9 @@ $lang->admin->productFeature['max'][] = 'Opportunity/Risk/Issues Management';
 
 $lang->admin->ai = new stdclass();
 $lang->admin->ai->model        = 'Language Models';
-$lang->admin->ai->conversation = 'Conversations';
-$lang->admin->ai->miniPrograms = 'Mini Programs';
-$lang->admin->ai->prompt       = 'Prompts';
+$lang->admin->ai->conversation = 'AI Conversations';
+$lang->admin->ai->miniPrograms = 'AI Mini Programs';
+$lang->admin->ai->prompt       = 'AI Prompts';
+$lang->admin->ai->assistant    = 'AI Assistant';
 
 include dirname(__FILE__) . '/menu.php';
