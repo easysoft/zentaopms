@@ -1210,7 +1210,7 @@ class task extends control
      */
     public function ajaxGetTestStories(int $executionID, int $taskID = 0)
     {
-        $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'ignoreID', 'active');
+        $stories         = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'ignoreID', 'active', '', false);
         $testStoryIdList = $this->story->getTestStories(array_keys($stories), $executionID);
         $testStories     = array();
         foreach($stories as $testStoryID => $storyTitle)
@@ -1242,7 +1242,7 @@ class task extends control
      */
     public function ajaxGetStories(int $executionID, int $moduleID, string $zeroTaskStory = 'false')
     {
-        $stories       = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short', 'active');
+        $stories       = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short', 'active', '', false);
         $taskCountList = $this->task->getStoryTaskCounts(array_keys($stories), $executionID);
 
         $items = array();

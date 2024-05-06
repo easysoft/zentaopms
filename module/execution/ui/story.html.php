@@ -399,7 +399,7 @@ $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyC
 foreach($stories as $story)
 {
     $story->moduleID = $story->module;
-    $data[] = $this->story->formatStoryForList($story, $options, $storyType);
+    $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
 }
 
 jsVar('cases', $storyCases);
