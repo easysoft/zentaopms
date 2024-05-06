@@ -3658,16 +3658,23 @@ class storyModel extends model
             $executionID = empty($execution) ? 0 : $execution->id;
             if(!helper::isAjaxRequest('modal') && $this->config->vision != 'lite')
             {
-                $mainMenu[] = commonModel::buildActionItem($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'split', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
+                $maxGradeGroup = $this->getMaxGradeGroup();
+                $story->hasOtherTypeChild = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->id)->andWhere('type')->ne($story->type)->andWhere('deleted')->eq('0')->fetch('id');
+                $story->hasSameTypeChild  = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->id)->andWhere('type')->eq($story->type)->andWhere('deleted')->eq('0')->fetch('id');
 
-                $disabled = $story->status != 'active' || !$this->checkCanSplit($story);
-                if($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate'))
+                $canBatchCreateStory = common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate') && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
+
+                if($canBatchCreateStory)
                 {
-                    if(!$disabled) $mainMenu[] = commonModel::buildActionItem('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'tree', 'text' => $this->lang->story->split, 'data-app' => $this->app->tab));
+                    $mainMenu[] = commonModel::buildActionItem($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'tree', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
                 }
-                elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate'))
+                elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
                 {
-                    if(!$disabled) $mainMenu[] = commonModel::buildActionItem('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'tree', 'text' => $this->lang->story->split, 'data-app' => $this->app->tab));
+                    $mainMenu[] = commonModel::buildActionItem('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'tree', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
+                }
+                elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
+                {
+                    $mainMenu[] = commonModel::buildActionItem('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params&executionID=$executionID&plan=0", $story, array('icon' => 'tree', 'text' => $this->lang->story->subdivide, 'data-app' => $this->app->tab));
                 }
             }
 

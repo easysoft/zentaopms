@@ -194,7 +194,7 @@ if(!empty($story->children))
     foreach(array_keys($cols) as $fieldName) $cols[$fieldName]['sortType'] = false;
 
     $options = array('users' => $users);
-    foreach($story->children as $child) $child = $this->story->formatStoryForList($child, $options, $child->type, $maxGradeGroup[$child->type]);
+    foreach($story->children as $child) $child = $this->story->formatStoryForList($child, $options, $child->type, $maxGradeGroup);
     if(!common::hasPriv($child->type, 'view')) unset($cols['title']['link']);
 }
 

@@ -320,6 +320,12 @@ class storyTao extends storyModel
                  ->andWhere('type')->eq($type)
                  ->andWhere('deleted')->eq(0)
                  ->fetchPairs();
+
+            $otherTypeChildren = $this->dao->select('parent, id')->from(TABLE_STORY)
+                 ->where('parent')->in(array_keys($stories))
+                 ->andWhere('type')->ne($type)
+                 ->andWhere('deleted')->eq(0)
+                 ->fetchPairs();
         }
 
         foreach($stories as $story)
@@ -330,8 +336,9 @@ class storyTao extends storyModel
                 if($parents[$story->parent]->version > $story->parentVersion && $story->parentVersion > 0 && $parents[$story->parent]->status == 'active') $story->parentChanged = true;
             }
 
-            /* Judge parent story if has same type child. */
-            if($story->type != 'story' && $story->isParent == '1' && !empty($sameTypeChildren[$story->id])) $story->cannotSplit = true;
+            /* Judge parent story if has same type child or other type child. */
+            if($story->type != 'story' && $story->isParent == '1' && !empty($sameTypeChildren[$story->id]))  $story->hasSameTypeChild  = true;
+            if($story->type != 'story' && $story->isParent == '1' && !empty($otherTypeChildren[$story->id])) $story->hasOtherTypeChild = true;
 
             /* Merge plan title. */
             $story->planTitle = '';
@@ -1773,11 +1780,11 @@ class storyTao extends storyModel
      * @param  string    $params
      * @param  string    $storyType story|requirement
      * @param  object    $execution
-     * @param  int       $maxGrade
+     * @param  array     $maxGradeGroup
      * @access protected
      * @return array
      */
-    protected function buildBrowseActionBtnList(object $story, string $params = '', string $storyType = 'story', object $execution = null, int $maxGrade = 0): array
+    protected function buildBrowseActionBtnList(object $story, string $params = '', string $storyType = 'story', object $execution = null, array $maxGradeGroup = array()): array
     {
         global $lang;
 
@@ -1888,36 +1895,40 @@ class storyTao extends storyModel
 
         /* Batch create button. */
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
-        $canBatchCreateStory = $this->isClickable($story, 'batchcreate') && $story->grade < $maxGrade;
+        $canBatchCreateStory = common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate') && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
+
         if($this->app->rawModule != 'projectstory' || $this->config->vision == 'lite' || $shadow)
         {
             if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
 
-            $title = $story->type == 'story' ? $this->lang->story->subdivideSR : $this->lang->story->subdivide;
-            if(!$canBatchCreateStory && $story->status != 'closed')
+            /*
+             * 需求的拆分按钮分为两种情况：
+             *   1.拆分成相同类型的子需求。
+             *   2.拆分成其他类型的子需求。
+             * 这两种情况是互斥的，拆分了一种类型的需求后，另一种类型的需求就不能再拆分了。
+             * 默认拆分相同类型的需求，如果不能拆分相同类型的需求，则拆分其他类型的需求。
+             */
+            if($canBatchCreateStory)
             {
+                $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'tree');
+            }
+            elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
+            {
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'tree');
+            }
+            elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
+            {
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'tree');
+            }
+            elseif(!$canBatchCreateStory && $story->status != 'closed' && common::hasPriv($story->type, 'batchcreate'))
+            {
+                $title = $this->lang->story->split;
                 if($story->status != 'active') $title = sprintf($this->lang->story->subDivideTip['notActive'], $story->type == 'story' ? $this->lang->SRCommon : $this->lang->URCommon);
                 if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->story->stageList, $story->stage));
                 if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
                 if($story->status == 'active' and !empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
-                if($story->grade >= $maxGrade) $title = $this->lang->story->errorMaxGradeSubdivide;
-            }
-
-            $actions[] = array('name' => 'batchCreate', 'url' => $canBatchCreateStory ? $batchCreateStoryLink : null, 'hint' => $title, 'disabled' => !$canBatchCreateStory);
-
-            /* Split requirement and story btn. */
-            $disabled = $story->status != 'active' || !empty($story->cannotSplit);
-            if($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate'))
-            {
-                $title = $this->lang->story->split . $lang->URCommon;
-                if(!empty($story->cannotSplit)) $title = $this->lang->story->errorCannotSplit;
-                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $title, 'disabled' => $disabled, 'icon' => 'tree');
-            }
-            elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate'))
-            {
-                $title = $this->lang->story->split . $lang->SRCommon;
-                if(!empty($story->cannotSplit)) $title = $this->lang->story->errorCannotSplit;
-                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $title, 'disabled' => $story->status != 'active', 'icon' => 'tree');
+                if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
+                $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'tree');
             }
         }
 

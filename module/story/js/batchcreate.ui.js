@@ -1,3 +1,5 @@
+$('input[name=typeSwitcher]').closest('.panel-actions').addClass('row-reverse justify-between w-11/12');
+
 window.setModuleAndPlanByBranch = function(e)
 {
     const $branch  = $(e.target);
@@ -53,4 +55,12 @@ window.setGrade = function(e)
             $grade.$.setValue(data.default);
         })
     })
+}
+
+window.switchType = function(e)
+{
+    const type = e.target.value;
+    const link = $.createLink(type, 'batchCreate', `productID=${productID}&branchID=${branch}&module=0&storyID=${storyID}`);
+
+    loadPage(link);
 }
