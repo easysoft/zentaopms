@@ -192,6 +192,8 @@ class story extends control
                 $fields['grade']['options'] = $gradeOptions;
                 $fields['grade']['default'] = current($gradeOptions);
             }
+
+            $this->view->story      = $story;
             $this->view->storyTitle = isset($story->title) ? $story->title : '';
 
             /* Check can subdivide or not. */
@@ -201,20 +203,21 @@ class story extends control
             if($storyType != $story->type && !$this->story->checkCanSplit($story)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->errorCannotSplit)));
         }
 
-        $this->view->title        = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $showFields;
-        $this->view->product      = $product;
-        $this->view->branch       = $branch;
-        $this->view->productID    = $productID;
-        $this->view->storyID      = $storyID;
-        $this->view->moduleID     = $moduleID;
-        $this->view->executionID  = $executionID;
-        $this->view->type         = $storyType;
-        $this->view->fields       = $fields;
-        $this->view->stories      = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
-        $this->view->storyTitle   = isset($story->title) ? $story->title : '';
-        $this->view->forceReview  = $this->story->checkForceReview();
+        $this->view->title         = $product->name . $this->lang->colon . ($storyID ? $this->lang->story->subdivide : $this->lang->story->batchCreate);
+        $this->view->customFields  = $customFields;
+        $this->view->showFields    = $showFields;
+        $this->view->product       = $product;
+        $this->view->branch        = $branch;
+        $this->view->productID     = $productID;
+        $this->view->storyID       = $storyID;
+        $this->view->moduleID      = $moduleID;
+        $this->view->executionID   = $executionID;
+        $this->view->type          = $storyType;
+        $this->view->fields        = $fields;
+        $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
+        $this->view->stories       = $this->storyZen->getDataFromUploadImages($productID, $moduleID, $plan);
+        $this->view->storyTitle    = isset($story->title) ? $story->title : '';
+        $this->view->forceReview   = $this->story->checkForceReview();
 
         $this->display();
     }
