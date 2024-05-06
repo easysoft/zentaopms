@@ -280,7 +280,8 @@ $lang->metric->objectList['vulnerability'] = "Vulnerability";
 $lang->metric->objectList['codeAnalysis']  = "Code Analysis";
 if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
-    $lang->metric->objectList['feedback']    = "Feedback";
+    $lang->metric->objectList['feedback'] = "Feedback";
+    $lang->metric->objectList['ticket']   = "Ticket";
 }
 if(in_array($config->edition, array('max', 'ipd')))
 {

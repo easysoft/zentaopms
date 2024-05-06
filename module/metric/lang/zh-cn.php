@@ -281,6 +281,7 @@ $lang->metric->objectList['codeAnalysis']  = "代码分析";
 if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
     $lang->metric->objectList['feedback'] = "反馈";
+    $lang->metric->objectList['ticket']   = "工单";
 }
 if(in_array($config->edition, array('max', 'ipd')))
 {
