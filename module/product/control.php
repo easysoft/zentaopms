@@ -746,7 +746,7 @@ class product extends control
             /* 如果只导出选中产品，删除非选中产品。 */
             if($this->post->exportType == 'selected')
             {
-                $checkedItem = $this->post->checkedItem;
+                $checkedItem = $this->cookie->checkedItem;
                 foreach($productStats as $i => $product)
                 {
                     if(strpos(",$checkedItem,", ",{$product->id},") === false) unset($productStats[$i]);
