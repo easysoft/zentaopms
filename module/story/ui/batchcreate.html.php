@@ -76,7 +76,7 @@ $fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $cust
 };
 
 $storyTypeRadio = null;
-if($storyID > 0 && $story->type != 'story')
+if($storyID > 0 && $story->type != 'story' && $config->{$story->type}->gradeRule != 'stepwise')
 {
     $gradeRule   = $this->config->{$story->type}->gradeRule;
     $isLastGrade = $story->grade == $maxGradeGroup[$story->type];
