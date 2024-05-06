@@ -568,8 +568,8 @@ pipeline {
                   sh "make markdown-init"
                 }
                 stage("docker build") {
-                  sh 'make test-open'
                   sh 'make build'
+                  sh 'make test-open'
 
                   sh 'make test-biz'
                   sh 'make build-biz'
