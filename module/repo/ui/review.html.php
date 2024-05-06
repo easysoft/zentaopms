@@ -35,7 +35,7 @@ foreach($bugs as $bug)
     {
         $bug->v2   = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
         $revision  = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, (int)zget($historys, $bug->v2)) : $bug->v2;
-        $bug->link = $this->repo->createLink('view', "repoID=$repoID&objectID={$objectID}&entry={$fileEntry}&revision={$bug->v2}");
+        $bug->link = $this->repo->createLink('view', "repoID={$bug->repo}&objectID={$objectID}&entry={$fileEntry}&revision={$bug->v2}");
     }
     else
     {
@@ -43,12 +43,13 @@ foreach($bugs as $bug)
         $revision .= ' : ';
         $revision .= $repo->SCM != 'Subversion' ? substr($bug->v2, 0, 10) : $bug->v2;
         if($repo->SCM != 'Subversion') $revision .= ' (' . zget($historys, $bug->v1) . ' : ' . zget($historys, $bug->v2) . ')';
-        $bug->link = $this->repo->createLink('diff', "repoID=$repoID&objectID={$objectID}&entry={$fileEntry}&oldRevision={$bug->v1}&newRevision={$bug->v2}");
+        $bug->link = $this->repo->createLink('diff', "repoID={$bug->repo}&objectID={$objectID}&entry={$fileEntry}&oldRevision={$bug->v1}&newRevision={$bug->v2}");
     }
 
 }
 $bugs = initTableData($bugs, $config->repo->reviewDtable->fieldList);
 
+if($app->tab == 'project' || $app->tab == 'execution') $repoID = 0;
 \zin\featureBar
 (
     set::current($browseType),
