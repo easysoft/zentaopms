@@ -471,7 +471,10 @@ class blockZen extends block
                 $assignedGroup = reset($assignedGroup);
                 $count         = zget($assignedGroup, 'value', 0);
             }
-            $assignToMe[$field] = array('number' => $count, 'href' => common::hasPriv('my', 'work') && $this->config->vision != 'lite' ? helper::createLink('my', 'work', "mode=$field&type=$type") : '');
+            $assignToLink = '';
+            if(common::hasPriv('my', 'work')       && $this->config->vision != 'lite') $assignToLink = helper::createLink('my', 'work',       "mode=$field&type=$type");
+            if(common::hasPriv('my', 'contribute') && $this->config->vision == 'lite') $assignToLink = helper::createLink('my', 'contribute', "mode=$field&type=$type");
+            $assignToMe[$field] = array('number' => $count, 'href' => $assignToLink);
         }
 
         /* 生成待我审批的数据。 */
