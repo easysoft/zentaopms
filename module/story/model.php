@@ -2743,15 +2743,17 @@ class storyModel extends model
     {
         if($storyType == 'story')
         {
-            $lastGrade    = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->andWhere('status')->eq('enable')->orderBy('grade_desc')->limit(1)->fetch('grade');
-            $SRGradePairs = $this->getGradePairs('story');
-            $URGradePairs = $this->getGradePairs('requirement');
-            $requirements = $this->dao->select('id, parent, grade, title')->from(TABLE_STORY)
+            $maxGradeGroup = $this->getMaxGradeGroup();
+            $lastGrade     = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->andWhere('status')->eq('enable')->orderBy('grade_desc')->limit(1)->fetch('grade');
+            $SRGradePairs  = $this->getGradePairs('story');
+            $URGradePairs  = $this->getGradePairs('requirement');
+            $requirements  = $this->dao->select('id, parent, grade, title')->from(TABLE_STORY)
                 ->where('deleted')->eq('0')
                 ->andWhere('product')->eq($productID)
                 ->andWhere('type')->eq('requirement')
                 ->andWhere('status')->eq('active')
                 ->andWhere('grade')->in(array_keys($URGradePairs))
+                ->beginIF($this->config->requirement->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['requirement'])->fi()
                 ->fetchAll('id');
 
             $parents = array();
@@ -2800,15 +2802,18 @@ class storyModel extends model
      */
     public function getRequirementParents(int $productID, string|int $appendedStories = '', string $storyType = 'requirement', int $storyID = 0): array
     {
-        $lastGrade    = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->andWhere('status')->eq('enable')->orderBy('grade_desc')->limit(1)->fetch('grade');
-        $ERGradePairs = $this->getGradePairs('epic');
-        $URGradePairs = $this->getGradePairs('requirement');
+        $maxGradeGroup = $this->getMaxGradeGroup();
+        $lastGrade     = $this->dao->select('grade')->from(TABLE_STORYGRADE)->where('type')->eq($storyType)->andWhere('status')->eq('enable')->orderBy('grade_desc')->limit(1)->fetch('grade');
+        $ERGradePairs  = $this->getGradePairs('epic');
+        $URGradePairs  = $this->getGradePairs('requirement');
+
         $epics = $this->dao->select('id, parent, grade, title')->from(TABLE_STORY)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->andWhere('type')->eq('epic')
             ->andWhere('status')->eq('active')
             ->andWhere('grade')->in(array_keys($ERGradePairs))
+            ->beginIF($this->config->epic->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['epic'])->fi()
             ->fetchAll('id');
 
         $parents = array();
