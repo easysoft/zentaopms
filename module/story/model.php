@@ -4876,15 +4876,15 @@ class storyModel extends model
      * @param  string $type
      * @param  object $execution
      * @param  string $storyType story|requirement
-     * @param  int    $maxGrade
+     * @param  array  $maxGradeGroup
      * @access public
      * @return array
      */
-    public function buildActionButtonList(object $story, $type = 'browse', object|null $execution = null, $storyType = 'story', int $maxGrade = 0): array
+    public function buildActionButtonList(object $story, $type = 'browse', object|null $execution = null, $storyType = 'story', array $maxGradeGroup = array()): array
     {
         $params = "storyID=$story->id";
 
-        if($type == 'browse') return $this->storyTao->buildBrowseActionBtnList($story, $params, $storyType, $execution, $maxGrade);
+        if($type == 'browse') return $this->storyTao->buildBrowseActionBtnList($story, $params, $storyType, $execution, $maxGradeGroup);
         return array();
     }
 
@@ -4895,13 +4895,13 @@ class storyModel extends model
      * @param  object $story
      * @param  array  $options
      * @param  string $storyType sting|requirement
-     * @param  int    $maxGrade
+     * @param  array  $maxGradeGroup
      * @access public
      * @return object
      */
-    public function formatStoryForList(object $story, array $options = array(), string $storyType = 'story', int $maxGrade = 0): object
+    public function formatStoryForList(object $story, array $options = array(), string $storyType = 'story', array $maxGradeGroup = array()): object
     {
-        $story->actions  = $this->buildActionButtonList($story, 'browse', zget($options, 'execution', null), $storyType, $maxGrade);
+        $story->actions  = $this->buildActionButtonList($story, 'browse', zget($options, 'execution', null), $storyType, $maxGradeGroup);
         $story->estimate = $story->estimate . $this->config->hourUnit;
 
         $story->taskCount = zget(zget($options, 'storyTasks', array()), $story->id, 0);
@@ -5181,22 +5181,6 @@ class storyModel extends model
         }
 
         return $gradeOptions;
-    }
-
-    /**
-     * 根据需求类型获取最大的层级。
-     * Get max grade by story type.
-     *
-     * @param  string $storyType
-     * @access public
-     * @return int
-     */
-    public function getMaxGrade(string $storyType)
-    {
-        return $this->dao->select('max(grade) as maxGrade')->from(TABLE_STORYGRADE)
-            ->where('type')->eq($storyType)
-            ->andWhere('status')->eq('enable')
-            ->fetch('maxGrade');
     }
 
     /**
