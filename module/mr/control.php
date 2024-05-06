@@ -927,7 +927,7 @@ class mr extends control
    public function ajaxSyncMRs(int $repoID)
    {
         $repo   = $this->loadModel('repo')->getByID($repoID);
-        $rawMRs = $this->loadModel(strtolower($repo->SCM))->apiGetMergeRequests($repo->gitService, $repo->serviceProject);
+        $rawMRs = $this->loadModel(strtolower($repo->SCM))->apiGetMergeRequests($repo->gitService, (int)$repo->serviceProject);
         if(empty($rawMRs)) $this->sendSuccess();
 
         $MRs = $this->dao->select('`id`,`sourceProject`,`sourceBranch`,`targetProject`,`targetBranch`,`mriid`')->from(TABLE_MR)->where('repoID')->eq($repoID)->fetchAll();
