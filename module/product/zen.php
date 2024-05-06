@@ -1473,7 +1473,7 @@ class productZen extends product
         $this->view->showGrade       = count($gradeGroup[$storyType]) > 2;
         $this->view->gradeMenu       = $this->loadModel('story')->getGradeMenu($storyType, $project);
         $this->view->gradePairs      = $this->story->getGradePairs($storyType);
-        $this->view->maxGrade        = $this->story->getMaxGrade($storyType);
+        $this->view->maxGradeGroup   = $this->story->getMaxGradeGroup();
         $this->view->storyType       = $storyType;
         $this->view->browseType      = $browseType;
         $this->view->isProjectStory  = $isProjectStory;

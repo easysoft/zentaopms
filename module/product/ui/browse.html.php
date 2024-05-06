@@ -214,7 +214,7 @@ foreach($stories as $story)
 {
     $story->rawModule    = $story->module;
     $options['branches'] = zget($branchOptions, $story->product, array());
-    $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGrade);
+    $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
 }
 
 /* Generate toolbar of DataTable footer. */
