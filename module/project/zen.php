@@ -269,7 +269,7 @@ class projectZen extends project
         if($this->app->tab == 'product' && !empty($output['productID'])) $this->product->setMenu($output['productID']);
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
-        if($copyProjectID) $copyProject = $this->getCopyProject((int)$copyProjectID);
+        if($copyProjectID) $copyProject = isset($this->view->copyProject) ? $this->view->copyProject : $this->getCopyProject((int)$copyProjectID);
         $shadow = $copyProjectID && empty($copyProject->hasProduct) ? 1 : 0;
 
         if($model == 'kanban')
@@ -342,9 +342,11 @@ class projectZen extends project
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
         $this->view->branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
         $this->view->productPlans        = $productPlans;
-        $this->view->linkedProducts      = $linkedProducts;
-        $this->view->linkedBranches      = $linkedBranches;
         $this->view->groups              = $this->loadModel('group')->getPairs();
+
+        if(!isset($this->view->linkedProducts)) $this->view->linkedProducts = $linkedProducts;
+        if(!isset($this->view->linkedBranches)) $this->view->linkedBranches = $linkedBranches;
+
         $this->display();
     }
 
