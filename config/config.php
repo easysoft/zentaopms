@@ -169,7 +169,7 @@ $config->moreLinks     = array();
 
 /* 渠成平台设置。CNE Api settings. */
 $config->inQuickon    = strtolower((string)getenv('IN_QUICKON')) == 'true';
-$config->inContainer  = strtolower((string)getenv('IS_CONTAINER')) == 'true';
+$config->inContainer  = strtolower((string)getenv('IS_CONTAINER')) == 'true' || strtolower((string)getenv('IN_CONTAINER')) == 'true';
 $config->k8space      = 'quickon-system';
 $config->demoAccounts = '';  // 用于演示的账号列表，该账号安装的应用30钟后会自动删除。 In account list for demo, app instance of demo will be removed in 30 minutes.
 $config->demoAppLife  = 30; // Demo安装的应用实例存续时长(分钟)。The minutes life of instance which demo account installed.
@@ -209,7 +209,7 @@ if(file_exists($cacheConfig)) include $cacheConfig;
 if($config->inContainer || $config->inQuickon)
 {
     $webRoot = getenv('ZT_WEB_ROOT') ? trim(getenv('ZT_WEB_ROOT'), '/') : '';
-    $config->installed     = (bool)getenv('ZT_INSTALLED');
+    $config->installed     = strtolower((string)getenv('ZT_INSTALLED')) == 'true';
     $config->debug         = (int)getenv('ZT_DEBUG');
     $config->requestType   = getenv('ZT_REQUEST_TYPE');
     $config->timezone      = getenv('ZT_TIMEZONE');
