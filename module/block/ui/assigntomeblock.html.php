@@ -16,7 +16,6 @@ jsVar('yesterdayLabel', $lang->yesterday);
 
 $blockNavCode = 'nav-' . uniqid();
 
-$index = 0;
 $menus = array();
 $moreMenus = array();
 foreach($hasViewPriv as $type => $bool)
@@ -25,11 +24,12 @@ foreach($hasViewPriv as $type => $bool)
     if($type != 'todo' && empty($data)) unset($hasViewPriv[$type]);
 }
 
+$index = 1;
 $count = count($hasViewPriv);
 foreach($hasViewPriv as $type => $bool)
 {
     $selected = key($hasViewPriv);
-    if(($longBlock && $count > 9 && $index >= 8) || (!$longBlock && $count > 3 && $index >= 2))
+    if(($longBlock && $count > 5 && $index > 5) || (!$longBlock && $count > 1 && $index > 1))
     {
         $moreMenus[] = array('text' => $type == 'review' ? $lang->my->audit : zget($lang->block->availableBlocks, $type), 'data-toggle' => 'tab', 'href' => "#assigntome{$type}Tab{$blockNavCode}");
     }
@@ -50,7 +50,7 @@ foreach($hasViewPriv as $type => $bool)
     $index ++;
 }
 
-if(($longBlock && $count > 9) || (!$longBlock && $count > 4))
+if(($longBlock && $count > 5) || (!$longBlock && $count > 1))
 {
     $menus[]  = li
     (
