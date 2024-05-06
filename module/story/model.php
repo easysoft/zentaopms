@@ -5226,7 +5226,7 @@ class storyModel extends model
     {
         $grades = $this->getGradePairs($storyType);
 
-        if($this->config->edition == 'open') return false;
+        if($this->config->edition != 'ipd') return false;
 
         return count($grades) > 1;
     }
