@@ -2892,8 +2892,9 @@ class executionModel extends model
     {
         $stories   = array();
         $plans     = $this->dao->select('product, plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchPairs('product', 'plan');
-        $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-        $this->session->set('project', $projectID);
+        $execution = $this->fetchByID($executionID);
+        $project   = $this->fetchByID($execution->project);
+        $this->session->set('project', $project->id);
 
         $this->loadModel('story');
         $executionProducts = $this->loadModel('project')->getBranchesByProject($executionID);
@@ -2911,12 +2912,14 @@ class executionModel extends model
                 foreach($planStories as $id => $story)
                 {
                     if($story->status != 'active' || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
+                    if(strpos($project->storyType, $story->type) === false) unset($planStories[$id]);
+                    if(!in_array($execution->attribute, array('request', 'design')) && $story->type != 'story') unset($planStories[$id]);
                 }
                 $stories = array_merge($stories, array_keys($planStories));
             }
         }
 
-        $this->linkStory($projectID, $stories);
+        $this->linkStory($project->id, $stories);
         $this->linkStory($executionID, $stories);
 
         return true;

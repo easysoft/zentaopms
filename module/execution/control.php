@@ -1000,7 +1000,7 @@ class execution extends control
         if(!empty($_POST))
         {
             /* Filter empty plans. */
-            if(isset($_POST['attribute']) and in_array($_POST['attribute'], array('request', 'design', 'review'))) unset($_POST['plans']);
+            if(isset($_POST['attribute']) and $_POST['attribute'] == 'review') unset($_POST['plans']);
             if(!empty($_POST['plans']))
             {
                 foreach($_POST['plans'] as $key => $planItem) $_POST['plans'][$key] = array_filter($_POST['plans'][$key]);
