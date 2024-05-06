@@ -257,6 +257,7 @@ class formPanel extends panel
                 set($this->props->pick(array_keys($props))),
                 $this->children(),
                 $this->prop('showExtra') ? $this->buildExtraBatchItem() : null,
+                set::hiddenFields($hiddenFields),
                 jsVar('formBatch', true),
                 $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
             );

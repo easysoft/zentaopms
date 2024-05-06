@@ -17,7 +17,7 @@
 <?php js::set('requiredFields', $config->bug->edit->requiredFields);?>
 <div id='mainContent' class='main-content fade'>
   <div class='main-header'>
-    <h2><?php echo $lang->bug->common . $lang->colon . $lang->bug->batchEdit;?></h2>
+    <h2><?php echo $lang->bug->common . $lang->hyphen . $lang->bug->batchEdit;?></h2>
     <div class="pull-right btn-toolbar">
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchEditFields')?>
       <?php include '../../common/view/customfield.html.php';?>

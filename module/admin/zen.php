@@ -277,17 +277,17 @@ class adminZen extends admin
             if($this->config->edition == 'open')
             {
                 $data->plugins = array(
-                    $this->config->admin->plugins[27],
-                    $this->config->admin->plugins[26],
-                    $this->config->admin->plugins[30]
+                    zget($this->config->admin->plugins, '27', ''),
+                    zget($this->config->admin->plugins, '26', ''),
+                    zget($this->config->admin->plugins, '30', '')
                 );
             }
             else
             {
                 $data->plugins = array(
-                    $this->config->admin->plugins[198],
-                    $this->config->admin->plugins[194],
-                    $this->config->admin->plugins[203]
+                    zget($this->config->admin->plugins, '198', ''),
+                    zget($this->config->admin->plugins, '194', ''),
+                    zget($this->config->admin->plugins, '203', '')
                 );
             }
         }

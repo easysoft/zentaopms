@@ -1247,8 +1247,8 @@ class executionModel extends model
         }
         if(dao::isError()) return;
 
-        if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
-        if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
+        if($begin < ($project->realBegan ? $project->realBegan : $project->begin)) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
+        if($end > ($project->realEnd ? $project->realEnd : $project->end))         dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
     }
 
     /**
@@ -2132,6 +2132,9 @@ class executionModel extends model
 
         $execution = $this->loadModel('file')->replaceImgURL($execution, 'desc');
         if($setImgSize) $execution->desc = $this->file->setImgSize($execution->desc);
+
+        $child = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->andWhere('deleted')->eq(0)->fetch('id');
+        $execution->isParent = !empty($child) ? 1 : 0;
 
         return $execution;
     }
@@ -3831,7 +3834,7 @@ class executionModel extends model
 
         $action = strtolower($action);
         if($action == 'start')    return $execution->status == 'wait';
-        if($action == 'close')    return $execution->status != 'closed';
+        if($action == 'close')    return $execution->status != 'closed' && $execution->type == 'stage' && !$execution->isParent;
         if($action == 'suspend')  return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' || $execution->status == 'closed';
@@ -4731,6 +4734,7 @@ class executionModel extends model
                         if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
                         if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
+                        if($actionName == 'createChildStage' && $action['disabled']) $action['hint'] = $execution->type == 'stage' ? $this->lang->programplan->error->createdTask : $this->lang->programplan->error->notStage;
                         if(!$action['disabled']) break;
                         if($actionName == 'close' && $execution->status != 'closed') break;
                     }
@@ -5104,7 +5108,7 @@ class executionModel extends model
 
         if($this->app->viewType == 'mhtml' and $executionID)
         {
-            $output  = html::a(helper::createLink('execution', 'index'), $this->lang->executionCommon) . $this->lang->colon;
+            $output  = html::a(helper::createLink('execution', 'index'), $this->lang->executionCommon) . $this->lang->hyphen;
             $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('execution', '$executionID', '$currentModule', '$currentMethod', '')\">{$currentExecutionName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             return $output;
         }

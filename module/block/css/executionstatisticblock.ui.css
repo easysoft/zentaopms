@@ -1,1 +1,1 @@
-.filter-project-pricker > .picker-select {border-radius: var(--radius-full);}
+.filter-project-pricker > .picker-select {border-radius: var(--radius-full); cursor: default;}

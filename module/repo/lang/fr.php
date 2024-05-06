@@ -69,7 +69,7 @@ $lang->repo->showHidden         = 'Show hidden repositories';
 $lang->repo->gitlabList         = 'Gitlab Repo';
 $lang->repo->batchCreate        = 'Batch create repo';
 
-$lang->repo->createRepoAction = 'Create repository';
+$lang->repo->createRepoAction = 'Create origin repository';
 
 $lang->repo->submit     = 'Soumettre';
 $lang->repo->cancel     = 'Annuler';

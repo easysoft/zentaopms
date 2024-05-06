@@ -155,7 +155,29 @@ class programplan extends control
     {
         if($_POST)
         {
-            $plan = $this->programplanZen->buildPlanForEdit($planID, $projectID);
+            $this->loadModel('execution');
+            if(!empty($this->config->setCode) && strpos(",{$this->config->execution->edit->requiredFields},", ',code,') !== false) $this->config->programplan->form->edit['code']['required'] = true;
+
+            $plan = form::data()->get();
+            if(empty($plan->realBegan)) $plan->realBegan = null;
+            if(empty($plan->realEnd))   $plan->realEnd   = null;
+
+            /* 设置计划和真实起始日期间隔时间。 */
+            /* Set planDuration and realDuration. */
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $plan->planDuration = $this->programplan->getDuration($plan->begin, $plan->end);
+                $plan->realDuration = $this->programplan->getDuration($plan->realBegan, $plan->realEnd);
+            }
+
+            if($plan->parent)
+            {
+                $parentStage = $this->programplan->getByID($plan->parent);
+                $plan->acl   = $parentStage->acl;
+                if($parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;
+            }
+
+            $this->programplanZen->prepareEditPlan($planID, $projectID, $plan, isset($parentStage) ? $parentStage : null);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = $this->programplan->update($planID, $projectID, $plan);

@@ -4,9 +4,9 @@ $(function()
     loadResult();
 });
 
-$('#runCaseModal').closest('.modal').off('hide.zui.modal').on('hide.zui.modal', function()
+$('#runCaseModal').closest('.modal').off('hide.zui.modal').on('hide.zui.modal', function(e)
 {
-    loadCurrentPage();
+    if($(e.target).attr('id').indexOf('fileModal') == -1) loadCurrentPage();
 });
 
 /**

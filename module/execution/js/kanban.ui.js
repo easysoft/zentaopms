@@ -130,6 +130,8 @@ window.buildColCardActions = function(col)
 window.getItem = function(info)
 {
     const avatar = renderAvatar(info.item);
+
+    info.item.titleAttrs = {};
     if(info.item.cardType == 'story')
     {
         info.item.icon = 'product';
@@ -172,7 +174,7 @@ window.getItem = function(info)
         if(priv.canViewTask)
         {
             info.item.titleUrl   = $.createLink('task', 'view', `id=${info.item.id}`);
-            info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.name};
+            info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
         }
 
         const content = `
@@ -193,7 +195,7 @@ window.getItem = function(info)
         info.item.title = info.item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>");
         info.item.title = {html: info.item.title};
     }
-    info.item.titleAttrs = {'class': 'card-title clip'};
+    info.item.titleAttrs.class = 'card-title clip';
 }
 
 window.renderAvatar = function(item)

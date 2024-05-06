@@ -780,7 +780,7 @@ class bugZen extends bug
         $showModule = !empty($this->config->bug->browse->showModule) ? $this->config->bug->browse->showModule : '';
 
         /* Set view. */
-        $this->view->title           = $product->name . $this->lang->colon . $this->lang->bug->common;
+        $this->view->title           = $product->name . $this->lang->hyphen . $this->lang->bug->common;
         $this->view->product         = $product;
         $this->view->branch          = $branch;
         $this->view->browseType      = $browseType;
@@ -1070,7 +1070,7 @@ class bugZen extends bug
         $bug = $this->gettasksForCreate($bug);
         if(in_array($this->config->edition, array('max', 'ipd'))) $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->projectID, $bug->productID, true);
 
-        $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
+        $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->hyphen . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->productMembers        = $this->getProductMembersForCreate($bug);
         $this->view->gobackLink            = $from == 'global' ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
@@ -1555,7 +1555,7 @@ class bugZen extends bug
         /* Get custom Fields. */
         foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
 
-        $this->view->title        = ($productID ? (zget($products, $productID, '', $products[$productID]->name . $this->lang->colon) . "BUG") : '') . $this->lang->bug->batchEdit;
+        $this->view->title        = ($productID ? (zget($products, $productID, '', $products[$productID]->name . $this->lang->hyphen) . "BUG") : '') . $this->lang->bug->batchEdit;
         $this->view->customFields = $customFields;
 
         /* Judge whether the editedBugs is too large and set session. */

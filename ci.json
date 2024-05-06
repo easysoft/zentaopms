@@ -39,6 +39,7 @@
       "snapshot": "easycorp-snapshot"
     }
   },
+  "push_version": "true",
   "notice": {
     "users": "qishiyao,hufangzhou,zhujinyong,caoyanyi",
     "groups": "38a4e39b-df5d-4606-a988-e22673bdc358",

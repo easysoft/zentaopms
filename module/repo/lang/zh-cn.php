@@ -69,7 +69,7 @@ $lang->repo->showHidden         = '显示隐藏的代码库';
 $lang->repo->gitlabList         = 'Gitlab代码库';
 $lang->repo->batchCreate        = '批量关联代码库';
 
-$lang->repo->createRepoAction = '创建代码库';
+$lang->repo->createRepoAction = '创建远程代码库';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';

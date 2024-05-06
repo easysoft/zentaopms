@@ -32,7 +32,7 @@
       <span class='label label-danger'><?php echo $lang->task->deleted;?></span>
       <?php endif;?>
       <?php if($task->fromBug != 0):?>
-      <small><?php echo html::a(helper::createLink('bug', 'view', "bugID=$task->fromBug", '', true), "<i class='icon icon-bug'></i> {$lang->task->fromBug}$lang->colon$task->fromBug", '', "class='iframe' data-width='80%'");?></small>
+      <small><?php echo html::a(helper::createLink('bug', 'view', "bugID=$task->fromBug", '', true), "<i class='icon icon-bug'></i> {$lang->task->fromBug}$lang->hyphen$task->fromBug", '', "class='iframe' data-width='80%'");?></small>
       <?php endif;?>
     </div>
   </div>

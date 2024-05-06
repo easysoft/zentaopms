@@ -44,19 +44,18 @@ function backupData()
         {
             clearInterval(timeID);
             $('#message').append(data);
-            setTimeout(function(){return loadPage($.createLink('backup', 'index'));}, 2000);
+            setTimeout(function(){return loadCurrentPage();}, 2000);
         },
         error: function(request, textstatus, error)
         {
             clearInterval(timeID);
             if(textstatus == 'timeout') $('#message').append("<p class='text-danger'>" + backupTimeout + '</p>');
-            setTimeout(function(){return loadPage($.createLink('backup', 'index'));}, 2000);
+            setTimeout(function(){return loadCurrentPage();}, 2000);
         }
     });
 
-    $('#waitting .modal-body #backupType').html(backup);
     zui.Modal.open({id: 'waiting', size: 'sm', backdrop: false});
-    $('#waitting').addClass('show');
+    $('#waiting').addClass('show');
 
     timeID = setInterval(function()
     {

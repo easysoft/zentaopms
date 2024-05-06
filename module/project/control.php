@@ -282,7 +282,7 @@ class project extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title       = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
+        $this->view->title       = $this->lang->project->common . $this->lang->hyphen . $this->lang->project->index;
         $this->view->pager       = $pager;
         $this->view->project     = $project;
         $this->view->browseType  = $browseType;
@@ -466,7 +466,7 @@ class project extends control
             if($this->post->longTime) $this->config->project->form->edit['end']['skipRequired'] = true;
 
             $postData        = form::data($this->config->project->form->edit);
-            $postProductData = form::data($this->config->project->form->edit)->get('products,plans,branch');
+            $postProductData = !empty($project->hasProduct) ? form::data($this->config->project->form->edit)->get('products,plans,branch') : new stdclass();
             $newProject      = $this->projectZen->prepareProject($postData, $project->hasProduct);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -479,17 +479,13 @@ class project extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->project->updatePlans($projectID, (array)$this->post->plans); // 更新关联的计划列表。
-            if($project->hasProduct > 0) $this->project->updateProducts($projectID, (array)$this->post->products, $postProductData); // 更新关联的产品列表。
-            $this->project->updateTeamMembers($newProject, $project, (array)$this->post->teamMembers); // 更新关联的用户信息。
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
 
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
 
-            $locateLink = ($this->session->projectList and $from != 'view') ? $this->session->projectList : inLink('view', "projectID=$projectID");
+            $locateLink = $this->session->projectList && $from != 'view' ? $this->session->projectList : inLink('view', "projectID=$projectID");
+            if(strpos($locateLink, 'index') > -1 && strpos($locateLink, 'app') > -1) $locateLink = inLink('view', "projectID=$projectID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
         }
 
@@ -711,7 +707,7 @@ class project extends control
 
         /* The header and position. */
         $project = $this->project->getByID($projectID);
-        $this->view->title = $project->name . $this->lang->colon . $this->lang->project->dynamic;
+        $this->view->title = $project->name . $this->lang->hyphen . $this->lang->project->dynamic;
 
         $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted');
@@ -929,7 +925,7 @@ class project extends control
 
         $this->projectZen->assignTesttaskVars($tasks);
 
-        $this->view->title    = $project->name . $this->lang->colon . $this->lang->project->common;
+        $this->view->title    = $project->name . $this->lang->hyphen . $this->lang->project->common;
         $this->view->project  = $project;
         $this->view->pager    = $pager;
         $this->view->orderBy  = $orderBy;
@@ -980,7 +976,7 @@ class project extends control
         }
 
         /* Set view data. */
-        $this->view->title     = $project->name . $this->lang->colon . $this->lang->execution->build;
+        $this->view->title     = $project->name . $this->lang->hyphen . $this->lang->execution->build;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->builds    = $this->projectZen->processBuildListData($builds, $projectID);
         $this->view->productID = $type == 'product' ? $param : 'all';
@@ -1040,7 +1036,7 @@ class project extends control
             }
         }
 
-        $this->view->title      = $group->name . $this->lang->colon . $this->lang->group->managePriv;
+        $this->view->title      = $group->name . $this->lang->hyphen . $this->lang->group->managePriv;
         $this->view->group      = $group;
         $this->view->groupPrivs = $getPrivs;
         $this->view->groupID    = $groupID;
@@ -1064,7 +1060,7 @@ class project extends control
         $project = $this->project->getByID($projectID);
         $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
 
-        $this->view->title        = $project->name . $this->lang->colon . $this->lang->project->team;
+        $this->view->title        = $project->name . $this->lang->hyphen . $this->lang->project->team;
         $this->view->projectID    = $projectID;
         $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
         $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
@@ -1142,7 +1138,7 @@ class project extends control
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
 
-        $this->view->title          = $this->lang->project->manageMembers . $this->lang->colon . $project->name;
+        $this->view->title          = $this->lang->project->manageMembers . $this->lang->hyphen . $project->name;
         $this->view->project        = $project;
         $this->view->users          = $users;
         $this->view->roles          = $roles;
@@ -1196,7 +1192,7 @@ class project extends control
             }
         }
 
-        $this->view->title        = $group->name . $this->lang->colon . $this->lang->group->manageMember;
+        $this->view->title        = $group->name . $this->lang->hyphen . $this->lang->group->manageMember;
         $this->view->group        = $group;
         $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu(0, array('deptModel', 'createGroupManageMemberLink'), (int)$groupID);
         $this->view->groupUsers   = $groupUsers;
@@ -1229,7 +1225,7 @@ class project extends control
             return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
+        $this->view->title = $this->lang->company->orgView . $this->lang->hyphen . $this->lang->group->copy;
         $this->view->group = $group;
         $this->display('group', 'copy');
     }
@@ -1257,7 +1253,7 @@ class project extends control
             return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
+        $this->view->title = $this->lang->company->orgView . $this->lang->hyphen . $this->lang->group->edit;
         $this->view->group = $this->group->getByID($groupID);
         $this->display('group', 'edit');
     }
@@ -1278,6 +1274,7 @@ class project extends control
         {
             $postData = form::data($this->config->project->form->start);
             $postData = $this->projectZen->prepareStartExtras($postData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $changes  = $this->project->start($projectID, $postData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1537,7 +1534,7 @@ class project extends control
         $this->projectZen->extractUnModifyForm($projectID, $project);
 
         /* Organizing render pages requires data. */
-        $this->view->title      = $this->lang->project->manageProducts . $this->lang->colon . $project->name;
+        $this->view->title      = $this->lang->project->manageProducts . $this->lang->hyphen . $project->name;
         $this->view->project    = $project;
         $this->view->executions = $executions;
         $this->view->branches   = $this->project->getBranchesByProject($projectID);

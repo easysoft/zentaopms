@@ -45,7 +45,7 @@ class webhook extends control
         /* Unset selectedDepts cookie. */
         helper::setcookie('selectedDepts', '', 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-        $this->view->title    = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->list;
+        $this->view->title    = $this->lang->webhook->api . $this->lang->hyphen . $this->lang->webhook->list;
         $this->view->webhooks = $this->webhook->getList($orderBy, $pager);
         $this->view->orderBy  = $orderBy;
         $this->view->pager    = $pager;
@@ -71,7 +71,7 @@ class webhook extends control
         }
 
         $this->app->loadLang('action');
-        $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
+        $this->view->title      = $this->lang->webhook->api . $this->lang->hyphen . $this->lang->webhook->create;
         $this->view->products   = $this->loadModel('product')->getPairs();
         $this->view->executions = $this->loadModel('execution')->getPairs();
         $this->display();
@@ -98,7 +98,7 @@ class webhook extends control
         $webhook = $this->webhook->getByID($id);
         $this->app->loadLang('action');
 
-        $this->view->title      = $this->lang->webhook->edit . $this->lang->colon . $webhook->name;
+        $this->view->title      = $this->lang->webhook->edit . $this->lang->hyphen . $webhook->name;
         $this->view->products   = $this->loadModel('product')->getPairs();
         $this->view->executions = $this->loadModel('execution')->getPairs();
         $this->view->webhook    = $webhook;
@@ -141,7 +141,7 @@ class webhook extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $webhook = $this->webhook->getByID($id);
-        $this->view->title   = $this->lang->webhook->log . $this->lang->colon . $webhook->name;
+        $this->view->title   = $this->lang->webhook->log . $this->lang->hyphen . $webhook->name;
         $this->view->logs    = $this->webhook->getLogList($id, $orderBy, $pager);
         $this->view->webhook = $webhook;
         $this->view->orderBy = $orderBy;

@@ -115,7 +115,7 @@ formPanel
                     inputGroup
                     (
                         $lang->doclib->user,
-                        users(set::items($users))
+                        userPicker(set::items($users))
                     )
                 )
             )

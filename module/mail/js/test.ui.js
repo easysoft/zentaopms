@@ -9,6 +9,6 @@ window.sendTest = function()
             return;
         }
 
-        $('#resultWin').html(data.message.error);
+        $('#resultWin').html(data.message.error).removeClass('hidden');
     })
 }

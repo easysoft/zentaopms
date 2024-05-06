@@ -774,6 +774,7 @@ class projectModel extends model
             ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!in_array($status, array('all', 'undone')))->andWhere('status')->eq($status)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', vision, ',')")->like("%,{$this->config->vision},%")->fi()
             ->fetchPairs();
     }
 
@@ -1343,6 +1344,10 @@ class projectModel extends model
         $this->updateUserView($projectID, $project->acl);                    // 更新用户视图。
         $this->updateShadowProduct($project, $oldProject);                   // 更新影子产品关联信息。
         $this->updateWhitelist($project, $oldProject);                       // 更新关联的白名单列表。
+
+        $this->updatePlans($projectID, (array)$this->post->plans); // 更新关联的计划列表。
+        if($oldProject->hasProduct > 0) $this->updateProducts($projectID, (array)$this->post->products, $postProductData); // 更新关联的产品列表。
+        $this->updateTeamMembers($project, $oldProject, (array)$this->post->teamMembers); // 更新关联的用户信息。
         if($postProductData) $this->updateProductStage($projectID, (string)$oldProject->stageBy, $postProductData); // 更新关联的所有产品的阶段。
 
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
@@ -1427,14 +1432,14 @@ class projectModel extends model
 
         $this->projectTao->doStart($projectID, $project);
 
-        $this->recordFirstEnd($projectID);
-
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError())
         {
             if(count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
             return false;
         }
+
+        $this->recordFirstEnd($projectID);
 
         if(!$oldProject->multiple) $this->projectTao->changeExecutionStatus($projectID, 'start');
         return common::createChanges($oldProject, $project);
@@ -1736,7 +1741,8 @@ class projectModel extends model
      */
     public function getBudgetWithUnit(float|string $budget): float|string
     {
-        $budget = (float)$budget;
+        $budget    = (float)$budget;
+        $rawBudget = $budget;
         if($budget < $this->config->project->budget->tenThousand)
         {
             $budget = round($budget, $this->config->project->budget->precision);
@@ -1753,7 +1759,7 @@ class projectModel extends model
             $unit   = $this->lang->project->hundredMillion;
         }
 
-        return in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round($budget, $this->config->project->budget->precision);
+        return !commonModel::checkNotCN() ? $budget . $unit : round($rawBudget, $this->config->project->budget->precision);
     }
 
     /**
@@ -1808,8 +1814,11 @@ class projectModel extends model
         /* Create actions. */
         $this->loadModel('action');
         if(!empty($needUpdate)) $this->action->create('project', $projectID, 'managed', '', implode(',', $products));
+
+        /* 如果有取消关联的产品，且项目有迭代且是非瀑布项目，记录关联产品执行到action表。*/
+        /* If there are unlinkedProducts and it is multiple project and it isn't waterfall project, record to table action. */
         $unlinkedProducts = array_diff($oldProductIdList, $products);
-        if(!empty($unlinkedProducts))
+        if(!empty($unlinkedProducts) && !empty($project) && $project->multiple && $project->model != 'waterfall' && $project->model != 'waterfallplus')
         {
             $products = $this->dao->select('name')->from(TABLE_PRODUCT)
                 ->where('id')->in($unlinkedProducts)
@@ -2531,7 +2540,7 @@ class projectModel extends model
 
         if($this->app->viewType == 'mhtml' && $projectID)
         {
-            $output  = $this->lang->project->common . $this->lang->colon;
+            $output  = $this->lang->project->common . $this->lang->hyphen;
             $output .= "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '')\">{$currentProjectName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             return $output;
         }

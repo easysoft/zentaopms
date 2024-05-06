@@ -20,6 +20,7 @@ $generateData = function() use ($lang, $title, $cols, $bugs)
         setID('pivotPanel'),
         set::title($title),
         set::shadow(false),
+        set::headingClass('h-14'),
         set::bodyClass('pt-0'),
         dtable
         (

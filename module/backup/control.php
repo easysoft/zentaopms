@@ -308,6 +308,7 @@ class backup extends control
             $log = $this->backup->getBackupDirProgress($attachFileName);
             if(empty($log)) return print('');
             $message = sprintf($this->lang->backup->progressAttach, zget($log, 'allCount', 0), zget($log, 'count', 0));
+            if(empty($log)) $message = '';
         }
 
         $codeFileName = $this->backup->getBackupFile($fileName, 'code');
@@ -316,6 +317,7 @@ class backup extends control
             $log = $this->backup->getBackupDirProgress($codeFileName);
             if(empty($log)) return print('');
             $message = sprintf($this->lang->backup->progressCode, zget($log, 'allCount', 0), zget($log, 'count', 0));
+            if(empty($log)) $message = '';
         }
 
         return print($message);

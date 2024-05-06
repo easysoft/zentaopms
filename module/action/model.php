@@ -415,8 +415,16 @@ class actionModel extends model
      */
     public function getTrashObjectTypes(string $type): array
     {
-        $extra = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
-        return $this->dao->select('objectType')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('extra')->eq($extra)->andWhere('vision')->eq($this->config->vision)->fetchAll('objectType');
+        $extra                = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('multiple')->eq('0')->andWhere('type')->in('sprint,kanban')->fetchPairs();
+        return $this->dao->select('objectType')->from(TABLE_ACTION)
+            ->where('action')->eq('deleted')
+            ->andWhere('extra')->eq($extra)
+            ->andWhere('objectType', true)->ne('execution')
+            ->orWhere('(objectType')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->markRight(2)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchAll('objectType');
     }
 
     /**
@@ -1124,11 +1132,12 @@ class actionModel extends model
         if($action->objectType == 'story' && $this->config->vision == 'lite') list($moduleName, $methodName, $params) = array('projectstory', 'view', "storyID={$action->objectID}");
         if($action->objectType == 'review') list($moduleName, $methodName, $params) = array('review', 'view', "reviewID={$action->objectID}");
 
+        $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
+
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';
         if($this->config->vision == 'lite' && $action->objectType == 'module') $action->objectLink .= '#app=project';
 
-        $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
         return $action;
     }
 

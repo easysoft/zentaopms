@@ -100,6 +100,12 @@ class metricZen extends metric
             return $calc->getStatement();
         }
 
+        foreach($calcList as $calc)
+        {
+            $calc->setHolidays($this->loadModel('holiday')->getList());
+            $calc->setWeekend(isset($this->config->project->weekend) ? $this->config->project->weekend : 2);
+        }
+
         $dataset   = $this->metric->getDataset($dao);
         $fieldList = $this->metric->uniteFieldList($calcList);
 
@@ -197,6 +203,7 @@ class metricZen extends metric
             $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateValues->$dateType);
             $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope);
 
+            if($calc->reuse) $this->prepareReuseMetricResult($calc, $options);
             $results = $calc->getResult($options);
             if(is_array($results))
             {
@@ -225,6 +232,17 @@ class metricZen extends metric
         }
 
         return $records;
+    }
+
+    protected function prepareReuseMetricResult($calc, $options)
+    {
+        $reuseMetrics = array();
+        foreach($calc->reuseMetrics as $key => $reuseMetric)
+        {
+            $reuseMetrics[$key] = $this->metric->getResultByCode($reuseMetric, $options);
+        }
+
+        $calc->calculate($reuseMetrics);
     }
 
     protected function getRecordByCodeAndDate($code, $calc, $date)
@@ -366,12 +384,15 @@ class metricZen extends metric
      */
     protected function calcMetric($rows, $calcList)
     {
-        foreach($rows as $row)
+        foreach($calcList as $code => $calc)
         {
-            foreach($calcList as $calc)
+            if(!$calc->reuse)
             {
-                $record = $this->getCalcFields($calc, $row);
-                $calc->calculate($record);
+                foreach($rows as $row)
+                {
+                    $record = $this->getCalcFields($calc, $row);
+                    $calc->calculate($record);
+                }
             }
         }
     }

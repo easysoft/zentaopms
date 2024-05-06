@@ -245,12 +245,13 @@ class doc extends control
         if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorMainSysLib, 'load' => array('alert' => $this->lang->doc->errorMainSysLib)));
 
         $this->doc->delete(TABLE_DOCLIB, $libID);
-        if($this->app->tab == 'doc') return $this->send(array('result' => 'success', 'load' => true, 'app' => $this->app->tab));
 
-        $objectType = $lib->type;
-        $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
         $moduleName = 'doc';
+        $objectType = $lib->type;
         $methodName = zget($this->config->doc->spaceMethod, $objectType);
+        if($this->app->tab == 'doc') return $this->send(array('result' => 'success', 'load' => $this->createLink($moduleName, $methodName), 'app' => $this->app->tab));
+
+        $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
         if($this->app->tab == 'execution' && $objectType == 'execution')
         {
             $moduleName = 'execution';
@@ -354,7 +355,7 @@ class doc extends control
 
         $this->docZen->setObjectsForCreate($lib->type, $lib, $unclosed, zget($lib, $lib->type, 0));
 
-        $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->create;
+        $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->create;
         $this->view->objectType       = $objectType;
         $this->view->objectID         = zget($lib, $lib->type, 0);
         $this->view->libID            = $libID;
@@ -408,7 +409,7 @@ class doc extends control
 
         $this->docZen->setObjectsForEdit($lib->type, $objectID);
 
-        $this->view->title            = $lib->name . $this->lang->colon . $this->lang->doc->edit;
+        $this->view->title            = $lib->name . $this->lang->hyphen . $this->lang->doc->edit;
         $this->view->doc              = $doc;
         $this->view->moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
         $this->view->type             = $lib->type;
@@ -751,7 +752,7 @@ class doc extends control
 
         $executionID = $type == 'project' && $lib->type == 'execution' ? $lib->execution : 0;
 
-        $this->view->title             = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
+        $this->view->title             = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->hyphen . $this->lang->doc->tableContents;
         $this->view->type              = $type;
         $this->view->objectType        = $type;
         $this->view->spaceType         = $type;

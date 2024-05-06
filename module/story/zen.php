@@ -229,7 +229,7 @@ class storyZen extends story
         {
             $this->product->setMenu($productID);
             $product = $this->product->getByID($productID);
-            $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->view->title = $product->name . $this->lang->hyphen . $this->lang->story->batchClose;
         }
         /* The stories of a execution. */
         elseif($this->app->tab == 'execution' && $executionID)
@@ -238,7 +238,7 @@ class storyZen extends story
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
             $this->execution->setMenu($executionID);
             $execution = $this->execution->getByID($executionID);
-            $this->view->title       = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->story->batchClose;
             $this->view->executionID = $executionID;
         }
         elseif($this->app->tab == 'project')
@@ -1145,6 +1145,17 @@ class storyZen extends story
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->story->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
         if($this->post->type == 'requirement') $fields['plan']['required'] = false;
+        if(!empty($_POST['modules']) && !empty($fields['module']['required']))
+        {
+            /* Check empty module in the product with multi-branches. */
+            $fields['module']['required'] = false;
+            $this->config->story->create->requiredFields = str_replace(',module,', ',', ",{$this->config->story->create->requiredFields},");
+            foreach($_POST['modules'] as $key => $moduleID)
+            {
+                if(empty($moduleID)) dao::$errors["modules[{$key}]"][] = sprintf($this->lang->error->notempty, $this->lang->story->module);
+            }
+        }
+        if(dao::isError()) return false;
 
         $storyData = form::data($fields)
             ->setIF($this->post->assignedTo, 'assignedDate', helper::now())
@@ -1223,8 +1234,6 @@ class storyZen extends story
             ->setDefault('stage', $oldStory->stage)
             ->setDefault('stagedBy', $oldStory->stagedBy)
             ->setDefault('childStories', $oldStory->childStories)
-            ->setDefault('parent', $oldStory->parent)
-            ->setDefault('plan', $oldStory->plan)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     && $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedReason && $oldStory->closedDate == '', 'closedDate', $now)

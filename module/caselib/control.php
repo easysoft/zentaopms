@@ -57,7 +57,7 @@ class caselib extends control
         $libID     = $this->caselibZen->saveLibState(0, $libraries);
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $this->view->title = $this->lang->caselib->common . $this->lang->colon . $this->lang->caselib->create;
+        $this->view->title = $this->lang->caselib->common . $this->lang->hyphen . $this->lang->caselib->create;
         $this->display();
     }
 
@@ -91,7 +91,7 @@ class caselib extends control
         $libID     = $this->caselibZen->saveLibState($libID, $libraries);
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $this->view->title = $libraries[$libID] . $this->lang->colon . $this->lang->caselib->edit;
+        $this->view->title = $libraries[$libID] . $this->lang->hyphen . $this->lang->caselib->edit;
         $this->view->lib   = $this->caselib->getByID($libID);
         $this->display();
     }
@@ -164,7 +164,7 @@ class caselib extends control
 
         $this->loadModel('testcase');
 
-        $this->view->title         = $this->lang->caselib->common . $this->lang->colon . $libraries[$libID];
+        $this->view->title         = $this->lang->caselib->common . $this->lang->hyphen . $libraries[$libID];
         $this->view->libID         = $libID;
         $this->view->libName       = $libraries[$libID];
         $this->view->cases         = $cases;
@@ -234,7 +234,7 @@ class caselib extends control
 
         /* Show the variables associated. */
         $this->app->loadLang('testcase');
-        $this->view->title            = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->create;
+        $this->view->title            = $libraries[$libID] . $this->lang->hyphen . $this->lang->testcase->create;
         $this->view->showFields       = $this->config->caselib->custom->createFields;
         $this->view->customFields     = $customFields;
         $this->view->libraries        = $libraries;
@@ -274,7 +274,7 @@ class caselib extends control
         /* Set lib menu. */
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $this->view->title            = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchCreate;
+        $this->view->title            = $libraries[$libID] . $this->lang->hyphen . $this->lang->testcase->batchCreate;
         $this->view->libID            = $libID;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'caselib', 0);
         $this->view->currentModuleID  = $moduleID;
@@ -299,7 +299,7 @@ class caselib extends control
         $this->caselib->setLibMenu($libraries, $libID);
 
         $this->app->loadLang('testcase');
-        $this->view->title   = $lib->name . $this->lang->colon . $this->lang->caselib->view;
+        $this->view->title   = $lib->name . $this->lang->hyphen . $this->lang->caselib->view;
         $this->view->lib     = $lib;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->actions = $this->loadModel('action')->getList('caselib', $libID);
@@ -449,7 +449,7 @@ class caselib extends control
             $caseData   = array_slice($caseData, ($pageID - 1) * $maxImport, $maxImport, true);
         }
 
-        $this->view->title       = $this->lang->caselib->common . $this->lang->colon . $this->lang->testcase->showImport;
+        $this->view->title       = $this->lang->caselib->common . $this->lang->hyphen . $this->lang->testcase->showImport;
         $this->view->cases       = $this->dao->select('id,module,stage,status,pri,type')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->andWhere('product')->eq(0)->fetchAll('id');
         $this->view->modules     = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
         $this->view->caseData    = $caseData;

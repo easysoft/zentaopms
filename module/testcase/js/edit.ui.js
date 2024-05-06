@@ -1,16 +1,16 @@
 function loadLibModules()
 {
-    const libID = $('#lib').val();
+    const libID = $('#lib').zui('picker').$.value;
     const link = $.createLink('tree', 'ajaxGetOptionMenu', 'libID=' + libID + '&viewtype=caselib&branch=0&rootModuleID=0&returnType=items&fieldID=');
 
     $.get(link, function(data)
     {
         if(data)
         {
-            let $libPicker = $('[name=lib]').zui('picker');
             data = JSON.parse(data);
-            $libPicker.render({items: data});
-            $libPicker.$.changeState({value: ''});
+            const $modulePicker = $('#module').zui('picker');
+            $modulePicker.render({items: data});
+            $modulePicker.$.changeState({value: ''});
         }
     });
 }
@@ -37,6 +37,8 @@ function loadBranchRelated()
 function loadModuleRelated()
 {
     const productID = $('[name=product]').val();
+    if(productID === undefined) return false;
+
     loadScenes(productID);
     if($('#story').length) loadProductStories(productID);
 }

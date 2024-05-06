@@ -42,7 +42,7 @@ $fields->field('code')
 
 $fields->field('type')
     ->required()
-    ->control('checkBtnGroup')
+    ->control($isStage ? 'picker' : 'checkBtnGroup')
     ->label($showExecutionExec ? $lang->execution->execType : $lang->execution->type)
     ->name($isStage ? 'attribute' : 'lifetime')
     ->hidden($isKanban)

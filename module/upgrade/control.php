@@ -95,7 +95,7 @@ class upgrade extends control
 
         if($_POST) $this->locate(inlink('confirm', "fromVersion={$this->post->fromVersion}"));
 
-        $this->view->title   = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
+        $this->view->title   = $this->lang->upgrade->common . $this->lang->hyphen . $this->lang->upgrade->selectVersion;
         $this->view->version = $version;
         $this->display();
     }

@@ -56,7 +56,7 @@ blockPanel
             cell
             (
                 setClass('text-sm'),
-                html(sprintf($lang->block->summary->welcome, $usageDays, $finishTask, $fixBug))
+                html($welcomeSummary)
             )
         )
     ),

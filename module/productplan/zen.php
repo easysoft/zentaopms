@@ -130,7 +130,8 @@ class productplanZen extends productplan
                 $plan->branchName = trim($plan->branchName, ',');
             }
 
-            if($plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future) $plan->begin = $plan->end = $this->lang->productplan->future;
+            if($plan->begin == $this->config->productplan->future) $plan->begin = $this->lang->productplan->future;
+            if($plan->end   == $this->config->productplan->future) $plan->end   = $this->lang->productplan->future;
 
             $plan->actions  = $this->buildActionsList($plan);
             $plan->projects = array_values($plan->projects);
@@ -234,11 +235,11 @@ class productplanZen extends productplan
         if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
         if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
 
-        $this->view->plan         = $plan;
-        $this->view->actions      = $this->loadModel('action')->getList('productplan', $plan->id);
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->plans        = $this->productplan->getPairs($plan->product, $plan->branch, '', true);
-        $this->view->modules      = $this->loadModel('tree')->getOptionMenu($plan->product);
+        $this->view->plan    = $plan;
+        $this->view->actions = $this->loadModel('action')->getList('productplan', $plan->id);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->plans   = $this->productplan->getPairs($plan->product, $plan->branch, '', true);
+        $this->view->modules = $this->loadModel('tree')->getOptionMenu($plan->product);
 
         if($this->app->getViewType() == 'json')
         {

@@ -15,7 +15,8 @@ include (dirname(__FILE__) . '/common.php');
 global $config;
 
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
-$lang->colon     = '-';
+$lang->colon     = ': ';
+$lang->hyphen    = '-';
 $lang->comma     = ',';
 $lang->dot       = '.';
 $lang->at        = ' à ';
@@ -188,6 +189,13 @@ $lang->code         = 'Code';
 
 $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
+
+$lang->contactUs = new stdClass();
+$lang->contactUs->common = 'Vous pouvez nous contacter si vous avez des questions.';
+$lang->contactUs->phone  = 'Téléphone';
+$lang->contactUs->email  = 'Email';
+$lang->contactUs->qq     = 'QQ';
+$lang->contactUs->wechat = 'Wechat';
 
 $lang->common->common       = 'Module Commun';
 $lang->common->story        = 'Story';

@@ -104,7 +104,7 @@ class projectZen extends project
         if($hasProduct)
         {
             /* Check if products not empty. */
-            if(!$this->post->products || empty($this->post->products[0]))
+            if(!$this->post->products || (empty($this->post->products[0]) && !array_filter($this->post->products)))
             {
                 dao::$errors['products[0]'] = $this->app->rawMethod == 'create' ? $this->lang->project->error->productNotEmpty : $this->lang->project->errorNoProducts;
                 return false;
@@ -310,7 +310,9 @@ class projectZen extends project
                 foreach($plans as $planID => $plan)
                 {
                     if(empty($plan)) continue;
-                    $planDate = $plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future ? ' ' . $this->lang->productplan->future : " [{$plan->begin} ~ {$plan->end}]";
+                    $planBegin = $plan->begin == $this->config->productplan->future ? $this->lang->productplan->future : $plan->begin;
+                    $planEnd   = $plan->end == $this->config->productplan->future ? $this->lang->productplan->future : $plan->end;
+                    $planDate  = $plan->begin == $this->config->productplan->future && $plan->end == $this->config->productplan->future ? ' ' . $this->lang->productplan->future : " [{$planBegin} ~ {$planEnd}]";
                     $productPlans[$productID][$branchID][$planID] = $plan->title . $planDate;
                 }
             }
@@ -342,7 +344,6 @@ class projectZen extends project
         $this->view->productPlans        = $productPlans;
         $this->view->linkedProducts      = $linkedProducts;
         $this->view->linkedBranches      = $linkedBranches;
-        $this->view->isStage             = in_array($model, array('waterfall', 'waterfallplus', 'ipd'));
         $this->view->groups              = $this->loadModel('group')->getPairs();
         $this->display();
     }
@@ -799,7 +800,7 @@ class projectZen extends project
         $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
         $taskList  = $taskIdList  ? $this->loadModel('task')->getByIdList($taskIdList) : array();
 
-        $this->view->title            = $project->name . $this->lang->colon . $this->lang->bug->common;
+        $this->view->title            = $project->name . $this->lang->hyphen . $this->lang->bug->common;
         $this->view->bugs             = $bugs;
         $this->view->build            = $this->loadModel('build')->getById($build);
         $this->view->buildID          = $this->view->build ? $this->view->build->id : 0;

@@ -176,7 +176,7 @@ form
                     div
                     (
                         setClass('w-full'),
-                        users(set::label($lang->doc->users), set::items($users), set::value($doc->users))
+                        userPicker(set::label($lang->doc->users), set::items($users), set::value($doc->users))
                     )
                 )
             ) : null,

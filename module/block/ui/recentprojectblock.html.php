@@ -79,12 +79,12 @@ foreach($projects as $projectID => $project)
                 div
                 (
                     setClass('flex items-center'),
-                    span(setClass('num mr-1'), $project->progress . '%'),
+                    span(setClass('num mr-1'), round((float)$project->progress) . '%'),
                     progressBar
                     (
                         setClass('progress flex-auto'),
                         set::height(8),
-                        set::percent($project->progress),
+                        set::percent(round((float)$project->progress)),
                         set::color('var(--color-primary-300)'),
                         set::background('rgba(0,0,0,0.02)')
                     )

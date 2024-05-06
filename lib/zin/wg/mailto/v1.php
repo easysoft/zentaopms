@@ -11,9 +11,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-requireWg('users');
+requireWg('userPicker');
 
-class mailto extends users
+class mailto extends userPicker
 {
     protected static array $defaultProps = array(
         'name' => 'mailto[]'

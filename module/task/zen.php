@@ -59,7 +59,7 @@ class taskZen extends task
         $executionTypeLang = zget($this->lang->execution->typeList, $execution->type, '');
         $this->lang->task->noticeLinkStory = sprintf($this->lang->task->noticeLinkStory, $executionTypeLang);
 
-        $this->view->title         = $execution->name . $this->lang->colon . $this->lang->task->create;
+        $this->view->title         = $execution->name . $this->lang->hyphen . $this->lang->task->create;
         $this->view->customFields  = $customFields;
         $this->view->modulePairs   = $modulePairs;
         $this->view->showFields    = $this->config->task->custom->createFields;
@@ -185,7 +185,7 @@ class taskZen extends task
             $this->execution->setMenu($executionID);
             $execution = $this->execution->getById($executionID);
 
-            $this->view->title     = $execution->name . $this->lang->colon . $this->lang->task->batchEdit;
+            $this->view->title     = $execution->name . $this->lang->hyphen . $this->lang->task->batchEdit;
             $this->view->execution = $execution;
             $this->view->modules   = $this->tree->getTaskOptionMenu($executionID, 0, !empty($this->config->task->allModule) ? 'allModule' : '');
         }
@@ -279,7 +279,7 @@ class taskZen extends task
             $taskMembers = $this->view->members;
         }
 
-        $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
+        $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
         $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', '', 'full', 'active');
         $this->view->tasks         = $tasks;
         $this->view->taskMembers   = $taskMembers;
@@ -314,7 +314,7 @@ class taskZen extends task
         if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
         if(isset($members['closed']) || $task->status == 'closed') $members['closed'] = 'Closed';
 
-        $this->view->title   = $this->view->execution->name . $this->lang->colon . $this->lang->task->assign;
+        $this->view->title   = $this->view->execution->name . $this->lang->hyphen . $this->lang->task->assign;
         $this->view->task    = $task;
         $this->view->members = $members;
         $this->view->users   = $this->loadModel('user')->getPairs();
@@ -353,6 +353,10 @@ class taskZen extends task
         $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $story ? $story->module : 0, 'short', 'active');
 
         list($customFields, $checkedFields) = $this->getCustomFields($execution, 'batchCreate');
+        if(isset($customFields['story'])) $customFields['preview'] = $customFields['copyStory'] = '';
+
+        $showFields = $this->config->task->custom->batchCreateFields;
+        if(strpos(",$showFields,", ',story,') !== false) $showFields .= ',preview,copyStory';
 
         $this->view->title         = $this->lang->task->batchCreate;
         $this->view->execution     = $execution;
@@ -368,7 +372,7 @@ class taskZen extends task
         $this->view->customFields  = $customFields;
         $this->view->checkedFields = $checkedFields;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
-        $this->view->showFields    = $this->config->task->custom->batchCreateFields;
+        $this->view->showFields    = $showFields;
 
         $this->display();
     }
@@ -1583,11 +1587,11 @@ class taskZen extends task
     {
         $response['result']     = 'success';
         $response['message']    = $this->lang->saveSuccess;
-        $response['closeModal'] = $this->app->rawMethod != 'recordworkhour' || $from == 'edittask';
+        $response['closeModal'] = $this->app->rawMethod != 'recordworkhour';
 
         if($this->app->rawMethod == 'recordworkhour')
         {
-            $response['callback'] = $from == 'edittask' ? "refreshConsumed('{$task->consumed}');" : "loadModal('" . inLink('recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
+            $response['callback'] = "loadModal('" . inLink('recordworkhour', "taskID={$task->id}") . "', '#modal-record-hours-task-{$task->id}')";
             return $response;
         }
 

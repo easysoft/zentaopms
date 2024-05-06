@@ -84,6 +84,56 @@ class baseCalc
     public $result = 0;
 
     /**
+     * 节假日信息。
+     * holidays
+     *
+     * @var array
+     * @access public
+     */
+    public $holidays = array();
+
+    /**
+     * 休息日
+     * weekend
+     *
+     * @var float
+     * @access public
+     */
+    public $weekend = 2;
+
+    /**
+     * 是否复用
+     *
+     * @var bool
+     * @access public
+     */
+    public $reuse = false;
+
+    /**
+     * 是否支持独立查询
+     *
+     * @var bool
+     * @access public
+     */
+    public $supportSingleQuery = false;
+
+    /**
+     * 是否使用独立查询
+     *
+     * @var bool
+     * @access public
+     */
+    public $useSingleQuery = false;
+
+    /**
+     * 独立查询sql
+     *
+     * @var string
+     * @access public
+     */
+    public $singleSql = '';
+
+    /**
      * 设置DAO 。
      * Set DAO.
      *
@@ -99,6 +149,16 @@ class baseCalc
     public function setSCM($scm)
     {
         $this->scm = $scm;
+    }
+
+    public function setHolidays($holidays)
+    {
+        $this->holidays = $holidays;
+    }
+
+    public function setWeekend($weekend)
+    {
+        $this->weekend = $weekend;
     }
 
     /**
@@ -149,6 +209,7 @@ class baseCalc
      */
     protected function filterByOptions($rows, $options)
     {
+
         if(empty($options)) return $rows;
 
         $rows = (array)$rows;
@@ -267,15 +328,19 @@ class baseCalc
      * @access public
      * @return array
      */
-    public function getRecords($keyNames)
+    public function getRecords($keyNames, $result = null)
     {
-        if(empty($keyNames)) return $this->result;
+        if($this->useSingleQuery) return $this->singleQuery();
 
-        if(current($keyNames) == 'value') return array(array('value' => $this->result));
+        if(empty($result)) $result = $this->result;
+
+        if(empty($keyNames)) return $result;
+
+        if(current($keyNames) == 'value') return array(array('value' => $result));
 
         $records = array();
         $keyName = array_shift($keyNames);
-        foreach($this->result as $key => $value) $records[] = array($keyName => $key, 'value' => $value);
+        foreach($result as $key => $value) $records[] = array($keyName => $key, 'value' => $value);
 
         while($keyName = array_shift($keyNames))
         {
@@ -296,6 +361,52 @@ class baseCalc
         }
 
         return $records;
+    }
+
+    /**
+     * 独立查询。
+     *
+     * @access public
+     * @return void
+     */
+    public function singleQuery()
+    {
+        $sql = $this->singleSql;
+        return $this->dao->select('*')->from("($sql) tt")->fetchAll();
+    }
+
+    /**
+     * 设置独立查询sql语句。
+     *
+     * @param  string  $sql
+     * @access public
+     * @return void
+     */
+    public function setSingleSql($sql)
+    {
+        $this->singleSql = $sql;
+    }
+
+    /**
+     * 获取独立查询sql语句。
+     *
+     * @access public
+     * @return void
+     */
+    public function getSingleSql()
+    {
+        return "({$this->singleSql}) tt";
+    }
+
+    /**
+     * 启用独立查询。
+     *
+     * @access public
+     * @return void
+     */
+    public function enableSingleQuery()
+    {
+        $this->useSingleQuery = true;
     }
 
     /**
@@ -332,5 +443,237 @@ class baseCalc
         $year = substr($dateStr, 0, 4);
 
         return $year == '0000' ? false : $year;
+    }
+
+    /**
+     * GetLastDay
+     *
+     * @param  int    $date
+     * @access public
+     * @return string
+     */
+    public function getLastDay($date)
+    {
+        $monday   = $this->getThisMonday($date);
+        $sunday   = $this->getThisSunday($date);
+        $workdays = $this->getActualWorkingDays($monday, $sunday);
+        return end($workdays);
+    }
+
+    /**
+     * Get monday for a date.
+     *
+     * @param  int $date
+     * @access public
+     * @return date
+     */
+    public function getThisMonday($date)
+    {
+        $timestamp = strtotime($date);
+
+        $day = date('w', $timestamp);
+        if($day == 0) $day = 7;
+
+        return date('Y-m-d', $timestamp - (($day - 1) * 24 * 3600));
+    }
+
+    /**
+     * Get fridays.
+     *
+     * @param  string $start
+     * @param  string $end
+     * @access public
+     * @return array
+     */
+    public function getFridays($start, $end)
+    {
+        $start = new DateTime($start);
+        $end = new DateTime($end);
+        $interval = new DateInterval('P1D'); // 间隔为1天
+        $period = new DatePeriod($start, $interval, $end);
+
+        $fridays = array();
+        foreach ($period as $date) {
+            if ($date->format('N') == 5) { // 5代表星期五
+                $fridays[] = $date->format('Y-m-d');
+            }
+        }
+
+        return $fridays;
+    }
+
+    public function getFridayByWeek($year, $week) {
+        $first_day = date("Y-m-d", strtotime($year . "-01-01"));
+
+        $first_friday = date("Y-m-d", strtotime("{$first_day} next Friday"));
+
+        $friday = date("Y-m-d", strtotime("{$first_friday} + " . ($week - 1) . " weeks"));
+
+        return $friday;
+    }
+
+    /**
+     * GetThisSunday
+     *
+     * @param  int    $date
+     * @access public
+     * @return date
+     */
+    public function getThisSunday($date)
+    {
+        $monday = $this->getThisMonday($date);
+        return date('Y-m-d', strtotime($monday) + (6 * 24 * 3600));
+    }
+
+    /**
+     * 获取开始和结束日期间的日期。
+     * Get the dates between the begin and end.
+     *
+     * @param  string  $begin
+     * @param  string  $end
+     * @access public
+     * @return array
+     */
+    public function getDaysBetween(string $begin, string $end): array
+    {
+        $beginTime = strtotime($begin);
+        $endTime   = strtotime($end);
+        $days      = ($endTime - $beginTime) / 86400;
+
+        $dateList  = array();
+        for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', strtotime("+{$i} days", $beginTime));
+
+        return $dateList;
+    }
+
+    /**
+     * 通过开始和结束日期获取节假日。
+     * Get holidays by begin and end.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return array
+     */
+    public function getHolidays(string $begin, string $end): array
+    {
+        $records = array();
+        foreach($this->holidays as $holiday)
+        {
+            if($holiday->type != 'holiday') continue;
+            if($holiday->begin > $end || $holiday->end < $begin) continue;
+
+            $records[] = $holiday;
+        }
+
+        $naturalDays = $this->getDaysBetween($begin, $end);
+
+        $holidays = array();
+        foreach($records as $record)
+        {
+            $dates    = $this->getDaysBetween($record->begin, $record->end);
+            $holidays = array_merge($holidays, $dates);
+        }
+
+        return array_intersect($naturalDays, $holidays);
+    }
+
+    /**
+     * 获取工作日。
+     * Get working days.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return array
+     */
+    public function getWorkingDays(string $begin = '', string $end = ''): array
+    {
+        $records = array();
+        foreach($this->holidays as $holiday)
+        {
+            if($holiday->type != 'working') continue;
+            if($holiday->begin > $end || $holiday->end < $begin) continue;
+
+            $records[] = $holiday;
+        }
+
+        $workingDays = array();
+        foreach($records as $record)
+        {
+            $dates       = $this->getDaysBetween($record->begin, $record->end);
+            $workingDays = array_merge($workingDays, $dates);
+        }
+
+        return $workingDays;
+    }
+
+    /**
+     * 获取系统休息日配置。
+     * Get system weekend.
+     *
+     * @access public
+     * @return void
+     */
+    public function getSystemWeekend()
+    {
+        $weekend = $this->dao->select('value')->from(TABLE_CONFIG)
+            ->where('module')->eq('execution')
+            ->andWhere('key')->eq('weekend')
+            ->fetch('value');
+
+        return $weekend ? $weekend : 2;
+    }
+
+    /**
+     * 获取实际工作日。
+     * Get actual working days.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return array
+     */
+    public function getActualWorkingDays(string $begin, string $end): array
+    {
+        if(empty($begin) || empty($end) || $begin == '0000-00-00' || $end == '0000-00-00') return array();
+
+        /* Get holidays, working days and weekend days .*/
+        $holidays    = $this->getHolidays($begin, $end);
+        $workingDays = $this->getWorkingDays($begin, $end);
+        $weekend     = $this->weekend;
+
+        /* When the start date and end date are the same. */
+        $actualDays = array();
+        if($begin == $end)
+        {
+            if(in_array($begin, $workingDays)) return array($begin);
+            if(in_array($begin, $holidays))    return array();
+
+            $w = date('w', strtotime($begin));
+            if($w == 0 || ($weekend == 2 && $w == 6)) return array();
+
+            return array($begin);
+        }
+
+        /* Process actual working days. */
+        for($i = 0, $currentDay = $begin; $currentDay < $end; $i ++)
+        {
+            $currentDay = date('Y-m-d', strtotime("{$begin} + {$i} days"));
+            $w          = date('w', strtotime($currentDay));
+
+            if(in_array($currentDay, $workingDays))
+            {
+                $actualDays[] = $currentDay;
+                continue;
+            }
+
+            if(in_array($currentDay, $holidays)) continue;
+            if($w == 0 || ($weekend == 2 && $w == 6)) continue;
+
+            $actualDays[] = $currentDay;
+        }
+
+        return $actualDays;
     }
 }

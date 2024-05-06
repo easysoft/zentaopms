@@ -40,12 +40,17 @@ if(!$hidden)
         ) : ''
     );
 }
+else
+{
+    $productRow = formHidden('product', $build->product);
+}
 
 $executionRow = '';
 $buildRow     = '';
 if(!$build->execution)
 {
-    $buildRow = formRow(
+    $buildRow = formRow
+    (
         formGroup
         (
             set::width('1/2'),
@@ -68,25 +73,33 @@ if(!$build->execution)
         )
     );
 }
-elseif(!empty($multipleProject))
+else
 {
-    $executionRow = formRow(
-        formGroup
+    if(!empty($multipleProject))
+    {
+        $executionRow = formRow
         (
-            set::width('1/2'),
-            set::name('execution'),
-            set::label($executionType ? $lang->build->executionAB : $lang->build->execution),
-            set::value($build->execution),
-            set::items($executions),
-            set::disabled(!empty($testtaskID)),
-            set::required(true)
-        ),
-        $testtaskID ? formGroup(
-            set::width('1/2'),
-            setClass('items-center pl-4'),
-            $lang->build->notice->changeExecution
-        ) : ''
-    );
+            formGroup
+            (
+                set::width('1/2'),
+                set::name('execution'),
+                set::label($executionType ? $lang->build->executionAB : $lang->build->execution),
+                set::value($build->execution),
+                set::items($executions),
+                set::disabled(!empty($testtaskID)),
+                set::required(true)
+            ),
+            $testtaskID ? formGroup(
+                set::width('1/2'),
+                setClass('items-center pl-4'),
+                $lang->build->notice->changeExecution
+            ) : ''
+        );
+    }
+    else
+    {
+        $executionRow = formHidden('execution', $build->execution);
+    }
 }
 
 if(empty($product)) $product = new stdclass();

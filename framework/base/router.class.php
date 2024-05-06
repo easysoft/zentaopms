@@ -288,14 +288,14 @@ class baseRouter
     static $loadedLangs = array();
 
     /**
-     * 已加载的模块.
-     * Modules loaded.
+     * 已加载的目标，可能是 model，tao 或者 zen 的实例化对象。
+     * Targets loaded, maybe instance of model, tao or zen.
      *
      * @static
      * @var array
      * @access public
      */
-    static $loadedModules = array();
+    static $loadedTargets = array();
 
     /**
      * 全局$lang对象。
@@ -424,11 +424,14 @@ class baseRouter
      *
      * @param string $appName   the name of the app
      * @param string $appRoot   the root path of the app
+     * @param string $mode      the mode of the app running|installing|upgrading
      * @access public
      * @return void
      */
-    public function __construct(string $appName = 'demo', string $appRoot = '')
+    public function __construct(string $appName = 'demo', string $appRoot = '', string $mode = 'running')
     {
+        if($mode != 'running') $this->{$mode} = true;
+
         $this->setPathFix();
         $this->setBasePath();
         $this->setFrameRoot();
@@ -499,14 +502,15 @@ class baseRouter
      * @param string $appName   应用名称。  The name of the app.
      * @param string $appRoot   应用根路径。The root path of the app.
      * @param string $className 应用类名，如果对router类做了扩展，需要指定类名。When extends router class, you should pass in the child router class name.
+     * @param string $mode      应用模式。  The mode of the app. running|installing|upgrading
      * @static
      * @access public
      * @return static   the app object
      */
-    public static function createApp(string $appName = 'demo', string $appRoot = '', string $className = '')
+    public static function createApp(string $appName = 'demo', string $appRoot = '', string $className = '', string $mode = 'running')
     {
         if(empty($className)) $className = self::class;
-        return new $className($appName, $appRoot);
+        return new $className($appName, $appRoot, $mode);
     }
 
     /**
@@ -2503,8 +2507,7 @@ class baseRouter
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($appName)) $appName = $this->appName;
 
-        global $loadedTargets;
-        if(isset($loadedTargets[$class][$appName][$moduleName])) return $loadedTargets[$class][$appName][$moduleName];
+        if(isset(self::$loadedTargets[$class][$appName][$moduleName])) return self::$loadedTargets[$class][$appName][$moduleName];
 
         $targetFile = $this->setTargetFile($moduleName, $appName, $class);
 
@@ -2528,14 +2531,14 @@ class baseRouter
         /**
          * 因为zen继承自control，tao继承自model，构造函数里会调用loadTarget方法，赋默认值值防止递归调用。
          */
-        if($class == 'zen' || $class == 'tao') $loadedTargets[$class][$appName][$moduleName] = false;
+        if($class == 'zen' || $class == 'tao') self::$loadedTargets[$class][$appName][$moduleName] = false;
 
         /**
          * 初始化target 对象并返回。
          * Init the target object and return it.
          */
         $target = new $targetClass($appName);
-        $loadedTargets[$class][$appName][$moduleName] = $target;
+        self::$loadedTargets[$class][$appName][$moduleName] = $target;
         return $target;
     }
 
@@ -2721,9 +2724,7 @@ class baseRouter
         $className = strtolower($className);
 
         /* 搜索$coreLibRoot(Search in $coreLibRoot) */
-        $classFile = $this->coreLibRoot . $className;
-        if(is_dir($classFile)) $classFile .= DS . $className;
-        $classFile .= '.class.php';
+        $classFile = $this->coreLibRoot . $className . DS . $className . '.class.php';
         if(!helper::import($classFile)) $this->triggerError("class file $classFile not found", __FILE__, __LINE__, true);
 
         /* 如果是静态调用，则返回(If static, return) */
@@ -2787,6 +2788,10 @@ class baseRouter
      */
     public function loadModuleConfig(string $moduleName, string $appName = '')
     {
+        if(isset(self::$loadedConfigs[$moduleName])) return false;
+
+        self::$loadedConfigs[$moduleName] = $moduleName;
+
         global $config;
 
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
@@ -2799,9 +2804,9 @@ class baseRouter
         /* 加载每一个配置文件。Load every config file. */
         foreach($configFiles as $configFile)
         {
-            if(in_array($configFile, self::$loadedConfigs)) continue;
+            if(isset(self::$loadedConfigs[$configFile])) continue;
             if(is_string($configFile) && file_exists($configFile)) include $configFile;
-            self::$loadedConfigs[] = $configFile;
+            self::$loadedConfigs[$configFile] = $configFile;
         }
 
         /* 加载数据库中与本模块相关的配置项。Merge from the db configs. */
@@ -2940,9 +2945,9 @@ class baseRouter
         if(!is_object($lang)) $lang = new language();
         if(!isset($lang->$moduleName)) $lang->$moduleName = new stdclass();
 
-        if(isset(self::$loadedModules[$moduleName])) return $lang;
+        if(isset(self::$loadedLangs[$moduleName])) return $lang;
 
-        self::$loadedModules[$moduleName] = $moduleName;
+        self::$loadedLangs[$moduleName] = $moduleName;
 
         /* 计算最终要加载的语言文件。 Get the lang files to be loaded. */
         $langFilesToLoad = $this->getMainAndExtFiles($moduleName, $appName, 'lang');

@@ -10,8 +10,11 @@ window.triggerChecked = function()
     $("#chartForm").find("input[name^=charts]").prop("checked", $('.btn-select-all').hasClass('checked'));
 }
 
-window.changeTab = function(e)
+window.changeTab = function(event)
 {
-    $('#chartForm form').attr('action', $(e.target).closest('.font-medium').data('param'))
-    createChart();
+    $(event.target).find('[data-zui-echarts]').each(function()
+    {
+        const echart = $(this).zui();
+        if(echart) echart.chart.resize();
+    });
 }

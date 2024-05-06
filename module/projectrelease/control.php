@@ -78,7 +78,7 @@ class projectrelease extends control
         $project   = $this->project->getByID($projectID);
         $execution = $this->loadModel('execution')->getByID($executionID);
 
-        $this->view->title       = (isset($project->name) ? $project->name : $execution->name) . $this->lang->colon . $this->lang->release->browse;
+        $this->view->title       = (isset($project->name) ? $project->name : $execution->name) . $this->lang->hyphen . $this->lang->release->browse;
         $this->view->products    = $this->product->getProductPairsByProject($projectID);
         $this->view->pageSummary = $this->release->getPageSummary($releases, $type);
         $this->view->projectID   = $projectID;
@@ -146,7 +146,7 @@ class projectrelease extends control
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
 
-        $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
+        $this->view->title       = $this->view->project->name . $this->lang->hyphen . $this->lang->release->create;
         $this->view->projectID   = $projectID;
         $this->view->builds      = $builds;
         $this->view->lastRelease = $this->projectrelease->getLast($projectID);
@@ -202,7 +202,7 @@ class projectrelease extends control
             if(!isset($bindBuilds[$releasedBuild])) unset($builds[$releasedBuild]);
         }
 
-        $this->view->title   = $this->view->product->name . $this->lang->colon . $this->lang->release->edit;
+        $this->view->title   = $this->view->product->name . $this->lang->hyphen . $this->lang->release->edit;
         $this->view->release = $release;
         $this->view->builds  = $builds;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');

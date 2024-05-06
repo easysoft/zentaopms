@@ -275,6 +275,7 @@ class metricTest
      */
     public function calcMetric($file)
     {
+        global $tester;
         $code    = pathinfo($file, PATHINFO_FILENAME);
         $purpose = basename(dirname($file));
         $scope   = basename(dirname($file, 2));
@@ -283,14 +284,33 @@ class metricTest
         include_once $this->objectModel->getCalcRoot() . $scope . DS . $purpose . DS . $code . '.php';
 
         $calc = new $code;
-        $rows = $this->prepareDataset($calc)->fetchAll();
+        $calc->setHolidays($tester->loadModel('holiday')->getList());
+        $calc->setWeekend(isset($tester->config->project->weekend) ? $tester->config->project->weekend : 2);
 
-        foreach($rows as $row)
+        if(!$calc->reuse)
         {
-            $calc->calculate((object)$row);
+            $rows = $this->prepareDataset($calc)->fetchAll();
+
+            foreach($rows as $row)
+            {
+                $calc->calculate((object)$row);
+            }
         }
 
         return $calc;
+    }
+
+    public function getReuseCalcResult($calc, $options = array())
+    {
+        $reuseMetrics = array();
+        foreach($calc->reuseMetrics as $key => $reuseMetric)
+        {
+            $reuseMetrics[$key] = $this->objectModel->getResultByCode($reuseMetric, $options);
+        }
+
+        $calc->calculate($reuseMetrics);
+
+        return $calc->getResult($options);
     }
 
     /**

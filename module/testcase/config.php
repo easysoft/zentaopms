@@ -11,7 +11,6 @@ $config->testcase->edit = new stdclass();
 $config->testcase->edit->requiredFields = 'title,type';
 
 $config->testcase->editor = new stdclass();
-$config->testcase->editor->edit   = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->testcase->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 $config->testcase->editor->review = array('id' => 'comment', 'tools' => 'simpleTools');
 

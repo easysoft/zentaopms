@@ -165,3 +165,8 @@ function loadLanes(event)
         if(!$row.find('td[data-name="region"][data-ditto="on"]').length) break;
     }
 }
+
+$('#formSettingBtn').on('click', '.checkbox-primary [value=story]', function()
+{
+    $('#formSettingBtn .checkbox-primary [value=preview], #formSettingBtn .checkbox-primary [value=copyStory]').prop('checked', $('#formSettingBtn .checkbox-primary [value=story]').prop('checked'));
+})

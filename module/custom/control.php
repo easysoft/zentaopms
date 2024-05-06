@@ -58,7 +58,7 @@ class custom extends control
             return $this->sendSuccess(array('load' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . ($lang == 'all' ? $lang : ''))));
         }
 
-        $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->$module->common;
+        $this->view->title       = $this->lang->custom->common . $this->lang->hyphen . $this->lang->$module->common;
         $this->view->field       = $field;
         $this->view->lang2Set    = str_replace('_', '-', $lang);
         $this->view->module      = $module;

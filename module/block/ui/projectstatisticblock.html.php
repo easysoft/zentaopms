@@ -257,7 +257,7 @@ if($project)
                             (
                                 array
                                 (
-                                    'title'     => $lang->block->tooltips['pv'],
+                                    'title'     => array('html' => $lang->block->tooltips['pv']),
                                     'placement' => 'bottom',
                                     'type'      => 'white',
                                     'className' => 'text-dark border border-light leading-5'
@@ -269,7 +269,7 @@ if($project)
                     span
                     (
                         setClass('font-bold text-black mr-1'),
-                        (!empty($project->pv) ? $project->pv : 0) . $lang->percent
+                        !empty($project->pv) ? $project->pv : 0
                     )
                 ),
                 item
@@ -296,7 +296,7 @@ if($project)
                     span
                     (
                         setClass('font-bold text-black mr-1'),
-                        (!empty($project->ev) ? $project->ev : 0) . $lang->percent
+                        !empty($project->ev) ? $project->ev : 0
                     )
                 )
             )
@@ -367,7 +367,7 @@ if($project)
                     span
                     (
                         setClass('font-bold text-black mr-1'),
-                        (!empty($project->ev) ? $project->ev : 0) . $lang->percent
+                        !empty($project->ev) ? $project->ev : 0
                     )
                 ),
                 item
@@ -382,7 +382,7 @@ if($project)
                             (
                                 array
                                 (
-                                    'title'     => $lang->block->tooltips['ac'],
+                                    'content'   => array('html' => $lang->block->tooltips['ac']),
                                     'placement' => 'bottom',
                                     'type'      => 'white',
                                     'className' => 'text-dark border border-light leading-5'
@@ -394,7 +394,7 @@ if($project)
                     span
                     (
                         setClass('font-bold text-black mr-1'),
-                        (!empty($project->ac) ? $project->ac : 0) . $lang->percent
+                        !empty($project->ac) ? $project->ac : 0
                     )
                 )
             )

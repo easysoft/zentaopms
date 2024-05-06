@@ -43,7 +43,8 @@ class formSettingBtn extends wg
                 set::name('fields[]'),
                 set::value($field),
                 set::text($text),
-                set::checked($showFields ? in_array($field, $showFields) : true)
+                set::checked($showFields ? in_array($field, $showFields) : true),
+                empty($text) ? set::rootClass('hidden') : null
             );
         }
         return $items;

@@ -168,7 +168,7 @@ function progressCircle(): progressCircle {return createWg('progressCircle', fun
 function filter(): filter {return createWg('filter', func_get_args());}
 function resultFilter(): resultFilter {return createWg('resultFilter', func_get_args());}
 function contactList(): contactList {return createWg('contactList', func_get_args());}
-function users(): users {return createWg('users', func_get_args());}
+function userPicker(): userPicker {return createWg('userPicker', func_get_args());}
 function mailto(): mailto {return createWg('mailto', func_get_args());}
 function whitelist(): whitelist {return createWg('whitelist', func_get_args());}
 function modulePicker(): modulePicker {return createWg('modulePicker', func_get_args());}
@@ -191,6 +191,7 @@ function caseBasicInfo(): caseBasicInfo {return createWg('caseBasicInfo', func_g
 function caseTimeInfo(): caseTimeInfo {return createWg('caseTimeInfo', func_get_args());}
 function caseRelatedList(): caseRelatedList {return createWg('caseRelatedList', func_get_args());}
 function flowSubTable(): flowSubTable {return createWg('flowSubTable', func_get_args());}
+function contactUs(): contactUs {return createWg('contactUs', func_get_args());
 function thumbnail(): thumbnail {return createWg('thumbnail', func_get_args());}
 function thinkNode(): thinkNode {return createWg('thinkNode', func_get_args());}
 function thinkStep(): thinkStep {return createWg('thinkStep', func_get_args());}

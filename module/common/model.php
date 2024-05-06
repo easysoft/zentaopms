@@ -32,6 +32,15 @@ class commonModel extends model
     public static $requestErrors = array();
 
     /**
+     * 缓存用户是否有某个模块、方法的访问权限。
+     * Cache the user's access rights to a module or method.
+     *
+     * @var array
+     * @access public
+     */
+    public static $userPrivs = array();
+
+    /**
      * 设置用户配置信息。
      * Set config of user.
      *
@@ -1241,6 +1250,33 @@ class commonModel extends model
      */
     public static function hasPriv(string $module, string $method, mixed $object = null, string $vars = '')
     {
+        global $app;
+        if(empty($app->user->account)) return false;
+
+        if($object) return self::getUserPriv($module, $method, $object, $vars);
+
+        $module = strtolower($module);
+        $method = strtolower($method);
+
+        if(!isset(self::$userPrivs[$module][$method][$vars])) self::$userPrivs[$module][$method][$vars] = self::getUserPriv($module, $method, $object, $vars);
+
+        return self::$userPrivs[$module][$method][$vars];
+    }
+
+    /**
+     * 获取用户是否有某个模块、方法的访问权限。
+     * Get the user has the access permission of one module and method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  mixed  $object
+     * @param  string $vars
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function getUserPriv(string $module, string $method, mixed $object = null, string $vars = ''): bool
+    {
         global $app,$config;
         $module = strtolower($module);
         $method = strtolower($method);
@@ -1690,7 +1726,7 @@ class commonModel extends model
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
 
-        global $app, $config;
+        global $config;
         static $productsStatus   = array();
         static $executionsStatus = array();
 
@@ -1701,7 +1737,7 @@ class commonModel extends model
         {
             if(!isset($productsStatus[$object->product]))
             {
-                $product = $commonModel->loadModel('product')->getByID($object->product);
+                $product = $commonModel->loadModel('product')->getByID((int)$object->product);
                 $productsStatus[$object->product] = $product ? $product->status : '';
             }
             if($productsStatus[$object->product] == 'closed') return false;
@@ -2012,6 +2048,8 @@ class commonModel extends model
 
         foreach($lang->$moduleName->$menuKey as $label => $menu)
         {
+            if(!$menu) continue;
+
             $lang->$moduleName->$menuKey->$label = static::setMenuVarsEx($menu, $objectID, $params);
             if(isset($menu['subMenu']))
             {

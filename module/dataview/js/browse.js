@@ -15,7 +15,7 @@ $(function()
         var result = true;
 
         if(dataview.used) result = confirm(warningDesign);
-        if(result) window.location.href = url;
+        if(result) $.apps.open(url, 'bi');
     });
 
     initPager(pageID, recPerPage, recTotal, fieldCount);

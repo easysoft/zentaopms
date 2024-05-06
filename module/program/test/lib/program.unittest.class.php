@@ -547,9 +547,9 @@ class programTest
      * @access public
      * @return array
      */
-    public function updateProcessTest(): array
+    public function updateProgressTest(): array
     {
-        $this->program->updateProcess();
+        $this->program->updateProgress();
         if(dao::isError()) return dao::getError();
 
         return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('program')->fetchAll('id');

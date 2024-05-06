@@ -116,7 +116,7 @@ class buildZen extends build
         $products = array();
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
-        $this->view->title           = $build->name . $this->lang->colon . $this->lang->build->edit;
+        $this->view->title           = $build->name . $this->lang->hyphen . $this->lang->build->edit;
         $this->view->products        = $products;
         $this->view->product         = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
         $this->view->users           = $this->loadModel('user')->getPairs('noletter', $build->builder);

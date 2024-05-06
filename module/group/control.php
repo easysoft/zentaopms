@@ -44,7 +44,7 @@ class group extends control
             $group->users   = implode(',', zget($groupUsers, $group->id, array()));
         }
 
-        $this->view->title  = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->browse;
+        $this->view->title  = $this->lang->company->orgView . $this->lang->hyphen . $this->lang->group->browse;
         $this->view->groups = $groups;
 
         $this->display();
@@ -69,7 +69,7 @@ class group extends control
             return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
+        $this->view->title = $this->lang->company->orgView . $this->lang->hyphen . $this->lang->group->create;
         $this->display();
     }
 
@@ -92,7 +92,7 @@ class group extends control
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
-        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
+        $this->view->title = $this->lang->company->orgView . $this->lang->hyphen . $this->lang->group->edit;
         $this->view->group = $this->group->getByID($groupID);
         $this->display();
     }
@@ -116,7 +116,7 @@ class group extends control
             return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
+        $this->view->title = $this->lang->company->orgView . $this->lang->hyphen . $this->lang->group->copy;
         $this->view->group = $this->group->getById($groupID);
         $this->display();
     }
@@ -143,7 +143,7 @@ class group extends control
 
         /* Get the group data by id. */
         $group = $this->group->getByID($groupID);
-        $this->view->title = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
+        $this->view->title = $this->lang->company->common . $this->lang->hyphen . $group->name . $this->lang->hyphen . $this->lang->group->manageView;
 
         /* Get the list of data sets under administrator permission. */
         if(!$this->app->user->admin)
@@ -233,7 +233,7 @@ class group extends control
         $otherUsers   = array_diff_assoc($allUsers, $groupUsers);
         $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty');
 
-        $this->view->title        = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
+        $this->view->title        = $this->lang->company->common . $this->lang->hyphen . $group->name . $this->lang->hyphen . $this->lang->group->manageMember;
         $this->view->group        = $group;
         $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createGroupManageMemberLink'), $groupID);
         $this->view->groupUsers   = $groupUsers;
@@ -267,7 +267,7 @@ class group extends control
         $group      = $this->group->getById($groupID);
         $groupUsers = $this->dao->select('t1.account, t2.realname')->from(TABLE_PROJECTADMIN)->alias('t1')->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')->fetchPairs();
 
-        $this->view->title         = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
+        $this->view->title         = $this->lang->company->common . $this->lang->hyphen . $group->name . $this->lang->hyphen . $this->lang->group->manageMember;
         $this->view->allUsers      = $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
         $this->view->groupID       = $groupID;
         $this->view->deptID        = $deptID;

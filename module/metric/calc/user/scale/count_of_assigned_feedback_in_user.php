@@ -26,6 +26,16 @@ class count_of_assigned_feedback_in_user extends baseCalc
 
     public $result = array();
 
+    public function singleQuery()
+    {
+        $select = "`assignedTo` as `user`, count(`assignedTo`) as `value`";
+        return $this->dao->select($select)->from($this->getSingleSql())
+            ->where('`assignedTo` IS NOT NULL')
+            ->andWhere('`assignedTo`')->ne('closed')
+            ->groupBy('`user`')
+            ->fetchAll();
+    }
+
     public function calculate($row)
     {
         $assignedTo = $row->assignedTo;

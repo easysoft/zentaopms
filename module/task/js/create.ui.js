@@ -108,8 +108,8 @@ function toggleSelectTestStory()
         $('#form-task-create [data-name=storyBox]').removeClass('hidden');
         $('#form-task-create [data-name=datePlan]').removeClass('hidden');
         $('#form-task-create [data-name=estimate]').removeClass('hidden');
-        $('#form-task-create [name=multiple]').closest('.checkbox-primary').removeClass('hidden');
         $('#form-task-create [data-name=testStoryBox]').addClass('hidden');
+        if($('#form-task-create [name=type]').val() != 'affair') $('#form-task-create [name=multiple]').closest('.checkbox-primary').removeClass('hidden');
 
         if($('#form-task-create [data-name=execution]').hasClass('hidden'))
         {
@@ -506,11 +506,11 @@ window.removeTeamMember = function()
     $(this).closest('.assignedToList').find('.picker-multi-selection').not(this).each(function()
     {
         const account = $(this).data('account');
-        accounts.push(account);
+        if(account) accounts.push(account);
     })
 
     let uniqueAccounts = [...new Set(accounts)];
-    if(uniqueAccounts.length == 1)
+    if(uniqueAccounts && uniqueAccounts.length == 1)
     {
         zui.Modal.alert(teamMemberError);
         return false;
@@ -560,7 +560,7 @@ window.copyStoryTitle = function(e)
     {
         $('[name=name]').val(storyTitle);
         $('[name=estimate]').val($('input[name=storyEstimate]').val());
-        $('[name=desc]').val($('input[name=storyDesc]').val());
+        $('zen-editor[name=desc]')[0].setHTML($('input[name=storyDesc]').val());
         $('input[name=pri]').zui('pripicker').$.setValue($('input[name=storyPri]').val());
     }
     else

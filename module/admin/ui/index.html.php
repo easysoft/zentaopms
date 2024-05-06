@@ -128,7 +128,9 @@ if($zentaoData->plugins)
 {
     foreach($zentaoData->plugins as $plugin)
     {
-        $pluginDesc = preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->abstract));
+        if(!$plugin) continue;
+
+        $pluginDesc = empty($plugin->abstract) ? '' : preg_replace('/[[:cntrl:]]/mu', '', strip_tags($plugin->abstract));
 
         $pluginItems[] = div
         (
@@ -319,6 +321,7 @@ div
     )
 );
 
+$isZeroDay = empty($dateUsed->year) && empty($dateUsed->month) && empty($dateUsed->day);
 div
 (
     setClass('bg-white rounded-md ml-4 px-4'),
@@ -337,7 +340,14 @@ div
             $lang->admin->zentaoUsed,
             $buildUsed((int)$dateUsed->year, $lang->year),
             $buildUsed((int)$dateUsed->month, $lang->admin->mon),
-            $buildUsed((int)$dateUsed->day, $lang->admin->day)
+            $buildUsed((int)$dateUsed->day, $lang->admin->day),
+            $isZeroDay ? span
+            (
+                setClass('bg-gray-100 rounded-md text-lg mx-1 px-1 py-0.5'),
+                0
+            ) : null,
+            $isZeroDay ? $lang->admin->day : null
+
         )
     ),
     div

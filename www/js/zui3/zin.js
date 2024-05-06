@@ -301,8 +301,23 @@
                 const $dropmenu = $(this);
                 const $nextDropmenu = $data.filter(`#${$dropmenu.attr('id')}`);
                 if(!$nextDropmenu.length) return $dropmenu.remove();
-                if($dropmenu.data('fetcher') === $nextDropmenu.data('fetcher')) return;
-                $dropmenu.replaceWith($nextDropmenu);
+                const options = $nextDropmenu.data();
+                const oldOptions = $dropmenu.data();
+                if([options.fetcher, options.url, options.text, options.defaultValue].join() === [oldOptions.fetcher, oldOptions.url, oldOptions.text, oldOptions.defaultValue].join()) return;
+                const oldDropmenu = $dropmenu.zui('dropmenu');
+                if(oldDropmenu)
+                {
+                    oldDropmenu.render(options);
+                    $dropmenu.data(options);
+                    const newState = {};
+                    if(options.defaultValue !== undefined) newState.value = options.defaultValue;
+                    if(options.text !== undefined) newState.text = options.text;
+                    oldDropmenu.$.setState(newState);
+                }
+                else
+                {
+                    $dropmenu.replaceWith($nextDropmenu);
+                }
             });
             $data.filter('[data-fetcher]').each(function()
             {
@@ -581,7 +596,7 @@
                 }
             }
         };
-        $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
+        if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         return $.ajax(ajaxOptions);
     }
 
@@ -959,7 +974,7 @@
         loadPage(
         {
             url:           url,
-            selector:      `#${id}>*`,
+            selector:      `#${id}`,
             partial:       options.partial,
             loadingTarget: loadingTarget,
             loadingClass:  'pointer-events-none',
@@ -975,13 +990,24 @@
 
                 if(options.items)
                 {
-                    const $data = $(info.data).filter('.form-group[data-name]');
+                    const $data = $(info.data).children('.form-group[data-name]');
                     items.forEach(name =>
                     {
                         const $item = $data.filter(`[data-name="${name}"]`);
                         $oldItems.filter(`[data-name="${name}"]`).replaceWith($item);
                         $item.zuiInit();
                     });
+
+                    if(options.updateOrders)
+                    {
+                        const formGrid = $form.zui();
+                        if(formGrid)
+                        {
+                            const orders = [];
+                            $data.each((_, element) => orders.push($(element).attr('data-name')));
+                            formGrid.updateOrders(orders, $form.data('fullModeOrders'));
+                        }
+                    }
                 }
                 else
                 {
@@ -1429,7 +1455,42 @@
         e.preventDefault();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm});
+    function createSelector(name)
+    {
+        return name.replace(/([[\]])/g, '\\$1');
+    };
+
+    function showValidateMessage(message)
+    {
+        let $firstControl = null;
+        Object.entries(message).forEach(([name, msg]) => {
+            if (Array.isArray(msg)) {
+                msg = msg.join('');
+            }
+            const nameSelector = createSelector(name);
+            const $element = $('.form');
+            let $control = $element.find(`#${nameSelector}`);
+            if(!$control.length) $control = $element.find(`[name="${nameSelector}"]`);
+            if(!$control.length && !name.includes('[')) $control = $element.find(`[name="${nameSelector}[]"]`);
+            if($control.hasClass('pick-value')) $control = $control.closest('.pick');
+            $control.addClass('has-error');
+            const $group = $control.closest('.form-group,.form-batch-control');
+            if(!$group.length) return zui.Messager.show({content: msg, type: 'danger', className: 'bg-danger text-canvas gap-2 messager-success'});
+            if($group.length)
+            {
+                let $tip = $group.find(`#${nameSelector}Tip`);
+                if(!$tip.length)
+                {
+                    $tip = $(`<div class="form-tip ajax-form-tip text-danger pre-line" id="${name}Tip"></div>`).appendTo($group);
+                }
+                $tip.empty().text(msg);
+            }
+            if(!$firstControl) $firstControl = $control;
+        });
+        if($firstControl) $firstControl[0]?.focus();
+    }
+
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 

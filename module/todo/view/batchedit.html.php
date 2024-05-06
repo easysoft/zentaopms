@@ -18,7 +18,7 @@
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
-    <h2><?php echo $lang->todo->common . $lang->colon . $lang->todo->batchEdit;?></h2>
+    <h2><?php echo $lang->todo->common . $lang->hyphen . $lang->todo->batchEdit;?></h2>
     <div class='input-group pull-right'>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchEditFields')?>
       <?php include '../../common/view/customfield.html.php';?>    </div>

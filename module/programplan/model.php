@@ -335,7 +335,7 @@ class programplanModel extends model
         foreach($plans as $plan)
         {
             $parallel = isset($plan->parallel) ? $plan->parallel : 0;
-            if(!empty($plan->point)) $enabledPoints = array_merge($enabledPoints, $plan->point); 
+            if(!empty($plan->point)) $enabledPoints = array_merge($enabledPoints, $plan->point);
             if($plan->milestone) $milestone = 1;
             if($plan->id)
             {

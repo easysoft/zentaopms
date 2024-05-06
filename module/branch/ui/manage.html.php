@@ -148,7 +148,6 @@ dtable
     set::cols($config->branch->dtable->fieldList),
     set::data($tableData),
     set::checkable(count($tableData) > 1 ? true : false),
-    set::canRowCheckable(jsRaw("(rowID) => {return rowID == '0' ? false : true}")),
     set::onCheckChange(jsRaw('checkedChange')),
     set::orderBy($orderBy),
     set::sortLink(createLink('branch', 'manage', "productID={$product->id}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),

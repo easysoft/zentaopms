@@ -2,7 +2,7 @@
 <?php
 /**
 
-title=测试 programTao::updateProcess();
+title=测试 programTao::updateProgress();
 timeout=0
 cid=1
 
@@ -16,4 +16,4 @@ zenData('user')->gen(5);
 su('admin');
 
 $programTester = new programTest();
-r($programTester->updateProcessTest()) && p('1:progress') && e('0.00'); // 获取系统中所有项目集的进度
+r($programTester->updateProgressTest()) && p('1:progress') && e('0.00'); // 获取系统中所有项目集的进度

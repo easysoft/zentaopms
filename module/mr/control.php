@@ -100,7 +100,7 @@ class mr extends control
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
         $projects       = $this->mrZen->getAllProjects($repo, $MRList);
 
-        $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
+        $this->view->title      = $this->lang->mr->common . $this->lang->hyphen . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
         $this->view->projects   = $projects;
         $this->view->pager      = $pager;
@@ -165,7 +165,7 @@ class mr extends control
         $objectName = $this->app->tab == 'project' ? 'projectID' : 'executionID';
         $this->view->{$objectName} = $projectID;
 
-        $this->view->title       = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
+        $this->view->title       = $this->lang->mr->common . $this->lang->hyphen . $this->lang->mr->browse;
         $this->view->MRList      = $MRList;
         $this->view->projects    = $projects;
         $this->view->pager       = $pager;
@@ -575,7 +575,7 @@ class mr extends control
         $tasks   = $this->mr->getLinkList($MRID, $productID, 'task',  $type == 'task'  ? $orderBy : '', $taskPager);
         $builds  = $this->loadModel('build')->getBuildPairs($productID);
 
-        $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->link;
+        $this->view->title      = $this->lang->mr->common . $this->lang->hyphen . $this->lang->mr->link;
         $this->view->MR         = $MR;
         $this->view->repoID     = $MR->repoID;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');

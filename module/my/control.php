@@ -167,7 +167,7 @@ class my extends control
         }
 
         /* Assign. */
-        $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
+        $this->view->title        = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->todo;
         $this->view->todos        = $todos;
         $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
         $this->view->type         = $type;
@@ -238,7 +238,7 @@ class my extends control
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
-        $this->view->title    = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
+        $this->view->title    = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
         $this->view->stories  = $stories;
         $this->view->users    = $this->user->getPairs('noletter');
         $this->view->type     = $type;
@@ -303,7 +303,7 @@ class my extends control
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
-        $this->view->title    = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
+        $this->view->title    = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
         $this->view->stories  = $stories;
         $this->view->users    = $this->user->getPairs('noletter');
         $this->view->type     = $type;
@@ -366,7 +366,7 @@ class my extends control
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->task;
         $this->view->tabID      = 'task';
         $this->view->tasks      = $this->app->viewType == 'json' ?  array_values($tasks) : $tasks;
         $this->view->summary    = $summary;
@@ -436,7 +436,7 @@ class my extends control
         }
 
         /* assign. */
-        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
+        $this->view->title       = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->bug;
         $this->view->bugs        = $bugs;
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->memberPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
@@ -494,7 +494,7 @@ class my extends control
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
-        $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestTask;
+        $this->view->title        = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->myTestTask;
         $this->view->tasks        = $tasks;
         $this->view->type         = $type;
         $this->view->waitCount    = $count['wait'];
@@ -552,7 +552,7 @@ class my extends control
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         /* Assign. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestCase;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->myTestCase;
         $this->view->cases      = $cases;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->tabID      = 'test';
@@ -603,7 +603,7 @@ class my extends control
         $this->loadModel('doc')->buildSearchForm(0, array(), $queryID, $actionURL, 'contribute');
 
         /* Assign. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->doc;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->doc;
         $this->view->docs       = $docs;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->type       = $type;
@@ -651,7 +651,7 @@ class my extends control
         }
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
-        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
+        $this->view->title       = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->project;
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->projects    = $projects;
         $this->view->PMList      = $PMList;
@@ -687,7 +687,7 @@ class my extends control
 
         $executions  = $this->user->getExecutions($this->app->user->account, $type, $orderBy, $pager);
 
-        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
+        $this->view->title       = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->execution;
         $this->view->tabID       = 'project';
         $this->view->executions  = $executions;
         $this->view->parentGroup = $this->loadModel('execution')->getChildIdGroup(array_keys($executions));
@@ -890,7 +890,7 @@ class my extends control
         $this->view->activities      = $this->pssp->getActivityPairs();
         $this->view->outputs         = $this->pssp->getOutputPairs();
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->auditplan;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->auditplan;
         $this->view->browseType = $browseType;
         $this->view->auditplans = $auditplans;
         $this->view->users      = $this->user->getPairs('noclosed|noletter');
@@ -935,7 +935,7 @@ class my extends control
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->nc;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->nc;
         $this->view->browseType = $browseType;
         $this->view->ncs        = $ncList;
         $this->view->users      = $this->user->getPairs('noclosed|noletter');
@@ -976,7 +976,7 @@ class my extends control
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myMeeting;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->myMeeting;
         $this->view->browseType = $browseType;
         $this->view->meetings   = $this->meeting->getListByUser($browseType, $orderBy, $queryID, $pager);
         $this->view->orderBy    = $orderBy;
@@ -1158,7 +1158,7 @@ class my extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('my', 'profile')));
         }
 
-        $this->view->title = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
+        $this->view->title = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->editProfile;
         $this->view->user  = $this->user->getById($this->app->user->account);
         $this->view->rand  = updateSessionRandom();
         $this->display();
@@ -1198,7 +1198,7 @@ class my extends control
         }
 
         $this->view->isonlybody = $isonlybody;
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->changePassword;
         $this->view->user       = $this->user->getById($this->app->user->account);
         $this->view->rand       = updateSessionRandom();
         $this->display();
@@ -1251,7 +1251,7 @@ class my extends control
         $userParams = empty($this->config->user->showDeleted) ? 'noletter|noempty|noclosed|noclosed|nodeleted' : 'noletter|noempty|noclosed|noclosed';
         $users      = $this->user->getPairs($userParams, $mode == 'new' ? '' : $userList, $this->config->maxCount);
 
-        $this->view->title = $this->lang->my->common . $this->lang->colon . $label;
+        $this->view->title = $this->lang->my->common . $this->lang->hyphen . $label;
         $this->view->lists = $this->user->getContactLists($this->app->user->account, 'list');
         $this->view->users = $users;
         $this->view->mode  = $mode;
@@ -1304,7 +1304,7 @@ class my extends control
 
         $user = $this->user->getById($this->app->user->account);
 
-        $this->view->title    = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
+        $this->view->title    = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->profile;
         $this->view->user     = $user;
         $this->view->groups   = $this->loadModel('group')->getByAccount($this->app->user->account);
         $this->view->deptPath = $this->dept->getParents($user->dept);
@@ -1331,7 +1331,7 @@ class my extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
         }
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->preference;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->preference;
         $this->view->showTip    = $showTip;
 
         $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
@@ -1399,7 +1399,7 @@ class my extends control
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
 
         /* Assign. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
+        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->dynamic;
         $this->view->type       = $type;
         $this->view->orderBy    = $orderBy;
         $this->view->dateGroups = $dateGroups;

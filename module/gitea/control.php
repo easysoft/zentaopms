@@ -52,7 +52,7 @@ class gitea extends control
             if(!$this->app->user->admin && !isset($myGiteas[$gitea->id])) $gitea->isBindUser = false;
         }
 
-        $this->view->title     = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->browse;
+        $this->view->title     = $this->lang->gitea->common . $this->lang->hyphen . $this->lang->gitea->browse;
         $this->view->giteaList = $giteaList;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
@@ -84,7 +84,7 @@ class gitea extends control
             return $this->sendSuccess(array('locate' => $this->createLink('space', 'browse')));
         }
 
-        $this->view->title = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->lblCreate;
+        $this->view->title = $this->lang->gitea->common . $this->lang->hyphen . $this->lang->gitea->lblCreate;
         $this->display();
     }
 
@@ -99,7 +99,7 @@ class gitea extends control
     {
         $gitea = $this->gitea->fetchByID($giteaID);
 
-        $this->view->title   = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->view;
+        $this->view->title   = $this->lang->gitea->common . $this->lang->hyphen . $this->lang->gitea->view;
         $this->view->gitea   = $gitea;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
         $this->view->actions = $this->loadModel('action')->getList('gitea', $giteaID);
@@ -136,7 +136,7 @@ class gitea extends control
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
-        $this->view->title = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->edit;
+        $this->view->title = $this->lang->gitea->common . $this->lang->hyphen . $this->lang->gitea->edit;
         $this->view->gitea = $oldGitea;
         $this->display();
     }

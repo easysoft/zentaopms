@@ -802,10 +802,11 @@ class kanbanModel extends model
      *
      * @param  int    $kanbanID
      * @param  int    $regionID
+     * @param  int    $regionCount
      * @access public
      * @return array
      */
-    public function getRDRegionActions(int $kanbanID, int $regionID): array
+    public function getRDRegionActions(int $kanbanID, int $regionID, int $regionCount = 1): array
     {
         $action  = array();
         $actions = array();
@@ -815,9 +816,10 @@ class kanbanModel extends model
         $action['caret'] = false;
         $action['items'] = array();
 
-        if(common::hasPriv('kanban', 'createRegion')) $action['items'][] = array('text' => $this->lang->kanban->createRegion, 'url' => helper::createLink('kanban', 'createRegion', "kanbanID=$kanbanID&from=execution"), 'data-toggle' => 'modal', 'icon' => 'plus');
-        if(common::hasPriv('kanban', 'editRegion'))   $action['items'][] = array('text' => $this->lang->kanban->editRegion,   'url' => helper::createLink('kanban', 'editRegion', "regionID=$regionID"), 'data-toggle' => 'modal', 'icon' => 'edit');
-        if(common::hasPriv('kanban', 'createLane'))   $action['items'][] = array('text' => $this->lang->kanban->createLane,   'url' => helper::createLink('kanban', 'createLane', "kanbanID=$kanbanID&regionID=$regionID&from=execution"), 'data-toggle' => 'modal', 'icon' => 'plus');
+        if(common::hasPriv('kanban', 'createRegion'))                       $action['items'][] = array('text' => $this->lang->kanban->createRegion, 'url' => helper::createLink('kanban', 'createRegion', "kanbanID=$kanbanID&from=execution"), 'data-toggle' => 'modal', 'icon' => 'plus');
+        if(common::hasPriv('kanban', 'editRegion'))                         $action['items'][] = array('text' => $this->lang->kanban->editRegion,   'url' => helper::createLink('kanban', 'editRegion', "regionID=$regionID"), 'data-toggle' => 'modal', 'icon' => 'edit');
+        if(common::hasPriv('kanban', 'createLane'))                         $action['items'][] = array('text' => $this->lang->kanban->createLane,   'url' => helper::createLink('kanban', 'createLane', "kanbanID=$kanbanID&regionID=$regionID&from=execution"), 'data-toggle' => 'modal', 'icon' => 'plus');
+        if(common::hasPriv('kanban', 'deleteRegion') && ($regionCount > 1)) $action['items'][] = array('text' => $this->lang->kanban->deleteRegion, 'url' => helper::createLink('kanban', 'deleteRegion', "regionID=$regionID"), 'data-confirm' => $this->lang->kanbanregion->confirmDelete, 'icon' => 'trash', 'innerClass' => 'ajax-submit');
 
         $actions[] = $action;
         return $actions;
@@ -934,7 +936,7 @@ class kanbanModel extends model
             $heading              = new stdclass();
             $heading->title       = new stdClass();
             $heading->title->html = $regionName . '<span class="icon icon-angle-top"></span>';
-            $heading->actions     = $this->getRDRegionActions($executionID, $regionID);
+            $heading->actions     = $this->getRDRegionActions($executionID, $regionID, count($regions));
 
             $regionData['key']               = "region{$regionID}";
             $regionData['id']                = $regionID;
@@ -969,7 +971,7 @@ class kanbanModel extends model
         $regionData = array();
         $heading          = new stdclass();
         $heading->title   = $execution->name;
-        $heading->actions = $this->getRDRegionActions($execution->id, $regionID);
+        $heading->actions = $this->getRDRegionActions($execution->id, $regionID, 1);
 
         $regionData['key']               = "region{$execution->id}";
         $regionData['id']                = $execution->id;
@@ -1161,7 +1163,7 @@ class kanbanModel extends model
             $item['group']  = $column->group;
             $item['parent'] = $column->parent;
             $item['color']  = $column->color;
-            $item['order']  = $column->order;
+            $item['order']  = (int)$column->order;
             if($column->parent > 0) $item['parentName'] = $column->parent;
 
             /* Judge column action priv. */
@@ -1715,7 +1717,7 @@ class kanbanModel extends model
             $lane->type       = $browseType;
             $lane->execution  = $executionID;
             $lane->name       = $objectName;
-            $lane->order      = $order;
+            $lane->order      = (int)$order;
             $lane->color      = $this->config->kanban->laneColorList[$laneColor];
             $lane->pri        = (isset($objects) && isset($objects[$objectType]->pri)) ? $objects[$objectType]->pri : '';
             $lane->assignedTo = (isset($objects) && isset($objects[$objectType]->assignedTo)) ? $objects[$objectType]->assignedTo : '';

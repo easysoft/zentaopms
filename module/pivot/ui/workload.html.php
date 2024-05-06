@@ -66,6 +66,7 @@ $generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, 
             setID('pivotPanel'),
             set::title($title),
             set::shadow(false),
+            set::headingClass('h-14'),
             set::bodyClass('pt-0'),
             to::titleSuffix
             (

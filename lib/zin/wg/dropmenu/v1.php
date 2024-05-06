@@ -52,6 +52,20 @@ class dropmenu extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
+    protected function buildDropmenu(string $menuID, string $id, null|string $url, null|string $text, null|array $data, string|int|null $defaultValue)
+    {
+        $cache = $this->prop('cache');
+        return zui::dropmenu
+        (
+            setID($menuID),
+            set('_id', $id),
+            set('_props', array('data-fetcher' => $url, 'data-text' => $text, 'data-default-value' => $defaultValue, 'data-cache' => $cache)),
+            set('data', $data),
+            set(array('fetcher' => $url, 'text' => $text, 'defaultValue' => $defaultValue, 'cache' => $cache)),
+            set($this->getRestProps())
+        );
+    }
+
     /**
      * Override the build method.
      *
@@ -118,15 +132,7 @@ class dropmenu extends wg
                         $extra = data('viewType');
                     }
                     $branchURL  = createLink('branch', 'ajaxGetDropMenu', "objectID=$objectID&branch=$branchID&module=$module&method=$method&extra=$extra");
-                    $branchMenu = zui::dropmenu
-                    (
-                        setID('branch-dropmenu'),
-                        set('_id', 'branch-dropmenu'),
-                        set('_props', array('data-fetcher' => $branchURL)),
-                        set('data', $data),
-                        set(array('fetcher' => $branchURL, 'text' => $branchName, 'defaultValue' => $branchID)),
-                        set($this->getRestProps())
-                    );
+                    $branchMenu = $this->buildDropmenu('branch-dropmenu', 'branch-dropmenu', $branchURL, $branchName, $data, $branchID);
                 }
             }
         }
@@ -134,15 +140,7 @@ class dropmenu extends wg
         if($module == 'testtask' && in_array($method, array('cases', 'view', 'report', 'groupcase', 'linkcase')) && $app->tab == 'qa')
         {
             $testtaskUrl  = createLink('testtask', 'ajaxGetDropMenu', data('switcherParams'));
-            $testtaskMenu = zui::dropmenu
-                (
-                    setID('testtask-dropmenu'),
-                    set('_id', 'testtask-dropmenu'),
-                    set('_props', array('data-fetcher' => $testtaskUrl)),
-                    set('data', $data),
-                    set(array('fetcher' => $testtaskUrl, 'text' => data('switcherText'), 'defaultValue' => data('switcherObjectID'))),
-                    set($this->getRestProps())
-                );
+            $testtaskMenu = $this->buildDropmenu('testtask-dropmenu', 'testtask-dropmenu', $testtaskUrl, data('switcherText'), $data, data('switcherObjectID'));
         }
 
         if($tab == 'admin')
@@ -155,7 +153,7 @@ class dropmenu extends wg
             $objectID       = $currentMenuKey;
         }
 
-        if($tab == 'caselib') $objectID = data('libID');
+        if($tab == 'caselib')  $objectID = data('libID');
         if($tab == 'feedback') $objectID = data('productID');
 
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
@@ -177,15 +175,7 @@ class dropmenu extends wg
 
         return array
         (
-            zui::dropmenu
-            (
-                setID($menuID),
-                set('_id', $id),
-                set('_props', array('data-fetcher' => $url)),
-                set('data', $data),
-                set(array('fetcher' => $url, 'text' => $text, 'defaultValue' => $objectID, 'cache' => $cache)),
-                set($this->getRestProps())
-            ),
+            $this->buildDropmenu($menuID, $id, $url, $text, $data, $objectID),
             $branchMenu,
             isset($testtaskMenu) ? $testtaskMenu : null
         );

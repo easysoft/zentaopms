@@ -165,20 +165,20 @@ JS
 );
 
 $copyProjectsBox = array();
-foreach($copyProjects as $id => $name)
+foreach($copyProjects as $id => $project)
 {
     $copyProjectsBox[] = btn(
         setClass('project-block justify-start'),
         setClass($copyProjectID == $id ? 'primary-outline' : ''),
         set('data-id', $id),
-        set('data-pinyin', zget($copyPinyinList, $name, '')),
+        set('data-pinyin', zget($copyPinyinList, $project->name, '')),
         icon
         (
             setClass('text-gray'),
             $lang->icons['project']
         ),
         on::click($toggleActiveProject),
-        span($name, set::title($name), setClass('text-left'))
+        span($project->name, set::title($project->name), setClass('text-left'))
     );
 }
 

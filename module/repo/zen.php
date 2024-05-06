@@ -378,7 +378,7 @@ class repoZen extends repo
         }
 
         $projects = $this->product->getProjectPairsByProductIDList(array_keys($products));
-        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->title           = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->create;
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
@@ -425,7 +425,7 @@ class repoZen extends repo
             $repoGroups = $this->repo->getGroups($serverID);
         }
 
-        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->title           = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->create;
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
@@ -474,7 +474,7 @@ class repoZen extends repo
         $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
         $products           = $products + $linkedProductPairs;
 
-        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $this->view->title           = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->edit;
         $this->view->repo            = $repo;
         $this->view->repoID          = $repoID;
         $this->view->objectID        = $objectID;

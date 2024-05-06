@@ -28,7 +28,11 @@ foreach($actions as $actionType => $typeActions)
         $actions[$actionType][$key]['url']       = str_replace('{id}', (string)$release->id, $action['url']);
         if($actionType == 'suffixActions')
         {
-            if($action['icon'] == 'edit')  $actions['suffixActions'][$key]['text'] = $lang->edit;
+            if($action['icon'] == 'edit')
+            {
+                $actions['suffixActions'][$key]['text']     = $lang->edit;
+                $actions['suffixActions'][$key]['data-app'] = $app->tab;
+            }
             if($action['icon'] == 'trash') $actions['suffixActions'][$key]['text'] = $lang->delete;
         }
     }

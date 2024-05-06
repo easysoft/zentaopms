@@ -155,7 +155,7 @@ class testsuite extends control
         $productID  = $this->product->checkAccess($productID, $this->products);
         $this->loadModel('qa')->setMenu($productID);
 
-        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->create;
+        $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->testsuite->create;
         $this->view->productID = $productID;
         $this->display();
     }
@@ -250,7 +250,7 @@ class testsuite extends control
         $productID = $this->product->checkAccess($suite->product, $this->products);
         $this->loadModel('qa')->setMenu($productID);
 
-        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->testsuite->edit;
+        $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->testsuite->edit;
         $this->view->suite     = $suite;
         $this->view->productID = $productID;
         $this->display();
@@ -339,7 +339,7 @@ class testsuite extends control
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
-        $this->view->title      = $suite->name . $this->lang->colon . $this->lang->testsuite->linkCase;
+        $this->view->title      = $suite->name . $this->lang->hyphen . $this->lang->testsuite->linkCase;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->cases      = $this->testsuite->getUnlinkedCases($suite, $browseType, $param, $pager);
         $this->view->suiteID    = $suiteID;

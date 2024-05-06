@@ -26,3 +26,37 @@ ALTER TABLE `zt_demandreview` CHANGE `reviewDate` `reviewDate` datetime NULL;
 
 DELETE FROM `zt_lang` WHERE `module` = 'project' AND `section` = 'menuOrder';
 DELETE FROM `zt_config` WHERE `module` = 'bi' AND `key` IN ('update2BI','bizGuide','pmsGuide');
+
+UPDATE `zt_metric` SET `name` = '按瀑布项目统计的截止本周的任务的计划完成工时(PV)',     `alias` = '截止本周的任务的计划完成工时(PV)' WHERE `code` = 'pv_of_task_in_waterfall';
+UPDATE `zt_metric` SET `name` = '按瀑布项目统计的截止本周已完成任务工作的预计工时(EV)', `alias` = '截止本周已完成任务工作的预计工时' WHERE `code` = 'ev_of_finished_task_in_waterfall';
+UPDATE `zt_metric` SET `name` = '按瀑布项目统计截止本周的实际花费工时(AC)',            `alias` = '瀑布项目截止本周实际花费工时'     WHERE `code` = 'ac_of_all_in_waterfall';
+UPDATE `zt_metric` SET `name` = '按瀑布项目统计的截止本周的进度偏差率',                `alias` = '进度偏差率'                       WHERE `code` = 'sv_in_waterfall';
+UPDATE `zt_metric` SET `name` = '按瀑布项目统计的截止本周的成本偏差率',                `alias` = '成本偏差率'                       WHERE `code` = 'cv_in_waterfall';
+
+UPDATE `zt_metric` SET `desc` = '按瀑布项目统计的每周的任务的计划完成工时指的是在瀑布项目管理方法中，按计划需要完成的任务的总预计工时。这个度量项用于评估每周的任务的预期工作量，可用作与实际花费工时和已完成任务的预计工时进行比较。' WHERE `code` = 'pv_of_task_in_waterfall';
+UPDATE `zt_metric` SET `desc` = '按瀑布项目统计的截止本周已完成任务工作的预计工时指的是在瀑布项目管理方法中，已经完成的任务的预计工时。这个度量项用来评估项目进展与实际完成情况的一致性。EV的值越高，代表项目团队在按计划完成任务的工作量方面表现得越好。' WHERE `code` = 'ev_of_finished_task_in_waterfall';
+UPDATE `zt_metric` SET `desc` = '按瀑布项目统计的截止本周实际花费工时指的是在瀑布项目管理方法中，截止本周实际花费的工时总数。这个度量项用于评估实际工作量和预计工作量之间的差异，有助于估计项目的真实进展情况。AC的值越接近EV，代表项目团队在任务执行方面表现得越好。'     WHERE `code` = 'ac_of_all_in_waterfall';
+UPDATE `zt_metric` SET `desc` = '按瀑布项目统计的截止本周的进度偏差率是用来衡量项目截止本周的进度与计划进度之间的差异。它通过计算已完成的工作量与计划工作量之间的差异来评估项目的进展情况。' WHERE `code` = 'sv_in_waterfall';
+UPDATE `zt_metric` SET `desc` = '按瀑布项目统计的截止本周的成本偏差率用于衡量项目的实际成本与计划成本之间的差异。它通过计算已花费的成本与预计花费的成本之间的差异来评估项目的成本绩效。' WHERE `code` = 'cv_in_waterfall';
+
+UPDATE `zt_metric` SET `definition` = '1.任务截至日期小于等于本周结束日期，累加预计工时。/n/r2.任务预计开始日期小于或等于本周结束日期，预计截至日期大于本周结束日期，累加预计工时=(任务的预计工时÷任务工期天数)x 任务预计开始到本周结束日期的天数。/n/r条件：过滤父任务，过滤已删除的任务，过滤已取消的任务，过滤已删除的执行的任务，过滤已删除的项目；任务未填写预计开始日期时默认取任务所属阶段的计划开始日期；任务未填写预计截至日期，预计截至日期默认取任务所属阶段的计划完成日期，时间只计算后台维护的工作日。' WHERE `code` = 'pv_of_task_in_waterfall';
+UPDATE `zt_metric` SET `definition` = '复用： 按项目统计的任务进度、按项目统计的任务预计工时数，公式： 按项目统计的已完成任务工作的预计工时(EV)=按项目统计的任务预计工时数*按项目统计的任务进度；要求项目为瀑布项目，过滤父任务，过滤消耗工时为0的任务，过滤已删除的任务，过滤已取消的任务，过滤已删除执行下的任务，过滤已删除的项目。' WHERE `code` = 'ev_of_finished_task_in_waterfall';
+UPDATE `zt_metric` SET `definition` = '瀑布项目中本周结束之前所有日志记录的工时之和 过滤已删除的项目。'     WHERE `code` = 'ac_of_all_in_waterfall';
+UPDATE `zt_metric` SET `definition` = '复用： 按瀑布项目统计的截止本周已完成任务工作的预计工时(EV) 、按瀑布项目统计的截止本周的任务的计划完成工时(PV)，公式： 按瀑布项目统计的截止本周的进度偏差率=(EV-PV)/PV*100%' WHERE `code` = 'sv_in_waterfall';
+UPDATE `zt_metric` SET `definition` = '复用： 按瀑布项目统计的截止本周已完成任务工作的预计工时、按瀑布项目统计的截止本周的实际花费工时(AC) 公式： 按瀑布项目统计的截止本周的成本偏差率=(EV-AC)/AC*100%' WHERE `code` = 'cv_in_waterfall';
+
+UPDATE `zt_metric` SET `code` = 'pv_of_weekly_task_in_waterfall',          `dateType` = 'week' WHERE `code` = 'pv_of_task_in_waterfall';
+UPDATE `zt_metric` SET `code` = 'ev_of_weekly_finished_task_in_waterfall', `dateType` = 'week' WHERE `code` = 'ev_of_finished_task_in_waterfall';
+UPDATE `zt_metric` SET `code` = 'ac_of_weekly_all_in_waterfall',           `dateType` = 'week' WHERE `code` = 'ac_of_all_in_waterfall';
+UPDATE `zt_metric` SET `code` = 'sv_weekly_in_waterfall',                  `dateType` = 'week' WHERE `code` = 'sv_in_waterfall';
+UPDATE `zt_metric` SET `code` = 'cv_weekly_in_waterfall',                  `dateType` = 'week' WHERE `code` = 'cv_in_waterfall';
+
+UPDATE `zt_metriclib` SET `metricCode` = 'pv_of_weekly_task_in_waterfall'          WHERE `metricCode` = 'pv_of_task_in_waterfall';
+UPDATE `zt_metriclib` SET `metricCode` = 'ev_of_weekly_finished_task_in_waterfall' WHERE `metricCode` = 'ev_of_finished_task_in_waterfall';
+UPDATE `zt_metriclib` SET `metricCode` = 'ac_of_weekly_all_in_waterfall'           WHERE `metricCode` = 'ac_of_all_in_waterfall';
+UPDATE `zt_metriclib` SET `metricCode` = 'sv_weekly_in_waterfall'                  WHERE `metricCode` = 'sv_in_waterfall';
+UPDATE `zt_metriclib` SET `metricCode` = 'cv_weekly_in_waterfall'                  WHERE `metricCode` = 'cv_in_waterfall';
+
+UPDATE `zt_metric` SET `definition` = '复用：\r\n按项目统计的实际工期\r\n按项目统计的计划工期\r\n公式：\r\n按项目统计的工期偏差=按项目统计的实际工期-按项目统计的计划工期\r\n其中未开始项目工期偏差为0' WHERE `code` = 'variance_of_time_in_project';
+
+UPDATE `zt_chart` SET `sql` = 'select\r\nyear,\r\ncount(a.id) as totalBugCount,\r\nsum(a.effectivebug) as effectiveBugCount,\r\nround(sum(a.effectivebug)/count(a.id) * 100, 2) effectiveBugRate\r\nfrom(\r\nselect \r\nleft(openedDate,4) year,\r\nid,\r\n(case when  resolution in (\'fixed\',\'postponed\') or status=\'active\' then 1 else 0 end) effectivebug,\r\n(case when  resolution=\'fixed\' then 1 else 0 end) fixedBug\r\nfrom zt_bug\r\nwhere zt_bug.deleted=\'0\'\r\n) a\r\ngroup by a.year\r\norder by  a.year' WHERE `name` = '质量数据-有效Bug率年度趋势图';

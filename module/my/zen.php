@@ -28,6 +28,7 @@ class myZen extends my
             $task->consumedLabel = $task->consumed . $this->lang->execution->workHourUnit;
             $task->leftLabel     = $task->left     . $this->lang->execution->workHourUnit;
             $task->status        = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')) ? $this->lang->my->storyChanged : $task->status;
+            $task->canBeChanged  = common::canBeChanged('task', $task);
             if($task->parent > 0)
             {
                 if(isset($tasks[$task->parent]))

@@ -10,6 +10,11 @@
 * @link        http://www.zentao.net
 */
 
+$config->contactUs['phone']  = '4006-8899-23';
+$config->contactUs['email']  = 'co@zentao.net';
+$config->contactUs['qq']     = '1492153927';
+$config->contactUs['wechat'] = '13730922971';
+
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
 $config->productCommonList['zh-cn'][1] = '项目';
@@ -736,7 +741,7 @@ $config->db->sqliteBlacklist  = array('sqlite_queue', 'cron');
 $config->hasDropmenuApps      = array('program', 'project', 'product', 'execution', 'qa', 'admin', 'bi', 'feedback');
 $config->hasBranchMenuModules = array('product', 'story', 'release', 'bug', 'testcase', 'testtask', 'branch', 'tree');
 $config->excludeBranchMenu    = array('product-dashboard', 'product-view');
-$config->excludeDropmenuList  = array('program-browse', 'program-productview', 'program-kanban', 'product-all', 'product-index', 'product-kanban', 'project-kanban', 'execution-all', 'execution-executionkanban', 'project-browse', 'project-batchedit', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit', 'metric-preview', 'metric-browse', 'metric-view', 'metriclib-browse', 'qa-index', 'caselib-create', 'feedback-batchedit', 'feedback-batchclose', 'dimension-browse');
+$config->excludeDropmenuList  = array('program-browse', 'program-productview', 'program-kanban', 'product-all', 'product-index', 'product-kanban', 'project-kanban', 'execution-all', 'execution-executionkanban', 'project-browse', 'project-batchedit', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'metric-preview', 'metric-browse', 'metric-view', 'metriclib-browse', 'qa-index', 'caselib-create', 'feedback-batchedit', 'feedback-batchclose', 'dimension-browse');
 $config->hasSwitcherModules   = array('design');
 $config->hasSwitcherMethods   = array('project-bug', 'project-testcase', 'execution-bug', 'execution-testcase', 'testtask-cases', 'testtask-view', 'testtask-report', 'testtask-groupcase', 'testtask-linkcase');
 $config->excludeSwitcherList  = array();

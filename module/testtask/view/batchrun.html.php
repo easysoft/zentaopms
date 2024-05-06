@@ -15,7 +15,7 @@
 <?php $this->app->loadLang('testcase'); unset($this->lang->testcase->resultList['n/a']); ?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo ($from == 'testtask' ? ($lang->testtask->common . $lang->colon) : ''). $lang->testtask->batchRun;?></h2>
+    <h2><?php echo ($from == 'testtask' ? ($lang->testtask->common . $lang->hyphen) : ''). $lang->testtask->batchRun;?></h2>
   </div>
   <form class='main-form no-stash' method='post' target='hiddenwin'>
     <table class='table table-fixed table-form table-bordered'>

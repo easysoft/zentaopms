@@ -8,7 +8,7 @@
 }
 [lang^='en'] {--zt-menu-width: 106px;}
 
-#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: rgba(var(--color-canvas-rgb), .8); transition: width .2s; user-select: none; z-index: 10;}
+#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: rgba(var(--color-canvas-rgb), .8); transition: width .1s; user-select: none; z-index: 10;}
 #menu .nav {flex-direction: column; align-items: stretch;}
 #menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 8px; transition: padding .2s;}
 #menu .nav > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 0; margin: 6px 12px;}
@@ -40,10 +40,10 @@
 .hide-menu #menu #menuMoreNav .nav > li > a > .text {display: flex;}
 .hide-menu #menu .menu-toggle > .icon {transform: rotate(180deg);}
 
-#apps {position: fixed; left: var(--zt-menu-width); top: 0; bottom: var(--zt-apps-bar-height); right: 0; background-color: var(--zt-page-bg); transition: left .2s;}
+#apps {position: fixed; left: var(--zt-menu-width); top: 0; bottom: var(--zt-apps-bar-height); right: 0; background-color: var(--zt-page-bg); transition: left .1s;}
 .hide-menu #apps {left: var(--zt-menu-fold-width)!important;}
 
-#appsBar {display: flex; flex-wrap: nowrap; align-items: center; position: fixed; left: var(--zt-menu-width); bottom: 0; right: 0; height: var(--zt-apps-bar-height); padding: 0 4px; background: var(--zt-apps-bar-bg); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .2s; border-top-width: 1px;}
+#appsBar {display: flex; flex-wrap: nowrap; align-items: center; position: fixed; left: var(--zt-menu-width); bottom: 0; right: 0; height: var(--zt-apps-bar-height); padding: 0 4px; background: var(--zt-apps-bar-bg); box-shadow: 0 -2px 12px rgba(0,0,0,.02); transition: left .1s; border-top-width: 1px;}
 .hide-menu #appsBar {left: var(--zt-menu-fold-width)!important;}
 #appTabs {flex: auto; user-select: none; --nav-active-color: currentColor}
 #appTabs > li > a {border-radius: var(--radius-md); opacity: .6;}
@@ -58,7 +58,8 @@
 #visionSwitcher::before {right: -10px; border-left-color: var(--color-fore); opacity: .1;}
 #versionSwitchBtn {padding: 0 6px;}
 
-.app-container {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; transition-duration: .3s; background: var(--zt-page-bg) linear-gradient(180deg, var(--zt-header-bg) 0, var(--zt-header-bg) 48px, rgba(255,0,0,0) 48px) no-repeat;}
+.app-container {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; transition-duration: .3s; background: var(--zt-page-bg);}
+.app-container.loading {background: var(--zt-page-bg) linear-gradient(180deg, var(--zt-header-bg) 0, var(--zt-header-bg) 48px, rgba(255,0,0,0) 48px) no-repeat;}
 .app-container.loading:before {background-color: rgba(0,0,0,.1);}
 .app-container.loading:before, .ap p-container.loading::after {transition-delay: 3s;}
 .app-container.loading.open-from-hidden {transition-delay: 0s;}

@@ -189,7 +189,7 @@ div
     div
     (
         setClass('entity-label flex items-center gap-x-2 text-lg font-bold'),
-        $viewType == 'host' ? $root->name : $lang->tree->common . $lang->colon . $root->name
+        $viewType == 'host' ? $root->name : $lang->tree->common . $lang->hyphen . $root->name
     )
 );
 

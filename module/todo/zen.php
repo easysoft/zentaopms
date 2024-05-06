@@ -20,7 +20,7 @@ class todoZen extends todo
      */
     protected function buildCreateView(string $date)
     {
-        $this->view->title = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->create;
+        $this->view->title = $this->lang->todo->common . $this->lang->hyphen . $this->lang->todo->create;
         $this->view->date  = date('Y-m-d', strtotime($date));
         $this->view->times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time  = date::now();
@@ -46,7 +46,7 @@ class todoZen extends todo
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->todo->custom->batchCreateFields;
 
-        $this->view->title      = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchCreate;
+        $this->view->title      = $this->lang->todo->common . $this->lang->hyphen . $this->lang->todo->batchCreate;
         $this->view->date       = (int)$date == 0 ? $date : date('Y-m-d', strtotime($date));
         $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time       = date::now();
@@ -66,7 +66,7 @@ class todoZen extends todo
     protected function buildEditView(object $todo): void
     {
         $todo->date = date("Y-m-d", strtotime($todo->date));
-        $this->view->title = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->edit;
+        $this->view->title = $this->lang->todo->common . $this->lang->hyphen . $this->lang->todo->edit;
         $this->view->times = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->todo  = $todo;
         $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
@@ -464,7 +464,7 @@ class todoZen extends todo
         $this->view->showFields   = $this->config->todo->custom->batchEditFields;
         $this->view->times        = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time         = date::now();
-        $this->view->title        = $this->lang->todo->common . $this->lang->colon . $this->lang->todo->batchEdit;
+        $this->view->title        = $this->lang->todo->common . $this->lang->hyphen . $this->lang->todo->batchEdit;
 
         $this->display();
     }

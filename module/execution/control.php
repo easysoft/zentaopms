@@ -194,7 +194,7 @@ class execution extends control
         if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
         $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL, $modules);
 
-        $this->view->title       = $execution->name . $this->lang->colon . $this->lang->execution->task;
+        $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->execution->task;
         $this->view->tasks       = $tasks;
         $this->view->pager       = $pager;
         $this->view->orderBy     = $orderBy;
@@ -269,7 +269,7 @@ class execution extends control
         list($groupTasks, $allCount) = $this->executionZen->filterGroupTasks($groupTasks, $groupBy, $filter, $allCount, $tasks);
 
         /* Assign. */
-        $this->view->title       = $execution->name . $this->lang->colon . $this->lang->execution->task;
+        $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->execution->task;
         $this->view->members     = $this->execution->getTeamMembers($executionID);
         $this->view->tasks       = $groupTasks;
         $this->view->groupByList = $groupByList;
@@ -334,7 +334,7 @@ class execution extends control
         $tasks2ImportedList = empty($tasks2ImportedList) ? $tasks2ImportedList : $tasks2ImportedList[$pageID - 1];
         $tasks2ImportedList = $this->loadModel('task')->processTasks($tasks2ImportedList);
 
-        $this->view->title          = $execution->name . $this->lang->colon . $this->lang->execution->importTask;
+        $this->view->title          = $execution->name . $this->lang->hyphen . $this->lang->execution->importTask;
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->executions     = $executions;
@@ -399,7 +399,7 @@ class execution extends control
         if($this->app->tab == 'project') $this->view->projectID = $execution->project;
 
         /* Assign. */
-        $this->view->title       = $executions[$executionID] . $this->lang->colon . $this->lang->execution->importBug;
+        $this->view->title       = $executions[$executionID] . $this->lang->hyphen . $this->lang->execution->importBug;
         $this->view->pager       = $pager;
         $this->view->bugs        = $bugs;
         $this->view->browseType  = $browseType;
@@ -701,7 +701,7 @@ class execution extends control
         }
 
         /* Set view data. */
-        $this->view->title    = $execution->name . $this->lang->colon . $this->lang->execution->build;
+        $this->view->title    = $execution->name . $this->lang->hyphen . $this->lang->execution->build;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->view->builds   = $this->executionZen->processBuildListData($builds, $executionID);
         $this->view->product  = $type == 'product' ? $param : '';
@@ -744,7 +744,7 @@ class execution extends control
 
         $this->executionZen->assignTesttaskVars($tasks);
 
-        $this->view->title         = $this->executions[$executionID] . $this->lang->colon . $this->lang->testtask->common;
+        $this->view->title         = $this->executions[$executionID] . $this->lang->hyphen . $this->lang->testtask->common;
         $this->view->execution     = $execution;
         $this->view->project       = $this->loadModel('project')->getByID($execution->project);
         $this->view->executionID   = $executionID;
@@ -798,7 +798,7 @@ class execution extends control
         unset($this->lang->TRActions);
 
         /* Shows the variables needed to burn page. */
-        $this->view->title         = $execution->name . $this->lang->colon . $this->lang->execution->burn;
+        $this->view->title         = $execution->name . $this->lang->hyphen . $this->lang->execution->burn;
         $this->view->tabID         = 'burn';
         $this->view->burnBy        = $burnBy;
         $this->view->executionID   = $executionID;
@@ -962,7 +962,7 @@ class execution extends control
             $teamMembers[] = $member;
         }
 
-        $this->view->title        = $execution->name . $this->lang->colon . $this->lang->execution->team;
+        $this->view->title        = $execution->name . $this->lang->hyphen . $this->lang->execution->team;
         $this->view->deptUsers    = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->recTotal     = count($this->view->teamMembers);
@@ -1184,7 +1184,7 @@ class execution extends control
             unset($parentStageList[0]);
         }
 
-        $this->view->title                = $this->lang->execution->edit . $this->lang->colon . $execution->name;
+        $this->view->title                = $this->lang->execution->edit . $this->lang->hyphen . $execution->name;
         $this->view->executions           = $executions;
         $this->view->execution            = $execution;
         $this->view->project              = $project;
@@ -1234,6 +1234,10 @@ class execution extends control
             $this->view->project = $project;
             if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->lang->execution->common = $this->lang->execution->stage;
             if($project->model == 'ipd') $this->config->execution->list->customBatchEditFields = 'days,team,desc,PO,QD,PM,RD';
+        }
+        else
+        {
+            $this->config->excludeDropmenuList[] = 'execution-batchedit';
         }
 
         if($this->post->name)
@@ -1385,7 +1389,7 @@ class execution extends control
             return $this->sendSuccess($response);
         }
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->start;
+        $this->view->title      = $this->view->execution->name . $this->lang->hyphen .$this->lang->execution->start;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
@@ -1425,7 +1429,7 @@ class execution extends control
             return $this->sendSuccess($response);
         }
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->putoff;
+        $this->view->title      = $this->view->execution->name . $this->lang->hyphen .$this->lang->execution->putoff;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
@@ -1472,7 +1476,7 @@ class execution extends control
             return $this->sendSuccess($response);
         }
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->suspend;
+        $this->view->title      = $this->view->execution->name . $this->lang->hyphen .$this->lang->execution->suspend;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
@@ -1524,7 +1528,7 @@ class execution extends control
         $dateDiff = helper::diffDate($newBegin, $execution->begin);
         $newEnd   = date('Y-m-d', strtotime($execution->end) + $dateDiff * 24 * 3600);
 
-        $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->activate;
+        $this->view->title      = $this->view->execution->name . $this->lang->hyphen .$this->lang->execution->activate;
         $this->view->execution    = $execution;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
@@ -1576,7 +1580,7 @@ class execution extends control
             return $this->sendSuccess($response);
         }
 
-        $this->view->title   = $this->view->execution->name . $this->lang->colon .$this->lang->execution->close;
+        $this->view->title   = $this->view->execution->name . $this->lang->hyphen .$this->lang->execution->close;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->display();
@@ -1596,6 +1600,11 @@ class execution extends control
         $executionID = $this->execution->checkAccess((int)$executionID, $this->executions);
         $execution   = $this->execution->getByID($executionID, true);
         $type        = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
+        if($execution->type == 'stage')
+        {
+            $childExecutions = $this->execution->getChildExecutions($executionID);
+            if(!empty($childExecutions)) return $this->app->control->sendError($this->lang->execution->errorParentExecution, helper::createLink('execution', 'all'));
+        }
 
         if(empty($execution) || strpos($type, $execution->type) === false) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->config->vision == 'lite' ? $this->createLink('project', 'index') : $this->createLink('execution', 'all'))));
 
@@ -2145,7 +2154,7 @@ class execution extends control
 
         if($execution->type == 'kanban') $this->lang->execution->copyTeamTitle = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyTeamTitle);
 
-        $this->view->title          = $this->lang->execution->manageMembers . $this->lang->colon . $execution->name;
+        $this->view->title          = $this->lang->execution->manageMembers . $this->lang->hyphen . $execution->name;
         $this->view->execution      = $execution;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
         $this->view->roles          = $this->user->getUserRoles(array_keys($this->view->users));
@@ -2310,7 +2319,7 @@ class execution extends control
         $productPairs = array();
         foreach($products as $id => $product) $productPairs[$id] = $product->name;
 
-        $this->view->title        = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
+        $this->view->title        = $object->name . $this->lang->hyphen . $this->lang->execution->linkStory;
         $this->view->objectID     = $originObjectID;
         $this->view->param        = $param;
         $this->view->extra        = $extra;
@@ -2458,7 +2467,7 @@ class execution extends control
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
 
-        $this->view->title        = $execution->name . $this->lang->colon . $this->lang->execution->dynamic;
+        $this->view->title        = $execution->name . $this->lang->hyphen . $this->lang->execution->dynamic;
         $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');
         $this->view->accountPairs = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->executionID  = $executionID;

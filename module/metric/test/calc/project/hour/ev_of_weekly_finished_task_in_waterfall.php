@@ -3,12 +3,12 @@
 
 /**
 
-title=ev_of_finished_task_in_waterfall
+title=ev_of_weekly_finished_task_in_waterfall
 timeout=0
 cid=1
 
-- 测试分组数。 @5
-- 测试项目7。第0条的value属性 @38.4
+- 测试分组数。 @1
+- 测试项目1。第0条的value属性 @930.45
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
@@ -21,6 +21,5 @@ zendata('task')->loadYaml('task_waterfall', true, 4)->gen(1000);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r(count($calc->getResult())) && p('') && e('5'); // 测试分组数。
-
-r($calc->getResult(array('project' => '7'))) && p('0:value') && e('38.4'); // 测试项目7。
+r(count($calc->getResult())) && p('') && e('1'); // 测试分组数。
+r($calc->getResult(array('project' => '1', 'year' => '2024', 'week' => '05'))) && p('0:value') && e('930.45'); // 测试项目1。

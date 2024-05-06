@@ -169,6 +169,7 @@ detailBody
                 set::name($lang->testcase->lib),
                 picker
                 (
+                    setID('lib'),
                     set::name('lib'),
                     set::items($libraries),
                     set::required(true),
@@ -206,6 +207,7 @@ detailBody
                 (
                     modulePicker
                     (
+                        setID('module'),
                         set::items($moduleOptionMenu),
                         set::value($case->module),
                         set::manageLink(createLink('tree', 'browse', "rootID={$rootID}&view={$viewType}&currentModuleID=0&branch={$case->branch}"))

@@ -28,6 +28,7 @@ div
             form
             (
                 h::pre(setID('progress'), setClass('progress block overflow-hidden h-96')),
+                contactUs(),
                 set::actions(array(array('disabled' => true, 'text' => $lang->install->next, 'class' => 'primary next')))
             )
         )

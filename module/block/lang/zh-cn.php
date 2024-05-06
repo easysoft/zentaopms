@@ -48,6 +48,10 @@ $lang->block->contribute      = '我的贡献';
 $lang->block->finish          = '已完成';
 $lang->block->guide           = '使用帮助';
 $lang->block->teamAchievement = '团队成就';
+$lang->block->learnMore       = '了解更多';
+$lang->block->prevPage        = '上一页';
+$lang->block->nextPage        = '下一页';
+$lang->block->experience      = '开始体验';
 
 $lang->block->leftToday           = '今天剩余工作总计';
 $lang->block->myTask              = '我的任务';
@@ -118,7 +122,11 @@ $lang->block->budget          = '预算';
 $lang->block->left            = '剩余';
 
 $lang->block->summary = new stdclass();
-$lang->block->summary->welcome = '禅道已陪伴您%s，<strong>昨日</strong>完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a>个任务、解决了<a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>个Bug，今日期待优秀的您来处理';
+$lang->block->summary->welcome    = '禅道已陪伴您%s： %s今日期待优秀的您来处理！';
+$lang->block->summary->yesterday  = '<strong>昨日</strong>';
+$lang->block->summary->noWork     = '您暂未处理任务和Bug，';
+$lang->block->summary->finishTask = '完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a>个任务';
+$lang->block->summary->fixBug     = '解决了<a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>个Bug';
 
 $lang->block->dashboard['default'] = '仪表盘';
 $lang->block->dashboard['my']      = '地盘';
@@ -532,8 +540,8 @@ $lang->block->welcome->reviewList['reviewByMe'] = '待我评审数';
 
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task']     = '任务数';
-$lang->block->welcome->assignList['bug']      = 'BUG数';
-$lang->block->welcome->assignList['story']    = $lang->SRCommon . '数';
+if($config->vision != 'or') $lang->block->welcome->assignList['bug']   = 'BUG数';
+if($config->vision != 'or') $lang->block->welcome->assignList['story'] = $lang->SRCommon . '数';
 $lang->block->welcome->assignList['testcase'] = '用例数';
 
 $lang->block->customModeTip = new stdClass();
@@ -725,11 +733,10 @@ $lang->block->tooltips['effectiveStory']    = "按{$lang->productCommon}统计�
 $lang->block->tooltips['deliveredStory']    = "按{$lang->productCommon}统计的已交付{$lang->SRCommon}数：{$lang->productCommon}中{$lang->SRCommon}个数求和，所处阶段为已发布或关闭原因为已完成，过滤已删除的{$lang->SRCommon}，过滤已删除的{$lang->productCommon}。";
 $lang->block->tooltips['costs']             = "已投入 = 已消耗工时 / 后台配置的每日可用工时";
 $lang->block->tooltips['sv']                = "进度偏差率 = (EV - PV) / PV * 100% ";
-$lang->block->tooltips['ev']                = "<strong>实际完成</strong>=按{$lang->projectCommon}统计的任务预计工时数*按{$lang->projectCommon}统计的任务进度，过滤已删除的任务，过滤已取消的任务，过滤已删除{$lang->execution->common}下的任务，过滤已删除的{$lang->projectCommon}。<br/>
-<strong>按{$lang->projectCommon}统计的任务预计工时数</strong>：{$lang->projectCommon}中任务的预计工时数求和，过滤已删除的任务，过滤父任务，过滤已删除{$lang->execution->common}的任务，过滤已删除的{$lang->projectCommon}。";
-$lang->block->tooltips['pv']                = "计划完成:瀑布{$lang->projectCommon}中所有任务的预计工时之和，过滤已删除的任务，过滤已取消的任务，过滤已删除的{$lang->execution->common}的任务，过滤已删除的{$lang->projectCommon}。";
+$lang->block->tooltips['ev']                = "任务状态为已完成，累加预计工时。<br/>任务状态为已关闭且关闭原因为已完成，累加预计工时。<br/>任务状态为进行中、已暂停，累加（任务预计工时*任务进度）。<br/>";
+$lang->block->tooltips['pv']                = "任务截至日期小于等于本周结束日期，累加预计工时。<br/>任务预计开始日期小于或等于本周结束日期，预计截至日期大于本周结束日期，累加预计工时=(任务的预计工时÷任务工期天数)x 任务预计开始到本周结束日期的天数。<br/>";
 $lang->block->tooltips['cv']                = "成本偏差率 = (EV - AC) / AC * 100%";
-$lang->block->tooltips['ac']                = "实际花费：瀑布{$lang->projectCommon}中所有日志记录的工时之和，过滤已删除的{$lang->projectCommon}。";
+$lang->block->tooltips['ac']                = "瀑布{$lang->projectCommon}中本周结束之前所有日志记录的工时之和，过滤已删除的{$lang->projectCommon}。";
 $lang->block->tooltips['executionProgress'] = "<strong>{$lang->execution->common}进度</strong>=按{$lang->execution->common}统计的任务消耗工时数 /（按{$lang->execution->common}统计的任务消耗工时数+按{$lang->execution->common}统计的任务剩余工时数）<br/>
 <strong>按{$lang->execution->common}统计的任务消耗工时数</strong>：{$lang->execution->common}中任务的消耗工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的{$lang->execution->common}，过滤已删除的{$lang->projectCommon}。<br/>
 <strong>按{$lang->execution->common}统计的任务剩余工时数</strong>：{$lang->execution->common}中任务的剩余工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的{$lang->execution->common}，过滤已删除的{$lang->projectCommon}。";

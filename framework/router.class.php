@@ -129,6 +129,8 @@ class router extends baseRouter
         global $lang;
         if(!is_object($lang)) $lang = new language();
 
+        if(isset(self::$loadedModules[$moduleName])) return $lang;
+
         /* Set productCommon and projectCommon for flow. */
         if($moduleName == 'common') $this->setCommonLang();
 
@@ -391,7 +393,10 @@ class router extends baseRouter
      */
     public function loadModuleConfig($moduleName, $appName = '')
     {
-        $extConfigPath = array();
+        if(isset(self::$loadedConfigs[$moduleName])) return false;
+
+        self::$loadedConfigs[$moduleName] = $moduleName;
+
         global $config;
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
 
@@ -408,6 +413,7 @@ class router extends baseRouter
         $configDirFiles = helper::ls($this->getModulePath($appName, $moduleName) . DS . 'config', '.php');
 
         /* 查找扩展配置文件。Get extension config files. */
+        $extConfigPath = array();
         if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($moduleName, 'config');
         if($config->framework->extensionLevel >= 1)
         {
@@ -426,9 +432,9 @@ class router extends baseRouter
         /* 加载每一个配置文件。Load every config file. */
         foreach($configFiles as $configFile)
         {
-            if(in_array($configFile, self::$loadedConfigs)) continue;
+            if(isset(self::$loadedConfigs[$configFile])) continue;
             if(file_exists($configFile)) include $configFile;
-            self::$loadedConfigs[] = $configFile;
+            self::$loadedConfigs[$configFile] = $configFile;
         }
 
         /* 加载数据库中与本模块相关的配置项。Merge from the db configs. */

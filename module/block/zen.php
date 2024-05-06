@@ -401,7 +401,7 @@ class blockZen extends block
         else
         {
             $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
-                ->where('date')->gt('1970-01-01')
+                ->where('date')->gt('1971-01-01')
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->orderBy('date_asc')
                 ->limit('1')
@@ -415,6 +415,8 @@ class blockZen extends block
             if(!empty($usageDateInfo->year))  $usageDays .= $usageDateInfo->year . ' ' . $this->lang->year . ' ';
             if(!empty($usageDateInfo->month)) $usageDays .= $usageDateInfo->month . ' ' . $this->lang->month . ' ';
             if(!empty($usageDateInfo->day))   $usageDays .= $usageDateInfo->day . ' ' . $this->lang->day . ' ';
+
+            if(!$usageDays) $usageDays .= "0 {$this->lang->day}";
         }
         else
         {
@@ -469,21 +471,39 @@ class blockZen extends block
                 $assignedGroup = reset($assignedGroup);
                 $count         = zget($assignedGroup, 'value', 0);
             }
-            $assignToMe[$field] = array('number' => $count, 'href' => common::hasPriv('my', 'work') ? helper::createLink('my', 'work', "mode=$field&type=$type") : '');
+            $assignToLink = '';
+            if(common::hasPriv('my', 'work')       && $this->config->vision != 'lite') $assignToLink = helper::createLink('my', 'work',       "mode=$field&type=$type");
+            if(common::hasPriv('my', 'contribute') && $this->config->vision == 'lite') $assignToLink = helper::createLink('my', 'contribute', "mode=$field&type=$type");
+            $assignToMe[$field] = array('number' => $count, 'href' => $assignToLink);
         }
 
         /* 生成待我审批的数据。 */
         $reviewList = $this->loadModel('my')->getReviewingList('all');
-        $reviewByMe['reviewByMe'] = array('number' => count($reviewList), 'href' => common::hasPriv('my', 'audit') ? helper::createLink('my', 'audit') : '');
+        $reviewByMe['reviewByMe'] = array('number' => count($reviewList), 'href' => common::hasPriv('my', 'audit') && $this->config->vision != 'lite' ? helper::createLink('my', 'audit') : '');
 
-        $this->view->todaySummary = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())]; // 当前年月日 星期几。
-        $this->view->welcomeType  = $welcomeType;
-        $this->view->usageDays    = $usageDays;
-        $this->view->finishTask   = $finishTask;
-        $this->view->fixBug       = $fixBug;
-        $this->view->honorary     = $honorary;
-        $this->view->assignToMe   = $assignToMe;
-        $this->view->reviewByMe   = $reviewByMe;
+        /* 生成欢迎语。 */
+        $yesterdaySummary = '';
+        if($finishTask || $fixBug)
+        {
+            if($finishTask) $yesterdaySummary .= sprintf($this->lang->block->summary->finishTask, $finishTask) . ($fixBug ? '、' : $this->lang->comma);
+            if($fixBug)     $yesterdaySummary .= sprintf($this->lang->block->summary->fixBug, $fixBug) . $this->lang->comma;
+        }
+        else
+        {
+            $yesterdaySummary .= $this->lang->block->summary->noWork;
+        }
+        $yesterdaySummary = $this->lang->block->summary->yesterday . $yesterdaySummary;
+        $welcomeSummary   = sprintf($this->lang->block->summary->welcome, $usageDays, $yesterdaySummary);
+
+        $this->view->todaySummary   = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())]; // 当前年月日 星期几。
+        $this->view->welcomeType    = $welcomeType;
+        $this->view->usageDays      = $usageDays;
+        $this->view->finishTask     = $finishTask;
+        $this->view->fixBug         = $fixBug;
+        $this->view->honorary       = $honorary;
+        $this->view->assignToMe     = $assignToMe;
+        $this->view->reviewByMe     = $reviewByMe;
+        $this->view->welcomeSummary = $welcomeSummary;
     }
 
     /**
@@ -697,7 +717,7 @@ class blockZen extends block
         $branches = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID, 'active');
 
         /* Assign view data. */
-        $this->view->title    = $product->name . $this->lang->colon . $this->lang->product->roadmap;
+        $this->view->title    = $product->name . $this->lang->hyphen . $this->lang->product->roadmap;
         $this->view->product  = $product;
         $this->view->roadmaps = $roadmaps;
         $this->view->branches = $branches;
@@ -3064,7 +3084,7 @@ class blockZen extends block
         $productID = $this->session->product;
 
         $this->view->productID = $productID;
-        $this->view->actions   = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', 30, $productID);
+        $this->view->actions   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 30, $productID);
         $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
     }
 
@@ -3287,11 +3307,11 @@ class blockZen extends block
         if($activatedBugGroup)  $activatedBugGroup  = array_column($activatedBugGroup,  null, 'project');
 
         /* 瀑布项目的统计信息。 */
-        $SVGroup           = $this->metric->getResultByCode('sv_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $PVGroup           = $this->metric->getResultByCode('pv_of_task_in_waterfall',          array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $EVGroup           = $this->metric->getResultByCode('ev_of_finished_task_in_waterfall', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $CVGroup           = $this->metric->getResultByCode('cv_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
-        $ACGroup           = $this->metric->getResultByCode('ac_of_all_in_waterfall',           array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $SVGroup           = $this->metric->getResultByCode('sv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $PVGroup           = $this->metric->getResultByCode('pv_of_weekly_task_in_waterfall',          array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $EVGroup           = $this->metric->getResultByCode('ev_of_weekly_finished_task_in_waterfall', array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $CVGroup           = $this->metric->getResultByCode('cv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
+        $ACGroup           = $this->metric->getResultByCode('ac_of_weekly_all_in_waterfall',           array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
         $taskProgressGroup = $this->metric->getResultByCode('progress_of_task_in_project',      array('project' => join(',', $projectIdList)), 'realtime', null, $vision);
         if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
         if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
@@ -3337,11 +3357,11 @@ class blockZen extends block
         }
         elseif(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
         {
-            $project->pv = isset($PVGroup[$projectID]['value']) ? (int)$PVGroup[$projectID]['value'] * 100 : 0;
-            $project->ev = isset($EVGroup[$projectID]['value']) ? (int)$EVGroup[$projectID]['value'] * 100 : 0;
-            $project->ac = isset($ACGroup[$projectID]['value']) ? (int)$ACGroup[$projectID]['value'] * 100 : 0;
-            $project->sv = isset($SVGroup[$projectID]['value']) ? (int)$SVGroup[$projectID]['value'] * 100 : 0;
-            $project->cv = isset($CVGroup[$projectID]['value']) ? (int)$CVGroup[$projectID]['value'] * 100 : 0;
+            $project->pv = isset($PVGroup[$projectID]['value']) ? sprintf('%.2f', $PVGroup[$projectID]['value']) : 0;
+            $project->ev = isset($EVGroup[$projectID]['value']) ? sprintf('%.2f', $EVGroup[$projectID]['value']) : 0;
+            $project->ac = isset($ACGroup[$projectID]['value']) ? sprintf('%.2f', $ACGroup[$projectID]['value']) : 0;
+            $project->sv = isset($SVGroup[$projectID]['value']) ? sprintf('%.4f', $SVGroup[$projectID]['value']) * 100 : 0;
+            $project->cv = isset($CVGroup[$projectID]['value']) ? sprintf('%.4f', $CVGroup[$projectID]['value']) * 100 : 0;
         }
         if($project->end != LONG_TIME) $project->remainingDays = helper::diffDate($project->end, helper::today());
         $project->risks  = isset($riskCountGroup[$projectID]['value']) ? (int)$riskCountGroup[$projectID]['value'] : 0;

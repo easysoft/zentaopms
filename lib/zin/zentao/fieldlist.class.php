@@ -263,11 +263,7 @@ class fieldList
 
     public function autoLoad(string|array $targets, string|array|null $loadNames = null): fieldList
     {
-        if(is_string($targets))
-        {
-            if(is_array($loadNames)) $loadNames = implode(',', $loadNames);
-            $targets = array($targets => $loadNames);
-        }
+        if(is_string($targets)) $targets = array($targets => $loadNames);
         $this->autoLoadRule = is_null($this->autoLoadRule) ? $targets : array_merge($this->autoLoadRule, $targets);
         return $this;
     }

@@ -142,7 +142,7 @@ class testcase extends control
 
         /* 展示变量. */
         /* Show the variables. */
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->title       = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->common;
         $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
         $this->view->users       = $this->user->getPairs('noletter');
@@ -277,7 +277,7 @@ class testcase extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
 
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->create;
+        $this->view->title        = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->create;
         $this->view->productID    = $productID;
         $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->gobackLink   = isset($output['from']) && $output['from'] == 'global' ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
@@ -332,7 +332,7 @@ class testcase extends control
 
         /* 展示变量. */
         /* Show the variables. */
-        $this->view->title            = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->batchCreate;
+        $this->view->title            = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->batchCreate;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' ? '0' : $branch);
@@ -382,7 +382,7 @@ class testcase extends control
 
         /* 展示变量. */
         /* Show the variables. */
-        $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
+        $this->view->title   = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->createBug;
         $this->view->caseID  = $caseID;
         $this->view->version = $version;
         $this->view->runID   = $runID;
@@ -768,7 +768,7 @@ class testcase extends control
         $cases2Link = array_chunk($cases2Link, $pager->recPerPage);
 
         /* Assign. */
-        $this->view->title      = $case->title . $this->lang->colon . $this->lang->testcase->linkCases;
+        $this->view->title      = $case->title . $this->lang->hyphen . $this->lang->testcase->linkCases;
         $this->view->case       = $case;
         $this->view->cases2Link = empty($cases2Link) ? $cases2Link : $cases2Link[$pageID - 1];
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -1170,7 +1170,7 @@ class testcase extends control
         /* Show the variables. */
         $this->testcaseZen->assignForImportFromLib($productID, $branch, $libID, $orderBy, $queryID, $libraries, $projectID);
 
-        $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->importFromLib;
+        $this->view->title      = $this->lang->testcase->common . $this->lang->hyphen . $this->lang->testcase->importFromLib;
         $this->view->libraries  = $libraries;
         $this->view->cases      = $this->testcase->getCanImportCases($productID, $libID, $branch, $orderBy, $pager, $browseType, $queryID);
         $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
@@ -1226,7 +1226,7 @@ class testcase extends control
 
         $this->testcaseZen->assignShowImportVars($productID, $branch, $data['caseData'], isset($stepVars) ? $stepVars : 0, $pagerID, $maxImport);
 
-        $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;
+        $this->view->title      = $this->lang->testcase->common . $this->lang->hyphen . $this->lang->testcase->showImport;
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $this->view->cases      = $this->testcase->getByProduct($productID);
         $this->view->stepData   = array_values($data['stepData']);
@@ -1370,6 +1370,7 @@ class testcase extends control
     {
         if($_POST)
         {
+            $this->lang->testcase->title = $this->lang->testcase->sceneTitle;
             $scene = form::data($this->config->testcase->form->createScene)->get();
 
             $this->testcase->createScene($scene);

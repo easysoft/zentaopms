@@ -11,9 +11,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-requireWg('users');
+requireWg('userpicker');
 
-class whitelist extends users
+class whitelist extends userPicker
 {
     protected static array $defaultProps = array(
         'name' => 'whitelist[]'

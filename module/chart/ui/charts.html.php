@@ -42,6 +42,7 @@ $generateCharts = function() use($charts, $lang)
             setID('chartPanel_' . $chartID),
             set::title($chart->name),
             set::shadow(false),
+            set::headingClass('h-14'),
             set::bodyClass('pt-0'),
             $filters ? div
             (

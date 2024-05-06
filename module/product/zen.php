@@ -854,10 +854,10 @@ class productZen extends product
 
         /* If invoked by projectstory module and not choose product, then get the modules of project story. */
         if(!isset($this->tree)) $this->loadModel('tree');
-        $project = $projectID ? $this->project->getByID($projectID) : null;
+        $project = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         if(!empty($projectID) && !empty($project->hasProduct) && $this->app->rawModule == 'projectstory')
         {
-            return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
+            return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink), array('storyType' => $storyType));
         }
 
         /* Pre generate parameters. */
@@ -872,14 +872,13 @@ class productZen extends product
      * Get products of the project.
      *
      * @param  int       $projectID
-     * @param  string    $storyType
      * @param  bool      $isProjectStory
      * @access protected
      * @return array
      */
-    protected function getProjectProductList(int $projectID, string $storyType, bool $isProjectStory): array
+    protected function getProjectProductList(int $projectID, bool $isProjectStory): array
     {
-        if($isProjectStory && $storyType == 'story') return $this->product->getProducts($projectID);
+        if($isProjectStory) return $this->product->getProducts($projectID);
 
         return array();
     }
@@ -1109,7 +1108,6 @@ class productZen extends product
 
         /* Save browse type into session for buildSearchForm. */
         if($browseType != 'bymodule' && $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
-        if(($browseType == 'bymodule' || $browseType == 'bybranch') && $this->session->storyBrowseType == 'bysearch') $this->session->set('storyBrowseType', 'unclosed');
     }
 
     /**
@@ -1145,6 +1143,11 @@ class productZen extends product
                 unset($this->config->product->search['fields']['plan']);
                 unset($this->config->product->search['params']['plan']);
             }
+        }
+
+        if($this->config->edition == 'ipd' && $storyType == 'requirement')
+        {
+            $this->config->product->search['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
         }
 
         /* Build search form. */
@@ -1369,14 +1372,14 @@ class productZen extends product
         $projectID       = $project ? (int)$project->id : 0;
         $productName     = ($isProjectStory && empty($product)) ? $this->lang->product->all : $this->products[$productID];
         $storyIdList     = $this->getStoryIdList($stories);
-        $projectProducts = $this->getProjectProductList($projectID, $storyType, $isProjectStory);
+        $projectProducts = $this->getProjectProductList($projectID, $isProjectStory);
         list($branchOpt, $branchTagOpt) = $this->getBranchAndTagOption($projectID, $product, $isProjectStory);
 
         /* Set show module by config. */
         $showModule = empty($this->config->product->browse->showModule) ? 0 : $this->config->product->browse->showModule;
         if($isProjectStory) $showModule = empty($this->config->projectstory->story->showModule) ? 0 : $this->config->projectstory->story->showModule;
 
-        $this->view->title           = $productName . $this->lang->colon . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
+        $this->view->title           = $productName . $this->lang->hyphen . ($storyType === 'story' ? $this->lang->product->browse : $this->lang->product->requirement);
         $this->view->productID       = $productID;
         $this->view->product         = $product;
         $this->view->projectID       = $projectID;

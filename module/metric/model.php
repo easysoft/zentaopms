@@ -596,6 +596,7 @@ class metricModel extends model
     public function getDataStatement($calculator, $returnType = 'statement', $vision = 'rnd')
     {
         $dao = $this->getDAO();
+        $statement = null;
         if(!empty($calculator->dataset))
         {
             include_once $this->getDatasetPath();
@@ -603,9 +604,7 @@ class metricModel extends model
             $dataset    = new dataset($dao, $this->config, $vision);
             $dataSource = $calculator->dataset;
             $fieldList  = implode(',', $calculator->fieldList);
-
-            $statement = $dataset->$dataSource($fieldList);
-            $sql       = $dataset->dao->get();
+            $statement  = $dataset->$dataSource($fieldList);
         }
         else
         {
@@ -614,10 +613,10 @@ class metricModel extends model
             $calculator->setSCM($scm);
 
             $statement = $calculator->getStatement();
-            $sql       = $calculator->dao->get();
         }
 
-        return $returnType == 'sql' ? $sql : $statement;
+        if($returnType == 'sql') return $statement->get();
+        return $statement;
     }
 
     /**
@@ -681,17 +680,17 @@ class metricModel extends model
         $metric = $this->metricTao->fetchMetricByCode($code);
         if(!$metric) return false;
 
-        $calcPath = $this->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
-        if(!is_file($calcPath)) return false;
+        $calculator = $this->getCalculator($metric->scope, $metric->purpose, $metric->code);
 
-        include_once $this->getBaseCalcPath();
-        include_once $calcPath;
-        $calculator = new $metric->code;
+        /* 因为是单个度量项的计算，所以需要优先查看是否支持可用的性能优化，如果有的话，使用性能优化方式计算。*/
+        /* Because this is a single metric calculation, it is important to first look to see if any performance optimizations are supported and, if so, use them. */
+        $calculated = false;
+        $calculated += $this->calculateReuseMetric($calculator, $options, $type, $pager, $vision);
+        $calculated += $this->calculateSingleMetric($calculator, $vision);
 
-        $statement = $this->getDataStatement($calculator, 'statement', 'rnd');
-        $rows = $statement->fetchAll();
-
-        foreach($rows as $row) $calculator->calculate($row);
+        /* 如果没有可用的性能优化方式，那么使用默认的方式计算。*/
+        /* If no optimizations are available, the default calculation is used. */
+        if(!$calculated) $this->calculateDefaultMetric($calculator, $vision);
 
         return $calculator;
     }
@@ -721,17 +720,18 @@ class metricModel extends model
         $metric = $this->metricTao->fetchMetricByCode($code);
         if(!$metric) return false;
 
-        $calcPath = $this->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
-        if(!is_file($calcPath)) return false;
+        $calculator = $this->getCalculator($metric->scope, $metric->purpose, $metric->code);
 
-        include_once $this->getBaseCalcPath();
-        include_once $calcPath;
-        $calculator = new $metric->code;
+        /* 因为是单个度量项的计算，所以需要优先查看是否支持可用的性能优化，如果有的话，使用性能优化方式计算。*/
+        /* Because this is a single metric calculation, it is important to first look to see if any performance optimizations are supported and, if so, use them. */
+        $calculated = false;
+        $calculated += $this->calculateReuseMetric($calculator, $options, $type, $pager, $vision);
+        $calculated += $this->calculateSingleMetric($calculator, $vision);
 
-        $statement = $this->getDataStatement($calculator, 'statement', $vision);
-        $rows = $statement->fetchAll();
+        /* 如果没有可用的性能优化方式，那么使用默认的方式计算。*/
+        /* If no optimizations are available, the default calculation is used. */
+        if(!$calculated) $this->calculateDefaultMetric($calculator, $vision);
 
-        if(!empty($rows)) foreach($rows as $row) $calculator->calculate($row);
         $records = $calculator->getResult($options);
 
         if(!empty($records))
@@ -746,6 +746,94 @@ class metricModel extends model
         }
 
         return $records;
+    }
+
+    /**
+     * 获取度量项计算对象。
+     * Get metric calculator.
+     *
+     * @param  string    $scope
+     * @param  string    $purpose
+     * @param  string    $code
+     * @access public
+     * @return object
+     */
+    public function getCalculator($scope, $purpose, $code)
+    {
+        $calcPath = $this->getCalcRoot() . $scope . DS . $purpose . DS . $code . '.php';
+        if(!is_file($calcPath)) return false;
+
+        include_once $this->getBaseCalcPath();
+        include_once $calcPath;
+        $calculator = new $code;
+        $calculator->setHolidays($this->loadModel('holiday')->getList());
+        $calculator->setWeekend(isset($this->config->project->weekend) ? $this->config->project->weekend : 2);
+
+        return $calculator;
+    }
+
+    /**
+     * 计算重用度量项。
+     * Calculate reuse metric.
+     *
+     * @param  object    $calculator
+     * @param  array     $options
+     * @param  string    $type
+     * @param  object    $pager
+     * @param  string    $vision
+     * @access public
+     * @return bool
+     */
+    public function calculateReuseMetric($calculator, $options, $type, $pager, $vision)
+    {
+        if(!$calculator->reuse) return false;
+
+        $reuseMetrics = array();
+        foreach($calculator->reuseMetrics as $key => $reuseMetric)
+        {
+            $reuseMetrics[$key] = $this->getResultByCode($reuseMetric, $options, $type, $pager, $vision);
+        }
+
+        $calculator->calculate($reuseMetrics);
+
+        return true;
+    }
+
+    /**
+     * 计算可独立计算度量项。
+     * Calculate single metric.
+     *
+     * @param  object  $calculator
+     * @param  string  $vision
+     * @access public
+     * @return bool
+     */
+    public function calculateSingleMetric($calculator, $vision)
+    {
+        if(!$calculator->supportSingleQuery) return false;
+
+        $sql = $this->getDataStatement($calculator, 'sql', $vision);
+        $calculator->setDAO($this->getDAO());
+        $calculator->setSingleSql($sql);
+        $calculator->enableSingleQuery();
+
+        return true;
+    }
+
+    /**
+     * 计算普通度量项。
+     * Calculate default metric.
+     *
+     * @param  object    $calculator
+     * @param  string    $vision
+     * @access public
+     * @return void
+     */
+    public function calculateDefaultMetric($calculator, $vision)
+    {
+        $statement = $this->getDataStatement($calculator, 'statement', $vision);
+        $rows = $statement->fetchAll();
+        if(!empty($rows)) foreach($rows as $row) $calculator->calculate($row);
     }
 
     /**

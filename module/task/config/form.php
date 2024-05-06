@@ -35,7 +35,7 @@ $config->task->form->create['keywords']     = array('type' => 'string',   'requi
 $config->task->form->assign = array();
 $config->task->form->assign['assignedTo']     = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->assign['assignedDate']   = array('type' => 'datetime', 'required' => false, 'default' => $now);
-$config->task->form->assign['left']           = array('type' => 'float',    'required' => true);
+$config->task->form->assign['left']           = array('type' => 'float',    'required' => false);
 $config->task->form->assign['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->task->form->assign['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 

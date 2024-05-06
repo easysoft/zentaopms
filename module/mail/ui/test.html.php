@@ -13,15 +13,21 @@ namespace zin;
 $mta = $config->mail->mta;
 formPanel
 (
-    modalHeader
+    set::formClass('pl-10'),
+    div
     (
-        set::entityText($lang->mail->common),
-        to::suffix(span
-            (
-                setClass('ml-2 flex items-center text-gray'),
-                icon('info text-warning mr-1'),
-                $lang->mail->sendmailTips
-            )
+        set::className('flex mx-auto w-full ml-4 items-center mb-2'),
+        $lang->mail->test,
+        strong
+        (
+            setClass('ml-2 h4'),
+            $lang->mail->common
+        ),
+        span
+        (
+            setClass('ml-2 flex items-center text-gray'),
+            icon('info text-warning mr-1'),
+            $lang->mail->sendmailTips
         )
     ),
     set::url(inlink('test')),
@@ -30,6 +36,7 @@ formPanel
         setClass('mx-4'),
         set::control('picker'),
         set::name('to'),
+        set::required(true),
         set::value($app->user->account),
         set::items($users)
     ),
@@ -46,5 +53,5 @@ formPanel
             'class' => 'btn-wide'
         )
     )),
-    div(setID('resultWin'))
+    div(setID('resultWin'), setClass('hidden'))
 );

@@ -73,7 +73,7 @@ class company extends control
         $users = $this->company->getUsers($browseType, $type, $queryID, $deptID, $sort, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'user');
 
-        $this->view->title      = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
+        $this->view->title      = $this->lang->company->index . $this->lang->hyphen . $this->lang->dept->common;
         $this->view->users      = array_map(function($user){unset($user->password);return $user;}, $users);
         $this->view->deptTree   = $this->dept->getTreeMenu(0, array('deptModel', 'createMemberLink'));
         $this->view->orderBy    = $orderBy;
@@ -110,7 +110,7 @@ class company extends control
             return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title   = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
+        $this->view->title   = $this->lang->company->common . $this->lang->hyphen . $this->lang->company->edit;
         $this->view->company = $this->company->getByID($this->app->company->id);
         $this->display();
     }
@@ -124,7 +124,7 @@ class company extends control
      */
     public function view()
     {
-        $this->view->title   = $this->lang->company->common . $this->lang->colon . $this->lang->company->view;
+        $this->view->title   = $this->lang->company->common . $this->lang->hyphen . $this->lang->company->view;
         $this->view->company = $this->company->getByID($this->app->company->id);
         $this->display();
     }
@@ -179,7 +179,7 @@ class company extends control
         if(empty($recTotal)) $recTotal = !(empty($date) && $browseType == 'all') ? array_sum(array_map('count', $dateGroups)) : $this->action->getDynamicCount();
 
         /* Assign.*/
-        $this->view->title       = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
+        $this->view->title       = $this->lang->company->common . $this->lang->hyphen . $this->lang->company->dynamic;
         $this->view->recTotal    = $recTotal;
         $this->view->browseType  = $browseType;
         $this->view->account     = $account;

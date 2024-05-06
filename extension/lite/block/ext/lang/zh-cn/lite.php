@@ -39,8 +39,11 @@ $lang->block->modules['execution']->availableBlocks['task']      = '任务列表
 unset($lang->block->moduleList['product']);
 unset($lang->block->moduleList['qa']);
 
-$lang->block->welcome->reviewList = array();
 $lang->block->welcome->assignList = array();
 $lang->block->welcome->assignList['task'] = '任务数';
 
-$lang->block->summary->welcome = '禅道已陪伴您%s天，<strong>昨日</strong>完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a>个任务，今日期待优秀的您来处理';
+$lang->block->summary->welcome    = '禅道已陪伴您%s： %s今日期待优秀的您来处理！';
+$lang->block->summary->yesterday  = '<strong>昨日</strong>';
+$lang->block->summary->noWork     = '您暂未处理任务，';
+$lang->block->summary->finishTask = '完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a>个任务';
+$lang->block->summary->fixBug     = '';

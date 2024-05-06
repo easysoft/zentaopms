@@ -72,7 +72,7 @@ if($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition =
     ) : null;
 }
 
-$createInfo = $doc->status == 'draft' ? zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB : zget($users, $doc->releasedBy) . " {$lang->colon} " . substr($doc->releasedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->release;
+$createInfo = $doc->status == 'draft' ? zget($users, $doc->addedBy) . " {$lang->hyphen} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB : zget($users, $doc->releasedBy) . " {$lang->hyphen} " . substr($doc->releasedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->release;
 
 $keywordsLabel = array();
 if($doc->keywords)
@@ -194,7 +194,7 @@ $contentDom = div
     ),
     div
     (
-        setClass('info'),
+        setClass('info mb-4'),
         span
         (
             setClass('user-time text-gray mr-2'),

@@ -317,7 +317,7 @@ class testtaskZen extends testtask
         $this->setDropMenu($product->id, $testtask);
         $showModule = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=testtask&section=cases&key=showModule");
 
-        $this->view->title          = $product->name . $this->lang->colon . $this->lang->testtask->cases;
+        $this->view->title          = $product->name . $this->lang->hyphen . $this->lang->testtask->cases;
         $this->view->runs           = $this->loadModel('testcase')->appendData($runs, 'run');
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
         $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($product->id, 'case', 0, array('treeModel', 'createTestTaskLink'), (string)$testtask->id, $testtask->branch ? $testtask->branch : '0');
@@ -380,7 +380,7 @@ class testtaskZen extends testtask
             $this->products[$productID] = $product->name;
         }
 
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
+        $this->view->title       = $this->products[$productID] . $this->lang->hyphen . $this->lang->testtask->create;
         $this->view->product     = $this->loadModel('product')->getByID($productID);
         $this->view->executions  = $productID ? $this->product->getExecutionPairsByProduct($productID, '', $projectID, 'stagefilter') : array();
         $this->view->builds      = $productID ? $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk,withexecution', $objectID, $objectType, '', false) : array();
@@ -424,7 +424,7 @@ class testtaskZen extends testtask
             $this->products[$productID] = $product->name;
         }
 
-        $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
+        $this->view->title        = $this->products[$productID] . $this->lang->hyphen . $this->lang->testtask->edit;
         $this->view->task         = $task;
         $this->view->project      = $this->project->getByID($projectID);
         $this->view->productID    = $productID;

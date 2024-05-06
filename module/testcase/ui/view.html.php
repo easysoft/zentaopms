@@ -16,6 +16,28 @@ jsVar('viewParams', "caseID={$case->id}&version={$version}&from={$from}&taskID={
 
 $isInModal = isInModal();
 
+/* 版本列表。Version list. */
+$versions = array();
+for($i = $case->version; $i >= 1; $i--)
+{
+    $versionItem = setting()
+        ->text("#{$i}")
+        ->url(inlink('view', "caseID={$case->id}&version={$i}&from={$from}&taskID={$taskID}&stepsType={$stepsType}"));
+
+    if($isInModal)
+    {
+        $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal-content'));
+    }
+
+    $versionItem->selected($version == $i);
+    $versions[] = $versionItem;
+}
+$versionBtn = count($versions) > 1 ? to::title(dropdown
+(
+    btn(set::type('ghost'), setClass('text-link font-normal text-base'), "#{$version}"),
+    set::items($versions)
+)) : null;
+
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
 if(!$isInModal && hasPriv('testcase', 'create', $case))
@@ -179,5 +201,6 @@ detail
     set::toolbar($toolbar),
     set::sections($sections),
     set::tabs($tabs),
-    set::actions($actions)
+    set::actions($actions),
+    $versionBtn
 );

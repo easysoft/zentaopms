@@ -81,7 +81,7 @@ class jenkins extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->title   = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->edit;
+        $this->view->title   = $this->lang->jenkins->common . $this->lang->hyphen . $this->lang->jenkins->edit;
         $this->view->jenkins = $jenkins;
         $this->display();
     }

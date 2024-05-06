@@ -81,12 +81,12 @@ $executions = $this->execution->generateRow($executionStats, $users, $avatarList
 
 /* zin: Define the feature bar on main menu. */
 $productItems = array();
-foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink($this->app->rawModule, $this->app->rawMethod, "status={$status}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
+foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink('project', 'execution', "status={$status}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
 
 $productName = !empty($product) ? $product->name : '';
 featureBar
 (
-    $project->hasProduct ? to::leading
+    ($project->stageBy == 'product' && $project->hasProduct) ? to::leading
     (
         dropdown
         (
@@ -94,8 +94,10 @@ featureBar
             set::items($productItems)
         )
     ) : null,
+    set::module('project'),
+    set::method('execution'),
     set::current($status),
-    set::linkParams("status={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
+    set::link('project', 'execution', "status={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li
     (
         checkbox

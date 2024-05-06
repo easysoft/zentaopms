@@ -128,6 +128,7 @@ div
                     $checkTrs
                 )
             ),
+            contactUs(),
             cell
             (
                 setClass('text-center mt-4'),

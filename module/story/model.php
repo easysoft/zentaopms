@@ -2317,8 +2317,7 @@ class storyModel extends model
         }
         if($excludeStatus) $storyQuery = $storyQuery . ' AND `status` NOT ' . helper::dbIN($excludeStatus);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
-        if($this->app->rawModule == 'build'   and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
-        if($this->app->rawModule == 'release' and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
+        if(in_array($this->app->rawModule, array('build', 'release', 'projectrelease')) && $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
         $allBranch = "`branch` = 'all'";
         if(!empty($executionID))
         {
@@ -3269,6 +3268,8 @@ class storyModel extends model
 
         if($action == 'change') return (($isSuperReviewer !== false || count($story->reviewer) == 0 || count($story->notReview) == 0) && in_array($story->status, array('active', 'launched')));
         if($action == 'review') return (($isSuperReviewer !== false || in_array($app->user->account, $story->notReview)) && $story->status == 'reviewing');
+
+        if($action == 'createbranch') return $story->type == 'story';
 
         return true;
     }
