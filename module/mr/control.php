@@ -927,6 +927,8 @@ class mr extends control
     */
    public function ajaxSyncMRs(int $repoID)
    {
+        if(!$repoID) $this->sendSuccess();
+
         $repo   = $this->loadModel('repo')->getByID($repoID);
         $rawMRs = $this->loadModel(strtolower($repo->SCM))->apiGetMergeRequests($repo->gitService, (int)$repo->serviceProject);
         if(empty($rawMRs)) $this->sendSuccess();
